@@ -63,65 +63,66 @@
                                         }
                                     </select>
                                 </td>
+                                
                                 <td rowspan="4" align="right" colspan="10">
                                     <div align="right">
-                                        <table style="border-style:solid;border-width:thin;color:gray;font-weight:bold;font-size:11px">
+                                        <table style="border-style:solid;border-width:thin;color:gray;font-weight:bold;font-size:11px;border-color:#E0E0E0; font-family: Helvetica Neue, Helvetica, Arial, sans-serif">
                                             <tr style="border-style:solid;border-width:thin">
-                                                <td colspan="2" style="color:black">
+                                                <td colspan="2" style="color:black; background-color:#f9f9f9">
                                                     Avtal
                                                 </td>
                                             </tr>
-                                            <tr style="border-style:solid;border-width:thin">
-                                                <td style="border-style:solid;border-width:thin">
+                                            <tr style="border-style:solid;border-width:thin;border-color:#E0E0E0">
+                                                <td style="border-style:solid;border-width:thin;border-color:#E0E0E0">
                                                     Antal:
                                                 </td>
 
-                                                <td style="border-style:solid;border-width:thin;text-align:right; width:100px">
+                                                <td style="border-style:solid;border-width:thin;text-align:right; width:100px;border-color:#E0E0E0">
                                                     @Model.TotalCases
                                                 </td>
                                             </tr>
-                                            <tr style="border-style:solid;border-width:thin">
-                                                <td style="border-style:solid;border-width:thin;padding-right:100px">
+                                            <tr style="border-style:solid;border-width:thin;border-color:#E0E0E0">
+                                                <td style="border-style:solid;border-width:thin;padding-right:100px;border-color:#E0E0E0">
                                                     Pågående:
                                                 </td>
 
-                                                <td style="border-style:solid;border-width:thin;text-align:right">
+                                                <td style="border-style:solid;border-width:thin;text-align:right;border-color:#E0E0E0">
                                                     @Model.OnGoingCases
                                                 </td>
                                             </tr>
-                                            <tr style="border-style:solid;border-width:thin">
-                                                <td style="border-style:solid;border-width:thin">
+                                            <tr style="border-style:solid;border-width:thin;border-color:#E0E0E0">
+                                                <td style="border-style:solid;border-width:thin;border-color:#E0E0E0">
                                                     Avslutade:
                                                 </td>
 
-                                                <td style="border-style:solid;border-width:thin;text-align:right">
+                                                <td style="border-style:solid;border-width:thin;text-align:right;border-color:#E0E0E0">
                                                     @Model.FinishedCases
                                                 </td>
                                             </tr>
-                                            <tr style="border-style:solid;border-width:thin">
-                                                <td style="border-style:solid;border-width:thin;">
+                                            <tr style="border-style:solid;border-width:thin;border-color:#E0E0E0">
+                                                <td style="border-style:solid;border-width:thin;border-color:#E0E0E0">
                                                     <span style="color:red">För uppsägning:</span>
                                                 </td>
 
-                                                <td style="border-style:solid;border-width:thin;text-align:right">
+                                                <td style="border-style:solid;border-width:thin;text-align:right;border-color:#E0E0E0">
                                                     <span style="color:red"> @Model.ContractNoticeOfRemovalCount </span>
                                                 </td>
                                             </tr>
-                                            <tr style="border-style:solid;border-width:thin">
-                                                <td style="border-style:solid;border-width:thin">
+                                            <tr style="border-style:solid;border-width:thin;border-color:#E0E0E0">
+                                                <td style="border-style:solid;border-width:thin;border-color:#E0E0E0">
                                                     <span style="color:#FF8000"> För uppföljning:</span>
                                                 </td>
 
-                                                <td style="border-style:solid;border-width:thin;text-align:right">
+                                                <td style="border-style:solid;border-width:thin;text-align:right;border-color:#E0E0E0">
                                                     <span style="color:#FF8000">  @Model.ContractFollowUpCount </span>
                                                 </td>
                                             </tr>
-                                            <tr style="border-style:solid;border-width:thin">
-                                                <td style="border-style:solid;border-width:thin">
+                                            <tr style="border-style:solid;border-width:thin;border-color:#E0E0E0">
+                                                <td style="border-style:solid;border-width:thin;border-color:#E0E0E0">
                                                     <span style="color:#009900">Löpande:</span>
                                                 </td>
 
-                                                <td style="border-style:solid;border-width:thin;text-align:right">
+                                                <td style="border-style:solid;border-width:thin;text-align:right;border-color:#E0E0E0">
                                                     <span style="#009900"> @Model.RunningCases</span>
                                                 </td>
                                             </tr>
