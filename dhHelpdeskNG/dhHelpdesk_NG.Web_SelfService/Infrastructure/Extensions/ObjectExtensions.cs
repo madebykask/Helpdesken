@@ -317,7 +317,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
                 return string.Empty;
             if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.SMS.ToString()))
                 return string.Empty;
-            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.SMS.ToString()))
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.AgreedDate.ToString()))
                 return string.Empty;
 
             return ret;

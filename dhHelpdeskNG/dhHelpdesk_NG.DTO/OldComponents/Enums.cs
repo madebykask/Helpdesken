@@ -137,6 +137,9 @@ namespace DH.Helpdesk.BusinessData.OldComponents
                 case CaseSolutionFields.Available:
                     return TranslationCaseFields.Available;
 
+                case CaseSolutionFields.AgreedDate:
+                    return TranslationCaseFields.AgreedDate;
+
                 case CaseSolutionFields.Caption:
                     return TranslationCaseFields.Caption;
 
