@@ -1177,6 +1177,19 @@
                 currentCase.ProductArea.Name = string.Join(" - ", translatedText);                
             }
 
+            if (currentCase.Category_Id.HasValue && currentCase.Category != null)
+            {
+                var pathTexts = _categoryService.GetParentPath(currentCase.Category_Id.Value, currentCase.Customer_Id).ToList();
+                var translatedText = pathTexts;
+                if (pathTexts.Any())
+                {
+                    translatedText = new List<string>();
+                    foreach (var pathText in pathTexts.ToList())
+                        translatedText.Add(Translation.Get(pathText));
+                }
+                currentCase.Category.Name = string.Join(" - ", translatedText);
+            }
+
             var newLogFile = new FilesModel();
 
             CaseOverviewModel model = null;
