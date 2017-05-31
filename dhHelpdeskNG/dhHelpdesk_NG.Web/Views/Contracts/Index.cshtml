@@ -99,30 +99,30 @@
                                                 </td>
                                             </tr>
                                             <tr style="border-style:solid;border-width:thin">
-                                                <td style="border-style:solid;border-width:thin">
-                                                    För uppsägning:
+                                                <td style="border-style:solid;border-width:thin;">
+                                                    <span style="color:red">För uppsägning:</span>
                                                 </td>
 
                                                 <td style="border-style:solid;border-width:thin;text-align:right">
-                                                    @Model.ContractNoticeOfRemovalCount
+                                                    <span style="color:red"> @Model.ContractNoticeOfRemovalCount </span>
                                                 </td>
                                             </tr>
                                             <tr style="border-style:solid;border-width:thin">
                                                 <td style="border-style:solid;border-width:thin">
-                                                    För uppföljning:
+                                                    <span style="color:#FF8000"> För uppföljning:</span>
                                                 </td>
 
                                                 <td style="border-style:solid;border-width:thin;text-align:right">
-                                                    @Model.ContractFollowUpCount
+                                                    <span style="color:#FF8000">  @Model.ContractFollowUpCount </span>
                                                 </td>
                                             </tr>
                                             <tr style="border-style:solid;border-width:thin">
                                                 <td style="border-style:solid;border-width:thin">
-                                                    Löpande:
+                                                    <span style="color:#009900">Löpande:</span>
                                                 </td>
 
                                                 <td style="border-style:solid;border-width:thin;text-align:right">
-                                                    @Model.RunningCases
+                                                    <span style="#009900"> @Model.RunningCases</span>
                                                 </td>
                                             </tr>
                                         </table>
@@ -197,11 +197,11 @@
                 <div id="contracts_grid">
                     @Html.Partial("_ContractsIndexRows", Model.Rows)
                 </div>
-            
+
                 @*<div id="SettingsTableContainer">
 
-                    @Html.Partial("_Settings", Model.Setting)
-                </div>*@
+                        @Html.Partial("_Settings", Model.Setting)
+                    </div>*@
 
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-2">
@@ -211,8 +211,8 @@
                 }
             </div>
 
-            
-            
+
+
         </div>
     </div>
 
