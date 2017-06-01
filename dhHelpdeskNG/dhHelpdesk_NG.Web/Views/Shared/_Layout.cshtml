@@ -387,7 +387,7 @@
 
     $(document).ready(function () {
 
-        if ('@accessToken' != null && '@refreshToken' != null) {
+        if ('@accessToken' != null && '@accessToken' != '' && '@refreshToken' != null && '@refreshToken' != '') {            
             var tokenData = { 'AccessToken': '@accessToken', 'RefreshToken': '@refreshToken' };
             localStorage.setItem("TokenData", JSON.stringify(tokenData));
         }

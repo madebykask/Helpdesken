@@ -740,4 +740,38 @@ EditPage.prototype.init = function (p) {
         requiredMessage: p.casesScopeInitParameters.mandatoryFieldsText,
         mustBeNumberMessage: p.casesScopeInitParameters.formatFieldsText + ": #.##"
     });
+    
+    me.getTokenIfNeeded();
 };
+
+
+EditPage.prototype.getTokenIfNeeded = function () {
+    var needToGetToken = false;
+    var _tokenData = localStorage.getItem("TokenData");
+
+    if (_tokenData !== null) {
+        var _details = JSON.parse(_tokenData);
+        if (_details != undefined) {
+            needToGetToken = _details.AccessToken === '' || _details.RefreshToken === '';
+        }
+    } else {
+        needToGetToken = true;
+    }
+
+    if (needToGetToken) {
+        $.get(_parameters.getTokenUrl,
+            {
+                curTime: Date.now()
+            },
+            function (res) {
+                if (res != null) {
+                    if (res.result) {
+                        localStorage.removeItem("TokenData");
+                        var newTokenData = { 'AccessToken': res.accessToken, 'RefreshToken': res.refreshToken };
+                        localStorage.setItem("TokenData", JSON.stringify(newTokenData));
+                    }
+                }
+            }
+         );
+    }
+}

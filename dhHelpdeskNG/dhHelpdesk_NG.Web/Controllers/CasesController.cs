@@ -78,6 +78,11 @@ namespace DH.Helpdesk.Web.Controllers
     using Infrastructure.ModelFactories.Case.Concrete;
     using static BusinessData.OldComponents.GlobalEnums;
     using System.Threading;
+    using Models.WebApi;
+    using Infrastructure.WebApi;
+    using System.Configuration;
+    using Infrastructure.Helpers;
+    using Infrastructure.Cryptography;
 
     public class CasesController : BaseController
     {
@@ -1243,7 +1248,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (SessionFacade.CurrentUser != null)
             {
+                /* Used for Extended Case */
                 TempData["Case_Id"] = id;
+
                 var userId = SessionFacade.CurrentUser.Id;
 
                 var caseLockViewModel = GetCaseLockModel(id, userId);
@@ -2662,6 +2669,25 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CaseOverviewGridSettings.ExpandedStatistics = value;
             return Json("Success", JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        public JsonResult GetToken()
+        {
+            if (SessionFacade.CurrentUser != null)
+            {
+                var user = _userService.GetUser(SessionFacade.CurrentUser.Id);
+                if (user != null)
+                {
+                    var token = GetSimpleToken(user.UserID, user.Password);
+                    if (token != null)
+                    {
+                        return Json(new { result = true, accessToken = token.access_token, refreshToken = token.refresh_token }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+
+            return Json(new { result=false }, JsonRequestBehavior.AllowGet);
+        }        
 
         #endregion
 
@@ -5884,6 +5910,31 @@ namespace DH.Helpdesk.Web.Controllers
         #endregion
 
         #region --General--
+
+        private SimpleToken GetSimpleToken(string userName, string password)
+        {
+            try
+            {
+                var baseUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Request.ApplicationPath.TrimEnd('/'));
+                var webApiService = new WebApiService(baseUrl);
+                var token = AsyncHelper.RunSync(() => webApiService.GetAccessToken(userName, password));
+
+                if (token != null)
+                {
+                    var encriptionKey = ConfigurationManager.AppSettings.AllKeys.Contains(AppSettingsKey.EncryptionKey) ?
+                                        ConfigurationManager.AppSettings[AppSettingsKey.EncryptionKey].ToString() : string.Empty;
+
+                    token.access_token = AESCryptoProvider.Encrypt256(token.access_token, encriptionKey);
+                    token.refresh_token = AESCryptoProvider.Encrypt256(token.refresh_token, encriptionKey);
+                }
+
+                return token;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         private string RenderPartialViewToString(string viewName, object model)
         {
