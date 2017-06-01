@@ -72,52 +72,44 @@
                                         @Html.TextBoxFor(model => model.CaseSolution.ShortDescription, new { id = "ShortDescription", maxlength = "100" })
                                     </td>
                                 </tr>
-                                <tr">
+                                <tr>
                                     <td style="width: 200px">
                                         @Translation.GetCoreTextTranslation("Information")
                                     </td>
                                     <td>
                                         @Html.TextAreaFor(model => model.CaseSolution.Information, new { id = "Information", @class = "richtexteditor", style = "width:600px; height:250px;" })
                                     </td>
-                                    </tr>
+                                </tr>
 
 
-                                    <tbody class="hideOnInsideCase" style="@(Model.CaseSolution.ShowInsideCase == 1 ? "" : "display:none")">
+                                @*<tbody class="hideOnInsideCase" style="@(Model.CaseSolution.ShowInsideCase == 1 ? "" : "display:none")">*@
 
 
-                                        <tr>
-                                            <td>
-                                                @Translation.Get("Ersätt alltid befintliga värden", SessionFacade.CurrentLanguageId)
-                                            </td>
-                                            <td>
-                                                <input type="checkbox" name="CaseSolution.OverWritePopUp" @(Model.CaseSolution.OverWritePopUp == 1 ? "checked=checked" : "") value="1" class="switchcheckbox" />
-                                                <input type="hidden" name="CaseSolution.OverWritePopUp" value="0" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Translation.Get("Sorteringsordning", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(model => model.CaseSolution.SortOrder, new { maxlength = "10", style = "width: 20px;" })
-                                            </td>
-                                        </tr>
-                                    </tbody>
 
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            <input type="checkbox" name="Casesolution.Status" @(Model.CaseSolution.Status != 0 ? "checked=checked" : "") value="1" class="switchcheckbox" />
-                                            <input type="hidden" name="Casesolution.Status" value="0" />
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Sorteringsordning", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.CaseSolution.SortOrder, new { maxlength = "10", style = "width: 20px;" })
+                                    </td>
+                                </tr>
+                                @*</tbody>*@
+
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="Casesolution.Status" @(Model.CaseSolution.Status != 0 ? "checked=checked" : "") value="1" class="switchcheckbox" />
+                                        <input type="hidden" name="Casesolution.Status" value="0" />
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>
                     <div style="@Model.displayUserInfoHtml()" class="notifier-block hideshow">
-                        <h4>@Translation.Get("Show", Enums.TranslationSource.TextTranslation)</h4>
+                        <h4>@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)</h4>
                         <div class="row">
                             <div class="span12">
                                 <table class="tableform" border="0">
@@ -149,10 +141,10 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <div id="divShowCase" style="display:none; border-style:solid;border-width:thin;border-color:lightgray; padding:5px">
+                                <div id="divShowCase" style="display:none; border-style:solid;border-width:thin;border-color:lightgray; padding:5px;width:600px">
                                     <table class="tableform" border="0">
                                         <tr>
-                                            <td>
+                                            <td style="width:200px">
                                                 @Translation.Get("Koppla till åtgärd", Enums.TranslationSource.TextTranslation)
                                             </td>
                                             <td>
@@ -182,15 +174,41 @@
                                                 {
                                                     @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new { @Id = "ConnectTo", disabled = "disabled", @onchange = "GetSelectedTextValue(this)" })
                                                 }
-                                                <div id="divConnect" style="display: none; border-style:solid;border-width:thin;border-color:lightgray; padding:5px">
-                                                    @Translation.Get("Detta arbetsflöde kommer endast visas om alla villkor är uppfyllda i ärendet. Det kan finnas mer än ett värde för varje fält, ett av värdena för fältet måste vara uppfyllt.", Enums.TranslationSource.TextTranslation)
 
-                                                </div>
                                             </td>
                                         </tr>
-
+                                        <tr>
+                                            <td>
+                                                @Translation.Get("Ersätt alltid befintliga värden", SessionFacade.CurrentLanguageId)
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" name="CaseSolution.OverWritePopUp" @(Model.CaseSolution.OverWritePopUp == 1 ? "checked=checked" : "") value="1" class="switchcheckbox" />
+                                                <input type="hidden" name="CaseSolution.OverWritePopUp" value="0" />
+                                            </td>
+                                        </tr>
                                     </table>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* <div id=" divConditions" style="display:none" class="notifier-block hideshow">*@
+                    <div id="divConditions" style="display: none" class="notifier-block hideshow">
+                        <h4>@Translation.Get("Villkor", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform" border="0">
+
+                                    <tr>
+                                        <td style="width:100%">
+                                            @Translation.Get("Detta arbetsflöde kommer endast visas om alla villkor är uppfyllda i ärendet. Det kan finnas mer än ett värde för varje fält, ett av värdena för fältet måste vara uppfyllt.", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        
+                                    </tr>
+
+
+
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -2170,18 +2188,19 @@
     });
 
 
-    function GetSelectedTextValue(ddlFruits) {
+    function GetSelectedTextValue(ddl) {
 
-        var selectedValue = ConnectTo.value;
-        // alert(selectedValue);
+        var selectedValue = ddl.value;
+
         if (selectedValue==0 && selectedValue!='')
         {
-            document.getElementById('divConnect').style.display = 'block';
+         
+            document.getElementById('divConditions').style.display = 'block';
         }
         else
         {
 
-            document.getElementById('divConnect').style.display = 'none';
+            document.getElementById('divConditions').style.display = 'none';
         }
         //var selectedText = ConnectTo.options[ConnectTo.selectedIndex].innerHTML;
 
@@ -2192,17 +2211,45 @@
     function ShowHideCaseDiv(chk) {
 
 
-
+        
         if (document.getElementById('Casesolution_ShowInsideCase').checked==true)
         {
             //alert();
             document.getElementById('divShowCase').style.display = 'block';
+
+            if(document.getElementById('ConnectTo').value==0  && document.getElementById('ConnectTo').value!='')
+            {
+                document.getElementById('divConditions').style.display = 'block';
+            }
         }
         else
         {
-
+            document.getElementById('divConditions').style.display = 'none';
             document.getElementById('divShowCase').style.display = 'none';
         }
 
     }
+
+    $( document ).ready(function() {
+
+        if (document.getElementById('Casesolution_ShowInsideCase').checked)
+        {
+            if(document.getElementById('ConnectTo').value==0  && document.getElementById('ConnectTo').value!='')
+            {
+                document.getElementById('divConditions').style.display = 'block';
+            }
+            
+
+            document.getElementById('divShowCase').style.display = 'block';
+        }
+        else
+        {
+            document.getElementById('divConditions').style.display = 'none';
+            document.getElementById('divShowCase').style.display = 'none';
+        }
+
+
+
+
+    });
 </script>
