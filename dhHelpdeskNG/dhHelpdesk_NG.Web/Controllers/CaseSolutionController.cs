@@ -98,7 +98,8 @@ namespace DH.Helpdesk.Web.Controllers
             IRegistrationSourceCustomerService registrationSourceCustomerService,
             ICaseRuleFactory caseRuleFactory,
             IWatchDateCalendarService watchDateCalendarService,
-            ICacheProvider cache)
+            ICacheProvider cache,
+            ICaseSolutionConditionService _caseSolutionConditionService)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
