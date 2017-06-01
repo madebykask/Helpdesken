@@ -125,6 +125,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IUsersPasswordHistoryService>().To<UsersPasswordHistoryService>();
             this.Bind<IRegistrationSourceCustomerService>().To<RegistrationSourceCustomerService>();
             this.Bind<ICaseLockService>().To<CaseLockService>();
+            this.Bind<ICaseSolutionConditionService>().To<CaseSolutionConditionService>();
 
             // Liceneses module services
             this.Bind<IProductsService>().To<ProductsService>();
@@ -147,7 +148,9 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IOrderAccountSettingsProxyService>().To<OrderAccountSettingsProxyService>();
 
             this.Bind<IOrderAccountDefaultSettingsCreator>().To<OrderAccountDefaultSettingsCreator>();
+
             
+
             // Survey service
             this.Bind<ISurveyService>().To<SurveyService>();
 

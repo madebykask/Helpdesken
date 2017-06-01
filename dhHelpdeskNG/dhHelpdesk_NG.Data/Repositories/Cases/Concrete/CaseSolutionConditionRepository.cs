@@ -38,9 +38,10 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 .Select(this._CaseSolutionConditionToBusinessModelMapper.Map);
         }
 
-        public List<CaseSolutionConditionEntity> GetCaseSolutionCondition(int customerId)
+        public IList<CaseSolutionConditionEntity> GetCaseSolutionCondition(int casesolutionid)
         {
-            return null;
+            return this.DataContext.CaseSolutionsConditions.Where(z => z.CaseSolution_Id == casesolutionid).ToList();
+         
         }
 
 

@@ -131,6 +131,8 @@
 
         public DbSet<CaseSolution> CaseSolutions { get; set; }
 
+        public DbSet<CaseSolutionConditionEntity> CaseSolutionsConditions { get; set; }
+
         public DbSet<CaseType> CaseTypes { get; set; }
 
         public DbSet<Case> Cases { get; set; }

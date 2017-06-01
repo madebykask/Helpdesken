@@ -20,7 +20,7 @@ namespace DH.Helpdesk.Services.Services
 
     public interface ICaseSolutionConditionService
     {
-        List<CaseSolutionConditionEntity> GetCaseSolutionCondition(int customerId);
+        IList<CaseSolutionConditionEntity> GetCaseSolutionCondition(int customerId);
 
     }
 
@@ -41,9 +41,9 @@ namespace DH.Helpdesk.Services.Services
         //    return _caseSolutionRepository.GetAntal(customerId, userid);
         //}
 
-        public List<CaseSolutionConditionEntity> GetCaseSolutionCondition(int customerId)
+        public IList<CaseSolutionConditionEntity> GetCaseSolutionCondition(int casesolutionid)
         {
-            return null;
+            return this._caseSolutionConditionRepository.GetCaseSolutionCondition(casesolutionid).ToList();
         }
 
 

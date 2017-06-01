@@ -60,6 +60,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseRuleFactory _caseRuleFactory;
         private readonly IWatchDateCalendarService _watchDateCalendarService;
         private readonly ICacheProvider _cache;
+        private readonly ICaseSolutionConditionService _caseSolutionConditionService;
 
         private const int MAX_QUICK_BUTTONS_COUNT = 5;
         private const string CURRENT_USER_ITEM_CAPTION = "Inloggad användare";
@@ -99,7 +100,7 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseRuleFactory caseRuleFactory,
             IWatchDateCalendarService watchDateCalendarService,
             ICacheProvider cache,
-            ICaseSolutionConditionService _caseSolutionConditionService)
+            ICaseSolutionConditionService caseSolutionConditionService)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
@@ -133,6 +134,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._registrationSourceCustomerService = registrationSourceCustomerService;
             this._caseRuleFactory = caseRuleFactory;
             this._cache = cache;
+            this._caseSolutionConditionService = caseSolutionConditionService;
             _watchDateCalendarService = watchDateCalendarService;
         }        
 

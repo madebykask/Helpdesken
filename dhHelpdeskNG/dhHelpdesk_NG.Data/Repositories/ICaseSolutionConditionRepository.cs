@@ -16,7 +16,7 @@
         /// </param>
         IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int caseSolution_Id);
 
-        List<CaseSolutionConditionEntity> GetCaseSolutionCondition(int customerId);
+        IList<CaseSolutionConditionEntity> GetCaseSolutionCondition(int casesolutionid);
         
     }
 }

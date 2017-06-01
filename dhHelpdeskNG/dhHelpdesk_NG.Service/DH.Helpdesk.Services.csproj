@@ -276,6 +276,7 @@
     <Compile Include="Response\Questionnaire\OptionNote.cs" />
     <Compile Include="Services\CaseExtraFollowersService.cs" />
     <Compile Include="Services\CaseFollowUpService.cs" />
+    <Compile Include="Services\CaseSolutionConditionService.cs" />
     <Compile Include="Services\CaseStatistic\CaseStatisticService.cs" />
     <Compile Include="Services\Concrete\CaseLockService.cs" />
     <Compile Include="Services\Concrete\LogProgramService.cs" />
