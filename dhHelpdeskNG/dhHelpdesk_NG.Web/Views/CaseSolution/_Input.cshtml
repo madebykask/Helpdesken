@@ -221,11 +221,16 @@
                                             </select>*@
 
                                             
-                                            @Html.ListBox("lstStateSecondary", Model.StateSecondariesSelect, new { id = "lstStateSecondary", multiple = "multiple", @class = "chosen-select" })
+                                          @* @Html.ListBox("lstStateSecondary", Model.StateSecondariesSelect, new { id = "lstStateSecondary", multiple = "multiple", @class = "chosen-select" })*@
                                            
                                             @*@Html.ValidationMessageFor(model => model.ProcessesFromValue)*@
 
+                                          @* @Html.DropDownListFor(model => model.SelectedCaseSecondaries, Model.StateSecondariesSelect, new { id = "lstStateSecondary", multiple = "multiple", @class = "chosen-select" })*@
 
+
+                                            @Html.DropDownList("lstStateSecondary", Model.StateSecondariesSelect, new { id = "lstStateSecondary", multiple = "multiple", @class = "chosen-select" })
+                                         
+                                           
                                         </td>
                                     </tr>
 
@@ -2201,15 +2206,24 @@
     }
 
     $(function () {
-
+        
         $('#CaseSolution_Text_External').resizable();
         $('#CaseSolution_Text_Internal').resizable();
 
         $('#SaveCaseSolution').on('click', function () {
+            
+            
             $('#target').submit();
         })
     });
 
+    $('#lstStateSecondary').change(function () {
+        
+        var SelectedValue = $(this).val();
+        //alert(SelectedValue);
+        document.getElementById('selectedStates').value=SelectedValue;
+        //$('table select').val(SelectedValue);
+    });
 
     function GetSelectedTextValue(ddl) {
 

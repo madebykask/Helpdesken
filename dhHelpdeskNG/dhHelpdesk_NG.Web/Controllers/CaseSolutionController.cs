@@ -439,7 +439,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Edit(
             CaseSolutionInputViewModel caseSolutionInputViewModel,
             CaseSolutionSettingModel[] CaseSolutionSettingModels,
-            int PageId)
+            int PageId, string[] selectedStates)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
@@ -819,15 +819,16 @@ namespace DH.Helpdesk.Web.Controllers
             List<SelectListItem> regions = null;
             List<SelectListItem> departments = null;
             List<SelectListItem> organizationUnits = null;
-            List<SelectListItem> StateSelected = null;
-
-
+            
             var regionList = this._regionService.GetActiveRegions(curCustomerId);
 
 
             IList<CaseSolutionConditionEntity> casesolutioncondition = _caseSolutionConditionService.GetCaseSolutionCondition(caseSolution.Id);
-            //StateSecondaries
+
+            ///////////////////////////////////////////////StateSecondaries/////////////////////////////////////////////////////////////////////////////////////////////////////////
+            Guid outguid = Guid.Empty;
             string[] words = null;
+            string selected = string.Empty;
             List<StateSecondary> stList = new List<StateSecondary>();
             if (casesolutioncondition != null)
             {
@@ -857,14 +858,40 @@ namespace DH.Helpdesk.Web.Controllers
 
                                 foreach (string s in words)
                                 {
-                                    StateSecondary temp = new StateSecondary
-                                    {
-                                        Id = 0,
-                                        StateSecondaryGUID = Guid.Empty,
-                                        Name = s.ToString()
 
-                                    };
-                                    stList.Add(temp);
+                                    if (Guid.TryParse(s, out outguid))
+                                    {
+                                        StateSecondary temp = new StateSecondary
+                                        {
+                                            Id = 0,
+                                            StateSecondaryGUID = new Guid(s.ToString()),
+                                            Name = string.Empty
+
+
+                                        };
+                                        stList.Add(temp);
+                                    }
+                                    else
+                                    {
+                                        StateSecondary temp = new StateSecondary
+                                        {
+                                            Id = 0,
+                                            StateSecondaryGUID = Guid.Empty,
+                                            Name = s
+
+
+                                        };
+                                        stList.Add(temp);
+                                    }
+
+                                    if (selected == string.Empty)
+                                    {
+                                        selected = s;
+                                    }
+                                    else
+                                    {
+                                        selected = selected + "," + s;
+                                    }
                                 }
 
                             }
@@ -874,7 +901,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
             var stateSecondaries1 = this._stateSecondaryService.GetActiveStateSecondaries(curCustomerId).Union(stList);
 
-            stateSecondaries1= stateSecondaries1.OrderBy(z => z.Id).ThenBy(z => z.Name);
+            stateSecondaries1 = stateSecondaries1.OrderBy(z => z.Id).ThenBy(z => z.Name);
 
             List<SelectListItem> stateSecondaries = null;
             if (words != null)
@@ -900,7 +927,7 @@ namespace DH.Helpdesk.Web.Controllers
                         Selected = false
                     }).ToList();
             }
-            //StateSecondaries
+            ///////////////////////////////////////////////StateSecondaries/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
             regions = regionList.Select(x => new SelectListItem
@@ -930,6 +957,7 @@ namespace DH.Helpdesk.Web.Controllers
             List<SelectListItem> isAbout_Departments = null;
             List<SelectListItem> isAbout_OrganizationUnits = null;
 
+            ViewBag.selectedStates = selected;
 
             isAbout_Regions = regionList.Select(x => new SelectListItem
             {

@@ -85,5 +85,8 @@
 
 
         public List<SelectListItem> StateSecondariesSelect { get; set; }
+
+        public string SelectedCaseSecondaries { get; set; }
+
     }
 }
