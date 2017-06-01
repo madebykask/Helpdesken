@@ -1179,7 +1179,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 customerId = SessionFacade.CurrentCustomer.Id;
-            }
+            }            
 
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             if (SessionFacade.CurrentUser != null)
@@ -1243,11 +1243,12 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (SessionFacade.CurrentUser != null)
             {
+                TempData["Case_Id"] = id;
                 var userId = SessionFacade.CurrentUser.Id;
 
                 var caseLockViewModel = GetCaseLockModel(id, userId);
                 int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : _caseService.GetCaseById(id).Customer_Id;
-
+                
                 m = this.GetCaseInputViewModel(userId, customerId, id, caseLockViewModel, redirectFrom, backUrl, null, null, updateState);
                 if (uni.HasValue)
                 {

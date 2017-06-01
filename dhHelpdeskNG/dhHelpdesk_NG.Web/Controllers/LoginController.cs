@@ -24,10 +24,15 @@
     using Models.WebApi;
     using Infrastructure.Cryptography;
     using System.Configuration;
+    using System.Collections.Generic;
 
     public class LoginController : Controller
     {
         private const string Root = "/";
+        private const string TokenKey = "Token_Data";
+        private const string Access_Token_Key = "Access_Token";
+        private const string Refresh_Token_Key = "Refresh_Token";
+
         private readonly IUserService userService;
         private readonly ICustomerService customerService;
         private readonly ILanguageService languageService;
@@ -68,18 +73,15 @@
 
             FormsAuthentication.SignOut();
 
-            TempData["Access_token"] = string.Empty;
-            TempData["Refresh_token"] = string.Empty;
-            
+            TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
+
             return this.View("Login");
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)]
         public ViewResult Login()
         {
-            TempData["Access_token"] = string.Empty;
-            TempData["Refresh_token"] = string.Empty;
-
+            TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);            
             return View();
         }
 
@@ -209,13 +211,11 @@
                     }
 
                     var token = GetToken(userName, password);
-                    TempData["Access_token"] = string.Empty;
-                    TempData["Refresh_token"] = string.Empty;
-
+                    TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
+                    
                     if (token != null)
                     {
-                        TempData["Access_token"] = token.access_token;
-                        TempData["Refresh_token"] = token.refresh_token;
+                        TempData[TokenKey] = GetTokenData(token.access_token, token.refresh_token);                        
                     }
 
                     this.RedirectFromLoginPage(userName, redirectTo, user.StartPage);
@@ -298,5 +298,12 @@
             return token;
         }
 
+        private Dictionary<string,string> GetTokenData(string access_token, string refresh_token)
+        {
+            var tempData = new Dictionary<string, string>();
+            tempData.Add(Access_Token_Key, access_token);
+            tempData.Add(Refresh_Token_Key, refresh_token);
+            return tempData;
+        }
     }
 }

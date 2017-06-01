@@ -351,18 +351,49 @@
 @RenderSection("Scripts", false)
 <input type="hidden" value="@Request.RawUrl" id="rawUrl"/>
 @Html.Partial("_Translations", null)
-    @{
-        var accessToken = TempData["Access_token"];
-        var refreshToken = TempData["Refresh_token"];
-        TempData["Access_token"] = null;
-        TempData["Refresh_token"] = null;        
-    }
-<script type="text/javascript">
-    $(document).ready(function () {
-        if ('@accessToken' != null && '@accessToken' != "" && '@refreshToken' != null && '@refreshToken' != "") {            
-            localStorage.setItem("AccessToken", '@accessToken');
-            localStorage.setItem("RefreshToken", '@refreshToken');
+@{
+    var curCustomerId = SessionFacade.CurrentCustomer.Id;
+    var curLanguageId = SessionFacade.CurrentLanguageId;
+    int curCaseId = 0;
+    if (TempData["Case_Id"] != null)
+    {
+        if (!int.TryParse(TempData["Case_Id"].ToString(), out curCaseId))
+        {
+            curCaseId = 0;
         }
+    }
+
+    var accessToken = "";
+    var refreshToken = "";
+    object tokenData = null;
+    Dictionary<string,string> tokenDataDic;
+    accessToken = null;
+    refreshToken = null;
+    if (TempData.TryGetValue("Token_Data", out tokenData))
+    {
+        tokenDataDic = ((Dictionary<string,string>) tokenData);
+        if (tokenDataDic != null && tokenDataDic.Any())
+        {
+            accessToken = tokenDataDic["Access_Token"].ToString();
+            refreshToken = tokenDataDic["Refresh_Token"].ToString();
+        }
+    }
+
+    TempData["TokenData"] = null;
+    TempData["Case_Id"] = null;
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        if ('@accessToken' != null && '@refreshToken' != null) {
+            var tokenData = { 'AccessToken': '@accessToken', 'RefreshToken': '@refreshToken' };
+            localStorage.setItem("TokenData", JSON.stringify(tokenData));
+        }
+
+        var globalData = { 'CurrentCustomerId': '@curCustomerId', 'CurrentLanguageId': '@curLanguageId', 'CurrentCaseId': '@curCaseId' };
+        sessionStorage.setItem("GlobalData", JSON.stringify(globalData));
 
         var timezoneAutodetectRes = "@ViewBag.AutoDetectionResult";
         var failureMsg = "@Translation.GetForJS("Vi kunde inte ange din tidszon. Var vänlig välj rätt tidszon och klicka på \"Spara\".")";

@@ -33,10 +33,10 @@ namespace DH.Helpdesk.Web.Areas.WebApi
         }
 
         [HttpGet]        
-        public string GetCase(int id)
+        public CaseModel GetCase(int id)
         {                         
             var caseModel = _universalCaseService.GetCase(id);
-            return JsonConvert.SerializeObject(caseModel);
+            return caseModel;
         }
         
         [HttpPost]        

@@ -43,10 +43,10 @@
             <input type="hidden" id="timeZoneOffsetInJan1" name="timeZoneOffsetInJan1"/>
             <input type="hidden" id="timeZoneOffsetInJul1" name="timeZoneOffsetInJul1"/>
             <input type="submit" value="Login" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />
-            @*<input type="button" value="Get Access Token" name="btnAccessToken" id="btnAccessToken" class="btn btn-large btn-danger" style="width:100%;" />
+            <input type="button" value="Get Access Token" name="btnAccessToken" id="btnAccessToken" class="btn btn-large btn-danger" style="width:100%;" />
             <input type="button" value="Get New Access Token" name="btnRefreshToken" id="btnRefreshToken" class="btn btn-large btn-danger" style="width:100%;" />
             <input type="button" value="Get Case" name="btnGetCase" id="btnGetCase" class="btn btn-large btn-warning" style="width:100%;" />
-            <input type="button" value="Save Case" name="btnSaveCase" id="btnSaveCase" class="btn btn-large btn-warning" style="width:100%;" />*@
+            <input type="button" value="Save Case" name="btnSaveCase" id="btnSaveCase" class="btn btn-large btn-warning" style="width:100%;" />
         }
     </div>
     <div class="signin-bottom">
@@ -65,6 +65,9 @@
         document.getElementById('timeZoneOffsetInJul1').value = Jul1.getTimezoneOffset();
         $("input:text:visible:first").focus();
     };
+
+    localStorage.removeItem("TokenData");
+    sessionStorage.removeItem("GlobalData");
 
     localStorage.removeItem("AccessToken");
     localStorage.removeItem("RefreshToken");
@@ -88,7 +91,7 @@
     function getToken() {        
         $.post("@Url.Content("~/token")",
                 "username=admin" +
-                "&password=" +
+                "&password=3edc4rfv" +
                 "&grant_type=password",
                 { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }                
         ).success(function (data) {
@@ -143,11 +146,9 @@
         }
 
         var caseInfo = {
-            Id: 95879,
-            CaseGUID: "5d843789-7049-4c7e-b60b-4b129eb7fff6",
-            Caption: "MyNew Caption",
-            Customer_Id: 29,
-            CaseType_Id: 93,
+            Id: 0,            
+            Caption: "My Case Caption1",
+            Customer_Id: 29,            
             ProductAreaSetDate:"2017-05-12T12:41:55",
             PersonsEmail: "mg@dhsolutions.se",
             CurrentLanguageId: 1            
