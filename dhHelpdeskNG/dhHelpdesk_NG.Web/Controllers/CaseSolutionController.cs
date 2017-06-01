@@ -768,6 +768,9 @@ namespace DH.Helpdesk.Web.Controllers
             var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation)
                                                          .Where(x => x.TemplatePath == null).ToList();
 
+
+           
+
             ////I have removed the  above condition, from now on these will appear in the list /TAN
             //var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation).ToList();
 
@@ -811,8 +814,21 @@ namespace DH.Helpdesk.Web.Controllers
             List<SelectListItem> regions = null;
             List<SelectListItem> departments = null;
             List<SelectListItem> organizationUnits = null;
+            List<SelectListItem> stateSecondaries = null;
 
             var regionList = this._regionService.GetActiveRegions(curCustomerId);
+
+            var statesecondaries = _stateSecondaryService.GetActiveStateSecondaries(curCustomerId);
+
+            stateSecondaries = this._stateSecondaryService.GetActiveStateSecondaries(curCustomerId)
+                                        .Select(x => new SelectListItem
+                                        {
+                                            Text = x.Name,
+                                            Value = x.Id.ToString(),
+                                            Selected = x.Id == caseSolution.Id
+                                        }).ToList();
+
+
             regions = regionList.Select(x => new SelectListItem
                                          {
                                              Text = x.Name,
@@ -840,6 +856,7 @@ namespace DH.Helpdesk.Web.Controllers
             List<SelectListItem> isAbout_Departments = null;
             List<SelectListItem> isAbout_OrganizationUnits = null;
             
+
             isAbout_Regions = regionList.Select(x => new SelectListItem
             {
                 Text = x.Name,
@@ -1033,7 +1050,9 @@ namespace DH.Helpdesk.Web.Controllers
 
                 ButtonList = buttonList,
 
-                ActionList = actionList
+                ActionList = actionList,
+
+                StateSecondariesSelect=stateSecondaries
             };
 
             model.ParantPath_Category = "--";

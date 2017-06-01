@@ -81,6 +81,9 @@
 
         public IList<SelectListItem> ActionList { get; set; }
      
-        public CaseRuleModel RuleModel { get; set; }    
+        public CaseRuleModel RuleModel { get; set; }
+
+
+        public List<SelectListItem> StateSecondariesSelect { get; set; }
     }
 }

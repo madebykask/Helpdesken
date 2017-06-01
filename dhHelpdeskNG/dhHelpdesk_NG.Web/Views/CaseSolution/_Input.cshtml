@@ -198,12 +198,28 @@
                         <div class="row">
                             <div class="span12">
                                 <table class="tableform" border="0">
-
-                                    <tr>
+                                    <tr style="width:100%">
                                         <td style="width:100%">
                                             @Translation.Get("Detta arbetsflöde kommer endast visas om alla villkor är uppfyllda i ärendet. Det kan finnas mer än ett värde för varje fält, ett av värdena för fältet måste vara uppfyllt.", Enums.TranslationSource.TextTranslation)
                                         </td>
-                                        
+
+                                    </tr>
+                                </table>
+
+                                <table class="tableform" border="0">
+                                    <tr>
+                                        <td style="width:200px">
+                                            @Translation.Get("Case - State Secondary", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            <select id="lstStateSecondary" name="lstStateSecondary" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                                @foreach (var s in Model.StateSecondariesSelect)
+                                                {
+                                                    <option value="@s.Value">@s.Text</option>
+                                                }
+                                            </select>
+
+                                        </td>
                                     </tr>
 
 
@@ -2194,7 +2210,7 @@
 
         if (selectedValue==0 && selectedValue!='')
         {
-         
+
             document.getElementById('divConditions').style.display = 'block';
         }
         else
@@ -2211,7 +2227,7 @@
     function ShowHideCaseDiv(chk) {
 
 
-        
+
         if (document.getElementById('Casesolution_ShowInsideCase').checked==true)
         {
             //alert();
@@ -2238,7 +2254,7 @@
             {
                 document.getElementById('divConditions').style.display = 'block';
             }
-            
+
 
             document.getElementById('divShowCase').style.display = 'block';
         }
