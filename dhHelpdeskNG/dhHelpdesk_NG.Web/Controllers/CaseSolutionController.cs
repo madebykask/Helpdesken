@@ -55,7 +55,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IChangeService _changeService;
         private readonly ICausingPartService _causingPartService;
         private readonly IOrganizationService _organizationService;
-        private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;        
+        private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
         private readonly ICaseSolutionSettingService caseSolutionSettingService;
         private readonly ICaseRuleFactory _caseRuleFactory;
         private readonly IWatchDateCalendarService _watchDateCalendarService;
@@ -136,7 +136,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._cache = cache;
             this._caseSolutionConditionService = caseSolutionConditionService;
             _watchDateCalendarService = watchDateCalendarService;
-        }        
+        }
 
         #region Template 
 
@@ -144,23 +144,23 @@ namespace DH.Helpdesk.Web.Controllers
         {
             //Set default
             var cs = new CaseSolutionSearch()
-                        {
-                            Ascending = true,
-                            SearchCss = string.Empty,
-                            SortBy = CaseSolutionIndexColumns.Name 
-                        };
-            
-            if (SessionFacade.CurrentCaseSolutionSearch != null)            
+            {
+                Ascending = true,
+                SearchCss = string.Empty,
+                SortBy = CaseSolutionIndexColumns.Name
+            };
+
+            if (SessionFacade.CurrentCaseSolutionSearch != null)
                 cs = SessionFacade.CurrentCaseSolutionSearch;
             else
                 SessionFacade.CurrentCaseSolutionSearch = cs;
-            
-            if (string.IsNullOrEmpty(SessionFacade.FindActiveTab("CaseSolution")))            
+
+            if (string.IsNullOrEmpty(SessionFacade.FindActiveTab("CaseSolution")))
                 SessionFacade.SaveActiveTab("CaseSolution", "CaseTemplate");
-            
-            var model = CreateIndexViewModel(cs);                                                
+
+            var model = CreateIndexViewModel(cs);
             return this.View(model);
-        }      
+        }
 
         [HttpGet]
         public JsonResult RememberTab(string topic, string tab)
@@ -173,8 +173,8 @@ namespace DH.Helpdesk.Web.Controllers
         public PartialViewResult Sort(string fieldName, bool asc)
         {
             var caseSolutionSearch = new CaseSolutionSearch();
-            if (SessionFacade.CurrentCaseSolutionSearch != null)            
-                caseSolutionSearch = SessionFacade.CurrentCaseSolutionSearch;            
+            if (SessionFacade.CurrentCaseSolutionSearch != null)
+                caseSolutionSearch = SessionFacade.CurrentCaseSolutionSearch;
 
             caseSolutionSearch.Ascending = !asc;
             caseSolutionSearch.SortBy = fieldName;
@@ -196,13 +196,13 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CurrentCaseSolutionSearch = caseSolutionSearch;
 
             var model = CreateIndexViewModel(caseSolutionSearch);
-            return PartialView("_RowsOverview", model.Rows);            
+            return PartialView("_RowsOverview", model.Rows);
         }
 
         public ActionResult New(int? backToPageId)
         {
             // Positive: Send Mail to...
-            var caseSolution = new CaseSolution (){ Customer_Id = SessionFacade.CurrentCustomer.Id, NoMailToNotifier = 1, Status = 1, ShowOnCaseOverview = 1, ShowInsideCase = 1, OverWritePopUp = 1};
+            var caseSolution = new CaseSolution() { Customer_Id = SessionFacade.CurrentCustomer.Id, NoMailToNotifier = 1, Status = 1, ShowOnCaseOverview = 1, ShowInsideCase = 1, OverWritePopUp = 1 };
 
             if (backToPageId == null)
                 ViewBag.PageId = 0;
@@ -217,7 +217,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
-        [ValidateInput(false)] 
+        [ValidateInput(false)]
         [HttpPost]
         public ActionResult New(CaseSolution caseSolution, CaseSolutionInputViewModel caseSolutionInputViewModel, CaseSolutionSettingModel[] caseSolutionSettingModels, int PageId)
         {
@@ -270,10 +270,10 @@ namespace DH.Helpdesk.Web.Controllers
                 switch (PageId) // back to refrence page
                 {
                     case 0:
-                        return this.RedirectToAction("index", "casesolution");                        
+                        return this.RedirectToAction("index", "casesolution");
 
                     case 1:
-                        return this.RedirectToAction("index", "Cases");                        
+                        return this.RedirectToAction("index", "Cases");
                 }
             }
 
@@ -305,7 +305,7 @@ namespace DH.Helpdesk.Web.Controllers
 
 
             var model = this.CreateInputViewModel(caseSolution);
-            
+
             return this.View(model);
         }
 
@@ -345,7 +345,7 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.FinishingCause_Id = null;
             }
 
-            if (SessionFacade.CurrentUser != null && caseSolution.SetCurrentUserAsPerformer == 1)            
+            if (SessionFacade.CurrentUser != null && caseSolution.SetCurrentUserAsPerformer == 1)
                 caseSolution.PerformerUser_Id = SessionFacade.CurrentUser.Id;
 
             if (SessionFacade.CurrentUser != null && SessionFacade.CurrentCustomer != null && caseSolution.SetCurrentUsersWorkingGroup == 1)
@@ -375,7 +375,7 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.Place,
                     caseSolution.UserCode,
                     UpdateNotifierInformation = caseSolution.UpdateNotifierInformation.ToBool().ToString(),
-                    
+
                     caseSolution.IsAbout_ReportedBy,
                     caseSolution.IsAbout_PersonsName,
                     caseSolution.IsAbout_PersonsEmail,
@@ -397,7 +397,7 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.CaseType_Id,
                     caseSolution.PerformerUser_Id,
                     caseSolution.Category_Id,
-                    caseSolution.ReportedBy,                    
+                    caseSolution.ReportedBy,
                     NoMailToNotifier = caseSolution.NoMailToNotifier.ToBool(),
                     caseSolution.ProductArea_Id,
                     caseSolution.Caption,
@@ -413,11 +413,11 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.Status_Id,
                     caseSolution.StateSecondary_Id,
                     caseSolution.PersonsEmail,
-                    WatchDate = caseSolution.WatchDate.HasValue? caseSolution.WatchDate.Value.ToShortDateString() : string.Empty,
+                    WatchDate = caseSolution.WatchDate.HasValue ? caseSolution.WatchDate.Value.ToShortDateString() : string.Empty,
                     caseSolution.CausingPartId,
                     caseSolution.InvoiceNumber,
                     caseSolution.ReferenceNumber,
-                    
+
                     SMS = caseSolution.SMS.ToBool(),
                     caseSolution.AgreedDate,
                     caseSolution.Available,
@@ -475,8 +475,8 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 caseSolutionInputViewModel.CaseSolution.SetCurrentUsersWorkingGroup = null;
             }
-            
-            if (caseSolutionInputViewModel.CaseSolution.ShowInsideCase != 1 || caseSolutionInputViewModel.CaseSolution.SaveAndClose < 0 )
+
+            if (caseSolutionInputViewModel.CaseSolution.ShowInsideCase != 1 || caseSolutionInputViewModel.CaseSolution.SaveAndClose < 0)
                 caseSolutionInputViewModel.CaseSolution.SaveAndClose = null;
 
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
@@ -496,7 +496,7 @@ namespace DH.Helpdesk.Web.Controllers
                 switch (PageId) // back to refrence page
                 {
                     case 1:
-                        return this.RedirectToAction("index", "Cases");                        
+                        return this.RedirectToAction("index", "Cases");
 
                     default:
                         return this.RedirectToAction("index", "casesolution");
@@ -507,7 +507,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.TempData["RequiredFields"] = errors;
             var model = this.CreateInputViewModel(caseSolutionInputViewModel.CaseSolution);
 
-       
+
             return this.View(model);
         }
 
@@ -570,8 +570,8 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 performersList = this._userService.GetAvailablePerformersOrUserId(customerId);
             }
-            
-            var currentUser = new User(){Id= -1, FirstName = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION))};
+
+            var currentUser = new User() { Id = -1, FirstName = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION)) };
             performersList.Insert(0, currentUser);
             if (customerSettings.IsUserFirstLastNameRepresentation == 1)
             {
@@ -614,7 +614,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                List<CaseSolutionSettingModel> templateSettingModel,
                                                Setting customerSettings,
                                                List<CaseFieldSetting> caseFieldSettings)
-        {           
+        {
             var currentData = new CaseCurrentDataModel();
 
             #region Assign current data
@@ -697,10 +697,10 @@ namespace DH.Helpdesk.Web.Controllers
                                        _projectService, _problemService, _causingPartService,
                                        _changeService, _finishingCauseService, _watchDateCalendarService);
 
-            var model = _caseRuleFactory.GetCaseRuleModel(customerId, ruleMode, currentData, customerSettings, caseFieldSettings, templateSettingModel);            
+            var model = _caseRuleFactory.GetCaseRuleModel(customerId, ruleMode, currentData, customerSettings, caseFieldSettings, templateSettingModel);
 
             return model;
-        }        
+        }
 
         #endregion
 
@@ -762,7 +762,7 @@ namespace DH.Helpdesk.Web.Controllers
         #region Private Methods
 
         private CaseSolutionIndexViewModel CreateIndexViewModel(CaseSolutionSearch caseSolutionSearch)
-        {            
+        {
             var customerId = SessionFacade.CurrentCustomer.Id;
             var isUserFirstLastNameRepresentation = this._settingService.GetCustomerSetting(customerId)
                                                                         .IsUserFirstLastNameRepresentation == 1;
@@ -772,72 +772,143 @@ namespace DH.Helpdesk.Web.Controllers
                                                          .Where(x => x.TemplatePath == null).ToList();
 
 
-           
+
 
             ////I have removed the  above condition, from now on these will appear in the list /TAN
             //var caseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(customerId, caseSolutionSearch, isUserFirstLastNameRepresentation).ToList();
 
             var curUserItem = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION));
             var connectedToButton = Translation.GetCoreTextTranslation("Knapp");
-            var _rows = caseSolutions.Select(cs=> new RowIndexViewModel
-                                                        {
-                                                            Id = cs.Id,
-                                                            Name = cs.Name,
-                                                            CategoryName = cs.CaseSolutionCategory == null? string.Empty : cs.CaseSolutionCategory.Name,
-                                                            CaseCaption = cs.Caption,
-                                                            PerformerUserName = cs.PerformerUser == null? 
-                                                                                (cs.SetCurrentUserAsPerformer == 1?  curUserItem : string.Empty):
-                                                                                (isUserFirstLastNameRepresentation? 
-                                                                                    string.Format("{0} {1}", cs.PerformerUser.FirstName, cs.PerformerUser.SurName):
+            var _rows = caseSolutions.Select(cs => new RowIndexViewModel
+            {
+                Id = cs.Id,
+                Name = cs.Name,
+                CategoryName = cs.CaseSolutionCategory == null ? string.Empty : cs.CaseSolutionCategory.Name,
+                CaseCaption = cs.Caption,
+                PerformerUserName = cs.PerformerUser == null ?
+                                                                                (cs.SetCurrentUserAsPerformer == 1 ? curUserItem : string.Empty) :
+                                                                                (isUserFirstLastNameRepresentation ?
+                                                                                    string.Format("{0} {1}", cs.PerformerUser.FirstName, cs.PerformerUser.SurName) :
                                                                                     string.Format("{0} {1}", cs.PerformerUser.SurName, cs.PerformerUser.FirstName)
                                                                                 ),
-                                                            PriorityName = cs.Priority == null ? string.Empty : cs.Priority.Name,
-                                                            IsActive = (cs.Status != 0),
-                                                            ConnectedToButton = (cs.ConnectedButton.HasValue && cs.ConnectedButton == 0) ? Translation.GetCoreTextTranslation(DH.Helpdesk.Common.Constants.Text.WorkflowStep) : ( cs.ConnectedButton.HasValue) ? connectedToButton + " " + cs.ConnectedButton.Value: "",
-                                                            SortOrder = cs.SortOrder
-                                                        }).ToArray();
+                PriorityName = cs.Priority == null ? string.Empty : cs.Priority.Name,
+                IsActive = (cs.Status != 0),
+                ConnectedToButton = (cs.ConnectedButton.HasValue && cs.ConnectedButton == 0) ? Translation.GetCoreTextTranslation(DH.Helpdesk.Common.Constants.Text.WorkflowStep) : (cs.ConnectedButton.HasValue) ? connectedToButton + " " + cs.ConnectedButton.Value : "",
+                SortOrder = cs.SortOrder
+            }).ToArray();
 
             var activeTab = SessionFacade.FindActiveTab("CaseSolution");
-            activeTab = activeTab ?? "CaseTemplate";            
+            activeTab = activeTab ?? "CaseTemplate";
 
             var model = new CaseSolutionIndexViewModel(activeTab)
             {
-                 Rows = _rows,                
+                Rows = _rows,
                 CaseSolutionCategories = this._caseSolutionService.GetCaseSolutionCategories(customerId)
             };
 
             return model;
         }
 
+
+
         private CaseSolutionInputViewModel CreateInputViewModel(CaseSolution caseSolution)
         {
             var curCustomerId = SessionFacade.CurrentCustomer.Id;
             var cs = this._settingService.GetCustomerSetting(curCustomerId);
-            
+
             List<SelectListItem> regions = null;
             List<SelectListItem> departments = null;
             List<SelectListItem> organizationUnits = null;
-            List<SelectListItem> stateSecondaries = null;
+            List<SelectListItem> StateSelected = null;
+
 
             var regionList = this._regionService.GetActiveRegions(curCustomerId);
 
-            var statesecondaries = _stateSecondaryService.GetActiveStateSecondaries(curCustomerId);
 
-            stateSecondaries = this._stateSecondaryService.GetActiveStateSecondaries(curCustomerId)
-                                        .Select(x => new SelectListItem
-                                        {
-                                            Text = x.Name,
-                                            Value = x.Id.ToString(),
-                                            Selected = x.Id == caseSolution.Id
-                                        }).ToList();
+            IList<CaseSolutionConditionEntity> casesolutioncondition = _caseSolutionConditionService.GetCaseSolutionCondition(caseSolution.Id);
+            //StateSecondaries
+            string[] words = null;
+            List<StateSecondary> stList = new List<StateSecondary>();
+            if (casesolutioncondition != null)
+            {
+                if (casesolutioncondition.Count() == 1)
+                {
+
+                    StateSecondary temp = new StateSecondary
+                    {
+                        Id = 0,
+                        StateSecondaryGUID = Guid.Empty,
+                        Name = casesolutioncondition.FirstOrDefault().Property_Name
+
+                    };
+                    stList.Add(temp);
+
+                }
+                else
+                {
+                    casesolutioncondition = casesolutioncondition.Where(z => z.Property_Name == "case_StateSecondary.StateSecondaryGUID").ToList();
+                    if (casesolutioncondition.Count() > 0)
+                    {
+                        if (casesolutioncondition.FirstOrDefault().Values != null)
+                        {
+                            if (casesolutioncondition.FirstOrDefault().Values != string.Empty)
+                            {
+                                words = casesolutioncondition.FirstOrDefault().Values.Split(',');
+
+                                foreach (string s in words)
+                                {
+                                    StateSecondary temp = new StateSecondary
+                                    {
+                                        Id = 0,
+                                        StateSecondaryGUID = Guid.Empty,
+                                        Name = s.ToString()
+
+                                    };
+                                    stList.Add(temp);
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+            var stateSecondaries1 = this._stateSecondaryService.GetActiveStateSecondaries(curCustomerId).Union(stList);
+
+            stateSecondaries1= stateSecondaries1.OrderBy(z => z.Id).ThenBy(z => z.Name);
+
+            List<SelectListItem> stateSecondaries = null;
+            if (words != null)
+            {
+
+                stateSecondaries = stateSecondaries1
+                    .Select(x => new SelectListItem
+                    {
+                        Text = x.Name,
+                        Value = x.Id.ToString(),
+                        Selected = words.Contains(x.StateSecondaryGUID.ToString())
+                    }).ToList();
+
+
+            }
+            else
+            {
+                stateSecondaries = stateSecondaries1
+                    .Select(x => new SelectListItem
+                    {
+                        Text = x.Name,
+                        Value = x.Id.ToString(),
+                        Selected = false
+                    }).ToList();
+            }
+            //StateSecondaries
 
 
             regions = regionList.Select(x => new SelectListItem
-                                         {
-                                             Text = x.Name,
-                                             Value = x.Id.ToString(),
-                                             Selected = x.Id == caseSolution.Region_Id
-                                         }).ToList();
+            {
+                Text = x.Name,
+                Value = x.Id.ToString(),
+                Selected = x.Id == caseSolution.Region_Id
+            }).ToList();
 
             departments = this._departmentService.GetActiveDepartmentsBy(curCustomerId, caseSolution.Region_Id)
                                          .Select(x => new SelectListItem
@@ -858,7 +929,7 @@ namespace DH.Helpdesk.Web.Controllers
             List<SelectListItem> isAbout_Regions = null;
             List<SelectListItem> isAbout_Departments = null;
             List<SelectListItem> isAbout_OrganizationUnits = null;
-            
+
 
             isAbout_Regions = regionList.Select(x => new SelectListItem
             {
@@ -897,22 +968,22 @@ namespace DH.Helpdesk.Web.Controllers
                                          .MapToSelectList(cs, true, true)
                                      : this._userService.GetAvailablePerformersForWorkingGroup(
                                          curCustomerId,
-                                         caseSolution.CaseWorkingGroup_Id).MapToSelectList(cs, true, true);            
+                                         caseSolution.CaseWorkingGroup_Id).MapToSelectList(cs, true, true);
             const bool TakeOnlyActive = true;
 
 
             var workingGroupList = this._workingGroupService.GetAllWorkingGroupsForCustomer(curCustomerId).Select(x => new SelectListItem
-                {
-                    Text = x.WorkingGroupName,
-                    Value = x.Id.ToString()
-                }).ToList();
-             
+            {
+                Text = x.WorkingGroupName,
+                Value = x.Id.ToString()
+            }).ToList();
+
             var currentWG = new List<SelectListItem>();
             currentWG.Add(new SelectListItem
-                {
-                    Text = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_WORKINGGROUP_CAPTION)),
-                    Value = "-1"
-                });
+            {
+                Text = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_WORKINGGROUP_CAPTION)),
+                Value = "-1"
+            });
 
             workingGroupList = currentWG.Union(workingGroupList).ToList();
 
@@ -921,7 +992,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                   .Select(c => c.ConnectedButton.Value).ToList();
 
             var buttonList = new List<SelectListItem>();
-            
+
             var buttonCaption = Translation.GetCoreTextTranslation("Knapp");
 
             //Add workflow choise
@@ -932,33 +1003,35 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = caseSolution.ConnectedButton == 0
             });
 
-            for (var i= 1; i <= MAX_QUICK_BUTTONS_COUNT; i++)
+            for (var i = 1; i <= MAX_QUICK_BUTTONS_COUNT; i++)
             {
                 if (!usedButtons.Contains(i))
                 {
                     buttonList.Add(new SelectListItem()
-                        {
-                            Value = i.ToString(),
-                            Text = string.Format("{0} {1}", buttonCaption, i),
-                            Selected = caseSolution.ConnectedButton == i
-                        });
+                    {
+                        Value = i.ToString(),
+                        Text = string.Format("{0} {1}", buttonCaption, i),
+                        Selected = caseSolution.ConnectedButton == i
+                    });
                 }
             }
 
             var actionList = new List<SelectListItem>();
             actionList.Add(new SelectListItem() { Value = "-1", Text = "", Selected = !caseSolution.SaveAndClose.HasValue });
-            actionList.Add(new SelectListItem() { 
-                                                  Value = "0", 
-                                                  Text = Translation.GetCoreTextTranslation("Spara"), 
-                                                  Selected = caseSolution.SaveAndClose.HasValue && caseSolution.SaveAndClose.Value == 0 
-                                                });
+            actionList.Add(new SelectListItem()
+            {
+                Value = "0",
+                Text = Translation.GetCoreTextTranslation("Spara"),
+                Selected = caseSolution.SaveAndClose.HasValue && caseSolution.SaveAndClose.Value == 0
+            });
 
-            actionList.Add(new SelectListItem() { 
-                                                  Value = "1", 
-                                                  Text = Translation.GetCoreTextTranslation("Spara och stäng"), 
-                                                  Selected = caseSolution.SaveAndClose.HasValue && caseSolution.SaveAndClose.Value != 0 
-                                                });
-            
+            actionList.Add(new SelectListItem()
+            {
+                Value = "1",
+                Text = Translation.GetCoreTextTranslation("Spara och stäng"),
+                Selected = caseSolution.SaveAndClose.HasValue && caseSolution.SaveAndClose.Value != 0
+            });
+
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolution = caseSolution,
@@ -970,15 +1043,15 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                
+
                 CaseTypes = this._caseTypeService.GetCaseTypes(curCustomerId, TakeOnlyActive),
 
-                CaseWorkingGroups = workingGroupList, 
+                CaseWorkingGroups = workingGroupList,
 
                 Categories = this._categoryService.GetActiveParentCategories(curCustomerId),
 
                 FinishingCauses = this._finishingCauseService.GetFinishingCauses(curCustomerId),
-                
+
                 PerformerUsers = performersList,
 
                 Priorities = this._priorityService.GetPriorities(curCustomerId).Where(x => x.IsActive == 1).Select(x => new SelectListItem
@@ -986,19 +1059,19 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                
+
                 ProductAreas = this._productAreaService.GetTopProductAreasForUser(curCustomerId, SessionFacade.CurrentUser),
 
                 WorkingGroups = this._workingGroupService.GetWorkingGroups(curCustomerId).Select(x => new SelectListItem
-                 {
-                     Text = x.WorkingGroupName,
-                     Value = x.Id.ToString()
-                 }).ToList(),
+                {
+                    Text = x.WorkingGroupName,
+                    Value = x.Id.ToString()
+                }).ToList(),
 
                 Regions = regions,
 
                 Departments = departments,
-                
+
                 OUs = organizationUnits,
 
                 IsAbout_Regions = isAbout_Regions,
@@ -1044,7 +1117,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }).ToList(),
 
                 CausingParts = GetCausingPartsModel(curCustomerId, caseSolution.CausingPartId),
-             
+
                 RegistrationSources = this._registrationSourceCustomerService.GetCustomersActiveRegistrationSources(curCustomerId).Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.SourceName),
@@ -1055,7 +1128,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 ActionList = actionList,
 
-                StateSecondariesSelect=stateSecondaries
+                StateSecondariesSelect = stateSecondaries
             };
 
             model.ParantPath_Category = "--";
@@ -1105,7 +1178,7 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList();
- 
+
             }
 
             if (cs.ModuleProblem == 1)
@@ -1128,7 +1201,7 @@ namespace DH.Helpdesk.Web.Controllers
             //var deps = this._departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
             //model.departments = deps ?? this._departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id);
 
-           
+
             model.Schedule = 0;
 
             var schedule = this._caseSolutionService.GetCaseSolutionSchedule(caseSolution.Id);
@@ -1167,7 +1240,7 @@ namespace DH.Helpdesk.Web.Controllers
                     model.ScheduleMonthlyWeekday = int.Parse(model.ScheduleDays.Substring(pos + 1, 1));
                 }
             }
-           
+
             ReadOnlyCollection<CaseSolutionSettingOverview> settingOverviews =
                     this.caseSolutionSettingService.GetCaseSolutionSettingOverviews(model.CaseSolution.Id);
 
@@ -1178,8 +1251,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             model.CaseFilesModel = new CaseFilesModel();
 
-            var caseRuleModel = GetCaseRuleModel(curCustomerId, CaseRuleMode.TemplateUserChangeMode, caseSolution, 
-                                                 model.CaseSolutionSettingModels.ToList(), cs, 
+            var caseRuleModel = GetCaseRuleModel(curCustomerId, CaseRuleMode.TemplateUserChangeMode, caseSolution,
+                                                 model.CaseSolutionSettingModels.ToList(), cs,
                                                  model.CaseFieldSettings.ToList());
 
             model.RuleModel = caseRuleModel;
@@ -1235,7 +1308,7 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
 
         }
-        
+
         private CaseSettingsSolutionAggregate CreateCaseSettingsSolutionAggregate(
             int caseSolutionId,
             IEnumerable<CaseSolutionSettingModel> caseSolutionSettingModels)

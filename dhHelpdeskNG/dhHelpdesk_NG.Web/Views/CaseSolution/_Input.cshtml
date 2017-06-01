@@ -9,6 +9,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @using System.Web.Script.Serialization
 
+
 @{
     var saveDropDownText = Html.Raw(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + " - " +
                                    Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation));
@@ -212,12 +213,18 @@
                                             @Translation.Get("Case - State Secondary", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
-                                            <select id="lstStateSecondary" name="lstStateSecondary" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                            @*<select id="lstStateSecondary" name="lstStateSecondary" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                                 @foreach (var s in Model.StateSecondariesSelect)
                                                 {
                                                     <option value="@s.Value">@s.Text</option>
                                                 }
-                                            </select>
+                                            </select>*@
+
+                                            
+                                            @Html.ListBox("lstStateSecondary", Model.StateSecondariesSelect, new { id = "lstStateSecondary", multiple = "multiple", @class = "chosen-select" })
+                                           
+                                            @*@Html.ValidationMessageFor(model => model.ProcessesFromValue)*@
+
 
                                         </td>
                                     </tr>
