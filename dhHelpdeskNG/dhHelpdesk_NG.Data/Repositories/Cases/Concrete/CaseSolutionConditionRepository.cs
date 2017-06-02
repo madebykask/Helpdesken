@@ -63,7 +63,14 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
         public IList<StateSecondary> GetStateSecondaries(int casesolutionid)
         {
-            
+            string constString = "case_StateSecondary";
+
+            List<CaseSolutionConditionEntity> clist = this.DataContext.CaseSolutionsConditions.Where(z => z.Property_Name == constString && z.CaseSolution_Id==casesolutionid && z.Status == 1).ToList();
+
+            if(clist!=null)
+            {
+
+            }
 
             return null;
         }
