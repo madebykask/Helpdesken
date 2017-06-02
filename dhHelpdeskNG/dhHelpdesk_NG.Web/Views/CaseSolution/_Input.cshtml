@@ -2225,34 +2225,23 @@
     
 
     function GetSelectedTextValue(ddl) {
-
         var selectedValue = ddl.value;
-
         if (selectedValue==0 && selectedValue!='')
         {
-
             document.getElementById('divConditions').style.display = 'block';
         }
         else
         {
-
             document.getElementById('divConditions').style.display = 'none';
-        }
-        //var selectedText = ConnectTo.options[ConnectTo.selectedIndex].innerHTML;
-
-        //alert("Selected Text: " + selectedText + " Value: " + selectedValue);
+        }       
     }
 
 
     function ShowHideCaseDiv(chk) {
 
-
-
         if (document.getElementById('Casesolution_ShowInsideCase').checked==true)
         {
-            //alert();
             document.getElementById('divShowCase').style.display = 'block';
-
             if(document.getElementById('ConnectTo').value==0  && document.getElementById('ConnectTo').value!='')
             {
                 document.getElementById('divConditions').style.display = 'block';

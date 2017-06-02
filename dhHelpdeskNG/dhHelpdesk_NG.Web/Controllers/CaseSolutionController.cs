@@ -440,7 +440,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Edit(
             CaseSolutionInputViewModel caseSolutionInputViewModel,
             CaseSolutionSettingModel[] CaseSolutionSettingModels,
-            int PageId, string selectedStates, string selectedWGs)
+            int PageId, string selectedStates, string selectedCaseWgs)
         {
 
 
@@ -500,6 +500,18 @@ namespace DH.Helpdesk.Web.Controllers
                 CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
                 Property_Name = stateId,
                 Values = selectedStates,
+                Status = 1
+            };
+
+            this._caseSolutionConditionService.Save(cce);
+
+            stateId = "case_WorkingGroup.WorkingGroupGUID";
+            cce = new CaseSolutionConditionEntity
+            {
+
+                CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
+                Property_Name = stateId,
+                Values = selectedCaseWgs,
                 Status = 1
             };
 
@@ -842,8 +854,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             ///////////////////////////////////////////////StateSecondaries/////////////////////////////////////////////////////////////////////////////////////////////////////////
             string selected = string.Empty;
-            IList<CaseSolutionCondition> stsec = _caseSolutionConditionService.GetStateSecondaries(caseSolution.Id, curCustomerId);
-
+            //IList<CaseSolutionCondition> stsec = _caseSolutionConditionService.GetStateSecondaries(caseSolution.Id, curCustomerId);
+            string wgguid = "case_StateSecondary.StateSecondaryGUID";
+            IList<CaseSolutionCondition> stsec = _caseSolutionConditionService.GetCaseSolutionConditionModel(caseSolution.Id, curCustomerId, wgguid);
             foreach (CaseSolutionCondition sb in stsec)
             {
                 if (sb.IsSelected == 1)
@@ -874,8 +887,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             ///////////////////////////////////////////////CaseWorkingGroups/////////////////////////////////////////////////////////////////////////////////////////////////////////
             string selectedWgs = string.Empty;
-            IList<CaseSolutionCondition> wkgroup = _caseSolutionConditionService.GetCaseWorkingGroups(caseSolution.Id, curCustomerId);
-
+            //IList<CaseSolutionCondition> wkgroup = _caseSolutionConditionService.GetCaseWorkingGroups(caseSolution.Id, curCustomerId);
+            wgguid = "case_WorkingGroup.WorkingGroupGUID";
+            IList<CaseSolutionCondition> wkgroup = _caseSolutionConditionService.GetCaseSolutionConditionModel(caseSolution.Id, curCustomerId, wgguid);
             foreach (CaseSolutionCondition sb in wkgroup)
             {
                 if (sb.IsSelected == 1)

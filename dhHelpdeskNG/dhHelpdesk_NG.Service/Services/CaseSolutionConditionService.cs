@@ -21,14 +21,16 @@ namespace DH.Helpdesk.Services.Services
 
     public interface ICaseSolutionConditionService
     {
-      
 
-        IList<CaseSolutionCondition> GetStateSecondaries(int casesolutionid, int customerid);
+
+
         IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid);
 
-        IList<CaseSolutionCondition> GetCaseWorkingGroups(int casesolutionid, int customerid);
 
         void Save(CaseSolutionConditionEntity model);
+
+        IList<CaseSolutionCondition> GetCaseSolutionConditionModel(int casesolutionid, int customerid, string constString);
+
     }
 
     public class CaseSolutionConditionService : ICaseSolutionConditionService
@@ -53,15 +55,12 @@ namespace DH.Helpdesk.Services.Services
         }
 
 
-        public IList<CaseSolutionCondition> GetStateSecondaries(int casesolutionid, int customerid)
+
+        public IList<CaseSolutionCondition> GetCaseSolutionConditionModel(int casesolutionid, int customerid, string constString)
         {
-            return this._caseSolutionConditionRepository.GetStateSecondaries(casesolutionid, customerid).ToList();
+            return this._caseSolutionConditionRepository.GetCaseSolutionConditionModel(casesolutionid, customerid, constString).ToList();
         }
 
-        public IList<CaseSolutionCondition> GetCaseWorkingGroups(int casesolutionid, int customerid)
-        {
-            return this._caseSolutionConditionRepository.GetCaseWorkingGroups(casesolutionid, customerid).ToList();
-        }
 
         public void Save(CaseSolutionConditionEntity model)
         {
@@ -69,4 +68,5 @@ namespace DH.Helpdesk.Services.Services
         }
 
     }
+
 }

@@ -15,14 +15,12 @@
         /// The id of CaseSolution.
         /// </param>
         IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid);
-
-
-        IList<CaseSolutionCondition> GetStateSecondaries(int casesolutionid, int customerid);
+        
 
         void Save(CaseSolutionConditionEntity model);
 
-        IList<CaseSolutionCondition> GetCaseWorkingGroups(int casesolutionid, int customerid);
         
 
-    }
+        IList<CaseSolutionCondition> GetCaseSolutionConditionModel(int casesolutionid, int customerid, string constString);
+    }       
 }
