@@ -80,12 +80,11 @@
         <script type="text/javascript">
             $(function() {
                 $('#@controlId').datepicker({
-                    format: '@Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
-            clearBtn: true,
-            autoclose: true,
-            weekStart: 1,
-            todayHighlight: true,
-            format: 'yyyy-mm-dd'
+                clearBtn: true,
+                autoclose: true,
+                weekStart: 1,
+                todayHighlight: true,
+                format: 'yyyy-mm-dd'
                 });
             });
         </script>
@@ -105,8 +104,17 @@
 </script>*@
 
  
+<input type="text" style="display: none;" />
 <div id="@controlId" class="input-group date dateie">
-    @Html.TextBox(string.Empty, formattedDate, htmlAttributes)
+    @if (!string.IsNullOrWhiteSpace(controlName))
+    {
+        // todo
+        @Html.TextBoxFor(m => formattedDate, htmlAttributes)
+    }
+    else
+    {
+        @Html.TextBox(controlName, formattedDate, htmlAttributes)
+    }
 
     @{var buttonClass = "";}
     @if (buttonAttributes.Keys.Contains("class"))
@@ -118,7 +126,6 @@
     {
         buttonClass = string.Format("glyphicon glyphicon-calendar");
     }
-
     <div class="input-group-addon">
         <span class="@buttonClass"></span>
     </div>
