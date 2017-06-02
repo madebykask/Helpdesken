@@ -564,7 +564,9 @@
             {
                 res.Add(this.productAreaCache[lookingProductAreaId.Value].Name);
 
-                if (this.productAreaCache[lookingProductAreaId.Value].ShowOnExtPageCases == 0)
+                //Hide this for next release #57742
+                //if (this.productAreaCache[lookingProductAreaId.Value].ShowOnExtPageCases == 0)
+                if (this.productAreaCache[lookingProductAreaId.Value].ShowOnExternalPage == 0)
                     checkShowOnExtenal = false;
 
                 lookingProductAreaId = this.productAreaCache[lookingProductAreaId.Value].Parent_ProductArea_Id;
