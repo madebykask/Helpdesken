@@ -13,10 +13,15 @@
     string stateIds = ViewBag.selectedStates;
 }
 
+@{
+    string WgIds = ViewBag.selectedCaseWgs;
+}
+
 @using (Html.BeginForm("edit", "casesolution", new { id = Model.CaseSolution.Id }, FormMethod.Post, new { id = "target" }))
 {   
     @Html.Hidden("PageId", backPageId)
     @Html.Hidden("selectedStates", stateIds)
+    @Html.Hidden("selectedCaseWgs", WgIds)
 
     <div class="secnavs fixed">
         <div class="pull-left">

@@ -440,7 +440,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Edit(
             CaseSolutionInputViewModel caseSolutionInputViewModel,
             CaseSolutionSettingModel[] CaseSolutionSettingModels,
-            int PageId, string selectedStates)
+            int PageId, string selectedStates, string selectedWGs)
         {
 
 
@@ -872,6 +872,38 @@ namespace DH.Helpdesk.Web.Controllers
             ///////////////////////////////////////////////StateSecondaries/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+            ///////////////////////////////////////////////CaseWorkingGroups/////////////////////////////////////////////////////////////////////////////////////////////////////////
+            string selectedWgs = string.Empty;
+            IList<CaseSolutionCondition> wkgroup = _caseSolutionConditionService.GetCaseWorkingGroups(caseSolution.Id, curCustomerId);
+
+            foreach (CaseSolutionCondition sb in wkgroup)
+            {
+                if (sb.IsSelected == 1)
+                {
+                    if (selectedWgs == string.Empty)
+                    {
+                        selectedWgs = sb.StateSecondaryGUID.ToString();
+                    }
+                    else
+                    {
+                        selectedWgs = selectedWgs + "," + sb.StateSecondaryGUID.ToString();
+                    }
+                }
+            }
+
+            List<SelectListItem> caseWorkingGroups = null;
+            caseWorkingGroups = wkgroup
+                  .Select(x => new SelectListItem
+                  {
+                      Text = x.Name,
+                      Value = x.StateSecondaryGUID.ToString(),
+                      Selected = x.IsSelected == 1 ? true : false
+                  }).ToList();
+
+            ViewBag.selectedCaseWgs = selectedWgs;
+            ///////////////////////////////////////////////CaseWorkingGroups/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
             regions = regionList.Select(x => new SelectListItem
             {
                 Text = x.Name,
@@ -1098,7 +1130,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 ActionList = actionList,
 
-                StateSecondariesSelect = stateSecondaries
+                StateSecondariesSelect = stateSecondaries,
+                CaseWorkingGroupSelect = caseWorkingGroups
             };
 
             model.ParantPath_Category = "--";

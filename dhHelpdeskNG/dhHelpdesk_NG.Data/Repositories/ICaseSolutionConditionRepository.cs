@@ -21,5 +21,8 @@
 
         void Save(CaseSolutionConditionEntity model);
 
+        IList<CaseSolutionCondition> GetCaseWorkingGroups(int casesolutionid, int customerid);
+        
+
     }
 }

@@ -75,6 +75,13 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 .Select(this._CaseSolutionConditionToBusinessModelMapper.Map);
         }
 
+        
+        public IList<CaseSolutionCondition> GetCaseWorkingGroups(int casesolutionid, int customerid)
+        {
+
+            return null;
+        }
+
         public IList<CaseSolutionCondition> GetStateSecondaries(int casesolutionid, int customerid)
         {
             string constString = "case_StateSecondary.StateSecondaryGUID";
