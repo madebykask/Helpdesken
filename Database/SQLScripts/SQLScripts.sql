@@ -552,10 +552,10 @@ INSERT INTO [dbo].[tblComputerUserFieldSettings]
 		SELECT  DISTINCT
 				Customer_Id,
 				'Language_Id',
-				1,
 				0,
 				0,
-				1,
+				0,
+				0,
 				''
 		FROM tblComputerUserFieldSettings	
 		WHERE Customer_Id IS NOT NULL AND Customer_Id NOT IN (SELECT Customer_Id From tblComputerUserFieldSettings WHERE Customer_Id IS NOT NULL AND ComputerUserField='Language_Id')
