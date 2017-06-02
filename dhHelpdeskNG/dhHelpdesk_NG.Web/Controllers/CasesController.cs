@@ -2941,6 +2941,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (names.Length > 1)
                     lName = names[names.Length - 1];
 
+                int lng = case_.RegLanguage_Id;
                 var caseNotifier = this.caseNotifierModelFactory.Create(
                                                             case_.ReportedBy,
                                                             fName,
@@ -2952,7 +2953,8 @@ namespace DH.Helpdesk.Web.Controllers
                                                             case_.OU_Id,
                                                             case_.Place,
                                                             case_.UserCode,
-                                                            case_.Customer_Id);
+                                                            case_.Customer_Id,
+                                                            lng);
 
                 this.notifierService.UpdateCaseNotifier(caseNotifier);
             }
