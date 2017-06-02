@@ -822,6 +822,8 @@ namespace DH.Helpdesk.Web.Controllers
             
             var regionList = this._regionService.GetActiveRegions(curCustomerId);
 
+            IList<StateSecondary> stsec = _caseSolutionConditionService.GetStateSecondaries(caseSolution.Id, curCustomerId);  
+
 
             IList<CaseSolutionConditionEntity> casesolutioncondition = _caseSolutionConditionService.GetCaseSolutionCondition(caseSolution.Id);
 

@@ -18,7 +18,7 @@
 
         IList<CaseSolutionConditionEntity> GetCaseSolutionCondition(int casesolutionid);
 
-        IList<StateSecondary> GetStateSecondaries(int casesolutionid);
+        IList<StateSecondary> GetStateSecondaries(int casesolutionid, int customerid);
 
     }
 }

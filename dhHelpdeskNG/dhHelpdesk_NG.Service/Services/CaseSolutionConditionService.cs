@@ -22,7 +22,7 @@ namespace DH.Helpdesk.Services.Services
     {
         IList<CaseSolutionConditionEntity> GetCaseSolutionCondition(int customerId);
 
-        IList<StateSecondary> GetStateSecondaries(int casesolutionid);
+        IList<StateSecondary> GetStateSecondaries(int casesolutionid, int customerid);
 
     }
 
@@ -50,7 +50,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<StateSecondary> GetStateSecondaries(int casesolutionid)
         {
-            return this._caseSolutionConditionRepository.GetStateSecondaries(casesolutionid).ToList();
+            return this._caseSolutionConditionRepository.GetStateSecondaries(casesolutionid, customerid).ToList();
         }
 
     }

@@ -61,16 +61,52 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
         }
 
-        public IList<StateSecondary> GetStateSecondaries(int casesolutionid)
+        public IList<StateSecondary> GetStateSecondaries(int casesolutionid, int customerid)
         {
-            string constString = "case_StateSecondary";
+            string constString = "case_StateSecondary.StateSecondaryGUID";
 
-            List<CaseSolutionConditionEntity> clist = this.DataContext.CaseSolutionsConditions.Where(z => z.Property_Name == constString && z.CaseSolution_Id==casesolutionid && z.Status == 1).ToList();
-
-            if(clist!=null)
+            List<CaseSolutionConditionEntity> clist = this.DataContext.CaseSolutionsConditions.Where(z => z.Property_Name == constString && z.CaseSolution_Id == casesolutionid && z.Status == 1).ToList();
+            
+            int i = -1;
+            if (clist != null)
             {
+                if (clist.Count > 0)
+                {
+                    int count = 0;
+                    
+                    //Count characters
+                    foreach (CaseSolutionConditionEntity ccount in clist)
+                    {
+                        count = count + ccount.Values.Count(f => f == ',') + 1;
+                    }
+                    
 
+                    string[] wordsFinal = new string[count];
+                    foreach (CaseSolutionConditionEntity c in clist)
+                    {
+                        string[] words = null;
+                        words = c.Values.Split(',');
+
+
+                        foreach (string s in words)
+                        {
+
+                            i = i + 1;
+
+                            wordsFinal[i] = s;
+
+                        }
+                    }
+                    
+                    List<string> uids = new List<string>(wordsFinal);
+                    var tlist = from xx in this.DataContext.StateSecondaries
+                                where xx.Customer_Id==customerid && uids.Contains(xx.StateSecondaryGUID.ToString())
+                                select (xx);
+
+                }
             }
+
+            
 
             return null;
         }
