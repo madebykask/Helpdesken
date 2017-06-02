@@ -55,12 +55,13 @@
         htmlAttributes.Add("class", " form-control ignore-globalfocus span2");
     }
 
-    var dateFormat = "yyyy-mm-dd";
+    //var dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
+    //var dateFormat = "yyyy-mm-dd";
     string formattedDate = null;
 
     if (Model.HasValue)
     {
-        formattedDate = Model.Value.ToString(dateFormat);
+        formattedDate = Model.Value.ToShortDateString();
     }
 
     var controlName = string.Empty;
