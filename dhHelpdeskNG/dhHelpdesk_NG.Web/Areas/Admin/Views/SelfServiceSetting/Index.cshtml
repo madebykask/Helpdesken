@@ -203,7 +203,7 @@
                                     @Html.CheckBoxFor(m => m.Customer.MyCasesRegarding) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Angående")
                                 </td>
                             </tr>
-                            <tr id="caseTypes">
+                            @*<tr id="caseTypes">
                                 <td>
                                     @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
                                 </td>
@@ -254,7 +254,7 @@
                                         </tr>
                                     </table>
                                 </td>
-                            </tr>                                                    
+                            </tr>*@                                                    
                         </table>
                     </div>
 
@@ -315,33 +315,35 @@
             return false;
         });
 
-        $("#addCaseType").click(function () {
-            $("#AvailableCaseTypes option:selected").remove().appendTo("#SelectedCaseTypes");
-            $("#AvailableCaseTypes").get(0).selectedIndex = -1;
-            $("#SelectedCaseTypes").get(0).selectedIndex = -1;
-            return false;
-        });
+        //For next version 5.3.33
+        //$("#addCaseType").click(function () {
+        //    $("#AvailableCaseTypes option:selected").remove().appendTo("#SelectedCaseTypes");
+        //    $("#AvailableCaseTypes").get(0).selectedIndex = -1;
+        //    $("#SelectedCaseTypes").get(0).selectedIndex = -1;
+        //    return false;
+        //});
 
-        $("#removeCaseType").click(function () {
-            $("#SelectedCaseTypes option:selected").remove().appendTo("#AvailableCaseTypes");
-            $("#AvailableCaseTypes").get(0).selectedIndex = -1;
-            $("#SelectedCaseTypes").get(0).selectedIndex = -1;
-            return false;
-        });
+        //$("#removeCaseType").click(function () {
+        //    $("#SelectedCaseTypes option:selected").remove().appendTo("#AvailableCaseTypes");
+        //    $("#AvailableCaseTypes").get(0).selectedIndex = -1;
+        //    $("#SelectedCaseTypes").get(0).selectedIndex = -1;
+        //    return false;
+        //});
 
-        $("#addProductArea").click(function () {
-            $("#AvailableProductAreas option:selected").remove().appendTo("#SelectedProductAreas");
-            $("#AvailableProductAreas").get(0).selectedIndex = -1;
-            $("#SelectedProductAreas").get(0).selectedIndex = -1;
-            return false;
-        });
+        //$("#addProductArea").click(function () {
+        //    $("#AvailableProductAreas option:selected").remove().appendTo("#SelectedProductAreas");
+        //    $("#AvailableProductAreas").get(0).selectedIndex = -1;
+        //    $("#SelectedProductAreas").get(0).selectedIndex = -1;
+        //    return false;
+        //});
 
-        $("#removeProductArea").click(function () {
-            $("#SelectedProductAreas option:selected").remove().appendTo("#AvailableProductAreas");
-            $("#AvailableProductAreas").get(0).selectedIndex = -1;
-            $("#SelectedProductAreas").get(0).selectedIndex = -1;
-            return false;
-        });
+        //$("#removeProductArea").click(function () {
+        //    $("#SelectedProductAreas option:selected").remove().appendTo("#AvailableProductAreas");
+        //    $("#AvailableProductAreas").get(0).selectedIndex = -1;
+        //    $("#SelectedProductAreas").get(0).selectedIndex = -1;
+        //    return false;
+        //});
+
         //For next release
         //$("Customer_ShowFAQOnExternalStartPage").change(function () {
         //    $("#SelectedCategories option").attr("selected", "selected");
@@ -349,8 +351,8 @@
            
         function submitForm() {
             $("#SelectedCategories option").attr("selected", "selected");
-            $("#SelectedCaseTypes option").attr("selected", "selected");
-            $("#SelectedProductAreas option").attr("selected", "selected");
+            //$("#SelectedCaseTypes option").attr("selected", "selected");
+            //$("#SelectedProductAreas option").attr("selected", "selected");
             $("#target").submit();
         }
 
