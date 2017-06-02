@@ -48,14 +48,14 @@
     if (htmlAttributes.Keys.Contains("class"))
     {
         var passedClass = htmlAttributes["class"];
-        htmlAttributes["class"] = string.Format("form-control ignore-globalfocus span2 {0}", passedClass);
+        htmlAttributes["class"] = string.Format("form-control ignore-globalfocus span2 myDatePicker {0}", passedClass);
     }
     else
     {
-        htmlAttributes.Add("class", " form-control ignore-globalfocus span2");
+        htmlAttributes.Add("class", " form-control ignore-globalfocus span2 myDatePicker");
     }
 
-    var dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
+    var dateFormat = "yyyy-mm-dd";
     string formattedDate = null;
 
     if (Model.HasValue)
@@ -79,7 +79,7 @@
     {
         <script type="text/javascript">
             $(function() {
-                $('#@controlId').datepicker({
+                $('.myDatePicker').datepicker({
                 clearBtn: true,
                 autoclose: true,
                 weekStart: 1,
