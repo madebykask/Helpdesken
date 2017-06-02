@@ -14,10 +14,9 @@
         /// <param name="caseSolution_Id">
         /// The id of CaseSolution.
         /// </param>
-        IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int caseSolution_Id);
+        IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid);
 
-        IList<CaseSolutionConditionEntity> GetCaseSolutionCondition(int casesolutionid);
-
+      
         IList<StateSecondary> GetStateSecondaries(int casesolutionid, int customerid);
 
     }

@@ -26,39 +26,11 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         }
 
 
-        public IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int caseSolution_Id)
+
+
+        public IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid)
         {
-
-            var entities = this.Table
-                  .Where(c => c.CaseSolution_Id == caseSolution_Id && c.Status != 0)
-
-                  .Distinct()
-                  .ToList();
-
-            return entities
-                .Select(this._CaseSolutionConditionToBusinessModelMapper.Map);
-        }
-
-        public IList<CaseSolutionConditionEntity> GetCaseSolutionCondition(int casesolutionid)
-        {
-            List<CaseSolutionConditionEntity> s = this.DataContext.CaseSolutionsConditions.Where(z => z.CaseSolution_Id == casesolutionid && z.Status > 0).ToList();
-            var t = s.Where(z => z.Property_Name == "New");
-
-            if (casesolutionid == 0)
-            {
-                if (t.Count() == 0)
-                {
-                    CaseSolutionConditionEntity newent = new CaseSolutionConditionEntity
-                    {
-                        Property_Name = "[New]",
-                        Id = 0,
-                        CaseSolutionConditionGUID = Guid.Empty
-                    };
-                    s.Add(newent);
-                }
-            }
-            return s.ToList();// this.DataContext.CaseSolutionsConditions.Where(z => z.CaseSolution_Id == casesolutionid).ToList();
-
+            return null;
         }
 
         public IList<StateSecondary> GetStateSecondaries(int casesolutionid, int customerid)
@@ -115,7 +87,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                             Id = c.Id,
                             IncludeInCaseStatistics = c.IncludeInCaseStatistics,
                             IsActive = c.IsActive,
-                            IsDefault = c.IsDefault,
+                            IsDefault = 1,
                             MailTemplate = c.MailTemplate,
                             MailTemplate_Id = c.MailTemplate_Id,
                             Name = c.Name,
@@ -125,9 +97,8 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                             ResetOnExternalUpdate = c.ResetOnExternalUpdate,
                             StateSecondaryGUID = c.StateSecondaryGUID,
                             WorkingGroup = c.WorkingGroup,
-                            WorkingGroup_Id = c.WorkingGroup_Id,
-                            Selected=true
-                            
+                            WorkingGroup_Id = c.WorkingGroup_Id
+
 
 
                         };
@@ -136,9 +107,44 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 }
             }
 
-            List<StateSecondary> stfinaList = this.DataContext.StateSecondaries.Where(z => z.Customer_Id == customerid).ToList();
 
-            var result = selected.Union(stfinaList).OrderBy(x => x.Id).ThenBy(x=>x.Name) .ToList();
+
+
+            List<StateSecondary> stfinaList = this.DataContext.StateSecondaries.Where(z => z.Customer_Id == customerid).ToList();
+            foreach (StateSecondary k in stfinaList)
+            {
+                bool has = selected.Any(cus => cus.StateSecondaryGUID == k.StateSecondaryGUID);
+                if (has == false)
+                {
+                    StateSecondary ss = new StateSecondary
+                    {
+                        ChangedDate = k.ChangedDate,
+                        CreatedDate = k.CreatedDate,
+                        Customer = k.Customer,
+                        Customer_Id = k.Customer_Id,
+                        Id = k.Id,
+                        IncludeInCaseStatistics = k.IncludeInCaseStatistics,
+                        IsActive = k.IsActive,
+                        IsDefault = 0,
+                        MailTemplate = k.MailTemplate,
+                        MailTemplate_Id = k.MailTemplate_Id,
+                        Name = k.Name,
+                        NoMailToNotifier = k.NoMailToNotifier,
+                        RecalculateWatchDate = k.RecalculateWatchDate,
+                        ReminderDays = k.ReminderDays,
+                        ResetOnExternalUpdate = k.ResetOnExternalUpdate,
+                        StateSecondaryGUID = k.StateSecondaryGUID,
+                        WorkingGroup = k.WorkingGroup,
+                        WorkingGroup_Id = k.WorkingGroup_Id
+
+
+
+                    };
+                    selected.Add(ss);
+                }
+            }
+
+            var result = selected.OrderBy(x => x.Id).ThenBy(x => x.Name).ToList();
 
             return result;
         }

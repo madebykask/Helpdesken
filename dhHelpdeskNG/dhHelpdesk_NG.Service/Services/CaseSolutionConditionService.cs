@@ -20,9 +20,10 @@ namespace DH.Helpdesk.Services.Services
 
     public interface ICaseSolutionConditionService
     {
-        IList<CaseSolutionConditionEntity> GetCaseSolutionCondition(int customerId);
+      
 
         IList<StateSecondary> GetStateSecondaries(int casesolutionid, int customerid);
+        IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid);
 
     }
 
@@ -42,11 +43,11 @@ namespace DH.Helpdesk.Services.Services
         //{
         //    return _caseSolutionRepository.GetAntal(customerId, userid);
         //}
-
-        public IList<CaseSolutionConditionEntity> GetCaseSolutionCondition(int casesolutionid)
+        public IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid)
         {
-            return this._caseSolutionConditionRepository.GetCaseSolutionCondition(casesolutionid).ToList();
+            return this._caseSolutionConditionRepository.GetCaseSolutionConditions(casesolutionid).ToList();
         }
+
 
         public IList<StateSecondary> GetStateSecondaries(int casesolutionid, int customerid)
         {

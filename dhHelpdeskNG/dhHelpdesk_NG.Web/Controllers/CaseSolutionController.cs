@@ -819,116 +819,33 @@ namespace DH.Helpdesk.Web.Controllers
             List<SelectListItem> regions = null;
             List<SelectListItem> departments = null;
             List<SelectListItem> organizationUnits = null;
-            
+
             var regionList = this._regionService.GetActiveRegions(curCustomerId);
 
-            IList<StateSecondary> stsec = _caseSolutionConditionService.GetStateSecondaries(caseSolution.Id, curCustomerId);  
-
-
-            IList<CaseSolutionConditionEntity> casesolutioncondition = _caseSolutionConditionService.GetCaseSolutionCondition(caseSolution.Id);
-
-            ///////////////////////////////////////////////StateSecondaries/////////////////////////////////////////////////////////////////////////////////////////////////////////
-            Guid outguid = Guid.Empty;
-            string[] words = null;
             string selected = string.Empty;
-            List<StateSecondary> stList = new List<StateSecondary>();
-            if (casesolutioncondition != null)
+            IList<StateSecondary> stsec = _caseSolutionConditionService.GetStateSecondaries(caseSolution.Id, curCustomerId);
+
+            foreach (StateSecondary sb in stsec)
             {
-                if (casesolutioncondition.Count() == 1)
+                if (selected == string.Empty)
                 {
-
-                    StateSecondary temp = new StateSecondary
-                    {
-                        Id = 0,
-                        StateSecondaryGUID = Guid.Empty,
-                        Name = casesolutioncondition.FirstOrDefault().Property_Name
-
-                    };
-                    stList.Add(temp);
-
+                    selected = sb.StateSecondaryGUID.ToString();
                 }
                 else
                 {
-                    casesolutioncondition = casesolutioncondition.Where(z => z.Property_Name == "case_StateSecondary.StateSecondaryGUID").ToList();
-                    if (casesolutioncondition.Count() > 0)
-                    {
-                        if (casesolutioncondition.FirstOrDefault().Values != null)
-                        {
-                            if (casesolutioncondition.FirstOrDefault().Values != string.Empty)
-                            {
-                                words = casesolutioncondition.FirstOrDefault().Values.Split(',');
-
-                                foreach (string s in words)
-                                {
-
-                                    if (Guid.TryParse(s, out outguid))
-                                    {
-                                        StateSecondary temp = new StateSecondary
-                                        {
-                                            Id = 0,
-                                            StateSecondaryGUID = new Guid(s.ToString()),
-                                            Name = string.Empty
-
-
-                                        };
-                                        stList.Add(temp);
-                                    }
-                                    else
-                                    {
-                                        StateSecondary temp = new StateSecondary
-                                        {
-                                            Id = 0,
-                                            StateSecondaryGUID = Guid.Empty,
-                                            Name = s
-
-
-                                        };
-                                        stList.Add(temp);
-                                    }
-
-                                    if (selected == string.Empty)
-                                    {
-                                        selected = s;
-                                    }
-                                    else
-                                    {
-                                        selected = selected + "," + s;
-                                    }
-                                }
-
-                            }
-                        }
-                    }
+                    selected = selected + "," + sb.StateSecondaryGUID.ToString();
                 }
             }
-            var stateSecondaries1 = this._stateSecondaryService.GetActiveStateSecondaries(curCustomerId).Union(stList);
-
-            stateSecondaries1 = stateSecondaries1.OrderBy(z => z.Id).ThenBy(z => z.Name);
 
             List<SelectListItem> stateSecondaries = null;
-            if (words != null)
-            {
+            stateSecondaries = stsec
+                  .Select(x => new SelectListItem
+                  {
+                      Text = x.Name,
+                      Value = x.StateSecondaryGUID.ToString(),
+                      Selected = x.IsDefault == 1 ? true : false
+                  }).ToList();
 
-                stateSecondaries = stateSecondaries1
-                    .Select(x => new SelectListItem
-                    {
-                        Text = x.Name,
-                        Value = x.Id.ToString(),
-                        Selected = words.Contains(x.StateSecondaryGUID.ToString())
-                    }).ToList();
-
-
-            }
-            else
-            {
-                stateSecondaries = stateSecondaries1
-                    .Select(x => new SelectListItem
-                    {
-                        Text = x.Name,
-                        Value = x.Id.ToString(),
-                        Selected = false
-                    }).ToList();
-            }
             ///////////////////////////////////////////////StateSecondaries/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
