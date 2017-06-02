@@ -66,20 +66,21 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             string constString = "case_StateSecondary.StateSecondaryGUID";
 
             List<CaseSolutionConditionEntity> clist = this.DataContext.CaseSolutionsConditions.Where(z => z.Property_Name == constString && z.CaseSolution_Id == casesolutionid && z.Status == 1).ToList();
-            
+            List<StateSecondary> selected = new List<StateSecondary>();
+
             int i = -1;
             if (clist != null)
             {
                 if (clist.Count > 0)
                 {
                     int count = 0;
-                    
+
                     //Count characters
                     foreach (CaseSolutionConditionEntity ccount in clist)
                     {
                         count = count + ccount.Values.Count(f => f == ',') + 1;
                     }
-                    
+
 
                     string[] wordsFinal = new string[count];
                     foreach (CaseSolutionConditionEntity c in clist)
@@ -97,18 +98,49 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
                         }
                     }
-                    
+
                     List<string> uids = new List<string>(wordsFinal);
                     var tlist = from xx in this.DataContext.StateSecondaries
-                                where xx.Customer_Id==customerid && uids.Contains(xx.StateSecondaryGUID.ToString())
+                                where xx.Customer_Id == customerid && uids.Contains(xx.StateSecondaryGUID.ToString())
                                 select (xx);
 
+                    foreach (var c in tlist)
+                    {
+                        StateSecondary ss = new StateSecondary
+                        {
+                            ChangedDate = c.ChangedDate,
+                            CreatedDate = c.CreatedDate,
+                            Customer = c.Customer,
+                            Customer_Id = c.Customer_Id,
+                            Id = c.Id,
+                            IncludeInCaseStatistics = c.IncludeInCaseStatistics,
+                            IsActive = c.IsActive,
+                            IsDefault = c.IsDefault,
+                            MailTemplate = c.MailTemplate,
+                            MailTemplate_Id = c.MailTemplate_Id,
+                            Name = c.Name,
+                            NoMailToNotifier = c.NoMailToNotifier,
+                            RecalculateWatchDate = c.RecalculateWatchDate,
+                            ReminderDays = c.ReminderDays,
+                            ResetOnExternalUpdate = c.ResetOnExternalUpdate,
+                            StateSecondaryGUID = c.StateSecondaryGUID,
+                            WorkingGroup = c.WorkingGroup,
+                            WorkingGroup_Id = c.WorkingGroup_Id,
+                            Selected=true
+                            
+
+
+                        };
+                        selected.Add(ss);
+                    }
                 }
             }
 
-            
+            List<StateSecondary> stfinaList = this.DataContext.StateSecondaries.Where(z => z.Customer_Id == customerid).ToList();
 
-            return null;
+            var result = selected.Union(stfinaList).OrderBy(x => x.Id).ThenBy(x=>x.Name) .ToList();
+
+            return result;
         }
 
 

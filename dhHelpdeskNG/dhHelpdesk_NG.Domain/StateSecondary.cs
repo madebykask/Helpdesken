@@ -24,5 +24,6 @@
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
 
         public virtual MailTemplateEntity MailTemplate { get; set; }
+
     }
 }
