@@ -4,7 +4,7 @@
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.BusinessData.Models.Case;
-    
+    using DH.Helpdesk.Domain.Cases;
 
     public interface ICaseSolutionConditionRepository : IRepository<CaseSolutionConditionEntity>
     {
@@ -17,7 +17,7 @@
         IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid);
 
       
-        IList<StateSecondary> GetStateSecondaries(int casesolutionid, int customerid);
+        IList<CaseSolutionCondition> GetStateSecondaries(int casesolutionid, int customerid);
 
     }
 }

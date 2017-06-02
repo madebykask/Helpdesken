@@ -17,12 +17,13 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.BusinessData.Models.User.Input;
+    using DH.Helpdesk.Domain.Cases;
 
     public interface ICaseSolutionConditionService
     {
       
 
-        IList<StateSecondary> GetStateSecondaries(int casesolutionid, int customerid);
+        IList<CaseSolutionCondition> GetStateSecondaries(int casesolutionid, int customerid);
         IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid);
 
     }
@@ -49,7 +50,7 @@ namespace DH.Helpdesk.Services.Services
         }
 
 
-        public IList<StateSecondary> GetStateSecondaries(int casesolutionid, int customerid)
+        public IList<CaseSolutionCondition> GetStateSecondaries(int casesolutionid, int customerid)
         {
             return this._caseSolutionConditionRepository.GetStateSecondaries(casesolutionid, customerid).ToList();
         }

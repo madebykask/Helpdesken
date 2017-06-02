@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System;
+using DH.Helpdesk.Domain.Cases;
 
 namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 {
@@ -40,12 +41,12 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 .Select(this._CaseSolutionConditionToBusinessModelMapper.Map);
         }
 
-        public IList<StateSecondary> GetStateSecondaries(int casesolutionid, int customerid)
+        public IList<CaseSolutionCondition> GetStateSecondaries(int casesolutionid, int customerid)
         {
             string constString = "case_StateSecondary.StateSecondaryGUID";
 
             List<CaseSolutionConditionEntity> clist = this.DataContext.CaseSolutionsConditions.Where(z => z.Property_Name == constString && z.CaseSolution_Id == casesolutionid && z.Status == 1).ToList();
-            List<StateSecondary> selected = new List<StateSecondary>();
+            List<CaseSolutionCondition> selected = new List<CaseSolutionCondition>();
 
             int i = -1;
             if (clist != null)
@@ -78,37 +79,77 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         }
                     }
 
+
+                    //Not guids                  
                     List<string> uids = new List<string>(wordsFinal);
+
+                    foreach (string s in uids)
+                    {
+                        Guid guidOutput;
+
+                        bool isValid = Guid.TryParse(s.ToString(), out guidOutput);
+
+                        if (isValid==false)
+                        {
+                            CaseSolutionCondition ss = new CaseSolutionCondition
+                            {
+                                
+                                Customer_Id = customerid,
+                                Id = 0,                                
+                                IsSelected = 1,                                
+                                Name = "[" + s + "]",                                
+                                StateSecondaryGUID = s.ToString()
+                                
+                            };
+                            selected.Add(ss);
+
+                        }
+                    }
+
+
                     var tlist = from xx in this.DataContext.StateSecondaries
                                 where xx.Customer_Id == customerid && uids.Contains(xx.StateSecondaryGUID.ToString())
                                 select (xx);
 
+
+
+
                     foreach (var c in tlist)
                     {
-                        StateSecondary ss = new StateSecondary
+                        CaseSolutionCondition ss = new CaseSolutionCondition
                         {
-                            ChangedDate = c.ChangedDate,
-                            CreatedDate = c.CreatedDate,
-                            Customer = c.Customer,
+                            
                             Customer_Id = c.Customer_Id,
-                            Id = c.Id,
-                            IncludeInCaseStatistics = c.IncludeInCaseStatistics,
-                            IsActive = c.IsActive,
-                            IsDefault = 1,
-                            MailTemplate = c.MailTemplate,
-                            MailTemplate_Id = c.MailTemplate_Id,
-                            Name = c.Name,
-                            NoMailToNotifier = c.NoMailToNotifier,
-                            RecalculateWatchDate = c.RecalculateWatchDate,
-                            ReminderDays = c.ReminderDays,
-                            ResetOnExternalUpdate = c.ResetOnExternalUpdate,
-                            StateSecondaryGUID = c.StateSecondaryGUID,
-                            WorkingGroup = c.WorkingGroup,
-                            WorkingGroup_Id = c.WorkingGroup_Id
-
-
+                            Id = c.Id,                                                        
+                            IsSelected = 1,                            
+                            Name = c.Name,                            
+                            StateSecondaryGUID = c.StateSecondaryGUID.ToString()                            
 
                         };
+                        //StateSecondary ss = new StateSecondary
+                        //{
+                        //    ChangedDate = c.ChangedDate,
+                        //    CreatedDate = c.CreatedDate,
+                        //    Customer = c.Customer,
+                        //    Customer_Id = c.Customer_Id,
+                        //    Id = c.Id,
+                        //    IncludeInCaseStatistics = c.IncludeInCaseStatistics,
+                        //    IsActive = c.IsActive,
+                        //    IsDefault = 1,
+                        //    MailTemplate = c.MailTemplate,
+                        //    MailTemplate_Id = c.MailTemplate_Id,
+                        //    Name = c.Name,
+                        //    NoMailToNotifier = c.NoMailToNotifier,
+                        //    RecalculateWatchDate = c.RecalculateWatchDate,
+                        //    ReminderDays = c.ReminderDays,
+                        //    ResetOnExternalUpdate = c.ResetOnExternalUpdate,
+                        //    StateSecondaryGUID = c.StateSecondaryGUID,
+                        //    WorkingGroup = c.WorkingGroup,
+                        //    WorkingGroup_Id = c.WorkingGroup_Id
+
+
+
+                        //};
                         selected.Add(ss);
                     }
                 }
@@ -120,33 +161,43 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             List<StateSecondary> stfinaList = this.DataContext.StateSecondaries.Where(z => z.Customer_Id == customerid).ToList();
             foreach (StateSecondary k in stfinaList)
             {
-                bool has = selected.Any(cus => cus.StateSecondaryGUID == k.StateSecondaryGUID);
+                bool has = selected.Any(cus => cus.StateSecondaryGUID.ToString() == k.StateSecondaryGUID.ToString());
                 if (has == false)
                 {
-                    StateSecondary ss = new StateSecondary
-                    {
-                        ChangedDate = k.ChangedDate,
-                        CreatedDate = k.CreatedDate,
-                        Customer = k.Customer,
+                    CaseSolutionCondition ss = new CaseSolutionCondition
+                    {                        
                         Customer_Id = k.Customer_Id,
-                        Id = k.Id,
-                        IncludeInCaseStatistics = k.IncludeInCaseStatistics,
-                        IsActive = k.IsActive,
-                        IsDefault = 0,
-                        MailTemplate = k.MailTemplate,
-                        MailTemplate_Id = k.MailTemplate_Id,
-                        Name = k.Name,
-                        NoMailToNotifier = k.NoMailToNotifier,
-                        RecalculateWatchDate = k.RecalculateWatchDate,
-                        ReminderDays = k.ReminderDays,
-                        ResetOnExternalUpdate = k.ResetOnExternalUpdate,
-                        StateSecondaryGUID = k.StateSecondaryGUID,
-                        WorkingGroup = k.WorkingGroup,
-                        WorkingGroup_Id = k.WorkingGroup_Id
-
-
+                        Id = k.Id,                                             
+                        IsSelected = 0,                        
+                        Name = k.Name,                                                
+                        StateSecondaryGUID = k.StateSecondaryGUID.ToString()
 
                     };
+
+                    //StateSecondary ss = new StateSecondary
+                    //{
+                    //    ChangedDate = k.ChangedDate,
+                    //    CreatedDate = k.CreatedDate,
+                    //    Customer = k.Customer,
+                    //    Customer_Id = k.Customer_Id,
+                    //    Id = k.Id,
+                    //    IncludeInCaseStatistics = k.IncludeInCaseStatistics,
+                    //    IsActive = k.IsActive,
+                    //    IsDefault = 0,
+                    //    MailTemplate = k.MailTemplate,
+                    //    MailTemplate_Id = k.MailTemplate_Id,
+                    //    Name = k.Name,
+                    //    NoMailToNotifier = k.NoMailToNotifier,
+                    //    RecalculateWatchDate = k.RecalculateWatchDate,
+                    //    ReminderDays = k.ReminderDays,
+                    //    ResetOnExternalUpdate = k.ResetOnExternalUpdate,
+                    //    StateSecondaryGUID = k.StateSecondaryGUID,
+                    //    WorkingGroup = k.WorkingGroup,
+                    //    WorkingGroup_Id = k.WorkingGroup_Id
+
+
+
+                    //};
                     selected.Add(ss);
                 }
             }

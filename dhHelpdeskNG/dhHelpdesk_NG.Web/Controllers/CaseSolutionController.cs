@@ -25,6 +25,7 @@ namespace DH.Helpdesk.Web.Controllers
     using Infrastructure.ModelFactories.Case.Concrete;
     using Common.Enums.Settings;
     using System;
+    using DH.Helpdesk.Domain.Cases;
 
     public class CaseSolutionController : UserInteractionController
     {
@@ -439,8 +440,20 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Edit(
             CaseSolutionInputViewModel caseSolutionInputViewModel,
             CaseSolutionSettingModel[] CaseSolutionSettingModels,
-            int PageId, string[] selectedStates)
+            int PageId, string selectedStates)
         {
+
+
+            string stateId = "case_StateSecondary.StateSecondaryGUID";
+            CaseSolutionConditionEntity cce = new CaseSolutionConditionEntity
+            {
+                
+               CaseSolution_Id=caseSolutionInputViewModel.CaseSolution.Id,
+               Property_Name=stateId,
+               Values=selectedStates,
+               Status=1
+            };
+
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
             this.TempData["RequiredFields"] = null;
@@ -822,18 +835,22 @@ namespace DH.Helpdesk.Web.Controllers
 
             var regionList = this._regionService.GetActiveRegions(curCustomerId);
 
+            ///////////////////////////////////////////////StateSecondaries/////////////////////////////////////////////////////////////////////////////////////////////////////////
             string selected = string.Empty;
-            IList<StateSecondary> stsec = _caseSolutionConditionService.GetStateSecondaries(caseSolution.Id, curCustomerId);
+            IList<CaseSolutionCondition> stsec = _caseSolutionConditionService.GetStateSecondaries(caseSolution.Id, curCustomerId);
 
-            foreach (StateSecondary sb in stsec)
+            foreach (CaseSolutionCondition sb in stsec)
             {
-                if (selected == string.Empty)
+                if (sb.IsSelected == 1)
                 {
-                    selected = sb.StateSecondaryGUID.ToString();
-                }
-                else
-                {
-                    selected = selected + "," + sb.StateSecondaryGUID.ToString();
+                    if (selected == string.Empty)
+                    {
+                        selected = sb.StateSecondaryGUID.ToString();
+                    }
+                    else
+                    {
+                        selected = selected + "," + sb.StateSecondaryGUID.ToString();
+                    }
                 }
             }
 
@@ -843,9 +860,10 @@ namespace DH.Helpdesk.Web.Controllers
                   {
                       Text = x.Name,
                       Value = x.StateSecondaryGUID.ToString(),
-                      Selected = x.IsDefault == 1 ? true : false
+                      Selected = x.IsSelected == 1 ? true : false
                   }).ToList();
 
+            ViewBag.selectedStates = selected;
             ///////////////////////////////////////////////StateSecondaries/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -876,7 +894,7 @@ namespace DH.Helpdesk.Web.Controllers
             List<SelectListItem> isAbout_Departments = null;
             List<SelectListItem> isAbout_OrganizationUnits = null;
 
-            ViewBag.selectedStates = selected;
+
 
             isAbout_Regions = regionList.Select(x => new SelectListItem
             {
