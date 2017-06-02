@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
+﻿using DH.Helpdesk.Common.Tools;
+
+namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -314,7 +316,7 @@
                 _whereStr += string.Format("AND tblCase.FinishingDate >= '{0}' ", filters.CaseClosingDate.FromDate.Value);
 
             if (filters.CaseClosingDate.ToDate.HasValue)
-                _whereStr += string.Format("AND tblCase.FinishingDate <= '{0}' ", filters.CaseClosingDate.ToDate.Value);
+                _whereStr += string.Format("AND tblCase.FinishingDate <= '{0}' ", filters.CaseClosingDate.ToDate.Value.GetEndOfDay());
 
             return _whereStr;
         }

@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using DH.Helpdesk.BusinessData.Models.Reports;
+using DH.Helpdesk.Common.Tools;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -112,6 +113,7 @@ namespace DH.Helpdesk.Dal.Repositories
             {
                 periodUntil = DateTime.Now;
             }
+            var closeToEndOfDay = closeTo.HasValue ? closeTo.Value.GetEndOfDay() : (DateTime?)null;
 
             var query = from c in this.DataContext.Cases
                 join cu in this.DataContext.Customers on c.Customer_Id equals cu.Id
@@ -176,7 +178,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     (DbFunctions.TruncateTime(c.RegTime) >= DbFunctions.TruncateTime(periodFrom) && DbFunctions.TruncateTime(c.RegTime) <= DbFunctions.TruncateTime(periodUntil))
 
                     && (closeFrom.HasValue ? DbFunctions.TruncateTime(c.FinishingDate) >= DbFunctions.TruncateTime(closeFrom.Value) : true)
-                    && (closeTo.HasValue ? DbFunctions.TruncateTime(c.FinishingDate) <= DbFunctions.TruncateTime(closeTo.Value) : true)
+                    && (closeToEndOfDay.HasValue ? DbFunctions.TruncateTime(c.FinishingDate) <= DbFunctions.TruncateTime(closeToEndOfDay.Value) : true)
 
                     && (caseTypeId.Any() ? caseTypeId.Contains(c.CaseType_Id) : true)
                     &&
@@ -239,6 +241,7 @@ namespace DH.Helpdesk.Dal.Repositories
             {
                 periodUntil = DateTime.Now;
             }
+            var closeToEndOfDay = closeTo.HasValue ? closeTo.Value.GetEndOfDay() : (DateTime?) null;
 
             var query = from c in this.DataContext.Cases
                         join cu in this.DataContext.Customers on c.Customer_Id equals cu.Id
@@ -303,7 +306,7 @@ namespace DH.Helpdesk.Dal.Repositories
                             (DbFunctions.TruncateTime(c.RegTime) >= DbFunctions.TruncateTime(periodFrom) && DbFunctions.TruncateTime(c.RegTime) <= DbFunctions.TruncateTime(periodUntil))
 
                             && (closeFrom.HasValue ? DbFunctions.TruncateTime(c.FinishingDate) >= DbFunctions.TruncateTime(closeFrom.Value) : true)
-                    && (closeTo.HasValue ? DbFunctions.TruncateTime(c.FinishingDate) <= DbFunctions.TruncateTime(closeTo.Value) : true)
+                    && (closeToEndOfDay.HasValue ? DbFunctions.TruncateTime(c.FinishingDate) <= DbFunctions.TruncateTime(closeToEndOfDay.Value) : true)
 
                             && (caseTypeId.Any() ? caseTypeId.Contains(c.CaseType_Id) : true)
                             &&
