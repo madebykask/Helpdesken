@@ -30,7 +30,14 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
         public IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid)
         {
-            return null;
+            var entities = this.Table
+                   .Where(c => c.CaseSolution_Id == casesolutionid && c.Status != 0)
+
+                   .Distinct()
+                   .ToList();
+
+            return entities
+                .Select(this._CaseSolutionConditionToBusinessModelMapper.Map);
         }
 
         public IList<StateSecondary> GetStateSecondaries(int casesolutionid, int customerid)
