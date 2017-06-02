@@ -61,7 +61,12 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
         }
 
+        public IList<StateSecondary> GetStateSecondaries(int casesolutionid)
+        {
+            
 
+            return null;
+        }
 
 
     }

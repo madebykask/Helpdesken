@@ -17,6 +17,8 @@
         IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int caseSolution_Id);
 
         IList<CaseSolutionConditionEntity> GetCaseSolutionCondition(int casesolutionid);
-        
+
+        IList<StateSecondary> GetStateSecondaries(int casesolutionid);
+
     }
 }
