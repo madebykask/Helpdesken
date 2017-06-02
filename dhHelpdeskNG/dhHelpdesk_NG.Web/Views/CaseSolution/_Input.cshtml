@@ -215,6 +215,9 @@
                                         <td>                                          
                                             @Html.DropDownList("lstStateSecondary", Model.StateSecondariesSelect, new { id = "lstStateSecondary", multiple = "multiple", @class = "chosen-select" })                                                                                    
                                         </td>
+                                        @*<td>
+                                            <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+                                        </td>*@
                                     </tr>
 
                                     <tr>
@@ -224,9 +227,43 @@
                                         <td>
                                             @Html.DropDownList("lstCaseWorkingGroup", Model.CaseWorkingGroupSelect, new { id = "lstCaseWorkingGroup", multiple = "multiple", @class = "chosen-select" })
                                         </td>
+                                        @*<td>
+                                            <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+                                        </td>*@
                                     </tr>
-
-
+                                    <tr>
+                                        <td style="width:200px">
+                                            @Translation.Get("Ärende - Prioritet", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.DropDownList("lstCasePriority", Model.CasePrioritySelect, new { id = "lstCasePriority", multiple = "multiple", @class = "chosen-select" })
+                                        </td>
+                                        @*<td>
+                                            <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+                                        </td>*@
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Ärende - Status", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.DropDownList("lstCaseStatus", Model.CaseStatusSelect, new { id = "lstCaseStatus", multiple = "multiple", @class = "chosen-select" })
+                                        </td>
+                                        @*<td>
+                                            <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+                                        </td>*@
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Användare - Driftgrupp", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.DropDownList("lstUserWg", Model.UserWgSelect, new { id = "lstUserWg", multiple = "multiple", @class = "chosen-select" })
+                                        </td>
+                                        @*<td>
+                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+            </td>*@
+                                    </tr>
                                 </table>
                             </div>
                         </div>
@@ -2222,7 +2259,26 @@
         
     });
 
-    
+    $('#lstCasePriority').change(function () {
+        
+        var SelectedValue = $(this).val();        
+        document.getElementById('selectedPrioritys').value=SelectedValue;
+        
+    });
+
+    $('#lstCaseStatus').change(function () {
+        
+        var SelectedValue = $(this).val();        
+        document.getElementById('selectedStatuses').value=SelectedValue;
+        
+    });
+
+    $('#lstUserWg').change(function () {
+        
+        var SelectedValue = $(this).val();        
+        document.getElementById('selectedUserWgs').value=SelectedValue;
+        
+    });
 
     function GetSelectedTextValue(ddl) {
         var selectedValue = ddl.value;

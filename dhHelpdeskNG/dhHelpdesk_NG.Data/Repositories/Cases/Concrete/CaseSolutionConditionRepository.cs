@@ -187,7 +187,76 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         }
 
                     }
+                    else if (constString == "case_Priority.PriorityGUID")
+                    {
+                        var tlist = from xx in this.DataContext.Priorities
+                                    where xx.Customer_Id == customerid && uids.Contains(xx.PriorityGUID.ToString())
+                                    select (xx);
 
+                        foreach (var c in tlist)
+                        {
+                            CaseSolutionCondition ss = new CaseSolutionCondition
+                            {
+
+                                Customer_Id = c.Customer_Id,
+                                Id = c.Id,
+                                IsSelected = 1,
+                                Name = c.Name,
+                                StateSecondaryGUID = c.PriorityGUID.ToString()
+
+                            };
+
+                            selected.Add(ss);
+                        }
+
+                    }
+
+                    else if (constString == "case_Status.StatusGUID")
+                    {
+                        var tlist = from xx in this.DataContext.Statuses
+                                    where xx.Customer_Id == customerid && uids.Contains(xx.StatusGUID.ToString())
+                                    select (xx);
+
+                        foreach (var c in tlist)
+                        {
+                            CaseSolutionCondition ss = new CaseSolutionCondition
+                            {
+
+                                Customer_Id = c.Customer_Id,
+                                Id = c.Id,
+                                IsSelected = 1,
+                                Name = c.Name,
+                                StateSecondaryGUID = c.StatusGUID.ToString()
+
+                            };
+
+                            selected.Add(ss);
+                        }
+
+                    }
+                    else if (constString == "user_WorkingGroup.WorkingGroupGUID")
+                    {
+                        var tlist = from xx in this.DataContext.WorkingGroups
+                                    where xx.Customer_Id == customerid && uids.Contains(xx.WorkingGroupGUID.ToString())
+                                    select (xx);
+
+                        foreach (var c in tlist)
+                        {
+                            CaseSolutionCondition ss = new CaseSolutionCondition
+                            {
+
+                                Customer_Id = c.Customer_Id,
+                                Id = c.Id,
+                                IsSelected = 1,
+                                Name = c.WorkingGroupName,
+                                StateSecondaryGUID = c.WorkingGroupGUID.ToString()
+
+                            };
+
+                            selected.Add(ss);
+                        }
+
+                    }
                 }
             }
 
@@ -239,12 +308,81 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     }
                 }
             }
+            else if (constString == "case_Priority.PriorityGUID")
+            {
+                List<Priority> stfinaList = this.DataContext.Priorities.Where(z => z.Customer_Id == customerid).ToList();
+                foreach (Priority k in stfinaList)
+                {
+                    bool has = selected.Any(cus => cus.StateSecondaryGUID.ToString() == k.PriorityGUID.ToString());
+                    if (has == false)
+                    {
+                        CaseSolutionCondition ss = new CaseSolutionCondition
+                        {
+                            Customer_Id = k.Customer_Id,
+                            Id = k.Id,
+                            IsSelected = 0,
+                            Name = k.Name,
+                            StateSecondaryGUID = k.PriorityGUID.ToString()
+
+                        };
+
+
+                        selected.Add(ss);
+                    }
+                }
+            }
+            else if (constString == "case_Status.StatusGUID")
+            {
+                List<Status> stfinaList = this.DataContext.Statuses.Where(z => z.Customer_Id == customerid).ToList();
+                foreach (Status k in stfinaList)
+                {
+                    bool has = selected.Any(cus => cus.StateSecondaryGUID.ToString() == k.StatusGUID.ToString());
+                    if (has == false)
+                    {
+                        CaseSolutionCondition ss = new CaseSolutionCondition
+                        {
+                            Customer_Id = k.Customer_Id,
+                            Id = k.Id,
+                            IsSelected = 0,
+                            Name = k.Name,
+                            StateSecondaryGUID = k.StatusGUID.ToString()
+
+                        };
+
+
+                        selected.Add(ss);
+                    }
+                }
+            }
+            else if (constString == "user_WorkingGroup.WorkingGroupGUID")
+            {
+                List<WorkingGroupEntity> stfinaList = this.DataContext.WorkingGroups.Where(z => z.Customer_Id == customerid).ToList();
+                foreach (WorkingGroupEntity k in stfinaList)
+                {
+                    bool has = selected.Any(cus => cus.StateSecondaryGUID.ToString() == k.WorkingGroupGUID.ToString());
+                    if (has == false)
+                    {
+                        CaseSolutionCondition ss = new CaseSolutionCondition
+                        {
+                            Customer_Id = k.Customer_Id,
+                            Id = k.Id,
+                            IsSelected = 0,
+                            Name = k.WorkingGroupName,
+                            StateSecondaryGUID = k.WorkingGroupGUID.ToString()
+
+                        };
+
+
+                        selected.Add(ss);
+                    }
+                }
+            }
             var result = selected.OrderBy(x => x.Id).ThenBy(x => x.Name).ToList();
 
             return result;
         }
 
-        
+
 
     }
 }

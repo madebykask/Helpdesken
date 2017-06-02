@@ -88,6 +88,13 @@
 
         public List<SelectListItem> CaseWorkingGroupSelect { get; set; }
 
+        public List<SelectListItem> CasePrioritySelect { get; set; }
+
+        public List<SelectListItem> CaseStatusSelect { get; set; }
+
+        public List<SelectListItem> UserWgSelect { get; set; }
+
+        
         public string SelectedCaseSecondaries { get; set; }
 
     }

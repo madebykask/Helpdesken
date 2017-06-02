@@ -440,11 +440,11 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Edit(
             CaseSolutionInputViewModel caseSolutionInputViewModel,
             CaseSolutionSettingModel[] CaseSolutionSettingModels,
-            int PageId, string selectedStates, string selectedCaseWgs)
+            int PageId, string selectedStates, string selectedCaseWgs, string selectedPrioritys, string selectedStatuses, string selectedUserWgs)
         {
 
 
-           
+
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
@@ -512,6 +512,43 @@ namespace DH.Helpdesk.Web.Controllers
                 CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
                 Property_Name = stateId,
                 Values = selectedCaseWgs,
+                Status = 1
+            };
+
+            this._caseSolutionConditionService.Save(cce);
+
+
+            stateId = "case_Priority.PriorityGUID";
+            cce = new CaseSolutionConditionEntity
+            {
+
+                CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
+                Property_Name = stateId,
+                Values = selectedPrioritys,
+                Status = 1
+            };
+
+            this._caseSolutionConditionService.Save(cce);
+
+            stateId = "case_Status.StatusGUID";
+            cce = new CaseSolutionConditionEntity
+            {
+
+                CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
+                Property_Name = stateId,
+                Values = selectedStatuses,
+                Status = 1
+            };
+
+            this._caseSolutionConditionService.Save(cce);
+
+            stateId = "user_WorkingGroup.WorkingGroupGUID";
+            cce = new CaseSolutionConditionEntity
+            {
+
+                CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
+                Property_Name = stateId,
+                Values = selectedUserWgs,
                 Status = 1
             };
 
@@ -918,6 +955,102 @@ namespace DH.Helpdesk.Web.Controllers
             ///////////////////////////////////////////////CaseWorkingGroups/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+            ///////////////////////////////////////////////CasePriority/////////////////////////////////////////////////////////////////////////////////////////////////////////
+            string selectedPrios = string.Empty;
+            //IList<CaseSolutionCondition> wkgroup = _caseSolutionConditionService.GetCaseWorkingGroups(caseSolution.Id, curCustomerId);
+            string prioguid = "case_Priority.PriorityGUID";
+            IList<CaseSolutionCondition> priogroup = _caseSolutionConditionService.GetCaseSolutionConditionModel(caseSolution.Id, curCustomerId, prioguid);
+            foreach (CaseSolutionCondition sb in priogroup)
+            {
+                if (sb.IsSelected == 1)
+                {
+                    if (selectedPrios == string.Empty)
+                    {
+                        selectedPrios = sb.StateSecondaryGUID.ToString();
+                    }
+                    else
+                    {
+                        selectedPrios = selectedPrios + "," + sb.StateSecondaryGUID.ToString();
+                    }
+                }
+            }
+
+            List<SelectListItem> casePrios = null;
+            casePrios = priogroup
+                  .Select(x => new SelectListItem
+                  {
+                      Text = x.Name,
+                      Value = x.StateSecondaryGUID.ToString(),
+                      Selected = x.IsSelected == 1 ? true : false
+                  }).ToList();
+
+            ViewBag.selectedPrioritys = selectedPrios;
+            ///////////////////////////////////////////////CasePriority/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            ///////////////////////////////////////////////CaseStatus/////////////////////////////////////////////////////////////////////////////////////////////////////////
+            string selectedStats = string.Empty;
+            string statguid = "case_Status.StatusGUID";
+            IList<CaseSolutionCondition> statgroup = _caseSolutionConditionService.GetCaseSolutionConditionModel(caseSolution.Id, curCustomerId, statguid);
+            foreach (CaseSolutionCondition sb in statgroup)
+            {
+                if (sb.IsSelected == 1)
+                {
+                    if (selectedStats == string.Empty)
+                    {
+                        selectedStats = sb.StateSecondaryGUID.ToString();
+                    }
+                    else
+                    {
+                        selectedStats = selectedStats + "," + sb.StateSecondaryGUID.ToString();
+                    }
+                }
+            }
+
+            List<SelectListItem> caseStatus = null;
+            caseStatus = statgroup
+                  .Select(x => new SelectListItem
+                  {
+                      Text = x.Name,
+                      Value = x.StateSecondaryGUID.ToString(),
+                      Selected = x.IsSelected == 1 ? true : false
+                  }).ToList();
+
+            ViewBag.selectedStatuses = selectedStats;
+            ///////////////////////////////////////////////CaseStatus/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+            ///////////////////////////////////////////////UserWg/////////////////////////////////////////////////////////////////////////////////////////////////////////
+            string selectedUserWg = string.Empty;
+            string userwgguid = "user_WorkingGroup.WorkingGroupGUID";
+            IList<CaseSolutionCondition> userwggroup = _caseSolutionConditionService.GetCaseSolutionConditionModel(caseSolution.Id, curCustomerId, userwgguid);
+            foreach (CaseSolutionCondition sb in userwggroup)
+            {
+                if (sb.IsSelected == 1)
+                {
+                    if (selectedUserWg == string.Empty)
+                    {
+                        selectedUserWg = sb.StateSecondaryGUID.ToString();
+                    }
+                    else
+                    {
+                        selectedUserWg = selectedUserWg + "," + sb.StateSecondaryGUID.ToString();
+                    }
+                }
+            }
+
+            List<SelectListItem> caseUserWg = null;
+            caseUserWg = userwggroup
+                  .Select(x => new SelectListItem
+                  {
+                      Text = x.Name,
+                      Value = x.StateSecondaryGUID.ToString(),
+                      Selected = x.IsSelected == 1 ? true : false
+                  }).ToList();
+
+            ViewBag.selectedUserWgs = selectedUserWg;
+            ///////////////////////////////////////////////UserWg/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
             regions = regionList.Select(x => new SelectListItem
             {
                 Text = x.Name,
@@ -1145,7 +1278,10 @@ namespace DH.Helpdesk.Web.Controllers
                 ActionList = actionList,
 
                 StateSecondariesSelect = stateSecondaries,
-                CaseWorkingGroupSelect = caseWorkingGroups
+                CaseWorkingGroupSelect = caseWorkingGroups,
+                CasePrioritySelect = casePrios,
+                CaseStatusSelect = caseStatus,
+                UserWgSelect = caseUserWg
             };
 
             model.ParantPath_Category = "--";
