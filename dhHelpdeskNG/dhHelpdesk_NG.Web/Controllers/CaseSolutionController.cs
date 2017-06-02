@@ -444,15 +444,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
 
 
-            string stateId = "case_StateSecondary.StateSecondaryGUID";
-            CaseSolutionConditionEntity cce = new CaseSolutionConditionEntity
-            {
-                
-               CaseSolution_Id=caseSolutionInputViewModel.CaseSolution.Id,
-               Property_Name=stateId,
-               Values=selectedStates,
-               Status=1
-            };
+           
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
@@ -499,6 +491,19 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolutionInputViewModel.CaseSolution.Id,
                     CaseSolutionSettingModels);
             this.caseSolutionSettingService.UpdateCaseSolutionSettings(settingsSolutionAggregate);
+
+
+            string stateId = "case_StateSecondary.StateSecondaryGUID";
+            CaseSolutionConditionEntity cce = new CaseSolutionConditionEntity
+            {
+
+                CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
+                Property_Name = stateId,
+                Values = selectedStates,
+                Status = 1
+            };
+
+            this._caseSolutionConditionService.Save(cce);
 
             //Remove caching of conditions for this specific template that is used in Case
             string cacheKey = string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition, caseSolutionInputViewModel.CaseSolution.Id);

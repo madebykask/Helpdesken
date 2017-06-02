@@ -16,8 +16,10 @@
         /// </param>
         IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid);
 
-      
+
         IList<CaseSolutionCondition> GetStateSecondaries(int casesolutionid, int customerid);
+
+        void Save(CaseSolutionConditionEntity model);
 
     }
 }

@@ -2,6 +2,12 @@
 using System.Linq;
 using System;
 using DH.Helpdesk.Domain.Cases;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Data;
+using System.Data.OleDb;
+using System.Globalization;
+
 
 namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 {
@@ -28,6 +34,34 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
 
 
+        public void Save(CaseSolutionConditionEntity model)
+        {
+            string sql = string.Empty;
+            int istatus = 1;
+
+            sql = "IF EXISTS (SELECT Id FROM tblCaseSolutionCondition WHERE Property_Name = '" + model.Property_Name + "' AND CaseSolution_Id= " + model.CaseSolution_Id + ") BEGIN ";
+            sql += "UPDATE tblCaseSolutionCondition SET [Values]='" + model.Values + "' WHERE Property_Name = '" + model.Property_Name + "' AND CaseSolution_Id = " + model.CaseSolution_Id + " END ";
+            sql += " ELSE BEGIN INSERT INTO tblCaseSolutionCondition (CaseSolution_Id, Property_Name, [Values], Status) ";
+            sql += " VALUES ( " + model.CaseSolution_Id + ", '" + model.Property_Name + "', '" + model.Values + "', " + istatus + " ) END";
+
+
+
+            string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand { Connection = connection, CommandType = CommandType.Text })
+                {
+                    cmd.CommandText = sql;
+                    if (connection.State == ConnectionState.Closed)
+                    {
+                        connection.Open();
+                    }
+                    cmd.ExecuteNonQuery();
+                    
+                }
+            }
+        }
 
         public IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid)
         {
@@ -89,17 +123,17 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
                         bool isValid = Guid.TryParse(s.ToString(), out guidOutput);
 
-                        if (isValid==false)
+                        if (isValid == false)
                         {
                             CaseSolutionCondition ss = new CaseSolutionCondition
                             {
-                                
+
                                 Customer_Id = customerid,
-                                Id = 0,                                
-                                IsSelected = 1,                                
-                                Name = "[" + s + "]",                                
+                                Id = 0,
+                                IsSelected = 1,
+                                Name = "[" + s + "]",
                                 StateSecondaryGUID = s.ToString()
-                                
+
                             };
                             selected.Add(ss);
 
@@ -118,12 +152,12 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     {
                         CaseSolutionCondition ss = new CaseSolutionCondition
                         {
-                            
+
                             Customer_Id = c.Customer_Id,
-                            Id = c.Id,                                                        
-                            IsSelected = 1,                            
-                            Name = c.Name,                            
-                            StateSecondaryGUID = c.StateSecondaryGUID.ToString()                            
+                            Id = c.Id,
+                            IsSelected = 1,
+                            Name = c.Name,
+                            StateSecondaryGUID = c.StateSecondaryGUID.ToString()
 
                         };
                         //StateSecondary ss = new StateSecondary
@@ -165,11 +199,11 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 if (has == false)
                 {
                     CaseSolutionCondition ss = new CaseSolutionCondition
-                    {                        
+                    {
                         Customer_Id = k.Customer_Id,
-                        Id = k.Id,                                             
-                        IsSelected = 0,                        
-                        Name = k.Name,                                                
+                        Id = k.Id,
+                        IsSelected = 0,
+                        Name = k.Name,
                         StateSecondaryGUID = k.StateSecondaryGUID.ToString()
 
                     };
