@@ -352,8 +352,8 @@
 <input type="hidden" value="@Request.RawUrl" id="rawUrl"/>
 @Html.Partial("_Translations", null)
 @{
-    var curCustomerId = SessionFacade.CurrentCustomer.Id;
-    var curLanguageId = SessionFacade.CurrentLanguageId;
+    var curCustomerId = SessionFacade.CurrentCustomer != null? SessionFacade.CurrentCustomer.Id : 0;
+    var curLanguageId = SessionFacade.CurrentCustomer != null ? SessionFacade.CurrentLanguageId : 1;
     int curCaseId = 0;
     if (TempData["Case_Id"] != null)
     {
