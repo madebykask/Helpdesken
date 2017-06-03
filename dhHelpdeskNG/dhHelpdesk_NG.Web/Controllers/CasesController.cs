@@ -4309,6 +4309,7 @@ namespace DH.Helpdesk.Web.Controllers
             var m = new CaseInputViewModel();
             SessionFacade.IsCaseDataChanged = false;
 
+            m.ContainsExtendedCase = true;
             m.BackUrl = backUrl;
             m.CanGetRelatedCases = SessionFacade.CurrentUser.IsAdministrator();
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
@@ -4377,6 +4378,7 @@ namespace DH.Helpdesk.Web.Controllers
             m.LogFilesModel = new FilesModel();
             m.CaseFileNames = GetCaseFileNames(caseId.ToString());
             m.LogFileNames = GetLogFileNames(caseId.ToString());
+            
 
             if (isCreateNewCase)
             {

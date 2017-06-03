@@ -258,6 +258,8 @@
                         @Html.HiddenFor(model => model.ProductAreaHasChild)
                         @Html.HiddenFor(model => model.CustomerSettings.ModuleCaseInvoice)
                         @Html.HiddenFor(model => model.MovedFromCustomerId)
+                        @Html.HiddenFor(model => model.ContainsExtendedCase)
+
 
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
