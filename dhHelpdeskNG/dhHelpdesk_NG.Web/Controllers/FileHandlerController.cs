@@ -9,13 +9,13 @@ using System.Web.Mvc;
 
 namespace DH.Helpdesk.Web.Controllers
 {
-    public class FilesController : BaseController
+    public class FileHandlerController : BaseController
     {
         private readonly ICaseService _caseService;
         private readonly IMasterDataService _masterDataService;
         private readonly ILogService _logService;
 
-        public FilesController(ICaseService caseService,
+        public FileHandlerController(ICaseService caseService,
             IMasterDataService masterDataService,
             ILogService logService)
             : base(masterDataService)

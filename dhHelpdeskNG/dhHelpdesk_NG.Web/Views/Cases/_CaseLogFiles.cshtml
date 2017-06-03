@@ -28,7 +28,7 @@
                         <td>
                             @if (Model.VirtualDirectory)
                             {
-                                <a target="_blank" href="@Html.Action("LogFileLinkVD","Files", new RouteValueDictionary { { "id", Model.Id }, { "fileName", filename } })"><i class="icon-file"></i> @filename</a>
+                                <a target="_blank" href="@Html.Action("LogFileLinkVD","FileHandler", new RouteValueDictionary { { "id", Model.Id }, { "fileName", filename } })"><i class="icon-file"></i> @filename</a>
                             }
                             else
                             {

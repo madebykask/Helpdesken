@@ -172,7 +172,7 @@
                                                 <p>
                                                     @if (Model.CaseFilesModel.VirtualDirectory)
                                                     {
-                                                        <a target="_blank" href="@Html.Action("LogFileLinkVD","Files", new { id = r.Id, fileName = l.FileName })"><i class="icon-file"></i> @l.FileName</a>
+                                                        <a target="_blank" href="@Html.Action("LogFileLinkVD","FileHandler", new { id = r.Id, fileName = l.FileName })"><i class="icon-file"></i> @l.FileName</a>
                                                     }
                                                     else
                                                     {
