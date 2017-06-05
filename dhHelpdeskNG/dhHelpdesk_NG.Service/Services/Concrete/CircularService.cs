@@ -120,7 +120,7 @@
             }
         }
 
-        public void AddCircular(CircularForInsert businessModel)
+        public int AddCircular(CircularForInsert businessModel)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
@@ -175,6 +175,7 @@
                 circularRepository.Add(entity);
 
                 uof.Save();
+                return entity.Id;
             }
         }
 

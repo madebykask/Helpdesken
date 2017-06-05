@@ -593,20 +593,22 @@ namespace DH.Helpdesk.Web.Controllers
                 SelectedProcent = newCircular.CaseFilter.SelectedProcent
             };
 
+            var circularId = newCircular.Id;
             if (newCircular.Id == 0)
             {
                 var circular = new CircularForInsert(newCircular.CircularName, newCircular.QuestionnaireId,
                     CircularStateId.ReadyToSend, DateTime.Now, cases, caseFilter);
 
-                this._circularService.AddCircular(circular);
+                circularId = _circularService.AddCircular(circular);
             }
             else
             {
                 var circular = new CircularForUpdate(newCircular.Id, newCircular.CircularName, DateTime.Now, cases, caseFilter);
                 this._circularService.UpdateCircular(circular);
+                circularId = circular.Id;
             }
 
-            return this.RedirectToAction("EditCircular", new { circularId = newCircular.Id, backStatusId });
+            return this.RedirectToAction("EditCircular", new { circularId = circularId, backStatusId });
         }
 
         [HttpPost]
