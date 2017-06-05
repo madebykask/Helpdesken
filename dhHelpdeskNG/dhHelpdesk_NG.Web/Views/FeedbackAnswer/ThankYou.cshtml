@@ -6,20 +6,48 @@
 <div class="content">
     <div class="container">
         @Html.Raw(Model.Html)
-        @using (Html.BeginForm("SaveComment", "FeedbackAnswer", new { customerId = Model.CustomerId, languageId = Model.LanguageId, questionId = Model.QuestionId, noteText = Model.NoteText }, FormMethod.Post))
+        @using (Html.BeginForm("SaveComment", "FeedbackAnswer", new {customerId = Model.CustomerId, languageId = Model.LanguageId, questionId = Model.QuestionId, noteText = Model.NoteText}, FormMethod.Post))
         {
             if (Model.IsShowNote)
             {
                 @Html.DisplayFor(m => m.NoteLabel)
-                <br />
-                @Html.TextAreaFor(m => m.NoteText)
+                <br/>
+                @Html.TextAreaFor(m => m.NoteText, new {id = "feedbackComment"})
                 @Html.ValidationMessageFor(m => m.NoteText)
                 @Html.HiddenFor(m => m.CustomerId)
                 @Html.HiddenFor(m => m.LanguageId)
                 @Html.HiddenFor(m => m.QuestionId)
                 <br/>
-                <input type="submit" value="Save" />
+                <a href="#" id="btnSaveComment" class="btn templateQuickButton"> Save </a>
             }
         }
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+            $("#btnSaveComment").click(function(e) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/FeedbackAnswer/SaveComment",
+                        data: {
+                            customerId: @Model.CustomerId,
+                            languageId: @Model.LanguageId,
+                            questionId: @Model.QuestionId,
+                            noteText: $("#feedbackComment").val()
+                        },
+                        dataType: 'json',
+                        success: function(data) {
+                            if (data && data.success) {
+                                $("#btnSaveComment").attr('disabled', 'disabled');
+                                $("#feedbackComment").attr('disabled', 'disabled');
+                                $('#btnSaveComment').unbind('click');
+                            }
+                        }
+                    });
+                    e.preventDefault();
+                });
+
+        });
+</script>
