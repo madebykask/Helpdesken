@@ -23,7 +23,9 @@ namespace DH.Helpdesk.Web.Areas.WebApi
         private class RequiredParams
         {
             public int? Id { get; set; }
+            public int? CurrentCustomerId { get; set; }
             public int? CurrentLanguageId { get; set; }
+
         }
 
         private readonly IUniversalCaseService _universalCaseService;
@@ -119,6 +121,7 @@ namespace DH.Helpdesk.Web.Areas.WebApi
             {                
                 ret.Id = dic.GetParamValue<int>(nameof(RequiredParams.Id));
                 ret.CurrentLanguageId = dic.GetParamValue<int>(nameof(RequiredParams.CurrentLanguageId));
+                ret.CurrentLanguageId = dic.GetParamValue<int>(nameof(RequiredParams.CurrentLanguageId));
             }
             catch
             {
@@ -131,6 +134,9 @@ namespace DH.Helpdesk.Web.Areas.WebApi
         {
             if (!reqParams.Id.HasValue || reqParams.Id < 0)
                 errors.Add(GenerateInvalidParameterError(nameof(reqParams.Id)));
+
+            if (!reqParams.CurrentCustomerId.HasValue || reqParams.CurrentCustomerId < 1)
+                errors.Add(GenerateInvalidParameterError(nameof(reqParams.CurrentCustomerId)));
 
             if (!reqParams.CurrentLanguageId.HasValue || reqParams.CurrentLanguageId < 1)
                 errors.Add(GenerateInvalidParameterError(nameof(reqParams.CurrentLanguageId)));
