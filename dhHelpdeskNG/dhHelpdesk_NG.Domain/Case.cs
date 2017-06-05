@@ -12,7 +12,9 @@
 	    public Case()
 	    {
 		    InvoiceRows = new List<InvoiceRow>();
-	    }
+            ActiveTab = "case-tab";
+            this.ExtendedCaseDatas = new List<ExtendedCaseEntity.ExtendedCaseDataEntity>();
+        }
 
 		public Guid CaseGUID { get; set; }
         public String ReportedBy { get; set; }
@@ -70,6 +72,8 @@
         public int? LockCaseToWorkingGroup_Id { get; set; }
         public int? WorkingGroup_Id { get; set; }
         public int? CaseSolution_Id { get; set; }
+        public string ActiveTab { get; set; }
+        
 
         /// <summary>
         /// In UTC
@@ -161,6 +165,8 @@
         public virtual ICollection<Mail2Ticket> Mail2Tickets { get; set; }
 
         public virtual CaseSolution CaseSolution { get; set; }
+
+        public virtual List<ExtendedCaseEntity.ExtendedCaseDataEntity> ExtendedCaseDatas { get; set; }
 
         public bool IsClosed()
         {

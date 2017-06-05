@@ -12,6 +12,11 @@
         @Styles.Render("~/cases/dynamic-cases")
     }
 
+    @if (Model.ExtendedCases != null)
+    {
+        @Styles.Render("~/cases/dynamic-cases")
+    }
+
     @Scripts.Render("~/bundles/cases/edit")
 
     @section Scripts {
@@ -176,69 +181,75 @@
     @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
     {
         @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
-       
+
         <script type="text/javascript">
         $(function () {
             @{
 
-                //string formUrl = string.Empty;
+                string formUrl = string.Empty;
 
 
-                //UriBuilder uriBuilder = new UriBuilder();
-                //var queryString = (Model.DynamicCase.FormPath.Contains("?") ? Model.DynamicCase.FormPath.Substring(Model.DynamicCase.FormPath.IndexOf("?")) : "");
+                UriBuilder uriBuilder = new UriBuilder();
+                var queryString = (Model.DynamicCase.FormPath.Contains("?") ? Model.DynamicCase.FormPath.Substring(Model.DynamicCase.FormPath.IndexOf("?")) : "");
 
 
                 //Build URL
-                //if (Model.DynamicCase.ExternalSite)
-                //{
+                if (Model.DynamicCase.ExternalSite)
+                {
 
-                //    uriBuilder.Scheme = Model.DynamicCase.Scheme;
-                //    uriBuilder.Host = Model.DynamicCase.Host;
+                    uriBuilder.Scheme = Model.DynamicCase.Scheme;
+                    uriBuilder.Host = Model.DynamicCase.Host;
 
-                //    if (!string.IsNullOrEmpty(queryString))
-                //    {
-                //        uriBuilder.Path = Model.DynamicCase.FormPath.ToLower().Replace(queryString.ToLower(), "");
-                //        uriBuilder.Query = (queryString.StartsWith("?") ? queryString.Remove(0, 1) : queryString);
-                //    }
-                //    else
-                //    {
-                //        uriBuilder.Path = Model.DynamicCase.FormPath;
-                //    }
+                    if (!string.IsNullOrEmpty(queryString))
+                    {
+                        uriBuilder.Path = Model.DynamicCase.FormPath.ToLower().Replace(queryString.ToLower(), "");
+                        uriBuilder.Query = (queryString.StartsWith("?") ? queryString.Remove(0, 1) : queryString);
+                    }
+                    else
+                    {
+                        uriBuilder.Path = Model.DynamicCase.FormPath;
+                    }
 
-                //    Uri uri = uriBuilder.Uri;
+                    Uri uri = uriBuilder.Uri;
 
-                //    formUrl = uri.ToString();
+                    formUrl = uri.ToString();
 
-                //}
-                ////Sub Site
-                //else
-                //{
-                //    if (!string.IsNullOrEmpty(queryString))
-                //    {
-                //        uriBuilder.Path = Path.Combine(Model.DynamicCase.Host, Model.DynamicCase.FormPath.ToLower().Replace(queryString.ToLower(), ""));
-                //        uriBuilder.Query = (queryString.StartsWith("?") ? queryString.Remove(0, 1) : queryString);
-                //    }
-                //    else
-                //    {
-                //        uriBuilder.Path = Path.Combine(Model.DynamicCase.Host, Model.DynamicCase.FormPath);
-                //    }
+                }
+                //Sub Site
+                else
+                {
+                    if (!string.IsNullOrEmpty(queryString))
+                    {
+                        uriBuilder.Path = Path.Combine(Model.DynamicCase.Host, Model.DynamicCase.FormPath.ToLower().Replace(queryString.ToLower(), ""));
+                        uriBuilder.Query = (queryString.StartsWith("?") ? queryString.Remove(0, 1) : queryString);
+                    }
+                    else
+                    {
+                        uriBuilder.Path = Path.Combine(Model.DynamicCase.Host, Model.DynamicCase.FormPath);
+                    }
 
-                //    Uri uri = uriBuilder.Uri;
+                    Uri uri = uriBuilder.Uri;
 
-                //    formUrl = (uri.AbsolutePath.EndsWith("/") ? uri.AbsolutePath.Remove(uri.AbsolutePath.LastIndexOf("/"), 1) : "") + uri.Query;
+                    formUrl = (uri.AbsolutePath.EndsWith("/") ? uri.AbsolutePath.Remove(uri.AbsolutePath.LastIndexOf("/"), 1) : "") + uri.Query;
 
-                //}
+                }
 
-                string _url = "";
-                _url = Model.DynamicCase.FormPath.StartsWith("/")? Model.DynamicCase.FormPath : string.Format("/{0}", Model.DynamicCase.FormPath);
+                //string _url = "";
+                //_url = Model.DynamicCase.FormPath.StartsWith("/")? Model.DynamicCase.FormPath : string.Format("/{0}", Model.DynamicCase.FormPath);
             }
 
-            var urlToSend = '@_url'.replace(/\\/g, '&#92;');
-            var currentpage = new dhform({ url: '@_url', modal: '@Model.DynamicCase.ViewMode' });
+            var urlToSend = '@formUrl'.replace(/\\/g, '&#92;');
+            var currentpage = new dhform({ url: '@formUrl', modal: '@Model.DynamicCase.ViewMode' });
 
         });
         </script>
     }
+
+
+@if (!Model.IsItChildCase())
+{
+    @Html.Partial("_ExtendedCase", Model.ExtendedCases)
+}
 
     @Html.Partial("_Plupload")
 

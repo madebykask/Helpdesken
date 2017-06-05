@@ -2745,6 +2745,8 @@ namespace DH.Helpdesk.Web.Controllers
             case_.Department = null;
             case_.Region = null;
             case_.CaseSolution_Id = m.CaseSolution_Id.HasValue && m.CaseSolution_Id == 0 ? null : m.CaseSolution_Id;
+            case_.ActiveTab = m.ActiveTab;
+            
             bool edit = case_.Id != 0;
             var isItChildCase = m.ParentId.HasValue;
             Case parentCase = null;
@@ -5004,6 +5006,22 @@ namespace DH.Helpdesk.Web.Controllers
                 m.DynamicCase.FormPath = m.DynamicCase.FormPath.Replace(@"\", @"\\"); //this is because users with backslash in name will have issues with container.js
             }
 
+            int caseSolutionId = (m.case_.CaseSolution_Id != null) ? m.case_.CaseSolution_Id.Value : (templateId.HasValue ? templateId.Value : 0);
+            var inputParameters = new Dictionary<string, string>();
+
+            inputParameters.Add("CustomerId", customerId.ToString());
+            inputParameters.Add("CaseId", m.case_.Id.ToString());
+            inputParameters.Add("CaseSolutionId", caseSolutionId.ToString());
+            inputParameters.Add("User_LanguageId", SessionFacade.CurrentLanguageId.ToString());
+
+            if (m.case_.Id > 0)
+            {
+                inputParameters.Add("CaseGuid", m.case_.CaseGUID.ToString());
+            }
+            
+
+
+            m.ExtendedCases = _caseService.GetExtendedCaseForms(inputParameters);
 
             if (case_ != null)
             {

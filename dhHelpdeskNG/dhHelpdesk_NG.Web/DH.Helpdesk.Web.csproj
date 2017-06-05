@@ -3871,11 +3871,11 @@
     <Content Include="Views\Cases\ModalDialogs\_CaseCharge.cshtml" />
     <Content Include="Views\Login\GetUserCount.cshtml" />
     <Content Include="Views\Feedback\Statistics.cshtml" />
-    <Content Include="Views\Shared\WorkflowStep.cshtml" />
     <Content Include="Views\Questionnaire\Feedback\_StatisticsCases.cshtml" />
     <Content Include="Views\Questionnaire\Feedback\FeedbackStatisticsGrid.cshtml" />
     <Content Include="Views\FeedbackAnswer\ThankYou.cshtml" />
     <Content Include="Views\Shared\WorkflowStep.cshtml" />
+    <Content Include="Views\Shared\_ExtendedCase.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

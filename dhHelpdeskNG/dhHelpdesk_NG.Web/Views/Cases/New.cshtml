@@ -1,5 +1,12 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
 @using System.Web.Optimization
+@using DH.Helpdesk.Web
+@using System
+
+@if (Model.ExtendedCases != null)
+{
+    @Styles.Render("~/cases/dynamic-cases")
+}
 
 @Scripts.Render("~/bundles/cases/new")
 @section Scripts {
@@ -42,6 +49,11 @@
             //location.href = '/Cases/new?customerId=' + ci + p2 + p3 + '&caseLanguageId=' + cli;       
         });
     </script>
+}
+
+@if (!Model.IsItChildCase())
+{
+    @Html.Partial("_ExtendedCase", Model.ExtendedCases)
 }
 
 @Html.Partial("_Plupload")

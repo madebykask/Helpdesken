@@ -37,6 +37,9 @@ namespace DH.Helpdesk.Dal.Repositories
         IEnumerable<CaseOverview> GetCaseOverviews(int[] customers);
         int LookupLanguage(int custid, string notid, int regid, int depid, string notifierid);
 
+        IList<ExtendedCaseFormModel> GetExtendedCaseForms(Dictionary<string, string> inputParameters);
+
+
         Case GetCaseIncluding(int id);
 
         CaseModel GetCase(int id);
@@ -108,6 +111,45 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var cases = this.DataContext.Cases.Where(c => c.Customer_Id == customerId && c.Problem_Id == problemId).ToList();
             return cases;
+        }
+
+        public IList<ExtendedCaseFormModel> GetExtendedCaseForms(Dictionary<string, string> inputParameters)
+        {
+            //TODO: Cache this!
+            IList<ExtendedCaseFormModel> extendedForm;
+            int caseSolutionId = int.Parse(inputParameters["CaseSolutionId"].ToString());
+            int customerId = int.Parse(inputParameters["CustomerId"].ToString());
+            int caseId = int.Parse(inputParameters["CaseId"].ToString());
+            var userLanguageId = inputParameters["User_LanguageId"].ToString();
+
+            if (caseSolutionId == 0)
+                return null;
+
+            var caseSolution = this.DataContext.CaseSolutions.Where(c => c.Customer_Id == customerId && c.Id == caseSolutionId).FirstOrDefault();
+
+            if (caseId == 0)
+            {
+                extendedForm = caseSolution.ExtendedCaseForms.Select(x => new ExtendedCaseFormModel
+                {
+                    CaseId = caseId,
+                    Id = x.Id,
+                    Path = caseSolution.TemplatePath.Replace("&extendedCaseGuid=[extendedCaseGuid]", "").Replace("[LanguageId]", userLanguageId).Replace("[CaseId]", caseId.ToString()),
+                    Name = (x.Name != null ? x.Name : caseSolution.Name)
+                }).ToList();
+            }
+            else
+            {
+                        
+                extendedForm = this.DataContext.Cases.Where(c => c.Customer_Id == customerId && c.Id == caseId).FirstOrDefault().ExtendedCaseDatas.Select(x => new ExtendedCaseFormModel
+                {
+                    CaseId = caseId,
+                    Id = x.ExtendedCaseForm.Id,
+                    Path = caseSolution.TemplatePath.Replace("[extendedCaseGuid]", x.ExtendedCaseGuid.ToString()).Replace("[LanguageId]", userLanguageId).Replace("[CaseId]", caseId.ToString()),
+                    Name = (x.ExtendedCaseForm.Name != null ? x.ExtendedCaseForm.Name : caseSolution.Name)
+                }).ToList();
+            }
+
+            return extendedForm;
         }
 
         public DynamicCase GetDynamicCase(int id)

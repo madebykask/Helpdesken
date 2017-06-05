@@ -197,6 +197,7 @@
 
         public bool CanGetRelatedCases { get; set; }
 
+        public IList<ExtendedCaseFormModel> ExtendedCases { get; set; }
 
         #region Date field from case_. Converted to user time zone
 

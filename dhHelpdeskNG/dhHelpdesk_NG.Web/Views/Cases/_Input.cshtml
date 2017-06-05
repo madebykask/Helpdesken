@@ -146,19 +146,19 @@
     <div class="content onemenu editcase" id="mm1">
         <div class="container">
             <ul class="nav nav-tabs" id="myTab">
-                <li class="active">
+                <li data-active-tab="case-tab" class="@((Model.case_.ActiveTab == DH.Helpdesk.Common.Constants.CaseTabs.CaseTab) ? "active": "")">
 
                     @if (Model.CaseTemplateName != null)
                 {
                         <a id="case-tab" href="#case" class="case">@Model.CaseTemplateName</a>
-                    }
+    }
                     else
                     {
                         <a id="case-tab" href="#case" class="case">
                             @Translation.GetCoreTextTranslation("Ärende")
                             @if (Model.case_.Id != 0)
-                            {
-                                @Model.case_.CaseNumber
+    {
+        @Model.case_.CaseNumber
                             }
                         </a>
                     }
@@ -173,9 +173,9 @@
                 }
 
                 @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
-                {
-                    if (Model.DynamicCase.ViewMode == 0)
-                    {
+{
+    if (Model.DynamicCase.ViewMode == 0)
+    {
                         <li>
                             <a href="#dh-form-area" id="loadContainer" class="eform" data-state="">@(Translation.Get(Model.DynamicCase.FormName))</a>                            
                         </li>                        
@@ -189,10 +189,23 @@
                     }
                 }
 
+
+                @if (Model.ExtendedCases != null)
+{
+    foreach (var extendedCase in Model.ExtendedCases)
+    {
+                        <li data-active-tab="@string.Format(DH.Helpdesk.Common.Constants.CaseTabs.ExtendedCaseTab, extendedCase.Id)" class="@((Model.case_.ActiveTab == string.Format(DH.Helpdesk.Common.Constants.CaseTabs.ExtendedCaseTab, extendedCase.Id)) ? "active": "")" >
+                            <a href="#container_@extendedCase.Id" id="tabExtendedcase_@extendedCase.Id" class="extendedcase" data-id="@extendedCase.Id" data-state="">@(Translation.Get(extendedCase.Name))</a>
+                        </li>
+                    }
+                  
+                }
+
+
                 @if (Model.CaseLock != null && Model.CaseLock.IsLocked && Model.CaseLock.User != null)
-                {
-                    if (Model.CaseLock.UserId == SessionFacade.CurrentUser.Id)
-                    {
+{
+    if (Model.CaseLock.UserId == SessionFacade.CurrentUser.Id)
+    {
                         <li class="notice">
                             <a>@Translation.GetCoreTextTranslation("OBS! Du har redan öppnat detta ärende i en annan session.")</a>
                         </li>
@@ -206,20 +219,20 @@
                     }
                 }
                 @if (Model.OrderId.HasValue)
-                {
+{
                     <li>
                         <a id="case-order-url" href="@Url.Content("~/Orders/Orders/Edit/" + Model.OrderId.Value + "?retToCase=" + Model.IsReturnToCase)">@Translation.GetCoreTextTranslation("Beställning")</a>
                     </li>
                 }
                 @if (Model.AccountId.HasValue && Model.AccountActivityId.HasValue)
-                {
+{
                     <li>
                         <a id="case-orderaccount-url" href="@Url.Content("~/OrderAccounts/Orders/Edit/" + Model.AccountId.Value + "?accountActivityId=" + Model.AccountActivityId.Value + "&caseId=" + Model.case_.Id)">@Translation.GetCoreTextTranslation("Beställning konto")</a>
                     </li>
                 }
             </ul>
             <div class="tab-content">
-                <div class="tab-pane tab-pane-border active" id="case">
+                <div class="tab-pane tab-pane-border @((Model.case_.ActiveTab == DH.Helpdesk.Common.Constants.CaseTabs.CaseTab) ? "active": "")" id="case">
                     <div class="container">
                         @Html.HiddenFor(model => model.case_.Id, new { data_field = "caseId" })
                         @Html.HiddenFor(model => model.case_.CaseGUID)
@@ -276,6 +289,7 @@
                         @Html.Hidden("CaseHasInvoiceOrder", "")
                         @Html.Hidden("IsAnyFileAdded", "0")
                         @Html.Hidden("CaseSolution_Id", (Model.NewModeParams != null && Model.NewModeParams.templateId != null) ? Model.NewModeParams.templateId : Model.case_.CaseSolution_Id)
+                        @Html.Hidden("ActiveTab", (string.IsNullOrEmpty(Model.case_.ActiveTab) ? DH.Helpdesk.Common.Constants.CaseTabs.CaseTab: Model.case_.ActiveTab))
 
                         @Html.HiddenFor(model => Model.CaseLock.LockGUID)
                         @*<input type="button" id="sla_test" value="SLA Test" onclick="CalcSLA();" />*@
@@ -318,7 +332,7 @@
                                                     }
                                                     else
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", @readonly = true, data_field = "userId", onblur = "test()" })
+                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", @readonly = true, data_field = "userId" })
                                                     }
                                                 </td>
                                                 <td>
@@ -2261,15 +2275,15 @@
                     <div id="dh-form-area" class="tab-pane tab-pane-border">
                         
                     </div>
-                    @*<div id="e-form-area" class="tab-pane tab-pane-border">
-                        <iframe sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                                src="/netherlands/hiring/edit/95392/?UserId=mg&language=EN"
-                                style="border: 0; width:100%;" scrolling="no">
-                        </iframe>
+                }
 
-                        <a onclick="loadMyPage('/Cases/AdvancedSearch')" class="btn"> Load Page</a>
-                        <div id="eform-Holder"></div>
-                    </div>*@
+                @if (Model.ExtendedCases != null)
+                {
+                    foreach (var extendedCase in Model.ExtendedCases)
+                    {
+                        <div id="container_@extendedCase.Id" class="tab-pane tab-pane-border @((Model.case_.ActiveTab == string.Format(DH.Helpdesk.Common.Constants.CaseTabs.ExtendedCaseTab, extendedCase.Id)) ? "active": "")">
+                        </div>
+                    }
                 }
 
                 @if (Model.IsItParentCase())
@@ -2833,6 +2847,16 @@
                 $("#caseDescriptionPreview").css('visibility', visibility);
             });
 
+        @if (Model.ExtendedCases != null && Model.ExtendedCases.Count > 0)
+              {
+                    <text>
+        $('#case-tab').on('click', function (event) {
+            //set active tab to case-tab
+            $('#ActiveTab').val('case-tab');
+        });
+        </text>
+          }
+
         @if (Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)
         {
             <text>
@@ -2844,8 +2868,8 @@
                 window.scrollTo(0, 0);
             });
 
-            
-        
+
+
         tab.click(function(ev) {
 
             if (ev.target.className.indexOf("case") >= 0) {
@@ -2856,7 +2880,7 @@
                                 $(".secnav").removeClass("hide");
                             });
                 }
-                                
+
                 $.ajax({
                     url: "/Cases/GetCaseInfo",
                     type: "GET",
@@ -2873,6 +2897,8 @@
                     }
                 });
                 //location.reload(true);
+
+
             }
 
             if (ev.target.className.indexOf("eform") >= 0) {
@@ -2892,7 +2918,7 @@
         var scope = dhHelpdesk.cases.scope(window.parameters.casesScopeInitParameters);
     });
 
-  
+
     //$('#divCase__WatchDate').datepicker({
     //    format: 'yyyy-mm-dd',
     //    weekStart: 1,

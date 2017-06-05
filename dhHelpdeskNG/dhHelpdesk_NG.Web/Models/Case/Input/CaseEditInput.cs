@@ -11,6 +11,11 @@ namespace DH.Helpdesk.Web.Models.Case.Input
 
     public class CaseEditInput
     {
+        public CaseEditInput()
+        {
+            ActiveTab = "case-tab";
+        }
+
         [Obsolete("Move used case properties into this model")]
         public Case case_ { get; set; }
 
@@ -25,6 +30,7 @@ namespace DH.Helpdesk.Web.Models.Case.Input
         public int? Performer_Id { get; set; }
 
         public int? CaseSolution_Id { get; set; }
+        public string ActiveTab { get; set; }
         public CaseLog caseLog { get; set; }
 
         public CaseMailSetting caseMailSetting { get; set; }        

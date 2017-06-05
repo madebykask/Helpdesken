@@ -45,6 +45,7 @@
     using DH.Helpdesk.Domain.Users;
     using DH.Helpdesk.Domain.WorkstationModules;
     using DH.Helpdesk.Domain.ADFS;
+    using DH.Helpdesk.Domain.ExtendedCaseEntity;
 
     using OperatingSystemConfiguration = DH.Helpdesk.Dal.EntityConfigurations.OperatingSystemConfiguration;
     using DH.Helpdesk.Domain.BusinessRules;
@@ -560,6 +561,10 @@
 
         public DbSet<CaseSolutionConditionEntity> CaseSolutionConditions { get; set; }
 
+        public DbSet<ExtendedCaseFormEntity> ExtendedCaseForms { get; set; }
+
+        public DbSet<ExtendedCaseDataEntity> ExtendedCaseDatas { get; set; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -837,8 +842,9 @@
 			modelBuilder.Configurations.Add(new InvoiceRowConfiguration());
 			modelBuilder.Configurations.Add(new InvoiceHeaderConfiguration());
 
-            //Workflow Step - Condition
             modelBuilder.Configurations.Add(new CaseSolutionConditionConfiguration());
+            modelBuilder.Configurations.Add(new ExtendedCaseFormConfiguration());
+            modelBuilder.Configurations.Add(new ExtendedCaseDataConfiguration());
 
             #endregion
 

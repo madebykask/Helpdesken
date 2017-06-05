@@ -13,7 +13,6 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Domain;
     using System.Reflection;
-    using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.BusinessData.Models.User.Input;

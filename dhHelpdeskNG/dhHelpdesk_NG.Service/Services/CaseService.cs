@@ -79,6 +79,7 @@ namespace DH.Helpdesk.Services.Services
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
         List<DynamicCase> GetAllDynamicCases();
         DynamicCase GetDynamicCase(int id);
+        IList<ExtendedCaseFormModel> GetExtendedCaseForms(Dictionary<string, string> inputParameters);
 
         int LookupLanguage(int custid, string notid, int regid, int depid, string notifierid);
 
@@ -316,6 +317,11 @@ namespace DH.Helpdesk.Services.Services
         public DynamicCase GetDynamicCase(int id)
         {
             return _caseRepository.GetDynamicCase(id);
+        }
+
+        public IList<ExtendedCaseFormModel> GetExtendedCaseForms(Dictionary<string, string> inputParameters)
+        {
+            return _caseRepository.GetExtendedCaseForms(inputParameters);
         }
 
         public Guid Delete(int id, string basePath, int? parentCaseId)

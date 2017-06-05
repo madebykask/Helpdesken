@@ -136,6 +136,8 @@
     <Compile Include="CaseIsAbout.cs" />
     <Compile Include="EmailLogAttempt.cs" />
     <Compile Include="EmailSendStatus.cs" />
+    <Compile Include="ExtendedCaseEntity\ExtendedCaseData.cs" />
+    <Compile Include="ExtendedCaseEntity\ExtendedCaseForm.cs" />
     <Compile Include="Invoice\InvoiceArticleProductAreaEntity.cs" />
     <Compile Include="Invoice\InvoiceStatus.cs" />
     <Compile Include="Mail2Ticket.cs" />
