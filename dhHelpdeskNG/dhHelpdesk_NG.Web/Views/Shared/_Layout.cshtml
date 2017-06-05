@@ -226,12 +226,12 @@
                         @Translation.Get("Licenshantering")</a></li>
                 }
 
-                @if (model.IsContractVisible())
+                @*@if (model.IsContractVisible())
                 {
                     <li><a href="@Url.Action("Index", "Contracts", new {area = ""})">
                         <img src="@Url.Content("~/Content/icons/deal.png")"/>
                         @Translation.Get("Avtal")</a></li>
-                }
+                }*@
 				@if (model.IsInvoicesVisible())
 				{
 					<li>
