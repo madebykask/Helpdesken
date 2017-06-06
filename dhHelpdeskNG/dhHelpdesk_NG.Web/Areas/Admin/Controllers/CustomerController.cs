@@ -879,7 +879,7 @@
                 FileIndexingCatalogName = customerToCopySettings.FileIndexingCatalogName,
 				BatchEmail = customerToCopySettings.BatchEmail,
                 BulletinBoardWGRestriction = customerToCopySettings.BulletinBoardWGRestriction,
-                CalendarWGRestriction = customerToCopySettings.CalendarWGRestriction
+                CalendarWGRestriction = customerToCopySettings.CalendarWGRestriction,
                 ModuleExtendedCase = customerToCopySettings.ModuleExtendedCase,
             };
 
