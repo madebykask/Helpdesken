@@ -270,6 +270,15 @@
                                         &nbsp;@Translation.Get("Fakturering artikel")
                                         </label>
                                     </td>
+                                    <td>
+                                        @*<label class="checkbox hidden">
+                                            <input type="checkbox" name="setting.ModuleExtendedCase" @(Model.Setting.ModuleExtendedCase == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleExtendedCase" value="0" />
+                                            &nbsp;@Translation.Get("Extended Case", Enums.TranslationSource.TextTranslation)
+                                        </label>*@
+                                        @*TODO: this is hidden for now, add above code when customer should be able to decide this /TAN*@
+                                        <input type="hidden" name="setting.ModuleExtendedCase" value="@Model.Setting.ModuleExtendedCase" />
+                                    </td>
                                 </tr>
                             </table>
                         </div>

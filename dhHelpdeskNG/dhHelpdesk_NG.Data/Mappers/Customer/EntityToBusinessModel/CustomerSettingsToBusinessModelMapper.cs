@@ -69,6 +69,8 @@ namespace DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
                            CreateCaseFromOrder = entity.CreateCaseFromOrder.ToBool(),
                            BulletinBoardWGRestriction = entity.BulletinBoardWGRestriction.ToBool(),
                            CalendarWGRestriction = entity.CalendarWGRestriction.ToBool()
+                           ModuleExtendedCase = entity.ModuleExtendedCase.ToBool(),
+
             };
         }
     }

@@ -79,7 +79,18 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 GO
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Status' and sysobjects.name = N'ExtendedCaseForms')
-	ALTER TABLE [dbo].[ExtendedCaseForms] ADD [Status] [int] NULL Default(0)
+	ALTER TABLE [dbo].[ExtendedCaseForms] ADD [Status] [int] NOT NULL Default(0)
 GO
 
-update [ExtendedCaseForms] set [Status] = 0 where [Status] is null
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DefaultTab' and sysobjects.name = N'tblCaseSolution')
+	begin
+		ALTER TABLE [dbo].[tblCaseSolution] ADD [DefaultTab] int not null Default(0)
+	end
+GO
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ModuleExtendedCase' and sysobjects.name = N'tblSettings')
+	begin
+		ALTER TABLE [dbo].[tblSettings] ADD [ModuleExtendedCase] int not null Default(0)
+	end
+GO

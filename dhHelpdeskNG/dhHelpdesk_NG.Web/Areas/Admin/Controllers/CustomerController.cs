@@ -880,6 +880,7 @@
 				BatchEmail = customerToCopySettings.BatchEmail,
                 BulletinBoardWGRestriction = customerToCopySettings.BulletinBoardWGRestriction,
                 CalendarWGRestriction = customerToCopySettings.CalendarWGRestriction
+                ModuleExtendedCase = customerToCopySettings.ModuleExtendedCase,
             };
 
             //Get CaseSettings to copy

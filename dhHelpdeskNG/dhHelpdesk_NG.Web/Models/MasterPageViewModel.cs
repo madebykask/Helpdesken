@@ -197,5 +197,10 @@
                 this.IsProblemVisible() ||
                 this.IsProjectVisible();
         }
+
+        public bool IsModuleExtendedCaseVisible()
+        {
+            return this.CustomerSetting.ModuleExtendedCase.ToBool() && this.IsCustomerOrSystemAdministrator();
+        }
     }
 }
