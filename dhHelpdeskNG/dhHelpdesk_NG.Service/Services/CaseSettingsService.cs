@@ -25,11 +25,11 @@
 
         IList<CaseSettings> GetCaseSettingsForDefaultCust();
 
-        IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettings(int customerId);
+        IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettings(int customerId, IList<CaseFieldSetting> customerCaseFieldSettings = null);
 
         IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettingsByUserGroup(int customerId, int userGroupId);
 
-        IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userId);
+        IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userId, IList<CaseFieldSetting> customerCaseFieldSettings);
 
         CaseSettings GetCaseSetting(int id);
 
@@ -80,22 +80,29 @@
             var list = this._caseSettingRepository.GetAll().Where(x => x.Customer_Id == null).ToList();
 
             return list;
-
         }
 
         /// <summary>
         /// Returns ll available columns for case overview grid
         /// </summary>
         /// <param name="customerId"></param>
+        /// <param name="customerCaseFieldSettings"></param>
         /// <returns></returns>
-        public IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettings(int customerId)
+        public IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettings(int customerId, IList<CaseFieldSetting> customerCaseFieldSettings = null)
         {
+            if (customerCaseFieldSettings == null)
+            {
+                customerCaseFieldSettings = this.caseFieldSettingService.GetCustomerEnabledCaseFieldSettings(customerId);
+            }
+
             var customerEnabledFields =
-                this.caseFieldSettingService.GetCustomerEnabledCaseFieldSettings(customerId)
-                    .Where(it => !GridColumnsDefinition.NotAvailableField.Contains(it.Name))
-                    .Select(it => new CaseOverviewGridColumnSetting() { Name = it.Name }).ToList();
+                customerCaseFieldSettings
+                    .Where(x => x.ShowOnStartPage == 1 && !GridColumnsDefinition.NotAvailableField.Contains(x.Name))
+                    .Select(it => new CaseOverviewGridColumnSetting() { Name = it.Name })
+                    .ToList();
+
             customerEnabledFields.AddRange(CaseOverviewGridColumnSetting.GetDefaulVirtualFields());
-            return customerEnabledFields;                   
+            return customerEnabledFields;
         }
 
         /// <summary>
@@ -132,11 +139,11 @@
         /// <param name="customerId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userId)
+        public IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userId, IList<CaseFieldSetting> customerCaseFieldSettings = null)
         {
             var duplicates = new HashSet<string>();
             var res =
-                this.GetAvailableCaseOverviewGridColumnSettings(customerId)
+                this.GetAvailableCaseOverviewGridColumnSettings(customerId, customerCaseFieldSettings)
                     .Join(
                         this.GetAvailableCaseSettings(customerId, userId),
                         colSetting => colSetting.Name,

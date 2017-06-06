@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.utils
+﻿using DH.Helpdesk.BusinessData.Models.User.Interfaces;
+
+namespace DH.Helpdesk.Services.utils
 {
     using System;
     using System.Collections.Generic;
@@ -41,28 +43,50 @@
 
         public static string departmentDescription(this Department d, int departmentFilterFormat)
         {
-            string ret = string.Empty;
-            string sep = " - ";
-
+            var ret = string.Empty;
             if (d != null)
             {
-                //if (departmentFilterFormat == 0)
-                //    ret = d.DepartmentId;
-                if (departmentFilterFormat == 1)
-                {
-                    // anpassning för Ikea IMS
-                    ret = d.DepartmentName;
-                    ret = ret.concatStrings(d.DepartmentId, sep);
-                    ret = ret.concatStrings(d.SearchKey, sep);
-                    if (d.Country != null)
-                        ret = ret.concatStrings(d.Country.Name, sep);
-                }
-                else
-                    ret = d.DepartmentName;
+                var departmentInfoAdapter = new DepartmentInfoAdapter(d);
+                ret = BuildDepartmentDescription(departmentInfoAdapter, departmentFilterFormat);
 
             }
             return ret;
         }
 
+        public static string departmentDescription(this IDepartmentInfo d, int departmentFilterFormat)
+        {
+            var ret = string.Empty;
+            if (d != null)
+            {
+                ret = BuildDepartmentDescription(d, departmentFilterFormat);
+            }
+
+            return ret;
+        }
+
+        private static string BuildDepartmentDescription(IDepartmentInfo info, int departmentFilterFormat)
+        {
+            var ret = string.Empty;
+            var sep = " - ";
+
+            //if (departmentFilterFormat == 0)
+            //    ret = d.DepartmentId;
+
+            if (departmentFilterFormat == 1)
+            {
+                // anpassning för Ikea IMS
+                ret = info.DepartmentName;
+                ret = ret.concatStrings(info.DepartmentId, sep);
+                ret = ret.concatStrings(info.SearchKey, sep);
+                if (!string.IsNullOrEmpty(info.CountryName))
+                    ret = ret.concatStrings(info.CountryName, sep);
+            }
+            else
+            {
+                ret = info.DepartmentName;
+            }
+            
+            return ret;
+        }
     }
 }

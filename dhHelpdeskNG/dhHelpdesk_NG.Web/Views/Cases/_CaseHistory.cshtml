@@ -1,12 +1,12 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 
-@if (Model != null && Model.case_.CaseHistories != null)
+@if (Model != null && Model.CaseHistories != null)
 {
     var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
     <div class="tab-pane tab-pane-border" id="historytab">
         <table class="table table-striped table-bordered table-hover">
-            @if (Model.case_.CaseHistories.Any())
+            @if (Model.CaseHistories.Any())
             {            
                 <thead>
                     <tr>
@@ -18,7 +18,7 @@
                 </thead>
                 <tbody>
                 @{
-                    var histories = Model.case_.CaseHistories.OrderByDescending(x => x.Id).ToArray();
+                    var histories = Model.CaseHistories.OrderByDescending(x => x.Id).ToArray();
                  }
                     @for(var i = 0; i < histories.Length; i++)
                     {

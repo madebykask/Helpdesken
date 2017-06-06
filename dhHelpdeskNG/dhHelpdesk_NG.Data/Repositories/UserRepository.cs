@@ -30,7 +30,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         List<ItemOverview> FindActiveOverviews(int customerId);
 
-        List<ItemWithEmail> FindUsersEmails(List<int> userIds);
+        List<ItemWithEmail> FindUsersEmails(List<int> userIds, bool isActive = false);
 
         IEnumerable<User> GetUsers(int customerId);
         IEnumerable<User> GetUsersByUserGroup(int customerId);
@@ -204,14 +204,15 @@ namespace DH.Helpdesk.Dal.Repositories
                     .ToList();
         }
 
-        public List<ItemWithEmail> FindUsersEmails(List<int> userIds)
+        public List<ItemWithEmail> FindUsersEmails(List<int> userIds, bool activeOnly = false)
         {
-            var usersEmails =
-                this.DataContext.Users.Where(u => userIds.Contains(u.Id) && u.Email.Length > 1)
-                    .Select(u => new { Id = u.Id, Email = u.Email })
-                    .ToList();
+            var query = Table.Where(u => userIds.Contains(u.Id) && u.Email.Length > 1);
 
-            return usersEmails.Select(e => new ItemWithEmail(e.Id, e.Email)).ToList();
+            if (activeOnly)
+                query = query.Where(u => u.IsActive == 1);
+
+           var usersEmails = query.Select(u => new {u.Id, u.Email}).ToList();
+           return usersEmails.Select(u => new ItemWithEmail(u.Id, u.Email)).ToList();
         }
 
         public IEnumerable<User> GetUsersForWorkingGroup(int customerId, int workingGroupId)
@@ -281,7 +282,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         join c in this.DataContext.Customers on cu.Customer_Id equals c.Id
                         join wg in this.DataContext.WorkingGroups on c.Id equals wg.Customer_Id
                         join u in this.DataContext.Users on userId equals u.Id
-                        from uwg in this.DataContext.UserWorkingGroups.Where(x => x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()                        
+                        from uwg in this.DataContext.UserWorkingGroups.Where(x => x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()
                         group uwg by new { wg.WorkingGroupName, userId, c.Name, wg.Id, uwg.UserRole, CustomerId = c.Id, uwg.IsDefault, wg.IsActive } into g
                         select new CustomerWorkingGroupForUser
                         {
@@ -291,7 +292,7 @@ namespace DH.Helpdesk.Dal.Repositories
                             IsStandard = g.Key.IsDefault,
                             WorkingGroup_Id = g.Key.Id,
                             RoleToUWG = g.Key.UserRole == null ? 0 : g.Key.UserRole,
-                            IsActive = g.Key.IsActive == 0? false : true,
+                            IsActive = g.Key.IsActive == 0 ? false : true,
                             CustomerId = g.Key.CustomerId
                         };
 

@@ -624,6 +624,18 @@ insert into tblCaseSolutionFieldSettings(casesolution_id, fieldname_id, mode)
 select id, 68, 1 from tblCaseSolution
 where id not in (select casesolution_id from  tblCaseSolutionFieldSettings where fieldname_id = 68 )
 
+-- recreate index IX_tblCase_Customer_Id
+DROP INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
+GO
+CREATE NONCLUSTERED INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
+(
+	[Customer_Id] ASC,	
+	[Deleted] ASC,
+	[FinishingDate] ASC    
+)INCLUDE ([Casenumber]) 
+GO
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.32'
 

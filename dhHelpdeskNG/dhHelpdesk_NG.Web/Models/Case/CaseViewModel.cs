@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Models.Case
+﻿using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+
+namespace DH.Helpdesk.Web.Models.Case
 {
     using System;
     using System.Collections.Generic;
@@ -70,6 +72,7 @@
         [Obsolete("Put all fields that you required into this CaseInputViewModel model")]
         public Case case_  { get; set; }
 
+        public IList<CaseHistoryOverview> CaseHistories { get; set; }
         public CaseLog CaseLog { get; set; }
         public SendToDialogModel SendToDialogModel { get; set; }
         public SendToDialogModel FollowersModel { get; set; }

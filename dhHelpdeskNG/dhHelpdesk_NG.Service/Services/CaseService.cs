@@ -6,6 +6,7 @@ using System.Linq.Dynamic;
 using System.Reflection;
 using DH.Helpdesk.BusinessData.Enums.MailTemplates;
 using DH.Helpdesk.BusinessData.Models.Feedback;
+using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Feedback;
 
 namespace DH.Helpdesk.Services.Services
@@ -53,8 +54,6 @@ namespace DH.Helpdesk.Services.Services
 
     public interface ICaseService
     {
-        IList<Case> GetCases();
-
         IList<Case> GetProjectCases(int customerId, int projectId);
         IList<Case> GetProblemCases(int customerId, int problemId);
 
@@ -78,8 +77,10 @@ namespace DH.Helpdesk.Services.Services
         Case GetCaseByEMailGUID(Guid GUID);
         EmailLog GetEMailLogByGUID(Guid GUID);
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
+        IList<CaseHistoryOverview> GetCaseHistories(int caseId);
         List<DynamicCase> GetAllDynamicCases();
         DynamicCase GetDynamicCase(int id);
+        IList<Case> GetProblemCases(int problemId);
 
         int LookupLanguage(int custid, string notid, int regid, int depid, string notifierid);
 
@@ -888,10 +889,10 @@ namespace DH.Helpdesk.Services.Services
 
             return c;
         }
-
-        public IList<Case> GetCases()
+        
+        public IList<Case> GetProblemCases(int problemId)
         {
-            return this._caseRepository.GetAll().ToList();
+            return this._caseRepository.GetProblemCases(problemId);
         }
 
         public IList<Case> GetProjectCases(int customerId, int projectId)
@@ -1165,6 +1166,11 @@ namespace DH.Helpdesk.Services.Services
         public IList<CaseHistory> GetCaseHistoryByCaseId(int caseId)
         {
             return this._caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList();
+        }
+
+        public IList<CaseHistoryOverview> GetCaseHistories(int caseId)
+        {
+            return this._caseHistoryRepository.GetCaseHistories(caseId).ToList();
         }
 
         public Dictionary<int, string> GetCaseFiles(List<int> caseIds)

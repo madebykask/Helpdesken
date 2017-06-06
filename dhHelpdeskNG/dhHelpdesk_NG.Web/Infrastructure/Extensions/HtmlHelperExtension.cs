@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Common.Constants;
+﻿using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+using DH.Helpdesk.Common.Constants;
 
 namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
@@ -328,8 +329,8 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
         }
 
         public static MvcHtmlString GetCaseHistoryInfo(
-            this CaseHistory cur, 
-            CaseHistory old, 
+            this CaseHistoryOverview cur, 
+            CaseHistoryOverview old, 
             int customerId, 
             int departmentFilterFormat, 
             IList<CaseFieldSetting> cfs,
@@ -343,7 +344,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             const string tdOpenMarkup = "<td style=\"width:70%\">";
             const string tdCloseMarkup = "</td>";
 
-            var o = (old != null ? old : new CaseHistory());
+            var o = (old != null ? old : new CaseHistoryOverview());
 
             // Reported by
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage == 1)
