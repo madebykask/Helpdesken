@@ -148,7 +148,7 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
                     {
 
                         Id = data.Category.Id,
-                        Name  = data.Category.Name,
+                        Name = data.Category.Name,
                     }
                     : null,
 
@@ -160,6 +160,7 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
                         SurName = data.UserPerformer.SurName
                     }
                     : null,
+
 
                 Priority = data.Priority != null
                     ? new PriorityOverview
@@ -199,12 +200,12 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
                         DepartmentId = data.IsAbout_Department.DepartmentId,
                         DepartmentName = data.IsAbout_Department.DepartmentName,
                         SearchKey = data.IsAbout_Department.SearchKey,
-                        CountryName = data.IsAbout_Department.Country.Name
+                        CountryName = data.IsAbout_Department.Country?.Name
                     }
                     : null,
 
                 Emaillogs = data.EmailLogs.Where(t => t.Id.HasValue)
-                                           .Select(t => new EmailLogsOverview(t.Id.Value, t.MailId.Value, t.EmailAddress)).ToList()
+                                          .Select(t => new EmailLogsOverview(t.Id.Value, t.MailId.Value, t.EmailAddress)).ToList()
             };
         }
     }
