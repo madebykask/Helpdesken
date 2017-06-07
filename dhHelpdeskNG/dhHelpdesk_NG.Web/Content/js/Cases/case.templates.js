@@ -282,6 +282,10 @@ function IsWillBeOverwritten(fieldId, val) {
             return IsWillBeOverwrittenByValue('#case__PlanDate', '#case__PlanDate', val);
             break;
 
+        case 'AgreedDate':
+            return IsWillBeOverwrittenByValue('#case__AgreedDate', '#case__AgreedDate', val);
+            break;
+
         case 'VerifiedDescription':
             return IsWillBeOverwrittenByValue('#case__VerifiedDescription', '#case__VerifiedDescription', val);
             break;
@@ -656,6 +660,11 @@ var ApplyTemplate = function (data, doOverwrite) {
                     SetDateValueIfElVisible(el, val, cfg, dateFormat);
                     break;
 
+                case 'AgreedDate':
+                    el = $("#case__AgreedDate");
+                    SetDateValueIfElVisible(el, val, cfg, dateFormat);
+                    break;
+
                 case 'VerifiedDescription':
                     el = $("#case__VerifiedDescription");
                     SetValueIfElVisible(el, val, cfg);
@@ -892,6 +901,10 @@ function IsValueApplicableFor(templateFieldId, val) {
             return $("#case__PlanDate").is(':visible');
             break;
         
+        case 'AgreedDate':
+            return $("#case__AgreedDate").is(':visible');
+            break;
+
         case 'VerifiedDescription':
             return $("#case__VerifiedDescription").is(':visible');
             break;

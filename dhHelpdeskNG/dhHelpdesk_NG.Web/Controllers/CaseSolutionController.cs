@@ -416,7 +416,7 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.ReferenceNumber,
                     
                     SMS = caseSolution.SMS.ToBool(),
-                    caseSolution.AgreedDate,
+                    AgreedDate = caseSolution.AgreedDate.HasValue ? caseSolution.AgreedDate.Value.ToShortDateString() : string.Empty,                    
                     caseSolution.Available,
                     caseSolution.Cost,
                     caseSolution.OtherCost,
