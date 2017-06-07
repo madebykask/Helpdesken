@@ -371,13 +371,15 @@ namespace DH.Helpdesk.Dal.Repositories
             string sql = string.Empty;
             int langid = 0;
             bool match = false;
-            
+
             //Initiation
-            if (notid != string.Empty && notifierid != string.Empty)
+            // if (notid != string.Empty && notifierid != string.Empty)
+            if (notifierid != string.Empty)
             {
 
-                //var not = this.DataContext.ComputerUsers.Single(c => c.UserId == notid);
-                var not = this.DataContext.ComputerUsers.Single(c => c.UserCode == notid && c.UserId == notifierid);
+                
+                //var not = this.DataContext.ComputerUsers.Single(c => c.UserCode == notid && c.UserId == notifierid);
+                var not = this.DataContext.ComputerUsers.Single(c=> c.UserId == notifierid);
                 if (not != null)
                 {
                     if (not.LanguageId > 0)

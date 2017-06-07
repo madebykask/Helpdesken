@@ -4320,6 +4320,15 @@ namespace DH.Helpdesk.Web.Controllers
                         CaseRegistrationSource.Administrator,
                         customerSetting,
                         windowsUser);
+
+                    //m.case_ = this._caseService.InitCase(
+                    //        customerId,
+                    //        userId,
+                    //        customer.Language_Id,
+                    //        this.Request.GetIpAddress(),
+                    //        CaseRegistrationSource.Administrator,
+                    //        customerSetting,
+                    //        windowsUser);
                 }
 
                 var defaultStateSecondary = this._stateSecondaryService.GetDefaultOverview(customerId);

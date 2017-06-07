@@ -116,7 +116,7 @@
     {
 
         var caseid = document.getElementById('case__Id').value;
-
+        
         if (caseid == 0)
         {
         
@@ -125,6 +125,7 @@
             var region = document.getElementById('case__Region_Id').value;            
             var dep = document.getElementById('case__Department_Id').value;            
             var customer = document.getElementById('case__Customer_Id').value;
+        
             
             $.get("/cases/LookupLanguage/", { customerid: "'" + customer.toString() + "'", notifier: "'" + reported.toString() + "'", region: "'" + region.toString() + "'", department: "'" + dep.toString() + "'", notifierid: "'" + reportedId.toString() + "'" }, function (result) {
 
