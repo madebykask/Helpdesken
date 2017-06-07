@@ -17,6 +17,7 @@ using System.Collections.Generic;
             this.SelectedProductAreas = new SelectedItems();
             this.SelectedCaseStatus = new SelectedItems();
             this.GeneralParameter = new List<GeneralParameter>();
+            this.CaseClosingDate = new DateToDate();
         }
 
         public int CaseId { get; set; }
