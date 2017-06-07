@@ -79,14 +79,72 @@ namespace DH.Helpdesk.Dal.Repositories
                 select new { links1.CaseSolution_Id, links1.CaseSolution, links1.Us, links1.Wg, links1.Customer_Id, links1.Document_Id, links1.LinkGroup_Id, links1.NewWindowHeight, links1.NewWindowWidth, links1.OpenInNewWindow, links1.SortOrder, links1.URLAddress, links1.URLName, links1.ShowOnStartPage, links1.Document, links1.LinkGroup, links1.Customer };
 
 
-            links = links.Where(x => !x.Us.Any() || x.Us.Any(u => u.Id == userid));
 
 
-            var userGroups = this.DataContext.UserWorkingGroups.Where(u => u.User_Id == userid).Select(u => u.WorkingGroup_Id);
+            var userGroups = this.DataContext.UserWorkingGroups.Where(z => z.User_Id == userid).Select(u => u.WorkingGroup_Id);
 
-            links = links.Where(x => !x.Wg.Any() || x.Wg.Any(g => userGroups.Contains(g.Id)));
+            //links = links.Where(x => !x.Us.Any() || x.Us.Any(u => u.Id == userid));
+
+            //links = links.Where(x => !x.Wg.Any() || x.Wg.Any(g => userGroups.Contains(g.Id)));
 
 
+
+            var linksCount =
+                from link31 in this.DataContext.Links
+                join casesolution in this.DataContext.CaseSolutions on link31.CaseSolution_Id equals casesolution.Id into linkssolution
+                join documents in this.DataContext.Documents on link31.Document_Id equals documents.Id into linksdocument
+                join linkgroup in this.DataContext.LinkGroups on link31.LinkGroup_Id equals linkgroup.Id into linkslinkgroup
+                join customer in this.DataContext.Customers on link31.Customer_Id equals customer.Id into linkscustomer
+                where customersIdAll.Contains(link31.Customer_Id.Value)
+                select new {  link31.Us.Count };
+
+            int countUs = 0;
+            foreach (var r in linksCount)
+            {
+                countUs = Convert.ToInt32(r.Count.ToString());
+                break;
+            }
+
+            var linksCountWg =
+               from link31 in this.DataContext.Links
+               join casesolution in this.DataContext.CaseSolutions on link31.CaseSolution_Id equals casesolution.Id into linkssolution
+               join documents in this.DataContext.Documents on link31.Document_Id equals documents.Id into linksdocument
+               join linkgroup in this.DataContext.LinkGroups on link31.LinkGroup_Id equals linkgroup.Id into linkslinkgroup
+               join customer in this.DataContext.Customers on link31.Customer_Id equals customer.Id into linkscustomer
+               where customersIdAll.Contains(link31.Customer_Id.Value)
+               select new { link31.Wg.Count };
+
+            int countWg = 0;
+            foreach (var r in linksCountWg)
+            {
+                countWg = Convert.ToInt32(r.Count.ToString());
+                break;
+            }
+
+
+            if (countWg == 0 && countUs > 0)
+            {
+                //links = links.Where(x=>x.Us.Any(u => u.Id == userid));
+                links = links.Where(x => !x.Us.Any() || x.Us.Any(u => u.Id == userid));        
+            }
+            else if (countWg > 0 && countUs == 0)
+            {
+
+                links = links.Where(x => !x.Wg.Any() || x.Wg.Any(g => userGroups.Contains(g.Id)));
+            }
+            else if (countWg == 0 && countUs == 0)
+            {
+                links = links;
+            }
+            else
+            {
+               // links = links.Where(x =>x.Us.Any(u => u.Id == userid) || x.Wg.Any(g => userGroups.Contains(g.Id)));
+
+                links = links.Where(x => !x.Us.Any() || x.Us.Any(u => u.Id == userid) || !x.Wg.Any() || x.Wg.Any(g => userGroups.Contains(g.Id)));
+
+                //links = links.Where(x => !x.Wg.Any() || x.Wg.Any(g => userGroups.Contains(g.Id)));
+
+            }
 
             List<LinkOverview> llist1 = new List<LinkOverview>();
             foreach (var r in links)
