@@ -33,6 +33,57 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         }
 
 
+        public IEnumerable<CaseSolutionSettingsField> GetCaseSolutionFieldSetting(int casesolutionid)
+        {
+
+            List<CaseSolutionSettingsField> list = new List<CaseSolutionSettingsField>();
+
+            var query =
+                from condition in this.DataContext.CaseSolutionsConditions
+                group condition by condition.Property_Name into newGroup
+                orderby newGroup.Key
+                select newGroup;
+
+            foreach (var nameGroup in query)
+            {
+                CaseSolutionSettingsField c = new CaseSolutionSettingsField();
+
+                foreach (var condition in nameGroup)
+                {
+
+                    if (condition.CaseSolutionConditionGUID != null)
+                    {
+                        c.CaseSolutionConditionId = condition.CaseSolutionConditionGUID.ToString();
+                    }
+                    else
+                    {
+                        c.CaseSolutionConditionId = string.Empty;
+                    }
+
+                    if (condition.CaseSolution_Id != null)
+                    {
+                        c.CaseSolutionId = condition.CaseSolution_Id;
+                    }
+                    else
+                    {
+                        c.CaseSolutionId = 0;
+                    }
+
+                    if (condition.Property_Name != null)
+                    {
+                        c.PropertyName = condition.Property_Name;
+                    }
+                    else
+                    {
+                        c.PropertyName = string.Empty;
+                    }
+
+                }
+            }
+
+            return list;
+
+        }
 
         public void Save(CaseSolutionConditionEntity model)
         {

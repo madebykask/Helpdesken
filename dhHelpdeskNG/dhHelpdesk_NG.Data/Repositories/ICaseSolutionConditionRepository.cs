@@ -15,7 +15,8 @@
         /// The id of CaseSolution.
         /// </param>
         IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid);
-        
+
+        IEnumerable<CaseSolutionSettingsField> GetCaseSolutionFieldSetting(int casesolutionid);
 
         void Save(CaseSolutionConditionEntity model);
 

@@ -900,7 +900,8 @@ namespace DH.Helpdesk.Web.Controllers
             var regionList = this._regionService.GetActiveRegions(curCustomerId);
 
 
-            List<CaseSolutionFieldsSetting> l = new List<CaseSolutionFieldsSetting>();
+            IEnumerable<CaseSolutionSettingsField> l = new List<CaseSolutionSettingsField>();
+            l = _caseSolutionConditionService.GetCaseSolutionFieldSetting(caseSolution.Id);
 
             ///////////////////////////////////////////////StateSecondaries/////////////////////////////////////////////////////////////////////////////////////////////////////////
             string selected = string.Empty;

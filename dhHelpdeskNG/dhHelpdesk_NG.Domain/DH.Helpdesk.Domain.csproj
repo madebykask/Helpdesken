@@ -87,6 +87,7 @@
     <Compile Include="Cases\CaseSolutionConditionHelper.cs" />
     <Compile Include="Cases\CaseSolutionSetting.cs" />
     <Compile Include="Cases\CaseLockEntity.cs" />
+    <Compile Include="Cases\CaseSolutionSettingsField.cs" />
     <Compile Include="Cases\CaseStatistic.cs" />
     <Compile Include="Cases\CaseFilterFavoriteEntity.cs" />
     <Compile Include="CaseType.cs" />
