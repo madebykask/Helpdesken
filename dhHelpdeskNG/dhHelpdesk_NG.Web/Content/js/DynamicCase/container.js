@@ -68,6 +68,19 @@ var dhform = function (options) {
                 }
             }
 
+            //preload always
+            
+                //var dataId = _this._formAreaId.replace('container_', '');
+                //var aHref = $('#tabExtendedcase_' + dataId);
+
+                
+                //    var curState = aHref.attr("data-state");
+                //    if (curState == "") {
+                //        _this.load({ url: _this._options.url, formAreaId: 'container_' + dataId });
+                //        aHref.attr("data-state", "loaded");
+                //    }
+                
+
             $('.extendedcase').on('click', function (event) {
                 
                 $('#ActiveTab').val('extended-case-tab' + $(this).data('id'))

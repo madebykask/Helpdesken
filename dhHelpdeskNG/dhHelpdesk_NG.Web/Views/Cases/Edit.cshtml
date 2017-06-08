@@ -246,7 +246,7 @@
     }
 
 
-@if (!Model.IsItChildCase())
+@if (Model.ExtendedCases != null && !Model.IsItChildCase())
 {
     @Html.Partial("_ExtendedCase", Model.ExtendedCases)
 }

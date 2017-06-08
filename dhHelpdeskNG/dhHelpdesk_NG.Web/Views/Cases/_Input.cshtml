@@ -146,7 +146,7 @@
     <div class="content onemenu editcase" id="mm1">
         <div class="container">
             <ul class="nav nav-tabs" id="myTab">
-                <li data-active-tab="case-tab" class="@((Model.case_.ActiveTab == DH.Helpdesk.Common.Constants.CaseTabs.CaseTab) ? "active": "")">
+                <li data-active-tab="case-tab" class="@((Model.ActiveTab == ""  || Model.ActiveTab == DH.Helpdesk.Common.Constants.CaseTabs.CaseTab) ? "active": "")">
 
                     @if (Model.CaseTemplateName != null)
                 {
@@ -194,7 +194,7 @@
 {
     foreach (var extendedCase in Model.ExtendedCases)
     {
-                        <li data-active-tab="@string.Format(DH.Helpdesk.Common.Constants.CaseTabs.ExtendedCaseTab, extendedCase.Id)" class="@((Model.case_.ActiveTab == string.Format(DH.Helpdesk.Common.Constants.CaseTabs.ExtendedCaseTab, extendedCase.Id)) ? "active": "")" >
+                        <li data-active-tab="@string.Format(DH.Helpdesk.Common.Constants.CaseTabs.ExtendedCaseTab, extendedCase.Id)" class="@((Model.ActiveTab == string.Format(DH.Helpdesk.Common.Constants.CaseTabs.ExtendedCaseTab, extendedCase.Id)) ? "active": "")" >
                             <a href="#container_@extendedCase.Id" id="tabExtendedcase_@extendedCase.Id" class="extendedcase" data-id="@extendedCase.Id" data-state="">@(Translation.Get(extendedCase.Name))</a>
                         </li>
                     }
@@ -232,7 +232,7 @@
                 }
             </ul>
             <div class="tab-content">
-                <div class="tab-pane tab-pane-border @((Model.case_.ActiveTab == DH.Helpdesk.Common.Constants.CaseTabs.CaseTab) ? "active": "")" id="case">
+                <div class="tab-pane tab-pane-border @((Model.ActiveTab == "" ||Model.ActiveTab == DH.Helpdesk.Common.Constants.CaseTabs.CaseTab) ? "active": "")" id="case">
                     <div class="container">
                         @Html.HiddenFor(model => model.case_.Id, new { data_field = "caseId" })
                         @Html.HiddenFor(model => model.case_.CaseGUID)
@@ -289,7 +289,9 @@
                         @Html.Hidden("CaseHasInvoiceOrder", "")
                         @Html.Hidden("IsAnyFileAdded", "0")
                         @Html.Hidden("CaseSolution_Id", (Model.NewModeParams != null && Model.NewModeParams.templateId != null) ? Model.NewModeParams.templateId : Model.case_.CaseSolution_Id)
-                        @Html.Hidden("ActiveTab", (string.IsNullOrEmpty(Model.case_.ActiveTab) ? DH.Helpdesk.Common.Constants.CaseTabs.CaseTab: Model.case_.ActiveTab))
+                        @Html.HiddenFor(model => model.ActiveTab)
+                        
+
 
                         @Html.HiddenFor(model => Model.CaseLock.LockGUID)
                         @*<input type="button" id="sla_test" value="SLA Test" onclick="CalcSLA();" />*@
@@ -2281,7 +2283,7 @@
                 {
                     foreach (var extendedCase in Model.ExtendedCases)
                     {
-                        <div id="container_@extendedCase.Id" class="tab-pane tab-pane-border @((Model.case_.ActiveTab == string.Format(DH.Helpdesk.Common.Constants.CaseTabs.ExtendedCaseTab, extendedCase.Id)) ? "active": "")">
+                        <div id="container_@extendedCase.Id" class="tab-pane tab-pane-border @((Model.ActiveTab == string.Format(DH.Helpdesk.Common.Constants.CaseTabs.ExtendedCaseTab, extendedCase.Id)) ? "active": "")">
                         </div>
                     }
                 }

@@ -22,7 +22,8 @@
             this.Property(l => l.BrowserSession).IsRequired();
             this.Property(l => l.CreatedTime).IsRequired(); 
             this.Property(l => l.ExtendedTime).IsRequired();
-            
+            this.Property(l => l.ActiveTab).IsRequired().HasMaxLength(100);
+
             this.ToTable("tblCaseLock");
         }
     }

@@ -164,6 +164,7 @@
             this.Property(x => x.SortOrder).IsRequired();
             this.Property(x => x.ShortDescription).IsOptional().HasMaxLength(100);
             this.Property(x => x.Information).IsOptional();
+            this.Property(x => x.DefaultTab).IsRequired().HasMaxLength(100);
 
             this.ToTable("tblcasesolution");
         }

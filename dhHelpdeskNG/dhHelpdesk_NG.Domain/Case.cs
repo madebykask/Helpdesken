@@ -12,7 +12,6 @@
 	    public Case()
 	    {
 		    InvoiceRows = new List<InvoiceRow>();
-            ActiveTab = "case-tab";
             this.ExtendedCaseDatas = new List<ExtendedCaseEntity.ExtendedCaseDataEntity>();
         }
 
@@ -72,8 +71,7 @@
         public int? LockCaseToWorkingGroup_Id { get; set; }
         public int? WorkingGroup_Id { get; set; }
         public int? CaseSolution_Id { get; set; }
-        public string ActiveTab { get; set; }
-        
+       
 
         /// <summary>
         /// In UTC

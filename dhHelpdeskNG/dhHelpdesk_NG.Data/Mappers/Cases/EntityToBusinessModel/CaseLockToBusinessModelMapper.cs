@@ -13,7 +13,8 @@
                                 entity.BrowserSession, 
                                 entity.CreatedTime, 
                                 entity.ExtendedTime,
-                                entity.User);                        
+                                entity.User,
+                                entity.ActiveTab);                        
         }
     }
 }

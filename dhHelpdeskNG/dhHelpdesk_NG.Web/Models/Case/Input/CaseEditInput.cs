@@ -13,7 +13,7 @@ namespace DH.Helpdesk.Web.Models.Case.Input
     {
         public CaseEditInput()
         {
-            ActiveTab = "case-tab";
+            //ActiveTab = "case-tab";
         }
 
         [Obsolete("Move used case properties into this model")]

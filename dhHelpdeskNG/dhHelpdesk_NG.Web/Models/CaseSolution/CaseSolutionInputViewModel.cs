@@ -82,5 +82,10 @@
         public IList<SelectListItem> ActionList { get; set; }
      
         public CaseRuleModel RuleModel { get; set; }    
+
+        public Setting CustomerSetting { get; set; }
+
+        //public IList<SelectListItem> TabList { get; set; }
+        public string DefaultTab { get; set; }
     }
 }

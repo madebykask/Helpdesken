@@ -1025,7 +1025,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             int caseId = this.Save(m);
             CheckTemplateParameters(templateId, caseId);
-            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = m.updateNotifierInformation });
+            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = m.updateNotifierInformation, activeTab = m.ActiveTab });
         }
 
         [HttpPost]
@@ -1036,6 +1036,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m.case_.Id == 0 && m.ParentId != null)
                 newChild = true;
+
+            m.ActiveTab = "";
 
             int caseId = this.Save(m);
             this.CheckTemplateParameters(templateId, caseId);
@@ -1075,13 +1077,14 @@ namespace DH.Helpdesk.Web.Controllers
         public RedirectToRouteResult Edit(CaseEditInput m)
         {
             int caseId = this.Save(m);
-            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = m.updateNotifierInformation, updateState = false });
+            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = m.updateNotifierInformation, updateState = false, activeTab = m.ActiveTab });
         }
 
         [HttpPost]
         [ValidateInput(false)]
         public RedirectResult EditAndClose(CaseEditInput m, string BackUrl)
         {
+            m.ActiveTab = "";
             this.Save(m);
             return string.IsNullOrEmpty(BackUrl) ? this.Redirect(Url.Action("index", "cases", new { customerId = m.case_.Customer_Id })) : this.Redirect(BackUrl);
         }
@@ -1184,7 +1187,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 customerId = SessionFacade.CurrentCustomer.Id;
-            }            
+            }
 
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             if (SessionFacade.CurrentUser != null)
@@ -1193,6 +1196,10 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     var userId = SessionFacade.CurrentUser.Id;
                     var caseLockModel = new CaseLockModel();
+                    caseLockModel.ActiveTab = (templateId.HasValue ? _caseSolutionService.GetCaseSolution(templateId.Value).DefaultTab : "case-tab");
+
+                    var activeTab = GetActiveTab(templateId, 0);
+
                     m = this.GetCaseInputViewModel(
                         userId,
                         customerId.Value,
@@ -1203,7 +1210,7 @@ namespace DH.Helpdesk.Web.Controllers
                         templateId,
                         copyFromCaseId,
                         false,
-                        templateistrue);
+                        templateistrue,null, activeTab);
 
                     var caseParam = new NewCaseParams
                     {
@@ -1211,7 +1218,7 @@ namespace DH.Helpdesk.Web.Controllers
                         templateId = templateId,
                         copyFromCaseId = copyFromCaseId,
                         caseLanguageId = caseLanguageId
-                    };
+                };
 
                     m.NewModeParams = caseParam;
                     AddViewDataValues();
@@ -1242,7 +1249,8 @@ namespace DH.Helpdesk.Web.Controllers
             bool? uni = null,
             bool updateState = true,
             string backUrl = null,
-            bool retToCase = true)
+            bool retToCase = true,
+            string activeTab = "")
         {
             CaseInputViewModel m = null;
 
@@ -1253,10 +1261,13 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var userId = SessionFacade.CurrentUser.Id;
 
-                var caseLockViewModel = GetCaseLockModel(id, userId);
+                var caseLockViewModel = GetCaseLockModel(id, userId,true,activeTab);
                 int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : _caseService.GetCaseById(id).Customer_Id;
                 
                 m = this.GetCaseInputViewModel(userId, customerId, id, caseLockViewModel, redirectFrom, backUrl, null, null, updateState);
+                m.ActiveTab = (!string.IsNullOrEmpty(caseLockViewModel.ActiveTab) ? caseLockViewModel.ActiveTab : activeTab);
+                m.ActiveTab = (m.ActiveTab == "") ? GetActiveTab(m.case_.CaseSolution_Id, id) : activeTab; //Fallback to casesolution
+
                 if (uni.HasValue)
                 {
                     m.UpdateNotifierInformation = uni.Value;
@@ -2712,6 +2723,19 @@ namespace DH.Helpdesk.Web.Controllers
             }
         }
 
+        private string GetActiveTab(int? templateId, int caseId)
+        {
+            if (templateId.HasValue)
+            {
+                // check template parameters
+                var template = _caseSolutionService.GetCaseSolution(templateId.Value);
+
+                return template.DefaultTab;
+            }
+
+            return "";
+        }
+
         private CaseTemplateTreeModel GetCaseTemplateTreeModel(int customerId, int userId, CaseSolutionLocationShow location)
         {
             var model = new CaseTemplateTreeModel();
@@ -2745,7 +2769,7 @@ namespace DH.Helpdesk.Web.Controllers
             case_.Department = null;
             case_.Region = null;
             case_.CaseSolution_Id = m.CaseSolution_Id.HasValue && m.CaseSolution_Id == 0 ? null : m.CaseSolution_Id;
-            case_.ActiveTab = m.ActiveTab;
+            //case_.ActiveTab = m.ActiveTab;
             
             bool edit = case_.Id != 0;
             var isItChildCase = m.ParentId.HasValue;
@@ -4306,7 +4330,8 @@ namespace DH.Helpdesk.Web.Controllers
             int? copyFromCaseId = null,
             bool updateState = true,
             int? templateistrue = 0,
-            int? parentCaseId = null)
+            int? parentCaseId = null,
+            string activeTab = "")
         {
             var m = new CaseInputViewModel();
             SessionFacade.IsCaseDataChanged = false;
@@ -4380,7 +4405,8 @@ namespace DH.Helpdesk.Web.Controllers
             m.LogFilesModel = new FilesModel();
             m.CaseFileNames = GetCaseFileNames(caseId.ToString());
             m.LogFileNames = GetLogFileNames(caseId.ToString());
-            
+
+            m.ActiveTab = activeTab;
 
             if (isCreateNewCase)
             {
@@ -5033,6 +5059,17 @@ namespace DH.Helpdesk.Web.Controllers
             m.CasePrintView = new ReportModel(false);
 
             m.UserHasInvoicePermission = userHasInvoicePermission;
+
+            ////activeTab = (templateId.HasValue ? _caseSolutionService.GetCaseSolution(templateId.Value).DefaultTab : "")
+
+
+            //// m.ActiveTab = (!string.IsNullOrEmpty(m.case_.ActiveTab) ? m.case_.ActiveTab : _caseSolutionService.GetCaseSolution(templateId.Value).DefaultTab);
+
+            //var apa = m.CaseLock;
+
+            //var ap2 = apa;
+            ////m.ActiveTab = (m.CaseLock != null && !string.IsNullOrEmpty(m.CaseLock.ActiveTab) ? m.CaseLock.ActiveTab : _caseSolutionService.GetCaseSolution(templateId.Value).DefaultTab);
+
             return m;
         }
 
@@ -5329,15 +5366,15 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
         }
 
-        private CaseLockModel GetCaseLockModel(int caseId, int userId, bool isNeedLock = true)
+        private CaseLockModel GetCaseLockModel(int caseId, int userId, bool isNeedLock = true, string activeTab = "")
         {
             var caseLock = this._caseLockService.GetCaseLockByCaseId(caseId);
             var globalSettings = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
-            return GetCaseLockModel(caseLock, caseId, userId, globalSettings, isNeedLock);
+            return GetCaseLockModel(caseLock, caseId, userId, globalSettings, isNeedLock, activeTab);
         }
 
-        private CaseLockModel GetCaseLockModel(ICaseLockOverview caseLock, int caseId, int userId, GlobalSetting globalSettings, bool isNeedLock = true)
+        private CaseLockModel GetCaseLockModel(ICaseLockOverview caseLock, int caseId, int userId, GlobalSetting globalSettings, bool isNeedLock = true, string activeTab = "")
         {
             CaseLockModel caseLockModel = null;
 
@@ -5374,15 +5411,15 @@ namespace DH.Helpdesk.Web.Controllers
                 var extendedLockTime = now.AddSeconds(extendedSec);
                 var newLockGUID = Guid.NewGuid();
 
-                var newCaseLock = new CaseLock(caseId, userId, newLockGUID, Session.SessionID, now, extendedLockTime);
+                var newCaseLock = new CaseLock(caseId, userId, newLockGUID, Session.SessionID, now, extendedLockTime, activeTab);
                 if (isNeedLock)
                     this._caseLockService.LockCase(newCaseLock);
 
-                caseLockModel = newCaseLock.MapToViewModel(caseIsLocked, extendedSec, timerInterval);
+                caseLockModel = newCaseLock.MapToViewModel(caseIsLocked, extendedSec, timerInterval, activeTab);
             }
             else
             {
-                caseLockModel = caseLock.MapToViewModel(caseIsLocked, extendedSec, timerInterval);
+                caseLockModel = caseLock.MapToViewModel(caseIsLocked, extendedSec, timerInterval, activeTab);
             }
 
             return caseLockModel;

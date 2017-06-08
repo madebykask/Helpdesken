@@ -211,7 +211,7 @@
                .HasForeignKey(x => x.CaseSolution_Id)
                .WillCascadeOnDelete(false);
 
-            this.Property(x => x.ActiveTab).IsOptional().HasMaxLength(100);
+            //this.Property(x => x.ActiveTab).IsOptional().HasMaxLength(100);
 
             this.HasMany(c => c.ExtendedCaseDatas).WithMany(ecd => ecd.Cases).Map(m =>
              {

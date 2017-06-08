@@ -2,14 +2,6 @@
 --Add ExtendedCase TABLES
 use [dhHelpdeskNG_ExtendedCase]
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'[ActiveTab]' and sysobjects.name = N'tblCase')
-	begin
-		--ALTER TABLE [dbo].[tblCase] ADD [ActiveTab] int NOT NULL DEFAULT(0)
-		ALTER TABLE [dbo].[tblCase] ADD [ActiveTab] nvarchar(100)  NULL DEFAULT('case-tab')
-	end
-GO
-
 
 if not exists(select * from sysobjects WHERE Name = N'tblCase_ExtendedCaseData')
 begin
@@ -82,9 +74,11 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE [dbo].[ExtendedCaseForms] ADD [Status] [int] NOT NULL Default(0)
 GO
 
+
+
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DefaultTab' and sysobjects.name = N'tblCaseSolution')
 	begin
-		ALTER TABLE [dbo].[tblCaseSolution] ADD [DefaultTab] int not null Default(0)
+		ALTER TABLE [dbo].tblCaseSolution ADD DefaultTab nvarchar(100) NOT NULL DEFAULT('case-tab')
 	end
 GO
 

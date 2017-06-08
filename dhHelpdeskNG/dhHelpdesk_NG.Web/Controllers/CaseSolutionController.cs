@@ -1162,6 +1162,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             model.RuleModel = caseRuleModel;
             model.CaseSolution.Name = model.CaseSolution.Name;
+            model.CustomerSetting = _settingService.GetCustomerSetting(model.CaseSolution.Customer_Id);
             return model;
         }
 
