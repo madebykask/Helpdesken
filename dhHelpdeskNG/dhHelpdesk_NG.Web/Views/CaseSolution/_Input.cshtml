@@ -208,13 +208,15 @@
                                 </table>
 
                                 <table class="tableform" border="0">
-                                  
-                                  @foreach (var cs in Model.CaseSolutionFieldSettings)
-                                  {
-                                      <tr>
-                                          <td style="width:200px"></td>
-                                      </tr>
-                                  }
+
+                                    @*@foreach (var cs in Model.CaseSolutionFieldSettings)
+                                    {
+                                        <tr>
+                                            <td style="width:200px">
+
+                                            </td>
+                                        </tr>
+                                    }*@
 
                                     <tr>
                                         <td style="width:200px">
@@ -224,8 +226,8 @@
                                             @Html.DropDownList("lstStateSecondary", Model.StateSecondariesSelect, new { id = "lstStateSecondary", multiple = "multiple", @class = "chosen-select" })
                                         </td>
                                         @*<td>
-                                            <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
-                                        </td>*@
+                                                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+                                            </td>*@
                                     </tr>
 
                                     <tr>
@@ -236,8 +238,8 @@
                                             @Html.DropDownList("lstCaseWorkingGroup", Model.CaseWorkingGroupSelect, new { id = "lstCaseWorkingGroup", multiple = "multiple", @class = "chosen-select" })
                                         </td>
                                         @*<td>
-                                            <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
-                                        </td>*@
+                                                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+                                            </td>*@
                                     </tr>
                                     <tr>
                                         <td style="width:200px">
@@ -247,8 +249,8 @@
                                             @Html.DropDownList("lstCasePriority", Model.CasePrioritySelect, new { id = "lstCasePriority", multiple = "multiple", @class = "chosen-select" })
                                         </td>
                                         @*<td>
-                                            <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
-                                        </td>*@
+                                                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+                                            </td>*@
                                     </tr>
                                     <tr>
                                         <td>
@@ -258,8 +260,8 @@
                                             @Html.DropDownList("lstCaseStatus", Model.CaseStatusSelect, new { id = "lstCaseStatus", multiple = "multiple", @class = "chosen-select" })
                                         </td>
                                         @*<td>
-                                            <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
-                                        </td>*@
+                                                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+                                            </td>*@
                                     </tr>
                                     <tr>
                                         <td>
@@ -269,8 +271,8 @@
                                             @Html.DropDownList("lstUserWg", Model.UserWgSelect, new { id = "lstUserWg", multiple = "multiple", @class = "chosen-select" })
                                         </td>
                                         @*<td>
-                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
-            </td>*@
+                                                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+                                            </td>*@
                                     </tr>
                                     <tr>
                                         <td>
@@ -280,8 +282,8 @@
                                             @Html.DropDownList("lstCaseProductArea", Model.ProductAreaSelect, new { id = "lstCaseProductArea", multiple = "multiple", @class = "chosen-select" })
                                         </td>
                                         @*<td>
-                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
-            </td>*@
+                                                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+                                            </td>*@
                                     </tr>
                                 </table>
                             </div>
@@ -2253,61 +2255,61 @@
     }
 
     $(function () {
-        
+
         $('#CaseSolution_Text_External').resizable();
         $('#CaseSolution_Text_Internal').resizable();
 
         $('#SaveCaseSolution').on('click', function () {
-            
-            
+
+
             $('#target').submit();
         })
     });
 
     $('#lstStateSecondary').change(function () {
-        
-        var SelectedValue = $(this).val();        
+
+        var SelectedValue = $(this).val();
         document.getElementById('selectedStates').value=SelectedValue;
-        
+
     });
 
     $('#lstCaseWorkingGroup').change(function () {
-        
-        var SelectedValue = $(this).val();        
+
+        var SelectedValue = $(this).val();
         document.getElementById('selectedCaseWgs').value=SelectedValue;
-        
+
     });
 
     $('#lstCasePriority').change(function () {
-        
-        var SelectedValue = $(this).val();        
+
+        var SelectedValue = $(this).val();
         document.getElementById('selectedPrioritys').value=SelectedValue;
-        
+
     });
 
     $('#lstCaseStatus').change(function () {
-        
-        var SelectedValue = $(this).val();        
+
+        var SelectedValue = $(this).val();
         document.getElementById('selectedStatuses').value=SelectedValue;
-        
+
     });
 
     $('#lstUserWg').change(function () {
-        
-        var SelectedValue = $(this).val();        
+
+        var SelectedValue = $(this).val();
         document.getElementById('selectedUserWgs').value=SelectedValue;
-        
+
     });
 
     $('#lstCaseProductArea').change(function () {
-        
-        var SelectedValue = $(this).val();        
+
+        var SelectedValue = $(this).val();
         document.getElementById('selectedProductAreas').value=SelectedValue;
-        
+
     });
 
 
-    
+
     function GetSelectedTextValue(ddl) {
         var selectedValue = ddl.value;
         if (selectedValue==0 && selectedValue!='')
@@ -2317,7 +2319,7 @@
         else
         {
             document.getElementById('divConditions').style.display = 'none';
-        }       
+        }
     }
 
 
