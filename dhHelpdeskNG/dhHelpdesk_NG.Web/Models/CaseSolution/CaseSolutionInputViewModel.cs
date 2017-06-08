@@ -102,7 +102,13 @@
         public string SelectedCaseSecondaries { get; set; }
 
 
-        public List<CaseSolutionSettingsField> CaseSolutionFieldSettings { get; set; }
+        public List<SelectListItem> CaseSolutionFieldSettings { get; set; }
 
+        /// <summary>
+        /// ///////
+        /// </summary>
+        public List<CaseSolutionSettingsField> CSSettingsField { get; set; }
+
+        public List<CaseSolutionSettingsField> CSSelectedSettingsField { get; set; }
     }
 }

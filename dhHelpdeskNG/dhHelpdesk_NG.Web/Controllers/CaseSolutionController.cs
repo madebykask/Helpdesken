@@ -899,10 +899,25 @@ namespace DH.Helpdesk.Web.Controllers
 
             var regionList = this._regionService.GetActiveRegions(curCustomerId);
 
-
+            //Get not selected case solution conditions
             IEnumerable<CaseSolutionSettingsField> lFieldSetting = new List<CaseSolutionSettingsField>();
             lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(caseSolution.Id);
-            
+
+            List<SelectListItem> feildSettings = null;
+            feildSettings = lFieldSetting
+                  .Select(x => new SelectListItem
+                  {
+                      Text = x.Text,
+                      Value = x.Id.ToString(),
+                      Selected = false
+                  }).ToList();
+            //Get not selected case solution conditions
+
+            //Get selected case solution conditions
+            IEnumerable<CaseSolutionSettingsField>  lFieldSettingSelected = new List<CaseSolutionSettingsField>();
+            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(caseSolution.Id);
+            //Get selected case solution conditions
+
 
             ///////////////////////////////////////////////StateSecondaries/////////////////////////////////////////////////////////////////////////////////////////////////////////
             string selected = string.Empty;
@@ -1331,7 +1346,9 @@ namespace DH.Helpdesk.Web.Controllers
                 CaseStatusSelect = caseStatus,
                 UserWgSelect = caseUserWg,
                 ProductAreaSelect = caseProductArea,
-                CaseSolutionFieldSettings = lFieldSetting.ToList()
+                CaseSolutionFieldSettings = feildSettings,
+                CSSettingsField= lFieldSetting.ToList(),
+                CSSelectedSettingsField= lFieldSettingSelected.ToList()
 
             };
 

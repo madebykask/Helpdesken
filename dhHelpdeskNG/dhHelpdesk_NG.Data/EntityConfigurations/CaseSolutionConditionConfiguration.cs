@@ -23,6 +23,8 @@
             Property(e => e.CreatedDate).IsRequired();
             Property(e => e.ChangedDate).IsRequired();
 
+
+
             ToTable("tblCaseSolutionCondition");
         }
 

@@ -209,15 +209,25 @@
 
                                 <table class="tableform" border="0">
 
-                                    @*@foreach (var cs in Model.CaseSolutionFieldSettings)
+
+                                    <tr>
+                                        <td style="width:200px">
+                                            @Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.DropDownList("lstAddFieldSettings", Model.CaseSolutionFieldSettings, new { id = "lstAddFieldSettings", @class = "chosen-select" })
+                                            <input class="btn btn-success addrow" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" />
+                                        </td>
+                                    </tr>
+
+                                    @foreach (var cs in Model.CSSelectedSettingsField)
                                     {
                                         <tr>
                                             <td style="width:200px">
-
+                                                @Translation.Get(cs.Text, Enums.TranslationSource.TextTranslation)
                                             </td>
                                         </tr>
-                                    }*@
-
+                                    }
                                     <tr>
                                         <td style="width:200px">
                                             @Translation.Get("Ärende - State Secondary", Enums.TranslationSource.TextTranslation)

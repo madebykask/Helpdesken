@@ -559,11 +559,13 @@
 
         public DbSet<CaseExtraFollower> CaseExtraFollowers { get; set; }
 
+        public DbSet<CaseSolutionConditionPropertyEntity> CaseSolutionConditionProperties { get; set; }
+
         #endregion
 
-		#region Public Methods and Operators
+        #region Public Methods and Operators
 
-		public virtual void Commit()
+        public virtual void Commit()
         {
             try
             {
@@ -838,7 +840,7 @@
 
             //Workflow Step - Condition
             modelBuilder.Configurations.Add(new CaseSolutionConditionConfiguration());
-
+            modelBuilder.Configurations.Add(new CaseSolutionConditionPropertyConfiguration());
             #endregion
 
             base.OnModelCreating(modelBuilder);

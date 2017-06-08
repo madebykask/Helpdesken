@@ -96,6 +96,7 @@
     <Compile Include="EntityConfigurations\BusinessRules\BRActionConfiguration.cs" />
     <Compile Include="EntityConfigurations\BusinessRules\BRActionParamsConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseSolutionConditionConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseSolutionConditionPropertyConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseExtraFollowerConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseFollowUpConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractFileConfiguration.cs" />

@@ -33,54 +33,100 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         }
 
 
+        public IEnumerable<CaseSolutionSettingsField> GetSelectedCaseSolutionFieldSetting(int casesolutionid)
+        {
+
+            List<CaseSolutionSettingsField> list = new List<CaseSolutionSettingsField>();
+
+            var query = from contact in this.DataContext.CaseSolutionsConditions
+                                 join dealer in this.DataContext.CaseSolutionConditionProperties on contact.Property_Name equals dealer.CaseSolutionConditionProperty
+                        where contact.CaseSolution_Id==casesolutionid
+                        select new { dealer.CaseSolutionConditionProperty, dealer.Id, dealer.Text, contact.CaseSolutionConditionGUID, contact.Values };
+
+            foreach (var nameGroup in query)
+            {
+                CaseSolutionSettingsField c = new CaseSolutionSettingsField();
+                if (nameGroup.Id != null)
+                {
+                    c.CaseSolutionConditionId = nameGroup.Id.ToString();
+                }
+                if (nameGroup.CaseSolutionConditionProperty != null)
+                {
+                    c.PropertyName = nameGroup.CaseSolutionConditionProperty.ToString();
+                }
+                if (nameGroup.Text != null)
+                {
+                    c.Text = nameGroup.Text.ToString();
+                }
+
+                
+
+                list.Add(c);
+            }
+
+            return list;
+
+        }
+
         public IEnumerable<CaseSolutionSettingsField> GetCaseSolutionFieldSetting(int casesolutionid)
         {
 
             List<CaseSolutionSettingsField> list = new List<CaseSolutionSettingsField>();
 
-            var query =
-                from condition in this.DataContext.CaseSolutionsConditions
-                group condition by condition.Property_Name into newGroup
-                orderby newGroup.Key
-                select newGroup;
 
-            foreach (var nameGroup in query)
+            if (casesolutionid == 0)
             {
-                CaseSolutionSettingsField c = new CaseSolutionSettingsField();
+                var query =
+                  from post in this.DataContext.CaseSolutionConditionProperties
+                  select new { post.CaseSolutionConditionProperty, post.Id, post.Text };
 
-                foreach (var condition in nameGroup)
+                foreach (var nameGroup in query)
                 {
-
-                    if (condition.CaseSolutionConditionGUID != null)
+                    CaseSolutionSettingsField c = new CaseSolutionSettingsField();
+                    if (nameGroup.Id != null)
                     {
-                        c.CaseSolutionConditionId = condition.CaseSolutionConditionGUID.ToString();
+                        c.CaseSolutionConditionId = nameGroup.Id.ToString();
                     }
-                    else
+                    if (nameGroup.CaseSolutionConditionProperty != null)
                     {
-                        c.CaseSolutionConditionId = string.Empty;
+                        c.PropertyName = nameGroup.CaseSolutionConditionProperty.ToString();
                     }
-
-                    if (condition.CaseSolution_Id != null)
+                    if (nameGroup.Text != null)
                     {
-                        c.CaseSolutionId = condition.CaseSolution_Id;
-                    }
-                    else
-                    {
-                        c.CaseSolutionId = 0;
+                        c.Text = nameGroup.Text.ToString();
                     }
 
-                    if (condition.Property_Name != null)
+                    list.Add(c);
+                }
+
+            }
+            else
+            {
+
+                var query = from user in this.DataContext.CaseSolutionConditionProperties
+                            where !this.DataContext.CaseSolutionsConditions.Any(f => f.Property_Name == user.CaseSolutionConditionProperty)
+                            select new { user.Id, user.CaseSolutionConditionProperty, user.Text };
+                foreach (var nameGroup in query)
+                {
+                    CaseSolutionSettingsField c = new CaseSolutionSettingsField();
+                    if (nameGroup.Id != null)
                     {
-                        c.PropertyName = condition.Property_Name;
+                        c.CaseSolutionConditionId = nameGroup.Id.ToString();
                     }
-                    else
+                    if (nameGroup.CaseSolutionConditionProperty != null)
                     {
-                        c.PropertyName = string.Empty;
+                        c.PropertyName = nameGroup.CaseSolutionConditionProperty.ToString();
+                    }
+                    if (nameGroup.Text != null)
+                    {
+                        c.Text = nameGroup.Text.ToString();
                     }
 
                     list.Add(c);
                 }
             }
+
+
 
             return list;
 

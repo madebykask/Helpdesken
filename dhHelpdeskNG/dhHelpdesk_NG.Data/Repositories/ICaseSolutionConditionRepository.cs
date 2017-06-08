@@ -18,6 +18,8 @@
 
         IEnumerable<CaseSolutionSettingsField> GetCaseSolutionFieldSetting(int casesolutionid);
 
+        IEnumerable<CaseSolutionSettingsField> GetSelectedCaseSolutionFieldSetting(int casesolutionid);
+
         void Save(CaseSolutionConditionEntity model);
 
         
