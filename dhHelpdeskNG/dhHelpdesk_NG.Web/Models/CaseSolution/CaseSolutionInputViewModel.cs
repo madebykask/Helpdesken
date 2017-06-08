@@ -6,6 +6,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Models.Case;
     using CaseRules;
+    using DH.Helpdesk.Domain.Cases;
 
     public class CaseSolutionInputViewModel
     {
@@ -99,6 +100,9 @@
         
 
         public string SelectedCaseSecondaries { get; set; }
+
+
+        public List<CaseSolutionSettingsField> CaseSolutionFieldSettings { get; set; }
 
     }
 }

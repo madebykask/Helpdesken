@@ -208,12 +208,20 @@
                                 </table>
 
                                 <table class="tableform" border="0">
+                                  
+                                  @foreach (var cs in Model.CaseSolutionFieldSettings)
+                                  {
+                                      <tr>
+                                          <td style="width:200px"></td>
+                                      </tr>
+                                  }
+
                                     <tr>
                                         <td style="width:200px">
                                             @Translation.Get("Ärende - State Secondary", Enums.TranslationSource.TextTranslation)
                                         </td>
-                                        <td>                                          
-                                            @Html.DropDownList("lstStateSecondary", Model.StateSecondariesSelect, new { id = "lstStateSecondary", multiple = "multiple", @class = "chosen-select" })                                                                                    
+                                        <td>
+                                            @Html.DropDownList("lstStateSecondary", Model.StateSecondariesSelect, new { id = "lstStateSecondary", multiple = "multiple", @class = "chosen-select" })
                                         </td>
                                         @*<td>
                                             <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />

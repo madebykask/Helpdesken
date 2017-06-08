@@ -78,6 +78,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         c.PropertyName = string.Empty;
                     }
 
+                    list.Add(c);
                 }
             }
 

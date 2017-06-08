@@ -900,8 +900,9 @@ namespace DH.Helpdesk.Web.Controllers
             var regionList = this._regionService.GetActiveRegions(curCustomerId);
 
 
-            IEnumerable<CaseSolutionSettingsField> l = new List<CaseSolutionSettingsField>();
-            l = _caseSolutionConditionService.GetCaseSolutionFieldSetting(caseSolution.Id);
+            IEnumerable<CaseSolutionSettingsField> lFieldSetting = new List<CaseSolutionSettingsField>();
+            lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(caseSolution.Id);
+            
 
             ///////////////////////////////////////////////StateSecondaries/////////////////////////////////////////////////////////////////////////////////////////////////////////
             string selected = string.Empty;
@@ -1329,7 +1330,8 @@ namespace DH.Helpdesk.Web.Controllers
                 CasePrioritySelect = casePrios,
                 CaseStatusSelect = caseStatus,
                 UserWgSelect = caseUserWg,
-                ProductAreaSelect = caseProductArea
+                ProductAreaSelect = caseProductArea,
+                CaseSolutionFieldSettings = lFieldSetting.ToList()
 
             };
 
