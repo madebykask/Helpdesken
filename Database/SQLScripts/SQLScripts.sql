@@ -487,47 +487,27 @@ GO
 
 
 /* ADD Language Columns to Region, Department and ComputerUsers */
-DECLARE @addlng bit=0
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblRegion')
-	begin
-		SET @addlng=1
-	end
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblRegion')
 	BEGIN
                       ALTER TABLE tblRegion 
                       ADD LanguageId int NULL
                       DEFAULT 0
     END                
-	if @addlng=1
-		BEGIN
-			update tblRegion set languageid=0
-		END
 GO
-
-DECLARE @addlng bit = 0
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblDepartment')
-	BEGIN
-		SET @addlng=1
-	END
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblRegion')
+	update tblRegion set languageid=0 where languageid is null
+GO
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblDepartment')
 	BEGIN
                       ALTER TABLE tblDepartment
                       ADD LanguageId int NULL
-                      DEFAULT 0
-           
+                      DEFAULT 0      
 	END
-		if @addlng=1
-			BEGIN
-				update tblDepartment set languageid=0
-			END
 GO
-
-DECLARE @addlng bit = 0
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblComputerUsers')
-	BEGIN
-		SET @addlng=1
-	END
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblDepartment')
+	update tblDepartment set languageid=0 where languageid is null
+GO
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblComputerUsers')
 	BEGIN
@@ -535,10 +515,9 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
                       ADD LanguageId int NULL
                       DEFAULT 0
 	END
-		if @addlng=1
-			BEGIN
-				update tblComputerUsers set languageid=0
-			END
+GO	
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblComputerUsers')			
+	update tblComputerUsers set languageid=0 where languageid is null
 GO
 
 INSERT INTO [dbo].[tblComputerUserFieldSettings]
