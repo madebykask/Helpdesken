@@ -899,6 +899,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             var regionList = this._regionService.GetActiveRegions(curCustomerId);
 
+
+            List<DH.Helpdesk.Domain.Cases.CaseSolutionFields> l = new List<DH.Helpdesk.Domain.Cases.CaseSolutionFields>();
+
             ///////////////////////////////////////////////StateSecondaries/////////////////////////////////////////////////////////////////////////////////////////////////////////
             string selected = string.Empty;
             //IList<CaseSolutionCondition> stsec = _caseSolutionConditionService.GetStateSecondaries(caseSolution.Id, curCustomerId);
