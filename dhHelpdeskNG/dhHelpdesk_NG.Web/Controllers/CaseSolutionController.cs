@@ -440,7 +440,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Edit(
             CaseSolutionInputViewModel caseSolutionInputViewModel,
             CaseSolutionSettingModel[] CaseSolutionSettingModels,
-            int PageId, string selectedStates, string selectedCaseWgs, string selectedPrioritys, string selectedStatuses, string selectedUserWgs)
+            int PageId, string selectedStates, string selectedCaseWgs, string selectedPrioritys, string selectedStatuses, string selectedUserWgs, string selectedProductAreas)
         {
 
 
@@ -549,6 +549,16 @@ namespace DH.Helpdesk.Web.Controllers
                 CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
                 Property_Name = stateId,
                 Values = selectedUserWgs,
+                Status = 1
+            };
+
+            stateId = "case_ProductArea.ProductAreaGUID";
+            cce = new CaseSolutionConditionEntity
+            {
+
+                CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
+                Property_Name = stateId,
+                Values = selectedProductAreas,
                 Status = 1
             };
 
@@ -1051,6 +1061,39 @@ namespace DH.Helpdesk.Web.Controllers
             ///////////////////////////////////////////////UserWg/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
+            ///////////////////////////////////////////////ProductAreas/////////////////////////////////////////////////////////////////////////////////////////////////////////
+            string selectedProductAreas = string.Empty;
+            string productareaguid = "case_ProductArea.ProductAreaGUID";
+            IList<CaseSolutionCondition> productareagroup = _caseSolutionConditionService.GetCaseSolutionConditionModel(caseSolution.Id, curCustomerId, productareaguid);
+            foreach (CaseSolutionCondition sb in productareagroup)
+            {
+                if (sb.IsSelected == 1)
+                {
+                    if (selectedProductAreas == string.Empty)
+                    {
+                        selectedProductAreas = sb.StateSecondaryGUID.ToString();
+                    }
+                    else
+                    {
+                        selectedProductAreas = selectedProductAreas + "," + sb.StateSecondaryGUID.ToString();
+                    }
+                }
+            }
+
+            List<SelectListItem> caseProductArea = null;
+            caseProductArea = productareagroup
+                  .Select(x => new SelectListItem
+                  {
+                      Text = x.Name,
+                      Value = x.StateSecondaryGUID.ToString(),
+                      Selected = x.IsSelected == 1 ? true : false
+                  }).ToList();
+
+            ViewBag.selectedProductAreas = selectedProductAreas;
+            ///////////////////////////////////////////////ProductAreas/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
             regions = regionList.Select(x => new SelectListItem
             {
                 Text = x.Name,
@@ -1281,7 +1324,9 @@ namespace DH.Helpdesk.Web.Controllers
                 CaseWorkingGroupSelect = caseWorkingGroups,
                 CasePrioritySelect = casePrios,
                 CaseStatusSelect = caseStatus,
-                UserWgSelect = caseUserWg
+                UserWgSelect = caseUserWg,
+                ProductAreaSelect = caseProductArea
+
             };
 
             model.ParantPath_Category = "--";

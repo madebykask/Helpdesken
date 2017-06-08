@@ -94,7 +94,10 @@
 
         public List<SelectListItem> UserWgSelect { get; set; }
 
+        public List<SelectListItem> ProductAreaSelect { get; set; }
+
         
+
         public string SelectedCaseSecondaries { get; set; }
 
     }

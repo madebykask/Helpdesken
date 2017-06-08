@@ -264,6 +264,17 @@
                 <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
             </td>*@
                                     </tr>
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Ärende - Produktområde", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.DropDownList("lstCaseProductArea", Model.ProductAreaSelect, new { id = "lstCaseProductArea", multiple = "multiple", @class = "chosen-select" })
+                                        </td>
+                                        @*<td>
+                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+            </td>*@
+                                    </tr>
                                 </table>
                             </div>
                         </div>
@@ -2280,6 +2291,15 @@
         
     });
 
+    $('#lstCaseProductArea').change(function () {
+        
+        var SelectedValue = $(this).val();        
+        document.getElementById('selectedProductAreas').value=SelectedValue;
+        
+    });
+
+
+    
     function GetSelectedTextValue(ddl) {
         var selectedValue = ddl.value;
         if (selectedValue==0 && selectedValue!='')

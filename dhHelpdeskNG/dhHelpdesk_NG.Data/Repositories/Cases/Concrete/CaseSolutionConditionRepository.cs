@@ -255,7 +255,28 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
                             selected.Add(ss);
                         }
+                    }
+                    else if (constString == "case_ProductArea.ProductAreaGUID")
+                    {
+                        var tlist = from xx in this.DataContext.ProductAreas
+                                    where xx.Customer_Id == customerid && uids.Contains(xx.ProductAreaGUID.ToString())
+                                    select (xx);
 
+                        foreach (var c in tlist)
+                        {
+                            CaseSolutionCondition ss = new CaseSolutionCondition
+                            {
+
+                                Customer_Id = c.Customer_Id,
+                                Id = c.Id,
+                                IsSelected = 1,
+                                Name = c.Name,
+                                StateSecondaryGUID = c.ProductAreaGUID.ToString()
+
+                            };
+
+                            selected.Add(ss);
+                        }
                     }
                 }
             }
@@ -369,6 +390,29 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                             IsSelected = 0,
                             Name = k.WorkingGroupName,
                             StateSecondaryGUID = k.WorkingGroupGUID.ToString()
+
+                        };
+
+
+                        selected.Add(ss);
+                    }
+                }
+            }
+            else if (constString == "case_ProductArea.ProductAreaGUID")
+            {
+                List<ProductArea> stfinaList = this.DataContext.ProductAreas.Where(z => z.Customer_Id == customerid).ToList();
+                foreach (ProductArea k in stfinaList)
+                {
+                    bool has = selected.Any(cus => cus.StateSecondaryGUID.ToString() == k.ProductAreaGUID.ToString());
+                    if (has == false)
+                    {
+                        CaseSolutionCondition ss = new CaseSolutionCondition
+                        {
+                            Customer_Id = k.Customer_Id,
+                            Id = k.Id,
+                            IsSelected = 0,
+                            Name = k.Name,
+                            StateSecondaryGUID = k.ProductAreaGUID.ToString()
 
                         };
 
