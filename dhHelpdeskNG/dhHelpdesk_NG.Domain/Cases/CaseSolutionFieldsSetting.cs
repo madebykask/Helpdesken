@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Domain.Cases
 {
-    public class CaseSolutionFields : Entity
+    public class CaseSolutionFieldsSetting : Entity
     {
 
         public int CaseSolutionId { get; set; }
