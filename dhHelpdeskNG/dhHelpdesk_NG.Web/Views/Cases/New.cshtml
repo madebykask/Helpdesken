@@ -141,67 +141,6 @@
                     @if (!Model.IsItChildCase())
                     {
                         @Html.Partial("WorkflowStep", Model.WorkflowSteps)
-                        <li>
-                            <button type="button" onclick="saveFormData()">Save</button>
-
-                            <button type="button" onclick="validateFormData()">Validate</button>
-
-                        </li>
-
-
-                   
-
-                            <script type="text/javascript">
-
-                                function validateFormData() {
-
-                                    @if (Model.ExtendedCases != null)
-                                    { 
-
-                                    foreach (var item in Model.ExtendedCases)
-                                    {
-                           <text>
-                                    document.getElementById('iframe_container_' + '@item.Id').contentWindow.Validate();
-                           </text>
-                                    }
-                                    }
-
-                                }
-
-                                function saveFormData() {
-
-                                     @if (Model.ExtendedCases != null)
-                                     { 
-                                      foreach (var item in Model.ExtendedCases)
-                                    {
-                                        <text>
-                                 
-                                    var promise = document.getElementById('iframe_container_' + '@item.Id').contentWindow.SaveExtendedCase();
-                                    promise.then(onSaveSuccess, onSaveError);
-
-                                        </text>
-                                         }
-
-                                     }
-                                }
-
-                                function onSaveSuccess(result) {
-                                    if (result.Success !== undefined && result.Success === true) {
-                                        console.log('Success. Result: ' + result.ExtendedCaseGuid);
-                                    } else {
-                                        var msg = result.Error || 'Unknown error';
-                                        console.log('Error. ' + msg);
-                                    }
-                                }
-
-                                function onSaveError(err) {
-                                    console.error('Error. ' + err);
-                                }
-
-                            </script>
-
-
-
                     }
                 </ul>
             </div>
