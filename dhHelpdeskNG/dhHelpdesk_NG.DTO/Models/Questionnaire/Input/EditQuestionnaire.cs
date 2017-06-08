@@ -26,6 +26,7 @@
         
         public int LanguageId { get; private set; }
 		public string Identifier { get; set; }
+		public bool ExcludeAdministrators { get; set; }
 
 
 		public DateTime ChangedDate { get; private set; }

@@ -5858,5 +5858,12 @@ If not exists (select * from tblTextTranslation where text_id = 1816 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1816, 2, 'Short description')
 GO
 
+If not exists (select * from tbltext where id = 1817)
+	insert into tbltext (id, TextString) VALUES (1817, 'Exkludera handläggare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1817 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1817, 2, 'Exclude administrators')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

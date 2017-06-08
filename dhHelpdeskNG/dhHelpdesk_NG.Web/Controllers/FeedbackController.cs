@@ -87,6 +87,7 @@ namespace DH.Helpdesk.Web.Controllers
 				model.Name = feedback.Name;
 				model.Description = feedback.Description;
 				model.Identifier = feedback.Identifier;
+			    model.ExcludeAdministrators = feedback.ExcludeAdministrators;
 
 				//Get Feeddback question
 				var feedbackQuestions =
@@ -174,6 +175,7 @@ namespace DH.Helpdesk.Web.Controllers
 				SessionFacade.CurrentCustomer.Id,
 				DateTime.Now);
 			newFeedback.Identifier = model.Identifier;
+			newFeedback.ExcludeAdministrators = model.ExcludeAdministrators;
 
 			var feedbackId = _feedbackService.AddFeedback(newFeedback);
 
@@ -214,6 +216,7 @@ namespace DH.Helpdesk.Web.Controllers
 				model.LanguageId,
 				DateTime.Now);
 			editFeedback.Identifier = model.Identifier;
+			editFeedback.ExcludeAdministrators = model.ExcludeAdministrators;
 
 			_feedbackService.UpdateFeedback(editFeedback);
 

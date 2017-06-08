@@ -16,5 +16,6 @@ namespace DH.Helpdesk.BusinessData.Models.Feedback
         public int FeedbackId { get; set; }
         public int CircularId { get; set; }
         public Guid CircularPartGuid { get; set; }
+        public bool ExcludeAdministrators { get; set; }
     }
 }

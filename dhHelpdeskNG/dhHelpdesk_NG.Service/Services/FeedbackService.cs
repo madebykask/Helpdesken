@@ -97,6 +97,7 @@ namespace DH.Helpdesk.Services.Services
 			var item = new FeedbackFullItem();
 			item.Info = new FeedbackOverview();
 			item.Info.Identifier = entity.Identifier;
+			item.Info.ExcludeAdministrators = entity.ExcludeAdministrators;
 			item.Info.Id = entity.Id;
 
 			var feedbackLangEntity = entity.QuestionnaireLanguageEntities != null && entity.QuestionnaireLanguageEntities.Any() ?

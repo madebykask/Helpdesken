@@ -294,14 +294,17 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
         {
             for (var i = 0; i < 100000; i++)
             {
-                if (orderType.Users.Any(u => u.Id == userId))
+                if (orderType != null)
                 {
-                    return orderType;
-                }
-                if (orderType.Parent_OrderType_Id.HasValue)
-                {
-                    orderType = orderType.ParentOrderType;
-                    continue;
+                    if (orderType.Users.Any(u => u.Id == userId))
+                    {
+                        return orderType;
+                    }
+                    if (orderType.Parent_OrderType_Id.HasValue)
+                    {
+                        orderType = orderType.ParentOrderType;
+                        continue;
+                    }
                 }
                 return null;
             }
