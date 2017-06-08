@@ -714,15 +714,13 @@
             </div>
         }
 
-       @{
+       @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.AgreedDate.ToString()))
+       {
            var AgreedDateIsReadOnly = Model.JsFieldSettings.Where(x => x.FieldName == "AgreedDate").FirstOrDefault().IsReadonly;
            var htmlAttrs = new Dictionary<string, object>();
            htmlAttrs.Add("class", "hasAttribute");
-           htmlAttrs.Add("standardName", GlobalEnums.TranslationCaseFields.AgreedDate.ToString());           
-        }
+           htmlAttrs.Add("standardName", GlobalEnums.TranslationCaseFields.AgreedDate.ToString());
 
-       @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.AgreedDate.ToString()))
-        {
             <div class="form-group row @GlobalEnums.TranslationCaseFields.AgreedDate.ToString()" >
                 <label class="col-md-3">
                     @Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
