@@ -1599,7 +1599,7 @@ namespace DH.Helpdesk.Services.Services
                                     if (ur.User != null)
                                         if (ur.User.IsActive == 1 && ur.User.AllocateCaseMail == 1 && _emailService.IsValidEmail(ur.User.Email) && ur.UserRole == 2)
                                         {
-                                            if (newCase.Department_Id != null && ur.User.Departments != null)
+                                            if (newCase.Department_Id != null && ur.User.Departments != null && ur.User.Departments.Count > 0)
                                             {
                                                 if (ur.User.Departments.Any(x => x.Id == newCase.Department_Id.Value))
                                                 {
