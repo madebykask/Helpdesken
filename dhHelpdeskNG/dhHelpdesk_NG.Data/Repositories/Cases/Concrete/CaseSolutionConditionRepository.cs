@@ -67,10 +67,13 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 }
 
                 char[] delimiters = new char[] { ',' };
-                string[] parts = nameGroup.Values.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-                for (int i = 0; i < parts.Length; i++)
+                if (nameGroup.Values != null)
                 {
-                    c.SelectedValues.Add(parts[i]);
+                    string[] parts = nameGroup.Values.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < parts.Length; i++)
+                    {
+                        c.SelectedValues.Add(parts[i]);
+                    }
                 }
 
                 switch (nameGroup.CaseSolutionConditionProperty.ToString())
@@ -250,7 +253,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     {
                         c.Text = nameGroup.Text.ToString();
                     }
-                    
+
                     list.Add(c);
                 }
 
@@ -290,12 +293,12 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         public void Add(int casesolutionid, int conditionid)
         {
             string sql = string.Empty;
+            string empty = string.Empty;
 
-            
 
-            sql = "IF NOT EXISTS (SELECT Id FROM tblCaseSolutionCondition WHERE CaseSolution_Id= " + casesolutionid + " AND PropertyName = SELECT CaseSolutionConditionProperty FROM dbo.tblCaseSolutionConditionProperties WHERE(Id = " + conditionid + ")) BEGIN ";
-            sql += "INSERT INTO tblCaseSolutionCondition (CaseSolution_Id, Property_Name, Status) ";
-            sql += "VALUES (" + casesolutionid + ", SELECT CaseSolutionConditionProperty FROM dbo.tblCaseSolutionConditionProperties WHERE(Id = " + conditionid + "))";
+            sql = "IF NOT EXISTS (SELECT Id FROM tblCaseSolutionCondition WHERE CaseSolution_Id= " + casesolutionid + " AND Property_Name = (SELECT CaseSolutionConditionProperty FROM dbo.tblCaseSolutionConditionProperties WHERE(Id = " + conditionid + "))) BEGIN ";
+            sql += "INSERT INTO tblCaseSolutionCondition (CaseSolution_Id, Property_Name, [Values], [Status]) ";
+            sql += "VALUES (" + casesolutionid + ", (SELECT CaseSolutionConditionProperty FROM dbo.tblCaseSolutionConditionProperties WHERE(Id = " + conditionid + ")), '" + empty + "', 1) END ";
 
             string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
 

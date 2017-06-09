@@ -438,7 +438,32 @@ namespace DH.Helpdesk.Web.Controllers
                     
         public ActionResult AddCondition(string conditionid, string casesolutionid)
         {
-            this._caseSolutionConditionService.Add(Convert.ToInt32(casesolutionid), Convert.ToInt32(conditionid));
+            string condid = conditionid.Replace("'", "");
+            string caid = casesolutionid.Replace("'", "");
+
+            this._caseSolutionConditionService.Add(Convert.ToInt32(caid), Convert.ToInt32(condid));
+            
+
+            //Get not selected case solution conditions
+            IEnumerable<CaseSolutionSettingsField> lFieldSetting = new List<CaseSolutionSettingsField>();
+            lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(Convert.ToInt32(casesolutionid));
+
+            List<SelectListItem> feildSettings = null;
+            feildSettings = lFieldSetting
+                  .Select(x => new SelectListItem
+                  {
+                      Text = x.Text,
+                      Value = x.CaseSolutionConditionId.ToString(),
+                      Selected = false
+                  }).ToList();
+            //Get not selected case solution conditions
+
+            //Get selected case solution conditions
+            IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
+            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(casesolutionid));
+
+            //Get selected case solution conditions
+
             return null;
         }
 
@@ -923,20 +948,7 @@ namespace DH.Helpdesk.Web.Controllers
             //Get selected case solution conditions
             IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
             lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(caseSolution.Id);
-            //foreach (var t in lFieldSettingSelected)
-            //{
-            //    List<SelectListItem> xl = null;
-            //    xl = lFieldSettingSelected
-            //     .Select(x => new SelectListItem
-            //     {
-            //         Text = t.Text,
-            //         Value = t.Id.ToString(),
-            //         Selected = false
-            //     }).ToList();
-
-            //    t.SelectList = xl;
-
-            //}
+          
             //Get selected case solution conditions
 
 
