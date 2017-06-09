@@ -250,7 +250,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     {
                         c.Text = nameGroup.Text.ToString();
                     }
-
+                    
                     list.Add(c);
                 }
 
@@ -285,6 +285,33 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
             return list;
 
+        }
+
+        public void Add(int casesolutionid, int conditionid)
+        {
+            string sql = string.Empty;
+
+            
+
+            sql = "IF NOT EXISTS (SELECT Id FROM tblCaseSolutionCondition WHERE CaseSolution_Id= " + casesolutionid + " AND PropertyName = SELECT CaseSolutionConditionProperty FROM dbo.tblCaseSolutionConditionProperties WHERE(Id = " + conditionid + ")) BEGIN ";
+            sql += "INSERT INTO tblCaseSolutionCondition (CaseSolution_Id, Property_Name, Status) ";
+            sql += "VALUES (" + casesolutionid + ", SELECT CaseSolutionConditionProperty FROM dbo.tblCaseSolutionConditionProperties WHERE(Id = " + conditionid + "))";
+
+            string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand { Connection = connection, CommandType = CommandType.Text })
+                {
+                    cmd.CommandText = sql;
+                    if (connection.State == ConnectionState.Closed)
+                    {
+                        connection.Open();
+                    }
+                    cmd.ExecuteNonQuery();
+
+                }
+            }
         }
 
         public void Save(CaseSolutionConditionEntity model)

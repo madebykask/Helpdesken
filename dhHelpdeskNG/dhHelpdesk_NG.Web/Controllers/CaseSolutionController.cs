@@ -435,6 +435,13 @@ namespace DH.Helpdesk.Web.Controllers
                     JsonRequestBehavior.AllowGet);
         }
 
+                    
+        public ActionResult AddCondition(string conditionid, string casesolutionid)
+        {
+            this._caseSolutionConditionService.Add(Convert.ToInt32(casesolutionid), Convert.ToInt32(conditionid));
+            return null;
+        }
+
         [ValidateInput(false)]
         [HttpPost]
         public ActionResult Edit(
@@ -908,7 +915,7 @@ namespace DH.Helpdesk.Web.Controllers
                   .Select(x => new SelectListItem
                   {
                       Text = x.Text,
-                      Value = x.Id.ToString(),
+                      Value = x.CaseSolutionConditionId.ToString(),
                       Selected = false
                   }).ToList();
             //Get not selected case solution conditions

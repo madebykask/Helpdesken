@@ -12,6 +12,8 @@ namespace DH.Helpdesk.Domain.Cases
 
         public string PropertyName { get; set; }
 
+        public string CaseSolutionConditionGuid { get; set; }
+
         public string Text { get; set; }
 
         //public string[] SelectedValues { get; set; }

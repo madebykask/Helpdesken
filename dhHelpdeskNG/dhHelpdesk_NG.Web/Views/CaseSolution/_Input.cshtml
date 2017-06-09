@@ -216,7 +216,7 @@
                                         </td>
                                         <td>
                                             @Html.DropDownList("lstAddFieldSettings", Model.CaseSolutionFieldSettings, new { id = "lstAddFieldSettings", @class = "chosen-select" })
-                                            <input class="btn btn-success addrow" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" />
+                                            <input class="btn btn-success addrow" onclick="AddCondition()" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" />
                                         </td>
                                     </tr>
 
@@ -228,64 +228,66 @@
                                             </td>
                                             <td>
                                                 @Html.DropDownList("lst_" + cs.PropertyName, cs.SelectList, new { id = "lst_" + cs.PropertyName, multiple = "multiple", @class = "chosen-select" })
+                                                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
                                             </td>
+                                           
                                         </tr>
                                     }
                                     @*<tr>
-                                        <td style="width:200px">
-                                            @Translation.Get("Ärende - State Secondary", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.DropDownList("lstStateSecondary", Model.StateSecondariesSelect, new { id = "lstStateSecondary", multiple = "multiple", @class = "chosen-select" })
-                                        </td>
-                                        
-                                    </tr>
+                                            <td style="width:200px">
+                                                @Translation.Get("Ärende - State Secondary", Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td>
+                                                @Html.DropDownList("lstStateSecondary", Model.StateSecondariesSelect, new { id = "lstStateSecondary", multiple = "multiple", @class = "chosen-select" })
+                                            </td>
 
-                                    <tr>
-                                        <td style="width:200px">
-                                            @Translation.Get("Ärende - Driftgrupp", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.DropDownList("lstCaseWorkingGroup", Model.CaseWorkingGroupSelect, new { id = "lstCaseWorkingGroup", multiple = "multiple", @class = "chosen-select" })
-                                        </td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td style="width:200px">
-                                            @Translation.Get("Ärende - Prioritet", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.DropDownList("lstCasePriority", Model.CasePrioritySelect, new { id = "lstCasePriority", multiple = "multiple", @class = "chosen-select" })
-                                        </td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Ärende - Status", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.DropDownList("lstCaseStatus", Model.CaseStatusSelect, new { id = "lstCaseStatus", multiple = "multiple", @class = "chosen-select" })
-                                        </td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Användare - Driftgrupp", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.DropDownList("lstUserWg", Model.UserWgSelect, new { id = "lstUserWg", multiple = "multiple", @class = "chosen-select" })
-                                        </td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Ärende - Produktområde", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.DropDownList("lstCaseProductArea", Model.ProductAreaSelect, new { id = "lstCaseProductArea", multiple = "multiple", @class = "chosen-select" })
-                                        </td>
-                                       
-                                    </tr>*@
+                                        </tr>
+
+                                        <tr>
+                                            <td style="width:200px">
+                                                @Translation.Get("Ärende - Driftgrupp", Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td>
+                                                @Html.DropDownList("lstCaseWorkingGroup", Model.CaseWorkingGroupSelect, new { id = "lstCaseWorkingGroup", multiple = "multiple", @class = "chosen-select" })
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td style="width:200px">
+                                                @Translation.Get("Ärende - Prioritet", Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td>
+                                                @Html.DropDownList("lstCasePriority", Model.CasePrioritySelect, new { id = "lstCasePriority", multiple = "multiple", @class = "chosen-select" })
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Translation.Get("Ärende - Status", Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td>
+                                                @Html.DropDownList("lstCaseStatus", Model.CaseStatusSelect, new { id = "lstCaseStatus", multiple = "multiple", @class = "chosen-select" })
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Translation.Get("Användare - Driftgrupp", Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td>
+                                                @Html.DropDownList("lstUserWg", Model.UserWgSelect, new { id = "lstUserWg", multiple = "multiple", @class = "chosen-select" })
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Translation.Get("Ärende - Produktområde", Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td>
+                                                @Html.DropDownList("lstCaseProductArea", Model.ProductAreaSelect, new { id = "lstCaseProductArea", multiple = "multiple", @class = "chosen-select" })
+                                            </td>
+
+                                        </tr>*@
                                 </table>
                             </div>
                         </div>
@@ -2309,7 +2311,20 @@
 
     });
 
+    function AddCondition()
+    {
+        var id=document.getElementById('CaseSolution_Id').value;        
+        var e = document.getElementById("lstAddFieldSettings");         
+        var value = e.options[e.selectedIndex].value;
 
+        $.get("/CaseSolution/AddCondition/", { conditionid: "'" + value.toString() + "'", casesolutionid: "'" + id.toString() + "'" }, function (result) {
+
+            if (parseInt(result) > 0) {            
+                $("#divConditions").val(result);
+            }
+        });
+
+    }
 
     function GetSelectedTextValue(ddl) {
         var selectedValue = ddl.value;

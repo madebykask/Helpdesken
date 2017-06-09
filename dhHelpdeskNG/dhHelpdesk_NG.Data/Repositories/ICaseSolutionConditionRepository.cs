@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Dal.Repositories.Cases
 {
-    using System.Collections.Generic;    
+    using System.Collections.Generic;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.BusinessData.Models.Case;
@@ -22,8 +22,9 @@
 
         void Save(CaseSolutionConditionEntity model);
 
-        
+
+        void Add(int casesolutionid, int conditionid);
 
         IList<CaseSolutionCondition> GetCaseSolutionConditionModel(int casesolutionid, int customerid, string constString);
-    }       
+    }
 }
