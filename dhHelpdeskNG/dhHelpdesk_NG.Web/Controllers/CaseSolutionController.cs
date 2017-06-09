@@ -914,8 +914,22 @@ namespace DH.Helpdesk.Web.Controllers
             //Get not selected case solution conditions
 
             //Get selected case solution conditions
-            IEnumerable<CaseSolutionSettingsField>  lFieldSettingSelected = new List<CaseSolutionSettingsField>();
+            IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
             lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(caseSolution.Id);
+            //foreach (var t in lFieldSettingSelected)
+            //{
+            //    List<SelectListItem> xl = null;
+            //    xl = lFieldSettingSelected
+            //     .Select(x => new SelectListItem
+            //     {
+            //         Text = t.Text,
+            //         Value = t.Id.ToString(),
+            //         Selected = false
+            //     }).ToList();
+
+            //    t.SelectList = xl;
+
+            //}
             //Get selected case solution conditions
 
 
@@ -1347,8 +1361,8 @@ namespace DH.Helpdesk.Web.Controllers
                 UserWgSelect = caseUserWg,
                 ProductAreaSelect = caseProductArea,
                 CaseSolutionFieldSettings = feildSettings,
-                CSSettingsField= lFieldSetting.ToList(),
-                CSSelectedSettingsField= lFieldSettingSelected.ToList()
+                CSSettingsField = lFieldSetting.ToList(),
+                CSSelectedSettingsField = lFieldSettingSelected.ToList()
 
             };
 

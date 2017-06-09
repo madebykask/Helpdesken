@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain;
-
+    using System.Web.Mvc;
 
     public sealed class CaseSolutionConditionRepository : RepositoryBase<CaseSolutionConditionEntity>, ICaseSolutionConditionRepository
     {
@@ -39,17 +39,24 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             List<CaseSolutionSettingsField> list = new List<CaseSolutionSettingsField>();
 
             var query = from contact in this.DataContext.CaseSolutionsConditions
-                                 join dealer in this.DataContext.CaseSolutionConditionProperties on contact.Property_Name equals dealer.CaseSolutionConditionProperty
-                        where contact.CaseSolution_Id==casesolutionid
-                        select new { dealer.CaseSolutionConditionProperty, dealer.Id, dealer.Text, contact.CaseSolutionConditionGUID, contact.Values };
+                        join dealer in this.DataContext.CaseSolutionConditionProperties on contact.Property_Name equals dealer.CaseSolutionConditionProperty
+                        where contact.CaseSolution_Id == casesolutionid
+                        select new { dealer.CaseSolutionConditionProperty, dealer.Id, dealer.Text, contact.CaseSolutionConditionGUID, contact.Values, contact.CaseSolution_Id };
 
             foreach (var nameGroup in query)
             {
                 CaseSolutionSettingsField c = new CaseSolutionSettingsField();
+                c.SelectedValues = new List<string>();
+
                 if (nameGroup.Id != null)
                 {
                     c.CaseSolutionConditionId = nameGroup.Id.ToString();
                 }
+                if (nameGroup.CaseSolution_Id != null)
+                {
+                    c.CaseSolutionId = nameGroup.CaseSolution_Id;
+                }
+
                 if (nameGroup.CaseSolutionConditionProperty != null)
                 {
                     c.PropertyName = nameGroup.CaseSolutionConditionProperty.ToString();
@@ -59,7 +66,155 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     c.Text = nameGroup.Text.ToString();
                 }
 
-                
+                char[] delimiters = new char[] { ',' };
+                string[] parts = nameGroup.Values.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < parts.Length; i++)
+                {
+                    c.SelectedValues.Add(parts[i]);
+                }
+
+                switch (nameGroup.CaseSolutionConditionProperty.ToString())
+                {
+                    case "case_StateSecondary.StateSecondaryGUID":
+
+                        var temp = from st in this.DataContext.StateSecondaries
+                                   where !c.SelectedValues.Contains(st.StateSecondaryGUID.ToString())
+                                   select new { st.Name, st.Id, st.StateSecondaryGUID, Selected = false };
+
+                        var temp1 = from st in this.DataContext.StateSecondaries
+                                    where c.SelectedValues.Contains(st.StateSecondaryGUID.ToString())
+                                    select new { st.Name, st.Id, st.StateSecondaryGUID, Selected = true };
+
+                        var result = temp.Concat(temp1).OrderBy(x => x.Name).ToList();
+
+                        List<SelectListItem> ls = null;
+                        ls = result
+                          .Select(x => new SelectListItem
+                          {
+                              Text = x.Name,
+                              Value = x.StateSecondaryGUID.ToString(),
+                              Selected = x.Selected
+                          }).ToList();
+
+
+                        c.SelectList = ls;
+                        break;
+                    case "case_WorkingGroup.WorkingGroupGUID":
+                        var temp11 = from st in this.DataContext.WorkingGroups
+                                     where !c.SelectedValues.Contains(st.WorkingGroupGUID.ToString())
+                                     select new { st.WorkingGroupName, st.Id, st.WorkingGroupGUID, Selected = false };
+
+                        var temp12 = from st in this.DataContext.WorkingGroups
+                                     where c.SelectedValues.Contains(st.WorkingGroupGUID.ToString())
+                                     select new { st.WorkingGroupName, st.Id, st.WorkingGroupGUID, Selected = true };
+
+                        var result11 = temp11.Concat(temp12).OrderBy(x => x.WorkingGroupName).ToList();
+
+                        List<SelectListItem> ls11 = null;
+                        ls11 = result11
+                          .Select(x => new SelectListItem
+                          {
+                              Text = x.WorkingGroupName,
+                              Value = x.WorkingGroupGUID.ToString(),
+                              Selected = x.Selected
+                          }).ToList();
+
+
+                        c.SelectList = ls11;
+                        break;
+                    case "case_Priority.PriorityGUID":
+                        var temp21 = from st in this.DataContext.Priorities
+                                     where !c.SelectedValues.Contains(st.PriorityGUID.ToString())
+                                     select new { st.Name, st.Id, st.PriorityGUID, Selected = false };
+
+                        var temp22 = from st in this.DataContext.Priorities
+                                     where c.SelectedValues.Contains(st.PriorityGUID.ToString())
+                                     select new { st.Name, st.Id, st.PriorityGUID, Selected = true };
+
+                        var result21 = temp21.Concat(temp22).OrderBy(x => x.Name).ToList();
+
+                        List<SelectListItem> ls21 = null;
+                        ls21 = result21
+                          .Select(x => new SelectListItem
+                          {
+                              Text = x.Name,
+                              Value = x.PriorityGUID.ToString(),
+                              Selected = x.Selected
+                          }).ToList();
+
+
+                        c.SelectList = ls21;
+                        break;
+                    case "case_Status.StatusGUID":
+                        var temp31 = from st in this.DataContext.Statuses
+                                     where !c.SelectedValues.Contains(st.StatusGUID.ToString())
+                                     select new { st.Name, st.Id, st.StatusGUID, Selected = false };
+
+                        var temp32 = from st in this.DataContext.Statuses
+                                     where c.SelectedValues.Contains(st.StatusGUID.ToString())
+                                     select new { st.Name, st.Id, st.StatusGUID, Selected = true };
+
+                        var result31 = temp31.Concat(temp32).OrderBy(x => x.Name).ToList();
+
+                        List<SelectListItem> ls31 = null;
+                        ls31 = result31
+                          .Select(x => new SelectListItem
+                          {
+                              Text = x.Name,
+                              Value = x.StatusGUID.ToString(),
+                              Selected = x.Selected
+                          }).ToList();
+
+
+                        c.SelectList = ls31;
+                        break;
+                    case "user_WorkingGroup.WorkingGroupGUID":
+                        var temp41 = from st in this.DataContext.WorkingGroups
+                                     where !c.SelectedValues.Contains(st.WorkingGroupGUID.ToString())
+                                     select new { st.WorkingGroupName, st.Id, st.WorkingGroupGUID, Selected = false };
+
+                        var temp42 = from st in this.DataContext.WorkingGroups
+                                     where c.SelectedValues.Contains(st.WorkingGroupGUID.ToString())
+                                     select new { st.WorkingGroupName, st.Id, st.WorkingGroupGUID, Selected = true };
+
+                        var result41 = temp41.Concat(temp42).OrderBy(x => x.WorkingGroupName).ToList();
+
+                        List<SelectListItem> ls41 = null;
+                        ls41 = result41
+                          .Select(x => new SelectListItem
+                          {
+                              Text = x.WorkingGroupName,
+                              Value = x.WorkingGroupGUID.ToString(),
+                              Selected = x.Selected
+                          }).ToList();
+
+
+                        c.SelectList = ls41;
+                        break;
+                    case "case_ProductArea.ProductAreaGUID":
+                        var temp51 = from st in this.DataContext.ProductAreas
+                                     where !c.SelectedValues.Contains(st.ProductAreaGUID.ToString())
+                                     select new { st.Name, st.Id, st.ProductAreaGUID, Selected = false };
+
+                        var temp52 = from st in this.DataContext.ProductAreas
+                                     where c.SelectedValues.Contains(st.ProductAreaGUID.ToString())
+                                     select new { st.Name, st.Id, st.ProductAreaGUID, Selected = true };
+
+                        var result51 = temp51.Concat(temp52).OrderBy(x => x.Name).ToList();
+
+                        List<SelectListItem> ls51 = null;
+                        ls51 = result51
+                          .Select(x => new SelectListItem
+                          {
+                              Text = x.Name,
+                              Value = x.ProductAreaGUID.ToString(),
+                              Selected = x.Selected
+                          }).ToList();
+
+
+                        c.SelectList = ls51;
+                        break;
+                }
 
                 list.Add(c);
             }

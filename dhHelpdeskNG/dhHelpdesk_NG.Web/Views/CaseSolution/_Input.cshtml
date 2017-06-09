@@ -226,18 +226,19 @@
                                             <td style="width:200px">
                                                 @Translation.Get(cs.Text, Enums.TranslationSource.TextTranslation)
                                             </td>
+                                            <td>
+                                                @Html.DropDownList("lst_" + cs.PropertyName, cs.SelectList, new { id = "lst_" + cs.PropertyName, multiple = "multiple", @class = "chosen-select" })
+                                            </td>
                                         </tr>
                                     }
-                                    <tr>
+                                    @*<tr>
                                         <td style="width:200px">
                                             @Translation.Get("Ärende - State Secondary", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
                                             @Html.DropDownList("lstStateSecondary", Model.StateSecondariesSelect, new { id = "lstStateSecondary", multiple = "multiple", @class = "chosen-select" })
                                         </td>
-                                        @*<td>
-                                                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
-                                            </td>*@
+                                        
                                     </tr>
 
                                     <tr>
@@ -247,9 +248,7 @@
                                         <td>
                                             @Html.DropDownList("lstCaseWorkingGroup", Model.CaseWorkingGroupSelect, new { id = "lstCaseWorkingGroup", multiple = "multiple", @class = "chosen-select" })
                                         </td>
-                                        @*<td>
-                                                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
-                                            </td>*@
+                                        
                                     </tr>
                                     <tr>
                                         <td style="width:200px">
@@ -258,9 +257,7 @@
                                         <td>
                                             @Html.DropDownList("lstCasePriority", Model.CasePrioritySelect, new { id = "lstCasePriority", multiple = "multiple", @class = "chosen-select" })
                                         </td>
-                                        @*<td>
-                                                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
-                                            </td>*@
+                                        
                                     </tr>
                                     <tr>
                                         <td>
@@ -269,9 +266,7 @@
                                         <td>
                                             @Html.DropDownList("lstCaseStatus", Model.CaseStatusSelect, new { id = "lstCaseStatus", multiple = "multiple", @class = "chosen-select" })
                                         </td>
-                                        @*<td>
-                                                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
-                                            </td>*@
+                                        
                                     </tr>
                                     <tr>
                                         <td>
@@ -280,9 +275,7 @@
                                         <td>
                                             @Html.DropDownList("lstUserWg", Model.UserWgSelect, new { id = "lstUserWg", multiple = "multiple", @class = "chosen-select" })
                                         </td>
-                                        @*<td>
-                                                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
-                                            </td>*@
+                                        
                                     </tr>
                                     <tr>
                                         <td>
@@ -291,10 +284,8 @@
                                         <td>
                                             @Html.DropDownList("lstCaseProductArea", Model.ProductAreaSelect, new { id = "lstCaseProductArea", multiple = "multiple", @class = "chosen-select" })
                                         </td>
-                                        @*<td>
-                                                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
-                                            </td>*@
-                                    </tr>
+                                       
+                                    </tr>*@
                                 </table>
                             </div>
                         </div>
