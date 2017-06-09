@@ -132,7 +132,7 @@ dhform.prototype.load = function (options) {
     var id = options.formAreaId.replace('container_', '');
 
     options.url = options.url.replace('[ExtendedCaseFormId]', id);
-    options.url = decodeURIComponent(options.url);
+    options.url = decodeURIComponent(options.url.replace(/&amp;/g, '&'));
 
     if (typeof _this._formArea === "undefined" || _this._formArea.length === 0) {
         // error!!!

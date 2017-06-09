@@ -5036,16 +5036,16 @@ namespace DH.Helpdesk.Web.Controllers
             var inputParameters = new Dictionary<string, string>();
 
             inputParameters.Add("CustomerId", customerId.ToString());
-            inputParameters.Add("CaseId", m.case_.Id.ToString());
+            inputParameters.Add("CaseId", (m.case_ != null ? m.case_.Id.ToString(): "0"));
             inputParameters.Add("CaseSolutionId", caseSolutionId.ToString());
             inputParameters.Add("User_LanguageId", SessionFacade.CurrentLanguageId.ToString());
+            inputParameters.Add("Case_StateSecondaryId", (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId.ToString() : "0"));
+            inputParameters.Add("Case_WorkingGroupId", (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId.ToString() : "0"));
 
-            if (m.case_.Id > 0)
+            if (m.case_ != null && m.case_.Id > 0)
             {
                 inputParameters.Add("CaseGuid", m.case_.CaseGUID.ToString());
             }
-            
-
 
             m.ExtendedCases = _caseService.GetExtendedCaseForms(inputParameters);
 
@@ -5059,16 +5059,6 @@ namespace DH.Helpdesk.Web.Controllers
             m.CasePrintView = new ReportModel(false);
 
             m.UserHasInvoicePermission = userHasInvoicePermission;
-
-            ////activeTab = (templateId.HasValue ? _caseSolutionService.GetCaseSolution(templateId.Value).DefaultTab : "")
-
-
-            //// m.ActiveTab = (!string.IsNullOrEmpty(m.case_.ActiveTab) ? m.case_.ActiveTab : _caseSolutionService.GetCaseSolution(templateId.Value).DefaultTab);
-
-            //var apa = m.CaseLock;
-
-            //var ap2 = apa;
-            ////m.ActiveTab = (m.CaseLock != null && !string.IsNullOrEmpty(m.CaseLock.ActiveTab) ? m.CaseLock.ActiveTab : _caseSolutionService.GetCaseSolution(templateId.Value).DefaultTab);
 
             return m;
         }

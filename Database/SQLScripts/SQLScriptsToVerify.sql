@@ -88,3 +88,26 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 		ALTER TABLE [dbo].[tblSettings] ADD [ModuleExtendedCase] int not null Default(0)
 	end
 GO
+
+/* StateSecondary columns, Make sure they exist in db, these are old ones.... */
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AlternativeStateSecondaryName' and sysobjects.name = N'tblStateSecondary')
+	begin
+		ALTER TABLE [dbo].[tblStateSecondary] ADD [AlternativeStateSecondaryName] [nvarchar](50) NULL
+	end
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'StateSecondaryId' and sysobjects.name = N'tblStateSecondary')
+	begin
+		ALTER TABLE [dbo].[tblStateSecondary] ADD [StateSecondaryId] int not null Default(0)
+	end
+GO
+
+/* StateSecondary columns, Make sure they exist in db, these are old ones.... */
+
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'WorkingGroupId' and sysobjects.name = N'tblWorkingGroup')
+	begin
+		ALTER TABLE [dbo].[tblWorkingGroup] ADD [WorkingGroupId] int not null Default(0)
+	end
+GO
