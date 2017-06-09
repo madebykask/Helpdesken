@@ -97,7 +97,7 @@
         {
             var caseType = this.caseTypeRepository.GetById(id);
             
-            if (caseType != null && !this._caseRepository.GetAll().Where(c=> c.CaseType_Id == id).Any())
+            if (caseType != null && !this._caseRepository.GetCasesIdsByType(id).Any())
             {
                 try
                 {

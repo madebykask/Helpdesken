@@ -487,60 +487,42 @@ GO
 
 
 /* ADD Language Columns to Region, Department and ComputerUsers */
-DECLARE @addlng bit=0
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblRegion')
-	begin
-		SET @addlng=1
-	end
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblRegion')
-BEGIN
+	BEGIN
                       ALTER TABLE tblRegion 
                       ADD LanguageId int NULL
                       DEFAULT 0
-END                    
-	if @addlng=1
-		BEGIN
-			update tblRegion set languageid=0
-		END
+    END                
+GO
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblRegion')
+	update tblRegion set languageid=0 where languageid is null
 GO
 
-DECLARE @addlng bit = 0
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblDepartment')
 	BEGIN
-		SET @addlng=1
-	END
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblDepartment')
 BEGIN
                       ALTER TABLE tblDepartment
                       ADD LanguageId int NULL
-                      DEFAULT 0
-           
+                      DEFAULT 0      
 END
-
-		if @addlng=1
-			BEGIN
-				update tblDepartment set languageid=0
-			END
+	END
+GO
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblDepartment')
+	update tblDepartment set languageid=0 where languageid is null
 GO
 
-DECLARE @addlng bit = 0
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblComputerUsers')
 	BEGIN
-		SET @addlng=1
-	END
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblComputerUsers')
 BEGIN
                       ALTER TABLE tblComputerUsers
                       ADD LanguageId int NULL
                       DEFAULT 0
                       
 END					
-		if @addlng=1
-			BEGIN
-				update tblComputerUsers set languageid=0
-			END
+	END
+GO	
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblComputerUsers')			
+	update tblComputerUsers set languageid=0 where languageid is null
 GO
 
 INSERT INTO [dbo].[tblComputerUserFieldSettings]
@@ -554,10 +536,10 @@ INSERT INTO [dbo].[tblComputerUserFieldSettings]
 		SELECT  DISTINCT
 				Customer_Id,
 				'Language_Id',
-				1,
 				0,
 				0,
-				1,
+				0,
+				0,
 				''
 		FROM tblComputerUserFieldSettings	
 		WHERE Customer_Id IS NOT NULL AND Customer_Id NOT IN (SELECT Customer_Id From tblComputerUserFieldSettings WHERE Customer_Id IS NOT NULL AND ComputerUserField='Language_Id')
@@ -625,6 +607,18 @@ GO
 insert into tblCaseSolutionFieldSettings(casesolution_id, fieldname_id, mode)
 select id, 68, 1 from tblCaseSolution
 where id not in (select casesolution_id from  tblCaseSolutionFieldSettings where fieldname_id = 68 )
+
+-- recreate index IX_tblCase_Customer_Id
+DROP INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
+GO
+CREATE NONCLUSTERED INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
+(
+	[Customer_Id] ASC,	
+	[Deleted] ASC,
+	[FinishingDate] ASC    
+)INCLUDE ([Casenumber]) 
+GO
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.32'

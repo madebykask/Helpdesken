@@ -13,7 +13,8 @@
 
         public static class CacheKey
     {
-        public const string CaseSolutionCondition = "CaseSolutionCondition{0}";
+        public const string CaseSolutionConditionWithId = CaseSolutionCondition + "{0}";
+        public const string CaseSolutionCondition = "CaseSolutionCondition";
         public const string DepartmentsByUserPermissions = "DepartmentsByUserPermissions{0}";
     }
 

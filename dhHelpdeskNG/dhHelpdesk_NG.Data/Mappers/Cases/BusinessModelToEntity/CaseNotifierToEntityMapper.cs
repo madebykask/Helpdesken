@@ -24,6 +24,7 @@
             entity.Location = businessModel.Place ?? string.Empty;
             entity.UserCode = businessModel.UserCode ?? string.Empty;
             entity.Customer_Id = businessModel.CustomerId;
+            entity.LanguageId = businessModel.LanguageId;
         }
     }
 }

@@ -474,7 +474,7 @@
                             @Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
                         </label>
                         <div class="col-md-9">
-                            @{var _agreeDate = Model.CasePreview.AgreedDate.HasValue ? Model.CasePreview.AgreedDate.Value.ToLocalTime().ToString() : string.Empty;}
+                            @{var _agreeDate = Model.CasePreview.AgreedDate.HasValue ? Model.CasePreview.AgreedDate.Value.ToShortDateString() : string.Empty;}
                             @Html.DisplayFor(a => _agreeDate)
                         </div>
                     </div>

@@ -416,7 +416,7 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.ReferenceNumber,
                     
                     SMS = caseSolution.SMS.ToBool(),
-                    caseSolution.AgreedDate,
+                    AgreedDate = caseSolution.AgreedDate.HasValue ? caseSolution.AgreedDate.Value.ToShortDateString() : string.Empty,                    
                     caseSolution.Available,
                     caseSolution.Cost,
                     caseSolution.OtherCost,
@@ -484,9 +484,8 @@ namespace DH.Helpdesk.Web.Controllers
                     CaseSolutionSettingModels);
             this.caseSolutionSettingService.UpdateCaseSolutionSettings(settingsSolutionAggregate);
 
-            //Remove caching of conditions for this specific template that is used in Case
-            string cacheKey = string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition, caseSolutionInputViewModel.CaseSolution.Id);
-            this._cache.Invalidate(cacheKey);
+            //Remove caching of all casesolution conditions
+            this._cache.InvalidateStartsWith(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition);
 
             if (errors.Count == 0)
             {

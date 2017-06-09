@@ -1,4 +1,10 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
+﻿using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+using DH.Helpdesk.BusinessData.Models.Logs.Output;
+using DH.Helpdesk.Dal.MapperData.CaseHistory;
+using DH.Helpdesk.Dal.MapperData.Logs;
+using DH.Helpdesk.Dal.Mappers.Logs;
+
+namespace DH.Helpdesk.Web.NinjectModules.Modules
 {
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
@@ -52,9 +58,17 @@
             this.Bind<IBusinessModelToEntityMapper<CaseModel, Case>>()
                 .To <CaseModelToEntityMapper>()
                 .InSingletonScope();
+                
+            this.Bind<IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview>>()
+                .To<CaseHistoryToCaseHistoryOverviewMapper>()
+                .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<Case, CaseModel>>()
                 .To<CaseToCaseModelMapper>()
+                .InSingletonScope();
+                
+            this.Bind<IEntityToBusinessModelMapper<LogMapperData, LogOverview>>()
+                .To<LogEntityToBusinessModelMapper>()
                 .InSingletonScope();
         }
     }

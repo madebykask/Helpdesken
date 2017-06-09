@@ -645,8 +645,13 @@ namespace DH.Helpdesk.Web.Controllers
                 var languageData =
                 this.languageRepository.GetActiveLanguages();
 
-                languages = languageData.Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
+                ItemOverview io = new ItemOverview(" ", "0");
 
+
+                
+
+                languages = languageData.Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
+                languages.Add(io);
                 //ItemOverview f = new ItemOverview(" ", "0");
                 //languages.Add(f);
 

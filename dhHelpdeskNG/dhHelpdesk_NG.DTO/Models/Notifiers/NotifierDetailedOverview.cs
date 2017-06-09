@@ -36,7 +36,8 @@
             DateTime createdDate,
             DateTime changedDate,
             DateTime? synchronizationDate,
-            int? languageId)
+            int? languageId,
+            string language)
         {
             this.Id = id;
             this.UserId = userId;
@@ -68,6 +69,7 @@
             this.ChangedDate = changedDate;
             this.SynchronizationDate = synchronizationDate;
             this.LanguageId = languageId;
+            this.Language = language;
         }
 
         [IsId]
