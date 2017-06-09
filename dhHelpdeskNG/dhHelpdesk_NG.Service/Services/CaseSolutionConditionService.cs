@@ -30,6 +30,7 @@ namespace DH.Helpdesk.Services.Services
         void Save(CaseSolutionConditionEntity model);
 
         void Add(int casesolutionid, int conditionid);
+        void Remove(string condition, int casesolutionid);
 
         IList<CaseSolutionCondition> GetCaseSolutionConditionModel(int casesolutionid, int customerid, string constString);
         IEnumerable<CaseSolutionSettingsField> GetCaseSolutionFieldSetting(int casesolutionid);
@@ -83,6 +84,11 @@ namespace DH.Helpdesk.Services.Services
         public void Add(int casesolutionid, int conditionidl)
         {
             this._caseSolutionConditionRepository.Add(casesolutionid, conditionidl);
+        }
+
+        public void Remove(string condition, int casesolutionid)
+        {
+            this._caseSolutionConditionRepository.Remove(condition, casesolutionid);
         }
     }
 

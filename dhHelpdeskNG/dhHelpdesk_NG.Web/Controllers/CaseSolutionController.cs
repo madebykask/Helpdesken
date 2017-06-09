@@ -435,6 +435,40 @@ namespace DH.Helpdesk.Web.Controllers
                     JsonRequestBehavior.AllowGet);
         }
 
+        public PartialViewResult RemoveCondition(string condition, string casesolutionid)
+        {
+            string condid = condition.Replace("'", "");
+            string caid = casesolutionid.Replace("'", "");
+            this._caseSolutionConditionService.Add(Convert.ToInt32(caid), Convert.ToInt32(condid));
+
+            //Get not selected case solution conditions
+            IEnumerable<CaseSolutionSettingsField> lFieldSetting = new List<CaseSolutionSettingsField>();
+            lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(Convert.ToInt32(caid));
+
+            List<SelectListItem> feildSettings = null;
+            feildSettings = lFieldSetting
+                  .Select(x => new SelectListItem
+                  {
+                      Text = x.Text,
+                      Value = x.CaseSolutionConditionId.ToString(),
+                      Selected = false
+                  }).ToList();
+            //Get not selected case solution conditions
+
+            //Get selected case solution conditions
+            IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
+            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid));
+
+            //Get selected case solution conditions
+
+            var model = new CaseSolutionInputViewModel
+            {
+                CaseSolutionFieldSettings = feildSettings,
+                CSSelectedSettingsField = lFieldSettingSelected.ToList()
+            };
+
+            return PartialView("_Conditions", model);
+        }
 
         public PartialViewResult AddCondition(string conditionid, string casesolutionid)
         {

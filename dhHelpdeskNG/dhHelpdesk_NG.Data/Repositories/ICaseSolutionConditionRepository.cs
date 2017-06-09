@@ -25,6 +25,8 @@
 
         void Add(int casesolutionid, int conditionid);
 
+        void Remove(string condition, int casesolutionid);
+
         IList<CaseSolutionCondition> GetCaseSolutionConditionModel(int casesolutionid, int customerid, string constString);
     }
 }

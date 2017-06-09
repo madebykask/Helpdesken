@@ -40,7 +40,7 @@
                         </td>
                         <td>
                             @Html.DropDownList("lst_" + cs.PropertyName, cs.SelectList, new { @onchange = "DropDownChange(this)", id = "lst_" + cs.PropertyName, multiple = "multiple", @class = "chosen-select" })
-                            <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+                            <input id="btn_@cs.PropertyName" class="btn btn-danger deleterow" onclick="RemoveCondition(this)" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
                         </td>
 
                     </tr>

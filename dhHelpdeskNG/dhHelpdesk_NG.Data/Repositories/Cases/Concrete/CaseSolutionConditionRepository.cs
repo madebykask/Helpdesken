@@ -290,6 +290,31 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
         }
 
+        public void Remove(string condition, int casesolutionid)
+        {
+            string sql = string.Empty;
+            string empty = string.Empty;
+
+
+            sql = "DELETE FROM tblCaseSolutionCondition WHERE Property_Name='" + condition + "' AND CaseSolution_Id = " + casesolutionid + "";
+
+            string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand { Connection = connection, CommandType = CommandType.Text })
+                {
+                    cmd.CommandText = sql;
+                    if (connection.State == ConnectionState.Closed)
+                    {
+                        connection.Open();
+                    }
+                    cmd.ExecuteNonQuery();
+
+                }
+            }
+        }
+
         public void Add(int casesolutionid, int conditionid)
         {
             string sql = string.Empty;
