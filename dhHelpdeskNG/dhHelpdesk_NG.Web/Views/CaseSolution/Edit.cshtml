@@ -32,6 +32,13 @@
     string ProductAreasIds = ViewBag.selectedProductAreas;
 }
 
+
+@{
+    string SelectedValues = ViewBag.selectedValues;
+}
+
+
+
 @using (Html.BeginForm("edit", "casesolution", new { id = Model.CaseSolution.Id }, FormMethod.Post, new { id = "target" }))
 {   
     @Html.Hidden("PageId", backPageId)
@@ -41,6 +48,8 @@
     @Html.Hidden("selectedStatuses", StatusIds)
     @Html.Hidden("selectedUserWgs", UserWgIds)
     @Html.Hidden("selectedProductAreas", ProductAreasIds)
+
+    @Html.Hidden("selectedValues", SelectedValues)
 
     <div class="secnavs fixed">
         <div class="pull-left">

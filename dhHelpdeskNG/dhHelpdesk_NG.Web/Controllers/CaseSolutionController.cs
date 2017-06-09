@@ -435,18 +435,18 @@ namespace DH.Helpdesk.Web.Controllers
                     JsonRequestBehavior.AllowGet);
         }
 
-                    
-        public ActionResult AddCondition(string conditionid, string casesolutionid)
+
+        public PartialViewResult AddCondition(string conditionid, string casesolutionid)
         {
             string condid = conditionid.Replace("'", "");
             string caid = casesolutionid.Replace("'", "");
 
             this._caseSolutionConditionService.Add(Convert.ToInt32(caid), Convert.ToInt32(condid));
-            
+
 
             //Get not selected case solution conditions
             IEnumerable<CaseSolutionSettingsField> lFieldSetting = new List<CaseSolutionSettingsField>();
-            lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(Convert.ToInt32(casesolutionid));
+            lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(Convert.ToInt32(caid));
 
             List<SelectListItem> feildSettings = null;
             feildSettings = lFieldSetting
@@ -460,11 +460,17 @@ namespace DH.Helpdesk.Web.Controllers
 
             //Get selected case solution conditions
             IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
-            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(casesolutionid));
+            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid));
 
             //Get selected case solution conditions
 
-            return null;
+            var model = new CaseSolutionInputViewModel
+            {
+                CaseSolutionFieldSettings = feildSettings,
+                CSSelectedSettingsField = lFieldSettingSelected.ToList()
+            };
+
+            return PartialView("_Conditions", model);
         }
 
         [ValidateInput(false)]
@@ -948,7 +954,38 @@ namespace DH.Helpdesk.Web.Controllers
             //Get selected case solution conditions
             IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
             lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(caseSolution.Id);
-          
+            string selval = string.Empty;
+            string bagresult = string.Empty;
+
+
+            foreach (var jj in lFieldSettingSelected)
+            {
+                selval = string.Empty;
+                foreach (var nn in jj.SelectedValues)
+                {
+                    if (selval == string.Empty)
+                    {
+                        selval = jj.PropertyName + ":" + nn.ToString();
+                    }
+                    else
+                    {
+                        selval = selval + "_" + nn.ToString();
+                    }
+
+                }
+
+
+                if (bagresult == string.Empty)
+                {
+                    bagresult = selval;
+                }
+                else
+                {
+                    bagresult = bagresult + Environment.NewLine + selval;
+                }
+
+            }
+            ViewBag.selectedValues = bagresult;
             //Get selected case solution conditions
 
 

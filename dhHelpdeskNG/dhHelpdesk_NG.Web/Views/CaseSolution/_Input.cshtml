@@ -195,102 +195,53 @@
 
                     @* <div id=" divConditions" style="display:none" class="notifier-block hideshow">*@
                     <div id="divConditions" style="display: none" class="notifier-block hideshow">
-                        <h4>@Translation.Get("Villkor", Enums.TranslationSource.TextTranslation)</h4>
-                        <div class="row">
-                            <div class="span12">
-                                <table class="tableform" border="0">
-                                    <tr style="width:100%">
-                                        <td style="width:100%">
-                                            @Translation.Get("Detta arbetsflöde kommer endast visas om alla villkor är uppfyllda i ärendet. Det kan finnas mer än ett värde för varje fält, ett av värdena för fältet måste vara uppfyllt.", Enums.TranslationSource.TextTranslation)
-                                        </td>
-
-                                    </tr>
-                                </table>
-
-                                <table class="tableform" border="0">
-
-
-                                    <tr>
-                                        <td style="width:200px">
-                                            @Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.DropDownList("lstAddFieldSettings", Model.CaseSolutionFieldSettings, new { id = "lstAddFieldSettings", @class = "chosen-select" })
-                                            <input class="btn btn-success addrow" onclick="AddCondition()" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" />
-                                        </td>
-                                    </tr>
-
-                                    @foreach (var cs in Model.CSSelectedSettingsField)
-                                    {
-                                        <tr>
-                                            <td style="width:200px">
-                                                @Translation.Get(cs.Text, Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            <td>
-                                                @Html.DropDownList("lst_" + cs.PropertyName, cs.SelectList, new { id = "lst_" + cs.PropertyName, multiple = "multiple", @class = "chosen-select" })
-                                                <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
-                                            </td>
-                                           
-                                        </tr>
-                                    }
-                                    @*<tr>
-                                            <td style="width:200px">
-                                                @Translation.Get("Ärende - State Secondary", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            <td>
-                                                @Html.DropDownList("lstStateSecondary", Model.StateSecondariesSelect, new { id = "lstStateSecondary", multiple = "multiple", @class = "chosen-select" })
-                                            </td>
-
-                                        </tr>
-
-                                        <tr>
-                                            <td style="width:200px">
-                                                @Translation.Get("Ärende - Driftgrupp", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            <td>
-                                                @Html.DropDownList("lstCaseWorkingGroup", Model.CaseWorkingGroupSelect, new { id = "lstCaseWorkingGroup", multiple = "multiple", @class = "chosen-select" })
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td style="width:200px">
-                                                @Translation.Get("Ärende - Prioritet", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            <td>
-                                                @Html.DropDownList("lstCasePriority", Model.CasePrioritySelect, new { id = "lstCasePriority", multiple = "multiple", @class = "chosen-select" })
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Translation.Get("Ärende - Status", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            <td>
-                                                @Html.DropDownList("lstCaseStatus", Model.CaseStatusSelect, new { id = "lstCaseStatus", multiple = "multiple", @class = "chosen-select" })
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Translation.Get("Användare - Driftgrupp", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            <td>
-                                                @Html.DropDownList("lstUserWg", Model.UserWgSelect, new { id = "lstUserWg", multiple = "multiple", @class = "chosen-select" })
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Translation.Get("Ärende - Produktområde", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            <td>
-                                                @Html.DropDownList("lstCaseProductArea", Model.ProductAreaSelect, new { id = "lstCaseProductArea", multiple = "multiple", @class = "chosen-select" })
-                                            </td>
-
-                                        </tr>*@
-                                </table>
-                            </div>
+                        <div id="divReplaceConditions">
+                            @Html.Partial("_Conditions", Model)
                         </div>
+
+                        @*<h4>@Translation.Get("Villkor", Enums.TranslationSource.TextTranslation)</h4>
+                            <div class="row">
+                                <div class="span12">
+                                    <table class="tableform" border="0">
+                                        <tr style="width:100%">
+                                            <td style="width:100%">
+                                                @Translation.Get("Detta arbetsflöde kommer endast visas om alla villkor är uppfyllda i ärendet. Det kan finnas mer än ett värde för varje fält, ett av värdena för fältet måste vara uppfyllt.", Enums.TranslationSource.TextTranslation)
+                                            </td>
+
+                                        </tr>
+                                    </table>
+
+                                    <table class="tableform" border="0">
+
+
+                                        <tr>
+                                            <td style="width:200px">
+                                                @Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td>
+                                                @Html.DropDownList("lstAddFieldSettings", Model.CaseSolutionFieldSettings, new { id = "lstAddFieldSettings", @class = "chosen-select" })
+                                                <input class="btn btn-success addrow" onclick="AddCondition()" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" />
+                                            </td>
+                                        </tr>
+
+                                        @foreach (var cs in Model.CSSelectedSettingsField)
+                                        {
+                                            <tr>
+                                                <td style="width:200px">
+                                                    @Translation.Get(cs.Text, Enums.TranslationSource.TextTranslation)
+                                                </td>
+                                                <td>
+                                                    @Html.DropDownList("lst_" + cs.PropertyName, cs.SelectList, new { id = "lst_" + cs.PropertyName, multiple = "multiple", @class = "chosen-select" })
+                                                    <input class="btn btn-danger deleterow" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+                                                </td>
+
+                                            </tr>
+                                        }
+
+                                    </table>
+                                </div>
+                            </div>*@
+
                     </div>
                     <div style="@Model.displayUserInfoHtml()" class="notifier-block hideshow">
                         <h4>@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</h4>
@@ -2311,18 +2262,61 @@
 
     });
 
+
+    function DropDownChange(v)
+    {
+        //var txt=v.id.toString().replace('lst','txt');
+        //alert(txt);
+        //var g=document.getElementById(txt);
+        //alert(g);
+        //var SelectedValue = $(v).val();
+        //document.getElementById('selectedValues').value=SelectedValue;
+        //alert(document.getElementById('selectedValues').value);
+        //var name=v.name;
+        
+        //name=name.toString().replace('lst_','');
+        //var pos=name.indexOf('.');
+        
+        ////name=name.toString().substring(0, pos);
+        
+        ////alert(document.getElementById('selectedValues').value=SelectedValue);
+        //var savedvals=document.getElementById('selectedValues').value;
+        //var pos1=savedvals.indexOf(name);
+        //alert(pos1);
+        
+    }
+
     function AddCondition()
     {
-        var id=document.getElementById('CaseSolution_Id').value;        
-        var e = document.getElementById("lstAddFieldSettings");         
+        var id=document.getElementById('CaseSolution_Id').value;
+        var e = document.getElementById("lstAddFieldSettings");
         var value = e.options[e.selectedIndex].value;
 
-        $.get("/CaseSolution/AddCondition/", { conditionid: "'" + value.toString() + "'", casesolutionid: "'" + id.toString() + "'" }, function (result) {
+        if (id!=0 && value != 0)
+        {
+            var url = "/CaseSolution/AddCondition/";
+            $.post(url, { conditionid: value.toString(), casesolutionid: id.toString() })
+                 .done(function (response) {
+                     alert(response);
+                     $("#divReplaceConditions").html(response);
+                 });
+        }
+        //$.get("/CaseSolution/AddCondition/", { conditionid: "'" + value.toString() + "'", casesolutionid: "'" + id.toString() + "'" }, function (result) {
 
-            if (parseInt(result) > 0) {            
-                $("#divConditions").val(result);
-            }
-        });
+        //    //if (parseInt(result) > 0) {
+        //    alert(result);
+        //    $("#divConditions").val(result);
+        //    //}
+        //});
+
+
+
+
+        //$("#divConditions").load('@(Url.Action("AddCondition", "CaseSolution", null, Request.Url.Scheme))?conditionid=' + value.toString(),'casesolutionid=' + id.toString());
+
+
+
+
 
     }
 
