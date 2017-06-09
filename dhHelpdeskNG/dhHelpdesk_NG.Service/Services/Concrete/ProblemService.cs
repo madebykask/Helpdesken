@@ -46,7 +46,7 @@
 
         public IList<ProblemOverview> GetCustomerProblems(int customerId, bool checkCaseRelation = true)
         {
-            return this.problemRepository.FindByCustomerId(customerId, checkCaseRelation).OrderBy(x => x.ProblemNumber).ToList();
+            return this.problemRepository.FindByCustomerId(customerId, checkCaseRelation).OrderBy(x => x.Name).ToList();
         }
 
         public IList<ProblemOverview> GetCustomerProblems(int customerId, EntityStatus show)
