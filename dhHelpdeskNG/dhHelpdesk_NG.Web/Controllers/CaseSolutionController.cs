@@ -26,6 +26,7 @@ namespace DH.Helpdesk.Web.Controllers
     using Common.Enums.Settings;
     using System;
     using DH.Helpdesk.Domain.Cases;
+    using System.Web;
 
     public class CaseSolutionController : UserInteractionController
     {
@@ -439,7 +440,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             string condid = condition.Replace("'", "");
             string caid = casesolutionid.Replace("'", "");
-            this._caseSolutionConditionService.Add(Convert.ToInt32(caid), Convert.ToInt32(condid));
+            this._caseSolutionConditionService.Remove(Convert.ToString(condid), Convert.ToInt32(caid));
 
             //Get not selected case solution conditions
             IEnumerable<CaseSolutionSettingsField> lFieldSetting = new List<CaseSolutionSettingsField>();
@@ -470,7 +471,7 @@ namespace DH.Helpdesk.Web.Controllers
             return PartialView("_Conditions", model);
         }
 
-        public PartialViewResult AddCondition(string conditionid, string casesolutionid)
+        public ActionResult AddCondition(string conditionid, string casesolutionid)
         {
             string condid = conditionid.Replace("'", "");
             string caid = casesolutionid.Replace("'", "");

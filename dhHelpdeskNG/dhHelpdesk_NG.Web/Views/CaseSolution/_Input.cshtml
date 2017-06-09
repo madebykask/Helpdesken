@@ -196,6 +196,7 @@
                     @* <div id=" divConditions" style="display:none" class="notifier-block hideshow">*@
                     <div id="divConditions" style="display: none" class="notifier-block hideshow">
                         <div id="divReplaceConditions">
+
                             @Html.Partial("_Conditions", Model)
                         </div>
 
@@ -2273,35 +2274,37 @@
         //document.getElementById('selectedValues').value=SelectedValue;
         //alert(document.getElementById('selectedValues').value);
         //var name=v.name;
-        
+
         //name=name.toString().replace('lst_','');
         //var pos=name.indexOf('.');
-        
+
         ////name=name.toString().substring(0, pos);
-        
+
         ////alert(document.getElementById('selectedValues').value=SelectedValue);
         //var savedvals=document.getElementById('selectedValues').value;
         //var pos1=savedvals.indexOf(name);
         //alert(pos1);
-        
+
     }
 
     function RemoveCondition (v)
     {
         var t=v.id.toString().replace('btn_','');
         var id=document.getElementById('CaseSolution_Id').value;
-        
+
         if (id!=0 && t != '')
         {
             var url = "/CaseSolution/RemoveCondition/";
             $.post(url, { condition: t.toString(), casesolutionid: id.toString() })
                  .done(function (response) {
-                     alert(response);
+
                      $("#divReplaceConditions").html(response);
                  });
         }
 
     }
+
+    
 
     function AddCondition()
     {
@@ -2311,29 +2314,21 @@
 
         if (id!=0 && value != 0)
         {
-            var url = "/CaseSolution/AddCondition/";
-            $.post(url, { conditionid: value.toString(), casesolutionid: id.toString() })
-                 .done(function (response) {
-                     alert(response);
-                     $("#divReplaceConditions").html(response);
-                 });
+            
+
+
+            $.post("/CaseSolution/AddCondition/", { conditionid: value.toString(), casesolutionid: "'" + id.toString() + "'" }, function (returnHtml) {
+                //    $('#divReplaceConditions').html($(returnHtml));
+                alert(returnHtml);
+                $('#divReplaceConditions').load(returnHtml);
+            });
+            //alert(id.toString());
+
+            //$("#divReplaceConditions").load("/CaseSolution/AddCondition/?conditionid=" + value.toString(), "casesolutionid:" + " + id.toString() + "); 
+
+
+
         }
-        //$.get("/CaseSolution/AddCondition/", { conditionid: "'" + value.toString() + "'", casesolutionid: "'" + id.toString() + "'" }, function (result) {
-
-        //    //if (parseInt(result) > 0) {
-        //    alert(result);
-        //    $("#divConditions").val(result);
-        //    //}
-        //});
-
-
-
-
-        //$("#divConditions").load('@(Url.Action("AddCondition", "CaseSolution", null, Request.Url.Scheme))?conditionid=' + value.toString(),'casesolutionid=' + id.toString());
-
-
-
-
 
     }
 
