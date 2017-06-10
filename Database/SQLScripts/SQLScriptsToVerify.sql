@@ -149,3 +149,10 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 		ALTER TABLE [dbo].tblGlobalSettings ADD ExtendedCasePath nvarchar(500) NULL 
 	end
 GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ActiveTab' and sysobjects.name = N'tblCaseLock')
+	begin
+		ALTER TABLE [dbo].tblCaseLock ADD ActiveTab nvarchar(100) NULL 
+	end
+GO
+
