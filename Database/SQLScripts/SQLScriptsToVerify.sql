@@ -111,3 +111,41 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 		ALTER TABLE [dbo].[tblWorkingGroup] ADD [WorkingGroupId] int not null Default(0)
 	end
 GO
+
+
+--FOR CURRENT RECORD - TEST
+
+----tblComputerUsers - make sure it does not allow null and add newid()
+--if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ComputerUserGUID' and sysobjects.name = N'tblComputerUsers')
+--begin
+--		EXECUTE  sp_executesql  "update tblComputerUsers set ComputerUserGUID = newid() where ComputerUserGUID is null"
+
+--		if not exists(select *
+--					  from sys.all_columns c
+--					  join sys.tables t on t.object_id = c.object_id
+--					  join sys.schemas s on s.schema_id = t.schema_id
+--					  join sys.default_constraints d on c.default_object_id = d.object_id
+--					  where t.name = 'tblComputerUsers'
+--					  and c.name = 'ComputerUserGUID'
+--					  and s.name = 'dbo'
+--					  and d.name = 'DF_ComputerUserGUID')
+--		begin
+--			Alter table tblComputerUsers
+--			Add constraint DF_ComputerUserGUID default (newid()) For ComputerUserGUID		
+--		end		
+
+--		Alter table tblComputerUsers
+--		ALTER COLUMN [ComputerUserGUID] uniqueIdentifier NOT NULL
+--end
+--else
+--begin
+--	Alter table tblComputerUsers
+--	Add ComputerUserGUID uniqueIdentifier NOT NULL CONSTRAINT DF_ComputerUserGUID default (newid())
+--end
+--GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ExtendedCasePath' and sysobjects.name = N'tblGlobalSettings')
+	begin
+		ALTER TABLE [dbo].tblGlobalSettings ADD ExtendedCasePath nvarchar(500) NULL 
+	end
+GO

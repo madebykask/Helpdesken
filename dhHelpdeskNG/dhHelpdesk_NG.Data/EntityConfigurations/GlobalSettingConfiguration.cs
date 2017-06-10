@@ -39,7 +39,8 @@
             this.Property(x => x.CaseLockTimer).IsRequired();
             this.Property(x => x.CaseLockBufferTime).IsRequired();
             this.Property(x => x.CaseLockExtendTime).IsRequired();
-
+            this.Property(x => x.ExtendedCasePath).IsOptional().HasMaxLength(500);
+            
             this.ToTable("tblglobalsettings");
         }
     }

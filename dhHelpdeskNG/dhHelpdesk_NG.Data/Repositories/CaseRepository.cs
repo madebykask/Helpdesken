@@ -125,8 +125,13 @@ namespace DH.Helpdesk.Dal.Repositories
             var userLanguageId = inputParameters["User_LanguageId"].ToString();
             var caseStateSecondaryId = inputParameters["Case_StateSecondaryId"].ToString();
             var caseWorkingGroupId = inputParameters["Case_WorkingGroupId"].ToString();
-
+            string extendedCasePath = inputParameters["ExtendedCasePath"].ToString();
+            
             if (caseSolutionId == 0)
+                return null;
+
+            //if no path is specified in GlobalSetting
+            if (string.IsNullOrEmpty(extendedCasePath))
                 return null;
 
             var caseSolution = this.DataContext.CaseSolutions.Where(c => c.Customer_Id == customerId && c.Id == caseSolutionId).FirstOrDefault();
@@ -137,20 +142,19 @@ namespace DH.Helpdesk.Dal.Repositories
                 {
                     CaseId = caseId,
                     Id = x.Id,
-                    Path = caseSolution.TemplatePath.Replace("&extendedCaseGuid=[extendedCaseGuid]", "").Replace("[LanguageId]", userLanguageId).Replace("[CaseId]", caseId.ToString()).Replace("[CaseStateSecondaryId]", caseStateSecondaryId.ToString()).Replace("[CaseWorkingGroupId]", caseWorkingGroupId.ToString()),
+                    Path = extendedCasePath.Replace("&extendedCaseGuid=[extendedCaseGuid]", "").Replace("[LanguageId]", userLanguageId).Replace("[CaseId]", caseId.ToString()).Replace("[CaseStateSecondaryId]", caseStateSecondaryId.ToString()).Replace("[CaseWorkingGroupId]", caseWorkingGroupId.ToString()),
                     Name = (x.Name != null ? x.Name : caseSolution.Name)
                 }).ToList();
             }
             else
             {
-                        
                 extendedForm = this.DataContext.Cases.Where(c => c.Customer_Id == customerId && c.Id == caseId).FirstOrDefault().ExtendedCaseDatas.Select(x => new ExtendedCaseFormModel
                 {
                     CaseId = caseId,
                     Id = x.ExtendedCaseForm.Id,
-                    //  Path = caseSolution.TemplatePath.Replace("[extendedCaseGuid]", x.ExtendedCaseGuid.ToString()).Replace("[LanguageId]", userLanguageId).Replace("[CaseId]", caseId.ToString()).Replace("[CaseStateSecondaryId]", caseStateSecondaryId.ToString()).Replace("[CaseWorkingGroupId]", caseWorkingGroupId.ToString()),
+                    //  Path = extendedCasePath.Replace("[extendedCaseGuid]", x.ExtendedCaseGuid.ToString()).Replace("[LanguageId]", userLanguageId).Replace("[CaseId]", caseId.ToString()).Replace("[CaseStateSecondaryId]", caseStateSecondaryId.ToString()).Replace("[CaseWorkingGroupId]", caseWorkingGroupId.ToString()),
                     //Temp, Problem opening extended case with a guid... take back above code when fixed.
-                    Path = caseSolution.TemplatePath.Replace("[extendedCaseGuid]", "").Replace("[LanguageId]", userLanguageId).Replace("[CaseId]", caseId.ToString()).Replace("[CaseStateSecondaryId]", caseStateSecondaryId.ToString()).Replace("[CaseWorkingGroupId]", caseWorkingGroupId.ToString()),
+                    Path = extendedCasePath.Replace("[extendedCaseGuid]", "").Replace("[LanguageId]", userLanguageId).Replace("[CaseId]", caseId.ToString()).Replace("[CaseStateSecondaryId]", caseStateSecondaryId.ToString()).Replace("[CaseWorkingGroupId]", caseWorkingGroupId.ToString()),
                     Name = (x.ExtendedCaseForm.Name != null ? x.ExtendedCaseForm.Name : caseSolution.Name)
                 }).ToList();
             }

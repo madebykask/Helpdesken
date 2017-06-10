@@ -5065,6 +5065,11 @@ namespace DH.Helpdesk.Web.Controllers
             int caseSolutionId = (m.case_.CaseSolution_Id != null) ? m.case_.CaseSolution_Id.Value : (templateId.HasValue ? templateId.Value : 0);
             var inputParameters = new Dictionary<string, string>();
 
+
+            var extendedCasePath = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
+
+
+            inputParameters.Add("ExtendedCasePath", extendedCasePath.ToString());
             inputParameters.Add("CustomerId", customerId.ToString());
             inputParameters.Add("CaseId", (m.case_ != null ? m.case_.Id.ToString(): "0"));
             inputParameters.Add("CaseSolutionId", caseSolutionId.ToString());

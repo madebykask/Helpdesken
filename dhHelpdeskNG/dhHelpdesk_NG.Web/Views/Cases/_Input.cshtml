@@ -150,7 +150,7 @@
             <ul class="nav nav-tabs" id="myTab">
                 <li data-active-tab="case-tab" class="@((Model.ActiveTab == ""  || Model.ActiveTab == DH.Helpdesk.Common.Constants.CaseTabs.CaseTab) ? "active": "")">
 
-                    @if (Model.CaseTemplateName != null)
+                    @if (Model.CaseTemplateName != null && Model.ExtendedCases == null)
                 {
                         <a id="case-tab" href="#case" class="case">@Model.CaseTemplateName</a>
     }
