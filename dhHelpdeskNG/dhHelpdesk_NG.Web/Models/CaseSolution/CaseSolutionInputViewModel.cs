@@ -87,5 +87,6 @@
 
         //public IList<SelectListItem> TabList { get; set; }
         public string DefaultTab { get; set; }
+        public string ValidateOnChange { get; set; }
     }
 }
