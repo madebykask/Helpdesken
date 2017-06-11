@@ -2,9 +2,6 @@
 
 var _parameters = window.parameters;
    
-var caseButtonsToLock = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
-                    '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
-                    '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton');
 
 $(function () {
     var $userId = $('#case__ReportedBy');
@@ -862,91 +859,11 @@ $(function () {
 
         return that;
     }
-
-    dhHelpdesk.refreshCaseInfo = function (updatedInfo) {
-        if (updatedInfo == null)
-            return;
-
-        changeCaseButtonsState(false);
-
-        $('#case__ReportedBy').val(updatedInfo.ReportedBy);
-        $('#case__PersonsName').val(updatedInfo.PersonsName);
-        $('#case__PersonsPhone').val(updatedInfo.PersonsPhone);
-        
-        $('#case__CaseType_Id').val(updatedInfo.CaseType_Id).change();        
-        
-        $('#case__ProductArea_Id').val(updatedInfo.ProductArea_Id).change();
-        $('#case__WorkingGroup_Id').val(updatedInfo.WorkingGroup_Id).change();
-        $('#workingGroup_Name').val(updatedInfo.WorkingGroupCaption);        
-        $('#case__Priority_Id').val(updatedInfo.Priority_Id).change();        
-
-        $("#case__PlanDate").datepicker({
-            format: updatedInfo.DateFormat.toLowerCase(),
-            autoclose: true
-        }).datepicker('setDate', updatedInfo.PlanDateJS);
-
-        $("#case__WatchDate").datepicker({
-            format: updatedInfo.DateFormat.toLowerCase(),
-            autoclose: true
-        }).datepicker('setDate', updatedInfo.WatchDateJS);
-        
-        $("#CaseTemplate_Department_Id").val();
-        $("#CaseTemplate_OU_Id").val();
-
-        if (updatedInfo.Department_Id != null && updatedInfo.Department_Id != 0) {
-            $("#CaseTemplate_Department_Id").val(updatedInfo.Department_Id);
-        }
-         
-        if (updatedInfo.OU_Id != null && updatedInfo.OU_Id != 0) {
-            $("#CaseTemplate_OU_Id").val(updatedInfo.OU_Id);
-        }
-
-        $('#case__Region_Id').val(updatedInfo.Region_Id).change();
-        $('#RegionName').val(updatedInfo.RegionCaption);
-        $('#DepartmentName').val(updatedInfo.DepartmentCaption);
-        $('#OuName').val(updatedInfo.OUCaption);
-                
-        $.get('/Cases/GetCaseFilesJS', { caseId: updatedInfo.Id, now: Date.now() }, function (data) {
-            $('#divCaseFiles').html(data);            
-            $(document).trigger("OnUploadedCaseFileRendered", []);
-            bindDeleteCaseFileBehaviorToDeleteButtons();
-        });
-
-        $.get('/Cases/GetCaseInputModelForLog', { caseId: updatedInfo.Id, now: Date.now() }, function (data) {
-            $('#logtab').html(data);            
-        }).done(function () {
-            
-        });
-        
-        $.get('/Cases/GetCaseInputModelForHistory', { caseId: updatedInfo.Id, now: Date.now() }, function (data) {
-            $('#case__Status_Id').val(updatedInfo.Status_Id).change();
-            $('#statusCaption').val(updatedInfo.StatusCaption).change();
-            $('#case__StateSecondary_Id').val(updatedInfo.StateSecondary_Id).change();
-            $(".readonlySubstate").val(updatedInfo.StateSecondary_Id);
-            $("#subStateCaption").val(updatedInfo.SubStateCaption);
-            $('#historytab').html(data);
-        }).done(function () {
-            changeCaseButtonsState(true);
-        });
-
-    }
-
   
     function ClearCostCentre() {
         $('#case__CostCentre').val('');
     }
 
-    function changeCaseButtonsState(state) {
-        if (state) {
-            caseButtons.removeClass('disabled');
-            caseButtons.css("pointer-events", "");
-            $(templateQuickButtonIndicator).css("display", "none");
-        }
-        else {
-            caseButtons.addClass("disabled");
-            caseButtons.css("pointer-events", "none");
-            $(templateQuickButtonIndicator).css("display", "block");
-        }
-    }
+    
 
 });

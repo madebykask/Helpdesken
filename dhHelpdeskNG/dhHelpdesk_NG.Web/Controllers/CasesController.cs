@@ -64,8 +64,7 @@ namespace DH.Helpdesk.Web.Controllers
 
     using DHDomain = DH.Helpdesk.Domain;
     using ParentCaseInfo = DH.Helpdesk.BusinessData.Models.Case.ChidCase.ParentCaseInfo;
-    using DH.Helpdesk.Web.Enums;
-    using System.Web.Script.Serialization;
+    using DH.Helpdesk.Web.Enums;    
     using Microsoft.Reporting.WebForms;
     using DH.Helpdesk.BusinessData.Models.ReportService;
     using DH.Helpdesk.Services.Services.Reports;
@@ -1516,10 +1515,13 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]        
         public JsonResult GetCaseInfo(int caseId)
         {
-            if (!SessionFacade.IsCaseDataChanged)
-                return Json(new { needUpdate = false, shouldReload = false, newData = "" }, JsonRequestBehavior.AllowGet);
+            //if (!SessionFacade.IsCaseDataChanged)
+            //    return Json(new { needUpdate = false, shouldReload = false, newData = "" }, JsonRequestBehavior.AllowGet);
 
             var _case = _caseService.GetCaseById(caseId);
+            if (_case == null)
+                return Json(new { needUpdate = false, shouldReload = false, newData = "" }, JsonRequestBehavior.AllowGet);
+
             if (_case.FinishingDate != null)
             {
                 SessionFacade.IsCaseDataChanged = false;
@@ -1537,24 +1539,24 @@ namespace DH.Helpdesk.Web.Controllers
                 PlanDateJS = _case.PlanDate.HasValue ? _case.PlanDate.Value.ToShortDateString() : "",
                 WatchDateJS = _case.WatchDate.HasValue ? _case.WatchDate.Value.ToShortDateString() : "",
                 Region_Id = _case.Region_Id,
-                RegionCaption = _case.Region?.Name,
+                RegionName = _case.Region?.Name,
                 Department_Id = _case.Department_Id,
-                DepartmentCaption = _case.Department?.DepartmentName,
+                DepartmentName = _case.Department?.DepartmentName,
                 OU_Id = _case.OU_Id,
-                OUCaption = _case.Ou != null? _case.Ou.Parent != null? 
+                OUName = _case.Ou != null? _case.Ou.Parent != null? 
                                 string.Format("{0} - {1}", _case.Ou.Parent.Name, _case.Ou.Name): _case.Ou.Name : string.Empty,
                 CaseType_Id = _case.CaseType_Id,
-                CaseTypeCaption = _case.CaseType?.Name,
+                CaseTypeName = _case.CaseType?.Name,
                 Priority_Id = _case.Priority_Id,
-                PriorityCaption = _case.Priority?.Name,
+                PriorityName = _case.Priority?.Name,
                 ProductArea_Id = _case.ProductArea_Id,
-                ProductAreaCaption = _case.ProductArea?.ResolveFullName(),
+                ProductAreaName = _case.ProductArea?.ResolveFullName(),
                 StateSecondary_Id = _case.StateSecondary_Id,
-                SubStateCaption = _case.StateSecondary?.Name,
+                SubStateName = _case.StateSecondary?.Name,
                 Status_Id = _case.Status_Id,
-                StatusCaption = _case.Status?.Name,
+                StatusName = _case.Status?.Name,
                 WorkingGroup_Id = _case.WorkingGroup_Id,
-                WorkingGroupCaption = _case.Workinggroup?.WorkingGroupName
+                WorkingGroupName = _case.Workinggroup?.WorkingGroupName
             };
             
             SessionFacade.IsCaseDataChanged = false;
@@ -4349,8 +4351,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var m = new CaseInputViewModel();
             SessionFacade.IsCaseDataChanged = false;
-
-            m.ContainsExtendedCase = true;
+            
             m.BackUrl = backUrl;
             m.CanGetRelatedCases = SessionFacade.CurrentUser.IsAdministrator();
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
@@ -5080,20 +5081,21 @@ namespace DH.Helpdesk.Web.Controllers
             if (m.case_ != null && m.case_.Id > 0)
             {
                 inputParameters.Add("CaseGuid", m.case_.CaseGUID.ToString());
-            }
-
-            m.ExtendedCases = _caseService.GetExtendedCaseForms(inputParameters);
+            }            
 
             if (case_ != null)
             {
                 m.MapCaseToCaseInputViewModel(case_, userTimeZone);
             }
 
-            m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.InsideTheCase);
+            m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.InsideTheCase);
 
             m.CasePrintView = new ReportModel(false);
 
             m.UserHasInvoicePermission = userHasInvoicePermission;
+
+            m.ExtendedCases = _caseService.GetExtendedCaseForms(inputParameters);
+            m.ContainsExtendedCase = m.ExtendedCases != null && m.ExtendedCases.Any();
 
             return m;
         }

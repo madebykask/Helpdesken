@@ -7,7 +7,7 @@
 @using DH.Helpdesk.Web
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
-@using DH.Helpdesk.Web.Models.Invoice
+@using DH.Helpdesk.Common.Constants;
 
 <script type="text/javascript">
     window.parameters = {
@@ -53,27 +53,45 @@
         selectedLabel: '@Translation.GetForJS("vald")',
 
         fileNameError: '@Translation.GetForJS("Filnamn är inte giltigt. Special tecken (!@#=$&?*) är inte tillåtna")',
+        containsExtendedCase: '@Model.ContainsExtendedCase',
+        containsEForm: '@(Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)',
 
-        caseFieldNames:{
+        caseFieldIds:{
+            CaseId: "case__Id",
             CustomerId: "case__Customer_Id",
             RegionId: "case__Region_Id",
+            RegionName: "RegionName",
             DepartmentId: "case__Department_Id",
+            DepartmentName: "DepartmentName",
             OUId: "case__Ou_Id",
+            OUName: "OuName",
             SourceId: "CustomerRegistrationSourceId",
             CaseTypeId: "case__CaseType_Id",
             ProductAreaId: "case__ProductArea_Id",
             CategoryId: "case__Category_Id",
             SupplierId: "case__Supplier_Id",
             WorkingGroupId: "case__WorkingGroup_Id",
+            WorkingGroupName: "workingGroup_Name",
             ResponsibleId: "ResponsibleUser_Id",
             AdministratorId: "Performer_Id",
             PriorityId: "case__Priority_Id",
             StatusId: "case__Status_Id",
+            StatusName: "statusName",
             SubStatusId: "case__StateSecondary_Id",
+            SubStatusName: "subStateName",
             CausingPartId: "case__CausingPartId",
             ClosingReasonId: "CaseLog_FinishingType",
-            FinishingDate: "CaseLog_FinishingDate"
+            FinishingDate: "CaseLog_FinishingDate",
+            UserCode: "case__UserCode",
+            ReportedBy: "case__ReportedBy",
+            CaseLanguageId: "case__RegLanguage_Id",
+            PersonsName: "case__PersonsName",
+            PersonsPhone:  "case__PersonsPhone",
+            PlanDate: "case__PlanDate",
+            WatchDate: "case__WatchDate"
+
         },
+
         casesScopeInitParameters: {
             requiredFieldsMessage: '@Translation.GetForJS("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")',
             getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")',
@@ -88,58 +106,44 @@
             noText: '@Translation.GetForJS("Nej")',
             validationMessages:  ['@Html.Raw(Translation.GetForJS("måste anges"))'],
             mandatoryFieldsText: '@Translation.GetForJS("Obligatoriska fält")',
-            formatFieldsText: '@Translation.GetForJS("Giltiga Format är")'
+            formatFieldsText: '@Translation.GetForJS("Giltiga Format är")',
+            descriptionText: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)'
+
         }
     };
-
-
-
-
 
 </script>
 
 @Scripts.Render("~/bundles/cases/_input")
+<script type="text/javascript" src="@Url.Content("~/Content/js/Cases/components/EditPage.js")"></script>
+
 @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseSolutionFields.AddFollowersBtn) && Model.caseFieldSettings.IsFieldVisible(GlobalEnums.TranslationCaseFields.AddFollowersBtn))
 {
     @Scripts.Render(BundleConfig.ScriptNames.CaseUserSearchCommon)
 }
 
-
 <script type="text/javascript">
-    function CalcSLA()
-    {
-        $.post('@Url.Content("~/Cases/CalculateSLA/")', {caseId:'@Model.case_.Id', userId:'@SessionFacade.CurrentUser.Id', simulateTime:'@Model.case_.ChangeTime.AddSeconds(5)'},
-            function(data) {
-                alert(data);
-            });
-    }
-
+    /* TODO: move to EditPage.js*/ 
     function GetLanguage()
     {
-
         var caseid = document.getElementById('case__Id').value;
         
         if (caseid == 0)
-        {
-        
+        {        
             var reported  = document.getElementById('case__UserCode').value;
             var reportedId  = document.getElementById('case__ReportedBy').value;
             
             var region = document.getElementById('case__Region_Id').value;            
             var dep = document.getElementById('case__Department_Id').value;            
             var customer = document.getElementById('case__Customer_Id').value;
-        
             
             $.get("/cases/LookupLanguage/", { customerid: "'" + customer.toString() + "'", notifier: "'" + reported.toString() + "'", region: "'" + region.toString() + "'", department: "'" + dep.toString() + "'", notifierid: "'" + reportedId.toString() + "'" }, function (result) {
-
                 if (parseInt(result) > 0) {            
                     $("#case__RegLanguage_Id").val(result);
                 }
             });
-
         }
     }
-
 
 </script>
 
@@ -148,20 +152,20 @@
     <div class="content onemenu editcase" id="mm1">
         <div class="container">
             <ul class="nav nav-tabs" id="myTab">
-                <li data-active-tab="case-tab" class="@((Model.ActiveTab == ""  || Model.ActiveTab == DH.Helpdesk.Common.Constants.CaseTabs.CaseTab) ? "active": "")">
+                <li data-active-tab="case-tab" class="@((Model.ActiveTab == "" || Model.ActiveTab == CaseTabs.CaseTab) ? "active" : "")">
 
                     @if (Model.CaseTemplateName != null && Model.ExtendedCases == null)
-                {
+                    {
                         <a id="case-tab" href="#case" class="case">@Model.CaseTemplateName</a>
-    }
+                    }
                     else
                     {
                         <a id="case-tab" href="#case" class="case">
-                            @Translation.GetCoreTextTranslation("Ärende")
-                            @if (Model.case_.Id != 0)
-    {
-        @Model.case_.CaseNumber
-                            }
+                        @Translation.GetCoreTextTranslation("Ärende")
+                        @if (Model.case_.Id != 0)
+                        {
+                            @Model.case_.CaseNumber
+                        }
                         </a>
                     }
                 </li>
@@ -175,13 +179,13 @@
                 }
 
                 @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
-{
-    if (Model.DynamicCase.ViewMode == 0)
-    {
+                {
+                    if (Model.DynamicCase.ViewMode == 0)
+                    {
                         <li>
                             <a href="#dh-form-area" id="loadContainer" class="eform" data-state="">@(Translation.Get(Model.DynamicCase.FormName))</a>                            
                         </li>                        
-                       
+
                     }
                     else if (Model.DynamicCase.ViewMode == 1)
                     {
@@ -191,23 +195,21 @@
                     }
                 }
 
-
-                @if (Model.ExtendedCases != null)
-{
-    foreach (var extendedCase in Model.ExtendedCases)
-    {
-                        <li data-active-tab="@string.Format(DH.Helpdesk.Common.Constants.CaseTabs.ExtendedCaseTab, extendedCase.Id)" class="@((Model.ActiveTab == string.Format(DH.Helpdesk.Common.Constants.CaseTabs.ExtendedCaseTab, extendedCase.Id)) ? "active": "")" >
-                            <a href="#container_@extendedCase.Id" id="tabExtendedcase_@extendedCase.Id" class="extendedcase" data-id="@extendedCase.Id" data-state="">@(Translation.Get(extendedCase.Name))</a>
+                @if (Model.ContainsExtendedCase)
+                {
+                    foreach (var extendedCase in Model.ExtendedCases)
+                    {
+                        <li data-active-tab="@string.Format(CaseTabs.ExtendedCaseTab, extendedCase.Id)" class="@((Model.ActiveTab == string.Format(CaseTabs.ExtendedCaseTab, extendedCase.Id)) ? "active" : "")" >
+                            <a href="#container_@extendedCase.Id" id="tabExtendedcase_@extendedCase.Id" class="extendedcase" data-id="@extendedCase.Id" data-state="">@(Translation.GetCoreTextTranslation(extendedCase.Name))</a>
                         </li>
                     }
-                  
+
                 }
 
-
                 @if (Model.CaseLock != null && Model.CaseLock.IsLocked && Model.CaseLock.User != null)
-{
-    if (Model.CaseLock.UserId == SessionFacade.CurrentUser.Id)
-    {
+                {
+                    if (Model.CaseLock.UserId == SessionFacade.CurrentUser.Id)
+                    {
                         <li class="notice">
                             <a>@Translation.GetCoreTextTranslation("OBS! Du har redan öppnat detta ärende i en annan session.")</a>
                         </li>
@@ -220,21 +222,23 @@
                         </li>
                     }
                 }
+
                 @if (Model.OrderId.HasValue)
-{
+                {
                     <li>
                         <a id="case-order-url" href="@Url.Content("~/Orders/Orders/Edit/" + Model.OrderId.Value + "?retToCase=" + Model.IsReturnToCase)">@Translation.GetCoreTextTranslation("Beställning")</a>
                     </li>
                 }
+
                 @if (Model.AccountId.HasValue && Model.AccountActivityId.HasValue)
-{
+                {
                     <li>
                         <a id="case-orderaccount-url" href="@Url.Content("~/OrderAccounts/Orders/Edit/" + Model.AccountId.Value + "?accountActivityId=" + Model.AccountActivityId.Value + "&caseId=" + Model.case_.Id)">@Translation.GetCoreTextTranslation("Beställning konto")</a>
                     </li>
                 }
             </ul>
             <div class="tab-content">
-                <div class="tab-pane tab-pane-border @((Model.ActiveTab == "" ||Model.ActiveTab == DH.Helpdesk.Common.Constants.CaseTabs.CaseTab) ? "active": "")" id="case">
+                <div class="tab-pane tab-pane-border @((Model.ActiveTab == "" || Model.ActiveTab == CaseTabs.CaseTab) ? "active" : "")" id="case">
                     <div class="container">
                         @Html.HiddenFor(model => model.case_.Id, new { data_field = "caseId" })
                         @Html.HiddenFor(model => model.case_.CaseGUID)
@@ -1785,7 +1789,7 @@
                                                     }
                                                     else
                                                     {
-                                                    @Html.TextBoxFor(m => m.statuses.SingleOrDefault(x => x.Id == Model.case_.Status_Id).Name, new { @readonly = true, id = "statusCaption" })
+                                                    @Html.TextBoxFor(m => m.statuses.SingleOrDefault(x => x.Id == Model.case_.Status_Id).Name, new { @readonly = true, id = "statusName" })
                                                         @Html.HiddenFor(x => x.case_.Status_Id)
                                                     }
                                                 }
@@ -1821,7 +1825,7 @@
                                                     }
                                                     else
                                                     {
-                                                    @Html.TextBoxFor(m => m.stateSecondaries.SingleOrDefault(x => x.Id == Model.case_.StateSecondary_Id).Name, new { @readonly = true, id="subStateCaption" })
+                                                    @Html.TextBoxFor(m => m.stateSecondaries.SingleOrDefault(x => x.Id == Model.case_.StateSecondary_Id).Name, new { @readonly = true, id = "subStateName" })
                                                         @Html.HiddenFor(x => x.case_.StateSecondary_Id)
                                                     }
                                                 }
@@ -2281,11 +2285,11 @@
                     </div>
                 }
 
-                @if (Model.ExtendedCases != null)
+                @if (Model.ContainsExtendedCase)
                 {
                     foreach (var extendedCase in Model.ExtendedCases)
                     {
-                        <div id="container_@extendedCase.Id" class="tab-pane tab-pane-border @((Model.ActiveTab == string.Format(DH.Helpdesk.Common.Constants.CaseTabs.ExtendedCaseTab, extendedCase.Id)) ? "active": "")">
+                        <div id="container_@extendedCase.Id" class="tab-pane tab-pane-border @((Model.ActiveTab == string.Format(CaseTabs.ExtendedCaseTab, extendedCase.Id)) ? "active" : "")">
                         </div>
                     }
                 }
@@ -2311,14 +2315,14 @@
         </div>
     </div>
 
-                                                    if (Model.case_.Id > 0 && Model.CasePrintView != null)
-                                                    {
-                                                        <div>
-                                                            @Html.Partial("_CasePrint", Model.CasePrintView)
-                                                        </div>
-                                                    }
-                                                    <div class="toast-container toast-position-top-center" style="z-index: 100051;"></div>
-                                                    }
+    if (Model.case_.Id > 0 && Model.CasePrintView != null)
+    {
+        <div>
+            @Html.Partial("_CasePrint", Model.CasePrintView)
+        </div>
+    }
+    <div class="toast-container toast-position-top-center" style="z-index: 100051;"></div>
+}
 
 @functions    {
 
@@ -2340,11 +2344,6 @@
 
 
 <script type="text/javascript">
-
-    function loadMyPage(uri){
-        alert(uri);
-        $("#eform-Holder").load(uri);
-    }
 
     var validator = $("#target").validate({
         ignore: "",
@@ -2498,21 +2497,21 @@
                 @if (Model.CustomerSettings.ModuleInvoice)
                 {
                     <text>
-                require_from_group: {
-                    param: [1, ".log-field"],
-                    depends: function(element) {
-                        var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
-                        var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
-                        var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
-                        var overTimeMin = $("#CaseLog_OvertimeMinute").val().replace(/\r/g, "") !== "";
-                        var material = $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "0"
-                        && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
-                        var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
-                        && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
-                        return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
+                    require_from_group: {
+                        param: [1, ".log-field"],
+                        depends: function(element) {
+                            var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
+                            var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
+                            var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
+                            var overTimeMin = $("#CaseLog_OvertimeMinute").val().replace(/\r/g, "") !== "";
+                            var material = $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "0"
+                            && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
+                            var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
+                            && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
+                            return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
+                        }
                     }
-                }
-                </text>
+                    </text>
                 }
             },
             "CaseLog.TextInternal": {
@@ -2520,21 +2519,21 @@
                 @if (Model.CustomerSettings.ModuleInvoice)
                 {
                     <text>
-                require_from_group: {
-                    param: [1, ".log-field"],
-                    depends: function(element) {
-                        var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
-                        var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
-                        var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
-                        var overTimeMin = $("#CaseLog_OvertimeMinute").val().replace(/\r/g, "") !== "";
-                        var material = $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "0"
-                        && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
-                        var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
-                        && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
-                        return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
+                    require_from_group: {
+                        param: [1, ".log-field"],
+                        depends: function(element) {
+                            var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
+                            var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
+                            var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
+                            var overTimeMin = $("#CaseLog_OvertimeMinute").val().replace(/\r/g, "") !== "";
+                            var material = $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "0"
+                            && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
+                            var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
+                            && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
+                            return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
+                        }
                     }
-                }
-                </text>
+                    </text>
                 }
             },
             "CaseLog.WorkingTimeHour": {
@@ -2731,9 +2730,7 @@
             "CaseLog.OvertimeMinute": {
                 require_from_group: "@Translation.GetForJS("Välj en eller flera")"
             },
-        },
-        //        submitHandler: function(form) {
-        //        }
+        }
     });
 
     function isProductAreaValid() {
@@ -2766,32 +2763,31 @@
 
         SetDynamicDropDowns();
 
-        $(".dropdown-submenu.DynamicDropDown_Up")
-            .mousemove(function(event) {
-                var target = $(event.target.parentElement);
-                if (target != undefined && target.hasClass('DynamicDropDown_Up') && target.index(0) != -1) {
-                    var objPos = GetObjectPosInView(target[0].id);
-                    var subMenu = "#subDropDownMenu_" + target[0].id;
-                    $(subMenu).css("bottom", "auto");
-                    $(subMenu).css("top", "auto");
-                    if ($(".DynamicDropDown").hasClass('dropup')) {
-                        if (objPos.ToTop < objPos.ToDown) {
-                            var h = -$(subMenu).height() + 25;
-                            var hstr = h + "px";
-                            $(subMenu).css("bottom", hstr);
-                        } else
-                            $(subMenu).css("bottom", "0");
-                    } else {
-                        if (objPos.ToTop < objPos.ToDown || $(subMenu).height() < objPos.ToDown)
-                            $(subMenu).css("top", "0");
-                        else {
-                            var h = -$(subMenu).height() + 25;
-                            var hstr = h + "px";
-                            $(subMenu).css("top", hstr);
-                        }
+        $(".dropdown-submenu.DynamicDropDown_Up").mousemove(function(event) {
+            var target = $(event.target.parentElement);
+            if (target != undefined && target.hasClass('DynamicDropDown_Up') && target.index(0) != -1) {
+                var objPos = GetObjectPosInView(target[0].id);
+                var subMenu = "#subDropDownMenu_" + target[0].id;
+                $(subMenu).css("bottom", "auto");
+                $(subMenu).css("top", "auto");
+                if ($(".DynamicDropDown").hasClass('dropup')) {
+                    if (objPos.ToTop < objPos.ToDown) {
+                        var h = -$(subMenu).height() + 25;
+                        var hstr = h + "px";
+                        $(subMenu).css("bottom", hstr);
+                    } else
+                        $(subMenu).css("bottom", "0");
+                } else {
+                    if (objPos.ToTop < objPos.ToDown || $(subMenu).height() < objPos.ToDown)
+                        $(subMenu).css("top", "0");
+                    else {
+                        var h = -$(subMenu).height() + 25;
+                        var hstr = h + "px";
+                        $(subMenu).css("top", hstr);
                     }
                 }
-            });
+            }
+        });
 
         function GetObjectPosInView(objectId) {
             var fixedArea = 90;
@@ -2802,10 +2798,9 @@
             return { ToTop: elementToTop, ToDown: elementToDown };
         }
 
-        $(window)
-            .scroll(function() {
-                SetDynamicDropDowns()
-            });
+        $(window).scroll(function() {
+            SetDynamicDropDowns()
+        });
 
         function SetDynamicDropDowns() {
             var fixedArea = 90;
@@ -2823,112 +2818,7 @@
             }
         }
 
-        $("#caseDescriptionPreview")
-            .click(function() {
-                var description = $(".case-description")
-                    .attr("value")
-                    .replace(/\r\n|\r|\n/g, "<br />");
-                var d = $(document.createElement("div"))
-                    .html(description)
-                    .dialog({
-                        title:
-                            "@Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)",
-                        modal: true,
-                        width: 600,
-                        height: 400,
-                        close: function() {
-                            d.dialog("destroy");
-                        }
-                    });
-            });
-
-        $(".case-description")
-            .keyup(function(ev) {
-                var visibility = 'visible';
-                if (ev.target.value.length == 0) {
-                    visibility = 'hidden';
-                }
-                $("#caseDescriptionPreview").css('visibility', visibility);
-            });
-
-        @if (Model.ExtendedCases != null && Model.ExtendedCases.Count > 0)
-              {
-                    <text>
-        $('#case-tab').on('click', function (event) {
-            //set active tab to case-tab
-            $('#ActiveTab').val('case-tab');
-        });
-        </text>
-          }
-
-        @if (Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)
-        {
-            <text>
-
-        var tab = $("#myTab li a");
-
-        tab.on('shown',
-            function(e) {
-                window.scrollTo(0, 0);
-            });
-
-
-
-        tab.click(function(ev) {
-
-            if (ev.target.className.indexOf("case") >= 0) {
-                if ($(".secnav").hasClass("hide")) {
-                    $(".secnav")
-                        .fadeIn(300,
-                            function() {
-                                $(".secnav").removeClass("hide");
-                            });
-                }
-
-                $.ajax({
-                    url: "/Cases/GetCaseInfo",
-                    type: "GET",
-                    data: { year: Date.now, caseId: '@Model.case_.Id' }
-                })
-                .done(function(result) {
-                    //debugger;
-                    if (result.needUpdate){
-                        if (result.shouldReload){
-                            location.reload(true);
-                        }else{
-                            dhHelpdesk.refreshCaseInfo(result.newData);
-                        }
-                    }
-                });
-                //location.reload(true);
-
-
-            }
-
-            if (ev.target.className.indexOf("eform") >= 0) {
-                var secnav = $(".secnav");
-                if (secnav.hasClass("hide") == false) {
-                    secnav.fadeOut(300,
-                        function() {
-                            secnav.addClass("hide");
-                        });
-                }
-            }
-        });
-
-        </text>
-        }
-
         var scope = dhHelpdesk.cases.scope(window.parameters.casesScopeInitParameters);
     });
-
-
-    //$('#divCase__WatchDate').datepicker({
-    //    format: 'yyyy-mm-dd',
-    //    weekStart: 1,
-    //    todayHighlight: true,
-    //    clearBtn : true,
-    //    autoclose:true,
-    //});
 
 </script>

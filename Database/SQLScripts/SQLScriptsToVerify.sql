@@ -1,5 +1,3 @@
-use [dhHelpdeskNG_ExtendedCase]
-
 
 if not exists(select * from sysobjects WHERE Name = N'ExtendedCaseForms')
 begin

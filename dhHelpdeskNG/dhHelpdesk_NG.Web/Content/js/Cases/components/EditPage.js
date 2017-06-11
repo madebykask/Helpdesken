@@ -2,6 +2,11 @@
 
 function EditPage() {};
 
+var caseButtonsToLock = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
+                          '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
+                          '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton');
+
+
 /*** CONST BEGIN ***/
 EditPage.prototype.DELETE_CASE_URL = '/Cases/DeleteCase';
 EditPage.prototype.NEW_CLOSE_CASE_URL = '/Cases/NewAndClose';
@@ -16,6 +21,11 @@ EditPage.prototype.CASE_IN_IDLE = 'case_in_idle';
 EditPage.prototype.CASE_IN_SAVING = 'case_in_saving';
 
 /*** CONST END ***/
+
+/*** Variables ***/
+EditPage.prototype.Contains_ExtendedCase = false;
+EditPage.prototype.Contains_Eform = false;
+EditPage.prototype.Case_Field_Ids = null;
 
 /**
 * @private
@@ -117,13 +127,13 @@ EditPage.prototype.isFormValid = function() {
         return false;
     }            
             
-    var curFinishDate = $('#' + me.p.caseFieldNames.FinishingDate).val();
+    var curFinishDate = $('#' + me.p.caseFieldIds.FinishingDate).val();
     if (curFinishDate != undefined && curFinishDate != '') {
         var regDate = me.getDate(me.p.caseRegDate);            
         var finishDate = me.getDate(curFinishDate);
         if (regDate > finishDate) {
             dhHelpdesk.cases.utils.showError(me.p.finishingDateMessage);
-            $('#' + me.p.caseFieldNames.FinishingDate).addClass("error");
+            $('#' + me.p.caseFieldIds.FinishingDate).addClass("error");
             return false;
         };        
     }
@@ -214,25 +224,26 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
 
         try 
         {
-            var form = me.$form[0];        
+            var form = me.$form[0];
+            var fieldIds = params.caseFieldIds;
             var fieldsToCheck = {
-                CustomerId: (form.elements[params.caseFieldNames.CustomerId] == undefined) ? null : form.elements[params.caseFieldNames.CustomerId].value,
-                RegionId: (form.elements[params.caseFieldNames.RegionId] == undefined) ? null : form.elements[params.caseFieldNames.RegionId].value,
-                DepartmentId: (form.elements[params.caseFieldNames.DepartmentId] == undefined) ? null : form.elements[params.caseFieldNames.DepartmentId].value,
-                OUId: (form.elements[params.caseFieldNames.OUId] == undefined) ? null : form.elements[params.caseFieldNames.OUId].value,
-                SourceId: (form.elements[params.caseFieldNames.SourceId] == undefined) ? null : form.elements[params.caseFieldNames.SourceId].value,
-                CaseTypeId: (form.elements[params.caseFieldNames.CaseTypeId] == undefined) ? null : form.elements[params.caseFieldNames.CaseTypeId].value,
-                ProductAreaId: (form.elements[params.caseFieldNames.ProductAreaId] == undefined) ? null : form.elements[params.caseFieldNames.ProductAreaId].value,
-                CategoryId: (form.elements[params.caseFieldNames.CategoryId] == undefined) ? null : form.elements[params.caseFieldNames.CategoryId].value,
-                SupplierId: (form.elements[params.caseFieldNames.SupplierId] == undefined) ? null : form.elements[params.caseFieldNames.SupplierId].value,
-                WorkingGroupId: (form.elements[params.caseFieldNames.WorkingGroupId] == undefined) ? null : form.elements[params.caseFieldNames.WorkingGroupId].value,
-                ResponsibleId: (form.elements[params.caseFieldNames.ResponsibleId] == undefined) ? null : form.elements[params.caseFieldNames.ResponsibleId].value,
-                AdministratorId: (form.elements[params.caseFieldNames.AdministratorId] == undefined) ? null : form.elements[params.caseFieldNames.AdministratorId].value,
-                PriorityId: (form.elements[params.caseFieldNames.PriorityId] == undefined) ? null : form.elements[params.caseFieldNames.PriorityId].value,
-                StatusId: (form.elements[params.caseFieldNames.StatusId] == undefined) ? null : form.elements[params.caseFieldNames.StatusId].value,
-                SubStatusId: (form.elements[params.caseFieldNames.SubStatusId] == undefined) ? null : form.elements[params.caseFieldNames.SubStatusId].value,
-                CausingPartId: (form.elements[params.caseFieldNames.CausingPartId] == undefined) ? null : form.elements[params.caseFieldNames.CausingPartId].value,
-                ClosingReasonId: (form.elements[params.caseFieldNames.ClosingReasonId] == undefined) ? null : form.elements[params.caseFieldNames.ClosingReasonId].value
+                CustomerId: (form.elements[fieldIds.CustomerId] == undefined) ? null : form.elements[fieldIds.CustomerId].value,
+                RegionId: (form.elements[fieldIds.RegionId] == undefined) ? null : form.elements[fieldIds.RegionId].value,
+                DepartmentId: (form.elements[fieldIds.DepartmentId] == undefined) ? null : form.elements[fieldIds.DepartmentId].value,
+                OUId: (form.elements[fieldIds.OUId] == undefined) ? null : form.elements[fieldIds.OUId].value,
+                SourceId: (form.elements[fieldIds.SourceId] == undefined) ? null : form.elements[fieldIds.SourceId].value,
+                CaseTypeId: (form.elements[fieldIds.CaseTypeId] == undefined) ? null : form.elements[fieldIds.CaseTypeId].value,
+                ProductAreaId: (form.elements[fieldIds.ProductAreaId] == undefined) ? null : form.elements[fieldIds.ProductAreaId].value,
+                CategoryId: (form.elements[fieldIds.CategoryId] == undefined) ? null : form.elements[fieldIds.CategoryId].value,
+                SupplierId: (form.elements[fieldIds.SupplierId] == undefined) ? null : form.elements[fieldIds.SupplierId].value,
+                WorkingGroupId: (form.elements[fieldIds.WorkingGroupId] == undefined) ? null : form.elements[fieldIds.WorkingGroupId].value,
+                ResponsibleId: (form.elements[fieldIds.ResponsibleId] == undefined) ? null : form.elements[fieldIds.ResponsibleId].value,
+                AdministratorId: (form.elements[fieldIds.AdministratorId] == undefined) ? null : form.elements[fieldIds.AdministratorId].value,
+                PriorityId: (form.elements[fieldIds.PriorityId] == undefined) ? null : form.elements[fieldIds.PriorityId].value,
+                StatusId: (form.elements[fieldIds.StatusId] == undefined) ? null : form.elements[fieldIds.StatusId].value,
+                SubStatusId: (form.elements[fieldIds.SubStatusId] == undefined) ? null : form.elements[fieldIds.SubStatusId].value,
+                CausingPartId: (form.elements[fieldIds.CausingPartId] == undefined) ? null : form.elements[fieldIds.CausingPartId].value,
+                ClosingReasonId: (form.elements[fieldIds.ClosingReasonId] == undefined) ? null : form.elements[fieldIds.ClosingReasonId].value
             }
         }        
         catch (exception) {
@@ -488,9 +499,6 @@ EditPage.prototype.onDeleteDlgClick = function (res) {
     return true;
 };
 
-/**
-* @private
-*/
 EditPage.prototype.InitDeleteConfirmationDlg = function() {
     var me = this;
     // Delete case confirmation dialogue
@@ -507,9 +515,6 @@ EditPage.prototype.InitDeleteConfirmationDlg = function() {
     return CreateInstance(ConfirmationDialog, dlgOptions);
 };
 
-/**
-* @private
-*/
 EditPage.prototype.InitLeaveConfirmationDlg = function () {
     var me = this;
     // Delete case confirmation dialogue
@@ -537,213 +542,6 @@ EditPage.prototype.onPageLeave = function(ev) {
         return false;
     }
 };
-
-EditPage.prototype.onCloseClick = function(ev) {
-    var me = this;
-    var c = me.case;
-    var url;
-    if (c.isChildCase() && c.isNew()) {
-        url = me.EDIT_CASE_URL + '/' + c.parentCaseId;
-    } else {
-        url = me.CASE_OVERVIEW_URL;
-    }
-
-    me.stopCaseLockTimer();
-    window.location.href = url;
-    return false;
-};
-
-/**
-* Page initialization 
-*/
-EditPage.prototype.init = function (p) {
-    var me = this;
-    me._inSaving = false;
-    me.p = p;
-    /// controls binding
-    me.$form = $('#target');
-    me.$watchDateChangers = $('.departments-list, #case__Priority_Id, #case__StateSecondary_Id');
-    me.$department = $('.departments-list');
-    me.$SLASelect = $('#case__Priority_Id');
-    me.$SLAText = $('#case__Priority_Id');    
-    me.$watchDateEdit = $('#case__WatchDate');
-    me.$watchDate = $('#divCase__WatchDate');      
-    me.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
-                             '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
-                             '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton');
-
-    me.$productAreaObj = $('#divProductArea');
-    me.$productAreaChildObj = $('#ProductAreaHasChild');
-    me.productAreaErrorMessage = me.p.productAreaErrorMessage;
-    me.$moveCaseButton = $("#btnMoveCase");    
-    me.$btnSave = $('.btn.save');
-    me.$btnSaveClose = $('.btn.save-close');
-    me.$btnSaveNew = $('.btn.save-new');
-    me.$btnDelete = $('.caseDeleteDialog.btn');
-    me.$btnClose = $('.btn.close-page');
-    me.deleteDlg = me.InitDeleteConfirmationDlg();
-    me.leaveDlg = me.InitLeaveConfirmationDlg();
-    ///////////////////////     events binding      /////////////////////////////////
-    me.$btnDelete.on('click', callAsMe(me.showDeleteConfirmationDlg, me));
-    me.$btnClose.on('click', Utils.callAsMe(me.onCloseClick, me));
-    me.$btnSave.on('click', Utils.callAsMe(me.onSaveClick, me));
-    me.$btnSaveClose.on('click', Utils.callAsMe(me.onSaveAndCloseClick, me));
-    me.$btnSaveNew.on('click', Utils.callAsMe(me.onSaveAndNewClick, me));
-
-    me.$btnPrint = $('.btn.print-case');    
-    me.$printArea = $('#CasePrintArea');
-    me.$printDialog = $('#PrintCaseDialog');
-
-    me.isCaseFileMandatory = me.p.isCaseFileMandatory;
-
-    var invoiceElm = $('#CustomerSettings_ModuleCaseInvoice').val();
-    me.invoiceIsActive = invoiceElm != undefined && invoiceElm != null && invoiceElm.toString().toLowerCase() == 'true';
-
-    me.$watchDateChangers.on('change', function () {        
-        var deptId = parseInt(me.$department.val(), 10);
-        var SLA = parseInt(me.$SLASelect.find('option:selected').attr('data-sla'), 10);
-        if (isNaN(SLA)) {            
-            SLA = parseInt(me.$SLAText.attr('data-sla'), 10);
-        }
-        if (this.id == "case__StateSecondary_Id") {
-            $.post('/Cases/ChangeStateSecondary', { 'id': $(this).val() }, function (data) {
-                if (data.ReCalculateWatchDate == 1) {
-                    if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
-                        return me.fetchWatchDateByDept.call(me, deptId);
-                    }
-                }
-            }, 'json');
-            return;
-        }
-
-        if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
-            return me.fetchWatchDateByDept.call(me, deptId);
-        }
-        //else {
-        //    if (me.$watchDateEdit.val() == '')
-        //        me.$watchDate.datepicker('update', '');
-        //}
-
-        return false;
-    });
-    
-    me.$moveCaseButton.click(function (e) {
-        e.preventDefault();
-        $.post(p.caseLockChecker,
-            {
-                caseId: p.currentCaseId,
-                caseChangedTime: p.caseChangedTime,
-                lockGuid: p.caseLockGuid
-            },
-            function (data) {
-                if (data == true) {
-                    window.moveCase(p.currentCaseId);
-                } else {
-                    ShowToastMessage(p.moveLockedCaseMessage, "error", true);
-                }
-        });
-    });
-    
-    $('.date').each(function () {
-        var $this = $(this);
-        var errorLabel = $this.find('label.error:visible');
-        if (errorLabel.length > 0) {
-            var calendarIcon = $this.find('.add-on');
-            if (calendarIcon.length > 0) {
-                errorLabel.detach().insertAfter(calendarIcon);
-            }
-        }
-    });
-
-    $('.lang.dropdown-submenu a').on('click', Utils.callAsMe(me.onPageLeave, me));             
-
-    me.$btnPrint.click(function (e) {
-            
-        /* Setup Print Page 
-        try {
-            var regpath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\PageSetup\\" + "Print_Background";
-            var oWSS = new ActiveXObject("WScript.Shell");
-            oWSS.RegWrite(regpath, "yes", "REG_SZ");
-
-
-            var regpath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\PageSetup\\" + "Shrink_To_Fit";
-            var oWSS = new ActiveXObject("WScript.Shell");
-            oWSS.RegWrite(regpath, "no", "REG_SZ");
-        }
-        catch (err) {            
-        }*/
-        
-        $.get("/Cases/ShowCasePrintPreview/",
-                {
-                    caseId: p.currentCaseId,
-                    caseNumber: p.currentCaseNumber,
-                    curTime: new Date().getTime()
-                },                
-
-                function (_reportPresentation) {
-                    me.$printArea.html(_reportPresentation);
-                                        
-                    $('#PrintCaseDialog').draggable({
-                        handle: ".modal-header"
-                    });
-                    
-                    /* show true if you need to show case print preview*/
-                    $('#PrintCaseDialog').modal({
-                        "backdrop": "static",
-                        "keyboard": true,
-                        "show": false
-                    });
-                   
-                    //var _iframe = $("#caseReportContainer").find("iframe");
-                    //if (_iframe != null && _iframe != undefined) {
-                    //    update_iFrame(_iframe.attr("id"));                        
-                    //}
-                }
-             );       
-    });
-    
-    /*Enable if you have case print preview*/
-    //var update_iFrame = function (iframeId) {
-    //    setTimeout(function () {           
-    //        var elm = document.getElementById(iframeId);
-    //        if (elm != null && elm != undefined) {
-    //            var newH = $(elm).height() + 50;
-    //            $(elm).css({ height: newH.toString() + "px" });
-    //        }            
-    //    }, 3000);
-    //}
-
-    //////// event bind end ///////////
-    /*
-        window.parameters.currentCaseId,
-        customerId: window.parameters.customerId,
-        parentCaseId: window.parameters.parentCaseId
-    */
-    me.case = new Case({
-        id: parseInt(p.currentCaseId, 10),
-        customerId: parseInt(p.customerId, 10),
-        parentCaseId: parseInt(p.parentCaseId, 10),
-        isAnyNotClosedChild: p.isAnyNotClosedChild === 'True'
-    });
-
-    if (me.case.isAnyNotClosedChild()) {
-        me.$btnDelete.addClass('disabled');
-    }
-
-    if (p.currentCaseId > 0 && me.p.timerInterval > 0) {
-        me.timerId = setInterval(callAsMe(me.ReExtendCaseLock, me), me.p.timerInterval * 1000);
-    }
-
-    me.formOnBootValues = me.$form.serialize();
-
-    me.ExternalInvoice = new ExternalInvoice({
-        requiredMessage: p.casesScopeInitParameters.mandatoryFieldsText,
-        mustBeNumberMessage: p.casesScopeInitParameters.formatFieldsText + ": #.##"
-    });
-    
-    me.getTokenIfNeeded();
-};
-
 
 EditPage.prototype.getTokenIfNeeded = function () {
     var needToGetToken = false;
@@ -775,3 +573,372 @@ EditPage.prototype.getTokenIfNeeded = function () {
          );
     }
 }
+
+EditPage.prototype.onCloseClick = function(ev) {
+    var me = this;
+    var c = me.case;
+    var url;
+    if (c.isChildCase() && c.isNew()) {
+        url = me.EDIT_CASE_URL + '/' + c.parentCaseId;
+    } else {
+        url = me.CASE_OVERVIEW_URL;
+    }
+
+    me.stopCaseLockTimer();
+    window.location.href = url;
+    return false;
+};
+
+EditPage.prototype.refreshCaseInfo = function (updatedInfo) {
+    if (updatedInfo == null)
+        return;
+
+    var self = this;
+    var _caseFields = self.Case_Field_Ids;
+    
+    self.changeCaseButtonsState(false);
+
+    $('#' + _caseFields.ReportedBy).val(updatedInfo.ReportedBy);
+    $('#' + _caseFields.PersonsName).val(updatedInfo.PersonsName);
+    $('#' + _caseFields.PersonsPhone).val(updatedInfo.PersonsPhone);
+
+    $('#' + _caseFields.CaseTypeId).val(updatedInfo.CaseType_Id).change();
+
+    $('#' + _caseFields.ProductAreaId).val(updatedInfo.ProductArea_Id).change();
+    $('#' + _caseFields.WorkingGroupId).val(updatedInfo.WorkingGroup_Id).change();
+    $('#' + _caseFields.WorkingGroupName).val(updatedInfo.WorkingGroupName);
+    $('#' + _caseFields.PriorityId).val(updatedInfo.Priority_Id).change();
+
+    $('#' + _caseFields.PlanDate).datepicker({
+        format: updatedInfo.DateFormat.toLowerCase(),
+        autoclose: true
+    }).datepicker('setDate', updatedInfo.PlanDateJS);
+
+    $('#' + _caseFields.WatchDate).datepicker({
+        format: updatedInfo.DateFormat.toLowerCase(),
+        autoclose: true
+    }).datepicker('setDate', updatedInfo.WatchDateJS);
+
+    $("#CaseTemplate_Department_Id").val();
+    $("#CaseTemplate_OU_Id").val();
+
+    if (updatedInfo.Department_Id != null && updatedInfo.Department_Id != 0) {
+        $("#CaseTemplate_Department_Id").val(updatedInfo.Department_Id);
+    }
+
+    if (updatedInfo.OU_Id != null && updatedInfo.OU_Id != 0) {
+        $("#CaseTemplate_OU_Id").val(updatedInfo.OU_Id);
+    }
+
+    $('#' + _caseFields.Region_Id).val(updatedInfo.Region_Id).change();
+    $('#' + _caseFields.RegionName).val(updatedInfo.RegionName);
+    $('#' + _caseFields.DepartmentName).val(updatedInfo.DepartmentName);
+    $('#' + _caseFields.OUName).val(updatedInfo.OUName);
+
+    $.get('/Cases/GetCaseFilesJS', { caseId: updatedInfo.Id, now: Date.now() }, function (data) {
+        $('#divCaseFiles').html(data);
+        $(document).trigger("OnUploadedCaseFileRendered", []);
+        bindDeleteCaseFileBehaviorToDeleteButtons();
+    });
+
+    $.get('/Cases/GetCaseInputModelForLog', { caseId: updatedInfo.Id, now: Date.now() }, function (data) {
+        $('#logtab').html(data);
+    }).done(function () {
+
+    });
+
+    $.get('/Cases/GetCaseInputModelForHistory', { caseId: updatedInfo.Id, now: Date.now() }, function (data) {
+        $('#' + _caseFields.StatusId).val(updatedInfo.Status_Id).change();
+        $('#' + _caseFields.StatusName).val(updatedInfo.StatusName).change();
+        $('#' + _caseFields.SubStatusId).val(updatedInfo.StateSecondary_Id).change();
+        $(".readonlySubstate").val(updatedInfo.StateSecondary_Id);
+        $('#' + _caseFields.SubStatusName).val(updatedInfo.SubStateName);
+        $('#historytab').html(data);
+    }).done(function () {
+        self.changeCaseButtonsState(true);
+    });
+}
+
+EditPage.prototype.changeCaseButtonsState = function(state) {
+    if (state) {
+        caseButtons.removeClass('disabled');
+        caseButtons.css("pointer-events", "");
+        $(templateQuickButtonIndicator).css("display", "none");
+    }
+    else {
+        caseButtons.addClass("disabled");
+        caseButtons.css("pointer-events", "none");
+        $(templateQuickButtonIndicator).css("display", "block");
+    }
+}
+
+EditPage.prototype.init = function (p) {
+    var self = this;
+    self._inSaving = false;
+    self.p = p;
+    EditPage.prototype.Case_Field_Ids = p.caseFieldIds;
+    
+    this.Contains_ExtendedCase = self.p.containsExtendedCase;
+    this.Contains_Eform = self.p.containsEForm;    
+
+    /// controls binding
+    self.$form = $('#target');
+    self.$watchDateChangers = $('.departments-list, #case__Priority_Id, #case__StateSecondary_Id');
+    self.$department = $('.departments-list');
+    self.$SLASelect = $('#case__Priority_Id');
+    self.$SLAText = $('#case__Priority_Id');    
+    self.$watchDateEdit = $('#case__WatchDate');
+    self.$watchDate = $('#divCase__WatchDate');      
+    self.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
+                             '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
+                             '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton');
+
+    self.$productAreaObj = $('#divProductArea');
+    self.$productAreaChildObj = $('#ProductAreaHasChild');
+    self.productAreaErrorMessage = self.p.productAreaErrorMessage;
+    self.$moveCaseButton = $("#btnMoveCase");    
+    self.$btnSave = $('.btn.save');
+    self.$btnSaveClose = $('.btn.save-close');
+    self.$btnSaveNew = $('.btn.save-new');
+    self.$btnDelete = $('.caseDeleteDialog.btn');
+    self.$btnClose = $('.btn.close-page');
+    self.deleteDlg = self.InitDeleteConfirmationDlg();
+    self.leaveDlg = self.InitLeaveConfirmationDlg();
+    ///////////////////////     events binding      /////////////////////////////////
+    self.$btnDelete.on('click', callAsMe(self.showDeleteConfirmationDlg, self));
+    self.$btnClose.on('click', Utils.callAsMe(self.onCloseClick, self));
+    self.$btnSave.on('click', Utils.callAsMe(self.onSaveClick, self));
+    self.$btnSaveClose.on('click', Utils.callAsMe(self.onSaveAndCloseClick, self));
+    self.$btnSaveNew.on('click', Utils.callAsMe(self.onSaveAndNewClick, self));
+
+    self.$btnPrint = $('.btn.print-case');    
+    self.$printArea = $('#CasePrintArea');
+    self.$printDialog = $('#PrintCaseDialog');
+    self.$descriptionDialog = $('#caseDescriptionPreview');
+    self.$caseDescriptionEl = $(".case-description")
+    self.$caseTab = $("#myTab li a");//$('#case-tab');
+    self.$activeTabHolder = $('#ActiveTab');
+
+    self.isCaseFileMandatory = self.p.isCaseFileMandatory;
+
+    var invoiceElm = $('#CustomerSettings_ModuleCaseInvoice').val();
+    self.invoiceIsActive = invoiceElm != undefined && invoiceElm != null && invoiceElm.toString().toLowerCase() == 'true';
+
+    self.$watchDateChangers.on('change', function () {        
+        var deptId = parseInt(self.$department.val(), 10);
+        var SLA = parseInt(self.$SLASelect.find('option:selected').attr('data-sla'), 10);
+        if (isNaN(SLA)) {            
+            SLA = parseInt(self.$SLAText.attr('data-sla'), 10);
+        }
+        if (this.id == "case__StateSecondary_Id") {
+            $.post('/Cases/ChangeStateSecondary', { 'id': $(this).val() }, function (data) {
+                if (data.ReCalculateWatchDate == 1) {
+                    if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
+                        return self.fetchWatchDateByDept.call(self, deptId);
+                    }
+                }
+            }, 'json');
+            return;
+        }
+
+        if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
+            return self.fetchWatchDateByDept.call(self, deptId);
+        }
+        //else {
+        //    if (self.$watchDateEdit.val() == '')
+        //        self.$watchDate.datepicker('update', '');
+        //}
+
+        return false;
+    });
+    
+    self.$moveCaseButton.click(function (e) {
+        e.preventDefault();
+        $.post(p.caseLockChecker,
+            {
+                caseId: p.currentCaseId,
+                caseChangedTime: p.caseChangedTime,
+                lockGuid: p.caseLockGuid
+            },
+            function (data) {
+                if (data == true) {
+                    window.moveCase(p.currentCaseId);
+                } else {
+                    ShowToastMessage(p.moveLockedCaseMessage, "error", true);
+                }
+        });
+    });
+    
+    $('.date').each(function () {
+        var $this = $(this);
+        var errorLabel = $this.find('label.error:visible');
+        if (errorLabel.length > 0) {
+            var calendarIcon = $this.find('.add-on');
+            if (calendarIcon.length > 0) {
+                errorLabel.detach().insertAfter(calendarIcon);
+            }
+        }
+    });
+
+    $('.lang.dropdown-submenu a').on('click', Utils.callAsMe(self.onPageLeave, self));             
+
+    self.$btnPrint.click(function (e) {
+            
+        /* Setup Print Page 
+        try {
+            var regpath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\PageSetup\\" + "Print_Background";
+            var oWSS = new ActiveXObject("WScript.Shell");
+            oWSS.RegWrite(regpath, "yes", "REG_SZ");
+
+
+            var regpath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\PageSetup\\" + "Shrink_To_Fit";
+            var oWSS = new ActiveXObject("WScript.Shell");
+            oWSS.RegWrite(regpath, "no", "REG_SZ");
+        }
+        catch (err) {            
+        }*/
+        
+        $.get("/Cases/ShowCasePrintPreview/",
+                {
+                    caseId: p.currentCaseId,
+                    caseNumber: p.currentCaseNumber,
+                    curTime: new Date().getTime()
+                },                
+
+                function (_reportPresentation) {
+                    self.$printArea.html(_reportPresentation);
+                                        
+                    $('#PrintCaseDialog').draggable({
+                        handle: ".modal-header"
+                    });
+                    
+                    /* show true if you need to show case print preview*/
+                    $('#PrintCaseDialog').modal({
+                        "backdrop": "static",
+                        "keyboard": true,
+                        "show": false
+                    });
+                   
+                    //var _iframe = $("#caseReportContainer").find("iframe");
+                    //if (_iframe != null && _iframe != undefined) {
+                    //    update_iFrame(_iframe.attr("id"));                        
+                    //}
+                }
+             );       
+    });
+    
+    self.$descriptionDialog.click(function () {
+        var description = self.$caseDescriptionEl
+            .attr("value")
+            .replace(/\r\n|\r|\n/g, "<br />");
+
+        var d = $(document.createElement("div"))
+            .html(description)
+            .dialog({
+                title:
+                    self.p.descriptionText,
+                modal: true,
+                width: 600,
+                height: 400,
+                close: function () {
+                    d.dialog("destroy");
+                }
+            });
+    });
+
+    self.$caseDescriptionEl.keyup(function (ev) {
+        var visibility = 'visible';
+        if (ev.target.value.length == 0) {
+            visibility = 'hidden';
+        }
+        self.$descriptionDialog.css('visibility', visibility);
+    });
+
+    /*Enable if you have case print preview*/
+    //var update_iFrame = function (iframeId) {
+    //    setTimeout(function () {           
+    //        var elm = document.getElementById(iframeId);
+    //        if (elm != null && elm != undefined) {
+    //            var newH = $(elm).height() + 50;
+    //            $(elm).css({ height: newH.toString() + "px" });
+    //        }            
+    //    }, 3000);
+    //}
+
+    //////// event bind end ///////////
+    /*
+        window.parameters.currentCaseId,
+        customerId: window.parameters.customerId,
+        parentCaseId: window.parameters.parentCaseId
+    */
+    self.case = new Case({
+        id: parseInt(p.currentCaseId, 10),
+        customerId: parseInt(p.customerId, 10),
+        parentCaseId: parseInt(p.parentCaseId, 10),
+        isAnyNotClosedChild: p.isAnyNotClosedChild === 'True'
+    });
+
+    if (self.case.isAnyNotClosedChild()) {
+        self.$btnDelete.addClass('disabled');
+    }
+
+    if (p.currentCaseId > 0 && self.p.timerInterval > 0) {
+        self.timerId = setInterval(callAsMe(self.ReExtendCaseLock, self), self.p.timerInterval * 1000);
+    }
+
+    self.formOnBootValues = self.$form.serialize();
+
+    self.ExternalInvoice = new ExternalInvoice({
+        requiredMessage: p.casesScopeInitParameters.mandatoryFieldsText,
+        mustBeNumberMessage: p.casesScopeInitParameters.formatFieldsText + ": #.##"
+    });
+        
+    self.$caseTab.click(function (ev) {
+        if (this.Contains_ExtendedCase) {
+            self.$activeTabHolder.val('case-tab');
+        }
+
+        if (this.Contains_Eform) {
+            if (ev.target.className.indexOf("case") >= 0) {
+                if ($(".secnav").hasClass("hide")) {
+                    $(".secnav").fadeIn(300, function () {
+                        $(".secnav").removeClass("hide");
+                    });
+                }
+
+                $.ajax({
+                    url: "/Cases/GetCaseInfo",
+                    type: "GET",
+                    data: { caseId: self.p.currentCaseId, curTime: Date.now }
+                })
+                .done(function (result) {
+                    if (result.needUpdate) {
+                        if (result.shouldReload) {
+                            location.reload(true);
+                        } else {
+                            self.refreshCaseInfo(result.newData);
+                        }
+                    }
+                });
+            }
+
+            if (ev.target.className.indexOf("eform") >= 0) {
+                var secnav = $(".secnav");
+                if (secnav.hasClass("hide") == false) {
+                    secnav.fadeOut(300, function () {
+                        secnav.addClass("hide");
+                    });
+                }
+            }
+        }
+    });
+
+    self.$caseTab.on('shown', function (e) {
+        window.scrollTo(0, 0);
+    });
+
+    /* Temporary disabled because Extended Case will not use token */
+    //self.getTokenIfNeeded();
+};
+
+

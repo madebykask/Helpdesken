@@ -183,23 +183,23 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public string WatchDateJS { get; set; }
 
-        public string StatusCaption { get; set; }
+        public string StatusName { get; set; }
 
-        public string SubStateCaption { get; set; }
+        public string SubStateName { get; set; }
 
-        public string PriorityCaption { get; set; }
+        public string PriorityName { get; set; }
 
-        public string WorkingGroupCaption { get; set; }
+        public string WorkingGroupName { get; set; }
 
-        public string CaseTypeCaption { get; set; }
+        public string CaseTypeName { get; set; }
 
-        public string ProductAreaCaption { get; set; }
+        public string ProductAreaName { get; set; }
 
-        public string RegionCaption { get; set; }
+        public string RegionName { get; set; }
 
-        public string DepartmentCaption { get; set; }
+        public string DepartmentName { get; set; }
 
-        public string OUCaption { get; set; }
+        public string OUName { get; set; }
     }
 
     public sealed class LogJS
