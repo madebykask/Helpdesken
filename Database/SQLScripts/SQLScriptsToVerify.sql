@@ -1,7 +1,108 @@
---TODO:
---Add ExtendedCase TABLES
 use [dhHelpdeskNG_ExtendedCase]
 
+
+if not exists(select * from sysobjects WHERE Name = N'ExtendedCaseForms')
+begin
+
+	CREATE TABLE [dbo].[ExtendedCaseForms]
+	(
+		[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+		[MetaData] NVARCHAR(MAX) NOT NULL, 
+		[Description] NVARCHAR(500) NULL, 
+		[CreatedOn] DATETIME NOT NULL, 
+		[CreatedBy] NVARCHAR(50) NOT NULL, 
+		[UpdatedOn] DATETIME NULL, 
+		[UpdatedBy] NVARCHAR(50) NULL
+	)
+
+end
+
+if not exists(select * from sysobjects WHERE Name = N'ExtendedCaseAssignments')
+begin
+CREATE TABLE [dbo].[ExtendedCaseAssignments]
+(
+    [Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [ExtendedCaseFormId] INT NOT NULL, 
+    [UserRole] INT NULL, 
+    [CaseStatus] INT NULL, 
+    [CustomerId] INT NULL, 
+    [CreatedOn] DATETIME NOT NULL, 
+    [CreatedBy] NVARCHAR(50) NOT NULL, 
+    [UpdatedOn] DATETIME NULL, 
+    [UpdatedBy] NVARCHAR(50) NULL, 
+    CONSTRAINT [FK_EFormAssignments_ExtendedCaseForms] FOREIGN KEY ([ExtendedCaseFormId]) REFERENCES [ExtendedCaseForms]([Id])
+)
+end
+
+if not exists(select * from sysobjects WHERE Name = N'ExtendedCaseCustomDataSources')
+begin
+
+	CREATE TABLE [dbo].[ExtendedCaseCustomDataSources]
+	(
+		[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+		[DataSourceId] NVARCHAR(100) NOT NULL, 
+		[Description] NVARCHAR(500) NULL, 
+		[MetaData] NVARCHAR(MAX) NOT NULL,
+		[CreatedOn] DATETIME NOT NULL, 
+		[CreatedBy] NVARCHAR(50) NOT NULL, 
+		[UpdatedOn] DATETIME NULL, 
+		[UpdatedBy] NVARCHAR(50) NULL
+	)
+end
+
+if not exists(select * from sysobjects WHERE Name = N'ExtendedCaseOptionDataSources')
+begin
+	CREATE TABLE [dbo].[ExtendedCaseOptionDataSources]
+	(
+		[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+		[DataSourceId] NVARCHAR(100) NOT NULL, 
+		[Description] NVARCHAR(500) NULL, 
+		[MetaData] NVARCHAR(MAX) NOT NULL,
+		[CreatedOn] DATETIME NOT NULL, 
+		[CreatedBy] NVARCHAR(50) NOT NULL, 
+		[UpdatedOn] DATETIME NULL, 
+		[UpdatedBy] NVARCHAR(50) NULL
+	)
+end
+
+if not exists(select * from sysobjects WHERE Name = N'ExtendedCaseTranslations')
+begin
+	CREATE TABLE [dbo].[ExtendedCaseTranslations]
+	(
+		[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+		[LanguageId] INT NULL, 
+		[Property] NVARCHAR(200) NOT NULL, 
+		[Text] NVARCHAR(MAX) NOT NULL
+	)
+end
+
+if not exists(select * from sysobjects WHERE Name = N'ExtendedCaseData')
+begin
+	CREATE TABLE [dbo].[ExtendedCaseData](
+		[Id] [int] NOT NULL PRIMARY KEY IDENTITY, 
+		[ExtendedCaseGuid] [uniqueidentifier]  NOT NULL DEFAULT NEWID(),
+		[ExtendedCaseFormId] [int] NOT NULL,
+		[CreatedOn] [datetime] NOT NULL,
+		[CreatedBy] [nvarchar](50) NOT NULL,
+		[UpdatedOn] [datetime] NULL,
+		[UpdatedBy] [nvarchar](50) NULL,	
+		CONSTRAINT [FK_ExtendedCaseData_ExtendedCaseForms] FOREIGN KEY([ExtendedCaseFormId]) REFERENCES [dbo].[ExtendedCaseForms] ([Id]))
+	
+	end
+
+if not exists(select * from sysobjects WHERE Name = N'ExtendedCaseValues')
+begin
+
+	CREATE TABLE [dbo].[ExtendedCaseValues](
+		[Id] [int]  NOT NULL PRIMARY KEY IDENTITY,
+		[ExtendedCaseDataId] [int] NOT NULL,
+		[FieldId] [nvarchar](100) NOT NULL,
+		[Value] [nvarchar](max) NULL,
+		[SecondaryValue] [nvarchar](max) NULL,
+		CONSTRAINT [FK_ExtendedCaseValues_ExtendedCaseData] FOREIGN KEY([ExtendedCaseDataId]) REFERENCES [dbo].[ExtendedCaseData] ([Id])
+	)
+
+end
 
 if not exists(select * from sysobjects WHERE Name = N'tblCase_ExtendedCaseData')
 begin
@@ -116,33 +217,33 @@ GO
 --FOR CURRENT RECORD - TEST
 
 ----tblComputerUsers - make sure it does not allow null and add newid()
---if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ComputerUserGUID' and sysobjects.name = N'tblComputerUsers')
---begin
---		EXECUTE  sp_executesql  "update tblComputerUsers set ComputerUserGUID = newid() where ComputerUserGUID is null"
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ComputerUserGUID' and sysobjects.name = N'tblComputerUsers')
+begin
+		EXECUTE  sp_executesql  "update tblComputerUsers set ComputerUserGUID = newid() where ComputerUserGUID is null"
 
---		if not exists(select *
---					  from sys.all_columns c
---					  join sys.tables t on t.object_id = c.object_id
---					  join sys.schemas s on s.schema_id = t.schema_id
---					  join sys.default_constraints d on c.default_object_id = d.object_id
---					  where t.name = 'tblComputerUsers'
---					  and c.name = 'ComputerUserGUID'
---					  and s.name = 'dbo'
---					  and d.name = 'DF_ComputerUserGUID')
---		begin
---			Alter table tblComputerUsers
---			Add constraint DF_ComputerUserGUID default (newid()) For ComputerUserGUID		
---		end		
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblComputerUsers'
+					  and c.name = 'ComputerUserGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_ComputerUserGUID')
+		begin
+			Alter table tblComputerUsers
+			Add constraint DF_ComputerUserGUID default (newid()) For ComputerUserGUID		
+		end		
 
---		Alter table tblComputerUsers
---		ALTER COLUMN [ComputerUserGUID] uniqueIdentifier NOT NULL
---end
---else
---begin
---	Alter table tblComputerUsers
---	Add ComputerUserGUID uniqueIdentifier NOT NULL CONSTRAINT DF_ComputerUserGUID default (newid())
---end
---GO
+		Alter table tblComputerUsers
+		ALTER COLUMN [ComputerUserGUID] uniqueIdentifier NOT NULL
+end
+else
+begin
+	Alter table tblComputerUsers
+	Add ComputerUserGUID uniqueIdentifier NOT NULL CONSTRAINT DF_ComputerUserGUID default (newid())
+end
+GO
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ExtendedCasePath' and sysobjects.name = N'tblGlobalSettings')
 	begin
@@ -156,3 +257,8 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ValidateOnChange' and sysobjects.name = N'tblCaseSolution')
+	begin
+		ALTER TABLE [dbo].tblCaseSolution ADD ValidateOnChange nvarchar(100) NULL 
+	end
+GO
