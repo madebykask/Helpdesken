@@ -329,7 +329,7 @@ namespace DH.Helpdesk.Services.Services
                     }
 
                     // Check conditions
-                    if (conditionValue.IndexOf(value.ToLower()) > -1)
+                    if (value.Length > 0 && conditionValue.IndexOf(value.ToLower()) > -1)
                     {
                         showWorkflowStep = true;
                         continue;
