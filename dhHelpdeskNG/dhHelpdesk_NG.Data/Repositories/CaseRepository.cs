@@ -136,6 +136,9 @@ namespace DH.Helpdesk.Dal.Repositories
 
             var caseSolution = this.DataContext.CaseSolutions.Where(c => c.Customer_Id == customerId && c.Id == caseSolutionId).FirstOrDefault();
 
+            if (caseSolution == null)
+                return null;
+
             if (caseId == 0)
             {
                 extendedForm = caseSolution.ExtendedCaseForms.Select(x => new ExtendedCaseFormModel
@@ -152,9 +155,9 @@ namespace DH.Helpdesk.Dal.Repositories
                 {
                     CaseId = caseId,
                     Id = x.ExtendedCaseForm.Id,
-                    //  Path = extendedCasePath.Replace("[extendedCaseGuid]", x.ExtendedCaseGuid.ToString()).Replace("[LanguageId]", userLanguageId).Replace("[CaseId]", caseId.ToString()).Replace("[CaseStateSecondaryId]", caseStateSecondaryId.ToString()).Replace("[CaseWorkingGroupId]", caseWorkingGroupId.ToString()),
+                    Path = extendedCasePath.Replace("[extendedCaseGuid]", x.ExtendedCaseGuid.ToString()).Replace("[LanguageId]", userLanguageId).Replace("[CaseId]", caseId.ToString()).Replace("[CaseStateSecondaryId]", caseStateSecondaryId.ToString()).Replace("[CaseWorkingGroupId]", caseWorkingGroupId.ToString()),
                     //Temp, Problem opening extended case with a guid... take back above code when fixed.
-                    Path = extendedCasePath.Replace("[extendedCaseGuid]", "").Replace("[LanguageId]", userLanguageId).Replace("[CaseId]", caseId.ToString()).Replace("[CaseStateSecondaryId]", caseStateSecondaryId.ToString()).Replace("[CaseWorkingGroupId]", caseWorkingGroupId.ToString()),
+                   // Path = extendedCasePath.Replace("[extendedCaseGuid]", "").Replace("[LanguageId]", userLanguageId).Replace("[CaseId]", caseId.ToString()).Replace("[CaseStateSecondaryId]", caseStateSecondaryId.ToString()).Replace("[CaseWorkingGroupId]", caseWorkingGroupId.ToString()),
                     Name = (x.ExtendedCaseForm.Name != null ? x.ExtendedCaseForm.Name : caseSolution.Name)
                 }).ToList();
             }
