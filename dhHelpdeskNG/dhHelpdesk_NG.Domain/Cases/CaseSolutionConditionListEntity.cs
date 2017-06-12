@@ -8,7 +8,7 @@ namespace DH.Helpdesk.Domain.Cases
     public class CaseSolitionConditionListEntity : Entity
     {
         
-        public Guid CaseSolutionConditionGUID { get; set; }
+        public string CaseSolutionConditionCaption { get; set; }
 
         public string CaseSolutionConditionValues { get; set; }
         

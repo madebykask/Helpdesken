@@ -571,46 +571,77 @@ namespace DH.Helpdesk.Web.Controllers
             string[] selectedSplit = selectedValues.Split('~');
             foreach (string s in selectedSplit)
             {
-                string saveVal = string.Empty;
-                string saveCaption = string.Empty;
-                string[] finalSaveList = s.Split(':');
-                int k = 0;
-                foreach (string t in finalSaveList)
+                string[] cap = s.Split(':');
+                string text = cap[0].ToString();
+                string values = cap[1].ToString();
+                bool exists = false;
+
+                exists = cse.Any(u => u.CaseSolutionConditionCaption == text);
+                if (exists == false)
                 {
-                    if (k == 0)
+                    CaseSolitionConditionListEntity cSc = new CaseSolitionConditionListEntity
                     {
-                        saveCaption = t;
-                    }
-                    else
-                    {
-                        saveVal = t;
-                    }
-                    k = k + 1;
+                        CaseSolutionConditionCaption = text,
+                        CaseSolutionConditionValues = values.Replace('_', ',')
+                    };
+
+                    cse.Add(cSc);
                 }
-                saveVal = saveVal.Replace('_', ',');
-
-                CaseSolutionConditionEntity cce = new CaseSolutionConditionEntity
+                else
                 {
 
-                    CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
-                    Property_Name = saveCaption,
-                    Values = saveVal,
-                    Status = 1
-                };
-                this._caseSolutionConditionService.Save(cce);
+
+
+                    string exvalues = cse.Where(x => x.CaseSolutionConditionCaption == text).FirstOrDefault().CaseSolutionConditionValues;
+                    string exid = cse.Where(x => x.CaseSolutionConditionCaption == text).FirstOrDefault().CaseSolutionConditionCaption;
+
+                    string[] existarray = exvalues.Split(',');
+                    string[] newarray = values.Split(',');
+                    string[] result = existarray.Union(newarray).ToArray();
+                    string final = string.Empty;
+                    foreach (string word in result)
+                    {
+                        if (final == string.Empty)
+                        {
+                            final = word;
+                        }
+                        else
+                        {
+                            final = final + "," + word;
+                        }
+                    }
+
+                    //CaseSolitionConditionListEntity cSc = new CaseSolitionConditionListEntity
+                    //{
+                    //    CaseSolutionConditionCaption = exid,
+                    //    CaseSolutionConditionValues = final
+                    //};
+                    
+                    foreach (var item in cse.Where(w => w.CaseSolutionConditionCaption == text))
+                    {
+                        item.CaseSolutionConditionValues =final;
+                    }
+
+                    //cse.Add(cSc);
+
+                }
+
+
+            }
+            if (cse != null)
+            {
+                foreach (CaseSolitionConditionListEntity lk in cse)
+                {
+                    CaseSolutionConditionEntity o = new CaseSolutionConditionEntity
+                    {
+                        CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
+                        Property_Name = lk.CaseSolutionConditionCaption,
+                        Values = lk.CaseSolutionConditionValues
+                    };
+                    this._caseSolutionConditionService.Save(o);
+                }
             }
 
-            //string stateId = "case_StateSecondary.StateSecondaryGUID";
-            //CaseSolutionConditionEntity cce = new CaseSolutionConditionEntity
-            //{
-
-            //    CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
-            //    Property_Name = stateId,
-            //    Values = selectedStates,
-            //    Status = 1
-            //};
-
-            //this._caseSolutionConditionService.Save(cce);
 
 
 

@@ -2173,6 +2173,9 @@
             }
         },
         submitHandler: function (form) {
+
+            setHiddenField();
+
             form.submit();
         }
     });
@@ -2221,6 +2224,8 @@
         })
     });
 
+
+
     $('#lstStateSecondary').change(function () {
 
         var SelectedValue = $(this).val();
@@ -2263,45 +2268,90 @@
 
     });
 
-
-    function DropDownChange(v)
+    function setHiddenField()
     {
+
+        var i, e, d;
+        var name='';
+        var value='';
+        var final='';
+
+        var ancestor = document.getElementById('divReplaceConditions'),
+            descendents = ancestor.getElementsByTagName('*');
+
+        for (i = 0; i < descendents.length; ++i) {
+
+            e = descendents[i];
+            if (e.id.toString().substring(0,3)=='lst')
+            {
+                name=e.id.replace('lst','');
+
+                if (name!='AddFieldSettings' && name!='AddFieldSettings_chosen')
+                {
+                    var pos=0;
+                    pos=name.indexOf('chosen');
+                    
+                    if (pos<0)
+                    {
+
+                        value = $(e).val();
+
+                        if (final=='')
+                        {
+                            final=name + ':' + value;
+                        }
+                        else
+                        {
+                            final=final + '~' + name + ':' + value;
+                        }
+                    }
+                }
+            }
+        }
         var h=document.getElementById('selectedValues');
-        
-        
-        //var newval = v.value;
-
-        var newval = $(v).val();
-        
-        //document.getElementById('selectedStates').value=SelectedValue;
-        
-        var newid=v.id.replace('lst_','');
-        
-
-        h.value=h.value + '~' + newid + ':' + newval;
-        alert( h.value);
-       
-        //var txt=v.id.toString().replace('lst','txt');
-        //alert(txt);
-        //var g=document.getElementById(txt);
-        //alert(g);
-        //var SelectedValue = $(v).val();
-        //document.getElementById('selectedValues').value=SelectedValue;
-        //alert(document.getElementById('selectedValues').value);
-        //var name=v.name;
-
-        //name=name.toString().replace('lst_','');
-        //var pos=name.indexOf('.');
-
-        ////name=name.toString().substring(0, pos);
-
-        ////alert(document.getElementById('selectedValues').value=SelectedValue);
-        //var savedvals=document.getElementById('selectedValues').value;
-        //var pos1=savedvals.indexOf(name);
-        //alert(pos1);
-       
-
+        h.value=final;
     }
+
+    //function DropDownChange(v)
+    //{
+
+
+    //    var h=document.getElementById('selectedValues');
+
+
+    //    //var newval = v.value;
+
+    //    var newval = $(v).val();
+
+    //    //document.getElementById('selectedStates').value=SelectedValue;
+
+    //    var newid=v.id.replace('lst_','');
+
+
+    //    h.value=h.value + '~' + newid + ':' + newval;
+
+
+    //    //var txt=v.id.toString().replace('lst','txt');
+    //    //alert(txt);
+    //    //var g=document.getElementById(txt);
+    //    //alert(g);
+    //    //var SelectedValue = $(v).val();
+    //    //document.getElementById('selectedValues').value=SelectedValue;
+    //    //alert(document.getElementById('selectedValues').value);
+    //    //var name=v.name;
+
+    //    //name=name.toString().replace('lst_','');
+    //    //var pos=name.indexOf('.');
+
+    //    ////name=name.toString().substring(0, pos);
+
+    //    ////alert(document.getElementById('selectedValues').value=SelectedValue);
+    //    //var savedvals=document.getElementById('selectedValues').value;
+    //    //var pos1=savedvals.indexOf(name);
+    //    //alert(pos1);
+
+
+    //}
 
     function RemoveCondition (v)
     {
@@ -2320,7 +2370,7 @@
 
     }
 
-    
+
 
     function AddCondition()
     {
@@ -2330,13 +2380,13 @@
 
         if (id!=0 && value != 0)
         {
-            
+
 
             $.post("/CaseSolution/AddCondition/", { conditionid: "'" + value.toString() + "'", casesolutionid: "'" + id.toString() + "'" }, function (returnHtml) {
                 alert(returnHtml);
                 $('#divReplaceConditions').html($(returnHtml));
                 //$('#divConditions').html($(returnHtml));
-                
+
             });
 
 
@@ -2345,10 +2395,10 @@
 
 
             //$.post("/CaseSolution/AddCondition/", { conditionid: value.toString(), casesolutionid: "'" + id.toString() + "'" }, function (returnHtml) {
-              
+
             //    $('#divReplaceConditions').load(returnHtml);
             //});
-            
+
 
 
         }
