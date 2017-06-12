@@ -566,16 +566,38 @@ namespace DH.Helpdesk.Web.Controllers
                     CaseSolutionSettingModels);
             this.caseSolutionSettingService.UpdateCaseSolutionSettings(settingsSolutionAggregate);
 
+            List<CaseSolitionConditionListEntity> cse = new List<CaseSolitionConditionListEntity>();
+
             string[] selectedSplit = selectedValues.Split('~');
             foreach (string s in selectedSplit)
             {
-
+                string saveVal = string.Empty;
+                string saveCaption = string.Empty;
                 string[] finalSaveList = s.Split(':');
+                int k = 0;
                 foreach (string t in finalSaveList)
                 {
-
+                    if (k == 0)
+                    {
+                        saveCaption = t;
+                    }
+                    else
+                    {
+                        saveVal = t;
+                    }
+                    k = k + 1;
                 }
+                saveVal = saveVal.Replace('_', ',');
 
+                CaseSolutionConditionEntity cce = new CaseSolutionConditionEntity
+                {
+
+                    CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
+                    Property_Name = saveCaption,
+                    Values = saveVal,
+                    Status = 1
+                };
+                this._caseSolutionConditionService.Save(cce);
             }
 
             //string stateId = "case_StateSecondary.StateSecondaryGUID";
