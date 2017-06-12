@@ -2266,6 +2266,21 @@
 
     function DropDownChange(v)
     {
+        var h=document.getElementById('selectedValues');
+        
+        
+        //var newval = v.value;
+
+        var newval = $(v).val();
+        
+        //document.getElementById('selectedStates').value=SelectedValue;
+        
+        var newid=v.id.replace('lst_','');
+        
+
+        h.value=h.value + '~' + newid + ':' + newval;
+        alert( h.value);
+       
         //var txt=v.id.toString().replace('lst','txt');
         //alert(txt);
         //var g=document.getElementById(txt);
@@ -2284,6 +2299,7 @@
         //var savedvals=document.getElementById('selectedValues').value;
         //var pos1=savedvals.indexOf(name);
         //alert(pos1);
+       
 
     }
 
@@ -2316,16 +2332,23 @@
         {
             
 
-
-            $.post("/CaseSolution/AddCondition/", { conditionid: value.toString(), casesolutionid: "'" + id.toString() + "'" }, function (returnHtml) {
-                //    $('#divReplaceConditions').html($(returnHtml));
+            $.post("/CaseSolution/AddCondition/", { conditionid: "'" + value.toString() + "'", casesolutionid: "'" + id.toString() + "'" }, function (returnHtml) {
                 alert(returnHtml);
-                $('#divReplaceConditions').load(returnHtml);
+                $('#divReplaceConditions').html($(returnHtml));
+                //$('#divConditions').html($(returnHtml));
+                
             });
-            //alert(id.toString());
 
-            //$("#divReplaceConditions").load("/CaseSolution/AddCondition/?conditionid=" + value.toString(), "casesolutionid:" + " + id.toString() + "); 
 
+
+
+
+
+            //$.post("/CaseSolution/AddCondition/", { conditionid: value.toString(), casesolutionid: "'" + id.toString() + "'" }, function (returnHtml) {
+              
+            //    $('#divReplaceConditions').load(returnHtml);
+            //});
+            
 
 
         }

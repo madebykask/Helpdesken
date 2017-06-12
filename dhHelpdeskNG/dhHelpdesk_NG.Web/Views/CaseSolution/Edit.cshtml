@@ -9,28 +9,6 @@
     int backPageId = ViewBag.PageId;   
 }
 
-@{
-    string stateIds = ViewBag.selectedStates;
-}
-
-@{
-    string WgIds = ViewBag.selectedCaseWgs;
-}
-
-@{
-    string PriorityIds = ViewBag.selectedPrioritys;
-}
-@{
-    string StatusIds = ViewBag.selectedStatuses;
-}
-
-@{
-    string UserWgIds = ViewBag.selectedUserWgs;
-}
-
-@{
-    string ProductAreasIds = ViewBag.selectedProductAreas;
-}
 
 
 @{
@@ -42,13 +20,7 @@
 @using (Html.BeginForm("edit", "casesolution", new { id = Model.CaseSolution.Id },  FormMethod.Post, new { id = "target" }))
 {
     @Html.Hidden("PageId", backPageId)
-    @Html.Hidden("selectedStates", stateIds)
-    @Html.Hidden("selectedCaseWgs", WgIds)
-    @Html.Hidden("selectedPrioritys", PriorityIds)
-    @Html.Hidden("selectedStatuses", StatusIds)
-    @Html.Hidden("selectedUserWgs", UserWgIds)
-    @Html.Hidden("selectedProductAreas", ProductAreasIds)
-
+    
     @Html.Hidden("selectedValues", SelectedValues)
 
     <div class="secnavs fixed">

@@ -471,6 +471,7 @@ namespace DH.Helpdesk.Web.Controllers
             return PartialView("_Conditions", model);
         }
 
+        [ValidateInput(false)]
         public ActionResult AddCondition(string conditionid, string casesolutionid)
         {
             string condid = conditionid.Replace("'", "");
@@ -505,7 +506,7 @@ namespace DH.Helpdesk.Web.Controllers
                 CSSelectedSettingsField = lFieldSettingSelected.ToList()
             };
 
-            return PartialView("_Conditions", model);
+            return PartialView("/Views/CaseSolution/_Conditions.cshtml", model);
         }
 
         [ValidateInput(false)]
@@ -513,7 +514,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Edit(
             CaseSolutionInputViewModel caseSolutionInputViewModel,
             CaseSolutionSettingModel[] CaseSolutionSettingModels,
-            int PageId, string selectedStates, string selectedCaseWgs, string selectedPrioritys, string selectedStatuses, string selectedUserWgs, string selectedProductAreas)
+            int PageId, string selectedValues)
         {
 
 
@@ -565,77 +566,31 @@ namespace DH.Helpdesk.Web.Controllers
                     CaseSolutionSettingModels);
             this.caseSolutionSettingService.UpdateCaseSolutionSettings(settingsSolutionAggregate);
 
-
-            string stateId = "case_StateSecondary.StateSecondaryGUID";
-            CaseSolutionConditionEntity cce = new CaseSolutionConditionEntity
+            string[] selectedSplit = selectedValues.Split('~');
+            foreach (string s in selectedSplit)
             {
 
-                CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
-                Property_Name = stateId,
-                Values = selectedStates,
-                Status = 1
-            };
+                string[] finalSaveList = s.Split(':');
+                foreach (string t in finalSaveList)
+                {
 
-            this._caseSolutionConditionService.Save(cce);
+                }
 
-            stateId = "case_WorkingGroup.WorkingGroupGUID";
-            cce = new CaseSolutionConditionEntity
-            {
+            }
 
-                CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
-                Property_Name = stateId,
-                Values = selectedCaseWgs,
-                Status = 1
-            };
+            //string stateId = "case_StateSecondary.StateSecondaryGUID";
+            //CaseSolutionConditionEntity cce = new CaseSolutionConditionEntity
+            //{
 
-            this._caseSolutionConditionService.Save(cce);
+            //    CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
+            //    Property_Name = stateId,
+            //    Values = selectedStates,
+            //    Status = 1
+            //};
+
+            //this._caseSolutionConditionService.Save(cce);
 
 
-            stateId = "case_Priority.PriorityGUID";
-            cce = new CaseSolutionConditionEntity
-            {
-
-                CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
-                Property_Name = stateId,
-                Values = selectedPrioritys,
-                Status = 1
-            };
-
-            this._caseSolutionConditionService.Save(cce);
-
-            stateId = "case_Status.StatusGUID";
-            cce = new CaseSolutionConditionEntity
-            {
-
-                CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
-                Property_Name = stateId,
-                Values = selectedStatuses,
-                Status = 1
-            };
-
-            this._caseSolutionConditionService.Save(cce);
-
-            stateId = "user_WorkingGroup.WorkingGroupGUID";
-            cce = new CaseSolutionConditionEntity
-            {
-
-                CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
-                Property_Name = stateId,
-                Values = selectedUserWgs,
-                Status = 1
-            };
-
-            stateId = "case_ProductArea.ProductAreaGUID";
-            cce = new CaseSolutionConditionEntity
-            {
-
-                CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
-                Property_Name = stateId,
-                Values = selectedProductAreas,
-                Status = 1
-            };
-
-            this._caseSolutionConditionService.Save(cce);
 
             //Remove caching of conditions for this specific template that is used in Case
             string cacheKey = string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition, caseSolutionInputViewModel.CaseSolution.Id);
@@ -993,7 +948,7 @@ namespace DH.Helpdesk.Web.Controllers
             string bagresult = string.Empty;
 
 
-            foreach (var jj in lFieldSettingSelected)
+            foreach (var jj in lFieldSettingSelected.OrderBy(z => z.PropertyName))
             {
                 selval = string.Empty;
                 foreach (var nn in jj.SelectedValues)
@@ -1012,11 +967,17 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (bagresult == string.Empty)
                 {
-                    bagresult = selval;
+                    if (selval != string.Empty)
+                    {
+                        bagresult = selval;
+                    }
                 }
                 else
                 {
-                    bagresult = bagresult + Environment.NewLine + selval;
+                    if (selval != string.Empty)
+                    {
+                        bagresult = bagresult + "~" + selval;
+                    }
                 }
 
             }
