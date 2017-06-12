@@ -55,6 +55,7 @@
         fileNameError: '@Translation.GetForJS("Filnamn är inte giltigt. Special tecken (!@#=$&?*) är inte tillåtna")',
         containsExtendedCase: '@Model.ContainsExtendedCase',
         containsEForm: '@(Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)',
+        extendedCaseFormId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Id.ToString() : "" )', 
 
         caseFieldIds:{
             CaseId: "case__Id",
@@ -151,7 +152,7 @@
 {
     <div class="content onemenu editcase" id="mm1">
         <div class="container">
-            <ul class="nav nav-tabs" id="myTab">
+            <ul class="nav nav-tabs" id="tabsArea">
                 <li data-active-tab="case-tab" class="@((Model.ActiveTab == "" || Model.ActiveTab == CaseTabs.CaseTab) ? "active" : "")">
 
                     @if (Model.CaseTemplateName != null && Model.ExtendedCases == null)

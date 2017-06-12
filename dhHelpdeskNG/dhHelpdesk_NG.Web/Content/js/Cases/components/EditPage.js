@@ -23,9 +23,10 @@ EditPage.prototype.CASE_IN_SAVING = 'case_in_saving';
 /*** CONST END ***/
 
 /*** Variables ***/
-EditPage.prototype.Contains_ExtendedCase = false;
-EditPage.prototype.Contains_Eform = false;
 EditPage.prototype.Case_Field_Ids = null;
+EditPage.prototype.EC_Container_Prefix = 'iframe_container_';
+EditPage.prototype.Current_EC_FormId = "";
+
 
 /**
 * @private
@@ -168,6 +169,7 @@ EditPage.prototype.isFormValid = function() {
 };
 
 EditPage.prototype.primaryValidation = function (submitUrl) {
+
     var me = this;
 
     var finishDate = $('#CaseLog_FinishingDate').val();
@@ -380,50 +382,142 @@ EditPage.prototype.CaseWillFinish = function ()
 };
 
 EditPage.prototype.onSaveYes = function () {    
-    var me = this;
-    var c = me.case;
-    var url = me.EDIT_CASE_URL;
+    var self = this;
+    var c = self.case;
+    var url = self.EDIT_CASE_URL;
     if (c.isNew() && c.isChildCase()) {
-        url = me.SAVE_GOTO_PARENT_CASE_URL;
+        url = self.SAVE_GOTO_PARENT_CASE_URL;
     }
-    return me.primaryValidation(url);
+    //return me.primaryValidation(url);
+    var $_ex_Container = self.getExtendedCaseContainer();
+    if ($_ex_Container != undefined) {
+        var valiationResult = $_ex_Container.contentWindow.validateExtendedCase(false);
+        if (valiationResult == null) {
+            var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
+            return promise.then(self.primaryValidation(url), self.onSaveError);
+        } else {
+            ShowToastMessage("Extended case is not valid!", "error", true);
+        }
+    } else {
+        return self.primaryValidation(url);
+    }
 };
 
 EditPage.prototype.onSaveAndNewYes = function (){
-    var me = this;
-    return me.primaryValidation(me.SAVE_ADD_CASE_URL);
+    var self = this;
+    //return self.primaryValidation(self.SAVE_ADD_CASE_URL);
+    var $_ex_Container = self.getExtendedCaseContainer();
+    if ($_ex_Container != undefined) {
+        var valiationResult = $_ex_Container.contentWindow.validateExtendedCase(false);
+        if (valiationResult == null) {
+            var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
+            return promise.then(self.primaryValidation(self.SAVE_ADD_CASE_URL), self.onSaveError);
+        } else {
+            ShowToastMessage("Extended case is not valid!", "error", true);
+        }
+    } else {
+        return self.primaryValidation(self.SAVE_ADD_CASE_URL);
+    }    
 };
 
 EditPage.prototype.onSaveAndCloseYes = function () {
-    var me = this;
-    return me.primaryValidation(me.NEW_CLOSE_CASE_URL);
+    var self = this;
+    //return me.primaryValidation(me.NEW_CLOSE_CASE_URL);    
+    var $_ex_Container = self.getExtendedCaseContainer();
+    if ($_ex_Container != undefined) {
+        var valiationResult = $_ex_Container.contentWindow.validateExtendedCase(false);
+        if (valiationResult == null) {
+            var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
+            return promise.then(self.primaryValidation(self.NEW_CLOSE_CASE_URL), self.onSaveError);
+        } else {
+            ShowToastMessage("Extended case is not valid!", "error", true);
+        }
+    } else {
+        return self.primaryValidation(self.NEW_CLOSE_CASE_URL);
+    }
 };
-
 
 EditPage.prototype.ReturnFalse = function () {
     return false;
 };
 
 EditPage.prototype.onSaveClick = function () {
-    var me = this;
-    var c = me.case;
-    var url = me.EDIT_CASE_URL;
+    var self = this;
+    var c = self.case;
+    var url = self.EDIT_CASE_URL;
     if (c.isNew() && c.isChildCase()) {
-        url = me.SAVE_GOTO_PARENT_CASE_URL;
+        url = self.SAVE_GOTO_PARENT_CASE_URL;
     }
-    
-    return me.primaryValidation(url);
+
+    var $_ex_Container = self.getExtendedCaseContainer();
+    if ($_ex_Container != undefined) {
+        var valiationResult = $_ex_Container.contentWindow.validateExtendedCase(false);
+        if (valiationResult == null) {
+            var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
+            return promise.then(self.primaryValidation(url), self.onSaveError);
+        } else {
+            ShowToastMessage("Extended case is not valid!", "error", true);
+        }
+    } else {
+        return self.primaryValidation(url);
+    }
+};
+
+//EditPage.prototype.saveExtendedCaseIfExists = function (saveCaseMethod, param1) {
+//    var self = this;
+//    var $_ex_Container = self.getExtendedCaseContainer();
+//    if ($_ex_Container != undefined) {
+//        var valiationResult = $_ex_Container.contentWindow.validateExtendedCase(false);
+//        if (valiationResult == null) {
+//            var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
+//            return promise.then(function () { return saveCaseMethod(param1) }, self.onSaveError);
+//        }
+//    } else {
+//        return saveCaseMethod(param1, self);
+//    }
+//}
+
+EditPage.prototype.getExtendedCaseContainer = function () {    
+    return document.getElementById(EditPage.prototype.EC_Container_Prefix + EditPage.prototype.Current_EC_FormId);
 };
 
 EditPage.prototype.onSaveAndCloseClick = function () {
-    var me = this;
-    return me.primaryValidation(me.NEW_CLOSE_CASE_URL);
+    var self = this;
+    //return me.primaryValidation(self.NEW_CLOSE_CASE_URL);
+    var $_ex_Container = self.getExtendedCaseContainer();
+    if ($_ex_Container != undefined) {
+        var valiationResult = $_ex_Container.contentWindow.validateExtendedCase(false);
+        if (valiationResult == null) {
+            var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
+            return promise.then(self.primaryValidation(self.NEW_CLOSE_CASE_URL), self.onSaveError);
+        } else {
+            ShowToastMessage("Extended case is not valid!", "error", true);
+        }
+    } else {
+        return self.primaryValidation(self.NEW_CLOSE_CASE_URL);
+    }
 };
 
 EditPage.prototype.onSaveAndNewClick = function () {
-    var me = this;
-    return me.primaryValidation(me.SAVE_ADD_CASE_URL);
+    var self = this;
+    //return me.primaryValidation(self.SAVE_ADD_CASE_URL);
+    var $_ex_Container = self.getExtendedCaseContainer();
+    if ($_ex_Container != undefined) {
+        var valiationResult = $_ex_Container.contentWindow.validateExtendedCase(false);
+        if (valiationResult == null) {
+            var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
+            return promise.then(self.primaryValidation(self.SAVE_ADD_CASE_URL), self.onSaveError);
+        } else {
+            ShowToastMessage("Extended case is not valid!", "error", true);
+        }
+    } else {
+        return self.primaryValidation(self.SAVE_ADD_CASE_URL);
+    }
 };
+
+EditPage.prototype.onSaveError = function (err) {
+    alert('Save case not succeed!');
+}
 
 EditPage.prototype.canDeleteCase = function () {
     var me = this;
@@ -543,7 +637,7 @@ EditPage.prototype.onPageLeave = function(ev) {
     }
 };
 
-EditPage.prototype.getTokenIfNeeded = function () {
+EditPage.prototype.recoverTokenIfNeeded = function () {
     var needToGetToken = false;
     var _tokenData = localStorage.getItem("TokenData");
 
@@ -672,14 +766,20 @@ EditPage.prototype.changeCaseButtonsState = function(state) {
     }
 }
 
+EditPage.prototype.syncExtendedCaseFields = function () {
+    var $iframContainer = document.getElementById("iframe_container_3");
+    if ($iframContainer != undefined) {
+        var caseFields = $iframContainer.contentWindow.getCaseValues();
+        console.log(caseFields);
+    }
+}
+
 EditPage.prototype.init = function (p) {
     var self = this;
     self._inSaving = false;
     self.p = p;
     EditPage.prototype.Case_Field_Ids = p.caseFieldIds;
-    
-    this.Contains_ExtendedCase = self.p.containsExtendedCase;
-    this.Contains_Eform = self.p.containsEForm;    
+    EditPage.prototype.Current_EC_FormId = p.extendedCaseFormId;
 
     /// controls binding
     self.$form = $('#target');
@@ -716,7 +816,7 @@ EditPage.prototype.init = function (p) {
     self.$printDialog = $('#PrintCaseDialog');
     self.$descriptionDialog = $('#caseDescriptionPreview');
     self.$caseDescriptionEl = $(".case-description")
-    self.$caseTab = $("#myTab li a");//$('#case-tab');
+    self.$caseTab = $("#tabsArea li a");//$('#case-tab');
     self.$activeTabHolder = $('#ActiveTab');
 
     self.isCaseFileMandatory = self.p.isCaseFileMandatory;
@@ -894,18 +994,22 @@ EditPage.prototype.init = function (p) {
     });
         
     self.$caseTab.click(function (ev) {
-        if (this.Contains_ExtendedCase) {
-            self.$activeTabHolder.val('case-tab');
+        
+        if (self.p.containsExtendedCase) {
+            if (ev.target.className == "case") {
+                self.$activeTabHolder.val('case-tab');
+                self.syncExtendedCaseFields();
+            }
         }
 
-        if (this.Contains_Eform) {
+        if (self.p.Contains_Eform) {
             if (ev.target.className.indexOf("case") >= 0) {
                 if ($(".secnav").hasClass("hide")) {
                     $(".secnav").fadeIn(300, function () {
                         $(".secnav").removeClass("hide");
                     });
                 }
-
+             
                 $.ajax({
                     url: "/Cases/GetCaseInfo",
                     type: "GET",
@@ -922,7 +1026,7 @@ EditPage.prototype.init = function (p) {
                 });
             }
 
-            if (ev.target.className.indexOf("eform") >= 0) {
+            if (ev.target.className == "eform") {
                 var secnav = $(".secnav");
                 if (secnav.hasClass("hide") == false) {
                     secnav.fadeOut(300, function () {
@@ -937,8 +1041,8 @@ EditPage.prototype.init = function (p) {
         window.scrollTo(0, 0);
     });
 
-    /* Temporary disabled because Extended Case will not use token */
-    //self.getTokenIfNeeded();
+    /* Temporary disabled since Extended Case does not use token */
+    //self.recoverTokenIfNeeded();
 };
 
 
