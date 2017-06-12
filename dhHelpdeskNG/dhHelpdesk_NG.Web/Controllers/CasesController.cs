@@ -1515,8 +1515,8 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]        
         public JsonResult GetCaseInfo(int caseId)
         {
-            //if (!SessionFacade.IsCaseDataChanged)
-            //    return Json(new { needUpdate = false, shouldReload = false, newData = "" }, JsonRequestBehavior.AllowGet);
+            if (!SessionFacade.IsCaseDataChanged)
+                return Json(new { needUpdate = false, shouldReload = false, newData = "" }, JsonRequestBehavior.AllowGet);
 
             var _case = _caseService.GetCaseById(caseId);
             if (_case == null)

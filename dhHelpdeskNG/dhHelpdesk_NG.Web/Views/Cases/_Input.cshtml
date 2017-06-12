@@ -1786,11 +1786,12 @@
                                                 {
                                                     if (!Model.case_.Status_Id.HasValue)
                                                     {
-                                                        @Html.TextBoxFor(m => m.case_.Status_Id, new { @readonly = true })
+                                                        @Html.TextBox("statusName", "", new { @readonly = true, id = "statusName" })
+                                                        @Html.HiddenFor(x => x.case_.Status_Id)
                                                     }
                                                     else
                                                     {
-                                                    @Html.TextBoxFor(m => m.statuses.SingleOrDefault(x => x.Id == Model.case_.Status_Id).Name, new { @readonly = true, id = "statusName" })
+                                                        @Html.TextBoxFor(m => m.statuses.SingleOrDefault(x => x.Id == Model.case_.Status_Id).Name, new { @readonly = true, id = "statusName" })
                                                         @Html.HiddenFor(x => x.case_.Status_Id)
                                                     }
                                                 }
