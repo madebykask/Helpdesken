@@ -294,7 +294,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null;//_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id);
-          
+
             CaseSolutionSettingModel[] caseSolutionSettingModels = new CaseSolutionSettingModel[0];
 
             string cost = Convert.ToString(collection["CaseSolution.Cost"].ToString());
@@ -401,7 +401,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 caseSolutionInputViewModel.CaseSolution.SetCurrentUsersWorkingGroup = null;
             }
-            
+
             if (caseSolutionInputViewModel.CaseSolution.ShowInsideCase != 1 || caseSolutionInputViewModel.CaseSolution.SaveAndClose < 0)
                 caseSolutionInputViewModel.CaseSolution.SaveAndClose = null;
 
@@ -473,20 +473,419 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (caseSolutionInputViewModel.CaseSolution.Text_Internal != null && caseSolutionInputViewModel.CaseSolution.Text_Internal.Length > 3000)
                 caseSolutionInputViewModel.CaseSolution.Text_Internal = caseSolutionInputViewModel.CaseSolution.Text_Internal.Substring(0, 3000);
-            
 
+
+
+            if (collection["CaseSolution.AgreedDate"].ToString().Trim() != string.Empty)
+            {
+                string AgreedDate = Convert.ToString(collection["CaseSolution.AgreedDate"].ToString());
+
+                caseSolutionInputViewModel.CaseSolution.AgreedDate = Convert.ToDateTime(AgreedDate);
+            }
+
+            if (collection["CaseSolution.CaseSolutionCategory_Id"].ToString().Trim() != string.Empty)
+            {
+                int CaseSolutionCategory_Id = Convert.ToInt32(collection["CaseSolution.CaseSolutionCategory_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.CaseSolutionCategory_Id = CaseSolutionCategory_Id;
+            }
+
+            if (collection["CaseSolution.CaseType_Id"].ToString().Trim() != string.Empty)
+            {
+                int CaseType_Id = Convert.ToInt32(collection["CaseSolution.CaseType_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.CaseType_Id = CaseType_Id;
+            }
+
+            if (collection["CaseSolution.Category_Id"].ToString().Trim() != string.Empty)
+            {
+                int Category_Id = Convert.ToInt32(collection["CaseSolution.Category_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.Category_Id = Category_Id;
+            }
+
+            if (collection["CaseSolution.CausingPartId"].ToString().Trim() != string.Empty)
+            {
+                int CausingPartId = Convert.ToInt32(collection["CaseSolution.CausingPartId"].ToString());
+                caseSolutionInputViewModel.CaseSolution.CausingPartId = CausingPartId;
+            }
+
+            if (collection["CaseSolution.Change_Id"].ToString().Trim() != string.Empty)
+            {
+                int Change_Id = Convert.ToInt32(collection["CaseSolution.Change_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.Change_Id = Change_Id;
+            }
+
+            caseSolutionInputViewModel.CaseSolution.ChangedDate = DateTime.Now;
+
+
+            if (collection["CaseSolution.ConnectedButton"].ToString().Trim() != string.Empty)
+            {
+                int ConnectedButton = Convert.ToInt32(collection["CaseSolution.ConnectedButton"].ToString());
+                caseSolutionInputViewModel.CaseSolution.ConnectedButton = ConnectedButton;
+            }
+
+            if (collection["CaseSolution.ContactBeforeAction"].ToString().Trim() != string.Empty)
+            {
+                int ContactBeforeAction = Convert.ToInt32(collection["CaseSolution.ContactBeforeAction"].ToString());
+                caseSolutionInputViewModel.CaseSolution.ContactBeforeAction = ContactBeforeAction;
+            }
+
+            if (collection["CaseSolution.Cost"].ToString().Trim() != string.Empty)
+            {
+                int Cost = Convert.ToInt32(collection["CaseSolution.Cost"].ToString());
+                caseSolutionInputViewModel.CaseSolution.Cost = Cost;
+            }
+
+            if (collection["CaseSolution.CostCentre"].ToString().Trim() != string.Empty)
+            {
+                string CostCentre = Convert.ToString(collection["CaseSolution.CostCentre"].ToString());
+                caseSolutionInputViewModel.CaseSolution.CostCentre = CostCentre;
+            }
+
+
+
+            caseSolutionInputViewModel.CaseSolution.CreatedDate = DateTime.Now;
+
+
+            if (collection["CaseSolution.Customer_Id"].ToString().Trim() != string.Empty)
+            {
+                int Customer_Id = Convert.ToInt32(collection["CaseSolution.Customer_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.Customer_Id = Customer_Id;
+            }
+
+            if (collection["CaseSolution.Department_Id"].ToString().Trim() != string.Empty)
+            {
+                int Department_Id = Convert.ToInt32(collection["CaseSolution.Department_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.Department_Id = Department_Id;
+            }
+
+            if (collection["CaseSolution.FinishingCause_Id"].ToString().Trim() != string.Empty)
+            {
+                int FinishingCause_Id = Convert.ToInt32(collection["CaseSolution.FinishingCause_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.FinishingCause_Id = FinishingCause_Id;
+            }
+
+            if (collection["CaseSolution.FinishingDate"].ToString().Trim() != string.Empty)
+            {
+                string FinishingDate = Convert.ToString(collection["CaseSolution.FinishingDate"].ToString());
+                caseSolutionInputViewModel.CaseSolution.FinishingDate = Convert.ToDateTime(FinishingDate);
+            }
+
+            if (collection["CaseSolution.FinishingDescription"].ToString().Trim() != string.Empty)
+            {
+                string FinishingDescription = Convert.ToString(collection["CaseSolution.FinishingDescription"].ToString());
+                caseSolutionInputViewModel.CaseSolution.FinishingDescription = FinishingDescription;
+            }
+
+            if (collection["CaseSolution.Id"].ToString().Trim() != string.Empty)
+            {
+                int Id = Convert.ToInt32(collection["CaseSolution.Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.Id = Id;
+            }
+
+            if (collection["CaseSolution.Impact_Id"].ToString().Trim() != string.Empty)
+            {
+                int Impact_Id = Convert.ToInt32(collection["CaseSolution.Impact_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.Impact_Id = Impact_Id;
+            }
+
+            if (collection["CaseSolution.Information"].ToString().Trim() != string.Empty)
+            {
+                string Information = Convert.ToString(collection["CaseSolution.Information"].ToString());
+                caseSolutionInputViewModel.CaseSolution.Information = Information;
+            }
+
+            if (collection["CaseSolution.IsAbout_CostCentre"].ToString().Trim() != string.Empty)
+            {
+                string IsAbout_CostCentre = Convert.ToString(collection["CaseSolution.IsAbout_CostCentre"].ToString());
+                caseSolutionInputViewModel.CaseSolution.IsAbout_CostCentre = IsAbout_CostCentre;
+            }
+
+            if (collection["CaseSolution.IsAbout_Department_Id"].ToString().Trim() != string.Empty)
+            {
+                int IsAbout_Department_Id = Convert.ToInt32(collection["CaseSolution.IsAbout_Department_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.IsAbout_Department_Id = IsAbout_Department_Id;
+            }
+
+            if (collection["CaseSolution.IsAbout_OU_Id"].ToString().Trim() != string.Empty)
+            {
+                int IsAbout_OU_Id = Convert.ToInt32(collection["CaseSolution.IsAbout_OU_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.IsAbout_OU_Id = IsAbout_OU_Id;
+            }
+
+            if (collection["CaseSolution.IsAbout_PersonsCellPhone"].ToString().Trim() != string.Empty)
+            {
+                int IsAbout_PersonsCellPhone = Convert.ToInt32(collection["CaseSolution.IsAbout_PersonsCellPhone"].ToString());
+                caseSolutionInputViewModel.CaseSolution.IsAbout_PersonsCellPhone = IsAbout_PersonsCellPhone.ToString();
+            }
+
+            if (collection["CaseSolution.IsAbout_PersonsEmail"].ToString().Trim() != string.Empty)
+            {
+                int IsAbout_PersonsEmail = Convert.ToInt32(collection["CaseSolution.IsAbout_PersonsEmail"].ToString());
+                caseSolutionInputViewModel.CaseSolution.IsAbout_PersonsEmail = IsAbout_PersonsEmail.ToString();
+            }
+            if (collection["CaseSolution.IsAbout_PersonsName"].ToString().Trim() != string.Empty)
+            {
+                int IsAbout_PersonsName = Convert.ToInt32(collection["CaseSolution.IsAbout_PersonsName"].ToString());
+                caseSolutionInputViewModel.CaseSolution.IsAbout_PersonsName = IsAbout_PersonsName.ToString();
+            }
+
+            if (collection["CaseSolution.IsAbout_PersonsPhone"].ToString().Trim() != string.Empty)
+            {
+                int IsAbout_PersonsPhone = Convert.ToInt32(collection["CaseSolution.IsAbout_PersonsPhone"].ToString());
+                caseSolutionInputViewModel.CaseSolution.IsAbout_PersonsPhone = IsAbout_PersonsPhone.ToString();
+            }
+
+            if (collection["CaseSolution.IsAbout_Place"].ToString().Trim() != string.Empty)
+            {
+                int IsAbout_Place = Convert.ToInt32(collection["CaseSolution.IsAbout_Place"].ToString());
+                caseSolutionInputViewModel.CaseSolution.IsAbout_Place = IsAbout_Place.ToString();
+            }
+
+            if (collection["CaseSolution.IsAbout_Region_Id"].ToString().Trim() != string.Empty)
+            {
+                int IsAbout_Region_Id = Convert.ToInt32(collection["CaseSolution.IsAbout_Region_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.IsAbout_Region_Id = IsAbout_Region_Id;
+            }
+
+            if (collection["CaseSolution.IsAbout_ReportedBy"].ToString().Trim() != string.Empty)
+            {
+                int IsAbout_ReportedBy = Convert.ToInt32(collection["CaseSolution.IsAbout_ReportedBy"].ToString());
+                caseSolutionInputViewModel.CaseSolution.IsAbout_ReportedBy = IsAbout_ReportedBy.ToString();
+            }
+            if (collection["CaseSolution.IsAbout_UserCode"].ToString().Trim() != string.Empty)
+            {
+                int IsAbout_UserCode = Convert.ToInt32(collection["CaseSolution.IsAbout_UserCode"].ToString());
+                caseSolutionInputViewModel.CaseSolution.IsAbout_UserCode = IsAbout_UserCode.ToString();
+            }
+
+
+            if (collection["CaseSolution.Name"].ToString().Trim() != string.Empty)
+            {
+                string Name = Convert.ToString(collection["CaseSolution.Name"].ToString());
+                caseSolutionInputViewModel.CaseSolution.Name = Name;
+            }
+
+            if (collection["CaseSolution.OU_Id"].ToString().Trim() != string.Empty)
+            {
+                int OU_Id = Convert.ToInt32(collection["CaseSolution.OU_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.OU_Id = OU_Id;
+            }
+
+
+
+            if (collection["CaseSolution.OtherCost"].ToString().Trim() != string.Empty)
+            {
+                int OtherCost = Convert.ToInt32(collection["CaseSolution.OtherCost"].ToString());
+                caseSolutionInputViewModel.CaseSolution.OtherCost = OtherCost;
+            }
+
+            if (collection["CaseSolution.OverWritePopUp"].ToString().Trim() != string.Empty)
+            {
+                string OverWritePopUp = Convert.ToString(collection["CaseSolution.OverWritePopUp"].ToString());
+
+                pos = OverWritePopUp.IndexOf(",");
+                if (pos > 0)
+                {
+                    OverWritePopUp = OverWritePopUp.Substring(0, pos);
+
+                    caseSolutionInputViewModel.CaseSolution.OverWritePopUp = Convert.ToInt32(OverWritePopUp.Substring(0, pos));
+
+                }
+            }
+
+            if (collection["CaseSolution.PersonsCellPhone"].ToString().Trim() != string.Empty)
+            {
+                string PersonsCellPhone = Convert.ToString(collection["CaseSolution.PersonsCellPhone"].ToString());
+                caseSolutionInputViewModel.CaseSolution.PersonsCellPhone = PersonsCellPhone;
+            }
+
+            if (collection["CaseSolution.PlanDate"].ToString().Trim() != string.Empty)
+            {
+                string PlanDate = Convert.ToString(collection["CaseSolution.PlanDate"].ToString());
+                caseSolutionInputViewModel.CaseSolution.PlanDate = Convert.ToDateTime(PlanDate);
+            }
+
+            if (collection["CaseSolution.Priority_Id"].ToString().Trim() != string.Empty)
+            {
+                int Priority_Id = Convert.ToInt32(collection["CaseSolution.Priority_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.Priority_Id = Priority_Id;
+            }
+
+            if (collection["CaseSolution.Priority_Id"].ToString().Trim() != string.Empty)
+            {
+                int Problem_Id = Convert.ToInt32(collection["CaseSolution.Problem_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.Problem_Id = Problem_Id;
+            }
+            if (collection["CaseSolution.ProductArea_Id"].ToString().Trim() != string.Empty)
+            {
+                int ProductArea_Id = Convert.ToInt32(collection["CaseSolution.ProductArea_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.ProductArea_Id = ProductArea_Id;
+            }
+
+            if (collection["CaseSolution.Project_Id"].ToString().Trim() != string.Empty)
+            {
+                int Project_Id = Convert.ToInt32(collection["CaseSolution.Project_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.Project_Id = Project_Id;
+            }
+
+            if (collection["CaseSolution.Region_Id"].ToString().Trim() != string.Empty)
+            {
+                int Region_Id = Convert.ToInt32(collection["CaseSolution.Region_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.Region_Id = Region_Id;
+            }
+
+            if (collection["CaseSolution.RegistrationSource"].ToString().Trim() != string.Empty)
+            {
+                int RegistrationSource = Convert.ToInt32(collection["CaseSolution.RegistrationSource"].ToString());
+                caseSolutionInputViewModel.CaseSolution.RegistrationSource = RegistrationSource;
+            }
+
+            if (collection["CaseSolution.SMS"].ToString().Trim() != string.Empty)
+            {
+                int SMS = Convert.ToInt32(collection["CaseSolution.SMS"].ToString());
+                caseSolutionInputViewModel.CaseSolution.SMS = SMS;
+            }
+
+            if (collection["CaseSolution.SaveAndClose"].ToString().Trim() != string.Empty)
+            {
+                int SaveAndClose = Convert.ToInt32(collection["CaseSolution.SaveAndClose"].ToString());
+                caseSolutionInputViewModel.CaseSolution.SaveAndClose = SaveAndClose;
+            }
+
+
+            if (collection["CaseSolution.ShortDescription"].ToString().Trim() != string.Empty)
+            {
+                string ShortDescription = Convert.ToString(collection["CaseSolution.ShortDescription"].ToString());
+                caseSolutionInputViewModel.CaseSolution.ShortDescription = ShortDescription;
+            }
+
+
+            if (collection["CaseSolution.ShowInSelfService"].ToString().Trim() != string.Empty)
+            {
+
+                if (collection["CaseSolution.ShowInSelfService"].ToString() == "0")
+                {
+                    caseSolutionInputViewModel.CaseSolution.ShowInSelfService = false;
+                }
+                else
+                {
+                    caseSolutionInputViewModel.CaseSolution.ShowInSelfService = true;
+                }
+            }
+
+            if (collection["CaseSolution.ShowInsideCase"].ToString().Trim() != string.Empty)
+            {
+                string ShowInsideCase = Convert.ToString(collection["CaseSolution.ShowInsideCase"].ToString());
+
+                pos = ShowInsideCase.IndexOf(",");
+                if (pos > 0)
+                {
+                    ShowInsideCase = ShowInsideCase.Substring(0, pos);
+
+                    caseSolutionInputViewModel.CaseSolution.OverWritePopUp = Convert.ToInt32(ShowInsideCase);
+
+                }
+
+
+            }
+
+            if (collection["CaseSolution.ShowOnCaseOverview"].ToString().Trim() != string.Empty)
+            {
+                string ShowOnCaseOverview = Convert.ToString(collection["CaseSolution.ShowOnCaseOverview"].ToString());
+                pos = ShowOnCaseOverview.IndexOf(",");
+                if (pos > 0)
+                {
+                    ShowOnCaseOverview = ShowOnCaseOverview.Substring(0, pos);
+
+                    caseSolutionInputViewModel.CaseSolution.ShowOnCaseOverview = Convert.ToInt32(ShowOnCaseOverview);
+
+                }
+
+
+            }
+
+            if (collection["CaseSolution.SortOrder"].ToString().Trim() != string.Empty)
+            {
+                int SortOrder = Convert.ToInt32(collection["CaseSolution.SortOrder"].ToString());
+                caseSolutionInputViewModel.CaseSolution.SortOrder = SortOrder;
+            }
+            if (collection["CaseSolution.StateSecondary_Id"].ToString().Trim() != string.Empty)
+            {
+                int StateSecondary_Id = Convert.ToInt32(collection["CaseSolution.StateSecondary_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.StateSecondary_Id = StateSecondary_Id;
+            }
+            if (collection["CaseSolution.Status_Id"].ToString().Trim() != string.Empty)
+            {
+                int Status_Id = Convert.ToInt32(collection["CaseSolution.Status_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.Status_Id = Status_Id;
+            }
+            if (collection["CaseSolution.Supplier_Id"].ToString().Trim() != string.Empty)
+            {
+                int Supplier_Id = Convert.ToInt32(collection["CaseSolution.Supplier_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.Supplier_Id = Supplier_Id;
+            }
+            if (collection["CaseSolution.System_Id"].ToString().Trim() != string.Empty)
+            {
+                int System_Id = Convert.ToInt32(collection["CaseSolution.System_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.System_Id = System_Id;
+            }
+
+
+
+            if (collection["CaseSolution.TemplatePath"].ToString().Trim() != string.Empty)
+            {
+                string TemplatePath = Convert.ToString(collection["CaseSolution.TemplatePath"].ToString());
+                caseSolutionInputViewModel.CaseSolution.TemplatePath = TemplatePath;
+            }
+
+            if (collection["CaseSolution.UpdateNotifierInformation"].ToString().Trim() != string.Empty)
+            {
+                int UpdateNotifierInformation = Convert.ToInt32(collection["CaseSolution.UpdateNotifierInformation"].ToString());
+                caseSolutionInputViewModel.CaseSolution.UpdateNotifierInformation = UpdateNotifierInformation;
+            }
+            if (collection["CaseSolution.Urgency_Id"].ToString().Trim() != string.Empty)
+            {
+                int Urgency_Id = Convert.ToInt32(collection["CaseSolution.Urgency_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.Urgency_Id = Urgency_Id;
+            }
+
+            if (collection["CaseSolution.Verified"].ToString().Trim() != string.Empty)
+            {
+                int Verified = Convert.ToInt32(collection["CaseSolution.Verified"].ToString());
+                caseSolutionInputViewModel.CaseSolution.Verified = Verified;
+            }
+            if (collection["CaseSolution.WatchDate"].ToString().Trim() != string.Empty)
+            {
+                string WatchDate = Convert.ToString(collection["CaseSolution.WatchDate"].ToString());
+                caseSolutionInputViewModel.CaseSolution.WatchDate = Convert.ToDateTime(WatchDate);
+            }
+            if (collection["CaseSolution.WorkingGroup_Id"].ToString().Trim() != string.Empty)
+            {
+                int WorkingGroup_Id = Convert.ToInt32(collection["CaseSolution.WorkingGroup_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.WorkingGroup_Id = WorkingGroup_Id;
+            }
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
             CaseSettingsSolutionAggregate settingsSolutionAggregate = this.CreateCaseSettingsSolutionAggregate(caseSolutionInputViewModel.CaseSolution.Id, caseSolutionSettingModels);
             this.caseSolutionSettingService.AddCaseSolutionSettings(settingsSolutionAggregate);
 
-            
+
+            int casesoilutionid = caseSolutionInputViewModel.CaseSolution.Id;
+
+            string condid = selvals;
+            string caid = casesoilutionid.ToString();
+            this._caseSolutionConditionService.Add(Convert.ToInt32(caid), Convert.ToInt32(condid));
 
 
 
-            var model = this.CreateInputViewModel(null);
 
-            return this.View(model);
+            var caseSolution = this._caseSolutionService.GetCaseSolution(casesoilutionid);
+
+
+            var model = this.CreateInputViewModel(caseSolution);
+
+            return this.View("/Views/CaseSolution/Edit.cshtml", model);
+
+
 
         }
 
