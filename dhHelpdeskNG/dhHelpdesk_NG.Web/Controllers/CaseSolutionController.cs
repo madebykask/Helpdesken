@@ -286,6 +286,101 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
+
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult NewAndEdit(CaseSolutionInputViewModel caseSolutionInputViewModel)
+        {
+
+            string condid = caseSolutionInputViewModel.ParantPath_Category;
+            string id = caseSolutionInputViewModel.Schedule.ToString();
+
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+            IList<CaseFieldSetting> CheckMandatory = null;//_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id);
+            this.TempData["RequiredFields"] = null;
+            CaseSolutionSettingModel[] caseSolutionSettingModels = null;
+            if (caseSolutionSettingModels == null)
+            {
+                caseSolutionSettingModels = new CaseSolutionSettingModel[0];
+            }
+
+            caseSolutionInputViewModel.CaseSolution = new CaseSolution {Id= Convert.ToInt32(id)};
+            
+
+            var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
+
+            // Positive: Send Mail to...
+            if (caseSolutionInputViewModel.CaseSolution.NoMailToNotifier == 0)
+                caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 1;
+            else
+                caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 0;
+
+            if (caseSolutionInputViewModel.CaseSolution.PerformerUser_Id == -1)
+            {
+                caseSolutionInputViewModel.CaseSolution.PerformerUser_Id = null;
+                caseSolutionInputViewModel.CaseSolution.SetCurrentUserAsPerformer = 1;
+            }
+            else
+            {
+                caseSolutionInputViewModel.CaseSolution.SetCurrentUserAsPerformer = null;
+            }
+
+            if (caseSolutionInputViewModel.CaseSolution.CaseWorkingGroup_Id == -1)
+            {
+                caseSolutionInputViewModel.CaseSolution.CaseWorkingGroup_Id = null;
+                caseSolutionInputViewModel.CaseSolution.SetCurrentUsersWorkingGroup = 1;
+            }
+            else
+            {
+                caseSolutionInputViewModel.CaseSolution.SetCurrentUsersWorkingGroup = null;
+            }
+
+            if (caseSolutionInputViewModel.CaseSolution.ShowInsideCase != 1 || caseSolutionInputViewModel.CaseSolution.SaveAndClose < 0)
+                caseSolutionInputViewModel.CaseSolution.SaveAndClose = null;
+
+            this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
+
+           
+            //////////////////////////////////
+            var caseSolutionEdit = this._caseSolutionService.GetCaseSolution(caseSolutionInputViewModel.CaseSolution.Id);
+
+
+
+
+
+            string caid = caseSolutionInputViewModel.CaseSolution.Id.ToString();
+            this._caseSolutionConditionService.Add(Convert.ToInt32(caid), Convert.ToInt32(condid));
+
+
+            //Get not selected case solution conditions
+            IEnumerable<CaseSolutionSettingsField> lFieldSetting = new List<CaseSolutionSettingsField>();
+            lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(Convert.ToInt32(caid));
+
+            List<SelectListItem> feildSettings = null;
+            feildSettings = lFieldSetting
+                  .Select(x => new SelectListItem
+                  {
+                      Text = x.Text,
+                      Value = x.CaseSolutionConditionId.ToString(),
+                      Selected = false
+                  }).ToList();
+            //Get not selected case solution conditions
+
+            //Get selected case solution conditions
+            IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
+            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid));
+
+            
+
+
+
+            var model = this.CreateInputViewModel(caseSolutionEdit);
+
+            return this.View("/Views/CaseSolution/Edit.cshtml", model);
+        }
+
+
         public ActionResult Edit(int id, int? backToPageId)
         {
             var caseSolution = this._caseSolutionService.GetCaseSolution(id);

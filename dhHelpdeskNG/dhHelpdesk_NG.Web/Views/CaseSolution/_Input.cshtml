@@ -2290,7 +2290,7 @@
                 {
                     var pos=0;
                     pos=name.indexOf('chosen');
-                    
+
                     if (pos<0)
                     {
 
@@ -2391,17 +2391,54 @@
 
 
 
+        }
+        else
+        {
+            var value = e.options[e.selectedIndex].value;
+
+            //var inputName = $('#Name').val();
+            var dataResponse = { ParantPath_Category: value.toString(), Schedule: 0 };
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(dataResponse),
+                dataType: 'html',
+                url: '/CaseSolution/NewAndEdit',
+                success: function(result) {
+                    alert();
+                }
+            });
 
 
 
-            //$.post("/CaseSolution/AddCondition/", { conditionid: value.toString(), casesolutionid: "'" + id.toString() + "'" }, function (returnHtml) {
 
-            //    $('#divReplaceConditions').load(returnHtml);
-            //});
 
+
+
+
+
+
+
+
+
+
+
+
+            //var formData = $("#target").serialize() + '&' + value.toString()
+
+
+
+            //$.ajax({
+            //    type : 'POST',
+            //    url : '/CaseSolution/NewAndEdit',
+            //    data : $('#target').serialize() + "&par1=1&par2=2&par3=232",
+            //    success: function (data) {
+            //        alert(data.Status);
+            //    }});
 
 
         }
+
 
     }
 
