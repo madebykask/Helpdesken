@@ -39,7 +39,7 @@
                                                         <li style="padding-left: 18px;">
                                                             @if(string.IsNullOrEmpty(link.UrlAddress))
                                                             {
-                                                                if(link.DocumentId == null)
+                                                                if (link.DocumentId == null || link.DocumentId == 0)
                                                                 {
                                                                 <a @target href="@Url.Action("new/", "cases", new { customerId = link.CustomerId, templateId = link.CaseSolutionId, templateistrue = 1 })">@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
                                                                 }
