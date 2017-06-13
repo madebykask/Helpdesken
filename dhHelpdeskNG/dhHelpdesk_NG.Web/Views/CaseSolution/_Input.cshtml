@@ -2226,47 +2226,47 @@
 
 
 
-    $('#lstStateSecondary').change(function () {
+    //$('#lstStateSecondary').change(function () {
 
-        var SelectedValue = $(this).val();
-        document.getElementById('selectedStates').value=SelectedValue;
+    //    var SelectedValue = $(this).val();
+    //    document.getElementById('selectedStates').value=SelectedValue;
 
-    });
+    //});
 
-    $('#lstCaseWorkingGroup').change(function () {
+    //$('#lstCaseWorkingGroup').change(function () {
 
-        var SelectedValue = $(this).val();
-        document.getElementById('selectedCaseWgs').value=SelectedValue;
+    //    var SelectedValue = $(this).val();
+    //    document.getElementById('selectedCaseWgs').value=SelectedValue;
 
-    });
+    //});
 
-    $('#lstCasePriority').change(function () {
+    //$('#lstCasePriority').change(function () {
 
-        var SelectedValue = $(this).val();
-        document.getElementById('selectedPrioritys').value=SelectedValue;
+    //    var SelectedValue = $(this).val();
+    //    document.getElementById('selectedPrioritys').value=SelectedValue;
 
-    });
+    //});
 
-    $('#lstCaseStatus').change(function () {
+    //$('#lstCaseStatus').change(function () {
 
-        var SelectedValue = $(this).val();
-        document.getElementById('selectedStatuses').value=SelectedValue;
+    //    var SelectedValue = $(this).val();
+    //    document.getElementById('selectedStatuses').value=SelectedValue;
 
-    });
+    //});
 
-    $('#lstUserWg').change(function () {
+    //$('#lstUserWg').change(function () {
 
-        var SelectedValue = $(this).val();
-        document.getElementById('selectedUserWgs').value=SelectedValue;
+    //    var SelectedValue = $(this).val();
+    //    document.getElementById('selectedUserWgs').value=SelectedValue;
 
-    });
+    //});
 
-    $('#lstCaseProductArea').change(function () {
+    //$('#lstCaseProductArea').change(function () {
 
-        var SelectedValue = $(this).val();
-        document.getElementById('selectedProductAreas').value=SelectedValue;
+    //    var SelectedValue = $(this).val();
+    //    document.getElementById('selectedProductAreas').value=SelectedValue;
 
-    });
+    //});
 
     function setHiddenField()
     {
@@ -2394,27 +2394,19 @@
         }
         else
         {
-            var value = e.options[e.selectedIndex].value;
-
-            //var inputName = $('#Name').val();
-            var dataResponse = { ParantPath_Category: value.toString(), Schedule: 0 };
+          
+            var form = $("#target").serialize();
             $.ajax({
                 type: 'POST',
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify(dataResponse),
-                dataType: 'html',
-                url: '/CaseSolution/NewAndEdit',
-                success: function(result) {
-                    alert();
+                url: "/CaseSolution/NewAndEdit",
+                data: form,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.result == "Error") {
+                        alert(data.message);
+                    }
                 }
             });
-
-
-
-
-
-
-
 
 
 

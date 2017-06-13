@@ -290,33 +290,93 @@ namespace DH.Helpdesk.Web.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult NewAndEdit(CaseSolutionInputViewModel caseSolutionInputViewModel)
+        public ActionResult NewAndEdit(FormCollection collection)
         {
-
-            string condid = caseSolutionInputViewModel.ParantPath_Category;
-            string id = caseSolutionInputViewModel.Schedule.ToString();
-
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null;//_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id);
-            this.TempData["RequiredFields"] = null;
-            CaseSolutionSettingModel[] caseSolutionSettingModels = null;
-            if (caseSolutionSettingModels == null)
+          
+            CaseSolutionSettingModel[] caseSolutionSettingModels = new CaseSolutionSettingModel[0];
+
+            string cost = Convert.ToString(collection["CaseSolution.Cost"].ToString());
+            string selvals = Convert.ToString(collection["lstAddFieldSettings"].ToString());
+
+
+            string caseSolutionId = Convert.ToString(collection["CaseSolution.Id"].ToString());
+            string scheduleMonthly = Convert.ToString(collection["ScheduleMonthly"].ToString());
+            int scheduleType = 0;// Convert.ToString(collection["ScheduleType"].ToString());
+            int scheduleTime = 0; // Convert.ToString(collection["ScheduleTime"].ToString()); 
+            int scheduleWatchDate = 0;// Convert.ToString(collection["ScheduleWatchDate"].ToString());
+            string[] scheduleDay = null;// = Convert.ToString(collection["ScheduleDay"].ToString());
+            string[] scheduleMonth = null;// = Convert.ToString(collection["ScheduleMonth"].ToString());
+            string scheduleMonthlyDay = Convert.ToString(collection["ScheduleMonthlyDay"].ToString());
+            int scheduleMonthlyOrder = 0;// Convert.ToString(collection["ScheduleMonthlyOrder"].ToString());
+            int scheduleMonthlyWeekday = 0;// Convert.ToString(collection["ScheduleMonthlyWeekday"].ToString());
+            string Schedule = Convert.ToString(collection["Schedule"].ToString());
+
+            var caseSolutionSchedule = new CaseSolutionSchedule();
+
+
+            if (Convert.ToInt32(Schedule) != 0)
             {
-                caseSolutionSettingModels = new CaseSolutionSettingModel[0];
+                caseSolutionSchedule.CaseSolution_Id = Convert.ToInt32(caseSolutionId);
+                caseSolutionSchedule.ScheduleType = Convert.ToInt32(scheduleType);
+                caseSolutionSchedule.ScheduleTime = Convert.ToInt32(scheduleTime);
+                caseSolutionSchedule.ScheduleWatchDate = Convert.ToInt32(scheduleWatchDate);
+
+                if (Convert.ToInt32(scheduleType) == 1)
+                    caseSolutionSchedule.ScheduleDay = null;
+
+                if (Convert.ToInt32(scheduleType) == 2 && scheduleDay != null)
+                {
+                    caseSolutionSchedule.ScheduleDay = "," + string.Join(",", scheduleDay) + ",";
+                }
+
+                if (Convert.ToInt32(scheduleType) == 3)
+                {
+                    if (Convert.ToInt32(scheduleMonthly) == 1 && scheduleMonth != null)
+                    {
+                        caseSolutionSchedule.ScheduleDay = scheduleMonthlyDay + ";," + string.Join(",", scheduleMonth) + ",";
+                    }
+
+                    if (Convert.ToInt32(scheduleMonthly) == 2 && scheduleMonth != null)
+                    {
+                        caseSolutionSchedule.ScheduleDay = scheduleMonthlyOrder + ":" + scheduleMonthlyWeekday + ";," + string.Join(",", scheduleMonth) + ",";
+                    }
+                }
+            }
+            else
+            {
+                caseSolutionSchedule = null;
             }
 
-            caseSolutionInputViewModel.CaseSolution = new CaseSolution {Id= Convert.ToInt32(id)};
-            
-
-            var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
-
+            CaseSolutionInputViewModel caseSolutionInputViewModel = new CaseSolutionInputViewModel();
+            caseSolutionInputViewModel.CaseSolution = new CaseSolution();
+            string NoMailToNotifier = Convert.ToString(collection["Casesolution.NoMailToNotifier"].ToString());
+            NoMailToNotifier = NoMailToNotifier.Replace(",", ".");
+            int pos = NoMailToNotifier.IndexOf(".");
+            if (pos > 0)
+            {
+                NoMailToNotifier = NoMailToNotifier.Substring(0, pos);
+            }
+            if (NoMailToNotifier == string.Empty)
+            {
+                NoMailToNotifier = "0";
+            }
             // Positive: Send Mail to...
-            if (caseSolutionInputViewModel.CaseSolution.NoMailToNotifier == 0)
+
+            if (Convert.ToInt32(NoMailToNotifier) == 0)
                 caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 1;
             else
                 caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 0;
 
-            if (caseSolutionInputViewModel.CaseSolution.PerformerUser_Id == -1)
+
+            string PerformerUser_Id = Convert.ToString(collection["Casesolution.PerformerUser_Id"].ToString());
+            PerformerUser_Id = PerformerUser_Id.Replace(",", ".");
+            if (PerformerUser_Id == string.Empty)
+            {
+                PerformerUser_Id = "0";
+            }
+            if (Convert.ToInt32(PerformerUser_Id) == -1)
             {
                 caseSolutionInputViewModel.CaseSolution.PerformerUser_Id = null;
                 caseSolutionInputViewModel.CaseSolution.SetCurrentUserAsPerformer = 1;
@@ -326,7 +386,13 @@ namespace DH.Helpdesk.Web.Controllers
                 caseSolutionInputViewModel.CaseSolution.SetCurrentUserAsPerformer = null;
             }
 
-            if (caseSolutionInputViewModel.CaseSolution.CaseWorkingGroup_Id == -1)
+            string CaseWorkingGroup_Id = Convert.ToString(collection["Casesolution.CaseWorkingGroup_Id"].ToString());
+            CaseWorkingGroup_Id = CaseWorkingGroup_Id.Replace(",", ".");
+            if (CaseWorkingGroup_Id == string.Empty)
+            {
+                CaseWorkingGroup_Id = "0";
+            }
+            if (Convert.ToInt32(CaseWorkingGroup_Id) == -1)
             {
                 caseSolutionInputViewModel.CaseSolution.CaseWorkingGroup_Id = null;
                 caseSolutionInputViewModel.CaseSolution.SetCurrentUsersWorkingGroup = 1;
@@ -335,49 +401,93 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 caseSolutionInputViewModel.CaseSolution.SetCurrentUsersWorkingGroup = null;
             }
-
+            
             if (caseSolutionInputViewModel.CaseSolution.ShowInsideCase != 1 || caseSolutionInputViewModel.CaseSolution.SaveAndClose < 0)
                 caseSolutionInputViewModel.CaseSolution.SaveAndClose = null;
 
+
+
+            /////SAve fields
+            string Caption = Convert.ToString(collection["Casesolution.Caption"].ToString());
+            caseSolutionInputViewModel.CaseSolution.Caption = Caption ?? string.Empty;
+
+            string Description = Convert.ToString(collection["Casesolution.Description"].ToString());
+            caseSolutionInputViewModel.CaseSolution.Description = Description ?? string.Empty;
+
+            string Miscellaneous = Convert.ToString(collection["Casesolution.Miscellaneous"].ToString());
+            caseSolutionInputViewModel.CaseSolution.Miscellaneous = Miscellaneous ?? string.Empty;
+
+            string ReportedBy = Convert.ToString(collection["Casesolution.ReportedBy"].ToString());
+            caseSolutionInputViewModel.CaseSolution.ReportedBy = ReportedBy ?? string.Empty;
+
+            string Text_External = Convert.ToString(collection["Casesolution.Text_External"].ToString());
+            caseSolutionInputViewModel.CaseSolution.Text_External = Text_External ?? string.Empty;
+
+            string Text_Internal = Convert.ToString(collection["Casesolution.Text_Internal"].ToString());
+            caseSolutionInputViewModel.CaseSolution.Text_Internal = Text_Internal ?? string.Empty;
+
+            string PersonsName = Convert.ToString(collection["Casesolution.PersonsName"].ToString());
+            caseSolutionInputViewModel.CaseSolution.PersonsName = PersonsName ?? string.Empty;
+
+            string PersonsPhone = Convert.ToString(collection["Casesolution.PersonsPhone"].ToString());
+            caseSolutionInputViewModel.CaseSolution.PersonsPhone = PersonsPhone ?? string.Empty;
+
+            string PersonsEmail = Convert.ToString(collection["Casesolution.PersonsEmail"].ToString());
+            caseSolutionInputViewModel.CaseSolution.PersonsEmail = PersonsEmail ?? string.Empty;
+
+            string Place = Convert.ToString(collection["Casesolution.Place"].ToString());
+            caseSolutionInputViewModel.CaseSolution.Place = Place ?? string.Empty;
+
+            string UserCode = Convert.ToString(collection["Casesolution.UserCode"].ToString());
+            caseSolutionInputViewModel.CaseSolution.UserCode = UserCode ?? string.Empty;
+
+            string InvoiceNumber = Convert.ToString(collection["Casesolution.InvoiceNumber"].ToString());
+            caseSolutionInputViewModel.CaseSolution.InvoiceNumber = InvoiceNumber ?? string.Empty;
+
+            string ReferenceNumber = Convert.ToString(collection["Casesolution.ReferenceNumber"].ToString());
+            caseSolutionInputViewModel.CaseSolution.ReferenceNumber = ReferenceNumber ?? string.Empty;
+
+            string VerifiedDescription = Convert.ToString(collection["Casesolution.VerifiedDescription"].ToString());
+            caseSolutionInputViewModel.CaseSolution.VerifiedDescription = VerifiedDescription ?? string.Empty;
+
+            string SolutionRate = Convert.ToString(collection["Casesolution.SolutionRate"].ToString());
+            caseSolutionInputViewModel.CaseSolution.SolutionRate = SolutionRate ?? string.Empty;
+
+            string InventoryNumber = Convert.ToString(collection["Casesolution.InventoryNumber"].ToString());
+            caseSolutionInputViewModel.CaseSolution.InventoryNumber = InventoryNumber ?? string.Empty;
+
+            string InventoryType = Convert.ToString(collection["Casesolution.InventoryType"].ToString());
+            caseSolutionInputViewModel.CaseSolution.InventoryType = InventoryType ?? string.Empty;
+
+            string InventoryLocation = Convert.ToString(collection["Casesolution.InventoryLocation"].ToString());
+            caseSolutionInputViewModel.CaseSolution.InventoryLocation = InventoryLocation ?? string.Empty;
+
+            string Available = Convert.ToString(collection["Casesolution.Available"].ToString());
+            caseSolutionInputViewModel.CaseSolution.Available = Available ?? string.Empty;
+
+            string Currency = Convert.ToString(collection["Casesolution.Currency"].ToString());
+            caseSolutionInputViewModel.CaseSolution.Currency = Currency ?? string.Empty;
+
+            if (caseSolutionInputViewModel.CaseSolution.Text_External != null && caseSolutionInputViewModel.CaseSolution.Text_External.Length > 3000)
+                caseSolutionInputViewModel.CaseSolution.Text_External = caseSolutionInputViewModel.CaseSolution.Text_External.Substring(0, 3000);
+
+            if (caseSolutionInputViewModel.CaseSolution.Text_Internal != null && caseSolutionInputViewModel.CaseSolution.Text_Internal.Length > 3000)
+                caseSolutionInputViewModel.CaseSolution.Text_Internal = caseSolutionInputViewModel.CaseSolution.Text_Internal.Substring(0, 3000);
+            
+
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
-           
-            //////////////////////////////////
-            var caseSolutionEdit = this._caseSolutionService.GetCaseSolution(caseSolutionInputViewModel.CaseSolution.Id);
-
-
-
-
-
-            string caid = caseSolutionInputViewModel.CaseSolution.Id.ToString();
-            this._caseSolutionConditionService.Add(Convert.ToInt32(caid), Convert.ToInt32(condid));
-
-
-            //Get not selected case solution conditions
-            IEnumerable<CaseSolutionSettingsField> lFieldSetting = new List<CaseSolutionSettingsField>();
-            lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(Convert.ToInt32(caid));
-
-            List<SelectListItem> feildSettings = null;
-            feildSettings = lFieldSetting
-                  .Select(x => new SelectListItem
-                  {
-                      Text = x.Text,
-                      Value = x.CaseSolutionConditionId.ToString(),
-                      Selected = false
-                  }).ToList();
-            //Get not selected case solution conditions
-
-            //Get selected case solution conditions
-            IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
-            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid));
+            CaseSettingsSolutionAggregate settingsSolutionAggregate = this.CreateCaseSettingsSolutionAggregate(caseSolutionInputViewModel.CaseSolution.Id, caseSolutionSettingModels);
+            this.caseSolutionSettingService.AddCaseSolutionSettings(settingsSolutionAggregate);
 
             
 
 
 
-            var model = this.CreateInputViewModel(caseSolutionEdit);
+            var model = this.CreateInputViewModel(null);
 
-            return this.View("/Views/CaseSolution/Edit.cshtml", model);
+            return this.View(model);
+
         }
 
 
@@ -711,10 +821,10 @@ namespace DH.Helpdesk.Web.Controllers
                     //    CaseSolutionConditionCaption = exid,
                     //    CaseSolutionConditionValues = final
                     //};
-                    
+
                     foreach (var item in cse.Where(w => w.CaseSolutionConditionCaption == text))
                     {
-                        item.CaseSolutionConditionValues =final;
+                        item.CaseSolutionConditionValues = final;
                     }
 
                     //cse.Add(cSc);
