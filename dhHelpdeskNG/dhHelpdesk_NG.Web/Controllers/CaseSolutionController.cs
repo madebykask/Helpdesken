@@ -876,14 +876,42 @@ namespace DH.Helpdesk.Web.Controllers
             this._caseSolutionConditionService.Add(Convert.ToInt32(caid), Convert.ToInt32(condid));
 
 
-            var caseSolution = this._caseSolutionService.GetCaseSolution(casesoilutionid);
-
-           
+            //var caseSolution = this._caseSolutionService.GetCaseSolution(casesoilutionid);
 
 
-            var model = this.CreateInputViewModel(caseSolution);
 
-            return this.View("/Views/CaseSolution/Edit.cshtml", model);
+
+            //Get not selected case solution conditions
+            IEnumerable<CaseSolutionSettingsField> lFieldSetting = new List<CaseSolutionSettingsField>();
+            lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(Convert.ToInt32(caid));
+
+            List<SelectListItem> feildSettings = null;
+            feildSettings = lFieldSetting
+                  .Select(x => new SelectListItem
+                  {
+                      Text = x.Text,
+                      Value = x.CaseSolutionConditionId.ToString(),
+                      Selected = false
+                  }).ToList();
+            //Get not selected case solution conditions
+
+            //Get selected case solution conditions
+            IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
+            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid));
+
+            //Get selected case solution conditions
+
+            var model = new CaseSolutionInputViewModel
+            {
+                CaseSolutionFieldSettings = feildSettings,
+                CSSelectedSettingsField = lFieldSettingSelected.ToList()
+            };
+
+            return PartialView("/Views/CaseSolution/_Conditions.cshtml", model);
+
+            //var model = this.CreateInputViewModel(caseSolution);
+
+            //return this.View("/Views/CaseSolution/Edit.cshtml", model);
 
 
 

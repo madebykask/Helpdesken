@@ -2383,7 +2383,7 @@
 
 
             $.post("/CaseSolution/AddCondition/", { conditionid: "'" + value.toString() + "'", casesolutionid: "'" + id.toString() + "'" }, function (returnHtml) {
-                alert(returnHtml);
+                //alert(returnHtml);
                 $('#divReplaceConditions').html($(returnHtml));
                 //$('#divConditions').html($(returnHtml));
 
@@ -2394,22 +2394,37 @@
         }
         else
         {
-          
+
             var form = $("#target").serialize();
             $.ajax({
                 type: 'POST',
                 url: "/CaseSolution/NewAndEdit",
                 data: form,
-                dataType: 'json',
                 success: function (data) {
-                    if (data.result == "Error") {
-                        //alert(data.message);
-                    }
+                    alert();
+                    $('#divReplaceConditions').html($(data));
+                },
+                error: function (result) {
+                    alert('Oh no: '+ data.responseText);
                 }
             });
 
 
 
+
+            //var form = $("#target").serialize();
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/CaseSolution/NewAndEdit",
+            //    contentType:"application/json; charset=utf-8",
+            //    data:form,
+            //    success: function (result) {
+            //        alert("ok: "+ result);
+            //    },
+            //    error: function (result) {
+            //        alert('Oh no: '+ result.responseText);
+            //    }
+            //});
 
 
 
