@@ -438,12 +438,12 @@ namespace DH.Helpdesk.Dal.Repositories
             bool match = false;
 
             //Initiation
-            if (notid != string.Empty && notifierid != string.Empty)
-            //if (notifierid != string.Empty)
+           // if (notid != string.Empty && notifierid != string.Empty)
+            if (notifierid != string.Empty)
             {
 
-
-                var not = this.DataContext.ComputerUsers.Single(c => c.UserCode == notid && c.UserId == notifierid && c.Customer_Id == custid);
+                var not = this.DataContext.ComputerUsers.FirstOrDefault(c=> c.UserId == notifierid && c.Customer_Id == custid);
+                // var not = this.DataContext.ComputerUsers.FirstOrDefault(c => c.UserCode == notid && c.UserId == notifierid && c.Customer_Id == custid);
                 // var not = this.DataContext.ComputerUsers.Single(c=> c.UserId == notifierid);
                 if (not != null)
                 {

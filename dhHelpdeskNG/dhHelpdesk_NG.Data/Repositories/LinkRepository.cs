@@ -242,7 +242,7 @@ namespace DH.Helpdesk.Dal.Repositories
             //}
 
 
-            sql = "SELECT TOP (100) ";
+            sql = "SELECT ";
             sql += "ISNULL([Project3].[Id], 0) AS [Id], ";
             sql += "ISNULL([Project3].[Customer_Id], 0) AS [Customer_Id], ";
             sql += "ISNULL([Project3].[Document_Id], 0) AS [Document_Id], ";
