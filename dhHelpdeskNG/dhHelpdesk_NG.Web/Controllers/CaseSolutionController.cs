@@ -909,10 +909,24 @@ namespace DH.Helpdesk.Web.Controllers
 
             return PartialView("/Views/CaseSolution/_Conditions.cshtml", model);
 
+
+
+
+
+
+            //int? backToPageId = null; 
+            //if (backToPageId == null)
+            //    ViewBag.PageId = 0;
+            //else
+            //    ViewBag.PageId = backToPageId;
+
+
+            //var caseSolution = this._caseSolutionService.GetCaseSolution(Convert.ToInt32(caid));
+
+
             //var model = this.CreateInputViewModel(caseSolution);
 
             //return this.View("/Views/CaseSolution/Edit.cshtml", model);
-
 
 
         }
@@ -1205,7 +1219,11 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 string[] cap = s.Split(':');
                 string text = cap[0].ToString();
-                string values = cap[1].ToString();
+                string values = string.Empty;
+                if (cap.Count() > 1)
+                {
+                    values = cap[1].ToString();
+                }
                 bool exists = false;
 
                 exists = cse.Any(u => u.CaseSolutionConditionCaption == text);
