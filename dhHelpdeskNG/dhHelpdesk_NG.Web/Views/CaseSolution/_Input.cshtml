@@ -2401,47 +2401,14 @@
                 url: "/CaseSolution/NewAndEdit",
                 data: form,
                 success: function (data) {
-                    alert();
+                   
                     $('#divReplaceConditions').html($(data));
                 },
                 error: function (result) {
-                    alert('Oh no: '+ data.responseText);
+                   
                 }
             });
 
-
-
-
-            //var form = $("#target").serialize();
-            //$.ajax({
-            //    type: "POST",
-            //    url: "/CaseSolution/NewAndEdit",
-            //    contentType:"application/json; charset=utf-8",
-            //    data:form,
-            //    success: function (result) {
-            //        alert("ok: "+ result);
-            //    },
-            //    error: function (result) {
-            //        alert('Oh no: '+ result.responseText);
-            //    }
-            //});
-
-
-
-
-
-
-            //var formData = $("#target").serialize() + '&' + value.toString()
-
-
-
-            //$.ajax({
-            //    type : 'POST',
-            //    url : '/CaseSolution/NewAndEdit',
-            //    data : $('#target').serialize() + "&par1=1&par2=2&par3=232",
-            //    success: function (data) {
-            //        alert(data.Status);
-            //    }});
 
 
         }

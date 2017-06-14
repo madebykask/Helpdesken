@@ -21,14 +21,9 @@
 {
     @Html.Hidden("PageId", backPageId)
 
-    @if (SelectedValues != null)
-    {
-        @Html.Hidden("selectedValues", SelectedValues)
-    }
-    else
-    {
-        @Html.Hidden("selectedValues", string.Empty)
-    }
+
+    @Html.Hidden("selectedValues", SelectedValues)
+
 
     <div class="secnavs fixed">
         <div class="pull-left">
