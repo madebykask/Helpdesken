@@ -41,7 +41,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             var query = from contact in this.DataContext.CaseSolutionsConditions
                         join dealer in this.DataContext.CaseSolutionConditionProperties on contact.Property_Name equals dealer.CaseSolutionConditionProperty
                         where contact.CaseSolution_Id == casesolutionid
-                        select new { dealer.CaseSolutionConditionProperty, dealer.Id, dealer.Text, contact.CaseSolutionConditionGUID, contact.Values, contact.CaseSolution_Id };
+                        select new { dealer.CaseSolutionConditionProperty, dealer.Id, dealer.Text, contact.CaseSolutionConditionGUID, contact.Values, contact.CaseSolution_Id, dealer.Table , dealer.TableFieldId, dealer.TableFieldName, dealer.TableFieldGuid};
 
             foreach (var nameGroup in query)
             {
@@ -75,6 +75,30 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         c.SelectedValues.Add(parts[i]);
                     }
                 }
+
+
+                //string colName = "Ditrict";
+                //var districtlist = db.table1.Select(d => new { d.colName }).Distinct().ToList();
+
+                string tablename = nameGroup.Table.ToString();
+                string tablefieldid = nameGroup.TableFieldId.ToString();
+                string tablefieldname = nameGroup.TableFieldName.ToString();
+                string tablefieldguid = nameGroup.TableFieldGuid.ToString();
+
+
+                string sql = string.Empty;
+                    sql = "SELECT ";
+                    sql += "'" + tablefieldid + "' ";
+                    sql += "'" + tablefieldname + "' ";
+                    sql += "'" + tablefieldguid + "' ";
+                    sql += "cast(0 as bit) AS[Selected] ";
+                    sql += "FROM '" + tablename + "' ";
+                    sql += "AS[Extent1] ";
+                    sql += "WHERE  NOT((LOWER( CAST( [Extent1]. '" + tablefieldguid + "' AS nvarchar(max)))  ";
+                    sql += "IN('" + c.SelectedValues +"')) ";
+                    sql += "AND(LOWER( CAST( [Extent1].'" + tablefieldguid + "' AS nvarchar(max))) IS NOT NULL)) ";
+
+
 
                 switch (nameGroup.CaseSolutionConditionProperty.ToString())
                 {

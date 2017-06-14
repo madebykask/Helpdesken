@@ -21,6 +21,9 @@ namespace DH.Helpdesk.Domain.Cases
         public List<string> SelectedValues  { get;set;}
 
         public List<SelectListItem> SelectList { get; set; }
+
+        public string Table { get; set; }
+
     }
 }
     
