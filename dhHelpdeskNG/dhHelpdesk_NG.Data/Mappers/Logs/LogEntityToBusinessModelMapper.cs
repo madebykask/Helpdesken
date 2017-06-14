@@ -53,7 +53,7 @@ namespace DH.Helpdesk.Dal.Mappers.Logs
                         .Select(t => new LogFileOverview(t.Id.Value, t.FileName))
                         .ToList(),
 
-                User = new LogUserOverview(data.User.Id.Value, data.User.FirstName, data.User.SurName)
+                User = new LogUserOverview( (data.User != null && data.User.Id.HasValue ? data.User.Id.Value : 0) , data.User?.FirstName, data.User?.SurName)
             };
         }
     }
