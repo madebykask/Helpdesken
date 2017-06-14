@@ -85,18 +85,52 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 string tablefieldname = nameGroup.TableFieldName.ToString();
                 string tablefieldguid = nameGroup.TableFieldGuid.ToString();
 
+                string selvals = string.Empty;
+                foreach (var it in c.SelectedValues)
+                {
+                    if (selvals==string.Empty)
+                    {
+                        selvals = it.ToString();
+                    }
+                    else
+                    {
+                        selvals = selvals + "," + it.ToString();
+                    }
+                }
 
                 string sql = string.Empty;
                     sql = "SELECT ";
-                    sql += "'" + tablefieldid + "' ";
-                    sql += "'" + tablefieldname + "' ";
-                    sql += "'" + tablefieldguid + "' ";
+                    sql += "" + tablefieldid + ", ";
+                    sql += "" + tablefieldname + ", ";
+                    sql += "" + tablefieldguid + ", ";
                     sql += "cast(0 as bit) AS[Selected] ";
-                    sql += "FROM '" + tablename + "' ";
-                    sql += "AS[Extent1] ";
-                    sql += "WHERE  NOT((LOWER( CAST( [Extent1]. '" + tablefieldguid + "' AS nvarchar(max)))  ";
-                    sql += "IN('" + c.SelectedValues +"')) ";
-                    sql += "AND(LOWER( CAST( [Extent1].'" + tablefieldguid + "' AS nvarchar(max))) IS NOT NULL)) ";
+                    sql += "FROM " + tablename + " ";
+                    sql += "AS [Extent1] ";
+                    sql += "WHERE  NOT((LOWER( CAST( [Extent1]. " + tablefieldguid + " AS nvarchar(max)))  ";
+                    sql += "IN('" + selvals +"')) ";
+                    sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL)) ";
+
+
+                string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+                DataTable dt = null;
+
+                using (var connection = new SqlConnection(ConnectionString))
+                {
+                    if (connection.State == ConnectionState.Closed)
+                    {
+                        connection.Open();
+                    }
+                    using (var command = new SqlCommand { Connection = connection, CommandType = CommandType.StoredProcedure, CommandTimeout = 0 })
+                    {
+                        command.CommandType = CommandType.Text;
+                        command.CommandText = sql;
+                        var reader = command.ExecuteReader();
+                        dt = new DataTable();
+                        dt.Load(reader);
+
+                    }
+                }
+
 
 
 
