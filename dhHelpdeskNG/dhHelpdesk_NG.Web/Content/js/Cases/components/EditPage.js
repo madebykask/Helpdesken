@@ -779,6 +779,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
     var _status_id = fieldData.status_id;
     var _plandate = fieldData.plandate;
     var _watchdate = fieldData.watchdate;
+    var _log_textinternal = fieldData.log_textinternal;
 
     if (_reportedby != undefined)
         $('#' + _caseFields.ReportedBy).val(_reportedby.Value);
@@ -791,6 +792,9 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
 
     if (_usercode != undefined)
         $('#' + _caseFields.UserCode).val(_usercode.Value);    
+
+    if (_log_textinternal != undefined)
+        $('#' + _caseFields.log_InternalText).val(_log_textinternal.Value);
 
     if (_department_id != undefined) {
         $("#CaseTemplate_Department_Id").val();        
