@@ -85,44 +85,65 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 string tablefieldname = nameGroup.TableFieldName.ToString();
                 string tablefieldguid = nameGroup.TableFieldGuid.ToString();
 
+                //var temp = from st in this.DataContext.StateSecondaries
+                //           where !c.SelectedValues.Contains(st.StateSecondaryGUID.ToString())
+                //           select new { st.Name, st.Id, st.StateSecondaryGUID, Selected = false };
+
+
+
                 string selvals = string.Empty;
                 foreach (var it in c.SelectedValues)
                 {
                     if (selvals == string.Empty)
                     {
-                        selvals = it.ToString();
+                        selvals = "'" + it.ToString() + "'";
                     }
                     else
                     {
-                        selvals = selvals + "," + it.ToString();
+                        selvals = selvals + ", '" + it.ToString() + "'";
                     }
                 }
-
+                selvals = selvals.Replace("''", "'");
                 string sql = string.Empty;
-                sql = "SELECT ";
-                sql += "" + tablefieldid + " AS Id, ";
-                sql += "" + tablefieldname + " AS Name, ";
-                sql += "" + tablefieldguid + " AS Guid, ";
-                sql += "cast(0 as bit) AS [Selected] ";
-                sql += "FROM " + tablename + " ";
-                sql += "AS [Extent1] ";
-                sql += "WHERE  NOT((LOWER( CAST( [Extent1]. " + tablefieldguid + " AS nvarchar(max)))  ";
-                sql += "IN('" + selvals + "')) ";
-                sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL)) ";
 
-                sql += " UNION ";
+                if (c.SelectedValues.Count > 0)
+                {
+                    sql = "SELECT ";
+                    sql += "" + tablefieldid + " AS Id, ";
+                    sql += "" + tablefieldname + " AS Name, ";
+                    sql += "" + tablefieldguid + " AS Guid, ";
+                    sql += "cast(0 as bit) AS [Selected] ";
+                    sql += "FROM " + tablename + " ";
+                    sql += "AS [Extent1] ";
+                    sql += "WHERE  NOT((LOWER( CAST( [Extent1]. " + tablefieldguid + " AS nvarchar(max)))  ";
+                    sql += "IN(" + selvals + ")) ";
+                    sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL)) ";
 
-                sql += "SELECT ";
-                sql += "" + tablefieldid + " AS Id, ";
-                sql += "" + tablefieldname + " AS Name,  ";
-                sql += "" + tablefieldguid + " AS Guid, ";                
-                sql += "cast(1 as bit) AS [Selected] ";
-                sql += "FROM " + tablename + " ";
-                sql += "AS[Extent1] ";
-                sql += "WHERE(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) ";
-                sql += "IN('" + selvals + "')) ";
-                sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL) ";
+                    sql += " UNION ";
 
+                    sql += "SELECT ";
+                    sql += "" + tablefieldid + " AS Id, ";
+                    sql += "" + tablefieldname + " AS Name,  ";
+                    sql += "" + tablefieldguid + " AS Guid, ";
+                    sql += "cast(1 as bit) AS [Selected] ";
+                    sql += "FROM " + tablename + " ";
+                    sql += "AS[Extent1] ";
+                    sql += "WHERE(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) ";
+                    sql += "IN(" + selvals + ")) ";
+                    sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL) ";
+                }
+                else
+                {
+
+
+                    sql = "SELECT ";
+                    sql += "" + tablefieldid + " AS Id, ";
+                    sql += "" + tablefieldname + " AS Name, ";
+                    sql += "" + tablefieldguid + " AS Guid, ";
+                    sql += "cast(0 as bit) AS [Selected] ";
+                    sql += "FROM " + tablename + " ";
+                    sql += "AS [Extent1] ";
+                }
 
 
                 string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
@@ -145,7 +166,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     }
                 }
 
-                if (dt!=null)
+                if (dt != null)
                 {
                     if (dt.Rows.Count > 0)
                     {
@@ -317,6 +338,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 list.Add(c);
             }
 
+
             return list;
 
         }
@@ -355,28 +377,76 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             }
             else
             {
+                string sql = string.Empty;
 
-                var query = from user in this.DataContext.CaseSolutionConditionProperties
-                            where !this.DataContext.CaseSolutionsConditions.Any(f => f.Property_Name == user.CaseSolutionConditionProperty)
-                            select new { user.Id, user.CaseSolutionConditionProperty, user.Text };
-                foreach (var nameGroup in query)
+                sql = "SELECT dbo.tblCaseSolutionConditionProperties.Id, dbo.tblCaseSolutionConditionProperties.CaseSolutionConditionProperty, ";
+                sql += "dbo.tblCaseSolutionConditionProperties.Text ";
+                sql += "FROM            dbo.tblCaseSolutionConditionProperties ";
+                sql += "WHERE dbo.tblCaseSolutionConditionProperties.Id NOT IN(SELECT        dbo.tblCaseSolutionConditionProperties.Id ";
+                sql += "FROM            dbo.tblCaseSolutionCondition INNER JOIN ";
+                sql += "dbo.tblCaseSolutionConditionProperties ON ";
+                sql += "dbo.tblCaseSolutionCondition.Property_Name = dbo.tblCaseSolutionConditionProperties.CaseSolutionConditionProperty ";
+                sql += "WHERE(dbo.tblCaseSolutionCondition.CaseSolution_Id = " + casesolutionid + ")) ";
+
+                string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+                DataTable dt = null;
+
+                using (var connection = new SqlConnection(ConnectionString))
+                {
+                    if (connection.State == ConnectionState.Closed)
+                    {
+                        connection.Open();
+                    }
+                    using (var command = new SqlCommand { Connection = connection, CommandType = CommandType.StoredProcedure, CommandTimeout = 0 })
+                    {
+                        command.CommandType = CommandType.Text;
+                        command.CommandText = sql;
+                        var reader = command.ExecuteReader();
+                        dt = new DataTable();
+                        dt.Load(reader);
+
+                    }
+                }
+
+                foreach (DataRow row in dt.Rows)
                 {
                     CaseSolutionSettingsField c = new CaseSolutionSettingsField();
-                    if (nameGroup.Id != null)
+                    if (row["Id"].ToString() != null)
                     {
-                        c.CaseSolutionConditionId = nameGroup.Id.ToString();
+                        c.CaseSolutionConditionId = row["Id"].ToString();
                     }
-                    if (nameGroup.CaseSolutionConditionProperty != null)
+                    if (row["CaseSolutionConditionProperty"].ToString() != null)
                     {
-                        c.PropertyName = nameGroup.CaseSolutionConditionProperty.ToString();
+                        c.PropertyName = row["CaseSolutionConditionProperty"].ToString();
                     }
-                    if (nameGroup.Text != null)
+                    if (row["Text"].ToString() != null)
                     {
-                        c.Text = nameGroup.Text.ToString();
+                        c.Text = row["Text"].ToString();
                     }
-
                     list.Add(c);
                 }
+
+                //var query = from user in this.DataContext.CaseSolutionConditionProperties
+                //            where !this.DataContext.CaseSolutionsConditions.Any(f => f.Property_Name == user.CaseSolutionConditionProperty)
+                //            select new { user.Id, user.CaseSolutionConditionProperty, user.Text };
+                //foreach (var nameGroup in query)
+                //{
+                //    CaseSolutionSettingsField c = new CaseSolutionSettingsField();
+                //    if (nameGroup.Id != null)
+                //    {
+                //        c.CaseSolutionConditionId = nameGroup.Id.ToString();
+                //    }
+                //    if (nameGroup.CaseSolutionConditionProperty != null)
+                //    {
+                //        c.PropertyName = nameGroup.CaseSolutionConditionProperty.ToString();
+                //    }
+                //    if (nameGroup.Text != null)
+                //    {
+                //        c.Text = nameGroup.Text.ToString();
+                //    }
+
+                //    list.Add(c);
+                //}
             }
 
 
