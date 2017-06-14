@@ -7,12 +7,13 @@ namespace DH.Helpdesk.Services.Response.Questionnaire
 
     public class OptionResult
     {
-        public OptionResult(int optionId, int count, IEnumerable<int> caseIds, IEnumerable<OptionNote> notes = null)
+        public OptionResult(int optionId, int count, IEnumerable<int> caseIds, IEnumerable<OptionNote> notes = null, IEnumerable<string> emails = null )
         {
             this.OptionId = optionId;
             this.Count = count;
             this.CaseIds = caseIds;
             this.Notes = notes?.ToList() ?? new List<OptionNote>();
+            this.Emails = emails?.ToList() ?? new List<string>();
         }
 
         [IsId]
@@ -23,5 +24,7 @@ namespace DH.Helpdesk.Services.Response.Questionnaire
         public IEnumerable<int> CaseIds { get; private set; }
 
         public List<OptionNote> Notes { get; set; }
+
+        public List<string> Emails { get; set; }
     }
 }

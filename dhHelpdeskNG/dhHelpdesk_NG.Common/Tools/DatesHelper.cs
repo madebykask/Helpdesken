@@ -245,5 +245,10 @@ namespace DH.Helpdesk.Common.Tools
         {
             return new DateTime(date.Year, date.Month, date.Day, 23, 59, 59);
         }
+
+        public static DateTime? GetEndOfDay(this DateTime? date)
+        {
+            return date.HasValue ? new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 23, 59, 59) : (DateTime?) null;
+        }
     }
 }

@@ -23,23 +23,26 @@
         </ul>
         <div class="tab-content">
             <div id="fragment-2" class="tab-pane tab-pane-border active">
-                <div class="row">
-                    <div class="span12">
-                        @using (Ajax.BeginForm("Statistics", null, new AjaxOptions {UpdateTargetId = "feedback_statistics_grid"}, new {id = "feedback_statistics_search_form"}))
-                        {
-                            @Html.HiddenFor(x => x.QuestionnaireId)
-                            <table class="tableform">
-                                <tr>
-                                    <td class="span3">@Translation.GetCoreTextTranslation("Återkopplingsdatum")</td>
-                                    <td>
-                                        @Html.EditorFor(m => m.StatisticsFilter.CircularCreatedDate.DateFrom, "DatePicker", new {id = "feedbackCreatedDateFrom_datepicker"})
-                                        -
-                                        @Html.EditorFor(m => m.StatisticsFilter.CircularCreatedDate.DateTo, "DatePicker", new {id = "feedbackCreatedDateTo_datepicker"})
-                                    </td>
-                                </tr>
-                            </table>
-                        }
-                    </div>
+                <div>
+                    @using (Ajax.BeginForm("Statistics", null, new AjaxOptions {UpdateTargetId = "feedback_statistics_grid"}, new {id = "feedback_statistics_search_form"}))
+                    {
+                        @Html.HiddenFor(x => x.QuestionnaireId)
+                        <table class="tableform">
+                            <tr>
+                                <td class="span3">@Translation.GetCoreTextTranslation("Återkopplingsdatum")</td>
+                                <td>
+                                    @Html.EditorFor(m => m.StatisticsFilter.CircularCreatedDate.DateFrom, "DatePicker", new {id = "feedbackCreatedDateFrom_datepicker"})
+                                    -
+                                    @Html.EditorFor(m => m.StatisticsFilter.CircularCreatedDate.DateTo, "DatePicker", new {id = "feedbackCreatedDateTo_datepicker"})
+                                    <div class="ico-right" style="display: inline;">
+                                        @Translation.GetCoreTextTranslation("Selektera ut")
+                                        @Html.TextBoxFor(m => m.StatisticsFilter.EmailsCount, new {type = "number", min = "0", max = "99", style = "width: 35px;", id = "emailsCol"})
+                                        @Translation.GetCoreTextTranslation("e-postadresser från urval")
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    }
                 </div>
                 <div id="feedback_statistics_grid">
                     @Html.Partial("~/Views/Questionnaire/Feedback/FeedbackStatisticsGrid.cshtml", Model)
