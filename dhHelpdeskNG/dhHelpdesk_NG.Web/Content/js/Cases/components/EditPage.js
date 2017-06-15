@@ -135,7 +135,7 @@ EditPage.prototype.isExtendedCaseValid = function () {
     }
 
     var $_ex_Container = self.getExtendedCaseContainer();
-    var validationResult = $_ex_Container.contentWindow.validateExtendedCase(true);
+    var validationResult = $_ex_Container.contentWindow.validateExtendedCase(isOnNext);
     if (validationResult == null) {
         return true;
     } else {
@@ -554,21 +554,20 @@ EditPage.prototype.loadExtendedCaseContainer = function () {
   
     $('[id*=' + iframeId + ']').load(function () {
         $('#' + iframeId).iFrameResize(iframeOptions);
+
+        var elm = document.getElementById(iframeId);
+        if (elm != null && elm != undefined) {
+
+            var $_ex_Container = self.getExtendedCaseContainer();
+            var formParameters = $_ex_Container.contentWindow.getFormParameters();
+            formParameters.languageId = EditPage.prototype.Current_EC_LanguageId;
+            formParameters.extendedCaseGuid = EditPage.prototype.Current_EC_Guid;
+            $_ex_Container.contentWindow.loadExtendedCase({ formParameters: formParameters, caseValues: { log_textinternal: { Value: '' } } });
+
+            $('[id*=' + iframeId + ']').removeClass('hidden2');
+        }
     });
-
-    setTimeout(function () {           
-            var elm = document.getElementById(iframeId);
-            if (elm != null && elm != undefined) {
-                
-                var $_ex_Container = self.getExtendedCaseContainer();
-                var formParameters = $_ex_Container.contentWindow.getFormParameters();
-                formParameters.languageId = EditPage.prototype.Current_EC_LanguageId;
-                formParameters.extendedCaseGuid = EditPage.prototype.Current_EC_Guid;
-                $_ex_Container.contentWindow.loadExtendedCase({ formParameters: formParameters, caseValues: { log_textinternal: { Value: '' } } });
-
-                $('[id*=' + iframeId + ']').removeClass('hidden2');
-            }            
-        }, 3000);
+  
 };
 
 EditPage.prototype.onSaveAndNewClick = function () {

@@ -579,6 +579,15 @@ var ApplyTemplate = function (data, doOverwrite) {
                     //#13311(redmine) Case template_list of administrators doesn't narrows depending on the choice of working group
                     //cfg['doNotTriggerEvent'] = true;
                     SetValueIfElVisible(el, val, cfg);
+
+                    if (el && (el.val() == "" || cfg.doOverwrite)) {
+                        //Todo: refactor
+                        //if connected to workflow we need to set the value
+                        if ($('#steps').length) {
+                            el.val(val);
+                        }
+                    }
+
                     break;
                 case 'PerformerUser_Id':
                     el = $('#Performer_Id');
