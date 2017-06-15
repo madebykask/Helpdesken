@@ -15,6 +15,7 @@
     @if (Model.ExtendedCases != null)
     {
         @Styles.Render("~/cases/dynamic-cases")
+        @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
     }
 
     @Scripts.Render("~/bundles/cases/edit")
@@ -244,12 +245,6 @@
         });
         </script>
     }
-
-
-@if (Model.ExtendedCases != null && !Model.IsItChildCase())
-{
-    @Html.Partial("_ExtendedCase", Model.ExtendedCases)
-}
 
     @Html.Partial("_Plupload")
 

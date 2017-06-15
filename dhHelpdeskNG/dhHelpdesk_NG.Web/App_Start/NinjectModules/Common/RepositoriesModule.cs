@@ -277,6 +277,8 @@
             this.Bind<ICaseExtraFollowersRepository>().To<CaseExtraFollowersRepository>();
 			this.Bind<IInvoiceRepository>().To<InvoiceRepository>();
             this.Bind<ICaseSolutionConditionRepository>().To<CaseSolutionConditionRepository>();
+            this.Bind<IExtendedCaseFormRepository>().To<ExtendedCaseFormRepository>();
+            this.Bind<IExtendedCaseDataRepository>().To<ExtendedCaseDataRepository>();
         }
 
         #endregion

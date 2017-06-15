@@ -50,6 +50,8 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Services.Infrastructure;
     using Feedback;
     using BusinessData.Models.MailTemplates;
+    using DH.Helpdesk.Domain.ExtendedCaseEntity;
+
 
     public interface ICaseService
     {
@@ -80,7 +82,8 @@ namespace DH.Helpdesk.Services.Services
         List<DynamicCase> GetAllDynamicCases();
         DynamicCase GetDynamicCase(int id);
         IList<Case> GetProblemCases(int problemId);
-        IList<ExtendedCaseFormModel> GetExtendedCaseForms(Dictionary<string, string> inputParameters);
+        IList<ExtendedCaseFormModel> GetExtendedCaseForm(int? caseSolutionId, int customerId, int? caseId, int userLanguageId, Guid userGuid, int? caseStateSecondaryId, int? caseWorkingGroupId, string extendedCasePath);
+        ExtendedCaseDataEntity GetExtendedCaseData(Guid extendedCaseGuid);
 
         int LookupLanguage(int custid, string notid, int regid, int depid, string notifierid);
 
@@ -205,6 +208,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly IEmailSendingSettingsProvider _emailSendingSettingsProvider;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
         private readonly IProductAreaService _productAreaService;
+        private readonly IExtendedCaseFormRepository _extendedCaseFormRepository;
+        private readonly IExtendedCaseDataRepository _extendedCaseDataRepository;
+
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -242,7 +248,9 @@ namespace DH.Helpdesk.Services.Services
             IEmailSendingSettingsProvider emailSendingSettingsProvider,
             ICaseExtraFollowersService caseExtraFollowersService,
             IFeedbackTemplateService feedbackTemplateService,
-            IProductAreaService productAreaService
+            IProductAreaService productAreaService,
+            IExtendedCaseFormRepository extendedCaseFormRepository,
+            IExtendedCaseDataRepository extendedCaseDataRepository
             )
 
         {
@@ -283,6 +291,8 @@ namespace DH.Helpdesk.Services.Services
             _caseExtraFollowersService = caseExtraFollowersService;
             _feedbackTemplateService = feedbackTemplateService;
             _productAreaService = productAreaService;
+            this._extendedCaseFormRepository = extendedCaseFormRepository;
+            this._extendedCaseDataRepository = extendedCaseDataRepository;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -320,9 +330,14 @@ namespace DH.Helpdesk.Services.Services
             return _caseRepository.GetDynamicCase(id);
         }
 
-        public IList<ExtendedCaseFormModel> GetExtendedCaseForms(Dictionary<string, string> inputParameters)
+        public IList<ExtendedCaseFormModel> GetExtendedCaseForm(int? caseSolutionId, int customerId, int? caseId, int userLanguageId, Guid userGuid, int? caseStateSecondaryId, int? caseWorkingGroupId, string extendedCasePath)
         {
-            return _caseRepository.GetExtendedCaseForms(inputParameters);
+            return _extendedCaseFormRepository.GetExtendedCaseForm((caseSolutionId.HasValue ? caseSolutionId.Value: 0), customerId, (caseId.HasValue ? caseId.Value : 0), userLanguageId, userGuid, (caseStateSecondaryId.HasValue ? caseStateSecondaryId.Value : 0), (caseWorkingGroupId.HasValue ? caseWorkingGroupId.Value : 0), extendedCasePath);
+        }
+
+        public DH.Helpdesk.Domain.ExtendedCaseEntity.ExtendedCaseDataEntity GetExtendedCaseData(Guid extendedCaseGuid)
+        {
+            return _extendedCaseDataRepository.GetExtendedCaseData(extendedCaseGuid);
         }
 
         public Guid Delete(int id, string basePath, int? parentCaseId)

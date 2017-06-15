@@ -227,6 +227,8 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IOrderLogRepository>().To<OrderLogRepository>();
             kernel.Bind<IOrderRepository>().To<OrderRepository>();
             kernel.Bind<IOrderStateRepository>().To<OrderStateRepository>();
+            kernel.Bind<IExtendedCaseFormRepository>().To<ExtendedCaseFormRepository>();
+            kernel.Bind<IExtendedCaseDataRepository>().To<ExtendedCaseDataRepository>();
 
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            

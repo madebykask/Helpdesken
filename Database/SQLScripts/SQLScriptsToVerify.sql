@@ -86,7 +86,14 @@ begin
 		[UpdatedBy] [nvarchar](50) NULL,	
 		CONSTRAINT [FK_ExtendedCaseData_ExtendedCaseForms] FOREIGN KEY([ExtendedCaseFormId]) REFERENCES [dbo].[ExtendedCaseForms] ([Id]))
 	
+		
 	end
+
+if exists(select * from sysobjects WHERE Name = N'ExtendedCaseData')
+begin
+	ALTER TABLE [dbo].[ExtendedCaseData] ADD  CONSTRAINT [DF_ExtendedCaseData_CreatedOn]  DEFAULT (getdate()) FOR [CreatedOn]
+end
+
 
 if not exists(select * from sysobjects WHERE Name = N'ExtendedCaseValues')
 begin
@@ -174,20 +181,21 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 GO
 
 
-
+-- OK
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DefaultTab' and sysobjects.name = N'tblCaseSolution')
 	begin
 		ALTER TABLE [dbo].tblCaseSolution ADD DefaultTab nvarchar(100) NOT NULL DEFAULT('case-tab')
 	end
 GO
 
-
+-- OK
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ModuleExtendedCase' and sysobjects.name = N'tblSettings')
 	begin
 		ALTER TABLE [dbo].[tblSettings] ADD [ModuleExtendedCase] int not null Default(0)
 	end
 GO
 
+-- OK
 /* StateSecondary columns, Make sure they exist in db, these are old ones.... */
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AlternativeStateSecondaryName' and sysobjects.name = N'tblStateSecondary')
 	begin
@@ -195,6 +203,7 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
+-- OK
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'StateSecondaryId' and sysobjects.name = N'tblStateSecondary')
 	begin
 		ALTER TABLE [dbo].[tblStateSecondary] ADD [StateSecondaryId] int not null Default(0)
@@ -204,7 +213,7 @@ GO
 /* StateSecondary columns, Make sure they exist in db, these are old ones.... */
 
 
-
+-- OK
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'WorkingGroupId' and sysobjects.name = N'tblWorkingGroup')
 	begin
 		ALTER TABLE [dbo].[tblWorkingGroup] ADD [WorkingGroupId] int not null Default(0)
@@ -214,6 +223,7 @@ GO
 
 --FOR CURRENT RECORD - TEST
 
+-- EJ MED I TRANSFER SCRIPT = OK
 ----tblComputerUsers - make sure it does not allow null and add newid()
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ComputerUserGUID' and sysobjects.name = N'tblComputerUsers')
 begin
@@ -243,18 +253,21 @@ begin
 end
 GO
 
+-- EJ MED I TRANSFER SCRIPT
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ExtendedCasePath' and sysobjects.name = N'tblGlobalSettings')
 	begin
 		ALTER TABLE [dbo].tblGlobalSettings ADD ExtendedCasePath nvarchar(500) NULL 
 	end
 GO
 
+-- EJ MED I TRANSFER SCRIPT
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ActiveTab' and sysobjects.name = N'tblCaseLock')
 	begin
 		ALTER TABLE [dbo].tblCaseLock ADD ActiveTab nvarchar(100) NULL 
 	end
 GO
 
+-- OK
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ValidateOnChange' and sysobjects.name = N'tblCaseSolution')
 	begin
 		ALTER TABLE [dbo].tblCaseSolution ADD ValidateOnChange nvarchar(100) NULL 

@@ -2935,6 +2935,13 @@ namespace DH.Helpdesk.Web.Controllers
 
                 case_.RegTime = utcNow;
 
+                //TODO: Refactor this
+                if (m.ExtendedCaseGuid != null)
+                { 
+                DH.Helpdesk.Domain.ExtendedCaseEntity.ExtendedCaseDataEntity d = new DHDomain.ExtendedCaseEntity.ExtendedCaseDataEntity();
+                d = _caseService.GetExtendedCaseData(m.ExtendedCaseGuid);
+                case_.ExtendedCaseDatas.Add(d);
+                }
                 #endregion
             }
 
@@ -5064,24 +5071,36 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             int caseSolutionId = (m.case_.CaseSolution_Id != null) ? m.case_.CaseSolution_Id.Value : (templateId.HasValue ? templateId.Value : 0);
-            var inputParameters = new Dictionary<string, string>();
 
+            #region Extended Case
 
-            var extendedCasePath = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
-
-
-            inputParameters.Add("ExtendedCasePath", extendedCasePath.ToString());
-            inputParameters.Add("CustomerId", customerId.ToString());
-            inputParameters.Add("CaseId", (m.case_ != null ? m.case_.Id.ToString(): "0"));
-            inputParameters.Add("CaseSolutionId", caseSolutionId.ToString());
-            inputParameters.Add("User_LanguageId", SessionFacade.CurrentLanguageId.ToString());
-            inputParameters.Add("Case_StateSecondaryId", (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId.ToString() : "0"));
-            inputParameters.Add("Case_WorkingGroupId", (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId.ToString() : "0"));
-
-            if (m.case_ != null && m.case_.Id > 0)
+            try
             {
-                inputParameters.Add("CaseGuid", m.case_.CaseGUID.ToString());
-            }            
+           
+            var extendedCasePath = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
+          
+            //TODO:
+            //CHECK HOW TO HANDLE WHEN FROM EMAIL
+            //At the moment we are only fetching 1 extended case since it is only programmed that way in editPage.js
+            //new Guid() is TEMPORARY, need to send in Current User guid
+            m.ExtendedCases = _caseService.GetExtendedCaseForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentLanguageId, new Guid(), (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0), (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0), extendedCasePath);
+            m.ContainsExtendedCase = m.ExtendedCases != null && m.ExtendedCases.Any();
+
+            //for hidden
+            if (m.ContainsExtendedCase)
+            {
+                m.ExtendedCaseGuid = m.ExtendedCases.FirstOrDefault().ExtendedCaseGuid;
+            }
+
+            }
+            catch (Exception)
+            {
+                //TODO:
+                //DO something here?
+                //throw;
+            }
+
+            #endregion Extended Case
 
             if (case_ != null)
             {
@@ -5089,14 +5108,9 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.InsideTheCase);
-
             m.CasePrintView = new ReportModel(false);
-
             m.UserHasInvoicePermission = userHasInvoicePermission;
-
-            m.ExtendedCases = _caseService.GetExtendedCaseForms(inputParameters);
-            m.ContainsExtendedCase = m.ExtendedCases != null && m.ExtendedCases.Any();
-
+         
             return m;
         }
 

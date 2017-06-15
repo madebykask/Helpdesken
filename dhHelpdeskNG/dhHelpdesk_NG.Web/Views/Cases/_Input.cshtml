@@ -56,6 +56,11 @@
         containsExtendedCase: '@Model.ContainsExtendedCase',
         containsEForm: '@(Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)',
         extendedCaseFormId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Id.ToString() : "" )', 
+        extendedCaseGuid: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().ExtendedCaseGuid.ToString() : "" )',
+        extendedCaseLanguageId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().LanguageId.ToString() : "" )',
+        extendedCasePath: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Path.ToString() : "" )',
+        @*extendedCaseStatus: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().CaseStatus.ToString() : "" )',
+        extendedUserRole: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().UserRole.ToString() : "" )',*@
 
         caseFieldIds:{
             CaseId: "case__Id",
@@ -280,7 +285,7 @@
                         @Html.HiddenFor(model => model.CustomerSettings.ModuleCaseInvoice)
                         @Html.HiddenFor(model => model.MovedFromCustomerId)
                         @Html.HiddenFor(model => model.ContainsExtendedCase)
-
+                        @Html.HiddenFor(model => model.ExtendedCaseGuid)
 
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())

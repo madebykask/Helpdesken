@@ -11,10 +11,14 @@
         internal ExtendedCaseDataConfiguration()
         {
             HasKey(e => e.Id);
-            Property(e => e.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            Property(e => e.ExtendedCaseGuid).IsRequired();
+            Property(e => e.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            this.HasRequired(t => t.ExtendedCaseForm)
+            Property(e => e.ExtendedCaseGuid).IsRequired();
+            Property(e => e.ExtendedCaseFormId).IsRequired();
+            Property(e => e.CreatedBy).IsRequired();
+            Property(e => e.CreatedOn).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+
+            HasRequired(t => t.ExtendedCaseForm)
                 .WithMany(t => t.ExtendedCaseDatas)
                 .HasForeignKey(d => d.ExtendedCaseFormId).WillCascadeOnDelete(false);
 

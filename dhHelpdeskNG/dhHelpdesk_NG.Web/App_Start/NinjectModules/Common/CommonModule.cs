@@ -121,6 +121,23 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
                 .To<CaseSolutionConditionToBusinessModelMapper>()
                 .InSingletonScope();
 
+
+            this.Bind<IBusinessModelToEntityMapper<ExtendedCaseFormModel, DH.Helpdesk.Domain.ExtendedCaseEntity.ExtendedCaseFormEntity>>()
+                .To<ExtendedCaseFormToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<DH.Helpdesk.Domain.ExtendedCaseEntity.ExtendedCaseFormEntity, ExtendedCaseFormModel>>()
+                .To<ExtendedCaseFormToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<ExtendedCaseDataModel, DH.Helpdesk.Domain.ExtendedCaseEntity.ExtendedCaseDataEntity>>()
+            .To<ExtendedCaseDataToEntityMapper>()
+            .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<DH.Helpdesk.Domain.ExtendedCaseEntity.ExtendedCaseDataEntity, ExtendedCaseDataModel>>()
+                .To<ExtendedCaseDataToBusinessModelMapper>()
+                .InSingletonScope();
+
         }
     }
 }

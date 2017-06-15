@@ -6,6 +6,7 @@
 @if (Model.ExtendedCases != null)
 {
     @Styles.Render("~/cases/dynamic-cases")
+    @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
 }
 
 @Scripts.Render("~/bundles/cases/new")
@@ -49,11 +50,6 @@
             //location.href = '/Cases/new?customerId=' + ci + p2 + p3 + '&caseLanguageId=' + cli;       
         });
     </script>
-}
-
-@if (Model.ExtendedCases != null && !Model.IsItChildCase())
-{
-    @Html.Partial("_ExtendedCase", Model.ExtendedCases)
 }
 
 @Html.Partial("_Plupload")

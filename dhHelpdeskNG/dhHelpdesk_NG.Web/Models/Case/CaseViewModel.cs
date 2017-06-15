@@ -267,6 +267,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public int LanguageId { get; set; }
 
         public bool ContainsExtendedCase { get; set; }
+        public Guid ExtendedCaseGuid { get; set; }
 
     }
 

@@ -24,8 +24,36 @@ EditPage.prototype.CASE_IN_SAVING = 'case_in_saving';
 
 /*** Variables ***/
 EditPage.prototype.Case_Field_Ids = null;
-EditPage.prototype.EC_Container_Prefix = 'iframe_container_';
+EditPage.prototype.EC_Container_Prefix = 'iframe_';
 EditPage.prototype.Current_EC_FormId = "";
+EditPage.prototype.Current_EC_Guid = "";
+EditPage.prototype.Current_EC_LanguageId = "";
+EditPage.prototype.Current_EC_Path = "";
+
+/* @Majid > Where should we place this? /TAN */
+/*
+Used with iframeResizer.js:
+This library enables the automatic resizing of the height and width of both same and cross domain iFrames to fit the contained content.
+Place iframeResizer.contentWindow.min.js in the page contained within the iframe.
+*/
+
+var iframeOptions = {
+    log: false,                                                         // Enable console logging
+    sizeHeight: true,
+    checkOrigin: false,                                                 // Not sure if this works or not, DL
+    enablePublicMethods: true,                                          // Enable methods within iframe hosted page
+    resizedCallback: function (messageData) {                           // Callback fn when resize is received     
+    },
+    bodyMargin: '0 0 200px 0',
+    messageCallback: function (messageData) {                           // Callback fn when message is received
+        if (messageData.message === 'cancelCase') {
+            var elem = $('#case-action-close');
+            location.href = elem.attr('href');
+        }
+    },
+    closedCallback: function (id) {                                     // Callback fn when iFrame is closed
+    }
+};
 
 
 /**
@@ -476,7 +504,8 @@ EditPage.prototype.onSaveClick = function () {
 //    }
 //}
 
-EditPage.prototype.getExtendedCaseContainer = function () {    
+EditPage.prototype.getExtendedCaseContainer = function () {
+    
     return document.getElementById(EditPage.prototype.EC_Container_Prefix + EditPage.prototype.Current_EC_FormId);
 };
 
@@ -495,6 +524,49 @@ EditPage.prototype.onSaveAndCloseClick = function () {
     } else {
         return self.primaryValidation(self.NEW_CLOSE_CASE_URL);
     }
+};
+
+EditPage.prototype.loadExtendedCaseContainer = function () {
+    "use strict";
+    var self = this;
+    var extendedCaseDiv = $('#container_' + EditPage.prototype.Current_EC_FormId);
+
+    var url = EditPage.prototype.Current_EC_Path;
+    //set form_id
+    url = url.replace('[ExtendedCaseFormId]', EditPage.prototype.Current_EC_FormId);
+    url = decodeURIComponent(url.replace(/&amp;/g, '&'));
+
+    if (typeof extendedCaseDiv === "undefined" || extendedCaseDiv.length === 0) {
+        // error!!!
+        debugger;
+        return;
+    }
+
+    var iframe = extendedCaseDiv.next('iframe');
+    var iframeId = 'iframe_' + EditPage.prototype.Current_EC_FormId;
+
+    if (iframe.length !== 0) {
+        iframe.remove();
+    }
+    $('<iframe id="' + iframeId + '" class="hidden2" scrolling="no" frameBorder="0" width="100%" src="' + url + '"></iframe>').appendTo(extendedCaseDiv);
+  
+    $('[id*=' + iframeId + ']').load(function () {
+        $('#' + iframeId).iFrameResize(iframeOptions);
+    });
+
+    setTimeout(function () {           
+            var elm = document.getElementById(iframeId);
+            if (elm != null && elm != undefined) {
+                
+                var $_ex_Container = self.getExtendedCaseContainer();
+                var formParameters = $_ex_Container.contentWindow.getFormParameters();
+                formParameters.languageId = EditPage.prototype.Current_EC_LanguageId;
+                formParameters.extendedCaseGuid = EditPage.prototype.Current_EC_Guid;
+                $_ex_Container.contentWindow.loadExtendedCase({ formParameters: formParameters, caseValues: { log_textinternal: { Value: '' } } });
+
+                $('[id*=' + iframeId + ']').removeClass('hidden2');
+            }            
+        }, 3000);
 };
 
 EditPage.prototype.onSaveAndNewClick = function () {
@@ -947,7 +1019,15 @@ EditPage.prototype.init = function (p) {
     self.p = p;
     EditPage.prototype.Case_Field_Ids = p.caseFieldIds;
     EditPage.prototype.Current_EC_FormId = p.extendedCaseFormId;
-
+    EditPage.prototype.Current_EC_Guid = p.extendedCaseGuid;
+    EditPage.prototype.Current_EC_LanguageId = p.extendedCaseLanguageId;
+    EditPage.prototype.Current_EC_Path = p.extendedCasePath;
+    
+    //only load if we have a value
+    if (p.extendedCaseFormId != '')
+    {
+        self.loadExtendedCaseContainer();
+    }
     /// controls binding
     self.$form = $('#target');
     self.$watchDateChangers = $('.departments-list, #case__Priority_Id, #case__StateSecondary_Id');
@@ -1161,7 +1241,6 @@ EditPage.prototype.init = function (p) {
     });
         
     self.$caseTab.click(function (ev) {
-        
         if (self.p.containsExtendedCase) {
             if (ev.target.className == "case") {
                 self.$activeTabHolder.val('case-tab');                

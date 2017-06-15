@@ -11,7 +11,7 @@
         internal ExtendedCaseFormConfiguration()
         {
             HasKey(e => e.Id);
-            Property(e => e.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            Property(e => e.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(e => e.Name).IsOptional().HasMaxLength(100);
 
             ToTable("ExtendedCaseForms");

@@ -13,6 +13,8 @@ namespace DH.Helpdesk.Domain.ExtendedCaseEntity
 
         public int ExtendedCaseFormId { get; set; }
         public Guid ExtendedCaseGuid { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedOn { get; set; }
 
         public virtual ICollection<Case> Cases { get; set; }
 

@@ -42,6 +42,9 @@ namespace DH.Helpdesk.Web.Models.Case.Input
         public int? MovedFromCustomerId { get; set; }
 
         public bool ContainsExtendedCase { get; set; }
+        public Guid ExtendedCaseGuid { get; set; }
+
+        public IList<ExtendedCaseFormModel> ExtendedCases { get; set; }
 
         public CaseLockModel caseLock { get; set; }
 

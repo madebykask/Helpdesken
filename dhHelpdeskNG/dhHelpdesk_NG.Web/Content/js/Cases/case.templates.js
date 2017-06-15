@@ -614,6 +614,12 @@ var ApplyTemplate = function (data, doOverwrite) {
                     SetValueIfElVisible(el, val, cfg);
                     if (el && (el.val() == "" || cfg.doOverwrite)) {
                         $(".reaonlySubstate").val(val);
+                        //Todo: refactor
+                        //if connected to workflow we need to set the value
+                        if ($('#steps').length)
+                        {
+                            el.val(val);
+                        }
                     }
                     break;
                 case 'Status_Id':
