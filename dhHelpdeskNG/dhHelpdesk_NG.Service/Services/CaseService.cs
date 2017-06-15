@@ -2444,7 +2444,7 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
-            if (c.CaseFollowers != null && string.IsNullOrEmpty(caseExtraFollowers))
+            if (c.CaseFollowers != null && c.CaseFollowers.Any() && string.IsNullOrEmpty(caseExtraFollowers))
             {
                 caseExtraFollowers = string.Join(BRConstItem.Email_Separator, c.CaseFollowers.Select(x => x.Follower)) + BRConstItem.Email_Separator;
             }
