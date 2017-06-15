@@ -85,18 +85,6 @@
         public CaseRuleModel RuleModel { get; set; }
 
 
-        public List<SelectListItem> StateSecondariesSelect { get; set; }
-
-        public List<SelectListItem> CaseWorkingGroupSelect { get; set; }
-
-        public List<SelectListItem> CasePrioritySelect { get; set; }
-
-        public List<SelectListItem> CaseStatusSelect { get; set; }
-
-        public List<SelectListItem> UserWgSelect { get; set; }
-
-        public List<SelectListItem> ProductAreaSelect { get; set; }
-
         
 
         public string SelectedCaseSecondaries { get; set; }

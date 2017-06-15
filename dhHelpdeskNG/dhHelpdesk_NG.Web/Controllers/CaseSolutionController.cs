@@ -211,9 +211,11 @@ namespace DH.Helpdesk.Web.Controllers
             else
                 ViewBag.PageId = backToPageId;
 
+
             if (caseSolution == null)
                 return new HttpNotFoundResult("No case solution found...");
 
+            TempData["NewOrOld"] = "0";
             var model = this.CreateInputViewModel(caseSolution);
 
             return this.View(model);
@@ -226,6 +228,16 @@ namespace DH.Helpdesk.Web.Controllers
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null;//_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id);
             this.TempData["RequiredFields"] = null;
+
+
+            string t = this.TempData["NewOrOld"].ToString();
+
+            if (t == "1")
+            {
+           
+                return RedirectToAction("editsave", new { caseSolutionInputViewModel = caseSolutionInputViewModel, CaseSolutionSettingModels = caseSolutionSettingModels, PageId = PageId, selectedValues = string.Empty });
+            }
+
             if (caseSolutionSettingModels == null)
             {
                 caseSolutionSettingModels = new CaseSolutionSettingModel[0];
@@ -899,7 +911,6 @@ namespace DH.Helpdesk.Web.Controllers
             IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
             lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid));
 
-            //Get selected case solution conditions
 
             var model = new CaseSolutionInputViewModel
             {
@@ -907,6 +918,7 @@ namespace DH.Helpdesk.Web.Controllers
                 CSSelectedSettingsField = lFieldSettingSelected.ToList()
             };
 
+            TempData["NewOrOld"] = "1";
             return PartialView("/Views/CaseSolution/_Conditions.cshtml", model);
 
 
@@ -1157,7 +1169,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult Edit(
+        public ActionResult editsave(
             CaseSolutionInputViewModel caseSolutionInputViewModel,
             CaseSolutionSettingModel[] CaseSolutionSettingModels,
             int PageId, string selectedValues)
@@ -1688,199 +1700,8 @@ namespace DH.Helpdesk.Web.Controllers
             //Get selected case solution conditions
 
 
-            ///////////////////////////////////////////////StateSecondaries/////////////////////////////////////////////////////////////////////////////////////////////////////////
-            string selected = string.Empty;
-            //IList<CaseSolutionCondition> stsec = _caseSolutionConditionService.GetStateSecondaries(caseSolution.Id, curCustomerId);
-            string wgguid = "case_StateSecondary.StateSecondaryGUID";
-            IList<CaseSolutionCondition> stsec = _caseSolutionConditionService.GetCaseSolutionConditionModel(caseSolution.Id, curCustomerId, wgguid);
-            foreach (CaseSolutionCondition sb in stsec)
-            {
-                if (sb.IsSelected == 1)
-                {
-                    if (selected == string.Empty)
-                    {
-                        selected = sb.StateSecondaryGUID.ToString();
-                    }
-                    else
-                    {
-                        selected = selected + "," + sb.StateSecondaryGUID.ToString();
-                    }
-                }
-            }
-
-            List<SelectListItem> stateSecondaries = null;
-            stateSecondaries = stsec
-                  .Select(x => new SelectListItem
-                  {
-                      Text = x.Name,
-                      Value = x.StateSecondaryGUID.ToString(),
-                      Selected = x.IsSelected == 1 ? true : false
-                  }).ToList();
-
-            ViewBag.selectedStates = selected;
-            ///////////////////////////////////////////////StateSecondaries/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-            ///////////////////////////////////////////////CaseWorkingGroups/////////////////////////////////////////////////////////////////////////////////////////////////////////
-            string selectedWgs = string.Empty;
-            //IList<CaseSolutionCondition> wkgroup = _caseSolutionConditionService.GetCaseWorkingGroups(caseSolution.Id, curCustomerId);
-            wgguid = "case_WorkingGroup.WorkingGroupGUID";
-            IList<CaseSolutionCondition> wkgroup = _caseSolutionConditionService.GetCaseSolutionConditionModel(caseSolution.Id, curCustomerId, wgguid);
-            foreach (CaseSolutionCondition sb in wkgroup)
-            {
-                if (sb.IsSelected == 1)
-                {
-                    if (selectedWgs == string.Empty)
-                    {
-                        selectedWgs = sb.StateSecondaryGUID.ToString();
-                    }
-                    else
-                    {
-                        selectedWgs = selectedWgs + "," + sb.StateSecondaryGUID.ToString();
-                    }
-                }
-            }
-
-            List<SelectListItem> caseWorkingGroups = null;
-            caseWorkingGroups = wkgroup
-                  .Select(x => new SelectListItem
-                  {
-                      Text = x.Name,
-                      Value = x.StateSecondaryGUID.ToString(),
-                      Selected = x.IsSelected == 1 ? true : false
-                  }).ToList();
-
-            ViewBag.selectedCaseWgs = selectedWgs;
-            ///////////////////////////////////////////////CaseWorkingGroups/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-            ///////////////////////////////////////////////CasePriority/////////////////////////////////////////////////////////////////////////////////////////////////////////
-            string selectedPrios = string.Empty;
-            //IList<CaseSolutionCondition> wkgroup = _caseSolutionConditionService.GetCaseWorkingGroups(caseSolution.Id, curCustomerId);
-            string prioguid = "case_Priority.PriorityGUID";
-            IList<CaseSolutionCondition> priogroup = _caseSolutionConditionService.GetCaseSolutionConditionModel(caseSolution.Id, curCustomerId, prioguid);
-            foreach (CaseSolutionCondition sb in priogroup)
-            {
-                if (sb.IsSelected == 1)
-                {
-                    if (selectedPrios == string.Empty)
-                    {
-                        selectedPrios = sb.StateSecondaryGUID.ToString();
-                    }
-                    else
-                    {
-                        selectedPrios = selectedPrios + "," + sb.StateSecondaryGUID.ToString();
-                    }
-                }
-            }
-
-            List<SelectListItem> casePrios = null;
-            casePrios = priogroup
-                  .Select(x => new SelectListItem
-                  {
-                      Text = x.Name,
-                      Value = x.StateSecondaryGUID.ToString(),
-                      Selected = x.IsSelected == 1 ? true : false
-                  }).ToList();
-
-            ViewBag.selectedPrioritys = selectedPrios;
-            ///////////////////////////////////////////////CasePriority/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-            ///////////////////////////////////////////////CaseStatus/////////////////////////////////////////////////////////////////////////////////////////////////////////
-            string selectedStats = string.Empty;
-            string statguid = "case_Status.StatusGUID";
-            IList<CaseSolutionCondition> statgroup = _caseSolutionConditionService.GetCaseSolutionConditionModel(caseSolution.Id, curCustomerId, statguid);
-            foreach (CaseSolutionCondition sb in statgroup)
-            {
-                if (sb.IsSelected == 1)
-                {
-                    if (selectedStats == string.Empty)
-                    {
-                        selectedStats = sb.StateSecondaryGUID.ToString();
-                    }
-                    else
-                    {
-                        selectedStats = selectedStats + "," + sb.StateSecondaryGUID.ToString();
-                    }
-                }
-            }
-
-            List<SelectListItem> caseStatus = null;
-            caseStatus = statgroup
-                  .Select(x => new SelectListItem
-                  {
-                      Text = x.Name,
-                      Value = x.StateSecondaryGUID.ToString(),
-                      Selected = x.IsSelected == 1 ? true : false
-                  }).ToList();
-
-            ViewBag.selectedStatuses = selectedStats;
-            ///////////////////////////////////////////////CaseStatus/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-            ///////////////////////////////////////////////UserWg/////////////////////////////////////////////////////////////////////////////////////////////////////////
-            string selectedUserWg = string.Empty;
-            string userwgguid = "user_WorkingGroup.WorkingGroupGUID";
-            IList<CaseSolutionCondition> userwggroup = _caseSolutionConditionService.GetCaseSolutionConditionModel(caseSolution.Id, curCustomerId, userwgguid);
-            foreach (CaseSolutionCondition sb in userwggroup)
-            {
-                if (sb.IsSelected == 1)
-                {
-                    if (selectedUserWg == string.Empty)
-                    {
-                        selectedUserWg = sb.StateSecondaryGUID.ToString();
-                    }
-                    else
-                    {
-                        selectedUserWg = selectedUserWg + "," + sb.StateSecondaryGUID.ToString();
-                    }
-                }
-            }
-
-            List<SelectListItem> caseUserWg = null;
-            caseUserWg = userwggroup
-                  .Select(x => new SelectListItem
-                  {
-                      Text = x.Name,
-                      Value = x.StateSecondaryGUID.ToString(),
-                      Selected = x.IsSelected == 1 ? true : false
-                  }).ToList();
-
-            ViewBag.selectedUserWgs = selectedUserWg;
-            ///////////////////////////////////////////////UserWg/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-            ///////////////////////////////////////////////ProductAreas/////////////////////////////////////////////////////////////////////////////////////////////////////////
-            string selectedProductAreas = string.Empty;
-            string productareaguid = "case_ProductArea.ProductAreaGUID";
-            IList<CaseSolutionCondition> productareagroup = _caseSolutionConditionService.GetCaseSolutionConditionModel(caseSolution.Id, curCustomerId, productareaguid);
-            foreach (CaseSolutionCondition sb in productareagroup)
-            {
-                if (sb.IsSelected == 1)
-                {
-                    if (selectedProductAreas == string.Empty)
-                    {
-                        selectedProductAreas = sb.StateSecondaryGUID.ToString();
-                    }
-                    else
-                    {
-                        selectedProductAreas = selectedProductAreas + "," + sb.StateSecondaryGUID.ToString();
-                    }
-                }
-            }
-
-            List<SelectListItem> caseProductArea = null;
-            caseProductArea = productareagroup
-                  .Select(x => new SelectListItem
-                  {
-                      Text = x.Name,
-                      Value = x.StateSecondaryGUID.ToString(),
-                      Selected = x.IsSelected == 1 ? true : false
-                  }).ToList();
-
-            ViewBag.selectedProductAreas = selectedProductAreas;
-            ///////////////////////////////////////////////ProductAreas/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
             regions = regionList.Select(x => new SelectListItem
@@ -2109,12 +1930,6 @@ namespace DH.Helpdesk.Web.Controllers
 
                 ActionList = actionList,
 
-                StateSecondariesSelect = stateSecondaries,
-                CaseWorkingGroupSelect = caseWorkingGroups,
-                CasePrioritySelect = casePrios,
-                CaseStatusSelect = caseStatus,
-                UserWgSelect = caseUserWg,
-                ProductAreaSelect = caseProductArea,
                 CaseSolutionFieldSettings = feildSettings,
                 CSSettingsField = lFieldSetting.ToList(),
                 CSSelectedSettingsField = lFieldSettingSelected.ToList()

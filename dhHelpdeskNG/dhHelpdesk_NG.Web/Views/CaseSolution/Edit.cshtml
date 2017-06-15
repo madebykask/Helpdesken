@@ -20,14 +20,13 @@
 
 
 
-@using (Html.BeginForm("edit", "casesolution", new { id = Model.CaseSolution.Id }, FormMethod.Post, new { id = "target" }))
+@using (Html.BeginForm("editsave", "casesolution", new { id = Model.CaseSolution.Id }, FormMethod.Post, new { id = "target" }))
 {
     @Html.Hidden("PageId", backPageId)
 
 
     @Html.Hidden("selectedValues", SelectedValues)
-
-
+    
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
