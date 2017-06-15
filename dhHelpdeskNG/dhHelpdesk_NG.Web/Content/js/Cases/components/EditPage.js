@@ -30,32 +30,6 @@ EditPage.prototype.Current_EC_Guid = "";
 EditPage.prototype.Current_EC_LanguageId = "";
 EditPage.prototype.Current_EC_Path = "";
 
-///* @Majid > Where should we place this? /TAN */
-///*
-//Used with iframeResizer.js:
-//This library enables the automatic resizing of the height and width of both same and cross domain iFrames to fit the contained content.
-//Place iframeResizer.contentWindow.min.js in the page contained within the iframe.
-//*/
-
-//var iframeOptions = {
-//    log: false,                                                         // Enable console logging
-//    sizeHeight: true,
-//    checkOrigin: false,                                                 // Not sure if this works or not, DL
-//    enablePublicMethods: true,                                          // Enable methods within iframe hosted page
-//    resizedCallback: function (messageData) {                           // Callback fn when resize is received     
-//    },
-//    bodyMargin: '0 0 200px 0',
-//    messageCallback: function (messageData) {                           // Callback fn when message is received
-//        if (messageData.message === 'cancelCase') {
-//            var elem = $('#case-action-close');
-//            location.href = elem.attr('href');
-//        }
-//    },
-//    closedCallback: function (id) {                                     // Callback fn when iFrame is closed
-//    }
-//};
-
-
 /**
 * @private
 * @param { Number } deptId
