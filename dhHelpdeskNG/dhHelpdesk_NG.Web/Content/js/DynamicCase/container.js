@@ -30,7 +30,7 @@ var dhform = function (options) {
     _this._modalId = 'containerModal';
     _this._loadingTemplate = '<div id="loading" style="width:100%;height:100%;"><img src="/Content/icons/ajax-loader.gif" /></div>';
     _this._formArea;
-    _this._formAreaId = (_this._options.formAreaId == undefined ? 'dh-form-area': _this._options.formAreaId);
+    _this._formAreaId = 'dh-form-area';
     _this._modalFormAreaId = 'dh-modal-form-area';
     _this.modalTemplate = '<div class="modal fade" id="containerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" aria-hidden="true">' +
                              '  <div class="modal-header">' +
@@ -46,68 +46,22 @@ var dhform = function (options) {
         if (_this._options.modal == 0) {
             $('#loadContainer').on('click', function (event) {
                 event.preventDefault();
-                var curState = $(this).attr("data-state");
-                if (curState == "") {
-                    _this.load({ url: _this._options.url, formAreaId: _this._formAreaId });
-                    $(this).attr("data-state", "loaded");
-                }
+                _this.load({ url: _this._options.url });
             });
-
-            //preload if tab is set to active
-            if (_this._formAreaId.indexOf("container_") >= 0)
-            {
-                var dataId = _this._formAreaId.replace('container_', '');
-                var aHref = $('#tabExtendedcase_' + dataId);
-
-                if (aHref.parent('li').hasClass('active')) {
-                    var curState = aHref.attr("data-state");
-                    if (curState == "") {
-                        _this.load({ url: _this._options.url, formAreaId: 'container_' + dataId });
-                        aHref.attr("data-state", "loaded");
-                    }
-                }
-            }
-
-            //preload always
-            
-                //var dataId = _this._formAreaId.replace('container_', '');
-                //var aHref = $('#tabExtendedcase_' + dataId);
-
-                
-                //    var curState = aHref.attr("data-state");
-                //    if (curState == "") {
-                //        _this.load({ url: _this._options.url, formAreaId: 'container_' + dataId });
-                //        aHref.attr("data-state", "loaded");
-                //    }
-                
-
-            $('.extendedcase').on('click', function (event) {
-                
-                $('#ActiveTab').val('extended-case-tab' + $(this).data('id'))
-
-                event.preventDefault();
-                var curState = $(this).attr("data-state");
-                if (curState == "") {
-                    _this.load({ url: _this._options.url, formAreaId: 'container_' + $(this).data('id') });
-                    $(this).attr("data-state", "loaded");
-                }
-            });
-
         } else if (_this._options.modal == 1) {
             $('#openContainer').on('click', function (event) {
                 event.preventDefault();
-                _this.loadModal({ url: _this._options.url, formAreaId: _this._formAreaId });
+                _this.loadModal({ url: _this._options.url });
             });
 
             $(document).on('hidden', '#' + _this._modalId, function () {
                 _this.closeModal();
             })
         }
-        else if (_this._options.modal == 2)
-        {
+        else if (_this._options.modal == 2) {
             _this._formAreaId = 'dh-form-on-case-area';
-           // _this._options.url = _this._options.url.substr(1);
-            _this.load({ url: _this._options.url, formAreaId: _this._formAreaId });
+            // _this._options.url = _this._options.url.substr(1);
+            _this.load({ url: _this._options.url });
         }
     })();
 };
@@ -125,14 +79,9 @@ dhform.prototype.progress = function () {
 dhform.prototype.load = function (options) {
     "use strict";
     var _this = this;
-    _this._formArea = $('#' + options.formAreaId);
-    
+    _this._formArea = $('#' + _this._formAreaId);
+
     _this._formArea.html(_this._loadingTemplate);
-
-    var id = options.formAreaId.replace('container_', '');
-
-    options.url = options.url.replace('[ExtendedCaseFormId]', id);
-    options.url = decodeURIComponent(options.url.replace(/&amp;/g, '&'));
 
     if (typeof _this._formArea === "undefined" || _this._formArea.length === 0) {
         // error!!!
@@ -140,16 +89,15 @@ dhform.prototype.load = function (options) {
     }
 
     var iframe = _this._formArea.next('iframe');
-    var iframeId = 'iframe_' + options.formAreaId;
 
     if (iframe.length !== 0) {
         iframe.remove();
     }
 
-    $('<iframe id="' + iframeId + '" class="hidden2" scrolling="no" frameBorder="0" width="100%" src="' + options.url + '"></iframe>').appendTo(_this._formArea);
+    $('<iframe id="test" class="hidden2" scrolling="no" frameBorder="0" width="100%" src="' + options.url + '"></iframe>').appendTo(_this._formArea);
 
-    $('[id*=' + iframeId + ']').load(function () {
-        $('#' + iframeId).iFrameResize(iframeOptions);
+    $('[id*=test]').load(function () {
+        $('#test').iFrameResize(iframeOptions);
         _this.progress();
     });
 };
