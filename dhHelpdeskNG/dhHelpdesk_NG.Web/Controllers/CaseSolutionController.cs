@@ -232,10 +232,12 @@ namespace DH.Helpdesk.Web.Controllers
 
             string t = this.TempData["NewOrOld"].ToString();
 
-            if (t == "1")
+            if (t != "0")
             {
-           
-                return RedirectToAction("editsave", new { caseSolutionInputViewModel = caseSolutionInputViewModel, CaseSolutionSettingModels = caseSolutionSettingModels, PageId = PageId, selectedValues = string.Empty });
+                caseSolution.Id = Convert.ToInt32(t.ToString());
+                caseSolutionInputViewModel.CaseSolution.Id = Convert.ToInt32(t.ToString());
+                //return RedirectToAction("editsave", new { caseSolutionInputViewModel = caseSolutionInputViewModel, CaseSolutionSettingModels = caseSolutionSettingModels, PageId = PageId, selectedValues = string.Empty });
+                //return RedirectToAction("editsave", "CaseSolution");
             }
 
             if (caseSolutionSettingModels == null)
@@ -276,8 +278,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
-            CaseSettingsSolutionAggregate settingsSolutionAggregate = this.CreateCaseSettingsSolutionAggregate(caseSolutionInputViewModel.CaseSolution.Id, caseSolutionSettingModels);
-            this.caseSolutionSettingService.AddCaseSolutionSettings(settingsSolutionAggregate);
+            if (t == "0")
+            {
+                CaseSettingsSolutionAggregate settingsSolutionAggregate = this.CreateCaseSettingsSolutionAggregate(caseSolutionInputViewModel.CaseSolution.Id, caseSolutionSettingModels);
+                this.caseSolutionSettingService.AddCaseSolutionSettings(settingsSolutionAggregate);
+            }
 
             if (errors.Count == 0)
             {
@@ -918,7 +923,7 @@ namespace DH.Helpdesk.Web.Controllers
                 CSSelectedSettingsField = lFieldSettingSelected.ToList()
             };
 
-            TempData["NewOrOld"] = "1";
+            TempData["NewOrOld"] = caid.ToString();
             return PartialView("/Views/CaseSolution/_Conditions.cshtml", model);
 
 
@@ -1169,7 +1174,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult editsave(
+        public ActionResult Edit(
             CaseSolutionInputViewModel caseSolutionInputViewModel,
             CaseSolutionSettingModel[] CaseSolutionSettingModels,
             int PageId, string selectedValues)
