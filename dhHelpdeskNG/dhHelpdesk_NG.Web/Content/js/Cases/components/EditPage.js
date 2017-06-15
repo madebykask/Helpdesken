@@ -119,6 +119,31 @@ EditPage.prototype.getDate = function (val) {
     }
 };
 
+
+
+EditPage.prototype.isExtendedCaseValid = function () {
+    var self = this;
+    var isOnNext = false;
+
+    if ($('#steps').length) {
+        //check if value is selected in steps, then isOnNext should be true;
+        var templateId = parseInt($('#steps').val()) || 0;
+        //only load if templateId exist
+        if (templateId > 0) {
+            isOnNext = true;
+        }
+    }
+
+    var $_ex_Container = self.getExtendedCaseContainer();
+    var validationResult = $_ex_Container.contentWindow.validateExtendedCase(true);
+    if (validationResult == null) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+
 EditPage.prototype.isFormValid = function() {
     var me = this;
     $('#btnAddCaseFile').removeClass('error');
@@ -392,8 +417,9 @@ EditPage.prototype.onSaveYes = function () {
     //return me.primaryValidation(url);
     var $_ex_Container = self.getExtendedCaseContainer();
     if ($_ex_Container != undefined) {
-        var valiationResult = $_ex_Container.contentWindow.validateExtendedCase(false);
-        if (valiationResult == null) {            
+
+        var isValid = self.isExtendedCaseValid();
+        if (isValid == true) {            
             var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
             return promise.then(self.primaryValidation(url), self.onSaveError);
         } else {
@@ -409,8 +435,9 @@ EditPage.prototype.onSaveAndNewYes = function (){
     //return self.primaryValidation(self.SAVE_ADD_CASE_URL);
     var $_ex_Container = self.getExtendedCaseContainer();
     if ($_ex_Container != undefined) {
-        var valiationResult = $_ex_Container.contentWindow.validateExtendedCase(false);
-        if (valiationResult == null) {            
+
+        var isValid = self.isExtendedCaseValid();
+        if (isValid == true) {
             var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
             return promise.then(self.primaryValidation(self.SAVE_ADD_CASE_URL), self.onSaveError);
         } else {
@@ -426,8 +453,9 @@ EditPage.prototype.onSaveAndCloseYes = function () {
     //return me.primaryValidation(me.NEW_CLOSE_CASE_URL);    
     var $_ex_Container = self.getExtendedCaseContainer();
     if ($_ex_Container != undefined) {
-        var valiationResult = $_ex_Container.contentWindow.validateExtendedCase(false);
-        if (valiationResult == null) {            
+
+        var isValid = self.isExtendedCaseValid();
+        if (isValid == true) {
             var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
             return promise.then(self.primaryValidation(self.NEW_CLOSE_CASE_URL), self.onSaveError);
         } else {
@@ -452,8 +480,8 @@ EditPage.prototype.onSaveClick = function () {
 
     var $_ex_Container = self.getExtendedCaseContainer();
     if ($_ex_Container != undefined) {
-        var valiationResult = $_ex_Container.contentWindow.validateExtendedCase(false);
-        if (valiationResult == null) {            
+        var isValid = self.isExtendedCaseValid();
+        if (isValid == true) {
             var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
             return promise.then(self.primaryValidation(url), self.onSaveError);
         } else {
@@ -488,8 +516,8 @@ EditPage.prototype.onSaveAndCloseClick = function () {
     //return me.primaryValidation(self.NEW_CLOSE_CASE_URL);
     var $_ex_Container = self.getExtendedCaseContainer();
     if ($_ex_Container != undefined) {
-        var valiationResult = $_ex_Container.contentWindow.validateExtendedCase(false);
-        if (valiationResult == null) {
+        var isValid = self.isExtendedCaseValid();
+        if (isValid == true) {
             var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
             return promise.then(self.primaryValidation(self.NEW_CLOSE_CASE_URL), self.onSaveError);
         } else {
@@ -548,8 +576,8 @@ EditPage.prototype.onSaveAndNewClick = function () {
     //return me.primaryValidation(self.SAVE_ADD_CASE_URL);
     var $_ex_Container = self.getExtendedCaseContainer();
     if ($_ex_Container != undefined) {
-        var valiationResult = $_ex_Container.contentWindow.validateExtendedCase(false);
-        if (valiationResult == null) {
+        var isValid = self.isExtendedCaseValid();
+        if (isValid == true) {
             var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
             return promise.then(self.primaryValidation(self.SAVE_ADD_CASE_URL), self.onSaveError);
         } else {

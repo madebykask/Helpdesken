@@ -46,6 +46,7 @@ namespace DH.Helpdesk.Web.Models.Case
                                                            }
                                                    };
 			ExternalInvoices = new List<ExternalInvoiceModel>();
+            this.SelectedWorkflowStep = 0;
         }
 
         public string CaseKey { get; set; }
@@ -69,7 +70,8 @@ namespace DH.Helpdesk.Web.Models.Case
         public int? AccountId { get; set; }
         public int? AccountActivityId { get; set; }
         public string ActiveTab { get; set; }
-
+        public int? SelectedWorkflowStep { get; set; }
+        
         [Obsolete("Put all fields that you required into this CaseInputViewModel model")]
         public Case case_  { get; set; }
 
