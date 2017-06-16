@@ -1,6 +1,7 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
 @using System.Web.Optimization
 @using System.Linq;
+@using System.Web.Script.Serialization
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Common.Enums.Settings
 @using DH.Helpdesk.Domain.Invoice
@@ -9,7 +10,13 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @using DH.Helpdesk.Common.Constants;
 
+@{
+    var jsSerializer = new JavaScriptSerializer(); 
+}
+
 <script type="text/javascript">
+
+
     window.parameters = {
         isCaseLocked: '@Model.CaseLock.IsLocked',
         currentCaseId: '@Model.case_.Id',
@@ -55,7 +62,7 @@
         fileNameError: '@Translation.GetForJS("Filnamn är inte giltigt. Special tecken (!@#=$&?*) är inte tillåtna")',
         containsExtendedCase: '@Model.ContainsExtendedCase',
         containsEForm: '@(Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)',
-        extendedCaseFormId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Id.ToString() : "" )', 
+        extendedCaseFormId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Id.ToString() : "" )',
         extendedCaseGuid: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().ExtendedCaseGuid.ToString() : "" )',
         extendedCaseLanguageId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().LanguageId.ToString() : "" )',
         extendedCasePath: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Path.ToString() : "" )',
@@ -94,7 +101,24 @@
             PlanDate: "case__PlanDate",
             WatchDate: "case__WatchDate",
             log_InternalText: "CaseLog_TextInternal"
+        },
 
+        caseInitValues: {
+            CaseId: '@Model.case_.Id',
+            CustomerId: '@Model.case_.Customer_Id',
+            ReportedBy:  '@Model.case_.ReportedBy',
+            PersonsName:  '@Model.case_.PersonsName',
+            PersonsPhone:   '@Model.case_.PersonsPhone',
+            UserCode:  '@Model.case_.UserCode',
+            RegionId: '@Model.case_.Region_Id',
+            DepartmentId: '@Model.case_.Department_Id',
+            ParentOUId: '@(Model.case_.Ou != null && Model.case_.Ou.Parent_OU_Id != null? Model.case_.Ou.Parent_OU_Id: null)',
+            ChildOUId: '@Model.case_.OU_Id',
+            ProductAreaId: '@Model.case_.ProductArea_Id',
+            StatusId:  '@Model.case_.Status_Id',
+            SubStatusId:  '@Model.case_.StateSecondary_Id',
+            PlanDate:  '@(Model.case_.PlanDate !=null ? Model.case_.PlanDate.Value.ToString("dd/MM/yyyy").Replace("-","/") : "" )',
+            WatchDate:   '@(Model.case_.WatchDate !=null ? Model.case_.WatchDate.Value.ToString("dd/MM/yyyy").Replace("-", "/") : "" )',
         },
 
         casesScopeInitParameters: {
@@ -188,7 +212,7 @@
                     if (Model.DynamicCase.ViewMode == 0)
                     {
                         <li>
-                            <a href="#dh-form-area" id="loadContainer" class="eform" data-state="">@(Translation.Get(Model.DynamicCase.FormName))</a>                            
+                            <a href="#dh-form-area" id="loadContainer" class="eform" data-state="">@(Translation.Get(Model.DynamicCase.FormName))</a>                                                        
                         </li>                        
 
                     }
@@ -205,10 +229,12 @@
                     foreach (var extendedCase in Model.ExtendedCases)
                     {
                         <li data-active-tab="@string.Format(CaseTabs.ExtendedCaseTab, extendedCase.Id)" class="@((Model.ActiveTab == string.Format(CaseTabs.ExtendedCaseTab, extendedCase.Id)) ? "active" : "")" >
-                            <a href="#container_@extendedCase.Id" id="tabExtendedcase_@extendedCase.Id" class="extendedcase" data-id="@extendedCase.Id" data-state="">@(Translation.GetCoreTextTranslation(extendedCase.Name))</a>
+                            <a href="#container_@extendedCase.Id" id="tabExtendedcase_@extendedCase.Id" class="extendedcase" data-id="@extendedCase.Id" data-state="">
+                                @(Translation.GetCoreTextTranslation(extendedCase.Name))
+                                <i id="exTabIndicator_@extendedCase.Id" class="tab-indicator" style="display:none">&nbsp;</i>
+                            </a>                            
                         </li>
                     }
-
                 }
 
                 @if (Model.CaseLock != null && Model.CaseLock.IsLocked && Model.CaseLock.User != null)

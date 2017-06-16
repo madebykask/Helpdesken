@@ -1875,6 +1875,18 @@ table th.thpointer {
         display: inline-block;
     }
 
+.tab-indicator {
+    width: 20px !important;
+    height: 20px !important;
+    background: url('/content/img/ajax-loader.gif');
+    background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border: none;
+    display: inline-block;
+}
+
 .case-overview.page .table-cases 
 {
     table-layout:fixed !important;
