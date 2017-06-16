@@ -1,7 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
 @using System.Web.Optimization
 @using System.Linq;
-@using System.Web.Script.Serialization
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Common.Enums.Settings
 @using DH.Helpdesk.Domain.Invoice
@@ -9,10 +8,6 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @using DH.Helpdesk.Common.Constants;
-
-@{
-    var jsSerializer = new JavaScriptSerializer(); 
-}
 
 <script type="text/javascript">
 
