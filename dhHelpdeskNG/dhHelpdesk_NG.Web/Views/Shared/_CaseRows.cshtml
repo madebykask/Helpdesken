@@ -39,10 +39,10 @@
                             <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id, backUrl = Model.BackUrl })">
                             @if (c.FieldType == CasesFieldsTypes.FieldTypes.Date)
                             {
-                                <!-- date -->
-                                @Html.DisplayFor(m => c.DateTimeValue, "Date")
+                                <!-- date: don't use display template for perfomance reasons -->
+                                @(c.DateTimeValue.HasValue ? c.DateTimeValue.Value.ToLocalTime().ToShortDateString() : string.Empty)
                             }
-                            else if (c.FieldType == CasesFieldsTypes.FieldTypes.Time)                                                        
+                            else if (c.FieldType == CasesFieldsTypes.FieldTypes.Time)
                             {
                                 <!-- dateTime -->
                                 @(c.DateTimeValue.HasValue ? c.DateTimeValue.Value.ToLocalTime().ToFormattedDateTime() : string.Empty)

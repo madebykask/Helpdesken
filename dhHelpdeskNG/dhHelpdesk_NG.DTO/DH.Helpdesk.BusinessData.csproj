@@ -173,8 +173,12 @@
     <Compile Include="Models\BusinessRules\BusinessRuleReadModel.cs" />
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
     <Compile Include="Models\Case\CaseFileDate.cs" />
+    <Compile Include="Models\Case\CaseHistoryOverview.cs" />
     <Compile Include="Models\Case\CaseLock\CaseLockOverview.cs" />
+    <Compile Include="Models\Case\CategoryOverview.cs" />
     <Compile Include="Models\Case\CaseSolutionConditionModel.cs" />
+    <Compile Include="Models\Case\DepartmentOverview.cs" />
+    <Compile Include="Models\Case\EmailLogsOverview.cs" />
     <Compile Include="Models\Case\ExtraFollower.cs" />
     <Compile Include="Models\Case\CaseIntLog\CaseEmailSendOverview.cs" />
     <Compile Include="Models\Case\CaseLock\LockedCaseOverview.cs" />
@@ -188,6 +192,11 @@
     <Compile Include="Models\Case\CaseDataSet.cs" />
     <Compile Include="Models\Case\CaseFilterFavorite.cs" />
     <Compile Include="Models\Case\CaseExtraInfo.cs" />
+    <Compile Include="Models\Case\PriorityOverview.cs" />
+    <Compile Include="Models\Case\RegistrationSourceCustomerOverview.cs" />
+    <Compile Include="Models\Case\StateSecondaryOverview.cs" />
+    <Compile Include="Models\Case\StatusOverview.cs" />
+    <Compile Include="Models\Case\UserBasicOvierview.cs" />
     <Compile Include="Models\Case\UserNamesStruct.cs" />
     <Compile Include="Models\Case\CaseRemainingTime.cs" />
     <Compile Include="Models\Case\CaseRemainingTimeData.cs" />
@@ -204,6 +213,7 @@
     <Compile Include="Models\Case\ChidCase\ParentCaseInfo.cs" />
     <Compile Include="Models\Case\ExtraFieldCaseHistory.cs" />
     <Compile Include="Models\Case\RelatedCase.cs" />
+    <Compile Include="Models\Case\WorkingGroupOverview.cs" />
     <Compile Include="Models\Checklists\Output\CheckListActionBM.cs" />
     <Compile Include="Models\Checklists\Output\CheckListBM.cs" />
     <Compile Include="Models\Checklists\Output\CheckListServiceBM.cs" />
@@ -276,6 +286,7 @@
     <Compile Include="Models\Licenses\Computers\ComputerOverview.cs" />
     <Compile Include="Models\DailyReport\Output\DailyReportSubject.cs" />
     <Compile Include="Models\LogProgram\LogProgram.cs" />
+    <Compile Include="Models\Logs\Output\EmailLogsOverview.cs" />
     <Compile Include="Models\MailTemplates\CustomMailTemplateLanguage.cs" />
     <Compile Include="Models\Modules\Output\ModulesOverview.cs" />
     <Compile Include="Models\OperationLog\Output\OperationLogObjectOverview.cs" />
@@ -996,7 +1007,10 @@
     <Compile Include="Enums\Changes\ChangeStatus.cs" />
     <Compile Include="Enums\Changes\Subtopic.cs" />
     <Compile Include="Models\Users\UserProfileCustomerSettings.cs" />
+    <Compile Include="Models\User\Interfaces\DepartmentInfoAdapter.cs" />
     <Compile Include="Models\WorkflowStepModel.cs" />
+    <Compile Include="Models\User\Interfaces\IDepartmentInfo.cs" />
+    <Compile Include="Models\User\Interfaces\IUserInfo.cs" />
     <Compile Include="Models\WorkingGroup\WorkingGroupForSMS.cs" />
     <Compile Include="Models\WorktimeCalculator\IWorkTimeCalculatorFactory.cs" />
     <Compile Include="Models\WorktimeCalculator\WorkTimeCalculator.cs" />
@@ -1019,7 +1033,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\Case\CaseHistory\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\PostSharp.4.0.36\tools\PostSharp.targets" Condition="Exists('..\packages\PostSharp.4.0.36\tools\PostSharp.targets')" />
   <Target Name="EnsurePostSharpImported" BeforeTargets="BeforeBuild" Condition="'$(PostSharp30Imported)' == ''">

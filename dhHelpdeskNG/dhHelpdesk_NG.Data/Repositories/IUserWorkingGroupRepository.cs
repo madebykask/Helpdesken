@@ -8,6 +8,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface IUserWorkingGroupRepository : IRepository<UserWorkingGroup>
     {
-        List<WorkingGroupUsers> FindWorkingGroupsUserIds(List<int> workingGroupIds, bool includeAdmins = true);
+        List<WorkingGroupUsers> FindWorkingGroupsUserIds(List<int> workingGroupIds, bool includeAdmins = true, bool activeUsers = false);
     }
 }

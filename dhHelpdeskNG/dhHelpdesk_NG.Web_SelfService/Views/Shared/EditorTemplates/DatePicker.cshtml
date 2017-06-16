@@ -4,16 +4,95 @@
 
 @{
     var controlId = ViewData["id"];
-    var dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
+    var isDisabledControl = ViewData.ContainsKey("disabled");
+
+    if (controlId == null)
+    {
+        throw new ArgumentNullException("id", "id must be specified.");
+    }
+
+    /*Text Attributes*/
+    var inputAttributes = (Dictionary<string, object>)ViewData["inputAttributes"];
+    Dictionary<string, object> htmlAttributes;
+    if (inputAttributes != null)
+    {
+        htmlAttributes = new Dictionary<string, object>(inputAttributes.Count + 1);
+
+        foreach (var inputAttribute in inputAttributes)
+        {
+            htmlAttributes.Add(inputAttribute.Key, inputAttribute.Value);
+        }
+    }
+    else
+    {
+        htmlAttributes = new Dictionary<string, object>(1);
+    }
+
+    /*Button Attributes*/
+    var buttonInputAttributes = (Dictionary<string, object>)ViewData["buttonInputAttributes"];
+    Dictionary<string, object> buttonAttributes;
+    if (buttonInputAttributes != null)
+    {
+        buttonAttributes = new Dictionary<string, object>(buttonInputAttributes.Count + 1);
+
+        foreach (var buttonInputAttribute in buttonInputAttributes)
+        {
+            buttonAttributes.Add(buttonInputAttribute.Key, buttonInputAttribute.Value);
+        }
+    }
+    else
+    {
+        buttonAttributes = new Dictionary<string, object>(1);
+    }
+
+    if (htmlAttributes.Keys.Contains("class"))
+    {
+        var passedClass = htmlAttributes["class"];
+        htmlAttributes["class"] = string.Format("form-control ignore-globalfocus span2 {0}", passedClass);
+    }
+    else
+    {
+        htmlAttributes.Add("class", " form-control ignore-globalfocus span2");
+    }
+
+    //var dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
+    //var dateFormat = "yyyy-mm-dd";
     string formattedDate = null;
 
     if (Model.HasValue)
     {
-        formattedDate = Model.Value.ToString(dateFormat);
+        formattedDate = Model.Value.ToShortDateString();
+    }
+
+    var controlName = string.Empty;
+    var name = ViewData["Name"] as string;
+    if (!string.IsNullOrWhiteSpace(name))
+    {
+        controlName = name;
+        htmlAttributes.Add("Name", controlName);
+    }
+
+    if (isDisabledControl)
+    {
+        htmlAttributes.Add("disabled", "disabled");
+    }
+    else
+    {
+        <script type="text/javascript">
+            $(function() {
+                $('#@controlId').datepicker({
+                clearBtn: true,
+                autoclose: true,
+                weekStart: 1,
+                todayHighlight: true,
+                format: 'yyyy-mm-dd'
+                });
+            });
+        </script>
     }
 }
 
-<script type="text/javascript">
+@*<script type="text/javascript">
     $(function() {
         $('#@controlId').datepicker({
             format: '@DateExtensions.GetDateFormat().ToLowerInvariant()',
@@ -23,11 +102,32 @@
             clearBtn: true
         });
     });
-</script>
+</script>*@
 
+ 
+<input type="text" style="display: none;" />
 <div id="@controlId" class="input-group date dateie">
-    @Html.TextBox(string.Empty, formattedDate, new {@class = "form-control ignore-globalfocus" })
+    @if (!string.IsNullOrWhiteSpace(controlName))
+    {
+        // todo
+        @Html.TextBoxFor(m => formattedDate, htmlAttributes)
+    }
+    else
+    {
+        @Html.TextBox(controlName, formattedDate, htmlAttributes)
+    }
+
+    @{var buttonClass = "";}
+    @if (buttonAttributes.Keys.Contains("class"))
+    {
+        var passedClass = buttonAttributes["class"].ToString();
+        buttonClass = string.Format("glyphicon glyphicon-calendar {0}", passedClass);
+    }
+    else
+    {
+        buttonClass = string.Format("glyphicon glyphicon-calendar");
+    }
     <div class="input-group-addon">
-        <span class="glyphicon glyphicon-calendar"></span>
+        <span class="@buttonClass"></span>
     </div>
 </div>

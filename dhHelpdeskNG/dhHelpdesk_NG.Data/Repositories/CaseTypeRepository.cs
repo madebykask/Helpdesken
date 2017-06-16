@@ -85,17 +85,23 @@
         {
             var entities =
                 this.DataContext.CaseTypes.Where(c => c.Customer_Id == customerId && c.IsActive != 0)
-                    .Select(c => new { c.Id, ParentId = c.Parent_CaseType_Id, c.Name, c.ShowOnExternalPage, c.ShowOnExtPageCases })
+                    .Select(c => new { c.Id, ParentId = c.Parent_CaseType_Id, c.Name, c.ShowOnExternalPage })
                     .OrderBy(c => c.Name)
                     .ToList();
+            //For next release #57742
+            //var entities =
+            //    this.DataContext.CaseTypes.Where(c => c.Customer_Id == customerId && c.IsActive != 0)
+            //        .Select(c => new { c.Id, ParentId = c.Parent_CaseType_Id, c.Name, c.ShowOnExternalPage, c.ShowOnExtPageCases })
+            //        .OrderBy(c => c.Name)
+            //        .ToList();
             return entities
                     .Select(c => new CaseTypeOverview
                                      {
                                          Id = c.Id,
                                          ParentId = c.ParentId,
                                          Name = c.Name,
-                                         ShowOnExternalPage = c.ShowOnExternalPage,
-                                         ShowOnExtPageCases = c.ShowOnExtPageCases
+                                         ShowOnExternalPage = c.ShowOnExternalPage
+                                         //ShowOnExtPageCases = c.ShowOnExtPageCases
                                      });
         }
 

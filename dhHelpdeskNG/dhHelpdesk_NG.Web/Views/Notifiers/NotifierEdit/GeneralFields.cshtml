@@ -49,7 +49,7 @@
                             @(Translation.Get(Model.Language.Caption, Enums.TranslationSource.TextTranslation) + (Model.Language.Required ? "*" : string.Empty))
                         </td>
                         <td>
-                            @Html.DropDown("language_dropdown", "LanguageId", !Model.Language.Required, Model.Language.Value)
+                            @Html.DropDown("language_dropdown", "LanguageId", Model.Language.Required, Model.Language.Value)
                         </td>
                     </tr>
                 }

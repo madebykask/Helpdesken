@@ -95,7 +95,7 @@ namespace DH.Helpdesk.Services.Services
             List<CaseTemplateCategoryNode> ret2 = new List<CaseTemplateCategoryNode>();
 
             var noneCatCaseSolutions = _caseSolutionRepository.GetMany(s => s.Customer_Id == customerId && s.CaseSolutionCategory_Id == null &&
-                                                                            s.Status != 0 && s.ConnectedButton == null &&
+                                                                            s.Status != 0 && s.ConnectedButton != 0 &&
                                                                         (s.WorkingGroup.UserWorkingGroups.Select(
                                                                          x => x.User_Id).Contains(userId) ||
                                                                          s.WorkingGroup_Id == null)).OrderBy(cs => cs.Name);
@@ -132,8 +132,8 @@ namespace DH.Helpdesk.Services.Services
                 curCategory.CategoryName = category.Name;
                 curCategory.IsRootTemplate = false;
 
-                var caseSolutions = _caseSolutionRepository.GetMany(s => s.CaseSolutionCategory_Id == category.Id &&
-                                                                         s.Status != 0 && s.ConnectedButton == null &&
+                var caseSolutions = _caseSolutionRepository.GetMany(s => s.Customer_Id == customerId && s.CaseSolutionCategory_Id == category.Id &&
+                                                                         s.Status != 0 && s.ConnectedButton != 0 &&
                                                                          (s.WorkingGroup.UserWorkingGroups.Select(
                                                                              x => x.User_Id).Contains(userId) || s.WorkingGroup_Id == null)).OrderBy(cs => cs.Name);
                 if (caseSolutions != null)
@@ -329,7 +329,7 @@ namespace DH.Helpdesk.Services.Services
                     }
 
                     // Check conditions
-                    if (conditionValue.IndexOf(value.ToLower()) > -1)
+                    if (value.Length > 0 && conditionValue.IndexOf(value.ToLower()) > -1)
                     {
                         showWorkflowStep = true;
                         continue;
@@ -342,7 +342,7 @@ namespace DH.Helpdesk.Services.Services
                 catch (Exception ex)
                 {
                     //Remove caching of conditions for this specific template that is used in Case
-                    string cacheKey = string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition, caseSolution_Id);
+                    string cacheKey = string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionConditionWithId, caseSolution_Id);
                     this._cache.Invalidate(cacheKey);
 
                     //throw;
@@ -675,9 +675,8 @@ namespace DH.Helpdesk.Services.Services
             {
                 caseSolutionConditions = _caseSolutionConditionRepository.GetCaseSolutionConditions(caseSolution_Id).Select(x => new { x.Property_Name, x.Values }).ToDictionary(x => x.Property_Name, x => x.Values);
                 
-                //TODO: add this again when test is OK
-                //if (caseSolutionConditions.Any())
-                //    this._cache.Set(string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition, caseSolution_Id), caseSolutionConditions, DH.Helpdesk.Common.Constants.Cache.Duration);
+                if (caseSolutionConditions.Any())
+                    this._cache.Set(string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionConditionWithId, caseSolution_Id), caseSolutionConditions, DH.Helpdesk.Common.Constants.Cache.Duration);
             }
 
             return caseSolutionConditions;

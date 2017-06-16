@@ -60,7 +60,20 @@ namespace DH.Helpdesk.Dal.Repositories
             string sql = string.Empty;
             DataTable dt = null;
 
-            // int custid = customers[0];
+
+            string custidstring = string.Empty;
+
+            for (int i = 0; i < customersIdAll.Length; i++)
+            {
+                if (custidstring == string.Empty)
+                {
+                    custidstring = customersIdAll[i].ToString();
+                }
+                else
+                {
+                    custidstring = custidstring  + ", " + customersIdAll[i].ToString();
+                }
+            }
 
             int StartPage = 0;
             if (forStartPage == true)
@@ -69,285 +82,289 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
 
-            var links =
-                from links1 in this.DataContext.Links
-                join casesolution in this.DataContext.CaseSolutions on links1.CaseSolution_Id equals casesolution.Id into linkssolution
-                join documents in this.DataContext.Documents on links1.Document_Id equals documents.Id into linksdocument
-                join linkgroup in this.DataContext.LinkGroups on links1.LinkGroup_Id equals linkgroup.Id into linkslinkgroup
-                join customer in this.DataContext.Customers on links1.Customer_Id equals customer.Id into linkscustomer
-                where customersIdAll.Contains(links1.Customer_Id.Value)
-                select new { links1.CaseSolution_Id, links1.CaseSolution, links1.Us, links1.Wg, links1.Customer_Id, links1.Document_Id, links1.LinkGroup_Id, links1.NewWindowHeight, links1.NewWindowWidth, links1.OpenInNewWindow, links1.SortOrder, links1.URLAddress, links1.URLName, links1.ShowOnStartPage, links1.Document, links1.LinkGroup, links1.Customer };
-
-
-            links = links.Where(x => !x.Us.Any() || x.Us.Any(u => u.Id == userid));
-
-
-            var userGroups = this.DataContext.UserWorkingGroups.Where(u => u.User_Id == userid).Select(u => u.WorkingGroup_Id);
-
-            links = links.Where(x => !x.Wg.Any() || x.Wg.Any(g => userGroups.Contains(g.Id)));
+            //var links =
+            //    from links1 in this.DataContext.Links
+            //    join casesolution in this.DataContext.CaseSolutions on links1.CaseSolution_Id equals casesolution.Id into linkssolution
+            //    join documents in this.DataContext.Documents on links1.Document_Id equals documents.Id into linksdocument
+            //    join linkgroup in this.DataContext.LinkGroups on links1.LinkGroup_Id equals linkgroup.Id into linkslinkgroup
+            //    join customer in this.DataContext.Customers on links1.Customer_Id equals customer.Id into linkscustomer
+            //    where customersIdAll.Contains(links1.Customer_Id.Value)
+            //    select new { links1.Id, links1.CaseSolution_Id, links1.CaseSolution, links1.Us, links1.Wg, links1.Customer_Id, links1.Document_Id, links1.LinkGroup_Id, links1.NewWindowHeight, links1.NewWindowWidth, links1.OpenInNewWindow, links1.SortOrder, links1.URLAddress, links1.URLName, links1.ShowOnStartPage, links1.Document, links1.LinkGroup, links1.Customer };
 
 
 
-            List<LinkOverview> llist1 = new List<LinkOverview>();
-            foreach (var r in links)
+
+            //var userGroups = this.DataContext.UserWorkingGroups.Where(z => z.User_Id == userid).Select(u => u.WorkingGroup_Id);
+
+            //links = links.Where(x => !x.Us.Any() || x.Us.Any(u => u.Id == userid));
+
+            //links = links.Where(x => !x.Wg.Any() || x.Wg.Any(g => userGroups.Contains(g.Id)));
+
+
+
+            //List<LinkOverview> llist1 = new List<LinkOverview>();
+            //foreach (var r in links)
+            //{
+
+
+
+            //    LinkOverview ltemp = new LinkOverview();
+            //    if (r.CaseSolution_Id != null)
+            //    {
+            //        ltemp.CaseSolutionId = r.CaseSolution_Id.ToString() != null ? Convert.ToInt32(r.CaseSolution_Id.ToString()) : 0;
+            //    }
+            //    else
+            //    {
+            //        ltemp.CaseSolutionId = 0;
+            //    }
+            //    if (r.CaseSolution != null)
+            //    {
+            //        ltemp.CaseSolutionName = r.CaseSolution.Name.ToString() != null ? Convert.ToString(r.CaseSolution.Name.ToString()) : null;
+            //    }
+            //    else
+            //    {
+            //        ltemp.CaseSolutionName = null;
+            //    }
+            //    if (r.Customer_Id != null)
+            //    {
+            //        ltemp.CustomerId = r.Customer_Id.ToString() != null ? Convert.ToInt32(r.Customer_Id.ToString()) : 0;
+            //    }
+            //    else
+            //    {
+            //        ltemp.CustomerId = 0;
+            //    }
+            //    if (r.Customer != null)
+            //    {
+            //        ltemp.CustomerName = r.Customer.Name.ToString() != null ? Convert.ToString(r.Customer.Name.ToString()) : null;
+            //    }
+            //    else
+            //    {
+            //        ltemp.CustomerName = null
+            //            ;
+            //    }
+            //    if (r.Document_Id != null)
+            //    {
+            //        ltemp.DocumentId = r.Document_Id.ToString() != null ? Convert.ToInt32(r.Document_Id.ToString()) : 0;
+            //    }
+            //    else
+            //    {
+            //        ltemp.DocumentId = 0;
+            //    }
+            //    if (r.Document != null)
+            //    {
+            //        ltemp.DocumentName = r.Document.Name.ToString() != null ? Convert.ToString(r.Document.Name.ToString()) : null;
+            //    }
+            //    else
+            //    {
+            //        ltemp.DocumentName = null;
+            //    }
+            //    if (r.LinkGroup_Id != null)
+            //    {
+            //        ltemp.LinkGroupId = r.LinkGroup_Id.ToString() != null ? Convert.ToInt32(r.LinkGroup_Id.ToString()) : 0;
+            //    }
+            //    else
+            //    {
+            //        ltemp.LinkGroupId = 0;
+            //    }
+            //    if (r.LinkGroup != null)
+            //    {
+            //        ltemp.LinkGroupName = r.LinkGroup.LinkGroupName.ToString() != null ? Convert.ToString(r.LinkGroup.LinkGroupName.ToString()) : null;
+            //    }
+            //    else
+            //    {
+            //        ltemp.LinkGroupName = null;
+            //    }
+
+            //    if (r.NewWindowHeight != null)
+            //    {
+            //        ltemp.NewWindowHeight = r.NewWindowHeight.ToString() != null ? Convert.ToInt32(r.NewWindowHeight.ToString()) : 0;
+            //    }
+            //    else
+            //    {
+            //        ltemp.NewWindowHeight = 0;
+            //    }
+
+            //    if (r.NewWindowWidth != null)
+            //    {
+            //        ltemp.NewWindowWidth = r.NewWindowWidth.ToString() != null ? Convert.ToInt32(r.NewWindowWidth.ToString()) : 0;
+            //    }
+            //    else
+            //    {
+            //        ltemp.NewWindowWidth = 0;
+            //    }
+
+            //    if (r.OpenInNewWindow != null)
+            //    {
+            //        ltemp.OpenInNewWindow = Convert.ToBoolean(Convert.ToInt32(r.OpenInNewWindow.ToString()));
+            //    }
+            //    else
+            //    {
+            //        ltemp.OpenInNewWindow = false;
+            //    }
+
+            //    if (r.ShowOnStartPage != null)
+            //    {
+            //        ltemp.ShowOnStartPage = Convert.ToBoolean(Convert.ToInt32(r.ShowOnStartPage.ToString()));
+            //    }
+            //    else
+            //    {
+            //        ltemp.ShowOnStartPage = false;
+            //    }
+
+            //    if (r.SortOrder != null)
+            //    {
+            //        ltemp.SortOrder = r.SortOrder.ToString() != null ? Convert.ToString(r.SortOrder.ToString()) : string.Empty;
+            //    }
+            //    else
+            //    {
+            //        ltemp.SortOrder = string.Empty;
+            //    }
+
+            //    if (r.URLAddress != null)
+            //    {
+            //        ltemp.UrlAddress = r.URLAddress.ToString() != null ? Convert.ToString(r.URLAddress.ToString()) : string.Empty;
+            //    }
+            //    else
+            //    {
+            //        ltemp.UrlAddress = string.Empty;
+            //    }
+
+            //    if (r.URLName != null)
+            //    {
+            //        ltemp.UrlName = r.URLName.ToString() != null ? Convert.ToString(r.URLName.ToString()) : string.Empty;
+            //    }
+            //    else
+            //    {
+            //        ltemp.UrlName = string.Empty;
+            //    }
+            //    llist1.Add(ltemp);
+            //}
+
+
+            sql = "SELECT ";
+            sql += "ISNULL([Project3].[Id], 0) AS [Id], ";
+            sql += "ISNULL([Project3].[Customer_Id], 0) AS [Customer_Id], ";
+            sql += "ISNULL([Project3].[Document_Id], 0) AS [Document_Id], ";
+            sql += "ISNULL([Project3].[OpenInNewWindow], 0) AS [OpenInNewWindow], ";
+            sql += "ISNULL([Project3].[NewWindowHeight], 0) AS [NewWindowHeight], ";
+            sql += "ISNULL([Project3].[NewWindowWidth], 0) AS [NewWindowWidth], ";
+            sql += "ISNULL([Project3].[ShowOnStartPage], 0) AS [ShowOnStartPage], ";
+            sql += "ISNULL([Project3].[LinkGroup_Id], 0) AS [LinkGroup_Id], ";
+            sql += "ISNULL([Project3].[URLAddress], '') AS [URLAddress], ";
+            sql += "ISNULL([Project3].[URLName], '') AS [URLName], ";
+            sql += "ISNULL([Project3].[SortOrder], '') AS [SortOrder], ";
+            sql += "ISNULL([Project3].[ChangedDate], '') AS [ChangedDate], ";
+            sql += "ISNULL([Project3].[CreatedDate], '') AS [CreatedDate], ";
+            sql += "ISNULL([Project3].[CaseSolution_Id], 0) AS [CaseSolution_Id], ";
+            sql += " ISNULL((SELECT CaseSolutionName FROM dbo.tblCaseSolution WHERE(Id = [Project3].[CaseSolution_Id])), '') AS CaseSolutionName, ";
+            sql += " ISNULL((SELECT Name FROM dbo.tblCustomer WHERE(Id = [Project3].[Customer_Id])), '') AS CustomerName, ";
+            sql += " (SELECT DocumentName FROM dbo.tblDocument WHERE(Id = [Project3].[Document_Id])) AS DocumentName,  ";
+            sql += " (SELECT LinkGroup FROM dbo.tblLinkGroup WHERE(Id = [Project3].[LinkGroup_Id])) AS LinkGroupName ";
+            sql += "FROM(SELECT ";
+            sql += "[Extent1].[Id] AS [Id], ";
+            sql += "[Extent1].[Customer_Id] AS [Customer_Id], ";
+            sql += "[Extent1].[Document_Id] AS [Document_Id], ";
+            sql += "[Extent1].[OpenInNewWindow] AS [OpenInNewWindow], ";
+            sql += "[Extent1].[NewWindowHeight] AS [NewWindowHeight], ";
+            sql += "[Extent1].[NewWindowWidth] AS [NewWindowWidth], ";
+            sql += "[Extent1].[ShowOnStartPage] AS [ShowOnStartPage], ";
+            sql += "[Extent1].[LinkGroup_Id] AS [LinkGroup_Id], ";
+            sql += "[Extent1].[URLAddress] AS [URLAddress], ";
+            sql += "[Extent1].[URLName] AS [URLName], ";
+            sql += "[Extent1].[SortOrder] AS [SortOrder], ";
+            sql += "[Extent1].[ChangedDate] AS [ChangedDate], ";
+            sql += "[Extent1].[CreatedDate] AS [CreatedDate], ";
+            sql += "[Extent1].[CaseSolution_Id] AS [CaseSolution_Id], ";
+            sql += "[Extent2].[Name] AS [Name] ";
+            sql += "FROM[dbo].[tbllink] AS [Extent1] ";
+            sql += "LEFT OUTER JOIN[dbo].[tblcustomer] AS [Extent2] ON[Extent1].[Customer_Id] = [Extent2].[Id] ";
+            sql += "WHERE(   ";
+            sql += "(NOT EXISTS(SELECT ";
+            sql += "1 AS [C1] ";
+            sql += "FROM[dbo].[tblLink_tblUsers] AS [Extent3] ";
+            sql += "WHERE[Extent1].[Id] = [Extent3].[Link_Id] ";
+            sql += "Union ";
+            sql += " SELECT ";
+            sql += "1 AS [C1] ";
+            sql += "FROM[dbo].[tblLink_tblWorkingGroup] AS [Extent31] ";
+            sql += "WHERE[Extent1].[Id] = [Extent31].[Link_Id] ";
+            sql += ") ";
+            sql += ") ";
+            sql += "OR ";
+            sql += "(EXISTS(SELECT ";
+            sql += "1 AS [C1] ";
+            sql += "FROM[dbo].[tblLink_tblUsers] AS [Extent4] ";
+            sql += "WHERE([Extent1].[Id] = [Extent4].[Link_Id]) AND([Extent4].[User_Id] = " + userid + ") ";
+            sql += ")) ";
+            sql += "OR ";
+            sql += "(EXISTS(SELECT ";
+            sql += "1 AS [C1] ";
+            sql += "FROM[dbo].[tblLink_tblWorkingGroup] AS [Extent41] ";
+            sql += "WHERE([Extent1].[Id] = [Extent41].[Link_Id]) AND([Extent41].[WorkingGroup_Id] in (select WorkingGroup_Id from tblUserWorkingGroup where User_Id =  " + userid + ")) ";
+            sql += ")) ";
+            sql += ") ";
+            sql += "AND([Extent1].[Customer_Id] IS NOT NULL) AND([Extent1].[Customer_Id] IN(" + custidstring + ")) AND([Extent1].[Customer_Id] IS NOT NULL) AND([Extent1].[ShowOnStartPage] = " + StartPage + ") ";
+            sql += ")  AS [Project3] ";
+            sql += "ORDER BY[Project3].[Name] ";
+            sql += "ASC, [Project3].[SortOrder] ";
+            sql += "ASC ";
+
+            string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+
+
+            using (var connection = new SqlConnection(ConnectionString))
             {
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+                using (var command = new SqlCommand { Connection = connection, CommandType = CommandType.StoredProcedure, CommandTimeout = 0 })
+                {
+                    command.CommandType = CommandType.Text;
+                    command.CommandText = sql;
+                    var reader = command.ExecuteReader();
+                    dt = new DataTable();
+                    dt.Load(reader);
 
-                LinkOverview ltemp = new LinkOverview();
-                if (r.CaseSolution_Id != null)
-                {
-                    ltemp.CaseSolutionId = r.CaseSolution_Id.ToString() != null ? Convert.ToInt32(r.CaseSolution_Id.ToString()) : 0;
                 }
-                else
-                {
-                    ltemp.CaseSolutionId = 0;
-                }
-                if (r.CaseSolution != null)
-                {
-                    ltemp.CaseSolutionName = r.CaseSolution.Name.ToString() != null ? Convert.ToString(r.CaseSolution.Name.ToString()) : string.Empty;
-                }
-                else
-                {
-                    ltemp.CaseSolutionName = string.Empty;
-                }
-                if (r.Customer_Id != null)
-                {
-                    ltemp.CustomerId = r.Customer_Id.ToString() != null ? Convert.ToInt32(r.Customer_Id.ToString()) : 0;
-                }
-                else
-                {
-                    ltemp.CustomerId = 0;
-                }
-                if (r.Customer != null)
-                {
-                    ltemp.CustomerName = r.Customer.Name.ToString() != null ? Convert.ToString(r.Customer.Name.ToString()) : string.Empty;
-                }
-                else
-                {
-                    ltemp.CustomerName = string.Empty;
-                }
-                if (r.Document_Id != null)
-                {
-                    ltemp.DocumentId = r.Document_Id.ToString() != null ? Convert.ToInt32(r.Document_Id.ToString()) : 0;
-                }
-                else
-                {
-                    ltemp.DocumentId = 0;
-                }
-                if (r.Document != null)
-                {
-                    ltemp.DocumentName = r.Document.Name.ToString() != null ? Convert.ToString(r.Document.Name.ToString()) : string.Empty;
-                }
-                else
-                {
-                    ltemp.DocumentName = string.Empty;
-                }
-                if (r.LinkGroup_Id != null)
-                {
-                    ltemp.LinkGroupId = r.LinkGroup_Id.ToString() != null ? Convert.ToInt32(r.LinkGroup_Id.ToString()) : 0;
-                }
-                else
-                {
-                    ltemp.LinkGroupId = 0;
-                }
-                if (r.LinkGroup != null)
-                {
-                    ltemp.LinkGroupName = r.LinkGroup.LinkGroupName.ToString() != null ? Convert.ToString(r.LinkGroup.LinkGroupName.ToString()) : string.Empty;
-                }
-                else
-                {
-                    ltemp.LinkGroupName = string.Empty;
-                }
-
-                if (r.NewWindowHeight != null)
-                {
-                    ltemp.NewWindowHeight = r.NewWindowHeight.ToString() != null ? Convert.ToInt32(r.NewWindowHeight.ToString()) : 0;
-                }
-                else
-                {
-                    ltemp.NewWindowHeight = 0;
-                }
-
-                if (r.NewWindowWidth != null)
-                {
-                    ltemp.NewWindowWidth = r.NewWindowWidth.ToString() != null ? Convert.ToInt32(r.NewWindowWidth.ToString()) : 0;
-                }
-                else
-                {
-                    ltemp.NewWindowWidth = 0;
-                }
-
-                if (r.OpenInNewWindow != null)
-                {
-                    ltemp.OpenInNewWindow = Convert.ToBoolean(Convert.ToInt32(r.OpenInNewWindow.ToString()));
-                }
-                else
-                {
-                    ltemp.OpenInNewWindow = false;
-                }
-
-                if (r.ShowOnStartPage != null)
-                {
-                    ltemp.ShowOnStartPage = Convert.ToBoolean(Convert.ToInt32(r.ShowOnStartPage.ToString()));
-                }
-                else
-                {
-                    ltemp.ShowOnStartPage = false;
-                }
-
-                if (r.SortOrder != null)
-                {
-                    ltemp.SortOrder = r.SortOrder.ToString() != null ? Convert.ToString(r.SortOrder.ToString()) : string.Empty;
-                }
-                else
-                {
-                    ltemp.SortOrder = string.Empty;
-                }
-
-                if (r.URLAddress != null)
-                {
-                    ltemp.UrlAddress = r.URLAddress.ToString() != null ? Convert.ToString(r.URLAddress.ToString()) : string.Empty;
-                }
-                else
-                {
-                    ltemp.UrlAddress = string.Empty;
-                }
-
-                if (r.URLName != null)
-                {
-                    ltemp.UrlName = r.URLName.ToString() != null ? Convert.ToString(r.URLName.ToString()) : string.Empty;
-                }
-                else
-                {
-                    ltemp.UrlName = string.Empty;
-                }
-                llist1.Add(ltemp);
             }
 
 
-            //sql = "SELECT TOP (100) ";
-            //sql += "ISNULL([Project3].[Id], 0) AS [Id], ";
-            //sql += "ISNULL([Project3].[Customer_Id], 0) AS [Customer_Id], ";
-            //sql += "ISNULL([Project3].[Document_Id], 0) AS [Document_Id], ";
-            //sql += "ISNULL([Project3].[OpenInNewWindow], 0) AS [OpenInNewWindow], ";
-            //sql += "ISNULL([Project3].[NewWindowHeight], 0) AS [NewWindowHeight], ";
-            //sql += "ISNULL([Project3].[NewWindowWidth], 0) AS [NewWindowWidth], ";
-            //sql += "ISNULL([Project3].[ShowOnStartPage], 0) AS [ShowOnStartPage], ";
-            //sql += "ISNULL([Project3].[LinkGroup_Id], 0) AS [LinkGroup_Id], ";
-            //sql += "ISNULL([Project3].[URLAddress], '') AS [URLAddress], ";
-            //sql += "ISNULL([Project3].[URLName], '') AS [URLName], ";
-            //sql += "ISNULL([Project3].[SortOrder], '') AS [SortOrder], ";
-            //sql += "ISNULL([Project3].[ChangedDate], '') AS [ChangedDate], ";
-            //sql += "ISNULL([Project3].[CreatedDate], '') AS [CreatedDate], ";
-            //sql += "ISNULL([Project3].[CaseSolution_Id], 0) AS [CaseSolution_Id], ";
-            //sql += " ISNULL((SELECT CaseSolutionName FROM dbo.tblCaseSolution WHERE(Id = [Project3].[CaseSolution_Id])), '') AS CaseSolutionName, ";
-            //sql += " ISNULL((SELECT Name FROM dbo.tblCustomer WHERE(Id = [Project3].[Customer_Id])), '') AS CustomerName, ";
-            //sql += " (SELECT DocumentName FROM dbo.tblDocument WHERE(Id = [Project3].[Document_Id])) AS DocumentName,  ";
-            //sql += " (SELECT LinkGroup FROM dbo.tblLinkGroup WHERE(Id = [Project3].[LinkGroup_Id])) AS LinkGroupName ";
-            //sql += "FROM(SELECT ";
-            //sql += "[Extent1].[Id] AS [Id], ";
-            //sql += "[Extent1].[Customer_Id] AS [Customer_Id], ";
-            //sql += "[Extent1].[Document_Id] AS [Document_Id], ";
-            //sql += "[Extent1].[OpenInNewWindow] AS [OpenInNewWindow], ";
-            //sql += "[Extent1].[NewWindowHeight] AS [NewWindowHeight], ";
-            //sql += "[Extent1].[NewWindowWidth] AS [NewWindowWidth], ";
-            //sql += "[Extent1].[ShowOnStartPage] AS [ShowOnStartPage], ";
-            //sql += "[Extent1].[LinkGroup_Id] AS [LinkGroup_Id], ";
-            //sql += "[Extent1].[URLAddress] AS [URLAddress], ";
-            //sql += "[Extent1].[URLName] AS [URLName], ";
-            //sql += "[Extent1].[SortOrder] AS [SortOrder], ";
-            //sql += "[Extent1].[ChangedDate] AS [ChangedDate], ";
-            //sql += "[Extent1].[CreatedDate] AS [CreatedDate], ";
-            //sql += "[Extent1].[CaseSolution_Id] AS [CaseSolution_Id], ";
-            //sql += "[Extent2].[Name] AS [Name] ";
-            //sql += "FROM[dbo].[tbllink] AS [Extent1] ";
-            //sql += "LEFT OUTER JOIN[dbo].[tblcustomer] AS [Extent2] ON[Extent1].[Customer_Id] = [Extent2].[Id] ";
-            //sql += "WHERE(   ";
-            //sql += "(NOT EXISTS(SELECT ";
-            //sql += "1 AS [C1] ";
-            //sql += "FROM[dbo].[tblLink_tblUsers] AS [Extent3] ";
-            //sql += "WHERE[Extent1].[Id] = [Extent3].[Link_Id] ";
-            //sql += "Union ";
-            //sql += " SELECT ";
-            //sql += "1 AS [C1] ";
-            //sql += "FROM[dbo].[tblLink_tblWorkingGroup] AS [Extent31] ";
-            //sql += "WHERE[Extent1].[Id] = [Extent31].[Link_Id] ";
-            //sql += ") ";
-            //sql += ") ";
-            //sql += "OR ";
-            //sql += "(EXISTS(SELECT ";
-            //sql += "1 AS [C1] ";
-            //sql += "FROM[dbo].[tblLink_tblUsers] AS [Extent4] ";
-            //sql += "WHERE([Extent1].[Id] = [Extent4].[Link_Id]) AND([Extent4].[User_Id] = " + userid + ") ";
-            //sql += ")) ";
-            //sql += "OR ";
-            //sql += "(EXISTS(SELECT ";
-            //sql += "1 AS [C1] ";
-            //sql += "FROM[dbo].[tblLink_tblWorkingGroup] AS [Extent41] ";
-            //sql += "WHERE([Extent1].[Id] = [Extent41].[Link_Id]) AND([Extent41].[WorkingGroup_Id] in (select WorkingGroup_Id from tblUserWorkingGroup where User_Id =  " + userid + ")) ";
-            //sql += ")) ";
-            //sql += ") ";
-            //sql += "AND([Extent1].[Customer_Id] IS NOT NULL) AND([Extent1].[Customer_Id] IN(" + custid + ")) AND([Extent1].[Customer_Id] IS NOT NULL) AND([Extent1].[ShowOnStartPage] = " + StartPage + ") ";
-            //sql += ")  AS [Project3] ";
-            //sql += "ORDER BY[Project3].[Name] ";
-            //sql += "ASC, [Project3].[SortOrder] ";
-            //sql += "ASC ";
-
-            //string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+            List<LinkOverview> llist = new List<LinkOverview>();
+            foreach (DataRow row in dt.Rows)
+            {
+                LinkOverview ltemp = new LinkOverview();
 
 
-            //using (var connection = new SqlConnection(ConnectionString))
-            //{
-            //    if (connection.State == ConnectionState.Closed)
-            //    {
-            //        connection.Open();
-            //    }
-            //    using (var command = new SqlCommand { Connection = connection, CommandType = CommandType.StoredProcedure, CommandTimeout = 0 })
-            //    {
-            //        command.CommandType = CommandType.Text;
-            //        command.CommandText = sql;
-            //        var reader = command.ExecuteReader();
-            //        dt = new DataTable();
-            //        dt.Load(reader);
+                ltemp.CaseSolutionId = row["CaseSolution_Id"].ToString() != null ? Convert.ToInt32(row["CaseSolution_Id"].ToString()) : 0;
+                ltemp.CaseSolutionName = row["CaseSolutionName"].ToString() != null ? Convert.ToString(row["CaseSolutionName"].ToString()) : string.Empty;
+                ltemp.CustomerId = row["Customer_Id"].ToString() != null ? Convert.ToInt32(row["Customer_Id"].ToString()) : 0;
+                ltemp.CustomerName = row["CustomerName"].ToString() != null ? Convert.ToString(row["CustomerName"].ToString()) : string.Empty;
+                ltemp.DocumentId = row["Document_Id"].ToString() != null ? Convert.ToInt32(row["Document_Id"].ToString()) : 0;
+                ltemp.DocumentName = row["DocumentName"].ToString() != null ? Convert.ToString(row["DocumentName"].ToString()) : string.Empty;
+                ltemp.LinkGroupId = row["LinkGroup_Id"].ToString() != null ? Convert.ToInt32(row["LinkGroup_Id"].ToString()) : 0;
+                ltemp.LinkGroupName = row["LinkGroupName"].ToString() != null ? Convert.ToString(row["LinkGroupName"].ToString()) : string.Empty;
+                ltemp.NewWindowHeight = row["NewWindowHeight"].ToString() != null ? Convert.ToInt32(row["NewWindowHeight"].ToString()) : 0;
+                ltemp.NewWindowWidth = row["NewWindowWidth"].ToString() != null ? Convert.ToInt32(row["NewWindowWidth"].ToString()) : 0;
+                if (row["OpenInNewWindow"] != null)
+                {
+                    ltemp.OpenInNewWindow = Convert.ToBoolean(Convert.ToInt32(row["OpenInNewWindow"].ToString()));
+                }
+                if (row["ShowOnStartPage"] != null)
+                {
+                    ltemp.ShowOnStartPage = Convert.ToBoolean(Convert.ToInt32(row["ShowOnStartPage"].ToString()));
+                }
 
-            //    }
-            //}
+                ltemp.SortOrder = row["SortOrder"].ToString() != null ? Convert.ToString(row["SortOrder"].ToString()) : string.Empty;
+                ltemp.UrlAddress = row["UrlAddress"].ToString() != null ? Convert.ToString(row["UrlAddress"].ToString()) : string.Empty;
+                ltemp.UrlName = row["URLName"].ToString() != null ? Convert.ToString(row["URLName"].ToString()) : string.Empty;
 
-
-            //List<LinkOverview> llist = new List<LinkOverview>();
-            //foreach (DataRow row in dt.Rows)
-            //{
-            //    LinkOverview ltemp = new LinkOverview();
-
-
-            //    ltemp.CaseSolutionId = row["CaseSolution_Id"].ToString() != null ? Convert.ToInt32(row["CaseSolution_Id"].ToString()) : 0;
-            //    ltemp.CaseSolutionName = row["CaseSolutionName"].ToString() != null ? Convert.ToString(row["CaseSolutionName"].ToString()) : string.Empty;
-            //    ltemp.CustomerId = row["Customer_Id"].ToString() != null ? Convert.ToInt32(row["Customer_Id"].ToString()) : 0;
-            //    ltemp.CustomerName = row["CustomerName"].ToString() != null ? Convert.ToString(row["CustomerName"].ToString()) : string.Empty;
-            //    ltemp.DocumentId = row["Document_Id"].ToString() != null ? Convert.ToInt32(row["Document_Id"].ToString()) : 0;
-            //    ltemp.DocumentName = row["DocumentName"].ToString() != null ? Convert.ToString(row["DocumentName"].ToString()) : string.Empty;
-            //    ltemp.LinkGroupId = row["LinkGroup_Id"].ToString() != null ? Convert.ToInt32(row["LinkGroup_Id"].ToString()) : 0;
-            //    ltemp.LinkGroupName = row["LinkGroupName"].ToString() != null ? Convert.ToString(row["LinkGroupName"].ToString()) : string.Empty;
-            //    ltemp.NewWindowHeight = row["NewWindowHeight"].ToString() != null ? Convert.ToInt32(row["NewWindowHeight"].ToString()) : 0;
-            //    ltemp.NewWindowWidth = row["NewWindowWidth"].ToString() != null ? Convert.ToInt32(row["NewWindowWidth"].ToString()) : 0;
-            //    if (row["OpenInNewWindow"] != null)
-            //    {
-            //        ltemp.OpenInNewWindow = Convert.ToBoolean(Convert.ToInt32(row["OpenInNewWindow"].ToString()));
-            //    }
-            //    if (row["ShowOnStartPage"] != null)
-            //    {
-            //        ltemp.ShowOnStartPage = Convert.ToBoolean(Convert.ToInt32(row["ShowOnStartPage"].ToString()));
-            //    }
-
-            //    ltemp.SortOrder = row["SortOrder"].ToString() != null ? Convert.ToString(row["SortOrder"].ToString()) : string.Empty;
-            //    ltemp.UrlAddress = row["UrlAddress"].ToString() != null ? Convert.ToString(row["UrlAddress"].ToString()) : string.Empty;
-            //    ltemp.UrlName = row["URLName"].ToString() != null ? Convert.ToString(row["URLName"].ToString()) : string.Empty;
-
-            //    llist.Add(ltemp);
-            //}
+                llist.Add(ltemp);
+            }
 
 
-            //return llist;
-            return llist1;
+            return llist;
+            // return llist1;
         }
     }
 }

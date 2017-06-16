@@ -35,9 +35,18 @@
         /// <param name="userGroupId"></param>
         /// <param name="userId"></param>
         /// <param name="gridId"></param>
+        /// <param name="customerCaseFieldSettings"></param>
         /// <returns></returns>
-        public CaseColumnsSettingsModel GetSettings(int customerId, int userGroupId, int userId, int gridId = GridSettingsService.CASE_OVERVIEW_GRID_ID)
+        public CaseColumnsSettingsModel GetSettings(int customerId, int userGroupId, int userId,
+            int gridId = GridSettingsService.CASE_OVERVIEW_GRID_ID,
+            IList<CaseFieldSetting> customerCaseFieldSettings = null)
         {
+            // this is done for performance optimisation
+            if (customerCaseFieldSettings == null)
+            {
+               customerCaseFieldSettings = this.caseFieldSettingService.GetCaseFieldSettings(customerId);
+            }
+
             var gridSettings = this.gridSettingsService.GetForCustomerUserGrid(customerId, userGroupId, userId, gridId);
             var exceptedList = new string[]
                 { 
@@ -52,42 +61,36 @@
                     UserFields.IsAbout_UserCode.ToLower()                   
                 };
 
-            
+
+            var avaialbleColumnds = 
+                this.caseSettingService.GetAvailableCaseOverviewGridColumnSettings(customerId, customerCaseFieldSettings)
+                                       .Where(c => !exceptedList.Contains(c.Name.ToLower()))
+                                       .OrderBy(it => Translation.Get(it.Name, Enums.TranslationSource.CaseTranslation, customerId));
+
+            var selectedColumns = this.caseSettingService.GetSelectedCaseOverviewGridColumnSettings(customerId, userId, customerCaseFieldSettings);
+
             var colSettingModel = new CaseColumnsSettingsModel
-                                      {
-                                          CustomerId = customerId,
-                                          SelectedFontStyle = gridSettings.cls,
-										  SelectedPageSize = gridSettings.pageOptions.recPerPage,
-                                          UserId = userId,
-                                          AvailableColumns =
-                                              this.caseSettingService
-                                                  .GetAvailableCaseOverviewGridColumnSettings(customerId)
-                                                  .Where(c=> !exceptedList.Contains(c.Name.ToLower()))
-                                                  .OrderBy(it => Translation.Get(it.Name, Enums.TranslationSource.CaseTranslation, customerId)),
-                                          SelectedColumns =
-                                              this.caseSettingService
-                                              .GetSelectedCaseOverviewGridColumnSettings(
-                                                  customerId,
-                                                  userId)
-                                      };
-            IList<CaseFieldSetting> userCaseFieldSettings = this.caseFieldSettingService.GetCaseFieldSettings(customerId);
-            colSettingModel.CaseFieldSettings = userCaseFieldSettings;
-            var li = new List<SelectListItem>
-                         {
-                             new SelectListItem()
-                                 {
-                                     Text =
-                                         Translation.Get(
-                                             "Info",
-                                             Enums.TranslationSource
-                                         .TextTranslation),
-                                     Value = "1",
-                                     Selected = false
-                                 }
-                         };
-            colSettingModel.LineList = li;
+            {
+                CustomerId = customerId,
+                SelectedFontStyle = gridSettings.cls,
+                SelectedPageSize = gridSettings.pageOptions.recPerPage,
+                UserId = userId,
+                AvailableColumns = avaialbleColumnds,
+                SelectedColumns = selectedColumns
+            };
+
+            colSettingModel.CaseFieldSettings = customerCaseFieldSettings;
+            colSettingModel.LineList = new[]
+            {
+                new SelectListItem
+                {
+                    Text = Translation.Get("Info", Enums.TranslationSource.TextTranslation),
+                    Value = "1",
+                    Selected = false
+                }
+            };
+             
             return colSettingModel;
         }
-        
     }
 }

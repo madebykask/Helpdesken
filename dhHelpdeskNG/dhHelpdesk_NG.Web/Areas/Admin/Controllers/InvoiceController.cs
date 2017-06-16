@@ -63,11 +63,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             var customer = customerService.GetCustomer(customerId);
             var model = new InvoiceArticleProductAreaIndexModel(customer);
-            var productAreas = productAreaService.GetActiveProductAreas(customerId);
+            var productAreas = productAreaService.GetAll(customerId);
             var lastLevels = new List<ProductArea>();
         
             foreach (var p in productAreas)
             {
+                var active = p.ParentProductArea != null ? p.ParentProductArea.IsActive == 1 && p.IsActive == 1 : p.IsActive == 1;
+                p.IsActive = active ? 1 : 0;
                 if (p.SubProductAreas.Count == 0)
                 {
                     p.Name = p.ResolveFullName();
@@ -143,11 +145,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private InvoiceArticleProductAreaInputViewModel CreateInputViewModel(Customer customer)
         {
             var allInvoiceArticles = invoiceArticleService.GetActiveArticles(customer.Id).OrderBy(a => a.Number);
-            var productAreas = productAreaService.GetActiveProductAreas(customer.Id);
+            var productAreas = productAreaService.GetAll(customer.Id);
             var lastLevels = new List<ProductArea>();
 
             foreach (var p in productAreas)
             {
+                var active = p.ParentProductArea != null ? p.ParentProductArea.IsActive == 1 && p.IsActive == 1 : p.IsActive == 1;
+                p.IsActive = active ? 1 : 0;
                 if (p.SubProductAreas.Count == 0)
                 {
                     p.Name = p.ResolveFullName();

@@ -9,6 +9,7 @@
 
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
+using DH.Helpdesk.Dal.DbQueryExecutor;
 using DH.Helpdesk.Dal.Mappers.ExternalInvoice.BusinessModelToEntity;
 using DH.Helpdesk.Dal.Mappers.ExternalInvoice.EntityToBusinessModel;
 using DH.Helpdesk.Web.Infrastructure.Cache;
@@ -108,6 +109,10 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
 
             this.Bind<IModulesInfoFactory>().To<ModulesInfoFactory>().InSingletonScope();
 
+            this.Bind<IDbQueryExecutorFactory>()
+                .To<SqlDbQueryExecutorFactory>()
+                .InSingletonScope();
+                
             this.Bind<IBusinessModelToEntityMapper<CaseSolutionConditionModel, CaseSolutionConditionEntity>>()
                 .To<CaseSolutionConditionToEntityMapper>()
                 .InSingletonScope();

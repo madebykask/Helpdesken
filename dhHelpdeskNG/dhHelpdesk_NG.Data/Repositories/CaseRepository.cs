@@ -52,6 +52,8 @@ namespace DH.Helpdesk.Dal.Repositories
         CaseOverview GetCaseOverview(int caseId);
 
         MyCase[] GetMyCases(int userId, int? count = null);
+        IList<Case> GetProblemCases(int problemId);
+        IList<int> GetCasesIdsByType(int caseTypeId);
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -71,7 +73,7 @@ namespace DH.Helpdesk.Dal.Repositories
             if (markCaseAsRead)
                 MarkCaseAsRead(id);
 
-            return (from w in this.DataContext.Set<Case>()
+            return (from w in this.DataContext.Cases
                     where w.Id == id
                     select w).FirstOrDefault();
         }
@@ -286,11 +288,12 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public CaseOverview GetCaseOverview(int caseId)
         {
-            var entities = this.Table
-                .Where(c => c.Id == caseId)
-                .ToList();
+            var query = (from _case in DataContext.Cases
+                         from caseHistory in _case.CaseHistories.DefaultIfEmpty() //will load CaseHistories with left join
+                         where _case.Id == caseId
+                         select _case);
 
-            return entities.Select(CaseToCaseOverviewMapper.Map).FirstOrDefault();
+            return query.Select(CaseToCaseOverviewMapper.Map).FirstOrDefault();
         }
 
         public MyCase[] GetMyCases(int userId, int? count = null)
@@ -330,6 +333,18 @@ namespace DH.Helpdesk.Dal.Repositories
                                 .ToArray();
         }
 
+        public IList<int> GetCasesIdsByType(int caseTypeId)
+        {
+            return DataContext.Cases
+                              .Where(c => c.CaseType_Id == caseTypeId)
+                              .Select(o => o.Id).ToList();
+        }
+
+        public IList<Case> GetProblemCases(int problemId)
+        {
+            return DataContext.Cases.Where(x => x.Problem_Id == problemId).ToList();
+        }
+
         public void MarkCaseAsRead(int id)
         {
             SetCaseUnreadFlag(id);
@@ -356,13 +371,15 @@ namespace DH.Helpdesk.Dal.Repositories
             string sql = string.Empty;
             int langid = 0;
             bool match = false;
-            
+
             //Initiation
-            if (notid != string.Empty && notifierid != string.Empty)
+           // if (notid != string.Empty && notifierid != string.Empty)
+            if (notifierid != string.Empty)
             {
 
-                //var not = this.DataContext.ComputerUsers.Single(c => c.UserId == notid);
-                var not = this.DataContext.ComputerUsers.Single(c => c.UserCode == notid && c.UserId == notifierid);
+                var not = this.DataContext.ComputerUsers.FirstOrDefault(c=> c.UserId == notifierid && c.Customer_Id == custid);
+                // var not = this.DataContext.ComputerUsers.FirstOrDefault(c => c.UserCode == notid && c.UserId == notifierid && c.Customer_Id == custid);
+                // var not = this.DataContext.ComputerUsers.Single(c=> c.UserId == notifierid);
                 if (not != null)
                 {
                     if (not.LanguageId > 0)

@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using DH.Helpdesk.BusinessData.Models.User.Interfaces;
+
 namespace DH.Helpdesk.BusinessData.Models.Logs.Output
 {
     using System;
@@ -132,17 +134,19 @@ namespace DH.Helpdesk.BusinessData.Models.Logs.Output
         /// <summary>
         /// Gets or sets the case history.
         /// </summary>
-        public CaseHistory CaseHistory { get; set; }
+        //public CaseHistory CaseHistory { get; set; }
+        public LogCaseHistoryOverview CaseHistory { get; set; }
 
         /// <summary>
         /// Gets or sets the user.
         /// </summary>
-        public User User { get; set; }
+        //public User User { get; set; }
+        public LogUserOverview User { get; set; }
 
         /// <summary>
         /// Gets or sets the log files.
         /// </summary>
-        public ICollection<LogFile> LogFiles { get; set; }
+        public IList<LogFileOverview> LogFiles { get; set; }
 
         /// <summary>
         /// Gets or sets the problem id.
@@ -159,5 +163,42 @@ namespace DH.Helpdesk.BusinessData.Models.Logs.Output
         {
             return this.ProblemId.HasValue;
         }
+    }
+
+    public class LogCaseHistoryOverview
+    {
+        public LogCaseHistoryOverview(int id)
+        {
+            Id = id;
+        }
+
+        public int Id { get; }
+        public IList<EmailLogsOverview> Emaillogs { get; set; }
+    }
+
+    public class LogFileOverview
+    {
+        public LogFileOverview(int id, string fileName)
+        {
+            Id = id;
+            FileName = fileName;
+        }
+
+        public int Id { get; }
+        public string FileName { get;  }
+    }
+
+    public class LogUserOverview : IUserInfo
+    {
+        public LogUserOverview(int id, string firstName, string surName)
+        {
+            Id = id;
+            FirstName = firstName;
+            SurName = surName;
+        }
+
+        public int Id { get; }
+        public string FirstName { get; }
+        public string SurName { get; }
     }
 }

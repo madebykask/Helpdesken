@@ -43,6 +43,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.2\lib\net40\Dapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DbExtensions, Version=5.1.0.0, Culture=neutral, PublicKeyToken=6b3b4f54da52bca4, processorArchitecture=MSIL">
       <HintPath>..\packages\DbExtensions.5.1.0\lib\net40\DbExtensions.dll</HintPath>
       <Private>True</Private>
@@ -79,6 +83,7 @@
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
@@ -93,6 +98,7 @@
     <Compile Include="CaseSearch\CaseSearchCriterias.cs" />
     <Compile Include="CaseSearch\CaseSearchQueryBuilder.cs" />
     <Compile Include="CaseSearch\Interfaces\ICaseSearchCriterias.cs" />
+    <Compile Include="CaseSearch\SearchResultItemData.cs" />
     <Compile Include="CaseSearch\SearchQueryBuildContext.cs" />
     <Compile Include="Dal\INewRepository.cs" />
     <Compile Include="EntityConfigurations\Accounts\AccountActivityGroupConfiguration.cs" />
@@ -219,6 +225,11 @@
     <Compile Include="Infrastructure\ModelFactories\Notifiers\Concrete\NotifierFieldSettingsFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Notifiers\INotifierFieldSettingsFactory.cs" />
     <Compile Include="Infrastructure\Translate\ITranslator.cs" />
+    <Compile Include="MapperData\CaseHistory\CaseHistoryMapperData.cs" />
+    <Compile Include="MapperData\CaseHistory\DepartmentMapperData.cs" />
+    <Compile Include="MapperData\CaseHistory\EmailLogMapperData.cs" />
+    <Compile Include="MapperData\Logs\LogFileMapperData.cs" />
+    <Compile Include="MapperData\CaseHistory\UserMapperData.cs" />
     <Compile Include="MapperData\Changes\FieldEditSettingMapperData.cs" />
     <Compile Include="MapperData\Inventory\FieldOverviewSettingMapperData.cs" />
     <Compile Include="MapperData\Inventory\FieldProcessingSettingMapperData.cs" />
@@ -227,6 +238,7 @@
     <Compile Include="MapperData\Inventory\InventoryFieldSettingMapperData.cs" />
     <Compile Include="MapperData\Inventory\InventoryFieldSettingMapperDataForModelEdit.cs" />
     <Compile Include="MapperData\Inventory\InventoryFieldSettingMapperDataForProcessing.cs" />
+    <Compile Include="MapperData\Logs\LogMapperData.cs" />
     <Compile Include="Mappers\Calendars\BusinessModelToEntity\CalendarToEntityMapper.cs" />
     <Compile Include="Mappers\Calendars\EntityToBusinessModel\CalendarToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseNotifierToEntityMapper.cs" />
@@ -235,6 +247,7 @@
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseLockToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseFilterFavoriteToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseExtraFollowersToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseHistoryToCaseHistoryOverviewMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseLockToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseSolutionConditionToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseToBusinessModelMapper.cs" />
@@ -288,6 +301,7 @@
     <Compile Include="Mappers\Invoice\EntityToBusinessModel\CaseInvoiceToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Invoice\EntityToBusinessModel\InvoiceArticleToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Invoice\EntityToBusinessModel\InvoiceArticleUnitToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\Logs\LogEntityToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Problems\ProblemEntityFromBusinessModelChanger.cs" />
     <Compile Include="Mappers\Problems\NewProblemToProblemEntityMapper.cs" />
     <Compile Include="Mappers\Problems\ProblemEntityToProblemOverviewMapper.cs" />
@@ -771,6 +785,10 @@
     <Compile Include="Repositories\WorkingGroupRepository.cs" />
     <Compile Include="Repositories\WorkTimeCalculatorFactory.cs" />
     <Compile Include="SearchRequestBuilders\Notifiers\NotifiersSearchRequestBuilder.cs" />
+    <Compile Include="DbQueryExecutor\IDbQueryExecutor.cs" />
+    <Compile Include="DbQueryExecutor\IDbQueryExecutorFactory.cs" />
+    <Compile Include="DbQueryExecutor\SqlDbQueryExecutorFactory.cs" />
+    <Compile Include="DbQueryExecutor\SqlQueryExecutor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">

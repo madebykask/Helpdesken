@@ -97,7 +97,6 @@
         IEnumerable<ProductAreaOverview> GetProductAreaOverviews(int customerId);
 
         int SaveProductArea(ProductAreaOverview productArea);
-        IEnumerable<ProductArea> GetActiveProductAreas(int customerId);
     }
 
     public class ProductAreaService : IProductAreaService
@@ -499,11 +498,6 @@
             return this.productAreaRepository.SaveProductArea(productArea);
         }
 
-        public IEnumerable<ProductArea> GetActiveProductAreas(int customerId)
-        {
-            return this.productAreaRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).ToList();
-        }
-
         private string loopProdcuctAreas(IList<ProductAreaEntity> pal, string separator, string valueToReturn)
         {
             string ret = string.Empty;
@@ -564,7 +558,9 @@
             {
                 res.Add(this.productAreaCache[lookingProductAreaId.Value].Name);
 
-                if (this.productAreaCache[lookingProductAreaId.Value].ShowOnExtPageCases == 0)
+                //Hide this for next release #57742
+                //if (this.productAreaCache[lookingProductAreaId.Value].ShowOnExtPageCases == 0)
+                if (this.productAreaCache[lookingProductAreaId.Value].ShowOnExternalPage == 0)
                     checkShowOnExtenal = false;
 
                 lookingProductAreaId = this.productAreaCache[lookingProductAreaId.Value].Parent_ProductArea_Id;

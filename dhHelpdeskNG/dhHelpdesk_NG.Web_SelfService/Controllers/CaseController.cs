@@ -234,10 +234,11 @@
                         userHasAccessToCase = true;   
                 }
 
-                if (currentCase.CaseType.ShowOnExtPageCases == 0 || currentCase.ProductArea?.ShowOnExtPageCases == 0)
-                {
-                    userHasAccessToCase = false;
-                }
+                //Hide this to next release #57742
+                //if (currentCase.CaseType.ShowOnExtPageCases == 0 || currentCase.ProductArea?.ShowOnExtPageCases == 0)
+                //{
+                //    userHasAccessToCase = false;
+                //}
 
                 if (!userHasAccessToCase)
                 {
@@ -942,8 +943,8 @@
             var fieldsVisibility = new
             {
                 Name = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()),
-                Email = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()),
-                Phone = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()),
+                Email = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()),
+                Phone = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()),
                 Department = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Department_Id.ToString()),
                 UserCode = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.UserCode.ToString())
             };
@@ -1175,6 +1176,19 @@
                         translatedText.Add(Translation.Get(pathText, Enums.TranslationSource.TextTranslation));
                 }
                 currentCase.ProductArea.Name = string.Join(" - ", translatedText);                
+            }
+
+            if (currentCase.Category_Id.HasValue && currentCase.Category != null)
+            {
+                var pathTexts = _categoryService.GetParentPath(currentCase.Category_Id.Value, currentCase.Customer_Id).ToList();
+                var translatedText = pathTexts;
+                if (pathTexts.Any())
+                {
+                    translatedText = new List<string>();
+                    foreach (var pathText in pathTexts.ToList())
+                        translatedText.Add(Translation.Get(pathText));
+                }
+                currentCase.Category.Name = string.Join(" - ", translatedText);
             }
 
             var newLogFile = new FilesModel();

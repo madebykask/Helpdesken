@@ -133,7 +133,7 @@
     @Html.HiddenFor(model => model.CaseLog.TextInternal)
     @Html.HiddenFor(model => model.CaseLog.FinishingType)
 
-    @Html.HiddenFor(model => model.NewCase.AgreedDate)
+    @*@Html.HiddenFor(model => model.NewCase.AgreedDate)*@
 
     @Html.HiddenFor(model => model.DepartmentFilterFormat, new {data_field = "departmentFilterFormat"})
 
@@ -610,7 +610,7 @@
                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.InvoiceNumber)
                 </label>
                 <div class="col-md-9">
-                    @Html.TextBoxFor(i => Model.NewCase.InvoiceNumber, new {@class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()})
+                    @Html.TextBoxFor(i => Model.NewCase.InvoiceNumber, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString() })
                 </div>
             </div>
         }
@@ -626,7 +626,7 @@
                     }
                 </label>
                 <div class="col-md-9">
-                    @Html.TextBoxFor(r => Model.NewCase.ReferenceNumber, new {@class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()})
+                    @Html.TextBoxFor(r => Model.NewCase.ReferenceNumber, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString() })
                 </div>
             </div>
         }
@@ -638,7 +638,7 @@
                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Caption)
                 </label>
                 <div class="col-md-9">
-                    @Html.TextBoxFor(c => Model.NewCase.Caption, new {@class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Caption.ToString()})
+                    @Html.TextBoxFor(c => Model.NewCase.Caption, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Caption.ToString() })
                 </div>
             </div>
         }
@@ -650,7 +650,7 @@
                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Description)
                 </label>
                 <div class="col-md-9">
-                    @Html.TextAreaFor(d => Model.NewCase.Description, new {@class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Description.ToString()})
+                    @Html.TextAreaFor(d => Model.NewCase.Description, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Description.ToString() })
                 </div>
             </div>
         }
@@ -662,7 +662,7 @@
                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Miscellaneous)
                 </label>
                 <div class="col-md-9">
-                    @Html.TextAreaFor(m => Model.NewCase.Miscellaneous, new {@class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()})
+                    @Html.TextAreaFor(m => Model.NewCase.Miscellaneous, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Miscellaneous.ToString() })
                 </div>
             </div>
         }
@@ -687,7 +687,7 @@
                                             </div>
                                         </div>
                                     }*@@if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()))
-                                       {
+                                    {
                                            <div class="form-group row @GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()">
                                                <label class="col-md-3">
                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ContactBeforeAction, false)
@@ -698,7 +698,7 @@
                                                    <input type="hidden" name="NewCase.ContactBeforeAction" value="0"/>
                                                </div>
                                            </div>
-                                       }
+                                    }
 
         @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.SMS.ToString()))
         {
@@ -714,6 +714,32 @@
             </div>
         }
 
+       @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.AgreedDate.ToString()))
+       {
+           var AgreedDateIsReadOnly = Model.JsFieldSettings.Where(x => x.FieldName == "AgreedDate").FirstOrDefault().IsReadonly;
+           var htmlAttrs = new Dictionary<string, object>();
+           htmlAttrs.Add("class", "hasAttribute");
+           htmlAttrs.Add("standardName", GlobalEnums.TranslationCaseFields.AgreedDate.ToString());
+
+            <div class="form-group row @GlobalEnums.TranslationCaseFields.AgreedDate.ToString()" >
+                <label class="col-md-3">
+                    @Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                </label>
+                <div class="col-md-2">
+                    @*@{var _agreeDate = Model.NewCase.AgreedDate.HasValue ? Model.NewCase.AgreedDate.Value.ToShortDateString()}*@
+                    @*@Html.DisplayFor(a => _agreeDate)*@                    
+                    @if (AgreedDateIsReadOnly)
+                    {
+                        @Html.EditorFor(m => Model.NewCase.AgreedDate, "DatePicker", new { id = "AgreedDate",  disabled = "disabled", inputAttributes =  htmlAttrs })
+                    }
+                    else
+                    {
+                        @Html.EditorFor(m => Model.NewCase.AgreedDate, "DatePicker", new { id = "AgreedDate", inputAttributes = htmlAttrs })
+                    }
+                </div>
+            </div>
+        }
+        
         @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Available.ToString()))
         {
             <div class="form-group row @GlobalEnums.TranslationCaseFields.Available.ToString()">

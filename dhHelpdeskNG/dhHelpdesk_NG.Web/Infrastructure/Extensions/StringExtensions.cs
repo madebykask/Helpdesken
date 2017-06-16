@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
+﻿using DH.Helpdesk.BusinessData.Models.User.Interfaces;
+
+namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
     using System;
     using System.Linq;
@@ -33,6 +35,11 @@
         public static string DepartmentDescription(this Department d, int departmentFilterFormat)
         {
             return d.departmentDescription(departmentFilterFormat);  
+        }
+
+        public static string DepartmentDescription(this IDepartmentInfo d, int departmentFilterFormat)
+        {
+            return d.departmentDescription(departmentFilterFormat);
         }
 
         public static string ConcatStrings(this string orginal, string valueToAdd, string sep)

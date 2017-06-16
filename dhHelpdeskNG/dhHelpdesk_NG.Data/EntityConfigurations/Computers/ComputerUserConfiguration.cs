@@ -82,6 +82,13 @@
             this.Property(u => u.ChangeTime).IsRequired();
             this.Property(u => u.SyncChangedDate).IsOptional();
             this.Property(u => u.LanguageId).IsOptional();
+
+            this.HasOptional(u => u.Language)
+                .WithMany()
+                .HasForeignKey(u => u.LanguageId)
+                .WillCascadeOnDelete(false);
+
+
             this.ToTable("tblComputerUsers");
         }
     }

@@ -14,33 +14,35 @@ namespace DH.Helpdesk.Dal.Repositories.Concrete
         {
         }
 
-        public List<WorkingGroupUsers> FindWorkingGroupsUserIds(List<int> workingGroupIds, bool includeAdmins = true)
+        public List<WorkingGroupUsers> FindWorkingGroupsUserIds(List<int> workingGroupIds, bool includeAdmins = true, bool activeUsers = false)
         {
-            var wGroupsUsers = this.DataContext.UserWorkingGroups.Where(g => workingGroupIds.Contains(g.WorkingGroup_Id)).AsQueryable();
+            var items = (from wg in DataContext.WorkingGroups
+                         from wgUser in wg.UserWorkingGroups.DefaultIfEmpty()
+                         where workingGroupIds.Contains(wg.Id)
+                         select new
+                         {
+                             Id = wg.Id,
+                             UserId = (int?)wgUser.User_Id,
+                             UserRole = (int?)wgUser.UserRole,
+                             IsActiveUser = (int?)wgUser.User.IsActive,
+                         }).ToList();
+
+            
             if (!includeAdmins)
             {
-                wGroupsUsers = wGroupsUsers.Where(x => x.UserRole == 2);
+                items = items.Where(x => x.UserRole == 2).ToList();
             }
-            var workingGroupsUsers = wGroupsUsers
-                .GroupBy(g => g.WorkingGroup_Id)
-                .Select(g => new {Id = g.Key, UserIds = g.Select(group => group.User_Id)})
-                .ToList();
 
-            var result = new List<WorkingGroupUsers>(workingGroupIds.Count);
-
-            foreach (var workingGroupId in workingGroupIds)
+            if (activeUsers)
             {
-                var group = workingGroupsUsers.SingleOrDefault(g => g.Id == workingGroupId);
-                if (group == null)
-                {
-                    result.Add(new WorkingGroupUsers(workingGroupId, new List<int>()));
-                }
-                else
-                {
-                    result.Add(new WorkingGroupUsers(workingGroupId, group.UserIds.ToList()));
-                }
+                items = items.Where(x => x.IsActiveUser == 1).ToList();
             }
 
+            var result =
+                 items.GroupBy(o => o.Id)
+                      .Select(o => new WorkingGroupUsers(o.Key, o.Where(u => u.UserId.HasValue).Select(u => u.UserId.Value).ToList()))
+                      .ToList();
+         
             return result;
         }
     }

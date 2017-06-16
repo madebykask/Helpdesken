@@ -51,15 +51,21 @@ namespace DH.Helpdesk.Web
 			// ECT.FormLib.FormLibSetup.Setup(); todo
 		}
 
-		private void ViewEngineInit()
-		{
-			// Clear all registered view engines
-			ViewEngines.Engines.Clear();
-			// Add back in just the Razor view engine
-			ViewEngines.Engines.Add(new RazorViewEngine());
-		}
+        private void ViewEngineInit()
+        {
+            // Clear all registered view engines
+            ViewEngines.Engines.Clear();
 
-		protected void Application_PostAuthorizeRequest()
+            // Add back in just the Razor view engine
+            var viewEngine = new RazorViewEngine
+            {
+                ViewLocationCache = new DefaultViewLocationCache(TimeSpan.FromHours(24))
+            };
+
+            ViewEngines.Engines.Add(viewEngine);
+        }
+
+        protected void Application_PostAuthorizeRequest()
 		{
 			if (IsWebApiRequest())
 			{

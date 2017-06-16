@@ -174,6 +174,7 @@ namespace DH.Helpdesk.Services.Services
             }
 
             var caseOverview = this.caseRepository.GetCaseOverview(caseId);
+
             if (caseOverview != null && caseOverview.ProblemId.HasValue)
             {
                 var problemLogs = this.problemLogService.GetProblemLogs(caseOverview.ProblemId.Value);

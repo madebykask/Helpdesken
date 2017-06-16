@@ -651,10 +651,14 @@ namespace DH.Helpdesk.Dal.Repositories
 
 
             //CaseType
-            sb.Append(" and (tblCaseType.ShowOnExtPageCases <> 0)");
+            sb.Append(" and (tblCaseType.ShowOnExternalPage <> 0)");
+            //Hide this for next release #57742
+            //sb.Append(" and (tblCaseType.ShowOnExtPageCases <> 0)");
 
             //ProductArea
-            sb.Append(" and (tblCase.ProductArea_Id Is Null or tblCase.ProductArea_Id in (select id from tblProductArea where ShowOnExtPageCases <> 0))");
+            sb.Append(" and (tblCase.ProductArea_Id Is Null or tblCase.ProductArea_Id in (select id from tblProductArea where ShowOnExternalPage <> 0))");
+            //Hide this for next release #57742
+            //sb.Append(" and (tblCase.ProductArea_Id Is Null or tblCase.ProductArea_Id in (select id from tblProductArea where ShowOnExtPageCases <> 0))");
 
 
             if (f.ReportedBy.Trim() == string.Empty)

@@ -75,7 +75,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             if (user.UserGroup_Id > UserGroups.Administrator)
                 workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false).ToList();
             else
-                workingGroups = _workingGroupService.GetWorkingGroups(customerId, userId, false).ToList();
+                workingGroups = _workingGroupService.GetWorkingGroups(customerId, userId, false, true).ToList();
             
             var caseTypes = this._caseTypeService.GetCaseTypes(customerId).ToList();
             var caseTypesInRow = this._caseTypeService.GetChildrenInRow(caseTypes).ToList();

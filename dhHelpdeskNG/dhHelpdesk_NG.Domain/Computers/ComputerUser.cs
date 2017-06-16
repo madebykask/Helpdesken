@@ -55,6 +55,8 @@
 
         public virtual ComputerUser ManagerComputerUser { get; set; }
 
+        public virtual Language Language { get; set; }
+
         public int? ManagerComputerUser_Id { get; set; }
 
         public string NDSpath { get; set; }

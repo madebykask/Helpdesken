@@ -1,4 +1,5 @@
 ﻿function onRemoveKeyDown(e, fakeInput, mainInput) {
+   
     e.stopImmediatePropagation();
     var text = mainInput.val();
     var email = getEmailsToRemove();

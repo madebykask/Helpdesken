@@ -130,7 +130,8 @@
                         Title = n.Title != string.Empty ? n.Title : null,
                         Unit = n.SOU != string.Empty ? n.SOU : null,
                         UserId = n.UserId,
-                        LanguageId = n.LanguageId
+                        LanguageId = n.LanguageId,
+                        Language = n.Language.Name
                     }).ToList();
 
             return
@@ -166,7 +167,8 @@
                         o.CreatedDate,
                         o.ChangedDate,
                         o.SynchronizationDate,
-                        o.LanguageId)).ToList();
+                        o.LanguageId,
+                        o.Language)).ToList();
         }
 
         public Notifier FindExistingNotifierById(int notifierId)
@@ -400,7 +402,8 @@
                         Title = r.Title != string.Empty ? r.Title : null,
                         Unit = r.SOU != string.Empty ? r.SOU : null,
                         UserId = r.UserId,
-                        LanguageId = r.LanguageId
+                        LanguageId = r.LanguageId,
+                        Language=r.Language.Name               
                     }).ToList();
 
             var notifiers =
@@ -436,7 +439,8 @@
                         r.CreatedDate,
                         r.ChangedDate,
                         r.SynchronizationDate,
-                        r.LanguageId)).ToList();
+                        r.LanguageId,
+                        r.Language)).ToList();
 
             return new SearchResult(notifiersFound, notifiers);
         }

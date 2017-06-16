@@ -1,14 +1,19 @@
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using DH.Helpdesk.BusinessData.Models.Logs.Output;
+using DH.Helpdesk.Dal.MapperData.CaseHistory;
+using DH.Helpdesk.Dal.MapperData.Logs;
+using DH.Helpdesk.Dal.Mappers;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
     using DH.Helpdesk.BusinessData.Models.LogProgram;
-using DH.Helpdesk.Dal.Enums;
-using DH.Helpdesk.Dal.Infrastructure;
-using DH.Helpdesk.Domain;
-using System;
-using Log = DH.Helpdesk.Domain.Log;
+    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
+    using System;
+    using Log = DH.Helpdesk.Domain.Log;
 
     #region LOG
 
@@ -34,10 +39,13 @@ using Log = DH.Helpdesk.Domain.Log;
 
     public class LogRepository : RepositoryBase<Log>, ILogRepository
     {
+        private readonly IEntityToBusinessModelMapper<LogMapperData, LogOverview> _logToLogOverviewMapper;
 
-        public LogRepository(IDatabaseFactory databaseFactory) 
+        public LogRepository(IDatabaseFactory databaseFactory,
+            IEntityToBusinessModelMapper<LogMapperData, LogOverview> logToLogOverviewMapper) 
             : base(databaseFactory)
         {
+            _logToLogOverviewMapper = logToLogOverviewMapper;
         }
 
         public Log GetLogById(int id)
@@ -70,6 +78,7 @@ using Log = DH.Helpdesk.Domain.Log;
             //return combined.OrderByDescending(l => l.LogDate);
         }
 
+
         /// <summary>
         /// The get case log overviews.
         /// </summary>
@@ -79,41 +88,43 @@ using Log = DH.Helpdesk.Domain.Log;
         /// <returns>
         /// The result />.
         /// </returns>
-        public IEnumerable<BusinessData.Models.Logs.Output.LogOverview> GetCaseLogOverviews(int caseId)
+        public IEnumerable<LogOverview> GetCaseLogOverviews(int caseId)
         {
-                var entities = this.Table                    
-                    .Where(l => l.Case_Id == caseId)  
-                    .OrderByDescending(l => l.LogDate)
-                    .ToList();
-
-                return entities.Select(l => new BusinessData.Models.Logs.Output.LogOverview()
+            var query = from l in Table
+                        where l.Case_Id == caseId
+                        orderby l.LogDate descending
+                        select new LogMapperData
                         {
-                            CaseHistoryId = l.CaseHistory_Id,
-                            CaseId = l.Case_Id,
-                            ChangeTime = l.ChangeTime,
-                            Charge = l.Charge,
-                            EquipmentPrice = l.EquipmentPrice,
-                            Export = l.Export,
-                            ExportDate = l.ExportDate,
-                            FinishingDate = l.FinishingDate,
-                            FinishingType = l.FinishingType,
-                            Id = l.Id,
-                            InformCustomer = l.InformCustomer,
-                            LogDate = l.LogDate,
-                            LogGuid = l.LogGUID,
-                            LogType = l.LogType,
-                            Price = l.Price,
-                            RegTime = l.RegTime,
-                            RegUser = l.RegUser,
-                            TextExternal = l.Text_External,
-                            TextInternal = l.Text_Internal,
-                            UserId = l.User_Id,
-                            WorkingTime = l.WorkingTime,
-							OverTime = l.OverTime,
-                            CaseHistory = l.CaseHistory,
-                            LogFiles = l.LogFiles,
-                            User = l.User
-                        });
+                            Log = l,
+
+                            User = new UserMapperData
+                            {
+                                Id = l.User.Id,
+                                FirstName = l.User.FirstName,
+                                SurName = l.User.SurName
+                            },
+                          
+                            EmailLogs = l.CaseHistory.Emaillogs.DefaultIfEmpty()
+                                            .Select(t => new EmailLogMapperData
+                                            {
+                                                Id = t.Id,
+                                                MailId = t.MailId,
+                                                EmailAddress = t.EmailAddress
+                                            }),
+
+                            LogFiles = l.LogFiles.DefaultIfEmpty()
+                                        .Select(t => 
+                                            new LogFileMapperData
+                                            {
+                                                Id = t.Id,
+                                                FileName = t.FileName
+                                            })
+                        };
+
+            var items = query.ToList();
+
+            var result = items.Select(_logToLogOverviewMapper.Map).ToList();
+            return result;
         }
 
         public IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate)
