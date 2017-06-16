@@ -244,16 +244,20 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             return ret;
         }
 
-        public SearchResponse Search(SearchParameters parameters, int userId)
+        public SearchResponse Search(SearchParameters parameters, int userId, bool isSelfService = false)
         {
 			var settings = this._orderFieldSettingsService.GetOrdersFieldSettingsOverview(parameters.CustomerId, parameters.OrderTypeId);
+            var user = _userRepository.GetUser(userId);
 			using (var uow = this._unitOfWorkFactory.CreateWithDisabledLazyLoading())
 			{
 				var orderTypeRep = uow.GetRepository<OrderType>();
                 var orderFieldTypesRep = uow.GetRepository<OrderFieldType>();
-                var orderTypes = orderTypeRep.GetAll(x => x.Users)
-									.GetOrderTypes(parameters.CustomerId).ToList();
-			    var filteredOrderTypes = FilterOrderTypeByUser(orderTypes, userId);
+                var orderTypes = orderTypeRep.GetAll(x => x.Users).GetOrderTypes(parameters.CustomerId).ToList();
+			    var filteredOrderTypes = orderTypes;
+                if (isSelfService && user.UserGroupId <= UserGroups.User)
+			    {
+			        filteredOrderTypes = FilterOrderTypeByUser(orderTypes, userId);
+			    }
                 var rootOrderType = filteredOrderTypes.Where(ot => parameters.OrderTypeId == null || ot.Id == parameters.OrderTypeId).ToList();
 				var orderTypeDescendants = GetChildrenInRow(rootOrderType, true).ToList();
 				orderTypeDescendants.AddRange(rootOrderType);

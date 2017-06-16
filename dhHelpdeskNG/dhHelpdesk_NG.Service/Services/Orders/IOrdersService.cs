@@ -10,7 +10,7 @@ using DH.Helpdesk.BusinessData.Models.Case;
     {
         OrdersFilterData GetOrdersFilterData(int customerId, int userId, out int[] filters);
 
-        SearchResponse Search(SearchParameters parameters, int userId);
+        SearchResponse Search(SearchParameters parameters, int userId, bool isSelfService = false);
 
         NewOrderEditData GetNewOrderEditData(int customerId, int orderTypeId, int? lowestchildordertypeid, bool useExternal);
 
