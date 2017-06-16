@@ -598,6 +598,15 @@ var ApplyTemplate = function (data, doOverwrite) {
                     //Diabled to show WatchDate 
                     //cfg['doNotTriggerEvent'] = true;
                     SetValueIfElVisible(el, val, cfg);
+
+                    if (el && (el.val() == "" || cfg.doOverwrite)) {
+                        //Todo: refactor
+                        //if connected to workflow we need to set the value
+                        if ($('#steps').length) {
+                            el.val(val);
+                        }
+                    }
+
                     break;
                 case 'Project_Id':
                     el = $("#case__Project_Id");
