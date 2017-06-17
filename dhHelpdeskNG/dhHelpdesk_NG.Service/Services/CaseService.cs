@@ -363,6 +363,8 @@ namespace DH.Helpdesk.Services.Services
 
             this.DeleteChildCasesFor(id);
 
+            DeleteExtendedCase(id);
+
             //delete CaseIsAbout
             this.DeleteCaseIsAboutFor(id);
 
@@ -1960,6 +1962,15 @@ namespace DH.Helpdesk.Services.Services
             using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 uow.GetRepository<ParentChildRelation>().DeleteWhere(it => it.AncestorId == caseId);
+                uow.Save();
+            }
+        }
+
+        private void DeleteExtendedCase(int caseId)
+        {
+            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                uow.GetRepository<ExtendedCaseDataEntity>().DeleteWhere(it => it.Id == caseId);
                 uow.Save();
             }
         }

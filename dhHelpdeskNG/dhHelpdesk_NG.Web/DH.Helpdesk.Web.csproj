@@ -3217,7 +3217,6 @@
     <Content Include="Areas\Invoices\Views\web.config" />
     <Content Include="Areas\Invoices\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\QuickLink\_QuickLinksRows.cshtml" />
-    <None Include="Properties\PublishProfiles\ExtendedCase.pubxml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />
