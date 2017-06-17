@@ -5086,7 +5086,7 @@ namespace DH.Helpdesk.Web.Controllers
                     //CHECK HOW TO HANDLE WHEN FROM EMAIL
                     //At the moment we are only fetching 1 extended case since it is only programmed that way in editPage.js
                     //TEMP, use UserID for userGUID
-                    m.ExtendedCases = _caseService.GetExtendedCaseForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.Id.ToString(), (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0), (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0), extendedCasePath);
+                    m.ExtendedCases = _caseService.GetExtendedCaseForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.Id.ToString(), (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0), (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0), extendedCasePath, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserId, ApplicationType.Helpdesk);
                     m.ContainsExtendedCase = m.ExtendedCases != null && m.ExtendedCases.Any();
 
                     //for hidden

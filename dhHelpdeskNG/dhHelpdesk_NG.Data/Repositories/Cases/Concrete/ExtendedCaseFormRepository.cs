@@ -8,6 +8,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain.ExtendedCaseEntity;
+    using DH.Helpdesk.Common.Enums;
 
     public sealed class ExtendedCaseFormRepository : RepositoryBase<ExtendedCaseFormEntity>, IExtendedCaseFormRepository
     {        
@@ -27,7 +28,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             _extendedCaseDataRepository = extendedCaseDataRepository;
     }
 
-        private Guid CreateExtendedCaseData(int formId)
+        private Guid CreateExtendedCaseData(int formId, string userGuid)
         {
             var newGuid = Guid.NewGuid();
 
@@ -35,8 +36,8 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             {
                 ExtendedCaseGuid = newGuid,
                 ExtendedCaseFormId = formId,
-                //TODO:
-                CreatedBy = "??",
+                //TODO: THIS is temp
+                CreatedBy = userGuid,
                 CreatedOn = System.DateTime.Now
             };
             
@@ -45,7 +46,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             return newGuid;
         }
 
-        public IList<ExtendedCaseFormModel> GetExtendedCaseForm(int caseSolutionId, int customerId, int caseId, int userLanguageId, string userGuid, int caseStateSecondaryId, int caseWorkingGroupId, string extendedCasePath)
+        public IList<ExtendedCaseFormModel> GetExtendedCaseForm(int caseSolutionId, int customerId, int caseId, int userLanguageId, string userGuid, int caseStateSecondaryId, int caseWorkingGroupId, string extendedCasePath, int? userId, string userName, ApplicationType applicationType)
         {
             ////TODO: 
             ///Cache this!
@@ -78,7 +79,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 {
                     CaseId = caseId,
                     Id = x.Id,
-                    ExtendedCaseGuid = CreateExtendedCaseData(x.Id),
+                    ExtendedCaseGuid = CreateExtendedCaseData(x.Id, userGuid),
                     Path = extendedCasePath,
                     Name = (x.Name != null ? x.Name : caseSolution.Name),
                     LanguageId = userLanguageId,
