@@ -112,8 +112,8 @@
             ProductAreaId: '@Model.case_.ProductArea_Id',
             StatusId:  '@Model.case_.Status_Id',
             SubStatusId:  '@Model.case_.StateSecondary_Id',
-            PlanDate:  '@(Model.case_.PlanDate !=null ? Model.case_.PlanDate.Value.ToString("dd/MM/yyyy").Replace("-","/") : "" )',
-            WatchDate:   '@(Model.case_.WatchDate !=null ? Model.case_.WatchDate.Value.ToString("dd/MM/yyyy").Replace("-", "/") : "" )',
+            PlanDate:  '@(Model.case_.PlanDate !=null ? Model.case_.PlanDate.Value.ToString() : "" )',
+            WatchDate:   '@(Model.case_.WatchDate !=null ? Model.case_.WatchDate.Value.ToString() : "" )',
         },
 
         casesScopeInitParameters: {
@@ -139,7 +139,6 @@
 </script>
 
 @Scripts.Render("~/bundles/cases/_input")
-
 
 @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseSolutionFields.AddFollowersBtn) && Model.caseFieldSettings.IsFieldVisible(GlobalEnums.TranslationCaseFields.AddFollowersBtn))
 {

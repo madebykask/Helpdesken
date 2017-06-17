@@ -74,11 +74,11 @@ EditPage.prototype.parseDate = function (dateStr) {
     if (dateStr == undefined || dateStr == "")
         return null;
 
-    var dateArray = dateStr.split("/");
+    var dateArray = dateStr.split("-");
     if (dateArray.length != 3)
         return null;
 
-    return new Date(parseInt(dateArray[2]), parseInt(dateArray[1] - 1), parseInt(dateArray[0]));
+    return new Date(parseInt(dateArray[0]), parseInt(dateArray[1] - 1), parseInt(dateArray[2]));
 }
 
 EditPage.prototype.dateToDisplayFormat = function (dateValue) {
@@ -131,7 +131,8 @@ EditPage.prototype.getECContainerTemplate = function (objId, target) {
 }
 
 EditPage.prototype.getExtendedCaseContainer = function () {
-    return document.getElementById(EditPage.prototype.Ex_Container_Prefix + EditPage.prototype.Current_EC_FormId);
+    var self = this;
+    return document.getElementById(self.Ex_Container_Prefix + self.Current_EC_FormId);
 };
 
 EditPage.prototype.getECTargetUrl = function () {
@@ -206,8 +207,8 @@ EditPage.prototype.loadExtendedCase = function () {
     var self = this;
     var $_ex_Container = self.getExtendedCaseContainer();
     var formParameters = $_ex_Container.contentWindow.getFormParameters();
-    formParameters.languageId = EditPage.prototype.Current_EC_LanguageId;
-    formParameters.extendedCaseGuid = EditPage.prototype.Current_EC_Guid;
+    formParameters.languageId = self.Current_EC_LanguageId;
+    formParameters.extendedCaseGuid = self.Current_EC_Guid;
     var fieldValues = self.Case_Field_Init_Values;
     if (fieldValues != null) {
         $_ex_Container.contentWindow.loadExtendedCase(
@@ -258,7 +259,7 @@ EditPage.prototype.isExtendedCaseValid = function () {
         return true;
     } else {
 
-        //TODO: Change Color
+        //TODO: Change tab Color on error
         //var $exTab = $(self.ExTab_Prefix + self.Current_EC_FormId);
 
         ShowToastMessage("Extended case is not valid!", "error", false);
@@ -462,7 +463,7 @@ EditPage.prototype.fetchWatchDateByDept = function (deptId) {
 
     $.getJSON(
         '/cases/GetWatchDateByDepartment',
-        { 'departmentId': deptId, 'myTime' : Date.now },
+        { 'departmentId': deptId, 'myTime' : Date.now() },
         function (response) {
             if (response.result === 'success') {
                 if (response.data != null) {
@@ -480,19 +481,19 @@ EditPage.prototype.fetchWatchDateByDept = function (deptId) {
 };
 
 EditPage.prototype.reExtendCaseLock = function () {
-    var me = this;
-    var _parameters = me.p;
+    var self = this;
+    var _parameters = self.p;
     $.post(_parameters.caseLockExtender, { lockGuid: _parameters.caseLockGuid, extendValue: _parameters.extendValue },
         function (data) {
             if (data == false) {
-                clearInterval(me.timerId);
+                clearInterval(self.timerId);
             }
         });
 };
 
 EditPage.prototype.resetSaving = function () {
-    var me = this;
-    me.setCaseStatus(me.CASE_IN_IDLE);
+    var self = this;
+    self.setCaseStatus(self.CASE_IN_IDLE);
 };
 
 EditPage.prototype.isProductAreaValid = function () {
@@ -585,7 +586,7 @@ EditPage.prototype.primaryValidation = function (submitUrl) {
 
     /* Check FinishigTime */
     if (me.CaseWillFinish() && finishDate != null && finishDate != undefined) {        
-        $.get('/Cases/IsFinishingDateValid/', { changedTime: me.p.caseChangedTime, finishingTime: finishDate, myTime: Date.now }, function (res) {
+        $.get('/Cases/IsFinishingDateValid/', { changedTime: me.p.caseChangedTime, finishingTime: finishDate, myTime: Date.now() }, function (res) {
             if (res != null && res) {
                 me.startSaveProcess(me, submitUrl);
             }
@@ -604,7 +605,7 @@ EditPage.prototype.startSaveProcess = function (sender, submitUrl) {
     var me = sender;
 
     if (me.invoiceIsActive && me.CaseWillFinish()) {
-        $.get('/CaseInvoice/IsThereNotSentOrder/', { caseId: me.p.currentCaseId, myTime: Date.now }, function (res) {
+        $.get('/CaseInvoice/IsThereNotSentOrder/', { caseId: me.p.currentCaseId, myTime: Date.now() }, function (res) {
             if (res != null && res) {
                 dhHelpdesk.cases.utils.showError(me.p.invoicePreventsToCloseCaseMessage);
             }
@@ -707,12 +708,13 @@ EditPage.prototype.doTotalValidationAndSave = function (submitUrl) {
         var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
         return promise.then(self.doSaveCase(submitUrl), self.onSaveError);
     } else {
-        return self.self.doSaveCase(submitUrl);
+        return self.doSaveCase(submitUrl);
     }
     
 }
 
-EditPage.prototype.doSaveCase = function(submitUrl) {
+EditPage.prototype.doSaveCase = function (submitUrl) {
+    var self = this;
     var action = submitUrl || '/Cases/Edit';
     self.$form.attr("action", action);
     
@@ -741,9 +743,9 @@ EditPage.prototype.doSaveCase = function(submitUrl) {
 };
 
 EditPage.prototype.stopCaseLockTimer = function () {
-    var me = this;
-    if (me.timerId != undefined)
-        clearInterval(me.timerId);    
+    var self = this;
+    if (self.timerId != undefined)
+        clearInterval(self.timerId);
 };
 
 EditPage.prototype.setCaseStatus = function (status) {
@@ -826,7 +828,7 @@ EditPage.prototype.onSaveAndNewYes = function (){
 
 EditPage.prototype.onSaveAndCloseYes = function () {
     var self = this;
-    return self.primaryValidation(me.NEW_CLOSE_CASE_URL);       
+    return self.primaryValidation(self.NEW_CLOSE_CASE_URL);       
 };
 
 EditPage.prototype.onSaveClick = function () {
@@ -1085,10 +1087,10 @@ EditPage.prototype.init = function (p) {
     self.$btnSave.on('click', Utils.callAsMe(self.onSaveClick, self));
     self.$btnSaveClose.on('click', Utils.callAsMe(self.onSaveAndCloseClick, self));
     self.$btnSaveNew.on('click', Utils.callAsMe(self.onSaveAndNewClick, self));
-   
+    $('.lang.dropdown-submenu a').on('click', Utils.callAsMe(self.onPageLeave, self));
+
     /*Load extended case*/
-    self.loadExtendedCaseIfNeeded();
-    
+    self.loadExtendedCaseIfNeeded();    
 
     self.$watchDateChangers.on('change', function () {        
         var deptId = parseInt(self.$department.val(), 10);
@@ -1145,52 +1147,36 @@ EditPage.prototype.init = function (p) {
             }
         }
     });
-
-    $('.lang.dropdown-submenu a').on('click', Utils.callAsMe(self.onPageLeave, self));             
-
-    self.$btnPrint.click(function (e) {
-            
-        /* Setup Print Page 
-        try {
-            var regpath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\PageSetup\\" + "Print_Background";
-            var oWSS = new ActiveXObject("WScript.Shell");
-            oWSS.RegWrite(regpath, "yes", "REG_SZ");
-
-
-            var regpath = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\PageSetup\\" + "Shrink_To_Fit";
-            var oWSS = new ActiveXObject("WScript.Shell");
-            oWSS.RegWrite(regpath, "no", "REG_SZ");
-        }
-        catch (err) {            
-        }*/
+    
+    self.$btnPrint.click(function (e) {               
         
-        $.get("/Cases/ShowCasePrintPreview/",
-                {
-                    caseId: p.currentCaseId,
-                    caseNumber: p.currentCaseNumber,
-                    curTime: new Date().getTime()
-                },                
+    $.get("/Cases/ShowCasePrintPreview/",
+            {
+                caseId: p.currentCaseId,
+                caseNumber: p.currentCaseNumber,
+                curTime: new Date.now()
+            },                
 
-                function (_reportPresentation) {
-                    self.$printArea.html(_reportPresentation);
+            function (_reportPresentation) {
+                self.$printArea.html(_reportPresentation);
                                         
-                    $('#PrintCaseDialog').draggable({
-                        handle: ".modal-header"
-                    });
+                $('#PrintCaseDialog').draggable({
+                    handle: ".modal-header"
+                });
                     
-                    /* show true if you need to show case print preview*/
-                    $('#PrintCaseDialog').modal({
-                        "backdrop": "static",
-                        "keyboard": true,
-                        "show": false
-                    });
+                /* show true if you need to show case print preview*/
+                $('#PrintCaseDialog').modal({
+                    "backdrop": "static",
+                    "keyboard": true,
+                    "show": false
+                });
                    
-                    //var _iframe = $("#caseReportContainer").find("iframe");
-                    //if (_iframe != null && _iframe != undefined) {
-                    //    update_iFrame(_iframe.attr("id"));                        
-                    //}
-                }
-             );       
+                //var _iframe = $("#caseReportContainer").find("iframe");
+                //if (_iframe != null && _iframe != undefined) {
+                //    update_iFrame(_iframe.attr("id"));                        
+                //}
+            }
+            );       
     });
     
     self.$descriptionDialog.click(function () {
@@ -1230,13 +1216,7 @@ EditPage.prototype.init = function (p) {
     //        }            
     //    }, 3000);
     //}
-
-    //////// event bind end ///////////
-    /*
-        window.parameters.currentCaseId,
-        customerId: window.parameters.customerId,
-        parentCaseId: window.parameters.parentCaseId
-    */
+    
     self.case = new Case({
         id: parseInt(p.currentCaseId, 10),
         customerId: parseInt(p.customerId, 10),
@@ -1278,7 +1258,7 @@ EditPage.prototype.init = function (p) {
                 $.ajax({
                     url: "/Cases/GetCaseInfo",
                     type: "GET",
-                    data: { caseId: self.p.currentCaseId, curTime: Date.now }
+                    data: { caseId: self.p.currentCaseId, curTime: Date.now() }
                 })
                 .done(function (result) {
                     if (result.needUpdate) {
