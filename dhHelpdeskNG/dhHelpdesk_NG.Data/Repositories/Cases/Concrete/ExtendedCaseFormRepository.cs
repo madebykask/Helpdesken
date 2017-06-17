@@ -45,7 +45,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             return newGuid;
         }
 
-        public IList<ExtendedCaseFormModel> GetExtendedCaseForm(int caseSolutionId, int customerId, int caseId, int userLanguageId, Guid userGuid, int caseStateSecondaryId, int caseWorkingGroupId, string extendedCasePath)
+        public IList<ExtendedCaseFormModel> GetExtendedCaseForm(int caseSolutionId, int customerId, int caseId, int userLanguageId, string userGuid, int caseStateSecondaryId, int caseWorkingGroupId, string extendedCasePath)
         {
             ////TODO: 
             ///Cache this!
@@ -69,7 +69,8 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             .Replace("&extendedCaseGuid=[extendedCaseGuid]", "")//sent in by js function
             .Replace("[CaseStateSecondaryId]", caseStateSecondaryId.ToString())
             .Replace("[CaseWorkingGroupId]", caseWorkingGroupId.ToString())
-            .Replace("&autoLoad=1", "&customerId=" + customerId.ToString()); //do not use this, TEMP add customer_id here
+            .Replace("[UserGuid]", userGuid)
+            .Replace("[CustomerId]", customerId.ToString());
 
             if (caseId == 0)
             {

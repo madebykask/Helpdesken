@@ -5076,22 +5076,26 @@ namespace DH.Helpdesk.Web.Controllers
 
             try
             {
-           
-            var extendedCasePath = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
-          
-            //TODO:
-            //CHECK HOW TO HANDLE WHEN FROM EMAIL
-            //At the moment we are only fetching 1 extended case since it is only programmed that way in editPage.js
-            //new Guid() is TEMPORARY, need to send in Current User guid
-            m.ExtendedCases = _caseService.GetExtendedCaseForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentLanguageId, new Guid(), (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0), (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0), extendedCasePath);
-            m.ContainsExtendedCase = m.ExtendedCases != null && m.ExtendedCases.Any();
 
-            //for hidden
-            if (m.ContainsExtendedCase)
-            {
-                m.ExtendedCaseGuid = m.ExtendedCases.FirstOrDefault().ExtendedCaseGuid;
-            }
+                string extendedCasePath = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
 
+                if (!string.IsNullOrEmpty(extendedCasePath))
+                {
+
+                    //TODO:
+                    //CHECK HOW TO HANDLE WHEN FROM EMAIL
+                    //At the moment we are only fetching 1 extended case since it is only programmed that way in editPage.js
+                    //TEMP, use UserID for userGUID
+                    m.ExtendedCases = _caseService.GetExtendedCaseForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.Id.ToString(), (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0), (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0), extendedCasePath);
+                    m.ContainsExtendedCase = m.ExtendedCases != null && m.ExtendedCases.Any();
+
+                    //for hidden
+                    if (m.ContainsExtendedCase)
+                    {
+                        m.ExtendedCaseGuid = m.ExtendedCases.FirstOrDefault().ExtendedCaseGuid;
+                    }
+
+                }
             }
             catch (Exception)
             {
@@ -5099,6 +5103,8 @@ namespace DH.Helpdesk.Web.Controllers
                 //DO something here?
                 //throw;
             }
+
+        
 
             #endregion Extended Case
 
