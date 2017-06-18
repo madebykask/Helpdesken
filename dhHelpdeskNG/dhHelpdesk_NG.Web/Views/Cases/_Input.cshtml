@@ -220,10 +220,11 @@
 
                 @if (Model.ContainsExtendedCase)
                 {
+
                     foreach (var extendedCase in Model.ExtendedCases)
                     {
                         <li data-active-tab="@string.Format(CaseTabs.ExtendedCaseTab, extendedCase.Id)" class="@((Model.ActiveTab == string.Format(CaseTabs.ExtendedCaseTab, extendedCase.Id)) ? "active" : "")" >
-                            <a href="#container_@extendedCase.Id" id="tabExtendedcase_@extendedCase.Id" class="extendedcase" data-id="@extendedCase.Id" data-state="">
+                            <a href="#container_@extendedCase.Id" id="extendedcase-tab-@extendedCase.Id" class="extendedcase" data-id="@extendedCase.Id" data-state="">
                                 @(Translation.GetCoreTextTranslation(extendedCase.Name))
                                 <i id="exTabIndicator_@extendedCase.Id" class="tab-indicator" style="display:none">&nbsp;</i>
                             </a>                            
@@ -322,10 +323,9 @@
                         @Html.Hidden("CaseSolution_Id", (Model.NewModeParams != null && Model.NewModeParams.templateId != null) ? Model.NewModeParams.templateId : Model.case_.CaseSolution_Id)
                         @Html.HiddenFor(model => model.ActiveTab)
                         @Html.HiddenFor(model => model.SelectedWorkflowStep)
-                        
-
 
                         @Html.HiddenFor(model => Model.CaseLock.LockGUID)
+                        @Html.HiddenFor(model => Model.CaseLock.ActiveTab)
                         @*<input type="button" id="sla_test" value="SLA Test" onclick="CalcSLA();" />*@
                         @if (Model.IsItChildCase())
                         {
