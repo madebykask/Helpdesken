@@ -1741,6 +1741,39 @@ table th.thpointer {
   font-weight:bold;
 }
 
+
+.nav-tabs li.error a {
+    background-color: #ffeeee;
+    color: #a94442;
+    border: 1px solid transparent;
+    padding-bottom: 7px;
+}
+
+.nav-tabs > li.error > a:hover,
+.nav-tabs > li.error > a:focus {
+    color: #a94442;
+    cursor: pointer;
+    background-color: #ffeeee;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    border-color: #eeeeee #eeeeee #dddddd;
+    padding-bottom: 8px;
+}
+
+.nav-tabs > li.error.active > a,
+.nav-tabs > li.error.active > a:hover,
+.nav-tabs > li.error.active > a:focus {
+    color: #a94442;
+    cursor: default;
+    background-color: #ffeeee;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    padding-bottom: 8px;
+}
+
+
+
+
 .nav-tabs-actions {
     
 }

@@ -240,11 +240,19 @@ EditPage.prototype.loadExtendedCase = function () {
     }
 }
 
-EditPage.prototype.isExtendedCaseValid = function () {
+EditPage.prototype.isExtendedCaseValid = function (showToast) {
+    //if no input param sent in, set show toast to true
+    if (showToast == null)
+    {
+        showToast = true;
+    }
+
     var self = this;
     var isOnNext = false;
 
-    if ($('#steps').length) {
+    var $exTab = $(self.ExTab_Prefix + self.Current_EC_FormId);
+
+    if ($('#steps').length && $('#ButtonClick').length && $('#ButtonClick').val() == 'btn-go') {
         //check if value is selected in steps, then isOnNext should be true;
         var templateId = parseInt($('#steps').val()) || 0;
         //only load if templateId exist
@@ -256,13 +264,24 @@ EditPage.prototype.isExtendedCaseValid = function () {
     var $_ex_Container = self.getExtendedCaseContainer();
     var validationResult = $_ex_Container.contentWindow.validateExtendedCase(isOnNext);
     if (validationResult == null) {
+        //Change color
+        if ($exTab.parent().hasClass('error')) {
+            $exTab.parent().removeClass('error');
+        }
+
         return true;
     } else {
 
-        //TODO: Change tab Color on error
-        //var $exTab = $(self.ExTab_Prefix + self.Current_EC_FormId);
+        //Change color      
+            if (!$exTab.parent().hasClass('error'))
+            {
+                $exTab.parent().addClass('error');
+            }
 
-        ShowToastMessage("Extended case is not valid!", "error", false);
+        if (showToast)
+        {
+            ShowToastMessage("Extended case is not valid!", "error", false);
+        }
         return false;
     }
 };
@@ -1076,6 +1095,9 @@ EditPage.prototype.init = function (p) {
     self.$caseTab = $("#tabsArea li a");//$('#case-tab');
     self.$activeTabHolder = $('#ActiveTab');
 
+    self.$selctListStep = $("#steps");
+    self.$btnGo = $('#btnGo');
+
     self.isCaseFileMandatory = self.p.isCaseFileMandatory;
 
     var invoiceElm = $('#CustomerSettings_ModuleCaseInvoice').val();
@@ -1244,11 +1266,17 @@ EditPage.prototype.init = function (p) {
             if (ev.target.className == "case") {
                 self.$activeTabHolder.val('case-tab');                
                 self.syncCaseFromExCaseIfExists();
+                
+                //validate extended case
+                //TODO: shold we have this here?
+                self.isExtendedCaseValid(false);
             }
             
             if (ev.target.className == "extendedcase") {
                 self.$activeTabHolder.val('extendedcase-tab-' + p.extendedCaseFormId);
             }
+
+
         }
 
         if (self.p.Contains_Eform) {
@@ -1282,6 +1310,32 @@ EditPage.prototype.init = function (p) {
                         secnav.addClass("hide");
                     });
                 }
+            }
+        }
+    });
+
+    
+    self.$btnGo.on("click", function (e) {
+        e.preventDefault();
+        $('#ButtonClick').val('btn-go');
+
+        var templateId = parseInt($('#steps').val()) || 0;
+        //only load if templateId exist
+        if (templateId > 0) {
+            $('#SelectedWorkflowStep').val(templateId);
+            LoadTemplate(templateId);
+        }
+    });
+
+    self.$selctListStep.on('change', function () {
+        //only if extended case exist
+        if (self.p.containsExtendedCase)
+        {
+            var stepId = parseInt($('#steps').val()) || 0;
+
+            if (stepId > 0)
+            {
+                self.isExtendedCaseValid(false);
             }
         }
     });

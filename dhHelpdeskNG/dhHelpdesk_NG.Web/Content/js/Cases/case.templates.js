@@ -940,17 +940,6 @@ function IsValueApplicableFor(templateFieldId, val) {
     return false;
 }
 
-
-$("#btnGo").on("click", function () {
-    var templateId = parseInt($('#steps').val()) || 0;
-    //only load if templateId exist
-    if (templateId > 0)
-    {
-        $('#SelectedWorkflowStep').val(templateId);
-        LoadTemplate(templateId);
-    }
-});
-
 function LoadTemplate(id) {
     var caseInvoiceIsActive = false;
     var curCaseId = $('#case__Id').val();

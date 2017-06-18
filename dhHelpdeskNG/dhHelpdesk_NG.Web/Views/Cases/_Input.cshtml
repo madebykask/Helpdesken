@@ -323,6 +323,7 @@
                         @Html.Hidden("CaseSolution_Id", (Model.NewModeParams != null && Model.NewModeParams.templateId != null) ? Model.NewModeParams.templateId : Model.case_.CaseSolution_Id)
                         @Html.HiddenFor(model => model.ActiveTab)
                         @Html.HiddenFor(model => model.SelectedWorkflowStep)
+                        @Html.Hidden("ButtonClick", "") @*TEMP, used to define if "Send" button is clicked*@
 
                         @Html.HiddenFor(model => Model.CaseLock.LockGUID)
                         @Html.HiddenFor(model => Model.CaseLock.ActiveTab)

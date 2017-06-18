@@ -76,21 +76,28 @@
             $("#case-action-save").click(function (e) {
                e.preventDefault();
                //$('#case__StateSecondary_Id').removeAttr('disabled');
-
+               $('#ButtonClick').val('save');
             });
 
             $("#case-action-save-and-close").click(function (e) {
                 e.preventDefault();
                 //$('#case__StateSecondary_Id').removeAttr('disabled');
+
+                $('#ButtonClick').val('save');
             });
 
             $("#case-action-save-and-new").click(function (e) {
+                
                 e.preventDefault();
+                $('#ButtonClick').val('save');
                 //$('#case__StateSecondary_Id').removeAttr('disabled');
             });
 
             $("#case-action-close").click(function (e) {
                 e.preventDefault();
+
+                $('#ButtonClick').val('save');
+
                 var targetUrl = $(this).attr("href");
                 if ('@Model.CaseLock.LockGUID' != '')
                     UnLockCase('@Model.CaseLock.LockGUID', targetUrl);
