@@ -146,27 +146,27 @@
 }
 
 <script type="text/javascript">
-    /* TODO: move to EditPage.js*/ 
-    function GetLanguage()
-    {
-        var caseid = document.getElementById('case__Id').value;
-        
-        if (caseid == 0)
-        {        
-            var reported  = document.getElementById('case__UserCode').value;
-            var reportedId  = document.getElementById('case__ReportedBy').value;
+    /* CHECK: moved to EditPage.js*/ 
+    //function GetLanguage()
+    //{
+    //    var caseid = document.getElementById('case__Id').value;
+    //    alert('old');
+    //    if (caseid == 0)
+    //    {        
+    //        var reported  = document.getElementById('case__UserCode').value;
+    //        var reportedId  = document.getElementById('case__ReportedBy').value;
             
-            var region = document.getElementById('case__Region_Id').value;            
-            var dep = document.getElementById('case__Department_Id').value;            
-            var customer = document.getElementById('case__Customer_Id').value;
+    //        var region = document.getElementById('case__Region_Id').value;            
+    //        var dep = document.getElementById('case__Department_Id').value;            
+    //        var customer = document.getElementById('case__Customer_Id').value;
             
-            $.get("/cases/LookupLanguage/", { customerid: "'" + customer.toString() + "'", notifier: "'" + reported.toString() + "'", region: "'" + region.toString() + "'", department: "'" + dep.toString() + "'", notifierid: "'" + reportedId.toString() + "'" }, function (result) {
-                if (parseInt(result) > 0) {            
-                    $("#case__RegLanguage_Id").val(result);
-                }
-            });
-        }
-    }
+    //        $.get("/cases/LookupLanguage/", { customerid: "'" + customer.toString() + "'", notifier: "'" + reported.toString() + "'", region: "'" + region.toString() + "'", department: "'" + dep.toString() + "'", notifierid: "'" + reportedId.toString() + "'" }, function (result) {
+    //            if (parseInt(result) > 0) {            
+    //                $("#case__RegLanguage_Id").val(result);
+    //            }
+    //        });
+    //    }
+    //}
 
 </script>
 
@@ -363,7 +363,7 @@
                                                     @Html.Hidden("ShowReportedBy", Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage)
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber))
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", data_field = "userId", onblur = "GetLanguage()" })
+                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", data_field = "userId", onblur = "EditPage.prototype.getLanguage()" })
                                                     }
                                                     else
                                                     {
@@ -2781,69 +2781,10 @@
     }
 
     $(function() {
+
         var isVisible = @Model.caseFieldSettings.IsFieldVisible(GlobalEnums.TranslationCaseFields.AddFollowersBtn).ToJavaScriptBool();
         if (isVisible) {
             $("#fakeCaseFollowerUsersInput").html(getHtmlFromEmails($("#caseFollowerUsersInput").val()));
-        }
-    });
-
-    $(function() {
-
-        SetDynamicDropDowns();
-
-        $(".dropdown-submenu.DynamicDropDown_Up").mousemove(function(event) {
-            var target = $(event.target.parentElement);
-            if (target != undefined && target.hasClass('DynamicDropDown_Up') && target.index(0) != -1) {
-                var objPos = GetObjectPosInView(target[0].id);
-                var subMenu = "#subDropDownMenu_" + target[0].id;
-                $(subMenu).css("bottom", "auto");
-                $(subMenu).css("top", "auto");
-                if ($(".DynamicDropDown").hasClass('dropup')) {
-                    if (objPos.ToTop < objPos.ToDown) {
-                        var h = -$(subMenu).height() + 25;
-                        var hstr = h + "px";
-                        $(subMenu).css("bottom", hstr);
-                    } else
-                        $(subMenu).css("bottom", "0");
-                } else {
-                    if (objPos.ToTop < objPos.ToDown || $(subMenu).height() < objPos.ToDown)
-                        $(subMenu).css("top", "0");
-                    else {
-                        var h = -$(subMenu).height() + 25;
-                        var hstr = h + "px";
-                        $(subMenu).css("top", hstr);
-                    }
-                }
-            }
-        });
-
-        function GetObjectPosInView(objectId) {
-            var fixedArea = 90;
-            var pageSize = $(window).height() - fixedArea;
-            var scrollPos = $(window).scrollTop();
-            var elementToTop = $("#" + objectId).offset().top - scrollPos - fixedArea;
-            var elementToDown = pageSize - elementToTop;
-            return { ToTop: elementToTop, ToDown: elementToDown };
-        }
-
-        $(window).scroll(function() {
-            SetDynamicDropDowns()
-        });
-
-        function SetDynamicDropDowns() {
-            var fixedArea = 90;
-            var pageSize = $(window).height() - fixedArea;
-            var scrollPos = $(window).scrollTop();
-            var elementToTop = $(".DynamicDropDown").offset().top - scrollPos - fixedArea;
-            var elementToDown = pageSize - elementToTop;
-            if (elementToTop < -$(".DynamicDropDown").height())
-                $(".DynamicDropDown").removeClass('open');
-
-            if (elementToTop <= elementToDown) {
-                $(".DynamicDropDown").removeClass('dropup');
-            } else {
-                $(".DynamicDropDown").addClass('dropup');
-            }
         }
 
         var scope = dhHelpdesk.cases.scope(window.parameters.casesScopeInitParameters);

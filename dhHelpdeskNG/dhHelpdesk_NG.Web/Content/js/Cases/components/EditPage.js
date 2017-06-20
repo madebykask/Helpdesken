@@ -15,6 +15,7 @@ EditPage.prototype.SAVE_GOTO_PARENT_CASE_URL = '/Cases/NewAndGotoParentCase';
 EditPage.prototype.SAVE_ADD_CASE_URL = '/Cases/NewAndAddCase';
 EditPage.prototype.CASE_OVERVIEW_URL = '/Cases';
 
+EditPage.prototype.DYNAMIC_DROPDOWNS = '.DynamicDropDown';
 EditPage.prototype.CHLID_CASES_TAB = 'childcases-tab';
 EditPage.prototype.CASE_IN_IDLE = 'case_in_idle';
 EditPage.prototype.CASE_IN_SAVING = 'case_in_saving';
@@ -123,6 +124,59 @@ EditPage.prototype.getDate = function (val) {
 EditPage.prototype.ReturnFalse = function () {
     return false;
 };
+
+EditPage.prototype.getObjectPosInView = function (objectId) {
+    var fixedArea = 90;
+    var pageSize = $(window).height() - fixedArea;
+    var scrollPos = $(window).scrollTop();
+    var elementToTop = $("#" + objectId).offset().top - scrollPos - fixedArea;
+    var elementToDown = pageSize - elementToTop;
+    return { ToTop: elementToTop, ToDown: elementToDown };
+}
+
+EditPage.prototype.setDynamicDropDowns = function () {
+    var self = this;
+    var fixedArea = 90;
+    var pageSize = $(window).height() - fixedArea;
+    var scrollPos = $(window).scrollTop();
+    var elementToTop = $(self.DYNAMIC_DROPDOWNS).offset().top - scrollPos - fixedArea;
+    var elementToDown = pageSize - elementToTop;
+    if (elementToTop < -$(self.DYNAMIC_DROPDOWNS).height())
+        $(self.DYNAMIC_DROPDOWNS).removeClass('open');
+
+    if (elementToTop <= elementToDown) {
+        $(self.DYNAMIC_DROPDOWNS).removeClass('dropup');
+    } else {
+        $(self.DYNAMIC_DROPDOWNS).addClass('dropup');
+    }
+}
+
+EditPage.prototype.dynamicDropDownBehaviorOnMouseMove = function () {
+    var self = this;
+    var target = $(event.target.parentElement);
+    if (target != undefined && target.hasClass('DynamicDropDown_Up') && target.index(0) != -1) {
+        var objPos = self.getObjectPosInView(target[0].id);
+        var subMenu = "#subDropDownMenu_" + target[0].id;
+        $(subMenu).css("bottom", "auto");
+        $(subMenu).css("top", "auto");
+        if ($(self.DYNAMIC_DROPDOWNS).hasClass('dropup')) {
+            if (objPos.ToTop < objPos.ToDown) {
+                var h = -$(subMenu).height() + 25;
+                var hstr = h + "px";
+                $(subMenu).css("bottom", hstr);
+            } else
+                $(subMenu).css("bottom", "0");
+        } else {
+            if (objPos.ToTop < objPos.ToDown || $(subMenu).height() < objPos.ToDown)
+                $(subMenu).css("top", "0");
+            else {
+                var h = -$(subMenu).height() + 25;
+                var hstr = h + "px";
+                $(subMenu).css("top", hstr);
+            }
+        }
+    }
+}
 
 
 /*** Extended Case Area ***/
@@ -1049,6 +1103,32 @@ EditPage.prototype.changeCaseButtonsState = function(state) {
     }
 }
 
+EditPage.prototype.getLanguage = function () {
+    var self = this;
+    
+    var _fieldIds = self.Case_Field_Ids;
+    var caseId = document.getElementById(_fieldIds.CaseId).value;
+    if (caseId == 0) {        
+        var reported = document.getElementById(_fieldIds.UserCode).value;
+        var reportedId = document.getElementById(_fieldIds.ReportedBy).value;
+
+        var region = document.getElementById(_fieldIds.RegionId).value;
+        var dep = document.getElementById(_fieldIds.DepartmentId).value;
+        var customer = document.getElementById(_fieldIds.CustomerId).value;
+
+        $.get("/cases/LookupLanguage/", {
+            customerid: "'" + customer.toString() + "'",
+            notifier: "'" + reported.toString() + "'",
+            region: "'" + region.toString() + "'",
+            department: "'" + dep.toString() + "'",
+            notifierid: "'" + reportedId.toString() + "'"
+        }, function (result) {
+            if (parseInt(result) > 0) {
+                $("#case__RegLanguage_Id").val(result);
+            }
+        });
+    }
+}
 
 /***** Initiator *****/
 EditPage.prototype.init = function (p) {
@@ -1110,6 +1190,16 @@ EditPage.prototype.init = function (p) {
     self.$btnSaveClose.on('click', Utils.callAsMe(self.onSaveAndCloseClick, self));
     self.$btnSaveNew.on('click', Utils.callAsMe(self.onSaveAndNewClick, self));
     $('.lang.dropdown-submenu a').on('click', Utils.callAsMe(self.onPageLeave, self));
+
+    $(".dropdown-submenu.DynamicDropDown_Up").mousemove(function (event) {
+        self.dynamicDropDownBehaviorOnMouseMove();
+    });
+
+    $(window).scroll(function () {
+        self.setDynamicDropDowns();
+    });
+
+    self.setDynamicDropDowns();
 
     /*Load extended case*/
     self.loadExtendedCaseIfNeeded();    
