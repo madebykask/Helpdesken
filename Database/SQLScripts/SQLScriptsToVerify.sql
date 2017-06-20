@@ -273,3 +273,11 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 		ALTER TABLE [dbo].tblCaseSolution ADD ValidateOnChange nvarchar(100) NULL 
 	end
 GO
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CacheData' and sysobjects.name = N'tblFormSettings')
+	begin
+		ALTER TABLE [dbo].tblFormSettings ADD CacheData bit
+	end
+GO
+

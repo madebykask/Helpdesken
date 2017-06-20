@@ -294,16 +294,20 @@ EditPage.prototype.loadExtendedCase = function () {
     }
 }
 
-EditPage.prototype.isExtendedCaseValid = function (showToast) {
+EditPage.prototype.isExtendedCaseValid = function (showToast, isOnNext) {
     //if no input param sent in, set show toast to true
     if (showToast == null)
     {
         showToast = true;
     }
 
-    var self = this;
-    var isOnNext = false;
+    //if no input param sent in, set isOnNext to false
+    if (isOnNext == null) {
+        isOnNext = false;
+    }
 
+    var self = this;
+    
     var $exTab = $(self.ExTab_Prefix + self.Current_EC_FormId);
 
     if ($('#steps').length && $('#ButtonClick').length && $('#ButtonClick').val() == 'btn-go') {
@@ -311,6 +315,7 @@ EditPage.prototype.isExtendedCaseValid = function (showToast) {
         var templateId = parseInt($('#steps').val()) || 0;
         //only load if templateId exist
         if (templateId > 0) {
+            
             isOnNext = true;
         }
     }
@@ -1425,8 +1430,18 @@ EditPage.prototype.init = function (p) {
 
             if (stepId > 0)
             {
-                self.isExtendedCaseValid(false);
+
+                self.isExtendedCaseValid(false,true);
             }
+            else
+            {
+                self.isExtendedCaseValid(false,false);
+            }
+            
+
+
+                        
+
         }
     });
 
