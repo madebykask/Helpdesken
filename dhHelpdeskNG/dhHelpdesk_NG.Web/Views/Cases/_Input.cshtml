@@ -81,6 +81,7 @@
             ResponsibleId: "ResponsibleUser_Id",
             AdministratorId: "Performer_Id",
             PriorityId: "case__Priority_Id",
+            PriorityName: "priority_Name",
             StatusId: "case__Status_Id",
             StatusName: "statusName",
             SubStatusId: "case__StateSecondary_Id",
@@ -114,6 +115,7 @@
             SubStatusId:  '@Model.case_.StateSecondary_Id',
             PlanDate:  '@(Model.case_.PlanDate !=null ? Model.case_.PlanDate.Value.ToString() : "" )',
             WatchDate:   '@(Model.case_.WatchDate !=null ? Model.case_.WatchDate.Value.ToString() : "" )',
+            PriorityId: '@Model.case_.Priority_Id',
         },
 
         casesScopeInitParameters: {

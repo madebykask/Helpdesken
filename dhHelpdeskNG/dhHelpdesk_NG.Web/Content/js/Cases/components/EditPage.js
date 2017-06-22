@@ -281,7 +281,8 @@ EditPage.prototype.loadExtendedCase = function () {
                     status_id: { Value: fieldValues.StatusId },
                     plandate: { Value: fieldValues.PlanDate },
                     watchdate: { Value: fieldValues.WatchDate },
-                    log_textinternal: { Value: '' },
+                    priority_id: { Value: fieldValues.PriorityId },
+                    log_textinternal: { Value: '' }
                 }
             });
     } else {
@@ -373,6 +374,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
     var _plandate = fieldData.plandate;
     var _watchdate = fieldData.watchdate;
     var _log_textinternal = fieldData.log_textinternal;
+    var _priority_id = fieldData.priority_id;
 
     if (_reportedby != undefined)
         $('#' + _caseFields.ReportedBy).val(_reportedby.Value);
@@ -398,7 +400,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
         $('#' + _caseFields.DepartmentId).val(_department_id.Value);
         $('#' + _caseFields.DepartmentName).val(_department_id.SecondaryValue);
     }
-
+    
     if (_ou_id_1 != undefined) {
         $("#CaseTemplate_OU_Id").val();
         var selectedOU_Id = _ou_id_1.Value;
@@ -419,9 +421,15 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
         $('#' + _caseFields.OUName).val(selectedOU_Name);
     }
 
+
     if (_region_id != undefined) {
         $('#' + _caseFields.RegionId).val(_region_id.Value);
         $('#' + _caseFields.RegionName).val(_region_id.SecondaryValue);
+    }
+
+    if (_priority_id != undefined) {
+        $('#' + _caseFields.PriorityId).val(_priority_id.Value);
+        $('#' + _caseFields.PriorityName).val(_priority_id.SecondaryValue);
     }
 
     if (_productarea_id != undefined) {
