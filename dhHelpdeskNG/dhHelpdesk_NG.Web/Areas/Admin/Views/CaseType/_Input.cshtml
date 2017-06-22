@@ -74,17 +74,17 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
+                                        @*@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)*@
                                         @*#57738*@
-                                        @*@Translation.Get("Visa i lista", Enums.TranslationSource.TextTranslation)*@
+                                        @Translation.Get("Visa i lista", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        <label class="checkbox">
+                                        @*<label class="checkbox">
                                             <input type="checkbox" name="casetype.ShowOnExternalPage" @(Model.CaseType.ShowOnExternalPage == 1 ? "checked=checked" : "") value="1" />
                                             <input type="hidden" name="casetype.ShowOnExternalPage" value="0" />
                                             &nbsp;@Translation.Get("Visa ärendetypen på självservice", Enums.TranslationSource.TextTranslation)
-                                        </label>
-                                        @*<label class="checkbox">
+                                        </label>*@
+                                        <label class="checkbox">
                                             <input type="checkbox" name="casetype.Selectable" @(Model.CaseType.Selectable == 1 ? "checked=checked" : "") value="1" />
                                             <input type="hidden" name="casetype.Selectable" value="0" />
                                             &nbsp;@Translation.Get("Helpdesk", Enums.TranslationSource.TextTranslation)
@@ -93,11 +93,11 @@
                                             <input type="checkbox" name="casetype.ShowOnExternalPage" @(Model.CaseType.ShowOnExternalPage == 1 ? "checked=checked" : "") value="1" />
                                             <input type="hidden" name="casetype.ShowOnExternalPage" value="0" />
                                             &nbsp;@Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)
-                                        </label>*@         
+                                        </label>         
                                     </td>
                                 </tr>
                                 @*#57738 Remove this later*@
-                                <tr>
+                                @*<tr>
                                     <td>
                                         @Translation.Get("Valbar", Enums.TranslationSource.TextTranslation)
                                     </td>
@@ -107,7 +107,7 @@
                                             <input type="hidden" name="casetype.Selectable" value="0" />
                                         </label>
                                     </td>
-                                </tr>
+                                </tr>*@
                                 <tr>
                                     <td>
                                         @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)

@@ -10,6 +10,6 @@
 
         public int ShowOnExternalPage { get; set; }
         //For next release #57742
-        //public int ShowOnExtPageCases { get; set; }
+        public int ShowOnExtPageCases { get; set; }
     }
 }

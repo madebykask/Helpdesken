@@ -14,6 +14,7 @@
     {
         IList<CaseType> GetCaseTypes(int customerId, bool isTakeOnlyActive = false);
 
+        IList<CaseType> GetCaseTypesForSetting(int customerId, bool isTakeOnlyActive = false);
         IList<CaseType> GetAllCaseTypes(int customerId, bool isTakeOnlyActive = false);
 
         CaseType GetCaseType(int id);
@@ -57,6 +58,18 @@
         {
             var query = this.caseTypeRepository.GetMany(
                 x => x.Customer_Id == customerId && x.Parent_CaseType_Id == null);
+            if (isTakeOnlyActive)
+            {
+                query = query.Where(it => it.IsActive == 1 && it.Selectable == 1);
+            }
+
+            return query.OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<CaseType> GetCaseTypesForSetting(int customerId, bool isTakeOnlyActive = false)
+        {
+            var query = this.caseTypeRepository.GetMany(
+                x => x.Customer_Id == customerId);
             if (isTakeOnlyActive)
             {
                 query = query.Where(it => it.IsActive == 1 && it.Selectable == 1);
