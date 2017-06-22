@@ -38,58 +38,105 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
             List<CaseSolutionSettingsField> list = new List<CaseSolutionSettingsField>();
 
-            var query = from contact in this.DataContext.CaseSolutionsConditions
-                        join dealer in this.DataContext.CaseSolutionConditionProperties on contact.Property_Name equals dealer.CaseSolutionConditionProperty
-                        where contact.CaseSolution_Id == casesolutionid
-                        select new { dealer.CaseSolutionConditionProperty, dealer.Id, dealer.Text, contact.CaseSolutionConditionGUID, contact.Values, contact.CaseSolution_Id, dealer.Table, dealer.TableFieldId, dealer.TableFieldName, dealer.TableFieldGuid };
+            
 
-            foreach (var nameGroup in query)
+            string sqlExt = string.Empty;
+
+            sqlExt = "SELECT ";
+            sqlExt += "0, ";
+            sqlExt += "[CaseSolution_Id] AS[CaseSolution_Id],  ";
+            sqlExt += "[CaseSolutionConditionProperty] AS[CaseSolutionConditionProperty],  ";
+            sqlExt += "[dbo].[tblCaseSolutionConditionProperties].[Id] AS[Id],  ";
+            sqlExt += "[Text] AS[Text],  ";
+            sqlExt += "Convert(nvarchar(50), [CaseSolutionConditionGUID]) AS[CaseSolutionConditionGUID],  ";
+            sqlExt += "[Values] AS[Values],  ";
+            sqlExt += "[Table] AS[Table],  ";
+            sqlExt += "[TableFieldId] AS[TableFieldId],  ";
+            sqlExt += "[TableFieldName] AS[TableFieldName],  ";
+            sqlExt += "[TableFieldGuid] AS[TableFieldGuid] ";
+            sqlExt += "FROM[dbo].[tblCaseSolutionCondition] ";
+            sqlExt += "INNER JOIN[dbo].[tblCaseSolutionConditionProperties] ";
+            sqlExt += "ON[Property_Name] = [CaseSolutionConditionProperty] ";
+            sqlExt += "WHERE[CaseSolution_Id] = " + casesolutionid + " ";
+            sqlExt += "UNION ";
+            sqlExt += "SELECT   ";
+            sqlExt += "1, ";
+            sqlExt += "" + casesolutionid + " AS[CaseSolution_Id], ";
+            sqlExt += "CaseSolutionConditionProperty,  ";
+            sqlExt += "tblCaseSolutionConditionProperties.Id, 	 ";
+            sqlExt += "tblCaseSolutionConditionProperties.Text,  ";
+            sqlExt += "'' AS[CaseSolutionConditionGUID], ";
+            sqlExt += "'' AS[Values], ";
+            sqlExt += "[Table],  ";
+            sqlExt += "TableFieldId,  ";
+            sqlExt += "TableFieldName,  ";
+            sqlExt += "TableFieldGuid ";
+            sqlExt += "FROM            dbo.tblCaseSolutionConditionProperties ";
+            sqlExt += "WHERE tblCaseSolutionConditionProperties.Id NOT IN(SELECT ";
+            sqlExt += "[dbo].[tblCaseSolutionConditionProperties].[Id] ";
+            sqlExt += "FROM  [dbo].[tblCaseSolutionCondition] ";
+            sqlExt += "INNER JOIN [dbo].[tblCaseSolutionConditionProperties] ON[Property_Name] = [CaseSolutionConditionProperty] ";
+            sqlExt += "WHERE[CaseSolution_Id] = " + casesolutionid + ") ";
+
+            string ConnectionStringExt = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+            DataTable dtExt = null;
+
+            using (var connectionExt = new SqlConnection(ConnectionStringExt))
+            {
+                if (connectionExt.State == ConnectionState.Closed)
+                {
+                    connectionExt.Open();
+                }
+                using (var commandExt = new SqlCommand { Connection = connectionExt, CommandType = CommandType.StoredProcedure, CommandTimeout = 0 })
+                {
+                    commandExt.CommandType = CommandType.Text;
+                    commandExt.CommandText = sqlExt;
+                    var reader = commandExt.ExecuteReader();
+                    dtExt = new DataTable();
+                    dtExt.Load(reader);
+
+                }
+            }
+
+
+            foreach (DataRow rowExt in dtExt.Rows)
             {
                 CaseSolutionSettingsField c = new CaseSolutionSettingsField();
                 c.SelectedValues = new List<string>();
 
-                if (nameGroup.Id != null)
+                if (rowExt["Id"].ToString() != null)
                 {
-                    c.CaseSolutionConditionId = nameGroup.Id.ToString();
-                }
-                if (nameGroup.CaseSolution_Id != null)
-                {
-                    c.CaseSolutionId = nameGroup.CaseSolution_Id;
+                    c.CaseSolutionConditionId = rowExt["Id"].ToString();
                 }
 
-                if (nameGroup.CaseSolutionConditionProperty != null)
+                if (rowExt["CaseSolution_Id"].ToString() != null)
                 {
-                    c.PropertyName = nameGroup.CaseSolutionConditionProperty.ToString();
-                }
-                if (nameGroup.Text != null)
-                {
-                    c.Text = nameGroup.Text.ToString();
+                    c.CaseSolutionId = Convert.ToInt32(rowExt["CaseSolution_Id"].ToString());
                 }
 
+                if (rowExt["CaseSolutionConditionProperty"].ToString() != null)
+                {
+                    c.PropertyName = rowExt["CaseSolutionConditionProperty"].ToString();
+                }
+                if (rowExt["Text"].ToString() != null)
+                {
+                    c.Text = rowExt["Text"].ToString();
+                }
                 char[] delimiters = new char[] { ',' };
-                if (nameGroup.Values != null)
+
+                if (rowExt["Values"].ToString() != null)
                 {
-                    string[] parts = nameGroup.Values.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                    string[] parts = rowExt["Values"].ToString().Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
                     for (int i = 0; i < parts.Length; i++)
                     {
                         c.SelectedValues.Add(parts[i]);
                     }
                 }
 
-
-                //string colName = "Ditrict";
-                //var districtlist = db.table1.Select(d => new { d.colName }).Distinct().ToList();
-
-                string tablename = nameGroup.Table.ToString();
-                string tablefieldid = nameGroup.TableFieldId.ToString();
-                string tablefieldname = nameGroup.TableFieldName.ToString();
-                string tablefieldguid = nameGroup.TableFieldGuid.ToString();
-
-                //var temp = from st in this.DataContext.StateSecondaries
-                //           where !c.SelectedValues.Contains(st.StateSecondaryGUID.ToString())
-                //           select new { st.Name, st.Id, st.StateSecondaryGUID, Selected = false };
-
-
+                string tablename = rowExt["Table"].ToString();
+                string tablefieldid = rowExt["TableFieldId"].ToString();
+                string tablefieldname = rowExt["TableFieldName"].ToString();
+                string tablefieldguid = rowExt["TableFieldGuid"].ToString();
 
                 string selvals = string.Empty;
                 foreach (var it in c.SelectedValues)
@@ -103,6 +150,8 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         selvals = selvals + ", '" + it.ToString() + "'";
                     }
                 }
+
+
                 selvals = selvals.Replace("''", "'");
                 string sql = string.Empty;
 
@@ -188,155 +237,162 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
                     }
                 }
-                //var temp1 = from st in this.DataContext.StateSecondaries
-                //            where c.SelectedValues.Contains(st.StateSecondaryGUID.ToString())
-                //            select new { st.Name, st.Id, st.StateSecondaryGUID, Selected = true };
-
-                //switch (nameGroup.CaseSolutionConditionProperty.ToString())
-                //{
-                //    case "case_StateSecondary.StateSecondaryGUID":
-
-                //        var temp = from st in this.DataContext.StateSecondaries
-                //                   where !c.SelectedValues.Contains(st.StateSecondaryGUID.ToString())
-                //                   select new { st.Name, st.Id, st.StateSecondaryGUID, Selected = false };
-
-                //        var temp1 = from st in this.DataContext.StateSecondaries
-                //                    where c.SelectedValues.Contains(st.StateSecondaryGUID.ToString())
-                //                    select new { st.Name, st.Id, st.StateSecondaryGUID, Selected = true };
-
-                //        var result = temp.Concat(temp1).OrderBy(x => x.Name).ToList();
-
-                //        List<SelectListItem> ls = null;
-                //        ls = result
-                //          .Select(x => new SelectListItem
-                //          {
-                //              Text = x.Name,
-                //              Value = x.StateSecondaryGUID.ToString(),
-                //              Selected = x.Selected
-                //          }).ToList();
-
-
-                //        c.SelectList = ls;
-                //        break;
-                //    case "case_WorkingGroup.WorkingGroupGUID":
-                //        var temp11 = from st in this.DataContext.WorkingGroups
-                //                     where !c.SelectedValues.Contains(st.WorkingGroupGUID.ToString())
-                //                     select new { st.WorkingGroupName, st.Id, st.WorkingGroupGUID, Selected = false };
-
-                //        var temp12 = from st in this.DataContext.WorkingGroups
-                //                     where c.SelectedValues.Contains(st.WorkingGroupGUID.ToString())
-                //                     select new { st.WorkingGroupName, st.Id, st.WorkingGroupGUID, Selected = true };
-
-                //        var result11 = temp11.Concat(temp12).OrderBy(x => x.WorkingGroupName).ToList();
-
-                //        List<SelectListItem> ls11 = null;
-                //        ls11 = result11
-                //          .Select(x => new SelectListItem
-                //          {
-                //              Text = x.WorkingGroupName,
-                //              Value = x.WorkingGroupGUID.ToString(),
-                //              Selected = x.Selected
-                //          }).ToList();
-
-
-                //        c.SelectList = ls11;
-                //        break;
-                //    case "case_Priority.PriorityGUID":
-                //        var temp21 = from st in this.DataContext.Priorities
-                //                     where !c.SelectedValues.Contains(st.PriorityGUID.ToString())
-                //                     select new { st.Name, st.Id, st.PriorityGUID, Selected = false };
-
-                //        var temp22 = from st in this.DataContext.Priorities
-                //                     where c.SelectedValues.Contains(st.PriorityGUID.ToString())
-                //                     select new { st.Name, st.Id, st.PriorityGUID, Selected = true };
-
-                //        var result21 = temp21.Concat(temp22).OrderBy(x => x.Name).ToList();
-
-                //        List<SelectListItem> ls21 = null;
-                //        ls21 = result21
-                //          .Select(x => new SelectListItem
-                //          {
-                //              Text = x.Name,
-                //              Value = x.PriorityGUID.ToString(),
-                //              Selected = x.Selected
-                //          }).ToList();
-
-
-                //        c.SelectList = ls21;
-                //        break;
-                //    case "case_Status.StatusGUID":
-                //        var temp31 = from st in this.DataContext.Statuses
-                //                     where !c.SelectedValues.Contains(st.StatusGUID.ToString())
-                //                     select new { st.Name, st.Id, st.StatusGUID, Selected = false };
-
-                //        var temp32 = from st in this.DataContext.Statuses
-                //                     where c.SelectedValues.Contains(st.StatusGUID.ToString())
-                //                     select new { st.Name, st.Id, st.StatusGUID, Selected = true };
-
-                //        var result31 = temp31.Concat(temp32).OrderBy(x => x.Name).ToList();
-
-                //        List<SelectListItem> ls31 = null;
-                //        ls31 = result31
-                //          .Select(x => new SelectListItem
-                //          {
-                //              Text = x.Name,
-                //              Value = x.StatusGUID.ToString(),
-                //              Selected = x.Selected
-                //          }).ToList();
-
-
-                //        c.SelectList = ls31;
-                //        break;
-                //    case "user_WorkingGroup.WorkingGroupGUID":
-                //        var temp41 = from st in this.DataContext.WorkingGroups
-                //                     where !c.SelectedValues.Contains(st.WorkingGroupGUID.ToString())
-                //                     select new { st.WorkingGroupName, st.Id, st.WorkingGroupGUID, Selected = false };
-
-                //        var temp42 = from st in this.DataContext.WorkingGroups
-                //                     where c.SelectedValues.Contains(st.WorkingGroupGUID.ToString())
-                //                     select new { st.WorkingGroupName, st.Id, st.WorkingGroupGUID, Selected = true };
-
-                //        var result41 = temp41.Concat(temp42).OrderBy(x => x.WorkingGroupName).ToList();
-
-                //        List<SelectListItem> ls41 = null;
-                //        ls41 = result41
-                //          .Select(x => new SelectListItem
-                //          {
-                //              Text = x.WorkingGroupName,
-                //              Value = x.WorkingGroupGUID.ToString(),
-                //              Selected = x.Selected
-                //          }).ToList();
-
-
-                //        c.SelectList = ls41;
-                //        break;
-                //    case "case_ProductArea.ProductAreaGUID":
-                //        var temp51 = from st in this.DataContext.ProductAreas
-                //                     where !c.SelectedValues.Contains(st.ProductAreaGUID.ToString())
-                //                     select new { st.Name, st.Id, st.ProductAreaGUID, Selected = false };
-
-                //        var temp52 = from st in this.DataContext.ProductAreas
-                //                     where c.SelectedValues.Contains(st.ProductAreaGUID.ToString())
-                //                     select new { st.Name, st.Id, st.ProductAreaGUID, Selected = true };
-
-                //        var result51 = temp51.Concat(temp52).OrderBy(x => x.Name).ToList();
-
-                //        List<SelectListItem> ls51 = null;
-                //        ls51 = result51
-                //          .Select(x => new SelectListItem
-                //          {
-                //              Text = x.Name,
-                //              Value = x.ProductAreaGUID.ToString(),
-                //              Selected = x.Selected
-                //          }).ToList();
-
-
-                //        c.SelectList = ls51;
-                //        break;
-                //}
 
                 list.Add(c);
+
             }
+
+
+
+
+
+
+            //var query = from contact in this.DataContext.CaseSolutionsConditions
+            //            join dealer in this.DataContext.CaseSolutionConditionProperties on contact.Property_Name equals dealer.CaseSolutionConditionProperty
+            //            where contact.CaseSolution_Id == casesolutionid
+            //            select new { dealer.CaseSolutionConditionProperty, dealer.Id, dealer.Text, contact.CaseSolutionConditionGUID, contact.Values, contact.CaseSolution_Id, dealer.Table, dealer.TableFieldId, dealer.TableFieldName, dealer.TableFieldGuid };
+
+            //foreach (var nameGroup in query)
+            //{
+            //    CaseSolutionSettingsField c = new CaseSolutionSettingsField();
+            //    c.SelectedValues = new List<string>();
+
+            //    if (nameGroup.Id != null)
+            //    {
+            //        c.CaseSolutionConditionId = nameGroup.Id.ToString();
+            //    }
+            //    if (nameGroup.CaseSolution_Id != null)
+            //    {
+            //        c.CaseSolutionId = nameGroup.CaseSolution_Id;
+            //    }
+
+            //    if (nameGroup.CaseSolutionConditionProperty != null)
+            //    {
+            //        c.PropertyName = nameGroup.CaseSolutionConditionProperty.ToString();
+            //    }
+            //    if (nameGroup.Text != null)
+            //    {
+            //        c.Text = nameGroup.Text.ToString();
+            //    }
+
+            //    char[] delimiters = new char[] { ',' };
+            //    if (nameGroup.Values != null)
+            //    {
+            //        string[] parts = nameGroup.Values.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+            //        for (int i = 0; i < parts.Length; i++)
+            //        {
+            //            c.SelectedValues.Add(parts[i]);
+            //        }
+            //    }
+
+                
+            //    string tablename = nameGroup.Table.ToString();
+            //    string tablefieldid = nameGroup.TableFieldId.ToString();
+            //    string tablefieldname = nameGroup.TableFieldName.ToString();
+            //    string tablefieldguid = nameGroup.TableFieldGuid.ToString();
+
+                
+            //    string selvals = string.Empty;
+            //    foreach (var it in c.SelectedValues)
+            //    {
+            //        if (selvals == string.Empty)
+            //        {
+            //            selvals = "'" + it.ToString() + "'";
+            //        }
+            //        else
+            //        {
+            //            selvals = selvals + ", '" + it.ToString() + "'";
+            //        }
+            //    }
+
+            //    selvals = selvals.Replace("''", "'");
+            //    string sql = string.Empty;
+
+            //    if (c.SelectedValues.Count > 0)
+            //    {
+            //        sql = "SELECT ";
+            //        sql += "" + tablefieldid + " AS Id, ";
+            //        sql += "" + tablefieldname + " AS Name, ";
+            //        sql += "" + tablefieldguid + " AS Guid, ";
+            //        sql += "cast(0 as bit) AS [Selected] ";
+            //        sql += "FROM " + tablename + " ";
+            //        sql += "AS [Extent1] ";
+            //        sql += "WHERE  NOT((LOWER( CAST( [Extent1]. " + tablefieldguid + " AS nvarchar(max)))  ";
+            //        sql += "IN(" + selvals + ")) ";
+            //        sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL)) ";
+
+            //        sql += " UNION ";
+
+            //        sql += "SELECT ";
+            //        sql += "" + tablefieldid + " AS Id, ";
+            //        sql += "" + tablefieldname + " AS Name,  ";
+            //        sql += "" + tablefieldguid + " AS Guid, ";
+            //        sql += "cast(1 as bit) AS [Selected] ";
+            //        sql += "FROM " + tablename + " ";
+            //        sql += "AS[Extent1] ";
+            //        sql += "WHERE(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) ";
+            //        sql += "IN(" + selvals + ")) ";
+            //        sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL) ";
+            //    }
+            //    else
+            //    {
+
+
+            //        sql = "SELECT ";
+            //        sql += "" + tablefieldid + " AS Id, ";
+            //        sql += "" + tablefieldname + " AS Name, ";
+            //        sql += "" + tablefieldguid + " AS Guid, ";
+            //        sql += "cast(0 as bit) AS [Selected] ";
+            //        sql += "FROM " + tablename + " ";
+            //        sql += "AS [Extent1] ";
+            //    }
+
+
+            //    string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+            //    DataTable dt = null;
+
+            //    using (var connection = new SqlConnection(ConnectionString))
+            //    {
+            //        if (connection.State == ConnectionState.Closed)
+            //        {
+            //            connection.Open();
+            //        }
+            //        using (var command = new SqlCommand { Connection = connection, CommandType = CommandType.StoredProcedure, CommandTimeout = 0 })
+            //        {
+            //            command.CommandType = CommandType.Text;
+            //            command.CommandText = sql;
+            //            var reader = command.ExecuteReader();
+            //            dt = new DataTable();
+            //            dt.Load(reader);
+
+            //        }
+            //    }
+
+            //    if (dt != null)
+            //    {
+            //        if (dt.Rows.Count > 0)
+            //        {
+            //            //var result="";
+            //            //result.Add(1);
+            //            List<DataRow> result = dt.AsEnumerable().ToList();
+
+            //            List<SelectListItem> ls = null;
+            //            ls = result
+            //              .Select(x => new SelectListItem
+            //              {
+            //                  Text = x[1].ToString(),
+            //                  Value = x[2].ToString(),
+            //                  Selected = Convert.ToBoolean(x[3].ToString())
+            //              }).ToList();
+
+
+            //            c.SelectList = ls;
+
+            //        }
+            //    }
+              
+            //    list.Add(c);
+            //}
 
 
             return list;

@@ -40,7 +40,7 @@
             <table class="tableform" border="0">
 
 
-                <tr>
+                @*<tr>
                     <td style="width:200px">
                         @Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)
                     </td>
@@ -48,7 +48,7 @@
                         @Html.DropDownList("lstAddFieldSettings", Model.CaseSolutionFieldSettings, new { id = "lstAddFieldSettings", @class = "chosen-select" })
                         <input class="btn btn-success addrow" onclick="AddCondition()" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" />
                     </td>
-                </tr>
+                </tr>*@
 
                 @foreach (var cs in Model.CSSelectedSettingsField)
             {
@@ -59,7 +59,7 @@
                         </td>
                         <td>
                             @Html.DropDownList("lst_" + cs.PropertyName, cs.SelectList, new { id = "lst" + cs.PropertyName, multiple = "multiple", @Tag="lst", @class = "chosen-select" })
-                            <input id="btn_@cs.PropertyName" class="btn btn-danger deleterow" onclick="RemoveCondition(this)" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
+                           @* <input id="btn_@cs.PropertyName" class="btn btn-danger deleterow" onclick="RemoveCondition(this)" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />*@
                         </td>
 
                     </tr>

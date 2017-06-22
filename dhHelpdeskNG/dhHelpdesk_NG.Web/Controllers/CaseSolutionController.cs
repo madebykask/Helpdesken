@@ -223,22 +223,21 @@ namespace DH.Helpdesk.Web.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult New(CaseSolution caseSolution, CaseSolutionInputViewModel caseSolutionInputViewModel, CaseSolutionSettingModel[] caseSolutionSettingModels, int PageId)
+        public ActionResult New(CaseSolution caseSolution, CaseSolutionInputViewModel caseSolutionInputViewModel, CaseSolutionSettingModel[] caseSolutionSettingModels, int PageId, string selectedValues)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null;//_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id);
             this.TempData["RequiredFields"] = null;
 
 
-            string t = this.TempData["NewOrOld"].ToString();
+            //string t = this.TempData["NewOrOld"].ToString();
 
-            if (t != "0")
-            {
-                caseSolution.Id = Convert.ToInt32(t.ToString());
-                caseSolutionInputViewModel.CaseSolution.Id = Convert.ToInt32(t.ToString());
-                //return RedirectToAction("editsave", new { caseSolutionInputViewModel = caseSolutionInputViewModel, CaseSolutionSettingModels = caseSolutionSettingModels, PageId = PageId, selectedValues = string.Empty });
-                //return RedirectToAction("editsave", "CaseSolution");
-            }
+            //if (t != "0")
+            //{
+            //    caseSolution.Id = Convert.ToInt32(t.ToString());
+            //    caseSolutionInputViewModel.CaseSolution.Id = Convert.ToInt32(t.ToString());
+
+            //}
 
             if (caseSolutionSettingModels == null)
             {
@@ -278,11 +277,91 @@ namespace DH.Helpdesk.Web.Controllers
 
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
-            if (t == "0")
+            //if (t == "0")
+            //{
+            CaseSettingsSolutionAggregate settingsSolutionAggregate = this.CreateCaseSettingsSolutionAggregate(caseSolutionInputViewModel.CaseSolution.Id, caseSolutionSettingModels);
+            this.caseSolutionSettingService.AddCaseSolutionSettings(settingsSolutionAggregate);
+            //}
+
+
+            ////////////////Save conditions//////////////////
+            List<CaseSolitionConditionListEntity> cse = new List<CaseSolitionConditionListEntity>();
+
+            string[] selectedSplit = selectedValues.Split('~');
+            foreach (string s in selectedSplit)
             {
-                CaseSettingsSolutionAggregate settingsSolutionAggregate = this.CreateCaseSettingsSolutionAggregate(caseSolutionInputViewModel.CaseSolution.Id, caseSolutionSettingModels);
-                this.caseSolutionSettingService.AddCaseSolutionSettings(settingsSolutionAggregate);
+                string[] cap = s.Split(':');
+                string text = cap[0].ToString();
+                string values = string.Empty;
+                if (cap.Count() > 1)
+                {
+                    values = cap[1].ToString();
+                }
+                bool exists = false;
+
+                exists = cse.Any(u => u.CaseSolutionConditionCaption == text);
+                if (exists == false)
+                {
+                    CaseSolitionConditionListEntity cSc = new CaseSolitionConditionListEntity
+                    {
+                        CaseSolutionConditionCaption = text,
+                        CaseSolutionConditionValues = values.Replace('_', ',')
+                    };
+
+                    cse.Add(cSc);
+                }
+                else
+                {
+
+
+
+                    string exvalues = cse.Where(x => x.CaseSolutionConditionCaption == text).FirstOrDefault().CaseSolutionConditionValues;
+                    string exid = cse.Where(x => x.CaseSolutionConditionCaption == text).FirstOrDefault().CaseSolutionConditionCaption;
+
+                    string[] existarray = exvalues.Split(',');
+                    string[] newarray = values.Split(',');
+                    string[] result = existarray.Union(newarray).ToArray();
+                    string final = string.Empty;
+                    foreach (string word in result)
+                    {
+                        if (final == string.Empty)
+                        {
+                            final = word;
+                        }
+                        else
+                        {
+                            final = final + "," + word;
+                        }
+                    }
+
+
+
+                    foreach (var item in cse.Where(w => w.CaseSolutionConditionCaption == text))
+                    {
+                        item.CaseSolutionConditionValues = final;
+                    }
+
+
+
+                }
+
+
             }
+            if (cse != null)
+            {
+                foreach (CaseSolitionConditionListEntity lk in cse)
+                {
+                    CaseSolutionConditionEntity o = new CaseSolutionConditionEntity
+                    {
+                        CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
+                        Property_Name = lk.CaseSolutionConditionCaption,
+                        Values = lk.CaseSolutionConditionValues
+                    };
+                    this._caseSolutionConditionService.Save(o);
+                }
+            }
+
+            /////////////////////////////////////////////////
 
             if (errors.Count == 0)
             {
@@ -1084,7 +1163,7 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.ReferenceNumber,
 
                     SMS = caseSolution.SMS.ToBool(),
-                    AgreedDate = caseSolution.AgreedDate.HasValue ? caseSolution.AgreedDate.Value.ToShortDateString() : string.Empty,                    
+                    AgreedDate = caseSolution.AgreedDate.HasValue ? caseSolution.AgreedDate.Value.ToShortDateString() : string.Empty,
                     caseSolution.Available,
                     caseSolution.Cost,
                     caseSolution.OtherCost,
@@ -1233,6 +1312,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             //Remove caching of all casesolution conditions
             this._cache.InvalidateStartsWith(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition);
+
             string[] selectedSplit = selectedValues.Split('~');
             foreach (string s in selectedSplit)
             {
@@ -1280,18 +1360,14 @@ namespace DH.Helpdesk.Web.Controllers
                         }
                     }
 
-                    //CaseSolitionConditionListEntity cSc = new CaseSolitionConditionListEntity
-                    //{
-                    //    CaseSolutionConditionCaption = exid,
-                    //    CaseSolutionConditionValues = final
-                    //};
+
 
                     foreach (var item in cse.Where(w => w.CaseSolutionConditionCaption == text))
                     {
                         item.CaseSolutionConditionValues = final;
                     }
 
-                    //cse.Add(cSc);
+
 
                 }
 
@@ -1648,21 +1724,22 @@ namespace DH.Helpdesk.Web.Controllers
 
             //Get not selected case solution conditions
             IEnumerable<CaseSolutionSettingsField> lFieldSetting = new List<CaseSolutionSettingsField>();
-            lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(caseSolution.Id);
-
+            //lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(caseSolution.Id);
             List<SelectListItem> feildSettings = null;
-            feildSettings = lFieldSetting
-                  .Select(x => new SelectListItem
-                  {
-                      Text = x.Text,
-                      Value = x.CaseSolutionConditionId.ToString(),
-                      Selected = false
-                  }).ToList();
+            //feildSettings = lFieldSetting
+            //      .Select(x => new SelectListItem
+            //      {
+            //          Text = x.Text,
+            //          Value = x.CaseSolutionConditionId.ToString(),
+            //          Selected = false
+            //      }).ToList();
             //Get not selected case solution conditions
 
             //Get selected case solution conditions
             IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
             lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(caseSolution.Id);
+
+
             string selval = string.Empty;
             string bagresult = string.Empty;
 
@@ -1670,19 +1747,21 @@ namespace DH.Helpdesk.Web.Controllers
             foreach (var jj in lFieldSettingSelected.OrderBy(z => z.PropertyName))
             {
                 selval = string.Empty;
-                foreach (var nn in jj.SelectedValues)
+                if (jj.SelectedValues != null)
                 {
-                    if (selval == string.Empty)
+                    foreach (var nn in jj.SelectedValues)
                     {
-                        selval = jj.PropertyName + ":" + nn.ToString();
-                    }
-                    else
-                    {
-                        selval = selval + "_" + nn.ToString();
-                    }
+                        if (selval == string.Empty)
+                        {
+                            selval = jj.PropertyName + ":" + nn.ToString();
+                        }
+                        else
+                        {
+                            selval = selval + "_" + nn.ToString();
+                        }
 
+                    }
                 }
-
 
                 if (bagresult == string.Empty)
                 {
