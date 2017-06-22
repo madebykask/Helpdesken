@@ -28,5 +28,7 @@
         void Remove(string condition, int casesolutionid);
 
         IList<CaseSolutionCondition> GetCaseSolutionConditionModel(int casesolutionid, int customerid, string constString);
+
+        void DeleteByCaseSolutionId(int id);
     }
 }

@@ -32,6 +32,31 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             _CaseSolutionConditionToEntityMapper = CaseSolutionConditionToEntityMapper;
         }
 
+        public void DeleteByCaseSolutionId(int id)
+        {
+
+           // this.DataContext.CaseSolutionsConditions.ToList().RemoveAll(x => x.CaseSolution_Id == id);
+            //query.RemoveAll(x => x.CaseSolution_Id == id);
+            string sql = "DELETE FROM tblCaseSolutionCondition WHERE CaseSolution_Id = " + id + "";
+            string ConnectionStringExt = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+            
+            using (var connectionExt = new SqlConnection(ConnectionStringExt))
+            {
+                if (connectionExt.State == ConnectionState.Closed)
+                {
+                    connectionExt.Open();
+                }
+                using (var commandExt = new SqlCommand { Connection = connectionExt, CommandType = CommandType.Text, CommandTimeout = 0 })
+                {
+                    commandExt.CommandType = CommandType.Text;
+                    commandExt.CommandText = sql;
+                    commandExt.ExecuteNonQuery();                    
+
+                }
+            }
+
+            //query.ForEach(x => this.DataContext.Remove(x));
+        }
 
         public IEnumerable<CaseSolutionSettingsField> GetSelectedCaseSolutionFieldSetting(int casesolutionid)
         {
