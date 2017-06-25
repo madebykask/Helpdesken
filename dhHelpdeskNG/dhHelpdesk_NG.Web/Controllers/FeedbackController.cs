@@ -11,6 +11,7 @@ using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
 using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Grid;
@@ -87,6 +88,7 @@ namespace DH.Helpdesk.Web.Controllers
 				model.Name = feedback.Name;
 				model.Description = feedback.Description;
 				model.Identifier = feedback.Identifier;
+			    model.ExcludeAdministrators = feedback.ExcludeAdministrators;
 
 				//Get Feeddback question
 				var feedbackQuestions =
@@ -174,6 +176,7 @@ namespace DH.Helpdesk.Web.Controllers
 				SessionFacade.CurrentCustomer.Id,
 				DateTime.Now);
 			newFeedback.Identifier = model.Identifier;
+			newFeedback.ExcludeAdministrators = model.ExcludeAdministrators;
 
 			var feedbackId = _feedbackService.AddFeedback(newFeedback);
 
@@ -214,6 +217,7 @@ namespace DH.Helpdesk.Web.Controllers
 				model.LanguageId,
 				DateTime.Now);
 			editFeedback.Identifier = model.Identifier;
+			editFeedback.ExcludeAdministrators = model.ExcludeAdministrators;
 
 			_feedbackService.UpdateFeedback(editFeedback);
 
@@ -343,9 +347,11 @@ namespace DH.Helpdesk.Web.Controllers
             var results = this._circularService.GetResults(
                 circularId,
                 statisticsFilter.CircularCreatedDate.DateFrom,
-                statisticsFilter.CircularCreatedDate.DateTo);
+                statisticsFilter.CircularCreatedDate.DateTo.GetEndOfDay());
             var jsonCaseIndexViewModel = GetJsonCaseIndexViewModel();
             var viewModel = new FeedbackStatisticsViewModel(questionnaireId, questionnaire, results, new StatisticsFilter(), jsonCaseIndexViewModel);
+            var random = new Random();
+            viewModel.Emails = results.SelectMany(x => x.Emails).OrderBy(i => random.Next()).Take(statisticsFilter.EmailsCount).ToList();
 
             return this.PartialView("~/Views/Questionnaire/FeedBack/FeedbackStatisticsGrid.cshtml", viewModel);
         }

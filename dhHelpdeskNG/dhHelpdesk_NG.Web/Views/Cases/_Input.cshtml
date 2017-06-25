@@ -369,7 +369,7 @@
                                                     }
                                                     else
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", @readonly = true, data_field = "userId" })
+                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", @readonly = true, data_field = "userId", onblur = "GetLanguage()" })
                                                     }
                                                 </td>
                                                 <td>

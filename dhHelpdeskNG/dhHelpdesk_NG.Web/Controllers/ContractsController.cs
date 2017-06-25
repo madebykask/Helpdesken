@@ -76,13 +76,39 @@ namespace DH.Helpdesk.Web.Controllers
 
             var filter = new ContractSelectedFilter();
 
-            model.Rows = GetIndexRowModel(customer.Id, filter, new ColSortModel(EnumContractFieldSettings.Number, true));
+            model.Rows = GetIndexRowModel(customer.Id, filter, new ColSortModel(EnumContractFieldSettings.Number, true), 10);
             model.SearchText = string.Empty;
             model.Departments = departments;
             model.Users = users;
             model.ContractCategories = contractcategories.OrderBy(a => a.Name).ToList();
             model.Suppliers = suppliers.OrderBy(s => s.Name).ToList();
             model.Setting = GetSettingsModel(customer.Id);
+            model.TotalCases = model.Rows.Data.Count();
+            model.OnGoingCases = model.Rows.Data.Where(z => z.Finished == 0).Count();
+            model.FinishedCases = model.Rows.Data.Where(z => z.Finished == 1).Count();
+
+            int iContractNoticeOfRemovalCount = 0;
+            foreach (ContractsIndexRowModel ci in model.Rows.Data)
+            {
+                if (isInNoticeOfRemoval(ci.Finished, ci.NoticeDate.ToString()))
+                {
+                    iContractNoticeOfRemovalCount = iContractNoticeOfRemovalCount + 1;
+                }
+            }
+            model.ContractNoticeOfRemovalCount = iContractNoticeOfRemovalCount;
+
+
+            int iContractFollowUpCount = 0;
+            foreach (ContractsIndexRowModel ci in model.Rows.Data)
+            {
+                if (isInFollowUp(ci.Finished, ci.ContractStartDate.ToString(), ci.ContractEndDate.ToString(), ci.FollowUpInterval))
+                {
+                    iContractFollowUpCount = iContractFollowUpCount + 1;
+                }
+            }
+            model.ContractFollowUpCount = iContractFollowUpCount;
+
+            model.RunningCases = model.Rows.Data.Where(z => z.Running == 1).Count();
 
 
 
@@ -157,13 +183,16 @@ namespace DH.Helpdesk.Web.Controllers
 
             SelectedItems itemsState = new SelectedItems();
             words = Show.Split(',');
+            int selectedstatus = 0;
             foreach (string word in words)
             {
                 itemsState.AddItems(word);
 
+                selectedstatus = Convert.ToInt32(word);
+                break;
                 //Inactive = 0,
-            //Active = 1,
-            //All = 2
+                //Active = 1,
+                //All = 2
             }
 
             var filter = new ContractSelectedFilter();
@@ -174,17 +203,137 @@ namespace DH.Helpdesk.Web.Controllers
             filter.SelectedDepartments = itemsDep;
             filter.SearchText = Search;
             filter.ShowState = itemsState;
-            
+
             var customer = _customerService.GetCustomer(id);
             var model = new ContractIndexViewModel(customer);
-            model.Rows = GetIndexRowModel(id, filter, new ColSortModel(EnumContractFieldSettings.Number, true));
-            //filter.SelectedContractCategories=
+
+
+            model.Rows = GetIndexRowModel(id, filter, new ColSortModel(EnumContractFieldSettings.Number, true), selectedstatus);
+            //model.TotalCases = model.Rows.Data.Count();
+            //model.OnGoingCases = model.Rows.Data.Where(z => z.Finished == 0).Count();
+            //model.FinishedCases = model.Rows.Data.Where(z => z.Finished == 1).Count();
+            //int iContractNoticeOfRemovalCount = 0;
+            //foreach (ContractsIndexRowModel ci in model.Rows.Data)
+            //{
+            //    if (isInNoticeOfRemoval(ci.Finished, ci.NoticeDate.ToString()))
+            //    {
+            //        iContractNoticeOfRemovalCount = iContractNoticeOfRemovalCount + 1;
+            //    }
+            //}
+            //model.ContractNoticeOfRemovalCount = iContractNoticeOfRemovalCount;
+
+            //int iContractFollowUpCount = 0;
+            //foreach (ContractsIndexRowModel ci in model.Rows.Data)
+            //{
+            //    if (isInFollowUp(ci.Finished, ci.ContractStartDate.ToString(), ci.ContractEndDate.ToString(), ci.FollowUpInterval))
+            //    {
+            //        iContractFollowUpCount = iContractFollowUpCount + 1;
+            //    }
+            //}
+            //model.ContractFollowUpCount = iContractFollowUpCount;
+            //model.RunningCases = model.Rows.Data.Where(z => z.Running == 1).Count();
 
             return this.PartialView("_ContractsIndexRows", model.Rows);
         }
 
+        private bool isInFollowUp(int Finished, string ContractStartDate, string ContractEndDate, int FollowUpInterval)
+        {
+
+            bool flag = false;
+            string sDate = string.Empty;
+            int i = 0;
+            string sContractEndDate = string.Empty;
+
+            if (Finished == 0 && Convert.ToInt32(FollowUpInterval) > 0)
+            {
+                if (ParseDate(ContractEndDate) == false)
+                {
+                    DateTime endDate = Convert.ToDateTime(DateTime.Now.AddMonths(1).ToShortDateString());
+                    sContractEndDate = endDate.ToShortDateString();
+                }
+                else
+                {
+                    sContractEndDate = ContractEndDate;
+                }
+
+                if (ContractStartDate != string.Empty)
+                {
+                    sDate = Convert.ToDateTime(ContractStartDate).ToShortDateString();
+
+                    do
+                    {
+
+                        DateTime endDate = Convert.ToDateTime(DateTime.Now.AddMonths(1).ToShortDateString());
+
+                        if (Convert.ToDateTime(Convert.ToDateTime(endDate).ToShortDateString()) > Convert.ToDateTime(Convert.ToDateTime(sDate).ToShortDateString()) && Convert.ToDateTime(Convert.ToDateTime(sDate).ToShortDateString()) < Convert.ToDateTime(Convert.ToDateTime(DateTime.Now).ToShortDateString()))
+                        {
+                            flag = true;
+                            break;
+                        }
+                        sDate = Convert.ToDateTime(Convert.ToDateTime(sDate).AddMonths(FollowUpInterval).ToShortDateString()).ToString();
+
+                        i = i + 1;
+                        if (i > 100)
+                        {
+                            break;
+                        }
+
+                    } while (Convert.ToDateTime(Convert.ToDateTime(sDate).ToShortDateString()) < Convert.ToDateTime(Convert.ToDateTime(sContractEndDate).ToShortDateString()));
+                }
+            }
+
+            return flag;
 
 
+        }
+
+        private bool isInNoticeOfRemoval(int Finished, string NoticeDate)
+        {
+
+            bool flag = false;
+            string sDate = string.Empty;
+
+
+            if (Finished == 0 && ParseDate(NoticeDate) == true)
+            {
+
+                if (Convert.ToDateTime(Convert.ToDateTime(NoticeDate).ToShortDateString()) < Convert.ToDateTime(DateTime.Now.ToShortDateString()))
+                {
+                    sDate = DateTime.Now.ToShortDateString();
+                }
+                else
+                {
+                    sDate = NoticeDate;
+
+                }
+
+                DateTime endDate = Convert.ToDateTime(DateTime.Now.AddMonths(1).ToShortDateString());
+
+                if (endDate >= Convert.ToDateTime(Convert.ToDateTime(sDate).ToShortDateString()) && Convert.ToDateTime(Convert.ToDateTime(sDate).ToShortDateString()) >= Convert.ToDateTime(DateTime.Now.ToShortDateString()))
+                {
+
+                    flag = true;
+
+                }
+
+            }
+
+
+            return flag;
+
+        }
+
+
+
+        public bool ParseDate(string value)
+        {
+
+            string text1 = value;
+            DateTime dt1;
+            bool res = DateTime.TryParse(value, out dt1);
+            return res;
+
+        }
 
         private ContractViewInputModel CreateInputViewModel(int customerId)
         {
@@ -348,17 +497,17 @@ namespace DH.Helpdesk.Web.Controllers
             return Json(new { state = true, message = Translation.GetCoreTextTranslation("Saved success!") }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult SortBy(int customerId, string colName, bool isAsc)
+        public ActionResult SortBy(int customerId, string colName, bool isAsc, int ShowStatus)
         {
-            var model = GetIndexRowModel(customerId, null, new ColSortModel(colName, isAsc));
+            var model = GetIndexRowModel(customerId, null, new ColSortModel(colName, isAsc), ShowStatus);
             return PartialView("_ContractsIndexRows", model);
         }
 
-        private ContractsIndexRowsModel GetIndexRowModel(int customerId, ContractSelectedFilter selectedFilter, ColSortModel sort)
+        private ContractsIndexRowsModel GetIndexRowModel(int customerId, ContractSelectedFilter selectedFilter, ColSortModel sort, int showstatus)
         {
             var customer = _customerService.GetCustomer(customerId);
             var model = new ContractsIndexRowsModel(customer);
-            var allContracts = _contractService.GetContracts(customerId);
+            var allContracts = _contractService.GetContractsNotFinished(customerId);
             var settings = GetSettingsModel(customer.Id);
             var selectedContracts = new List<Contract>();
 
@@ -431,6 +580,42 @@ namespace DH.Helpdesk.Web.Controllers
                     allContracts = allContracts.Where(t => idList.Contains(t.Supplier_Id)).ToList();
                 }
 
+
+                //State
+                z = 0;
+                if (selectedFilter.ShowState.Any())
+                {
+                    var idList = new int?[selectedFilter.ShowState.Count()];
+                    foreach (object i in selectedFilter.ShowState)
+                    {
+                        idList[z] = Convert.ToInt32(i.ToString());
+                        z = z + 1;
+
+                    }
+
+                    string[] arr = new string[idList.Count()];
+                    int p = 0;
+                    foreach (object d in idList)
+                    {
+                        arr[p] = d.ToString();
+                        p = p + 1;
+                    }
+
+                    if (arr.Contains("9"))
+                    {
+                        allContracts = allContracts.Where(t => t.Finished == 1).ToList();
+                    }
+                    else if (!arr.Contains("10"))
+                    {
+                        allContracts = allContracts.Where(t => t.Finished == 0).ToList();
+                    }
+
+                    if (arr.Contains("4"))
+                    {
+                        allContracts = allContracts.Where(t => t.Running == 1).ToList();
+                    }
+                }
+
                 //Text                
                 z = 0;
                 if (selectedFilter.SearchText.Any())
@@ -449,6 +634,8 @@ namespace DH.Helpdesk.Web.Controllers
                 col.SetOrder();
 
             model.Columns = model.Columns.OrderBy(s => s.VirtualOrder).ToList();
+            model.SelectedShowStatus = showstatus;
+
 
             foreach (var con in allContracts)
             {
@@ -467,7 +654,10 @@ namespace DH.Helpdesk.Web.Controllers
                     ContractCategory = con.ContractCategory,
                     Department = con.Department,
                     ResponsibleUser = con.ResponsibleUser,
-                    FollowUpResponsibleUser = con.FollowUpResponsibleUser
+                    FollowUpResponsibleUser = con.FollowUpResponsibleUser,
+                    SelectedShowStatus = showstatus,
+                    IsInNoticeOfRemoval = isInNoticeOfRemoval(con.Finished, con.NoticeDate.ToString()),
+                    IsInFollowUp = isInFollowUp(con.Finished, con.ContractStartDate.ToString(), con.ContractEndDate.ToString(), con.FollowUpInterval),
                 });
             }
 

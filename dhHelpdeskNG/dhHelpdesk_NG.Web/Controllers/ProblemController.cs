@@ -300,7 +300,7 @@
         public PartialViewResult Log(int id)
         {
             var log = MapLogs(this.problemLogService.GetProblemLog(id));
-            var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).ToList();
+            var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).OrderBy(x => x.Name).ToList();
             var finishingCauseId = log.FinishingCauseId.HasValue
                                        ? log.FinishingCauseId.ToString()
                                        : null;
@@ -400,7 +400,7 @@
             var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id);
             var problemOutputModel = MapProblemOverviewToEditOutputModel(problem);
 
-            var outputLogs = logs.Select(x=> MapLogs(x, isFirstName)).ToList();
+            var outputLogs = logs.Select(x=> MapLogs(x, isFirstName)).OrderBy(x => x.Date).ToList();
 
             var outputCases = cases.Select(MapCase).ToList();
             

@@ -62,7 +62,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Order
                     .Select(s =>
                     {
                         var values = s.Split(new[] { valuesSplitter }, StringSplitOptions.None);
-                        return values.Length == 2 ? values[1] ?? "" : "";
+                        return values.Length == 2 ? values[0] ?? "" : "";
                     });
                 builder.AppendFormat(LineFormat, Translation.GetCoreTextTranslation(model.UserInfo.OrdererId.Caption), string.Join(", ", multiTextValues), Environment.NewLine);
             }

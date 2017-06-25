@@ -13,5 +13,8 @@ namespace DH.Helpdesk.BusinessData.Models.Feedback
 		}
 
 		public string Identifier { get; set; }
-	}
+
+        public bool ExcludeAdministrators { get; set; }
+
+    }
 }

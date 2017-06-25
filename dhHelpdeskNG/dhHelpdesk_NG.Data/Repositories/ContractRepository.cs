@@ -17,6 +17,7 @@ namespace DH.Helpdesk.Dal.Repositories
         Contract GetContract(int contractId);
         void SaveContract(ContractInputModel contractModel);
         void DeleteContract(Contract contract);
+        IList<Contract> GetContractsNotFinished(int customerId);
     }
 
     public class ContractRepository : Repository, IContractRepository
@@ -28,7 +29,13 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IList<Contract> GetContracts(int customerId)
         {
-            var query = this.DbContext.Contracts.Where(c => c.Finished == 0 && c.ContractCategory.Customer_Id == customerId);            
+            var query = this.DbContext.Contracts.Where(c => c.Finished == 0 && c.ContractCategory.Customer_Id == customerId);
+            return query.ToList();
+        }
+
+        public IList<Contract> GetContractsNotFinished(int customerId)
+        {
+            var query = this.DbContext.Contracts.Where(c => c.ContractCategory.Customer_Id == customerId);
             return query.ToList();
         }
 
@@ -39,7 +46,7 @@ namespace DH.Helpdesk.Dal.Repositories
         }
 
         public void SaveContract(ContractInputModel contractModel)
-        {            
+        {
 
             if (contractModel.Id == 0)
             {
@@ -66,7 +73,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     ContractGUID = contractModel.ContractGUID
                 };
 
-                this.DbContext.Contracts.Add(contractEntity);                
+                this.DbContext.Contracts.Add(contractEntity);
                 this.InitializeAfterCommit(contractModel, contractEntity);
             }
             else
@@ -87,14 +94,14 @@ namespace DH.Helpdesk.Dal.Repositories
                 contractEntity.Info = contractModel.Other;
                 contractEntity.ContractStartDate = contractModel.ContractStartDate;
                 contractEntity.ContractEndDate = contractModel.ContractEndDate;
-                contractEntity.NoticeDate = contractModel.NoticeDate;                
+                contractEntity.NoticeDate = contractModel.NoticeDate;
                 contractEntity.ChangedDate = contractModel.ChangedDate;
-                
+
             }
         }
         public void DeleteContract(Contract contract)
         {
-            this.DbContext.Contracts.Remove(contract);           
+            this.DbContext.Contracts.Remove(contract);
         }
     }
 
@@ -120,7 +127,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface IContractFieldSettingsRepository : IRepository<ContractFieldSettings>
     {
-        IList<ContractsSettingRowModel> GetContractsSettingRows(int customerId);        
+        IList<ContractsSettingRowModel> GetContractsSettingRows(int customerId);
     }
 
 
@@ -134,7 +141,8 @@ namespace DH.Helpdesk.Dal.Repositories
         public IList<ContractsSettingRowModel> GetContractsSettingRows(int customerId)
         {
             var query = this.DataContext.ContractFieldSettings.Where(c => c.Customer_Id == customerId);
-            var ret = query.Select(c => new ContractsSettingRowModel {
+            var ret = query.Select(c => new ContractsSettingRowModel
+            {
                 Id = c.Id,
                 CustomerId = c.Customer_Id,
                 ContractField = c.ContractField,
@@ -146,10 +154,10 @@ namespace DH.Helpdesk.Dal.Repositories
                 ShowExternal = c.ShowExternal != 0,
                 reguired = c.Required != 0,
                 CreatedDate = c.CreatedDate,
-                ChangedDate = c.ChangedDate                                               
+                ChangedDate = c.ChangedDate
             }).ToList();
             return ret;
-        }      
+        }
     }
 
     #endregion
@@ -181,7 +189,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 File = file.Content,
                 ContentType = file.ContentType,
                 ArchivedContractFile_Id = file.ArchivedContractFile_Id,
-                FileName = file.FileName,         
+                FileName = file.FileName,
                 ArchivedDate = file.ArchivedDate,
                 CreatedDate = file.CreatedDate,
                 ContractFileGUID = file.ContractFileGuid
@@ -193,7 +201,7 @@ namespace DH.Helpdesk.Dal.Repositories
         }
 
         public List<ContractFile> GetContractFiles(int contractId)
-        {           
+        {
             var query = this.DbContext.ContractFiles.Where(c => c.Contract_Id == contractId);
             return query.ToList();
         }
@@ -219,7 +227,7 @@ namespace DH.Helpdesk.Dal.Repositories
             //    ContractFileGUID = contractFile.ContractFileGuid
             //};
 
-            var contractFileEntity =  this.DbContext.ContractFiles.Find(fileId);
+            var contractFileEntity = this.DbContext.ContractFiles.Find(fileId);
             this.DbContext.ContractFiles.Remove(contractFileEntity);
         }
 
@@ -233,7 +241,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     this.DbContext.ContractFiles.Remove(contractFile);
                 }
             }
-            
+
         }
 
 
@@ -257,7 +265,7 @@ namespace DH.Helpdesk.Dal.Repositories
         }
 
         public void SaveContractHistory(ContractInputModel contract)
-        {           
+        {
             var contractHistoryEntity = new ContractHistory()
             {
                 Contract_Id = contract.Id,
@@ -278,13 +286,13 @@ namespace DH.Helpdesk.Dal.Repositories
                 CreatedDate = DateTime.UtcNow,
                 CreatedByUser_Id = contract.ChangedByUser_Id
             };
-            
+
             this.DbContext.ContractHistories.Add(contractHistoryEntity);
             this.InitializeAfterCommit(contract, contractHistoryEntity);
         }
 
         public void DeleteContractHistory(Contract contract)
-        {            
+        {
             var contractHistories = this.DbContext.ContractHistories.Where(c => c.Contract_Id == contract.Id).ToList();
             foreach (var contractHistory in contractHistories)
             {

@@ -32,6 +32,8 @@
 
 		public string Identifier { get; set; }
 
+		public bool ExcludeAdministrators { get; set; }
+
 		public QuestionnaireType Type { get; set; }
 
 	public virtual ICollection<QuestionnaireQuestionEntity> QuestionnaireQuestionEntities { get; set; }

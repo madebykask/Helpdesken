@@ -235,10 +235,10 @@
                 }
 
                 //Hide this to next release #57742
-                //if (currentCase.CaseType.ShowOnExtPageCases == 0 || currentCase.ProductArea?.ShowOnExtPageCases == 0)
-                //{
-                //    userHasAccessToCase = false;
-                //}
+                if (currentCase.CaseType.ShowOnExtPageCases == 0 || currentCase.ProductArea?.ShowOnExtPageCases == 0)
+                {
+                    userHasAccessToCase = false;
+                }
 
                 if (!userHasAccessToCase)
                 {

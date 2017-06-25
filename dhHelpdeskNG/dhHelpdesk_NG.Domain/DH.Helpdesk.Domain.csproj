@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -59,6 +59,10 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
@@ -84,12 +88,16 @@
     <Compile Include="CaseSettings.cs" />
     <Compile Include="CaseSolution.cs" />
     <Compile Include="CaseSolutionCategory.cs" />
+    <Compile Include="CaseSolutionConditionPropertyEntity.cs" />
     <Compile Include="CaseSolutionSchedule.cs" />
     <Compile Include="CaseSolutionSearch.cs" />
     <Compile Include="Cases\CaseExtraFollower.cs" />
     <Compile Include="Cases\CaseFollowUp.cs" />
+    <Compile Include="Cases\CaseSolutionConditionHelper.cs" />
+    <Compile Include="Cases\CaseSolutionConditionListEntity.cs" />
     <Compile Include="Cases\CaseSolutionSetting.cs" />
     <Compile Include="Cases\CaseLockEntity.cs" />
+    <Compile Include="Cases\CaseSolutionSettingsField.cs" />
     <Compile Include="Cases\CaseStatistic.cs" />
     <Compile Include="Cases\CaseFilterFavoriteEntity.cs" />
     <Compile Include="CaseType.cs" />

@@ -16,11 +16,12 @@
                 {
                     NoteText = x.QuestionnaireQuestionNote,
                     CaseId = x.QuestionnaireResult.QuestionnaireCircularPart.Case.CaseNumber
-                } } )
+                },
+                InitiatorEmail = x.QuestionnaireResult.QuestionnaireCircularPart.Case.PersonsEmail } )
                 .GroupBy(x => x.QuestionnaireQuestionOptionId)
-                    .Select(x => new { OptionId = x.Key, Count = x.Count(), CaseIds = x.Select(r => r.CaseId), Notes = x.Select(r => r.OptionNote)})
+                    .Select(x => new { OptionId = x.Key, Count = x.Count(), CaseIds = x.Select(r => r.CaseId), Notes = x.Select(r => r.OptionNote), Emails = x.Select(r => r.InitiatorEmail)})
                     .ToList()
-                    .Select(x => new OptionResult(x.OptionId, x.Count, x.CaseIds, x.Notes))
+                    .Select(x => new OptionResult(x.OptionId, x.Count, x.CaseIds, x.Notes, x.Emails))
                     .ToList();
 
             return overviews;
@@ -31,6 +32,7 @@
             public int CaseId { get; set; }
             public int QuestionnaireQuestionOptionId { get; set; }
             public OptionNote OptionNote { get; set; }
+            public string InitiatorEmail { get; set; }
         }
     }
 }

@@ -26,7 +26,16 @@
                 </td>
                 <td>@Html.DisplayFor(x => item.ResponsibleUserName)
                 </td>
-                <td>@Html.DisplayFor(x => item.State)
+                <td>
+                    @if (item.State == "Active")
+                    {
+                        @Translation.Get("Pågående", Enums.TranslationSource.TextTranslation)
+                    }
+                    @if (item.State == "Finished")
+                    {
+                        @Translation.Get("Avslutad", Enums.TranslationSource.TextTranslation)
+                    }
+                    @*@Html.DisplayFor(x => item.State)*@
                 </td>
             </tr>
         }

@@ -123,5 +123,6 @@ namespace DH.Helpdesk.Domain
         public int SortOrder { get; set; }
         public virtual List<ExtendedCaseEntity.ExtendedCaseFormEntity> ExtendedCaseForms { get; set; }
 
+        
     }
 }

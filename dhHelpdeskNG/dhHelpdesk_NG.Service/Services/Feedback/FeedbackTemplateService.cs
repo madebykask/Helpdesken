@@ -85,7 +85,8 @@ namespace DH.Helpdesk.Services.Services.Feedback
                 FieldType = FieldTypes.String,
                 Key = $"[{FeedbackTemplate.FeedbackIdentifierPredicate}{feedback.Info.Identifier}]",
                 FeedbackId = feedback.Info.Id,
-                StringValue = string.Empty
+                StringValue = string.Empty,
+                ExcludeAdministrators = feedback.Info.ExcludeAdministrators
             };
 
             var dbCircular = _circularService.GetSingleOrDefaultByQuestionnaireId(feedback.Info.Id);

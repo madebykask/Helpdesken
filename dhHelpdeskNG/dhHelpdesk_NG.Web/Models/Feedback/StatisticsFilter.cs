@@ -16,5 +16,7 @@ namespace DH.Helpdesk.Web.Models.Feedback
 
         [NotNull]
         public DateRange CircularCreatedDate { get; set; }
+
+        public int EmailsCount { get; set; }
     }
 }

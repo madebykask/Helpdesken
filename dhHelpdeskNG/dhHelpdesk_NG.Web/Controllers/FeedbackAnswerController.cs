@@ -69,7 +69,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 _circularService.SaveFeedbackNote(questionId, noteText);
             }
-            return RedirectToAction("ThankYou", new RouteValueDictionary(new { customerId, languageId}));
+            return Json(new { success = true });
         }
     }
 }

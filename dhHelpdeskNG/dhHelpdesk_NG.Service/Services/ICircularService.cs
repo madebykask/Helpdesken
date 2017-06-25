@@ -14,7 +14,7 @@ namespace DH.Helpdesk.Services.Services
     {
         List<CircularOverview> GetCircularOverviews(int questionnaireId, int state);
 
-        void AddCircular(CircularForInsert businessModel);
+        int AddCircular(CircularForInsert businessModel);
 
         void UpdateCircular(CircularForUpdate businessModel);
 

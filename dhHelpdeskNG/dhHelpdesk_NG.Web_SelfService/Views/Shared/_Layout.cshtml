@@ -347,7 +347,7 @@
                         }
                     }
                     
-                    @if (!hideMenu && SessionFacade.CurrentLocalUser != null && orderModuleIsEnabled && userHasOrderTypes)
+                    @if (!hideMenu && SessionFacade.CurrentLocalUser != null && orderModuleIsEnabled && (SessionFacade.CurrentLocalUser.IsAdministrator() || userHasOrderTypes))
                     {
                         <li class="blue">
                             <a href="@Url.Action("Index", "Orders", new { customerId = pCustomerId, area = "" })">

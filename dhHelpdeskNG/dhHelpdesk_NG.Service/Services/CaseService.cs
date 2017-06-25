@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Linq.Dynamic;
-using DH.Helpdesk.BusinessData.Enums.MailTemplates;
 using DH.Helpdesk.BusinessData.Models.Feedback;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Feedback;
@@ -16,23 +14,18 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Email;
-    using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Constants;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Common.Enums.BusinessRule;
-    using DH.Helpdesk.Common.Extensions.Boolean;
-    using DH.Helpdesk.Dal.DbContext;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Cases;
-    using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Domain.Cases;
     using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Domain.Problems;
     using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
@@ -45,7 +38,6 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Services.Localization;
     using DH.Helpdesk.Services.Services.CaseStatistic;
     using DH.Helpdesk.Services.utils;
-    using System.Text.RegularExpressions;
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
     using DH.Helpdesk.Services.Infrastructure;
     using Feedback;
@@ -1409,25 +1401,29 @@ namespace DH.Helpdesk.Services.Services
             else
             {
                 #region Send template email if priority has value and Internal or External log is filled
-                if (newCase.Priority != null && log != null && (!string.IsNullOrEmpty(log.TextExternal) || !string.IsNullOrEmpty(log.TextInternal)))
+
+                if (!string.IsNullOrWhiteSpace(newCase.Priority.EMailList))
                 {
-                    var caseHis = _caseHistoryRepository.GetCloneOfPenultimate(caseId);
-                    if (caseHis != null && caseHis.Priority_Id.HasValue)
+                    SendPriorityMailSpecial(newCase, log, cms, files, helpdeskMailFromAdress, caseHistoryId, caseId, customerSetting, smtpInfo, userTimeZone);
+                }
+                else
+                {
+                    if (newCase.Priority != null && log != null && (!string.IsNullOrEmpty(log.TextExternal) || !string.IsNullOrEmpty(log.TextInternal)))
                     {
-                        var prevPriority = _priorityService.GetPriority(caseHis.Priority_Id.Value);
-                        if (!string.IsNullOrWhiteSpace(prevPriority.EMailList))
+                        var caseHis = _caseHistoryRepository.GetCloneOfPenultimate(caseId);
+                        if (caseHis != null && caseHis.Priority_Id.HasValue)
                         {
-                            var copyNewCase = _caseRepository.GetDetachedCaseById(caseId);
-                            copyNewCase.Priority = prevPriority;
-                            SendPriorityMailSpecial(copyNewCase, log, cms, files, helpdeskMailFromAdress, caseHistoryId, caseId, customerSetting, smtpInfo, userTimeZone);
+                            var prevPriority = _priorityService.GetPriority(caseHis.Priority_Id.Value);
+                            if (!string.IsNullOrWhiteSpace(prevPriority.EMailList))
+                            {
+                                var copyNewCase = _caseRepository.GetDetachedCaseById(caseId);
+                                copyNewCase.Priority = prevPriority;
+                                SendPriorityMailSpecial(copyNewCase, log, cms, files, helpdeskMailFromAdress, caseHistoryId, caseId, customerSetting, smtpInfo, userTimeZone);
+                            }
                         }
                     }
-
-                    if (!string.IsNullOrWhiteSpace(newCase.Priority.EMailList))
-                    {
-                        SendPriorityMailSpecial(newCase, log, cms, files, helpdeskMailFromAdress, caseHistoryId, caseId, customerSetting, smtpInfo, userTimeZone);
-                    }
                 }
+
                 #endregion
             }
 
@@ -1630,7 +1626,7 @@ namespace DH.Helpdesk.Services.Services
                                     if (ur.User != null)
                                         if (ur.User.IsActive == 1 && ur.User.AllocateCaseMail == 1 && _emailService.IsValidEmail(ur.User.Email) && ur.UserRole == 2)
                                         {
-                                            if (newCase.Department_Id != null && ur.User.Departments != null)
+                                            if (newCase.Department_Id != null && ur.User.Departments != null && ur.User.Departments.Count > 0)
                                             {
                                                 if (ur.User.Departments.Any(x => x.Id == newCase.Department_Id.Value))
                                                 {
@@ -1749,16 +1745,37 @@ namespace DH.Helpdesk.Services.Services
                         if (!string.IsNullOrWhiteSpace(newCase.Customer.CloseCaseEmailList))
                         {
                             string[] to = newCase.Customer.CloseCaseEmailList.Split(';');
+                            var adminEmails = newCase.Customer.UsersAvailable.Where(x => x.UserGroup_Id != UserGroups.User).Select(x => x.Email).ToList();
                             for (int i = 0; i < to.Length; i++)
                             {
                                 if (_emailService.IsValidEmail(to[i]))
                                 {
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender2));
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 8, userTimeZone);
-                                    var identifiers = _feedbackTemplateService.FindIdentifiers(m.Body);
-                                    var templateFields = _feedbackTemplateService.GetCustomerTemplates(identifiers,
-                                        newCase.Customer_Id, newCase.RegLanguage_Id, newCase.Id, cms.AbsoluterUrl);
-                                    fields.AddRange(templateFields.Select(tf => tf.MapToFields()));
+
+                                    var identifiers = _feedbackTemplateService.FindIdentifiers(m.Body).ToList();
+                                    //dont send feedback to admins
+                                    var identifiersToDel = new List<string>();
+                                    var templateFields = _feedbackTemplateService.GetCustomerTemplates(identifiers, newCase.Customer_Id, newCase.RegLanguage_Id, newCase.Id, cms.AbsoluterUrl);
+                                    foreach (var templateField in templateFields)
+                                    {
+                                        if (templateField.ExcludeAdministrators && adminEmails.Any(x => x.Equals(to[i])))
+                                        {
+                                            identifiersToDel.Add(templateField.Key);
+                                        }
+                                        else
+                                        {
+                                            var tf = templateField.MapToFields();
+                                            fields.Add(tf);
+                                        }
+                                    }
+                                    foreach (var identifier in identifiersToDel)
+                                    {
+                                        if (!string.IsNullOrEmpty(identifier))
+                                        {
+                                            m.Body = m.Body.Replace(identifier, string.Empty);
+                                        }
+                                    }
 
                                     string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
                                     var mailResponse = EmailResponse.GetEmptyEmailResponse();
@@ -1784,6 +1801,7 @@ namespace DH.Helpdesk.Services.Services
                             var to = newCase.PersonsEmail.Split(';', ',').Select(x => new Tuple<string, bool>(x, true)).ToList();
                             var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => new Tuple<string, bool>(x.Follower, false)).ToList();
                             to.AddRange(extraFollowers);
+                            var adminEmails = newCase.Customer.UsersAvailable.Where(x => x.UserGroup_Id != UserGroups.User).Select(x => x.Email).ToList();
                             foreach (var t in to)
                             {
                                 var mailBody = m.Body;
@@ -1793,22 +1811,30 @@ namespace DH.Helpdesk.Services.Services
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender2));
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 9, userTimeZone);
                                     var templateFields = new List<FeedbackField>();
-                                    var identifiers = _feedbackTemplateService.FindIdentifiers(mailBody);
+                                    var identifiers = _feedbackTemplateService.FindIdentifiers(mailBody).ToList();
+                                    //dont send feedback to followers and admins
+                                    var identifiersToDel = new List<string>();
                                     if (t.Item2)
                                     {
-                                        templateFields = _feedbackTemplateService.GetCustomerTemplates(identifiers,
-                                            newCase.Customer_Id, newCase.RegLanguage_Id, newCase.Id, cms.AbsoluterUrl);
-                                        fields.AddRange(templateFields.Select(tf => tf.MapToFields()));
-                                    }
-                                    else
-                                    {
-                                        foreach (var identifier in identifiers)
+                                        templateFields = _feedbackTemplateService.GetCustomerTemplates(identifiers, newCase.Customer_Id, newCase.RegLanguage_Id, newCase.Id, cms.AbsoluterUrl);
+                                        foreach (var templateField in templateFields)
                                         {
-                                            if (!string.IsNullOrEmpty(identifier))
+                                            if (templateField.ExcludeAdministrators && adminEmails.Any(x => x.Equals(curMail)))
                                             {
-                                                var tag = $"[{FeedbackTemplate.FeedbackIdentifierPredicate}{identifier}]";
-                                                mailBody = m.Body.Replace(tag, string.Empty);
+                                                identifiersToDel.Add(templateField.Key);
                                             }
+                                            else
+                                            {
+                                                var tf = templateField.MapToFields();
+                                                fields.Add(tf);
+                                            }
+                                        }
+                                    }
+                                    foreach (var identifier in identifiersToDel)
+                                    {
+                                        if (!string.IsNullOrEmpty(identifier))
+                                        {
+                                            mailBody = m.Body.Replace(identifier, string.Empty);
                                         }
                                     }
 
@@ -2454,7 +2480,7 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
-            if (c.CaseFollowers != null && string.IsNullOrEmpty(caseExtraFollowers))
+            if (c.CaseFollowers != null && c.CaseFollowers.Any() && string.IsNullOrEmpty(caseExtraFollowers))
             {
                 caseExtraFollowers = string.Join(BRConstItem.Email_Separator, c.CaseFollowers.Select(x => x.Follower)) + BRConstItem.Email_Separator;
             }

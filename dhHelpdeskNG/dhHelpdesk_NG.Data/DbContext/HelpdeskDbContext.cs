@@ -132,6 +132,8 @@
 
         public DbSet<CaseSolution> CaseSolutions { get; set; }
 
+        public DbSet<CaseSolutionConditionEntity> CaseSolutionsConditions { get; set; }
+
         public DbSet<CaseType> CaseTypes { get; set; }
 
         public DbSet<Case> Cases { get; set; }
@@ -558,8 +560,7 @@
 
         public DbSet<CaseExtraFollower> CaseExtraFollowers { get; set; }
 
-
-        public DbSet<CaseSolutionConditionEntity> CaseSolutionConditions { get; set; }
+        public DbSet<CaseSolutionConditionPropertyEntity> CaseSolutionConditionProperties { get; set; }
 
         public DbSet<ExtendedCaseFormEntity> ExtendedCaseForms { get; set; }
 
@@ -844,8 +845,8 @@
 
             modelBuilder.Configurations.Add(new CaseSolutionConditionConfiguration());
             modelBuilder.Configurations.Add(new ExtendedCaseFormConfiguration());
+            modelBuilder.Configurations.Add(new CaseSolutionConditionPropertyConfiguration());
             modelBuilder.Configurations.Add(new ExtendedCaseDataConfiguration());
-
             #endregion
 
             base.OnModelCreating(modelBuilder);

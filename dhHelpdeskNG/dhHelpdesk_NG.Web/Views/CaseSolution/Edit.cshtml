@@ -1,39 +1,54 @@
 ﻿@using System.Web.UI.WebControls
 @using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Models.CaseSolution.CaseSolutionInputViewModel
+
+
+
 @{
     ViewBag.Title = "Edit";
 }
 
 @{
-    int backPageId = ViewBag.PageId;   
+    int backPageId = ViewBag.PageId;
 }
 
-@using (Html.BeginForm("edit", "casesolution", new { id = Model.CaseSolution.Id }, FormMethod.Post, new { id = "target" }))
-{   
+
+
+@{
+    string SelectedValues = ViewBag.selectedValues;
+}
+
+
+
+@using (Html.BeginForm("Edit", "casesolution", new { id = Model.CaseSolution.Id }, FormMethod.Post, new { id = "target" }))
+{
     @Html.Hidden("PageId", backPageId)
 
+
+    @Html.Hidden("selectedValues", SelectedValues)
+    
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
+
                 @*<li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.CaseSolution.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>*@
-                <li><a class="btn" id="SaveCaseSolution">@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)</a></li>
-                <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete", new { id = @Model.CaseSolution.Id, pageId = backPageId }, new {@class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" }) </li>
+                <li><a class="btn save" id="SaveCaseSolution">@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)</a></li>
+                <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete", new { id = @Model.CaseSolution.Id, pageId = backPageId }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" }) </li>
                 <li>
                     @switch (backPageId)
-                        {
-                            case 0:
-                        @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", null, new { @class = "btn" })
-                                break;
+                    {
+                        case 0:
+                            @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", null, new { @class = "btn" })
+                            break;
 
-                            case 1:
-                        @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", "Cases", null, new { @class = "btn" })
-                                break;
-                        }
+                        case 1:
+                            @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", "Cases", null, new { @class = "btn" })
+                            break;
+                    }
                 </li>
             </ul>
         </div>
-    </div>    
+    </div>
 
     <div class="contentContent">
         @Html.Partial("_Input", Model)

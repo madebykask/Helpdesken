@@ -20,10 +20,13 @@ namespace DH.Helpdesk.Web.Models.Feedback
 			this.OptionResults = optionResults;
 			this.StatisticsFilter = statisticsFilter;
 			this.FeedbackStatisticsCases = caseIndexViewModel;
+            Emails = new List<string>();
 		}
 
 		public StatisticsFilter StatisticsFilter { get; set; }
 
         public JsonCaseIndexViewModel FeedbackStatisticsCases { get; set; }
+
+	    public List<string> Emails { get; set; }
     }
 }

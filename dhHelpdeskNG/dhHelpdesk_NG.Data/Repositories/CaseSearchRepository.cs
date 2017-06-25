@@ -616,10 +616,9 @@ namespace DH.Helpdesk.Dal.Repositories
             do
             {
                 list.Add(parent);
-
+                //if (parent.ShowOnExternalPage == 0)
                 //Hide this for next version #57742
-				//if (parent.ShowOnExtPageCases == 0)
-                if (parent.ShowOnExternalPage == 0)
+                if (parent.ShowOnExtPageCases == 0)
                     checkShowOnExternal = false;
 
                 parent = caseTypes.FirstOrDefault(c => c.Id == parent.ParentId);

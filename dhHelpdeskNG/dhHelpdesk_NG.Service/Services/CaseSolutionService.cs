@@ -47,6 +47,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseSolutionScheduleRepository _caseSolutionScheduleRepository;
 
         private readonly ICaseSolutionSettingRepository caseSolutionSettingRepository;
+        private readonly ICaseSolutionConditionRepository caseSolutionConditionRepository;
         private readonly IFormRepository _formRepository;
         private readonly ILinkService _linkService;
         private readonly ILinkRepository _linkRepository;
@@ -55,6 +56,7 @@ namespace DH.Helpdesk.Services.Services
 
         private readonly ICaseSolutionConditionRepository _caseSolutionConditionRepository;
         private readonly IWorkingGroupService _workingGroupService;
+        private readonly ICaseSolutionConditionService _caseSolutionConditionService;
 
         public CaseSolutionService(
             ICaseSolutionRepository caseSolutionRepository,
@@ -67,7 +69,8 @@ namespace DH.Helpdesk.Services.Services
             IUnitOfWork unitOfWork,
             ICaseSolutionConditionRepository caseSolutionConditionRepository,
             ICacheProvider cache,
-            IWorkingGroupService workingGroupService)
+            IWorkingGroupService workingGroupService,
+            ICaseSolutionConditionService caseSolutionCondtionService)
         {
             this._caseSolutionRepository = caseSolutionRepository;
             this._caseSolutionCategoryRepository = caseSolutionCategoryRepository;
@@ -80,6 +83,8 @@ namespace DH.Helpdesk.Services.Services
             this._caseSolutionConditionRepository = caseSolutionConditionRepository;
             this._cache = cache;
             this._workingGroupService = workingGroupService;
+            this._caseSolutionConditionService = caseSolutionCondtionService;
+            this.caseSolutionConditionRepository = caseSolutionConditionRepository;
         }
 
         //public int GetAntal(int customerId, int userid)
@@ -487,6 +492,10 @@ namespace DH.Helpdesk.Services.Services
             {
                 try
                 {
+
+                    this.caseSolutionConditionRepository.DeleteByCaseSolutionId(id);
+                    //this.caseSolutionConditionRepository.Commit();
+
                     this.caseSolutionSettingRepository.DeleteByCaseSolutionId(id);
                     this.caseSolutionSettingRepository.Commit();
 

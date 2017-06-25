@@ -279,6 +279,7 @@
     <Compile Include="Response\Questionnaire\OptionNote.cs" />
     <Compile Include="Services\CaseExtraFollowersService.cs" />
     <Compile Include="Services\CaseFollowUpService.cs" />
+    <Compile Include="Services\CaseSolutionConditionService.cs" />
     <Compile Include="Services\CaseStatistic\CaseStatisticService.cs" />
     <Compile Include="Services\UniversalCase\IUniversalCaseService.cs" />
     <Compile Include="Services\Concrete\CaseLockService.cs" />
@@ -532,7 +533,6 @@
     <None Include="app.config" />
     <None Include="BusinessLogic\MailTools\TemplateFormatters\SurveyTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>SurveyTemplate1.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
   </ItemGroup>

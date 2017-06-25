@@ -22,6 +22,7 @@
         ProductAreaEntity[] GetProductAreasForCustomer(int customerId);
 
         IList<ProductAreaEntity> GetTopProductAreas(int customerId, bool isOnlyActive = true);
+        IList<ProductAreaEntity> GetProductAreasForSetting(int customerId, bool isOnlyActive = true);
 
         IList<ProductAreaEntity> GetTopProductAreasForUser(int customerId, UserOverview user, bool isOnlyActive = true);
 
@@ -137,7 +138,16 @@
                     x.Customer_Id == customerId && x.Parent_ProductArea_Id == null
                     && ((isOnlyActive && x.IsActive != 0) || !isOnlyActive)).OrderBy(x => x.Name).ToList();
         }
-        
+
+        public IList<ProductAreaEntity> GetProductAreasForSetting(int customerId, bool isOnlyActive = true)
+        {
+            return
+                this.productAreaRepository.GetMany(
+                    x =>
+                    x.Customer_Id == customerId
+                    && ((isOnlyActive && x.IsActive != 0) || !isOnlyActive)).OrderBy(x => x.Name).ToList();
+        }
+
         public IList<ProductAreaEntity> GetTopProductAreasForUser(int customerId, UserOverview user, bool isOnlyActive = true)
         {
             var res =
@@ -558,9 +568,9 @@
             {
                 res.Add(this.productAreaCache[lookingProductAreaId.Value].Name);
 
-                //Hide this for next release #57742
-                //if (this.productAreaCache[lookingProductAreaId.Value].ShowOnExtPageCases == 0)
-                if (this.productAreaCache[lookingProductAreaId.Value].ShowOnExternalPage == 0)
+                //if (this.productAreaCache[lookingProductAreaId.Value].ShowOnExternalPage == 0)
+                    //Hide this for next release #57742
+               if (this.productAreaCache[lookingProductAreaId.Value].ShowOnExtPageCases == 0)
                     checkShowOnExtenal = false;
 
                 lookingProductAreaId = this.productAreaCache[lookingProductAreaId.Value].Parent_ProductArea_Id;
