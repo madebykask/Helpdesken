@@ -57,6 +57,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseSolutionConditionRepository _caseSolutionConditionRepository;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly ICaseSolutionConditionService _caseSolutionConditionService;
+        private readonly IStateSecondaryService _stateSecondaryService;
 
         public CaseSolutionService(
             ICaseSolutionRepository caseSolutionRepository,
@@ -70,7 +71,9 @@ namespace DH.Helpdesk.Services.Services
             ICaseSolutionConditionRepository caseSolutionConditionRepository,
             ICacheProvider cache,
             IWorkingGroupService workingGroupService,
-            ICaseSolutionConditionService caseSolutionCondtionService)
+            ICaseSolutionConditionService caseSolutionCondtionService,
+            IStateSecondaryService stateSecondaryService
+            )
         {
             this._caseSolutionRepository = caseSolutionRepository;
             this._caseSolutionCategoryRepository = caseSolutionCategoryRepository;
@@ -85,6 +88,7 @@ namespace DH.Helpdesk.Services.Services
             this._workingGroupService = workingGroupService;
             this._caseSolutionConditionService = caseSolutionCondtionService;
             this.caseSolutionConditionRepository = caseSolutionConditionRepository;
+            this._stateSecondaryService = stateSecondaryService;
         }
 
         //public int GetAntal(int customerId, int userid)
@@ -209,7 +213,9 @@ namespace DH.Helpdesk.Services.Services
             {
                 CaseTemplateId = c.Id,
                 Name = c.Name,
-                SortOrder = c.SortOrder
+                SortOrder = c.SortOrder,
+                NextStep = (c.StateSecondary_Id != null ? _stateSecondaryService.GetStateSecondary(c.StateSecondary_Id.Value).StateSecondaryId : 0)
+
             }).OrderBy(c => c.SortOrder).ToList();
 
 

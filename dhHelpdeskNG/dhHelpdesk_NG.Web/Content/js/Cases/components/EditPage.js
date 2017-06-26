@@ -346,6 +346,14 @@ EditPage.prototype.isExtendedCaseValid = function (showToast, isOnNext) {
     }
 };
 
+EditPage.prototype.setNextStep = function () {
+
+    var nextStep = 0;
+    nextStep = parseInt($("#steps option:selected").attr('data-next-step')) || 0;
+    var $_ex_Container = self.getExtendedCaseContainer();
+    var validationResult = $_ex_Container.contentWindow.setNextStep(nextStep);
+};
+
 EditPage.prototype.syncCaseFromExCaseIfExists = function () {
     var self = this;
 
@@ -1188,7 +1196,7 @@ EditPage.prototype.init = function (p) {
     self.$caseTab = $("#tabsArea li a");//$('#case-tab');
     self.$activeTabHolder = $('#ActiveTab');
 
-    self.$selctListStep = $("#steps");
+    self.$selectListStep = $("#steps");
     self.$btnGo = $('#btnGo');
 
     self.isCaseFileMandatory = self.p.isCaseFileMandatory;
@@ -1430,7 +1438,7 @@ EditPage.prototype.init = function (p) {
         }
     });
 
-    self.$selctListStep.on('change', function () {
+    self.$selectListStep.on('change', function () {
         //only if extended case exist
         if (self.p.containsExtendedCase)
         {
@@ -1446,10 +1454,7 @@ EditPage.prototype.init = function (p) {
                 self.isExtendedCaseValid(false,false);
             }
             
-
-
-                        
-
+            self.setNextStep();
         }
     });
 
