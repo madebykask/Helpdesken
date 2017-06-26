@@ -90,16 +90,16 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             }
             else
             {
-                extendedForm = this.DataContext.Cases.Where(c => c.Customer_Id == customerId && c.Id == caseId).FirstOrDefault().ExtendedCaseDatas.Select(x => new ExtendedCaseFormModel
+                extendedForm = this.DataContext.Cases.Where(c => c.Customer_Id == customerId && c.Id == caseId).FirstOrDefault().CaseExtendedCaseDatas.Select(x => new ExtendedCaseFormModel
                 {
                     CaseId = caseId,
-                    Id = x.ExtendedCaseForm.Id,
-                    ExtendedCaseGuid = x.ExtendedCaseGuid,
+                    Id = x.ExtendedCaseData.ExtendedCaseForm.Id,
+                    ExtendedCaseGuid = x.ExtendedCaseData.ExtendedCaseGuid,
                     Path = extendedCasePath,
                     LanguageId = userLanguageId,
                     //CaseStatus = caseStateSecondaryId,/Sent by querystring at the moment
                     //UserRole = caseWorkingGroupId,/Sent by querystring at the moment
-                    Name = (x.ExtendedCaseForm.Name != null ? x.ExtendedCaseForm.Name : caseSolution.Name),
+                    Name = (x.ExtendedCaseData.ExtendedCaseForm?.Name != null ? x.ExtendedCaseData.ExtendedCaseForm.Name : caseSolution.Name),
                     //UserGuid
                 }).Take(1).ToList();
             }

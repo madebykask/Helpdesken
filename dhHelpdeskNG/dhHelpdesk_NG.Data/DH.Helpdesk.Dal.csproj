@@ -119,6 +119,7 @@
     <Compile Include="EntityConfigurations\ContractConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractFieldSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\EmailLogAttemptConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ExtendedCaseEntity\Case_ExtendedCaseDataConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseDataConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseFormConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleProductAreaConfiguration.cs" />

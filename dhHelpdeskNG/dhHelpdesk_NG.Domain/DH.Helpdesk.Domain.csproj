@@ -144,6 +144,7 @@
     <Compile Include="CaseIsAbout.cs" />
     <Compile Include="EmailLogAttempt.cs" />
     <Compile Include="EmailSendStatus.cs" />
+    <Compile Include="ExtendedCaseEntity\Case_ExtendedCaseEntity.cs" />
     <Compile Include="ExtendedCaseEntity\ExtendedCaseData.cs" />
     <Compile Include="ExtendedCaseEntity\ExtendedCaseForm.cs" />
     <Compile Include="Invoice\InvoiceArticleProductAreaEntity.cs" />

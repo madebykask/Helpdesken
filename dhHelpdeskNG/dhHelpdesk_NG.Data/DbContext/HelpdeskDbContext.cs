@@ -52,6 +52,7 @@
     using DH.Helpdesk.Dal.EntityConfigurations.BusinessRule;
     using DH.Helpdesk.Domain.Orders;
     using Domain.MetaDataEntity;
+    using EntityConfigurations.ExtendedCaseEntity;
 
     public class HelpdeskDbContext : DbContext, IDbContext
     {
@@ -566,6 +567,8 @@
 
         public DbSet<ExtendedCaseDataEntity> ExtendedCaseDatas { get; set; }
 
+        public DbSet<Case_ExtendedCaseEntity> Case_ExtendedCases { get; set; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -847,6 +850,7 @@
             modelBuilder.Configurations.Add(new ExtendedCaseFormConfiguration());
             modelBuilder.Configurations.Add(new CaseSolutionConditionPropertyConfiguration());
             modelBuilder.Configurations.Add(new ExtendedCaseDataConfiguration());
+            modelBuilder.Configurations.Add(new Case_ExtendedCaseDataConfiguration());
             #endregion
 
             base.OnModelCreating(modelBuilder);

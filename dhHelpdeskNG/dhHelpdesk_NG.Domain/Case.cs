@@ -3,7 +3,7 @@
     using DH.Helpdesk.Domain.Cases;
     using DH.Helpdesk.Domain.Interfaces;
     using DH.Helpdesk.Domain.Problems;
-
+    using ExtendedCaseEntity;
     using global::System;
     using global::System.Collections.Generic;
 
@@ -12,7 +12,7 @@
 	    public Case()
 	    {
 		    InvoiceRows = new List<InvoiceRow>();
-            this.ExtendedCaseDatas = new List<ExtendedCaseEntity.ExtendedCaseDataEntity>();
+            //CaseExtendedCaseDatas = new ICollection<Case_ExtendedCaseEntity>();
         }
 
 		public Guid CaseGUID { get; set; }
@@ -164,7 +164,7 @@
 
         public virtual CaseSolution CaseSolution { get; set; }
 
-        public virtual List<ExtendedCaseEntity.ExtendedCaseDataEntity> ExtendedCaseDatas { get; set; }
+        public virtual ICollection<Case_ExtendedCaseEntity> CaseExtendedCaseDatas { get; set; }
 
         public bool IsClosed()
         {

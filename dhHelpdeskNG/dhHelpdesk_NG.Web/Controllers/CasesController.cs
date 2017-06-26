@@ -2934,14 +2934,6 @@ namespace DH.Helpdesk.Web.Controllers
                 #region NewCase
 
                 case_.RegTime = utcNow;
-
-                //TODO: Refactor this
-                if (m.ExtendedCaseGuid != null)
-                { 
-                DH.Helpdesk.Domain.ExtendedCaseEntity.ExtendedCaseDataEntity d = new DHDomain.ExtendedCaseEntity.ExtendedCaseDataEntity();
-                d = _caseService.GetExtendedCaseData(m.ExtendedCaseGuid);
-                case_.ExtendedCaseDatas.Add(d);
-                }
                 #endregion
             }
 
@@ -3125,6 +3117,16 @@ namespace DH.Helpdesk.Web.Controllers
             var temporaryLogFiles = this.userTemporaryFilesStorage.FindFiles(caseLog.LogGuid.ToString(), ModuleName.Log);
             caseLog.CaseId = case_.Id;
             caseLog.CaseHistoryId = caseHistoryId;
+
+            if (!edit)
+            {
+                /* Create Relationship between Case & ExtendedCase*/                
+                if (m.ExtendedCaseGuid != null)
+                {                    
+                    var exData = _caseService.GetExtendedCaseData(m.ExtendedCaseGuid);
+                    _caseService.CreateExtendedCaseRelationship(case_.Id, exData.Id);                    
+                }
+            }
 
             var orginalInternalLog = caseLog.TextInternal;
 
