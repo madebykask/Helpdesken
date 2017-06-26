@@ -54,6 +54,7 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 
 		[LocalizedDisplay("ChangedDate")]
         public DateTime ChangedDate { get; set; }
-       
+
+        public string IconSrc { get; set; }
     }
 }

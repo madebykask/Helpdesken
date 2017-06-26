@@ -26,6 +26,7 @@ namespace DH.Helpdesk.Web
 			public const string FeedbackStatisticsCases = "~/bundles/case/feedbackstatisticscases";
 			public const string QuickLinks = "~/bundles/admin/quicklinks";
 			public const string OrderTypes = "~/bundles/admin/ordertypes/index";
+			public const string FeedbackEdit = "~/bundles/feedback/feedbackedit";
 		}
 
 
@@ -462,6 +463,8 @@ namespace DH.Helpdesk.Web
             bundles.Add(new ScriptBundle(ScriptNames.FeedbackStatisticsCases).Include(
                 "~/Content/js/Feedback/feedbackStatisticsCases.js",
                 "~/Content/js/Cases/components/Utils.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.FeedbackEdit).Include(
+                "~/Content/js/Feedback/feedback.edit.js"));
 
             RegisterOrdersAreaBundles(bundles);
 			RegisterInvoicesAreaBundles(bundles);

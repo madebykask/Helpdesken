@@ -12,7 +12,8 @@
 
         void UpdateQuestionnaireQuestionOption(QuestionnaireQuesOption option);
 
-        void DeleteQuestionnaireQuestionOptionById(int optionId, int languageId);     
-        
+        void DeleteQuestionnaireQuestionOptionById(int optionId, int languageId);
+
+        void UpdateQuestionnaireQuestionOptionIcon(int optionId, byte[] iconSrc);
     }
 }

@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using DH.Helpdesk.Common.Constants
 @using DH.Helpdesk.Common.Enums
 
 @model DH.Helpdesk.Web.Models.Feedback.EditFeedbackModel
@@ -14,101 +15,115 @@
                 <div class="span12">
                     <table id="tblQuestions" class="table table-striped table-bordered table-hover">
                         <thead>
-                            <tr>
-                                <th style="cursor: pointer; cursor: hand;width: 5%">
-                                    @Translation.GetCoreTextTranslation("Position")
-                                </th>
-                                <th style="cursor: pointer; cursor: hand;width: 60%">
-                                    @Translation.GetCoreTextTranslation("Alternativ")
-                                </th>
-                                <th style="cursor: pointer; cursor: hand; width: 12%">
-                                    @Translation.GetCoreTextTranslation("Värde")
-                                </th>
-                                <th style="cursor: pointer; cursor: hand;width: 10%">
-                                    @Translation.GetCoreTextTranslation("Ikon")
-                                </th>
-                                <th style="cursor: pointer; cursor: hand;width: 18%">
-                                    @Translation.GetCoreTextTranslation("Åtgärd")
-                                </th>
-                            </tr>
+                        <tr>
+                            <th style="cursor: pointer; cursor: hand; width: 5%">
+                                @Translation.GetCoreTextTranslation("Position")
+                            </th>
+                            <th style="cursor: pointer; cursor: hand; width: 60%">
+                                @Translation.GetCoreTextTranslation("Alternativ")
+                            </th>
+                            <th style="cursor: pointer; cursor: hand; width: 12%">
+                                @Translation.GetCoreTextTranslation("Värde")
+                            </th>
+                            <th style="cursor: pointer; cursor: hand; width: 10%">
+                                @Translation.GetCoreTextTranslation("Ikon")
+                            </th>
+                            <th style="cursor: pointer; cursor: hand; width: 18%">
+                                @Translation.GetCoreTextTranslation("Åtgärd")
+                            </th>
+                        </tr>
                         </thead>
                         <tbody>
-                            @if (Model.LanguageId == LanguageIds.Swedish)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.TextBox("optionPos", "0", new {id = "optionPos", style = "width: 85%;background-color:beige"})
-                                    </td>
-                                    <td>
-                                        @Html.TextBox("optionText", "", new {id = "optionText", style = "width: 95%;background-color:beige"})
-                                    </td>
-                                    <td>
-                                        @Html.TextBox("optionValue", "0", new {id = "optionValue", style = "width: 85%;background-color:beige"})
-                                    </td>
-                                    <td>
-                                        @Html.DropDownList("optionIcon", icons, new { @class = "question_icons"  })
-                                    </td>
-                                    <td style="text-align: center;">
-                                        <a id="Addbtn" style="width: 60%" class="btn">
-                                            @Translation.GetCoreTextTranslation("Lägg till")
-                                        </a>
-                                    </td>
-                                </tr>
-                            }
-                            @for (var i = 0; i < Model.Options.Count; i++)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.HiddenFor(o => o.Options[i].Id)
-                                        @Html.HiddenFor(o => o.Options[i].LanguageId)
-                                        @Html.HiddenFor(o => o.Options[i].QuestionId)
+                        @if (Model.LanguageId == LanguageIds.Swedish)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.TextBox("optionPos", "0", new {id = "optionPos", style = "width: 85%;background-color:beige"})
+                                </td>
+                                <td>
+                                    @Html.TextBox("optionText", "", new {id = "optionText", style = "width: 95%;background-color:beige"})
+                                </td>
+                                <td>
+                                    @Html.TextBox("optionValue", "0", new {id = "optionValue", style = "width: 85%;background-color:beige"})
+                                </td>
+                                <td>
+                                    <input type="file" style="display: none" id="load_emoj_file"/>
+                                    @Html.DropDownList("optionIcon", icons, new {@class = "question_icons"})
+                                </td>
+                                <td style="text-align: center;">
+                                    <a id="Addbtn" style="width: 60%" class="btn">
+                                        @Translation.GetCoreTextTranslation("Lägg till")
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                        @for (var i = 0; i < Model.Options.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.HiddenFor(o => o.Options[i].Id, new {@class = "option-id"})
+                                    @Html.HiddenFor(o => o.Options[i].LanguageId)
+                                    @Html.HiddenFor(o => o.Options[i].QuestionId)
 
-                                        @if (Model.LanguageId == LanguageIds.Swedish)
-                                        {@Html.TextBoxFor(o => o.Options[i].OptionPos, new { style = "width: 85%;" })}
-                                        else
-                                        {@Html.TextBoxFor(o => o.Options[i].OptionPos, new { style = "width: 85%;", @readonly = "" })}
-                                    </td>
-                                    <td>
-                                        @Html.TextBoxFor(o => o.Options[i].Option, new {style = "width: 95%;"})
-                                    </td>
-                                         <td>
-                                             @if (Model.LanguageId == LanguageIds.Swedish)
-                                             {@Html.TextBoxFor(o => o.Options[i].OptionValue, new {style = "width: 85%;", @class="question_option"})
-                                             }
-                                             else
-                                             {@Html.TextBoxFor(o => o.Options[i].OptionValue, new {style = "width: 85%;", @readonly = ""})
-                                             }
-                                         </td>
-                                    <td>
-                                        @if (Model.LanguageId == LanguageIds.Swedish)
+                                    @if (Model.LanguageId == LanguageIds.Swedish)
+                                    {@Html.TextBoxFor(o => o.Options[i].OptionPos, new {style = "width: 85%;"})
+                                    }
+                                    else
+                                    {@Html.TextBoxFor(o => o.Options[i].OptionPos, new {style = "width: 85%;", @readonly = ""})
+                                    }
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(o => o.Options[i].Option, new {style = "width: 95%;"})
+                                </td>
+                                <td>
+                                    @if (Model.LanguageId == LanguageIds.Swedish)
+                                    {@Html.TextBoxFor(o => o.Options[i].OptionValue, new {style = "width: 85%;", @class = "question_option"})
+                                    }
+                                    else
+                                    {@Html.TextBoxFor(o => o.Options[i].OptionValue, new {style = "width: 85%;", @readonly = ""})
+                                    }
+                                </td>
+                                <td>
+                                    @if (Model.LanguageId == LanguageIds.Swedish)
+                                    {
+                                        @Html.DropDownListFor(m => m.Options[i].IconId, new SelectList(icons, "Value", "Text", Model.Options[i].IconId), new {@class = "question_icons"})
+                                        @Html.HiddenFor(m => m.Options[i].IconSrc, new { @class="iconSrc"})
+                                    }
+                                    else
+                                    {
+                                        if (!string.IsNullOrEmpty(Model.Options[i].IconId))
                                         {
-                                            @Html.DropDownListFor(m => m.Options[i].IconId, new SelectList(icons, "Value", "Text", Model.Options[i].IconId), new { @class = "question_icons" })}
-                                        else
-                                        {
-                                            if (!string.IsNullOrEmpty(Model.Options[i].IconId))
+                                            @Html.HiddenFor(m => m.Options[i].IconId)
+                                            if (Model.Options[i].IconId == FeedBack.IconId)
                                             {
-                                                @Html.HiddenFor(m => m.Options[i].IconId)
-                                                <img src=@string.Format(Url.Content("~/Content/img/") +"{0}", Model.Options[i].IconId) />
+                                                <img class="loaded-image" src=""/>
+                                                @Html.HiddenFor(m => m.Options[i].IconSrc, new { @class = "iconSrc" })
+                                            }
+                                            else
+                                            {
+                                                <img src=@(Url.Content("~/Content/img/") + Model.Options[i].IconId) />
                                             }
                                         }
-                                    </td>
-                                    <td style="text-align:center;">
-                                        @if ((Model.LanguageId != LanguageIds.Swedish && Model.Options[i].LanguageId == LanguageIds.Swedish) || Model.IsSent)
-                                        {<input type="button" disabled="" value="@Translation.GetCoreTextTranslation("Delete")" class="btn" />}
-                                        else
-                                        {
-                                            @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), MvcUrlName.Feedback.DeleteQuestionOption, MvcUrlName.Feedback.Controller,
-                                                            new
-                                                            {
-                                                                feedbackId = Model.QuestionnaireId,
-                                                                questionId = Model.QuestionId,
-                                                                languageId = Model.LanguageId,
-                                                                optionId = Model.Options[i].Id
-                                                            },
-                                                            new { @class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?" })
-                                        }
-                                    </td>
-                                </tr>                }
+                                    }
+                                </td>
+                                <td style="text-align: center;">
+                                    @if ((Model.LanguageId != LanguageIds.Swedish && Model.Options[i].LanguageId == LanguageIds.Swedish) || Model.IsSent)
+                                    {<input type="button" disabled="" value="@Translation.GetCoreTextTranslation("Delete")" class="btn"/>}
+                                    else
+                                    {
+                                        @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), MvcUrlName.Feedback.DeleteQuestionOption, MvcUrlName.Feedback.Controller,
+                                            new
+                                            {
+                                                feedbackId = Model.QuestionnaireId,
+                                                questionId = Model.QuestionId,
+                                                languageId = Model.LanguageId,
+                                                optionId = Model.Options[i].Id
+                                            },
+                                            new {@class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?"})
+                                    }
+                                </td>
+                            </tr>
+                        }
                         </tbody>
                     </table>
                 </div>

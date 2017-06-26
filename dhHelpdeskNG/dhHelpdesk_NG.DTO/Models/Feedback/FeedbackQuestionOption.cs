@@ -23,5 +23,7 @@ namespace DH.Helpdesk.BusinessData.Models.Feedback
 		[MaxLength(200)]
 		public string IconId { get; set; }
 
+	    public string IconSrc { get; set; }
+
 	}
 }
