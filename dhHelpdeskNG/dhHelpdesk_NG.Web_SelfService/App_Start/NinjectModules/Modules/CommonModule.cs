@@ -46,6 +46,7 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
     using DH.Helpdesk.Services.BusinessLogic.Admin.Users.Concrete;
     using Ninject.Modules;
     using Dal.DbQueryExecutor;
+    using Domain.ExtendedCaseEntity;
 
     /// <summary>
     /// The common module.
@@ -225,6 +226,31 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
 
             this.Bind<IDbQueryExecutorFactory>()
                 .To<SqlDbQueryExecutorFactory>()
+                .InSingletonScope();
+
+
+            this.Bind<IBusinessModelToEntityMapper<CaseModel, Case>>()
+                .To<CaseModelToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<Case, CaseModel>>()
+                .To<CaseToCaseModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<ExtendedCaseFormModel, ExtendedCaseFormEntity>>()
+               .To<ExtendedCaseFormToEntityMapper>()
+               .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel>>()
+                .To<ExtendedCaseFormToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity>>()
+            .To<ExtendedCaseDataToEntityMapper>()
+            .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ExtendedCaseDataEntity, ExtendedCaseDataModel>>()
+                .To<ExtendedCaseDataToBusinessModelMapper>()
                 .InSingletonScope();
         }
     }

@@ -291,7 +291,8 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IRegistrationSourceCustomerService>().To<RegistrationSourceCustomerService>();
             kernel.Bind<IRegistrationSourceCustomerRepository>().To<RegistrationSourceCustomerRepository>();
             kernel.Bind<ICaseSolutionConditionRepository>().To<CaseSolutionConditionRepository>();
-
+            kernel.Bind<ICaseSolutionConditionService>().To<CaseSolutionConditionService>();
+            
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
 
