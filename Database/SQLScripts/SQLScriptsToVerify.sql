@@ -281,3 +281,39 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
+-- OK
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AttachmentPlacement' and sysobjects.name = N'tblSettings')
+	begin
+		ALTER TABLE [dbo].[tblSettings] ADD [AttachmentPlacement] int not null Default(0)
+	end
+GO
+
+-- VET EJ OM DET ÄR MED I TRANSFER SCRIPT - KOLLA DET HÄR
+----tblUsers - make sure it does not allow null and add newid()
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserGUID' and sysobjects.name = N'tblUsers')
+begin
+		EXECUTE  sp_executesql  "update tblUsers set UserGUID = newid() where UserGUID is null"
+
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblUsers'
+					  and c.name = 'UserGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_UserGUID')
+		begin
+			Alter table tblUsers
+			Add constraint DF_UserGUID default (newid()) For UserGUID		
+		end		
+
+		Alter table tblUsers
+		ALTER COLUMN [UserGUID] uniqueIdentifier NOT NULL
+end
+else
+begin
+	Alter table tblUsers
+	Add UserGUID uniqueIdentifier NOT NULL CONSTRAINT DF_UserGUID default (newid())
+end
+GO

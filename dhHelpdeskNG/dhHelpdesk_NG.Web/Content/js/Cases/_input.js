@@ -803,6 +803,15 @@ $(function () {
 
                 caseInfo.addCaseFile(caseFile);
             });
+
+           
+            if ($('#attachment-tab').length)
+            {
+                var nrOfFiles = parseInt($('#case_files_table tr[data-field="caseFile"]').length) || 0;
+                
+                $('#nrOfAttachedFiles').html('(' + nrOfFiles + ')');
+            }
+
         }
         refreshCaseFiles();
 

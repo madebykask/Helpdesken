@@ -70,6 +70,7 @@ namespace DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
                            BulletinBoardWGRestriction = entity.BulletinBoardWGRestriction.ToBool(),
                            CalendarWGRestriction = entity.CalendarWGRestriction.ToBool(),
                            ModuleExtendedCase = entity.ModuleExtendedCase.ToBool(),
+                           AttachmentPlacement = entity.AttachmentPlacement,
 
             };
         }

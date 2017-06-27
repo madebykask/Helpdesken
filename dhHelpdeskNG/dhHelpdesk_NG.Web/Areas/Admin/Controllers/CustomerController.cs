@@ -881,6 +881,7 @@
                 BulletinBoardWGRestriction = customerToCopySettings.BulletinBoardWGRestriction,
                 CalendarWGRestriction = customerToCopySettings.CalendarWGRestriction,
                 ModuleExtendedCase = customerToCopySettings.ModuleExtendedCase,
+                AttachmentPlacement = customerToCopySettings.AttachmentPlacement,
             };
 
             //Get CaseSettings to copy

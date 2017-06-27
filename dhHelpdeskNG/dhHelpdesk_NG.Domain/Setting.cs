@@ -133,6 +133,7 @@ namespace DH.Helpdesk.Domain
         public int BulletinBoardWGRestriction { get; set; }
         public int CalendarWGRestriction { get; set; }
         public int ModuleExtendedCase { get; set; }
+        public int AttachmentPlacement { get; set; }
 
         public virtual OrderState CloseOrderState { get; set; }
         /// <summary>

@@ -161,7 +161,12 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
         /// Gets or sets a value indicating whether module Extended Case is used or not.
         /// </summary>
         public bool ModuleExtendedCase { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets a value indicating where attatchements should be shown.
+        /// </summary>
+        public int AttachmentPlacement { get; set; }
+
 
         /// <summary>
         /// The is module on.

@@ -234,6 +234,14 @@
                     }
                 }
 
+                @if (Model.CustomerSettings.AttachmentPlacement == 1)
+                {
+                    <li>
+                        <a id="attachment-tab" href="#attachment-container">@(Translation.GetCoreTextTranslation("Bilagor")) <span id="nrOfAttachedFiles">(@(Model.CaseFilesModel.SavedFiles != null ? Model.CaseFilesModel.Files.Count():0))</span></a>
+
+                    </li>
+                }
+
                 @if (Model.CaseLock != null && Model.CaseLock.IsLocked && Model.CaseLock.User != null)
                 {
                     if (Model.CaseLock.UserId == SessionFacade.CurrentUser.Id)
@@ -1623,6 +1631,8 @@
                                                 </table>
                                             </td>
                                         </tr>
+                                        @if (Model.CustomerSettings.AttachmentPlacement == 0)
+                                        { 
                                         <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Filename, CaseSolutionFields.FileName)">
                                             @*<tr class="displaytr" style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Filename.ToString())">*@
                                             <td>
@@ -1643,6 +1653,7 @@
                                         <tr class="displaytr">
                                             <td colspan="3" class="span3"></td>
                                         </tr>
+                                        }
                                     </table>
                                 </div>
                             </div>
@@ -2329,8 +2340,37 @@
                     @Html.Partial("_ChildCases", Model.ChildCaseViewModel);
                 }
 
-            </div>
-        </div>
+                @if (Model.CustomerSettings.AttachmentPlacement == 1)
+                {
+                   <div id="attachment-container" class="tab-pane tab-pane-border">
+                       <h4 style="margin-left:3px;">@(Translation.GetCoreTextTranslation("Bifoga"))</h4>
+                        <div class="row">
+                           
+                            <div class="span12">
+                                 <table class="tableform">
+                                    <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Filename, CaseSolutionFields.FileName)">
+                                        <td colspan="3" class="span3">
+                                            @if (Model.EditMode == Enums.AccessMode.FullAccess)
+                                            {
+                                                <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
+                                                <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="case">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
+                                            }
+                                            <div id="divCaseFiles" style="margin-top:10px;">
+                                                @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary { { "CaseInactive", Model.case_.FinishingDate.HasValue } })
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="displaytr">
+                                        <td colspan="3" class="span3"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                            </div>
+                            }
+
+                        </div>
+                    </div>
     </div>
     <div id="overwriteDlg" class="modal fade" style="display: none">
         <div class="modal-dialog">

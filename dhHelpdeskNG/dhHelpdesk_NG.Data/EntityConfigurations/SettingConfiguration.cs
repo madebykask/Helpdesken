@@ -140,6 +140,7 @@
             this.Property(x => x.BulletinBoardWGRestriction).IsRequired();
             this.Property(x => x.CalendarWGRestriction).IsRequired();
             this.Property(x => x.ModuleExtendedCase).IsRequired();
+            this.Property(x => x.AttachmentPlacement).IsRequired();
 
             this.ToTable("tblsettings");
         }
