@@ -288,7 +288,7 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
--- VET EJ OM DET ÄR MED I TRANSFER SCRIPT - KOLLA DET HÄR
+-- OK - Not used in Transfer script
 ----tblUsers - make sure it does not allow null and add newid()
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserGUID' and sysobjects.name = N'tblUsers')
 begin
@@ -316,4 +316,43 @@ begin
 	Alter table tblUsers
 	Add UserGUID uniqueIdentifier NOT NULL CONSTRAINT DF_UserGUID default (newid())
 end
+GO
+
+---- OK - not used in Transfer Script
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Customer_Id' and sysobjects.name = N'tblEntityDefault')
+	begin
+		ALTER TABLE [dbo].[tblEntityDefault] ADD [Customer_Id] int not null
+
+		ALTER TABLE [dbo].[tblEntityDefault]  WITH CHECK ADD  CONSTRAINT [FK_tblEntityDefault_tblCustomer] FOREIGN KEY([Customer_Id])
+		REFERENCES [dbo].[tblCustomer] ([Id])
+
+		ALTER TABLE [dbo].[tblEntityDefault] CHECK CONSTRAINT [FK_tblEntityDefault_tblCustomer]
+
+	end
+GO
+
+---- OK - not used in Transfer Script
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Customer_Id' and sysobjects.name = N'tblEntityRelationship')
+	begin
+		ALTER TABLE [dbo].[tblEntityRelationship] ADD [Customer_Id] int not null 
+
+		ALTER TABLE [dbo].[tblEntityRelationship]  WITH CHECK ADD  CONSTRAINT [FK_tblEntityRelationship_tblCustomer] FOREIGN KEY([Customer_Id])
+		REFERENCES [dbo].[tblCustomer] ([Id])
+
+		ALTER TABLE [dbo].[tblEntityRelationship] CHECK CONSTRAINT [FK_tblEntityRelationship_tblCustomer]
+
+	end
+GO
+
+---- OK - not used in Transfer Script
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Customer_Id' and sysobjects.name = N'tblEntityAttribute')
+	begin
+		ALTER TABLE [dbo].[tblEntityAttribute] ADD [Customer_Id] int not null 
+
+		ALTER TABLE [dbo].[tblEntityAttribute]  WITH CHECK ADD  CONSTRAINT [FK_tblEntityAttribute_tblCustomer] FOREIGN KEY([Customer_Id])
+		REFERENCES [dbo].[tblCustomer] ([Id])
+
+		ALTER TABLE [dbo].[tblEntityAttribute] CHECK CONSTRAINT [FK_tblEntityAttribute_tblCustomer]
+
+	end
 GO
