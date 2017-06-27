@@ -376,12 +376,12 @@ namespace DH.Helpdesk.Services.Services
             {
                 SearchCaseSolutions.SearchCss = SearchCaseSolutions.SearchCss.ToLower();
 
-                query = query.Where(x => x.Caption.ToLower().Contains(SearchCaseSolutions.SearchCss)
-                                      || x.Description.ToLower().Contains(SearchCaseSolutions.SearchCss)
-                                      || x.Miscellaneous.ToLower().Contains(SearchCaseSolutions.SearchCss)
-                                      || x.Name.ToLower().Contains(SearchCaseSolutions.SearchCss)
-                                      || x.Text_External.ToLower().Contains(SearchCaseSolutions.SearchCss)
-                                      || x.Text_Internal.ToLower().Contains(SearchCaseSolutions.SearchCss)
+                query = query.Where(x => (!string.IsNullOrEmpty(x.Caption) &&x.Caption.ToLower().Contains(SearchCaseSolutions.SearchCss))
+                                      || (!string.IsNullOrEmpty(x.Description) && x.Description.ToLower().Contains(SearchCaseSolutions.SearchCss))
+                                      || (!string.IsNullOrEmpty(x.Miscellaneous) && x.Miscellaneous.ToLower().Contains(SearchCaseSolutions.SearchCss))
+                                      || (!string.IsNullOrEmpty(x.Name) && x.Name.ToLower().Contains(SearchCaseSolutions.SearchCss))
+                                      || (!string.IsNullOrEmpty(x.Text_External) && x.Text_External.ToLower().Contains(SearchCaseSolutions.SearchCss))
+                                      || (!string.IsNullOrEmpty(x.Text_Internal) && x.Text_Internal.ToLower().Contains(SearchCaseSolutions.SearchCss))
                                    );
             }
 
