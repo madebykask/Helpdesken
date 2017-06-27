@@ -33,17 +33,13 @@
                                 <td class="span3">
                                     @Translation.Get("Visa i menyn", Enums.TranslationSource.TextTranslation)
                                 </td>
-                            </tr>      
-                           @*For next release*@                       
-                           <tr style="height:30px">
-                                <td></td>
                                 <td>
-                                    <input type="checkbox" name="customer.ShowFAQOnExternalPage" @(Model.Customer.ShowFAQOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
+                                    <input type="checkbox" name="customer.ShowFAQOnExternalPage" @(Model.Customer.ShowFAQOnExternalPage == 1 ? "checked=checked" : "") value="1" />
                                     <input type="hidden" name="customer.ShowFAQOnExternalPage" value="0" />
                                     &nbsp; &nbsp; @Translation.Get("Visa FAQ i toppmenyn", Enums.TranslationSource.TextTranslation)
                                 </td>
-                            </tr>
-
+                            </tr>      
+                           @*For next release*@                       
                             @*<tr style="height:40px">
                                 <td></td>
                                 <td>
@@ -53,7 +49,7 @@
                                 </td>
                             </tr>*@
                             
-                            <tr style="height:40px">
+                            <tr>
                                 <td></td>
                                 <td>
                                     <input type="checkbox" name="customer.ShowCoWorkersOnExternalPage" @(Model.Customer.ShowCoWorkersOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
@@ -62,7 +58,7 @@
                                 </td>
                             </tr>
 
-                            <tr style="height:40px">
+                            <tr>
                                 <td></td>
                                 <td>
                                     <input type="checkbox" name="customer.ShowHelpOnExternalPage" @(Model.Customer.ShowHelpOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
@@ -71,7 +67,7 @@
                                 </td>
                             </tr>                         
 
-                            <tr style="height:40px">
+                            <tr>
                                 <td></td>
                                 <td>
                                     <input type="checkbox" id="chkDoc" name="customer.ShowDocumentsOnExternalPage" @(Model.Customer.ShowDocumentsOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
@@ -116,9 +112,14 @@
                                 <td class="span3">
                                     @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
                                 </td>
+                                <td>
+                                    <input type="checkbox" name="customer.ShowBulletinBoardOnExtPage" @(Model.Customer.ShowBulletinBoardOnExtPage == 1 ? "checked=checked" : "") value="1" />
+                                    <input type="hidden" name="customer.ShowBulletinBoardOnExtPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Visa Anslagstavlan på startsidan", Enums.TranslationSource.TextTranslation)
+                                </td>
                             </tr>  
                             @*For next release*@ 
-                            @*<tr style="height:40px">
+                            @*<tr>
                                 <td></td>
                                 <td style="vertical-align:middle">
                                     <input type="checkbox" id="chkFAQOnStartPage" name="customer.ShowFAQOnExternalStartPage" @(Model.Customer.ShowFAQOnExternalStartPage > 0 ? "checked=checked" : "") value="1"/>
@@ -130,15 +131,7 @@
                                         @Html.DropDownListFor(m => Model.Customer.ShowFAQOnExternalStartPage, Model.StartPageFAQNums, new { style = "width: 70px;" })                                     
                                     </span>                                                                                                         
                                 </td>
-                            </tr>*@
-                            <tr style="height:40px">
-                                <td></td>
-                                <td>
-                                    <input type="checkbox" name="customer.ShowBulletinBoardOnExtPage" @(Model.Customer.ShowBulletinBoardOnExtPage == 1 ? "checked=checked" : "") value="1"/>
-                                    <input type="hidden" name="customer.ShowBulletinBoardOnExtPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa Anslagstavlan på startsidan", Enums.TranslationSource.TextTranslation)
-                                </td>
-                            </tr>                              
+                            </tr>*@                      
                         </table>
                     </div>
 
@@ -151,12 +144,9 @@
                                 <td class="span3">
                                     @Translation.Get("Loggpost", Enums.TranslationSource.TextTranslation)
                                 </td>
-                            </tr>
-                            <tr style="height: 40px">
-                                <td></td>
                                 <td>
-                                    <input type="checkbox" name="customer.UseInternalLogNoteOnExternalPage" @(Model.Customer.UseInternalLogNoteOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
-                                    <input type="hidden" name="customer.UseInternalLogNoteOnExternalPage" value="0"/>
+                                    <input type="checkbox" name="customer.UseInternalLogNoteOnExternalPage" @(Model.Customer.UseInternalLogNoteOnExternalPage == 1 ? "checked=checked" : "") value="1" />
+                                    <input type="hidden" name="customer.UseInternalLogNoteOnExternalPage" value="0" />
                                     &nbsp; &nbsp; @Translation.Get("Intern loggpost i ärende", Enums.TranslationSource.TextTranslation)
                                 </td>
                             </tr>
@@ -177,7 +167,7 @@
                     </h4>
                     <div class="formContainer">
                         <table class="tableform">
-                            <tr style="height: 40px">
+                            <tr>
                                 <td class="span3">
                                     @Translation.GetCoreTextTranslation("Mina ärende visar")
                                 </td>
@@ -185,19 +175,19 @@
                                     @Html.CheckBoxFor(m => m.Customer.MyCasesInitiator) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Anmälare")
                                 </td>
                             </tr>
-                            <tr style="height: 40px">
+                            <tr>
                                 <td></td>
                                 <td>
                                     @Html.CheckBoxFor(m => m.Customer.MyCasesRegistrator) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Registrerare")
                                 </td>
                             </tr>
-                            <tr style="height: 40px">
+                            <tr>
                                 <td></td>
                                 <td>
                                     @Html.CheckBoxFor(m => m.Customer.MyCasesFollower) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Följare")
                                 </td>
                             </tr>
-                            <tr style="height: 40px">
+                            <tr>
                                 <td></td>
                                 <td>
                                     @Html.CheckBoxFor(m => m.Customer.MyCasesRegarding) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Angående")
