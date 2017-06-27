@@ -54,7 +54,7 @@
         public int ShowCoWorkersOnExternalPage { get; set; }
         public int ShowHelpOnExternalPage { get; set; }
         public int UseInternalLogNoteOnExternalPage { get; set; }
-
+        public int ShowCasesOnExternalPage { get; set; }
         public bool MyCasesInitiator { get; set; }
         public bool MyCasesRegistrator { get; set; } = true;
         public bool MyCasesFollower { get; set; }
