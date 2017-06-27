@@ -3121,7 +3121,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (!edit)
             {
                 /* Create Relationship between Case & ExtendedCase*/                
-                if (m.ExtendedCaseGuid != null)
+                if (m.ExtendedCaseGuid != Guid.Empty)
                 {                    
                     var exData = _caseService.GetExtendedCaseData(m.ExtendedCaseGuid);
                     _caseService.CreateExtendedCaseRelationship(case_.Id, exData.Id);                    
