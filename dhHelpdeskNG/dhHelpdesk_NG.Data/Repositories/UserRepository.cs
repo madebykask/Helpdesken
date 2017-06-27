@@ -500,7 +500,11 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.StartPage,
                         x.ShowSolutionTime.ToBool(),
                         x.ShowCaseStatistics.ToBool(),
-                        x.TimeZoneId)).FirstOrDefault();
+                        x.TimeZoneId,
+                         x.UserGUID
+
+                        )).FirstOrDefault();
+            
 
             return ret;
         }
@@ -547,7 +551,10 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.StartPage,
                         x.ShowSolutionTime.ToBool(),
                         x.ShowCaseStatistics.ToBool(),
-                        x.TimeZoneId)).SingleOrDefault();
+                        x.TimeZoneId,
+                         x.UserGUID
+
+                        )).SingleOrDefault();
             return u;
         }
     }
