@@ -5909,10 +5909,10 @@ end
 GO
 
 If not exists (select * from tbltext where id = 1822)
-	insert into tbltext (id, TextString) VALUES (1822, 'Visa Ärende i toppmenyn')
+	insert into tbltext (id, TextString) VALUES (1822, 'Visa Skapa ett ärende i toppmenyn')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1822 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1822, 2, 'Show Case in top menu')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1822, 2, 'Show Initiate a Case in top menu')
 GO
 
 If not exists (select * from tbltext where id = 1823)
@@ -5920,6 +5920,9 @@ If not exists (select * from tbltext where id = 1823)
 GO
 If not exists (select * from tblTextTranslation where text_id = 1823 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1823, 2, 'Show Cases in top menu')
+GO
+
+UPDATE tblText Set TextString = 'Mina ärenden visar' WHERE Id=1783;
 GO
 
 -- *** Run this last when put translation script above this line **--

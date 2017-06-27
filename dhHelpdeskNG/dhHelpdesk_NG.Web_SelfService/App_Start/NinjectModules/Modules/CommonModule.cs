@@ -46,6 +46,7 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
     using DH.Helpdesk.Services.BusinessLogic.Admin.Users.Concrete;
     using Ninject.Modules;
     using Dal.DbQueryExecutor;
+    using Services.Services;
 
     /// <summary>
     /// The common module.
@@ -226,6 +227,8 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
             this.Bind<IDbQueryExecutorFactory>()
                 .To<SqlDbQueryExecutorFactory>()
                 .InSingletonScope();
+
+            this.Bind<ICaseSolutionConditionService>().To<CaseSolutionConditionService>();
         }
     }
 }

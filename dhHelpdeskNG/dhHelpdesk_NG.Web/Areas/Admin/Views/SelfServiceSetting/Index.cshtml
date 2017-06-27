@@ -36,15 +36,44 @@
                                 <td>
                                     <input type="checkbox" name="customer.ShowCaseOnExternalPage" @(Model.Customer.ShowCaseOnExternalPage == 1 ? "checked=checked" : "") value="1" />
                                     <input type="hidden" name="customer.ShowCaseOnExternalPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa Ärende i toppmenyn", Enums.TranslationSource.TextTranslation)
+                                    &nbsp; &nbsp; @Translation.Get("Visa Skapa ett ärende i toppmenyn", Enums.TranslationSource.TextTranslation)
                                 </td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <td>
-                                    <input type="checkbox" name="customer.ShowCasesOnExternalPage" @(Model.Customer.ShowCasesOnExternalPage == 1 ? "checked=checked" : "") value="1" />
+                                    <input type="checkbox" id="chkCases" name="customer.ShowCasesOnExternalPage" @(Model.Customer.ShowCasesOnExternalPage == 1 ? "checked=checked" : "") value="1" />
                                     <input type="hidden" name="customer.ShowCasesOnExternalPage" value="0" />
                                     &nbsp; &nbsp; @Translation.Get("Visa Ärenden i toppmenyn", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                            <tr id="mycases">
+                                <td></td>
+                                <td>
+                                    <table border="0">
+                                        <tr>
+                                            <td style="width:24px"></td>
+                                            <td>
+                                                @Translation.GetCoreTextTranslation("Mina ärenden visar")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:24px"></td>
+                                            <td>@Html.CheckBoxFor(m => m.Customer.MyCasesInitiator) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Anmälare")</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:24px"></td>
+                                            <td>@Html.CheckBoxFor(m => m.Customer.MyCasesRegistrator) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Registrerare")</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:24px"></td>
+                                            <td>@Html.CheckBoxFor(m => m.Customer.MyCasesFollower) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Följare")</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:24px"></td>
+                                            <td>@Html.CheckBoxFor(m => m.Customer.MyCasesRegarding) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Angående")</td>
+                                        </tr>
+                                    </table>
                                 </td>
                             </tr>
                             <tr>
@@ -64,17 +93,17 @@
                                 </td>
                             </tr>
                             <tr id="docCategories">
+                                <td></td>
                                 <td>
-                                    @*@Translation.Get("Dokument", Enums.TranslationSource.TextTranslation) @Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)*@
-                                </td>
-                                <td>
-                                    <table>
+                                    <table border="0">
                                         <tr>
-                                            <td>@Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation) @Translation.Get("Dokument", Enums.TranslationSource.TextTranslation) @Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</td>
+                                            <td style="width:24px"></td>
+                                            <td>@Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation) @Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</td>
                                             <td></td>
-                                            <td>@Translation.Get("Valda", Enums.TranslationSource.TextTranslation) @Translation.Get("Dokument", Enums.TranslationSource.TextTranslation) @Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</td>
+                                            <td>@Translation.Get("Valda", Enums.TranslationSource.TextTranslation) @Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</td>
                                         </tr>
                                         <tr>
+                                            <td></td>
                                             <td>
                                                 @Html.ListBox("AvailableCategories", Model.AvailableCategories, new { style = "width: 280px; height: 120px" })
                                             </td>
@@ -154,7 +183,7 @@
                     <div class="formContainer">
                         <table class="tableform">
                             <tr>
-                                <td class="span3">
+                                <td  class="span3">
                                     @Translation.Get("Loggpost", Enums.TranslationSource.TextTranslation)
                                 </td>
                                 <td>
@@ -174,40 +203,13 @@
                             </tr>
                         </table>
                     </div>
-
                     <h4>
                         @Translation.GetCoreTextTranslation("Inställningar") - @Translation.GetCoreTextTranslation("Logga in")
                     </h4>
                     <div class="formContainer">
                         <table class="tableform">
-                            <tr>
-                                <td class="span3">
-                                    @Translation.GetCoreTextTranslation("Mina ärende visar")
-                                </td>
-                                <td>
-                                    @Html.CheckBoxFor(m => m.Customer.MyCasesInitiator) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Anmälare")
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    @Html.CheckBoxFor(m => m.Customer.MyCasesRegistrator) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Registrerare")
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    @Html.CheckBoxFor(m => m.Customer.MyCasesFollower) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Följare")
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    @Html.CheckBoxFor(m => m.Customer.MyCasesRegarding) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Angående")
-                                </td>
-                            </tr>
                             <tr id="caseTypes">
-                                <td>
+                                <td class="span3">
                                     @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
                                 </td>
                                 <td>
@@ -290,6 +292,15 @@
             }
             else {
                 $('#docCategories').hide();
+            }
+        });
+
+        $('#chkCases').click(function () {
+            if ($('#chkCases').attr('checked')) {
+                $('#mycases').show();
+            }
+            else {
+                $('#mycases').hide();
             }
         });
 
