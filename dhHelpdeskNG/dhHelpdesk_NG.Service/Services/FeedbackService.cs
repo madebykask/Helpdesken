@@ -7,6 +7,7 @@ using DH.Helpdesk.BusinessData.Models.Feedback;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Input;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Dal.NewInfrastructure;
@@ -131,6 +132,9 @@ namespace DH.Helpdesk.Services.Services
 				option.IconId = optionEntity.IconId;
 				option.Position = optionEntity.QuestionnaireQuestionOptionPos;
 				option.Value = optionEntity.OptionValue;
+			    option.IconSrc = optionEntity.IconSrc != null
+			        ? FeedBack.ImgId + Convert.ToBase64String(optionEntity.IconSrc)
+			        : string.Empty;
 
 				var optionLangEntity = optionEntity.QuestionnaireQuesOpLangEntities != null && optionEntity.QuestionnaireQuesOpLangEntities.Any() ?
 					optionEntity.QuestionnaireQuesOpLangEntities.SingleOrDefault(qqo => qqo.Language_Id == languageId) :

@@ -18,11 +18,19 @@
         public const string DepartmentsByUserPermissions = "DepartmentsByUserPermissions{0}";
     }
 
-    public static class CaseTabs
+      public static class CaseTabs
     {
         public const string CaseTab = "case-tab";
         public const string ChildCasesTab = "childcases-tab";
         public const string ExtendedCaseTab = "extendedcase-tab-{0}"; //replace {0} with id of extended case
     }
+
+   	public static class FeedBack
+    {
+        public const string IconId = "load_image_from_file";
+        public const string ImgId = "data:image/gif;base64,";
+    }
+
+
 
 }

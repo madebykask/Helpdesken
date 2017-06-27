@@ -47,7 +47,12 @@
 
             this._questionnaireQuestionOptionRepository.Commit();
         }
-        
+
+        public void UpdateQuestionnaireQuestionOptionIcon(int optionId, byte[] iconSrc)
+        {
+            _questionnaireQuestionOptionRepository.UpdateQuestionnaireQuestionOptionIcon(optionId, iconSrc);
+        }
+
         public void UpdateQuestionnaireQuestionOption(QuestionnaireQuesOption option)
         {
             switch (option.LanguageId)

@@ -43,5 +43,7 @@ namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Input
 		public string IconId { get; set; }
 
         public DateTime ChangedDate { get;  set; }
+
+        public byte[] IconSrc { get; set; }
     }
 }

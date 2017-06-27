@@ -254,7 +254,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 var orderFieldTypesRep = uow.GetRepository<OrderFieldType>();
                 var orderTypes = orderTypeRep.GetAll(x => x.Users).GetOrderTypes(parameters.CustomerId).ToList();
 			    var filteredOrderTypes = orderTypes;
-                if (isSelfService && user.UserGroupId <= UserGroups.User)
+                if (isSelfService && user.UserGroupId < UserGroups.Administrator)
 			    {
 			        filteredOrderTypes = FilterOrderTypeByUser(orderTypes, userId);
 			    }

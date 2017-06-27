@@ -23,5 +23,7 @@
         void DeleteQuestionOptionById(int optionId, int languageId);                
 
         #endregion
+
+        void UpdateQuestionnaireQuestionOptionIcon(int optionId, byte[] iconSrc);
     }
 }

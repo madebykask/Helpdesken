@@ -600,8 +600,20 @@
     <Content Include="Content\img\ic_sentiment_neutral_black_24dp_2x.png" />
     <Content Include="Content\img\ic_sentiment_satisfied_black_24dp_1x.png" />
     <Content Include="Content\img\ic_sentiment_satisfied_black_24dp_2x.png" />
+    <Content Include="Content\img\ic_sentiment_shocked_black_24dp_1x.png" />
+    <Content Include="Content\img\ic_sentiment_shocked_black_24dp_2x.png" />
+    <Content Include="Content\img\ic_sentiment_silent_black_24dp_1x.png" />
+    <Content Include="Content\img\ic_sentiment_silent_black_24dp_2x.png" />
+    <Content Include="Content\img\ic_sentiment_tongue_black_24dp_1x.png" />
+    <Content Include="Content\img\ic_sentiment_tongue_black_24dp_2x.png" />
+    <Content Include="Content\img\ic_sentiment_very_dissatisfied_black_24dp_1x.png" />
+    <Content Include="Content\img\ic_sentiment_very_dissatisfied_black_24dp_2x.png" />
     <Content Include="Content\img\ic_sentiment_very_satisfied_black_24dp_1x.png" />
     <Content Include="Content\img\ic_sentiment_very_satisfied_black_24dp_2x.png" />
+    <Content Include="Content\img\ic_thumbs_down_black_24dp_1x.png" />
+    <Content Include="Content\img\ic_thumbs_down_black_24dp_2x.png" />
+    <Content Include="Content\img\ic_thumbs_up_black_24dp_1x.png" />
+    <Content Include="Content\img\ic_thumbs_up_black_24dp_2x.png" />
     <Content Include="Content\js\Account\order.js" />
     <Content Include="Areas\Admin\Content\js\Users\_input.js" />
     <Content Include="Content\js\additional-methods.js" />
@@ -1003,6 +1015,7 @@
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
     <Content Include="Content\js\Contract\contractIndex.js" />
     <Content Include="Content\js\Contract\edit.js" />
+    <Content Include="Content\js\Feedback\feedback.edit.js" />
     <Content Include="Content\js\Feedback\feedbackStatisticsCases.js" />
     <Content Include="Content\js\Inventory\inventory.search.js" />
     <Content Include="Content\js\Shared\errors.js" />
@@ -1493,6 +1506,7 @@
     <Compile Include="Models\Feedback\FeedbackStatisticsViewModel.cs" />
     <Compile Include="Models\Feedback\FeedbackThankYouModel.cs" />
     <Compile Include="Models\Feedback\StatisticsFilter.cs" />
+    <Compile Include="Models\Feedback\UpdateQuestionOptionIconParams.cs" />
     <Compile Include="Models\Invoice\ExternalInvoiceModel.cs" />
     <Compile Include="Models\Case\Input\CaseEditInput.cs" />
     <Compile Include="Models\Case\MyFavoriteFilterModel.cs" />
