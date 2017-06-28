@@ -131,6 +131,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             customerToSave.MyCasesRegistrator = vmodel.Customer.MyCasesRegistrator;
             customerToSave.ShowCasesOnExternalPage = vmodel.Customer.ShowCasesOnExternalPage;
             customerToSave.ShowCaseOnExternalPage = vmodel.Customer.ShowCaseOnExternalPage;
+            customerToSave.GroupCaseTemplates = vmodel.Customer.GroupCaseTemplates;
 
             if (customerToSave == null)
                 throw new Exception("No customer found...");

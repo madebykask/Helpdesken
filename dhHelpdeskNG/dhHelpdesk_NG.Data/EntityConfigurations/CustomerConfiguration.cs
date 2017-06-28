@@ -95,6 +95,7 @@
             this.Property(x => x.MyCasesRegarding).IsRequired();
             this.Property(x => x.MyCasesRegistrator).IsRequired();
             this.Property(x => x.ShowCasesOnExternalPage).IsRequired();
+            this.Property(x => x.GroupCaseTemplates).IsRequired();
 
             this.ToTable("tblcustomer");
         }
