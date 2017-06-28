@@ -43,7 +43,7 @@ END
            ,[TableFieldGuid])
      VALUES
            ('case_StateSecondary.StateSecondaryGUID',
-			'Ärende - Substatus',
+			'Ärende - Understatus',
 			'dbo.tblStateSecondary',
 			'Id',
 			'StateSecondary',

@@ -5925,5 +5925,47 @@ GO
 UPDATE tblText Set TextString = 'Mina ärenden visar' WHERE Id=1783;
 GO
 
+If not exists (select * from tbltext where id = 1824)
+	insert into tbltext (id, TextString) VALUES (1824, 'Ärende - Understatus')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1824 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1824, 2, 'Case - Sub status')
+GO
+
+If not exists (select * from tbltext where id = 1825)
+	insert into tbltext (id, TextString) VALUES (1825, 'Ärende - Driftgrupp')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1825 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1825, 2, 'Case - Working group')
+GO
+
+If not exists (select * from tbltext where id = 1826)
+	insert into tbltext (id, TextString) VALUES (1826, 'Ärende - Prioritet')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1826 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1826, 2, 'Case - Priority')
+GO
+
+If not exists (select * from tbltext where id = 1827)
+	insert into tbltext (id, TextString) VALUES (1827, 'Ärende - Status')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1827 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1827, 2, 'Case - Status')
+GO
+
+If not exists (select * from tbltext where id = 1828)
+	insert into tbltext (id, TextString) VALUES (1828, 'Ärende - Produktområde')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1828 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1828, 2, 'Case - Product area')
+GO
+
+If not exists (select * from tbltext where id = 1829)
+	insert into tbltext (id, TextString) VALUES (1829, 'Användare - Driftgrupp')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1829 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1829, 2, 'User - Working group')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
