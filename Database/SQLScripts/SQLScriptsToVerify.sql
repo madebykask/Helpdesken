@@ -361,6 +361,12 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
+-- 20170628 Johan Weinitz, added support for independent child cases (parent case can be closed with open independent child cases)
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Independent' and sysobjects.name = N'tblParentChildCaseRelations')
+	begin
+		ALTER TABLE [dbo].tblParentChildCaseRelations ADD Independent BIT DEFAULT(0) NOT NULL
+	end
+GO
 if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentTemplate')
 begin
 
