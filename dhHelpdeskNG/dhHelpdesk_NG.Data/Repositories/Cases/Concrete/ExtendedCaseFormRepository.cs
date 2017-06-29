@@ -65,6 +65,21 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             if (caseSolution == null)
                 return null;
 
+            if (caseSolutionId > 0)
+            {
+                //fallback to casesolution.StateSecondaryId if case is new
+                if (caseStateSecondaryId == 0 && caseSolution.StateSecondary_Id != null && caseSolution.StateSecondary_Id != 0)
+                {
+                    caseStateSecondaryId = this.DataContext.StateSecondaries.Where(x => x.Id == caseSolution.StateSecondary_Id).FirstOrDefault().StateSecondaryId;
+                }
+
+                //fallback to casesolution.StateSecondaryId if case is new
+                if (caseWorkingGroupId == 0 && caseSolution.CaseWorkingGroup_Id != null && caseSolution.CaseWorkingGroup_Id != 0)
+                {
+                    caseWorkingGroupId = this.DataContext.WorkingGroups.Where(x => x.Id == caseSolution.CaseWorkingGroup_Id).FirstOrDefault().WorkingGroupId;
+                }
+            }
+
             extendedCasePath = extendedCasePath
             .Replace("&languageId=[LanguageId]", "") //sent in by js function
             .Replace("&extendedCaseGuid=[extendedCaseGuid]", "")//sent in by js function
