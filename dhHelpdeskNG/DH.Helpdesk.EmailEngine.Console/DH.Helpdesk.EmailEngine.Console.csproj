@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1DC0070F-C970-47F0-A383-95017CD1B76D}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <ProjectGuid>{CE636A55-FC45-4D6A-8A9C-5D2D1BB699EA}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DH.Helpdesk.EmailEngine.WinService</RootNamespace>
-    <AssemblyName>DH.Helpdesk.EmailEngine.WinService</AssemblyName>
+    <RootNamespace>DH.Helpdesk.EmailEngine.Console</RootNamespace>
+    <AssemblyName>DH.Helpdesk.EmailEngine.Console</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -47,61 +47,31 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="MainService.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="MainService.Designer.cs">
-      <DependentUpon>MainService.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="ProjectInstaller.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ProjectInstaller.Designer.cs">
-      <DependentUpon>ProjectInstaller.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MainService.resx">
-      <DependentUpon>MainService.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ProjectInstaller.resx">
-      <DependentUpon>ProjectInstaller.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\DH.Helpdesk.EmailEngine.Library\DH.Helpdesk.EmailEngine.Library.csproj">
-      <Project>{F7A2888F-75A6-4C84-902F-1A201CC56EC9}</Project>
+      <Project>{f7a2888f-75a6-4c84-902f-1a201cc56ec9}</Project>
       <Name>DH.Helpdesk.EmailEngine.Library</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\dhHelpdesk_NG.Data\DH.Helpdesk.Dal.csproj">
-      <Project>{a8f6b7b8-8055-4bb7-82c4-85004f52e6ef}</Project>
-      <Name>DH.Helpdesk.Dal</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\dhHelpdesk_NG.Domain\DH.Helpdesk.Domain.csproj">
-      <Project>{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}</Project>
-      <Name>DH.Helpdesk.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
