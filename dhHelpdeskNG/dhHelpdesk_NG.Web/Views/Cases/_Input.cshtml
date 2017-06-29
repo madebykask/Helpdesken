@@ -242,6 +242,13 @@
                     </li>
                 }
 
+                @if (Model.CaseDocuments != null && Model.CaseDocuments.Count() > 0)
+                { 
+                    <li>
+                        <a id="casedocument-tab" href="#casedocument-container">@(Translation.GetCoreTextTranslation("Dokument")) <span id="nrOfCaseDocuments">(@(Model.CaseDocuments != null ? Model.CaseDocuments.Count() : 0))</span></a>
+                    </li>
+                }
+
                 @if (Model.CaseLock != null && Model.CaseLock.IsLocked && Model.CaseLock.User != null)
                 {
                     if (Model.CaseLock.UserId == SessionFacade.CurrentUser.Id)
@@ -2368,6 +2375,10 @@
                         </div>
                             </div>
                             }
+
+                @Html.Partial("_CaseDocument", Model.CaseDocuments)
+
+              
 
                         </div>
                     </div>

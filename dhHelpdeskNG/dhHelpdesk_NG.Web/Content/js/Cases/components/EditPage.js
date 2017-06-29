@@ -347,7 +347,7 @@ EditPage.prototype.isExtendedCaseValid = function (showToast, isOnNext) {
 };
 
 EditPage.prototype.setNextStep = function () {
-
+    var self = this;
     var nextStep = 0;
     nextStep = parseInt($("#steps option:selected").attr('data-next-step')) || 0;
     var $_ex_Container = self.getExtendedCaseContainer();
@@ -1442,19 +1442,18 @@ EditPage.prototype.init = function (p) {
         //only if extended case exist
         if (self.p.containsExtendedCase)
         {
+            self.setNextStep();
+
             var stepId = parseInt($('#steps').val()) || 0;
 
             if (stepId > 0)
             {
-
                 self.isExtendedCaseValid(false,true);
             }
             else
             {
                 self.isExtendedCaseValid(false,false);
             }
-            
-            self.setNextStep();
         }
     });
 

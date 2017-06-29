@@ -1418,7 +1418,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 #region Send template email if priority has value and Internal or External log is filled
 
-                if (!string.IsNullOrWhiteSpace(newCase.Priority.EMailList))
+                if (newCase.Priority != null && !string.IsNullOrWhiteSpace(newCase.Priority.EMailList))
                 {
                     SendPriorityMailSpecial(newCase, log, cms, files, helpdeskMailFromAdress, caseHistoryId, caseId, customerSetting, smtpInfo, userTimeZone);
                 }

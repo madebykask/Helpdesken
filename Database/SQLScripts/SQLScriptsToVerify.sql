@@ -356,3 +356,80 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 
 	end
 GO
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocument')
+begin
+
+	CREATE TABLE [dbo].[tblCaseDocument](
+		[Id] [int] NOT NULL,
+		[CaseDocumentGUID] [uniqueidentifier] NULL,
+		[Name] [nvarchar](100) NULL,
+		[Description] [nvarchar](200) NULL,
+		[Customer_Id] [int] NULL,
+		[FileType] [nvarchar](10) NOT NULL,
+		[SortOrder] [int] NOT NULL,
+		[Status] [int] NOT NULL,
+		[CreatedDate] [datetime] NOT NULL,
+		[CreatedByUser_Id] [int] NULL,
+		[ChangedDate] [datetime] NOT NULL,
+		[ChangedByUser_Id] [int] NULL,
+	 CONSTRAINT [PK_ExtendedCaseDocuments] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+	ALTER TABLE [dbo].[tblCaseDocument] ADD  CONSTRAINT [DF_tblCaseDocument_CaseDocumentGUID]  DEFAULT (newid()) FOR [CaseDocumentGUID]
+	
+	ALTER TABLE [dbo].[tblCaseDocument] ADD  CONSTRAINT [DF_tblCaseDocument_SortOrder]  DEFAULT ((0)) FOR [SortOrder]
+	
+	ALTER TABLE [dbo].[tblCaseDocument] ADD  CONSTRAINT [DF_tblCaseDocument_Status]  DEFAULT ((1)) FOR [Status]
+	
+	ALTER TABLE [dbo].[tblCaseDocument] ADD  CONSTRAINT [DF_tblCaseDocument_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+	
+	ALTER TABLE [dbo].[tblCaseDocument] ADD  CONSTRAINT [DF_tblCaseDocument_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
+	
+end
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentCondition')
+begin
+
+	CREATE TABLE [dbo].[tblCaseDocumentCondition](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[CaseDocumentConditionGUID] [uniqueidentifier] NULL,
+		[CaseDocument_Id] [int] NULL,
+		[Property_Name] [nvarchar](600) NOT NULL,
+		[Values] [nvarchar](max) NOT NULL,
+		[Description] [nvarchar](200) NULL,
+		[Status] [int] NULL,
+		[CreatedDate] [datetime] NULL,
+		[CreatedByUser_Id] [int] NULL,
+		[ChangedDate] [datetime] NULL,
+		[ChangedByUser_Id] [int] NULL,
+	 CONSTRAINT [PK_ExtendedCaseDocumentsCondition] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+	
+	ALTER TABLE [dbo].[tblCaseDocumentCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentsCondition_CaseSolutionConditionGUID]  DEFAULT (newid()) FOR [CaseDocumentConditionGUID]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentsCondition_Status]  DEFAULT ((0)) FOR [Status]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentsCondition_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentsCondition_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentCondition]  WITH NOCHECK ADD  CONSTRAINT [FK_ExtendedCaseDocumentsCondition_ExtendedCaseDocuments] FOREIGN KEY([CaseDocument_Id])
+	REFERENCES [dbo].[tblCaseDocument] ([Id])
+	
+	ALTER TABLE [dbo].[tblCaseDocumentCondition] NOCHECK CONSTRAINT [FK_ExtendedCaseDocumentsCondition_ExtendedCaseDocuments]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentCondition]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseDocumentCondition_tblCaseDocument] FOREIGN KEY([CaseDocument_Id])
+	REFERENCES [dbo].[tblCaseDocument] ([Id])
+	
+	ALTER TABLE [dbo].[tblCaseDocumentCondition] CHECK CONSTRAINT [FK_tblCaseDocumentCondition_tblCaseDocument]
+	
+end
+

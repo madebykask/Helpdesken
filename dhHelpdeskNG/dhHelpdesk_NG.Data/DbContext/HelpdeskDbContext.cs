@@ -27,6 +27,8 @@
     using DH.Helpdesk.Dal.EntityConfigurations.WorkstationModules;
     using DH.Helpdesk.Dal.EntityConfigurations.ADFS;
     using DH.Helpdesk.Dal.NewInfrastructure;
+    using DH.Helpdesk.Dal.EntityConfigurations.CaseDocument;
+
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
     using DH.Helpdesk.Domain.Cases;
@@ -567,7 +569,13 @@
 
         public DbSet<ExtendedCaseDataEntity> ExtendedCaseDatas { get; set; }
 
+        public DbSet<ExtendedCaseValueEntity> ExtendedCaseValues { get; set; }
+
         public DbSet<Case_ExtendedCaseEntity> Case_ExtendedCases { get; set; }
+
+        public DbSet<CaseDocumentEntity> CaseDocuments { get; set; }
+
+        public DbSet<CaseDocumentConditionEntity> CaseDocumentConditions { get; set; }
 
         #endregion
 
@@ -850,7 +858,10 @@
             modelBuilder.Configurations.Add(new ExtendedCaseFormConfiguration());
             modelBuilder.Configurations.Add(new CaseSolutionConditionPropertyConfiguration());
             modelBuilder.Configurations.Add(new ExtendedCaseDataConfiguration());
+            modelBuilder.Configurations.Add(new ExtendedCaseValueConfiguration());
             modelBuilder.Configurations.Add(new Case_ExtendedCaseDataConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentConditionConfiguration());
             #endregion
 
             base.OnModelCreating(modelBuilder);

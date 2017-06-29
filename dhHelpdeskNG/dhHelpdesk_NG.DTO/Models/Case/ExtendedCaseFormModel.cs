@@ -23,4 +23,14 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
     }
+
+    public class ExtendedCaseValueModel
+    {
+        public int Id { get; set; }
+        public int ExtendedCaseDataId { get; set; }
+        public string FieldId { get; set; }
+        public string Value { get; set; }
+        public string SecondaryValue { get; set; }
+
+    }
 }

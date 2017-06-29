@@ -171,6 +171,8 @@
     <Compile Include="Models\BusinessRules-Depricated\Rule.cs" />
     <Compile Include="Models\BusinessRules\BusinessRuleModel.cs" />
     <Compile Include="Models\BusinessRules\BusinessRuleReadModel.cs" />
+    <Compile Include="Models\CaseDocument\CaseDocumentModel.cs" />
+    <Compile Include="Models\CaseDocument\CaseDocumentConditionModel.cs" />
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
     <Compile Include="Models\Case\AuxCaseModel.cs" />
     <Compile Include="Models\Case\CaseModel.cs" />

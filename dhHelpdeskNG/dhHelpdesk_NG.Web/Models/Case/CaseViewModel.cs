@@ -16,6 +16,7 @@ namespace DH.Helpdesk.Web.Models.Case
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.CaseDocument;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Web.Infrastructure.CaseOverview;
@@ -204,6 +205,8 @@ namespace DH.Helpdesk.Web.Models.Case
         public bool CanGetRelatedCases { get; set; }
 
         public IList<ExtendedCaseFormModel> ExtendedCases { get; set; }
+
+        public IEnumerable<CaseDocumentModel> CaseDocuments { get; set; }
 
         #region Date field from case_. Converted to user time zone
 

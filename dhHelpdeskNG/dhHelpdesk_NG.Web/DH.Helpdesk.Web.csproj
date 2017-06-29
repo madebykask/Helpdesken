@@ -3890,6 +3890,7 @@
     <Content Include="Views\FeedbackAnswer\ThankYou.cshtml" />
     <Content Include="Views\Shared\WorkflowStep.cshtml" />
     <Content Include="Views\CaseSolution\_Conditions.cshtml" />
+    <Content Include="Views\Shared\_CaseDocument.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

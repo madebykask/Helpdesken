@@ -1,0 +1,43 @@
+﻿@model IEnumerable<DH.Helpdesk.BusinessData.Models.CaseDocument.CaseDocumentModel>
+@using DH.Helpdesk.Common.Constants;
+
+@if (Model != null && Model.Any())
+{
+
+    
+    <div id="casedocument-container" class="tab-pane tab-pane-border">
+        <div class="container">
+            <h4>@(Translation.GetCoreTextTranslation("Case Documents"))</h4>
+                <p> Förtydliga: Dynamiska dokument baseras på senast sparade värden.</p>
+
+            <table class="table table-striped table-full-width">
+                <thead>
+                    <tr>
+                        <th class="span4">Name</th>
+                        <th class="span4"></th>
+                        <th class="span4"></th>
+                    </tr>
+                </thead>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.Name<text>.</text>@item.FileType
+                        </td>
+                        <td>
+                            <a title="@Translation.GetCoreTextTranslation("Skriv ut")" class="btn print-case"><i class="icon-file"></i> @Translation.GetCoreTextTranslation("Skriv ut")</a>
+                        </td>
+                        <td></td>
+                    </tr>
+                }
+
+
+            </table>
+
+
+        </div>
+    </div>
+
+
+
+}

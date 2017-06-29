@@ -149,8 +149,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IOrderAccountSettingsProxyService>().To<OrderAccountSettingsProxyService>();
 
             this.Bind<IOrderAccountDefaultSettingsCreator>().To<OrderAccountDefaultSettingsCreator>();
+            this.Bind<ICaseDocumentService>().To<CaseDocumentService>();
 
-            
 
             // Survey service
             this.Bind<ISurveyService>().To<SurveyService>();

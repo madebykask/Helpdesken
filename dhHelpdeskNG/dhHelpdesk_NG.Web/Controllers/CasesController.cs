@@ -192,6 +192,8 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IOrderService _orderService;
         private readonly IOrderAccountService _orderAccountService;
 
+        private readonly ICaseDocumentService _caseDocumentService;
+
 
         #endregion
 
@@ -264,7 +266,9 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseExtraFollowersService caseExtraFollowersService,
             ICaseRuleFactory caseRuleFactory,
             IOrderService orderService,
-            IOrderAccountService orderAccountService)
+            IOrderAccountService orderAccountService,
+            ICaseDocumentService caseDocumentService
+            )
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;
@@ -337,6 +341,7 @@ namespace DH.Helpdesk.Web.Controllers
             _caseRuleFactory = caseRuleFactory;
             _orderService = orderService;
             _orderAccountService = orderAccountService;
+            this._caseDocumentService = caseDocumentService;
         }
 
         #endregion
@@ -5087,8 +5092,6 @@ namespace DH.Helpdesk.Web.Controllers
                     //TODO:
                     //CHECK HOW TO HANDLE WHEN FROM EMAIL
                     //At the moment we are only fetching 1 extended case since it is only programmed that way in editPage.js
-                    //TEMP, use UserID for userGUID
-                    //m.ExtendedCases = _caseService.GetExtendedCaseForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.Id.ToString(), (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0), (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0), extendedCasePath, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserId, ApplicationType.Helpdesk);
                     m.ExtendedCases = _caseService.GetExtendedCaseForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.UserGUID.ToString(), (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0), (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0), extendedCasePath, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserId, ApplicationType.Helpdesk);
                     m.ContainsExtendedCase = m.ExtendedCases != null && m.ExtendedCases.Any();
 
@@ -5103,13 +5106,22 @@ namespace DH.Helpdesk.Web.Controllers
             catch (Exception)
             {
                 //TODO:
-                //DO something here?
                 //throw;
             }
 
-        
+
 
             #endregion Extended Case
+
+
+            #region CaseDocuments
+
+            //OM case har extendedcase, hämta värden 
+
+
+            m.CaseDocuments = _caseDocumentService.GetCaseDocuments(customerId, m.case_, SessionFacade.CurrentUser, ApplicationType.Helpdesk);
+
+            #endregion
 
             if (case_ != null)
             {
