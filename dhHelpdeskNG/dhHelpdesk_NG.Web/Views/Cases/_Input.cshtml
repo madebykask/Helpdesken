@@ -234,7 +234,7 @@
                     }
                 }
 
-                @if (Model.CustomerSettings.AttachmentPlacement == 1)
+                @if (Model.Setting.AttachmentPlacement == 1)
                 {
                     <li>
                         <a id="attachment-tab" href="#attachment-container">@(Translation.GetCoreTextTranslation("Bilagor")) <span id="nrOfAttachedFiles">(@(Model.CaseFilesModel.SavedFiles != null ? Model.CaseFilesModel.Files.Count():0))</span></a>
@@ -1638,7 +1638,9 @@
                                                 </table>
                                             </td>
                                         </tr>
-                                        @if (Model.CustomerSettings.AttachmentPlacement == 0)
+                                        
+
+                                        @if (Model.Setting.AttachmentPlacement == 0 )
                                         { 
                                         <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Filename, CaseSolutionFields.FileName)">
                                             @*<tr class="displaytr" style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Filename.ToString())">*@
@@ -2347,7 +2349,7 @@
                     @Html.Partial("_ChildCases", Model.ChildCaseViewModel);
                 }
 
-                @if (Model.CustomerSettings.AttachmentPlacement == 1)
+                @if (Model.Setting.AttachmentPlacement == 1)
                 {
                    <div id="attachment-container" class="tab-pane tab-pane-border">
                        <h4 style="margin-left:3px;">@(Translation.GetCoreTextTranslation("Bifoga"))</h4>
