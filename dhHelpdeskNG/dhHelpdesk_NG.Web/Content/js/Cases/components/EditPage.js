@@ -20,7 +20,7 @@ EditPage.prototype.CHLID_CASES_TAB = 'childcases-tab';
 EditPage.prototype.CASE_IN_IDLE = 'case_in_idle';
 EditPage.prototype.CASE_IN_SAVING = 'case_in_saving';
 EditPage.prototype.Ex_Container_Prefix = 'iframe_';
-EditPage.prototype.ExTab_Prefix = '#extendedcase-tab-';
+EditPage.prototype.ExTab_Prefix = '#extendedcase-tab';
 EditPage.prototype.ExTab_Indicator_Prefix = '#exTabIndicator_';
 
 /*** CONST END ***/
@@ -1384,7 +1384,7 @@ EditPage.prototype.init = function (p) {
             }
             
             if (ev.target.className == "extendedcase") {
-                self.$activeTabHolder.val('extendedcase-tab-' + p.extendedCaseFormId);
+                self.$activeTabHolder.val('extendedcase-tab');
             }
 
 

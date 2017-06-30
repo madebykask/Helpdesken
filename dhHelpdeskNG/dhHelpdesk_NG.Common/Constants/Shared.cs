@@ -22,7 +22,7 @@
     {
         public const string CaseTab = "case-tab";
         public const string ChildCasesTab = "childcases-tab";
-        public const string ExtendedCaseTab = "extendedcase-tab-{0}"; //replace {0} with id of extended case
+        public const string ExtendedCaseTab = "extendedcase-tab";
     }
 
    	public static class FeedBack
