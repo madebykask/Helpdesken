@@ -271,7 +271,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
 
 
-
+             
             //var query = from contact in this.DataContext.CaseSolutionsConditions
             //            join dealer in this.DataContext.CaseSolutionConditionProperties on contact.Property_Name equals dealer.CaseSolutionConditionProperty
             //            where contact.CaseSolution_Id == casesolutionid
