@@ -238,6 +238,11 @@ namespace DH.Helpdesk.Services.Services
                 var conditionValue = condition.Value.Tidy().ToLower();
                 var conditionKey = condition.Key.Tidy();
 
+                if (conditionValue == "null")
+                {
+                    return true;
+                }
+
                 try
                 {
                     var value = "";
