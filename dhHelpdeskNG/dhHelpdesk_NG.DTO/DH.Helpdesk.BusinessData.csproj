@@ -268,6 +268,7 @@
     <Compile Include="Models\Department\DepartmentOverview.cs" />
     <Compile Include="Models\Email\EmailResponse.cs" />
     <Compile Include="Models\Error\ErrorModel.cs" />
+    <Compile Include="Models\ExtendedCase\InitExtendedForm.cs" />
     <Compile Include="Models\ExternalInvoice\ExternalInvoice.cs" />
     <Compile Include="Models\Faq\Input\EditCategory.cs" />
     <Compile Include="Models\Faq\Input\FaqCategory.cs" />

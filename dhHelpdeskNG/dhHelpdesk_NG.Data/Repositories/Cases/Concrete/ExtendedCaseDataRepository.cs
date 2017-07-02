@@ -1,43 +1,68 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System;
 
 namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 {
     using BusinessData.Models.Case;    
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.Mappers;
-    using DH.Helpdesk.Domain.ExtendedCaseEntity;
+    using Infrastructure;
+    using Mappers;
+    using Domain.ExtendedCaseEntity;
     
 
     public sealed class ExtendedCaseDataRepository : RepositoryBase<ExtendedCaseDataEntity>, IExtendedCaseDataRepository
     {        
-        private readonly IEntityToBusinessModelMapper<ExtendedCaseDataEntity, ExtendedCaseDataModel> _ExtendedCaseDataToBusinessModelMapper;
-        private readonly IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity> _ExtendedCaseDataToEntityMapper;
+        private readonly IEntityToBusinessModelMapper<ExtendedCaseDataEntity, ExtendedCaseDataModel> _extendedCaseDataToBusinessModelMapper;
+        private readonly IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity> _extendedCaseDataToEntityMapper;
 
         public ExtendedCaseDataRepository(
             IDatabaseFactory databaseFactory,
-            IEntityToBusinessModelMapper<ExtendedCaseDataEntity, ExtendedCaseDataModel> ExtendedCaseDataToBusinessModelMapper,
-            IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity> ExtendedCaseDataToEntityMapper)
+            IEntityToBusinessModelMapper<ExtendedCaseDataEntity, ExtendedCaseDataModel> extendedCaseDataToBusinessModelMapper,
+            IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity> extendedCaseDataToEntityMapper)
             : base(databaseFactory)
         {
-            _ExtendedCaseDataToBusinessModelMapper = ExtendedCaseDataToBusinessModelMapper;
-            _ExtendedCaseDataToEntityMapper = ExtendedCaseDataToEntityMapper;
+            _extendedCaseDataToBusinessModelMapper = extendedCaseDataToBusinessModelMapper;
+            _extendedCaseDataToEntityMapper = extendedCaseDataToEntityMapper;
+        }
+
+        public ExtendedCaseDataModel CreateTemporaryExtendedCaseData(int formId, string creator)
+        {
+            var newGuid = Guid.NewGuid();
+
+            var extendedCaseDataEntity = new ExtendedCaseDataEntity
+            {
+                ExtendedCaseGuid = newGuid,
+                ExtendedCaseFormId = formId,                
+                CreatedBy = creator,
+                CreatedOn = DateTime.UtcNow
+            };
+
+            Add(extendedCaseDataEntity);
+            Commit();
+
+            return _extendedCaseDataToBusinessModelMapper.Map(extendedCaseDataEntity);
         }
 
         public void AddEcd(ExtendedCaseDataEntity e)
         {
-            this.Add(e);
-            this.Commit();
+            Add(e);
+            Commit();
         }
 
         public ExtendedCaseDataEntity GetExtendedCaseData(Guid extendedCaseGuid)
         {
-
-            return this.Table
+            return Table
                   .Where(c => c.ExtendedCaseGuid == extendedCaseGuid)
                   .Distinct()
                   .FirstOrDefault();
+        }
+
+        public ExtendedCaseDataModel GetExtendedCaseDataByCaseId(int caseId)
+        {
+            var case_ExtendedCaseEntity = DataContext.Case_ExtendedCases.Where(ce => ce.Case_Id == caseId).FirstOrDefault();
+            if (case_ExtendedCaseEntity == null)
+                return null;
+
+            return _extendedCaseDataToBusinessModelMapper.Map(case_ExtendedCaseEntity.ExtendedCaseData);
         }
     }
 }

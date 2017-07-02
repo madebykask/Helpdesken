@@ -99,7 +99,7 @@ namespace DH.Helpdesk.Dal.Repositories
                             FormPath = f.FormPath
                         };
 
-            return query.Distinct().ToList();
+            return query.Take(5000).Distinct().ToList();
         }
 
         public IList<Case> GetProjectCases(int customerId, int projectId)

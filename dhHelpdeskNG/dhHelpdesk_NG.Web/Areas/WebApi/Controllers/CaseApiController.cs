@@ -99,15 +99,12 @@ namespace DH.Helpdesk.Web.Areas.WebApi
             if (caseModel == null)
                 return new ProcessResult("SaveCase", ProcessResult.ResultTypeEnum.ERROR, "Invalid Case id.").Serialize();
 
-            var infoToSave = dic.LoadDictionaryToObject(caseModel);            
-            var res = _universalCaseService.SaveCase(
-                        infoToSave,
-                        new AuxCaseModel(1,
-                                         curUserId,
-                                         User.Identity.Name,
-                                         RequestExtension.GetAbsoluteUrl(),
-                                         CreatedByApplications.Helpdesk5Api)
-            );
+            var infoToSave = dic.LoadDictionaryToObject(caseModel);
+            var auxModel = new AuxCaseModel(1, curUserId, User.Identity.Name,
+                                            RequestExtension.GetAbsoluteUrl(),
+                                            CreatedByApplications.Helpdesk5Api);
+            int caseId = -1;         
+            var res = _universalCaseService.SaveCase(infoToSave, auxModel, out caseId);
 
             #endregion            
 

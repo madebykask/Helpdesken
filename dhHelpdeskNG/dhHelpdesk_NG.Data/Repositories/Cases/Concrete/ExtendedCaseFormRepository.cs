@@ -11,22 +11,22 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     using DH.Helpdesk.Common.Enums;
 
     public sealed class ExtendedCaseFormRepository : RepositoryBase<ExtendedCaseFormEntity>, IExtendedCaseFormRepository
-    {        
-        private readonly IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel> _ExtendedCaseFormToBusinessModelMapper;
-        private readonly IBusinessModelToEntityMapper<ExtendedCaseFormModel, ExtendedCaseFormEntity> _ExtendedCaseFormToEntityMapper;
+    {
+        private readonly IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel> _extendedCaseFormToBusinessModelMapper;
+        private readonly IBusinessModelToEntityMapper<ExtendedCaseFormModel, ExtendedCaseFormEntity> _extendedCaseFormToEntityMapper;
         private readonly ExtendedCaseDataRepository _extendedCaseDataRepository;
 
         public ExtendedCaseFormRepository(
             IDatabaseFactory databaseFactory,
             ExtendedCaseDataRepository extendedCaseDataRepository,
-            IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel> ExtendedCaseFormToBusinessModelMapper,
-            IBusinessModelToEntityMapper<ExtendedCaseFormModel, ExtendedCaseFormEntity> ExtendedCaseFormToEntityMapper)
+            IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel> extendedCaseFormToBusinessModelMapper,
+            IBusinessModelToEntityMapper<ExtendedCaseFormModel, ExtendedCaseFormEntity> extendedCaseFormToEntityMapper)
             : base(databaseFactory)
         {
-            _ExtendedCaseFormToBusinessModelMapper = ExtendedCaseFormToBusinessModelMapper;
-            _ExtendedCaseFormToEntityMapper = ExtendedCaseFormToEntityMapper;
+            _extendedCaseFormToBusinessModelMapper = extendedCaseFormToBusinessModelMapper;
+            _extendedCaseFormToEntityMapper = extendedCaseFormToEntityMapper;
             _extendedCaseDataRepository = extendedCaseDataRepository;
-    }
+        }
 
         private Guid CreateExtendedCaseData(int formId, string userGuid)
         {
@@ -40,13 +40,17 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 CreatedBy = userGuid,
                 CreatedOn = System.DateTime.Now
             };
-            
+
             _extendedCaseDataRepository.AddEcd(extendedCaseData);
 
             return newGuid;
         }
 
-        public IList<ExtendedCaseFormModel> GetExtendedCaseForm(int caseSolutionId, int customerId, int caseId, int userLanguageId, string userGuid, int caseStateSecondaryId, int caseWorkingGroupId, string extendedCasePath, int? userId, string userName, ApplicationType applicationType)
+        public IList<ExtendedCaseFormModel> GetExtendedCaseForm(int caseSolutionId, int customerId,
+                                                                int caseId, int userLanguageId, string userGuid,
+                                                                int caseStateSecondaryId, int caseWorkingGroupId,
+                                                                string extendedCasePath, int? userId, string userName,
+                                                                ApplicationType applicationType)
         {
             ////TODO: 
             ///Cache this!
@@ -120,6 +124,16 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             }
 
             return extendedForm;
+        }
+
+
+        public ExtendedCaseFormModel GetExtendedCaseFormForCaseSolution(int caseSolutionId)
+        {
+            var caseSolutionEntity = DataContext.CaseSolutions.Where(cs => cs.Id == caseSolutionId).FirstOrDefault();
+            if (caseSolutionEntity == null || !caseSolutionEntity.ExtendedCaseForms.Any())
+                return null;
+
+            return _extendedCaseFormToBusinessModelMapper.Map(caseSolutionEntity.ExtendedCaseForms.FirstOrDefault());
         }
     }
 }

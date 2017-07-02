@@ -59,6 +59,8 @@ namespace DH.Helpdesk.SelfService
     using Dal.Repositories.Faq.Concrete;
     using Dal.Repositories.Questionnaire;
     using Dal.Repositories.Questionnaire.Concrete;
+    using Services.Services.ExtendedCase;
+    using Services.Services.UniversalCase;
 
     public static class NinjectWebCommon 
     {
@@ -229,6 +231,8 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IOrderStateRepository>().To<OrderStateRepository>();
             kernel.Bind<IExtendedCaseFormRepository>().To<ExtendedCaseFormRepository>();
             kernel.Bind<IExtendedCaseDataRepository>().To<ExtendedCaseDataRepository>();
+            kernel.Bind<ITextTranslationRepository>().To<TextTranslationRepository>();
+            kernel.Bind<ITextTypeRepository>().To<TextTypeRepository>();            
 
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
@@ -292,6 +296,9 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IRegistrationSourceCustomerRepository>().To<RegistrationSourceCustomerRepository>();
             kernel.Bind<ICaseSolutionConditionRepository>().To<CaseSolutionConditionRepository>();
             kernel.Bind<ICaseSolutionConditionService>().To<CaseSolutionConditionService>();
+            kernel.Bind<IUniversalCaseService>().To<UniversalCaseService>();
+            kernel.Bind<IExtendedCaseService>().To<ExtendedCaseService>();
+            kernel.Bind<ITextTranslationService>().To<TextTranslationService>();
             
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();

@@ -1,15 +1,18 @@
-﻿using System;
+﻿using System.Linq;
 
 namespace DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity
 {
     using BusinessData.Models.Case;
-    using DH.Helpdesk.Domain.ExtendedCaseEntity;
+    using Domain.ExtendedCaseEntity;
 
     public  class ExtendedCaseDataToBusinessModelMapper : IEntityToBusinessModelMapper<ExtendedCaseDataEntity, ExtendedCaseDataModel>
     {
         public ExtendedCaseDataModel Map(ExtendedCaseDataEntity entity)
         {
-            return new ExtendedCaseDataModel
+            if (entity == null)
+                return null;
+
+            var model = new ExtendedCaseDataModel
             {
                 Id = entity.Id,
                 ExtendedCaseGuid = entity.ExtendedCaseGuid,
@@ -17,6 +20,18 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity
                 CreatedBy = entity.CreatedBy,
                 CreatedOn = entity.CreatedOn
             };
+
+            if (entity.ExtendedCaseForm != null)
+            {                
+                var formModel = new ExtendedCaseFormModel
+                {
+                    Id = entity.ExtendedCaseForm.Id,
+                    Name = entity.ExtendedCaseForm.Name
+                };
+                model.FormModel = formModel;
+            }
+            
+            return model;
         }
     }
 }

@@ -5082,8 +5082,7 @@ namespace DH.Helpdesk.Web.Controllers
             #region Extended Case
 
             try
-            {
-
+            {                 
                 string extendedCasePath = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
 
                 if (!string.IsNullOrEmpty(extendedCasePath))
@@ -5097,7 +5096,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                     //for hidden
                     if (m.ContainsExtendedCase)
-                    {
+                    {                        
                         m.ExtendedCaseGuid = m.ExtendedCases.FirstOrDefault().ExtendedCaseGuid;
                     }
 

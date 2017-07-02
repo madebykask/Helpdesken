@@ -28,35 +28,20 @@
         var relatedFieldBlockPrefix = "#relatedFieldBlock-";
         var mandatorySignPrefix = "#mandatory_sign_";                
 
-        Application.prototype.init = function () {
-            var self = this;       
-            customerId = $('#NewCase_Customer_Id').val();
-            self.$regionControl = $('#NewCase_Region_Id');
-            self.$departmentControl = $('#NewCase_Department_Id');
-            self.$orgUnitControl = $('#NewCase_Ou_Id');
-            self.$caseTypeControl = $(document.getElementById("NewCase.CaseType_Id"));
+        Application.prototype.Ex_Container_Prefix = 'iframe_';
+        Application.prototype.ExTab_Prefix = '#extendedcase-tab-';
+        Application.prototype.ExTab_Indicator_Prefix = '#exTabIndicator_';
 
-            $('#NewCase_ReportedBy').typeahead(Application.prototype._GetComputerUserSearchOptions());
-            $('#NewCase_InventoryNumber').typeahead(Application.prototype._GetComputerSearchOptions());            
+        Application.prototype.Case_Field_Ids = null;
+        Application.prototype.Case_Field_Init_Values = null;
+        Application.prototype.Current_EC_FormId = "3";
+        Application.prototype.Current_EC_Guid = "44ec9146-2576-44aa-abbc-030b6d5b8dff";
+        Application.prototype.Current_EC_LanguageId = "2";
+        Application.prototype.Current_EC_Path = "http://dhhelpdesk-ikea-bschr-v5-ec.datahalland.se/ExtendedCase/?formId=[ExtendedCaseFormId]&amp;caseStatus=0&amp;userRole=0&amp;autoLoad=1";
 
-            // Remove after implementing http://redmine.fastdev.se/issues/10995
-            self.$regionControl.on('change', function () {
-                self.refreshDepartment.call(self, $(this).val());
-            });
 
-            self.$departmentControl.on('change', function () {
-                // Remove after implementing http://redmine.fastdev.se/issues/10995        
-                var departmentId = $(this).val();
-                self.refreshOrganizationUnit(departmentId);
-            });
 
-            self.$caseTypeControl.change(function () {
-                self.checkCaseTypeRelationRules($(this));
-            });
-
-            self.applyFieldAttributes();            
-            self.$caseTypeControl.change();
-        };
+        
         
         Application.prototype.applyFieldAttributes = function () {
             if (fieldSettings == undefined || fieldSettings == null || fieldSettings.length <= 0)
@@ -105,6 +90,378 @@
             }          
         }
 
+
+        Application.prototype.isNullOrEmpty = function (val) {
+            return val == undefined || val == null || val == "";
+        }
+
+        Application.prototype.isNullOrUndefined = function (val) {
+            return val == undefined || val == null;
+        }
+
+        Application.prototype.setValueToBtnGroup = function (domContainer, domText, domValue, value) {
+            var self = this;
+            var $domValue = $(domValue);
+            var oldValue = $domValue.val();
+            var el = $(domContainer).find('a[value="' + value + '"]');
+            if (el) {
+                var _txt = self.getBreadcrumbs(el);
+                if (_txt == undefined || _txt == "")
+                    _txt = "--";
+                $(domText).text(_txt);
+                $domValue.val(value);
+                if (oldValue !== value) {
+                    $domValue.trigger('change');
+                }
+            }
+        }
+
+        Application.prototype.getBreadcrumbs = function (el) {
+            self = this;
+            var path = $(el).text();
+            var $parent = $(el).parents("li").eq(1).find("a:first");
+            if ($parent.length == 1) {
+                path = self.getBreadcrumbs($parent) + " - " + path;
+            }
+            return path;
+        }
+
+        Application.prototype.parseDate = function (dateStr) {
+            if (dateStr == undefined || dateStr == "")
+                return null;
+
+            var dateArray = dateStr.split("-");
+            if (dateArray.length != 3)
+                return null;
+
+            return new Date(parseInt(dateArray[0]), parseInt(dateArray[1] - 1), parseInt(dateArray[2]));
+        }
+
+        Application.prototype.dateToDisplayFormat = function (dateValue) {
+            var self = this;
+            if (Object.prototype.toString.call(dateValue) === "[object Date]") {
+                if (isNaN(dateValue.getTime())) {
+                    return "";
+                }
+                else {
+                    return dateValue.getFullYear() + "-" +
+                           self.padLeft(dateValue.getMonth() + 1, 2, "0") + "-" +
+                           self.padLeft(dateValue.getDate(), 2, "0");
+                }
+            }
+            else {
+                return "";
+            }
+        }
+
+        Application.prototype.padLeft = function (value, totalLength, padChar) {
+            var valLen = value.toString().length;
+            var diff = totalLength - valLen;
+            if (diff > 0) {
+                for (var i = 0; i < diff; i++)
+                    value = padChar + value;
+            }
+            return value;
+        }
+
+        Application.prototype.getDate = function (val) {
+            if (val == undefined || val == null || val == "")
+                return null;
+            else {
+                var dateStr = val.split(' ');
+                if (dateStr.length > 0)
+                    return new Date(dateStr[0]);
+                else
+                    return null;
+            }
+        };
+
+        /*** Extended Case Area ***/
+        Application.prototype.getECContainerTemplate = function (objId, target) {
+            return $('<iframe id="' + objId + '"  scrolling="no" frameBorder="0" width="100%" src="' + target + '"></iframe>');
+        }
+
+        Application.prototype.getExtendedCaseContainer = function () {
+            var self = this;
+            return document.getElementById(self.Ex_Container_Prefix + self.Current_EC_FormId);
+        };
+
+        Application.prototype.getECTargetUrl = function () {
+            var self = this;
+            var path = self.Current_EC_Path;
+            path = path.replace('[ExtendedCaseFormId]', self.Current_EC_FormId);
+            return decodeURIComponent(path.replace(/&amp;/g, '&'));
+        }
+
+        Application.prototype.loadExtendedCaseIfNeeded = function () {
+            "use strict";
+            var self = this;
+
+            if (self.isNullOrEmpty(self.Current_EC_FormId)) {
+                return;
+            }
+
+            var extendedCaseDiv = $('#container_' + self.Current_EC_FormId);
+            if (typeof extendedCaseDiv === "undefined" || extendedCaseDiv.length === 0) {
+                return;
+            }
+
+            var $indicator = $(self.ExTab_Indicator_Prefix + self.Current_EC_FormId);
+            $indicator.css("display", "inline-block");
+
+            var $iframe = extendedCaseDiv.next('iframe');
+            if ($iframe.length !== 0) {
+                $iframe.remove();
+            }
+
+
+            var targetUrl = self.getECTargetUrl();
+
+            var iframeId = self.Ex_Container_Prefix + self.Current_EC_FormId;
+            var $placeHolder = self.getECContainerTemplate(iframeId, targetUrl);
+            $placeHolder.appendTo(extendedCaseDiv);
+
+            var $elm = document.getElementById(iframeId);
+            if (!self.isNullOrUndefined($elm)) {
+                var iframeOptions = {
+                    log: false,
+                    sizeHeight: true,
+                    checkOrigin: false,
+                    enablePublicMethods: true,
+                    resizedCallback: function (messageData) {
+                    },
+                    bodyMargin: '0 0 200px 0',
+                    messageCallback: function (messageData) {
+                        if (messageData.message === 'cancelCase') {
+                            var elem = $('#case-action-close');
+                            location.href = elem.attr('href');
+                        }
+                    },
+                    closedCallback: function (id) {
+                    }
+                };
+
+                $placeHolder.load(function () {
+
+                    $placeHolder.addClass("hidden2");
+                    self.loadExtendedCase(iframeId);
+                    $placeHolder.removeClass('hidden2');
+                    $placeHolder.iFrameResize(iframeOptions);
+                    $indicator.css("display", "none");
+                });
+            } else {
+                $indicator.css("display", "none");
+            }
+        };
+
+        Application.prototype.loadExtendedCase = function () {
+            var self = this;
+            var $_ex_Container = self.getExtendedCaseContainer();
+            var formParameters = $_ex_Container.contentWindow.getFormParameters();
+            formParameters.languageId = self.Current_EC_LanguageId;
+            formParameters.extendedCaseGuid = self.Current_EC_Guid;
+            var fieldValues = self.Case_Field_Init_Values;
+            if (fieldValues != null) {
+                $_ex_Container.contentWindow.loadExtendedCase(
+                    {
+                        formParameters: formParameters,
+                        caseValues: {
+                            reportedby: { Value: fieldValues.ReportedBy },
+                            persons_name: { Value: fieldValues.PersonsName },
+                            persons_phone: { Value: fieldValues.PersonsPhone },
+                            usercode: { Value: fieldValues.UserCode },
+                            region_id: { Value: fieldValues.RegionId },
+                            department_id: { Value: fieldValues.DepartmentId },
+                            ou_id_1: { Value: fieldValues.ParentOUId },
+                            ou_id_2: { Value: fieldValues.ChildOUId },
+                            productarea_id: { Value: fieldValues.ProductAreaId },
+                            status_id: { Value: fieldValues.StatusId },
+                            plandate: { Value: fieldValues.PlanDate },
+                            watchdate: { Value: fieldValues.WatchDate },
+                            priority_id: { Value: fieldValues.PriorityId },
+                            log_textinternal: { Value: '' }
+                        }
+                    });
+            } else {
+                $_ex_Container.contentWindow.loadExtendedCase(
+                    {
+                        formParameters: formParameters, caseValues: {
+                            log_textinternal: { Value: '' }
+                        }
+                    });
+            }
+        }
+
+        Application.prototype.isExtendedCaseValid = function (showToast, isOnNext) {
+            //if no input param sent in, set show toast to true
+            if (showToast == null) {
+                showToast = true;
+            }
+
+            //if no input param sent in, set isOnNext to false
+            if (isOnNext == null) {
+                isOnNext = false;
+            }
+
+            var self = this;
+
+            var $exTab = $(self.ExTab_Prefix + self.Current_EC_FormId);
+
+            if ($('#steps').length && $('#ButtonClick').length && $('#ButtonClick').val() == 'btn-go') {
+                //check if value is selected in steps, then isOnNext should be true;
+                var templateId = parseInt($('#steps').val()) || 0;
+                //only load if templateId exist
+                if (templateId > 0) {
+
+                    isOnNext = true;
+                }
+            }
+
+            var $_ex_Container = self.getExtendedCaseContainer();
+            var validationResult = $_ex_Container.contentWindow.validateExtendedCase(isOnNext);
+            if (validationResult == null) {
+                //Change color
+                if ($exTab.parent().hasClass('error')) {
+                    $exTab.parent().removeClass('error');
+                }
+
+                return true;
+            } else {
+
+                //Change color      
+                if (!$exTab.parent().hasClass('error')) {
+                    $exTab.parent().addClass('error');
+                }
+
+                if (showToast) {
+                    ShowToastMessage("Extended case is not valid!", "error", false);
+                }
+                return false;
+            }
+        };
+
+        Application.prototype.syncCaseFromExCaseIfExists = function () {
+            var self = this;
+
+            var $_ex_Container = self.getExtendedCaseContainer();
+            if ($_ex_Container == undefined) {
+                return;
+            }
+
+            var fieldData = $_ex_Container.contentWindow.getCaseValues()
+            if (fieldData == undefined) {
+                return;
+            }
+
+            var _caseFields = self.Case_Field_Ids;
+
+            var _reportedby = fieldData.reportedby;
+            var _persons_name = fieldData.persons_name;
+            var _persons_phone = fieldData.persons_phone;
+            var _usercode = fieldData.usercode;
+            var _region_id = fieldData.region_id;
+            var _department_id = fieldData.department_id;
+            var _ou_id_1 = fieldData.ou_id_1;
+            var _ou_id_2 = fieldData.ou_id_2;
+            var _productarea_id = fieldData.productarea_id;
+            var _status_id = fieldData.status_id;
+            var _plandate = fieldData.plandate;
+            var _watchdate = fieldData.watchdate;
+            var _log_textinternal = fieldData.log_textinternal;
+            var _priority_id = fieldData.priority_id;
+
+            if (_reportedby != undefined)
+                $('#' + _caseFields.ReportedBy).val(_reportedby.Value);
+
+            if (_persons_name != undefined)
+                $('#' + _caseFields.PersonsName).val(_persons_name.Value);
+
+            if (_persons_phone != undefined)
+                $('#' + _caseFields.PersonsPhone).val(_persons_phone.Value);
+
+            if (_usercode != undefined)
+                $('#' + _caseFields.UserCode).val(_usercode.Value);
+
+            if (_log_textinternal != undefined)
+                $('#' + _caseFields.log_InternalText).val(_log_textinternal.Value);
+
+            if (_department_id != undefined) {
+                $("#CaseTemplate_Department_Id").val();
+
+                if (_department_id != 0) {
+                    $("#CaseTemplate_Department_Id").val(_department_id.Value);
+                }
+                $('#' + _caseFields.DepartmentId).val(_department_id.Value);
+                $('#' + _caseFields.DepartmentName).val(_department_id.SecondaryValue);
+            }
+
+            if (_ou_id_1 != undefined) {
+                $("#CaseTemplate_OU_Id").val();
+                var selectedOU_Id = _ou_id_1.Value;
+                var selectedOU_Name = _ou_id_1.SecondaryValue;
+                if (selectedOU_Name == null)
+                    selectedOU_Name = "";
+
+                if (_ou_id_2 != undefined && _ou_id_2.Value != null && _ou_id_2.SecondaryValue != null) {
+                    selectedOU_Id = _ou_id_2.Value;
+                    if (_ou_id_2.SecondaryValue != null)
+                        selectedOU_Name = selectedOU_Name + ' - ' + _ou_id_2.SecondaryValue;
+                }
+
+                if (selectedOU_Id != 0) {
+                    $("#CaseTemplate_OU_Id").val(selectedOU_Id);
+                }
+                $('#' + _caseFields.OUId).val(selectedOU_Id);
+                $('#' + _caseFields.OUName).val(selectedOU_Name);
+            }
+
+
+            if (_region_id != undefined) {
+                $('#' + _caseFields.RegionId).val(_region_id.Value);
+                $('#' + _caseFields.RegionName).val(_region_id.SecondaryValue);
+            }
+
+            if (_priority_id != undefined) {
+                $('#' + _caseFields.PriorityId).val(_priority_id.Value);
+                $('#' + _caseFields.PriorityName).val(_priority_id.SecondaryValue);
+            }
+
+            if (_productarea_id != undefined) {
+                self.setValueToBtnGroup('#divProductArea', "#divBreadcrumbs_ProductArea", '#' + _caseFields.ProductAreaId, _productarea_id.Value)
+            }
+
+            if (_status_id != undefined) {
+                $('#' + _caseFields.StatusId).val(_status_id.Value).change();
+                $('#' + _caseFields.StatusName).val(_status_id.SecondaryValue);
+            }
+
+            if (_plandate != undefined) {
+                var _date = self.parseDate(_plandate.Value);
+                if (_date != null) {
+                    if ($('#' + _caseFields.PlanDate).is('[readonly]'))
+                        $('#' + _caseFields.PlanDate).val(self.dateToDisplayFormat(_date));
+                    else
+                        $('#' + _caseFields.PlanDate).datepicker({
+                            format: "yyyy-mm-dd",
+                            autoclose: true
+                        }).datepicker('setDate', _date);
+                }
+            }
+
+            if (_watchdate != undefined) {
+                var _date = self.parseDate(_watchdate.Value);
+
+                if (_date != null) {
+                    if ($('#' + _caseFields.WatchDate).is('[readonly]'))
+                        $('#' + _caseFields.WatchDate).val(self.dateToDisplayFormat(_date));
+                    else
+                        $('#' + _caseFields.WatchDate).datepicker({
+                            format: "yyyy-mm-dd",
+                            autoclose: true
+                        }).datepicker('setDate', _date);
+                }
+            }
+        }
 
         var canApplyCaseTypeRule = function (standardFieldName) {
             var impactSetting = getFieldSetting(standardFieldName);
@@ -921,6 +1278,37 @@
             globalClipboard.init.call(globalClipboard, $(e.target).attr('data-src'));
         });
        
+        Application.prototype.init = function () {
+            var self = this;
+            customerId = $('#NewCase_Customer_Id').val();
+            self.$regionControl = $('#NewCase_Region_Id');
+            self.$departmentControl = $('#NewCase_Department_Id');
+            self.$orgUnitControl = $('#NewCase_Ou_Id');
+            self.$caseTypeControl = $(document.getElementById("NewCase.CaseType_Id"));
+
+            $('#NewCase_ReportedBy').typeahead(Application.prototype._GetComputerUserSearchOptions());
+            $('#NewCase_InventoryNumber').typeahead(Application.prototype._GetComputerSearchOptions());
+
+            // Remove after implementing http://redmine.fastdev.se/issues/10995
+            self.$regionControl.on('change', function () {
+                self.refreshDepartment.call(self, $(this).val());
+            });
+
+            self.$departmentControl.on('change', function () {
+                // Remove after implementing http://redmine.fastdev.se/issues/10995        
+                var departmentId = $(this).val();
+                self.refreshOrganizationUnit(departmentId);
+            });
+
+            self.$caseTypeControl.change(function () {
+                self.checkCaseTypeRelationRules($(this));
+            });
+
+            self.applyFieldAttributes();
+            self.$caseTypeControl.change();
+            /*Load extended case*/
+            self.loadExtendedCaseIfNeeded();
+        };
     })($);
     
     //tab arrows
@@ -995,5 +1383,6 @@
         }
         return true;
     });
+
     Application.prototype.init();
 });

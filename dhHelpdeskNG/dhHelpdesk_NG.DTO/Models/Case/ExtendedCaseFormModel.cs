@@ -2,6 +2,7 @@
 
 namespace DH.Helpdesk.BusinessData.Models.Case
 {
+     /*TODO: Needs refactoring */
     public class ExtendedCaseFormModel
     {
         public int CaseId { get; set; }
@@ -17,11 +18,18 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
     public class ExtendedCaseDataModel
     {
+        public ExtendedCaseDataModel()
+        {
+            FormModel = new ExtendedCaseFormModel();
+        }
+
         public int Id { get; set; }
         public Guid ExtendedCaseGuid { get; set; }
         public int ExtendedCaseFormId { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
+
+        public ExtendedCaseFormModel FormModel { get; set; }
     }
 
     public class ExtendedCaseValueModel

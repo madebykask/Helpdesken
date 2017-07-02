@@ -336,6 +336,7 @@
     <Compile Include="Models\Case\CaseFieldSettingJSModel.cs" />
     <Compile Include="Models\Case\CaseOverviewModel.cs" />
     <Compile Include="Models\Case\CaseLogModel.cs" />
+    <Compile Include="Models\Case\ExtendedCaseModel.cs" />
     <Compile Include="Models\Case\NewCaseModel.cs" />
     <Compile Include="Models\Case\UserCasesModel.cs" />
     <Compile Include="Models\CheckBoxListItem.cs" />
@@ -437,6 +438,7 @@
     <Content Include="Content\img\glyphicons-halflings.png" />
     <Content Include="Content\img\throbber.gif" />
     <Content Include="Content\img\transp50.png" />
+    <Content Include="Content\js\Case\case.extended.js" />
     <Content Include="Content\js\Case\_caseAddFollowersSearch.js" />
     <Content Include="Content\js\Case\_caseUserSearchCommon.js" />
     <Content Include="Content\js\chosen.jquery.js" />
@@ -446,6 +448,7 @@
     <Content Include="Content\js\Faq\faq.js" />
     <Content Include="Content\js\Case\edit.js" />
     <Content Include="Content\js\Case\case.log.js" />
+    <Content Include="Content\js\iframeResizer.js" />
     <Content Include="Content\js\jquery.dataTables.js" />
     <Content Include="Content\js\jquery.dataTables.min.js" />
     <Content Include="Content\js\Orders\order.edit.js" />
@@ -1044,6 +1047,7 @@
     <Content Include="Views\Orders\AttachedFiles.cshtml" />
     <Content Include="Views\Orders\DisplayTemplates\Fields\DecimalLabel.cshtml" />
     <Content Include="Views\Orders\EditorTemplates\Fields\MultiText.cshtml" />
+    <Content Include="Views\Case\ExtendedCase.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
@@ -1350,6 +1354,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\highlighter\" />
+    <Folder Include="Infrastructure\BusinessModelFactories\ExtendedCase\Concrete\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

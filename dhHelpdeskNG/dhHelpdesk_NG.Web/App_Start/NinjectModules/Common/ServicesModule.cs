@@ -16,6 +16,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
     using DH.Helpdesk.Services.Services.Users;
 
     using Ninject.Modules;
+    using Services.Services.ExtendedCase;
     using Services.Services.UniversalCase;
 
     public sealed class ServicesModule : NinjectModule
@@ -169,6 +170,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
 
 			Bind<ICaseExtraFollowersService>().To<CaseExtraFollowersService>();
             Bind<IUniversalCaseService>().To<UniversalCaseService>();
+            Bind<IExtendedCaseService>().To<ExtendedCaseService>();
         }
 
         #endregion

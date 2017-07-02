@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Shared
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace DH.Helpdesk.BusinessData.Models.Shared
 {
     public class DataValidationResult
     {
@@ -86,5 +90,26 @@
         public string LastMessage { get; private set; }
 
         public ResultTypeEnum ResultType { get; private set; }
+
+        public string GenerateRawMessage()
+        {
+            var res = string.Empty;
+            
+            res = LastMessage;
+            var valueType = Data.GetType();
+            if (Data is IList && valueType.IsGenericType)
+            {
+                try
+                {
+                    var _data = (List<KeyValuePair<string, string>>)Data;
+                    foreach (var r in _data)
+                    {
+                        res += string.Format(" <br/> <b>{0}</b>: {1}", r.Key, r.Value);
+                    }
+                }
+                catch { }               
+            }           
+            return res;
+        }
     }
 }

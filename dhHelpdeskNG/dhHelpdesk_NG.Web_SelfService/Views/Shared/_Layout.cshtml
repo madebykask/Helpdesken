@@ -239,10 +239,17 @@
                                             @if (pCaseTemplates != null)
                                             {
                                                 foreach (var c in pCaseTemplates)
-                                                {
-
+                                            {                                                
                                                     <li>
-                                                        @if (string.IsNullOrEmpty(c.TemplatePath))
+                                                    @if (c.ExtendedCaseForms.Any())
+                                                    {
+                                                        <a href="@Url.Action("ExtendedCase", "case", new { caseTemplateId = c.Id, area = "" })">
+                                                            <span class="glyphicon glyphicon-plus"></span>@c.Name
+                                                            <br />
+                                                            <span class="small">@c.ShortDescription</span>
+                                                        </a>
+                                                    }
+                                                    else if (string.IsNullOrEmpty(c.TemplatePath))
                                                         {
                                                             <a href="@Url.Action("NewCase", "case", new { customerId = pCustomerId, caseTemplateId = c.Id, area = "" })">
                                                                 <span class="glyphicon glyphicon-plus"></span>@c.Name

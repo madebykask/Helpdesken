@@ -13,5 +13,10 @@ namespace DH.Helpdesk.Common.Extensions.Integer
         {
             return (value != NotChangedValue.NULLABLE_INT);
         }
+
+        public static bool IsNew(this int? value)
+        {
+            return (!value.HasValue || value.Value == 0);
+        }
     }
 }

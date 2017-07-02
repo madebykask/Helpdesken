@@ -8,6 +8,8 @@
 
     public interface IExtendedCaseFormRepository : IRepository<ExtendedCaseFormEntity>
     {
+        ExtendedCaseFormModel GetExtendedCaseFormForCaseSolution(int caseSolutionId);
+
         IList<ExtendedCaseFormModel> GetExtendedCaseForm(int caseSolutionId, int customerId, int caseId, int userLanguageId, string userGuid, int caseStateSecondaryId, int caseWorkingGroupId, string extendedCasePath, int? userId, string userName, ApplicationType applicationType);
     }
 }

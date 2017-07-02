@@ -27,6 +27,9 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
     using Models.Shared;
+    using BusinessData.Models.ExtendedCase;
+    using Services.Services.UniversalCase;
+    using Common.Extensions.Integer;
 
     public class CaseController : BaseController
     {
@@ -40,6 +43,7 @@
         private readonly ILogFileService _logFileService;
         private readonly IRegionService _regionService;
         private readonly IDepartmentService _departmentService;
+        private readonly IOUService _ouService;
         private readonly ICaseTypeService _caseTypeService;
         private readonly IProductAreaService _productAreaService;
         private readonly ISystemService _systemService;
@@ -63,6 +67,9 @@
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
         private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
         private readonly IPriorityService _priorityService;
+        private readonly IExtendedCaseService _extendedCaseService;
+        private readonly IUniversalCaseService _universalCaseService;
+
 
         private const string ParentPathDefaultValue = "--";
         private const string EnterMarkup = "<br />";
@@ -74,12 +81,14 @@
             ICaseService caseService,
             ICaseFieldSettingService caseFieldSettingService,
             IMasterDataService masterDataService,
+
             ILogService logService,
             IInfoService infoService,
             IUserTemporaryFilesStorageFactory userTemporaryFilesStorageFactory,
             ICaseFileService caseFileService,
             IRegionService regionService,
             IDepartmentService departmentService,
+            IOUService ouService,
             ICaseTypeService caseTypeService,
             IProductAreaService productAreaService,
             ISystemService systemService,
@@ -105,7 +114,9 @@
             IEmailService emailService,
             ICaseExtraFollowersService caseExtraFollowersService,
             IRegistrationSourceCustomerService registrationSourceCustomerService,
-            IPriorityService priorityService)
+            IPriorityService priorityService,
+            IExtendedCaseService extendedCaseService,
+            IUniversalCaseService universalCaseService)
             : base(masterDataService, caseSolutionService)
         {
             _masterDataService = masterDataService;
@@ -117,6 +128,7 @@
             _caseFileService = caseFileService;
             _regionService = regionService;
             _departmentService = departmentService;
+            _ouService = ouService;
             _caseTypeService = caseTypeService;
             _productAreaService = productAreaService;
             _currencyService = currencyService;
@@ -143,6 +155,8 @@
             _caseExtraFollowersService = caseExtraFollowersService;
             _registrationSourceCustomerService = registrationSourceCustomerService;
             _priorityService = priorityService;
+            _extendedCaseService = extendedCaseService;
+            _universalCaseService = universalCaseService;
         }
 
 
@@ -557,6 +571,113 @@
             } // Load Case Template
 
             return View("NewCase", model);
+        }
+
+        [HttpGet]
+        public ActionResult ExtendedCase(int? caseTemplateId = null, int? caseId = null)
+        {
+            if (caseTemplateId.IsNew() && caseId.IsNew())
+            {
+                ErrorGenerator.MakeError("Template or Case must be specified!");
+                return RedirectToAction("Index", "Error");
+            }
+
+            var currentCustomer = default(Customer);
+            if (SessionFacade.CurrentCustomer != null)
+                currentCustomer = SessionFacade.CurrentCustomer;
+            else
+            {
+                ErrorGenerator.MakeError("Customer is not valid!");
+                return RedirectToAction("Index", "Error");
+            }
+
+            var languageId = SessionFacade.CurrentLanguageId;
+            var customerId = SessionFacade.CurrentCustomer.Id;
+
+            CaseSolution caseTemplate = null;
+            if (caseId.IsNew())
+            {                
+                caseTemplate = _caseSolutionService.GetCaseSolution(caseTemplateId.Value);
+
+                if (caseTemplate == null || caseTemplate.Status == 0 ||
+                    !caseTemplate.ShowInSelfService || caseTemplate.Customer_Id != customerId)
+                {
+                    ErrorGenerator.MakeError("Selected template is not available anymore!");
+                    return RedirectToAction("Index", "Error");
+                }
+            }
+
+            var initData = new InitExtendedForm(customerId, languageId, SessionFacade.CurrentUserIdentity.UserId, caseTemplateId, caseId);
+            var lastError = string.Empty;
+            var extendedCaseDataModel = _extendedCaseService.GenerateExtendedFormModel(initData, out lastError);
+            if (extendedCaseDataModel == null)
+            {
+                ErrorGenerator.MakeError(lastError);
+                return RedirectToAction("Index", "Error");
+            }
+
+            var model = new ExtendedCaseViewModel
+            {
+                CaseId = initData.CaseId,
+                CaseTemplateId = initData.CaseSolutionId,
+                CustomerId = initData.CustomerId,
+                LanguageId = initData.LanguageId,
+                ExtendedCaseDataModel = extendedCaseDataModel
+            };
+
+            var caseModel = new CaseModel
+            {
+                RegUserId = SessionFacade.CurrentUserIdentity.UserId,
+                RegUserDomain = SessionFacade.CurrentUserIdentity.Domain,
+                RegUserName = SessionFacade.CurrentUserIdentity.FirstName,
+                IpAddress = Request.GetIpAddress()
+            };
+
+            if (model.CaseId == 0)
+            {
+                if (string.IsNullOrEmpty(model.ExtendedCaseDataModel.FormModel.Name))
+                    model.ExtendedCaseDataModel.FormModel.Name = caseTemplate.Name;
+
+                caseModel.Customer_Id = initData.CustomerId;                
+                caseModel = LoadTemplateToCase(caseModel, caseTemplate);
+            }
+            else
+                caseModel = _universalCaseService.GetCase(model.CaseId);
+
+            model.CaseDataModel = caseModel;
+
+            /*Get OU if is existing*/
+            if (model.CaseDataModel.OU_Id.HasValue)            
+                model.CaseOU = _ouService.GetOU(model.CaseDataModel.OU_Id.Value);                
+            
+            return View("ExtendedCase", model);
+        }
+
+        [HttpPost]
+        public ActionResult ExtendedCase(ExtendedCaseViewModel model)
+        {
+            var isNewCase = model.CaseDataModel.Id == 0;
+            var auxModel = new AuxCaseModel(model.LanguageId, 0, SessionFacade.CurrentUserIdentity.UserId,
+                                            RequestExtension.GetAbsoluteUrl(),
+                                            CreatedByApplications.ExtendedCase,
+                                            TimeZoneInfo.Local);
+
+            int caseId = -1;
+            var res = _universalCaseService.SaveCase(model.CaseDataModel, auxModel, out caseId);
+            if (res.IsSucceed && caseId != -1)
+            {
+                if (isNewCase)
+                    _caseService.CreateExtendedCaseRelationship(caseId, model.ExtendedCaseDataModel.Id);
+
+                return RedirectToAction("UserCases", new { customerId = model.CustomerId });
+            }
+
+            if (model.CaseDataModel.OU_Id.HasValue)            
+                model.CaseOU = _ouService.GetOU(model.CaseDataModel.OU_Id.Value);                
+            
+
+            model.Result = res;            
+            return View("ExtendedCase", model);
         }
 
         public ActionResult GetDepartmentsByRegion(int? id, int customerId, int departmentFilterFormat)
@@ -1044,7 +1165,12 @@
                 _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Log);            
         }
 
-        
+        public ViewResult AddCommentPopup(int casePreviewId)
+        {
+            return View("_AddCommentPopup");
+        }
+
+
         private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
         {
             IDictionary<string, string> errors;
@@ -1644,10 +1770,102 @@
             return ret;
         }
 
-        public ViewResult AddCommentPopup(int casePreviewId)
+        private CaseModel LoadTemplateToCase(CaseModel model, CaseSolution caseTemplate)
         {
-        
-             return this.View("_AddCommentPopup");
+            if (model == null || caseTemplate == null)
+                return null;
+
+                        
+            if (caseTemplate.CaseType_Id != null)
+            {
+                model.CaseType_Id = caseTemplate.CaseType_Id.Value;
+            }
+
+            var notifier = _computerService.GetInitiatorByUserId(SessionFacade.CurrentUserIdentity.UserId, model.Customer_Id);
+
+            model.ReportedBy = caseTemplate.ReportedBy;
+            model.PersonsName = caseTemplate.PersonsName;
+
+            model.PersonsEmail = caseTemplate.PersonsEmail;
+            model.PersonsPhone = caseTemplate.PersonsPhone;
+            model.PersonsCellphone = caseTemplate.PersonsCellPhone;
+            model.Region_Id = caseTemplate.Region_Id;
+            model.Department_Id = caseTemplate.Department_Id;
+            model.OU_Id = caseTemplate.OU_Id;
+            model.Place = caseTemplate.Place;
+            model.UserCode = caseTemplate.UserCode;
+            model.CostCentre = caseTemplate.CostCentre;
+
+            model.InventoryNumber = caseTemplate.InventoryNumber;
+            model.InventoryType = caseTemplate.InventoryType;
+            model.InventoryLocation = caseTemplate.InventoryLocation;
+
+            model.ProductArea_Id = caseTemplate.ProductArea_Id;
+            model.System_Id = caseTemplate.System_Id;
+            model.Caption = caseTemplate.Caption;
+            model.Description = caseTemplate.Description;
+            model.Priority_Id = caseTemplate.Priority_Id;
+            model.Project_Id = caseTemplate.Project_Id;
+            model.Urgency_Id = caseTemplate.Urgency_Id;
+            model.Impact_Id = caseTemplate.Impact_Id;
+            model.Category_Id = caseTemplate.Category_Id;
+            model.Supplier_Id = caseTemplate.Supplier_Id;
+
+            model.InvoiceNumber = caseTemplate.InvoiceNumber;
+            model.ReferenceNumber = caseTemplate.ReferenceNumber;
+            model.Miscellaneous = caseTemplate.Miscellaneous;
+            model.ContactBeforeAction = caseTemplate.ContactBeforeAction;
+            model.SMS = caseTemplate.SMS;
+            model.AgreedDate = caseTemplate.AgreedDate;
+            model.Available = caseTemplate.Available;
+            model.Cost = caseTemplate.Cost;
+            model.OtherCost = caseTemplate.OtherCost;
+            model.Currency = caseTemplate.Currency;
+            
+            model.Performer_User_Id = caseTemplate.PerformerUser_Id;
+            model.CausingPartId = caseTemplate.CausingPartId;
+            model.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
+            model.Project_Id = caseTemplate.Project_Id;
+            model.Problem_Id = caseTemplate.Problem_Id;
+            model.PlanDate = caseTemplate.PlanDate;
+            model.WatchDate = caseTemplate.WatchDate;
+            
+            model.IsAbout_ReportedBy = caseTemplate.IsAbout_ReportedBy;
+            model.IsAbout_PersonsName = caseTemplate.IsAbout_PersonsName;
+            model.IsAbout_PersonsEmail = caseTemplate.IsAbout_PersonsEmail;
+            model.IsAbout_PersonsPhone = caseTemplate.IsAbout_PersonsPhone;
+            model.IsAbout_PersonsCellPhone = caseTemplate.IsAbout_PersonsCellPhone;
+            model.IsAbout_Region_Id = caseTemplate.IsAbout_Region_Id;
+            model.IsAbout_Department_Id = caseTemplate.IsAbout_Department_Id;
+            model.IsAbout_OU_Id = caseTemplate.IsAbout_OU_Id;
+            model.IsAbout_CostCentre = caseTemplate.IsAbout_CostCentre;
+            model.IsAbout_Place = caseTemplate.IsAbout_Place;
+            model.IsAbout_UserCode = caseTemplate.UserCode;
+
+            model.Status_Id = caseTemplate.Status_Id;
+            model.StateSecondary_Id = caseTemplate.StateSecondary_Id;
+            model.Verified = caseTemplate.Verified;
+            model.VerifiedDescription = caseTemplate.VerifiedDescription;
+            model.SolutionRate = caseTemplate.SolutionRate;
+
+            model.Text_External = caseTemplate.Text_External;
+            model.Text_Internal = caseTemplate.Text_Internal;
+            model.FinishingType_Id = caseTemplate.FinishingCause_Id;
+                
+            if (caseTemplate.RegistrationSource.HasValue)
+            {
+                model.RegistrationSourceCustomer_Id = caseTemplate.RegistrationSource.Value;
+            }
+            else
+            {
+                var registrationSource = _registrationSourceCustomerService.GetCustomersActiveRegistrationSources(model.Customer_Id)
+                        .FirstOrDefault(x => x.SystemCode == (int)CaseRegistrationSource.SelfService);
+                if (registrationSource != null)
+                    model.RegistrationSourceCustomer_Id = registrationSource.Id;
+            }
+
+            return model;
         }
+        
     }
 }

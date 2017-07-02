@@ -9,9 +9,13 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity
     {
         public ExtendedCaseFormModel Map(ExtendedCaseFormEntity entity)
         {
+            if (entity == null)
+                return null;
+
             return new ExtendedCaseFormModel
             {
                 Id = entity.Id,
+                Name = entity.Name                
             };
         }
     }

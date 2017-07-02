@@ -14,13 +14,13 @@ using DH.Helpdesk.Common.Enums.BusinessRule;
 using static DH.Helpdesk.BusinessData.Models.Shared.ProcessResult;
 
 namespace DH.Helpdesk.Services.Services.UniversalCase
-{   
-    public class UniversalCaseService: IUniversalCaseService
+{
+    public class UniversalCaseService : IUniversalCaseService
     {
-        
+
         private const string _CASE_TEXT = "ärendet";
-        private const string _INVALID_TEXT = "är inte giltigt";        
-        private const string _INVALID_EMPTY_TEXT = "kan inte vara tomt";        
+        private const string _INVALID_TEXT = "är inte giltigt";
+        private const string _INVALID_EMPTY_TEXT = "kan inte vara tomt";
 
         private string[] _UNIT_TEXTS = { };
 
@@ -34,7 +34,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
         private int _currentLanguageId;
         private IList<CaseFieldSettingsWithLanguage> _caseFieldSettings;
-        private IList<CustomKeyValue<string,string>> _localTranslations;
+        private IList<CustomKeyValue<string, string>> _localTranslations;
         private CustomerUser _customerUser;
 
         private readonly ICaseRepository _caseRepository;
@@ -82,9 +82,10 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             return _caseRepository.GetCase(id);
         }
 
-        public ProcessResult SaveCase(CaseModel caseModel, AuxCaseModel auxModel)
+        public ProcessResult SaveCase(CaseModel caseModel, AuxCaseModel auxModel, out int caseId)
         {
             var res = new ProcessResult("Save Case");
+            caseId = -1;
 
             res = PrimaryValidate(ref caseModel);
             if (res.IsSucceed)
@@ -97,13 +98,13 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                     if (res.IsSucceed)
                     {
                         var emailSettings = GetEmailSettings(caseModel, auxModel);
-                        res = DoSaveCase(caseModel, auxModel, timeMetrics, emailSettings);
+                        res = DoSaveCase(caseModel, auxModel, timeMetrics, emailSettings, out caseId);
                     }
                 }
             }
             return res;
         }
-       
+
         public CaseTimeMetricsModel ClaculateCaseTimeMetrics(CaseModel caseModel, AuxCaseModel auxModel, CaseModel oldCase = null)
         {
             var ret = new CaseTimeMetricsModel
@@ -124,12 +125,16 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             var setting = _settingService.GetCustomerSetting(curCustomer.Id);
             var customerTimeOffset = setting.TimeZone_offset;
 
-            if (auxModel.UserTimeZone == null)
+            if (auxModel.UserTimeZone == null && auxModel.CurrentUserId != 0)
             {
                 auxModel.UserTimeZone = TimeZoneInfo.Local;
                 var timeZoneId = _userService.GetUserTimeZoneId(auxModel.CurrentUserId);
                 if (timeZoneId != string.Empty)
                     auxModel.UserTimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            }
+            else
+            {
+                auxModel.UserTimeZone = TimeZoneInfo.Local;
             }
 
             var workTimeCalcFactory = new WorkTimeCalculatorFactory(
@@ -206,7 +211,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             #endregion
 
             #region LatestSLACountDate
-            
+
             ret.LatestSLACountDate = CalculateLatestSLACountDate(oldCase?.StateSecondary_Id, caseModel.StateSecondary_Id, oldCase?.LatestSLACountDate);
 
             #endregion
@@ -276,7 +281,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
             if (caseModel.Id == 0)
             {
-                caseModel.CaseGUID = Guid.NewGuid();                
+                caseModel.CaseGUID = Guid.NewGuid();
                 caseModel.ContactBeforeAction = _DEFAULT_CONTACT_BEFORE_ACTION;
                 caseModel.Cost = _DEFAULT_COST;
                 caseModel.Deleted = _DEFAULT_DELETED;
@@ -291,7 +296,8 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             _UNIT_TEXTS = new string[] { _INVALID_TEXT, _INVALID_EMPTY_TEXT, _CASE_TEXT };
             _localTranslations = _textTranslationService.GetTranslationsFor(_UNIT_TEXTS.ToList(), _currentLanguageId);
             _caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(caseModel.Customer_Id, _currentLanguageId).ToList();
-            _customerUser = _customerUserService.GetCustomerSettings(caseModel.Customer_Id, auxModel.CurrentUserId);            
+            if (auxModel.CurrentUserId > 0)
+                _customerUser = _customerUserService.GetCustomerSettings(caseModel.Customer_Id, auxModel.CurrentUserId);
             var oldCase = new CaseModel();
 
             /*Apply rules*/
@@ -302,7 +308,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             {
                 oldCase = _caseRepository.GetCase(caseModel.Id);
 
-                if (_customerUser.UserInfoPermission == 0)
+                if (_customerUser != null && _customerUser.UserInfoPermission == 0)
                 {
                     caseModel.ReportedBy = oldCase.ReportedBy;
                     caseModel.Place = oldCase.Place;
@@ -329,8 +335,8 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             {
                 if (!caseModel.FinishingDate.HasValue)
                     caseModel.FinishingDate = auxModel.UtcNow;
-                else                
-                {                    
+                else
+                {
                     if (caseModel.FinishingDate.Value.ToShortDateString() == DateTime.Today.ToShortDateString())
                     {
                         caseModel.FinishingDate = auxModel.UtcNow;
@@ -343,7 +349,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                     else
                     {
                         caseModel.FinishingDate = DateTime.SpecifyKind(caseModel.FinishingDate.Value, DateTimeKind.Local).ToUniversalTime();
-                    }                    
+                    }
                 }
                 caseModel.FinishingDate = DatesHelper.Max(caseModel.RegTime, caseModel.FinishingDate.Value);
             }
@@ -356,7 +362,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             caseModel.LeadTime = calculatedTimes.LeadTime;
             caseModel.ExternalTime = calculatedTimes.ExternalTime;
             caseModel.LatestSLACountDate = calculatedTimes.LatestSLACountDate;
-            timeMetrics = calculatedTimes;            
+            timeMetrics = calculatedTimes;
 
             return new ProcessResult("Case cloned.");
         }
@@ -369,12 +375,12 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             var retData = new List<KeyValuePair<string, string>>();
 
             #region case validation
-            
+
             if (caseModel.Id == 0)
-            {                
+            {
                 if (caseModel.CaseType_Id == 0)
                     retData.Add(GenerateCantBeNullOrEmptyMessage(GlobalEnums.TranslationCaseFields.CaseType_Id));
-            }            
+            }
 
             if (caseModel.FinishingDate.HasValue)
             {
@@ -393,11 +399,11 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
         private ProcessResult DoSaveCase(CaseModel caseModel, AuxCaseModel auxModel,
                                          CaseTimeMetricsModel timesModel,
-                                         CaseMailSetting mailSettings)
+                                         CaseMailSetting mailSettings, out int caseId)
         {
             /*TODO: After merge CaseServices case must be sent to the Repository directly from here(No need to use CaseService anymore) */
             /* Convert caseModel to Case entity to make it ready for Save method */
-
+            caseId = -1;
             var oldCase = new Case();
             if (caseModel.Id != 0)
                 oldCase = _caseService.GetCaseById(caseModel.Id);
@@ -424,7 +430,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             var logId = _logService.SaveLog(logEntity, 0, out errors);
             logEntity.Id = logId;
 
-            var curUser = _userService.GetUser(auxModel.CurrentUserId);
+            var curUser = auxModel.CurrentUserId > 0 ? _userService.GetUser(auxModel.CurrentUserId) : null;
             oldCase = oldCase.Id > 0 ? oldCase : null;
 
             _caseService.SendCaseEmail(caseEntity.Id, mailSettings, historyId, "", auxModel.UserTimeZone,
@@ -435,6 +441,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 _caseService.ExecuteBusinessActions(actions, caseEntity, logEntity, auxModel.UserTimeZone,
                                                     historyId, "", auxModel.CurrentLanguageId, mailSettings);
 
+            caseId = caseEntity.Id;
             return new ProcessResult("Case saved");
         }
 
@@ -459,10 +466,10 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         }
 
         private string TranslateLocally(string text)
-        {            
+        {
             var translations = _localTranslations.Where(t => t.Key.Equals(text, StringComparison.CurrentCultureIgnoreCase)).ToList();
             return translations.Any() ? translations.First().Value : text;
-        }                
+        }
 
         private DateTime? CalculateLatestSLACountDate(int? oldSubStateId, int? newSubStateId, DateTime? oldSLADate)
         {
@@ -540,7 +547,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             {
                 CustomeMailFromAddress = mailSenders
             };
-            
+
             return caseMailSetting;
         }
 
@@ -548,13 +555,13 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         {
             var caseEntity = new Case();
             if (oldCase != null && oldCase.Id > 0)
-                caseEntity = oldCase;            
+                caseEntity = oldCase;
 
             #region Update Case properties
 
             var properties = caseModel.GetType().GetProperties();
             foreach (var prop in properties)
-            {                
+            {
                 var type = prop.PropertyType;
                 var typeCode = Type.GetTypeCode(type);
                 var caseProperty = caseEntity.GetType().GetProperty(prop.Name);
@@ -564,46 +571,46 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                     {
                         case TypeCode.Int32:
                         case TypeCode.Int64:
-                            var intVal = (int)prop.GetValue(caseModel, null);                            
+                            var intVal = (int)prop.GetValue(caseModel, null);
                             caseProperty.SetValue(caseEntity, intVal);
                             break;
 
                         case TypeCode.String:
-                            var strVal = (string)prop.GetValue(caseModel, null);                            
+                            var strVal = (string)prop.GetValue(caseModel, null);
                             caseProperty.SetValue(caseEntity, strVal);
                             break;
 
                         case TypeCode.DateTime:
-                            var dateVal = (DateTime)prop.GetValue(caseModel, null);                            
+                            var dateVal = (DateTime)prop.GetValue(caseModel, null);
                             caseProperty.SetValue(caseEntity, dateVal);
                             break;
 
                         case TypeCode.Decimal:
-                            var decimalVal = (decimal)prop.GetValue(caseModel, null);                            
+                            var decimalVal = (decimal)prop.GetValue(caseModel, null);
                             caseProperty.SetValue(caseEntity, decimalVal);
                             break;
-                        
+
                         case TypeCode.Object:
                             if (type == typeof(int?))
                             {
-                                var nullIntVal = (int?)prop.GetValue(caseModel, null);                                
+                                var nullIntVal = (int?)prop.GetValue(caseModel, null);
                                 caseProperty.SetValue(caseEntity, nullIntVal);
                             }
                             else
                             if (type == typeof(DateTime?))
                             {
-                                var nullDateVal = (DateTime?)prop.GetValue(caseModel, null);                                
+                                var nullDateVal = (DateTime?)prop.GetValue(caseModel, null);
                                 caseProperty.SetValue(caseEntity, nullDateVal);
                             }
                             else
                             if (type == typeof(Guid))
                             {
-                                var guidVal = (Guid)prop.GetValue(caseModel, null);                                
+                                var guidVal = (Guid)prop.GetValue(caseModel, null);
                                 caseProperty.SetValue(caseEntity, guidVal);
                             }
                             break;
 
-                        default:                            
+                        default:
                             break;
                     }
                 }
@@ -647,7 +654,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             {
                 isAbout.Place = caseModel.IsAbout_Place;
                 isAboutChanged = true;
-            }            
+            }
             if (caseModel.IsAbout_UserCode != oldCase.IsAbout?.UserCode)
             {
                 isAbout.UserCode = caseModel.IsAbout_UserCode;
@@ -673,7 +680,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 isAbout.CostCentre = caseModel.IsAbout_CostCentre;
                 isAboutChanged = true;
             }
-            
+
             if (!isAboutChanged)
                 isAbout = null;
 
@@ -682,7 +689,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
             return caseEntity;
         }
-        
+
         private CaseLog GetCaseLog(CaseModel caseModel)
         {
             var ret = new CaseLog
@@ -691,13 +698,13 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 CaseHistoryId = 0, // Will bet set after save case
                 CaseId = caseModel.Id,
                 FinishingDate = caseModel.FinishingDate,
-                FinishingType = caseModel.FinishingType_Id,                
+                FinishingType = caseModel.FinishingType_Id,
                 LogGuid = Guid.NewGuid(),
                 LogType = 0,
                 TextExternal = caseModel.Text_External,
                 TextInternal = caseModel.Text_Internal
             };
-            
+
             return ret;
         }
     }
