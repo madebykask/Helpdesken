@@ -5897,19 +5897,6 @@ begin
 end
 GO
 
-Declare @Id int = 1822
-Declare @LanguageId int = 2
-If not exists (select * from tbltext where id = @Id)
-begin
-	insert into tbltext (id, TextString) VALUES (@Id, '-- Välj --')
-end
-If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
-begin
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, '-- Select --')
-end
-GO
-
-
 If not exists (select * from tbltext where id = 1822)
 	insert into tbltext (id, TextString) VALUES (1822, 'Visa Skapa ett ärende i toppmenyn')
 GO
@@ -5974,6 +5961,18 @@ If not exists (select * from tbltext where id = 1830)
 GO
 If not exists (select * from tblTextTranslation where text_id = 1830 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1830, 2, 'Group case templates')
+GO
+
+Declare @Id int = 1831
+Declare @LanguageId int = 2
+If not exists (select * from tbltext where id = @Id)
+begin
+	insert into tbltext (id, TextString) VALUES (@Id, '-- Välj --')
+end
+If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, '-- Select --')
+end
 GO
 
 -- *** Run this last when put translation script above this line **--
