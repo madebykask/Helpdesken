@@ -5801,17 +5801,6 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = 'Default when cases are registered by e-mail' WHERE Text_Id=854 AND Language_Id=2;
 GO
 
-Declare @Id int = 1811
-Declare @LanguageId int = 2
-If not exists (select * from tbltext where id = @Id)
-begin
-	insert into tbltext (id, TextString) VALUES (@Id, '-- Välj --')
-end
-If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
-begin
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, '-- Select --')
-end
-GO
 
 Declare @Id int = 1812
 Declare @LanguageId int = 2
@@ -5907,6 +5896,19 @@ begin
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, 'Show on Attachment-tab')
 end
 GO
+
+Declare @Id int = 1822
+Declare @LanguageId int = 2
+If not exists (select * from tbltext where id = @Id)
+begin
+	insert into tbltext (id, TextString) VALUES (@Id, '-- Välj --')
+end
+If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, '-- Select --')
+end
+GO
+
 
 If not exists (select * from tbltext where id = 1822)
 	insert into tbltext (id, TextString) VALUES (1822, 'Visa Skapa ett ärende i toppmenyn')
