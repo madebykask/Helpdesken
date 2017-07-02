@@ -1418,28 +1418,30 @@ namespace DH.Helpdesk.Services.Services
             {
                 #region Send template email if priority has value and Internal or External log is filled
 
-                if (newCase.Priority != null && !string.IsNullOrWhiteSpace(newCase.Priority.EMailList))
+                if (newCase.Priority != null)
                 {
-                    SendPriorityMailSpecial(newCase, log, cms, files, helpdeskMailFromAdress, caseHistoryId, caseId, customerSetting, smtpInfo, userTimeZone);
-                }
-                else
-                {
-                    if (newCase.Priority != null && log != null && (!string.IsNullOrEmpty(log.TextExternal) || !string.IsNullOrEmpty(log.TextInternal)))
+                    if (!string.IsNullOrWhiteSpace(newCase.Priority.EMailList))
                     {
-                        var caseHis = _caseHistoryRepository.GetCloneOfPenultimate(caseId);
-                        if (caseHis != null && caseHis.Priority_Id.HasValue)
+                        SendPriorityMailSpecial(newCase, log, cms, files, helpdeskMailFromAdress, caseHistoryId, caseId, customerSetting, smtpInfo, userTimeZone);
+                    }
+                    else
+                    {
+                        if (newCase.Priority != null && log != null && (!string.IsNullOrEmpty(log.TextExternal) || !string.IsNullOrEmpty(log.TextInternal)))
                         {
-                            var prevPriority = _priorityService.GetPriority(caseHis.Priority_Id.Value);
-                            if (!string.IsNullOrWhiteSpace(prevPriority.EMailList))
+                            var caseHis = _caseHistoryRepository.GetCloneOfPenultimate(caseId);
+                            if (caseHis != null && caseHis.Priority_Id.HasValue)
                             {
-                                var copyNewCase = _caseRepository.GetDetachedCaseById(caseId);
-                                copyNewCase.Priority = prevPriority;
-                                SendPriorityMailSpecial(copyNewCase, log, cms, files, helpdeskMailFromAdress, caseHistoryId, caseId, customerSetting, smtpInfo, userTimeZone);
+                                var prevPriority = _priorityService.GetPriority(caseHis.Priority_Id.Value);
+                                if (!string.IsNullOrWhiteSpace(prevPriority.EMailList))
+                                {
+                                    var copyNewCase = _caseRepository.GetDetachedCaseById(caseId);
+                                    copyNewCase.Priority = prevPriority;
+                                    SendPriorityMailSpecial(copyNewCase, log, cms, files, helpdeskMailFromAdress, caseHistoryId, caseId, customerSetting, smtpInfo, userTimeZone);
+                                }
                             }
                         }
                     }
                 }
-
                 #endregion
             }
 

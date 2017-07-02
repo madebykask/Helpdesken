@@ -104,7 +104,6 @@
             vmodel.Setting.EMailAnswerSeparator = setting.EMailAnswerSeparator.ToString();
             vmodel.Setting.EMailSubjectPattern = setting.EMailSubjectPattern.ToString();
             vmodel.Setting.LDAPSyncType = setting.LDAPSyncType;
-            vmodel.Setting.LDAPLogLevel = setting.LDAPLogLevel;
             vmodel.Setting.PhysicalFilePath = setting.PhysicalFilePath;
             vmodel.Setting.VirtualFilePath = setting.VirtualFilePath;
             vmodel.Setting.CaseComplaintDays = setting.CaseComplaintDays;

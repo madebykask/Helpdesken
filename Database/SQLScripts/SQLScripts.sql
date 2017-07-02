@@ -43,7 +43,7 @@ END
            ,[TableFieldGuid])
      VALUES
            ('case_StateSecondary.StateSecondaryGUID',
-			'Ärende - Substatus',
+			'Ärende - Understatus',
 			'dbo.tblStateSecondary',
 			'Id',
 			'StateSecondary',
@@ -147,7 +147,14 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE [dbo].[tblQuestionnaireQuestionOption] ADD [IconSrc] varbinary(2048) null
 GO
 
+-- New field in tblCustomer
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowCasesOnExternalPage' and sysobjects.name = N'tblCustomer')
+   ALTER TABLE tblCustomer ADD ShowCasesOnExternalPage int NOT NULL Default(1)
+GO
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'GroupCaseTemplates' and sysobjects.name = N'tblCustomer')
+   ALTER TABLE tblCustomer ADD GroupCaseTemplates int NOT NULL Default(0)
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.33'

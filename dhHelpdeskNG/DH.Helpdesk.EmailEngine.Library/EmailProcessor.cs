@@ -10,7 +10,7 @@ using DH.Helpdesk.Dal.DbContext;
 using DH.Helpdesk.Domain;
 using log4net;
 
-namespace DH.Helpdesk.EmailEngine.WinService
+namespace DH.Helpdesk.EmailEngine.Library
 {
 	public class EmailProcessor : IDisposable
 	{
@@ -43,6 +43,7 @@ namespace DH.Helpdesk.EmailEngine.WinService
 				SendEmail(email.e, email.historyCustomer ?? email.logCustomer);
 			}
 
+            _logger.Info($"Emails sent: {emails.Count}");
 			_context.Commit();
 		}
 

@@ -5801,17 +5801,6 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = 'Default when cases are registered by e-mail' WHERE Text_Id=854 AND Language_Id=2;
 GO
 
-Declare @Id int = 1811
-Declare @LanguageId int = 2
-If not exists (select * from tbltext where id = @Id)
-begin
-	insert into tbltext (id, TextString) VALUES (@Id, '-- Välj --')
-end
-If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
-begin
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, '-- Select --')
-end
-GO
 
 Declare @Id int = 1812
 Declare @LanguageId int = 2
@@ -5905,6 +5894,84 @@ end
 If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
 begin
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, 'Show on Attachment-tab')
+end
+GO
+
+If not exists (select * from tbltext where id = 1822)
+	insert into tbltext (id, TextString) VALUES (1822, 'Visa Skapa ett ärende i toppmenyn')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1822 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1822, 2, 'Show Initiate a Case in top menu')
+GO
+
+If not exists (select * from tbltext where id = 1823)
+	insert into tbltext (id, TextString) VALUES (1823, 'Visa Ärenden i toppmenyn')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1823 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1823, 2, 'Show Cases in top menu')
+GO
+
+UPDATE tblText Set TextString = 'Mina ärenden visar' WHERE Id=1783;
+GO
+
+If not exists (select * from tbltext where id = 1824)
+	insert into tbltext (id, TextString) VALUES (1824, 'Ärende - Understatus')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1824 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1824, 2, 'Case - Sub status')
+GO
+
+If not exists (select * from tbltext where id = 1825)
+	insert into tbltext (id, TextString) VALUES (1825, 'Ärende - Driftgrupp')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1825 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1825, 2, 'Case - Working group')
+GO
+
+If not exists (select * from tbltext where id = 1826)
+	insert into tbltext (id, TextString) VALUES (1826, 'Ärende - Prioritet')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1826 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1826, 2, 'Case - Priority')
+GO
+
+If not exists (select * from tbltext where id = 1827)
+	insert into tbltext (id, TextString) VALUES (1827, 'Ärende - Status')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1827 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1827, 2, 'Case - Status')
+GO
+
+If not exists (select * from tbltext where id = 1828)
+	insert into tbltext (id, TextString) VALUES (1828, 'Ärende - Produktområde')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1828 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1828, 2, 'Case - Product area')
+GO
+
+If not exists (select * from tbltext where id = 1829)
+	insert into tbltext (id, TextString) VALUES (1829, 'Användare - Driftgrupp')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1829 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1829, 2, 'User - Working group')
+GO
+
+If not exists (select * from tbltext where id = 1830)
+	insert into tbltext (id, TextString) VALUES (1830, 'Gruppera ärendemallar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1830 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1830, 2, 'Group case templates')
+GO
+
+Declare @Id int = 1831
+Declare @LanguageId int = 2
+If not exists (select * from tbltext where id = @Id)
+begin
+	insert into tbltext (id, TextString) VALUES (@Id, '-- Välj --')
+end
+If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, '-- Select --')
 end
 GO
 

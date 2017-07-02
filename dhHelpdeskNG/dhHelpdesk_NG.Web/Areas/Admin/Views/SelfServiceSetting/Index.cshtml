@@ -33,64 +33,48 @@
                                 <td class="span3">
                                     @Translation.Get("Visa i menyn", Enums.TranslationSource.TextTranslation)
                                 </td>
-                            </tr>      
-                           @*For next release*@                       
-                           <tr style="height:30px">
+                                <td>
+                                    <input type="checkbox" name="customer.ShowCaseOnExternalPage" @(Model.Customer.ShowCaseOnExternalPage == 1 ? "checked=checked" : "") value="1" />
+                                    <input type="hidden" name="customer.ShowCaseOnExternalPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Visa Skapa ett ärende i toppmenyn", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                            <tr>
                                 <td></td>
                                 <td>
-                                    <input type="checkbox" name="customer.ShowFAQOnExternalPage" @(Model.Customer.ShowFAQOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
+                                    <input type="checkbox" id="chkCases" name="customer.ShowCasesOnExternalPage" @(Model.Customer.ShowCasesOnExternalPage == 1 ? "checked=checked" : "") value="1" />
+                                    <input type="hidden" name="customer.ShowCasesOnExternalPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Visa Ärenden i toppmenyn", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" name="customer.ShowFAQOnExternalPage" @(Model.Customer.ShowFAQOnExternalPage == 1 ? "checked=checked" : "") value="1" />
                                     <input type="hidden" name="customer.ShowFAQOnExternalPage" value="0" />
                                     &nbsp; &nbsp; @Translation.Get("Visa FAQ i toppmenyn", Enums.TranslationSource.TextTranslation)
                                 </td>
                             </tr>
-
-                            @*<tr style="height:40px">
+                            <tr>
                                 <td></td>
                                 <td>
-                                    <input type="checkbox" name="customer.ShowDashboardOnExternalPage" @(Model.Customer.ShowDashboardOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
-                                    <input type="hidden" name="customer.ShowDashboardOnExternalPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa Dashboard på självservice", Enums.TranslationSource.TextTranslation)
-                                </td>
-                            </tr>*@
-                            
-                            <tr style="height:40px">
-                                <td></td>
-                                <td>
-                                    <input type="checkbox" name="customer.ShowCoWorkersOnExternalPage" @(Model.Customer.ShowCoWorkersOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
-                                    <input type="hidden" name="customer.ShowCoWorkersOnExternalPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa kundspecifik sida", Enums.TranslationSource.TextTranslation)
-                                </td>
-                            </tr>
-
-                            <tr style="height:40px">
-                                <td></td>
-                                <td>
-                                    <input type="checkbox" name="customer.ShowHelpOnExternalPage" @(Model.Customer.ShowHelpOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
-                                    <input type="hidden" name="customer.ShowHelpOnExternalPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa Hjälp i toppmenyn", Enums.TranslationSource.TextTranslation)
-                                </td>
-                            </tr>                         
-
-                            <tr style="height:40px">
-                                <td></td>
-                                <td>
-                                    <input type="checkbox" id="chkDoc" name="customer.ShowDocumentsOnExternalPage" @(Model.Customer.ShowDocumentsOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
+                                    <input type="checkbox" id="chkDoc" name="customer.ShowDocumentsOnExternalPage" @(Model.Customer.ShowDocumentsOnExternalPage == 1 ? "checked=checked" : "") value="1" />
                                     <input type="hidden" name="customer.ShowDocumentsOnExternalPage" value="0" />
                                     &nbsp; &nbsp; @Translation.Get("Visa Dokument i toppmenyn", Enums.TranslationSource.TextTranslation)
                                 </td>
-                            </tr>                            
+                            </tr>
                             <tr id="docCategories">
+                                <td></td>
                                 <td>
-                                    @Translation.Get("Dokument", Enums.TranslationSource.TextTranslation) @Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)
-                                </td>
-                                <td>
-                                    <table>
-                                        <tr>                                           
-                                            <td>@Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)</td>
+                                    <table border="0">
+                                        <tr>
+                                            <td style="width:24px"></td>
+                                            <td>@Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation) @Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</td>
                                             <td></td>
-                                            <td>@Translation.Get("Valda", Enums.TranslationSource.TextTranslation)</td>
+                                            <td>@Translation.Get("Valda", Enums.TranslationSource.TextTranslation) @Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</td>
                                         </tr>
                                         <tr>
+                                            <td></td>
                                             <td>
                                                 @Html.ListBox("AvailableCategories", Model.AvailableCategories, new { style = "width: 280px; height: 120px" })
                                             </td>
@@ -102,9 +86,42 @@
                                                 @Html.ListBox("SelectedCategories", Model.SelectedCategories, new { style = "width: 280px; height: 120px" })
                                             </td>
                                         </tr>
-                                    </table>                                    
-                                </td>                                
-                            </tr>                            
+                                    </table>
+                                </td>
+                            </tr>                                  
+                           @*For next release*@                       
+                            @*<tr style="height:40px">
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" name="customer.ShowDashboardOnExternalPage" @(Model.Customer.ShowDashboardOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
+                                    <input type="hidden" name="customer.ShowDashboardOnExternalPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Visa Dashboard på självservice", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>*@
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" name="customer.ShowHelpOnExternalPage" @(Model.Customer.ShowHelpOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
+                                    <input type="hidden" name="customer.ShowHelpOnExternalPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Visa Hjälp i toppmenyn", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>                         
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" name="customer.ShowCoWorkersOnExternalPage" @(Model.Customer.ShowCoWorkersOnExternalPage == 1 ? "checked=checked" : "") value="1" />
+                                    <input type="hidden" name="customer.ShowCoWorkersOnExternalPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Visa kundspecifik sida", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" name="customer.GroupCaseTemplates" @(Model.Customer.GroupCaseTemplates == 1 ? "checked=checked" : "") value="1" />
+                                    <input type="hidden" name="customer.GroupCaseTemplates" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Gruppera ärendemallar", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
                         </table>
                     </div>
 
@@ -116,9 +133,14 @@
                                 <td class="span3">
                                     @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
                                 </td>
+                                <td>
+                                    <input type="checkbox" name="customer.ShowBulletinBoardOnExtPage" @(Model.Customer.ShowBulletinBoardOnExtPage == 1 ? "checked=checked" : "") value="1" />
+                                    <input type="hidden" name="customer.ShowBulletinBoardOnExtPage" value="0" />
+                                    &nbsp; &nbsp; @Translation.Get("Visa Anslagstavlan på startsidan", Enums.TranslationSource.TextTranslation)
+                                </td>
                             </tr>  
                             @*For next release*@ 
-                            @*<tr style="height:40px">
+                            @*<tr>
                                 <td></td>
                                 <td style="vertical-align:middle">
                                     <input type="checkbox" id="chkFAQOnStartPage" name="customer.ShowFAQOnExternalStartPage" @(Model.Customer.ShowFAQOnExternalStartPage > 0 ? "checked=checked" : "") value="1"/>
@@ -130,15 +152,7 @@
                                         @Html.DropDownListFor(m => Model.Customer.ShowFAQOnExternalStartPage, Model.StartPageFAQNums, new { style = "width: 70px;" })                                     
                                     </span>                                                                                                         
                                 </td>
-                            </tr>*@
-                            <tr style="height:40px">
-                                <td></td>
-                                <td>
-                                    <input type="checkbox" name="customer.ShowBulletinBoardOnExtPage" @(Model.Customer.ShowBulletinBoardOnExtPage == 1 ? "checked=checked" : "") value="1"/>
-                                    <input type="hidden" name="customer.ShowBulletinBoardOnExtPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa Anslagstavlan på startsidan", Enums.TranslationSource.TextTranslation)
-                                </td>
-                            </tr>                              
+                            </tr>*@                      
                         </table>
                     </div>
 
@@ -148,15 +162,12 @@
                     <div class="formContainer">
                         <table class="tableform">
                             <tr>
-                                <td class="span3">
+                                <td  class="span3">
                                     @Translation.Get("Loggpost", Enums.TranslationSource.TextTranslation)
                                 </td>
-                            </tr>
-                            <tr style="height: 40px">
-                                <td></td>
                                 <td>
-                                    <input type="checkbox" name="customer.UseInternalLogNoteOnExternalPage" @(Model.Customer.UseInternalLogNoteOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
-                                    <input type="hidden" name="customer.UseInternalLogNoteOnExternalPage" value="0"/>
+                                    <input type="checkbox" name="customer.UseInternalLogNoteOnExternalPage" @(Model.Customer.UseInternalLogNoteOnExternalPage == 1 ? "checked=checked" : "") value="1" />
+                                    <input type="hidden" name="customer.UseInternalLogNoteOnExternalPage" value="0" />
                                     &nbsp; &nbsp; @Translation.Get("Intern loggpost i ärende", Enums.TranslationSource.TextTranslation)
                                 </td>
                             </tr>
@@ -171,13 +182,12 @@
                             </tr>
                         </table>
                     </div>
-
-                    <h4>
-                        @Translation.GetCoreTextTranslation("Inställningar") - @Translation.GetCoreTextTranslation("Logga in")
+                    <h4 id="headCases">
+                        @Translation.GetCoreTextTranslation("Inställningar") - @Translation.GetCoreTextTranslation("Ärenden")
                     </h4>
-                    <div class="formContainer">
+                    <div class="formContainer" id="divCases">
                         <table class="tableform">
-                            <tr style="height: 40px">
+                            <tr>
                                 <td class="span3">
                                     @Translation.GetCoreTextTranslation("Mina ärende visar")
                                 </td>
@@ -185,26 +195,26 @@
                                     @Html.CheckBoxFor(m => m.Customer.MyCasesInitiator) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Anmälare")
                                 </td>
                             </tr>
-                            <tr style="height: 40px">
+                            <tr>
                                 <td></td>
                                 <td>
                                     @Html.CheckBoxFor(m => m.Customer.MyCasesRegistrator) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Registrerare")
                                 </td>
                             </tr>
-                            <tr style="height: 40px">
+                            <tr>
                                 <td></td>
                                 <td>
                                     @Html.CheckBoxFor(m => m.Customer.MyCasesFollower) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Följare")
                                 </td>
                             </tr>
-                            <tr style="height: 40px">
+                            <tr>
                                 <td></td>
                                 <td>
                                     @Html.CheckBoxFor(m => m.Customer.MyCasesRegarding) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Angående")
                                 </td>
                             </tr>
                             <tr id="caseTypes">
-                                <td>
+                                <td class="span3">
                                     @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
                                 </td>
                                 <td>
@@ -287,6 +297,17 @@
             }
             else {
                 $('#docCategories').hide();
+            }
+        });
+
+        $('#chkCases').click(function () {
+            if ($('#chkCases').attr('checked')) {
+                $('#divCases').show();
+                $('#headCases').show();
+            }
+            else {
+                $('#divCases').hide();
+                $('#headCases').hide();
             }
         });
 

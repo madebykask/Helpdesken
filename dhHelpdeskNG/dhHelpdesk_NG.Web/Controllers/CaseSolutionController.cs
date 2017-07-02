@@ -993,7 +993,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             //Get selected case solution conditions
             IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
-            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid));
+            int Cust = Convert.ToInt32(collection["CaseSolution.Customer_Id"].ToString());
+            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid), Cust);
 
 
             var model = new CaseSolutionInputViewModel
@@ -1200,7 +1201,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             //Get selected case solution conditions
             IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
-            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid));
+            int cust = SessionFacade.CurrentCustomer.Id;
+            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid), cust);
 
             //Get selected case solution conditions
 
@@ -1238,7 +1240,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             //Get selected case solution conditions
             IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
-            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid));
+            int cust = SessionFacade.CurrentCustomer.Id;
+            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid), cust);
 
             //Get selected case solution conditions
 
@@ -1737,7 +1740,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             //Get selected case solution conditions
             IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
-            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(caseSolution.Id);
+            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(caseSolution.Id, Convert.ToInt32(curCustomerId));
 
 
             string selval = string.Empty;

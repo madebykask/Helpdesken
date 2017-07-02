@@ -58,7 +58,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             //query.ForEach(x => this.DataContext.Remove(x));
         }
 
-        public IEnumerable<CaseSolutionSettingsField> GetSelectedCaseSolutionFieldSetting(int casesolutionid)
+        public IEnumerable<CaseSolutionSettingsField> GetSelectedCaseSolutionFieldSetting(int casesolutionid, int customerid)
         {
 
             List<CaseSolutionSettingsField> list = new List<CaseSolutionSettingsField>();
@@ -191,7 +191,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     sql += "AS [Extent1] ";
                     sql += "WHERE  NOT((LOWER( CAST( [Extent1]. " + tablefieldguid + " AS nvarchar(max)))  ";
                     sql += "IN(" + selvals + ")) ";
-                    sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL)) ";
+                    sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL)) AND (Customer_Id= " + customerid + ") ";
 
                     sql += " UNION ";
 
@@ -204,7 +204,8 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     sql += "AS[Extent1] ";
                     sql += "WHERE(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) ";
                     sql += "IN(" + selvals + ")) ";
-                    sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL) ";
+                    sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL) AND (Customer_Id= " + customerid + ") ";
+                    sql += " ORDER BY " + tablefieldname + "";
                 }
                 else
                 {
@@ -216,7 +217,8 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     sql += "" + tablefieldguid + " AS Guid, ";
                     sql += "cast(0 as bit) AS [Selected] ";
                     sql += "FROM " + tablename + " ";
-                    sql += "AS [Extent1] ";
+                    sql += "AS [Extent1] WHERE [Status] = 1 and (Customer_Id= " + customerid + ")";
+                    sql += " ORDER BY " + tablefieldname + "";
                 }
 
 
@@ -271,7 +273,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
 
 
-
+             
             //var query = from contact in this.DataContext.CaseSolutionsConditions
             //            join dealer in this.DataContext.CaseSolutionConditionProperties on contact.Property_Name equals dealer.CaseSolutionConditionProperty
             //            where contact.CaseSolution_Id == casesolutionid

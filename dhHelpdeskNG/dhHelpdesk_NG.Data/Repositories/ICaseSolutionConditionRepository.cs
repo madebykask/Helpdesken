@@ -18,7 +18,7 @@
 
         IEnumerable<CaseSolutionSettingsField> GetCaseSolutionFieldSetting(int casesolutionid);
 
-        IEnumerable<CaseSolutionSettingsField> GetSelectedCaseSolutionFieldSetting(int casesolutionid);
+        IEnumerable<CaseSolutionSettingsField> GetSelectedCaseSolutionFieldSetting(int casesolutionid, int customerid);
 
         void Save(CaseSolutionConditionEntity model);
 

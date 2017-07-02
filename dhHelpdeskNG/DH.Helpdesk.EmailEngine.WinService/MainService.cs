@@ -16,6 +16,8 @@ using DH.Helpdesk.Domain;
 using log4net;
 using log4net.Config;
 using log4net.Core;
+using DH.Helpdesk.EmailEngine.Library;
+using System.IO;
 
 namespace DH.Helpdesk.EmailEngine.WinService
 {
@@ -28,8 +30,10 @@ namespace DH.Helpdesk.EmailEngine.WinService
 		{
 			InitializeComponent();
 
+
 			var delay = int.Parse(ConfigurationManager.AppSettings["Delay"]) * 1000;
-		    _timer = new Timer
+
+			_timer = new Timer
 		    {
 		        Interval = delay,
 		        AutoReset = false

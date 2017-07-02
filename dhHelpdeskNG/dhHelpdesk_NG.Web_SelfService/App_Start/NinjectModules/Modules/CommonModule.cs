@@ -46,6 +46,7 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
     using DH.Helpdesk.Services.BusinessLogic.Admin.Users.Concrete;
     using Ninject.Modules;
     using Dal.DbQueryExecutor;
+    using Services.Services;
     using Domain.ExtendedCaseEntity;
 
     /// <summary>
@@ -252,6 +253,8 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
             this.Bind<IEntityToBusinessModelMapper<ExtendedCaseDataEntity, ExtendedCaseDataModel>>()
                 .To<ExtendedCaseDataToBusinessModelMapper>()
                 .InSingletonScope();
+
+            this.Bind<ICaseSolutionConditionService>().To<CaseSolutionConditionService>();
         }
     }
 }
