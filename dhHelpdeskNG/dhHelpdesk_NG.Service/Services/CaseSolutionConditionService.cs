@@ -32,7 +32,7 @@ namespace DH.Helpdesk.Services.Services
         void Add(int casesolutionid, int conditionid);
         void Remove(string condition, int casesolutionid);
 
-        IList<CaseSolutionCondition> GetCaseSolutionConditionModel(int casesolutionid, int customerid, string constString);
+        //IList<CaseSolutionCondition> GetCaseSolutionConditionModel(int casesolutionid, int customerid, string constString);
         IEnumerable<CaseSolutionSettingsField> GetCaseSolutionFieldSetting(int casesolutionid);
 
         IEnumerable<CaseSolutionSettingsField> GetSelectedCaseSolutionFieldSetting(int casesolutionid, int customerid);
@@ -70,10 +70,10 @@ namespace DH.Helpdesk.Services.Services
             return this._caseSolutionConditionRepository.GetSelectedCaseSolutionFieldSetting(casesolutionid, customerid).ToList();
         }
 
-        public IList<CaseSolutionCondition> GetCaseSolutionConditionModel(int casesolutionid, int customerid, string constString)
-        {
-            return this._caseSolutionConditionRepository.GetCaseSolutionConditionModel(casesolutionid, customerid, constString).ToList();
-        }
+        //public IList<CaseSolutionCondition> GetCaseSolutionConditionModel(int casesolutionid, int customerid, string constString)
+        //{
+        //    return this._caseSolutionConditionRepository.GetCaseSolutionConditionModel(casesolutionid, customerid, constString).ToList();
+        //}
 
 
         public void Save(CaseSolutionConditionEntity model)
