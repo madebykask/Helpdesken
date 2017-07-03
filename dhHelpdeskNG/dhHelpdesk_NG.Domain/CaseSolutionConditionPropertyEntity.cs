@@ -10,9 +10,9 @@ namespace DH.Helpdesk.Domain
 
         public string Table { get; set; }
         public string TableFieldId { get; set; }
-
         public string TableFieldName { get; set; }
-
         public string TableFieldGuid { get; set; }
+        public int SortOrder { get; set; }
+        public int Status { get; set; }
     }
 }

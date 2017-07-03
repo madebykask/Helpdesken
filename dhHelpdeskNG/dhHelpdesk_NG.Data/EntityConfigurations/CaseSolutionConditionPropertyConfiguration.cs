@@ -14,6 +14,8 @@
             Property(e => e.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);            
             Property(e => e.CaseSolutionConditionProperty).IsRequired().HasMaxLength(100);            
             Property(e => e.Text).IsOptional().HasMaxLength(400);
+            Property(e => e.SortOrder).IsRequired();
+            Property(e => e.Status).IsRequired();
             
 
             ToTable("tblCaseSolutionConditionProperties");

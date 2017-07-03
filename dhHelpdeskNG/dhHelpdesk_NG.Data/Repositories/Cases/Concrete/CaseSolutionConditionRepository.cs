@@ -78,7 +78,8 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             sqlExt += "[Table] AS[Table],  ";
             sqlExt += "[TableFieldId] AS[TableFieldId],  ";
             sqlExt += "[TableFieldName] AS[TableFieldName],  ";
-            sqlExt += "[TableFieldGuid] AS[TableFieldGuid] ";
+            sqlExt += "[TableFieldGuid] AS[TableFieldGuid], ";
+            sqlExt += "[tblCaseSolutionConditionProperties].SortOrder AS SortOrder ";
             sqlExt += "FROM[dbo].[tblCaseSolutionCondition] ";
             sqlExt += "INNER JOIN[dbo].[tblCaseSolutionConditionProperties] ";
             sqlExt += "ON[Property_Name] = [CaseSolutionConditionProperty] ";
@@ -95,13 +96,15 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             sqlExt += "[Table],  ";
             sqlExt += "TableFieldId,  ";
             sqlExt += "TableFieldName,  ";
-            sqlExt += "TableFieldGuid ";
-            sqlExt += "FROM            dbo.tblCaseSolutionConditionProperties ";
+            sqlExt += "TableFieldGuid, ";
+            sqlExt += " [tblCaseSolutionConditionProperties].SortOrder AS SortOrder ";
+            sqlExt += "FROM dbo.tblCaseSolutionConditionProperties ";
             sqlExt += "WHERE tblCaseSolutionConditionProperties.Id NOT IN(SELECT ";
             sqlExt += "[dbo].[tblCaseSolutionConditionProperties].[Id] ";
             sqlExt += "FROM  [dbo].[tblCaseSolutionCondition] ";
             sqlExt += "INNER JOIN [dbo].[tblCaseSolutionConditionProperties] ON[Property_Name] = [CaseSolutionConditionProperty] ";
             sqlExt += "WHERE[CaseSolution_Id] = " + casesolutionid + ") ";
+            sqlExt += " ORDER BY SortOrder ";
 
             string ConnectionStringExt = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
             DataTable dtExt = null;

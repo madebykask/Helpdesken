@@ -14,6 +14,12 @@ ALTER TABLE tblCaseSolutionCondition
 ALTER COLUMN [Values] nvarchar(4000)
 
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblCaseSolutionConditionProperties' AND xtype='U')
+begin
+	DROP TABLE tblCaseSolutionConditionProperties
+end
+GO
+
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblCaseSolutionConditionProperties' AND xtype='U')
 	BEGIN
 
 		CREATE TABLE [dbo].[tblCaseSolutionConditionProperties](
@@ -24,12 +30,16 @@ IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblCaseSolutionConditionProp
 			[TableFieldId] [nvarchar](100) NULL,
 			[TableFieldName] [nvarchar](100) NULL,
 			[TableFieldGuid] [nvarchar](100) NULL,
+			[SortOrder] [int] NULL,
+			[Status] [int] NULL,
 		 CONSTRAINT [PK_tblCaseSolutionConditionProperties] PRIMARY KEY CLUSTERED 
 		(
 			[Id] ASC
 		)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 		) ON [PRIMARY]
 
+		ALTER TABLE [dbo].[tblCaseSolutionConditionProperties] ADD  CONSTRAINT [DF_tblCaseSolutionConditionProperties_SortOrder]  DEFAULT ((0)) FOR [SortOrder]
+		ALTER TABLE [dbo].[tblCaseSolutionConditionProperties] ADD  CONSTRAINT [DF_tblCaseSolutionConditionProperties_Status]  DEFAULT ((1)) FOR [Status]
 END
 
 
@@ -40,14 +50,16 @@ END
            ,[Table]
            ,[TableFieldId]
            ,[TableFieldName]
-           ,[TableFieldGuid])
+           ,[TableFieldGuid]
+		   ,[SortOrder])
      VALUES
            ('case_StateSecondary.StateSecondaryGUID',
 			'Ärende - Understatus',
 			'dbo.tblStateSecondary',
 			'Id',
 			'StateSecondary',
-			'StateSecondaryGUID')
+			'StateSecondaryGUID',
+			0)
 
 
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
@@ -56,14 +68,16 @@ END
            ,[Table]
            ,[TableFieldId]
            ,[TableFieldName]
-           ,[TableFieldGuid])
+           ,[TableFieldGuid]
+		   ,[SortOrder])
      VALUES
            ('case_WorkingGroup.WorkingGroupGUID',
 			'Ärende - Driftgrupp',
 			'dbo.tblWorkingGroup',
 			'Id',
 			'WorkingGroup',
-			'WorkingGroupGUID')
+			'WorkingGroupGUID',
+			1)
 
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
            ([CaseSolutionConditionProperty]
@@ -71,14 +85,16 @@ END
            ,[Table]
            ,[TableFieldId]
            ,[TableFieldName]
-           ,[TableFieldGuid])
+           ,[TableFieldGuid]
+		   ,[SortOrder])
      VALUES
            ('case_Priority.PriorityGUID',
 			'Ärende - Prioritet',
 			'dbo.tblPriority',
 			'Id',
 			'PriorityName',
-			'PriorityGUID')
+			'PriorityGUID',
+			2)
 
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
            ([CaseSolutionConditionProperty]
@@ -86,14 +102,17 @@ END
            ,[Table]
            ,[TableFieldId]
            ,[TableFieldName]
-           ,[TableFieldGuid])
+           ,[TableFieldGuid]
+		   ,[SortOrder])
+		   
      VALUES
            ('case_Status.StatusGUID',
 			'Ärende - Status',
 			'dbo.tblStatus',
 			'Id',
 			'StatusName',
-			'StatusGUID')
+			'StatusGUID'
+			,3)
 
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
            ([CaseSolutionConditionProperty]
@@ -101,15 +120,16 @@ END
            ,[Table]
            ,[TableFieldId]
            ,[TableFieldName]
-           ,[TableFieldGuid])
+           ,[TableFieldGuid]
+		   ,[SortOrder])
      VALUES
            ('case_ProductArea.ProductAreaGUID',
 			'Ärende - Produktområde',
 			'dbo.tblProductArea',
 			'Id',
 			'ProductArea',
-			'ProductAreaGUID')
-
+			'ProductAreaGUID'
+			,4)
 
 
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
@@ -118,14 +138,17 @@ END
            ,[Table]
            ,[TableFieldId]
            ,[TableFieldName]
-           ,[TableFieldGuid])
+           ,[TableFieldGuid]
+		   ,[SortOrder])
      VALUES
            ('user_workinggroup',
 			'Användare - Driftgrupp',
 			'dbo.tblWorkingGroup',
 			'Id',
 			'WorkingGroup',
-			'WorkingGroupGUID')
+			'WorkingGroupGUID'
+			,5
+			)
 
 
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
@@ -134,14 +157,16 @@ END
            ,[Table]
            ,[TableFieldId]
            ,[TableFieldName]
-           ,[TableFieldGuid])
+           ,[TableFieldGuid]
+		   ,[SortOrder])
      VALUES
            ('casesolution_ProductArea.ProductAreaGUID',
 			'Ärendemall - Produktområde',
 			'dbo.tblProductArea',
 			'Id',
 			'ProductArea',
-			'ProductAreaGUID')
+			'ProductAreaGUID',
+			6)
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IconSrc' and sysobjects.name = N'tblQuestionnaireQuestionOption')
 	ALTER TABLE [dbo].[tblQuestionnaireQuestionOption] ADD [IconSrc] varbinary(2048) null
