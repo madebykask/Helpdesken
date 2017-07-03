@@ -217,7 +217,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     sql += "" + tablefieldguid + " AS Guid, ";
                     sql += "cast(0 as bit) AS [Selected] ";
                     sql += "FROM " + tablename + " ";
-                    sql += "AS [Extent1] WHERE [Status] = 1 and (Customer_Id= " + customerid + ")";
+                    sql += "AS [Extent1] WHERE (Customer_Id= " + customerid + ")";
                     sql += " ORDER BY " + tablefieldname + "";
                 }
 
