@@ -5975,5 +5975,19 @@ begin
 end
 GO
 
+If not exists (select * from tbltext where id = 1832)
+	insert into tbltext (id, TextString) VALUES (1832, 'Ärendemall - Produktområde')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1832 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1832, 2, 'Case template - Product area')
+GO
+
+If not exists (select * from tbltext where id = 1833)
+	insert into tbltext (id, TextString) VALUES (1833, 'Detta arbetsflöde kommer endast visas om alla villkor är uppfyllda i ärendet. Det kan finnas mer än ett värde för varje fält, ett av värdena för fältet måste vara uppfyllt.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1833 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1833, 2, 'This workflow step will only be shown if all added conditions are fulfilled for the case. There can be more than one value for each field, one of the values for that field must be fulfilled.')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
