@@ -268,6 +268,9 @@
             }
             else
             {
+                if (currentCase.CaseExtendedCaseDatas.Any())
+                    return RedirectToAction("ExtendedCase", new { caseId = currentCase.Id });
+
                 if(currentCase.FinishingDate == null)
                 {
                     ViewBag.CurrentCaseId = currentCase.Id;
@@ -578,27 +581,54 @@
         {
             if (caseTemplateId.IsNew() && caseId.IsNew())
             {
-                ErrorGenerator.MakeError("Template or Case must be specified!");
+                ErrorGenerator.MakeError("Template or Case must be specified!", 210);
                 return RedirectToAction("Index", "Error");
             }
+
+            var caseModel = new CaseModel
+            {
+                RegUserId = SessionFacade.CurrentUserIdentity.UserId,
+                RegUserDomain = SessionFacade.CurrentUserIdentity.Domain,
+                RegUserName = SessionFacade.CurrentUserIdentity.FirstName,
+                IpAddress = Request.GetIpAddress(),
+                CaseSolution_Id = caseTemplateId
+            };
+            
+            CaseSolution caseTemplate = null;            
+            if (caseTemplateId.HasValue)
+                caseTemplate = _caseSolutionService.GetCaseSolution(caseTemplateId.Value);
+
+            if (caseId.HasValue)
+                caseModel = _universalCaseService.GetCase(caseId.Value);
+
+            if (caseModel == null && caseTemplate == null)
+            {
+                ErrorGenerator.MakeError("Template or Case must be specified!", 211);
+                return RedirectToAction("Index", "Error");
+            }            
 
             var currentCustomer = default(Customer);
             if (SessionFacade.CurrentCustomer != null)
                 currentCustomer = SessionFacade.CurrentCustomer;
             else
             {
+                var _cusId = caseModel != null && caseModel.Customer_Id > 0 ?
+                    caseModel.Customer_Id : (caseTemplate != null ? caseTemplate.Customer_Id : 0);
+
+                currentCustomer = _customerService.GetCustomer(_cusId);
+            }
+
+            if (SessionFacade.CurrentCustomer == null)
+            { 
                 ErrorGenerator.MakeError("Customer is not valid!");
                 return RedirectToAction("Index", "Error");
             }
-
+            
             var languageId = SessionFacade.CurrentLanguageId;
             var customerId = SessionFacade.CurrentCustomer.Id;
 
-            CaseSolution caseTemplate = null;
             if (caseId.IsNew())
-            {                
-                caseTemplate = _caseSolutionService.GetCaseSolution(caseTemplateId.Value);
-
+            {
                 if (caseTemplate == null || caseTemplate.Status == 0 ||
                     !caseTemplate.ShowInSelfService || caseTemplate.Customer_Id != customerId)
                 {
@@ -606,6 +636,14 @@
                     return RedirectToAction("Index", "Error");
                 }
             }
+            else
+            {
+                if (caseModel != null && caseModel.Customer_Id != customerId)
+                {
+                    ErrorGenerator.MakeError("Selected Case is not belong to current customer!");
+                    return RedirectToAction("Index", "Error");
+                }
+            }            
 
             var initData = new InitExtendedForm(customerId, languageId, SessionFacade.CurrentUserIdentity.UserId, caseTemplateId, caseId);
             var lastError = string.Empty;
@@ -624,26 +662,22 @@
                 LanguageId = initData.LanguageId,
                 ExtendedCaseDataModel = extendedCaseDataModel
             };
-
-            var caseModel = new CaseModel
-            {
-                RegUserId = SessionFacade.CurrentUserIdentity.UserId,
-                RegUserDomain = SessionFacade.CurrentUserIdentity.Domain,
-                RegUserName = SessionFacade.CurrentUserIdentity.FirstName,
-                IpAddress = Request.GetIpAddress()
-            };
-
+            
             if (model.CaseId == 0)
             {
-                if (string.IsNullOrEmpty(model.ExtendedCaseDataModel.FormModel.Name))
-                    model.ExtendedCaseDataModel.FormModel.Name = caseTemplate.Name;
-
-                caseModel.Customer_Id = initData.CustomerId;                
+                caseModel.Customer_Id = customerId;                
                 caseModel = LoadTemplateToCase(caseModel, caseTemplate);
-            }
-            else
-                caseModel = _universalCaseService.GetCase(model.CaseId);
+            }            
 
+            if (string.IsNullOrEmpty(model.ExtendedCaseDataModel.FormModel.Name))
+            {
+                if (caseTemplate == null)
+                    caseTemplate = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id?? (caseTemplateId.HasValue? caseTemplateId.Value : 0));
+
+                if (caseTemplate != null)
+                    model.ExtendedCaseDataModel.FormModel.Name = caseTemplate.Name;
+            }
+                
             model.CaseDataModel = caseModel;
 
             /*Get OU if is existing*/
@@ -1866,6 +1900,6 @@
 
             return model;
         }
-        
+                       
     }
 }

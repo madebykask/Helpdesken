@@ -118,6 +118,8 @@
             //entity.Moved = businessModel.Moved.Value;
             entity.RegTime = businessModel.RegTime;
             entity.ChangeTime = businessModel.ChangeTime;
+            entity.CaseSolution_Id = businessModel.CaseSolution_Id;
+
             #endregion
         }
     }

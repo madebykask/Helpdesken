@@ -228,5 +228,11 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         #endregion
 
+        #region Etc
+
+        public int? CaseSolution_Id { get; set; }
+
+        #endregion
+
     }
 }

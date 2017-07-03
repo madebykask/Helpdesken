@@ -252,9 +252,7 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
 
             this.Bind<IEntityToBusinessModelMapper<ExtendedCaseDataEntity, ExtendedCaseDataModel>>()
                 .To<ExtendedCaseDataToBusinessModelMapper>()
-                .InSingletonScope();
-
-            this.Bind<ICaseSolutionConditionService>().To<CaseSolutionConditionService>();
+                .InSingletonScope();            
         }
     }
 }

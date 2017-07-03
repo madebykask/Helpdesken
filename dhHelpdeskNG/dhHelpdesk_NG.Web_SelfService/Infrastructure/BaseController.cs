@@ -72,7 +72,8 @@
                 return;
             }
             else            
-            {                
+            {
+                SessionFacade.UserHasAccess = true;
                 customerId = SessionFacade.CurrentCustomer.Id;
                 SessionFacade.CurrentCustomerID = customerId;                
             }

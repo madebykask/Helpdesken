@@ -29,6 +29,8 @@
          }
      }
 
+     var curCustomer = SessionFacade.CurrentCustomer;
+
      var helper = ManualDependencyResolver.Get<ICommonFunctions>();
 
      var pCaseTemplates = helper.GetCaseTemplates(pCustomerId);
@@ -40,12 +42,7 @@
          userHasOrderTypes = helper.IsUserHasOrderTypes(SessionFacade.CurrentLocalUser.Id, pCustomerId);
      }
 
-     var hideMenu = false;
-
-     if (SessionFacade.UserHasAccess == false)
-     {
-         hideMenu = true;
-     }
+     var hideMenu = !SessionFacade.UserHasAccess;     
 
      var showLanguageSelect = false;
      if (TempData["ShowLanguageSelect"] != null && TempData["ShowLanguageSelect"].ToString().ToLower() == "true")
@@ -220,7 +217,7 @@
                             </li>
                         }
                     }
-                    @if (!pHasError && SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.ShowCaseOnExternalPage != 0)
+                    @if (!pHasError && curCustomer != null && curCustomer.ShowCaseOnExternalPage != 0)
                     {
                         if (!hideMenu)
                         {
@@ -295,7 +292,16 @@
                                             foreach (var c in pCaseTemplates)
                                             {
                                                 <li>
-                                                    @if (string.IsNullOrEmpty(c.TemplatePath))
+                                                    @if (c.ExtendedCaseForms.Any())
+                                                    {
+                                                        <a href="@Url.Action("ExtendedCase", "case", new { caseTemplateId = c.Id, area = "" })">
+                                                            <span class="glyphicon glyphicon-plus"></span>@c.Name
+                                                            <br />
+                                                            <span class="small">@c.ShortDescription</span>
+                                                        </a>
+                                                    }
+                                                    else
+                                                    if (string.IsNullOrEmpty(c.TemplatePath))
                                                     {
                                                         <a href="@Url.Action("NewCase", "case", new { customerId = pCustomerId, caseTemplateId = c.Id, area = "" })">
                                                             <span class="glyphicon glyphicon-plus"></span>&nbsp;@Translation.Get(c.Name, Enums.TranslationSource.TextTranslation)
@@ -321,7 +327,7 @@
                             }
                         }
                     }
-                    @if (!pHasError && SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.ShowCasesOnExternalPage != 0)
+                    @if (!pHasError && curCustomer != null && curCustomer.ShowCasesOnExternalPage != 0)
                     {
                         if (!hideMenu)
                         {
@@ -367,7 +373,7 @@
                         </li>
                     }
 
-                    @if (!pHasError && SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.ShowDocumentsOnExternalPage != 0)
+                    @if (!pHasError && curCustomer != null && curCustomer.ShowDocumentsOnExternalPage != 0)
                     {
                         if (!hideMenu)
                         {
@@ -403,7 +409,7 @@
                         }
                     }
 
-                    @if (!pHasError && SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.ShowFAQOnExternalPage != 0)
+                    @if (!pHasError && curCustomer != null && curCustomer.ShowFAQOnExternalPage != 0)
                     {
                         if (!hideMenu)
                         {
@@ -432,7 +438,7 @@
                         }
                     }
 
-                    @if (!pHasError && SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.ShowCoWorkersOnExternalPage != 0)
+                    @if (!pHasError && curCustomer != null && curCustomer.ShowCoWorkersOnExternalPage != 0)
                     {
                         if (!hideMenu)
                         {
@@ -461,7 +467,7 @@
                         }
                     }
 
-                    @if (!pHasError && SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.ShowHelpOnExternalPage != 0)
+                    @if (!pHasError && curCustomer != null && curCustomer.ShowHelpOnExternalPage != 0)
                     {
                         if (!hideMenu)
                         {

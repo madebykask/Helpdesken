@@ -42,9 +42,7 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                 return null;
             }
 
-            ExtendedCaseDataModel extendedCaseData = null;
-            Guid extendedCaseGuid = Guid.NewGuid();
-            
+            ExtendedCaseDataModel extendedCaseData = null;                        
             if (initData.CaseId == 0)
             {
                 if (!initData.CaseSolutionId.HasValue || initData.CaseSolutionId.Value == 0)

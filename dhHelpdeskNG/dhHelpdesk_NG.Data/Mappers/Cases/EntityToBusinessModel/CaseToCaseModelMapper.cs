@@ -211,9 +211,15 @@
 
                 RegTime = entity.RegTime,
 
-                ChangeTime = entity.ChangeTime
+                ChangeTime = entity.ChangeTime,
 
-            #endregion
+                #endregion
+
+                #region Etc
+
+                CaseSolution_Id = entity.CaseSolution_Id
+
+                #endregion
             };
 
             return ret;
