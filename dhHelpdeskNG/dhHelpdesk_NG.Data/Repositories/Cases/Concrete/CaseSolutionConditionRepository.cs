@@ -621,14 +621,12 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             string sql = string.Empty;
             int istatus = 1;
 
-            if (model.Values != "null")
-            { 
                 sql = "IF EXISTS (SELECT Id FROM tblCaseSolutionCondition WHERE Property_Name = '" + model.Property_Name + "' AND CaseSolution_Id= " + model.CaseSolution_Id + ") BEGIN ";
                 sql += "UPDATE tblCaseSolutionCondition SET [Values]='" + model.Values + "' WHERE Property_Name = '" + model.Property_Name + "' AND CaseSolution_Id = " + model.CaseSolution_Id + " END ";
                 sql += " ELSE BEGIN INSERT INTO tblCaseSolutionCondition (CaseSolution_Id, Property_Name, [Values], Status) ";
-                sql += " VALUES ( " + model.CaseSolution_Id + ", '" + model.Property_Name + "', '" + model.Values + "', " + istatus + " ) END";
-
-
+                sql += " VALUES ( " + model.CaseSolution_Id + ", '" + model.Property_Name + "', '" + model.Values + "', " + istatus + " ) END;";
+                //TEMP
+                sql += "delete from tblCaseSolutionCondition where[Values] = 'null' ";
 
                 string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
 
@@ -646,7 +644,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     }
                 }
 
-            }
+           
         }
 
         public IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid)
