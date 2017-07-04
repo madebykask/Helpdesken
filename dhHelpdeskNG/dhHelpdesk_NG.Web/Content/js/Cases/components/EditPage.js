@@ -1433,8 +1433,16 @@ EditPage.prototype.init = function (p) {
         var templateId = parseInt($('#steps').val()) || 0;
         //only load if templateId exist
         if (templateId > 0) {
-            $('#SelectedWorkflowStep').val(templateId);
-            LoadTemplate(templateId);
+
+            var isValid = self.isExtendedCaseValid(true);
+
+            if (isValid) {
+                $('#SelectedWorkflowStep').val(templateId);
+                LoadTemplate(templateId);
+            }
+            else {
+                $('#SelectedWorkflowStep').val(0);
+            }
         }
     });
 
