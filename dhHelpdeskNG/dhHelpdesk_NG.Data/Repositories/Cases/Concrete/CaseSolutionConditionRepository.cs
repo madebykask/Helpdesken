@@ -79,6 +79,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             sqlExt += "[TableFieldId] AS[TableFieldId],  ";
             sqlExt += "[TableFieldName] AS[TableFieldName],  ";
             sqlExt += "[TableFieldGuid] AS[TableFieldGuid], ";
+            sqlExt += "[TableParentId] AS[TableParentId], ";
             sqlExt += "[tblCaseSolutionConditionProperties].SortOrder AS SortOrder ";
             sqlExt += "FROM[dbo].[tblCaseSolutionCondition] ";
             sqlExt += "INNER JOIN[dbo].[tblCaseSolutionConditionProperties] ";
@@ -97,6 +98,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             sqlExt += "TableFieldId,  ";
             sqlExt += "TableFieldName,  ";
             sqlExt += "TableFieldGuid, ";
+            sqlExt += "TableParentId, ";
             sqlExt += " [tblCaseSolutionConditionProperties].SortOrder AS SortOrder ";
             sqlExt += "FROM dbo.tblCaseSolutionConditionProperties ";
             sqlExt += "WHERE tblCaseSolutionConditionProperties.Id NOT IN(SELECT ";
@@ -165,6 +167,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 string tablefieldid = rowExt["TableFieldId"].ToString();
                 string tablefieldname = rowExt["TableFieldName"].ToString();
                 string tablefieldguid = rowExt["TableFieldGuid"].ToString();
+                string tableParentId = rowExt["TableParentId"].ToString();
 
                 string selvals = string.Empty;
                 foreach (var it in c.SelectedValues)
@@ -186,42 +189,63 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 if (c.SelectedValues.Count > 0)
                 {
                     sql = "SELECT ";
-                    sql += "" + tablefieldid + " AS Id, ";
-                    sql += "" + tablefieldname + " AS Name, ";
+                    sql += "[" + tablefieldid + "] AS Id, ";
+                    if (string.IsNullOrEmpty(tableParentId))
+                    {
+                        sql += "[" + tablefieldname + "] AS Name, ";
+                        
+                    }
+                    else
+                    {
+                        sql += "isnull(dbo.GetHierarchy(" + tablefieldid + ", '" + tablename + "'), '') AS Name, ";
+                    }
                     sql += "" + tablefieldguid + " AS Guid, ";
                     sql += "cast(0 as bit) AS [Selected] ";
                     sql += "FROM " + tablename + " ";
                     sql += "AS [Extent1] ";
                     sql += "WHERE  NOT((LOWER( CAST( [Extent1]. " + tablefieldguid + " AS nvarchar(max)))  ";
                     sql += "IN(" + selvals + ")) ";
-                    sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL)) AND (Customer_Id= " + customerid + ") ";
+                    sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL)) AND (Customer_Id is null or Customer_Id= " + customerid + ") ";
 
                     sql += " UNION ";
 
                     sql += "SELECT ";
-                    sql += "" + tablefieldid + " AS Id, ";
-                    sql += "" + tablefieldname + " AS Name,  ";
+                    sql += "[" + tablefieldid + "] AS Id, ";
+                    if (string.IsNullOrEmpty(tableParentId))
+                    {
+                        sql += "[" + tablefieldname + "] AS Name, ";
+
+                    }
+                    else
+                    {
+                        sql += "isnull(dbo.GetHierarchy(" + tablefieldid + ", '" + tablename + "'), '') AS Name, ";
+                    }
                     sql += "" + tablefieldguid + " AS Guid, ";
                     sql += "cast(1 as bit) AS [Selected] ";
                     sql += "FROM " + tablename + " ";
                     sql += "AS[Extent1] ";
                     sql += "WHERE(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) ";
                     sql += "IN(" + selvals + ")) ";
-                    sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL) AND (Customer_Id= " + customerid + ") ";
-                    sql += " ORDER BY " + tablefieldname + "";
+                    sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL) AND (Customer_Id is null or Customer_Id= " + customerid + ") ";
+                    sql += " ORDER BY Name";
                 }
                 else
                 {
-
-
                     sql = "SELECT ";
-                    sql += "" + tablefieldid + " AS Id, ";
-                    sql += "" + tablefieldname + " AS Name, ";
+                    sql += "[" + tablefieldid + "] AS Id, ";
+                    if (string.IsNullOrEmpty(tableParentId))
+                    {
+                        sql += "[" + tablefieldname + "] AS Name, ";
+                    }
+                    else
+                    {
+                        sql += "isnull(dbo.GetHierarchy(" + tablefieldid + ", '" + tablename + "'), '') AS Name, ";
+                    }
                     sql += "" + tablefieldguid + " AS Guid, ";
                     sql += "cast(0 as bit) AS [Selected] ";
                     sql += "FROM " + tablename + " ";
-                    sql += "AS [Extent1] WHERE (Customer_Id= " + customerid + ")";
-                    sql += " ORDER BY " + tablefieldname + "";
+                    sql += "AS [Extent1] WHERE (Customer_Id is null or Customer_Id= " + customerid + ")"; //
+                    sql += " ORDER BY Name";
                 }
 
 
@@ -241,7 +265,6 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         var reader = command.ExecuteReader();
                         dt = new DataTable();
                         dt.Load(reader);
-
                     }
                 }
 
