@@ -254,12 +254,12 @@ namespace DH.Helpdesk.Services.Services
                         value = appType.ToString();
                     }
                     //GET FROM USER
-                    else if (conditionKey.ToLower().StartsWith("user_workinggroup"))
+                    else if (conditionKey.ToLower().StartsWith("user_WorkingGroup.WorkingGroupGUID".ToLower()))
                     {
                         var workingGroups = this._workingGroupService.GetWorkingGroups(customerId, user.Id);
                         bool wgShowWorkflowStep = false;
 
-                        conditionKey = conditionKey.Replace("user_workinggroup", "");
+                      //  conditionKey = conditionKey.Replace("user_workinggroup", "");
 
                         string[] conditionValues = conditionValue.Split(',').Select(sValue => sValue.Trim()).ToArray();
 
