@@ -272,6 +272,9 @@ namespace DH.Helpdesk.Common.Extensions.String
 
         public static string CleanSpaceAndLowStr(this string value)
         {
+            if (string.IsNullOrEmpty(value))
+                return string.Empty;
+
             return value.Replace(" ", string.Empty).ToLower();
         }
 
