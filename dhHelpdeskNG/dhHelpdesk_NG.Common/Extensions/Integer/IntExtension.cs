@@ -18,5 +18,10 @@ namespace DH.Helpdesk.Common.Extensions.Integer
         {
             return (!value.HasValue || value.Value == 0);
         }
+
+        public static int? IfNullThenElse(this int? value, int? elseValue)
+        {
+            return value ?? elseValue;
+        }
     }
 }

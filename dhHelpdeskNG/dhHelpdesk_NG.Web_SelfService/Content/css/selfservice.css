@@ -1045,3 +1045,9 @@ div .multitext i {
 {
 	min-height: 150px !important;
 }
+
+.dropdown-group{
+    width:320px;
+    height: 34px;
+    margin-top: -2px;
+}

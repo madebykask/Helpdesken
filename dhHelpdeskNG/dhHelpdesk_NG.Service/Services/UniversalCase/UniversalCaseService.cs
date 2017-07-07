@@ -87,7 +87,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             var res = new ProcessResult("Save Case");
             caseId = -1;
 
-            res = PrimaryValidate(ref caseModel);
+            res = PrimaryValidation(ref caseModel);
             if (res.IsSucceed)
             {
                 var timeMetrics = new CaseTimeMetricsModel();
@@ -224,7 +224,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         /************ PRIVATE Methods ****************/
         /*********************************************/
 
-        private ProcessResult PrimaryValidate(ref CaseModel caseModel)
+        private ProcessResult PrimaryValidation(ref CaseModel caseModel)
         {
             /*In this method you can't translate messages (Use validation instead) */
 

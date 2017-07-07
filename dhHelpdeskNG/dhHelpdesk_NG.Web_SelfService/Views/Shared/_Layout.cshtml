@@ -145,8 +145,7 @@
             </div>
         </div>
     }
-    <!-- END COMMUNICATE DIV--->
-
+    <!-- END COMMUNICATE DIV--->    
     <div class="jumbotron">
         <div class="container-fluid">
             <a href="@Url.Action("Index", "Start", new { customerId = pCustomerId, area = "" })">
@@ -509,10 +508,20 @@
     </div>
    
     @RenderBody()
+    <div class="container-fluid dh-container">
+        <div class="row">
+            <div class="col-md-10 small">
+                <div class="footerdhhd">
+                    <img src="@Url.Content("~/Content/img/dh_solutions_slogan.png")" />&nbsp;
+                    <br /><i>@Translation.Get("Version")&nbsp;@ApplicationFacade.Version</i>
+                </div>
+            </div>
+        </div>
+        @RenderSection("Scripts", false)
+        <input type="hidden" value="@Request.RawUrl" id="rawUrl" />
+    </div>    
     @RenderSection("Dialogs", false)    
     @Scripts.Render("~/Content/js/helpdesk")
-    @RenderSection("Scripts", false)
-    <input type="hidden" value="@Request.RawUrl" id="rawUrl" />
     
 </body>
 

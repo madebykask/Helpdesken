@@ -270,10 +270,18 @@ ExtendedCasePage.prototype.isExtendedCaseValid = function (showToast, isOnNext) 
         }
 
         if (showToast) {
-            ShowToastMessage("Extended case is not valid!", "error", false);
+            ShowToastMessage("Case is not valid!", "error", false);
         }
         return false;
     }
+};
+
+ExtendedCasePage.prototype.setNextStep = function () {
+    var self = this;
+    var nextStep = 0;
+    nextStep = parseInt($("#steps option:selected").attr('data-next-step')) || 0;
+    var $_ex_Container = self.getExtendedCaseContainer();
+    var validationResult = $_ex_Container.contentWindow.setNextStep(nextStep);
 };
 
 ExtendedCasePage.prototype.syncCaseFromExCaseIfExists = function () {
@@ -434,15 +442,46 @@ ExtendedCasePage.prototype.init = function (params) {
     /// controls binding
     self.$Form = $('#extendedCaseForm');
     self.$btnSave = $('#btnSave');
-    self.$caseTab = $("#tabsArea li a");   
-    
+    self.$caseTab = $("#tabsArea li a");       
+    self.$selectListStep = $("#steps");
+    self.$btnGo = $('#btnGo');
+    self.$selectedWorkflow = $('#SelectedWorkflowStep');
+
     self.$btnSave.on('click', function (e) {
         self.onSaveClick(self)
     });
 
-    self.loadExtendedCaseIfNeeded();
-    //self.formOnBootValues = self.$form.serialize();    
+    self.loadExtendedCaseIfNeeded();    
    
+    self.$btnGo.on("click", function (e) {
+        e.preventDefault();
+        $('#ButtonClick').val('btn-go');
+
+        var templateId = parseInt(self.$selectListStep.val()) || 0;
+        //only load if templateId exist
+        if (templateId > 0) {
+            var isValid = self.isExtendedCaseValid(true);
+            if (isValid) {
+                self.$selectedWorkflow.val(templateId);
+                self.onSaveClick(self);                
+            }
+            else {
+                self.$selectedWorkflow.val(0);
+            }
+        }
+    });
+
+    self.$selectListStep.on('change', function () {
+        self.setNextStep();
+        var stepId = parseInt(self.$selectListStep.val()) || 0;
+        if (stepId > 0) {
+            self.isExtendedCaseValid(false, true);
+        }
+        else {
+            self.isExtendedCaseValid(false, false);
+        }        
+    });
+
     self.$caseTab.on('shown', function (e) {
         window.scrollTo(0, 0);
     });

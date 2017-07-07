@@ -30,6 +30,8 @@
     using BusinessData.Models.ExtendedCase;
     using Services.Services.UniversalCase;
     using Common.Extensions.Integer;
+    using Common.Extensions.String;
+    using Common.Extensions.DateTime;
 
     public class CaseController : BaseController
     {
@@ -593,8 +595,8 @@
                 IpAddress = Request.GetIpAddress(),
                 CaseSolution_Id = caseTemplateId
             };
-            
-            CaseSolution caseTemplate = null;            
+
+            CaseSolution caseTemplate = null;
             if (caseTemplateId.HasValue)
                 caseTemplate = _caseSolutionService.GetCaseSolution(caseTemplateId.Value);
 
@@ -605,7 +607,7 @@
             {
                 ErrorGenerator.MakeError("Template or Case must be specified!", 211);
                 return RedirectToAction("Index", "Error");
-            }            
+            }
 
             var currentCustomer = default(Customer);
             if (SessionFacade.CurrentCustomer != null)
@@ -619,11 +621,11 @@
             }
 
             if (SessionFacade.CurrentCustomer == null)
-            { 
+            {
                 ErrorGenerator.MakeError("Customer is not valid!");
                 return RedirectToAction("Index", "Error");
             }
-            
+
             var languageId = SessionFacade.CurrentLanguageId;
             var customerId = SessionFacade.CurrentCustomer.Id;
 
@@ -643,7 +645,7 @@
                     ErrorGenerator.MakeError("Selected Case is not belong to current customer!");
                     return RedirectToAction("Index", "Error");
                 }
-            }            
+            }
 
             var initData = new InitExtendedForm(customerId, languageId, SessionFacade.CurrentUserIdentity.UserId, caseTemplateId, caseId);
             var lastError = string.Empty;
@@ -662,28 +664,32 @@
                 LanguageId = initData.LanguageId,
                 ExtendedCaseDataModel = extendedCaseDataModel
             };
-            
+
             if (model.CaseId == 0)
             {
-                caseModel.Customer_Id = customerId;                
+                caseModel.Customer_Id = customerId;
                 caseModel = LoadTemplateToCase(caseModel, caseTemplate);
-            }            
+            }
 
             if (string.IsNullOrEmpty(model.ExtendedCaseDataModel.FormModel.Name))
             {
                 if (caseTemplate == null)
-                    caseTemplate = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id?? (caseTemplateId.HasValue? caseTemplateId.Value : 0));
+                    caseTemplate = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id ?? (caseTemplateId.HasValue ? caseTemplateId.Value : 0));
 
                 if (caseTemplate != null)
                     model.ExtendedCaseDataModel.FormModel.Name = caseTemplate.Name;
             }
-                
+
             model.CaseDataModel = caseModel;
+            model.WorkflowSteps = GetWorkflowStepModel(customerId, caseId ?? 0, caseTemplateId ?? 0).ToList();
 
             /*Get OU if is existing*/
-            if (model.CaseDataModel.OU_Id.HasValue)            
-                model.CaseOU = _ouService.GetOU(model.CaseDataModel.OU_Id.Value);                
-            
+            if (model.CaseDataModel.OU_Id.HasValue)
+                model.CaseOU = _ouService.GetOU(model.CaseDataModel.OU_Id.Value);
+
+            if (!caseId.IsNew() && !model.CaseDataModel.FinishingDate.HasValue)
+                ViewBag.CurrentCaseId = caseId.Value;
+
             return View("ExtendedCase", model);
         }
 
@@ -696,6 +702,9 @@
                                             CreatedByApplications.ExtendedCase,
                                             TimeZoneInfo.Local);
 
+            if (model.SelectedWorkflowStep.HasValue && model.SelectedWorkflowStep.Value > 0)            
+                model.CaseDataModel = ApplyNextWorkflowStepOnCase(model.CaseDataModel, model.SelectedWorkflowStep.Value);
+            
             int caseId = -1;
             var res = _universalCaseService.SaveCase(model.CaseDataModel, auxModel, out caseId);
             if (res.IsSucceed && caseId != -1)
@@ -961,7 +970,7 @@
         }
 
         private void SaveExternalMessage(int caseId, string extraNote, string logFileGuid) 
-        {
+        { 
             IDictionary<string, string> errors;            
             var currentCase = _caseService.GetCaseById(caseId);
             var currentCustomer = _customerService.GetCustomer(currentCase.Customer_Id);
@@ -1055,6 +1064,7 @@
                                                         );
 
             var temporaryLogFiles = new List<WebTemporaryFile>();
+            var userTimeZone = TimeZoneInfo.Local;
             if (!string.IsNullOrEmpty(logFileGuid))
             {
                 temporaryLogFiles = _userTemporaryFilesStorage.GetFiles(logFileGuid, ModuleName.Log);
@@ -1063,15 +1073,14 @@
                 // save log files
                 var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
                 _logFileService.AddFiles(newLogFiles);
-                // send emails
-                var userTimeZone = TimeZoneInfo.Local;
+                // send emails                
                 _caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, userTimeZone, newLogFiles, caseIsActivated);
                 _userTemporaryFilesStorage.DeleteFiles(logFileGuid);
             }
             else
             {
                 caseLog.Id = _logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
-                _caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, string.Empty, null, null, caseIsActivated);
+                _caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, string.Empty, userTimeZone, null, caseIsActivated);
             }
         }
 
@@ -1806,16 +1815,16 @@
 
         private CaseModel LoadTemplateToCase(CaseModel model, CaseSolution caseTemplate)
         {
-            if (model == null || caseTemplate == null)
+            if (model == null)
                 return null;
 
-                        
+            if (caseTemplate == null)
+                return model;
+
             if (caseTemplate.CaseType_Id != null)
             {
                 model.CaseType_Id = caseTemplate.CaseType_Id.Value;
-            }
-
-            var notifier = _computerService.GetInitiatorByUserId(SessionFacade.CurrentUserIdentity.UserId, model.Customer_Id);
+            }            
 
             model.ReportedBy = caseTemplate.ReportedBy;
             model.PersonsName = caseTemplate.PersonsName;
@@ -1886,7 +1895,7 @@
             model.Text_Internal = caseTemplate.Text_Internal;
             model.FinishingType_Id = caseTemplate.FinishingCause_Id;
                 
-            if (caseTemplate.RegistrationSource.HasValue)
+            if (caseTemplate.RegistrationSource.HasValue && caseTemplate.RegistrationSource.Value > 0)
             {
                 model.RegistrationSourceCustomer_Id = caseTemplate.RegistrationSource.Value;
             }
@@ -1900,6 +1909,128 @@
 
             return model;
         }
-                       
+
+        private CaseModel ApplyNextWorkflowStepOnCase(CaseModel model, int stepId)
+        {
+            if (model == null)
+                return null;
+
+            var caseTemplate = _caseSolutionService.GetCaseSolution(stepId);
+            if (caseTemplate == null)
+                return model;
+
+            if (caseTemplate.CaseType_Id != null)
+            {
+                model.CaseType_Id = caseTemplate.CaseType_Id.Value;
+            }            
+
+            model.ReportedBy = caseTemplate.ReportedBy.IfNullThenElse(model.ReportedBy);
+            model.PersonsName = caseTemplate.PersonsName.IfNullThenElse(model.PersonsName);
+            model.PersonsEmail = caseTemplate.PersonsEmail.IfNullThenElse(model.PersonsEmail);
+            model.PersonsPhone = caseTemplate.PersonsPhone.IfNullThenElse(model.PersonsPhone);
+            model.PersonsCellphone = caseTemplate.PersonsCellPhone.IfNullThenElse(model.PersonsCellphone);
+            model.Region_Id = caseTemplate.Region_Id.IfNullThenElse(model.Region_Id);
+            model.Department_Id = caseTemplate.Department_Id.IfNullThenElse(model.Department_Id);
+            model.OU_Id = caseTemplate.OU_Id.IfNullThenElse(model.OU_Id);
+            model.Place = caseTemplate.Place.IfNullThenElse(model.Place);
+            model.UserCode = caseTemplate.UserCode.IfNullThenElse(model.UserCode);
+            model.CostCentre = caseTemplate.CostCentre.IfNullThenElse(model.CostCentre);
+
+            model.InventoryNumber = caseTemplate.InventoryNumber.IfNullThenElse(model.InventoryNumber);
+            model.InventoryType = caseTemplate.InventoryType.IfNullThenElse(model.InventoryType);
+            model.InventoryLocation = caseTemplate.InventoryLocation.IfNullThenElse(model.InventoryLocation);
+
+            model.ProductArea_Id = caseTemplate.ProductArea_Id.IfNullThenElse(model.ProductArea_Id);
+            model.System_Id = caseTemplate.System_Id.IfNullThenElse(model.System_Id);
+            model.Caption = caseTemplate.Caption.IfNullThenElse(model.Caption);
+            model.Description = caseTemplate.Description.IfNullThenElse(model.Description);
+            model.Priority_Id = caseTemplate.Priority_Id.IfNullThenElse(model.Priority_Id);
+            model.Project_Id = caseTemplate.Project_Id.IfNullThenElse(model.Project_Id);
+            model.Urgency_Id = caseTemplate.Urgency_Id.IfNullThenElse(model.Urgency_Id);
+            model.Impact_Id = caseTemplate.Impact_Id.IfNullThenElse(model.Impact_Id);
+            model.Category_Id = caseTemplate.Category_Id.IfNullThenElse(model.Category_Id);
+            model.Supplier_Id = caseTemplate.Supplier_Id.IfNullThenElse(model.Supplier_Id);
+
+            model.InvoiceNumber = caseTemplate.InvoiceNumber.IfNullThenElse(model.InvoiceNumber);
+            model.ReferenceNumber = caseTemplate.ReferenceNumber.IfNullThenElse(model.ReferenceNumber);
+            model.Miscellaneous = caseTemplate.Miscellaneous.IfNullThenElse(model.Miscellaneous);
+            model.ContactBeforeAction = caseTemplate.ContactBeforeAction;
+            model.SMS = caseTemplate.SMS;
+            model.AgreedDate = caseTemplate.AgreedDate.IfNullThenElse(model.AgreedDate);
+            model.Available = caseTemplate.Available.IfNullThenElse(model.Available);
+            model.Cost = caseTemplate.Cost;
+            model.OtherCost = caseTemplate.OtherCost;
+            model.Currency = caseTemplate.Currency.IfNullThenElse(model.Currency);
+
+            model.Performer_User_Id = caseTemplate.PerformerUser_Id.IfNullThenElse(model.Performer_User_Id);
+            model.CausingPartId = caseTemplate.CausingPartId.IfNullThenElse(model.CausingPartId);
+            model.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id.IfNullThenElse(model.WorkingGroup_Id);
+            model.Project_Id = caseTemplate.Project_Id.IfNullThenElse(model.Project_Id);
+            model.Problem_Id = caseTemplate.Problem_Id.IfNullThenElse(model.Problem_Id);
+            model.PlanDate = caseTemplate.PlanDate.IfNullThenElse(model.PlanDate);
+            model.WatchDate = caseTemplate.WatchDate.IfNullThenElse(model.WatchDate);
+
+            model.IsAbout_ReportedBy = caseTemplate.IsAbout_ReportedBy.IfNullThenElse(model.IsAbout_ReportedBy);
+            model.IsAbout_PersonsName = caseTemplate.IsAbout_PersonsName.IfNullThenElse(model.IsAbout_PersonsName);
+            model.IsAbout_PersonsEmail = caseTemplate.IsAbout_PersonsEmail.IfNullThenElse(model.IsAbout_PersonsEmail);
+            model.IsAbout_PersonsPhone = caseTemplate.IsAbout_PersonsPhone.IfNullThenElse(model.IsAbout_PersonsPhone);
+            model.IsAbout_PersonsCellPhone = caseTemplate.IsAbout_PersonsCellPhone.IfNullThenElse(model.IsAbout_PersonsCellPhone);
+            model.IsAbout_Region_Id = caseTemplate.IsAbout_Region_Id.IfNullThenElse(model.IsAbout_Region_Id);
+            model.IsAbout_Department_Id = caseTemplate.IsAbout_Department_Id.IfNullThenElse(model.IsAbout_Department_Id);
+            model.IsAbout_OU_Id = caseTemplate.IsAbout_OU_Id.IfNullThenElse(model.IsAbout_OU_Id);
+            model.IsAbout_CostCentre = caseTemplate.IsAbout_CostCentre.IfNullThenElse(model.IsAbout_CostCentre);
+            model.IsAbout_Place = caseTemplate.IsAbout_Place.IfNullThenElse(model.IsAbout_Place);
+            model.IsAbout_UserCode = caseTemplate.UserCode.IfNullThenElse(model.IsAbout_UserCode);
+
+            model.Status_Id = caseTemplate.Status_Id.IfNullThenElse(model.Status_Id);
+            model.StateSecondary_Id = caseTemplate.StateSecondary_Id.IfNullThenElse(model.StateSecondary_Id);
+            model.Verified = caseTemplate.Verified;
+            model.VerifiedDescription = caseTemplate.VerifiedDescription.IfNullThenElse(model.VerifiedDescription);
+            model.SolutionRate = caseTemplate.SolutionRate.IfNullThenElse(model.SolutionRate);
+
+            model.Text_External = caseTemplate.Text_External.IfNullThenElse(model.Text_External);
+            model.Text_Internal = caseTemplate.Text_Internal.IfNullThenElse(model.Text_Internal);
+            model.FinishingType_Id = caseTemplate.FinishingCause_Id.IfNullThenElse(model.FinishingType_Id);
+
+            if (caseTemplate.RegistrationSource.HasValue && caseTemplate.RegistrationSource.Value > 0)
+            {
+                model.RegistrationSourceCustomer_Id = caseTemplate.RegistrationSource.Value;
+            }
+           
+            return model;
+        }
+
+        private IList<WorkflowStepModel> GetWorkflowStepModel(int customerId, int caseId, int templateId)
+        {            
+            Case caseEntity = null;
+            if (caseId == 0)
+            {
+                caseEntity = _caseService.InitCase(
+                                customerId,
+                                0,
+                                SessionFacade.CurrentLanguageId,
+                                Request.GetIpAddress(),
+                                CaseRegistrationSource.SelfService,
+                                null,
+                                string.Empty);
+
+                var defaultStateSecondary = _stateSecondaryService.GetDefaultOverview(customerId);
+                if (defaultStateSecondary != null)
+                {
+                    caseEntity.StateSecondary_Id = int.Parse(defaultStateSecondary.Value);
+                }
+            }
+            else
+            {
+                caseEntity = _caseService.GetCaseById(caseId);
+            }
+
+            if (caseEntity != null)
+                return _caseSolutionService.GetGetWorkflowSteps(
+                                        customerId, caseEntity, null, 
+                                        ApplicationType.LineManager, templateId);            
+            return null;
+
+        }                  
     }
 }

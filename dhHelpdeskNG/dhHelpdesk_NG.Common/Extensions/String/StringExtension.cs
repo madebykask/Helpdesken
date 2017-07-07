@@ -349,5 +349,10 @@ namespace DH.Helpdesk.Common.Extensions.String
         {
             return value.Replace("\r", "").Replace("\n", "").Trim();
         }
+
+        public static string IfNullThenElse(this string value, string elseValue)
+        {
+            return string.IsNullOrEmpty(value)? elseValue : value;
+        }
     }
 }

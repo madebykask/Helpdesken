@@ -84,5 +84,9 @@ namespace DH.Helpdesk.Common.Extensions.DateTime
             return (value != NotChangedValue.NULLABLE_DATETIME);
         }
 
+        public static DateTime? IfNullThenElse(this DateTime? value, DateTime? elseValue)
+        {
+            return value?? elseValue;
+        }
     }
 }

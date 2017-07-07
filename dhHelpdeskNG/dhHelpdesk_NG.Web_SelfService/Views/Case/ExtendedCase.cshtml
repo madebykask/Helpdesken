@@ -1,5 +1,6 @@
-﻿@using System.Web.Script.Serialization
-@using System.Web.Optimization
+﻿@using System.Web.Optimization
+@using System.Web.Script.Serialization
+@using DH.Helpdesk.Common.Constants
 
 @model DH.Helpdesk.SelfService.Models.Case.ExtendedCaseViewModel
 @{
@@ -7,7 +8,7 @@
     if (Model.Result != null)
     {
         if (!Model.Result.IsSucceed)
-        {            
+        {
             lastErrorMessage = Model.Result.GenerateRawMessage();
         }
     }
@@ -69,7 +70,7 @@
 
         extendedCaseGuid: '@(Model.ExtendedCaseDataModel.ExtendedCaseGuid)',
         extendedCaseFormId: '@(Model.ExtendedCaseDataModel.FormModel.Id)',
-        extendedCaseLanguageId:'@(Model.ExtendedCaseDataModel.FormModel.LanguageId)',
+        extendedCaseLanguageId: '@(Model.ExtendedCaseDataModel.FormModel.LanguageId)',
         extendedCasePath: '@(Model.ExtendedCaseDataModel.FormModel.Path)',
 
         lastError: '@Html.Raw(lastErrorMessage)'
@@ -77,22 +78,38 @@
 
 </script>
 
-@*@Scripts.Render("~/Content/js/Case/extendedCase")*@
-<script src="~/Content/js/Case/case.extended.js"></script>
-<script src="~/Content/js/iframeResizer.js"></script>
+@Scripts.Render("~/Content/js/Case/extendedCase")
+
 
 <div class="jumbotron greybar">
     <div class="container-fluid">
-        <ul class="secnav">
-            <li>
+        <div class="col-lg-3 secnav">
+            <div class="col-lg-4" style="padding-left:0;">
                 <input id="btnSave" type="button" value='@Translation.Get("Save", Enums.TranslationSource.TextTranslation)' class="btn btn-default" />
-            </li>
-        </ul>
+            </div>
+            <div class="col-lg-4">
+                <div class="input-group">
+                    <select id="steps" name="steps" class="dropdown-group">
+                        <option value="0" class="form-control">@Translation.Get(Text.SelectStep)</option>
+                        @if (Model.WorkflowSteps != null && Model.WorkflowSteps.Any())
+                        {
+                            foreach (var step in Model.WorkflowSteps)
+                            {
+                                <option data-next-step="@step.NextStep" value="@step.CaseTemplateId">@Translation.Get(step.Name)</option>
+                            }
+                        }
+                    </select>
+                    <span class="input-group-btn">
+                        <input id="btnGo" type="button" class="btn btn-default go-button" value="@Translation.Get("Send")" />
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 @using (Html.BeginForm("ExtendedCase", "case", null, FormMethod.Post, new { id = "extendedCaseForm" }))
-{    
+{
     // Base
     @Html.HiddenFor(model => model.CaseDataModel.Id)
     @Html.HiddenFor(model => model.CaseDataModel.CaseNumber)
@@ -200,7 +217,7 @@
     @Html.HiddenFor(model => model.CaseDataModel.RegTime)
     @Html.HiddenFor(model => model.CaseDataModel.ChangeTime)
 
-    // Log 
+    // Log
     @Html.HiddenFor(model => model.CaseDataModel.Text_External)
     @Html.HiddenFor(model => model.CaseDataModel.Text_Internal)
 
@@ -232,26 +249,30 @@
     @Html.HiddenFor(model => model.ExtendedCaseDataModel.FormModel.UserRole)
     @Html.HiddenFor(model => model.ExtendedCaseDataModel.FormModel.Path)
 
+    /*according to Helpdesk*/
+    @Html.Hidden("ButtonClick", "") @*TEMP, used to define if "Send" button is clicked*@
+    @Html.HiddenFor(model => model.SelectedWorkflowStep)
+
 }
 
 @{ var extendedFormId = Model.ExtendedCaseDataModel.FormModel.Id; }
 
-<div class="container-fluid dh-container">    
+<div class="container-fluid dh-container">
     <ul class="nav nav-tabs" id="tabsArea">
         <li id="extendedcase-tab-@extendedFormId" class="active">
-            <a href="#fragment-1"> 
+            <a href="#fragment-1">
                 @Model.ExtendedCaseDataModel.FormModel.Name
                 <i id="exTabIndicator_@extendedFormId" class="tab-indicator" style="display:none;">&nbsp;</i>
-            </a>            
+            </a>
         </li>
     </ul>
 
     <div class="content">
         <div id="fragment-1" class="tab-pane active">
             <div class="container-fluid dh-container">
-                <div id="container_@extendedFormId" class="">                    
+                <div id="container_@extendedFormId" class="">
                     @*Extended case placement*@
-                </div>                
+                </div>
             </div>
         </div>
     </div>
