@@ -917,7 +917,8 @@
                 newCustomerCaseFieldSettings.FieldSize = cfs.FieldSize;
                 newCustomerCaseFieldSettings.ListEdit = cfs.ListEdit;
                 newCustomerCaseFieldSettings.EMailIdentifier = cfs.EMailIdentifier;
-                newCustomerCaseFieldSettings.ChangedDate = curTime; 
+                newCustomerCaseFieldSettings.ChangedDate = curTime;
+                newCustomerCaseFieldSettings.CaseFieldSettingsGUID = Guid.NewGuid();
                 
                 this._customerService.SaveCaseFieldSettingsForCustomerCopy(newCustomerToSave.Id, newCustomerToSave.Language_Id, newCustomerCaseFieldSettings, out errors);
             }

@@ -189,7 +189,7 @@ END
 			'tblApplicationType',
 			'Id',
 			'ApplicationType',
-			'ApplicationTypeGUID',
+			'Id',
 			7)
 
 
