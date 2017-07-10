@@ -357,6 +357,38 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
+
+
+
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentTemplate')
+begin
+
+
+	CREATE TABLE [dbo].[tblCaseDocumentTemplate](
+		[Id] [int] NULL,
+		[Name] [nvarchar](50) NULL,
+		[Margins] [nvarchar](50) NULL,
+		[PageNumbersUse] [bit] NULL,
+		[DraftUse] [bit] NULL,
+		[BarCodeUse] [bit] NULL,
+		[Footer] [nvarchar](max) NULL,
+		[Header] [nvarchar](max) NULL,
+		[LanguageId] [int] NULL
+	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_PageNumbersUse]  DEFAULT ((0)) FOR [PageNumbersUse]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_DraftUse]  DEFAULT ((0)) FOR [DraftUse]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_BarCodeUse]  DEFAULT ((0)) FOR [BarCodeUse]
+	
+end
+
+
+
+
 if not exists(select * from sysobjects WHERE Name = N'tblCaseDocument')
 begin
 
@@ -390,6 +422,12 @@ begin
 	ALTER TABLE [dbo].[tblCaseDocument] ADD  CONSTRAINT [DF_tblCaseDocument_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
 	
 end
+
+
+-- New field in tblCaseDocument
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaseDocumentTemplate_Id' and sysobjects.name = N'tblCaseDocument')
+   ALTER TABLE tblCaseDocument ADD CaseDocumentTemplate_Id int NOT NULL
+GO
 
 if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentCondition')
 begin
@@ -433,3 +471,44 @@ begin
 	
 end
 
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentParagraph')
+begin
+
+	CREATE TABLE [dbo].[tblCaseDocumentParagraph](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[Name] [nvarchar](50) NULL,
+		[Description] [nvarchar](50) NULL,
+		[ParagraphType] [int] NULL,
+	 CONSTRAINT [PK_tblCaseDocumentParagraph] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+
+	ALTER TABLE [dbo].[tblCaseDocumentParagraph] ADD  CONSTRAINT [DF_tblCaseDocumentParagraph_ParagraphType]  DEFAULT ((1)) FOR [ParagraphType]
+
+end
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentText')
+begin
+
+	CREATE TABLE [dbo].[tblCaseDocumentText](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[CaseDocumentParagraph_Id] [int] NULL,
+		[Name] [nvarchar](50) NULL,
+		[Description] [nvarchar](50) NULL,
+		[Text] [nvarchar](max) NOT NULL,
+		[Headline] [nvarchar](200) NULL,
+		[SortOrder] [int] NOT NULL,
+	 CONSTRAINT [PK_tblCaseDocumentText] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+	
+	ALTER TABLE [dbo].[tblCaseDocumentText] ADD  CONSTRAINT [DF_tblCaseDocumentText_SortOrder]  DEFAULT ((0)) FOR [SortOrder]
+	
+
+end
