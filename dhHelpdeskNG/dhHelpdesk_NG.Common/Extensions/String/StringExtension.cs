@@ -10,6 +10,7 @@
 using System.Linq;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Constants;
+using System.Web;
 
 namespace DH.Helpdesk.Common.Extensions.String
 {
@@ -354,5 +355,15 @@ namespace DH.Helpdesk.Common.Extensions.String
         {
             return string.IsNullOrEmpty(value)? elseValue : value;
         }
+
+
+        /// <summary>
+        /// Removes \r and \n from string and Trims
+        /// </summary>
+        public static HtmlString ToHtmlString(this string value)
+        {
+            return new HtmlString(value);
+        }
+
     }
 }
