@@ -235,6 +235,8 @@ ExtendedCasePage.prototype.loadExtendedCase = function () {
 }
 
 ExtendedCasePage.prototype.isExtendedCaseValid = function (showToast, isOnNext) {
+    var self = this;
+  
     //if no input param sent in, set show toast to true
     if (showToast == null) {
         showToast = true;
@@ -245,16 +247,12 @@ ExtendedCasePage.prototype.isExtendedCaseValid = function (showToast, isOnNext) 
         isOnNext = false;
     }
 
-    var self = this;
-
     var $exTab = $(self.ExTab_Prefix + self.Current_EC_FormId);
-
     if ($('#steps').length && $('#ButtonClick').length && $('#ButtonClick').val() == 'btn-go') {
         //check if value is selected in steps, then isOnNext should be true;
         var templateId = parseInt($('#steps').val()) || 0;
         //only load if templateId exist
         if (templateId > 0) {
-
             isOnNext = true;
         }
     }
@@ -266,10 +264,8 @@ ExtendedCasePage.prototype.isExtendedCaseValid = function (showToast, isOnNext) 
         if ($exTab.parent().hasClass('error')) {
             $exTab.parent().removeClass('error');
         }
-
         return true;
     } else {
-
         //Change color      
         if (!$exTab.parent().hasClass('error')) {
             $exTab.parent().addClass('error');

@@ -677,10 +677,10 @@ namespace DH.Helpdesk.Dal.Repositories
 
                 //CoWorkers Cases Only
                 case CaseListTypes.CoWorkerCases:
-                    if (string.IsNullOrEmpty(f.ReportedBy.Replace(" ", "").Replace("'", "")))
-                        sb.Append(" and (tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "')");
+                    if (string.IsNullOrEmpty(f.ReportedBy.Replace(" ", "").Replace("'", "")))                        
+                        sb.Append(" and (tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "' and (tblCase.[ReportedBy] is null or tblCase.[ReportedBy] = ''))");
                     else
-                        sb.Append(" and (((tblCase.[ReportedBy] is null or tblCase.[ReportedBy] = '') and tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "') or tblCase.[ReportedBy] in (" + f.ReportedBy.SafeForSqlInjectForInOperator() + "))");
+                        sb.Append(" and (((tblCase.[ReportedBy] is null or tblCase.[ReportedBy] = '') and tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "') or tblCase.[ReportedBy] in (" + f.ReportedBy.SafeForSqlInjectForInOperator() + "))");                        
                     break;
 
                 //Manager & Coworkers Cases
