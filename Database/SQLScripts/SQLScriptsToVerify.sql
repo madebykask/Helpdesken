@@ -512,3 +512,28 @@ begin
 	
 
 end
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocument_CaseDocumentParagraph')
+begin
+	CREATE TABLE [dbo].[tblCaseDocument_CaseDocumentParagraph](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[CaseDocument_Id] [int] NULL,
+		[CaseDocumentParagraph_Id] [int] NULL,
+		[SortOrder] [int] NULL
+	) ON [PRIMARY]
+
+	
+
+	ALTER TABLE [dbo].[tblCaseDocument_CaseDocumentParagraph]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseDocument_tblCaseDocumentParagraph_tblCaseDocument] FOREIGN KEY([CaseDocument_Id])
+	REFERENCES [dbo].[tblCaseDocument] ([Id])
+	
+	ALTER TABLE [dbo].[tblCaseDocument_CaseDocumentParagraph] CHECK CONSTRAINT [FK_tblCaseDocument_tblCaseDocumentParagraph_tblCaseDocument]
+	
+	ALTER TABLE [dbo].[tblCaseDocument_CaseDocumentParagraph]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseDocument_tblCaseDocumentParagraph_tblCaseDocumentParagraph] FOREIGN KEY([CaseDocumentParagraph_Id])
+	REFERENCES [dbo].[tblCaseDocumentParagraph] ([Id])
+	
+	ALTER TABLE [dbo].[tblCaseDocument_CaseDocumentParagraph] CHECK CONSTRAINT [FK_tblCaseDocument_tblCaseDocumentParagraph_tblCaseDocumentParagraph]
+	
+end
+
+
