@@ -168,15 +168,16 @@ ExtendedCasePage.prototype.loadExtendedCaseIfNeeded = function () {
             enablePublicMethods: true,
             resizedCallback: function (messageData) {
             },
-            bodyMargin: '0 0 200px 0',
-            messageCallback: function (messageData) {
-                if (messageData.message === 'cancelCase') {
-                    var elem = $('#case-action-close');
-                    location.href = elem.attr('href');
-                }
-            },
+            bodyMargin: '0 0 0 0',
+            //messageCallback: function (messageData) {
+            //    if (messageData.message === 'cancelCase') {
+            //        var elem = $('#case-action-close');
+            //        location.href = elem.attr('href');
+            //    }
+            //},
             closedCallback: function (id) {
-            }
+            },
+            heightCalculationMethod: 'grow'
         };
 
         $placeHolder.load(function () {
