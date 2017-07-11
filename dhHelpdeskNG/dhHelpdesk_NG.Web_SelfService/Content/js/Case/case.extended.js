@@ -22,6 +22,9 @@ ExtendedCasePage.prototype.Current_EC_FormId = "";
 ExtendedCasePage.prototype.Current_EC_Guid = "";
 ExtendedCasePage.prototype.Current_EC_LanguageId = "";
 ExtendedCasePage.prototype.Current_EC_Path = "";
+ExtendedCasePage.prototype.UserRole = "";
+ExtendedCasePage.prototype.CurrentUser = "";
+ExtendedCasePage.prototype.CaseStatus = 0;
 
 
 /*** Common Area ***/
@@ -195,6 +198,9 @@ ExtendedCasePage.prototype.loadExtendedCase = function () {
     var formParameters = $_ex_Container.contentWindow.getFormParameters();
     formParameters.languageId = self.Current_EC_LanguageId;
     formParameters.extendedCaseGuid = self.Current_EC_Guid;
+    formParameters.caseStatus = self.CaseStatus;
+    formParameters.userRole = self.UserRole;
+    formParameters.currentUser = self.CurrentUser;
 
     var fieldValues = self.Case_Field_Init_Values;
     if (fieldValues != null) {
@@ -436,6 +442,9 @@ ExtendedCasePage.prototype.init = function (params) {
     self.Current_EC_Guid = params.extendedCaseGuid;
     self.Current_EC_LanguageId = params.extendedCaseLanguageId;
     self.Current_EC_Path = params.extendedCasePath;
+    self.UserRole = params.userRole;
+    self.CaseStatus = params.caseStatus;
+    self.CurrentUser = params.currentUser;
 
     var lastError = params.lastError;
 

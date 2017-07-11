@@ -662,7 +662,9 @@
                 CaseTemplateId = initData.CaseSolutionId,
                 CustomerId = initData.CustomerId,
                 LanguageId = initData.LanguageId,
-                ExtendedCaseDataModel = extendedCaseDataModel
+                ExtendedCaseDataModel = extendedCaseDataModel,
+                CurrentUser = SessionFacade.CurrentUserIdentity.EmployeeNumber,
+                UserRole = UserRoleType.LineManager
             };
 
             if (model.CaseId == 0)
@@ -687,6 +689,15 @@
             if (model.CaseDataModel.OU_Id.HasValue)
                 model.CaseOU = _ouService.GetOU(model.CaseDataModel.OU_Id.Value);
 
+            /*Get StateSecondaryId if existing*/
+            model.StateSecondaryId = 0;
+            if (model.CaseDataModel.StateSecondary_Id.HasValue)
+            {
+                var ss = _stateSecondaryService.GetStateSecondary(model.CaseDataModel.StateSecondary_Id.Value);
+                if (ss != null)
+                    model.StateSecondaryId = ss.StateSecondaryId;
+            }
+                
             if (!caseId.IsNew() && !model.CaseDataModel.FinishingDate.HasValue)
                 ViewBag.CurrentCaseId = caseId.Value;
 

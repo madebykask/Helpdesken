@@ -19,6 +19,9 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public int CaseId { get; set; }
         public int? CaseTemplateId { get; set; }
         public int? SelectedWorkflowStep { get; set; }
+        public string UserRole { get; set; }
+        public int StateSecondaryId { get; set; }
+        public string CurrentUser { get; set; }
         public CaseModel CaseDataModel { get; set; }
         public ExtendedCaseDataModel ExtendedCaseDataModel { get; set; }
         public List<WorkflowStepModel> WorkflowSteps { get; set; }

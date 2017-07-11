@@ -1,5 +1,4 @@
 ﻿@using System.Web.Optimization
-@using System.Web.Script.Serialization
 @using DH.Helpdesk.Common.Constants
 
 @model DH.Helpdesk.SelfService.Models.Case.ExtendedCaseViewModel
@@ -12,7 +11,10 @@
             lastErrorMessage = Model.Result.GenerateRawMessage();
         }
     }
-    var jsSerializer = new JavaScriptSerializer();
+    var extendedFormId = Model.ExtendedCaseDataModel.FormModel.Id;
+    /*Debug mode*/
+    //Model.ExtendedCaseDataModel.FormModel.Path =
+    //    "http://dhhelpdesk-ikea-bschr-v5-ec.datahalland.se/ExtendedCase/?formId="+ extendedFormId + "&autoLoad=1";
 }
 
 <script type="text/javascript">
@@ -72,6 +74,9 @@
         extendedCaseFormId: '@(Model.ExtendedCaseDataModel.FormModel.Id)',
         extendedCaseLanguageId: '@(Model.ExtendedCaseDataModel.FormModel.LanguageId)',
         extendedCasePath: '@(Model.ExtendedCaseDataModel.FormModel.Path)',
+        userRole: '@(Model.UserRole)',
+        caseStatus: '@(Model.StateSecondaryId)',
+        currentUser: '@(Model.CurrentUser)',
 
         lastError: '@Html.Raw(lastErrorMessage)'
     }
@@ -249,13 +254,17 @@
     @Html.HiddenFor(model => model.ExtendedCaseDataModel.FormModel.UserRole)
     @Html.HiddenFor(model => model.ExtendedCaseDataModel.FormModel.Path)
 
+    @Html.HiddenFor(model => model.StateSecondaryId)
+    @Html.HiddenFor(model => model.UserRole)
+    @Html.HiddenFor(model => model.CurrentUser)
+
     /*according to Helpdesk*/
     @Html.Hidden("ButtonClick", "") @*TEMP, used to define if "Send" button is clicked*@
     @Html.HiddenFor(model => model.SelectedWorkflowStep)
 
 }
 
-@{ var extendedFormId = Model.ExtendedCaseDataModel.FormModel.Id; }
+
 
 <div class="container-fluid dh-container">
     <ul class="nav nav-tabs" id="tabsArea">
