@@ -3584,7 +3584,7 @@ namespace DH.Helpdesk.Web.Controllers
             // In new case shouldn't check
             /*Updated in this way:*/
             /*If user does not have access to WG, if last action was "Save", user can see the Case in readonly mode 
-             * there is no ticket. (Per know more info)
+             * there is no ticket. (Per knows more info)
              */
 
             if (accessToWorkinggroups != null && m.case_.Id != 0)
@@ -3596,10 +3596,7 @@ namespace DH.Helpdesk.Web.Controllers
                         var wg = accessToWorkinggroups.FirstOrDefault(w => w.WorkingGroup_Id == m.case_.WorkingGroup_Id.Value);
                         if (wg == null && (gs != null && gs.LockCaseToWorkingGroup == 1))
                         {
-                            if (temporaryHasAccessToWG)
-                                return Enums.AccessMode.ReadOnly;
-                            else
-                                return Enums.AccessMode.NoAccess;
+                            return temporaryHasAccessToWG? Enums.AccessMode.ReadOnly : Enums.AccessMode.NoAccess;
                         }
 
                         if (wg != null && wg.RoleToUWG == 1)
