@@ -40,64 +40,46 @@
 
         IEnumerable<Department> GetDepartmentsByIds(int[] departmentsIds);
 
-		IList<Department> GetChargedDepartments(int customerId);
-	}
+        IList<Department> GetChargedDepartments(int customerId);
+    }
 
     public class DepartmentService : IDepartmentService
     {
-        private readonly IDepartmentRepository departmentRepository;
+        private readonly IDepartmentRepository _departmentRepository;
 
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
         public DepartmentService(
             IDepartmentRepository departmentRepository,
             IUnitOfWork unitOfWork, 
             IUnitOfWorkFactory unitOfWorkFactory)
         {
-            this.departmentRepository = departmentRepository;
-            this.unitOfWork = unitOfWork;
-            this.unitOfWorkFactory = unitOfWorkFactory;
+            this._departmentRepository = departmentRepository;
+            this._unitOfWork = unitOfWork;
+            this._unitOfWorkFactory = unitOfWorkFactory;
         }
 
         public IList<Department> GetDepartments(int customerId, ActivationStatus isActive = ActivationStatus.Active)
         {
             if (isActive == ActivationStatus.All)
             {
-                return this.departmentRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.DepartmentName).ToList();
+                return this._departmentRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.DepartmentName).ToList();
             }
                
-            return this.departmentRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == (int)isActive).OrderBy(x => x.DepartmentName).ToList();
+            return this._departmentRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == (int)isActive).OrderBy(x => x.DepartmentName).ToList();
         }
 
         public IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool isOnlyActive = true)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
-            {
-                var usersRep = uow.GetRepository<User>();
-                var customersRep = uow.GetRepository<Customer>();
-                var departmentsRep = uow.GetRepository<Department>();
-                var userDepartmentsRep = uow.GetRepository<DepartmentUser>();
-
-                var users = usersRep.GetAll().GetById(userId);
-                var customers = customersRep.GetAll().GetById(customerId);
-                var departments = departmentsRep.GetAll().GetActiveByCustomer(customerId);
-                var userDepartments = userDepartmentsRep.GetAll();
-
-                var deps = DepartmentMapper.MapToUserDepartments(
-                                        users,
-                                        customers,
-                                        departments,
-                                        userDepartments);
-                return deps.Where(d => d.Region_Id == null || isOnlyActive == false || (isOnlyActive && d.Region != null && d.Region.IsActive != 0))
-                           .ToList();
-            }
+            var departments = _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, isOnlyActive);
+            return departments.Where(d => d.Region_Id == null || (isOnlyActive && d.Region != null && d.Region.IsActive != 0)).ToList();
         }
 
         public List<ItemOverview> GetUserDepartments(int customerId, int? userId, int? regionId, int departmentFilterFormat)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var usersRep = uow.GetRepository<User>();
                 var customersRep = uow.GetRepository<Customer>();
@@ -151,7 +133,7 @@
 
         public List<ItemOverview> GetDepartmentUsers(int customerId, int? departmentId, int? workingGroupId)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var usersRep = uow.GetRepository<User>();
                 var customersRep = uow.GetRepository<Customer>();
@@ -184,18 +166,18 @@
 
         public Department GetDepartment(int id)
         {
-            return this.departmentRepository.Get(x => x.Id == id);
+            return this._departmentRepository.Get(x => x.Id == id);
         }
 
         public DeleteMessage DeleteDepartment(int id)
         {           
-            var department = this.departmentRepository.GetById(id);
+            var department = this._departmentRepository.GetById(id);
 
             if (department != null)
             {
                 try
                 {
-                    this.departmentRepository.Delete(department);
+                    this._departmentRepository.Delete(department);
                     this.Commit();
 
                     return DeleteMessage.Success;
@@ -211,13 +193,13 @@
 
         public IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId)
         {
-            return departmentRepository.GetActiveDepartmentsBy(customerId, regionId);
+            return _departmentRepository.GetActiveDepartmentsBy(customerId, regionId);
         }
 
         public IEnumerable<Department> GetDepartmentsByIds(int[] departmentsIds)
         {
             var deptMap = departmentsIds.ToDictionary(it => it);
-            return this.departmentRepository.GetAll().Where(it => deptMap.ContainsKey(it.Id));
+            return this._departmentRepository.GetAll().Where(it => deptMap.ContainsKey(it.Id));
         }
 
         public void SaveDepartment(Department department, out IDictionary<string, string> errors)
@@ -246,11 +228,11 @@
             if (department.Id == 0)
             {
                 department.DepartmentGUID = Guid.NewGuid();
-                this.departmentRepository.Add(department);
+                this._departmentRepository.Add(department);
             }
             else
             {
-                this.departmentRepository.Update(department);
+                this._departmentRepository.Update(department);
             }
 
             if (errors.Count == 0)
@@ -261,23 +243,23 @@
 
         public void Commit()
         {
-            this.unitOfWork.Commit();
+            this._unitOfWork.Commit();
         }
 
         public List<ItemOverview> FindActiveOverviews(int customerId)
         {
-            return this.departmentRepository.FindActiveOverviews(customerId);
+            return this._departmentRepository.FindActiveOverviews(customerId);
         }
 
         public ItemOverview FindActiveOverview(int departmentId)
         {
-            return this.departmentRepository.FindActiveOverview(departmentId);
+            return this._departmentRepository.FindActiveOverview(departmentId);
         }
 
-		public IList<Department> GetChargedDepartments(int customerId)
-		{
-			return this.departmentRepository.GetMany(x => x.Customer_Id == customerId && x.Charge == 1)
-				.OrderBy(x => x.DepartmentName).ToList();
-		}
-	}
+        public IList<Department> GetChargedDepartments(int customerId)
+        {
+            return this._departmentRepository.GetMany(x => x.Customer_Id == customerId && x.Charge == 1)
+                .OrderBy(x => x.DepartmentName).ToList();
+        }
+    }
 }

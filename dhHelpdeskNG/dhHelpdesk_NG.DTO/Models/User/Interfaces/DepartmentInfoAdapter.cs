@@ -2,14 +2,12 @@
 {
     public class DepartmentInfoAdapter : IDepartmentInfo
     {
-        private readonly Domain.Department _department;
-
         public DepartmentInfoAdapter(Domain.Department d)
         {
             DepartmentId = d.DepartmentId;
             DepartmentName = d.DepartmentName;
             SearchKey = d.SearchKey;
-            CountryName = d.Country?.Name;
+            CountryName = d.Country?.Name ?? string.Empty;
         }
 
         public string DepartmentId { get; }
