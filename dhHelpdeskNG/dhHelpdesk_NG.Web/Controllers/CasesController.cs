@@ -3591,14 +3591,15 @@ namespace DH.Helpdesk.Web.Controllers
                         var wg = accessToWorkinggroups.FirstOrDefault(w => w.WorkingGroup_Id == m.case_.WorkingGroup_Id.Value);
                         if (wg == null && (gs != null && gs.LockCaseToWorkingGroup == 1))
                         {
-                            if (!temporaryHasAccessToWG)
+                            if (temporaryHasAccessToWG)
+                                return Enums.AccessMode.ReadOnly;
+                            else
                                 return Enums.AccessMode.NoAccess;
                         }
 
                         if (wg != null && wg.RoleToUWG == 1)
-                        {
-                            if (!temporaryHasAccessToWG)
-                                return Enums.AccessMode.ReadOnly;
+                        {                            
+                            return Enums.AccessMode.ReadOnly;
                         }
                     }
                 }
@@ -5023,8 +5024,8 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
-            var temporaryUserHasAccessToWG = redirectFrom.ToLower() == "save" ? true : false;
-            m.EditMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups, temporaryUserHasAccessToWG);
+            var temporaryUserHasAccessToWG = redirectFrom.ToLower() == "save";
+            m.EditMode = EditMode(m, ModuleName.Cases, deps, acccessToGroups, temporaryUserHasAccessToWG);
             if (isCreateNewCase)
             {
                 m.case_.DefaultOwnerWG_Id = null;
