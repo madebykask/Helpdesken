@@ -3582,6 +3582,11 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             // In new case shouldn't check
+            /*Updated in this way:*/
+            /*If user does not have access to WG, if last action was "Save", user can see the Case in readonly mode 
+             * there is no ticket. (Per know more info)
+             */
+
             if (accessToWorkinggroups != null && m.case_.Id != 0)
             {
                 if (SessionFacade.CurrentUser.UserGroupId < 3)
