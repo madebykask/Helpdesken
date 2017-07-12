@@ -5,6 +5,7 @@
 		<!-- If changing this, change var match.. in C# code also  -->
 		<TagMatchTemplate>v*.*.*</TagMatchTemplate>
 		<ExitCode>0</ExitCode>
+		<!-- <GitExe>C:\Program Files\Git\bin\git.exe</GitExe>	 -->
 		<GitExe>C:\Program Files (x86)\Git\bin\git.exe</GitExe>	
 	</PropertyGroup>
 
