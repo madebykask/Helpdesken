@@ -91,7 +91,11 @@ begin
 
 if exists(select * from sysobjects WHERE Name = N'ExtendedCaseData')
 begin
-	ALTER TABLE [dbo].[ExtendedCaseData] ADD  CONSTRAINT [DF_ExtendedCaseData_CreatedOn]  DEFAULT (getdate()) FOR [CreatedOn]
+
+	if not exists(SELECT * FROM sys.objects WHERE type = 'D' AND name = 'DF_ExtendedCaseData_CreatedOn')
+	begin
+		ALTER TABLE [dbo].[ExtendedCaseData] ADD  CONSTRAINT [DF_ExtendedCaseData_CreatedOn]  DEFAULT (getdate()) FOR [CreatedOn]
+	end
 end
 
 
@@ -424,10 +428,11 @@ begin
 end
 
 
--- New field in tblCaseDocument
+-- New column in tblCaseDocument
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaseDocumentTemplate_Id' and sysobjects.name = N'tblCaseDocument')
+begin
    ALTER TABLE tblCaseDocument ADD CaseDocumentTemplate_Id int NOT NULL
-GO
+end
 
 if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentCondition')
 begin
@@ -537,3 +542,8 @@ begin
 end
 
 
+-- New column in ExtendedCaseForms
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Version' and sysobjects.name = N'ExtendedCaseForms')
+begin
+   ALTER TABLE ExtendedCaseForms ADD [Version] int NOT NULL Default(0)
+end

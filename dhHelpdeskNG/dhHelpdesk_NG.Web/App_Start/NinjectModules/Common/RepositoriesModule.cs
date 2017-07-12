@@ -284,6 +284,7 @@
             this.Bind<ICaseDocumentRepository>().To<CaseDocumentRepository>();
             this.Bind<ICaseDocumentConditionRepository>().To<CaseDocumentConditionRepository>();
             this.Bind<IExtendedCaseValueRepository>().To<ExtendedCaseValueRepository>();
+         //   this.Bind<ICaseDocumentParagraphRepository>().To<CaseDocumentParagraphRepository>();
         }
 
         #endregion

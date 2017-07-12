@@ -50,7 +50,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                                                                 int caseId, int userLanguageId, string userGuid,
                                                                 int caseStateSecondaryId, int caseWorkingGroupId,
                                                                 string extendedCasePath, int? userId, string userName,
-                                                                ApplicationType applicationType)
+                                                                ApplicationType applicationType, int userWorkingGroupId)
         {
             ////TODO: 
             ///Cache this!
@@ -77,18 +77,20 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     caseStateSecondaryId = this.DataContext.StateSecondaries.Where(x => x.Id == caseSolution.StateSecondary_Id).FirstOrDefault().StateSecondaryId;
                 }
 
-                //fallback to casesolution.StateSecondaryId if case is new
-                if (caseWorkingGroupId == 0 && caseSolution.CaseWorkingGroup_Id != null && caseSolution.CaseWorkingGroup_Id != 0)
-                {
-                    caseWorkingGroupId = this.DataContext.WorkingGroups.Where(x => x.Id == caseSolution.CaseWorkingGroup_Id).FirstOrDefault().WorkingGroupId;
-                }
+                ////fallback to casesolution.StateSecondaryId if case is new
+                //if (caseWorkingGroupId == 0 && caseSolution.CaseWorkingGroup_Id != null && caseSolution.CaseWorkingGroup_Id != 0)
+                //{
+                //    caseWorkingGroupId = this.DataContext.WorkingGroups.Where(x => x.Id == caseSolution.CaseWorkingGroup_Id).FirstOrDefault().WorkingGroupId;
+                //}
             }
+
+
 
             extendedCasePath = extendedCasePath
             .Replace("&languageId=[LanguageId]", "") //sent in by js function
             .Replace("&extendedCaseGuid=[extendedCaseGuid]", "")//sent in by js function
             .Replace("[CaseStateSecondaryId]", caseStateSecondaryId.ToString())
-            .Replace("[CaseWorkingGroupId]", caseWorkingGroupId.ToString())
+            .Replace("[CaseWorkingGroupId]", userWorkingGroupId.ToString()) //NOTE, this is from now on userWorkingGroupId. 
             .Replace("[UserGuid]", userGuid)
             .Replace("[CustomerId]", customerId.ToString());
 

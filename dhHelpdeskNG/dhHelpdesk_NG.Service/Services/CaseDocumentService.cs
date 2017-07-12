@@ -17,7 +17,7 @@ namespace DH.Helpdesk.Services.Services
 
     public interface ICaseDocumentService
     {
-        CaseDocumentModel GetCaseDocument(int id);
+        CaseDocumentModel GetCaseDocument(int id, int caseId);
         IEnumerable<CaseDocumentModel> GetCaseDocuments(int customerId, Case _case, UserOverview user, ApplicationType applicationType);
     }
 
@@ -27,23 +27,177 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseDocumentConditionRepository _caseDocumentConditionRepository;
         private readonly ICacheProvider _cache;
         private readonly IExtendedCaseValueRepository _extendedCaseValueRepository;
+        private readonly ICaseService _caseService;
 
         public CaseDocumentService(
             ICaseDocumentRepository caseDocumentRepository,
             ICaseDocumentConditionRepository caseDocumentConditionRepository,
             ICacheProvider cache,
-            IExtendedCaseValueRepository extendedCaseValueRepository
+            IExtendedCaseValueRepository extendedCaseValueRepository,
+             ICaseService caseService
             )
         {
             this._caseDocumentRepository = caseDocumentRepository;
             this._caseDocumentConditionRepository = caseDocumentConditionRepository;
             this._cache = cache;
             this._extendedCaseValueRepository = extendedCaseValueRepository;
+            this._caseService = caseService;
         }
 
-        public CaseDocumentModel GetCaseDocument(int id)
+        private string GetCaseValue(Case _case, string propertyName)
         {
-            return this._caseDocumentRepository.GetCaseDocument(id);
+            string value = string.Empty;
+
+            try
+            {
+                
+                propertyName = propertyName.Replace("Case.", "");
+
+                if (!propertyName.Contains("."))
+                {
+                    //Get value from Case Model by casting to dictionary and look for property name
+                    value = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[propertyName].ToString();
+                }
+                else
+                {
+                    var parentClassName = string.Concat(propertyName.TakeWhile((c) => c != '.'));
+                    var parentPropertyName = propertyName.Substring(propertyName.LastIndexOf('.') + 1);
+
+                    var parentClass = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[parentClassName];
+                    value = parentClass.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(parentClass, null))[parentPropertyName].ToString();
+                }
+
+            }
+            catch (Exception)
+            {
+                //Return back propertyname
+                value = "[" + propertyName + "]";
+            }
+
+            return value;
+        }
+
+        private Dictionary<string,string> GetCaseValueDictionary(int id, int caseId)
+        {
+            var _case = _caseService.GetCaseById(caseId);
+
+
+            Dictionary<string, string> dictionary = new Dictionary<string, string>();
+
+            #region Case
+
+            string casePersonsName = "Case.PersonsName";
+            dictionary.Add(casePersonsName, GetCaseValue(_case, casePersonsName));
+
+            string casePersonsPhone = "Case.PersonsPhone";
+            dictionary.Add(casePersonsPhone, GetCaseValue(_case, casePersonsPhone));
+
+            string caseDepartmentName = "Case.Department.DepartmentName";
+            dictionary.Add(caseDepartmentName, GetCaseValue(_case, caseDepartmentName));
+
+            string caseRegionName = "Case.Region.Name";
+            dictionary.Add(caseRegionName, GetCaseValue(_case, caseRegionName));
+           
+
+            #endregion
+
+            #region Other
+
+            //TODO: do we neeed to convert?
+            string dateNowLong = "Date.NowLong";
+            dictionary.Add(dateNowLong, DateTime.Now.ToLongDateString());
+
+            string dateNowShort = "Date.NowShort";
+            dictionary.Add(dateNowShort, DateTime.Now.ToShortDateString());
+
+
+            #endregion
+
+            #region Extended Case
+
+            //[PositionTitle]
+            dictionary.Add("[PositionTitle]", "[PositionTitle]");
+
+            //[ReportsToLineManager.PositionTitle]
+            dictionary.Add("[ReportsToLineManager.PositionTitle]", "[ReportsToLineManager.PositionTitle]");
+
+            //[ReportsToLineManager]
+            dictionary.Add("[ReportsToLineManager]", "[ReportsToLineManager]");
+
+
+
+            //[AddressLine1]
+            dictionary.Add("[AddressLine1]", "[AddressLine1]");
+            //[AddressLine2]
+            dictionary.Add("[AddressLine2]", "[AddressLine2]");
+            //[State]
+            dictionary.Add("[State]", "[State]");
+            //[PostalCode]
+            dictionary.Add("[PostalCode]", "[PostalCode]");
+            //[AddressLine3]
+            dictionary.Add("[AddressLine3]", "[AddressLine3]");
+            //[ContractStartDate]
+            dictionary.Add("[ContractStartDate]", "[ContractStartDate]");
+            //[BasicPayAmount]
+            dictionary.Add("[BasicPayAmount]", "[BasicPayAmount]");
+            //[ContractedHours]
+            dictionary.Add("[ContractedHours]", "[ContractedHours]");
+            //[NextSalaryReviewYear]
+            dictionary.Add("[NextSalaryReviewYear]", "[NextSalaryReviewYear]");
+
+            #endregion
+
+            return dictionary;
+
+        }
+
+        private string ReplaceWithValue(int id, int caseId, string text)
+        {
+            Dictionary<string, string> dictionary = GetCaseValueDictionary(id, caseId);
+
+            foreach (var item in dictionary)
+            {
+                text = text.Replace("[" + item.Key + "]", item.Value);
+            }
+
+            return text;
+        }
+
+        public CaseDocumentModel GetCaseDocument(int id, int caseId)
+        {
+            //var _case = _caseService.GetCaseById(caseId);
+
+
+            var caseDocument = this._caseDocumentRepository.GetCaseDocument(id);
+
+            //var firstName = "Case.PersonsName";
+
+            //var value = GetCaseValue(_case, firstName);
+
+            //var depName = "Case.Department.DepartmentName";
+
+            //var valueDep = GetCaseValue(_case, depName);
+
+
+            //Case.PersonsPhone
+
+            if (caseDocument.CaseDocumentParagraphs != null)
+            {
+                foreach (var item in caseDocument.CaseDocumentParagraphs)
+                {
+                    if (item.CaseDocumentParagraph.CaseDocumentTexts != null)
+                    {
+                        foreach (var paragraphText in item.CaseDocumentParagraph.CaseDocumentTexts)
+                        {
+                            paragraphText.Text = ReplaceWithValue(id, caseId, paragraphText.Text);
+
+                        }
+                    }
+                }
+            }
+
+
+            return caseDocument;
         }
       
         public IEnumerable<CaseDocumentModel> GetCaseDocuments(int customerId, Case _case, UserOverview user, ApplicationType applicationType)
@@ -55,11 +209,10 @@ namespace DH.Helpdesk.Services.Services
                 Name = c.Name,
                 FileType = c.FileType,
                 SortOrder = c.SortOrder,
+                CaseId = _case.Id,
             }).OrderBy(c => c.SortOrder).ToList();
 
-
             return caseDocuments.Where(c => show(customerId, _case, c.Id, user, applicationType) == true).ToList();
-
         }
 
         //TODO: REFACTOR, this could be used the "same" way as workflowstep... 

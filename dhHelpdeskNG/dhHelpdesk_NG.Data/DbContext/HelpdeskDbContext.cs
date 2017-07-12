@@ -29,6 +29,7 @@
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.EntityConfigurations.CaseDocument;
 
+
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
     using DH.Helpdesk.Domain.Cases;
@@ -576,6 +577,10 @@
         public DbSet<CaseDocumentEntity> CaseDocuments { get; set; }
 
         public DbSet<CaseDocumentConditionEntity> CaseDocumentConditions { get; set; }
+        public DbSet<CaseDocumentParagraphEntity> CaseDocumentParagraphs { get; set; }
+
+        public DbSet<CaseDocument_CaseDocumentParagraphEntity> CaseDocument_CaseDocumentParagraphs { get; set; }
+        public DbSet<CaseDocumentTextEntity> CaseDocumentTexts { get; set; }
 
         #endregion
 
@@ -862,6 +867,10 @@
             modelBuilder.Configurations.Add(new Case_ExtendedCaseDataConfiguration());
             modelBuilder.Configurations.Add(new CaseDocumentConfiguration());
             modelBuilder.Configurations.Add(new CaseDocumentConditionConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentParagraphConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocument_CaseDocumentParagraphConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentTextConfiguration());
+
             #endregion
 
             base.OnModelCreating(modelBuilder);

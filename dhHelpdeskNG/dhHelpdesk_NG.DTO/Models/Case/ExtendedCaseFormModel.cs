@@ -14,6 +14,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public int LanguageId { get; set; }
         public Guid UserGuid { get; set; }
         public Guid ExtendedCaseGuid { get; set; }
+        public int Version { get; set; }
     }
 
     public class ExtendedCaseDataModel

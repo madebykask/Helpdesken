@@ -15,7 +15,9 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity
             return new ExtendedCaseFormModel
             {
                 Id = entity.Id,
-                Name = entity.Name                
+                Name = entity.Name,
+                Version = entity.Version
+                            
             };
         }
     }

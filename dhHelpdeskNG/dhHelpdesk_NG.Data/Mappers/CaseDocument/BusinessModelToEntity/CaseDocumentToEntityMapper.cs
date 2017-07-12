@@ -14,6 +14,7 @@
 
             entity.Id = businessModel.Id;
             entity.CaseDocumentGUID = businessModel.CaseDocumentGUID;
+            entity.CaseDocumentTemplate_Id = businessModel.CaseDocumentTemplate_Id;
             entity.Name = businessModel.Name;
             entity.Description = businessModel.Description;
             entity.Customer_Id = businessModel.Customer_Id;
@@ -24,6 +25,7 @@
             entity.CreatedByUser_Id = businessModel.CreatedByUser_Id;
             entity.ChangedDate = businessModel.ChangedDate;
             entity.ChangedByUser_Id = businessModel.ChangedByUser_Id;
+            entity.CaseDocumentParagraphs = businessModel.CaseDocumentParagraphs;
         }
     }
 }

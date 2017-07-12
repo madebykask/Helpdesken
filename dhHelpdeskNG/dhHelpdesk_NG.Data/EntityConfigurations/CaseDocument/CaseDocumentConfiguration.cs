@@ -23,7 +23,7 @@
             Property(e => e.Status).IsRequired();
             Property(e => e.CreatedDate).IsRequired();
             Property(e => e.ChangedDate).IsRequired();
-
+            Property(e => e.CaseDocumentTemplate_Id).IsRequired();
             ToTable("tblCaseDocument");
         }
 

@@ -384,7 +384,7 @@
                                                     }
                                                     else
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", @readonly = true, data_field = "userId", onblur = "GetLanguage()" })
+                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", @readonly = true, data_field = "userId", onblur = "EditPage.prototype.getLanguage()" })
                                                     }
                                                 </td>
                                                 <td>
@@ -1638,30 +1638,30 @@
                                                 </table>
                                             </td>
                                         </tr>
-                                        
 
-                                        @if (Model.Setting.AttachmentPlacement == 0 )
-                                        { 
-                                        <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Filename, CaseSolutionFields.FileName)">
-                                            @*<tr class="displaytr" style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Filename.ToString())">*@
-                                            <td>
-                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Filename, "Bifogad fil")
-                                            </td>
-                                            <td colspan="2">
-                                                @if (Model.EditMode == Enums.AccessMode.FullAccess)
-                                                {
-                                                    <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
-                                                    <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="case">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
 
-                                                }
-                                                <div id="divCaseFiles">
-                                                    @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary { { "CaseInactive", Model.case_.FinishingDate.HasValue } })
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr class="displaytr">
-                                            <td colspan="3" class="span3"></td>
-                                        </tr>
+                                        @if (Model.Setting.AttachmentPlacement == 0)
+                                        {
+                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Filename, CaseSolutionFields.FileName)">
+                                                @*<tr class="displaytr" style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Filename.ToString())">*@
+                                                <td>
+                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Filename, "Bifogad fil")
+                                                </td>
+                                                <td colspan="2">
+                                                    @if (Model.EditMode == Enums.AccessMode.FullAccess)
+                                                    {
+                                                        <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
+                                                        <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="case">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
+
+                                                    }
+                                                    <div id="divCaseFiles">
+                                                        @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary { { "CaseInactive", Model.case_.FinishingDate.HasValue } })
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="displaytr">
+                                                <td colspan="3" class="span3"></td>
+                                            </tr>
                                         }
                                     </table>
                                 </div>
@@ -1875,7 +1875,7 @@
                                                     }
                                                     else
                                                     {
-                                                    @Html.TextBoxFor(m => m.stateSecondaries.SingleOrDefault(x => x.Id == Model.case_.StateSecondary_Id).Name, new { @readonly = true, id = "subStateName" })
+                                                        @Html.TextBoxFor(m => m.stateSecondaries.SingleOrDefault(x => x.Id == Model.case_.StateSecondary_Id).Name, new { @readonly = true, id = "subStateName" })
                                                         @Html.HiddenFor(x => x.case_.StateSecondary_Id)
                                                     }
                                                 }
@@ -1958,44 +1958,44 @@
                                             }
                                         }
                                         @* <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart)">
-                                                <td>
-                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CausingPart, "Rotorsak")
-                                                </td>
-                                                <td class="span1" style="float: left;">
-                                                    @Html.HiddenFor(model => model.case_.CausingPartId, new { ModelId = "causing-type" })
-                                                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart))
+                                        <td>
+                                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CausingPart, "Rotorsak")
+                                        </td>
+                                        <td class="span1" style="float: left;">
+                                            @Html.HiddenFor(model => model.case_.CausingPartId, new { ModelId = "causing-type" })
+                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart))
+                                            {
+                                                @Html.CausingPartList(Model.case_.Customer_Id, Model.case_.CausingPartId, "causing-type")
+                                            }
+                                            else
+                                            {
+                                                var causingpart = Model.case_.CausingPartId.HasValue ? Model.causingParts.SingleOrDefault(x => x.Id == Model.case_.CausingPartId) : null;
+
+                                                if (causingpart == null)
+                                                {
+                                                    if (Model.case_.CausingPart != null)
                                                     {
-                                                        @Html.CausingPartList(Model.case_.Customer_Id, Model.case_.CausingPartId, "causing-type")
+                                                        var transName = Translation.GetMasterDataTranslation(Model.case_.CausingPart.Name);
+                                                        @Html.TextBoxFor(m => transName, new { @readonly = true })
+
                                                     }
                                                     else
                                                     {
-                                                        var causingpart = Model.case_.CausingPartId.HasValue ? Model.causingParts.SingleOrDefault(x => x.Id == Model.case_.CausingPartId) : null;
-
-                                                        if (causingpart == null)
-                                                        {
-                                                            if (Model.case_.CausingPart != null)
-                                                            {
-                                                                var transName = Translation.GetMasterDataTranslation(Model.case_.CausingPart.Name);
-                                                                @Html.TextBoxFor(m => transName, new { @readonly = true })
-
-                                                            }
-                                                            else
-                                                            {
-                                                                @Html.TextBoxFor(m => m.case_.CausingPart.Name, new { @readonly = true })
-                                                            }
-
-                                                        }
-                                                        else
-                                                        {
-                                                            var transName = Translation.GetMasterDataTranslation(causingpart.Name);
-                                                             @Html.TextBoxFor(m => transName, new { @readonly = true })
-                                                             @Html.HiddenFor(x => x.case_.CausingPartId)
-                                                        }
-
+                                                        @Html.TextBoxFor(m => m.case_.CausingPart.Name, new { @readonly = true })
                                                     }
 
-                                                </td>
-                                            </tr>*@
+                                                }
+                                                else
+                                                {
+                                                    var transName = Translation.GetMasterDataTranslation(causingpart.Name);
+                                                     @Html.TextBoxFor(m => transName, new { @readonly = true })
+                                                     @Html.HiddenFor(x => x.case_.CausingPartId)
+                                                }
+
+                                            }
+
+                                        </td>
+                                    </tr>*@
 
                                         <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart)">
                                             <td>
@@ -2331,7 +2331,7 @@
                 @if (Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)
                 {
                     <div id="dh-form-area" class="tab-pane tab-pane-border">
-                        
+
                     </div>
                 }
 
@@ -2339,8 +2339,15 @@
                 {
                     foreach (var extendedCase in Model.ExtendedCases)
                     {
+
                         <div id="container_@extendedCase.Id" class="tab-pane tab-pane-border @((Model.ActiveTab.StartsWith(CaseTabs.ExtendedCaseTab)) ? "active" : "")">
-                        </div>
+                            <div class="container">
+                                @Html.Partial("_CaseInformation", Model, new ViewDataDictionary { { "Headline", Translation.GetCoreTextTranslation(extendedCase.Name) } })
+                                @*<div>@extendedCase.Version</div>*@
+                                </div>
+                         
+                            </div>
+                        
                     }
                 }
 
@@ -2351,38 +2358,42 @@
 
                 @if (Model.Setting.AttachmentPlacement == 1)
                 {
-                   <div id="attachment-container" class="tab-pane tab-pane-border">
-                       <h4 style="margin-left:3px;">@(Translation.GetCoreTextTranslation("Bifoga"))</h4>
-                        <div class="row">
-                           
-                            <div class="span12">
-                                 <table class="tableform">
-                                    <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Filename, CaseSolutionFields.FileName)">
-                                        <td colspan="3" class="span3">
-                                            @if (Model.EditMode == Enums.AccessMode.FullAccess)
+                    <div id="attachment-container" class="tab-pane tab-pane-border">
+                        <div class="container">
+                            @Html.Partial("_CaseInformation", Model, new ViewDataDictionary { { "Headline", Translation.GetCoreTextTranslation("Bilagor") } })
+                            <div class="row">
+                                <div class="span12">
+                                    <table class="tableform">
+                                        <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Filename, CaseSolutionFields.FileName)">
+                                            <td colspan="3" class="span3">
+                                                @if (Model.EditMode == Enums.AccessMode.FullAccess)
                                             {
-                                                <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
-                                                <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="case">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
+                                            <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
+                                            <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="case">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
                                             }
-                                            <div id="divCaseFiles" style="margin-top:10px;">
-                                                @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary { { "CaseInactive", Model.case_.FinishingDate.HasValue } })
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="displaytr">
-                                        <td colspan="3" class="span3"></td>
-                                    </tr>
-                                </table>
+                                                <div id="divCaseFiles" style="margin-top:10px;">
+                                                    @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary { { "CaseInactive", Model.case_.FinishingDate.HasValue } })
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="displaytr">
+                                            <td colspan="3" class="span3"></td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                            </div>
-                            }
+                    </div>
+                }
 
-                @Html.Partial("_CaseDocument", Model.CaseDocuments)
+                <div id="casedocument-container" class="tab-pane tab-pane-border">
+                    <div class="container">
+                        @Html.Partial("_CaseInformation", Model, new ViewDataDictionary { { "Headline", "" } })
+                        @Html.Partial("_CaseDocument", Model.CaseDocuments)
+                    </div>
+                </div>
+            </div>
 
-              
-
-                        </div>
                     </div>
     </div>
     <div id="overwriteDlg" class="modal fade" style="display: none">

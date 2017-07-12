@@ -344,7 +344,7 @@ namespace DH.Helpdesk.Common.Extensions.String
         }
 
         /// <summary>
-        /// Removes \r and \n from string and Trims
+        /// Removes \r and \n from string and Trim
         /// </summary>
         public static string Tidy(this string value)
         {
@@ -363,6 +363,14 @@ namespace DH.Helpdesk.Common.Extensions.String
         public static HtmlString ToHtmlString(this string value)
         {
             return new HtmlString(value);
+        }
+
+        /// <summary>
+        /// Removes \r and \n and  * from string and Trim
+        /// </summary>
+        public static string RemoveRequiredText(this string value)
+        {
+            return value.Replace("\r", "").Replace("\n", "").Replace(" *", "").Trim();
         }
 
     }

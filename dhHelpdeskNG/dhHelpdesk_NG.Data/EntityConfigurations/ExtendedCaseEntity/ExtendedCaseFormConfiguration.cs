@@ -14,6 +14,8 @@
             Property(e => e.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(e => e.Name).IsOptional().HasMaxLength(100);
 
+            Property(e => e.Version).IsRequired();
+
             ToTable("ExtendedCaseForms");
         }
 

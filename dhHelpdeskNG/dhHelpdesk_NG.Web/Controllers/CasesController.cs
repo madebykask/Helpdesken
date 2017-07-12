@@ -346,6 +346,9 @@ namespace DH.Helpdesk.Web.Controllers
 
         #endregion
 
+
+
+
         #region ***Public Methods***
 
         #region --Advanced Search--
@@ -5092,11 +5095,20 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (!string.IsNullOrEmpty(extendedCasePath))
                 {
+                    //Take the highest workinggroupId
+                    var userWorkingGroup = this._workingGroupService.GetWorkingGroups(customerId, SessionFacade.CurrentUser.Id).OrderByDescending(x => x.WorkingGroupId).FirstOrDefault();
 
-                    //TODO:
+                    int userWorkingGroupId = 0;
+
+                    if (userWorkingGroup != null)
+                    {
+                        userWorkingGroupId = userWorkingGroup.WorkingGroupId;
+                    }
+
+                    //TODO: If user is Admin - send in another Number 
                     //CHECK HOW TO HANDLE WHEN FROM EMAIL
                     //At the moment we are only fetching 1 extended case since it is only programmed that way in editPage.js
-                    m.ExtendedCases = _caseService.GetExtendedCaseForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.UserGUID.ToString(), (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0), (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0), extendedCasePath, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserId, ApplicationType.Helpdesk);
+                    m.ExtendedCases = _caseService.GetExtendedCaseForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.UserGUID.ToString(), (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0), (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0), extendedCasePath, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserId, ApplicationType.Helpdesk, userWorkingGroupId);
                     m.ContainsExtendedCase = m.ExtendedCases != null && m.ExtendedCases.Any();
 
                     //for hidden

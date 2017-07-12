@@ -85,8 +85,11 @@
     <Compile Include="BusinessRules\BRActionEntity.cs" />
     <Compile Include="BusinessRules\BRActionParamEntity.cs" />
     <Compile Include="CalendarSearch.cs" />
+    <Compile Include="CaseDocumentEntity\CaseDocumentTextEntity.cs" />
+    <Compile Include="CaseDocumentEntity\CaseDocumentParagraphEntity.cs" />
     <Compile Include="CaseDocumentEntity\CaseDocumentEntity.cs" />
     <Compile Include="CaseDocumentEntity\CaseDocumentConditionEntity.cs" />
+    <Compile Include="CaseDocumentEntity\CaseDocument_CaseDocumentParagraphEntity.cs" />
     <Compile Include="CaseSettings.cs" />
     <Compile Include="CaseSolution.cs" />
     <Compile Include="CaseSolutionCategory.cs" />

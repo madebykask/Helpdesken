@@ -9,10 +9,14 @@ namespace DH.Helpdesk.Dal.Mappers.CaseDocument
     {
         public CaseDocumentModel Map(CaseDocumentEntity entity)
         {
-            return new CaseDocumentModel
+            if (entity == null)
+                return null;
+
+            var model = new CaseDocumentModel
             {
                 Id = entity.Id,
                 Name = entity.Name,
+                CaseDocumentTemplate_Id = entity.CaseDocumentTemplate_Id,
                 CaseDocumentGUID = entity.CaseDocumentGUID,
                 Customer_Id = entity.Customer_Id,
                 Description = entity.Description,
@@ -22,8 +26,12 @@ namespace DH.Helpdesk.Dal.Mappers.CaseDocument
                 CreatedDate = entity.CreatedDate,
                 CreatedByUser_Id = entity.CreatedByUser_Id,
                 ChangedDate = entity.ChangedDate,
-                ChangedByUser_Id = entity.ChangedByUser_Id
+                ChangedByUser_Id = entity.ChangedByUser_Id,
+                CaseDocumentParagraphs = entity.CaseDocumentParagraphs,
             };
+
+            return model;
+
         }
     }
 }

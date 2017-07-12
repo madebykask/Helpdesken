@@ -12,6 +12,7 @@ namespace DH.Helpdesk.Domain.ExtendedCaseEntity
 
 
         public string Name { get; set; }
+        public int Version { get; set; }
 
         public virtual ICollection<CaseSolution> CaseSolutions { get; set; }
         public virtual ICollection<ExtendedCaseDataEntity> ExtendedCaseDatas { get; set; }

@@ -13,6 +13,8 @@
             }
 
             entity.Id = businessModel.Id;
+            entity.Name = businessModel.Name;
+            entity.Version = businessModel.Version;
         }
     }
 }
