@@ -2388,7 +2388,7 @@
 
                 <div id="casedocument-container" class="tab-pane tab-pane-border">
                     <div class="container">
-                        @Html.Partial("_CaseInformation", Model, new ViewDataDictionary { { "Headline", "" } })
+                        @Html.Partial("_CaseInformation", Model, new ViewDataDictionary { { "Headline", Translation.GetCoreTextTranslation("Dokument") } })
                         @Html.Partial("_CaseDocument", Model.CaseDocuments)
                     </div>
                 </div>

@@ -17,6 +17,9 @@
         return res;
     }
 
+
+  
+
 }
 
 @{
@@ -33,34 +36,46 @@
     if (Model.case_.Id > 0)
     {
 
+        int customerId = Model.case_.Customer_Id;
+
         if (!string.IsNullOrEmpty(Model.case_.ReportedBy))
         {
-            reportedBy = string.Format(templateText, CaseFieldCaption(GlobalEnums.TranslationCaseFields.ReportedBy, "Användar ID").ToString(), Model.case_.ReportedBy);
+
+
+            reportedBy = string.Format(templateText, Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), customerId), Model.case_.ReportedBy);
             texts.Add("ReportedBy", reportedBy);
         }
 
         if (!string.IsNullOrEmpty(Model.case_.PersonsName))
         {
-            personsName = string.Format(templateText, CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_Name, "Anmälare").ToString(), Model.case_.PersonsName);
+            
+
+            personsName = string.Format(templateText, Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), customerId), Model.case_.PersonsName);
             texts.Add("PersonsName", personsName);
         }
 
         //Note, IKEA MYHR uses Phone for last name
         if (!string.IsNullOrEmpty(Model.case_.PersonsPhone))
         {
-            personPhone = string.Format(templateText, CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_Phone, "Telefon").ToString(), Model.case_.PersonsPhone);
+            
+
+            personPhone = string.Format(templateText, Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), customerId), Model.case_.PersonsPhone);
             texts.Add("PersonsPhone", personPhone);
         }
 
         if (Model.case_.StateSecondary != null && !string.IsNullOrEmpty(Model.case_.StateSecondary.Name))
         {
-            stateSecondary = string.Format(templateText, CaseFieldCaption(GlobalEnums.TranslationCaseFields.StateSecondary_Id, "Understatus").ToString(), Model.case_.StateSecondary.Name);
+
+            
+            stateSecondary = string.Format(templateText, Translation.GetForCase(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), customerId), Model.case_.StateSecondary.Name);
             texts.Add("StateSecondary", stateSecondary);
         }
 
         if (Model.case_.Workinggroup != null && !string.IsNullOrEmpty(Model.case_.Workinggroup.WorkingGroupName))
         {
-            workingGroup = string.Format(templateText, CaseFieldCaption(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, "Driftgrupp").ToString(), Model.case_.Workinggroup.WorkingGroupName);
+
+            
+            workingGroup = string.Format(templateText, Translation.GetForCase(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), customerId), Model.case_.Workinggroup.WorkingGroupName);
             texts.Add("Workinggroup", workingGroup);
         }
     }
