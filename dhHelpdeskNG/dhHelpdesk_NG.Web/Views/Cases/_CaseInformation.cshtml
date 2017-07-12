@@ -20,7 +20,7 @@
 }
 
 @{
-    string templateText = "<strong>{0}</strong>:&nbsp;{1}&nbsp;|&nbsp;";
+    string templateText = "<strong>{0}</strong>&nbsp;{1}&nbsp;|&nbsp;";
 
     string reportedBy = string.Empty;
     string personsName = string.Empty;
@@ -68,13 +68,13 @@
 
 @if (!string.IsNullOrEmpty(ViewData["Headline"].ToString()) || texts.Count > 0)
 {
-    <h4 style="font-weight:normal !important;">
+    <h4 style="font-weight:normal !important; font-size:11px !important;">
         
         @if (texts.Count > 0 && !string.IsNullOrEmpty(ViewData["Headline"].ToString())){
         <strong>@ViewData["Headline"].ToString()</strong>
             if (texts.Count() > 0)
             {
-                <text> - </text>
+                <text> | </text>
             }
         }
         else
