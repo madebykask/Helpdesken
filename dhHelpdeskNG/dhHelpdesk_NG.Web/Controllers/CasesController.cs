@@ -2758,7 +2758,9 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var model = new CaseTemplateTreeModel();
             model.CustomerId = customerId;
-            model.CaseTemplateCategoryTree = _caseSolutionService.GetCaseSolutionCategoryTree(customerId, userId, location);
+            model.CaseTemplateCategoryTree = _caseSolutionService.GetCaseSolutionCategoryTree(customerId, userId, location)
+                                            .Where(c=> c.CaseTemplates == null || (c.CaseTemplates != null && c.CaseTemplates.Any()))
+                                            .ToList();
             return model;
         }
 
