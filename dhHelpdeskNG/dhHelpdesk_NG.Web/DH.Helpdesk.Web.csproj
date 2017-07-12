@@ -3897,7 +3897,7 @@
     <Content Include="Views\Shared\WorkflowStep.cshtml" />
     <Content Include="Views\CaseSolution\_Conditions.cshtml" />
     <Content Include="Views\Cases\_CaseDocument.cshtml" />
-    <Content Include="Views\Cases\_CaseDocumentPrint.cshtml" />
+    <Content Include="Views\Shared\_CaseDocumentPrint.cshtml" />
     <Content Include="Views\Cases\_CaseInformation.cshtml" />
   </ItemGroup>
   <ItemGroup>

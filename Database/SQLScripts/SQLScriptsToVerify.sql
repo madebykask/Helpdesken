@@ -547,3 +547,36 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 begin
    ALTER TABLE ExtendedCaseForms ADD [Version] int NOT NULL Default(0)
 end
+
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentParagraphCondition')
+begin
+
+	CREATE TABLE [dbo].[tblCaseDocumentParagraphCondition](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[CaseDocumentParagraphConditionGUID] [uniqueidentifier] NULL,
+		[CaseDocumentParagraph_Id] [int] NULL,
+		[Property_Name] [nvarchar](100) NULL,
+		[Operator] [nvarchar](50) NULL,
+		[Values] [nvarchar](max) NULL,
+		[Description] [nvarchar](200) NULL,
+		[Status] [int] NULL,
+		[CreatedDate] [datetime] NULL,
+		[CreatedByUser_Id] [int] NULL,
+		[ChangedDate] [datetime] NULL,
+		[ChangedByUser_Id] [int] NULL,
+	 CONSTRAINT [PK_ExtendedCaseDocumentParagraphsCondition] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+	
+	ALTER TABLE [dbo].[tblCaseDocumentParagraphCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentParagraphsCondition_CaseSolutionConditionGUID]  DEFAULT (newid()) FOR [CaseDocumentParagraphConditionGUID]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentParagraphCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentParagraphsCondition_Status]  DEFAULT ((0)) FOR [Status]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentParagraphCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentParagraphsCondition_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentParagraphCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentParagraphsCondition_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
+end
