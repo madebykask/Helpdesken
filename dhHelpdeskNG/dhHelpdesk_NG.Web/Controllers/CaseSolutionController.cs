@@ -1920,6 +1920,11 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = caseSolution.SaveAndClose.HasValue && caseSolution.SaveAndClose.Value != 0
             });
 
+			// 
+
+			var splitToCaseSolutions = _caseSolutionService.GetCaseSolutions(curCustomerId);
+
+
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolution = caseSolution,
@@ -2018,7 +2023,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 CaseSolutionFieldSettings = feildSettings,
                 CSSettingsField = lFieldSetting.ToList(),
-                CSSelectedSettingsField = lFieldSettingSelected.ToList()
+                CSSelectedSettingsField = lFieldSettingSelected.ToList(),
+				SplitToCaseSolutions = splitToCaseSolutions
 
             };
 

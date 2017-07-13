@@ -33,6 +33,15 @@
                 //$('#case__StateSecondary_Id').removeAttr('disabled');                
                 $('#ButtonClick').val('save');
             });
+
+            //$("#case-action-save-close-and-split").click(function (e) {
+            //    e.preventDefault();
+            //    //$('#case__StateSecondary_Id').removeAttr('disabled');
+
+            //    $('#ButtonClick').val('save');
+
+            //    // Todo set new url
+            //});
         });
 
         $("#case__RegLanguage_Id").change(function () {
@@ -80,6 +89,11 @@
                     @if (!Model.IsItChildCase() && Model.WorkflowSteps.Count() > 0)
                     {
                         <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn save", id = "case-action-save" })</li>
+                    }
+                    @if (Model.CaseTemplateSplitToCaseSolutionID.HasValue)
+                    {
+                        <li>@Html.ActionLink(Translation.Get("Save and split", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn new-close-split", id = "case-action-save-close-and-split", href="#"})</li>
+                        @*<li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara, stäng och dela"), null, null, new { @class = "btn save-close-split", id = "case-action-save-close-and-split" })</li>*@
                     }
 
 

@@ -30,6 +30,12 @@ namespace DH.Helpdesk.Web.Models.Case.Input
         public int? Performer_Id { get; set; }
 
         public int? CaseSolution_Id { get; set; }
+
+		/// <summary>
+		/// Saves information regarding current case template
+		/// </summary>
+		public int? CurrentCaseSolution_Id { get; set;  }
+
         public string ActiveTab { get; set; }
         public CaseLog caseLog { get; set; }
 
@@ -54,6 +60,8 @@ namespace DH.Helpdesk.Web.Models.Case.Input
         {
             return ParentId.HasValue && ParentId != 0;
         }
+
+		public bool IndependentChild { get; set; }
 
 		public List<ExternalInvoiceModel> ExternalInvoices { get; set; }
 

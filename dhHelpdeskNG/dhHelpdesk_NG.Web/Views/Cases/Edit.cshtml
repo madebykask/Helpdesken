@@ -103,6 +103,15 @@
                     UnLockCase('@Model.CaseLock.LockGUID', targetUrl);
             });
 
+            $("#case-action-save-close-and-split").click(function (e) {
+                e.preventDefault();
+                //$('#case__StateSecondary_Id').removeAttr('disabled');
+
+                //$('#ButtonClick').val('save');
+
+                // Todo set new url
+            });
+
              @*$("#case-action-delete").click(function (e) {
                 if (hasNotInvoicedArticles()) {
                     messageDialog(dc('@Translation.GetForJS("Du får inte ta bort ett ärende som har invalda men ofakturerade artiklar.")'));
@@ -269,6 +278,14 @@
                     {
                     <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), null, null, null, new { @class = "btn save", id = "case-action-save" })</li>
                     <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara och stäng"), null, null, new { @class = "btn save-close", id = "case-action-save-and-close" })</li>
+{
+                                var x = Model.CaseTemplateSplitToCaseSolutionID.HasValue;
+                            }
+                            if (Model.CaseTemplateSplitToCaseSolutionID.HasValue)
+                            {
+
+                    <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Save and split"), null, null, null, new { @class = "btn edit-close-split", id = "case-action-save-close-and-split" })</li>
+                    }
                     <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara") + "/" + Translation.GetCoreTextTranslation("Nytt ärende"), null, null, new { @class = "btn save-new", id = "case-action-save-and-new" })</li>
                             <li><i id="TemplateQuickButtonIndicator" class="gif-loader" style="display:none">&nbsp;</i></li>
                             <li class="secspace"></li>

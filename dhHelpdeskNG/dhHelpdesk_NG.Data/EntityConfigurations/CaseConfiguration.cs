@@ -211,19 +211,24 @@
                .HasForeignKey(x => x.CaseSolution_Id)
                .WillCascadeOnDelete(false);
 
-            //this.Property(x => x.ActiveTab).IsOptional().HasMaxLength(100);
+			this.HasOptional(x => x.CurrentCaseSolution)
+			   .WithMany()
+			   .HasForeignKey(x => x.CurrentCaseSolution_Id)
+			   .WillCascadeOnDelete(false);
 
-            //this.HasMany(c => c.ExtendedCaseDatas)
-            //    .WithMany(ecd => ecd.Cases)                
-            //    .Map(m =>
-            // {
-            //     m.MapLeftKey("Case_Id");
-            //     m.MapRightKey("ExtendedCaseData_Id");
-            //     m.ToTable("tblCase_ExtendedCaseData");
-            // });
+			//this.Property(x => x.ActiveTab).IsOptional().HasMaxLength(100);
 
-            
-            this.ToTable("tblcase");
+			//this.HasMany(c => c.ExtendedCaseDatas)
+			//    .WithMany(ecd => ecd.Cases)                
+			//    .Map(m =>
+			// {
+			//     m.MapLeftKey("Case_Id");
+			//     m.MapRightKey("ExtendedCaseData_Id");
+			//     m.ToTable("tblCase_ExtendedCaseData");
+			// });
+
+
+			this.ToTable("tblcase");
         }
     }
 }

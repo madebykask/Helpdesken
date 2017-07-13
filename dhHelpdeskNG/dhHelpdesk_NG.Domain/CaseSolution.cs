@@ -107,6 +107,8 @@ namespace DH.Helpdesk.Domain
         public string DefaultTab { get; set; }
         public string ValidateOnChange { get; set; }
 
+		public int? SplitToCaseSolution_Id { get; set; }
+
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }
         public virtual CaseType CaseType { get; set; }
@@ -123,6 +125,8 @@ namespace DH.Helpdesk.Domain
         public int SortOrder { get; set; }
         public virtual List<ExtendedCaseEntity.ExtendedCaseFormEntity> ExtendedCaseForms { get; set; }
 
+
+		public virtual CaseSolution SplitToCaseSolution { get; set; }
         
     }
 }

@@ -14,6 +14,5 @@
         ExtendedCaseDataEntity GetExtendedCaseData(Guid extendedCaseGuid);
 
         ExtendedCaseDataModel GetExtendedCaseDataByCaseId(int caseId);
-        
-    }
+	}
 }

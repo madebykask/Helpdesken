@@ -18,9 +18,12 @@
             Property(e => e.CreatedBy).IsRequired();
             Property(e => e.CreatedOn).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
-            HasRequired(t => t.ExtendedCaseForm)
-                .WithMany(t => t.ExtendedCaseDatas)
-                .HasForeignKey(d => d.ExtendedCaseFormId).WillCascadeOnDelete(false);
+
+			HasRequired(t => t.ExtendedCaseForm)
+				.WithMany(t => t.ExtendedCaseDatas)
+				.HasForeignKey(d => d.ExtendedCaseFormId).WillCascadeOnDelete(false);
+
+
 
             ToTable("ExtendedCaseData");
         }

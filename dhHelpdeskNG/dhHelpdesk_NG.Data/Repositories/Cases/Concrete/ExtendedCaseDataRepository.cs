@@ -13,16 +13,23 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     {        
         private readonly IEntityToBusinessModelMapper<ExtendedCaseDataEntity, ExtendedCaseDataModel> _extendedCaseDataToBusinessModelMapper;
         private readonly IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity> _extendedCaseDataToEntityMapper;
+		private readonly IUserRepository _userRepository;
+		private readonly IExtendedCaseValueRepository _extendedCaseValueRepository;
 
-        public ExtendedCaseDataRepository(
+		public ExtendedCaseDataRepository(
             IDatabaseFactory databaseFactory,
             IEntityToBusinessModelMapper<ExtendedCaseDataEntity, ExtendedCaseDataModel> extendedCaseDataToBusinessModelMapper,
-            IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity> extendedCaseDataToEntityMapper)
+            IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity> extendedCaseDataToEntityMapper,
+			IUserRepository userRepository,
+			IExtendedCaseValueRepository extendedCaseValueRepository)
             : base(databaseFactory)
         {
             _extendedCaseDataToBusinessModelMapper = extendedCaseDataToBusinessModelMapper;
             _extendedCaseDataToEntityMapper = extendedCaseDataToEntityMapper;
-        }
+			_userRepository = userRepository;
+			_extendedCaseValueRepository = extendedCaseValueRepository;
+
+		}
 
         public ExtendedCaseDataModel CreateTemporaryExtendedCaseData(int formId, string creator)
         {
@@ -63,6 +70,50 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 return null;
 
             return _extendedCaseDataToBusinessModelMapper.Map(case_ExtendedCaseEntity.ExtendedCaseData);
+        }
+
+        public ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, int userID)
+        {
+            var copyFromExtendedCaseData = DataContext.ExtendedCaseDatas.Where(o => o.Id == extendedCaseDataID).Single();
+
+			var now = DateTime.UtcNow;
+
+			var user = _userRepository.GetById(userID);
+
+			var newExtendedCaseData = new ExtendedCaseDataEntity
+			{
+				ExtendedCaseGuid = Guid.NewGuid(),
+				ExtendedCaseFormId = copyFromExtendedCaseData.ExtendedCaseFormId,
+				CreatedOn = now,
+				CreatedBy = user.UserID
+			};
+
+			var newCaseExtendedCase = new Case_ExtendedCaseEntity
+			{
+				Case_Id = caseID
+			};
+			DataContext.ExtendedCaseDatas.Add(newExtendedCaseData);
+
+
+			var copyFromExtendedCaseValues = DataContext.ExtendedCaseValues.Where(o => o.ExtendedCaseDataId == extendedCaseDataID);
+
+			foreach (var copyValue in copyFromExtendedCaseValues)
+			{
+				var newValue = new ExtendedCaseValueEntity
+				{
+					FieldId = copyValue.FieldId,
+					Value = copyValue.Value,
+					SecondaryValue = copyValue.SecondaryValue
+				};
+
+				newExtendedCaseData.ExtendedCaseValues.Add(newValue);
+			}
+
+			DataContext.SaveChanges();
+
+			var model = _extendedCaseDataToBusinessModelMapper.Map(newExtendedCaseData);
+
+			return model;
         }
     }
 }

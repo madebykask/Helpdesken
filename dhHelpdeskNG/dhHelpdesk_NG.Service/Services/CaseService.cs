@@ -155,7 +155,8 @@ namespace DH.Helpdesk.Services.Services
         string DeleteFavorite(int favoriteId);
         void DeleteChildCaseFromParent(int id, int parentId);
         bool AddParentCase(int id, int parentId);
-    }
+		void SetIndependentChild(int caseID, bool independentChild);
+	}
 
     public class CaseService : ICaseService
     {
@@ -763,7 +764,7 @@ namespace DH.Helpdesk.Services.Services
                 var allPerformers = uow.GetRepository<User>().GetAll();
                 var relationInfo = allRelations
                     .Where(it => it.DescendantId == caseId)
-                    .Select(it => new { id = it.DescendantId, parentId = it.AncestorId })
+                    .Select(it => new { id = it.DescendantId, parentId = it.AncestorId, independent = it.Independent })
                     .GroupJoin(
                             allCases,
                             it => it.parentId,
@@ -776,6 +777,7 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 id = t.parentChild.id,
                                 parentId = t.parentChild.parentId,
+								independent = t.parentChild.independent,
                                 caseNumber = case_.CaseNumber,
                                 subject = case_.Caption,
                                 performerId = case_.Performer_User_Id,
@@ -799,6 +801,7 @@ namespace DH.Helpdesk.Services.Services
                                 finishingDate = t.tmpParentChild.finishingDate,
                                 performerFirstName = performer == null ? string.Empty : performer.FirstName,
                                 performerLastName = performer == null ? string.Empty : performer.SurName,
+								isChildIndependent = t.tmpParentChild.independent
                             })
                         .FirstOrDefault();
                 if (relationInfo != null)
@@ -807,7 +810,8 @@ namespace DH.Helpdesk.Services.Services
                     {
                         ParentId = relationInfo.parentId,
                         CaseNumber = relationInfo.caseNumber,
-                        CaseAdministrator =
+						IsChildIndependent = relationInfo.isChildIndependent,
+						CaseAdministrator =
                                        new UserNamesStruct()
                                        {
                                            FirstName = relationInfo.performerFirstName,
@@ -2918,6 +2922,25 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
         }
-        #endregion
-    }
+
+		public void SetIndependentChild(int caseID, bool independentChild)
+		{
+			using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+			{
+				var parentCaseRelation = uow.GetRepository<ParentChildRelation>()
+					.GetAll()
+					.Where(o => o.DescendantId == caseID)
+					.SingleOrDefault();
+
+				if (parentCaseRelation == null)
+				{
+					throw new ArgumentException($"No parent for case id {caseID}");
+				}
+
+				parentCaseRelation.Independent = independentChild;
+				uow.Save();
+			}
+		}
+		#endregion
+	}
 }

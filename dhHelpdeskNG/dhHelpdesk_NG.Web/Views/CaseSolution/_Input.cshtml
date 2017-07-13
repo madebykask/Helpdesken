@@ -112,6 +112,24 @@
                                         <input type="hidden" name="Casesolution.Status" value="0" />
                                     </td>
                                 </tr>
+                                @*Split selection*@
+                                @*<tr> // TODO: Use a enable button to show (and reset value if saved when disabled) of split to dropdown
+                                    <td>
+                                        @Translation.Get("Enable split", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="Casesolution.EnableSplit" @(Model.CaseSolution.SplitToCaseSolution_Id.HasValue ? "checked=checked" : "") value="" class="switchcheckbox" />
+                                        <input type="hidden" name="Casesolution.EnableSplit" value="0" />
+                                    </td>
+                                </tr>*@
+                                <tr id="splitSelection">
+                                    <td>
+                                        @Translation.Get("Split to case template", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.CaseSolution.SplitToCaseSolution_Id, Model.SplitToCaseSolutions.Select(o => new SelectListItem() { Text = o.Name + (o.CaseSolutionCategory == null ? "" : " " + o.CaseSolutionCategory.Name), Value = o.Id.ToString() }).ToList(), "")
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>

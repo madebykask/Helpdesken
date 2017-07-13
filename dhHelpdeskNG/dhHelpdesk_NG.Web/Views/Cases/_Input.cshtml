@@ -321,7 +321,7 @@
                         @Html.HiddenFor(model => model.CustomerSettings.ModuleCaseInvoice)
                         @Html.HiddenFor(model => model.MovedFromCustomerId)
                         @Html.HiddenFor(model => model.ContainsExtendedCase)
-                        @Html.HiddenFor(model => model.ExtendedCaseGuid)
+                        @Html.HiddenFor(model => model.ExtendedCaseGuid)                        
 
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
@@ -338,6 +338,9 @@
                         @Html.Hidden("CaseHasInvoiceOrder", "")
                         @Html.Hidden("IsAnyFileAdded", "0")
                         @Html.Hidden("CaseSolution_Id", (Model.NewModeParams != null && Model.NewModeParams.templateId != null) ? Model.NewModeParams.templateId : Model.case_.CaseSolution_Id)
+                        @Html.Hidden("CurrentCaseSolution_Id", (Model.CurrentCaseSolution == null ? (int?)null : Model.CurrentCaseSolution.Id))
+
+
                         @Html.HiddenFor(model => model.ActiveTab)
                         @Html.HiddenFor(model => model.SelectedWorkflowStep)
                         @Html.Hidden("ButtonClick", "") @*TEMP, used to define if "Send" button is clicked*@
@@ -355,6 +358,11 @@
                                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Model.case_.Customer_Id)
                                     <strong>@Model.ParentCaseInfo.Administrator</strong>
                                 }
+                                <br />
+                                @*@Translation.Get("Independent child")&nbsp;<input id="IndependentChild" name="IndependentChild" type="checkbox" @(Model.IndependentChild ? "checked" : "") value="true" />
+                                @Html.HiddenFor(model => Model.IndependentChild)*@
+                                @Translation.Get("Independent child")&nbsp;
+                                @Html.CheckBoxFor(model => Model.IndependentChild)
                             </div>
                         }
 
@@ -2857,3 +2865,4 @@
     });
 
 </script>
+

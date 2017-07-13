@@ -71,6 +71,12 @@
                 .HasForeignKey(x => x.WorkingGroup_Id)
                 .WillCascadeOnDelete(false);
 
+
+			this.HasOptional(x => x.SplitToCaseSolution)
+				.WithMany()
+				.HasForeignKey(x => x.SplitToCaseSolution_Id)
+				.WillCascadeOnDelete(false);
+
             this.HasMany(cs => cs.ExtendedCaseForms).WithMany(ecf => ecf.CaseSolutions).Map(m =>
              {
                  m.MapLeftKey("CaseSolution_Id");

@@ -10,6 +10,8 @@ var caseButtonsToLock = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseD
 /*** CONST BEGIN ***/
 EditPage.prototype.DELETE_CASE_URL = '/Cases/DeleteCase';
 EditPage.prototype.NEW_CLOSE_CASE_URL = '/Cases/NewAndClose';
+EditPage.prototype.NEW_CLOSE_SPLIT_URL = '/Cases/NewCloseAndSplit';
+EditPage.prototype.EDIT_CLOSE_SPLIT_URL = '/Cases/EditCloseAndSplit';
 EditPage.prototype.EDIT_CASE_URL = '/Cases/Edit';
 EditPage.prototype.SAVE_GOTO_PARENT_CASE_URL = '/Cases/NewAndGotoParentCase';
 EditPage.prototype.SAVE_ADD_CASE_URL = '/Cases/NewAndAddCase';
@@ -957,10 +959,21 @@ EditPage.prototype.onSaveClick = function () {
     return self.primaryValidation(url);   
 };
 
+EditPage.prototype.onNewCloseAndSplitClick = function () {
+    var self = this;
+    return self.primaryValidation(self.NEW_CLOSE_SPLIT_URL);
+};
+
+EditPage.prototype.onEditCloseAndSplitClick = function () {
+    var self = this;
+    return self.primaryValidation(self.EDIT_CLOSE_SPLIT_URL);
+};
+
 EditPage.prototype.onSaveAndCloseClick = function () {
     var self = this;
     return self.primaryValidation(self.NEW_CLOSE_CASE_URL);   
 };
+
 
 EditPage.prototype.onSaveAndNewClick = function () {
     var self = this;
@@ -1198,7 +1211,7 @@ EditPage.prototype.init = function (p) {
     self.$watchDateEdit = $('#case__WatchDate');
     self.$watchDate = $('#divCase__WatchDate');      
     self.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
-                             '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
+                             '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,.btn.new-close-split,.btn.edit-close-split' +
                              '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton');
 
     self.$productAreaObj = $('#divProductArea');
@@ -1210,6 +1223,8 @@ EditPage.prototype.init = function (p) {
     self.$btnSaveNew = $('.btn.save-new');
     self.$btnDelete = $('.caseDeleteDialog.btn');
     self.$btnClose = $('.btn.close-page');
+    self.$btnNewCloseAndSplit = $('.btn.new-close-split');
+    self.$btnEditCloseAndSplit = $('.btn.edit-close-split');
     self.deleteDlg = self.initDeleteConfirmationDlg();
     self.leaveDlg = self.initLeaveConfirmationDlg();
     
@@ -1236,7 +1251,10 @@ EditPage.prototype.init = function (p) {
     self.$btnSave.on('click', Utils.callAsMe(self.onSaveClick, self));
     self.$btnSaveClose.on('click', Utils.callAsMe(self.onSaveAndCloseClick, self));
     self.$btnSaveNew.on('click', Utils.callAsMe(self.onSaveAndNewClick, self));
+    self.$btnNewCloseAndSplit.on('click', Utils.callAsMe(self.onNewCloseAndSplitClick, self));
     self.$internalLogNote.on('change', self.propagateLogNote);
+    self.$btnEditCloseAndSplit.on('click', Utils.callAsMe(self.onEditCloseAndSplitClick, self));
+
     $('.lang.dropdown-submenu a').on('click', Utils.callAsMe(self.onPageLeave, self));
 
     $(".dropdown-submenu.DynamicDropDown_Up").mousemove(function (event) {

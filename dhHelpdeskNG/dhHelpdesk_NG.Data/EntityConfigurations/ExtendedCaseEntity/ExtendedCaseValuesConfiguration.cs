@@ -24,7 +24,7 @@
             .HasForeignKey(c => c.ExtendedCaseDataId)
             .WillCascadeOnDelete(false);
 
-            ToTable("ExtendedCaseValues");
+			ToTable("ExtendedCaseValues");
         }
 
         #endregion

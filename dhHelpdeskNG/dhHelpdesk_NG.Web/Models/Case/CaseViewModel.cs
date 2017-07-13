@@ -199,8 +199,9 @@ namespace DH.Helpdesk.Web.Models.Case
         public int? templateistrue { get; set; }
 
         public string CaseTemplateName { get; set; }
+		public int? CaseTemplateSplitToCaseSolutionID { get; set; }
 
-        public string BackUrl { get; set; }
+		public string BackUrl { get; set; }
 
         public bool CanGetRelatedCases { get; set; }
 
@@ -273,8 +274,9 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public bool ContainsExtendedCase { get; set; }
         public Guid ExtendedCaseGuid { get; set; }
-
-    }
+		public bool IndependentChild { get; internal set; }
+		public CaseSolution CurrentCaseSolution { get; internal set; }
+	}
 
     public class CaseIndexViewModel
     {

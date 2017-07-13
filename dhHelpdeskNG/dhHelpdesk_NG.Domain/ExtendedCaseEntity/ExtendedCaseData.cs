@@ -20,5 +20,5 @@ namespace DH.Helpdesk.Domain.ExtendedCaseEntity
         public virtual ICollection<ExtendedCaseValueEntity> ExtendedCaseValues { get; set; }
 
         
-    }
+	}
 }
