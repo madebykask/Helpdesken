@@ -11,7 +11,7 @@
 
     public static class PrintExtensions
     {
-        private static readonly BaseColor HeaderColor = BaseColor.LIGHT_GRAY;
+        private static readonly Color HeaderColor = Color.LIGHT_GRAY;
 
         public static void AddHeader(this PdfPTable table, string text)
         {
