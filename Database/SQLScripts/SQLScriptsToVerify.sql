@@ -371,6 +371,10 @@ begin
 		[PageNumbersUse] [bit] NULL,
 		[LanguageId] [int] NULL,
 		[CaseDocumentTemplateGUID] [uniqueidentifier] NULL,
+		[MarginTop] int NULL,
+		[MarginBottom] int NULL,
+		[MarginLeft] int NULL,
+		[MarginRight] int NULL,
 	 CONSTRAINT [PK_tblCaseDocumentTemplate] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC

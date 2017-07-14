@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Globalization;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -30,6 +30,10 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseService _caseService;
         private readonly ICaseDocumentTextConditionRepository _caseDocumentTextConditionRepository;
 
+        private const string DateShortFormat = "dd.MM.yyyy";
+        private const string DateLongFormat = "d MMMM yyyy";
+
+
         public CaseDocumentService(
             ICaseDocumentRepository caseDocumentRepository,
             ICaseDocumentConditionRepository caseDocumentConditionRepository,
@@ -47,19 +51,28 @@ namespace DH.Helpdesk.Services.Services
             this._caseDocumentTextConditionRepository = caseDocumentTextConditionRepository;
         }
 
+
+        private bool CheckDate(String date)
+        {
+            try
+            {
+                DateTime dt = DateTime.Parse(date);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private string GetExtendedCaseValue(Case _case, string fieldId)
         {
             int pos = fieldId.LastIndexOf(".") + 1;
 
             string fieldIdShort =  fieldId.Substring(pos, fieldId.Length - pos);
-
-
-
             
             try
             {
-                // return  _extendedCaseValueRepository.GetExtendedCaseValue(_case.CaseExtendedCaseDatas.FirstOrDefault().ExtendedCaseData_Id, fieldId).Value;
-
                 //Check if SecondaryValue exist
                 var value = _case.CaseExtendedCaseDatas.FirstOrDefault().ExtendedCaseData.ExtendedCaseValues.Where(x => x.FieldId.ToLower() == fieldId.ToLower()).First().SecondaryValue;
 
@@ -73,6 +86,14 @@ namespace DH.Helpdesk.Services.Services
                     {
                        return "[" + fieldIdShort + "]";
                     }
+                }
+
+                if (CheckDate(value))
+                {
+                    
+                    //INPUT NEEDS TO BE like: 2017-07-26
+                    DateTime convertedDate = DateTime.ParseExact(value, "d", null);
+                    return convertedDate.ToString(DateShortFormat, CultureInfo.InvariantCulture);
                 }
 
                 return value;
@@ -116,6 +137,7 @@ namespace DH.Helpdesk.Services.Services
             return value;
         }
 
+     
         private Dictionary<string,string> GetCaseValueDictionary(int id, int caseId)
         {
             var _case = _caseService.GetCaseById(caseId);
@@ -147,14 +169,15 @@ namespace DH.Helpdesk.Services.Services
 
             #region Other
 
-            //TODO: do we neeed to convert?
+            //TODO: Put format in DB
             string dateNowLong = "Date.NowLong";
-            dictionary.Add(dateNowLong, DateTime.Now.ToLongDateString());
+
+            dictionary.Add(dateNowLong, DateTime.Now.ToString(DateLongFormat, CultureInfo.InvariantCulture));
 
             string dateNowShort = "Date.NowShort";
-            dictionary.Add(dateNowShort, DateTime.Now.ToShortDateString());
+            dictionary.Add(dateNowShort, DateTime.Now.ToString(DateShortFormat, CultureInfo.InvariantCulture));
 
-            
+
             #endregion
 
             #region Extended Case
