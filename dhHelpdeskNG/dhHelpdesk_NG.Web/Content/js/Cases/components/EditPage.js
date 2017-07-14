@@ -493,7 +493,13 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
     }
 }
 
-
+EditPage.prototype.propagateLogNote = function () {
+    var data = $(this).val();
+    var propagateMessage = { log_textinternal: { Value: data } };
+    
+    var $_ex_Container = EditPage.prototype.getExtendedCaseContainer();
+    $_ex_Container.contentWindow.updateCaseFields(propagateMessage);    
+};
 
 EditPage.prototype.refreshCasePage = function (updatedInfo) {
     if (updatedInfo == null)
@@ -1179,6 +1185,9 @@ EditPage.prototype.init = function (p) {
     EditPage.prototype.Current_EC_Guid = p.extendedCaseGuid;
     EditPage.prototype.Current_EC_LanguageId = p.extendedCaseLanguageId;
     EditPage.prototype.Current_EC_Path = p.extendedCasePath;
+
+    /*Debug mode*/    
+    //EditPage.prototype.Current_EC_Path = "http://dhhelpdesk-ikea-bschr-v5.datahalland.se/ExtendedCase/?formId=[ExtendedCaseFormId]&autoLoad=1";
         
     /// controls binding
     self.$form = $('#target');
@@ -1211,6 +1220,7 @@ EditPage.prototype.init = function (p) {
     self.$caseDescriptionEl = $(".case-description")
     self.$caseTab = $("#tabsArea li a");//$('#case-tab');
     self.$activeTabHolder = $('#ActiveTab');
+    self.$internalLogNote = $('#' + self.Case_Field_Ids.log_InternalText);
 
     self.$selectListStep = $("#steps");
     self.$btnGo = $('#btnGo');
@@ -1226,6 +1236,7 @@ EditPage.prototype.init = function (p) {
     self.$btnSave.on('click', Utils.callAsMe(self.onSaveClick, self));
     self.$btnSaveClose.on('click', Utils.callAsMe(self.onSaveAndCloseClick, self));
     self.$btnSaveNew.on('click', Utils.callAsMe(self.onSaveAndNewClick, self));
+    self.$internalLogNote.on('change', self.propagateLogNote);
     $('.lang.dropdown-submenu a').on('click', Utils.callAsMe(self.onPageLeave, self));
 
     $(".dropdown-submenu.DynamicDropDown_Up").mousemove(function (event) {
@@ -1353,7 +1364,7 @@ EditPage.prototype.init = function (p) {
             visibility = 'hidden';
         }
         self.$descriptionDialog.css('visibility', visibility);
-    });
+    });   
 
     /*Enable if you have case print preview*/
     //var update_iFrame = function (iframeId) {
