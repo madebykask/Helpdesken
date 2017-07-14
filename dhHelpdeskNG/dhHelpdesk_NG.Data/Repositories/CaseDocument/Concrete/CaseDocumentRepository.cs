@@ -8,7 +8,7 @@ namespace DH.Helpdesk.Dal.Repositories.CaseDocument.Concrete
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain;
-    using System.Web.Mvc;
+    using System;
 
     public sealed class CaseDocumentRepository : RepositoryBase<CaseDocumentEntity>, ICaseDocumentRepository
     {
@@ -27,6 +27,7 @@ namespace DH.Helpdesk.Dal.Repositories.CaseDocument.Concrete
 
         public IEnumerable<CaseDocumentModel> GetCaseDocumentsByCustomer(int customerId)
         {
+
             var entities = this.Table
                   .Where(c => c.Customer_Id == customerId && c.Status > 0)
                    .Distinct()
@@ -35,10 +36,10 @@ namespace DH.Helpdesk.Dal.Repositories.CaseDocument.Concrete
             return entities.Select(this._CaseDocumentToBusinessModelMapper.Map);
         }
 
-        public CaseDocumentModel GetCaseDocument(int id)
+        public CaseDocumentModel GetCaseDocument(Guid caseDocumentGUID)
         {
             var entities = this.Table
-                    .Where(c => c.Id == id && c.Status > 0)
+                    .Where(c => c.CaseDocumentGUID == caseDocumentGUID && c.Status > 0)
 
                    .Distinct()
                    .ToList();

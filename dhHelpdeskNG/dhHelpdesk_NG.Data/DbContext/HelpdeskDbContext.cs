@@ -583,6 +583,7 @@
         public DbSet<CaseDocumentTextEntity> CaseDocumentTexts { get; set; }
 
         public DbSet<CaseDocumentParagraphConditionEntity> CaseDocumentParagraphConditions { get; set; }
+        public DbSet<CaseDocumentTextConditionEntity> CaseDocumentTextConditions { get; set; }
 
         #endregion
 
@@ -874,6 +875,7 @@
             modelBuilder.Configurations.Add(new CaseDocumentTextConfiguration());
 
             modelBuilder.Configurations.Add(new CaseDocumentParagraphConditionConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentTextConditionConfiguration());
 
             #endregion
 

@@ -13,4 +13,5 @@ namespace DH.Helpdesk.Domain
         public DateTime ChangedDate { get; set; }
         public int? ChangedByUser_Id { get; set; }
     }
+
 }

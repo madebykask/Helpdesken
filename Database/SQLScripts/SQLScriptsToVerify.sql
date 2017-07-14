@@ -361,43 +361,31 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
-
-
-
-
 if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentTemplate')
 begin
 
-
 	CREATE TABLE [dbo].[tblCaseDocumentTemplate](
-		[Id] [int] NULL,
+		[Id] [int] IDENTITY(1,1) NOT NULL,
 		[Name] [nvarchar](50) NULL,
 		[Margins] [nvarchar](50) NULL,
 		[PageNumbersUse] [bit] NULL,
-		[DraftUse] [bit] NULL,
-		[BarCodeUse] [bit] NULL,
-		[Footer] [nvarchar](max) NULL,
-		[Header] [nvarchar](max) NULL,
-		[LanguageId] [int] NULL
-	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+		[LanguageId] [int] NULL,
+		[CaseDocumentTemplateGUID] [uniqueidentifier] NULL,
+	 CONSTRAINT [PK_tblCaseDocumentTemplate] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
 
-	
 	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_PageNumbersUse]  DEFAULT ((0)) FOR [PageNumbersUse]
-	
-	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_DraftUse]  DEFAULT ((0)) FOR [DraftUse]
-	
-	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_BarCodeUse]  DEFAULT ((0)) FOR [BarCodeUse]
-	
+
 end
-
-
-
 
 if not exists(select * from sysobjects WHERE Name = N'tblCaseDocument')
 begin
 
 	CREATE TABLE [dbo].[tblCaseDocument](
-		[Id] [int] NOT NULL,
+		[Id] [int] IDENTITY(1,1) NOT NULL,
 		[CaseDocumentGUID] [uniqueidentifier] NULL,
 		[Name] [nvarchar](100) NULL,
 		[Description] [nvarchar](200) NULL,
@@ -409,39 +397,38 @@ begin
 		[CreatedByUser_Id] [int] NULL,
 		[ChangedDate] [datetime] NOT NULL,
 		[ChangedByUser_Id] [int] NULL,
+		[CaseDocumentTemplate_Id] [int] NOT NULL,
+		[Version] [int] NOT NULL,
 	 CONSTRAINT [PK_ExtendedCaseDocuments] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 
+
 	ALTER TABLE [dbo].[tblCaseDocument] ADD  CONSTRAINT [DF_tblCaseDocument_CaseDocumentGUID]  DEFAULT (newid()) FOR [CaseDocumentGUID]
-	
+
 	ALTER TABLE [dbo].[tblCaseDocument] ADD  CONSTRAINT [DF_tblCaseDocument_SortOrder]  DEFAULT ((0)) FOR [SortOrder]
-	
+
 	ALTER TABLE [dbo].[tblCaseDocument] ADD  CONSTRAINT [DF_tblCaseDocument_Status]  DEFAULT ((1)) FOR [Status]
-	
+
 	ALTER TABLE [dbo].[tblCaseDocument] ADD  CONSTRAINT [DF_tblCaseDocument_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
-	
+
 	ALTER TABLE [dbo].[tblCaseDocument] ADD  CONSTRAINT [DF_tblCaseDocument_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
-	
+
+	ALTER TABLE [dbo].[tblCaseDocument] ADD  DEFAULT ((0)) FOR [Version]
+
 end
 
 
--- New column in tblCaseDocument
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaseDocumentTemplate_Id' and sysobjects.name = N'tblCaseDocument')
-begin
-   ALTER TABLE tblCaseDocument ADD CaseDocumentTemplate_Id int NOT NULL
-end
 
 if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentCondition')
 begin
-
 	CREATE TABLE [dbo].[tblCaseDocumentCondition](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
 		[CaseDocumentConditionGUID] [uniqueidentifier] NULL,
 		[CaseDocument_Id] [int] NULL,
-		[Property_Name] [nvarchar](600) NOT NULL,
+		[Property_Name] [nvarchar](500) NULL,
 		[Values] [nvarchar](max) NOT NULL,
 		[Description] [nvarchar](200) NULL,
 		[Status] [int] NULL,
@@ -455,35 +442,34 @@ begin
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-	
 	ALTER TABLE [dbo].[tblCaseDocumentCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentsCondition_CaseSolutionConditionGUID]  DEFAULT (newid()) FOR [CaseDocumentConditionGUID]
-	
+
 	ALTER TABLE [dbo].[tblCaseDocumentCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentsCondition_Status]  DEFAULT ((0)) FOR [Status]
-	
+
 	ALTER TABLE [dbo].[tblCaseDocumentCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentsCondition_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
-	
+
 	ALTER TABLE [dbo].[tblCaseDocumentCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentsCondition_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
-	
-	ALTER TABLE [dbo].[tblCaseDocumentCondition]  WITH NOCHECK ADD  CONSTRAINT [FK_ExtendedCaseDocumentsCondition_ExtendedCaseDocuments] FOREIGN KEY([CaseDocument_Id])
+
+	ALTER TABLE [dbo].[tblCaseDocumentCondition]  WITH NOCHECK ADD  CONSTRAINT [FK_CaseDocumentsCondition_CaseDocument] FOREIGN KEY([CaseDocument_Id])
 	REFERENCES [dbo].[tblCaseDocument] ([Id])
-	
-	ALTER TABLE [dbo].[tblCaseDocumentCondition] NOCHECK CONSTRAINT [FK_ExtendedCaseDocumentsCondition_ExtendedCaseDocuments]
-	
+
+	ALTER TABLE [dbo].[tblCaseDocumentCondition] NOCHECK CONSTRAINT [FK_CaseDocumentsCondition_CaseDocument]
+
 	ALTER TABLE [dbo].[tblCaseDocumentCondition]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseDocumentCondition_tblCaseDocument] FOREIGN KEY([CaseDocument_Id])
 	REFERENCES [dbo].[tblCaseDocument] ([Id])
-	
+
 	ALTER TABLE [dbo].[tblCaseDocumentCondition] CHECK CONSTRAINT [FK_tblCaseDocumentCondition_tblCaseDocument]
 	
 end
 
 if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentParagraph')
 begin
-
 	CREATE TABLE [dbo].[tblCaseDocumentParagraph](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
 		[Name] [nvarchar](50) NULL,
 		[Description] [nvarchar](50) NULL,
 		[ParagraphType] [int] NULL,
+		[CaseDocumentParagraphGUID] [uniqueidentifier] NULL,
 	 CONSTRAINT [PK_tblCaseDocumentParagraph] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
@@ -492,7 +478,6 @@ begin
 
 
 	ALTER TABLE [dbo].[tblCaseDocumentParagraph] ADD  CONSTRAINT [DF_tblCaseDocumentParagraph_ParagraphType]  DEFAULT ((1)) FOR [ParagraphType]
-
 end
 
 if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentText')
@@ -506,39 +491,47 @@ begin
 		[Text] [nvarchar](max) NOT NULL,
 		[Headline] [nvarchar](200) NULL,
 		[SortOrder] [int] NOT NULL,
+		[CaseDocumentTextGUID] [uniqueidentifier] NULL,
 	 CONSTRAINT [PK_tblCaseDocumentText] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-	
+
 	ALTER TABLE [dbo].[tblCaseDocumentText] ADD  CONSTRAINT [DF_tblCaseDocumentText_SortOrder]  DEFAULT ((0)) FOR [SortOrder]
-	
+
+	ALTER TABLE [dbo].[tblCaseDocumentText]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseDocumentText_tblCaseDocumentParagraph] FOREIGN KEY([CaseDocumentParagraph_Id])
+	REFERENCES [dbo].[tblCaseDocumentParagraph] ([Id])
+
+	ALTER TABLE [dbo].[tblCaseDocumentText] CHECK CONSTRAINT [FK_tblCaseDocumentText_tblCaseDocumentParagraph]
 
 end
 
 if not exists(select * from sysobjects WHERE Name = N'tblCaseDocument_CaseDocumentParagraph')
 begin
+
 	CREATE TABLE [dbo].[tblCaseDocument_CaseDocumentParagraph](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[CaseDocument_Id] [int] NULL,
-		[CaseDocumentParagraph_Id] [int] NULL,
-		[SortOrder] [int] NULL
+		[CaseDocument_Id] [int] NOT NULL,
+		[CaseDocumentParagraph_Id] [int] NOT NULL,
+		[SortOrder] [int] NOT NULL,
+	 CONSTRAINT [PK_tblCaseDocument_CaseDocumentParagraph] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 
-	
 
 	ALTER TABLE [dbo].[tblCaseDocument_CaseDocumentParagraph]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseDocument_tblCaseDocumentParagraph_tblCaseDocument] FOREIGN KEY([CaseDocument_Id])
 	REFERENCES [dbo].[tblCaseDocument] ([Id])
-	
+
 	ALTER TABLE [dbo].[tblCaseDocument_CaseDocumentParagraph] CHECK CONSTRAINT [FK_tblCaseDocument_tblCaseDocumentParagraph_tblCaseDocument]
-	
+
 	ALTER TABLE [dbo].[tblCaseDocument_CaseDocumentParagraph]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseDocument_tblCaseDocumentParagraph_tblCaseDocumentParagraph] FOREIGN KEY([CaseDocumentParagraph_Id])
 	REFERENCES [dbo].[tblCaseDocumentParagraph] ([Id])
-	
+
 	ALTER TABLE [dbo].[tblCaseDocument_CaseDocumentParagraph] CHECK CONSTRAINT [FK_tblCaseDocument_tblCaseDocumentParagraph_tblCaseDocumentParagraph]
-	
 end
 
 
@@ -551,12 +544,11 @@ end
 
 if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentParagraphCondition')
 begin
-
 	CREATE TABLE [dbo].[tblCaseDocumentParagraphCondition](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
 		[CaseDocumentParagraphConditionGUID] [uniqueidentifier] NULL,
 		[CaseDocumentParagraph_Id] [int] NULL,
-		[Property_Name] [nvarchar](100) NULL,
+		[Property_Name] [nvarchar](500) NULL,
 		[Operator] [nvarchar](50) NULL,
 		[Values] [nvarchar](max) NULL,
 		[Description] [nvarchar](200) NULL,
@@ -571,12 +563,53 @@ begin
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-	
+
 	ALTER TABLE [dbo].[tblCaseDocumentParagraphCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentParagraphsCondition_CaseSolutionConditionGUID]  DEFAULT (newid()) FOR [CaseDocumentParagraphConditionGUID]
-	
+
 	ALTER TABLE [dbo].[tblCaseDocumentParagraphCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentParagraphsCondition_Status]  DEFAULT ((0)) FOR [Status]
-	
+
 	ALTER TABLE [dbo].[tblCaseDocumentParagraphCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentParagraphsCondition_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
-	
+
 	ALTER TABLE [dbo].[tblCaseDocumentParagraphCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentParagraphsCondition_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
+
 end
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentTextCondition')
+begin
+
+	CREATE TABLE [dbo].[tblCaseDocumentTextCondition](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[CaseDocumentTextConditionGUID] [uniqueidentifier] NULL,
+		[CaseDocumentText_Id] [int] NULL,
+		[Property_Name] [nvarchar](500) NULL,
+		[Operator] [nvarchar](50) NULL,
+		[Values] [nvarchar](max) NULL,
+		[Description] [nvarchar](200) NULL,
+		[Status] [int] NULL,
+		[CreatedDate] [datetime] NULL,
+		[CreatedByUser_Id] [int] NULL,
+		[ChangedDate] [datetime] NULL,
+		[ChangedByUser_Id] [int] NULL,
+	 CONSTRAINT [PK_ExtendedCaseDocumentTextsCondition] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+	ALTER TABLE [dbo].[tblCaseDocumentTextCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentTextsCondition_CaseSolutionConditionGUID]  DEFAULT (newid()) FOR [CaseDocumentTextConditionGUID]
+
+	ALTER TABLE [dbo].[tblCaseDocumentTextCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentTextsCondition_Status]  DEFAULT ((0)) FOR [Status]
+
+	ALTER TABLE [dbo].[tblCaseDocumentTextCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentTextsCondition_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+
+	ALTER TABLE [dbo].[tblCaseDocumentTextCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentTextsCondition_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
+
+	ALTER TABLE [dbo].[tblCaseDocumentTextCondition]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseDocumentTextCondition_tblCaseDocumentText] FOREIGN KEY([CaseDocumentText_Id])
+	REFERENCES [dbo].[tblCaseDocumentText] ([Id])
+
+	ALTER TABLE [dbo].[tblCaseDocumentTextCondition] CHECK CONSTRAINT [FK_tblCaseDocumentTextCondition_tblCaseDocumentText]
+end
+
+
+
+

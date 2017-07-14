@@ -18,10 +18,11 @@
             Property(e => e.Value).IsOptional();
             Property(e => e.SecondaryValue).IsOptional();
 
-              //this.HasRequired(c => c.ExtendedCaseData)
-              //.WithMany(c => c.ExtendedCaseValues)
-              //.HasForeignKey(c => c.ExtendedCaseDataId)
-              //.WillCascadeOnDelete(false);
+            //LAZY
+            this.HasRequired(c => c.ExtendedCaseData)
+            .WithMany(c => c.ExtendedCaseValues)
+            .HasForeignKey(c => c.ExtendedCaseDataId)
+            .WillCascadeOnDelete(false);
 
             ToTable("ExtendedCaseValues");
         }

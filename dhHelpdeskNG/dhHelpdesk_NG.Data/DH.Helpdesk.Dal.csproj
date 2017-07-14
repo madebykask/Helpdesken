@@ -111,6 +111,7 @@
     <Compile Include="EntityConfigurations\BusinessRules\BRConditionConfiguration.cs" />
     <Compile Include="EntityConfigurations\BusinessRules\BRActionConfiguration.cs" />
     <Compile Include="EntityConfigurations\BusinessRules\BRActionParamsConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseDocument\CaseDocumentTextConditionConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseDocument\CaseDocumentParagraphConditionConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseDocument\CaseDocumentTextConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseDocument\CaseDocumentParagraphConfiguration.cs" />
@@ -251,10 +252,12 @@
     <Compile Include="MapperData\Logs\LogMapperData.cs" />
     <Compile Include="Mappers\Calendars\BusinessModelToEntity\CalendarToEntityMapper.cs" />
     <Compile Include="Mappers\Calendars\EntityToBusinessModel\CalendarToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\CaseDocument\BusinessModelToEntity\CaseDocumentTextConditionToEntityMapper.cs" />
     <Compile Include="Mappers\CaseDocument\BusinessModelToEntity\CaseDocumentParagraphConditionToEntityMapper.cs" />
     <Compile Include="Mappers\CaseDocument\BusinessModelToEntity\CaseDocumentTextToEntityMapper.cs" />
     <Compile Include="Mappers\CaseDocument\BusinessModelToEntity\CaseDocumentParagraphToEntityMapper.cs" />
     <Compile Include="Mappers\CaseDocument\BusinessModelToEntity\CaseDocumentConditionToEntityMapper.cs" />
+    <Compile Include="Mappers\CaseDocument\EntityToBusinessModel\CaseDocumentTextConditionToBusinessModelMapper.cs" />
     <Compile Include="Mappers\CaseDocument\EntityToBusinessModel\CaseDocumentParagraphConditionToBusinessModelMapper.cs" />
     <Compile Include="Mappers\CaseDocument\EntityToBusinessModel\CaseDocumentTextToBusinessModelMapper.cs" />
     <Compile Include="Mappers\CaseDocument\EntityToBusinessModel\CaseDocumentParagraphToBusinessModelMapper.cs" />
@@ -441,8 +444,10 @@
     <Compile Include="Repositories\ADFS\IADFSRepository.cs" />
     <Compile Include="Repositories\BusinessRules\Concrete\BusinessRuleRepository.cs" />
     <Compile Include="Repositories\BusinessRules\IBusinessRuleRepository.cs" />
+    <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentTextConditionRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentConditionRepository.cs" />
+    <Compile Include="Repositories\CaseDocument\ICaseDocumentTextRepository.cs" />
     <Compile Include="Repositories\CaseDocument\ICaseDocumentRepository.cs" />
     <Compile Include="Repositories\CaseDocument\ICaseDocumentConditionRepository.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />

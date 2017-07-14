@@ -4,11 +4,11 @@
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.BusinessData.Models.CaseDocument;
-    using DH.Helpdesk.Domain.Cases;
+    using System;
 
     public interface ICaseDocumentRepository : IRepository<CaseDocumentEntity>
     {
-        CaseDocumentModel GetCaseDocument(int id);
+        CaseDocumentModel GetCaseDocument(Guid caseDocumentGUID);
 
         IEnumerable<CaseDocumentModel> GetCaseDocumentsByCustomer(int customerId);
     }

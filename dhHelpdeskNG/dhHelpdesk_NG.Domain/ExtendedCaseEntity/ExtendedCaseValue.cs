@@ -12,6 +12,6 @@ namespace DH.Helpdesk.Domain.ExtendedCaseEntity
         public string SecondaryValue { get; set; }
 
 
-        //public virtual ExtendedCaseDataEntity ExtendedCaseData { get; set; }
+        public virtual ExtendedCaseDataEntity ExtendedCaseData { get; set; }
     }
 }

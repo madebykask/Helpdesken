@@ -11,7 +11,7 @@
         internal CaseDocumentConfiguration()
         {
             HasKey(e => e.Id);
-            Property(e => e.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            Property(e => e.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity).IsRequired();
             Property(e => e.CaseDocumentGUID).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             Property(e => e.Name).IsOptional().HasMaxLength(100);
             Property(e => e.Description).IsOptional().HasMaxLength(200);
