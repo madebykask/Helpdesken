@@ -255,5 +255,12 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ALTER TABLE [dbo].[tblQuestionnaireQuestionOption] ADD [IconSrc] varbinary(2048) null
 GO
 
+
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+           where syscolumns.name = N'MetaDataText' and sysobjects.name = N'tblMetaData')
+	ALTER TABLE [dbo].[tblMetaData] ALTER COLUMN [MetaDataText] nvarchar(3500) not Null 
+GO
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.33'
