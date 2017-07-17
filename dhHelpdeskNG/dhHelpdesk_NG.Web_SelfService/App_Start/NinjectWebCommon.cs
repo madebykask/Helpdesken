@@ -299,9 +299,11 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IUniversalCaseService>().To<UniversalCaseService>();
             kernel.Bind<IExtendedCaseService>().To<ExtendedCaseService>();
             kernel.Bind<ITextTranslationService>().To<TextTranslationService>();
-            
-            // Cache
-            kernel.Bind<ICacheProvider>().To<CacheProvider>();
+
+			kernel.Bind<IExtendedCaseService>().To<ExtendedCaseService>();
+
+			// Cache
+			kernel.Bind<ICacheProvider>().To<CacheProvider>();
 
 
             // FormLib

@@ -1162,6 +1162,7 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.CausingPartId,
                     caseSolution.InvoiceNumber,
                     caseSolution.ReferenceNumber,
+					SplitToCaseSolution_Id = caseSolution.SplitToCaseSolution_Id.HasValue ? caseSolution.SplitToCaseSolution_Id : null,
 
                     SMS = caseSolution.SMS.ToBool(),
                     AgreedDate = caseSolution.AgreedDate.HasValue ? caseSolution.AgreedDate.Value.ToShortDateString() : string.Empty,

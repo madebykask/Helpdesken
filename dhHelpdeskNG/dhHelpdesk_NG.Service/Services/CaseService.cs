@@ -154,7 +154,7 @@ namespace DH.Helpdesk.Services.Services
 
         string DeleteFavorite(int favoriteId);
         void DeleteChildCaseFromParent(int id, int parentId);
-        bool AddParentCase(int id, int parentId);
+        bool AddParentCase(int id, int parentId, bool independent = false);
 		void SetIndependentChild(int caseID, bool independentChild);
 	}
 
@@ -542,7 +542,7 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        public bool AddParentCase(int childCaseId, int parentCaseId)
+        public bool AddParentCase(int childCaseId, int parentCaseId, bool independent = false)
         {
             if (childCaseId == parentCaseId)
                 return false;
@@ -562,7 +562,8 @@ namespace DH.Helpdesk.Services.Services
                 parentChildRelationRepo.Add(new ParentChildRelation()
                 {
                     AncestorId = parentCaseId,
-                    DescendantId = childCaseId
+                    DescendantId = childCaseId,
+					Independent = independent
                 });
                 uow.Save();
             }

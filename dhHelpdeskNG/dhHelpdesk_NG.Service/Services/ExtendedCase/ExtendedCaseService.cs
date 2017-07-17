@@ -3,6 +3,7 @@ using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.ExtendedCase;
 using DH.Helpdesk.Dal.Repositories.Cases;
+using DH.Helpdesk.Domain.ExtendedCaseEntity;
 
 namespace DH.Helpdesk.Services.Services.ExtendedCase
 {
@@ -74,7 +75,18 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
             extendedCaseData.FormModel.Path = globalSetting.ExtendedCasePath.Replace("[ExtendedCaseFormId]", extendedCaseData.FormModel.Id.ToString());
 
             return extendedCaseData;
-        }        
-            
-    }		
+        }
+
+		public ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, int userID)
+		{
+			return _extendedCaseDataRepository.CopyExtendedCaseToCase(extendedCaseDataID, caseID, userID);
+		}
+
+		public ExtendedCaseDataModel GetExtendedCaseFromCase(int caseID)
+		{
+			return _extendedCaseDataRepository.GetExtendedCaseDataByCaseId(caseID);
+		}
+	}
+
+
 }

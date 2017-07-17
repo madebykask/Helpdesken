@@ -115,5 +115,22 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
 			return model;
         }
-    }
+
+		public ExtendedCaseDataEntity GetExtendedCaseFromCase(int caseID)
+		{
+			var extendedCaseDataID = DataContext.Case_ExtendedCases.SingleOrDefault(o => o.Case_Id == caseID)?.ExtendedCaseData_Id;
+
+			ExtendedCaseDataEntity dataEntity;
+			if (extendedCaseDataID.HasValue)
+			{
+				dataEntity = DataContext.ExtendedCaseDatas.Single(o => o.Id == extendedCaseDataID.Value);
+			}
+			else
+			{
+				dataEntity = null;
+			}
+
+			return dataEntity;
+		}
+	}
 }

@@ -69,5 +69,8 @@ namespace DH.Helpdesk.Web.Models.Case.Input
 
         public IList<CaseFieldSetting> caseFieldSettings { get; set; }
 
+
+		public int? SplitToCaseSolution_Id { get; set; }
+
     }
 }

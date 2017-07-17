@@ -6,5 +6,8 @@
     public interface IExtendedCaseService
     {
         ExtendedCaseDataModel GenerateExtendedFormModel(InitExtendedForm initData, out string lastError);
-    }
+
+		ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, int userID);
+		ExtendedCaseDataModel GetExtendedCaseFromCase(int id);
+	}
 }

@@ -953,19 +953,27 @@ function LoadTemplate(id) {
                 ShowToastMessage(mes, 'warning', false);                
             }
             else {
-                GetTemplateData(id);
+                GetTemplateData(id).done(function (template) {
+                    if (template.SplitToCaseSolution_Id != null) {
+                        $("#SplitToCaseSolution_Id").val(template.SplitToCaseSolution_Id);
+                    }
+                });
             }
         });
     }
     else {
-         GetTemplateData(id);
+        GetTemplateData(id).done(function (template) {
+            if (template.SplitToCaseSolution_Id != null) {
+                $("#SplitToCaseSolution_Id").val(template.SplitToCaseSolution_Id);
+            }
+        });
     }
     
 }
 
 function GetTemplateData(id) {
     
-    $.get('/CaseSolution/GetTemplate',
+    return $.get('/CaseSolution/GetTemplate',
         { 'id': id, myTime: Date.now },
         function (caseTemplate) {
 
@@ -992,8 +1000,7 @@ function GetTemplateData(id) {
                     window.ApplyTemplate(caseTemplate);
                 }
             }
-
-                       
+            return caseTemplate;
         }
     );
 }

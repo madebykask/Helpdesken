@@ -2266,8 +2266,6 @@
     <Content Include="FormLibContent\Xmls\Norway\CoWorkerLoans.xml" />
     <Content Include="FormLibContent\Xmls\Norway\Data\Absences\Data_Absences_AbsenceType.xml" />
     <Content Include="FormLibContent\Xmls\Norway\Data\Absences\Data_Absences_ChangeType.xml" />
-    <Content Include="FormLibContent\Xmls\Norway\Data\AdditionalPaymentsDeductions\Data_AdditionalPaymentsDeductions_AllowancesType.xml" />
-    <Content Include="FormLibContent\Xmls\Norway\Data\AdditionalPaymentsDeductions\Data_AdditionalPaymentsDeductions_DeductionsType.xml" />
     <Content Include="FormLibContent\Xmls\Norway\Data\Change\Data_Change_AllowancesPaidPer.xml" />
     <Content Include="FormLibContent\Xmls\Norway\Data\Change\Data_Change_AllowancesType.xml" />
     <Content Include="FormLibContent\Xmls\Norway\Data\Change\Data_Change_BasicPayChangeReason.xml" />
@@ -4617,6 +4615,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Inventory\Infrastucture\" />
+    <Folder Include="FormLibContent\Xmls\Norway\Data\AdditionalPaymentsDeductions\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
   </ItemGroup>
   <ItemGroup>

@@ -339,7 +339,7 @@
                         @Html.Hidden("IsAnyFileAdded", "0")
                         @Html.Hidden("CaseSolution_Id", (Model.NewModeParams != null && Model.NewModeParams.templateId != null) ? Model.NewModeParams.templateId : Model.case_.CaseSolution_Id)
                         @Html.Hidden("CurrentCaseSolution_Id", (Model.CurrentCaseSolution == null ? (int?)null : Model.CurrentCaseSolution.Id))
-
+                        @Html.Hidden("SplitToCaseSolution_Id", "")
 
                         @Html.HiddenFor(model => model.ActiveTab)
                         @Html.HiddenFor(model => model.SelectedWorkflowStep)

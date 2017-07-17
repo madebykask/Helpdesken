@@ -13,6 +13,9 @@
 
         ExtendedCaseDataEntity GetExtendedCaseData(Guid extendedCaseGuid);
 
-        ExtendedCaseDataModel GetExtendedCaseDataByCaseId(int caseId);
+   
+		ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, int userID);
+
+		ExtendedCaseDataModel GetExtendedCaseDataByCaseId(int caseID);
 	}
 }
