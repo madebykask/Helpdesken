@@ -180,8 +180,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             footerHtmlElement.WebFontsEnabled = true;
             
-            footerHtmlElement.FitWidth = true;
-           footerHtmlElement.FitHeight = true;
+            //footerHtmlElement.FitWidth = true;
+          // footerHtmlElement.FitHeight = true;
 
          
             PdfConverter pdfConverter = new PdfConverter();
