@@ -27,8 +27,9 @@ namespace DH.Helpdesk.BusinessData.Models.CaseDocument
         public DateTime ChangedDate { get; set; }
         public int? ChangedByUser_Id { get; set; }
 
+        //TODO: use model instead
         public ICollection<DH.Helpdesk.Domain.CaseDocument_CaseDocumentParagraphEntity> CaseDocumentParagraphs { get; set; }
-
+        public DH.Helpdesk.Domain.CaseDocumentTemplateEntity CaseDocumentTemplate { get; set; }
     }
 
 

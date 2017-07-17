@@ -180,6 +180,14 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
                 .To<CaseDocumentTextConditionToBusinessModelMapper>()
                 .InSingletonScope();
 
+            this.Bind<IBusinessModelToEntityMapper<CaseDocumentTemplateModel, CaseDocumentTemplateEntity>>()
+           .To<CaseDocumentTemplateToEntityMapper>()
+           .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseDocumentTemplateEntity, CaseDocumentTemplateModel>>()
+                .To<CaseDocumentTemplateToBusinessModelMapper>()
+                .InSingletonScope();
+
         }
     }
 }

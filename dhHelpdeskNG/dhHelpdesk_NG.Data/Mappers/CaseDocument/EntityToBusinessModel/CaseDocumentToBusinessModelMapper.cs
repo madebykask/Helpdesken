@@ -28,6 +28,8 @@ namespace DH.Helpdesk.Dal.Mappers.CaseDocument
                 ChangedDate = entity.ChangedDate,
                 ChangedByUser_Id = entity.ChangedByUser_Id,
                 CaseDocumentParagraphs = entity.CaseDocumentParagraphs,
+                CaseDocumentTemplate = entity.CaseDocumentTemplate
+                
             };
 
             return model;

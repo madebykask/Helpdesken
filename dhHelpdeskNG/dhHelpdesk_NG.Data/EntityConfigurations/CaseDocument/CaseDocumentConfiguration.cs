@@ -24,6 +24,15 @@
             Property(e => e.CreatedDate).IsRequired();
             Property(e => e.ChangedDate).IsRequired();
             Property(e => e.CaseDocumentTemplate_Id).IsRequired();
+
+
+
+            this.HasRequired(c => c.CaseDocumentTemplate)
+           .WithMany(c => c.CaseDocuments)
+           .HasForeignKey(c => c.CaseDocumentTemplate_Id)
+           .WillCascadeOnDelete(false);
+
+
             ToTable("tblCaseDocument");
         }
 

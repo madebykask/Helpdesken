@@ -14,7 +14,10 @@ namespace DH.Helpdesk.Domain
         public int SortOrder { get; set; }
 
         public virtual ICollection<CaseDocument_CaseDocumentParagraphEntity> CaseDocumentParagraphs { get; set; }
-        
+
+
+        public virtual CaseDocumentTemplateEntity CaseDocumentTemplate { get; set; }
+
 
     }
 }

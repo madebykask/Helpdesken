@@ -26,6 +26,8 @@
             entity.ChangedDate = businessModel.ChangedDate;
             entity.ChangedByUser_Id = businessModel.ChangedByUser_Id;
             entity.CaseDocumentParagraphs = businessModel.CaseDocumentParagraphs;
+            entity.CaseDocumentTemplate = businessModel.CaseDocumentTemplate;
+            
         }
     }
 }

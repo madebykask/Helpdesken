@@ -111,6 +111,7 @@
     <Compile Include="EntityConfigurations\BusinessRules\BRConditionConfiguration.cs" />
     <Compile Include="EntityConfigurations\BusinessRules\BRActionConfiguration.cs" />
     <Compile Include="EntityConfigurations\BusinessRules\BRActionParamsConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseDocument\CaseDocumentTemplateConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseDocument\CaseDocumentTextConditionConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseDocument\CaseDocumentParagraphConditionConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseDocument\CaseDocumentTextConfiguration.cs" />
@@ -252,11 +253,13 @@
     <Compile Include="MapperData\Logs\LogMapperData.cs" />
     <Compile Include="Mappers\Calendars\BusinessModelToEntity\CalendarToEntityMapper.cs" />
     <Compile Include="Mappers\Calendars\EntityToBusinessModel\CalendarToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\CaseDocument\BusinessModelToEntity\CaseDocumentTemplateToEntityMapper.cs" />
     <Compile Include="Mappers\CaseDocument\BusinessModelToEntity\CaseDocumentTextConditionToEntityMapper.cs" />
     <Compile Include="Mappers\CaseDocument\BusinessModelToEntity\CaseDocumentParagraphConditionToEntityMapper.cs" />
     <Compile Include="Mappers\CaseDocument\BusinessModelToEntity\CaseDocumentTextToEntityMapper.cs" />
     <Compile Include="Mappers\CaseDocument\BusinessModelToEntity\CaseDocumentParagraphToEntityMapper.cs" />
     <Compile Include="Mappers\CaseDocument\BusinessModelToEntity\CaseDocumentConditionToEntityMapper.cs" />
+    <Compile Include="Mappers\CaseDocument\EntityToBusinessModel\CaseDocumentTemplateToBusinessModelMapper.cs" />
     <Compile Include="Mappers\CaseDocument\EntityToBusinessModel\CaseDocumentTextConditionToBusinessModelMapper.cs" />
     <Compile Include="Mappers\CaseDocument\EntityToBusinessModel\CaseDocumentParagraphConditionToBusinessModelMapper.cs" />
     <Compile Include="Mappers\CaseDocument\EntityToBusinessModel\CaseDocumentTextToBusinessModelMapper.cs" />

@@ -48,11 +48,10 @@ namespace DH.Helpdesk.Web.Controllers
                 //WinnovativePointF contractHtmlLocation = Point.Empty;
 
                 contractPdfPage = pdfDocument.AddPage();
-                //contractPdfPage.Margins.Left = coP.MarginLeft;
-                //contractPdfPage.Margins.Right = coP.MarginRight;
-                //TODO: move this to Database
-                contractPdfPage.Margins.Top = 30;
-                // contractPdfPage.Margins.Bottom = coP.MarginBottom;
+                contractPdfPage.Margins.Left = model.CaseDocumentTemplate.MarginLeft;
+                contractPdfPage.Margins.Right = model.CaseDocumentTemplate.MarginRight;
+                contractPdfPage.Margins.Top = model.CaseDocumentTemplate.MarginTop;
+                contractPdfPage.Margins.Bottom = model.CaseDocumentTemplate.MarginBottom;
 
                 // contractHtmlLocation = PointF.Empty;
                 var contractHtmlToConvert = RenderRazorViewToString("~/Views/Shared/_CaseDocumentPrint.cshtml", model, false);
@@ -74,8 +73,8 @@ namespace DH.Helpdesk.Web.Controllers
                     htmlToPdfConverter.PdfDocumentOptions.ShowFooter = true;
                     
                     //TODO: Move this to Database
-                    pdfDocument.AddFooterTemplate(60);
-                    AddFooter(pdfDocument, baseUrl, footerText);
+                    pdfDocument.AddFooterTemplate(model.CaseDocumentTemplate.FooterHeight);
+                    AddFooter(model, pdfDocument, baseUrl, footerText);
                 }
 
 
@@ -150,7 +149,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
 
-        private void AddHeader(Winnovative.Document pdfDocument, string baseURL)
+        private void AddHeader(CaseDocumentModel model, Winnovative.Document pdfDocument, string baseURL)
         {
             PdfConverter pdfConverter = new PdfConverter();
 
@@ -169,13 +168,13 @@ namespace DH.Helpdesk.Web.Controllers
 
         }
 
-        private void AddFooter(Winnovative.Document pdfDocument, string baseURL, string footerText)
+        private void AddFooter(CaseDocumentModel model, Winnovative.Document pdfDocument, string baseURL, string footerText)
         {
 
             var footerHtml = footerText;
 
             // Create the HTML element to add in stamp template
-            var y = pdfDocument.Pages[0].Margins.Bottom - 60;
+            var y = pdfDocument.Pages[0].Margins.Bottom - model.CaseDocumentTemplate.FooterHeight;
             HtmlToPdfElement footerHtmlElement = new HtmlToPdfElement(0, 0, footerHtml, baseURL);
 
             footerHtmlElement.WebFontsEnabled = true;
@@ -192,7 +191,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
 
-        //Byt namn
+
         public ActionResult CaseDocumentGet(Guid caseDocumentGUID, int caseId)
         {
 

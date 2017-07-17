@@ -365,24 +365,39 @@ if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentTemplate')
 begin
 
 	CREATE TABLE [dbo].[tblCaseDocumentTemplate](
-		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[Name] [nvarchar](50) NULL,
-		[Margins] [nvarchar](50) NULL,
-		[PageNumbersUse] [bit] NULL,
-		[LanguageId] [int] NULL,
-		[CaseDocumentTemplateGUID] [uniqueidentifier] NULL,
-		[MarginTop] int NULL,
-		[MarginBottom] int NULL,
-		[MarginLeft] int NULL,
-		[MarginRight] int NULL,
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](50) NULL,
+	[PageNumbersUse] [bit] NOT NULL,
+	[CaseDocumentTemplateGUID] [uniqueidentifier] NULL,
+	[MarginTop] [int] NOT NULL,
+	[MarginBottom] [int] NOT NULL,
+	[MarginLeft] [int] NOT NULL,
+	[MarginRight] [int] NOT NULL,
+	[FooterHeight] [int] NOT NULL,
+	[HeaderHeight] [int] NOT NULL,
 	 CONSTRAINT [PK_tblCaseDocumentTemplate] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 
+	
 	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_PageNumbersUse]  DEFAULT ((0)) FOR [PageNumbersUse]
-
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_CaseDocumentTemplateGUID]  DEFAULT (newid()) FOR [CaseDocumentTemplateGUID]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_MarginTop]  DEFAULT ((0)) FOR [MarginTop]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_MarginBottom]  DEFAULT ((0)) FOR [MarginBottom]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_MarginLeft]  DEFAULT ((0)) FOR [MarginLeft]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_MarginRight]  DEFAULT ((0)) FOR [MarginRight]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_FooterHeight]  DEFAULT ((0)) FOR [FooterHeight]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_HeaderHeight]  DEFAULT ((0)) FOR [HeaderHeight]
+	
 end
 
 if not exists(select * from sysobjects WHERE Name = N'tblCaseDocument')
