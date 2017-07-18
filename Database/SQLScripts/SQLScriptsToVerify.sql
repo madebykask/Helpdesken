@@ -491,7 +491,7 @@ if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentParagraph')
 begin
 	CREATE TABLE [dbo].[tblCaseDocumentParagraph](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[Name] [nvarchar](50) NULL,
+		[Name] [nvarchar](500) NULL,
 		[Description] [nvarchar](50) NULL,
 		[ParagraphType] [int] NULL,
 		[CaseDocumentParagraphGUID] [uniqueidentifier] NULL,

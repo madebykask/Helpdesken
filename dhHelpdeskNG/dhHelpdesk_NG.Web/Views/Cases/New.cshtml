@@ -150,11 +150,7 @@
                     }
 
                     @*At the moment we do not check access for this /TAN*@
-        
-                    @if (!Model.IsItChildCase())
-                    {
-                        @Html.Partial("WorkflowStep", Model.WorkflowSteps)
-                    }
+                    @Html.Partial("WorkflowStep", Model.WorkflowSteps)
                 </ul>
             </div>
             <div class="pull-right">
