@@ -31,7 +31,7 @@ namespace DH.Helpdesk.Web.Controllers
         #endregion
 
 
-        public  byte[] GeneratePdf(CaseDocumentModel model, string baseUrl, string footerText, string draftText)
+        public  byte[] GeneratePdf(CaseDocumentModel model, string baseUrl, string footerText, string draftText, string headerText)
         {
             // Create the PDF document where to add the HTML documents
             Winnovative.Document pdfDocument = new Winnovative.Document();
@@ -72,22 +72,21 @@ namespace DH.Helpdesk.Web.Controllers
                     //// Enable footer in the generated PDF document
                     htmlToPdfConverter.PdfDocumentOptions.ShowFooter = true;
                     
-                    //TODO: Move this to Database
                     pdfDocument.AddFooterTemplate(model.CaseDocumentTemplate.FooterHeight);
                     AddFooter(model, pdfDocument, baseUrl, footerText);
                 }
 
+                if (!string.IsNullOrEmpty(headerText))
+                {
+                    //// Enable header in the generated PDF document
+                    htmlToPdfConverter.PdfDocumentOptions.ShowHeader = true;
 
-                ////// Enable header in the generated PDF document
-                //htmlToPdfConverter.PdfDocumentOptions.ShowHeader = true;
-
-                //pdfDocument.AddHeaderTemplate(60);
-
-                //AddHeader(pdfDocument, baseUrl);
+                    pdfDocument.AddHeaderTemplate(model.CaseDocumentTemplate.HeaderHeight);
+                    AddHeader(model, pdfDocument, baseUrl, headerText);
+                }
 
                 if (!string.IsNullOrEmpty(draftText))
                 { 
-
                     // Get the stamp width and height
                     float stampWidth = pdfDocument.Pages[0].ClientRectangle.Width; // float.Parse("600");
                     float stampHeight = float.Parse("600");
@@ -149,33 +148,30 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
 
-        private void AddHeader(CaseDocumentModel model, Winnovative.Document pdfDocument, string baseURL)
+        private void AddHeader(CaseDocumentModel model, Winnovative.Document pdfDocument, string baseURL, string headerText)
         {
+
+            var headerHtml = headerText;
+
+            // Create the HTML element to add in stamp template
+            HtmlToPdfVariableElement headerHtmlElement = new HtmlToPdfVariableElement(0,0,headerHtml, baseURL);
+
+            headerHtmlElement.WebFontsEnabled = true;
+
             PdfConverter pdfConverter = new PdfConverter();
+            pdfConverter.PdfHeaderOptions.AddElement(headerHtmlElement);
 
-            // Create a text element with page numbering place holders &p; and & P;
-            //  TextElement footerText = new TextElement(260, pdfDocument.Pages[0].Margins.Bottom - 20, "Side &p; av &P;  ",
-            //TextElement footerText = new TextElement(0, 0, "&p;",
-            TextElement footerText = new TextElement(0, 0, "",
-            new Font(new FontFamily("Verdana"), 9, GraphicsUnit.Point));
-
-            footerText.ForeColor = Color.Gray;
-
-            pdfConverter.PdfFooterOptions.AddElement(footerText);
-
-            // Add variable HTML element with page numbering to footer
-            pdfDocument.Header.AddElement(footerText);
-
+            // Add variable HTML element with page numbering to Header
+            pdfDocument.Header.AddElement(headerHtmlElement);
         }
 
         private void AddFooter(CaseDocumentModel model, Winnovative.Document pdfDocument, string baseURL, string footerText)
         {
-
             var footerHtml = footerText;
 
             // Create the HTML element to add in stamp template
             var y = pdfDocument.Pages[0].Margins.Bottom - model.CaseDocumentTemplate.FooterHeight;
-            HtmlToPdfElement footerHtmlElement = new HtmlToPdfElement(0, 0, footerHtml, baseURL);
+            HtmlToPdfVariableElement footerHtmlElement = new HtmlToPdfVariableElement(0, 0, footerHtml, baseURL);
 
             footerHtmlElement.WebFontsEnabled = true;
             
@@ -218,10 +214,20 @@ namespace DH.Helpdesk.Web.Controllers
 
             }
 
+            string headerText = "";
+            try
+            {
+                headerText = m.CaseDocumentParagraphs.Where(x => x.CaseDocumentParagraph.ParagraphType == 7).FirstOrDefault().CaseDocumentParagraph.CaseDocumentTexts.FirstOrDefault().Text;
+            }
+            catch (Exception)
+            {
+
+            }
+
             //// Get the base URL
             string baseUrl = this.ControllerContext.HttpContext.Request.Url.AbsoluteUri;
 
-            byte[] outPdfBuffer = GeneratePdf(m,baseUrl, footerText, draftText).ToArray();
+            byte[] outPdfBuffer = GeneratePdf(m,baseUrl, footerText, draftText, headerText).ToArray();
 
             return this.Pdf(outPdfBuffer);
         }
