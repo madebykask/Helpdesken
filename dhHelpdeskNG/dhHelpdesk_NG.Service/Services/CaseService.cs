@@ -633,7 +633,7 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-
+        //TODO: Extremely needs to be refactored
         public ChildCaseOverview[] GetChildCasesFor(int caseId)
         {
             using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
@@ -645,7 +645,7 @@ namespace DH.Helpdesk.Services.Services
                 var caseTypes = uow.GetRepository<CaseType>().GetAll();
                 var res =
                     childCaseRelations.Where(it => it.AncestorId == caseId)
-                        .Select(it => new { id = it.DescendantId, parentId = it.AncestorId })
+                        .Select(it => new { id = it.DescendantId, parentId = it.AncestorId, independent = it.Independent })
                         .GroupJoin(
                             allCases,
                             it => it.id,
@@ -658,6 +658,7 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 id = t.parentChild.id,
                                 parentId = t.parentChild.parentId,
+                                independent = t.parentChild.independent,
                                 caseNumber = case_.CaseNumber,
                                 subject = case_.Caption,
                                 performerId = case_.Performer_User_Id,
@@ -665,7 +666,7 @@ namespace DH.Helpdesk.Services.Services
                                 caseTypeId = case_.CaseType_Id,
                                 registrationDate = case_.RegTime,
                                 closingDate = case_.FinishingDate,
-                                approvedDate = case_.ApprovedDate
+                                approvedDate = case_.ApprovedDate                                
                             })
                         .GroupJoin(
                             allPerformers,
@@ -679,6 +680,7 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 id = t.tmpParentChild.id,
                                 parentId = t.tmpParentChild.parentId,
+                                independent = t.tmpParentChild.independent,
                                 caseNumber = t.tmpParentChild.caseNumber,
                                 subject = t.tmpParentChild.subject,
                                 performerFirstName = performer == null ? string.Empty : performer.FirstName,
@@ -701,6 +703,7 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 id = t.tmpParentChild.id,
                                 parentId = t.tmpParentChild.parentId,
+                                independent = t.tmpParentChild.independent,
                                 subject = t.tmpParentChild.subject,
                                 caseNumber = t.tmpParentChild.caseNumber,
                                 performerFirstName = t.tmpParentChild.performerFirstName,
@@ -723,6 +726,7 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 id = t.tmpParentChild.id,
                                 parentId = t.tmpParentChild.parentId,
+                                independent = t.tmpParentChild.independent,
                                 caseNumber = t.tmpParentChild.caseNumber,
                                 subject = t.tmpParentChild.subject,
                                 performerFirstName = t.tmpParentChild.performerFirstName,
@@ -731,7 +735,7 @@ namespace DH.Helpdesk.Services.Services
                                 caseType = caseType == null ? string.Empty : caseType.Name,
                                 IsApprovingRequired = caseType != null && caseType.RequireApproving == 1,
                                 registrationDate = t.tmpParentChild.registrationDate,
-                                closingDate = t.tmpParentChild.closingDate,
+                                closingDate = t.tmpParentChild.closingDate,                                
                                 t.tmpParentChild.approvedDate
                             })
                         .AsQueryable();
@@ -751,11 +755,13 @@ namespace DH.Helpdesk.Services.Services
                     ClosingDate = it.closingDate,
                     ApprovedDate = it.approvedDate,
                     IsRequriedToApprive = it.IsApprovingRequired,
-                    ParentId = it.parentId
+                    ParentId = it.parentId,
+                    Indepandent = it.independent
                 }).ToArray();
             }
         }
 
+        //TODO: Extremely needs to be refactored
         public ParentCaseInfo GetParentInfo(int caseId)
         {
             using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())

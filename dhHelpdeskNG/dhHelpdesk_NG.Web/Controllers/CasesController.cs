@@ -1176,8 +1176,10 @@ namespace DH.Helpdesk.Web.Controllers
 						if (template.StateSecondary_Id.HasValue)
 							child.StateSecondary_Id = template.StateSecondary_Id.Value;
 
+                        if (template.CaseWorkingGroup_Id.HasValue)
+                            child.WorkingGroup_Id = template.CaseWorkingGroup_Id.Value;
 
-						IDictionary<string, string> errors; // = new Dictionary<string, string>();
+                        IDictionary<string, string> errors; // = new Dictionary<string, string>();
 
 						var parentCase = _caseService.GetCaseById(caseId);
 
@@ -1192,10 +1194,9 @@ namespace DH.Helpdesk.Web.Controllers
 						_caseService.SetIndependentChild(child.Id, true);
 
 
-						var data = _extendedCaseService.GetExtendedCaseFromCase(parentCase.Id);
-
+						var data = _extendedCaseService.GetExtendedCaseFromCase(parentCase.Id);                         
 						if(data != null)
-							_extendedCaseService.CopyExtendedCaseToCase(data.Id, child.Id, userId);
+							_extendedCaseService.CopyExtendedCaseToCase(data.Id, child.Id, SessionFacade.CurrentUser.UserId);
 
 						//editModel.case_.Ou = null;
 						
@@ -4850,7 +4851,7 @@ namespace DH.Helpdesk.Web.Controllers
 					Formatter = outputFormatter,
 					ChildCaseList = childCases
 				};
-				m.ClosedChildCasesCount = childCases.Count(it => it.ClosingDate != null);
+				m.ClosedChildCasesCount = childCases.Count(it => it.ClosingDate != null && !it.Indepandent);
 				m.ParentCaseInfo = this._caseService.GetParentInfo(caseId).MapBusinessToWebModel(outputFormatter);
 				if (m.ParentCaseInfo != null)
 				{

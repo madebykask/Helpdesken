@@ -239,7 +239,7 @@ namespace DH.Helpdesk.Web.Models.Case
             return this.ChildCaseViewModel != null && this.ChildCaseViewModel.ChildCaseList != null && this.ChildCaseViewModel.ChildCaseList.Length > 0;
         }
 
-        public bool IsAnyNotClosedChild()
+        public bool IsAnyNotClosedChild(bool containsIndependents = false)
         {
             if (this.ChildCaseViewModel == null)
             {
@@ -252,7 +252,7 @@ namespace DH.Helpdesk.Web.Models.Case
                 return false;
             }
 
-            return childList.Any(it => it.ClosingDate == null);
+            return childList.Any(it => it.ClosingDate == null && (containsIndependents? !it.Indepandent : true));
         }
 
         public OutputFormatter OutFormatter { get; set; }

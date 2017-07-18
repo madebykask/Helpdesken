@@ -3,11 +3,11 @@ using System;
 
 namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 {
-    using BusinessData.Models.Case;    
+    using BusinessData.Models.Case;
     using Infrastructure;
     using Mappers;
-    using Domain.ExtendedCaseEntity;
-    
+    using Domain.ExtendedCaseEntity;    
+    using System.Collections.ObjectModel;
 
     public sealed class ExtendedCaseDataRepository : RepositoryBase<ExtendedCaseDataEntity>, IExtendedCaseDataRepository
     {        
@@ -28,13 +28,11 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             _extendedCaseDataToEntityMapper = extendedCaseDataToEntityMapper;
 			_userRepository = userRepository;
 			_extendedCaseValueRepository = extendedCaseValueRepository;
-
 		}
 
         public ExtendedCaseDataModel CreateTemporaryExtendedCaseData(int formId, string creator)
         {
             var newGuid = Guid.NewGuid();
-
             var extendedCaseDataEntity = new ExtendedCaseDataEntity
             {
                 ExtendedCaseGuid = newGuid,
@@ -72,48 +70,49 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             return _extendedCaseDataToBusinessModelMapper.Map(case_ExtendedCaseEntity.ExtendedCaseData);
         }
 
-        public ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, int userID)
+        public ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, string userID)
         {
-            var copyFromExtendedCaseData = DataContext.ExtendedCaseDatas.Where(o => o.Id == extendedCaseDataID).Single();
+            var copyFromExtendedCaseData = DataContext.ExtendedCaseDatas.Where(o => o.Id == extendedCaseDataID).FirstOrDefault();
 
-			var now = DateTime.UtcNow;
+            if (copyFromExtendedCaseData == null)
+                return null;
 
-			var user = _userRepository.GetById(userID);
+            var now = DateTime.UtcNow;
+            var newExtendedCaseData = new ExtendedCaseDataEntity
+            {
+                ExtendedCaseGuid = Guid.NewGuid(),
+                ExtendedCaseFormId = copyFromExtendedCaseData.ExtendedCaseFormId,
+                CreatedOn = now,
+                CreatedBy = userID,
+                ExtendedCaseValues = new Collection<ExtendedCaseValueEntity>()
+            };
 
-			var newExtendedCaseData = new ExtendedCaseDataEntity
-			{
-				ExtendedCaseGuid = Guid.NewGuid(),
-				ExtendedCaseFormId = copyFromExtendedCaseData.ExtendedCaseFormId,
-				CreatedOn = now,
-				CreatedBy = user.UserID
-			};
+            DataContext.ExtendedCaseDatas.Add(newExtendedCaseData);
+            var copyFromExtendedCaseValues = DataContext.ExtendedCaseValues.Where(o => o.ExtendedCaseDataId == extendedCaseDataID);
 
-			var newCaseExtendedCase = new Case_ExtendedCaseEntity
-			{
-				Case_Id = caseID
-			};
-			DataContext.ExtendedCaseDatas.Add(newExtendedCaseData);
+            foreach (var copyValue in copyFromExtendedCaseValues)
+            {
+                var newValue = new ExtendedCaseValueEntity
+                {
+                    FieldId = copyValue.FieldId,
+                    Value = copyValue.Value,
+                    SecondaryValue = copyValue.SecondaryValue
+                };
 
+                newExtendedCaseData.ExtendedCaseValues.Add(newValue);
+            }
 
-			var copyFromExtendedCaseValues = DataContext.ExtendedCaseValues.Where(o => o.ExtendedCaseDataId == extendedCaseDataID);
+            var newCaseExtendedCase = new Case_ExtendedCaseEntity
+            {
+                Case_Id = caseID,
+                ExtendedCaseData_Id = newExtendedCaseData.Id
+            };
 
-			foreach (var copyValue in copyFromExtendedCaseValues)
-			{
-				var newValue = new ExtendedCaseValueEntity
-				{
-					FieldId = copyValue.FieldId,
-					Value = copyValue.Value,
-					SecondaryValue = copyValue.SecondaryValue
-				};
+            DataContext.Case_ExtendedCases.Add(newCaseExtendedCase);
+            DataContext.SaveChanges();
 
-				newExtendedCaseData.ExtendedCaseValues.Add(newValue);
-			}
-
-			DataContext.SaveChanges();
-
-			var model = _extendedCaseDataToBusinessModelMapper.Map(newExtendedCaseData);
-
-			return model;
+            var model = _extendedCaseDataToBusinessModelMapper.Map(newExtendedCaseData);
+            return model;
         }
 
 		public ExtendedCaseDataEntity GetExtendedCaseFromCase(int caseID)

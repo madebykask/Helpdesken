@@ -77,7 +77,7 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
             return extendedCaseData;
         }
 
-		public ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, int userID)
+		public ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, string userID)
 		{
 			return _extendedCaseDataRepository.CopyExtendedCaseToCase(extendedCaseDataID, caseID, userID);
 		}
