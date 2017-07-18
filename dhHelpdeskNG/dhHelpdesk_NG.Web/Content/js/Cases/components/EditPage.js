@@ -364,11 +364,14 @@ EditPage.prototype.setNextStep = function () {
 
     if (self.p.containsExtendedCase == "True")
     {
-    var nextStep = 0;
-    nextStep = parseInt($("#steps option:selected").attr('data-next-step')) || 0;
+        var nextStep = 0;
+        nextStep = parseInt($("#steps option:selected").attr('data-next-step')) || 0;
 
-    var $_ex_Container = self.getExtendedCaseContainer();
-    var validationResult = $_ex_Container.contentWindow.setNextStep(nextStep);
+        var $_ex_Container = self.getExtendedCaseContainer();
+
+        var isNextStepValidation = true;
+
+        $_ex_Container.contentWindow.setNextStep(nextStep, isNextStepValidation);
     }
 };
 
@@ -1425,7 +1428,7 @@ EditPage.prototype.init = function (p) {
                 
                 //validate extended case
                 //TODO: shold we have this here?
-                self.isExtendedCaseValid(false);
+                //self.isExtendedCaseValid(false);
             }
             
             if (ev.target.className == "extendedcase") {
@@ -1476,10 +1479,21 @@ EditPage.prototype.init = function (p) {
         $('#ButtonClick').val('btn-go');
 
         var templateId = parseInt($('#steps').val()) || 0;
+
+
         //only load if templateId exist
         if (templateId > 0) {
 
-            var isValid = self.isExtendedCaseValid(true);
+            var isValid = false;
+
+            var stepId = parseInt($('#steps').val()) || 0;
+
+            if (stepId > 0) {
+                isValid = self.isExtendedCaseValid(false, false);
+            }
+            else {
+                isValid = self.isExtendedCaseValid(false, false);
+            }
 
             if (isValid) {
                 $('#SelectedWorkflowStep').val(templateId);
@@ -1496,14 +1510,14 @@ EditPage.prototype.init = function (p) {
         if (self.p.containsExtendedCase != "False") {
             self.setNextStep();
 
-            var stepId = parseInt($('#steps').val()) || 0;
+            //var stepId = parseInt($('#steps').val()) || 0;
 
-            if (stepId > 0) {
-                self.isExtendedCaseValid(false, true);
-            }
-            else {
-                self.isExtendedCaseValid(false, false);
-            }
+            //if (stepId > 0) {
+            //    self.isExtendedCaseValid(false, true);
+            //}
+            //else {
+            //    self.isExtendedCaseValid(false, false);
+            //}
         }
       
     });
