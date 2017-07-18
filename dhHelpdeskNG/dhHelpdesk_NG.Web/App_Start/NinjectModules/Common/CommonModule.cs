@@ -188,6 +188,14 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
                 .To<CaseDocumentTemplateToBusinessModelMapper>()
                 .InSingletonScope();
 
+            this.Bind<IBusinessModelToEntityMapper<CaseDocumentTextIdentifierModel, CaseDocumentTextIdentifierEntity>>()
+            .To<CaseDocumentTextIdentifierToEntityMapper>()
+            .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseDocumentTextIdentifierEntity, CaseDocumentTextIdentifierModel>>()
+                .To<CaseDocumentTextIdentifierToBusinessModelMapper>()
+                .InSingletonScope();
+
         }
     }
 }

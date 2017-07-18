@@ -86,6 +86,7 @@
     <Compile Include="BusinessRules\BRActionParamEntity.cs" />
     <Compile Include="CalendarSearch.cs" />
     <Compile Include="CaseDocumentEntity\CaseDocumentTemplateEntity.cs" />
+    <Compile Include="CaseDocumentEntity\CaseDocumentTextIdentifierEntity.cs" />
     <Compile Include="CaseDocumentEntity\CaseDocumentTextConditionEntity.cs" />
     <Compile Include="CaseDocumentEntity\CaseDocumentParagraphConditionEntity.cs" />
     <Compile Include="CaseDocumentEntity\CaseDocumentTextEntity.cs" />

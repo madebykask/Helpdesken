@@ -29,7 +29,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly IExtendedCaseValueRepository _extendedCaseValueRepository;
         private readonly ICaseService _caseService;
         private readonly ICaseDocumentTextConditionRepository _caseDocumentTextConditionRepository;
+        private readonly ICaseDocumentTextIdentifierRepository _caseCaseDocumentTextIdentifierRepository;
 
+        //TODO: Move to DB
         private const string DateShortFormat = "dd.MM.yyyy";
         private const string DateLongFormat = "d MMMM yyyy";
 
@@ -39,8 +41,9 @@ namespace DH.Helpdesk.Services.Services
             ICaseDocumentConditionRepository caseDocumentConditionRepository,
             ICacheProvider cache,
             IExtendedCaseValueRepository extendedCaseValueRepository,
-             ICaseService caseService,
-              ICaseDocumentTextConditionRepository caseDocumentTextConditionRepository
+            ICaseService caseService,
+            ICaseDocumentTextConditionRepository caseDocumentTextConditionRepository,
+            ICaseDocumentTextIdentifierRepository caseCaseDocumentTextIdentifierRepository
             )
         {
             this._caseDocumentRepository = caseDocumentRepository;
@@ -49,6 +52,7 @@ namespace DH.Helpdesk.Services.Services
             this._extendedCaseValueRepository = extendedCaseValueRepository;
             this._caseService = caseService;
             this._caseDocumentTextConditionRepository = caseDocumentTextConditionRepository;
+            this._caseCaseDocumentTextIdentifierRepository = caseCaseDocumentTextIdentifierRepository;
         }
 
 
@@ -65,11 +69,8 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        private string GetExtendedCaseValue(Case _case, string fieldId)
+        private string GetExtendedCaseValue(Case _case, string fieldId, string displayName)
         {
-            int pos = fieldId.LastIndexOf(".") + 1;
-
-            string fieldIdShort =  fieldId.Substring(pos, fieldId.Length - pos);
             
             try
             {
@@ -84,7 +85,7 @@ namespace DH.Helpdesk.Services.Services
 
                     if (string.IsNullOrEmpty(value))
                     {
-                       return "[" + fieldIdShort + "]";
+                        return "[" + displayName.Replace("<", "").Replace(">", "").Replace("[", "").Replace("]", "") + "]";
                     }
                 }
 
@@ -100,17 +101,19 @@ namespace DH.Helpdesk.Services.Services
             }
             catch (Exception ex)
             {
-                return "[" + fieldIdShort + "]"; 
+                return  "[" + displayName.Replace("<", "").Replace(">", "").Replace("[", "").Replace("]", "") + "]";
+                 
             }
         }
 
-        private string GetCaseValue(Case _case, string propertyName)
+        private string GetCaseValue(Case _case, string propertyName, string displayName)
         {
+
+
             string value = string.Empty;
 
             try
             {
-                
                 propertyName = propertyName.Replace("Case.", "");
 
                 if (!propertyName.Contains("."))
@@ -131,141 +134,74 @@ namespace DH.Helpdesk.Services.Services
             catch (Exception)
             {
                 //Return back propertyname
-                value = "[" + propertyName + "]";
+                value = "[" + displayName.Replace("<", "").Replace(">","").Replace("[", "").Replace("]","") + "]";
             }
 
             return value;
         }
 
-     
-        private Dictionary<string,string> GetCaseValueDictionary(int id, int caseId)
+        private Dictionary<string, string> GetCaseValueDictionary(int id, int caseId)
         {
+      
             var _case = _caseService.GetCaseById(caseId);
+
+            //Get Identifiers for Case and for ExtendedCase that is connected
+
+            int extendedCaseFormId = 0;
+            if (_case.CaseExtendedCaseDatas != null)
+            {
+                extendedCaseFormId = _case.CaseExtendedCaseDatas.First().ExtendedCaseData.ExtendedCaseFormId;
+            }
+
+            var identifiers = _caseCaseDocumentTextIdentifierRepository.GetCaseDocumentTextIdentifiers(extendedCaseFormId);
 
 
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
 
-            #region Case
-
-
-            string caseReportedBy = "Case.ReportedBy";
-            dictionary.Add(caseReportedBy, GetCaseValue(_case, caseReportedBy));
-
-
-            string casePersonsName = "Case.PersonsName";
-            dictionary.Add(casePersonsName, GetCaseValue(_case, casePersonsName));
-
-            string casePersonsPhone = "Case.PersonsPhone";
-            dictionary.Add(casePersonsPhone, GetCaseValue(_case, casePersonsPhone));
-
-            string caseDepartmentName = "Case.Department.DepartmentName";
-            dictionary.Add(caseDepartmentName, GetCaseValue(_case, caseDepartmentName));
-
-            string caseRegionName = "Case.Region.Name";
-            dictionary.Add(caseRegionName, GetCaseValue(_case, caseRegionName));
-           
-
-            #endregion
-
-            #region Other
-
-            //TODO: Put format in DB
-            string dateNowLong = "Date.NowLong";
-
-            dictionary.Add(dateNowLong, DateTime.Now.ToString(DateLongFormat, CultureInfo.InvariantCulture));
-
-            string dateNowShort = "Date.NowShort";
-            dictionary.Add(dateNowShort, DateTime.Now.ToString(DateShortFormat, CultureInfo.InvariantCulture));
-
-
-            #endregion
-
-            #region Extended Case
-
-            if (_case.CaseExtendedCaseDatas != null)
+            foreach (var item in identifiers)
             {
-                string fieldId = "tabs.ServiceRequestDetails.sections.STD_S_PermanentAddressHiring.instances[0].controls.AddressLine1";
-                dictionary.Add(fieldId, GetExtendedCaseValue(_case, fieldId));
+                string propertyName = item.PropertyName;
+                //TODO: Translate DisplayName from MasterData
+                string displayName = (!string.IsNullOrEmpty(item.DisplayName) ? item.DisplayName : item.Identifier);
 
-                fieldId = "tabs.ServiceRequestDetails.sections.STD_S_PermanentAddressHiring.instances[0].controls.AddressLine2";
-                dictionary.Add(fieldId, GetExtendedCaseValue(_case, fieldId));
+                if (item.ExtendedCaseFormId == 0)
+                {
 
-                fieldId = "tabs.ServiceRequestDetails.sections.STD_S_PermanentAddressHiring.instances[0].controls.State";
-                dictionary.Add(fieldId, GetExtendedCaseValue(_case, fieldId));
+                    #region  Case or Date
+                     if (item.PropertyName.ToLower().Contains("case"))
+                    { 
+                        dictionary.Add(item.Identifier, GetCaseValue(_case, propertyName, displayName));
+                    }
+                    else if (item.PropertyName == "Date.NowLong")
+                    {
+                        dictionary.Add(item.Identifier, DateTime.Now.ToString(DateLongFormat, CultureInfo.InvariantCulture));
+                    }
 
-                fieldId = "tabs.ServiceRequestDetails.sections.STD_S_PermanentAddressHiring.instances[0].controls.PostalCode";
-                dictionary.Add(fieldId, GetExtendedCaseValue(_case, fieldId));
+                    else if (item.PropertyName == "Date.NowShort")
+                    {
+                        dictionary.Add(item.Identifier, DateTime.Now.ToString(DateShortFormat, CultureInfo.InvariantCulture));
+                    }
 
-                fieldId = "tabs.ServiceRequestDetails.sections.STD_S_PermanentAddressHiring.instances[0].controls.AddressLine3";
-                dictionary.Add(fieldId, GetExtendedCaseValue(_case, fieldId));
-                
-                fieldId = "tabs.OrganisationalAssignment.sections.STD_S_OrganisationHiring.instances[0].controls.ReportsToLineManagerPositionTitle";
-                dictionary.Add(fieldId, GetExtendedCaseValue(_case, fieldId));
+                    #endregion
 
-                fieldId = "tabs.OrganisationalAssignment.sections.STD_S_OrganisationHiring.instances[0].controls.ReportsToLineManager";
-                dictionary.Add(fieldId, GetExtendedCaseValue(_case, fieldId));
+                }
+                else
+                {
+                    #region Extended Case
 
-                fieldId = "tabs.OrganisationalAssignment.sections.STD_S_JobHiring.instances[0].controls.PositionTitleLocalJobName";
-                dictionary.Add(fieldId, GetExtendedCaseValue(_case, fieldId));
+                    if (_case.CaseExtendedCaseDatas != null)
+                    {
+                        dictionary.Add(item.Identifier, GetExtendedCaseValue(_case, propertyName, displayName));
+                    }
 
-                fieldId = "tabs.ServiceRequestDetails.sections.STD_S_ProcessingDetailsHiring.instances[0].controls.ContractStartDate";
-                dictionary.Add(fieldId, GetExtendedCaseValue(_case, fieldId));
-
-                fieldId = "tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditionsHiring.instances[0].controls.ContractedHours";
-                dictionary.Add(fieldId, GetExtendedCaseValue(_case, fieldId));
-
-                fieldId = "tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditionsHiring.instances[0].controls.ContractEndDate";
-                dictionary.Add(fieldId, GetExtendedCaseValue(_case, fieldId));
-
+                    #endregion
+                }
             }
-
-            /* KOLLA KONTRAKTET */
-
-
-
-
-            ////[CoworkerGlobalViewID]
-            //dictionary.Add("[CoworkerGlobalViewID]", "[CoworkerGlobalViewID]");
-
-
-
-            ////[tabs.OrganisationalAssignment.sections.STD_S_JobHiring.instances[0].controls.PositionTitleLocalJobName]
-            //dictionary.Add("[tabs.OrganisationalAssignment.sections.STD_S_JobHiring.instances[0].controls.PositionTitleLocalJobName]", "[tabs.OrganisationalAssignment.sections.STD_S_JobHiring.instances[0].controls.PositionTitleLocalJobName]");
-
-            ////[ReportsToLineManager.PositionTitle]
-            //dictionary.Add("[ReportsToLineManager.PositionTitle]", "[ReportsToLineManager.PositionTitle]");
-
-            ////[ReportsToLineManager]
-            //dictionary.Add("[ReportsToLineManager]", "[ReportsToLineManager]");
-
-
-            ////tabs.ServiceRequestDetails.sections.STD_S_PermanentAddressHiring.controls.AddressLine1
-            ////m.tabs.ServiceRequestDetails.sections.STD_S_PermanentAddressHiring.controls.AddressLine2
-
-            ////[AddressLine1]
-            //dictionary.Add("[AddressLine1]", "[AddressLine1]");
-            ////[AddressLine2]
-            //dictionary.Add("[AddressLine2]", "[AddressLine2]");
-            ////[State]
-            //dictionary.Add("[State]", "[State]");
-            ////[PostalCode]
-            //dictionary.Add("[PostalCode]", "[PostalCode]");
-            ////[AddressLine3]
-            //dictionary.Add("[AddressLine3]", "[AddressLine3]");
-            ////[ContractStartDate]
-            //dictionary.Add("[ContractStartDate]", "[ContractStartDate]");
-            ////[BasicPayAmount]
-            //dictionary.Add("[BasicPayAmount]", "[BasicPayAmount]");
-            ////[ContractedHours]
-            //dictionary.Add("[ContractedHours]", "[ContractedHours]");
-            ////[NextSalaryReviewYear]
-            //dictionary.Add("[NextSalaryReviewYear]", "[NextSalaryReviewYear]");
-
-            #endregion
 
             return dictionary;
 
         }
+
 
         private string ReplaceWithValue(int id, int caseId, string text)
         {
@@ -273,7 +209,8 @@ namespace DH.Helpdesk.Services.Services
 
             foreach (var item in dictionary)
             {
-                text = text.Replace("[" + item.Key + "]", item.Value);
+                // text = text.Replace("[" + item.Key + "]", item.Value);
+                text = text.Replace(item.Key, item.Value);
             }
 
             return text;
