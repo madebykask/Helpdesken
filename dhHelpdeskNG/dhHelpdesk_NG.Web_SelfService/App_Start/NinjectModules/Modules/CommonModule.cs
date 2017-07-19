@@ -247,12 +247,20 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
                 .InSingletonScope();
 
             this.Bind<IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity>>()
-            .To<ExtendedCaseDataToEntityMapper>()
-            .InSingletonScope();
+                .To<ExtendedCaseDataToEntityMapper>()
+                .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<ExtendedCaseDataEntity, ExtendedCaseDataModel>>()
                 .To<ExtendedCaseDataToBusinessModelMapper>()
-                .InSingletonScope();            
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<ExtendedCaseValueModel, ExtendedCaseValueEntity>>()
+                .To<ExtendedCaseValueToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ExtendedCaseValueEntity, ExtendedCaseValueModel>>()
+                .To<ExtendedCaseValueToBusinessModelMapper>()
+                .InSingletonScope();
         }
     }
 }

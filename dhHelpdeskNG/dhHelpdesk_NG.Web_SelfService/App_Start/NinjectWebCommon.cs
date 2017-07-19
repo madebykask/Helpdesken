@@ -232,8 +232,9 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IExtendedCaseFormRepository>().To<ExtendedCaseFormRepository>();
             kernel.Bind<IExtendedCaseDataRepository>().To<ExtendedCaseDataRepository>();
             kernel.Bind<ITextTranslationRepository>().To<TextTranslationRepository>();
-            kernel.Bind<ITextTypeRepository>().To<TextTypeRepository>();            
-
+            kernel.Bind<ITextTypeRepository>().To<TextTypeRepository>();
+            kernel.Bind<IExtendedCaseValueRepository>().To<ExtendedCaseValueRepository>();
+            
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
             kernel.Bind<ISettingService>().To<SettingService>();
@@ -298,9 +299,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ICaseSolutionConditionService>().To<CaseSolutionConditionService>();
             kernel.Bind<IUniversalCaseService>().To<UniversalCaseService>();
             kernel.Bind<IExtendedCaseService>().To<ExtendedCaseService>();
-            kernel.Bind<ITextTranslationService>().To<TextTranslationService>();
-
-			kernel.Bind<IExtendedCaseService>().To<ExtendedCaseService>();
+            kernel.Bind<ITextTranslationService>().To<TextTranslationService>();			
 
 			// Cache
 			kernel.Bind<ICacheProvider>().To<CacheProvider>();
