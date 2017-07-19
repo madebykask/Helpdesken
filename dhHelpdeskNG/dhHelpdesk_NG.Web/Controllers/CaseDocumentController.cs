@@ -150,7 +150,6 @@ namespace DH.Helpdesk.Web.Controllers
 
         private void AddHeader(CaseDocumentModel model, Winnovative.Document pdfDocument, string baseURL, string headerText)
         {
-
             var headerHtml = headerText;
 
             // Create the HTML element to add in stamp template
@@ -177,8 +176,6 @@ namespace DH.Helpdesk.Web.Controllers
             
             //footerHtmlElement.FitWidth = true;
           // footerHtmlElement.FitHeight = true;
-
-         
             PdfConverter pdfConverter = new PdfConverter();
             pdfConverter.PdfFooterOptions.AddElement(footerHtmlElement);
 
@@ -186,13 +183,10 @@ namespace DH.Helpdesk.Web.Controllers
             pdfDocument.Footer.AddElement(footerHtmlElement);
         }
 
-
-
         public ActionResult CaseDocumentGet(Guid caseDocumentGUID, int caseId)
         {
 
             //TODO: Check if user have access to this case?
-
             string footerText = "";
             CaseDocumentModel m = _caseDocumentService.GetCaseDocument(caseDocumentGUID, caseId);
             try

@@ -673,10 +673,29 @@ begin
 	) ON [PRIMARY]
 
 end
-
+GO
 
 IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Properties' and sysobjects.name = N'ExtendedCaseValues')
 begin
 	ALTER TABLE [dbo].[ExtendedCaseValues] ADD [Properties] [nvarchar](Max) NULL 
 end
 GO
+
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentTextConditionIdentifier')
+begin
+
+	CREATE TABLE [dbo].[tblCaseDocumentTextConditionIdentifier](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[ExtendedCaseFormId] [int] NOT NULL,
+		[Process] [nvarchar](50) NULL,
+		[Identifier] [nvarchar](500) NOT NULL,
+		[PropertyName] [nvarchar](500) NOT NULL,
+		[DisplayName] [nvarchar](50) NULL,
+	 CONSTRAINT [PK_tblCaseDocumentTextConditionIdentifier] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+end

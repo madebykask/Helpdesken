@@ -30,6 +30,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseService _caseService;
         private readonly ICaseDocumentTextConditionRepository _caseDocumentTextConditionRepository;
         private readonly ICaseDocumentTextIdentifierRepository _caseCaseDocumentTextIdentifierRepository;
+        private readonly ICaseDocumentTextConditionIdentifierRepository _caseCaseDocumentTextConditionIdentifierRepository;
 
         //TODO: Move to DB
         private const string DateShortFormat = "dd.MM.yyyy";
@@ -43,7 +44,8 @@ namespace DH.Helpdesk.Services.Services
             IExtendedCaseValueRepository extendedCaseValueRepository,
             ICaseService caseService,
             ICaseDocumentTextConditionRepository caseDocumentTextConditionRepository,
-            ICaseDocumentTextIdentifierRepository caseCaseDocumentTextIdentifierRepository
+            ICaseDocumentTextIdentifierRepository caseCaseDocumentTextIdentifierRepository,
+            ICaseDocumentTextConditionIdentifierRepository caseCaseDocumentTextConditionIdentifierRepository
             )
         {
             this._caseDocumentRepository = caseDocumentRepository;
@@ -53,6 +55,7 @@ namespace DH.Helpdesk.Services.Services
             this._caseService = caseService;
             this._caseDocumentTextConditionRepository = caseDocumentTextConditionRepository;
             this._caseCaseDocumentTextIdentifierRepository = caseCaseDocumentTextIdentifierRepository;
+            this._caseCaseDocumentTextConditionIdentifierRepository = caseCaseDocumentTextConditionIdentifierRepository;
         }
 
 
@@ -168,7 +171,7 @@ namespace DH.Helpdesk.Services.Services
                 {
 
                     #region  Case or Date
-                     if (item.PropertyName.ToLower().Contains("case"))
+                    if (item.PropertyName.ToLower().Contains("case"))
                     { 
                         dictionary.Add(item.Identifier, GetCaseValue(_case, propertyName, displayName));
                     }
@@ -222,17 +225,6 @@ namespace DH.Helpdesk.Services.Services
 
 
             var caseDocument = this._caseDocumentRepository.GetCaseDocument(caseDocumentGUID);
-
-            //var firstName = "Case.PersonsName";
-
-            //var value = GetCaseValue(_case, firstName);
-
-            //var depName = "Case.Department.DepartmentName";
-
-            //var valueDep = GetCaseValue(_case, depName);
-
-
-            //Case.PersonsPhone
 
             if (caseDocument.CaseDocumentParagraphs != null)
             {
@@ -359,8 +351,6 @@ namespace DH.Helpdesk.Services.Services
             //To be true all conditions needs to be fulfilled
             return showDocument;
         }
-
-
         //TODO: REFACTOR
         private bool checkCaseDocumentTextConditions(Case _case, int caseDocumentText_Id)
         {
@@ -375,14 +365,32 @@ namespace DH.Helpdesk.Services.Services
             if (condtions == null || condtions.Count() == 0)
                 return true;
 
+
+            int extendedCaseFormId = 0;
+            if (_case.CaseExtendedCaseDatas != null)
+            {
+                extendedCaseFormId = _case.CaseExtendedCaseDatas.First().ExtendedCaseData.ExtendedCaseFormId;
+            }
+
             foreach (var condition in condtions)
             {
                 
                 var conditionValue = condition.Values.Tidy().ToLower();
                 var conditionKey = condition.Property_Name.Tidy();
+
+
+                var mapper = _caseCaseDocumentTextConditionIdentifierRepository.GetCaseDocumentTextConditionPropertyName(extendedCaseFormId, conditionKey);
+
+                if (mapper != null)
+                { 
+                    conditionKey = mapper.PropertyName;
+                }
+
+
+
                 var conditionOperator = condition.Operator.Tidy();
 
-                    try
+                try
                 {
 
                     var value = "";

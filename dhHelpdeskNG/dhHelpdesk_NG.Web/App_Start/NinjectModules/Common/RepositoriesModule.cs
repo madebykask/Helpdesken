@@ -287,6 +287,7 @@
             //   this.Bind<ICaseDocumentParagraphRepository>().To<CaseDocumentParagraphRepository>();
             this.Bind<ICaseDocumentTextConditionRepository>().To<CaseDocumentTextConditionRepository>();
             this.Bind<ICaseDocumentTextIdentifierRepository>().To<CaseDocumentTextIdentifierRepository>();
+            this.Bind<ICaseDocumentTextConditionIdentifierRepository>().To<CaseDocumentTextConditionIdentifierRepository>();
         }
 
         #endregion
