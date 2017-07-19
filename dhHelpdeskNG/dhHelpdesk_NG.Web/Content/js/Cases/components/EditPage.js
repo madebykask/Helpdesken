@@ -1494,7 +1494,7 @@ EditPage.prototype.init = function (p) {
             var stepId = parseInt($('#steps').val()) || 0;
 
             if (stepId > 0) {
-                isValid = self.isExtendedCaseValid(false, false);
+                isValid = self.isExtendedCaseValid(false, true);
             }
             else {
                 isValid = self.isExtendedCaseValid(false, false);
@@ -1513,18 +1513,8 @@ EditPage.prototype.init = function (p) {
     self.$selectListStep.on('change', function () {
         //only if extended case exist
         if (self.p.containsExtendedCase != "False") {
-            self.setNextStep();
-
-            //var stepId = parseInt($('#steps').val()) || 0;
-
-            //if (stepId > 0) {
-            //    self.isExtendedCaseValid(false, true);
-            //}
-            //else {
-            //    self.isExtendedCaseValid(false, false);
-            //}
-        }
-      
+            self.setNextStep();           
+        }      
     });
 
     self.$caseTab.on('shown', function (e) {

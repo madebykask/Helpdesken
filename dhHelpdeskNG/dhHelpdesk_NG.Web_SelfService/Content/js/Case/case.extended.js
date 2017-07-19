@@ -279,12 +279,17 @@ ExtendedCasePage.prototype.isExtendedCaseValid = function (showToast, isOnNext) 
     }
 };
 
-ExtendedCasePage.prototype.setNextStep = function () {
-    var self = this;
+ExtendedCasePage.prototype.setNextStep = function () {   
+    var self = this;    
     var nextStep = 0;
     nextStep = parseInt($("#steps option:selected").attr('data-next-step')) || 0;
+
     var $_ex_Container = self.getExtendedCaseContainer();
-    var validationResult = $_ex_Container.contentWindow.setNextStep(nextStep);
+    var isNextStepValidation = true;
+    if (nextStep == 0) {
+        isNextStepValidation = false;
+    }
+    $_ex_Container.contentWindow.setNextStep(nextStep, isNextStepValidation);    
 };
 
 ExtendedCasePage.prototype.syncCaseFromExCaseIfExists = function () {
@@ -466,7 +471,14 @@ ExtendedCasePage.prototype.init = function (params) {
         var templateId = parseInt(self.$selectListStep.val()) || 0;
         //only load if templateId exist
         if (templateId > 0) {
-            var isValid = self.isExtendedCaseValid(true);
+            var isValid = false;
+            var stepId = parseInt(self.$selectListStep.val()) || 0;
+            if (stepId > 0) {
+                isValid = self.isExtendedCaseValid(false, true);
+            }
+            else {
+                isValid = self.isExtendedCaseValid(false, false);
+            }
             if (isValid) {
                 self.$selectedWorkflow.val(templateId);
                 self.onSaveClick(self);                
@@ -478,14 +490,7 @@ ExtendedCasePage.prototype.init = function (params) {
     });
 
     self.$selectListStep.on('change', function () {
-        self.setNextStep();
-        var stepId = parseInt(self.$selectListStep.val()) || 0;
-        if (stepId > 0) {
-            self.isExtendedCaseValid(false, true);
-        }
-        else {
-            self.isExtendedCaseValid(false, false);
-        }        
+        self.setNextStep();       
     });
 
     self.$caseTab.on('shown', function (e) {
