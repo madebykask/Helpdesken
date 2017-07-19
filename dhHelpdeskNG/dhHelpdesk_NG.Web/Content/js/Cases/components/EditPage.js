@@ -371,6 +371,11 @@ EditPage.prototype.setNextStep = function () {
 
         var isNextStepValidation = true;
 
+        if (nextStep == 0)
+        {
+            isNextStepValidation = false;
+        }
+
         $_ex_Container.contentWindow.setNextStep(nextStep, isNextStepValidation);
     }
 };
