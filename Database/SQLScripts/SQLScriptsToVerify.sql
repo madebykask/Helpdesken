@@ -675,3 +675,8 @@ begin
 end
 
 
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Properties' and sysobjects.name = N'ExtendedCaseValues')
+begin
+	ALTER TABLE [dbo].[ExtendedCaseValues] ADD [Properties] [nvarchar](Max) NULL 
+end
+GO
