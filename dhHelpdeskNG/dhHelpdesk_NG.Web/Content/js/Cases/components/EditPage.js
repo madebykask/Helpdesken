@@ -218,8 +218,7 @@ EditPage.prototype.loadExtendedCaseIfNeeded = function () {
     if ($iframe.length !== 0) {
         $iframe.remove();
     }
-    
-    
+        
     var targetUrl = self.getECTargetUrl();
     
     var iframeId = self.Ex_Container_Prefix + self.Current_EC_FormId;
@@ -235,25 +234,17 @@ EditPage.prototype.loadExtendedCaseIfNeeded = function () {
             enablePublicMethods: true,
             resizedCallback: function (messageData) {
             },
-            bodyMargin: '0 0 0 0',
-            //messageCallback: function (messageData) {
-            //    if (messageData.message === 'cancelCase') {
-            //        var elem = $('#case-action-close');
-            //        location.href = elem.attr('href');
-            //    }
-            //},
+            bodyMargin: '0 0 0 0',           
             closedCallback: function (id) {
             },
             heightCalculationMethod: 'grow'
         };
 
-        $placeHolder.load(function () {
-            
+        $placeHolder.load(function () {            
             $placeHolder.addClass("hidden2");
             self.loadExtendedCase(iframeId);
             $placeHolder.removeClass('hidden2');
-            $placeHolder.iFrameResize(iframeOptions);
-            $indicator.css("display", "none");
+            $placeHolder.iFrameResize(iframeOptions);            
         });
     } else {
         $indicator.css("display", "none");
@@ -268,7 +259,7 @@ EditPage.prototype.loadExtendedCase = function () {
     formParameters.extendedCaseGuid = self.Current_EC_Guid;
     var fieldValues = self.Case_Field_Init_Values;
     if (fieldValues != null) {
-        $_ex_Container.contentWindow.loadExtendedCase(
+        var pr = $_ex_Container.contentWindow.loadExtendedCase(
             {
                 formParameters: formParameters,
                 caseValues: {
@@ -288,13 +279,15 @@ EditPage.prototype.loadExtendedCase = function () {
                     log_textinternal: { Value: '' }
                 }
             });
+        pr.then(function () { self.onExtendedCaseLoaded() });
     } else {
-        $_ex_Container.contentWindow.loadExtendedCase(
+        var pr = $_ex_Container.contentWindow.loadExtendedCase(
             {
                 formParameters: formParameters, caseValues: {
                     log_textinternal: { Value: '' }
                 }
             });
+        pr.then(function () { self.onExtendedCaseLoaded() });
     }
 }
 
@@ -509,6 +502,13 @@ EditPage.prototype.propagateLogNote = function () {
     
     var $_ex_Container = EditPage.prototype.getExtendedCaseContainer();
     $_ex_Container.contentWindow.updateCaseFields(propagateMessage);    
+};
+
+EditPage.prototype.onExtendedCaseLoaded = function () {
+    var self = this;
+    var $indicator = $(self.ExTab_Indicator_Prefix + self.Current_EC_FormId);
+    self.setNextStep();
+    $indicator.css("display", "none");
 };
 
 EditPage.prototype.refreshCasePage = function (updatedInfo) {
@@ -1208,7 +1208,6 @@ EditPage.prototype.init = function (p) {
     EditPage.prototype.Current_EC_Path = p.extendedCasePath;
 
     /*Debug mode*/    
-    //EditPage.prototype.Current_EC_Path = "http://dhhelpdesk-ikea-bschr-v5.datahalland.se/ExtendedCase/?formId=[ExtendedCaseFormId]&autoLoad=1";
         
     /// controls binding
     self.$form = $('#target');
@@ -1477,7 +1476,6 @@ EditPage.prototype.init = function (p) {
             }
         }
     });
-
     
     self.$btnGo.on("click", function (e) {
         e.preventDefault();

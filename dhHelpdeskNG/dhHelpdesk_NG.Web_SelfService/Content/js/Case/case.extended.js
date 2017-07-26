@@ -202,10 +202,11 @@ ExtendedCasePage.prototype.loadExtendedCase = function () {
     formParameters.caseStatus = self.CaseStatus;
     formParameters.userRole = self.UserRole;
     formParameters.currentUser = self.CurrentUser;
+    formParameters.userGuid = '';
 
     var fieldValues = self.Case_Field_Init_Values;
     if (fieldValues != null) {
-        $_ex_Container.contentWindow.loadExtendedCase(
+        var promise = $_ex_Container.contentWindow.loadExtendedCase(
             {
                 formParameters: formParameters,
                 caseValues: {
@@ -225,13 +226,15 @@ ExtendedCasePage.prototype.loadExtendedCase = function () {
                     log_textinternal: { Value: '' }
                 }
             });
+        promise.then(function () { self.onExtendedCaseLoaded() });
     } else {
-        $_ex_Container.contentWindow.loadExtendedCase(
+        var promise = $_ex_Container.contentWindow.loadExtendedCase(
             {
                 formParameters: formParameters, caseValues: {
                     log_textinternal: { Value: '' }
                 }
             });
+        promise.then(function () { self.onExtendedCaseLoaded() });
     }
 }
 
@@ -432,6 +435,12 @@ ExtendedCasePage.prototype.onSaveError = function (err) {
     return false;
 }
 
+EditPage.prototype.onExtendedCaseLoaded = function () {
+    var self = this;
+    var $indicator = $(self.ExTab_Indicator_Prefix + self.Current_EC_FormId);
+    self.setNextStep();
+    $indicator.css("display", "none");
+};
 
 /***** Initiator *****/
 ExtendedCasePage.prototype.init = function (params) {
