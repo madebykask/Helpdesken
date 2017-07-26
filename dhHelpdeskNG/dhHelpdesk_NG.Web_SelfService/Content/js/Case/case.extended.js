@@ -200,7 +200,7 @@ ExtendedCasePage.prototype.loadExtendedCase = function () {
     formParameters.languageId = self.Current_EC_LanguageId;
     formParameters.extendedCaseGuid = self.Current_EC_Guid;
     formParameters.caseStatus = self.CaseStatus;
-    formParameters.userRole = self.UserRole;
+    formParameters.userRole = self.UserRole;    
     formParameters.currentUser = self.CurrentUser;
     formParameters.userGuid = '';
 
@@ -451,11 +451,13 @@ ExtendedCasePage.prototype.init = function (params) {
     self.Case_Field_Init_Values = params.caseInitValues;
     self.Current_EC_FormId = params.extendedCaseFormId;
     self.Current_EC_Guid = params.extendedCaseGuid;
-    self.Current_EC_LanguageId = params.extendedCaseLanguageId;
-    self.Current_EC_Path = params.extendedCasePath;
+    self.Current_EC_LanguageId = params.extendedCaseLanguageId;    
     self.UserRole = params.userRole;
     self.CaseStatus = params.caseStatus;
     self.CurrentUser = params.currentUser;
+    //NOTE:
+    //Parameter needs to be clarified which one overwrite on the other (url params/form params)   
+    self.Current_EC_Path = params.extendedCasePath.replace("[CaseWorkingGroupId]", params.userRole);
 
     var lastError = params.lastError;
 
