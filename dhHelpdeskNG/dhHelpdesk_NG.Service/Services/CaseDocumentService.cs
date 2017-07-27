@@ -396,9 +396,9 @@ namespace DH.Helpdesk.Services.Services
                     var value = "";
 
                     //GET FROM EXTENDEDCASE
-                    if (conditionKey.ToLower().StartsWith("extendedcase_"))
+                    if (condition.Property_Name.ToLower().StartsWith("extendedcase_"))
                     {
-                        conditionKey = conditionKey.Replace("extendedcase_", "");
+                       //conditionKey = conditionKey.Replace("extendedcase_", "");
                         value = _extendedCaseValueRepository.GetExtendedCaseValue(_case.CaseExtendedCaseDatas.FirstOrDefault().ExtendedCaseData_Id, conditionKey).Value;
                     }
                    
