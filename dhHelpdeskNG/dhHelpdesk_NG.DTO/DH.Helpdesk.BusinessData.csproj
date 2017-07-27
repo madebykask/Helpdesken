@@ -175,6 +175,7 @@
     <Compile Include="Models\Case\CaseFileDate.cs" />
     <Compile Include="Models\Case\CaseHistoryOverview.cs" />
     <Compile Include="Models\Case\CaseLock\CaseLockOverview.cs" />
+    <Compile Include="Models\Case\CaseSections\CaseSectionModel.cs" />
     <Compile Include="Models\Case\CategoryOverview.cs" />
     <Compile Include="Models\Case\CaseSolutionConditionModel.cs" />
     <Compile Include="Models\Case\DepartmentOverview.cs" />

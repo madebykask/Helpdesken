@@ -1,4 +1,10 @@
-﻿using DH.Helpdesk.Web.Infrastructure.Cache;
+﻿using System;
+using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
+using DH.Helpdesk.Common.Extensions.Boolean;
+using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Domain.Cases;
+using DH.Helpdesk.Services.Services.Cases;
+using DH.Helpdesk.Web.Infrastructure.Cache;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
@@ -21,6 +27,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ILanguageService _languageService;
         private readonly IHelpdeskCache _cache;
         private readonly ISettingService _settingService;
+        private readonly ICaseSectionService _caseSectionService;
 
         public CustomerCaseFieldSettingsController(
             ICaseFieldSettingService caseFieldSettingService,
@@ -29,6 +36,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             ILanguageService languageService,
             IMasterDataService masterDataService,
             IHelpdeskCache cache,
+            ICaseSectionService caseSectionService,
             ISettingService settingService)
             : base(masterDataService)
         {
@@ -38,6 +46,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this._languageService = languageService;
             _cache = cache;
             _settingService = settingService;
+            _caseSectionService = caseSectionService;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -50,10 +59,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             if (customer == null)
                 return new HttpNotFoundResult("No customer found...");
 
+            var caseSections = _caseSectionService.GetCaseSections(customerId, languageId);
             //var casefieldsetting = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
 
             var model = this.CustomerInputViewModel(customer, language);
-            
+            model.CaseSections = caseSections;
             return this.View(model);
         }
 
@@ -65,6 +75,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
             _customerService.SaveCaseFieldSettingsForCustomer(customerId, languageId, vmodel.CaseFieldSettingWithLangauges, CaseFieldSettings, out errors);
+            _caseSectionService.SaveCaseSections(languageId, vmodel.CaseSections, customerId);
             _cache.ClearCaseTranslations(customerId);
 
             if (errors.Count == 0)
@@ -89,6 +100,44 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 this.TempData.Add("Error", "");
                 return this.RedirectToAction("edit", "customer", new { id = id });
             }
+        }
+
+        [CustomAuthorize(Roles = "3,4")]
+        [HttpPost]
+        public ActionResult GetCaseSection(int sectionId, int customerId, int languageId)
+        {
+            var cs = _caseSectionService.GetCaseSection(sectionId, customerId, languageId);
+            return Json(new
+                    {
+                        success = true,
+                        isNewCollapsed = cs.IsNewCollapsed.ToInt(),
+                        isEditCollapsed = cs.IsEditCollapsed.ToInt(),
+                        sectionFields = cs.CaseSectionFields,
+                        sectionHeader = !string.IsNullOrEmpty(cs.SectionHeader) ? cs.SectionHeader : string.Empty
+            });
+        }
+
+        [CustomAuthorize(Roles = "3,4")]
+        [HttpPost]
+        public ActionResult SaveCaseSectionOptions(int sectionId, int customerId, int isNewCollapsed, int isEditCollapsed, int sectionType, List<int> selectedFields, int languageId)
+        {
+            var caseSection = _caseSectionService.GetCaseSection(sectionId, customerId, languageId);
+            var fields = selectedFields.Where(x => x > 0).ToList();
+            if (caseSection != null)
+            {
+                caseSection.IsEditCollapsed = isEditCollapsed.ToBool();
+                caseSection.IsNewCollapsed = isNewCollapsed.ToBool();
+                caseSection.CaseSectionFields = fields;
+                caseSection.CustomerId = customerId;
+                caseSection.SectionType = sectionType;
+                caseSection.Id = sectionId;
+                sectionId = _caseSectionService.SaveCaseSection(caseSection);
+            }
+            else
+            {
+                return Json(new { success = false, sectionId });
+            }
+            return Json(new {success = true, sectionId});
         }
 
         private CustomerIndexViewModel IndexViewModel()
@@ -212,9 +261,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var language = this._languageService.GetLanguage(id);
 
             var casefieldsetting = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, id);
+            var caseSections = _caseSectionService.GetCaseSections(customerId, id);
 
             var model = this.CustomerInputViewModel(customer, language);
-
+            model.CaseSections = caseSections;
 
             var view = "~/areas/admin/views/CustomerCaseFieldSettings/_Input.cshtml";
             return this.RenderRazorViewToString(view, model);

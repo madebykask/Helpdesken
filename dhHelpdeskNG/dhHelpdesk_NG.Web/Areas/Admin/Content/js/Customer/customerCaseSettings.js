@@ -56,6 +56,81 @@ $(function () {
         }
         return true;
     });
+
+    $(".header-chosen").chosen({
+        width: "315px",
+        'placeholder_text_multiple': placeholder_text_multiple,
+        'no_results_text': no_results_text,
+        max_selected_options: 4
+    });
+
+    var sectionElement;
+    var sectionType;
+
+    $("a.section-settbtn").on("click", function (e) {
+        e.preventDefault();
+        var $src = $(this);
+        sectionElement = $src.children("input.section-id");
+        sectionType = $src.children("input.section-type").val();
+        var customerId = $("#customerId").val();
+        var languageId = $("#LanguageId").val();
+
+        $.ajax({
+            url: "/customercasefieldsettings/GetCaseSection",
+            type: "post",
+            data: { sectionId: sectionElement.val(), customerId: customerId, languageId: languageId },
+            dataType: "json",
+            success: function (result) {
+                if (result.success) {
+                    $("#isNewCollapsed").val(result.isNewCollapsed);
+                    $("#isEditCollapsed").val(result.isEditCollapsed);
+                    $("#modal_header").text(result.sectionHeader);
+                    $("#sectionDrop" + sectionType).val(result.sectionFields);
+                    $("#sectionDrop" + sectionType).trigger("chosen:updated");
+                    $("#sectionDiv" + sectionType).removeClass("hidden-desktop");
+                }
+                return;
+            }
+        });
+        var $target = $("#case_header_settings_popup");
+        $target.attr("data-src", $src.attr("data-src"));
+        $target.modal("show");
+    });
+
+    $("#btnSaveDlg").on("click", function () {
+        var isNewCollapsed = $("#isNewCollapsed").val();
+        var isEditCollapsed = $("#isEditCollapsed").val();
+        var customerId = $("#customerId").val();
+        var sectionDrop = $("#sectionDrop" + sectionType).val();
+        var languageId = $("#LanguageId").val();
+        $.ajax({
+            url: "/customercasefieldsettings/SaveCaseSectionOptions",
+            type: "post",
+            data: {
+                sectionId: sectionElement.val(),
+                customerId: customerId,
+                isNewCollapsed: isNewCollapsed,
+                isEditCollapsed: isEditCollapsed,
+                sectionType: sectionType,
+                selectedFields: sectionDrop,
+                languageId: languageId
+            },
+            dataType: "json",
+            success: function (result) {
+                if (result.success) {
+                    sectionElement.val(result.sectionId);
+                    return;
+                } else {
+                    ShowToastMessage("Bad", "error");
+                }
+                return;
+            }
+        });
+    });
+
+    $("#case_header_settings_popup").on("hide", function () {
+        $("#sectionDiv" + sectionType).addClass("hidden-desktop");
+    });
 });
 
 $(function () {    

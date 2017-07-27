@@ -94,6 +94,9 @@
     <Compile Include="CaseSolutionSearch.cs" />
     <Compile Include="Cases\CaseExtraFollower.cs" />
     <Compile Include="Cases\CaseFollowUp.cs" />
+    <Compile Include="Cases\CaseSection.cs" />
+    <Compile Include="Cases\CaseSectionField.cs" />
+    <Compile Include="Cases\CaseSectionLanguage.cs" />
     <Compile Include="Cases\CaseSolutionConditionHelper.cs" />
     <Compile Include="Cases\CaseSolutionConditionListEntity.cs" />
     <Compile Include="Cases\CaseSolutionSetting.cs" />

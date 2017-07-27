@@ -5989,5 +5989,47 @@ If not exists (select * from tblTextTranslation where text_id = 1833 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1833, 2, 'This workflow step will only be shown if all added conditions are fulfilled for the case. There can be more than one value for each field, one of the values for that field must be fulfilled.')
 GO
 
+If not exists (select * from tbltext where id = 1834)
+	insert into tbltext (id, TextString) VALUES (1834, 'Ärendesektion')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1834 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1834, 2, 'Case section')
+GO
+
+If not exists (select * from tbltext where id = 1835)
+	insert into tbltext (id, TextString) VALUES (1835, 'Kollapsade')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1835 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1835, 2, 'Collapsed')
+GO
+
+If not exists (select * from tbltext where id = 1836)
+	insert into tbltext (id, TextString) VALUES (1836, 'Sektion')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1836 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1836, 2, 'Section')
+GO
+
+If not exists (select * from tbltext where id = 1837)
+	insert into tbltext (id, TextString) VALUES (1837, 'Öppen')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1837 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1837, 2, 'Expanded')
+GO
+
+If not exists (select * from tbltext where id = 1838)
+	insert into tbltext (id, TextString) VALUES (1838, 'Hopfälld')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1838 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1838, 2, 'Collapsed')
+GO
+
+If not exists (select * from tbltext where id = 1839)
+	insert into tbltext (id, TextString) VALUES (1839, 'På')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1839 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1839, 2, 'On')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

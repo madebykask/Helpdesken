@@ -41,6 +41,22 @@
 
             //location.href = '/Cases/new?customerId=' + ci + p2 + p3 + '&caseLanguageId=' + cli;       
         });
+
+        //HIDE SHOW
+        $(".hidebtn").on("click", function (e) {
+            e.preventDefault();
+            $(this).parents(".section-block").addClass("hideshow");
+            $(this).parent().parent().find("#fakeCaseFollowerUsersInput").addClass("hidefollowers");
+            $(this).parent().parent().find("#fake_CaseLog_EmailRecepientsInternalLogTo").addClass("hidefollowers");
+            $(this).parent().parent().find("#fake_CaseLog_EmailRecepientsInternalLogCc").addClass("hidefollowers");
+        });
+        $(".showbtn").on("click", function (e) {
+            e.preventDefault();
+            $(this).parents(".section-block").removeClass("hideshow");
+            $(this).parent().parent().find("#fakeCaseFollowerUsersInput").removeClass("hidefollowers");
+            $(this).parent().parent().find("#fake_CaseLog_EmailRecepientsInternalLogTo").removeClass("hidefollowers");
+            $(this).parent().parent().find("#fake_CaseLog_EmailRecepientsInternalLogCc").removeClass("hidefollowers");
+        });
     </script>
 }
 

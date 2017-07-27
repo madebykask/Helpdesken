@@ -115,6 +115,8 @@
     <Compile Include="EntityConfigurations\CaseSolutionConditionPropertyConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseExtraFollowerConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseFollowUpConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Cases\CaseSectionFieldConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Cases\CaseSectionsConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractFileConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractHistoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractConfiguration.cs" />
@@ -421,6 +423,7 @@
     <Compile Include="Repositories\Cases\CaseQuestionCategoryRepository.cs" />
     <Compile Include="Repositories\Cases\CaseQuestionHeaderRepository.cs" />
     <Compile Include="Repositories\Cases\CaseQuestionRepository.cs" />
+    <Compile Include="Repositories\Cases\CaseSectionsRepository.cs" />
     <Compile Include="Repositories\Cases\CaseSettingsRepository.cs" />
     <Compile Include="Repositories\Cases\CaseSolutionSettingRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CaseLockRepository.cs" />
