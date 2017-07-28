@@ -63,31 +63,31 @@
                     <table class="table table-striped table-bordered table-hover table-cases" style="display: inline-block;">
                     <thead style=" display:inline-block">
                     <tr>
-                        <th class="tableth1">&nbsp;
+                        <th class="th1">&nbsp;
                         </th>
-                        <th class="tableth2">
+                        <th class="th2">
                             @Translation.GetCoreTextTranslation("Fält")
                         </th>
-                        <th class="tableth3">
+                        <th class="th3">
                             @Translation.GetCoreTextTranslation("Visa")
                         </th>
-                        <th class="tableth4">
+                        <th class="th4">
                             @Translation.GetCoreTextTranslation("Visa på självservice")
                         </th>
-                        <th class="tableth5">
+                        <th class="th5">
                             @Translation.GetCoreTextTranslation("Rubrik")
                             @Html.DropDownListFor(model => model.Language.Id, Model.Languages, new {style = "width: auto;", id = "LanguageId", onchange = "changeLabelList(this.options[this.selectedIndex].value);"})
                         </th>
-                        <th class="tableth6">
+                        <th class="th6">
                             @Translation.GetCoreTextTranslation("Obligatorisk")
                         </th>
-                        <th class="tableth7">
+                        <th class="th7">
                             @Translation.GetCoreTextTranslation("Storlek")
                         </th>
-                        <th class="tableth8">
+                        <th class="th8">
                             @Translation.GetCoreTextTranslation("Skapa din egen hjälptext till fältet")
                         </th>
-                        <th class="tableth9">
+                        <th class="th9">
                             @Translation.GetCoreTextTranslation("Låst fält")
                         </th>
                     </tr>

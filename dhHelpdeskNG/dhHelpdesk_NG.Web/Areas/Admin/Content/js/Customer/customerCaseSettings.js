@@ -131,6 +131,18 @@ $(function () {
     $("#case_header_settings_popup").on("hide", function () {
         $("#sectionDiv" + sectionType).addClass("hidden-desktop");
     });
+
+    $(document).ready(function () {
+        $(".th1").css({ 'width': ($(".tableth1").width() + 'px') });
+        $(".th2").css({'width': ($(".tableth2").width() + 'px') });
+        $(".th3").css({'width': ($(".tableth3").width() + 'px') });
+        $(".th4").css({'width': ($(".tableth4").width() + 'px') });
+        $(".th5").css({'width': ($(".tableth5").width() + 'px') });
+        $(".th6").css({'width': ($(".tableth6").width() + 'px') });
+        $(".th7").css({'width': ($(".tableth7").width() + 'px') });
+        $(".th8").css({'width': ($(".tableth8").width() + 'px') });
+        $(".th9").css({'width': ($(".tableth9").width() + 'px') });
+        });
 });
 
 $(function () {    
