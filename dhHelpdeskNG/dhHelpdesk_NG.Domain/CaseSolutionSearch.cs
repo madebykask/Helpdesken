@@ -8,6 +8,8 @@ namespace DH.Helpdesk.Domain
         int CustomerId { get; set; }
         string SearchCss { get; set; }
         List<int> CategoryIds { get; set; }
+
+        List<int> SubStatusIds { get; set; }
     }
 
     public class CaseSolutionSearch : Search, ICaseSolutionSearch
@@ -15,5 +17,7 @@ namespace DH.Helpdesk.Domain
         public int CustomerId { get; set; }
         public string SearchCss { get; set; }
         public List<int> CategoryIds { get; set; }
+
+        public List<int> SubStatusIds { get; set; }
     }
 }

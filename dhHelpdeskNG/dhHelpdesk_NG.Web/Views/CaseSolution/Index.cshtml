@@ -34,6 +34,10 @@
     var searchCategories = (SessionFacade.CurrentCaseSolutionSearch != null &&
                      SessionFacade.CurrentCaseSolutionSearch.CategoryIds != null && SessionFacade.CurrentCaseSolutionSearch.CategoryIds.Any())
                      ? SessionFacade.CurrentCaseSolutionSearch.CategoryIds : null;
+
+    var searchSubStatuses = (SessionFacade.CurrentCaseSolutionSearch != null &&
+                     SessionFacade.CurrentCaseSolutionSearch.SubStatusIds != null && SessionFacade.CurrentCaseSolutionSearch.SubStatusIds.Any())
+                     ? SessionFacade.CurrentCaseSolutionSearch.SubStatusIds : null;
 }
 
 @*@Scripts.Render("~/bundles/casetemplates/index")*@
@@ -69,7 +73,7 @@
                                 <select id="caseSolFilterSubstatus" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.CaseSolutionSubStatus)
                                     {
-                                        <option value="@e.Id">@e.Name</option>
+                                        <option value="@e.Id" @e.Id.IdIsSelected(searchSubStatuses)>@e.Name</option>
                                     }
                                 </select>
                             </td>

@@ -385,6 +385,11 @@ namespace DH.Helpdesk.Services.Services
                 query = query.Where(x => x.CaseSolutionCategory_Id.HasValue && SearchCaseSolutions.CategoryIds.Contains(x.CaseSolutionCategory_Id.Value));
             }
 
+            if (SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.SubStatusIds.Any())
+            {
+                query = query.Where(x => x.Status_Id.HasValue && SearchCaseSolutions.SubStatusIds.Contains(x.Status_Id.Value));
+            }
+
             #endregion
 
             #region Sort

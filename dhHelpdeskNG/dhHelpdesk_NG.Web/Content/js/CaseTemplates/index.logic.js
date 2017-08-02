@@ -17,33 +17,65 @@ var tabCategory = '#CategoriesTab';
 var btnSearch = '#btnCaseSolutionSearch';
 var edtSearch = '#caseSolutionSearch';
 var categories = '#caseSolFilterCategory';
+var substatus = '#caseSolFilterSubstatus';
+
+var Wgroup = '#caseSolFilterWGroup';
+var Priority = '#caseSolFilterPriority';
+var Status = '#caseSolFilterStatus';
+var ProductArea = '#caseSolFilterProductArea';
+var UserWGroup = '#caseSolFilterUserWGroup';
+var TemplateProductArea = '#caseSolFilterCaseTemplateProductArea';
 
 
 $(function () {
 
+    
     $(sortableCol).click(function () {
         var sortBy = $(this).attr(attrSortField);
         var asc = $(this).attr(attrSortDir);
         DoSort(sortBy, asc);
     });
-    
+
     $(btnSearch).click(function () {
+
+        
+        
         var searchText = $(edtSearch).val();
         var categoryIds = $(categories).val();
-        doSearch(searchText, categoryIds);
+        var subStatusIds = $(substatus).val();
+
+        var WgroupIds = $(Wgroup).val();
+        var PriorityIds = $(Priority).val();
+        var StatusIds = $(Status).val();
+        var ProductAreaIds = $(ProductArea).val();
+        var UserWGroupIds = $(UserWGroup).val();
+        var TemplateProductAreaIds = $(TemplateProductArea).val();
+
+        doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds);
     });
 
     $(edtSearch).keydown(function (e) {
+       
         if (e.keyCode == 13) {
             e.preventDefault();
             var searchText = $(edtSearch).val();
             var categoryIds = $(categories).val();
-            doSearch(searchText, categoryIds);
+            var subStatusIds = $(substatus).val();
+
+            var WgroupIds = $(Wgroup).val();
+            var PriorityIds = $(Priority).val();
+            var StatusIds = $(Status).val();
+            var ProductAreaIds = $(ProductArea).val();
+            var UserWGroupIds = $(UserWGroup).val();
+            var TemplateProductAreaIds = $(TemplateProductArea).val();
+
+            doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds);
             return false;
         }
     });
 
     $(tabCaseTemplate).click(function () {
+        
         $.get(rememberSelectedTab,
             {
                 topic: "CaseSolution",
@@ -53,10 +85,11 @@ $(function () {
             function (data) {
                 $('#menu1').show();
                 $('#menu2').hide();
-            });        
+            });
     });
 
     $(tabCategory).click(function () {
+        
         $.get(rememberSelectedTab,
             {
                 topic: "CaseSolution",
@@ -66,10 +99,11 @@ $(function () {
             function (data) {
                 $('#menu2').show();
                 $('#menu1').hide();
-            });       
+            });
     });
 
     var DoSort = function (sortBy, asc) {
+      
         $.get(sortOverview,
                 {
                     fieldName: sortBy,
@@ -81,14 +115,25 @@ $(function () {
                 });
     }
 
-    function doSearch(searchText, categoryIds) {
+    function doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds) {
+        
         $.ajax({
+
             url: searchOverview,
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify({
                 searchText: searchText,
-                categoryIds: categoryIds
+                categoryIds: categoryIds,
+                subStatusIds: subStatusIds,
+                subStatusIds: subStatusIds,
+                WgroupIds: WgroupIds,
+                PriorityIds: PriorityIds,
+                StatusIds: StatusIds,
+                ProductAreaIds: ProductAreaIds,
+                UserWGroupIds: UserWGroupIds,
+                TemplateProductAreaIds: TemplateProductAreaIds
+
             }),
             success: function (filteredModel) {
                 $(caseSolutionRowsArea).html(filteredModel);

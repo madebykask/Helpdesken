@@ -64,7 +64,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICacheProvider _cache;
         private readonly ICaseSolutionConditionService _caseSolutionConditionService;
 
-        
+
 
         private const int MAX_QUICK_BUTTONS_COUNT = 5;
         private const string CURRENT_USER_ITEM_CAPTION = "Inloggad användare";
@@ -189,7 +189,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult Search(string searchText, List<int> categoryIds)
+        public PartialViewResult Search(string searchText, List<int> categoryIds, List<int> subStatusIds, List<int> WgroupIds, List<int> PriorityIds, List<int> StatusIds, List<int> ProductAreaIds, List<int> UserWGroupIds, List<int> TemplateProductAreaIds)
         {
             var caseSolutionSearch = new CaseSolutionSearch();
             if (SessionFacade.CurrentCaseSolutionSearch != null)
@@ -197,6 +197,10 @@ namespace DH.Helpdesk.Web.Controllers
 
             caseSolutionSearch.SearchCss = searchText;
             caseSolutionSearch.CategoryIds = categoryIds.ToList();
+            if (subStatusIds != null)
+            {
+                caseSolutionSearch.SubStatusIds = subStatusIds.ToList();
+            }
             SessionFacade.CurrentCaseSolutionSearch = caseSolutionSearch;
 
             var model = CreateIndexViewModel(caseSolutionSearch);
@@ -1712,7 +1716,7 @@ namespace DH.Helpdesk.Web.Controllers
                 CaseSolutionWGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId),
                 CaseSolutionSubStatus = this._statusService.GetActiveStatuses(customerId),
                 CaseSolutionPriorities = this._priorityService.GetPriorities(customerId),
-                CaseSolutionStatuses  = this._statusService.GetActiveStatuses(customerId),
+                CaseSolutionStatuses = this._statusService.GetActiveStatuses(customerId),
                 CaseSolutionProductArea = this._productAreaService.GetAllProductAreas(customerId),
                 CaseSolutionUserWGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId),
                 CaseSolutionCTemplateProductArea = this._productAreaService.GetAllProductAreas(customerId),
