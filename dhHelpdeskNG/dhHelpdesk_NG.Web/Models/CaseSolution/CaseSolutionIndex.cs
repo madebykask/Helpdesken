@@ -88,5 +88,22 @@
         public IList<CaseSolutionCategory> CaseSolutionCategories { get; set; }
 
         public string ActiveTab { get; set; }
+
+
+        public IList<Status> CaseSolutionStatuses { get; set; }
+
+        public IList<WorkingGroupEntity> CaseSolutionWGroup { get; set; }
+
+        public IList<Priority> CaseSolutionPriorities { get; set; }
+
+        public IList<Status> CaseSolutionSubStatus { get; set; }
+
+        public IList<ProductArea> CaseSolutionProductArea { get; set; }
+
+        public IList<WorkingGroupEntity> CaseSolutionUserWGroup { get; set; }
+
+        public IList<ProductArea> CaseSolutionCTemplateProductArea { get; set; }
+
+        public IList<Application> CaseSolutionApplication { get; set; }
     }
 }

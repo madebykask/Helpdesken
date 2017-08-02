@@ -20,7 +20,9 @@
                 <td>
                     <input type="text" id="caseSolutionSearch" maxlength="50" style="width: 285px;" value="@searchText"/>
                     <input type="button" id="btnCaseSolutionSearch" class="btn" value="@Translation.GetCoreTextTranslation("Sök")"/>
+                    <i id="icoImg" class="icon-plus-sign"; style="cursor: pointer;"onclick="showDiv()"></i>
                 </td>
+                
             </tr>
         </table>
     </div>
@@ -95,3 +97,26 @@
         </tbody>
     </table>
 </div>
+
+<script type="text/javascript">
+
+    function showDiv() {
+       // alert();
+
+        var x = document.getElementById('searchDiv');
+        if (x.style.display === 'none') {
+            x.style.display = 'block';
+
+            document.getElementById("icoImg").classList.remove('icon-plus-sign');
+            document.getElementById("icoImg").classList.add('icon-minus-sign');
+
+        } else {
+            x.style.display = 'none';
+            
+            document.getElementById("icoImg").classList.remove('icon-minus-sign');
+            document.getElementById("icoImg").classList.add('icon-plus-sign');
+        }
+    }
+
+</script>
+

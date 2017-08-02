@@ -64,6 +64,8 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICacheProvider _cache;
         private readonly ICaseSolutionConditionService _caseSolutionConditionService;
 
+        
+
         private const int MAX_QUICK_BUTTONS_COUNT = 5;
         private const string CURRENT_USER_ITEM_CAPTION = "Inloggad användare";
         private const string CURRENT_USER_WORKINGGROUP_CAPTION = "Inloggad användares driftgrupp";
@@ -1706,7 +1708,15 @@ namespace DH.Helpdesk.Web.Controllers
             var model = new CaseSolutionIndexViewModel(activeTab)
             {
                 Rows = _rows,
-                CaseSolutionCategories = this._caseSolutionService.GetCaseSolutionCategories(customerId)
+                CaseSolutionCategories = this._caseSolutionService.GetCaseSolutionCategories(customerId),
+                CaseSolutionWGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId),
+                CaseSolutionSubStatus = this._statusService.GetActiveStatuses(customerId),
+                CaseSolutionPriorities = this._priorityService.GetPriorities(customerId),
+                CaseSolutionStatuses  = this._statusService.GetActiveStatuses(customerId),
+                CaseSolutionProductArea = this._productAreaService.GetAllProductAreas(customerId),
+                CaseSolutionUserWGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId),
+                CaseSolutionCTemplateProductArea = this._productAreaService.GetAllProductAreas(customerId),
+                //CaseSolutionApplication = this._app
             };
 
             return model;
