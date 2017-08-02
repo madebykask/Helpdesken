@@ -591,7 +591,7 @@
             {
                 RegUserId = SessionFacade.CurrentUserIdentity.UserId,
                 RegUserDomain = SessionFacade.CurrentUserIdentity.Domain,
-                RegUserName = SessionFacade.CurrentUserIdentity.FirstName,
+                RegUserName = string.Format("{0} {1}", SessionFacade.CurrentUserIdentity.FirstName, SessionFacade.CurrentUserIdentity.LastName),
                 IpAddress = Request.GetIpAddress(),
                 CaseSolution_Id = caseTemplateId
             };

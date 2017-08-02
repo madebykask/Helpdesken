@@ -258,6 +258,9 @@ EditPage.prototype.loadExtendedCase = function () {
     formParameters.languageId = self.Current_EC_LanguageId;
     formParameters.extendedCaseGuid = self.Current_EC_Guid;
     var fieldValues = self.Case_Field_Init_Values;
+
+    $_ex_Container.contentWindow.setInitialData({step:0, isNextValidation: false});
+
     if (fieldValues != null) {
         var pr = $_ex_Container.contentWindow.loadExtendedCase(
             {
@@ -358,6 +361,7 @@ EditPage.prototype.setNextStep = function () {
     if (self.p.containsExtendedCase == "True")
     {
         var nextStep = 0;
+        var tempId = $("#steps option:selected");
         nextStep = parseInt($("#steps option:selected").attr('data-next-step')) || 0;
 
         var $_ex_Container = self.getExtendedCaseContainer();
@@ -507,7 +511,8 @@ EditPage.prototype.propagateLogNote = function () {
 EditPage.prototype.onExtendedCaseLoaded = function () {
     var self = this;
     var $indicator = $(self.ExTab_Indicator_Prefix + self.Current_EC_FormId);
-    self.setNextStep();
+    /*Disabled because form is not ready yet - Majid/Alex */
+    //self.setNextStep();
     $indicator.css("display", "none");
 };
 
@@ -1208,7 +1213,8 @@ EditPage.prototype.init = function (p) {
     EditPage.prototype.Current_EC_Path = p.extendedCasePath;
 
     /*Debug mode*/    
-        
+    EditPage.prototype.Current_EC_Path = "http://dhhelpdesk-ikea-bschr-v5.datahalland.se/ExtendedCase/?formId=[ExtendedCaseFormId]&autoLoad=1";
+
     /// controls binding
     self.$form = $('#target');
     self.$watchDateChangers = $('.departments-list, #case__Priority_Id, #case__StateSecondary_Id');
@@ -1492,7 +1498,7 @@ EditPage.prototype.init = function (p) {
             var stepId = parseInt($('#steps').val()) || 0;
 
             if (stepId > 0) {
-                isValid = self.isExtendedCaseValid(false, true);
+                isValid = self.isExtendedCaseValid(false, true, 29);
             }
             else {
                 isValid = self.isExtendedCaseValid(false, false);

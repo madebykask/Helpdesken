@@ -204,6 +204,8 @@ ExtendedCasePage.prototype.loadExtendedCase = function () {
     formParameters.currentUser = self.CurrentUser;
     formParameters.userGuid = '';
 
+    $_ex_Container.contentWindow.setInitialData({ step: 0, isNextValidation: false });
+
     var fieldValues = self.Case_Field_Init_Values;
     if (fieldValues != null) {
         var promise = $_ex_Container.contentWindow.loadExtendedCase(
@@ -435,10 +437,11 @@ ExtendedCasePage.prototype.onSaveError = function (err) {
     return false;
 }
 
-EditPage.prototype.onExtendedCaseLoaded = function () {
+ExtendedCasePage.prototype.onExtendedCaseLoaded = function () {
     var self = this;
     var $indicator = $(self.ExTab_Indicator_Prefix + self.Current_EC_FormId);
-    self.setNextStep();
+    /*temp disabled - Majid/Alex */
+    //self.setNextStep();
     $indicator.css("display", "none");
 };
 
