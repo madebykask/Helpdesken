@@ -461,6 +461,7 @@ ExtendedCasePage.prototype.init = function (params) {
     //NOTE:
     //Parameter needs to be clarified which one overwrite on the other (url params/form params)   
     self.Current_EC_Path = params.extendedCasePath.replace("[CaseWorkingGroupId]", params.userRole);
+    self.Current_EC_Path = self.Current_EC_Path.replace("[CaseStateSecondaryId]", params.caseStatus);
 
     var lastError = params.lastError;
 

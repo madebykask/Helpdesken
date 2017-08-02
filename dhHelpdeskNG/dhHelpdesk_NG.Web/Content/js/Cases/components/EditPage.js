@@ -1213,7 +1213,7 @@ EditPage.prototype.init = function (p) {
     EditPage.prototype.Current_EC_Path = p.extendedCasePath;
 
     /*Debug mode*/    
-    EditPage.prototype.Current_EC_Path = "http://dhhelpdesk-ikea-bschr-v5.datahalland.se/ExtendedCase/?formId=[ExtendedCaseFormId]&autoLoad=1";
+    //EditPage.prototype.Current_EC_Path = "http://dhhelpdesk-ikea-bschr-v5.datahalland.se/ExtendedCase/?formId=[ExtendedCaseFormId]&autoLoad=1";
 
     /// controls binding
     self.$form = $('#target');
