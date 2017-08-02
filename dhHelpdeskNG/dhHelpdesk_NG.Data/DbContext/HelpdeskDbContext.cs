@@ -105,6 +105,12 @@
 
         public DbSet<CaseFieldSetting> CaseFieldSettings { get; set; }
 
+        public DbSet<CaseSection> CaseSections { get; set; }
+
+        public DbSet<CaseSectionLanguage> CaseSectionLanguages { get; set; }
+
+        public DbSet<CaseSectionField> CaseSectionFields { get; set; }
+
         public DbSet<CaseFile> CaseFiles { get; set; }
 
         public DbSet<CaseFilterFavoriteEntity> CaseFilterFavorite { get; set; }
@@ -632,6 +638,9 @@
             modelBuilder.Configurations.Add(new CaseStatisticConfiguration());
             modelBuilder.Configurations.Add(new CaseFollowUpConfiguration());
             modelBuilder.Configurations.Add(new CaseExtraFollowerConfiguration());
+            modelBuilder.Configurations.Add(new CaseSectionsConfiguration());
+            modelBuilder.Configurations.Add(new CaseSectionsLanguageConfiguration());
+            modelBuilder.Configurations.Add(new CaseSectionFieldConfiguration());
 
             modelBuilder.Configurations.Add(new CaseInvoiceRowConfiguration());
             modelBuilder.Configurations.Add(new CaseIsAboutConfiguration());

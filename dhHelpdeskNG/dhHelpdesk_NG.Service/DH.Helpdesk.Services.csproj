@@ -281,6 +281,7 @@
     <Compile Include="Services\CaseFollowUpService.cs" />
     <Compile Include="Services\CaseSolutionConditionService.cs" />
     <Compile Include="Services\CaseStatistic\CaseStatisticService.cs" />
+    <Compile Include="Services\Cases\CaseSectionService.cs" />
     <Compile Include="Services\Concrete\CaseLockService.cs" />
     <Compile Include="Services\Concrete\LogProgramService.cs" />
     <Compile Include="Services\Concrete\Reports\ReportServiceService.cs" />

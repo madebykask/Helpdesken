@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
 
 namespace DH.Helpdesk.Web.Models.Case
 {
@@ -87,6 +88,8 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public IEnumerable<CaseFieldSettingsWithLanguage> CaseFieldSettingWithLangauges { get; set; }
         public IList<CaseSolutionSettingModel> CaseSolutionSettingModels { get; set; }
+
+        public IEnumerable<CaseSectionModel> CaseSectionModels { get; set; }
 
         public IList<CaseType> caseTypes { get; set; }
         public IList<StandardText> standardTexts { get; set; }

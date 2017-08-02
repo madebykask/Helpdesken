@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Models
+﻿using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
+using DH.Helpdesk.Domain.Cases;
+
+namespace DH.Helpdesk.Web.Areas.Admin.Models
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
@@ -59,6 +62,7 @@
         public Language Language { get; set; }
         public UserGroup UserGroup { get; set; }
 
+        public IEnumerable<CaseSectionModel> CaseSections { get; set; }
         public IList<CaseFieldSetting> CaseFieldSettings { get; set; }
         public IEnumerable<Region> Regions { get; set; }
         public IEnumerable<CaseFieldSettingsWithLanguage> CaseFieldSettingWithLangauges { get; set; }

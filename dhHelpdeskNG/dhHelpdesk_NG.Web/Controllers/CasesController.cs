@@ -12,6 +12,7 @@ using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Dal.DbQueryExecutor;
 using DH.Helpdesk.Dal.Repositories;
+using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Web.Models.Invoice;
 
 
@@ -187,6 +188,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseRuleFactory _caseRuleFactory;
         private readonly IOrderService _orderService;
         private readonly IOrderAccountService _orderAccountService;
+        private readonly ICaseSectionService _caseSectionService;
 
 
         #endregion
@@ -260,7 +262,8 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseExtraFollowersService caseExtraFollowersService,
             ICaseRuleFactory caseRuleFactory,
             IOrderService orderService,
-            IOrderAccountService orderAccountService)
+            IOrderAccountService orderAccountService,
+            ICaseSectionService caseSectionService)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;
@@ -333,6 +336,7 @@ namespace DH.Helpdesk.Web.Controllers
             _caseRuleFactory = caseRuleFactory;
             _orderService = orderService;
             _orderAccountService = orderAccountService;
+            _caseSectionService = caseSectionService;
         }
 
         #endregion
@@ -1408,6 +1412,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.customerUserSetting = cu;
                     m.caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
                     m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
+                    m.CaseSectionModels = _caseSectionService.GetCaseSections(customerId, SessionFacade.CurrentLanguageId);
                     m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);
                     m.case_ = this._caseService.GetCaseById(m.CaseLog.CaseId);
                     bool UseVD = false;
@@ -2611,7 +2616,9 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var model = new CaseTemplateTreeModel();
             model.CustomerId = customerId;
-            model.CaseTemplateCategoryTree = _caseSolutionService.GetCaseSolutionCategoryTree(customerId, userId, location);
+            model.CaseTemplateCategoryTree = _caseSolutionService.GetCaseSolutionCategoryTree(customerId, userId, location)
+                                            .Where(c=> c.CaseTemplates == null || (c.CaseTemplates != null && c.CaseTemplates.Any()))
+                                            .ToList();
             return model;
         }
 
@@ -4270,6 +4277,7 @@ namespace DH.Helpdesk.Web.Controllers
             //todo: first
             m.caseFieldSettings = customerFieldSettings;
             m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetAllCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
+            m.CaseSectionModels = _caseSectionService.GetCaseSections(customerId, SessionFacade.CurrentLanguageId);
 
             m.DepartmentFilterFormat = customerSetting.DepartmentFilterFormat;
             m.ParantPath_CaseType = ParentPathDefaultValue;

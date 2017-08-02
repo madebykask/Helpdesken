@@ -2,6 +2,8 @@
 @using System.Web.Optimization
 @using System.Linq;
 @using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Common.Constants
+@using DH.Helpdesk.Common.Enums.Cases
 @using DH.Helpdesk.Common.Enums.Settings
 @using DH.Helpdesk.Domain.Invoice
 @using DH.Helpdesk.Web
@@ -50,6 +52,7 @@
                                                 Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)',
         closeBtn: '@Html.Raw(Translation.GetForJS("Stäng"))',
         selectedLabel: '@Translation.GetForJS("vald")',
+        noResultLabel: '@Translation.GetForJS("Inga resultat matchar")',
 
         fileNameError: '@Translation.GetForJS("Filnamn är inte giltigt. Special tecken (!@#=$&?*) är inte tillåtna")',
 
@@ -280,7 +283,7 @@
                         {
                             <input type="hidden" name="ParentId" value="@Model.ParentCaseInfo.ParentId" />
                             <div class="alert alert-info">
-                                @Translation.Get("Detta är ett underärende till ärende")&nbsp;<a href="@Url.Action("Edit", new { id = Model.ParentCaseInfo.ParentId })"><strong>@Model.ParentCaseInfo.CaseNumber</strong></a>.
+                                @Translation.GetCoreTextTranslation("Detta är ett underärende till ärende")&nbsp;<a href="@Url.Action("Edit", new { id = Model.ParentCaseInfo.ParentId })"><strong>@Model.ParentCaseInfo.CaseNumber</strong></a>.
                                 @if (!string.IsNullOrEmpty(Model.ParentCaseInfo.Administrator))
                                 {
                                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Model.case_.Customer_Id)
@@ -291,8 +294,12 @@
 
                         @if (Model.customerUserSetting.UserInfoPermission == 1)
                         {
-                            <div style="@Model.displayUserInfoHtml()" class="notifier-block hideshow">
-                                <h4><a href="#" class="showbtn"><i class="icon-plus-sign"></i></a><a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a> @Translation.Get("Anmälare")</h4>
+                            <div style="@Model.displayUserInfoHtml()" class="section-block @Model.getSectionClass(CaseSectionType.Initiator)">
+                            <h4>
+                                <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
+                                <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                                @Model.getSectionHeader(CaseSectionType.Initiator, CaseSections.InitiatorHeader) @Model.getSectionHeaderFields(CaseSectionType.Initiator)
+                            </h4>
                                 <div class="row">
                                     <div class="span12">
                                         <table class="tableform">
@@ -303,7 +310,7 @@
                                                     <th class="span5"></th>
                                                 </tr>
                                             </thead>
-                                            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">
+                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">
                                                 <td>
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ReportedBy, "Användar ID")
                                                 </td>
@@ -351,12 +358,12 @@
                                                         {
                                                             @Html.Partial("ModalDialogs/_CaseAddFollowers", Model.FollowersModel)
                                                             <a href="#case_add_followers_btn" role="button" class="btn case-usersearch-btn" data-src="case" data-toggle="modal">@Translation.GetCoreTextTranslation("Välj följare")</a>
-                                                            <div id="fakeCaseFollowerUsersInput" contenteditable="true" class="case-send-emails-div case-usersearch-textarea"></div>
+                                                            <div id="fakeCaseFollowerUsersInput" contenteditable="true" class="case-send-emails-div case-usersearch-textarea @Model.getSearchEmailClass(CaseSectionType.Initiator)"></div>
                                                         }
                                                         else
                                                         {
                                                             <a href="#case_add_followers_btn" role="button" class="btn case-usersearch-btn disabled" disabled="true" data-toggle="modal">@Translation.GetCoreTextTranslation("Välj följare")</a>
-                                                            <div id="fakeCaseFollowerUsersInput" contenteditable="false" class="case-send-emails-div-readonly case-send-emails-div case-usersearch-textarea"></div>
+                                                            <div id="fakeCaseFollowerUsersInput" contenteditable="false" class="case-send-emails-div-readonly case-send-emails-div case-usersearch-textarea @Model.getSearchEmailClass(CaseSectionType.Initiator)"></div>
                                                         }
                                                     </td>
                                                 }
@@ -596,29 +603,11 @@
                             @Html.HiddenFor(m => Model.case_.RegLanguage_Id);
                         }
 
-                        <div style="@Model.displayAboutUserInfoHtml()" class='@(Model.case_.Id != 0 ? "regarding-block hideshowregarding" : "regarding-block hideshow")'>
+                        <div style="@Model.displayAboutUserInfoHtml()" class="section-block @Model.getSectionClass(CaseSectionType.Regarding)">
                             <h4>
                                 <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
                                 <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
-                                @Translation.Get("Angående") -&nbsp;  @if (Model.case_.IsAbout != null && @Model.case_.IsAbout.ReportedBy != null)
-                                { @Model.case_.IsAbout.ReportedBy }&nbsp;
-                                @if (Model.case_.IsAbout != null && Model.case_.IsAbout.Person_Name != null)
-                                {
-                                    @Model.case_.IsAbout.Person_Name
-                                } &nbsp;
-                                @if (Model.case_.IsAbout != null && Model.case_.IsAbout.Department_Id != null)
-                                {
-                                    var curDep = Model.departments.Where(d => d.Id == Model.case_.IsAbout.Department_Id).SingleOrDefault();
-                                    @(curDep != null ? curDep.DepartmentName : "")
-                                } &nbsp;
-                                @if (Model.case_.IsAbout != null && Model.case_.IsAbout.OU_Id != null)
-                                {
-                                    if (Model.isaboutous != null)
-                                    {
-                                        var curOu = Model.isaboutous.Where(w => w.Id == Model.case_.IsAbout.OU_Id).SingleOrDefault();
-                                        @(curOu != null ? curOu.Name : "")
-                                    }
-                                }
+                                @Model.getSectionHeader(CaseSectionType.Regarding, CaseSections.RegardingHeader) @Model.getSectionHeaderFields(CaseSectionType.Regarding)
                             </h4>
 
                             <div class="row">
@@ -881,8 +870,12 @@
                             </div>
                         </div>
 
-                        <div style="@Model.displayComputerInfoHtml()" class="computer-block hideshow">
-                            <h4><a href="#" class="showbtn"><i class="icon-plus-sign"></i></a><a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a> @Translation.Get("Datorinformation")</h4>
+                        <div style="@Model.displayComputerInfoHtml()" class="section-block @Model.getSectionClass(CaseSectionType.ComputerInfo)">
+                            <h4>
+                                <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
+                                <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                                @Model.getSectionHeader(CaseSectionType.ComputerInfo, CaseSections.ComputerInfoHeader) @Model.getSectionHeaderFields(CaseSectionType.ComputerInfo)
+                            </h4>
                             <div class="row">
                                 <div class="span12">
                                     <table class="tableform">
@@ -944,10 +937,11 @@
                             </div>
                         </div>
 
-                        <div style="@Model.displayCaseInfoHtml()" class="caseinfo-block hideshow">
+                        <div style="@Model.displayCaseInfoHtml()" class="section-block @Model.getSectionClass(CaseSectionType.CaseInfo)">
                             <h4>
                                 <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
-                                <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a> @Translation.Get("Ärendeinformation")
+                                <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                                @Model.getSectionHeader(CaseSectionType.CaseInfo, CaseSections.CaseInfoHeader) @Model.getSectionHeaderFields(CaseSectionType.CaseInfo)
                             </h4>
                             <div class="row">
                                 <div class="span12">
@@ -1599,7 +1593,9 @@
                             if (Model.DynamicCase.ViewMode == 2)
                             {
                                 <div>
-                                    <h4>@Translation.Get("Utökad ärendeinformation", SessionFacade.CurrentLanguageId)</h4>
+                                    <h4>
+                                        @Model.getSectionHeader(CaseSectionType.ExtendedCase, CaseSections.ExtendedCaseHeader)
+                                    </h4>
                                     <div class="span12">
                                         <div id="dh-form-on-case-area">
 
@@ -1610,10 +1606,11 @@
                             }
                         }
 
-                        <div style="@Model.displayCaseManagementInfoHtml()" class="casehandling-block hideshow">
+                        <div style="@Model.displayCaseManagementInfoHtml()" class="section-block @Model.getSectionClass(CaseSectionType.CaseManagement)">
                             <h4>
-                                <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a><a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
-                                @Translation.Get("Ärendehantering")
+                                <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
+                                <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                                @Model.getSectionHeader(CaseSectionType.CaseManagement, CaseSections.CaseManagementHeader) @Model.getSectionHeaderFields(CaseSectionType.CaseManagement)
                             </h4>
                             <div class="row">
                                 <div class="span12">
@@ -2125,48 +2122,52 @@
 
                         @if (Model.case_.FinishingDate.HasValue)
                         {
-                            <h4>
-                                @Translation.Get("Status")
-                            </h4>
-                            <div class="row">
-                                <div class="span12">
-                                    <table class="tableform">
-                                        <thead>
-                                            <tr>
-                                                <th class="span3"></th>
-                                                <th class="span4"></th>
-                                                <th class="span5"></th>
+                            <div class="section-block @Model.getSectionClass(CaseSectionType.Status)">
+                                <h4>
+                                    <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
+                                    <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                                    @Model.getSectionHeader(CaseSectionType.Status, CaseSections.StatusHeader) @Model.getSectionHeaderFields(CaseSectionType.Status)
+                                </h4>
+                                <div class="row">
+                                    <div class="span12">
+                                        <table class="tableform">
+                                            <thead>
+                                                <tr>
+                                                    <th class="span3"></th>
+                                                    <th class="span4"></th>
+                                                    <th class="span5"></th>
+                                                </tr>
+                                            </thead>
+                                            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)">
+                                                <td>
+                                                    @Translation.Get("Avslutsorsak", SessionFacade.CurrentLanguageId)
+                                                </td>
+                                                <td>
+                                                    @Model.FinishingCause
+                                                </td>
+                                                <td></td>
                                             </tr>
-                                        </thead>
-                                        <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)">
-                                            <td>
-                                                @Translation.Get("Avslutsorsak", SessionFacade.CurrentLanguageId)
-                                            </td>
-                                            <td>
-                                                @Model.FinishingCause
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                        <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)">
-                                            <td>
-                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDate, "Avslutsdatum")
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(m => m.case_.FinishingDate.Value, "DateLocalTZ")
-                                                @Html.HiddenFor(m => m.case_.FinishingDate.HasValue)
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                        <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription)">
-                                            <td>
-                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription, "Avslutsbeskrivning")
-                                            </td>
-                                            <td>
-                                                @Model.case_.FinishingDescription
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                    </table>
+                                            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)">
+                                                <td>
+                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDate, "Avslutsdatum")
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => m.case_.FinishingDate.Value, "DateLocalTZ")
+                                                    @Html.HiddenFor(m => m.case_.FinishingDate.HasValue)
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription)">
+                                                <td>
+                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription, "Avslutsbeskrivning")
+                                                </td>
+                                                <td>
+                                                    @Model.case_.FinishingDescription
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         }
@@ -2174,13 +2175,15 @@
                         {
                             if (Model.CaseLock == null || (Model.CaseLock != null && !Model.CaseLock.IsLocked))
                             {
-                                @Html.Partial("_CaseLogInput", Model)
+                                <div class="section-block @Model.getSectionClass(CaseSectionType.Communication)">
+                                    @Html.Partial("_CaseLogInput", Model)
+                                </div>
                             }
                             if (Model.CustomerSettings.ModuleInvoice == true)
                             {
                                 <div id="divExternalInvoice" style="@Model.ShowExternalInvoiceFields.displayHtml()">
                                     <h4>
-                                        @Translation.GetCoreTextTranslation("Fakturor")
+                                        @Model.getSectionHeader(CaseSectionType.Invoices, CaseSections.InvoicesHeader)
                                     </h4>
                                     <div class="row">
                                         <div class="span12">

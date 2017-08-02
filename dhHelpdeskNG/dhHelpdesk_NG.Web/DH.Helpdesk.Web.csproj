@@ -91,8 +91,9 @@
       <HintPath>..\packages\EPPlus.4.0.2\lib\net20\EPPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="itextsharp">
+    <Reference Include="itextsharp, Version=4.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca">
       <HintPath>..\packages\iTextSharp.4.1.2\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
@@ -1974,6 +1975,7 @@
     <Compile Include="Infrastructure\UrlHelpers\Mvc\Invoices\MvcOrdersUrlName.Overview.cs" />
     <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\MultiText.cshtml" />
     <Content Include="Areas\Admin\Views\QuickLink\_QuickLinksRows.cshtml" />
+    <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\_HeaderDialog.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />

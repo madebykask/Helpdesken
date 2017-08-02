@@ -13,23 +13,35 @@ GO
 ALTER TABLE tblCaseSolutionCondition
 ALTER COLUMN [Values] nvarchar(4000)
 
+IF EXISTS (SELECT * FROM sysobjects WHERE name='tblCaseSolutionConditionProperties' AND xtype='U')
+begin
+	DROP TABLE tblCaseSolutionConditionProperties
+end
+GO
+
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblCaseSolutionConditionProperties' AND xtype='U')
-	BEGIN
+BEGIN
+	
+	CREATE TABLE [dbo].[tblCaseSolutionConditionProperties](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[CaseSolutionConditionProperty] [nvarchar](100) NULL,
+	[Text] [nvarchar](400) NULL,
+	[Table] [nvarchar](100) NULL,
+	[TableFieldId] [nvarchar](100) NULL,
+	[TableFieldName] [nvarchar](100) NULL,
+	[TableFieldGuid] [nvarchar](100) NULL,
+	[TableParentId] [nvarchar](100) NULL,
+	[SortOrder] [int] NULL,
+	[Status] [int] NULL,
+	 CONSTRAINT [PK_tblCaseSolutionConditionProperties] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
 
-		CREATE TABLE [dbo].[tblCaseSolutionConditionProperties](
-			[Id] [int] IDENTITY(1,1) NOT NULL,
-			[CaseSolutionConditionProperty] [nvarchar](100) NULL,
-			[Text] [nvarchar](400) NULL,
-			[Table] [nvarchar](100) NULL,
-			[TableFieldId] [nvarchar](100) NULL,
-			[TableFieldName] [nvarchar](100) NULL,
-			[TableFieldGuid] [nvarchar](100) NULL,
-		 CONSTRAINT [PK_tblCaseSolutionConditionProperties] PRIMARY KEY CLUSTERED 
-		(
-			[Id] ASC
-		)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-		) ON [PRIMARY]
+	ALTER TABLE [dbo].[tblCaseSolutionConditionProperties] ADD  CONSTRAINT [DF_tblCaseSolutionConditionProperties_SortOrder]  DEFAULT ((0)) FOR [SortOrder]
 
+	ALTER TABLE [dbo].[tblCaseSolutionConditionProperties] ADD  CONSTRAINT [DF_tblCaseSolutionConditionProperties_Status]  DEFAULT ((1)) FOR [Status]
 END
 
 
@@ -40,14 +52,16 @@ END
            ,[Table]
            ,[TableFieldId]
            ,[TableFieldName]
-           ,[TableFieldGuid])
+           ,[TableFieldGuid]
+		   ,[SortOrder])
      VALUES
            ('case_StateSecondary.StateSecondaryGUID',
 			'Ärende - Understatus',
-			'dbo.tblStateSecondary',
+			'tblStateSecondary',
 			'Id',
 			'StateSecondary',
-			'StateSecondaryGUID')
+			'StateSecondaryGUID',
+			0)
 
 
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
@@ -56,14 +70,16 @@ END
            ,[Table]
            ,[TableFieldId]
            ,[TableFieldName]
-           ,[TableFieldGuid])
+           ,[TableFieldGuid]
+		   ,[SortOrder])
      VALUES
            ('case_WorkingGroup.WorkingGroupGUID',
 			'Ärende - Driftgrupp',
-			'dbo.tblWorkingGroup',
+			'tblWorkingGroup',
 			'Id',
 			'WorkingGroup',
-			'WorkingGroupGUID')
+			'WorkingGroupGUID',
+			1)
 
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
            ([CaseSolutionConditionProperty]
@@ -71,14 +87,16 @@ END
            ,[Table]
            ,[TableFieldId]
            ,[TableFieldName]
-           ,[TableFieldGuid])
+           ,[TableFieldGuid]
+		   ,[SortOrder])
      VALUES
            ('case_Priority.PriorityGUID',
 			'Ärende - Prioritet',
-			'dbo.tblPriority',
+			'tblPriority',
 			'Id',
 			'PriorityName',
-			'PriorityGUID')
+			'PriorityGUID',
+			2)
 
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
            ([CaseSolutionConditionProperty]
@@ -86,14 +104,17 @@ END
            ,[Table]
            ,[TableFieldId]
            ,[TableFieldName]
-           ,[TableFieldGuid])
+           ,[TableFieldGuid]
+		   ,[SortOrder])
+		   
      VALUES
            ('case_Status.StatusGUID',
 			'Ärende - Status',
-			'dbo.tblStatus',
+			'tblStatus',
 			'Id',
 			'StatusName',
-			'StatusGUID')
+			'StatusGUID'
+			,3)
 
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
            ([CaseSolutionConditionProperty]
@@ -101,15 +122,18 @@ END
            ,[Table]
            ,[TableFieldId]
            ,[TableFieldName]
-           ,[TableFieldGuid])
+           ,[TableFieldGuid]
+		   ,[SortOrder]
+		   ,[TableParentId])
      VALUES
            ('case_ProductArea.ProductAreaGUID',
 			'Ärende - Produktområde',
-			'dbo.tblProductArea',
+			'tblProductArea',
 			'Id',
 			'ProductArea',
-			'ProductAreaGUID')
-
+			'ProductAreaGUID'
+			,4
+			,'Parent_ProductArea_Id')
 
 
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
@@ -118,14 +142,17 @@ END
            ,[Table]
            ,[TableFieldId]
            ,[TableFieldName]
-           ,[TableFieldGuid])
+           ,[TableFieldGuid]
+		   ,[SortOrder])
      VALUES
-           ('user_workinggroup',
+           ('user_WorkingGroup.WorkingGroupGUID',
 			'Användare - Driftgrupp',
-			'dbo.tblWorkingGroup',
+			'tblWorkingGroup',
 			'Id',
 			'WorkingGroup',
-			'WorkingGroupGUID')
+			'WorkingGroupGUID'
+			,5
+			)
 
 
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
@@ -134,14 +161,40 @@ END
            ,[Table]
            ,[TableFieldId]
            ,[TableFieldName]
-           ,[TableFieldGuid])
+           ,[TableFieldGuid]
+		   ,[SortOrder]
+		   ,[TableParentId])
      VALUES
            ('casesolution_ProductArea.ProductAreaGUID',
 			'Ärendemall - Produktområde',
-			'dbo.tblProductArea',
+			'tblProductArea',
 			'Id',
 			'ProductArea',
-			'ProductAreaGUID')
+			'ProductAreaGUID',
+			6,
+			'Parent_ProductArea_Id')
+
+
+	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
+           ([CaseSolutionConditionProperty]
+           ,[Text]
+           ,[Table]
+           ,[TableFieldId]
+           ,[TableFieldName]
+           ,[TableFieldGuid]
+		   ,[SortOrder])
+     VALUES
+           ('application_type',
+			'Applikation',
+			'tblApplicationType',
+			'Id',
+			'ApplicationType',
+			'Id',
+			7)
+
+
+update tblCaseSolutionCondition set property_name =  'user_WorkingGroup.WorkingGroupGUID' where property_name = 'user_WorkingGroup'
+delete from tblCaseSolutionCondition where [Values] = 'null'
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IconSrc' and sysobjects.name = N'tblQuestionnaireQuestionOption')
 	ALTER TABLE [dbo].[tblQuestionnaireQuestionOption] ADD [IconSrc] varbinary(2048) null
@@ -155,6 +208,121 @@ GO
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'GroupCaseTemplates' and sysobjects.name = N'tblCustomer')
    ALTER TABLE tblCustomer ADD GroupCaseTemplates int NOT NULL Default(0)
 GO
+
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='tblApplicationType' AND xtype='U')
+begin
+	DROP TABLE tblApplicationType
+end
+GO
+
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblApplicationType' AND xtype='U')
+	BEGIN
+
+		CREATE TABLE [dbo].[tblApplicationType](
+			[Id] [int] NULL,
+			[ApplicationType] [nvarchar](50) NULL,
+			[ApplicationTypeGUID] [uniqueidentifier] NULL,
+			[Customer_Id] [int] NULL
+		) ON [PRIMARY]
+
+
+		ALTER TABLE [dbo].[tblApplicationType] ADD  CONSTRAINT [DF_tblApplicationType_ApplicationTypeGUID]  DEFAULT (newid()) FOR [ApplicationTypeGUID]
+
+	END
+
+
+	TRUNCATE TABLE [dbo].[tblApplicationType]
+	INSERT INTO [dbo].[tblApplicationType]
+           ([Id]
+           ,[ApplicationType]
+		   )
+     VALUES
+           (1,
+			'Helpdesk'
+			)
+
+	INSERT INTO [dbo].[tblApplicationType]
+           ([Id]
+           ,[ApplicationType]
+		   )
+     VALUES
+           (2,
+			'Selfservice'
+			)
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IconSrc' and sysobjects.name = N'tblQuestionnaireQuestionOption')
+	ALTER TABLE [dbo].[tblQuestionnaireQuestionOption] ADD [IconSrc] varbinary(2048) null
+GO
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseSections')
+begin
+CREATE TABLE [dbo].[tblCaseSections](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Customer_Id] [int] NOT NULL,
+	[SectionType] [int] NOT NULL,
+	[IsNewCollapsed] [bit] NOT NULL DEFAULT (0),
+	[IsEditCollapsed] [bit] NOT NULL DEFAULT (0),
+	[CreatedDate] [datetime] NOT NULL CONSTRAINT [DF_tblCaseSections_CreatedDate]  DEFAULT (getdate()),
+	[UpdatedDate] [datetime] NULL,
+ CONSTRAINT [PK_tblCaseSections] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+ALTER TABLE [dbo].[tblCaseSections] ADD  CONSTRAINT [FK_tblCaseSections_tblCustomer] FOREIGN KEY([Customer_Id])
+REFERENCES [dbo].[tblCustomer] ([Id])
+
+END
+GO
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseSectionFields')
+begin
+CREATE TABLE [dbo].[tblCaseSectionFields](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[CaseSection_Id] [int] NOT NULL,
+	[CaseFieldSetting_Id] [int] NOT NULL,
+ CONSTRAINT [PK_tblCaseSectionFields] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+ALTER TABLE [dbo].[tblCaseSectionFields] ADD  CONSTRAINT [FK_tblCaseSectionFields_tblCaseSections] FOREIGN KEY([CaseSection_Id])
+REFERENCES [dbo].[tblCaseSections] ([Id])
+
+ALTER TABLE [dbo].[tblCaseSectionFields] ADD  CONSTRAINT [FK_tblCaseSectionFields_tblCaseFieldSettings] FOREIGN KEY([CaseFieldSetting_Id])
+REFERENCES [dbo].[tblCaseFieldSettings] ([Id])
+
+END
+GO
+
+
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseSections_tblLang')
+begin
+CREATE TABLE [dbo].[tblCaseSections_tblLang](
+	[CaseSection_Id] [int] NOT NULL,
+	[Language_Id] [int] NOT NULL,
+	[Label] [nvarchar](50) NULL
+ CONSTRAINT [PK_tblCaseSections_tblLang] PRIMARY KEY CLUSTERED 
+(
+	[CaseSection_Id] ASC,
+	[Language_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+ALTER TABLE [dbo].[tblCaseSections_tblLang] ADD  CONSTRAINT [FK_tblCaseSections_tblLang_tblCaseSections] FOREIGN KEY([CaseSection_Id])
+REFERENCES [dbo].[tblCaseSections] ([Id])
+
+ALTER TABLE [dbo].[tblCaseSections_tblLang] ADD  CONSTRAINT [FK_tblCaseSections_tblLang_tblLanguage] FOREIGN KEY([Language_Id])
+REFERENCES [dbo].[tblLanguage] ([Id])
+
+END
+GO
+
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.33'

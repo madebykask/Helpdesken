@@ -78,7 +78,9 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             sqlExt += "[Table] AS[Table],  ";
             sqlExt += "[TableFieldId] AS[TableFieldId],  ";
             sqlExt += "[TableFieldName] AS[TableFieldName],  ";
-            sqlExt += "[TableFieldGuid] AS[TableFieldGuid] ";
+            sqlExt += "[TableFieldGuid] AS[TableFieldGuid], ";
+            sqlExt += "[TableParentId] AS[TableParentId], ";
+            sqlExt += "[tblCaseSolutionConditionProperties].SortOrder AS SortOrder ";
             sqlExt += "FROM[dbo].[tblCaseSolutionCondition] ";
             sqlExt += "INNER JOIN[dbo].[tblCaseSolutionConditionProperties] ";
             sqlExt += "ON[Property_Name] = [CaseSolutionConditionProperty] ";
@@ -95,13 +97,16 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             sqlExt += "[Table],  ";
             sqlExt += "TableFieldId,  ";
             sqlExt += "TableFieldName,  ";
-            sqlExt += "TableFieldGuid ";
-            sqlExt += "FROM            dbo.tblCaseSolutionConditionProperties ";
+            sqlExt += "TableFieldGuid, ";
+            sqlExt += "TableParentId, ";
+            sqlExt += " [tblCaseSolutionConditionProperties].SortOrder AS SortOrder ";
+            sqlExt += "FROM dbo.tblCaseSolutionConditionProperties ";
             sqlExt += "WHERE tblCaseSolutionConditionProperties.Id NOT IN(SELECT ";
             sqlExt += "[dbo].[tblCaseSolutionConditionProperties].[Id] ";
             sqlExt += "FROM  [dbo].[tblCaseSolutionCondition] ";
             sqlExt += "INNER JOIN [dbo].[tblCaseSolutionConditionProperties] ON[Property_Name] = [CaseSolutionConditionProperty] ";
             sqlExt += "WHERE[CaseSolution_Id] = " + casesolutionid + ") ";
+            sqlExt += " ORDER BY SortOrder ";
 
             string ConnectionStringExt = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
             DataTable dtExt = null;
@@ -162,6 +167,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 string tablefieldid = rowExt["TableFieldId"].ToString();
                 string tablefieldname = rowExt["TableFieldName"].ToString();
                 string tablefieldguid = rowExt["TableFieldGuid"].ToString();
+                string tableParentId = rowExt["TableParentId"].ToString();
 
                 string selvals = string.Empty;
                 foreach (var it in c.SelectedValues)
@@ -183,42 +189,63 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 if (c.SelectedValues.Count > 0)
                 {
                     sql = "SELECT ";
-                    sql += "" + tablefieldid + " AS Id, ";
-                    sql += "" + tablefieldname + " AS Name, ";
+                    sql += "[" + tablefieldid + "] AS Id, ";
+                    if (string.IsNullOrEmpty(tableParentId))
+                    {
+                        sql += "[" + tablefieldname + "] AS Name, ";
+                        
+                    }
+                    else
+                    {
+                        sql += "isnull(dbo.GetHierarchy(" + tablefieldid + ", '" + tablename + "'), '') AS Name, ";
+                    }
                     sql += "" + tablefieldguid + " AS Guid, ";
                     sql += "cast(0 as bit) AS [Selected] ";
                     sql += "FROM " + tablename + " ";
                     sql += "AS [Extent1] ";
                     sql += "WHERE  NOT((LOWER( CAST( [Extent1]. " + tablefieldguid + " AS nvarchar(max)))  ";
                     sql += "IN(" + selvals + ")) ";
-                    sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL)) AND (Customer_Id= " + customerid + ") ";
+                    sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL)) AND (Customer_Id is null or Customer_Id= " + customerid + ") ";
 
                     sql += " UNION ";
 
                     sql += "SELECT ";
-                    sql += "" + tablefieldid + " AS Id, ";
-                    sql += "" + tablefieldname + " AS Name,  ";
+                    sql += "[" + tablefieldid + "] AS Id, ";
+                    if (string.IsNullOrEmpty(tableParentId))
+                    {
+                        sql += "[" + tablefieldname + "] AS Name, ";
+
+                    }
+                    else
+                    {
+                        sql += "isnull(dbo.GetHierarchy(" + tablefieldid + ", '" + tablename + "'), '') AS Name, ";
+                    }
                     sql += "" + tablefieldguid + " AS Guid, ";
                     sql += "cast(1 as bit) AS [Selected] ";
                     sql += "FROM " + tablename + " ";
                     sql += "AS[Extent1] ";
                     sql += "WHERE(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) ";
                     sql += "IN(" + selvals + ")) ";
-                    sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL) AND (Customer_Id= " + customerid + ") ";
-                    sql += " ORDER BY " + tablefieldname + "";
+                    sql += "AND(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) IS NOT NULL) AND (Customer_Id is null or Customer_Id= " + customerid + ") ";
+                    sql += " ORDER BY Name";
                 }
                 else
                 {
-
-
                     sql = "SELECT ";
-                    sql += "" + tablefieldid + " AS Id, ";
-                    sql += "" + tablefieldname + " AS Name, ";
+                    sql += "[" + tablefieldid + "] AS Id, ";
+                    if (string.IsNullOrEmpty(tableParentId))
+                    {
+                        sql += "[" + tablefieldname + "] AS Name, ";
+                    }
+                    else
+                    {
+                        sql += "isnull(dbo.GetHierarchy(" + tablefieldid + ", '" + tablename + "'), '') AS Name, ";
+                    }
                     sql += "" + tablefieldguid + " AS Guid, ";
                     sql += "cast(0 as bit) AS [Selected] ";
                     sql += "FROM " + tablename + " ";
-                    sql += "AS [Extent1] WHERE (Customer_Id= " + customerid + ")";
-                    sql += " ORDER BY " + tablefieldname + "";
+                    sql += "AS [Extent1] WHERE (Customer_Id is null or Customer_Id= " + customerid + ")"; //
+                    sql += " ORDER BY Name";
                 }
 
 
@@ -238,7 +265,6 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         var reader = command.ExecuteReader();
                         dt = new DataTable();
                         dt.Load(reader);
-
                     }
                 }
 
@@ -595,28 +621,30 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             string sql = string.Empty;
             int istatus = 1;
 
-            sql = "IF EXISTS (SELECT Id FROM tblCaseSolutionCondition WHERE Property_Name = '" + model.Property_Name + "' AND CaseSolution_Id= " + model.CaseSolution_Id + ") BEGIN ";
-            sql += "UPDATE tblCaseSolutionCondition SET [Values]='" + model.Values + "' WHERE Property_Name = '" + model.Property_Name + "' AND CaseSolution_Id = " + model.CaseSolution_Id + " END ";
-            sql += " ELSE BEGIN INSERT INTO tblCaseSolutionCondition (CaseSolution_Id, Property_Name, [Values], Status) ";
-            sql += " VALUES ( " + model.CaseSolution_Id + ", '" + model.Property_Name + "', '" + model.Values + "', " + istatus + " ) END";
+                sql = "IF EXISTS (SELECT Id FROM tblCaseSolutionCondition WHERE Property_Name = '" + model.Property_Name + "' AND CaseSolution_Id= " + model.CaseSolution_Id + ") BEGIN ";
+                sql += "UPDATE tblCaseSolutionCondition SET [Values]='" + model.Values + "' WHERE Property_Name = '" + model.Property_Name + "' AND CaseSolution_Id = " + model.CaseSolution_Id + " END ";
+                sql += " ELSE BEGIN INSERT INTO tblCaseSolutionCondition (CaseSolution_Id, Property_Name, [Values], Status) ";
+                sql += " VALUES ( " + model.CaseSolution_Id + ", '" + model.Property_Name + "', '" + model.Values + "', " + istatus + " ) END;";
+                //TEMP
+                sql += "delete from tblCaseSolutionCondition where[Values] = 'null' ";
 
+                string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
 
-
-            string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
-
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
-            {
-                using (SqlCommand cmd = new SqlCommand { Connection = connection, CommandType = CommandType.Text })
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    cmd.CommandText = sql;
-                    if (connection.State == ConnectionState.Closed)
+                    using (SqlCommand cmd = new SqlCommand { Connection = connection, CommandType = CommandType.Text })
                     {
-                        connection.Open();
-                    }
-                    cmd.ExecuteNonQuery();
+                        cmd.CommandText = sql;
+                        if (connection.State == ConnectionState.Closed)
+                        {
+                            connection.Open();
+                        }
+                        cmd.ExecuteNonQuery();
 
+                    }
                 }
-            }
+
+           
         }
 
         public IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid)
@@ -633,354 +661,354 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
 
 
-        public IList<CaseSolutionCondition> GetCaseSolutionConditionModel(int casesolutionid, int customerid, string constString)
-        {
-            //string constString = "case_WorkingGroup.WorkingGroupGUID";
-
-            List<CaseSolutionConditionEntity> clist = this.DataContext.CaseSolutionsConditions.Where(z => z.Property_Name == constString && z.CaseSolution_Id == casesolutionid && z.Status == 1).ToList();
-            List<CaseSolutionCondition> selected = new List<CaseSolutionCondition>();
+        //public IList<CaseSolutionCondition> GetCaseSolutionConditionModel(int casesolutionid, int customerid, string constString)
+        //{
+        //    //string constString = "case_WorkingGroup.WorkingGroupGUID";
+
+        //    List<CaseSolutionConditionEntity> clist = this.DataContext.CaseSolutionsConditions.Where(z => z.Property_Name == constString && z.CaseSolution_Id == casesolutionid && z.Status == 1).ToList();
+        //    List<CaseSolutionCondition> selected = new List<CaseSolutionCondition>();
 
-            int i = -1;
-            if (clist != null)
-            {
-                if (clist.Count > 0)
-                {
-                    int count = 0;
-
-                    //Count characters
-                    foreach (CaseSolutionConditionEntity ccount in clist)
-                    {
-                        count = count + ccount.Values.Count(f => f == ',') + 1;
-                    }
-
-
-                    string[] wordsFinal = new string[count];
-                    foreach (CaseSolutionConditionEntity c in clist)
-                    {
-                        string[] words = null;
-                        words = c.Values.Split(',');
-
-
-                        foreach (string s in words)
-                        {
-
-                            i = i + 1;
+        //    int i = -1;
+        //    if (clist != null)
+        //    {
+        //        if (clist.Count > 0)
+        //        {
+        //            int count = 0;
+
+        //            //Count characters
+        //            foreach (CaseSolutionConditionEntity ccount in clist)
+        //            {
+        //                count = count + ccount.Values.Count(f => f == ',') + 1;
+        //            }
+
+
+        //            string[] wordsFinal = new string[count];
+        //            foreach (CaseSolutionConditionEntity c in clist)
+        //            {
+        //                string[] words = null;
+        //                words = c.Values.Split(',');
+
+
+        //                foreach (string s in words)
+        //                {
+
+        //                    i = i + 1;
 
-                            wordsFinal[i] = s;
+        //                    wordsFinal[i] = s;
 
-                        }
-                    }
-
-
-                    //Not guids                  
-                    List<string> uids = new List<string>(wordsFinal);
-
-                    foreach (string s in uids)
-                    {
-                        Guid guidOutput;
-
-                        bool isValid = Guid.TryParse(s.ToString(), out guidOutput);
-
-                        if (isValid == false)
-                        {
-                            CaseSolutionCondition ss = new CaseSolutionCondition
-                            {
-
-                                Customer_Id = customerid,
-                                Id = 0,
-                                IsSelected = 1,
-                                Name = "[" + s + "]",
-                                StateSecondaryGUID = s.ToString()
-
-                            };
-                            selected.Add(ss);
-
-                        }
-                    }
-
-                    if (constString == "case_WorkingGroup.WorkingGroupGUID")
-                    {
-                        var tlist = from xx in this.DataContext.WorkingGroups
-                                    where xx.Customer_Id == customerid && uids.Contains(xx.WorkingGroupGUID.ToString())
-                                    select (xx);
-
-                        foreach (var c in tlist)
-                        {
-                            CaseSolutionCondition ss = new CaseSolutionCondition
-                            {
-
-                                Customer_Id = c.Customer_Id,
-                                Id = c.Id,
-                                IsSelected = 1,
-                                Name = c.WorkingGroupName,
-                                StateSecondaryGUID = c.WorkingGroupGUID.ToString()
-
-                            };
-
-                            selected.Add(ss);
-                        }
-                    }
-                    else if (constString == "case_StateSecondary.StateSecondaryGUID")
-                    {
-                        var tlist = from xx in this.DataContext.StateSecondaries
-                                    where xx.Customer_Id == customerid && uids.Contains(xx.StateSecondaryGUID.ToString())
-                                    select (xx);
-
-                        foreach (var c in tlist)
-                        {
-                            CaseSolutionCondition ss = new CaseSolutionCondition
-                            {
-
-                                Customer_Id = c.Customer_Id,
-                                Id = c.Id,
-                                IsSelected = 1,
-                                Name = c.Name,
-                                StateSecondaryGUID = c.StateSecondaryGUID.ToString()
-
-                            };
-
-                            selected.Add(ss);
-                        }
-
-                    }
-                    else if (constString == "case_Priority.PriorityGUID")
-                    {
-                        var tlist = from xx in this.DataContext.Priorities
-                                    where xx.Customer_Id == customerid && uids.Contains(xx.PriorityGUID.ToString())
-                                    select (xx);
-
-                        foreach (var c in tlist)
-                        {
-                            CaseSolutionCondition ss = new CaseSolutionCondition
-                            {
-
-                                Customer_Id = c.Customer_Id,
-                                Id = c.Id,
-                                IsSelected = 1,
-                                Name = c.Name,
-                                StateSecondaryGUID = c.PriorityGUID.ToString()
-
-                            };
-
-                            selected.Add(ss);
-                        }
-
-                    }
-
-                    else if (constString == "case_Status.StatusGUID")
-                    {
-                        var tlist = from xx in this.DataContext.Statuses
-                                    where xx.Customer_Id == customerid && uids.Contains(xx.StatusGUID.ToString())
-                                    select (xx);
-
-                        foreach (var c in tlist)
-                        {
-                            CaseSolutionCondition ss = new CaseSolutionCondition
-                            {
-
-                                Customer_Id = c.Customer_Id,
-                                Id = c.Id,
-                                IsSelected = 1,
-                                Name = c.Name,
-                                StateSecondaryGUID = c.StatusGUID.ToString()
-
-                            };
-
-                            selected.Add(ss);
-                        }
-
-                    }
-                    else if (constString == "user_WorkingGroup.WorkingGroupGUID")
-                    {
-                        var tlist = from xx in this.DataContext.WorkingGroups
-                                    where xx.Customer_Id == customerid && uids.Contains(xx.WorkingGroupGUID.ToString())
-                                    select (xx);
-
-                        foreach (var c in tlist)
-                        {
-                            CaseSolutionCondition ss = new CaseSolutionCondition
-                            {
-
-                                Customer_Id = c.Customer_Id,
-                                Id = c.Id,
-                                IsSelected = 1,
-                                Name = c.WorkingGroupName,
-                                StateSecondaryGUID = c.WorkingGroupGUID.ToString()
-
-                            };
-
-                            selected.Add(ss);
-                        }
-                    }
-                    else if (constString == "case_ProductArea.ProductAreaGUID")
-                    {
-                        var tlist = from xx in this.DataContext.ProductAreas
-                                    where xx.Customer_Id == customerid && uids.Contains(xx.ProductAreaGUID.ToString())
-                                    select (xx);
-
-                        foreach (var c in tlist)
-                        {
-                            CaseSolutionCondition ss = new CaseSolutionCondition
-                            {
-
-                                Customer_Id = c.Customer_Id,
-                                Id = c.Id,
-                                IsSelected = 1,
-                                Name = c.Name,
-                                StateSecondaryGUID = c.ProductAreaGUID.ToString()
-
-                            };
-
-                            selected.Add(ss);
-                        }
-                    }
-                }
-            }
-
-
-
-            if (constString == "case_WorkingGroup.WorkingGroupGUID")
-            {
-                List<WorkingGroupEntity> stfinaList = this.DataContext.WorkingGroups.Where(z => z.Customer_Id == customerid).ToList();
-                foreach (WorkingGroupEntity k in stfinaList)
-                {
-                    bool has = selected.Any(cus => cus.StateSecondaryGUID.ToString() == k.WorkingGroupGUID.ToString());
-                    if (has == false)
-                    {
-                        CaseSolutionCondition ss = new CaseSolutionCondition
-                        {
-                            Customer_Id = k.Customer_Id,
-                            Id = k.Id,
-                            IsSelected = 0,
-                            Name = k.WorkingGroupName,
-                            StateSecondaryGUID = k.WorkingGroupGUID.ToString()
-
-                        };
-
-
-                        selected.Add(ss);
-                    }
-                }
-            }
-            else if (constString == "case_StateSecondary.StateSecondaryGUID")
-            {
-                List<StateSecondary> stfinaList = this.DataContext.StateSecondaries.Where(z => z.Customer_Id == customerid).ToList();
-                foreach (StateSecondary k in stfinaList)
-                {
-                    bool has = selected.Any(cus => cus.StateSecondaryGUID.ToString() == k.StateSecondaryGUID.ToString());
-                    if (has == false)
-                    {
-                        CaseSolutionCondition ss = new CaseSolutionCondition
-                        {
-                            Customer_Id = k.Customer_Id,
-                            Id = k.Id,
-                            IsSelected = 0,
-                            Name = k.Name,
-                            StateSecondaryGUID = k.StateSecondaryGUID.ToString()
-
-                        };
-
-
-                        selected.Add(ss);
-                    }
-                }
-            }
-            else if (constString == "case_Priority.PriorityGUID")
-            {
-                List<Priority> stfinaList = this.DataContext.Priorities.Where(z => z.Customer_Id == customerid).ToList();
-                foreach (Priority k in stfinaList)
-                {
-                    bool has = selected.Any(cus => cus.StateSecondaryGUID.ToString() == k.PriorityGUID.ToString());
-                    if (has == false)
-                    {
-                        CaseSolutionCondition ss = new CaseSolutionCondition
-                        {
-                            Customer_Id = k.Customer_Id,
-                            Id = k.Id,
-                            IsSelected = 0,
-                            Name = k.Name,
-                            StateSecondaryGUID = k.PriorityGUID.ToString()
-
-                        };
-
-
-                        selected.Add(ss);
-                    }
-                }
-            }
-            else if (constString == "case_Status.StatusGUID")
-            {
-                List<Status> stfinaList = this.DataContext.Statuses.Where(z => z.Customer_Id == customerid).ToList();
-                foreach (Status k in stfinaList)
-                {
-                    bool has = selected.Any(cus => cus.StateSecondaryGUID.ToString() == k.StatusGUID.ToString());
-                    if (has == false)
-                    {
-                        CaseSolutionCondition ss = new CaseSolutionCondition
-                        {
-                            Customer_Id = k.Customer_Id,
-                            Id = k.Id,
-                            IsSelected = 0,
-                            Name = k.Name,
-                            StateSecondaryGUID = k.StatusGUID.ToString()
-
-                        };
-
-
-                        selected.Add(ss);
-                    }
-                }
-            }
-            else if (constString == "user_WorkingGroup.WorkingGroupGUID")
-            {
-                List<WorkingGroupEntity> stfinaList = this.DataContext.WorkingGroups.Where(z => z.Customer_Id == customerid).ToList();
-                foreach (WorkingGroupEntity k in stfinaList)
-                {
-                    bool has = selected.Any(cus => cus.StateSecondaryGUID.ToString() == k.WorkingGroupGUID.ToString());
-                    if (has == false)
-                    {
-                        CaseSolutionCondition ss = new CaseSolutionCondition
-                        {
-                            Customer_Id = k.Customer_Id,
-                            Id = k.Id,
-                            IsSelected = 0,
-                            Name = k.WorkingGroupName,
-                            StateSecondaryGUID = k.WorkingGroupGUID.ToString()
-
-                        };
-
-
-                        selected.Add(ss);
-                    }
-                }
-            }
-            else if (constString == "case_ProductArea.ProductAreaGUID")
-            {
-                List<ProductArea> stfinaList = this.DataContext.ProductAreas.Where(z => z.Customer_Id == customerid).ToList();
-                foreach (ProductArea k in stfinaList)
-                {
-                    bool has = selected.Any(cus => cus.StateSecondaryGUID.ToString() == k.ProductAreaGUID.ToString());
-                    if (has == false)
-                    {
-                        CaseSolutionCondition ss = new CaseSolutionCondition
-                        {
-                            Customer_Id = k.Customer_Id,
-                            Id = k.Id,
-                            IsSelected = 0,
-                            Name = k.Name,
-                            StateSecondaryGUID = k.ProductAreaGUID.ToString()
-
-                        };
-
-
-                        selected.Add(ss);
-                    }
-                }
-            }
-            var result = selected.OrderBy(x => x.Id).ThenBy(x => x.Name).ToList();
-
-            return result;
-        }
+        //                }
+        //            }
+
+
+        //            //Not guids                  
+        //            List<string> uids = new List<string>(wordsFinal);
+
+        //            foreach (string s in uids)
+        //            {
+        //                Guid guidOutput;
+
+        //                bool isValid = Guid.TryParse(s.ToString(), out guidOutput);
+
+        //                if (isValid == false)
+        //                {
+        //                    CaseSolutionCondition ss = new CaseSolutionCondition
+        //                    {
+
+        //                        Customer_Id = customerid,
+        //                        Id = 0,
+        //                        IsSelected = 1,
+        //                        Name = "[" + s + "]",
+        //                        StateSecondaryGUID = s.ToString()
+
+        //                    };
+        //                    selected.Add(ss);
+
+        //                }
+        //            }
+
+        //            if (constString == "case_WorkingGroup.WorkingGroupGUID")
+        //            {
+        //                var tlist = from xx in this.DataContext.WorkingGroups
+        //                            where xx.Customer_Id == customerid && uids.Contains(xx.WorkingGroupGUID.ToString())
+        //                            select (xx);
+
+        //                foreach (var c in tlist)
+        //                {
+        //                    CaseSolutionCondition ss = new CaseSolutionCondition
+        //                    {
+
+        //                        Customer_Id = c.Customer_Id,
+        //                        Id = c.Id,
+        //                        IsSelected = 1,
+        //                        Name = c.WorkingGroupName,
+        //                        StateSecondaryGUID = c.WorkingGroupGUID.ToString()
+
+        //                    };
+
+        //                    selected.Add(ss);
+        //                }
+        //            }
+        //            else if (constString == "case_StateSecondary.StateSecondaryGUID")
+        //            {
+        //                var tlist = from xx in this.DataContext.StateSecondaries
+        //                            where xx.Customer_Id == customerid && uids.Contains(xx.StateSecondaryGUID.ToString())
+        //                            select (xx);
+
+        //                foreach (var c in tlist)
+        //                {
+        //                    CaseSolutionCondition ss = new CaseSolutionCondition
+        //                    {
+
+        //                        Customer_Id = c.Customer_Id,
+        //                        Id = c.Id,
+        //                        IsSelected = 1,
+        //                        Name = c.Name,
+        //                        StateSecondaryGUID = c.StateSecondaryGUID.ToString()
+
+        //                    };
+
+        //                    selected.Add(ss);
+        //                }
+
+        //            }
+        //            else if (constString == "case_Priority.PriorityGUID")
+        //            {
+        //                var tlist = from xx in this.DataContext.Priorities
+        //                            where xx.Customer_Id == customerid && uids.Contains(xx.PriorityGUID.ToString())
+        //                            select (xx);
+
+        //                foreach (var c in tlist)
+        //                {
+        //                    CaseSolutionCondition ss = new CaseSolutionCondition
+        //                    {
+
+        //                        Customer_Id = c.Customer_Id,
+        //                        Id = c.Id,
+        //                        IsSelected = 1,
+        //                        Name = c.Name,
+        //                        StateSecondaryGUID = c.PriorityGUID.ToString()
+
+        //                    };
+
+        //                    selected.Add(ss);
+        //                }
+
+        //            }
+
+        //            else if (constString == "case_Status.StatusGUID")
+        //            {
+        //                var tlist = from xx in this.DataContext.Statuses
+        //                            where xx.Customer_Id == customerid && uids.Contains(xx.StatusGUID.ToString())
+        //                            select (xx);
+
+        //                foreach (var c in tlist)
+        //                {
+        //                    CaseSolutionCondition ss = new CaseSolutionCondition
+        //                    {
+
+        //                        Customer_Id = c.Customer_Id,
+        //                        Id = c.Id,
+        //                        IsSelected = 1,
+        //                        Name = c.Name,
+        //                        StateSecondaryGUID = c.StatusGUID.ToString()
+
+        //                    };
+
+        //                    selected.Add(ss);
+        //                }
+
+        //            }
+        //            else if (constString == "user_WorkingGroup.WorkingGroupGUID")
+        //            {
+        //                var tlist = from xx in this.DataContext.WorkingGroups
+        //                            where xx.Customer_Id == customerid && uids.Contains(xx.WorkingGroupGUID.ToString())
+        //                            select (xx);
+
+        //                foreach (var c in tlist)
+        //                {
+        //                    CaseSolutionCondition ss = new CaseSolutionCondition
+        //                    {
+
+        //                        Customer_Id = c.Customer_Id,
+        //                        Id = c.Id,
+        //                        IsSelected = 1,
+        //                        Name = c.WorkingGroupName,
+        //                        StateSecondaryGUID = c.WorkingGroupGUID.ToString()
+
+        //                    };
+
+        //                    selected.Add(ss);
+        //                }
+        //            }
+        //            else if (constString == "case_ProductArea.ProductAreaGUID")
+        //            {
+        //                var tlist = from xx in this.DataContext.ProductAreas
+        //                            where xx.Customer_Id == customerid && uids.Contains(xx.ProductAreaGUID.ToString())
+        //                            select (xx);
+
+        //                foreach (var c in tlist)
+        //                {
+        //                    CaseSolutionCondition ss = new CaseSolutionCondition
+        //                    {
+
+        //                        Customer_Id = c.Customer_Id,
+        //                        Id = c.Id,
+        //                        IsSelected = 1,
+        //                        Name = c.Name,
+        //                        StateSecondaryGUID = c.ProductAreaGUID.ToString()
+
+        //                    };
+
+        //                    selected.Add(ss);
+        //                }
+        //            }
+        //        }
+        //    }
+
+
+
+        //    if (constString == "case_WorkingGroup.WorkingGroupGUID")
+        //    {
+        //        List<WorkingGroupEntity> stfinaList = this.DataContext.WorkingGroups.Where(z => z.Customer_Id == customerid).ToList();
+        //        foreach (WorkingGroupEntity k in stfinaList)
+        //        {
+        //            bool has = selected.Any(cus => cus.StateSecondaryGUID.ToString() == k.WorkingGroupGUID.ToString());
+        //            if (has == false)
+        //            {
+        //                CaseSolutionCondition ss = new CaseSolutionCondition
+        //                {
+        //                    Customer_Id = k.Customer_Id,
+        //                    Id = k.Id,
+        //                    IsSelected = 0,
+        //                    Name = k.WorkingGroupName,
+        //                    StateSecondaryGUID = k.WorkingGroupGUID.ToString()
+
+        //                };
+
+
+        //                selected.Add(ss);
+        //            }
+        //        }
+        //    }
+        //    else if (constString == "case_StateSecondary.StateSecondaryGUID")
+        //    {
+        //        List<StateSecondary> stfinaList = this.DataContext.StateSecondaries.Where(z => z.Customer_Id == customerid).ToList();
+        //        foreach (StateSecondary k in stfinaList)
+        //        {
+        //            bool has = selected.Any(cus => cus.StateSecondaryGUID.ToString() == k.StateSecondaryGUID.ToString());
+        //            if (has == false)
+        //            {
+        //                CaseSolutionCondition ss = new CaseSolutionCondition
+        //                {
+        //                    Customer_Id = k.Customer_Id,
+        //                    Id = k.Id,
+        //                    IsSelected = 0,
+        //                    Name = k.Name,
+        //                    StateSecondaryGUID = k.StateSecondaryGUID.ToString()
+
+        //                };
+
+
+        //                selected.Add(ss);
+        //            }
+        //        }
+        //    }
+        //    else if (constString == "case_Priority.PriorityGUID")
+        //    {
+        //        List<Priority> stfinaList = this.DataContext.Priorities.Where(z => z.Customer_Id == customerid).ToList();
+        //        foreach (Priority k in stfinaList)
+        //        {
+        //            bool has = selected.Any(cus => cus.StateSecondaryGUID.ToString() == k.PriorityGUID.ToString());
+        //            if (has == false)
+        //            {
+        //                CaseSolutionCondition ss = new CaseSolutionCondition
+        //                {
+        //                    Customer_Id = k.Customer_Id,
+        //                    Id = k.Id,
+        //                    IsSelected = 0,
+        //                    Name = k.Name,
+        //                    StateSecondaryGUID = k.PriorityGUID.ToString()
+
+        //                };
+
+
+        //                selected.Add(ss);
+        //            }
+        //        }
+        //    }
+        //    else if (constString == "case_Status.StatusGUID")
+        //    {
+        //        List<Status> stfinaList = this.DataContext.Statuses.Where(z => z.Customer_Id == customerid).ToList();
+        //        foreach (Status k in stfinaList)
+        //        {
+        //            bool has = selected.Any(cus => cus.StateSecondaryGUID.ToString() == k.StatusGUID.ToString());
+        //            if (has == false)
+        //            {
+        //                CaseSolutionCondition ss = new CaseSolutionCondition
+        //                {
+        //                    Customer_Id = k.Customer_Id,
+        //                    Id = k.Id,
+        //                    IsSelected = 0,
+        //                    Name = k.Name,
+        //                    StateSecondaryGUID = k.StatusGUID.ToString()
+
+        //                };
+
+
+        //                selected.Add(ss);
+        //            }
+        //        }
+        //    }
+        //    else if (constString == "user_WorkingGroup.WorkingGroupGUID")
+        //    {
+        //        List<WorkingGroupEntity> stfinaList = this.DataContext.WorkingGroups.Where(z => z.Customer_Id == customerid).ToList();
+        //        foreach (WorkingGroupEntity k in stfinaList)
+        //        {
+        //            bool has = selected.Any(cus => cus.StateSecondaryGUID.ToString() == k.WorkingGroupGUID.ToString());
+        //            if (has == false)
+        //            {
+        //                CaseSolutionCondition ss = new CaseSolutionCondition
+        //                {
+        //                    Customer_Id = k.Customer_Id,
+        //                    Id = k.Id,
+        //                    IsSelected = 0,
+        //                    Name = k.WorkingGroupName,
+        //                    StateSecondaryGUID = k.WorkingGroupGUID.ToString()
+
+        //                };
+
+
+        //                selected.Add(ss);
+        //            }
+        //        }
+        //    }
+        //    else if (constString == "case_ProductArea.ProductAreaGUID")
+        //    {
+        //        List<ProductArea> stfinaList = this.DataContext.ProductAreas.Where(z => z.Customer_Id == customerid).ToList();
+        //        foreach (ProductArea k in stfinaList)
+        //        {
+        //            bool has = selected.Any(cus => cus.StateSecondaryGUID.ToString() == k.ProductAreaGUID.ToString());
+        //            if (has == false)
+        //            {
+        //                CaseSolutionCondition ss = new CaseSolutionCondition
+        //                {
+        //                    Customer_Id = k.Customer_Id,
+        //                    Id = k.Id,
+        //                    IsSelected = 0,
+        //                    Name = k.Name,
+        //                    StateSecondaryGUID = k.ProductAreaGUID.ToString()
+
+        //                };
+
+
+        //                selected.Add(ss);
+        //            }
+        //        }
+        //    }
+        //    var result = selected.OrderBy(x => x.Id).ThenBy(x => x.Name).ToList();
+
+        //    return result;
+        //}
 
 
 
