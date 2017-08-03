@@ -859,7 +859,11 @@ namespace DH.Helpdesk.Web.Controllers
                 string ShortDescription = Convert.ToString(collection["CaseSolution.ShortDescription"].ToString());
                 caseSolutionInputViewModel.CaseSolution.ShortDescription = ShortDescription;
             }
-
+            if (collection["CaseSolution.CaseSolutionDescription"].ToString().Trim() != string.Empty)
+            {
+                string CaseSolutionDescription = Convert.ToString(collection["CaseSolution.CaseSolutionDescription"].ToString());
+                caseSolutionInputViewModel.CaseSolution.CaseSolutionDescription = CaseSolutionDescription;
+            }
 
             if (collection["CaseSolution.ShowInSelfService"].ToString().Trim() != string.Empty)
             {
@@ -1442,6 +1446,27 @@ namespace DH.Helpdesk.Web.Controllers
             }
         }
 
+        [HttpPost]
+        public RedirectToRouteResult Copy(int id, int pageId)
+        {
+            if (this._caseSolutionService.DeleteCaseSolution(id, SessionFacade.CurrentCustomer.Id) == DeleteMessage.Success)
+            {
+                switch (pageId)
+                {
+                    case 1:
+                        return this.RedirectToAction("index", "Cases");
+
+                    default:
+                        return this.RedirectToAction("index", "casesolution");
+
+                }
+            }
+            else
+            {
+                this.TempData.Add("Error", string.Empty);
+                return this.RedirectToAction("edit", "casesolution", new { id = id });
+            }
+        }
 
         public JsonResult ChangeRegion(int? regionId)
         {
@@ -1703,7 +1728,8 @@ namespace DH.Helpdesk.Web.Controllers
                 PriorityName = cs.Priority == null ? string.Empty : cs.Priority.Name,
                 IsActive = (cs.Status != 0),
                 ConnectedToButton = (cs.ConnectedButton.HasValue && cs.ConnectedButton == 0) ? Translation.GetCoreTextTranslation(DH.Helpdesk.Common.Constants.Text.WorkflowStep) : (cs.ConnectedButton.HasValue) ? connectedToButton + " " + cs.ConnectedButton.Value : "",
-                SortOrder = cs.SortOrder
+                SortOrder = cs.SortOrder,
+                CaseSolutionDescription = cs.CaseSolutionDescription
             }).ToArray();
 
             var activeTab = SessionFacade.FindActiveTab("CaseSolution");

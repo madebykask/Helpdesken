@@ -67,7 +67,14 @@
                                         @Html.DropDownListFor(model => model.CaseSolution.CaseSolutionCategory_Id, Model.CsCategories, "")
                                     </td>
                                 </tr>
-
+                                <tr>
+                                    <td style="width: 200px">
+                                        @Translation.GetCoreTextTranslation("Beskrivning")
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.CaseSolution.CaseSolutionDescription, new { id = "CaseSolutionDescription", maxlength = "4000" })
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td style="width: 200px">
                                         @Translation.GetCoreTextTranslation("Kort beskrivning")

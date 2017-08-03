@@ -25,6 +25,7 @@
 
         public int SortOrder { get; set; }
 
+        public string CaseSolutionDescription { get; set; }
     }
 
     public static class CaseSolutionRowIndexMapper

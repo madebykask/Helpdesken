@@ -38,6 +38,14 @@
                     <i class="@CaseSolutionIndexColumns.Category.SetCaseSolutionSortIcon()"></i>                    
                 </th>
                 <th class="sortable" data-sort="@CaseSolutionIndexColumns.Caption" data-asc="@_asc" style="cursor: pointer; width: 15%">
+                    @Translation.GetCoreTextTranslation("Beskrivning")
+                    <i class="@CaseSolutionIndexColumns.Caption.SetCaseSolutionSortIcon()"></i>
+                </th>
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.ConnectedToButton" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
+                    @Translation.GetCoreTextTranslation("Kopplat till")
+                    <i class="@CaseSolutionIndexColumns.ConnectedToButton.SetCaseSolutionSortIcon()"></i>
+                </th>
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.Caption" data-asc="@_asc" style="cursor: pointer; width: 15%">
                     @Translation.GetCoreTextTranslation("Rubrik")                    
                     <i class="@CaseSolutionIndexColumns.Caption.SetCaseSolutionSortIcon()"></i>
                 </th>
@@ -48,11 +56,7 @@
                 <th class="sortable" data-sort="@CaseSolutionIndexColumns.Priority" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
                     @Translation.GetCoreTextTranslation("Prioritet")
                     <i class="@CaseSolutionIndexColumns.Priority.SetCaseSolutionSortIcon()"></i>
-                </th>
-                <th class="sortable" data-sort="@CaseSolutionIndexColumns.ConnectedToButton" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
-                    @Translation.GetCoreTextTranslation("Kopplat till")
-                    <i class="@CaseSolutionIndexColumns.ConnectedToButton.SetCaseSolutionSortIcon()"></i>
-                </th>
+                </th>                
                 <th class="sortable" data-sort="@CaseSolutionIndexColumns.Status" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 8%">
                     @Translation.GetCoreTextTranslation("Aktiv")
                     <i class="@CaseSolutionIndexColumns.Status.SetCaseSolutionSortIcon()"></i>
@@ -75,6 +79,12 @@
                         <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CategoryName)</a>
                     </td>
                     <td>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CaseSolutionDescription)</a>
+                    </td>
+                    <td>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })"> @item.ConnectedToButton</a>
+                    </td>
+                    <td>
                         <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CaseCaption)</a>
                     </td>
                     <td>
@@ -82,10 +92,7 @@
                     </td>
                     <td>
                         <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.PriorityName)</a>
-                    </td>
-                    <td>
-                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })"> @item.ConnectedToButton</a>
-                    </td>
+                    </td>                    
                      <td>
                         <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })"> @item.IsActive.BoolToYesNo()</a>
                     </td>      

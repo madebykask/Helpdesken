@@ -115,6 +115,8 @@ namespace DH.Helpdesk.Domain
         //public virtual Problem Problem { get; set; }
         public int SortOrder { get; set; }
 
-        
+        public string CaseSolutionDescription { get; set; }
+
+
     }
 }
