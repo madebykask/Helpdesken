@@ -324,5 +324,14 @@ GO
 
 
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaseSolutionDescription' and sysobjects.name = N'tblCaseSolution')
+	ALTER TABLE tblCaseSolution
+	ADD CaseSolutionDescription nvarchar(4000)
+GO
+
+
+
+
+    
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.33'
