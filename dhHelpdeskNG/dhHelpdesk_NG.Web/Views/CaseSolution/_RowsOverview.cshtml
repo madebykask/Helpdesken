@@ -23,12 +23,12 @@
                     <i id="icoImg" class="icon-plus-sign" ; style="cursor: pointer;" onclick="showDiv()"></i>
                 </td>
             </tr>
-            <tr>
+            @*<tr>
                 <td>
                     <span>@Translation.Get("Visa endast aktiva")</span>
                     <input type="checkbox" onchange="test()" class="switchcheckbox showonly-active" @(Model.FirstOrDefault().IsShowOnlyActive ? "checked" : string.Empty)>
                 </td>
-            </tr>
+            </tr>*@
         </table>
     </div>
     <table class="table table-striped table-bordered table-hover" id="tblCaseSolution">

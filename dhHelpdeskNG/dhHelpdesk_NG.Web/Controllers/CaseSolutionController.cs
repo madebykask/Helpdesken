@@ -189,7 +189,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult Search(string searchText, List<int> categoryIds, List<int> subStatusIds, List<int> WgroupIds, List<int> PriorityIds, List<int> StatusIds, List<int> ProductAreaIds, List<int> UserWGroupIds, List<int> TemplateProductAreaIds)
+        public PartialViewResult Search(string searchText, List<int> categoryIds, List<int> subStatusIds, List<int> WgroupIds, List<int> PriorityIds, List<int> StatusIds, List<int> ProductAreaIds, List<int> UserWGroupIds, List<int> TemplateProductAreaIds, List<int> ApplicationIds)
         {
             var caseSolutionSearch = new CaseSolutionSearch();
             if (SessionFacade.CurrentCaseSolutionSearch != null)
@@ -230,6 +230,11 @@ namespace DH.Helpdesk.Web.Controllers
             if (TemplateProductAreaIds != null)
             {
                 caseSolutionSearch.TemplateProductAreaIds = TemplateProductAreaIds.ToList();
+            }
+
+            if (ApplicationIds != null)
+            {
+                caseSolutionSearch.ApplicationIds = ApplicationIds.ToList();
             }
 
             SessionFacade.CurrentCaseSolutionSearch = caseSolutionSearch;

@@ -249,7 +249,7 @@ namespace DH.Helpdesk.Services.Services
                         var workingGroups = this._workingGroupService.GetWorkingGroups(customerId, user.Id);
                         bool wgShowWorkflowStep = false;
 
-                      //  conditionKey = conditionKey.Replace("user_workinggroup", "");
+                        //  conditionKey = conditionKey.Replace("user_workinggroup", "");
 
                         string[] conditionValues = conditionValue.Split(',').Select(sValue => sValue.Trim()).ToArray();
 
@@ -385,9 +385,52 @@ namespace DH.Helpdesk.Services.Services
                 query = query.Where(x => x.CaseSolutionCategory_Id.HasValue && SearchCaseSolutions.CategoryIds.Contains(x.CaseSolutionCategory_Id.Value));
             }
 
+            //Sub status
             if (SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.SubStatusIds.Any())
             {
                 query = query.Where(x => x.Status_Id.HasValue && SearchCaseSolutions.SubStatusIds.Contains(x.Status_Id.Value));
+            }
+
+            //Working group
+            if (SearchCaseSolutions.WgroupIds != null && SearchCaseSolutions.WgroupIds.Any())
+            {
+                query = query.Where(x => x.WorkingGroup_Id.HasValue && SearchCaseSolutions.WgroupIds.Contains(x.WorkingGroup_Id.Value));
+            }
+
+            //Priority
+            if (SearchCaseSolutions.PriorityIds != null && SearchCaseSolutions.PriorityIds.Any())
+            {
+                query = query.Where(x => x.Priority_Id.HasValue && SearchCaseSolutions.PriorityIds.Contains(x.Priority_Id.Value));
+            }
+
+            //Status
+            if (SearchCaseSolutions.StatusIds != null && SearchCaseSolutions.StatusIds.Any())
+            {
+                query = query.Where(x => x.Status_Id.HasValue && SearchCaseSolutions.StatusIds.Contains(x.Status_Id.Value));
+            }
+
+            //ProductArea
+            if (SearchCaseSolutions.ProductAreaIds != null && SearchCaseSolutions.ProductAreaIds.Any())
+            {
+                query = query.Where(x => x.ProductArea_Id.HasValue && SearchCaseSolutions.ProductAreaIds.Contains(x.ProductArea_Id.Value));
+            }
+
+            //UserWGroup, ????????????
+            if (SearchCaseSolutions.UserWGroupIds != null && SearchCaseSolutions.UserWGroupIds.Any())
+            {
+                query = query.Where(x => x.WorkingGroup_Id.HasValue && SearchCaseSolutions.UserWGroupIds.Contains(x.WorkingGroup_Id.Value));
+            }
+
+            //TemplateProduct, ????????????
+            if (SearchCaseSolutions.TemplateProductAreaIds != null && SearchCaseSolutions.TemplateProductAreaIds.Any())
+            {
+                //query = query.Where(x => x.WorkingGroup_Id.HasValue && SearchCaseSolutions.UserWGroupIds.Contains(x.WorkingGroup_Id.Value));
+            }
+
+            //Application, ????????????
+            if (SearchCaseSolutions.ApplicationIds != null && SearchCaseSolutions.ApplicationIds.Any())
+            {
+                //    //query = query.Where(x => x.WorkingGroup_Id.HasValue && SearchCaseSolutions.UserWGroupIds.Contains(x.WorkingGroup_Id.Value));
             }
 
             #endregion
@@ -688,7 +731,7 @@ namespace DH.Helpdesk.Services.Services
             if (caseSolutionConditions == null)
             {
                 caseSolutionConditions = _caseSolutionConditionRepository.GetCaseSolutionConditions(caseSolution_Id).Select(x => new { x.Property_Name, x.Values }).ToDictionary(x => x.Property_Name, x => x.Values);
-                
+
                 if (caseSolutionConditions.Any())
                     this._cache.Set(string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionConditionWithId, caseSolution_Id), caseSolutionConditions, DH.Helpdesk.Common.Constants.Cache.Duration);
             }

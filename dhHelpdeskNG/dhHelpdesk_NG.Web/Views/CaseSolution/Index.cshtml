@@ -163,19 +163,19 @@
                             </td>
                         </tr>
 
-                        @*<tr>
+                        <tr>
                             <td style="width:100px">
                                 @Translation.GetCoreTextTranslation("Applikation")
                             </td>
                             <td>
                                 <select id="caseSolFilterApplication" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
-                                    @foreach (var e in Model.CaseSolutionApplication)
+                                    @foreach (var e in Model.CaseSolutionCTemplateProductArea)
                                     {
                                         <option value="@e.Id">@e.Name</option>
                                     }
                                 </select>
                             </td>
-                        </tr>*@
+                        </tr>
                     </table>
                 </div>
                 <table class="tableform">

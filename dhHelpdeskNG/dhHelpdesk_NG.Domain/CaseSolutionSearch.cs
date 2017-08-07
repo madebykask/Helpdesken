@@ -10,6 +10,20 @@ namespace DH.Helpdesk.Domain
         List<int> CategoryIds { get; set; }
 
         List<int> SubStatusIds { get; set; }
+
+        List<int> WgroupIds { get; set; }
+
+        List<int> PriorityIds { get; set; }
+
+        List<int> StatusIds { get; set; }
+
+        List<int> ProductAreaIds { get; set; }
+
+        List<int> UserWGroupIds { get; set; }
+
+        List<int> TemplateProductAreaIds { get; set; }
+
+        List<int> ApplicationIds { get; set; }
     }
 
     public class CaseSolutionSearch : Search, ICaseSolutionSearch
@@ -31,5 +45,7 @@ namespace DH.Helpdesk.Domain
         public List<int> UserWGroupIds { get; set; }
 
         public List<int> TemplateProductAreaIds { get; set; }
+
+        public List<int> ApplicationIds { get; set; }
     }
 }
