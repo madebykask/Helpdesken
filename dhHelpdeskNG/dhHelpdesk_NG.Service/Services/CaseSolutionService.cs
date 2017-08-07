@@ -17,10 +17,14 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.BusinessData.Models.User.Input;
+    using System.Data;
+    using System.Configuration;
+    using System.Data.SqlClient;
 
     public interface ICaseSolutionService
     {
         IList<CaseSolution> GetCaseSolutions(int customerId);
+        IList<Application> GetAllApplications(int customerId);
         IList<CaseSolutionCategory> GetCaseSolutionCategories(int customerId);
         IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch SearchCaseSolutions, bool isFirstNamePresentation);
 
@@ -39,10 +43,13 @@ namespace DH.Helpdesk.Services.Services
         void SaveEmptyForm(Guid formGuid, int caseId);
         void Commit();
         IList<WorkflowStepModel> GetGetWorkflowSteps(int customerId, Case _case, UserOverview user, ApplicationType applicationType, int? templateId);
+
+        
     }
 
     public class CaseSolutionService : ICaseSolutionService
     {
+        private readonly IApplicationRepository _applicationRepository;
         private readonly ICaseSolutionRepository _caseSolutionRepository;
         private readonly ICaseSolutionCategoryRepository _caseSolutionCategoryRepository;
         private readonly ICaseSolutionScheduleRepository _caseSolutionScheduleRepository;
@@ -71,7 +78,8 @@ namespace DH.Helpdesk.Services.Services
             ICaseSolutionConditionRepository caseSolutionConditionRepository,
             ICacheProvider cache,
             IWorkingGroupService workingGroupService,
-            ICaseSolutionConditionService caseSolutionCondtionService)
+            ICaseSolutionConditionService caseSolutionCondtionService,
+            IApplicationRepository applicationRepository)
         {
             this._caseSolutionRepository = caseSolutionRepository;
             this._caseSolutionCategoryRepository = caseSolutionCategoryRepository;
@@ -86,6 +94,7 @@ namespace DH.Helpdesk.Services.Services
             this._workingGroupService = workingGroupService;
             this._caseSolutionConditionService = caseSolutionCondtionService;
             this.caseSolutionConditionRepository = caseSolutionConditionRepository;
+            this._applicationRepository = applicationRepository;
         }
 
         //public int GetAntal(int customerId, int userid)
@@ -202,6 +211,52 @@ namespace DH.Helpdesk.Services.Services
         public IList<CaseSolution> GetCaseSolutions(int customerId)
         {
             return this._caseSolutionRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<Application> GetAllApplications(int customerId)
+        {
+            string sql = string.Empty;
+            sql = "SELECT * FROM tblApplicationType  ";//WHERE Customer_Id= " + customerId + "";
+            string ConnectionStringExt = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+            DataTable dtExt = null;
+
+            using (var connectionExt = new SqlConnection(ConnectionStringExt))
+            {
+                if (connectionExt.State == ConnectionState.Closed)
+                {
+                    connectionExt.Open();
+                }
+                using (var commandExt = new SqlCommand { Connection = connectionExt, CommandType = CommandType.StoredProcedure, CommandTimeout = 0 })
+                {
+                    commandExt.CommandType = CommandType.Text;
+                    commandExt.CommandText = sql;
+                    var reader = commandExt.ExecuteReader();
+                    dtExt = new DataTable();
+                    dtExt.Load(reader);
+
+                }
+            }
+
+            List<Application> lapp= new List<Application>();
+
+            foreach (DataRow rowExt in dtExt.Rows)
+            {
+                Application a = new Application();
+                
+                if (rowExt["Id"].ToString() != null)
+                {
+                    a.Id = Convert.ToInt32(rowExt["Id"].ToString());
+                }
+                if (rowExt["ApplicationType"].ToString() != null)
+                {
+                    a.Name = Convert.ToString(rowExt["ApplicationType"].ToString());
+                }
+
+                lapp.Add(a);
+            }
+
+            return lapp;
+            //return this._applicationRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
         public IList<WorkflowStepModel> GetGetWorkflowSteps(int customerId, Case _case, UserOverview user, ApplicationType applicationType, int? templateId)

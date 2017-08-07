@@ -1782,7 +1782,7 @@ namespace DH.Helpdesk.Web.Controllers
                 CaseSolutionProductArea = this._productAreaService.GetAllProductAreas(customerId),
                 CaseSolutionUserWGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId),
                 CaseSolutionCTemplateProductArea = this._productAreaService.GetAllProductAreas(customerId),
-                //CaseSolutionApplication = this._app
+                CaseSolutionApplication = this._caseSolutionService.GetAllApplications(customerId)
             };
 
             return model;

@@ -169,7 +169,7 @@
                             </td>
                             <td>
                                 <select id="caseSolFilterApplication" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
-                                    @foreach (var e in Model.CaseSolutionCTemplateProductArea)
+                                    @foreach (var e in Model.CaseSolutionApplication)
                                     {
                                         <option value="@e.Id">@e.Name</option>
                                     }
