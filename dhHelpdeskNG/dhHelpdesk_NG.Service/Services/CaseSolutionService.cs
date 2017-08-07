@@ -443,49 +443,122 @@ namespace DH.Helpdesk.Services.Services
             //Sub status
             if (SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.SubStatusIds.Any())
             {
-                query = query.Where(x => x.Status_Id.HasValue && SearchCaseSolutions.SubStatusIds.Contains(x.Status_Id.Value));
+                
+                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
+                             select cs);
+
+                var res = from cust in query
+                          join so in q on cust.Id equals so.CaseSolution_Id
+                          where SearchCaseSolutions.SubStatusIds.Contains(so.Values)                          
+                          select cust;
+
+                query = res;
+
+                
+                
+
             }
 
             //Working group
             if (SearchCaseSolutions.WgroupIds != null && SearchCaseSolutions.WgroupIds.Any())
             {
-                query = query.Where(x => x.WorkingGroup_Id.HasValue && SearchCaseSolutions.WgroupIds.Contains(x.WorkingGroup_Id.Value));
+                //query = query.Where(x => x.WorkingGroup_Id.HasValue && SearchCaseSolutions.WgroupIds.Contains(x.WorkingGroup_Id.Value));
+
+                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
+                         select cs);
+
+                var res = from cust in query
+                          join so in q on cust.Id equals so.CaseSolution_Id
+                          where SearchCaseSolutions.WgroupIds.Contains(so.Values)
+                          select cust;
+
+                query = res;
+
             }
 
             //Priority
             if (SearchCaseSolutions.PriorityIds != null && SearchCaseSolutions.PriorityIds.Any())
             {
-                query = query.Where(x => x.Priority_Id.HasValue && SearchCaseSolutions.PriorityIds.Contains(x.Priority_Id.Value));
+                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
+                         select cs);
+
+                var res = from cust in query
+                          join so in q on cust.Id equals so.CaseSolution_Id
+                          where SearchCaseSolutions.PriorityIds.Contains(so.Values)
+                          select cust;
+
+                query = res;
             }
 
             //Status
             if (SearchCaseSolutions.StatusIds != null && SearchCaseSolutions.StatusIds.Any())
             {
-                query = query.Where(x => x.Status_Id.HasValue && SearchCaseSolutions.StatusIds.Contains(x.Status_Id.Value));
+                
+                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
+                         select cs);
+
+                var res = from cust in query
+                          join so in q on cust.Id equals so.CaseSolution_Id
+                          where SearchCaseSolutions.StatusIds.Contains(so.Values)
+                          select cust;
+
+                query = res;
             }
 
             //ProductArea
             if (SearchCaseSolutions.ProductAreaIds != null && SearchCaseSolutions.ProductAreaIds.Any())
             {
-                query = query.Where(x => x.ProductArea_Id.HasValue && SearchCaseSolutions.ProductAreaIds.Contains(x.ProductArea_Id.Value));
+                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
+                         select cs);
+
+                var res = from cust in query
+                          join so in q on cust.Id equals so.CaseSolution_Id
+                          where SearchCaseSolutions.ProductAreaIds.Contains(so.Values)
+                          select cust;
+
+                query = res;
             }
 
             //UserWGroup, ????????????
             if (SearchCaseSolutions.UserWGroupIds != null && SearchCaseSolutions.UserWGroupIds.Any())
             {
-                query = query.Where(x => x.WorkingGroup_Id.HasValue && SearchCaseSolutions.UserWGroupIds.Contains(x.WorkingGroup_Id.Value));
+                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
+                         select cs);
+
+                var res = from cust in query
+                          join so in q on cust.Id equals so.CaseSolution_Id
+                          where SearchCaseSolutions.UserWGroupIds.Contains(so.Values)
+                          select cust;
+
+                query = res;
             }
 
             //TemplateProduct, ????????????
             if (SearchCaseSolutions.TemplateProductAreaIds != null && SearchCaseSolutions.TemplateProductAreaIds.Any())
             {
-                //query = query.Where(x => x.WorkingGroup_Id.HasValue && SearchCaseSolutions.UserWGroupIds.Contains(x.WorkingGroup_Id.Value));
+                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
+                         select cs);
+
+                var res = from cust in query
+                          join so in q on cust.Id equals so.CaseSolution_Id
+                          where SearchCaseSolutions.TemplateProductAreaIds.Contains(so.Values)
+                          select cust;
+
+                query = res;
             }
 
             //Application, ????????????
             if (SearchCaseSolutions.ApplicationIds != null && SearchCaseSolutions.ApplicationIds.Any())
             {
-                //    //query = query.Where(x => x.WorkingGroup_Id.HasValue && SearchCaseSolutions.UserWGroupIds.Contains(x.WorkingGroup_Id.Value));
+                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
+                         select cs);
+
+                var res = from cust in query
+                          join so in q on cust.Id equals so.CaseSolution_Id
+                          where SearchCaseSolutions.ApplicationIds.Contains(so.Values)
+                          select cust;
+
+                query = res;
             }
 
             #endregion

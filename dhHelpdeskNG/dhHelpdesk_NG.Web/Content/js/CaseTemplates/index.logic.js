@@ -17,14 +17,15 @@ var tabCategory = '#CategoriesTab';
 var btnSearch = '#btnCaseSolutionSearch';
 var edtSearch = '#caseSolutionSearch';
 var categories = '#caseSolFilterCategory';
-var substatus = '#caseSolFilterSubstatus';
 
+var substatus = '#caseSolFilterSubstatus';
 var Wgroup = '#caseSolFilterWGroup';
 var Priority = '#caseSolFilterPriority';
 var Status = '#caseSolFilterStatus';
 var ProductArea = '#caseSolFilterProductArea';
 var UserWGroup = '#caseSolFilterUserWGroup';
 var TemplateProductArea = '#caseSolFilterCaseTemplateProductArea';
+var Application = '#caseSolFilterApplication';
 
 
 $(function () {
@@ -42,16 +43,17 @@ $(function () {
         
         var searchText = $(edtSearch).val();
         var categoryIds = $(categories).val();
-        var subStatusIds = $(substatus).val();
 
+        var subStatusIds = $(substatus).val();
         var WgroupIds = $(Wgroup).val();
         var PriorityIds = $(Priority).val();
         var StatusIds = $(Status).val();
         var ProductAreaIds = $(ProductArea).val();
         var UserWGroupIds = $(UserWGroup).val();
         var TemplateProductAreaIds = $(TemplateProductArea).val();
+        var ApplicationIds = $(Application).val();
 
-        doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds);
+        doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds, ApplicationIds);
     });
 
     $(edtSearch).keydown(function (e) {
@@ -60,16 +62,17 @@ $(function () {
             e.preventDefault();
             var searchText = $(edtSearch).val();
             var categoryIds = $(categories).val();
-            var subStatusIds = $(substatus).val();
 
+            var subStatusIds = $(substatus).val();
             var WgroupIds = $(Wgroup).val();
             var PriorityIds = $(Priority).val();
             var StatusIds = $(Status).val();
             var ProductAreaIds = $(ProductArea).val();
             var UserWGroupIds = $(UserWGroup).val();
             var TemplateProductAreaIds = $(TemplateProductArea).val();
+            var ApplicationIds = $(Application).val();
 
-            doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds);
+            doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds, ApplicationIds);
             return false;
         }
     });
@@ -115,7 +118,7 @@ $(function () {
                 });
     }
 
-    function doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds) {
+    function doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds, ApplicationIds) {
         
         $.ajax({
 
@@ -125,14 +128,14 @@ $(function () {
             data: JSON.stringify({
                 searchText: searchText,
                 categoryIds: categoryIds,
-                subStatusIds: subStatusIds,
-                subStatusIds: subStatusIds,
+                subStatusIds: subStatusIds,                
                 WgroupIds: WgroupIds,
                 PriorityIds: PriorityIds,
                 StatusIds: StatusIds,
                 ProductAreaIds: ProductAreaIds,
                 UserWGroupIds: UserWGroupIds,
-                TemplateProductAreaIds: TemplateProductAreaIds
+                TemplateProductAreaIds: TemplateProductAreaIds,
+                ApplicationIds: ApplicationIds,
 
             }),
             success: function (filteredModel) {

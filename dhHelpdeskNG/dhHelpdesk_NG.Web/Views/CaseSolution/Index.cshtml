@@ -73,7 +73,7 @@
                                 <select id="caseSolFilterSubstatus" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.CaseSolutionSubStatus)
                                     {
-                                        <option value="@e.Id" @e.Id.IdIsSelected(searchSubStatuses)>@e.Name</option>
+                                        <option value="@e.StateSecondaryGUID">@e.Name</option>
                                     }
                                 </select>
                             </td>
@@ -87,7 +87,7 @@
                                 <select id="caseSolFilterWGroup" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.CaseSolutionWGroup)
                                     {
-                                        <option value="@e.Id">@e.WorkingGroupName</option>
+                                        <option value="@e.WorkingGroupGUID">@e.WorkingGroupName</option>
                                     }
                                 </select>
                             </td>
@@ -101,7 +101,7 @@
                                 <select id="caseSolFilterPriority" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.CaseSolutionPriorities)
                                     {
-                                        <option value="@e.Id">@e.Name</option>
+                                        <option value="@e.PriorityGUID">@e.Name</option>
                                     }
                                 </select>
                             </td>
@@ -115,7 +115,7 @@
                                 <select id="caseSolFilterStatus" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.CaseSolutionStatuses)
                                     {
-                                        <option value="@e.Id">@e.Name</option>
+                                        <option value="@e.StatusGUID">@e.Name</option>
                                     }
                                 </select>
                             </td>
@@ -129,7 +129,7 @@
                                 <select id="caseSolFilterProductArea" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.CaseSolutionProductArea)
                                     {
-                                        <option value="@e.Id">@e.Name</option>
+                                        <option value="@e.ProductAreaGUID">@e.Name</option>
                                     }
                                 </select>
                             </td>
@@ -143,7 +143,7 @@
                                 <select id="caseSolFilterUserWGroup" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.CaseSolutionUserWGroup)
                                     {
-                                        <option value="@e.Id">@e.WorkingGroupName</option>
+                                        <option value="@e.WorkingGroupGUID">@e.WorkingGroupName</option>
                                     }
                                 </select>
                             </td>
@@ -157,7 +157,7 @@
                                 <select id="caseSolFilterCaseTemplateProductArea" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
                                     @foreach (var e in Model.CaseSolutionCTemplateProductArea)
                                     {
-                                        <option value="@e.Id">@e.Name</option>
+                                        <option value="@e.ProductAreaGUID">@e.Name</option>
                                     }
                                 </select>
                             </td>
