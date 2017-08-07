@@ -1771,17 +1771,23 @@ namespace DH.Helpdesk.Web.Controllers
             var activeTab = SessionFacade.FindActiveTab("CaseSolution");
             activeTab = activeTab ?? "CaseTemplate";
 
+            IList<Priority> p = this._priorityService.GetPriorities(customerId);
+            p = p.OrderBy(x => x.Name).ToList();
+
+            IList<ProductArea> pa = this._productAreaService.GetProductAreasForCustomer(customerId);            
+            pa = pa.OrderBy(x => x.Name).ToList();
+            //this._productAreaService.GetAllProductAreas(customerId)
             var model = new CaseSolutionIndexViewModel(activeTab)
             {
                 Rows = _rows,
                 CaseSolutionCategories = this._caseSolutionService.GetCaseSolutionCategories(customerId),
-                CaseSolutionWGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId),
-                CaseSolutionSubStatus = this._statusService.GetActiveStatuses(customerId),
-                CaseSolutionPriorities = this._priorityService.GetPriorities(customerId),
-                CaseSolutionStatuses = this._statusService.GetActiveStatuses(customerId),
-                CaseSolutionProductArea = this._productAreaService.GetAllProductAreas(customerId),
+                CaseSolutionSubStatus = this._stateSecondaryService.GetActiveStateSecondaries(customerId),
+                CaseSolutionWGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId),                
+                CaseSolutionPriorities = p,
+                CaseSolutionStatuses = this._statusService.GetStatuses(customerId),
+                CaseSolutionProductArea = pa,
                 CaseSolutionUserWGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId),
-                CaseSolutionCTemplateProductArea = this._productAreaService.GetAllProductAreas(customerId),
+                CaseSolutionCTemplateProductArea = pa,
                 CaseSolutionApplication = this._caseSolutionService.GetAllApplications(customerId)
             };
 

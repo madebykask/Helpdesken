@@ -101,7 +101,7 @@
 
         public IList<Priority> CaseSolutionPriorities { get; set; }
 
-        public IList<Status> CaseSolutionSubStatus { get; set; }
+        public IList<StateSecondary> CaseSolutionSubStatus { get; set; }
 
         public IList<ProductArea> CaseSolutionProductArea { get; set; }
 
