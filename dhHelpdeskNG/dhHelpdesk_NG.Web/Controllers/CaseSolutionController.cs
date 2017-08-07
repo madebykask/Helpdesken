@@ -201,6 +201,37 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 caseSolutionSearch.SubStatusIds = subStatusIds.ToList();
             }
+
+            if (WgroupIds != null)
+            {
+                caseSolutionSearch.WgroupIds = WgroupIds.ToList();
+            }
+
+            if (PriorityIds != null)
+            {
+                caseSolutionSearch.PriorityIds = PriorityIds.ToList();
+            }
+
+            if (StatusIds != null)
+            {
+                caseSolutionSearch.StatusIds = StatusIds.ToList();
+            }
+
+            if (ProductAreaIds != null)
+            {
+                caseSolutionSearch.ProductAreaIds = ProductAreaIds.ToList();
+            }
+
+            if (UserWGroupIds != null)
+            {
+                caseSolutionSearch.UserWGroupIds = UserWGroupIds.ToList();
+            }
+
+            if (TemplateProductAreaIds != null)
+            {
+                caseSolutionSearch.TemplateProductAreaIds = TemplateProductAreaIds.ToList();
+            }
+
             SessionFacade.CurrentCaseSolutionSearch = caseSolutionSearch;
 
             var model = CreateIndexViewModel(caseSolutionSearch);

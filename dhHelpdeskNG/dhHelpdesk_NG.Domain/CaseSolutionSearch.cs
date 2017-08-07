@@ -19,5 +19,17 @@ namespace DH.Helpdesk.Domain
         public List<int> CategoryIds { get; set; }
 
         public List<int> SubStatusIds { get; set; }
+
+        public List<int> WgroupIds { get; set; }
+
+        public List<int> PriorityIds { get; set; }
+
+        public List<int> StatusIds { get; set; }
+
+        public List<int> ProductAreaIds { get; set; }
+
+        public List<int> UserWGroupIds { get; set; }
+
+        public List<int> TemplateProductAreaIds { get; set; }
     }
 }
