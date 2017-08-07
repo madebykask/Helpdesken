@@ -5,7 +5,7 @@
 @{
     var searchText = (SessionFacade.CurrentCaseSolutionSearch != null &&
                      SessionFacade.CurrentCaseSolutionSearch.SearchCss != null) ? SessionFacade.CurrentCaseSolutionSearch.SearchCss : string.Empty;
-    var _asc = SessionFacade.CurrentCaseSolutionSearch.Ascending;    
+    var _asc = SessionFacade.CurrentCaseSolutionSearch.Ascending;
 }
 
 @Scripts.Render("~/bundles/casetemplates/index")
@@ -18,11 +18,16 @@
                     @Translation.GetCoreTextTranslation("Sök")
                 </td>
                 <td>
-                    <input type="text" id="caseSolutionSearch" maxlength="50" style="width: 285px;" value="@searchText"/>
-                    <input type="button" id="btnCaseSolutionSearch" class="btn" value="@Translation.GetCoreTextTranslation("Sök")"/>
-                    <i id="icoImg" class="icon-plus-sign"; style="cursor: pointer;"onclick="showDiv()"></i>
+                    <input type="text" id="caseSolutionSearch" maxlength="50" style="width: 285px;" value="@searchText" />
+                    <input type="button" id="btnCaseSolutionSearch" class="btn" value="@Translation.GetCoreTextTranslation("Sök")" />
+                    <i id="icoImg" class="icon-plus-sign" ; style="cursor: pointer;" onclick="showDiv()"></i>
                 </td>
-                
+            </tr>
+            <tr>
+                <td>
+                    <span>@Translation.Get("Visa endast aktiva")</span>
+                    <input type="checkbox" onchange="test()" class="switchcheckbox showonly-active" @(Model.FirstOrDefault().IsShowOnlyActive ? "checked" : string.Empty)>
+                </td>
             </tr>
         </table>
     </div>
@@ -30,12 +35,12 @@
         <thead>
             <tr>
                 <th class="sortable" data-sort="@CaseSolutionIndexColumns.Name" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
-                    @Translation.GetCoreTextTranslation("Namn")                    
+                    @Translation.GetCoreTextTranslation("Namn")
                     <i class="@CaseSolutionIndexColumns.Name.SetCaseSolutionSortIcon()"></i>
                 </th>
                 <th class="sortable" data-sort="@CaseSolutionIndexColumns.Category" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 12%">
-                    @Translation.GetCoreTextTranslation("Kategori")                    
-                    <i class="@CaseSolutionIndexColumns.Category.SetCaseSolutionSortIcon()"></i>                    
+                    @Translation.GetCoreTextTranslation("Kategori")
+                    <i class="@CaseSolutionIndexColumns.Category.SetCaseSolutionSortIcon()"></i>
                 </th>
                 <th class="sortable" data-sort="@CaseSolutionIndexColumns.Caption" data-asc="@_asc" style="cursor: pointer; width: 15%">
                     @Translation.GetCoreTextTranslation("Beskrivning")
@@ -46,7 +51,7 @@
                     <i class="@CaseSolutionIndexColumns.ConnectedToButton.SetCaseSolutionSortIcon()"></i>
                 </th>
                 <th class="sortable" data-sort="@CaseSolutionIndexColumns.Caption" data-asc="@_asc" style="cursor: pointer; width: 15%">
-                    @Translation.GetCoreTextTranslation("Rubrik")                    
+                    @Translation.GetCoreTextTranslation("Rubrik")
                     <i class="@CaseSolutionIndexColumns.Caption.SetCaseSolutionSortIcon()"></i>
                 </th>
                 <th class="sortable" data-sort="@CaseSolutionIndexColumns.Administrator" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 10%">
@@ -56,7 +61,7 @@
                 <th class="sortable" data-sort="@CaseSolutionIndexColumns.Priority" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
                     @Translation.GetCoreTextTranslation("Prioritet")
                     <i class="@CaseSolutionIndexColumns.Priority.SetCaseSolutionSortIcon()"></i>
-                </th>                
+                </th>
                 <th class="sortable" data-sort="@CaseSolutionIndexColumns.Status" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 8%">
                     @Translation.GetCoreTextTranslation("Aktiv")
                     <i class="@CaseSolutionIndexColumns.Status.SetCaseSolutionSortIcon()"></i>
@@ -92,13 +97,13 @@
                     </td>
                     <td>
                         <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.PriorityName)</a>
-                    </td>                    
-                     <td>
+                    </td>
+                    <td>
                         <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })"> @item.IsActive.BoolToYesNo()</a>
-                    </td>      
+                    </td>
                     <td>
                         <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.SortOrder)</a>
-                    </td>              
+                    </td>
                 </tr>
             }
         </tbody>
@@ -107,8 +112,14 @@
 
 <script type="text/javascript">
 
+    function test()
+    {
+
+        
+    }
+
     function showDiv() {
-       // alert();
+        // alert();
 
         var x = document.getElementById('searchDiv');
         if (x.style.display === 'none') {
@@ -119,7 +130,7 @@
 
         } else {
             x.style.display = 'none';
-            
+
             document.getElementById("icoImg").classList.remove('icon-minus-sign');
             document.getElementById("icoImg").classList.add('icon-plus-sign');
         }

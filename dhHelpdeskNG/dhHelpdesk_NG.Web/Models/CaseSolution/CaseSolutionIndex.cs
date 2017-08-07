@@ -26,6 +26,8 @@
         public int SortOrder { get; set; }
 
         public string CaseSolutionDescription { get; set; }
+
+        public bool IsShowOnlyActive { get; set; }
     }
 
     public static class CaseSolutionRowIndexMapper
@@ -79,6 +81,8 @@
         }
 
         public string SearchCss { get; set; }
+
+        
 
         public CaseSolution CaseSolution { get; set; }
 
