@@ -27,6 +27,7 @@ var UserWGroup = '#caseSolFilterUserWGroup';
 var TemplateProductArea = '#caseSolFilterCaseTemplateProductArea';
 var Application = '#caseSolFilterApplication';
 
+var Active = '#chkActive'
 
 $(function () {
 
@@ -52,6 +53,8 @@ $(function () {
         var UserWGroupIds = $(UserWGroup).val();
         var TemplateProductAreaIds = $(TemplateProductArea).val();
         var ApplicationIds = $(Application).val();
+        var Actives = $(Active).val();
+        
 
         doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds, ApplicationIds);
     });
