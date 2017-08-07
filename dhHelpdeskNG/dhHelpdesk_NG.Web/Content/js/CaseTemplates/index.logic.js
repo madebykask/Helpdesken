@@ -119,12 +119,13 @@ $(function () {
     }
 
     function doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds, ApplicationIds) {
-        
-        $.ajax({
-
+        //dataType: "json",
+        //async: true,
+        $.ajax({      
+            
             url: searchOverview,
             type: "POST",
-            contentType: "application/json",
+            contentType: "application/json",            
             data: JSON.stringify({
                 searchText: searchText,
                 categoryIds: categoryIds,
