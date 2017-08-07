@@ -35,9 +35,7 @@
                      SessionFacade.CurrentCaseSolutionSearch.CategoryIds != null && SessionFacade.CurrentCaseSolutionSearch.CategoryIds.Any())
                      ? SessionFacade.CurrentCaseSolutionSearch.CategoryIds : null;
 
-    var searchSubStatuses = (SessionFacade.CurrentCaseSolutionSearch != null &&
-                     SessionFacade.CurrentCaseSolutionSearch.SubStatusIds != null && SessionFacade.CurrentCaseSolutionSearch.SubStatusIds.Any())
-                     ? SessionFacade.CurrentCaseSolutionSearch.SubStatusIds : null;
+  
 }
 
 @*@Scripts.Render("~/bundles/casetemplates/index")*@
