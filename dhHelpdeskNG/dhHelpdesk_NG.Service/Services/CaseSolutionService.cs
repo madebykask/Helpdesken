@@ -439,6 +439,13 @@ namespace DH.Helpdesk.Services.Services
             {
                 query = query.Where(x => x.CaseSolutionCategory_Id.HasValue && SearchCaseSolutions.CategoryIds.Contains(x.CaseSolutionCategory_Id.Value));
             }
+            
+
+            if (SearchCaseSolutions.OnlyActive == true)
+            {
+                query = query.Where(x => x.Status == 1);
+
+            }
 
             //Sub status
             if (SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.SubStatusIds.Any())

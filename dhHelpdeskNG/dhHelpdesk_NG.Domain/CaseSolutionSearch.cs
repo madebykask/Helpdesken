@@ -24,6 +24,8 @@ namespace DH.Helpdesk.Domain
         List<string> TemplateProductAreaIds { get; set; }
 
         List<string> ApplicationIds { get; set; }
+
+        bool OnlyActive { get; set; }
     }
 
     public class CaseSolutionSearch : Search, ICaseSolutionSearch
@@ -47,5 +49,7 @@ namespace DH.Helpdesk.Domain
         public List<string> TemplateProductAreaIds { get; set; }
 
         public List<string> ApplicationIds { get; set; }
+
+        public bool OnlyActive { get; set; }
     }
 }

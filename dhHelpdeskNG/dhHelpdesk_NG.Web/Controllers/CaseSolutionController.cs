@@ -189,8 +189,14 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult Search(string searchText, List<int> categoryIds, List<string> subStatusIds, List<string> WgroupIds, List<string> PriorityIds, List<string> StatusIds, List<string> ProductAreaIds, List<string> UserWGroupIds, List<string> TemplateProductAreaIds, List<string> ApplicationIds)
+        public PartialViewResult Search(string searchText, List<int> categoryIds, List<string> subStatusIds, List<string> WgroupIds, List<string> PriorityIds, List<string> StatusIds, List<string> ProductAreaIds, List<string> UserWGroupIds, List<string> TemplateProductAreaIds, List<string> ApplicationIds, string Actives)
         {
+            bool act = false;
+            if (Actives=="true")
+            {
+                act = true;
+            }
+
             var caseSolutionSearch = new CaseSolutionSearch();
             if (SessionFacade.CurrentCaseSolutionSearch != null)
                 caseSolutionSearch = SessionFacade.CurrentCaseSolutionSearch;
@@ -236,6 +242,10 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 caseSolutionSearch.ApplicationIds = ApplicationIds.ToList();
             }
+
+            
+            caseSolutionSearch.OnlyActive = act;
+            
 
             SessionFacade.CurrentCaseSolutionSearch = caseSolutionSearch;
 

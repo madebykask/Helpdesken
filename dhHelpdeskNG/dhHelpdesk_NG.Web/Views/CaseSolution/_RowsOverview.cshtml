@@ -28,14 +28,9 @@
                     <span>@Translation.Get("Visa endast aktiva")</span>
                 </td>
                 <td>
-                    @if (Model.FirstOrDefault()!= null)
-                    {
-                        <input type="checkbox" onchange="test(this)" id="chkActive" class="switchcheckbox showonly-active" @(Model.FirstOrDefault().IsShowOnlyActive ? "checked" : string.Empty)>
-                    }
-                    else
-                    {
-                        <input type="checkbox" onchange="test(this)" id="chkActive" class="switchcheckbox showonly-active" @(string.Empty)>
-                    }
+
+                    <input type="checkbox" onclick="test(this)" id="chkActive">
+
                 </td>
 
 
@@ -125,7 +120,45 @@
 <script type="text/javascript">
 
     function test(t) {
+        
+        var searchText = document.getElementById('caseSolutionSearch').value;
+        var categoryIds = document.getElementById('caseSolFilterCategory').value;
+        var subStatusIds = document.getElementById('caseSolFilterSubstatus').value;
+        var WgroupIds = document.getElementById('caseSolFilterWGroup').value;
+        var PriorityIds = document.getElementById('caseSolFilterPriority').value;
+        var StatusIds = document.getElementById('caseSolFilterStatus').value;
+        var ProductAreaIds = document.getElementById('caseSolFilterProductArea').value;
+        var UserWGroupIds = document.getElementById('caseSolFilterUserWGroup').value;
+        var TemplateProductAreaIds = document.getElementById('caseSolFilterCaseTemplateProductArea').value;
+        var ApplicationIds = document.getElementById('caseSolFilterApplication').value;
+        var Actives = document.getElementById('chkActive').checked;
 
+        $.ajax({
+
+            url: '/CaseSolution/Search',
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                searchText: searchText,
+                categoryIds: categoryIds,
+                subStatusIds: subStatusIds,
+                WgroupIds: WgroupIds,
+                PriorityIds: PriorityIds,
+                StatusIds: StatusIds,
+                ProductAreaIds: ProductAreaIds,
+                UserWGroupIds: UserWGroupIds,
+                TemplateProductAreaIds: TemplateProductAreaIds,
+                ApplicationIds: ApplicationIds,
+                Actives: Actives.toString()
+
+            }),
+            success: function (filteredModel) {
+                $(caseSolutionRowsArea).html(filteredModel);
+                $(edtSearch).focus();
+                $(edtSearch).val(searchText);
+                $(edtSearch).select();
+            }
+        });
 
     }
 

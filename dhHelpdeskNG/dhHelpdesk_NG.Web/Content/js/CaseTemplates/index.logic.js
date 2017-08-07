@@ -53,12 +53,15 @@ $(function () {
         var UserWGroupIds = $(UserWGroup).val();
         var TemplateProductAreaIds = $(TemplateProductArea).val();
         var ApplicationIds = $(Application).val();
-        var Actives = $(Active).val();
         
+        var Actives = document.getElementById('chkActive').checked;
+        
+      
 
-        doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds, ApplicationIds);
+        doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds, ApplicationIds, Actives.toString());
     });
 
+   
     $(edtSearch).keydown(function (e) {
        
         if (e.keyCode == 13) {
@@ -74,8 +77,9 @@ $(function () {
             var UserWGroupIds = $(UserWGroup).val();
             var TemplateProductAreaIds = $(TemplateProductArea).val();
             var ApplicationIds = $(Application).val();
+            var Actives = document.getElementById('chkActive').checked;
 
-            doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds, ApplicationIds);
+            doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds, ApplicationIds, Actives.toString());
             return false;
         }
     });
@@ -121,7 +125,7 @@ $(function () {
                 });
     }
 
-    function doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds, ApplicationIds) {
+    function doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds, ApplicationIds, Actives) {
         //dataType: "json",
         //async: true,
         $.ajax({      
@@ -140,6 +144,7 @@ $(function () {
                 UserWGroupIds: UserWGroupIds,
                 TemplateProductAreaIds: TemplateProductAreaIds,
                 ApplicationIds: ApplicationIds,
+                Actives: Actives.toString()
 
             }),
             success: function (filteredModel) {
