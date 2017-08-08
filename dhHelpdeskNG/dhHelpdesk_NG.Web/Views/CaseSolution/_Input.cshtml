@@ -2185,7 +2185,7 @@
         submitHandler: function (form) {
 
             setHiddenField();
-            //var id=document.getElementById('CaseSolution_Id').value;            
+            //var id=document.getElementById('CaseSolution_Id').value;
             //if (id==0)
             //{
             //    var form = $("#target").serialize();
@@ -2194,11 +2194,11 @@
             //        url: "/CaseSolution/NewAndEdit",
             //        data: form,
             //        success: function (data) {
-                   
+
             //            $('#divReplaceConditions').html($(data));
             //        },
             //        error: function (result) {
-                   
+
             //        }
             //    });
             //}
@@ -2251,25 +2251,30 @@
 
 
         $('#CopyCaseSolution').on('click', function () {
+            if (confirm("Copy?") == true)
+            {
 
 
-            var id=0;            
-            if (id==0)
-            {                
-                var form = $("#target").serialize();
-                $.ajax({
-                    type: 'POST',
-                    url: "/CaseSolution/Copy",
-                    data: form,
-                    success: function (data) {
-                   
-                        window.location.href = '/CaseSolution/Index/';
-                        //$('#divReplaceConditions').html($(data));
-                    },
-                    error: function (result) {
-                   
-                    }
-                });
+
+
+                var id=0;
+                if (id==0)
+                {
+                    var form = $("#target").serialize();
+                    $.ajax({
+                        type: 'POST',
+                        url: "/CaseSolution/Copy",
+                        data: form,
+                        success: function (data) {
+
+                            window.location.href = '/CaseSolution/Index/';
+                            //$('#divReplaceConditions').html($(data));
+                        },
+                        error: function (result) {
+
+                        }
+                    });
+                }
             }
             //form.submit();
         })
@@ -2361,7 +2366,7 @@
         }
         var h=document.getElementById('selectedValues');
         h.value=final;
-        
+
     }
 
     //function DropDownChange(v)
@@ -2453,11 +2458,11 @@
                 url: "/CaseSolution/NewAndEdit",
                 data: form,
                 success: function (data) {
-                   
+
                     $('#divReplaceConditions').html($(data));
                 },
                 error: function (result) {
-                   
+
                 }
             });
 
