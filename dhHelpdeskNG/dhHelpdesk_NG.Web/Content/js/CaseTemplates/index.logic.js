@@ -55,10 +55,10 @@ $(function () {
         var ApplicationIds = $(Application).val();
         
         var Actives = document.getElementById('chkActive').checked;
-        
+        var Img = document.getElementById('icoImg');
       
 
-        doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds, ApplicationIds, Actives.toString());
+        doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds, ApplicationIds, Actives.toString(), Img.className.toString());
     });
 
    
@@ -78,8 +78,9 @@ $(function () {
             var TemplateProductAreaIds = $(TemplateProductArea).val();
             var ApplicationIds = $(Application).val();
             var Actives = document.getElementById('chkActive').checked;
+            var Img = document.getElementById('icoImg');
 
-            doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds, ApplicationIds, Actives.toString());
+            doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds, ApplicationIds, Actives.toString(), Img.className.toString());
             return false;
         }
     });
@@ -125,7 +126,7 @@ $(function () {
                 });
     }
 
-    function doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds, ApplicationIds, Actives) {
+    function doSearch(searchText, categoryIds, subStatusIds, WgroupIds, PriorityIds, StatusIds, ProductAreaIds, UserWGroupIds, TemplateProductAreaIds, ApplicationIds, Actives, ImgClass) {
         //dataType: "json",
         //async: true,
         $.ajax({      
@@ -144,7 +145,8 @@ $(function () {
                 UserWGroupIds: UserWGroupIds,
                 TemplateProductAreaIds: TemplateProductAreaIds,
                 ApplicationIds: ApplicationIds,
-                Actives: Actives.toString()
+                Actives: Actives.toString(),
+                ImgClass: ImgClass
 
             }),
             success: function (filteredModel) {

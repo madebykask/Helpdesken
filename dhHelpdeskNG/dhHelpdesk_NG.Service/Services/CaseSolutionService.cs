@@ -44,7 +44,7 @@ namespace DH.Helpdesk.Services.Services
         void Commit();
         IList<WorkflowStepModel> GetGetWorkflowSteps(int customerId, Case _case, UserOverview user, ApplicationType applicationType, int? templateId);
 
-        
+
     }
 
     public class CaseSolutionService : ICaseSolutionService
@@ -237,12 +237,12 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
-            List<Application> lapp= new List<Application>();
+            List<Application> lapp = new List<Application>();
 
             foreach (DataRow rowExt in dtExt.Rows)
             {
                 Application a = new Application();
-                
+
                 if (rowExt["Id"].ToString() != null)
                 {
                     a.Id = Convert.ToInt32(rowExt["Id"].ToString());
@@ -439,30 +439,34 @@ namespace DH.Helpdesk.Services.Services
             {
                 query = query.Where(x => x.CaseSolutionCategory_Id.HasValue && SearchCaseSolutions.CategoryIds.Contains(x.CaseSolutionCategory_Id.Value));
             }
-            
+
 
             if (SearchCaseSolutions.OnlyActive == true)
             {
                 query = query.Where(x => x.Status == 1);
 
             }
+            else
+            {
+                query = query.Where(x => x.Status == 1 | x.Status == 0);
+            }
 
             //Sub status
             if (SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.SubStatusIds.Any())
             {
-                
+
                 var q = (from cs in this._caseSolutionConditionRepository.GetAll()
-                             select cs);
+                         select cs);
 
                 var res = from cust in query
                           join so in q on cust.Id equals so.CaseSolution_Id
-                          where SearchCaseSolutions.SubStatusIds.Contains(so.Values)                          
+                          where SearchCaseSolutions.SubStatusIds.Contains(so.Values)
                           select cust;
 
                 query = res;
 
-                
-                
+
+
 
             }
 
@@ -500,7 +504,7 @@ namespace DH.Helpdesk.Services.Services
             //Status
             if (SearchCaseSolutions.StatusIds != null && SearchCaseSolutions.StatusIds.Any())
             {
-                
+
                 var q = (from cs in this._caseSolutionConditionRepository.GetAll()
                          select cs);
 

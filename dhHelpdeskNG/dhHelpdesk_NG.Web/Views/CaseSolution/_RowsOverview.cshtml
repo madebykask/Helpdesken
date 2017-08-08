@@ -20,7 +20,9 @@
                 <td>
                     <input type="text" id="caseSolutionSearch" maxlength="50" style="width: 285px;" value="@searchText" />
                     <input type="button" id="btnCaseSolutionSearch" class="btn" value="@Translation.GetCoreTextTranslation("Sök")" />
-                    <i id="icoImg" class="icon-plus-sign" ; style="cursor: pointer;" onclick="showDiv()"></i>
+                    <i id="icoImg" class="@Model.FirstOrDefault().ImageClass"; style="cursor: pointer;" onclick="showDiv()"></i>
+
+                    @*class="icon-plus-sign"*@
                 </td>
             </tr>
             <tr>
@@ -28,8 +30,8 @@
                     <span>@Translation.Get("Visa endast aktiva")</span>
                 </td>
                 <td>
-
-                    <input type="checkbox" onclick="test(this)" id="chkActive">
+                    <input type="checkbox" onclick="test(this)" id="chkActive" @(Model.FirstOrDefault().IsShowOnlyActive ? "checked" : string.Empty)>
+                   @* <input type="checkbox" onclick="test(this)" id="chkActive">*@
 
                 </td>
 
@@ -132,7 +134,8 @@
         var TemplateProductAreaIds = document.getElementById('caseSolFilterCaseTemplateProductArea').value;
         var ApplicationIds = document.getElementById('caseSolFilterApplication').value;
         var Actives = document.getElementById('chkActive').checked;
-
+        var Img = document.getElementById('icoImg');
+       // alert(Img.className);
         $.ajax({
 
             url: '/CaseSolution/Search',
@@ -149,7 +152,8 @@
                 UserWGroupIds: UserWGroupIds,
                 TemplateProductAreaIds: TemplateProductAreaIds,
                 ApplicationIds: ApplicationIds,
-                Actives: Actives.toString()
+                Actives: Actives.toString(),
+                ImgClass: Img.className
 
             }),
             success: function (filteredModel) {

@@ -26,6 +26,8 @@ namespace DH.Helpdesk.Domain
         List<string> ApplicationIds { get; set; }
 
         bool OnlyActive { get; set; }
+
+        string ImageClass { get; set; }
     }
 
     public class CaseSolutionSearch : Search, ICaseSolutionSearch
@@ -51,5 +53,7 @@ namespace DH.Helpdesk.Domain
         public List<string> ApplicationIds { get; set; }
 
         public bool OnlyActive { get; set; }
+
+        public string ImageClass { get; set; }
     }
 }

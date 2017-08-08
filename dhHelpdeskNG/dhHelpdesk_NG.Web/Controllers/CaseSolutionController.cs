@@ -189,12 +189,84 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult Search(string searchText, List<int> categoryIds, List<string> subStatusIds, List<string> WgroupIds, List<string> PriorityIds, List<string> StatusIds, List<string> ProductAreaIds, List<string> UserWGroupIds, List<string> TemplateProductAreaIds, List<string> ApplicationIds, string Actives)
+        public PartialViewResult Search(string searchText, List<int> categoryIds, List<string> subStatusIds, List<string> WgroupIds, List<string> PriorityIds, List<string> StatusIds, List<string> ProductAreaIds, List<string> UserWGroupIds, List<string> TemplateProductAreaIds, List<string> ApplicationIds, string Actives, string ImgClass)
         {
             bool act = false;
-            if (Actives=="true")
+            if (Actives == "true")
             {
                 act = true;
+            }
+
+            if (categoryIds != null)
+            {
+                if (categoryIds.Count() == 1 && (categoryIds[0] == 0 | categoryIds[0].ToString() == ""))
+                {
+                    categoryIds = null;
+                }
+            }
+
+            if (subStatusIds != null)
+            {
+                if (subStatusIds.Count() == 1 && (subStatusIds[0] == "0" | subStatusIds[0].ToString() == ""))
+                {
+                    subStatusIds = null;
+                }
+            }
+
+            if (WgroupIds != null)
+            {
+                if (WgroupIds.Count() == 1 && (WgroupIds[0] == "0" | WgroupIds[0].ToString() == ""))
+                {
+                    WgroupIds = null;
+                }
+            }
+
+            if (PriorityIds != null)
+            {
+                if (PriorityIds.Count() == 1 && (PriorityIds[0] == "0" | PriorityIds[0].ToString() == ""))
+                {
+                    PriorityIds = null;
+                }
+            }
+
+            if (StatusIds != null)
+            {
+                if (StatusIds.Count() == 1 && (StatusIds[0] == "0" | StatusIds[0].ToString() == ""))
+                {
+                    StatusIds = null;
+                }
+            }
+
+            if (ProductAreaIds != null)
+            {
+                if (ProductAreaIds.Count() == 1 && (ProductAreaIds[0] == "0" | ProductAreaIds[0].ToString() == ""))
+                {
+                    ProductAreaIds = null;
+                }
+            }
+
+            if (UserWGroupIds != null)
+            {
+                if (UserWGroupIds.Count() == 1 && (UserWGroupIds[0] == "0" | UserWGroupIds[0].ToString() == ""))
+                {
+                    UserWGroupIds = null;
+                }
+            }
+
+            if (TemplateProductAreaIds != null)
+            {
+                if (TemplateProductAreaIds.Count() == 1 && (TemplateProductAreaIds[0] == "0" | TemplateProductAreaIds[0].ToString() == ""))
+                {
+                    TemplateProductAreaIds = null;
+                }
+            }
+
+            if (ApplicationIds != null)
+            {
+                if (ApplicationIds.Count() == 1 && (ApplicationIds[0] == "0" | ApplicationIds[0].ToString() == ""))
+                {
+                    ApplicationIds = null;
+                }
             }
 
             var caseSolutionSearch = new CaseSolutionSearch();
@@ -202,7 +274,13 @@ namespace DH.Helpdesk.Web.Controllers
                 caseSolutionSearch = SessionFacade.CurrentCaseSolutionSearch;
 
             caseSolutionSearch.SearchCss = searchText;
-            caseSolutionSearch.CategoryIds = categoryIds.ToList();
+
+
+            if (categoryIds != null)
+            {
+                caseSolutionSearch.CategoryIds = categoryIds.ToList();
+            }
+
             if (subStatusIds != null)
             {
                 caseSolutionSearch.SubStatusIds = subStatusIds.ToList();
@@ -243,9 +321,9 @@ namespace DH.Helpdesk.Web.Controllers
                 caseSolutionSearch.ApplicationIds = ApplicationIds.ToList();
             }
 
-            
+
             caseSolutionSearch.OnlyActive = act;
-            
+            caseSolutionSearch.ImageClass = ImgClass;
 
             SessionFacade.CurrentCaseSolutionSearch = caseSolutionSearch;
 
@@ -1775,7 +1853,9 @@ namespace DH.Helpdesk.Web.Controllers
                 IsActive = (cs.Status != 0),
                 ConnectedToButton = (cs.ConnectedButton.HasValue && cs.ConnectedButton == 0) ? Translation.GetCoreTextTranslation(DH.Helpdesk.Common.Constants.Text.WorkflowStep) : (cs.ConnectedButton.HasValue) ? connectedToButton + " " + cs.ConnectedButton.Value : "",
                 SortOrder = cs.SortOrder,
-                CaseSolutionDescription = cs.CaseSolutionDescription
+                CaseSolutionDescription = cs.CaseSolutionDescription,
+                IsShowOnlyActive = caseSolutionSearch.OnlyActive,
+                ImageClass = caseSolutionSearch.ImageClass == null ? "icon-plus-sign" : caseSolutionSearch.ImageClass
             }).ToArray();
 
             var activeTab = SessionFacade.FindActiveTab("CaseSolution");
@@ -1784,7 +1864,7 @@ namespace DH.Helpdesk.Web.Controllers
             IList<Priority> p = this._priorityService.GetPriorities(customerId);
             p = p.OrderBy(x => x.Name).ToList();
 
-            IList<ProductArea> pa = this._productAreaService.GetProductAreasForCustomer(customerId);            
+            IList<ProductArea> pa = this._productAreaService.GetProductAreasForCustomer(customerId);
             pa = pa.OrderBy(x => x.Name).ToList();
             //this._productAreaService.GetAllProductAreas(customerId)
             var model = new CaseSolutionIndexViewModel(activeTab)
@@ -1792,7 +1872,7 @@ namespace DH.Helpdesk.Web.Controllers
                 Rows = _rows,
                 CaseSolutionCategories = this._caseSolutionService.GetCaseSolutionCategories(customerId),
                 CaseSolutionSubStatus = this._stateSecondaryService.GetActiveStateSecondaries(customerId),
-                CaseSolutionWGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId),                
+                CaseSolutionWGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId),
                 CaseSolutionPriorities = p,
                 CaseSolutionStatuses = this._statusService.GetStatuses(customerId),
                 CaseSolutionProductArea = pa,

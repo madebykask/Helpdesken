@@ -28,6 +28,8 @@
         public string CaseSolutionDescription { get; set; }
 
         public bool IsShowOnlyActive { get; set; }
+
+        public string ImageClass { get; set; }
     }
 
     public static class CaseSolutionRowIndexMapper
