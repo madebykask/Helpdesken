@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Logs.Output;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
@@ -117,7 +118,9 @@ namespace DH.Helpdesk.Dal.Repositories
                                             new LogFileMapperData
                                             {
                                                 Id = t.Id,
-                                                FileName = t.FileName
+                                                FileName = t.FileName,
+                                                LogId = t.ParentLog_Id,
+                                                CaseId = t.IsCaseFile.HasValue && t.IsCaseFile.Value ? t.Log.Case_Id : (int?)null
                                             })
                         };
 
@@ -202,6 +205,12 @@ namespace DH.Helpdesk.Dal.Repositories
         List<LogFile> GetLogFilesByLogId(int logId);
         void DeleteByLogIdAndFileName(int logId, string basePath, string fileName);
         void MoveLogFiles(int caseId, string fromBasePath, string toBasePath);
+        List<LogFileExisting> GetExistingFileNamesByCaseId(int caseId);
+        bool SaveAttachedExistingLogFiles(IEnumerable<LogFileExisting> logExistingFiles);
+        void DeleteByFileIdAndFileName(int fileId, string filename);
+        void ClearExistingAttachedFiles(int caseId);
+        void AddExistLogFiles(IEnumerable<LogFile> logExFiles);
+        byte[] GetCaseFileContentByIdAndFileName(int caseId, string basePath, string fileName);
     }
 
     public class LogFileRepository : RepositoryBase<LogFile>, ILogFileRepository
@@ -219,8 +228,15 @@ namespace DH.Helpdesk.Dal.Repositories
             return this._filesStorage.GetFileContent(ModuleName.Log, logId, basePath, fileName);
         }
 
+        public byte[] GetCaseFileContentByIdAndFileName(int caseId, string basePath, string fileName)
+        {
+            var caseNumber = DataContext.Cases.Single(x => x.Id == caseId).CaseNumber;
+            return this._filesStorage.GetFileContent(ModuleName.Cases, Convert.ToInt32(caseNumber), basePath, fileName);
+        }
+
         public List<string> FindFileNamesByLogId(int logId)
         {
+//            return this.DataContext.LogFiles.Where(f => f.Log_Id == logId && !f.ParentLog_Id.HasValue && !(f.IsCaseFile.HasValue && f.IsCaseFile.Value)).Select(f => f.FileName).ToList();
             return this.DataContext.LogFiles.Where(f => f.Log_Id == logId).Select(f => f.FileName).ToList();
         }
 
@@ -265,6 +281,48 @@ namespace DH.Helpdesk.Dal.Repositories
             var logFiles = this.DataContext.LogFiles.Where(f => f.Log.Case_Id == caseId).Select(f=> f.Log_Id).Distinct().ToList();
             foreach (var logId in logFiles)
                 _filesStorage.MoveDirectory(ModuleName.Log, logId.ToString(), fromBasePath, toBasePath);
+        }
+
+        public List<LogFileExisting> GetExistingFileNamesByCaseId(int caseId)
+        {
+            return DataContext.LogFilesExisting.Where(f => f.Case_Id == caseId).ToList();
+        }
+
+        public bool SaveAttachedExistingLogFiles(IEnumerable<LogFileExisting> logExistingFiles)
+        {
+//            var files = logExistingFiles.ToList();
+//            if (files.Any())
+//            {
+//                var caseId = files.Select(x => x.Case_Id).FirstOrDefault();
+//                var dupFiles = DataContext.LogFilesExisting.Where(x => x.FileName.Equals(x.FileName) && x.Case_Id == caseId);
+//                DataContext.LogFilesExisting.RemoveRange(oldFiles);
+//            }
+            DataContext.LogFilesExisting.AddRange(logExistingFiles);
+            DataContext.SaveChanges();
+            return true;
+        }
+
+        public void DeleteByFileIdAndFileName(int fileId, string filename)
+        {
+            var file = DataContext.LogFiles.FirstOrDefault(x => x.Id == fileId && x.FileName.Equals(filename));
+            if (file != null)
+            {
+                DataContext.LogFiles.Remove(file);
+                DataContext.SaveChanges();
+            }
+        }
+
+        public void ClearExistingAttachedFiles(int caseId)
+        {
+            var files = DataContext.LogFilesExisting.Where(x => x.Case_Id == caseId);
+            DataContext.LogFilesExisting.RemoveRange(files);
+            DataContext.SaveChanges();
+
+        }
+
+        public void AddExistLogFiles(IEnumerable<LogFile> logExFiles)
+        {
+            DataContext.LogFiles.AddRange(logExFiles);
         }
     }
 

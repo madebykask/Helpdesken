@@ -337,6 +337,8 @@
 
         public DbSet<LogFile> LogFiles { get; set; }
 
+        public DbSet<LogFileExisting> LogFilesExisting { get; set; }
+
         public DbSet<LogProgramEntity> LogPrograms { get; set; }
 
         public DbSet<Log> Logs { get; set; }
@@ -717,6 +719,7 @@
             modelBuilder.Configurations.Add(new LinkGroupConfiguration());            
             modelBuilder.Configurations.Add(new LogConfiguration());
             modelBuilder.Configurations.Add(new LogFileConfiguration());
+            modelBuilder.Configurations.Add(new LogFileExistingConfiguration());
             modelBuilder.Configurations.Add(new LogProgramConfiguration());
             modelBuilder.Configurations.Add(new Mail2TicketConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateConfiguration());

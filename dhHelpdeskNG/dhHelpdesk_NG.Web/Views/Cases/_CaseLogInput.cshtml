@@ -49,70 +49,8 @@
 		            if (Model.CustomerSettings.ModuleFaq == true && Model.customerUserSetting.User.FAQPermission == 1)
 		            {
 			            <li><a href="#" id="AddFAQ" class="btn">@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)</a></li>
-			            <li class="secspace"></li>
+@*			            <li class="secspace"></li>*@
 		            }
-                }
-		        <li>
-			        <div class="checkbox">
-				        @if (Model.Disable_SendMailAboutCaseToNotifier || Model.EditMode == Enums.AccessMode.ReadOnly)
-				        {
-					        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
-						        new {@disabled = "disabled", InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool()})
-				        }
-				        else
-				        {
-					        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
-						        new {InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool()})
-				        }
-				        <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span>
-			        </div>
-		        </li>
-                @if (!hasReadonlyLog)
-                {
-		            <li class="secspace"></li>
-		            <li>
-			            <div class="checkbox">
-				            @if (Model.EditMode == Enums.AccessMode.ReadOnly)
-                            {
-					            @Html.CheckBoxFor(model => model.CaseLog.HighPriority, new { @disabled = true })
-                            }
-                            else
-                            {
-					            @Html.CheckBoxFor(model => model.CaseLog.HighPriority)
-                            }
-				            <span class="lbl">@Translation.Get("Hög prioritet", SessionFacade.CurrentCaseLanguageId) </span>
-			            </div>
-		            </li>
-		            if (Model.CaseLog.Id == 0)
-                    {
-                        if (Model.standardTexts != null)
-                        {
-                            if (Model.standardTexts.Any())
-                            {
-					            <li class="secspace"></li>
-					            <li>
-						            <div class="btn-group" id="standardtextDropdownMenu">
-							            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-								            @Translation.GetCoreTextTranslation("Standardtext")&nbsp;<span class="caret"></span>
-							            </button>
-							            <ul class="dropdown-menu case-standardText-keep-open" role="menu">
-								            <li>
-									            <div id="standardTextAccordion" class="case-div-standardtext-accordion">
-										            @foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
-                                                    {
-											            <h3>
-												            <div id="stHeader_@e.Id" class="case-standardtext-space standardtext-header">@Html.Raw(e.StandardTextName)</div>
-											            </h3>
-											            <div class="case-div-standardtext case-standardtext-space"><span id="stText_@e.Id">@Html.Raw(e.Text)</span></div>
-                                                    }
-									            </div>
-								            </li>
-							            </ul>
-						            </div>
-					            </li>
-                            }
-                        }
-                    }
                 }
 	        </ul>
         </div>
@@ -128,13 +66,62 @@
                     @msg
                 </div>
             }
-            <thead>
-                <tr>
-                    <th class="span3"></th>
-                    <th class="span4"></th>
-                    <th class="span5"></th>
-                </tr>
-            </thead>
+        <thead>
+        <tr>
+            <th class="span3"></th>
+            <th class="span4"></th>
+            <th class="span5"></th>
+        </tr>
+        </thead>
+        <tr>
+            <td></td>
+            @if (!hasReadonlyLog)
+            {
+                <td>
+                    @if (Model.CaseLog.Id == 0)
+                    {
+                        if (Model.standardTexts != null)
+                        {
+                            if (Model.standardTexts.Any())
+                            {
+                                <div class="btn-group" id="standardtextDropdownMenu">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        @Translation.GetCoreTextTranslation("Standardtext")&nbsp;<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu case-standardText-keep-open" role="menu">
+                                        <li>
+                                            <div id="standardTextAccordion" class="case-div-standardtext-accordion">
+                                                @foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
+                                                {
+                                                    <h3>
+                                                        <div id="stHeader_@e.Id" class="case-standardtext-space standardtext-header">@Html.Raw(e.StandardTextName)</div>
+                                                    </h3>
+                                                    <div class="case-div-standardtext case-standardtext-space"><span id="stText_@e.Id">@Html.Raw(e.Text)</span></div>
+                                                }
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+                        }
+                    }
+                </td>
+                <td>
+                    <div class="checkbox commun">
+                        @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                        {
+                            @Html.CheckBoxFor(model => model.CaseLog.HighPriority, new {@disabled = true})
+                        }
+                        else
+                        {
+                            @Html.CheckBoxFor(model => model.CaseLog.HighPriority)
+                        }
+                        <span class="lbl">@Translation.Get("Hög prioritet", SessionFacade.CurrentCaseLanguageId) </span>
+                    </div>
+
+                </td>
+            }
+        </tr>
             <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote)">
                 <td>
                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_External, "Extern notering")
@@ -150,6 +137,19 @@
                     }
                 </td>
                 <td>
+                    <div class="checkbox commun">
+                        @if (Model.Disable_SendMailAboutCaseToNotifier || Model.EditMode == Enums.AccessMode.ReadOnly)
+                        {
+                            @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
+                                new { @disabled = "disabled", InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
+                        }
+                        else
+                        {
+                            @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
+                                new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
+                        }
+                        <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span>
+                    </div>
                     @Html.HiddenFor(model => model.CaseLog.RegUser)
                     @Html.HiddenFor(model => model.CaseLog.LogType)
                     @Html.HiddenFor(model => model.CaseLog.UserId)
@@ -214,22 +214,31 @@
 				{*@
 			@if (Model.CaseLog.Id == 0 && !Model.newLog)
 			{
-				<tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Filename, CaseSolutionFields.LogFileName)">
-					<td>
-						@CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename, "Bifogad fil")
-					</td>
-					<td>
-						@if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
-						{
-							<a href="#upload_logfiles_popup" role="button" class="btn disabled" disabled="true" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
-						}
-						else
-						{
-							<a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
-							<a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="log">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
-						}
-					</td>
-				</tr>
+			    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Filename, CaseSolutionFields.LogFileName)">
+			        <td>
+			            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename, "Bifogad fil")
+			        </td>
+			        <td>
+			            @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
+			            {
+			                <a href="#upload_logfiles_popup" role="button" class="btn disabled" disabled="true" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
+			            }
+			            else
+			            {
+			                <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
+			                <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="log">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
+			            }
+			        </td>
+			        <td>
+			            <a href="" id="attachExistingFile" role="button" class="btn" style="margin-left: 20px;">
+			                <img src="@Url.Content("~/Content/img/clip.png")"/>
+			            </a>
+                        <div id="attached_files_view">
+                            @Html.Partial("ModalDialogs/_CaseAttachExistFile", Model)
+                        </div>
+			        </td>
+			    </tr>
+			    <tr><td>&nbsp;</td></tr>
 			}
 			<tr>
 				<td class="span3"></td>

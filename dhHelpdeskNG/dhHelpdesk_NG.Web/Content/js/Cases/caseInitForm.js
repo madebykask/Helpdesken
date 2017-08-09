@@ -1018,7 +1018,7 @@ function CaseInitForm() {
     };
 
     var getLogFiles = function () {
-        $.get('/Cases/LogFiles', { id: $('#LogKey').val(), now: Date.now() }, function (data) {
+        $.get('/Cases/LogFiles', { id: $('#LogKey').val(), now: Date.now(), caseId: $("#case__Id").val() }, function (data) {
             $('#divCaseLogFiles').html(data);
             // Raise event about rendering of uploaded file
             $(document).trigger("OnUploadedCaseLogFileRendered", []);

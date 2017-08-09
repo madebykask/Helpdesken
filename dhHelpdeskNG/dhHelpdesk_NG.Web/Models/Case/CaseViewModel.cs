@@ -47,6 +47,7 @@ namespace DH.Helpdesk.Web.Models.Case
                                                            }
                                                    };
 			ExternalInvoices = new List<ExternalInvoiceModel>();
+			CaseAttachedExFiles = new List<CaseAttachedExFileModel>();
         }
 
         public string CaseKey { get; set; }
@@ -173,6 +174,8 @@ namespace DH.Helpdesk.Web.Models.Case
         public string LogFileNames { get; set; }
 
         public string SavedFiles { get; set; }
+
+        public List<CaseAttachedExFileModel> CaseAttachedExFiles { get; set; }
 
         /// <summary>
         /// Gets or sets the case owner default working group.

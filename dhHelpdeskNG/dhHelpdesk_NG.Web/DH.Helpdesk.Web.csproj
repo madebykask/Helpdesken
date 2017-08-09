@@ -513,6 +513,7 @@
     <Content Include="Content\css\select2.css" />
     <Content Include="Content\icons\advanced_search.png" />
     <Content Include="Content\icons\ajax-loader.gif" />
+    <Content Include="Content\icons\clip.png" />
     <Content Include="Content\icons\deal.png" />
     <Content Include="Content\icons\doc-download.png" />
     <Content Include="Content\icons\doc-edit.png" />
@@ -528,6 +529,7 @@
     <Content Include="Content\img\clickmultimenu-4.png" />
     <Content Include="Content\img\clickmultimenu-5.png" />
     <Content Include="Content\img\clickmultimenu-6.png" />
+    <Content Include="Content\img\clip.png" />
     <Content Include="Content\img\dh_solutions_version.png" />
     <Content Include="Content\img\glyphicons-dh.png" />
     <Content Include="Content\img\ic_sentiment_dissatisfied_black_24dp_1x.png" />
@@ -595,6 +597,7 @@
     <Content Include="Content\js\Cases\caseByIds.logic.js" />
     <Content Include="Content\js\Cases\Dialogs\CaseCharge.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseAddFollowersSearch.js" />
+    <Content Include="Content\js\Cases\Dialogs\_caseAttachExistFile.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseConnectToParent.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseIntLogSearch.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseUserSearchCommon.js" />
@@ -1428,6 +1431,7 @@
     <Compile Include="Models\CaseRules\CaseRuleModel.cs" />
     <Compile Include="Models\CaseSolutionSettingModel.cs" />
     <Compile Include="Models\CaseSolution\CaseSolutionIndex.cs" />
+    <Compile Include="Models\Case\CaseAttachedExFileModel.cs" />
     <Compile Include="Models\Case\CaseByIdsViewModel.cs" />
     <Compile Include="Models\Case\CaseFilesModel.cs" />
     <Compile Include="Models\CaseLock\CaseLockModel.cs" />
@@ -2635,6 +2639,7 @@
     <Content Include="Views\FeedbackAnswer\ThankYou.cshtml" />
     <Content Include="Views\Shared\WorkflowStep.cshtml" />
     <Content Include="Views\CaseSolution\_Conditions.cshtml" />
+    <Content Include="Views\Cases\ModalDialogs\_CaseAttachExistFile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

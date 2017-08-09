@@ -4053,3 +4053,13 @@ a.export-order {
 .tableth9 {
     width: 20%;
 }
+
+td > div.checkbox.commun {
+    line-height: 20px;
+    padding-left: 40px;
+}
+
+.attachedFile {
+    background-image: url(../icons/clip.png);
+    background-position: 2px 1px;
+}

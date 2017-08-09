@@ -1228,7 +1228,11 @@ namespace DH.Helpdesk.Services.Services
             List<string> files = null;
             if (logFiles != null && log != null)
                 if (logFiles.Count > 0)
-                    files = logFiles.Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, log.Id, basePath, f.FileName)).ToList();
+                {
+                    var caseFiles = logFiles.Where(x => x.IsCaseFile).Select(x => _filesStorage.ComposeFilePath(ModuleName.Cases, x.ReferenceId, basePath, x.FileName)).ToList();
+                    files = logFiles.Where(x => !x.IsCaseFile).Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, f.ReferenceId, basePath, f.FileName)).ToList();
+                    files.AddRange(caseFiles);
+                }
 
             // sub state should not generate email to notifier
             if (newCase.StateSecondary != null)
@@ -2263,7 +2267,11 @@ namespace DH.Helpdesk.Services.Services
             List<string> files = null;
             if (logFiles != null && log != null)
                 if (logFiles.Count > 0)
-                    files = logFiles.Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, log.Id, basePath, f.FileName)).ToList();
+                {
+                    var caseFiles = logFiles.Where(x => x.IsCaseFile).Select(x => _filesStorage.ComposeFilePath(ModuleName.Cases, x.ReferenceId, basePath, x.FileName)).ToList();
+                    files = logFiles.Where(x => !x.IsCaseFile).Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, f.ReferenceId, basePath, f.FileName)).ToList();
+                    files.AddRange(caseFiles);
+                }
 
             foreach (var receiver in receivers)
             {

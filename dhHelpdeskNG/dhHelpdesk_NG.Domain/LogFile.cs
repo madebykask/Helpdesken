@@ -8,6 +8,9 @@
         public string FileName { get; set; }
         public DateTime CreatedDate { get; set; }
 
+        public bool? IsCaseFile { get; set; }
+        public int? ParentLog_Id { get; set; }
+
         public virtual Log Log { get; set; }
     }
 }

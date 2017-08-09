@@ -287,6 +287,7 @@
     <Compile Include="Models\Licenses\Computers\ComputerOverview.cs" />
     <Compile Include="Models\DailyReport\Output\DailyReportSubject.cs" />
     <Compile Include="Models\LogProgram\LogProgram.cs" />
+    <Compile Include="Models\Logs\LogExistingFileModel.cs" />
     <Compile Include="Models\Logs\Output\EmailLogsOverview.cs" />
     <Compile Include="Models\MailTemplates\CustomMailTemplateLanguage.cs" />
     <Compile Include="Models\Modules\Output\ModulesOverview.cs" />
