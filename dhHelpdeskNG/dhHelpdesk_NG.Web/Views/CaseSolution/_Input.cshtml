@@ -2251,31 +2251,31 @@
 
 
         $('#CopyCaseSolution').on('click', function () {
-            if (confirm("Copy?") == true)
+            //if (confirm("Copy?") == true)
+            //{
+
+
+
+
+            var id=0;
+            if (id==0)
             {
+                var form = $("#target").serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: "/CaseSolution/Copy",
+                    data: form,
+                    success: function (data) {
 
+                        window.location.href = '/CaseSolution/Index/';
+                        //$('#divReplaceConditions').html($(data));
+                    },
+                    error: function (result) {
 
-
-
-                var id=0;
-                if (id==0)
-                {
-                    var form = $("#target").serialize();
-                    $.ajax({
-                        type: 'POST',
-                        url: "/CaseSolution/Copy",
-                        data: form,
-                        success: function (data) {
-
-                            window.location.href = '/CaseSolution/Index/';
-                            //$('#divReplaceConditions').html($(data));
-                        },
-                        error: function (result) {
-
-                        }
-                    });
-                }
+                    }
+                });
             }
+            //}
             //form.submit();
         })
     });
