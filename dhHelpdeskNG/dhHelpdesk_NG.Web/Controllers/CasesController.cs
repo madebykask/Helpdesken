@@ -1108,108 +1108,106 @@ namespace DH.Helpdesk.Web.Controllers
 				SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
 				if (SessionFacade.CurrentUser != null)
 				{
-					if (SessionFacade.CurrentUser.CreateCasePermission == 1)
-					{
-						var userId = SessionFacade.CurrentUser.Id;
-						var caseLockModel = new CaseLockModel();
-						caseLockModel.ActiveTab = "non";
-						var customerCaseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+					var userId = SessionFacade.CurrentUser.Id;
+					var caseLockModel = new CaseLockModel();
+					caseLockModel.ActiveTab = "non";
+					var customerCaseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
 
 
 
-						var template = _caseSolutionService.GetCaseSolution(m.SplitToCaseSolution_Id.Value);
+					var template = _caseSolutionService.GetCaseSolution(m.SplitToCaseSolution_Id.Value);
 
 
 
-						//var splitInput = this.GetCaseInputViewModel(
-						//	userId,
-						//	customerId,
-						//	0,
-						//	caseLockModel,
-						//	customerCaseFieldSettings,
-						//	string.Empty,
-						//	null,
-						//	 m.SplitToCaseSolution_Id.Value,
-						//	null,
-						//	false,
-						//	0, 
-						//	caseId);
+					//var splitInput = this.GetCaseInputViewModel(
+					//	userId,
+					//	customerId,
+					//	0,
+					//	caseLockModel,
+					//	customerCaseFieldSettings,
+					//	string.Empty,
+					//	null,
+					//	 m.SplitToCaseSolution_Id.Value,
+					//	null,
+					//	false,
+					//	0, 
+					//	caseId);
 
-						//var editModel = new CaseEditInput()
-						//{
-						//	CaseSolution_Id = m.SplitToCaseSolution_Id.Value,
-						//	caseFieldSettings = new List<CaseFieldSetting>() ,
-						//	caseLock = new CaseLock(),
-						//	caseLog = splitInput.CaseLog,
-						//	caseMailSetting = splitInput.CaseMailSetting,
-						//	CurrentCaseSolution_Id = m.SplitToCaseSolution_Id.Value,
-						//	case_ = splitInput.case_,
-						//	IndependentChild = true,
-						//	SplitToCaseSolution_Id = splitInput.CaseTemplateSplitToCaseSolutionID,
-						//	ParentId = splitInput.ParentCaseInfo.ParentId
-						//};
-						var identity = global::System.Security.Principal.WindowsIdentity.GetCurrent();
-						var windowsUser = identity != null ? identity.Name : null;
-						var child = this._caseService.Copy(
-								caseId,
-								userId,
-								SessionFacade.CurrentLanguageId,
-								this.Request.GetIpAddress(),
-								CaseRegistrationSource.Administrator,
-								windowsUser);
-
-						child.Id = 0;
-
-
-						if (template.OU_Id.HasValue)
-							child.OU_Id = template.OU_Id.Value;
-
-						if (template.Status_Id.HasValue)
-							child.Status_Id = template.Status_Id.Value;
-
-						if (template.ProductArea_Id.HasValue)
-							child.ProductArea_Id = template.ProductArea_Id.Value;
-
-						if (template.Priority_Id.HasValue)
-							child.Priority_Id = template.Priority_Id.Value;
-
-						if (template.StateSecondary_Id.HasValue)
-							child.StateSecondary_Id = template.StateSecondary_Id.Value;
-
-                        if (template.CaseWorkingGroup_Id.HasValue)
-                            child.WorkingGroup_Id = template.CaseWorkingGroup_Id.Value;
-
-                        IDictionary<string, string> errors; // = new Dictionary<string, string>();
-
-						var parentCase = _caseService.GetCaseById(caseId);
-
-						_caseService.SaveCase(child,
-							new CaseLog(),
+					//var editModel = new CaseEditInput()
+					//{
+					//	CaseSolution_Id = m.SplitToCaseSolution_Id.Value,
+					//	caseFieldSettings = new List<CaseFieldSetting>() ,
+					//	caseLock = new CaseLock(),
+					//	caseLog = splitInput.CaseLog,
+					//	caseMailSetting = splitInput.CaseMailSetting,
+					//	CurrentCaseSolution_Id = m.SplitToCaseSolution_Id.Value,
+					//	case_ = splitInput.case_,
+					//	IndependentChild = true,
+					//	SplitToCaseSolution_Id = splitInput.CaseTemplateSplitToCaseSolutionID,
+					//	ParentId = splitInput.ParentCaseInfo.ParentId
+					//};
+					var identity = global::System.Security.Principal.WindowsIdentity.GetCurrent();
+					var windowsUser = identity != null ? identity.Name : null;
+					var child = this._caseService.Copy(
+							caseId,
 							userId,
-							windowsUser,
-							new CaseExtraInfo(),
-							out errors,
-							parentCase);
+							SessionFacade.CurrentLanguageId,
+							this.Request.GetIpAddress(),
+							CaseRegistrationSource.Administrator,
+							windowsUser);
 
-						_caseService.SetIndependentChild(child.Id, true);
-
-
-						var data = _extendedCaseService.GetExtendedCaseFromCase(parentCase.Id);                         
-						if(data != null)
-							_extendedCaseService.CopyExtendedCaseToCase(data.Id, child.Id, SessionFacade.CurrentUser.UserId);
-
-						//editModel.case_.Ou = null;
-						
-						///this.Save(m);
+					child.Id = 0;
 
 
-						//var input = this.GetCaseInputViewModel(0, 0, 0, null, null, null, null, m.SplitToCaseSolution_Id.Value, caseId, true, 1, caseId);
-					}
+					if (template.OU_Id.HasValue)
+						child.OU_Id = template.OU_Id.Value;
+
+					if (template.Status_Id.HasValue)
+						child.Status_Id = template.Status_Id.Value;
+
+					if (template.ProductArea_Id.HasValue)
+						child.ProductArea_Id = template.ProductArea_Id.Value;
+
+					if (template.Priority_Id.HasValue)
+						child.Priority_Id = template.Priority_Id.Value;
+
+					if (template.StateSecondary_Id.HasValue)
+						child.StateSecondary_Id = template.StateSecondary_Id.Value;
+
+					if (template.CaseWorkingGroup_Id.HasValue)
+						child.WorkingGroup_Id = template.CaseWorkingGroup_Id.Value;
+
+					IDictionary<string, string> errors; // = new Dictionary<string, string>();
+
+					var parentCase = _caseService.GetCaseById(caseId);
+
+					_caseService.SaveCase(child,
+						new CaseLog(),
+						userId,
+						windowsUser,
+						new CaseExtraInfo(),
+						out errors,
+						parentCase);
+
+					_caseService.SetIndependentChild(child.Id, true);
+
+
+					var data = _extendedCaseService.GetExtendedCaseFromCase(parentCase.Id);
+					if (data != null)
+						_extendedCaseService.CopyExtendedCaseToCase(data.Id, child.Id, SessionFacade.CurrentUser.UserId);
+
+					//editModel.case_.Ou = null;
+
+					///this.Save(m);
+
+
+					//var input = this.GetCaseInputViewModel(0, 0, 0, null, null, null, null, m.SplitToCaseSolution_Id.Value, caseId, true, 1, caseId);
+
 				}
 				else
 				{
 					// Todo: proper error handling
-					this.RedirectToAction("~/Error/Unathorized"); 
+					this.RedirectToAction("~/Error/Unathorized");
 				}
 
 				// Create new case
@@ -5520,6 +5518,10 @@ namespace DH.Helpdesk.Web.Controllers
 			try
 			{
 				string extendedCasePath = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
+
+				//TODO: Do not check in
+				//extendedCasePath = "http://cfdhsschr.ikeadt.com" + extendedCasePath;
+				//extendedCasePath = "http://dhhelpdesk-ikea-bschr-v5.datahalland.se" + extendedCasePath;
 
 				if (!string.IsNullOrEmpty(extendedCasePath))
 				{
