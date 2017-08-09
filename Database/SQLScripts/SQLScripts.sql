@@ -329,7 +329,38 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ADD CaseSolutionDescription nvarchar(4000)
 GO
 
+if not exists(select * from sysobjects WHERE Name = N'tblLogFileExisting')
+BEGIN
+CREATE TABLE [dbo].[tblLogFileExisting](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Log_Id] [int] NULL,
+	[Case_Id] [int] NOT NULL,
+	[FileName] [nvarchar](200) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL CONSTRAINT [DF_tblLogFileExisting_CreatedDate]  DEFAULT (getdate())
+ CONSTRAINT [PK_tblLogFileExisting] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
 
+ALTER TABLE [dbo].[tblLogFileExisting] ADD  CONSTRAINT [FK_tblLogFileExisting_tblLog] FOREIGN KEY([Log_Id])
+REFERENCES [dbo].[tblLog] ([Id])
+
+ALTER TABLE [dbo].[tblLogFileExisting] ADD  CONSTRAINT [FK_tblLogFileExisting_tblCase] FOREIGN KEY([Case_Id])
+REFERENCES [dbo].[tblCase] ([Id])
+
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IsCaseFile' and sysobjects.name = N'tblLogFile')
+	ALTER TABLE tblLogFile
+	ADD [IsCaseFile] bit NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ParentLog_Id' and sysobjects.name = N'tblLogFile')
+	ALTER TABLE tblLogFile
+	ADD [ParentLog_Id] int NULL
+GO
 
 
     
