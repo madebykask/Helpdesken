@@ -101,6 +101,7 @@ DECLARE @dcTcEmployGreetingTextAGuid UNIQUEIDENTIFIER = '224a94ef-a37d-4693-ad30
 	@dcTcEmployGreetingTextAHeadline NVARCHAR(MAX) = '',
 	@dcTcEmployGreetingTextASortOrder INT = 0
 
+
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcEmployGreetingTextAGuid)
 BEGIN
 	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
@@ -268,6 +269,7 @@ SET @counter = @counter + 1
 
 -- #################################### 11a-33 Terms
 
+DECLARE @termsCounter INT = 0
 ---- Create or update a terms paragraph
 -- Paragraph guid
 DECLARE @dcTcTermsGuid UNIQUEIDENTIFIER = 'a38eea6a-7794-4cd7-ad1a-dba7f59335b8',
@@ -296,7 +298,8 @@ DECLARE @dcTcTermsPositionAGuid UNIQUEIDENTIFIER = 'd84526d7-6791-4f2c-ab1a-78e3
 	@dcTcTermsPositionADescription NVARCHAR(MAX) = '',
 	@dcTcTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to the <Position Title (Local Job Name)> of <Reports To Line Manager>. Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
 	@dcTcTermsPositionAHeadline NVARCHAR(MAX) = '<i>Position</i>',
-	@dcTcTermsPositionASortOrder INT = 0
+	@dcTcTermsPositionASortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsPositionAGuid)
 BEGIN
@@ -380,7 +383,8 @@ DECLARE @dcTcTermsPositionBGuid UNIQUEIDENTIFIER = '5716b2bc-72f3-427c-82bc-e482
 	@dcTcTermsPositionBDescription NVARCHAR(MAX) = '',
 	@dcTcTermsPositionBText NVARCHAR(MAX) = 'Your position is Part Time <Position Title (Local Job Name)> <Shift Type> Shift, reporting to  <Position Title (Local Job Name)> of <Reports To Line Manager>, which will be based at <Business Unit>. Your position (in terms of your duties & responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
 	@dcTcTermsPositionBHeadline NVARCHAR(MAX) = '<i>Position</i>',
-	@dcTcTermsPositionBSortOrder INT = 0
+	@dcTcTermsPositionBSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsPositionBGuid)
 BEGIN
@@ -467,7 +471,8 @@ DECLARE @dcTcTermsComAGuid UNIQUEIDENTIFIER = '93803913-df3b-4477-a545-cb0b15111
 	@dcTcTermsComADescription NVARCHAR(MAX) = '',
 	@dcTcTermsComAText NVARCHAR(MAX) = 'Your commencement date is <Contract Start Date>, unless otherwise terminated in accordance with this contract.',
 	@dcTcTermsComAHeadline NVARCHAR(MAX) = 'Commencement Date',
-	@dcTcTermsComASortOrder INT = 0
+	@dcTcTermsComASortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsComAGuid)
 BEGIN
@@ -603,7 +608,8 @@ DECLARE @dcTcTermsComBGuid UNIQUEIDENTIFIER = 'e367cd79-7c5c-40d5-b334-3c1991b73
 	@dcTcTermsComBDescription NVARCHAR(MAX) = '',
 	@dcTcTermsComBText NVARCHAR(MAX) = 'Your commencement date is <Contract Start Date> and will cease on <Contract End Date>, unless otherwise terminated in accordance with this contract.',
 	@dcTcTermsComBHeadline NVARCHAR(MAX) = 'Commencement date',
-	@dcTcTermsComBSortOrder INT = 0
+	@dcTcTermsComBSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsComBGuid)
 BEGIN
@@ -744,7 +750,8 @@ DECLARE @dcTcTermsHWAGuid UNIQUEIDENTIFIER = 'a5f8db11-a408-4aac-af4c-0f9cfd7a55
 	'You will be rostered to work 76 ordinary hours per fortnight.  Such details of your initial roster will be discussed with you upon your commencement.  However, where there is a change in the business’ needs, your hours may also be subject to change with appropriate notice.
 You should note that ordinary hours in the Distribution Centre include Saturday’s and you have mutually agreed to work more than one in three Saturdays as part of your contracted ordinary hours.',
 	@dcTcTermsHWAHeadline NVARCHAR(MAX) = 'Position',
-	@dcTcTermsHWASortOrder INT = 0
+	@dcTcTermsHWASortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsHWAGuid)
 BEGIN
@@ -830,7 +837,8 @@ DECLARE @dcTcTermsHWBGuid UNIQUEIDENTIFIER = 'b055c31a-16e4-4544-b542-30ca4204d2
 	'Your contracted hours are <Contracted Hours> per fortnight, you may be offered additional ‘varied hours’ paid at your ordinary rate of pay.
 	You will be rostered in accordance to your availability schedule which you filled out at the time of your employment. Your availability schedule forms part of your employment contract.',
 	@dcTcTermsHWBHeadline NVARCHAR(MAX) = 'Hours of Work',
-	@dcTcTermsHWBSortOrder INT = 0
+	@dcTcTermsHWBSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsHWBGuid)
 BEGIN
@@ -917,7 +925,8 @@ DECLARE @dcTcTermsProbTimeGuid UNIQUEIDENTIFIER = '63913abd-c604-4a0f-a380-1838c
 	@dcTcTermsProbTimeDescription NVARCHAR(MAX) = '',
 	@dcTcTermsProbTimeText NVARCHAR(MAX) = 'IKEA offers this employment to you on a probationary basis for a period of six (6) months, during which time your performance standards will be subject to regular review and assessment.  In the six (6)-month period, if either you or IKEA wishes to terminate the employment relationship, then either party can effect that termination with one week’s notice in writing.',
 	@dcTcTermsProbTimeHeadline NVARCHAR(MAX) = 'Probationary Period',
-	@dcTcTermsProbTimeSortOrder INT = 0
+	@dcTcTermsProbTimeSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsProbTimeGuid)
 BEGIN
@@ -1004,7 +1013,8 @@ DECLARE @dcTcTermsRemunGuid UNIQUEIDENTIFIER = '91714198-1a98-4040-be64-207db370
 	@dcTcTermsRemunDescription NVARCHAR(MAX) = '',
 	@dcTcTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your base hourly rate will be as per the <b>IKEA Distributions Services Australia Pty Ltd Enterprise Agreement 2016</b>.  This amount will be paid directly into your nominated bank account on a fortnightly basis.',
 	@dcTcTermsRemunHeadline NVARCHAR(MAX) = 'Remuneration',
-	@dcTcTermsRemunSortOrder INT = 0
+	@dcTcTermsRemunSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsRemunGuid)
 BEGIN
@@ -1039,7 +1049,8 @@ IKEA’s current employer superannuation fund is the Labour Union Co-operative Ret
 <br>
 It is your responsibility to nominate a Super Fund for your contributions to be made to, and to ensure that you complete the necessary paperwork for enrolment into your nominated fund.  IKEA will supply you with a LUCRF Member Guide, including an application form.',
 	@dcTcTermsSuperHeadline NVARCHAR(MAX) = 'Superannuation',
-	@dcTcTermsSuperSortOrder INT = 0
+	@dcTcTermsSuperSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsSuperGuid)
 BEGIN
@@ -1095,7 +1106,8 @@ During and after your employment, you must not use or disclose Confidential Info
 <br>
 As an IKEA co-worker, you must keep Confidential Information in a secure manner and treat such information with appropriate sensitivity. On demand by IKEA and at the end of your employment, you must deliver to IKEA all copies of Confidential Information in your possession or control (including all Confidential Information held electronically in any medium) and then delete all Confidential Information held electronically in any medium in your possession or control.',
 	@dcTcTermsConfHeadline NVARCHAR(MAX) = 'Confidential Information',
-	@dcTcTermsConfSortOrder INT = 0
+	@dcTcTermsConfSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsConfGuid)
 BEGIN
@@ -1128,7 +1140,8 @@ DECLARE @dcTcTermsLeaveAGuid UNIQUEIDENTIFIER = 'ec1d8852-2d25-4440-b051-f3022f3
 	@dcTcTermsLeaveADescription NVARCHAR(MAX) = '',
 	@dcTcTermsLeaveAText NVARCHAR(MAX) = 'From your commencement date, you are entitled to leave in accordance with the relevant legislation and the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016. These entitlements are processed as detailed in the IKEA policies.',
 	@dcTcTermsLeaveAHeadline NVARCHAR(MAX) = 'Leave Entitlements',
-	@dcTcTermsLeaveASortOrder INT = 0
+	@dcTcTermsLeaveASortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsLeaveAGuid)
 BEGIN
@@ -1214,7 +1227,8 @@ DECLARE @dcTcTermsLeaveBGuid UNIQUEIDENTIFIER = 'c8417748-c47b-419d-8eea-2d36e57
 	@dcTcTermsLeaveBDescription NVARCHAR(MAX) = '',
 	@dcTcTermsLeaveBText NVARCHAR(MAX) = 'You will accrue entitlements to leave in accordance with relevant legislation and company policy on a pro rata basis (compared to a full-time employee). As stated in the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016.  These entitlements are processed as detailed in the IKEA policies.  This includes personal leave, annual leave, parental leave and long service leave.',
 	@dcTcTermsLeaveBHeadline NVARCHAR(MAX) = 'Leave Entitlements',
-	@dcTcTermsLeaveBSortOrder INT = 0
+	@dcTcTermsLeaveBSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsLeaveBGuid)
 BEGIN
@@ -1298,7 +1312,8 @@ DECLARE @dcTcTermsIssuesGuid UNIQUEIDENTIFIER = 'c55a5c5f-9271-46f0-9fb5-b43c1e4
 	@dcTcTermsIssuesDescription NVARCHAR(MAX) = '',
 	@dcTcTermsIssuesText NVARCHAR(MAX) = 'If any issues arise during your employment with IKEA, the matter should initially be discussed with your immediate manager, in accordance with IKEA’s Issue Resolution Procedure.  If the problem remains unresolved, you may refer it to more senior levels of management for further discussion in accordance with the Issue Resolution Procedure and the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016.',
 	@dcTcTermsIssuesHeadline NVARCHAR(MAX) = 'Issues Resolution',
-	@dcTcTermsIssuesSortOrder INT = 0
+	@dcTcTermsIssuesSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsIssuesGuid)
 BEGIN
@@ -1329,7 +1344,8 @@ DECLARE @dcTcTermsEqualGuid UNIQUEIDENTIFIER = 'a8c2b37f-051e-4d32-b87c-ba9930f5
 	@dcTcTermsEqualDescription NVARCHAR(MAX) = '',
 	@dcTcTermsEqualText NVARCHAR(MAX) = 'IKEA''s policy is to provide all co-workers with equal opportunity.  This policy precludes discrimination and harassment based on, but not limited to, race, colour, religion, gender, age, marital status and disability.  You are required to familiarise yourself with this policy and comply with it at all times.',
 	@dcTcTermsEqualHeadline NVARCHAR(MAX) = 'Equal Employment Opportunity ',
-	@dcTcTermsEqualSortOrder INT = 0
+	@dcTcTermsEqualSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsEqualGuid)
 BEGIN
@@ -1361,8 +1377,9 @@ DECLARE @dcTcTermsUniformGuid UNIQUEIDENTIFIER = '8661a234-5724-41b6-9ca5-16dd67
 	@dcTcTermsUniformText NVARCHAR(MAX) = 'IKEA has established guidelines necessary for the professional appearance that IKEA expects all co-workers to present, and as such co-workers are supplied with uniforms and name badges within these guidelines.
 <br><br>
 Co-workers are expected to project a favourable and professional image for IKEA, and are to be courteous, efficient and reliable in their dealings with colleagues, existing and potential customers and suppliers to IKEA.',
-	@dcTcTermsUniformHeadline NVARCHAR(MAX) = 'Issues Resolution',
-	@dcTcTermsUniformSortOrder INT = 0
+	@dcTcTermsUniformHeadline NVARCHAR(MAX) = 'Uniform & Conduct',
+	@dcTcTermsUniformSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsUniformGuid)
 BEGIN
@@ -1395,7 +1412,8 @@ DECLARE @dcTcTermsInductionGuid UNIQUEIDENTIFIER = '03a639f7-eab2-4bd2-abed-e930
 <br><br>
 IKEA also encourages its co-workers to take responsibility for their own learning and development.',
 	@dcTcTermsInductionHeadline NVARCHAR(MAX) = 'Induction & Ongoing Learning & Development',
-	@dcTcTermsInductionSortOrder INT = 0
+	@dcTcTermsInductionSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsInductionGuid)
 BEGIN
@@ -1426,7 +1444,8 @@ DECLARE @dcTcTermsSafetyGuid UNIQUEIDENTIFIER = 'd77f8309-6bb0-41ab-b93c-053f73a
 	@dcTcTermsSafetyDescription NVARCHAR(MAX) = '',
 	@dcTcTermsSafetyText NVARCHAR(MAX) = 'IKEA understands the requirement of ensuring a safe and healthy working environment for all co-workers in its offices, warehouses and stores, and a safe and healthy shopping environment for customers.  In fulfilling this aim, we undertake regular consultation with co-workers on health and safety issues and concerns.',
 	@dcTcTermsSafetyHeadline NVARCHAR(MAX) = 'Occupational Health & Safety',
-	@dcTcTermsSafetySortOrder INT = 0
+	@dcTcTermsSafetySortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsSafetyGuid)
 BEGIN
@@ -1461,7 +1480,8 @@ Upon termination of your employment, all material, equipment, uniforms, informat
 <br><br>
 IKEA reserves the right to withhold an appropriate sum of money from a co-worker’s termination payment until such time as any outstanding company property as detailed above is returned.',
 	@dcTcTermsTerminationHeadline NVARCHAR(MAX) = 'Termination',
-	@dcTcTermsTerminationSortOrder INT = 0
+	@dcTcTermsTerminationSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsTerminationGuid)
 BEGIN
@@ -1492,7 +1512,8 @@ DECLARE @dcTcTermsPoliciesGuid UNIQUEIDENTIFIER = 'a53f323b-545c-4fd7-b474-c2a93
 	@dcTcTermsPoliciesDescription NVARCHAR(MAX) = '',
 	@dcTcTermsPoliciesText NVARCHAR(MAX) = 'You shall be required to comply with all IKEA Policies and Procedures as amended from time to time and as outlined in IKEA’s Policy Guidelines and Welcome Program. The IKEA Policies and Procedures form part of your contract of employment.',
 	@dcTcTermsPoliciesHeadline NVARCHAR(MAX) = 'Company Policies & Procedures',
-	@dcTcTermsPoliciesSortOrder INT = 0
+	@dcTcTermsPoliciesSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsPoliciesGuid)
 BEGIN
@@ -1523,7 +1544,8 @@ DECLARE @dcTcTermsOtherTermsGuid UNIQUEIDENTIFIER = '4e4af9b2-68e2-4376-b269-c50
 	@dcTcTermsOtherTermsDescription NVARCHAR(MAX) = '',
 	@dcTcTermsOtherTermsText NVARCHAR(MAX) = 'The terms and conditions contained within the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016 (and any subsequent statutory agreement binding you and IKEA) also apply to your employment.  A copy of this Agreement is available for your perusal at all times.',
 	@dcTcTermsOtherTermsHeadline NVARCHAR(MAX) = 'Other Terms and Conditions',
-	@dcTcTermsOtherTermsSortOrder INT = 0
+	@dcTcTermsOtherTermsSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsOtherTermsGuid)
 BEGIN
@@ -1562,7 +1584,8 @@ If you are required to provide the police check/s at any other time during your 
 <br><br>
 Please note that the existence of a criminal record does not mean that the check will automatically be unsatisfactory, or that you will be assessed automatically as being unsuitable.  Each case will be assessed on its merits and will depend upon the inherent requirements of the position.',
 	@dcTcTermsPoliceHeadline NVARCHAR(MAX) = 'Police Checks',
-	@dcTcTermsPoliceSortOrder INT = 0
+	@dcTcTermsPoliceSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsPoliceGuid)
 BEGIN
@@ -1593,7 +1616,8 @@ DECLARE @dcTcTermsPerfGuid UNIQUEIDENTIFIER = 'f262417d-f0a8-4b17-8ef8-2757166ed
 	@dcTcTermsPerfDescription NVARCHAR(MAX) = '',
 	@dcTcTermsPerfText NVARCHAR(MAX) = 'A Co-worker Performance Review will be conducted at least once a year, usually between September and November.  However, your first review will be conducted during your 6-month probationary period.  This review will be based on your initial Co-worker discussion and your position’s Performance Criteria and Job Profile.  Areas of performance and non-performance will be discussed and addressed in accordance with company guidelines. Whilst the company conducts annual performance reviews, it also maintains an ongoing performance management program with its co-workers.',
 	@dcTcTermsPerfHeadline NVARCHAR(MAX) = 'Performance Management',
-	@dcTcTermsPerfSortOrder INT = 0
+	@dcTcTermsPerfSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsPerfGuid)
 BEGIN
@@ -1624,7 +1648,8 @@ DECLARE @dcTcTermsMediaGuid UNIQUEIDENTIFIER = '9b691976-4767-496f-b394-33ca4c00
 	@dcTcTermsMediaDescription NVARCHAR(MAX) = '',
 	@dcTcTermsMediaText NVARCHAR(MAX) = 'You shall not provide information or speak on behalf of IKEA or otherwise to the media on any matters concerning IKEA’s business or activities.  You must refer all requests from the media for information and/or interviews to the DC Manager.',
 	@dcTcTermsMediaHeadline NVARCHAR(MAX) = 'Communications with Media',
-	@dcTcTermsMediaSortOrder INT = 0
+	@dcTcTermsMediaSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsMediaGuid)
 BEGIN
@@ -1655,7 +1680,8 @@ DECLARE @dcTcTermsUnlawGuid UNIQUEIDENTIFIER = '58feef2e-241f-491e-b315-cecd82be
 	@dcTcTermsUnlawDescription NVARCHAR(MAX) = '',
 	@dcTcTermsUnlawText NVARCHAR(MAX) = 'If you become aware of or suspect any unlawful act or omission by any IKEA employee, you must advise IKEA immediately.',
 	@dcTcTermsUnlawHeadline NVARCHAR(MAX) = 'Obligation to report unlawful activities',
-	@dcTcTermsUnlawSortOrder INT = 0
+	@dcTcTermsUnlawSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsUnlawGuid)
 BEGIN
@@ -1695,7 +1721,8 @@ During and after your employment, you must do anything IKEA reasonably requires 
 </ul>',
 
 	@dcTcTermsIntelPropHeadline NVARCHAR(MAX) = 'Intellectual Property',
-	@dcTcTermsIntelPropSortOrder INT = 0
+	@dcTcTermsIntelPropSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsIntelPropGuid)
 BEGIN
@@ -1726,7 +1753,8 @@ DECLARE @dcTcTermsVarGuid UNIQUEIDENTIFIER = '0ea70ddd-53ee-4eec-aeab-7cf3821af6
 	@dcTcTermsVarDescription NVARCHAR(MAX) = '',
 	@dcTcTermsVarText NVARCHAR(MAX) = 'This Agreement may only be varied by a written agreement signed by yourself and IKEA.',
 	@dcTcTermsVarHeadline NVARCHAR(MAX) = 'Variation',
-	@dcTcTermsVarSortOrder INT = 0
+	@dcTcTermsVarSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsVarGuid)
 BEGIN
@@ -1757,7 +1785,8 @@ DECLARE @dcTcTermsSuspGuid UNIQUEIDENTIFIER = 'f0667d2f-d9c2-4e9f-a474-a112dd724
 	@dcTcTermsSuspDescription NVARCHAR(MAX) = '',
 	@dcTcTermsSuspText NVARCHAR(MAX) = 'If we have reason to believe that you may have engaged in a serious breach of your employment obligations, IKEA may at its discretion suspend you from your duties, either with or without pay, while and investigation is conducted.',
 	@dcTcTermsSuspHeadline NVARCHAR(MAX) = 'Suspension',
-	@dcTcTermsSuspSortOrder INT = 0
+	@dcTcTermsSuspSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsSuspGuid)
 BEGIN

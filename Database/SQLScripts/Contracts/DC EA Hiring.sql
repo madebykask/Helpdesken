@@ -119,7 +119,8 @@ BEGIN
 		[Name] = @dcHiringEmployGreetingTextAName, 
 		[Description] = @dcHiringEmployGreetingTextADescription, 
 		[Text] = @dcHiringEmployGreetingTextAText,
-		[Headline] = @dcHiringEmployGreetingTextAHeadline
+		[Headline] = @dcHiringEmployGreetingTextAHeadline,
+		SortOrder = @dcHiringEmployGreetingTextASortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringEmployGreetingTextAGuid
 END
@@ -202,7 +203,8 @@ BEGIN
 		[Name] = @dcHiringEmployGreetingTextBName, 
 		[Description] = @dcHiringEmployGreetingTextBDescription, 
 		[Text] = @dcHiringEmployGreetingTextBText,
-		[Headline] = @dcHiringEmployGreetingTextBHeadline
+		[Headline] = @dcHiringEmployGreetingTextBHeadline,
+		SortOrder = @dcHiringEmployGreetingTextBSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringEmployGreetingTextBGuid
 END
@@ -296,7 +298,7 @@ DECLARE @dcHiringTermsID INT = (SELECT ID FROM tblCaseDocumentParagraph WHERE Ca
 DECLARE @dcHiringTermsPositionAGuid UNIQUEIDENTIFIER = '7f5dc325-98b0-44b7-a812-562b0b368954',
 	@dcHiringTermsPositionAName NVARCHAR(MAX) = @prefix + ' Employment - Position - Full time',
 	@dcHiringTermsPositionADescription NVARCHAR(MAX) = '',
-	@dcHiringTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to the <Position Title (Local Job Name)> of <Reports To Line Manager>. Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
+	@dcHiringTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)> <Shift Type> Shift, reporting to  <Position Title (Local Job Name)> of <Reports To Line Manager>, which will be based at <Business Unit>. Your position (in terms of your duties & responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
 	@dcHiringTermsPositionAHeadline NVARCHAR(MAX) = '<i>Position</i>',
 	@dcHiringTermsPositionASortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
@@ -319,7 +321,8 @@ BEGIN
 		[Name] = @dcHiringTermsPositionAName, 
 		[Description] = @dcHiringTermsPositionADescription, 
 		[Text] = @dcHiringTermsPositionAText,
-		[Headline] = @dcHiringTermsPositionAHeadline
+		[Headline] = @dcHiringTermsPositionAHeadline,
+		SortOrder = @dcHiringTermsPositionASortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsPositionAGuid
 END
@@ -405,7 +408,8 @@ BEGIN
 		[Name] = @dcHiringTermsPositionBName, 
 		[Description] = @dcHiringTermsPositionBDescription, 
 		[Text] = @dcHiringTermsPositionBText,
-		[Headline] = @dcHiringTermsPositionBHeadline
+		[Headline] = @dcHiringTermsPositionBHeadline,
+		SortOrder = @dcHiringTermsPositionBSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsPositionBGuid
 END
@@ -492,7 +496,8 @@ BEGIN
 		[Name] = @dcHiringTermsComAName, 
 		[Description] = @dcHiringTermsComADescription, 
 		[Text] = @dcHiringTermsComAText,
-		[Headline] = @dcHiringTermsComAHeadline
+		[Headline] = @dcHiringTermsComAHeadline,
+		SortOrder = @dcHiringTermsComASortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsComAGuid
 END
@@ -629,7 +634,8 @@ BEGIN
 		[Name] = @dcHiringTermsComBName, 
 		[Description] = @dcHiringTermsComBDescription, 
 		[Text] = @dcHiringTermsComBText,
-		[Headline] = @dcHiringTermsComBHeadline
+		[Headline] = @dcHiringTermsComBHeadline,
+		SortOrder = @dcHiringTermsComBSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsComBGuid
 END
@@ -747,7 +753,7 @@ DECLARE @dcHiringTermsHWAGuid UNIQUEIDENTIFIER = '4a800b05-7d0e-4227-9724-8bce8c
 	@dcHiringTermsHWAText NVARCHAR(MAX) = 
 	'You will be rostered to work 76 ordinary hours per fortnight.  Such details of your initial roster will be discussed with you upon your commencement.  However, where there is a change in the business’ needs, your hours may also be subject to change with appropriate notice.
 You should note that ordinary hours in the Distribution Centre include Saturday’s and you have mutually agreed to work more than one in three Saturdays as part of your contracted ordinary hours.',
-	@dcHiringTermsHWAHeadline NVARCHAR(MAX) = 'Position',
+	@dcHiringTermsHWAHeadline NVARCHAR(MAX) = 'Hours of Work',
 	@dcHiringTermsHWASortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
 
@@ -769,7 +775,8 @@ BEGIN
 		[Name] = @dcHiringTermsHWAName, 
 		[Description] = @dcHiringTermsHWADescription, 
 		[Text] = @dcHiringTermsHWAText,
-		[Headline] = @dcHiringTermsHWAHeadline
+		[Headline] = @dcHiringTermsHWAHeadline,
+		SortOrder = @dcHiringTermsHWASortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsHWAGuid
 END
@@ -836,6 +843,7 @@ DECLARE @dcHiringTermsHWBGuid UNIQUEIDENTIFIER = '01c03f18-01fd-4718-bfab-1e5ec7
 	You will be rostered in accordance to your availability schedule which you filled out at the time of your employment. Your availability schedule forms part of your employment contract.',
 	@dcHiringTermsHWBHeadline NVARCHAR(MAX) = 'Hours of Work',
 	@dcHiringTermsHWBSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcHiringTermsHWBGuid)
 BEGIN
@@ -855,7 +863,8 @@ BEGIN
 		[Name] = @dcHiringTermsHWBName, 
 		[Description] = @dcHiringTermsHWBDescription, 
 		[Text] = @dcHiringTermsHWBText,
-		[Headline] = @dcHiringTermsHWBHeadline
+		[Headline] = @dcHiringTermsHWBHeadline,
+		SortOrder = @dcHiringTermsHWBSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsHWBGuid
 END
@@ -923,6 +932,7 @@ DECLARE @dcHiringTermsProbTimeGuid UNIQUEIDENTIFIER = 'ab481264-fce1-4f8c-bdea-b
 	@dcHiringTermsProbTimeText NVARCHAR(MAX) = 'IKEA offers this employment to you on a probationary basis for a period of six (6) months, during which time your performance standards will be subject to regular review and assessment.  In the six (6)-month period, if either you or IKEA wishes to terminate the employment relationship, then either party can effect that termination with one week’s notice in writing.',
 	@dcHiringTermsProbTimeHeadline NVARCHAR(MAX) = 'Probationary Period',
 	@dcHiringTermsProbTimeSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcHiringTermsProbTimeGuid)
 BEGIN
@@ -942,7 +952,8 @@ BEGIN
 		[Name] = @dcHiringTermsProbTimeName, 
 		[Description] = @dcHiringTermsProbTimeDescription, 
 		[Text] = @dcHiringTermsProbTimeText,
-		[Headline] = @dcHiringTermsProbTimeHeadline
+		[Headline] = @dcHiringTermsProbTimeHeadline,
+		SortOrder = @dcHiringTermsProbTimeSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsProbTimeGuid
 END
@@ -974,7 +985,8 @@ BEGIN
 		[Name] = @dcHiringTermsRemunName, 
 		[Description] = @dcHiringTermsRemunDescription, 
 		[Text] = @dcHiringTermsRemunText,
-		[Headline] = @dcHiringTermsRemunHeadline
+		[Headline] = @dcHiringTermsRemunHeadline,
+		SortOrder = @dcHiringTermsRemunSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsRemunGuid
 END
@@ -1010,7 +1022,8 @@ BEGIN
 		[Name] = @dcHiringTermsSuperName, 
 		[Description] = @dcHiringTermsSuperDescription, 
 		[Text] = @dcHiringTermsSuperText,
-		[Headline] = @dcHiringTermsSuperHeadline
+		[Headline] = @dcHiringTermsSuperHeadline,
+		SortOrder = @dcHiringTermsSuperSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsSuperGuid
 END
@@ -1067,7 +1080,8 @@ BEGIN
 		[Name] = @dcHiringTermsConfName, 
 		[Description] = @dcHiringTermsConfDescription, 
 		[Text] = @dcHiringTermsConfText,
-		[Headline] = @dcHiringTermsConfHeadline
+		[Headline] = @dcHiringTermsConfHeadline,
+		SortOrder = @dcHiringTermsConfSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsConfGuid
 END
@@ -1101,7 +1115,8 @@ BEGIN
 		[Name] = @dcHiringTermsLeaveAName, 
 		[Description] = @dcHiringTermsLeaveADescription, 
 		[Text] = @dcHiringTermsLeaveAText,
-		[Headline] = @dcHiringTermsLeaveAHeadline
+		[Headline] = @dcHiringTermsLeaveAHeadline,
+		SortOrder = @dcHiringTermsLeaveASortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsLeaveAGuid
 END
@@ -1188,7 +1203,8 @@ BEGIN
 		[Name] = @dcHiringTermsLeaveBName, 
 		[Description] = @dcHiringTermsLeaveBDescription, 
 		[Text] = @dcHiringTermsLeaveBText,
-		[Headline] = @dcHiringTermsLeaveBHeadline
+		[Headline] = @dcHiringTermsLeaveBHeadline,
+		SortOrder = @dcHiringTermsLeaveBSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsLeaveBGuid
 END
@@ -1273,7 +1289,8 @@ BEGIN
 		[Name] = @dcHiringTermsIssuesName, 
 		[Description] = @dcHiringTermsIssuesDescription, 
 		[Text] = @dcHiringTermsIssuesText,
-		[Headline] = @dcHiringTermsIssuesHeadline
+		[Headline] = @dcHiringTermsIssuesHeadline,
+		SortOrder = @dcHiringTermsIssuesSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsIssuesGuid
 END
@@ -1305,7 +1322,8 @@ BEGIN
 		[Name] = @dcHiringTermsEqualName, 
 		[Description] = @dcHiringTermsEqualDescription, 
 		[Text] = @dcHiringTermsEqualText,
-		[Headline] = @dcHiringTermsEqualHeadline
+		[Headline] = @dcHiringTermsEqualHeadline,
+		SortOrder = @dcHiringTermsEqualSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsEqualGuid
 END
@@ -1317,7 +1335,7 @@ DECLARE @dcHiringTermsUniformGuid UNIQUEIDENTIFIER = '9c93cf51-80fa-4ff9-9c9b-4d
 	@dcHiringTermsUniformText NVARCHAR(MAX) = 'IKEA has established guidelines necessary for the professional appearance that IKEA expects all co-workers to present, and as such co-workers are supplied with uniforms and name badges within these guidelines.
 <br><br>
 Co-workers are expected to project a favourable and professional image for IKEA, and are to be courteous, efficient and reliable in their dealings with colleagues, existing and potential customers and suppliers to IKEA.',
-	@dcHiringTermsUniformHeadline NVARCHAR(MAX) = 'Issues Resolution',
+	@dcHiringTermsUniformHeadline NVARCHAR(MAX) = 'Uniform & Conduct',
 	@dcHiringTermsUniformSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
 
@@ -1339,7 +1357,8 @@ BEGIN
 		[Name] = @dcHiringTermsUniformName, 
 		[Description] = @dcHiringTermsUniformDescription, 
 		[Text] = @dcHiringTermsUniformText,
-		[Headline] = @dcHiringTermsUniformHeadline
+		[Headline] = @dcHiringTermsUniformHeadline,
+		SortOrder = @dcHiringTermsUniformSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsUniformGuid
 END
@@ -1373,7 +1392,8 @@ BEGIN
 		[Name] = @dcHiringTermsInductionName, 
 		[Description] = @dcHiringTermsInductionDescription, 
 		[Text] = @dcHiringTermsInductionText,
-		[Headline] = @dcHiringTermsInductionHeadline
+		[Headline] = @dcHiringTermsInductionHeadline,
+		SortOrder = @dcHiringTermsInductionSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsInductionGuid
 END
@@ -1405,7 +1425,8 @@ BEGIN
 		[Name] = @dcHiringTermsSafetyName, 
 		[Description] = @dcHiringTermsSafetyDescription, 
 		[Text] = @dcHiringTermsSafetyText,
-		[Headline] = @dcHiringTermsSafetyHeadline
+		[Headline] = @dcHiringTermsSafetyHeadline,
+		SortOrder = @dcHiringTermsSafetySortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsSafetyGuid
 END
@@ -1441,13 +1462,14 @@ BEGIN
 		[Name] = @dcHiringTermsTerminationName, 
 		[Description] = @dcHiringTermsTerminationDescription, 
 		[Text] = @dcHiringTermsTerminationText,
-		[Headline] = @dcHiringTermsTerminationHeadline
+		[Headline] = @dcHiringTermsTerminationHeadline,
+		SortOrder = @dcHiringTermsTerminationSortOrder 
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsTerminationGuid
 END
 
 -- #################################### 25 Company Policies & Procedures 
-DECLARE @dcHiringTermsPoliciesGuid UNIQUEIDENTIFIER = '6e0427ae-fe4d-492d-9319-5f047223df3d',
+DECLARE @dcHiringTermsPoliciesGuid UNIQUEIDENTIFIER = 'ee5d4723-4bc3-436c-9e9a-3faa079715a1',
 	@dcHiringTermsPoliciesName NVARCHAR(MAX) = @prefix + ' - Policies',
 	@dcHiringTermsPoliciesDescription NVARCHAR(MAX) = '',
 	@dcHiringTermsPoliciesText NVARCHAR(MAX) = 'You shall be required to comply with all IKEA Policies and Procedures as amended from time to time and as outlined in IKEA’s Policy Guidelines and Welcome Program. The IKEA Policies and Procedures form part of your contract of employment.',
@@ -1473,7 +1495,8 @@ BEGIN
 		[Name] = @dcHiringTermsPoliciesName, 
 		[Description] = @dcHiringTermsPoliciesDescription, 
 		[Text] = @dcHiringTermsPoliciesText,
-		[Headline] = @dcHiringTermsPoliciesHeadline
+		[Headline] = @dcHiringTermsPoliciesHeadline,
+		SortOrder = @dcHiringTermsPoliciesSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsPoliciesGuid
 END
@@ -1505,7 +1528,8 @@ BEGIN
 		[Name] = @dcHiringTermsOtherTermsName, 
 		[Description] = @dcHiringTermsOtherTermsDescription, 
 		[Text] = @dcHiringTermsOtherTermsText,
-		[Headline] = @dcHiringTermsOtherTermsHeadline
+		[Headline] = @dcHiringTermsOtherTermsHeadline,
+		SortOrder = @dcHiringTermsOtherTermsSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsOtherTermsGuid
 END
@@ -1545,7 +1569,8 @@ BEGIN
 		[Name] = @dcHiringTermsPoliceName, 
 		[Description] = @dcHiringTermsPoliceDescription, 
 		[Text] = @dcHiringTermsPoliceText,
-		[Headline] = @dcHiringTermsPoliceHeadline
+		[Headline] = @dcHiringTermsPoliceHeadline,
+		SortOrder = @dcHiringTermsPoliceSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsPoliceGuid
 END
@@ -1577,7 +1602,8 @@ BEGIN
 		[Name] = @dcHiringTermsPerfName, 
 		[Description] = @dcHiringTermsPerfDescription, 
 		[Text] = @dcHiringTermsPerfText,
-		[Headline] = @dcHiringTermsPerfHeadline
+		[Headline] = @dcHiringTermsPerfHeadline,
+		SortOrder = @dcHiringTermsPerfSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsPerfGuid
 END
@@ -1609,7 +1635,8 @@ BEGIN
 		[Name] = @dcHiringTermsMediaName, 
 		[Description] = @dcHiringTermsMediaDescription, 
 		[Text] = @dcHiringTermsMediaText,
-		[Headline] = @dcHiringTermsMediaHeadline
+		[Headline] = @dcHiringTermsMediaHeadline,
+		SortOrder = @dcHiringTermsMediaSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsMediaGuid
 END
@@ -1641,7 +1668,8 @@ BEGIN
 		[Name] = @dcHiringTermsUnlawName, 
 		[Description] = @dcHiringTermsUnlawDescription, 
 		[Text] = @dcHiringTermsUnlawText,
-		[Headline] = @dcHiringTermsUnlawHeadline
+		[Headline] = @dcHiringTermsUnlawHeadline,
+		SortOrder = @dcHiringTermsUnlawSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsUnlawGuid
 END
@@ -1682,7 +1710,8 @@ BEGIN
 		[Name] = @dcHiringTermsIntelPropName, 
 		[Description] = @dcHiringTermsIntelPropDescription, 
 		[Text] = @dcHiringTermsIntelPropText,
-		[Headline] = @dcHiringTermsIntelPropHeadline
+		[Headline] = @dcHiringTermsIntelPropHeadline,
+		SortOrder = @dcHiringTermsIntelPropSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsIntelPropGuid
 END
@@ -1714,7 +1743,8 @@ BEGIN
 		[Name] = @dcHiringTermsVarName, 
 		[Description] = @dcHiringTermsVarDescription, 
 		[Text] = @dcHiringTermsVarText,
-		[Headline] = @dcHiringTermsVarHeadline
+		[Headline] = @dcHiringTermsVarHeadline,
+		SortOrder = @dcHiringTermsVarSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsVarGuid
 END
@@ -1746,7 +1776,8 @@ BEGIN
 		[Name] = @dcHiringTermsSuspName, 
 		[Description] = @dcHiringTermsSuspDescription, 
 		[Text] = @dcHiringTermsSuspText,
-		[Headline] = @dcHiringTermsSuspHeadline
+		[Headline] = @dcHiringTermsSuspHeadline,
+		SortOrder = @dcHiringTermsSuspSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringTermsSuspGuid
 END
@@ -1809,7 +1840,8 @@ BEGIN
 		[Name] = @dcHiringEndTextName, 
 		[Description] = @dcHiringEndTextDescription, 
 		[Text] = @dcHiringEndTextText,
-		[Headline] = @dcHiringEndTextHeadline
+		[Headline] = @dcHiringEndTextHeadline,
+		SortOrder = @dcHiringEndTextSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringEndTextGuid
 END
@@ -1870,7 +1902,8 @@ BEGIN
 		[Name] = @dcHiringConSignName, 
 		[Description] = @dcHiringConSignDescription, 
 		[Text] = @dcHiringConSignText,
-		[Headline] = @dcHiringConSignHeadline
+		[Headline] = @dcHiringConSignHeadline,
+		SortOrder = @dcHiringConSignSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringConSignGuid
 END
@@ -1939,7 +1972,8 @@ BEGIN
 		[Name] = @dcHiringAcceptName, 
 		[Description] = @dcHiringAcceptDescription, 
 		[Text] = @dcHiringAcceptText,
-		[Headline] = @dcHiringAcceptHeadline
+		[Headline] = @dcHiringAcceptHeadline,
+		SortOrder = @dcHiringAcceptSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcHiringAcceptGuid
 END
