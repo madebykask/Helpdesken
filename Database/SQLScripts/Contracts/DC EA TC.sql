@@ -120,7 +120,8 @@ BEGIN
 		[Name] = @dcTcEmployGreetingTextAName, 
 		[Description] = @dcTcEmployGreetingTextADescription, 
 		[Text] = @dcTcEmployGreetingTextAText,
-		[Headline] = @dcTcEmployGreetingTextAHeadline
+		[Headline] = @dcTcEmployGreetingTextAHeadline,
+		SortOrder = @dcTcEmployGreetingTextASortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcEmployGreetingTextAGuid
 END
@@ -203,7 +204,8 @@ BEGIN
 		[Name] = @dcTcEmployGreetingTextBName, 
 		[Description] = @dcTcEmployGreetingTextBDescription, 
 		[Text] = @dcTcEmployGreetingTextBText,
-		[Headline] = @dcTcEmployGreetingTextBHeadline
+		[Headline] = @dcTcEmployGreetingTextBHeadline,
+		SortOrder = @dcTcEmployGreetingTextBSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcEmployGreetingTextBGuid
 END
@@ -319,7 +321,8 @@ BEGIN
 		[Name] = @dcTcTermsPositionAName, 
 		[Description] = @dcTcTermsPositionADescription, 
 		[Text] = @dcTcTermsPositionAText,
-		[Headline] = @dcTcTermsPositionAHeadline
+		[Headline] = @dcTcTermsPositionAHeadline,
+		SortOrder = @dcTcTermsPositionASortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsPositionAGuid
 END
@@ -404,7 +407,8 @@ BEGIN
 		[Name] = @dcTcTermsPositionBName, 
 		[Description] = @dcTcTermsPositionBDescription, 
 		[Text] = @dcTcTermsPositionBText,
-		[Headline] = @dcTcTermsPositionBHeadline
+		[Headline] = @dcTcTermsPositionBHeadline,
+		SortOrder = @dcTcTermsPositionBSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsPositionBGuid
 END
@@ -462,14 +466,13 @@ BEGIN
 	WHERE CDTC.CaseDocumentTextConditionGUID = @dcTcTermsPositionBCondGuid
 END
 
--- DC EA T&C has no Contract start date, avoid this field for now
 -- #################################### 12a-b Commencement Date
-/*
+
 ---- Commencement A
 DECLARE @dcTcTermsComAGuid UNIQUEIDENTIFIER = '93803913-df3b-4477-a545-cb0b15111444',
 	@dcTcTermsComAName NVARCHAR(MAX) = @prefix + ' Employment - Commencement - No date',
 	@dcTcTermsComADescription NVARCHAR(MAX) = '',
-	@dcTcTermsComAText NVARCHAR(MAX) = 'Your commencement date is <Contract Start Date>, unless otherwise terminated in accordance with this contract.',
+	@dcTcTermsComAText NVARCHAR(MAX) = 'Your commencement date is <Change Valid From>, unless otherwise terminated in accordance with this contract.',
 	@dcTcTermsComAHeadline NVARCHAR(MAX) = 'Commencement Date',
 	@dcTcTermsComASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -492,7 +495,8 @@ BEGIN
 		[Name] = @dcTcTermsComAName, 
 		[Description] = @dcTcTermsComADescription, 
 		[Text] = @dcTcTermsComAText,
-		[Headline] = @dcTcTermsComAHeadline
+		[Headline] = @dcTcTermsComAHeadline,
+		SortOrder = @dcTcTermsComASortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsComAGuid
 END
@@ -500,7 +504,7 @@ DECLARE @dcTcTermsComAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT
 
 -- Create condition for Commencement A
 DECLARE @dcTcTermsComACondAGuid UNIQUEIDENTIFIER = '471bdf02-2355-4986-94a7-8d01afffbb62',
-	@dcTcTermsComACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
+	@dcTcTermsComACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
 	@dcTcTermsComACondAOperator NVARCHAR(MAX) = 'IsEmpty',
 	@dcTcTermsComACondAValues NVARCHAR(MAX) = '',
 	@dcTcTermsComACondADescription NVARCHAR(MAX) = 'Has no end date',
@@ -602,11 +606,11 @@ END
 --	WHERE CDTC.CaseDocumentTextConditionGUID = @dcTcTermsComACondBGuid
 --END
 
----- Position B
+---- Commencement B
 DECLARE @dcTcTermsComBGuid UNIQUEIDENTIFIER = 'e367cd79-7c5c-40d5-b334-3c1991b735dc',
 	@dcTcTermsComBName NVARCHAR(MAX) = @prefix + ' Employment - Commencement - Has end date',
 	@dcTcTermsComBDescription NVARCHAR(MAX) = '',
-	@dcTcTermsComBText NVARCHAR(MAX) = 'Your commencement date is <Contract Start Date> and will cease on <Contract End Date>, unless otherwise terminated in accordance with this contract.',
+	@dcTcTermsComBText NVARCHAR(MAX) = 'Your commencement date is <Change Valid From> and will cease on <Change Valid To>, unless otherwise terminated in accordance with this contract.',
 	@dcTcTermsComBHeadline NVARCHAR(MAX) = 'Commencement date',
 	@dcTcTermsComBSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -629,7 +633,8 @@ BEGIN
 		[Name] = @dcTcTermsComBName, 
 		[Description] = @dcTcTermsComBDescription, 
 		[Text] = @dcTcTermsComBText,
-		[Headline] = @dcTcTermsComBHeadline
+		[Headline] = @dcTcTermsComBHeadline,
+		SortOrder = @dcTcTermsComBSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsComBGuid
 END
@@ -637,7 +642,7 @@ DECLARE @dcTcTermsComBID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT
 
 -- Create condition for Commence B
 DECLARE @dcTcTermsComBCondAGuid UNIQUEIDENTIFIER = '5b78476f-b1c8-438d-b7ed-b3d5c8c0dd77',
-	@dcTcTermsComBCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
+	@dcTcTermsComBCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
 	@dcTcTermsComBCondAOperator NVARCHAR(MAX) = 'HasValue',
 	@dcTcTermsComBCondAValues NVARCHAR(MAX) = '',
 	@dcTcTermsComBCondADescription NVARCHAR(MAX) = 'Has end date',
@@ -739,7 +744,7 @@ BEGIN
 	WHERE CDTC.CaseDocumentTextConditionGUID = @dcTcTermsComBCondBGuid
 END*/
 
-*/
+
 -- #################################### 13a-b Hours of Work
 
 ---- Hours of Work A
@@ -771,7 +776,8 @@ BEGIN
 		[Name] = @dcTcTermsHWAName, 
 		[Description] = @dcTcTermsHWADescription, 
 		[Text] = @dcTcTermsHWAText,
-		[Headline] = @dcTcTermsHWAHeadline
+		[Headline] = @dcTcTermsHWAHeadline,
+		SortOrder = @dcTcTermsHWASortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsHWAGuid
 END
@@ -858,7 +864,8 @@ BEGIN
 		[Name] = @dcTcTermsHWBName, 
 		[Description] = @dcTcTermsHWBDescription, 
 		[Text] = @dcTcTermsHWBText,
-		[Headline] = @dcTcTermsHWBHeadline
+		[Headline] = @dcTcTermsHWBHeadline,
+		SortOrder = @dcTcTermsHWBSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsHWBGuid
 END
@@ -946,7 +953,8 @@ BEGIN
 		[Name] = @dcTcTermsProbTimeName, 
 		[Description] = @dcTcTermsProbTimeDescription, 
 		[Text] = @dcTcTermsProbTimeText,
-		[Headline] = @dcTcTermsProbTimeHeadline
+		[Headline] = @dcTcTermsProbTimeHeadline,
+		SortOrder = @dcTcTermsProbTimeSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsProbTimeGuid
 END
@@ -1034,7 +1042,8 @@ BEGIN
 		[Name] = @dcTcTermsRemunName, 
 		[Description] = @dcTcTermsRemunDescription, 
 		[Text] = @dcTcTermsRemunText,
-		[Headline] = @dcTcTermsRemunHeadline
+		[Headline] = @dcTcTermsRemunHeadline,
+		SortOrder = @dcTcTermsRemunSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsRemunGuid
 END
@@ -1070,7 +1079,8 @@ BEGIN
 		[Name] = @dcTcTermsSuperName, 
 		[Description] = @dcTcTermsSuperDescription, 
 		[Text] = @dcTcTermsSuperText,
-		[Headline] = @dcTcTermsSuperHeadline
+		[Headline] = @dcTcTermsSuperHeadline,
+		SortOrder = @dcTcTermsSuperSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsSuperGuid
 END
@@ -1127,7 +1137,8 @@ BEGIN
 		[Name] = @dcTcTermsConfName, 
 		[Description] = @dcTcTermsConfDescription, 
 		[Text] = @dcTcTermsConfText,
-		[Headline] = @dcTcTermsConfHeadline
+		[Headline] = @dcTcTermsConfHeadline,
+		SortOrder = @dcTcTermsConfSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsConfGuid
 END
@@ -1161,7 +1172,8 @@ BEGIN
 		[Name] = @dcTcTermsLeaveAName, 
 		[Description] = @dcTcTermsLeaveADescription, 
 		[Text] = @dcTcTermsLeaveAText,
-		[Headline] = @dcTcTermsLeaveAHeadline
+		[Headline] = @dcTcTermsLeaveAHeadline,
+		SortOrder = @dcTcTermsLeaveASortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsLeaveAGuid
 END
@@ -1248,7 +1260,8 @@ BEGIN
 		[Name] = @dcTcTermsLeaveBName, 
 		[Description] = @dcTcTermsLeaveBDescription, 
 		[Text] = @dcTcTermsLeaveBText,
-		[Headline] = @dcTcTermsLeaveBHeadline
+		[Headline] = @dcTcTermsLeaveBHeadline,
+		SortOrder = @dcTcTermsLeaveBSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsLeaveBGuid
 END
@@ -1333,7 +1346,8 @@ BEGIN
 		[Name] = @dcTcTermsIssuesName, 
 		[Description] = @dcTcTermsIssuesDescription, 
 		[Text] = @dcTcTermsIssuesText,
-		[Headline] = @dcTcTermsIssuesHeadline
+		[Headline] = @dcTcTermsIssuesHeadline,
+		SortOrder = @dcTcTermsIssuesSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsIssuesGuid
 END
@@ -1365,7 +1379,8 @@ BEGIN
 		[Name] = @dcTcTermsEqualName, 
 		[Description] = @dcTcTermsEqualDescription, 
 		[Text] = @dcTcTermsEqualText,
-		[Headline] = @dcTcTermsEqualHeadline
+		[Headline] = @dcTcTermsEqualHeadline,
+		SortOrder = @dcTcTermsEqualSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsEqualGuid
 END
@@ -1399,7 +1414,8 @@ BEGIN
 		[Name] = @dcTcTermsUniformName, 
 		[Description] = @dcTcTermsUniformDescription, 
 		[Text] = @dcTcTermsUniformText,
-		[Headline] = @dcTcTermsUniformHeadline
+		[Headline] = @dcTcTermsUniformHeadline,
+		SortOrder = @dcTcTermsUniformSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsUniformGuid
 END
@@ -1433,7 +1449,8 @@ BEGIN
 		[Name] = @dcTcTermsInductionName, 
 		[Description] = @dcTcTermsInductionDescription, 
 		[Text] = @dcTcTermsInductionText,
-		[Headline] = @dcTcTermsInductionHeadline
+		[Headline] = @dcTcTermsInductionHeadline,
+		SortOrder = @dcTcTermsInductionSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsInductionGuid
 END
@@ -1465,7 +1482,8 @@ BEGIN
 		[Name] = @dcTcTermsSafetyName, 
 		[Description] = @dcTcTermsSafetyDescription, 
 		[Text] = @dcTcTermsSafetyText,
-		[Headline] = @dcTcTermsSafetyHeadline
+		[Headline] = @dcTcTermsSafetyHeadline,
+		SortOrder = @dcTcTermsSafetySortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsSafetyGuid
 END
@@ -1501,7 +1519,8 @@ BEGIN
 		[Name] = @dcTcTermsTerminationName, 
 		[Description] = @dcTcTermsTerminationDescription, 
 		[Text] = @dcTcTermsTerminationText,
-		[Headline] = @dcTcTermsTerminationHeadline
+		[Headline] = @dcTcTermsTerminationHeadline,
+		SortOrder = @dcTcTermsTerminationSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsTerminationGuid
 END
@@ -1533,7 +1552,8 @@ BEGIN
 		[Name] = @dcTcTermsPoliciesName, 
 		[Description] = @dcTcTermsPoliciesDescription, 
 		[Text] = @dcTcTermsPoliciesText,
-		[Headline] = @dcTcTermsPoliciesHeadline
+		[Headline] = @dcTcTermsPoliciesHeadline,
+		SortOrder = @dcTcTermsPoliciesSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsPoliciesGuid
 END
@@ -1565,7 +1585,8 @@ BEGIN
 		[Name] = @dcTcTermsOtherTermsName, 
 		[Description] = @dcTcTermsOtherTermsDescription, 
 		[Text] = @dcTcTermsOtherTermsText,
-		[Headline] = @dcTcTermsOtherTermsHeadline
+		[Headline] = @dcTcTermsOtherTermsHeadline,
+		SortOrder = @dcTcTermsOtherTermsSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsOtherTermsGuid
 END
@@ -1605,42 +1626,187 @@ BEGIN
 		[Name] = @dcTcTermsPoliceName, 
 		[Description] = @dcTcTermsPoliceDescription, 
 		[Text] = @dcTcTermsPoliceText,
-		[Headline] = @dcTcTermsPoliceHeadline
+		[Headline] = @dcTcTermsPoliceHeadline,
+		SortOrder = @dcTcTermsPoliceSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsPoliceGuid
 END
 
 -- #################################### 28 Performance Management
-DECLARE @dcTcTermsPerfGuid UNIQUEIDENTIFIER = 'f262417d-f0a8-4b17-8ef8-2757166ed84f',
-	@dcTcTermsPerfName NVARCHAR(MAX) = @prefix + ' Employment - Performance',
-	@dcTcTermsPerfDescription NVARCHAR(MAX) = '',
-	@dcTcTermsPerfText NVARCHAR(MAX) = 'A Co-worker Performance Review will be conducted at least once a year, usually between September and November.  However, your first review will be conducted during your 6-month probationary period.  This review will be based on your initial Co-worker discussion and your position’s Performance Criteria and Job Profile.  Areas of performance and non-performance will be discussed and addressed in accordance with company guidelines. Whilst the company conducts annual performance reviews, it also maintains an ongoing performance management program with its co-workers.',
-	@dcTcTermsPerfHeadline NVARCHAR(MAX) = 'Performance Management',
-	@dcTcTermsPerfSortOrder INT = @termsCounter
+DECLARE @dcTcTermsPerfAGuid UNIQUEIDENTIFIER = 'f262417d-f0a8-4b17-8ef8-2757166ed84f',
+	@dcTcTermsPerfAName NVARCHAR(MAX) = @prefix + ' Employment - Performance',
+	@dcTcTermsPerfADescription NVARCHAR(MAX) = '',
+	@dcTcTermsPerfAText NVARCHAR(MAX) = 'A Co-worker Performance Review will be conducted at least once a year, usually between September and November.  However, your first review will be conducted during your 6-month probationary period.  This review will be based on your initial Co-worker discussion and your position’s Performance Criteria and Job Profile.  Areas of performance and non-performance will be discussed and addressed in accordance with company guidelines. Whilst the company conducts annual performance reviews, it also maintains an ongoing performance management program with its co-workers.',
+	@dcTcTermsPerfAHeadline NVARCHAR(MAX) = 'Performance Management',
+	@dcTcTermsPerfASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
 
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsPerfGuid)
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsPerfAGuid)
 BEGIN
 	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
 	VALUES (@dcTcTermsID, 
-		@dcTcTermsPerfName, 
-		@dcTcTermsPerfDescription,
-		@dcTcTermsPerfText, 
-		@dcTcTermsPerfHeadline,
-		@dcTcTermsPerfSortOrder,
-		@dcTcTermsPerfGuid)
+		@dcTcTermsPerfAName, 
+		@dcTcTermsPerfADescription,
+		@dcTcTermsPerfAText, 
+		@dcTcTermsPerfAHeadline,
+		@dcTcTermsPerfASortOrder,
+		@dcTcTermsPerfAGuid)
 END
 ELSE
 BEGIN
 	UPDATE CDT SET 
 		CaseDocumentParagraph_Id = @dcTcTermsID,
-		[Name] = @dcTcTermsPerfName, 
-		[Description] = @dcTcTermsPerfDescription, 
-		[Text] = @dcTcTermsPerfText,
-		[Headline] = @dcTcTermsPerfHeadline
+		[Name] = @dcTcTermsPerfAName, 
+		[Description] = @dcTcTermsPerfADescription, 
+		[Text] = @dcTcTermsPerfAText,
+		[Headline] = @dcTcTermsPerfAHeadline,
+		SortoRder = @dcTcTermsPerfASortOrder
 	FROM tblCaseDocumentText CDT 
-	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsPerfGuid
+	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsPerfAGuid
 END
+
+DECLARE @dcTcTermsPerfAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcTcTermsPerfAGuid)
+
+-- Create condition for probation period 
+DECLARE @dcTcTermsPerfACondGuid UNIQUEIDENTIFIER = '32ab33cf-2f93-4bf5-a371-978fe20f3ed3',
+	@dcTcTermsPerfACondPropertyName NVARCHAR(MAX) = 'extendedcase_ProbationPeriod',
+	@dcTcTermsPerfACondOperator NVARCHAR(MAX) = 'Equal',
+	@dcTcTermsPerfACondValues NVARCHAR(MAX) = 'Yes',
+	@dcTcTermsPerfACondDescription NVARCHAR(MAX) = 'Has probation period',
+	@dcTcTermsPerfACondStatus INT = 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcTcTermsPerfACondGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentTextCondition(
+		CaseDocumentTextConditionGUID, 
+		CaseDocumentText_Id, 
+		Property_Name,
+		Operator,
+		[Values],
+		[Description],
+		[Status],
+		CreatedDate,
+		CreatedByUser_Id,
+		ChangedDate,
+		ChangedByUser_Id)
+	VALUES(
+		@dcTcTermsPerfACondGuid,
+		@dcTcTermsPerfAID,
+		@dcTcTermsPerfACondPropertyName,
+		@dcTcTermsPerfACondOperator,
+		@dcTcTermsPerfACondValues,
+		@dcTcTermsPerfACondDescription,
+		@dcTcTermsPerfACondStatus,
+		@now, 
+		@userID,
+		@now,
+		@userID
+	)
+END
+ELSE
+BEGIN
+	UPDATE CDTC SET CaseDocumentText_Id = @dcTcTermsPerfAID,
+		Property_Name = @dcTcTermsPerfACondPropertyName,
+		Operator = @dcTcTermsPerfACondOperator,
+		[Values] = @dcTcTermsPerfACondValues,
+		[Description] = @dcTcTermsPerfACondDescription,
+		[Status] = @dcTcTermsPerfACondStatus,
+		CreatedDate = @now,
+		CreatedByUser_Id = @userID,
+		ChangedDate = @now,
+		ChangedByUser_Id = @userID
+	FROM tblCaseDocumentTextCondition CDTC
+	WHERE CDTC.CaseDocumentTextConditionGUID = @dcTcTermsPerfACondGuid
+END
+
+
+-- Con B
+DECLARE @dcTcTermsPerfBGuid UNIQUEIDENTIFIER = '1802ed22-0ce0-4e2f-ad0e-7b20d65691e7',
+	@dcTcTermsPerfBName NVARCHAR(MAX) = @prefix + ' Employment - Performance',
+	@dcTcTermsPerfBDescription NVARCHAR(MAX) = '',
+	@dcTcTermsPerfBText NVARCHAR(MAX) = 'A Co-worker Performance Review will be conducted at least once a year, usually between September and November. This review will be based on your initial Co-worker discussion and your position’s Performance Criteria and Job Profile.  Areas of performance and non-performance will be discussed and addressed in accordance with company guidelines. Whilst the company conducts annual performance reviews, it also maintains an ongoing performance management program with its co-workers.',
+	@dcTcTermsPerfBHeadline NVARCHAR(MAX) = 'Performance Management',
+	@dcTcTermsPerfBSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcTermsPerfBGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
+	VALUES (@dcTcTermsID, 
+		@dcTcTermsPerfBName, 
+		@dcTcTermsPerfBDescription,
+		@dcTcTermsPerfBText, 
+		@dcTcTermsPerfBHeadline,
+		@dcTcTermsPerfBSortOrder,
+		@dcTcTermsPerfBGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDT SET 
+		CaseDocumentParagraph_Id = @dcTcTermsID,
+		[Name] = @dcTcTermsPerfBName, 
+		[Description] = @dcTcTermsPerfBDescription, 
+		[Text] = @dcTcTermsPerfBText,
+		[Headline] = @dcTcTermsPerfBHeadline,
+		SortoRder = @dcTcTermsPerfBSortOrder
+	FROM tblCaseDocumentText CDT 
+	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsPerfBGuid
+END
+
+DECLARE @dcTcTermsPerfBID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcTcTermsPerfBGuid)
+
+-- Create condition for probation period 
+DECLARE @dcTcTermsPerfBCondGuid UNIQUEIDENTIFIER = '1888c047-c336-4a3b-b85b-6408bb8accd6',
+	@dcTcTermsPerfBCondPropertyName NVARCHAR(MAX) = 'extendedcase_ProbationPeriod',
+	@dcTcTermsPerfBCondOperator NVARCHAR(MAX) = 'Equal',
+	@dcTcTermsPerfBCondValues NVARCHAR(MAX) = 'No',
+	@dcTcTermsPerfBCondDescription NVARCHAR(MAX) = 'Has not probation period',
+	@dcTcTermsPerfBCondStatus INT = 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcTcTermsPerfBCondGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentTextCondition(
+		CaseDocumentTextConditionGUID, 
+		CaseDocumentText_Id, 
+		Property_Name,
+		Operator,
+		[Values],
+		[Description],
+		[Status],
+		CreatedDate,
+		CreatedByUser_Id,
+		ChangedDate,
+		ChangedByUser_Id)
+	VALUES(
+		@dcTcTermsPerfBCondGuid,
+		@dcTcTermsPerfBID,
+		@dcTcTermsPerfBCondPropertyName,
+		@dcTcTermsPerfBCondOperator,
+		@dcTcTermsPerfBCondValues,
+		@dcTcTermsPerfBCondDescription,
+		@dcTcTermsPerfBCondStatus,
+		@now, 
+		@userID,
+		@now,
+		@userID
+	)
+END
+ELSE
+BEGIN
+	UPDATE CDTC SET CaseDocumentText_Id = @dcTcTermsPerfBID,
+		Property_Name = @dcTcTermsPerfBCondPropertyName,
+		Operator = @dcTcTermsPerfBCondOperator,
+		[Values] = @dcTcTermsPerfBCondValues,
+		[Description] = @dcTcTermsPerfBCondDescription,
+		[Status] = @dcTcTermsPerfBCondStatus,
+		CreatedDate = @now,
+		CreatedByUser_Id = @userID,
+		ChangedDate = @now,
+		ChangedByUser_Id = @userID
+	FROM tblCaseDocumentTextCondition CDTC
+	WHERE CDTC.CaseDocumentTextConditionGUID = @dcTcTermsPerfBCondGuid
+END
+
 
 -- #################################### 29 Communications with Media
 DECLARE @dcTcTermsMediaGuid UNIQUEIDENTIFIER = '9b691976-4767-496f-b394-33ca4c0087b3',
@@ -1669,7 +1835,8 @@ BEGIN
 		[Name] = @dcTcTermsMediaName, 
 		[Description] = @dcTcTermsMediaDescription, 
 		[Text] = @dcTcTermsMediaText,
-		[Headline] = @dcTcTermsMediaHeadline
+		[Headline] = @dcTcTermsMediaHeadline,
+		SortOrder = @dcTcTermsMediaSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsMediaGuid
 END
@@ -1701,7 +1868,8 @@ BEGIN
 		[Name] = @dcTcTermsUnlawName, 
 		[Description] = @dcTcTermsUnlawDescription, 
 		[Text] = @dcTcTermsUnlawText,
-		[Headline] = @dcTcTermsUnlawHeadline
+		[Headline] = @dcTcTermsUnlawHeadline,
+		SortOrder = @dcTcTermsUnlawSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsUnlawGuid
 END
@@ -1742,7 +1910,8 @@ BEGIN
 		[Name] = @dcTcTermsIntelPropName, 
 		[Description] = @dcTcTermsIntelPropDescription, 
 		[Text] = @dcTcTermsIntelPropText,
-		[Headline] = @dcTcTermsIntelPropHeadline
+		[Headline] = @dcTcTermsIntelPropHeadline,
+		SortOrder = @dcTcTermsIntelPropSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsIntelPropGuid
 END
@@ -1774,7 +1943,8 @@ BEGIN
 		[Name] = @dcTcTermsVarName, 
 		[Description] = @dcTcTermsVarDescription, 
 		[Text] = @dcTcTermsVarText,
-		[Headline] = @dcTcTermsVarHeadline
+		[Headline] = @dcTcTermsVarHeadline,
+		SortOrder = @dcTcTermsVarSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsVarGuid
 END
@@ -1806,7 +1976,8 @@ BEGIN
 		[Name] = @dcTcTermsSuspName, 
 		[Description] = @dcTcTermsSuspDescription, 
 		[Text] = @dcTcTermsSuspText,
-		[Headline] = @dcTcTermsSuspHeadline
+		[Headline] = @dcTcTermsSuspHeadline,
+		SortOrder = @dcTcTermsSuspSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsSuspGuid
 END
@@ -1868,7 +2039,8 @@ BEGIN
 		[Name] = @dcTcEndTextName, 
 		[Description] = @dcTcEndTextDescription, 
 		[Text] = @dcTcEndTextText,
-		[Headline] = @dcTcEndTextHeadline
+		[Headline] = @dcTcEndTextHeadline,
+		SortOrder = @dcTcEndTextSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcEndTextGuid
 END
@@ -1928,7 +2100,8 @@ BEGIN
 		[Name] = @dcTcConSignName, 
 		[Description] = @dcTcConSignDescription, 
 		[Text] = @dcTcConSignText,
-		[Headline] = @dcTcConSignHeadline
+		[Headline] = @dcTcConSignHeadline,
+		SortOrder = @dcTcConSignSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcConSignGuid
 END
@@ -1997,7 +2170,8 @@ BEGIN
 		[Name] = @dcTcAcceptName, 
 		[Description] = @dcTcAcceptDescription, 
 		[Text] = @dcTcAcceptText,
-		[Headline] = @dcTcAcceptHeadline
+		[Headline] = @dcTcAcceptHeadline,
+		SortOrder = @dcTcAcceptSortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcTcAcceptGuid
 END
