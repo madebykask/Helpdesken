@@ -1443,7 +1443,7 @@ DECLARE @retSalHiringTermsAppearGuid UNIQUEIDENTIFIER = '1B7CAAF4-3606-442C-8CB8
 	@retSalHiringTermsAppearText NVARCHAR(MAX) = 'IKEA has established guidelines necessary for the professional appearance that the company expects all co-workers to present, and as such co-workers are to wear smart casual attire within these guidelines.<br>
 	<br>
 Co-workers are expected to project a favorable and professional image for IKEA, and are to be courteous, efficient and reliable in their dealings with colleagues, existing and potential customers and suppliers to IKEA.<br>',
-	@retSalHiringTermsAppearHeadline NVARCHAR(MAX) = 'Uniform & Conduct',
+	@retSalHiringTermsAppearHeadline NVARCHAR(MAX) = 'Apperance & Conduct',
 	@retSalHiringTermsAppearSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
 
@@ -2111,9 +2111,9 @@ DECLARE @retSalHiringConSignParagraphID INT = (SELECT ID FROM tblCaseDocumentPar
 DECLARE @retSalHiringConSignGuid UNIQUEIDENTIFIER = 'E0D4CACD-C0AC-44D6-BE61-067A74D75D24',
 	@retSalHiringConSignName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@retSalHiringConSignDescription NVARCHAR(MAX) = '',
-	@retSalHiringConSignText NVARCHAR(MAX) = 'Yours sincerely		
-<Reports To Line Manager>		
-[<Position Title (Local Job Name)> of <Reports To Line Manager>]		
+	@retSalHiringConSignText NVARCHAR(MAX) = 'Yours sincerely<br>		
+<Reports To Line Manager><br>
+<Position Title (Local Job Name)> of <Reports To Line Manager><br>
 <strong>IKEA Pty Limited</strong>
 ',
 	@retSalHiringConSignHeadline NVARCHAR(MAX) = '',

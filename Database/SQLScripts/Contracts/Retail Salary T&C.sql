@@ -1,5 +1,5 @@
 --########################################
---########## DC Retail Salary Hiring #####
+--########## DC Retail Salary T&C #####
 --########################################
 
 BEGIN TRAN
@@ -21,7 +21,7 @@ DECLARE @addressInfoID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE C
 
 -- Draft ID
 DECLARE @draftGuid UNIQUEIDENTIFIER = '51220147-E756-492E-88A1-C1671BDE6AA5'
-DECLARE @draftID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @addressInfoGuid)
+DECLARE @draftID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @draftGuid)
 
 -- Paragraph types
 DECLARE @ParagraphTypeText INT = 1
@@ -37,10 +37,10 @@ DECLARE @now DATETIME = GETDATE()
 
 DECLARE @prefix NVARCHAR(MAX) = 'RET SAL TC'
 
--- #################################### Contract Clusters – Retail Salaray T&C) ####################################
+-- #################################### Contract Clusters – Retail Salary T&C) ####################################
 
 -- Get the form
-DECLARE @retSalTcGuid UNIQUEIDENTIFIER = '571A5DAA-10F9-401E-936E-3B782191F6925'
+DECLARE @retSalTcGuid UNIQUEIDENTIFIER = 'EA1D92DF-AF56-4D3E-BA70-C45E4C3C30DA'
 DECLARE @retSalTcID INT, @counter INT = 0
 SELECT @retSalTcID = ID FROM tblCaseDocument CD WHERE CD.CaseDocumentGUID = @retSalTcGuid
 
@@ -95,9 +95,9 @@ DECLARE @retSalTcEmployGreetingID INT = (SELECT ID FROM tblCaseDocumentParagraph
 
 ---- Create or update text A, Full Time
 DECLARE @retSalTcEmployGreetingTextAGuid UNIQUEIDENTIFIER = 'BA6D3614-9C2D-4FE5-9B19-BB757885E1ED',
-	@retSalTcEmployGreetingTextAName NVARCHAR(MAX) = @prefix + ' Greeting, Full time',
+	@retSalTcEmployGreetingTextAName NVARCHAR(MAX) = @prefix + ' Greeting, No contract end date',
 	@retSalTcEmployGreetingTextADescription NVARCHAR(MAX) = '',
-	@retSalTcEmployGreetingTextAText NVARCHAR(MAX) = 'We are delighted to confirm that your application for the position of Full Time <Position Title (Local Job Name)> <Shift Type> Shift has been successful, and wish to confirm the terms and conditions of your employment.',
+	@retSalTcEmployGreetingTextAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to  <Position Title (Local Job Name)> of <Reports To Line Manager>.  Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
 	@retSalTcEmployGreetingTextAHeadline NVARCHAR(MAX) = '',
 	@retSalTcEmployGreetingTextASortOrder INT = 0
 
@@ -128,10 +128,10 @@ DECLARE @retSalTcEmployGreetingTextAID INT = (SELECT ID FROM tblCaseDocumentText
 
 -- Create condition for Text A, Full time
 DECLARE @retSalTcEmployGreetingTextACondAGuid UNIQUEIDENTIFIER = '888B07D9-353A-49C6-B2CB-AAA6DA6A0433',
-	@retSalTcEmployGreetingTextACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractedHours',
-	@retSalTcEmployGreetingTextACondAOperator NVARCHAR(MAX) = 'Equal',
-	@retSalTcEmployGreetingTextACondAValues NVARCHAR(MAX) = '76',
-	@retSalTcEmployGreetingTextACondADescription NVARCHAR(MAX) = 'Is full time',
+	@retSalTcEmployGreetingTextACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
+	@retSalTcEmployGreetingTextACondAOperator NVARCHAR(MAX) = 'IsEmpty',
+	@retSalTcEmployGreetingTextACondAValues NVARCHAR(MAX) = '',
+	@retSalTcEmployGreetingTextACondADescription NVARCHAR(MAX) = 'No contract end date',
 	@retSalTcEmployGreetingTextACondAStatus INT = 1
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalTcEmployGreetingTextACondAGuid)
 BEGIN
