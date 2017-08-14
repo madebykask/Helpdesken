@@ -924,11 +924,11 @@ BEGIN
 END
 
 
--- #################################### 14 Probationary Period
+-- #################################### Probationary Period
 
 ---- Probationary Period
 DECLARE @dcSalTcTermsProbTimeGuid UNIQUEIDENTIFIER = 'C3E1599B-F185-4DBB-BCF8-38BF73B543B0',
-	@dcSalTcTermsProbTimeName NVARCHAR(MAX) = @prefix + ' Employment - Probationary Period',
+	@dcSalTcTermsProbTimeName NVARCHAR(MAX) = @prefix + ' Probationary Period',
 	@dcSalTcTermsProbTimeDescription NVARCHAR(MAX) = '',
 	@dcSalTcTermsProbTimeText NVARCHAR(MAX) = 'IKEA offers this employment to you on a probationary basis for a period of six (6) months, during which time your performance standards will be subject to regular review and assessment.  In the six (6)-month period, if either you or IKEA wishes to terminate the employment relationship, then either party can effect that termination with one week’s notice in writing.',
 	@dcSalTcTermsProbTimeHeadline NVARCHAR(MAX) = 'Probationary Period',
@@ -1632,9 +1632,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcSalTcTermsPoliceGuid
 END
 
--- #################################### 28 Performance Management
+-- #################################### Performance Management
 DECLARE @dcSalTcTermsPerfAGuid UNIQUEIDENTIFIER = '7B555926-E16C-4577-A2CB-5910351298D5',
-	@dcSalTcTermsPerfAName NVARCHAR(MAX) = @prefix + ' Employment - Performance',
+	@dcSalTcTermsPerfAName NVARCHAR(MAX) = @prefix + ' Performance',
 	@dcSalTcTermsPerfADescription NVARCHAR(MAX) = '',
 	@dcSalTcTermsPerfAText NVARCHAR(MAX) = 'A Co-worker Performance Review will be conducted at least once a year, usually between September and November.  However, your first review will be conducted during your 6-month probationary period.  This review will be based on your initial Co-worker discussion and your position’s Performance Criteria and Job Profile.  Areas of performance and non-performance will be discussed and addressed in accordance with company guidelines. Whilst the company conducts annual performance reviews, it also maintains an ongoing performance management program with its co-workers.',
 	@dcSalTcTermsPerfAHeadline NVARCHAR(MAX) = 'Performance Management',
@@ -1667,7 +1667,7 @@ END
 
 DECLARE @dcSalTcTermsPerfAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcSalTcTermsPerfAGuid)
 
--- Create condition for probation period 
+-- Create condition for performance
 DECLARE @dcSalTcTermsPerfACondGuid UNIQUEIDENTIFIER = '880C9775-0C2B-441E-B35A-CD68201B5AEF',
 	@dcSalTcTermsPerfACondPropertyName NVARCHAR(MAX) = 'extendedcase_ProbationPeriod',
 	@dcSalTcTermsPerfACondOperator NVARCHAR(MAX) = 'Equal',
