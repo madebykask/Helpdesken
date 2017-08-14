@@ -1,5 +1,5 @@
 --########################################
---########## DC Retail Salary Hiring #####
+--########## Retail Retail Salary Hiring #
 --########################################
 
 BEGIN TRAN
@@ -37,10 +37,10 @@ DECLARE @now DATETIME = GETDATE()
 
 DECLARE @prefix NVARCHAR(MAX) = 'RET SAL HIR'
 
--- #################################### Contract Clusters – DC EA (Hiring) ####################################
+-- #################################### Contract Clusters – Retail Salary (Hiring) ####################################
 
 -- Get the form
-DECLARE @retSalHiringGuid UNIQUEIDENTIFIER = '8595E209-075C-4384-ADDB-8BF2E52A2CE5'
+DECLARE @retSalHiringGuid UNIQUEIDENTIFIER = 'E11C26B9-C538-4BBB-AB9E-DB2D49D49CD4'
 DECLARE @retSalHiringID INT, @counter INT = 0
 SELECT @retSalHiringID = ID FROM tblCaseDocument CD WHERE CD.CaseDocumentGUID = @retSalHiringGuid
 
@@ -66,12 +66,12 @@ SET @counter = @counter + 1
 
 
 
--- #################################### 2-8. Address and company info
+-- #################################### Address and company info
 INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentParagraph_Id, SortOrder)
 SELECT @retSalHiringID, @addressInfoID, @counter
 SET @counter = @counter + 1
 
--- #################################### 10a-b. Employment greeting
+-- #################################### Employment greeting
 
 ---- Create or update paragraph
 -- Paragraph guid
@@ -95,9 +95,9 @@ DECLARE @retSalHiringEmployGreetingID INT = (SELECT ID FROM tblCaseDocumentParag
 
 ---- Create or update text A, Full Time
 DECLARE @retSalHiringEmployGreetingTextAGuid UNIQUEIDENTIFIER = '2DD1625E-9B06-457C-8123-B27B825CB384',
-	@retSalHiringEmployGreetingTextAName NVARCHAR(MAX) = @prefix + ' Greeting, Full time',
+	@retSalHiringEmployGreetingTextAName NVARCHAR(MAX) = @prefix + ' Greeting, no end date',
 	@retSalHiringEmployGreetingTextADescription NVARCHAR(MAX) = '',
-	@retSalHiringEmployGreetingTextAText NVARCHAR(MAX) = 'We are delighted to confirm that your application for the position of Full Time <Position Title (Local Job Name)> <Shift Type> Shift has been successful, and wish to confirm the terms and conditions of your employment.',
+	@retSalHiringEmployGreetingTextAText NVARCHAR(MAX) = 'We are delighted to confirm your appointment to the position of <Position Title (Local Job Name)> at IKEA and wish to confirm the terms and conditions of your employment.',
 	@retSalHiringEmployGreetingTextAHeadline NVARCHAR(MAX) = '',
 	@retSalHiringEmployGreetingTextASortOrder INT = 0
 
@@ -128,10 +128,10 @@ DECLARE @retSalHiringEmployGreetingTextAID INT = (SELECT ID FROM tblCaseDocument
 
 -- Create condition for Text A, Full time
 DECLARE @retSalHiringEmployGreetingTextACondAGuid UNIQUEIDENTIFIER = '2DD1625E-9B06-457C-8123-B27B825CB384',
-	@retSalHiringEmployGreetingTextACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractedHours',
-	@retSalHiringEmployGreetingTextACondAOperator NVARCHAR(MAX) = 'Equal',
+	@retSalHiringEmployGreetingTextACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
+	@retSalHiringEmployGreetingTextACondAOperator NVARCHAR(MAX) = 'Empty',
 	@retSalHiringEmployGreetingTextACondAValues NVARCHAR(MAX) = '76',
-	@retSalHiringEmployGreetingTextACondADescription NVARCHAR(MAX) = 'Is full time',
+	@retSalHiringEmployGreetingTextACondADescription NVARCHAR(MAX) = 'Has no contract end date',
 	@retSalHiringEmployGreetingTextACondAStatus INT = 1
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalHiringEmployGreetingTextACondAGuid)
 BEGIN
@@ -179,9 +179,9 @@ END
 
 ---- Create or update text B, Part Time
 DECLARE @retSalHiringEmployGreetingTextBGuid UNIQUEIDENTIFIER = '9572FFD6-DBBF-4913-AF5F-93D0B1F0F0FB',
-	@retSalHiringEmployGreetingTextBName NVARCHAR(MAX) = @prefix + ' Greeting, Part time',
+	@retSalHiringEmployGreetingTextBName NVARCHAR(MAX) = @prefix + ' Greeting, has end date',
 	@retSalHiringEmployGreetingTextBDescription NVARCHAR(MAX) = '',
-	@retSalHiringEmployGreetingTextBText NVARCHAR(MAX) = 'We are delighted to confirm that your application for the position of Part Time <Position Title (Local Job Name)> <Shift Type> Shift has been successful, and wish to confirm the terms and conditions of your employment.',
+	@retSalHiringEmployGreetingTextBText NVARCHAR(MAX) = 'We are delighted to confirm your appointment to the fixed term position of <Position Title (Local Job Name)> at IKEA, and wish to confirm the terms and conditions of your employment.',
 	@retSalHiringEmployGreetingTextBHeadline NVARCHAR(MAX) = '',
 	@retSalHiringEmployGreetingTextBSortOrder INT = 1
 
@@ -212,10 +212,10 @@ DECLARE @retSalHiringEmployGreetingTextBID INT = (SELECT ID FROM tblCaseDocument
 
 -- Create condition for Text B, Part time
 DECLARE @retSalHiringEmployGreetingTextBCondAGuid UNIQUEIDENTIFIER = '0EF15E2F-7644-4480-9744-76C5B2D59030',
-	@retSalHiringEmployGreetingTextBCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractedHours',
-	@retSalHiringEmployGreetingTextBCondAOperator NVARCHAR(MAX) = 'LessThan',
+	@retSalHiringEmployGreetingTextBCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
+	@retSalHiringEmployGreetingTextBCondAOperator NVARCHAR(MAX) = 'HasValue',
 	@retSalHiringEmployGreetingTextBCondAValues NVARCHAR(MAX) = '76',
-	@retSalHiringEmployGreetingTextBCondADescription NVARCHAR(MAX) = 'Is part time',
+	@retSalHiringEmployGreetingTextBCondADescription NVARCHAR(MAX) = 'Has contract end date',
 	@retSalHiringEmployGreetingTextBCondAStatus INT = 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalHiringEmployGreetingTextBCondAGuid)
@@ -292,13 +292,13 @@ BEGIN
 END
 DECLARE @retSalHiringTermsID INT = (SELECT ID FROM tblCaseDocumentParagraph WHERE CaseDocumentParagraphGUID = @retSalHiringTermsGuid)
 
--- #################################### 11a-b Position
+-- #################################### Position
 
 ---- Position A
 DECLARE @retSalHiringTermsPositionAGuid UNIQUEIDENTIFIER = '864CCBC4-FF1F-4CF7-A6F8-097DDFE88ADF',
-	@retSalHiringTermsPositionAName NVARCHAR(MAX) = @prefix + ' Employment - Position - Full time',
+	@retSalHiringTermsPositionAName NVARCHAR(MAX) = @prefix + ' Position, Full time',
 	@retSalHiringTermsPositionADescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)> <Shift Type> Shift, reporting to  <Position Title (Local Job Name)> of <Reports To Line Manager>, which will be based at <Business Unit>. Your position (in terms of your duties & responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
+	@retSalHiringTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to [<Position Title (Local Job Name)> of <Reports To Line Manager>].  Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.  ',
 	@retSalHiringTermsPositionAHeadline NVARCHAR(MAX) = '<i>Position</i>',
 	@retSalHiringTermsPositionASortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
@@ -383,9 +383,9 @@ END
 
 ---- Position B
 DECLARE @retSalHiringTermsPositionBGuid UNIQUEIDENTIFIER = '927711F2-75A7-4DE4-B46E-E88EEEC08354',
-	@retSalHiringTermsPositionBName NVARCHAR(MAX) = @prefix + ' Employment - Position - Part time',
+	@retSalHiringTermsPositionBName NVARCHAR(MAX) = @prefix + ' Position, Part time',
 	@retSalHiringTermsPositionBDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsPositionBText NVARCHAR(MAX) = 'Your position is Part Time <Position Title (Local Job Name)> <Shift Type> Shift, reporting to  <Position Title (Local Job Name)> of <Reports To Line Manager>, which will be based at <Business Unit>. Your position (in terms of your duties & responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
+	@retSalHiringTermsPositionBText NVARCHAR(MAX) = 'Your position is Part Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to [<Position Title (Local Job Name)> of <Reports To Line Manager>].  Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
 	@retSalHiringTermsPositionBHeadline NVARCHAR(MAX) = '<i>Position</i>',
 	@retSalHiringTermsPositionBSortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
@@ -471,9 +471,9 @@ END
 
 ---- Commencement A
 DECLARE @retSalHiringTermsComAGuid UNIQUEIDENTIFIER = '5D926BEA-7199-4EB5-B5C1-10C8D1974D01',
-	@retSalHiringTermsComAName NVARCHAR(MAX) = @prefix + ' Employment - Commencement - No date',
+	@retSalHiringTermsComAName NVARCHAR(MAX) = @prefix + ' Commencement, no end date',
 	@retSalHiringTermsComADescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsComAText NVARCHAR(MAX) = 'Your commencement date is <Contract Start Date>, unless otherwise terminated in accordance with this contract.',
+	@retSalHiringTermsComAText NVARCHAR(MAX) = 'Your date of commencement will be <Contract Start Date>.',
 	@retSalHiringTermsComAHeadline NVARCHAR(MAX) = 'Commencement Date',
 	@retSalHiringTermsComASortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
@@ -609,7 +609,7 @@ END
 
 ---- Position B
 DECLARE @retSalHiringTermsComBGuid UNIQUEIDENTIFIER = 'A760E025-2266-426B-AB7F-0D13D8594D3B',
-	@retSalHiringTermsComBName NVARCHAR(MAX) = @prefix + ' - Commencement - Has end date',
+	@retSalHiringTermsComBName NVARCHAR(MAX) = @prefix + ' Commencement, has end date',
 	@retSalHiringTermsComBDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsComBText NVARCHAR(MAX) = 'Your commencement date is <Contract Start Date> and will cease on <Contract End Date>, unless otherwise terminated in accordance with this contract.',
 	@retSalHiringTermsComBHeadline NVARCHAR(MAX) = 'Commencement date',
@@ -744,8 +744,80 @@ BEGIN
 	FROM tblCaseDocumentTextCondition CDTC
 	WHERE CDTC.CaseDocumentTextConditionGUID = @retSalHiringTermsComBCondBGuid
 END*/
--- #################################### 13a-b Hours of Work
 
+
+-- #################################### Remuneration
+DECLARE @retSalHiringTermsRemunGuid UNIQUEIDENTIFIER = '00149C22-1C23-48B1-A246-51274F3AB8BC',
+	@retSalHiringTermsRemunName NVARCHAR(MAX) = @prefix + ' - Remuneration',
+	@retSalHiringTermsRemunDescription NVARCHAR(MAX) = '',
+	@retSalHiringTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your base hourly rate will be as per the <b>IKEA Distributions Services Australia Pty Ltd Enterprise Agreement 2016</b>.  This amount will be paid directly into your nominated bank account on a fortnightly basis.',
+	@retSalHiringTermsRemunHeadline NVARCHAR(MAX) = 'Remuneration',
+	@retSalHiringTermsRemunSortOrder INT = @termsCounter 
+ SET @termsCounter = @termsCounter + 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retSalHiringTermsRemunGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
+	VALUES (@retSalHiringTermsID, 
+		@retSalHiringTermsRemunName, 
+		@retSalHiringTermsRemunDescription,
+		@retSalHiringTermsRemunText, 
+		@retSalHiringTermsRemunHeadline,
+		@retSalHiringTermsRemunSortOrder,
+		@retSalHiringTermsRemunGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDT SET 
+		CaseDocumentParagraph_Id = @retSalHiringTermsID,
+		[Name] = @retSalHiringTermsRemunName, 
+		[Description] = @retSalHiringTermsRemunDescription, 
+		[Text] = @retSalHiringTermsRemunText,
+		[Headline] = @retSalHiringTermsRemunHeadline,
+		SortOrder = @retSalHiringTermsRemunSortOrder
+	FROM tblCaseDocumentText CDT 
+	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsRemunGuid
+END
+
+-- #################################### Superannuation
+DECLARE @retSalHiringTermsSuperGuid UNIQUEIDENTIFIER = 'A47D9626-268F-4B1E-A584-6ACE4757CF1D',
+	@retSalHiringTermsSuperName NVARCHAR(MAX) = @prefix + ' - Superannuation',
+	@retSalHiringTermsSuperDescription NVARCHAR(MAX) = '',
+	@retSalHiringTermsSuperText NVARCHAR(MAX) = 'IKEA will make superannuation contributions, on your behalf, to a government approved Superannuation Fund, at the rate payable under the Superannuation Guarantee Legislation (SGL). This rate is currently 9.5% of your wage.
+<br>
+IKEA’s current employer superannuation fund is the Labour Union Co-operative Retirement Fund (LUCRF), which is the fund into which the superannuation contributions will be made unless an alternate fund is nominated by you in writing, in accordance with the SGL.
+<br>
+It is your responsibility to nominate a Super Fund for your contributions to be made to, and to ensure that you complete the necessary paperwork for enrolment into your nominated fund.  IKEA will supply you with a LUCRF Member Guide, including an application form.',
+	@retSalHiringTermsSuperHeadline NVARCHAR(MAX) = 'Superannuation',
+	@retSalHiringTermsSuperSortOrder INT = @termsCounter 
+ SET @termsCounter = @termsCounter + 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retSalHiringTermsSuperGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
+	VALUES (@retSalHiringTermsID, 
+		@retSalHiringTermsSuperName, 
+		@retSalHiringTermsSuperDescription,
+		@retSalHiringTermsSuperText, 
+		@retSalHiringTermsSuperHeadline,
+		@retSalHiringTermsSuperSortOrder,
+		@retSalHiringTermsSuperGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDT SET 
+		CaseDocumentParagraph_Id = @retSalHiringTermsID,
+		[Name] = @retSalHiringTermsSuperName, 
+		[Description] = @retSalHiringTermsSuperDescription, 
+		[Text] = @retSalHiringTermsSuperText,
+		[Headline] = @retSalHiringTermsSuperHeadline,
+		SortOrder = @retSalHiringTermsSuperSortOrder
+	FROM tblCaseDocumentText CDT 
+	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsSuperGuid
+END
+
+-- TODO: Fix Business Unit requirement
+-- #################################### Hours of Work
 ---- Hours of Work A
 DECLARE @retSalHiringTermsHWAGuid UNIQUEIDENTIFIER = '19E0C4DA-0FC7-49FD-8E91-78F98AA20EA3',
 	@retSalHiringTermsHWAName NVARCHAR(MAX) = @prefix + ' - Hours of Work - Full time',
@@ -922,8 +994,7 @@ BEGIN
 	WHERE CDTC.CaseDocumentTextConditionGUID = @retSalHiringTermsHWBCondGuid
 END
 
-
--- #################################### 14 Probationary Period
+-- #################################### Probationary Period
 
 ---- Probationary Period
 DECLARE @retSalHiringTermsProbTimeGuid UNIQUEIDENTIFIER = 'D33DCA76-8810-4163-B180-6285D9F055D2',
@@ -958,74 +1029,72 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsProbTimeGuid
 END
 
--- #################################### 15 Remuneration
-DECLARE @retSalHiringTermsRemunGuid UNIQUEIDENTIFIER = '00149C22-1C23-48B1-A246-51274F3AB8BC',
-	@retSalHiringTermsRemunName NVARCHAR(MAX) = @prefix + ' - Remuneration',
-	@retSalHiringTermsRemunDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your base hourly rate will be as per the <b>IKEA Distributions Services Australia Pty Ltd Enterprise Agreement 2016</b>.  This amount will be paid directly into your nominated bank account on a fortnightly basis.',
-	@retSalHiringTermsRemunHeadline NVARCHAR(MAX) = 'Remuneration',
-	@retSalHiringTermsRemunSortOrder INT = @termsCounter 
- SET @termsCounter = @termsCounter + 1
+-- #################################### Performance Management
+DECLARE @retSalHiringTermsPerfGuid UNIQUEIDENTIFIER = '5E663ED4-F484-4919-BC78-AAF1DD219076',
+	@retSalHiringTermsPerfName NVARCHAR(MAX) = @prefix + ' - Performance',
+	@retSalHiringTermsPerfDescription NVARCHAR(MAX) = '',
+	@retSalHiringTermsPerfText NVARCHAR(MAX) = 'A Co-worker Performance Review will be conducted at least once a year, usually between September and November.  However, your first review will be conducted during your 6-month probationary period.  This review will be based on your initial Co-worker discussion and your position’s Performance Criteria and Job Profile.  Areas of performance and non-performance will be discussed and addressed in accordance with company guidelines. Whilst the company conducts annual performance reviews, it also maintains an ongoing performance management program with its co-workers.',
+	@retSalHiringTermsPerfHeadline NVARCHAR(MAX) = 'Performance Management',
+	@retSalHiringTermsPerfSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retSalHiringTermsRemunGuid)
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retSalHiringTermsPerfGuid)
 BEGIN
 	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
 	VALUES (@retSalHiringTermsID, 
-		@retSalHiringTermsRemunName, 
-		@retSalHiringTermsRemunDescription,
-		@retSalHiringTermsRemunText, 
-		@retSalHiringTermsRemunHeadline,
-		@retSalHiringTermsRemunSortOrder,
-		@retSalHiringTermsRemunGuid)
+		@retSalHiringTermsPerfName, 
+		@retSalHiringTermsPerfDescription,
+		@retSalHiringTermsPerfText, 
+		@retSalHiringTermsPerfHeadline,
+		@retSalHiringTermsPerfSortOrder,
+		@retSalHiringTermsPerfGuid)
 END
 ELSE
 BEGIN
 	UPDATE CDT SET 
 		CaseDocumentParagraph_Id = @retSalHiringTermsID,
-		[Name] = @retSalHiringTermsRemunName, 
-		[Description] = @retSalHiringTermsRemunDescription, 
-		[Text] = @retSalHiringTermsRemunText,
-		[Headline] = @retSalHiringTermsRemunHeadline,
-		SortOrder = @retSalHiringTermsRemunSortOrder
+		[Name] = @retSalHiringTermsPerfName, 
+		[Description] = @retSalHiringTermsPerfDescription, 
+		[Text] = @retSalHiringTermsPerfText,
+		[Headline] = @retSalHiringTermsPerfHeadline,
+		SortOrder = @retSalHiringTermsPerfSortOrder
 	FROM tblCaseDocumentText CDT 
-	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsRemunGuid
+	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsPerfGuid
 END
 
--- #################################### 16 Superannuation
-DECLARE @retSalHiringTermsSuperGuid UNIQUEIDENTIFIER = 'A47D9626-268F-4B1E-A584-6ACE4757CF1D',
-	@retSalHiringTermsSuperName NVARCHAR(MAX) = @prefix + ' - Superannuation',
-	@retSalHiringTermsSuperDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsSuperText NVARCHAR(MAX) = 'IKEA will make superannuation contributions, on your behalf, to a government approved Superannuation Fund, at the rate payable under the Superannuation Guarantee Legislation (SGL). This rate is currently 9.5% of your wage.
-<br>
-IKEA’s current employer superannuation fund is the Labour Union Co-operative Retirement Fund (LUCRF), which is the fund into which the superannuation contributions will be made unless an alternate fund is nominated by you in writing, in accordance with the SGL.
-<br>
-It is your responsibility to nominate a Super Fund for your contributions to be made to, and to ensure that you complete the necessary paperwork for enrolment into your nominated fund.  IKEA will supply you with a LUCRF Member Guide, including an application form.',
-	@retSalHiringTermsSuperHeadline NVARCHAR(MAX) = 'Superannuation',
-	@retSalHiringTermsSuperSortOrder INT = @termsCounter 
- SET @termsCounter = @termsCounter + 1
+-- #################################### Remuneration Review
+DECLARE @retSalHiringTermsRenRevGuid UNIQUEIDENTIFIER = 'E6F5000E-41DE-4F9F-8F22-A33DAEDB5834',
+	@retSalHiringTermsRenRevName NVARCHAR(MAX) = @prefix + ' - Remuneration review',
+	@retSalHiringTermsRenRevDescription NVARCHAR(MAX) = '',
+	@retSalHiringTermsRenRevText NVARCHAR(MAX) = 'In line with IKEA’s Remuneration Policy, your Total Remuneration package will be reviewed annually following your performance review.<br>
+	<br>
+The earliest your Total Remuneration package will be reviewed will be in January <Next Salary Review Year>.',
+	@retSalHiringTermsRenRevHeadline NVARCHAR(MAX) = 'Remuneration review',
+	@retSalHiringTermsRenRevSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
 
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retSalHiringTermsSuperGuid)
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retSalHiringTermsRenRevGuid)
 BEGIN
 	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
 	VALUES (@retSalHiringTermsID, 
-		@retSalHiringTermsSuperName, 
-		@retSalHiringTermsSuperDescription,
-		@retSalHiringTermsSuperText, 
-		@retSalHiringTermsSuperHeadline,
-		@retSalHiringTermsSuperSortOrder,
-		@retSalHiringTermsSuperGuid)
+		@retSalHiringTermsRenRevName, 
+		@retSalHiringTermsRenRevDescription,
+		@retSalHiringTermsRenRevText, 
+		@retSalHiringTermsRenRevHeadline,
+		@retSalHiringTermsRenRevSortOrder,
+		@retSalHiringTermsRenRevGuid)
 END
 ELSE
 BEGIN
 	UPDATE CDT SET 
 		CaseDocumentParagraph_Id = @retSalHiringTermsID,
-		[Name] = @retSalHiringTermsSuperName, 
-		[Description] = @retSalHiringTermsSuperDescription, 
-		[Text] = @retSalHiringTermsSuperText,
-		[Headline] = @retSalHiringTermsSuperHeadline,
-		SortOrder = @retSalHiringTermsSuperSortOrder
+		[Name] = @retSalHiringTermsRenRevName, 
+		[Description] = @retSalHiringTermsRenRevDescription, 
+		[Text] = @retSalHiringTermsRenRevText,
+		[Headline] = @retSalHiringTermsRenRevHeadline,
+		SortOrder = @retSalHiringTermsRenRevSortOrder
 	FROM tblCaseDocumentText CDT 
-	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsSuperGuid
+	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsRenRevGuid
 END
 
 
@@ -1086,13 +1155,32 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsConfGuid
 END
 
--- #################################### 18a-b Leave Entitlements 
+-- #################################### Leave Entitlements 
 
 ---- Leave Entitlements  A
 DECLARE @retSalHiringTermsLeaveAGuid UNIQUEIDENTIFIER = 'D162CA85-7670-4CA8-B619-3A358F41B42F',
-	@retSalHiringTermsLeaveAName NVARCHAR(MAX) = @prefix + ' - Leave - Full time',
+	@retSalHiringTermsLeaveAName NVARCHAR(MAX) = @prefix + ' Leave, Full time',
 	@retSalHiringTermsLeaveADescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsLeaveAText NVARCHAR(MAX) = 'From your commencement date, you are entitled to leave in accordance with the relevant legislation and the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016. These entitlements are processed as detailed in the IKEA policies.',
+	@retSalHiringTermsLeaveAText NVARCHAR(MAX) = 'All Full Time Co-workers shall be entitled to up to 4 weeks’ paid Annual Leave per anniversary year in accordance with the provisions of the applicable legislation, accruing and credited on a fortnightly basis.<br>
+	<br>
+Annual Leave is to be taken within a period not exceeding 12 months from the date it becomes due. As a result of the peak business demands placed upon IKEA during certain periods of the year, no Annual Leave is available to be taken by co-workers during the weeks posted by IKEA at the beginning of each calendar year (known as “block out” periods), unless IKEA approves such an Annual Leave request in writing. Such Annual Leave “block out” period may be different from department to department and subject to change from year to year.<br>
+<br>
+All Full Time Co-workers shall accrue, on a fortnightly basis, an amount of paid Personal Leave which can be taken as either Sick Leave or as Carer’s Leave up to a maximum of 10 days per anniversary year.  <br>
+<br>
+Any unused Personal Leave will accumulate from year to year. Co-workers are not entitled to be paid for their accumulated Personal Leave on termination. <br>
+<br>
+IKEA is committed to ensuring that Sick Leave is only utilised in cases of genuine need. The misuse of Sick Leave will lead to performance management of the co-worker.<br>
+<br>
+If a co-worker is required to access their Sick Leave, all reasonable efforts must be made by the co-worker to contact their immediate manager or the person in charge of the location at the time, at least 1 hour prior to their commencement time. At this point of contact, the co-worker will also be required to advise management of the nature of their absence and the estimated duration of the absence.<br>
+<br>
+In order to qualify for paid Sick Leave, IKEA requires the production of a medical certificate from a medical practitioner dated at the time of absence or a statutory declaration signed by a Justice of the Peace, specifying the nature of the absence for:<br>
+<br>
+a. any absences in excess of one day;<br>
+<br>
+b. absences on a single day if they occur on either side of a Non-Working Day or Public Holiday;<br>
+c. where IKEA management believes that the co-worker has had an excessive amount of single day absences or a pattern of absence has been identified; or<br>
+<br>
+d. where IKEA management has previously performance managed a co-worker in relation to an excessive amount of sick leave and has requested in writing that all future claims for sick leave be supported by a medical certificate.<br>',
 	@retSalHiringTermsLeaveAHeadline NVARCHAR(MAX) = 'Leave Entitlements',
 	@retSalHiringTermsLeaveASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1178,9 +1266,29 @@ END
 
 ---- Leave Entitlements  B
 DECLARE @retSalHiringTermsLeaveBGuid UNIQUEIDENTIFIER = '896C5182-6B30-4E8A-BF19-86699F9672E6',
-	@retSalHiringTermsLeaveBName NVARCHAR(MAX) = @prefix + ' - Leave - Part time',
+	@retSalHiringTermsLeaveBName NVARCHAR(MAX) = @prefix + ' Leave, Part time',
 	@retSalHiringTermsLeaveBDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsLeaveBText NVARCHAR(MAX) = 'You will accrue entitlements to leave in accordance with relevant legislation and company policy on a pro rata basis (compared to a full-time employee). As stated in the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016.  These entitlements are processed as detailed in the IKEA policies.  This includes personal leave, annual leave, parental leave and long service leave.',
+	@retSalHiringTermsLeaveBText NVARCHAR(MAX) = 'All Part Time Co-workers will be entitled to a pro rata amount of Annual Leave based on your paid hours worked in accordance with the provisions of the applicable legislation, accruing and credited on a fortnightly basis.<br>
+	<br>
+Annual Leave is to be taken within a period not exceeding 12 months from the date it becomes due. As a result of the peak business demands placed upon IKEA during certain periods of the year, no Annual Leave is available to be taken by co-workers during the weeks posted by IKEA at the beginning of each calendar year (known as “block out” periods), unless IKEA approves such an Annual Leave request in writing. Such Annual Leave “block out” period may be different from department to department and subject to change from year to year.<br>
+<br>
+All Part Time Co-workers shall accrue, on a fortnightly basis, an amount of paid Personal Leave which can be taken as either Sick Leave or as Carer’s Leave.  Part-time Co-workers receive a pro-rata entitlement to Personal Leave based on your paid hours Worked. <br>
+<br>
+Any unused Personal Leave will accumulate from year to year. Co-workers are not entitled to be paid for their accumulated Personal Leave on termination. <br>
+<br>
+IKEA is committed to ensuring that Sick Leave is only utilised in cases of genuine need. The misuse of Sick Leave will lead to performance management of the co-worker.<br>
+<br>
+If a co-worker is required to access their Sick Leave, all reasonable efforts must be made by the co-worker to contact their immediate manager or the person in charge of the location at the time, at least 1 hour prior to their commencement time. At this point of contact, the co-worker will also be required to advise management of the nature of their absence and the estimated duration of the absence.<br>
+<br>
+In order to qualify for paid Sick Leave, IKEA requires the production of a medical certificate from a medical practitioner dated at the time of absence or a statutory declaration signed by a Justice of the Peace, specifying the nature of the absence for:<br>
+<br>
+a. any absences in excess of one day;<br>
+<br>
+b. absences on a single day if they occur on either side of a Non-Working Day or Public Holiday;<br>
+<br>
+c. where IKEA management believes that the co-worker has had an excessive amount of single day absences or a pattern of absence has been identified; or<br>
+<br>
+d. where IKEA management has previously performance managed a co-worker in relation to an excessive amount of sick leave and has requested in writing that all future claims for sick leave be supported by a medical certificate.<br>',
 	@retSalHiringTermsLeaveBHeadline NVARCHAR(MAX) = 'Leave Entitlements',
 	@retSalHiringTermsLeaveBSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1264,9 +1372,9 @@ END
 
 -- #################################### Issues Resolution
 DECLARE @retSalHiringTermsIssuesGuid UNIQUEIDENTIFIER = 'EE681C14-64B3-42D2-90D8-70EE880A80DB',
-	@retSalHiringTermsIssuesName NVARCHAR(MAX) = @prefix + ' - Issues Resolution',
+	@retSalHiringTermsIssuesName NVARCHAR(MAX) = @prefix + ' Issues Resolution',
 	@retSalHiringTermsIssuesDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsIssuesText NVARCHAR(MAX) = 'If any issues arise during your employment with IKEA, the matter should initially be discussed with your immediate manager, in accordance with IKEA’s Issue Resolution Procedure.  If the problem remains unresolved, you may refer it to more senior levels of management for further discussion in accordance with the Issue Resolution Procedure and the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016.',
+	@retSalHiringTermsIssuesText NVARCHAR(MAX) = 'If any issues arise during your employment with IKEA, the matter should initially be discussed with your immediate manager, in accordance with IKEA’s Issue Resolution Procedure.  If the problem remains unresolved, you may refer it to more senior levels of management for further discussion in accordance with the Issue Resolution Procedure.',
 	@retSalHiringTermsIssuesHeadline NVARCHAR(MAX) = 'Issues Resolution',
 	@retSalHiringTermsIssuesSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1295,7 +1403,7 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsIssuesGuid
 END
 
--- #################################### 20 Equal Employment Opportunity 
+-- ####################################  Equal Employment Opportunity 
 DECLARE @retSalHiringTermsEqualGuid UNIQUEIDENTIFIER = '1C24FE44-8A51-45E9-96F9-6F5CB8C305D3',
 	@retSalHiringTermsEqualName NVARCHAR(MAX) = @prefix + ' - Equal Employment',
 	@retSalHiringTermsEqualDescription NVARCHAR(MAX) = '',
@@ -1328,48 +1436,48 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsEqualGuid
 END
 
--- #################################### Uniform & Conduct
-DECLARE @retSalHiringTermsUniformGuid UNIQUEIDENTIFIER = '1B7CAAF4-3606-442C-8CB8-4D98FA79BDE8',
-	@retSalHiringTermsUniformName NVARCHAR(MAX) = @prefix + ' - Uniform & Conduct',
-	@retSalHiringTermsUniformDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsUniformText NVARCHAR(MAX) = 'IKEA has established guidelines necessary for the professional appearance that IKEA expects all co-workers to present, and as such co-workers are supplied with uniforms and name badges within these guidelines.
-<br><br>
-Co-workers are expected to project a favourable and professional image for IKEA, and are to be courteous, efficient and reliable in their dealings with colleagues, existing and potential customers and suppliers to IKEA.',
-	@retSalHiringTermsUniformHeadline NVARCHAR(MAX) = 'Uniform & Conduct',
-	@retSalHiringTermsUniformSortOrder INT = @termsCounter
+-- #################################### Apperance & Conduct
+DECLARE @retSalHiringTermsAppearGuid UNIQUEIDENTIFIER = '1B7CAAF4-3606-442C-8CB8-4D98FA79BDE8',
+	@retSalHiringTermsAppearName NVARCHAR(MAX) = @prefix + ' - Apperance & Conduct',
+	@retSalHiringTermsAppearDescription NVARCHAR(MAX) = '',
+	@retSalHiringTermsAppearText NVARCHAR(MAX) = 'IKEA has established guidelines necessary for the professional appearance that the company expects all co-workers to present, and as such co-workers are to wear smart casual attire within these guidelines.<br>
+	<br>
+Co-workers are expected to project a favorable and professional image for IKEA, and are to be courteous, efficient and reliable in their dealings with colleagues, existing and potential customers and suppliers to IKEA.<br>',
+	@retSalHiringTermsAppearHeadline NVARCHAR(MAX) = 'Uniform & Conduct',
+	@retSalHiringTermsAppearSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
 
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retSalHiringTermsUniformGuid)
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retSalHiringTermsAppearGuid)
 BEGIN
 	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
 	VALUES (@retSalHiringTermsID, 
-		@retSalHiringTermsUniformName, 
-		@retSalHiringTermsUniformDescription,
-		@retSalHiringTermsUniformText, 
-		@retSalHiringTermsUniformHeadline,
-		@retSalHiringTermsUniformSortOrder,
-		@retSalHiringTermsUniformGuid)
+		@retSalHiringTermsAppearName, 
+		@retSalHiringTermsAppearDescription,
+		@retSalHiringTermsAppearText, 
+		@retSalHiringTermsAppearHeadline,
+		@retSalHiringTermsAppearSortOrder,
+		@retSalHiringTermsAppearGuid)
 END
 ELSE
 BEGIN
 	UPDATE CDT SET 
 		CaseDocumentParagraph_Id = @retSalHiringTermsID,
-		[Name] = @retSalHiringTermsUniformName, 
-		[Description] = @retSalHiringTermsUniformDescription, 
-		[Text] = @retSalHiringTermsUniformText,
-		[Headline] = @retSalHiringTermsUniformHeadline,
-		SortOrder = @retSalHiringTermsUniformSortOrder
+		[Name] = @retSalHiringTermsAppearName, 
+		[Description] = @retSalHiringTermsAppearDescription, 
+		[Text] = @retSalHiringTermsAppearText,
+		[Headline] = @retSalHiringTermsAppearHeadline,
+		SortOrder = @retSalHiringTermsAppearSortOrder
 	FROM tblCaseDocumentText CDT 
-	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsUniformGuid
+	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsAppearGuid
 END
 
 -- #################################### Induction & Ongoing Learning & Development
 DECLARE @retSalHiringTermsInductionGuid UNIQUEIDENTIFIER = 'F953A7C5-92AD-4ECD-8441-5F09814C9EB7',
 	@retSalHiringTermsInductionName NVARCHAR(MAX) = @prefix + ' - Induction',
 	@retSalHiringTermsInductionDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsInductionText NVARCHAR(MAX) = 'IKEA is committed to your induction and ongoing development and as such, has a requirement that you undertake and are committed to training as offered by the company.  Whilst the majority of training is conducted on the job, you may be required from time to time to attend external training programs at different locations as organised by IKEA.
-<br><br>
-IKEA also encourages its co-workers to take responsibility for their own learning and development.',
+	@retSalHiringTermsInductionText NVARCHAR(MAX) = 'IKEA is committed to your induction and ongoing development and as such, has a requirement that you undertake and are committed to training as offered by the company.  Whilst the majority of training is conducted on the job, you may be required from time to time to attend external training programs at different locations as organised by the company.<br>
+	<br>
+IKEA encourages its co-workers to take responsibility for their own learning and development.',
 	@retSalHiringTermsInductionHeadline NVARCHAR(MAX) = 'Induction & Ongoing Learning & Development',
 	@retSalHiringTermsInductionSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1431,48 +1539,203 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsSafetyGuid
 END
 
--- #################################### 24 Termination
-DECLARE @retSalHiringTermsTerminationGuid UNIQUEIDENTIFIER = '62896AB1-1E21-4476-B403-2C08E9297DAF',
-	@retSalHiringTermsTerminationName NVARCHAR(MAX) = @prefix + ' - Termination',
-	@retSalHiringTermsTerminationDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsTerminationText NVARCHAR(MAX) = 'Either party may terminate the employment relationship with the appropriate notice as prescribed in the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016.  Notice provisions do not apply in the case of summary dismissal.
+-- #################################### Termination
+-- A. Termination has no end date
+DECLARE @retSalHiringTermsTerminationAGuid UNIQUEIDENTIFIER = '62896AB1-1E21-4476-B403-2C08E9297DAF',
+	@retSalHiringTermsTerminationAName NVARCHAR(MAX) = @prefix + ' - Termination, No contract end date',
+	@retSalHiringTermsTerminationADescription NVARCHAR(MAX) = '',
+	@retSalHiringTermsTerminationAText NVARCHAR(MAX) = 'Either party may terminate the employment relationship with the appropriate notice as prescribed in the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016.  Notice provisions do not apply in the case of summary dismissal.
 <br><br>
 Upon termination of your employment, all material, equipment, uniforms, information, company records, data etc issued to you or created by you in your employment is to be returned to IKEA or its nominee.
 <br><br>
 IKEA reserves the right to withhold an appropriate sum of money from a co-worker’s termination payment until such time as any outstanding company property as detailed above is returned.',
-	@retSalHiringTermsTerminationHeadline NVARCHAR(MAX) = 'Termination',
-	@retSalHiringTermsTerminationSortOrder INT = @termsCounter
+	@retSalHiringTermsTerminationAHeadline NVARCHAR(MAX) = 'Termination',
+	@retSalHiringTermsTerminationASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
 
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retSalHiringTermsTerminationGuid)
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retSalHiringTermsTerminationAGuid)
 BEGIN
 	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
 	VALUES (@retSalHiringTermsID, 
-		@retSalHiringTermsTerminationName, 
-		@retSalHiringTermsTerminationDescription,
-		@retSalHiringTermsTerminationText, 
-		@retSalHiringTermsTerminationHeadline,
-		@retSalHiringTermsTerminationSortOrder,
-		@retSalHiringTermsTerminationGuid)
+		@retSalHiringTermsTerminationAName, 
+		@retSalHiringTermsTerminationADescription,
+		@retSalHiringTermsTerminationAText, 
+		@retSalHiringTermsTerminationAHeadline,
+		@retSalHiringTermsTerminationASortOrder,
+		@retSalHiringTermsTerminationAGuid)
 END
 ELSE
 BEGIN
 	UPDATE CDT SET 
 		CaseDocumentParagraph_Id = @retSalHiringTermsID,
-		[Name] = @retSalHiringTermsTerminationName, 
-		[Description] = @retSalHiringTermsTerminationDescription, 
-		[Text] = @retSalHiringTermsTerminationText,
-		[Headline] = @retSalHiringTermsTerminationHeadline,
-		SortOrder = @retSalHiringTermsTerminationSortOrder 
+		[Name] = @retSalHiringTermsTerminationAName, 
+		[Description] = @retSalHiringTermsTerminationADescription, 
+		[Text] = @retSalHiringTermsTerminationAText,
+		[Headline] = @retSalHiringTermsTerminationAHeadline,
+		SortOrder = @retSalHiringTermsTerminationASortOrder 
 	FROM tblCaseDocumentText CDT 
-	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsTerminationGuid
+	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsTerminationAGuid
 END
+
+DECLARE @retSalHiringTermsTerminationAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsTerminationAGuid)
+ 
+-- Create condition for for termination
+DECLARE @retSalHiringTermsTerminationACondGuid UNIQUEIDENTIFIER = '9AD17D96-6781-4F52-880E-0A3566580AA1',
+	@retSalHiringTermsTerminationACondPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
+	@retSalHiringTermsTerminationACondOperator NVARCHAR(MAX) = 'IsEmpty',
+	@retSalHiringTermsTerminationACondValues NVARCHAR(MAX) = '',
+	@retSalHiringTermsTerminationACondDescription NVARCHAR(MAX) = 'No contract end date',
+	@retSalHiringTermsTerminationACondStatus INT = 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalHiringTermsTerminationACondGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentTextCondition(
+		CaseDocumentTextConditionGUID, 
+		CaseDocumentText_Id, 
+		Property_Name,
+		Operator,
+		[Values],
+		[Description],
+		[Status],
+		CreatedDate,
+		CreatedByUser_Id,
+		ChangedDate,
+		ChangedByUser_Id)
+	VALUES(
+		@retSalHiringTermsTerminationACondGuid,
+		@retSalHiringTermsTerminationAID,
+		@retSalHiringTermsTerminationACondPropertyName,
+		@retSalHiringTermsTerminationACondOperator,
+		@retSalHiringTermsTerminationACondValues,
+		@retSalHiringTermsTerminationACondDescription,
+		@retSalHiringTermsTerminationACondStatus,
+		@now, 
+		@userID,
+		@now,
+		@userID
+	)
+END
+ELSE
+BEGIN
+	UPDATE CDTC SET CaseDocumentText_Id = @retSalHiringTermsTerminationAID,
+		Property_Name = @retSalHiringTermsTerminationACondPropertyName,
+		Operator = @retSalHiringTermsTerminationACondOperator,
+		[Values] = @retSalHiringTermsTerminationACondValues,
+		[Description] = @retSalHiringTermsTerminationACondDescription,
+		[Status] = @retSalHiringTermsTerminationACondStatus,
+		CreatedDate = @now,
+		CreatedByUser_Id = @userID,
+		ChangedDate = @now,
+		ChangedByUser_Id = @userID
+	FROM tblCaseDocumentTextCondition CDTC
+	WHERE CDTC.CaseDocumentTextConditionGUID = @retSalHiringTermsTerminationACondGuid
+END
+
+-- B. Termination has end date
+DECLARE @retSalHiringTermsTerminationBGuid UNIQUEIDENTIFIER = '7F836435-FC2E-4C8A-8AC2-0E941FD98FF6',
+	@retSalHiringTermsTerminationBName NVARCHAR(MAX) = @prefix + ' - Termination, Has contract end date',
+	@retSalHiringTermsTerminationBDescription NVARCHAR(MAX) = '',
+	@retSalHiringTermsTerminationBText NVARCHAR(MAX) = 'Your employment will terminate on the date specified in clause 2 above. <br> 
+<br>
+Despite clause 2, IKEA may terminate your employment by giving 4 weeks’ notice, or payment in lieu at your ordinary rate of pay.  If you are over 45 years of age and have at least two years’ continuous employment with IKEA, you will be entitled to an additional week’s notice.<br>
+<br>
+If you wish to resign, you must provide IKEA with four (4) weeks’ notice.  If you fail to give the appropriate notice to IKEA, IKEA shall have the right to withhold monies due to you up to a maximum of your ordinary rate of pay for the period of notice not served.<br>
+<br>
+Notices of resignation or termination must be supplied in writing, and must comply with the abovenamed notice periods unless a new period is agreed to in writing between you and IKEA.  A failure on your part to resign in writing will not affect the validity of your resignation.  <br>
+<br>
+IKEA retains the right to terminate your employment without notice in the case of summary dismissal.<br>
+<br>
+Upon termination of your employment, all material, equipment, uniforms, information, company records, data etc issued to you or created by you in your employment is to be returned to IKEA or its nominee. IKEA reserves the right to withhold an appropriate sum of money from a co-worker’s termination payment until such time as any outstanding company property as detailed above is returned.<br>
+<br>
+Termination payments will be made by way of Electronic Funds Transfer within 4 days of the end of the termination pay period.',
+	@retSalHiringTermsTerminationBHeadline NVARCHAR(MAX) = 'Termination',
+	@retSalHiringTermsTerminationBSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retSalHiringTermsTerminationBGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
+	VALUES (@retSalHiringTermsID, 
+		@retSalHiringTermsTerminationBName, 
+		@retSalHiringTermsTerminationBDescription,
+		@retSalHiringTermsTerminationBText, 
+		@retSalHiringTermsTerminationBHeadline,
+		@retSalHiringTermsTerminationBSortOrder,
+		@retSalHiringTermsTerminationBGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDT SET 
+		CaseDocumentParagraph_Id = @retSalHiringTermsID,
+		[Name] = @retSalHiringTermsTerminationBName, 
+		[Description] = @retSalHiringTermsTerminationBDescription, 
+		[Text] = @retSalHiringTermsTerminationBText,
+		[Headline] = @retSalHiringTermsTerminationBHeadline,
+		SortOrder = @retSalHiringTermsTerminationBSortOrder 
+	FROM tblCaseDocumentText CDT 
+	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsTerminationBGuid
+END
+
+DECLARE @retSalHiringTermsTerminationBID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsTerminationBGuid)
+ 
+-- Create condition for for termination
+DECLARE @retSalHiringTermsTerminationBCondGuid UNIQUEIDENTIFIER = '62CFE069-FE8C-4997-9B80-0737622DBF31',
+	@retSalHiringTermsTerminationBCondPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
+	@retSalHiringTermsTerminationBCondOperator NVARCHAR(MAX) = 'HasValue',
+	@retSalHiringTermsTerminationBCondValues NVARCHAR(MAX) = '',
+	@retSalHiringTermsTerminationBCondDescription NVARCHAR(MAX) = 'Has contract end date',
+	@retSalHiringTermsTerminationBCondStatus INT = 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalHiringTermsTerminationBCondGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentTextCondition(
+		CaseDocumentTextConditionGUID, 
+		CaseDocumentText_Id, 
+		Property_Name,
+		Operator,
+		[Values],
+		[Description],
+		[Status],
+		CreatedDate,
+		CreatedByUser_Id,
+		ChangedDate,
+		ChangedByUser_Id)
+	VALUES(
+		@retSalHiringTermsTerminationBCondGuid,
+		@retSalHiringTermsTerminationBID,
+		@retSalHiringTermsTerminationBCondPropertyName,
+		@retSalHiringTermsTerminationBCondOperator,
+		@retSalHiringTermsTerminationBCondValues,
+		@retSalHiringTermsTerminationBCondDescription,
+		@retSalHiringTermsTerminationBCondStatus,
+		@now, 
+		@userID,
+		@now,
+		@userID
+	)
+END
+ELSE
+BEGIN
+	UPDATE CDTC SET CaseDocumentText_Id = @retSalHiringTermsTerminationBID,
+		Property_Name = @retSalHiringTermsTerminationBCondPropertyName,
+		Operator = @retSalHiringTermsTerminationBCondOperator,
+		[Values] = @retSalHiringTermsTerminationBCondValues,
+		[Description] = @retSalHiringTermsTerminationBCondDescription,
+		[Status] = @retSalHiringTermsTerminationBCondStatus,
+		CreatedDate = @now,
+		CreatedByUser_Id = @userID,
+		ChangedDate = @now,
+		ChangedByUser_Id = @userID
+	FROM tblCaseDocumentTextCondition CDTC
+	WHERE CDTC.CaseDocumentTextConditionGUID = @retSalHiringTermsTerminationBCondGuid
+END
+
 
 -- #################################### Company Policies & Procedures 
 DECLARE @retSalHiringTermsPoliciesGuid UNIQUEIDENTIFIER = 'A4BE12B8-036B-4BFC-8368-51C26E837752',
 	@retSalHiringTermsPoliciesName NVARCHAR(MAX) = @prefix + ' - Policies',
 	@retSalHiringTermsPoliciesDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsPoliciesText NVARCHAR(MAX) = 'You shall be required to comply with all IKEA Policies and Procedures as amended from time to time and as outlined in IKEA’s Policy Guidelines and Welcome Program. The IKEA Policies and Procedures form part of your contract of employment.',
+	@retSalHiringTermsPoliciesText NVARCHAR(MAX) = 'You shall be required to comply with all Company Policies and Procedures as advised to you and as outlined in IKEA’s Policy Guidelines and IKEA Store Introduction Program. These Policies and Procedures may be subject to change/amendment from time to time, and form part of your contract of employment.',
 	@retSalHiringTermsPoliciesHeadline NVARCHAR(MAX) = 'Company Policies & Procedures',
 	@retSalHiringTermsPoliciesSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1501,11 +1764,11 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsPoliciesGuid
 END
 
--- #################################### 26 Other Terms and Conditions
+-- #################################### Other Terms and Conditions
 DECLARE @retSalHiringTermsOtherTermsGuid UNIQUEIDENTIFIER = '32AD2BDD-8B69-49E7-9975-773F45DF856F',
-	@retSalHiringTermsOtherTermsName NVARCHAR(MAX) = @prefix + ' - Other T&C',
+	@retSalHiringTermsOtherTermsName NVARCHAR(MAX) = @prefix + ' Other T&C',
 	@retSalHiringTermsOtherTermsDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsOtherTermsText NVARCHAR(MAX) = 'The terms and conditions contained within the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016 (and any subsequent statutory agreement binding you and IKEA) also apply to your employment.  A copy of this Agreement is available for your perusal at all times.',
+	@retSalHiringTermsOtherTermsText NVARCHAR(MAX) = 'The terms and conditions contained within the IKEA Everyday Work Ways Handbook, ico-worker.com/au, IKEA Intranet website and the IKEA Group Code of Conduct may also apply to your employment. These documents may be amended from time to time.',
 	@retSalHiringTermsOtherTermsHeadline NVARCHAR(MAX) = 'Other Terms and Conditions',
 	@retSalHiringTermsOtherTermsSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1536,17 +1799,17 @@ END
 
 -- #################################### Police Checks
 DECLARE @retSalHiringTermsPoliceGuid UNIQUEIDENTIFIER = '5FC0E186-B8C8-4A50-A32D-66F944BB3067',
-	@retSalHiringTermsPoliceName NVARCHAR(MAX) = @prefix + ' - Police',
+	@retSalHiringTermsPoliceName NVARCHAR(MAX) = @prefix + ' Police',
 	@retSalHiringTermsPoliceDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsPoliceText NVARCHAR(MAX) = 'Some positions at IKEA require evidence of good character (for example - positions that deal with children or cash).  Obtaining details of your criminal history via a police check/s is an integral part of the assessment of your suitability for such positions.
-<br><br>
-You may be required to provide a police check/s at the time you are given this offer of employment.  Alternatively, you may be required to provide a police check/s during your employment (for instance, when it is suspected that you have incurred a criminal record since the commencement of your employment, or where you begin working in a position requiring evidence of good character).  By signing this offer of employment, you consent to complete, sign and lodge the relevant police check application documentation (which will be provided to you by IKEA), and to direct that the corresponding police check record/s be forwarded directly to IKEA (where permitted) or (otherwise) to provide IKEA with the original police check record/s immediately on receipt.
-<br><br>
-If you are required to provide the police check/s at the time you are given this offer of employment, you acknowledge that the offer of employment will be subject to the check being satisfactory to IKEA.
-<br><br>
-If you are required to provide the police check/s at any other time during your employment and the check is not satisfactory to IKEA, it may give grounds for dismissal.
-<br><br>
-Please note that the existence of a criminal record does not mean that the check will automatically be unsatisfactory, or that you will be assessed automatically as being unsuitable.  Each case will be assessed on its merits and will depend upon the inherent requirements of the position.',
+	@retSalHiringTermsPoliceText NVARCHAR(MAX) = 'Some positions at IKEA require evidence of good character (for example - positions that deal with children or cash).  Obtaining details of your criminal history via a police check/s is an integral part of the assessment of your suitability for such positions.<br>
+<br>
+You may be required to provide a police check/s at the time you are given this offer of employment.  Alternatively, you may be required to provide a police check/s during your employment (for instance, when it is suspected that you have incurred a criminal record since the commencement of your employment, or where you begin working in a position requiring evidence of good character).  By signing this offer of employment, you consent to complete, sign and lodge the relevant police check application documentation (which will be provided to you by IKEA), and to direct that the corresponding police check record/s be forwarded directly to IKEA (where permitted) or (otherwise) to provide IKEA with the original police check record/s immediately on receipt.<br>
+<br>
+If you are required to provide the police check/s at the time you are given this offer of employment, you acknowledge that the offer of employment will be subject to the check being satisfactory to IKEA.<br>
+<br>
+If you are required to provide the police check/s at any other time during your employment and the check is not satisfactory to IKEA, it may give grounds for summary dismissal.<br>
+<br>
+Please note that the existence of a criminal history does not mean that the check will automatically be unsatisfactory, or that you will be assessed automatically as being unsuitable.  Each case will be assessed on its merits and will depend upon the inherent requirements of the position.',
 	@retSalHiringTermsPoliceHeadline NVARCHAR(MAX) = 'Police Checks',
 	@retSalHiringTermsPoliceSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1575,44 +1838,12 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsPoliceGuid
 END
 
--- #################################### Performance Management
-DECLARE @retSalHiringTermsPerfGuid UNIQUEIDENTIFIER = '5E663ED4-F484-4919-BC78-AAF1DD219076',
-	@retSalHiringTermsPerfName NVARCHAR(MAX) = @prefix + ' - Performance',
-	@retSalHiringTermsPerfDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsPerfText NVARCHAR(MAX) = 'A Co-worker Performance Review will be conducted at least once a year, usually between September and November.  However, your first review will be conducted during your 6-month probationary period.  This review will be based on your initial Co-worker discussion and your position’s Performance Criteria and Job Profile.  Areas of performance and non-performance will be discussed and addressed in accordance with company guidelines. Whilst the company conducts annual performance reviews, it also maintains an ongoing performance management program with its co-workers.',
-	@retSalHiringTermsPerfHeadline NVARCHAR(MAX) = 'Performance Management',
-	@retSalHiringTermsPerfSortOrder INT = @termsCounter
-SET @termsCounter = @termsCounter + 1
-
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retSalHiringTermsPerfGuid)
-BEGIN
-	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
-	VALUES (@retSalHiringTermsID, 
-		@retSalHiringTermsPerfName, 
-		@retSalHiringTermsPerfDescription,
-		@retSalHiringTermsPerfText, 
-		@retSalHiringTermsPerfHeadline,
-		@retSalHiringTermsPerfSortOrder,
-		@retSalHiringTermsPerfGuid)
-END
-ELSE
-BEGIN
-	UPDATE CDT SET 
-		CaseDocumentParagraph_Id = @retSalHiringTermsID,
-		[Name] = @retSalHiringTermsPerfName, 
-		[Description] = @retSalHiringTermsPerfDescription, 
-		[Text] = @retSalHiringTermsPerfText,
-		[Headline] = @retSalHiringTermsPerfHeadline,
-		SortOrder = @retSalHiringTermsPerfSortOrder
-	FROM tblCaseDocumentText CDT 
-	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsPerfGuid
-END
 
 -- #################################### Communications with Media
 DECLARE @retSalHiringTermsMediaGuid UNIQUEIDENTIFIER = '65542777-90DF-4329-8D91-EE885E4E431D',
-	@retSalHiringTermsMediaName NVARCHAR(MAX) = @prefix + ' - Media',
+	@retSalHiringTermsMediaName NVARCHAR(MAX) = @prefix + ' Media',
 	@retSalHiringTermsMediaDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsMediaText NVARCHAR(MAX) = 'You shall not provide information or speak on behalf of IKEA or otherwise to the media on any matters concerning IKEA’s business or activities.  You must refer all requests from the media for information and/or interviews to the DC Manager.',
+	@retSalHiringTermsMediaText NVARCHAR(MAX) = 'You shall not provide information or speak on behalf of IKEA or otherwise to the media on any matters concerning IKEA’s business or activities.  You must refer all requests from the media for information and/or interviews to the Retail Manager.',
 	@retSalHiringTermsMediaHeadline NVARCHAR(MAX) = 'Communications with Media',
 	@retSalHiringTermsMediaSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1674,18 +1905,56 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsUnlawGuid
 END
 
+-- #################################### Variation
+DECLARE @retSalHiringTermsVarGuid UNIQUEIDENTIFIER = 'B36C5152-9AA9-40EF-8721-5087518C67C4',
+	@retSalHiringTermsVarName NVARCHAR(MAX) = @prefix + ' Variation',
+	@retSalHiringTermsVarDescription NVARCHAR(MAX) = '',
+	@retSalHiringTermsVarText NVARCHAR(MAX) = 'This Agreement may only be varied by a written agreement signed by IKEA and you.',
+	@retSalHiringTermsVarHeadline NVARCHAR(MAX) = 'Variation',
+	@retSalHiringTermsVarSortOrder INT = @termsCounter
+SET @termsCounter = @termsCounter + 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retSalHiringTermsVarGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
+	VALUES (@retSalHiringTermsID, 
+		@retSalHiringTermsVarName, 
+		@retSalHiringTermsVarDescription,
+		@retSalHiringTermsVarText, 
+		@retSalHiringTermsVarHeadline,
+		@retSalHiringTermsVarSortOrder,
+		@retSalHiringTermsVarGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDT SET 
+		CaseDocumentParagraph_Id = @retSalHiringTermsID,
+		[Name] = @retSalHiringTermsVarName, 
+		[Description] = @retSalHiringTermsVarDescription, 
+		[Text] = @retSalHiringTermsVarText,
+		[Headline] = @retSalHiringTermsVarHeadline,
+		SortOrder = @retSalHiringTermsVarSortOrder
+	FROM tblCaseDocumentText CDT 
+	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsVarGuid
+END
+
+
 -- #################################### Intellectual Property
 DECLARE @retSalHiringTermsIntelPropGuid UNIQUEIDENTIFIER = 'A8515394-D0D9-4E37-8CCF-ADFF9EEB1866',
-	@retSalHiringTermsIntelPropName NVARCHAR(MAX) = @prefix + ' - Int. Property',
+	@retSalHiringTermsIntelPropName NVARCHAR(MAX) = @prefix + ' Int. Property',
 	@retSalHiringTermsIntelPropDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsIntelPropText NVARCHAR(MAX) = 'IKEA owns all copyright in any works and all inventions, discoveries, novel designs, improvements or modifications, computer program material and trademarks which you write or develop in the course of your employment (in or out of working hours) (“Intellectual Property”).<br>
 <br>
 You assign to IKEA any interest you have in the Intellectual Property, and you must disclose any Intellectual Property to IKEA.<br>
 <br>
-During and after your employment, you must do anything IKEA reasonably requires (at IKEA''s cost) to:
+During and after your employment, you must do anything IKEA reasonably requires (at IKEA''s cost) to:<br>
 <ul>
-<li>obtain statutory protection (including by patent, design registration, trade mark registration or copyright) for the Intellectual Property for IKEA in any country; or</li>
-<li>Perfect or evidence IKEA’s ownership of the Intellectual Property.</li>
+<li>
+Ø  obtain statutory protection (including by patent, design registration, trade mark registration or copyright) for the Intellectual Property for IKEA in any country; or
+</li>
+<li>
+Ø  perfect or evidence IKEA’s ownership of the Intellectual Property.
+</li>
 </ul>',
 
 	@retSalHiringTermsIntelPropHeadline NVARCHAR(MAX) = 'Intellectual Property',
@@ -1716,44 +1985,11 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsIntelPropGuid
 END
 
--- #################################### Variation
-DECLARE @retSalHiringTermsVarGuid UNIQUEIDENTIFIER = 'B36C5152-9AA9-40EF-8721-5087518C67C4',
-	@retSalHiringTermsVarName NVARCHAR(MAX) = @prefix + ' - Variation',
-	@retSalHiringTermsVarDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsVarText NVARCHAR(MAX) = 'This Agreement may only be varied by a written agreement signed by yourself and IKEA.',
-	@retSalHiringTermsVarHeadline NVARCHAR(MAX) = 'Variation',
-	@retSalHiringTermsVarSortOrder INT = @termsCounter
-SET @termsCounter = @termsCounter + 1
-
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retSalHiringTermsVarGuid)
-BEGIN
-	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
-	VALUES (@retSalHiringTermsID, 
-		@retSalHiringTermsVarName, 
-		@retSalHiringTermsVarDescription,
-		@retSalHiringTermsVarText, 
-		@retSalHiringTermsVarHeadline,
-		@retSalHiringTermsVarSortOrder,
-		@retSalHiringTermsVarGuid)
-END
-ELSE
-BEGIN
-	UPDATE CDT SET 
-		CaseDocumentParagraph_Id = @retSalHiringTermsID,
-		[Name] = @retSalHiringTermsVarName, 
-		[Description] = @retSalHiringTermsVarDescription, 
-		[Text] = @retSalHiringTermsVarText,
-		[Headline] = @retSalHiringTermsVarHeadline,
-		SortOrder = @retSalHiringTermsVarSortOrder
-	FROM tblCaseDocumentText CDT 
-	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsVarGuid
-END
-
 -- #################################### Suspension
 DECLARE @retSalHiringTermsSuspGuid UNIQUEIDENTIFIER = '340560CC-8FF4-4720-A51F-B8E632ABBF1C',
-	@retSalHiringTermsSuspName NVARCHAR(MAX) = @prefix + ' - Suspension',
+	@retSalHiringTermsSuspName NVARCHAR(MAX) = @prefix + ' Suspension',
 	@retSalHiringTermsSuspDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsSuspText NVARCHAR(MAX) = 'If we have reason to believe that you may have engaged in a serious breach of your employment obligations, IKEA may at its discretion suspend you from your duties, either with or without pay, while and investigation is conducted.',
+	@retSalHiringTermsSuspText NVARCHAR(MAX) = 'If we have reason to believe that you may have engaged in a serious breach of your employment obligations, IKEA may at its discretion suspend you from your duties, either with or without pay, while an investigation is conducted.',
 	@retSalHiringTermsSuspHeadline NVARCHAR(MAX) = 'Suspension',
 	@retSalHiringTermsSuspSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1792,7 +2028,7 @@ SET @counter = @counter + 1
 ---- Create or update paragraph
 -- Paragraph guid
 DECLARE @retSalHiringEndTextParagraphGuid UNIQUEIDENTIFIER = '8A22C400-407A-49E4-9D4B-6BBD7AC2FF17',
-	@retSalHiringEndTextParagraphName NVARCHAR(MAX) = @prefix + ' - End Text',
+	@retSalHiringEndTextParagraphName NVARCHAR(MAX) = @prefix + ' End Text',
 	@retSalHiringEndTextParagraphType INT = @ParagraphTypeText,
 	@retSalHiringEndTextParagraphDescription NVARCHAR(MAX) = ''
 
@@ -1811,16 +2047,15 @@ DECLARE @retSalHiringEndTextParagraphID INT = (SELECT ID FROM tblCaseDocumentPar
 
 -- Create a text field
 DECLARE @retSalHiringEndTextGuid UNIQUEIDENTIFIER = '077A4ED8-39CA-4D9A-9968-A0AE0CEFD28E',
-	@retSalHiringEndTextName NVARCHAR(MAX) = @prefix + ' - End Text',
+	@retSalHiringEndTextName NVARCHAR(MAX) = @prefix + ' End Text',
 	@retSalHiringEndTextDescription NVARCHAR(MAX) = '',
-	@retSalHiringEndTextText NVARCHAR(MAX) = 'IKEA recognises that its co-workers are essential to the success of the company’s operations.  IKEA remains committed to ensuring that all co-workers are treated fairly and equitably and encourages co-workers to reach their full potential.  We believe that the basis of your employment outlined above, will achieve these objectives and greatly benefit those co-workers willing to develop themselves.
-	<br><br>
-	As an indication of your understanding and acceptance of these conditions, please sign this letter of offer, and return to the undersigned within seven (7) days.  Please retain the second copy for your records.
-	<br><br>
-	If you have any questions pertaining to this offer of employment or any of the information contained herein, please do not hesitate to contact me before signing this letter.',
+	@retSalHiringEndTextText NVARCHAR(MAX) = 'As an indication of your understanding and acceptance of these conditions, please sign this letter of offer, and return to the undersigned within seven (7) days.  Please retain the second copy for your records.<br>
+<br>
+If you have any questions pertaining to this offer of employment or any of the information contained herein, please do not hesitate to contact me before signing this letter.<br>
+<br>
+We look forward to you joining the IKEA team, and look forward to a mutually rewarding association.',
 	@retSalHiringEndTextHeadline NVARCHAR(MAX) = '',
-	@retSalHiringEndTextSortOrder INT = @termsCounter
-SET @termsCounter = @termsCounter + 1
+	@retSalHiringEndTextSortOrder INT = 0
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retSalHiringEndTextGuid)
 BEGIN
@@ -1855,7 +2090,7 @@ SET @counter = @counter + 1
 ---- Create or update paragraph
 -- Paragraph guid
 DECLARE @retSalHiringConSignParagraphGuid UNIQUEIDENTIFIER = '7675D323-18F5-46FE-B2C4-6C25FFD33A7A',
-	@retSalHiringConSignParagraphName NVARCHAR(MAX) = @prefix + ' - Con. Sign.',
+	@retSalHiringConSignParagraphName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@retSalHiringConSignParagraphType INT = @ParagraphTypeText,
 	@retSalHiringConSignParagraphDescription NVARCHAR(MAX) = ''
 
@@ -1876,10 +2111,11 @@ DECLARE @retSalHiringConSignParagraphID INT = (SELECT ID FROM tblCaseDocumentPar
 DECLARE @retSalHiringConSignGuid UNIQUEIDENTIFIER = 'E0D4CACD-C0AC-44D6-BE61-067A74D75D24',
 	@retSalHiringConSignName NVARCHAR(MAX) = @prefix + ' - Con. Sign.',
 	@retSalHiringConSignDescription NVARCHAR(MAX) = '',
-	@retSalHiringConSignText NVARCHAR(MAX) = 'Yours sincerely<br>
-	<Reports to Line Manager><br>
-	<Position Title (Local Job Name)> of <Reports To Line Manager><br>
-	<strong>IKEA Distribution Services Australia Pty Ltd</strong>',
+	@retSalHiringConSignText NVARCHAR(MAX) = 'Yours sincerely		
+<Reports To Line Manager>		
+[<Position Title (Local Job Name)> of <Reports To Line Manager>]		
+<strong>IKEA Pty Limited</strong>
+',
 	@retSalHiringConSignHeadline NVARCHAR(MAX) = '',
 	@retSalHiringConSignSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1997,5 +2233,5 @@ ORDER BY CDCDP.SortOrder, CDT.SortOrder
 
 
 
-COMMIT
+ROLLBACK
 
