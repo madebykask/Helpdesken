@@ -996,11 +996,13 @@ END
 
 -- #################################### 18a-b Leave Entitlements 
 
----- Leave Entitlements  A
+---- Leave Entitlements
 DECLARE @dcSalHirTermsLeaveAGuid UNIQUEIDENTIFIER = 'C8D02802-F6D3-43EB-A05B-74CB01ED0412',
 	@dcSalHirTermsLeaveAName NVARCHAR(MAX) = @prefix + ' Employment - Leave - Full time',
 	@dcSalHirTermsLeaveADescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsLeaveAText NVARCHAR(MAX) = 'From your commencement date, you are entitled to leave in accordance with the relevant legislation and the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016. These entitlements are processed as detailed in the IKEA policies.',
+	@dcSalHirTermsLeaveAText NVARCHAR(MAX) = 'You will accrue entitlements to leave in accordance with relevant legislation and company policy.  This currently includes annual leave (4 weeks per annum, excluding annual leave loading), personal leave (10 days per annum) to be used for absence due to personal illness or to care for a member of your immediate family, parental leave and long service leave.  Company policy may change at any time at IKEA’s sole discretion.<br>
+	<br>
+Annual leave is ordinarily to be taken within the year it is accrued, or within 12 months from the date it becomes due.  Annual leave is to be taken at times mutually agreed to, taking into consideration peak periods in business operations, which may vary from year to year.  Peak periods may be such that no annual leave will be authorised during those periods.  Peak periods can be identified in consultation with your manager.',
 	@dcSalHirTermsLeaveAHeadline NVARCHAR(MAX) = 'Leave Entitlements',
 	@dcSalHirTermsLeaveASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1027,148 +1029,9 @@ BEGIN
 		SortOrder = @dcSalHirTermsLeaveASortOrder
 	FROM tblCaseDocumentText CDT 
 	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsLeaveAGuid
-END
+END 
 
 DECLARE @dcSalHirTermsLeaveAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsLeaveAGuid)
-
-
--- Create condition for Leave Entitlements A
-DECLARE @dcSalHirTermsLeaveACondGuid UNIQUEIDENTIFIER = '1DDDDCA1-EA7C-4A9F-AED5-82338C3FFD7C',
-	@dcSalHirTermsLeaveACondPropertyName NVARCHAR(MAX) = 'extendedcase_ContractedHours',
-	@dcSalHirTermsLeaveACondOperator NVARCHAR(MAX) = 'Equal',
-	@dcSalHirTermsLeaveACondValues NVARCHAR(MAX) = '76',
-	@dcSalHirTermsLeaveACondDescription NVARCHAR(MAX) = 'Is full time',
-	@dcSalHirTermsLeaveACondStatus INT = 1
-
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcSalHirTermsLeaveACondGuid)
-BEGIN
-	INSERT INTO tblCaseDocumentTextCondition(
-		CaseDocumentTextConditionGUID, 
-		CaseDocumentText_Id, 
-		Property_Name,
-		Operator,
-		[Values],
-		[Description],
-		[Status],
-		CreatedDate,
-		CreatedByUser_Id,
-		ChangedDate,
-		ChangedByUser_Id)
-	VALUES(
-		@dcSalHirTermsLeaveACondGuid,
-		@dcSalHirTermsLeaveAID,
-		@dcSalHirTermsLeaveACondPropertyName,
-		@dcSalHirTermsLeaveACondOperator,
-		@dcSalHirTermsLeaveACondValues,
-		@dcSalHirTermsLeaveACondDescription,
-		@dcSalHirTermsLeaveACondStatus,
-		@now, 
-		@userID,
-		@now,
-		@userID
-	)
-END
-ELSE
-BEGIN
-	UPDATE CDTC SET CaseDocumentText_Id = @dcSalHirTermsLeaveAID,
-		Property_Name = @dcSalHirTermsLeaveACondPropertyName,
-		Operator = @dcSalHirTermsLeaveACondOperator,
-		[Values] = @dcSalHirTermsLeaveACondValues,
-		[Description] = @dcSalHirTermsLeaveACondDescription,
-		[Status] = @dcSalHirTermsLeaveACondStatus,
-		CreatedDate = @now,
-		CreatedByUser_Id = @userID,
-		ChangedDate = @now,
-		ChangedByUser_Id = @userID
-	FROM tblCaseDocumentTextCondition CDTC
-	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalHirTermsLeaveACondGuid
-END
-
----- Leave Entitlements  B
-DECLARE @dcSalHirTermsLeaveBGuid UNIQUEIDENTIFIER = '17F9BE91-18C4-46B6-8FB6-7556A03EFB5B',
-	@dcSalHirTermsLeaveBName NVARCHAR(MAX) = @prefix + ' Employment - Leave - Part time',
-	@dcSalHirTermsLeaveBDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsLeaveBText NVARCHAR(MAX) = 'You will accrue entitlements to leave in accordance with relevant legislation and company policy on a pro rata basis (compared to a full-time employee). As stated in the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016.  These entitlements are processed as detailed in the IKEA policies.  This includes personal leave, annual leave, parental leave and long service leave.',
-	@dcSalHirTermsLeaveBHeadline NVARCHAR(MAX) = 'Leave Entitlements',
-	@dcSalHirTermsLeaveBSortOrder INT = @termsCounter
-SET @termsCounter = @termsCounter + 1
-
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcSalHirTermsLeaveBGuid)
-BEGIN
-	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
-	VALUES (@dcSalHirTermsID, 
-		@dcSalHirTermsLeaveBName, 
-		@dcSalHirTermsLeaveBDescription,
-		@dcSalHirTermsLeaveBText, 
-		@dcSalHirTermsLeaveBHeadline,
-		@dcSalHirTermsLeaveBSortOrder,
-		@dcSalHirTermsLeaveBGuid)
-END
-ELSE
-BEGIN
-	UPDATE CDT SET 
-		CaseDocumentParagraph_Id = @dcSalHirTermsID,
-		[Name] = @dcSalHirTermsLeaveBName, 
-		[Description] = @dcSalHirTermsLeaveBDescription, 
-		[Text] = @dcSalHirTermsLeaveBText,
-		[Headline] = @dcSalHirTermsLeaveBHeadline,
-		SortOrder = @dcSalHirTermsLeaveBSortOrder
-	FROM tblCaseDocumentText CDT 
-	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsLeaveBGuid
-END
-DECLARE @dcSalHirTermsLeaveBID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsLeaveBGuid)
-
--- Create condition for leave entitlements B
-DECLARE @dcSalHirTermsLeaveBCondGuid UNIQUEIDENTIFIER = '36AC7B1D-003B-4A1F-8502-0A86D6689BDD',
-	@dcSalHirTermsLeaveBCondPropertyName NVARCHAR(MAX) = 'extendedcase_ContractedHours',
-	@dcSalHirTermsLeaveBCondOperator NVARCHAR(MAX) = 'LessThan',
-	@dcSalHirTermsLeaveBCondValues NVARCHAR(MAX) = '76',
-	@dcSalHirTermsLeaveBCondDescription NVARCHAR(MAX) = 'Is part time',
-	@dcSalHirTermsLeaveBCondStatus INT = 1
-
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcSalHirTermsLeaveBCondGuid)
-BEGIN
-	INSERT INTO tblCaseDocumentTextCondition(
-		CaseDocumentTextConditionGUID, 
-		CaseDocumentText_Id, 
-		Property_Name,
-		Operator,
-		[Values],
-		[Description],
-		[Status],
-		CreatedDate,
-		CreatedByUser_Id,
-		ChangedDate,
-		ChangedByUser_Id)
-	VALUES(
-		@dcSalHirTermsLeaveBCondGuid,
-		@dcSalHirTermsLeaveBID,
-		@dcSalHirTermsLeaveBCondPropertyName,
-		@dcSalHirTermsLeaveBCondOperator,
-		@dcSalHirTermsLeaveBCondValues,
-		@dcSalHirTermsLeaveBCondDescription,
-		@dcSalHirTermsLeaveBCondStatus,
-		@now, 
-		@userID,
-		@now,
-		@userID
-	)
-END
-ELSE
-BEGIN
-	UPDATE CDTC SET CaseDocumentText_Id = @dcSalHirTermsLeaveBID,
-		Property_Name = @dcSalHirTermsLeaveBCondPropertyName,
-		Operator = @dcSalHirTermsLeaveBCondOperator,
-		[Values] = @dcSalHirTermsLeaveBCondValues,
-		[Description] = @dcSalHirTermsLeaveBCondDescription,
-		[Status] = @dcSalHirTermsLeaveBCondStatus,
-		CreatedDate = @now,
-		CreatedByUser_Id = @userID,
-		ChangedDate = @now,
-		ChangedByUser_Id = @userID
-	FROM tblCaseDocumentTextCondition CDTC
-	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalHirTermsLeaveBCondGuid
-END
 
 -- #################################### 19 Issues Resolution
 DECLARE @dcSalHirTermsIssuesGuid UNIQUEIDENTIFIER = '93D2EA1A-A8A0-4A8E-A386-63354E414AA4',
@@ -1236,14 +1099,14 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsEqualGuid
 END
 
--- #################################### 21 Uniform & Conduct
+-- #################################### 21 Appearance & Conduct
 DECLARE @dcSalHirTermsUniformGuid UNIQUEIDENTIFIER = '675E5D06-86CA-45EC-AA36-61EC5971CA16',
-	@dcSalHirTermsUniformName NVARCHAR(MAX) = @prefix + ' Employment - Uniform & Conduct',
+	@dcSalHirTermsUniformName NVARCHAR(MAX) = @prefix + ' Terms - Appearance & Conduct',
 	@dcSalHirTermsUniformDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsUniformText NVARCHAR(MAX) = 'IKEA has established guidelines necessary for the professional appearance that IKEA expects all co-workers to present, and as such co-workers are supplied with uniforms and name badges within these guidelines.
-<br><br>
-Co-workers are expected to project a favourable and professional image for IKEA, and are to be courteous, efficient and reliable in their dealings with colleagues, existing and potential customers and suppliers to IKEA.',
-	@dcSalHirTermsUniformHeadline NVARCHAR(MAX) = 'Uniform & Conduct',
+	@dcSalHirTermsUniformText NVARCHAR(MAX) = 'IKEA has established guidelines necessary for the professional appearance that the company expects all co-workers to present, and as such co-workers are supplied with uniforms and name badges within these guidelines.<br>
+	<br>
+Co-workers are expected to project a favorable and professional image for IKEA, and are to be courteous, efficient and reliable in their dealings with colleagues, existing and potential customers and suppliers to IKEA.',
+	@dcSalHirTermsUniformHeadline NVARCHAR(MAX) = 'Appearance & Conduct',
 	@dcSalHirTermsUniformSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
 
@@ -1483,59 +1346,6 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsPoliceGuid
 END
 
-
-
--- Create condition for probation period 
-DECLARE @dcSalHirTermsPerfACondGuid UNIQUEIDENTIFIER = '243A2923-15C3-48BC-AC2F-1C04B874D469',
-	@dcSalHirTermsPerfACondPropertyName NVARCHAR(MAX) = 'extendedcase_ProbationPeriod',
-	@dcSalHirTermsPerfACondOperator NVARCHAR(MAX) = 'Equal',
-	@dcSalHirTermsPerfACondValues NVARCHAR(MAX) = 'Yes',
-	@dcSalHirTermsPerfACondDescription NVARCHAR(MAX) = 'Has probation period',
-	@dcSalHirTermsPerfACondStatus INT = 1
-
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcSalHirTermsPerfACondGuid)
-BEGIN
-	INSERT INTO tblCaseDocumentTextCondition(
-		CaseDocumentTextConditionGUID, 
-		CaseDocumentText_Id, 
-		Property_Name,
-		Operator,
-		[Values],
-		[Description],
-		[Status],
-		CreatedDate,
-		CreatedByUser_Id,
-		ChangedDate,
-		ChangedByUser_Id)
-	VALUES(
-		@dcSalHirTermsPerfACondGuid,
-		@dcSalHirTermsPerfAID,
-		@dcSalHirTermsPerfACondPropertyName,
-		@dcSalHirTermsPerfACondOperator,
-		@dcSalHirTermsPerfACondValues,
-		@dcSalHirTermsPerfACondDescription,
-		@dcSalHirTermsPerfACondStatus,
-		@now, 
-		@userID,
-		@now,
-		@userID
-	)
-END
-ELSE
-BEGIN
-	UPDATE CDTC SET CaseDocumentText_Id = @dcSalHirTermsPerfAID,
-		Property_Name = @dcSalHirTermsPerfACondPropertyName,
-		Operator = @dcSalHirTermsPerfACondOperator,
-		[Values] = @dcSalHirTermsPerfACondValues,
-		[Description] = @dcSalHirTermsPerfACondDescription,
-		[Status] = @dcSalHirTermsPerfACondStatus,
-		CreatedDate = @now,
-		CreatedByUser_Id = @userID,
-		ChangedDate = @now,
-		ChangedByUser_Id = @userID
-	FROM tblCaseDocumentTextCondition CDTC
-	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalHirTermsPerfACondGuid
-END
 
 
 -- Con B
@@ -2013,5 +1823,5 @@ ORDER BY CDCDP.SortOrder, CDT.SortOrder
 
 
 
-ROLLBACK
+COMMIT
 
