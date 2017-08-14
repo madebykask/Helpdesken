@@ -128,10 +128,10 @@ DECLARE @retSalTcEmployGreetingTextAID INT = (SELECT ID FROM tblCaseDocumentText
 
 -- Create condition for Text A, Full time
 DECLARE @retSalTcEmployGreetingTextACondAGuid UNIQUEIDENTIFIER = '888B07D9-353A-49C6-B2CB-AAA6DA6A0433',
-	@retSalTcEmployGreetingTextACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
+	@retSalTcEmployGreetingTextACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
 	@retSalTcEmployGreetingTextACondAOperator NVARCHAR(MAX) = 'IsEmpty',
 	@retSalTcEmployGreetingTextACondAValues NVARCHAR(MAX) = '',
-	@retSalTcEmployGreetingTextACondADescription NVARCHAR(MAX) = 'No contract end date',
+	@retSalTcEmployGreetingTextACondADescription NVARCHAR(MAX) = 'No change valid to date',
 	@retSalTcEmployGreetingTextACondAStatus INT = 1
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalTcEmployGreetingTextACondAGuid)
 BEGIN
@@ -178,7 +178,7 @@ BEGIN
 END
 
 ---- Create or update text B, No contract end date
-DECLARE @retSalTcEmployGreetingTextBGuid UNIQUEIDENTIFIER = 'BA6D3614-9C2D-4FE5-9B19-BB757885E1ED',
+DECLARE @retSalTcEmployGreetingTextBGuid UNIQUEIDENTIFIER = 'CCE45E91-9A72-4D39-9DB7-FF75DF8655F5',
 	@retSalTcEmployGreetingTextBName NVARCHAR(MAX) = @prefix + ' Greeting, B',
 	@retSalTcEmployGreetingTextBDescription NVARCHAR(MAX) = '',
 	@retSalTcEmployGreetingTextBText NVARCHAR(MAX) = 'We are delighted to confirm your appointment to the fixed term position of <Position Title (Local Job Name)> at IKEA, and wish to confirm the terms and conditions of your employment.',
@@ -211,11 +211,11 @@ END
 DECLARE @retSalTcEmployGreetingTextBID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @retSalTcEmployGreetingTextBGuid)
 
 -- Create condition for Text B, Has contract end date
-DECLARE @retSalTcEmployGreetingTextBCondAGuid UNIQUEIDENTIFIER = '888B07D9-353A-49C6-B2CB-AAA6DA6A0433',
-	@retSalTcEmployGreetingTextBCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
+DECLARE @retSalTcEmployGreetingTextBCondAGuid UNIQUEIDENTIFIER = 'E22A9E8C-983D-4839-A753-BC26CD7E3DC4',
+	@retSalTcEmployGreetingTextBCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
 	@retSalTcEmployGreetingTextBCondAOperator NVARCHAR(MAX) = 'HasValue',
 	@retSalTcEmployGreetingTextBCondAValues NVARCHAR(MAX) = '',
-	@retSalTcEmployGreetingTextBCondADescription NVARCHAR(MAX) = 'No contract end date',
+	@retSalTcEmployGreetingTextBCondADescription NVARCHAR(MAX) = 'Has change valid to date',
 	@retSalTcEmployGreetingTextBCondAStatus INT = 1
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalTcEmployGreetingTextBCondAGuid)
 BEGIN
@@ -263,7 +263,7 @@ END
 
 
 --Text C
-DECLARE @retSalTcEmployGreetingTextCGuid UNIQUEIDENTIFIER = 'BA6D3614-9C2D-4FE5-9B19-BB757885E1ED',
+DECLARE @retSalTcEmployGreetingTextCGuid UNIQUEIDENTIFIER = '1CD7DB6A-12B6-4808-AA0D-783CA8E1548D',
 	@retSalTcEmployGreetingTextCName NVARCHAR(MAX) = @prefix + ' Greeting, C',
 	@retSalTcEmployGreetingTextCDescription NVARCHAR(MAX) = '',
 	@retSalTcEmployGreetingTextCText NVARCHAR(MAX) = 'We are delighted to confirm the extension of your fixed term position of <Position Title (Local Job Name)> at IKEA, and wish to confirm the terms and conditions of your employment.',
@@ -295,13 +295,13 @@ BEGIN
 END
 DECLARE @retSalTcEmployGreetingTextCID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @retSalTcEmployGreetingTextCGuid)
 
--- TODO: declare
+-- TODO: Fix Text C
 -- Create condition for Text C, Has contract end date and fixed term position
-DECLARE @retSalTcEmployGreetingTextCCondAGuid UNIQUEIDENTIFIER = '888B07D9-353A-49C6-B2CB-AAA6DA6A0433',
-	@retSalTcEmployGreetingTextCCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
+DECLARE @retSalTcEmployGreetingTextCCondAGuid UNIQUEIDENTIFIER = 'FC31A329-AD04-47E1-8B17-188241785CBC',
+	@retSalTcEmployGreetingTextCCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
 	@retSalTcEmployGreetingTextCCondAOperator NVARCHAR(MAX) = 'HasValue',
 	@retSalTcEmployGreetingTextCCondAValues NVARCHAR(MAX) = '',
-	@retSalTcEmployGreetingTextCCondADescription NVARCHAR(MAX) = 'Contract end date',
+	@retSalTcEmployGreetingTextCCondADescription NVARCHAR(MAX) = 'Valid to change date',
 	@retSalTcEmployGreetingTextCCondAStatus INT = 1
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalTcEmployGreetingTextCCondAGuid)
 BEGIN
@@ -593,7 +593,7 @@ DECLARE @retSalTcTermsComACondAGuid UNIQUEIDENTIFIER = '3334A6E7-0949-49F0-9BD0-
 	@retSalTcTermsComACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
 	@retSalTcTermsComACondAOperator NVARCHAR(MAX) = 'IsEmpty',
 	@retSalTcTermsComACondAValues NVARCHAR(MAX) = '',
-	@retSalTcTermsComACondADescription NVARCHAR(MAX) = 'No changeValidTo date',
+	@retSalTcTermsComACondADescription NVARCHAR(MAX) = 'No change ValidTo date',
 	@retSalTcTermsComACondAStatus INT = 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalTcTermsComACondAGuid)
@@ -1577,7 +1577,7 @@ END
 
 -- #################################### Issues Resolution
 DECLARE @retSalTcTermsIssuesGuid UNIQUEIDENTIFIER = '0E499425-1BCE-4B07-A656-D88D52349D0B',
-	@retSalTcTermsIssuesName NVARCHAR(MAX) = @prefix + 'Issues Resolution',
+	@retSalTcTermsIssuesName NVARCHAR(MAX) = @prefix + ' Issues Resolution',
 	@retSalTcTermsIssuesDescription NVARCHAR(MAX) = '',
 	@retSalTcTermsIssuesText NVARCHAR(MAX) = 'If any issues arise during your employment with IKEA, the matter should initially be discussed with your immediate manager, in accordance with IKEA’s Issue Resolution Procedure.  If the problem remains unresolved, you may refer it to more senior levels of management for further discussion in accordance with the Issue Resolution Procedure.',
 	@retSalTcTermsIssuesHeadline NVARCHAR(MAX) = 'Issues Resolution',
@@ -1748,7 +1748,7 @@ END
 -- #################################### Termination
 -- A. Termination has no end date
 DECLARE @retSalTcTermsTerminationAGuid UNIQUEIDENTIFIER = '9D46DC4C-C0FA-4418-A44F-ACE2F96BA621',
-	@retSalTcTermsTerminationAName NVARCHAR(MAX) = @prefix + ' Termination, No contract end date',
+	@retSalTcTermsTerminationAName NVARCHAR(MAX) = @prefix + ' Termination, No change valid to date',
 	@retSalTcTermsTerminationADescription NVARCHAR(MAX) = '',
 	@retSalTcTermsTerminationAText NVARCHAR(MAX) = 'IKEA may terminate your employment by giving four (4) weeks’ notice, or payment in lieu at your ordinary rate of pay.  If you are over 45 years of age and have at least two years’ continuous employment with IKEA, you will be entitled to an additional week’s notice.<br>
 <br>
@@ -1797,10 +1797,10 @@ DECLARE @retSalTcTermsTerminationAID INT = (SELECT ID FROM tblCaseDocumentText C
  
 -- Create condition for for termination
 DECLARE @retSalTcTermsTerminationACondGuid UNIQUEIDENTIFIER = 'F3447D0D-2C2C-4E24-B46A-C583D205F2F8',
-	@retSalTcTermsTerminationACondPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
+	@retSalTcTermsTerminationACondPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
 	@retSalTcTermsTerminationACondOperator NVARCHAR(MAX) = 'IsEmpty',
 	@retSalTcTermsTerminationACondValues NVARCHAR(MAX) = '',
-	@retSalTcTermsTerminationACondDescription NVARCHAR(MAX) = 'No contract end date',
+	@retSalTcTermsTerminationACondDescription NVARCHAR(MAX) = 'No change valid to date',
 	@retSalTcTermsTerminationACondStatus INT = 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalTcTermsTerminationACondGuid)
@@ -1896,10 +1896,10 @@ DECLARE @retSalTcTermsTerminationBID INT = (SELECT ID FROM tblCaseDocumentText C
  
 -- Create condition for for termination
 DECLARE @retSalTcTermsTerminationBCondGuid UNIQUEIDENTIFIER = 'E28048E7-4B84-4008-836C-F1E6E1FD2136',
-	@retSalTcTermsTerminationBCondPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
+	@retSalTcTermsTerminationBCondPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
 	@retSalTcTermsTerminationBCondOperator NVARCHAR(MAX) = 'HasValue',
 	@retSalTcTermsTerminationBCondValues NVARCHAR(MAX) = '',
-	@retSalTcTermsTerminationBCondDescription NVARCHAR(MAX) = 'Has contract end date',
+	@retSalTcTermsTerminationBCondDescription NVARCHAR(MAX) = 'Has change valid to date',
 	@retSalTcTermsTerminationBCondStatus INT = 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalTcTermsTerminationBCondGuid)

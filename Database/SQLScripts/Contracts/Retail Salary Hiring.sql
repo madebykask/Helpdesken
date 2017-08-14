@@ -127,7 +127,7 @@ END
 DECLARE @retSalHiringEmployGreetingTextAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @retSalHiringEmployGreetingTextAGuid)
 
 -- Create condition for Text A, Full time
-DECLARE @retSalHiringEmployGreetingTextACondAGuid UNIQUEIDENTIFIER = '2DD1625E-9B06-457C-8123-B27B825CB384',
+DECLARE @retSalHiringEmployGreetingTextACondAGuid UNIQUEIDENTIFIER = '719D11A1-C743-4FAF-B7B6-A60E10496FF0',
 	@retSalHiringEmployGreetingTextACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
 	@retSalHiringEmployGreetingTextACondAOperator NVARCHAR(MAX) = 'Empty',
 	@retSalHiringEmployGreetingTextACondAValues NVARCHAR(MAX) = '76',
@@ -694,7 +694,7 @@ BEGIN
 END
 
 -- No support for 31.12.9999 yet
-/*DECLARE @retSalHiringTermsComBCondBGuid UNIQUEIDENTIFIER = '43c72a21-96c1-4d3c-a44a-5279593332c7',
+/*DECLARE @retSalHiringTermsComBCondBGuid UNIQUEIDENTIFIER = '',
 	@retSalHiringTermsComBCondBPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
 	@retSalHiringTermsComBCondBOperator NVARCHAR(MAX) = 'NotEqual',
 	@retSalHiringTermsComBCondBValues NVARCHAR(MAX) = '31.12.9999',
