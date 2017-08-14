@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-$(function asssaaaac() {
+$(function() {
 
     $("#attachExistingFile").on("click", function(e) {
                 e.preventDefault();
@@ -15,7 +15,7 @@ $(function asssaaaac() {
                 var divs = $("#table_attached_files").find("div.checkbox");
                 var caseId = $("#case__Id").val();
                 var selectedFiles = [];
-                divs.each(function (i) {
+                divs.each(function(i) {
                     var logId = null;
                     var checked = $(divs[i]).find("input[type=checkbox]:checked");
                     var id = checked.val();
@@ -36,28 +36,26 @@ $(function asssaaaac() {
                         checked.attr("checked", false);
                     }
                 });
-            $.ajax({
-                url: "/cases/AttachExistingFile",
-                type: "POST",
-                data: { files: selectedFiles, caseId: caseId },
-                dataType: "json",
-                success: function(result) {
-                    if (result.success) {
-                        $.get('/Cases/LogFiles',
-                            { id: $('#LogKey').val(), now: Date.now(), caseId: caseId },
-                            function(data) {
-                                $('#divCaseLogFiles').html(data);
-                                // Raise event about rendering of uploaded file
-                                $(document).trigger("OnUploadedCaseLogFileRendered", []);
-                                bindDeleteLogFileBehaviorToDeleteButtons();
-                            });
-                        $("#case_attach_ex_file_popup").modal("hide");
-                        return false;
-                    } else {
-                        ShowToastMessage("Error", "error");
+                $.ajax({
+                    url: "/cases/AttachExistingFile",
+                    type: "POST",
+                    data: { files: selectedFiles, caseId: caseId },
+                    dataType: "json",
+                    success: function(result) {
+                        if (result.success) {
+                            $.get('/Cases/LogFiles',
+                                { id: $('#LogKey').val(), now: Date.now(), caseId: caseId },
+                                function(data) {
+                                    $('#divCaseLogFiles').html(data);
+                                    // Raise event about rendering of uploaded file
+                                    $(document).trigger("OnUploadedCaseLogFileRendered", []);
+                                    bindDeleteLogFileBehaviorToDeleteButtons();
+                                });
+                            $("#case_attach_ex_file_popup").modal("hide");
+                            return false;
+                        }
                     }
-                }
-            });
-        return false;
+                });
+                return false;
             });
 });

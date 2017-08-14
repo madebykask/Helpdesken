@@ -236,7 +236,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public List<string> FindFileNamesByLogId(int logId)
         {
-//            return this.DataContext.LogFiles.Where(f => f.Log_Id == logId && !f.ParentLog_Id.HasValue && !(f.IsCaseFile.HasValue && f.IsCaseFile.Value)).Select(f => f.FileName).ToList();
             return this.DataContext.LogFiles.Where(f => f.Log_Id == logId).Select(f => f.FileName).ToList();
         }
 
@@ -290,13 +289,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public bool SaveAttachedExistingLogFiles(IEnumerable<LogFileExisting> logExistingFiles)
         {
-//            var files = logExistingFiles.ToList();
-//            if (files.Any())
-//            {
-//                var caseId = files.Select(x => x.Case_Id).FirstOrDefault();
-//                var dupFiles = DataContext.LogFilesExisting.Where(x => x.FileName.Equals(x.FileName) && x.Case_Id == caseId);
-//                DataContext.LogFilesExisting.RemoveRange(oldFiles);
-//            }
             DataContext.LogFilesExisting.AddRange(logExistingFiles);
             DataContext.SaveChanges();
             return true;
