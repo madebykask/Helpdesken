@@ -21,7 +21,7 @@ DECLARE @addressInfoID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE C
 
 -- Draft ID
 DECLARE @draftGuid UNIQUEIDENTIFIER = '51220147-E756-492E-88A1-C1671BDE6AA5'
-DECLARE @draftID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @addressInfoGuid)
+DECLARE @draftID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @draftGuid)
 
 -- Paragraph types
 DECLARE @ParagraphTypeText INT = 1
@@ -748,7 +748,7 @@ END*/
 
 -- #################################### Remuneration
 DECLARE @retSalHiringTermsRemunGuid UNIQUEIDENTIFIER = '00149C22-1C23-48B1-A246-51274F3AB8BC',
-	@retSalHiringTermsRemunName NVARCHAR(MAX) = @prefix + ' - Remuneration',
+	@retSalHiringTermsRemunName NVARCHAR(MAX) = @prefix + ' Remuneration',
 	@retSalHiringTermsRemunDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your base hourly rate will be as per the <b>IKEA Distributions Services Australia Pty Ltd Enterprise Agreement 2016</b>.  This amount will be paid directly into your nominated bank account on a fortnightly basis.',
 	@retSalHiringTermsRemunHeadline NVARCHAR(MAX) = 'Remuneration',
@@ -781,7 +781,7 @@ END
 
 -- #################################### Superannuation
 DECLARE @retSalHiringTermsSuperGuid UNIQUEIDENTIFIER = 'A47D9626-268F-4B1E-A584-6ACE4757CF1D',
-	@retSalHiringTermsSuperName NVARCHAR(MAX) = @prefix + ' - Superannuation',
+	@retSalHiringTermsSuperName NVARCHAR(MAX) = @prefix + ' Superannuation',
 	@retSalHiringTermsSuperDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsSuperText NVARCHAR(MAX) = 'IKEA will make superannuation contributions, on your behalf, to a government approved Superannuation Fund, at the rate payable under the Superannuation Guarantee Legislation (SGL). This rate is currently 9.5% of your wage.
 <br>
@@ -820,7 +820,7 @@ END
 -- #################################### Hours of Work
 ---- Hours of Work A
 DECLARE @retSalHiringTermsHWAGuid UNIQUEIDENTIFIER = '19E0C4DA-0FC7-49FD-8E91-78F98AA20EA3',
-	@retSalHiringTermsHWAName NVARCHAR(MAX) = @prefix + ' - Hours of Work - Full time',
+	@retSalHiringTermsHWAName NVARCHAR(MAX) = @prefix + ' Hours of Work, full time',
 	@retSalHiringTermsHWADescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsHWAText NVARCHAR(MAX) = 
 	'You will be rostered to work 76 ordinary hours per fortnight.  Such details of your initial roster will be discussed with you upon your commencement.  However, where there is a change in the business’ needs, your hours may also be subject to change with appropriate notice.
@@ -908,7 +908,7 @@ END
 
 ---- Hours of Work B
 DECLARE @retSalHiringTermsHWBGuid UNIQUEIDENTIFIER = '9A40A689-16CB-423E-8A96-E75882AC099C',
-	@retSalHiringTermsHWBName NVARCHAR(MAX) = @prefix + ' - Hours of Work - Part time',
+	@retSalHiringTermsHWBName NVARCHAR(MAX) = @prefix + ' Hours of Work, part time',
 	@retSalHiringTermsHWBDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsHWBText NVARCHAR(MAX) = 
 	'Your contracted hours are <Contracted Hours> per fortnight, you may be offered additional ‘varied hours’ paid at your ordinary rate of pay.
@@ -998,7 +998,7 @@ END
 
 ---- Probationary Period
 DECLARE @retSalHiringTermsProbTimeGuid UNIQUEIDENTIFIER = 'D33DCA76-8810-4163-B180-6285D9F055D2',
-	@retSalHiringTermsProbTimeName NVARCHAR(MAX) = @prefix + ' - Probationary Period',
+	@retSalHiringTermsProbTimeName NVARCHAR(MAX) = @prefix + ' Probationary Period',
 	@retSalHiringTermsProbTimeDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsProbTimeText NVARCHAR(MAX) = 'IKEA offers this employment to you on a probationary basis for a period of six (6) months, during which time your performance standards will be subject to regular review and assessment.  In the six (6)-month period, if either you or IKEA wishes to terminate the employment relationship, then either party can effect that termination with one week’s notice in writing.',
 	@retSalHiringTermsProbTimeHeadline NVARCHAR(MAX) = 'Probationary Period',
@@ -1031,7 +1031,7 @@ END
 
 -- #################################### Performance Management
 DECLARE @retSalHiringTermsPerfGuid UNIQUEIDENTIFIER = '5E663ED4-F484-4919-BC78-AAF1DD219076',
-	@retSalHiringTermsPerfName NVARCHAR(MAX) = @prefix + ' - Performance',
+	@retSalHiringTermsPerfName NVARCHAR(MAX) = @prefix + ' Performance',
 	@retSalHiringTermsPerfDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsPerfText NVARCHAR(MAX) = 'A Co-worker Performance Review will be conducted at least once a year, usually between September and November.  However, your first review will be conducted during your 6-month probationary period.  This review will be based on your initial Co-worker discussion and your position’s Performance Criteria and Job Profile.  Areas of performance and non-performance will be discussed and addressed in accordance with company guidelines. Whilst the company conducts annual performance reviews, it also maintains an ongoing performance management program with its co-workers.',
 	@retSalHiringTermsPerfHeadline NVARCHAR(MAX) = 'Performance Management',
@@ -1064,7 +1064,7 @@ END
 
 -- #################################### Remuneration Review
 DECLARE @retSalHiringTermsRenRevGuid UNIQUEIDENTIFIER = 'E6F5000E-41DE-4F9F-8F22-A33DAEDB5834',
-	@retSalHiringTermsRenRevName NVARCHAR(MAX) = @prefix + ' - Remuneration review',
+	@retSalHiringTermsRenRevName NVARCHAR(MAX) = @prefix + ' Remuneration review',
 	@retSalHiringTermsRenRevDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsRenRevText NVARCHAR(MAX) = 'In line with IKEA’s Remuneration Policy, your Total Remuneration package will be reviewed annually following your performance review.<br>
 	<br>
@@ -1100,7 +1100,7 @@ END
 
 -- #################################### 17 Confidential Information
 DECLARE @retSalHiringTermsConfGuid UNIQUEIDENTIFIER = '6FDBEA72-1B45-46F0-B6C9-C1FC6D921AB4',
-	@retSalHiringTermsConfName NVARCHAR(MAX) = @prefix + ' - Confidential Information',
+	@retSalHiringTermsConfName NVARCHAR(MAX) = @prefix + ' Confidential Information',
 	@retSalHiringTermsConfDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsConfText NVARCHAR(MAX) = 'In the course of your employment, you may be exposed to “Confidential Information” concerning IKEA. Confidential Information means any information obtained by you in the course of your employment, including:
 <ul>
@@ -1405,7 +1405,7 @@ END
 
 -- ####################################  Equal Employment Opportunity 
 DECLARE @retSalHiringTermsEqualGuid UNIQUEIDENTIFIER = '1C24FE44-8A51-45E9-96F9-6F5CB8C305D3',
-	@retSalHiringTermsEqualName NVARCHAR(MAX) = @prefix + ' - Equal Employment',
+	@retSalHiringTermsEqualName NVARCHAR(MAX) = @prefix + ' Equal Employment',
 	@retSalHiringTermsEqualDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsEqualText NVARCHAR(MAX) = 'IKEA''s policy is to provide all co-workers with equal opportunity.  This policy precludes discrimination and harassment based on, but not limited to, race, colour, religion, gender, age, marital status and disability.  You are required to familiarise yourself with this policy and comply with it at all times.',
 	@retSalHiringTermsEqualHeadline NVARCHAR(MAX) = 'Equal Employment Opportunity ',
@@ -1438,7 +1438,7 @@ END
 
 -- #################################### Apperance & Conduct
 DECLARE @retSalHiringTermsAppearGuid UNIQUEIDENTIFIER = '1B7CAAF4-3606-442C-8CB8-4D98FA79BDE8',
-	@retSalHiringTermsAppearName NVARCHAR(MAX) = @prefix + ' - Apperance & Conduct',
+	@retSalHiringTermsAppearName NVARCHAR(MAX) = @prefix + ' Apperance & Conduct',
 	@retSalHiringTermsAppearDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsAppearText NVARCHAR(MAX) = 'IKEA has established guidelines necessary for the professional appearance that the company expects all co-workers to present, and as such co-workers are to wear smart casual attire within these guidelines.<br>
 	<br>
@@ -1473,7 +1473,7 @@ END
 
 -- #################################### Induction & Ongoing Learning & Development
 DECLARE @retSalHiringTermsInductionGuid UNIQUEIDENTIFIER = 'F953A7C5-92AD-4ECD-8441-5F09814C9EB7',
-	@retSalHiringTermsInductionName NVARCHAR(MAX) = @prefix + ' - Induction',
+	@retSalHiringTermsInductionName NVARCHAR(MAX) = @prefix + ' Induction',
 	@retSalHiringTermsInductionDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsInductionText NVARCHAR(MAX) = 'IKEA is committed to your induction and ongoing development and as such, has a requirement that you undertake and are committed to training as offered by the company.  Whilst the majority of training is conducted on the job, you may be required from time to time to attend external training programs at different locations as organised by the company.<br>
 	<br>
@@ -1508,7 +1508,7 @@ END
 
 -- #################################### Occupational Health & Safety
 DECLARE @retSalHiringTermsSafetyGuid UNIQUEIDENTIFIER = '068FED85-1E7F-4D2C-A3F9-F9D281188A70',
-	@retSalHiringTermsSafetyName NVARCHAR(MAX) = @prefix + ' - Safety',
+	@retSalHiringTermsSafetyName NVARCHAR(MAX) = @prefix + ' Safety',
 	@retSalHiringTermsSafetyDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsSafetyText NVARCHAR(MAX) = 'IKEA understands the requirement of ensuring a safe and healthy working environment for all co-workers in its offices, warehouses and stores, and a safe and healthy shopping environment for customers.  In fulfilling this aim, we undertake regular consultation with co-workers on health and safety issues and concerns.',
 	@retSalHiringTermsSafetyHeadline NVARCHAR(MAX) = 'Occupational Health & Safety',
@@ -1542,7 +1542,7 @@ END
 -- #################################### Termination
 -- A. Termination has no end date
 DECLARE @retSalHiringTermsTerminationAGuid UNIQUEIDENTIFIER = '62896AB1-1E21-4476-B403-2C08E9297DAF',
-	@retSalHiringTermsTerminationAName NVARCHAR(MAX) = @prefix + ' - Termination, No contract end date',
+	@retSalHiringTermsTerminationAName NVARCHAR(MAX) = @prefix + ' Termination, No contract end date',
 	@retSalHiringTermsTerminationADescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsTerminationAText NVARCHAR(MAX) = 'Either party may terminate the employment relationship with the appropriate notice as prescribed in the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016.  Notice provisions do not apply in the case of summary dismissal.
 <br><br>
@@ -1633,7 +1633,7 @@ END
 
 -- B. Termination has end date
 DECLARE @retSalHiringTermsTerminationBGuid UNIQUEIDENTIFIER = '7F836435-FC2E-4C8A-8AC2-0E941FD98FF6',
-	@retSalHiringTermsTerminationBName NVARCHAR(MAX) = @prefix + ' - Termination, Has contract end date',
+	@retSalHiringTermsTerminationBName NVARCHAR(MAX) = @prefix + ' Termination, Has contract end date',
 	@retSalHiringTermsTerminationBDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsTerminationBText NVARCHAR(MAX) = 'Your employment will terminate on the date specified in clause 2 above. <br> 
 <br>
@@ -1733,7 +1733,7 @@ END
 
 -- #################################### Company Policies & Procedures 
 DECLARE @retSalHiringTermsPoliciesGuid UNIQUEIDENTIFIER = 'A4BE12B8-036B-4BFC-8368-51C26E837752',
-	@retSalHiringTermsPoliciesName NVARCHAR(MAX) = @prefix + ' - Policies',
+	@retSalHiringTermsPoliciesName NVARCHAR(MAX) = @prefix + ' Policies',
 	@retSalHiringTermsPoliciesDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsPoliciesText NVARCHAR(MAX) = 'You shall be required to comply with all Company Policies and Procedures as advised to you and as outlined in IKEA’s Policy Guidelines and IKEA Store Introduction Program. These Policies and Procedures may be subject to change/amendment from time to time, and form part of your contract of employment.',
 	@retSalHiringTermsPoliciesHeadline NVARCHAR(MAX) = 'Company Policies & Procedures',
@@ -1874,7 +1874,7 @@ END
 
 -- #################################### Obligation to report unlawful activities
 DECLARE @retSalHiringTermsUnlawGuid UNIQUEIDENTIFIER = '401FA0BD-0400-47E0-9972-AEA03B23B20F',
-	@retSalHiringTermsUnlawName NVARCHAR(MAX) = @prefix + ' - Unlawful',
+	@retSalHiringTermsUnlawName NVARCHAR(MAX) = @prefix + ' Unlawful',
 	@retSalHiringTermsUnlawDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsUnlawText NVARCHAR(MAX) = 'If you become aware of or suspect any unlawful act or omission by any IKEA employee, you must advise IKEA immediately.',
 	@retSalHiringTermsUnlawHeadline NVARCHAR(MAX) = 'Obligation to report unlawful activities',
@@ -2109,7 +2109,7 @@ DECLARE @retSalHiringConSignParagraphID INT = (SELECT ID FROM tblCaseDocumentPar
 
 -- Create a text field
 DECLARE @retSalHiringConSignGuid UNIQUEIDENTIFIER = 'E0D4CACD-C0AC-44D6-BE61-067A74D75D24',
-	@retSalHiringConSignName NVARCHAR(MAX) = @prefix + ' - Con. Sign.',
+	@retSalHiringConSignName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@retSalHiringConSignDescription NVARCHAR(MAX) = '',
 	@retSalHiringConSignText NVARCHAR(MAX) = 'Yours sincerely		
 <Reports To Line Manager>		
@@ -2153,7 +2153,7 @@ SET @counter = @counter + 1
 ---- Create or update paragraph
 -- Paragraph guid
 DECLARE @retSalHiringAcceptParagraphGuid UNIQUEIDENTIFIER = '22909EDC-ACE0-496E-8A24-6E0D25DD97BA',
-	@retSalHiringAcceptParagraphName NVARCHAR(MAX) = @prefix + ' - Acceptance',
+	@retSalHiringAcceptParagraphName NVARCHAR(MAX) = @prefix + ' Acceptance',
 	@retSalHiringAcceptParagraphType INT = @ParagraphTypeText,
 	@retSalHiringAcceptParagraphDescription NVARCHAR(MAX) = ''
 
@@ -2172,7 +2172,7 @@ DECLARE @retSalHiringAcceptParagraphID INT = (SELECT ID FROM tblCaseDocumentPara
 
 -- Create a text field
 DECLARE @retSalHiringAcceptGuid UNIQUEIDENTIFIER = '746561EF-0FD3-46FA-A485-312E1C73D568',
-	@retSalHiringAcceptName NVARCHAR(MAX) = @prefix + ' - Acceptance',
+	@retSalHiringAcceptName NVARCHAR(MAX) = @prefix + ' Acceptance',
 	@retSalHiringAcceptDescription NVARCHAR(MAX) = '',
 	@retSalHiringAcceptText NVARCHAR(MAX) = '<table style="border: 1px solid black">
 <tr><th align="center">ACCEPTANCE</th></tr>
@@ -2233,5 +2233,5 @@ ORDER BY CDCDP.SortOrder, CDT.SortOrder
 
 
 
-ROLLBACK
+COMMIT
 
