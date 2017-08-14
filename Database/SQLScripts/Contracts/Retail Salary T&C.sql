@@ -95,7 +95,7 @@ DECLARE @retSalTcEmployGreetingID INT = (SELECT ID FROM tblCaseDocumentParagraph
 
 ---- Create or update text A, No contract end date
 DECLARE @retSalTcEmployGreetingTextAGuid UNIQUEIDENTIFIER = 'BA6D3614-9C2D-4FE5-9B19-BB757885E1ED',
-	@retSalTcEmployGreetingTextAName NVARCHAR(MAX) = @prefix + ' Greeting, No contract end date',
+	@retSalTcEmployGreetingTextAName NVARCHAR(MAX) = @prefix + ' Greeting, A',
 	@retSalTcEmployGreetingTextADescription NVARCHAR(MAX) = '',
 	@retSalTcEmployGreetingTextAText NVARCHAR(MAX) = 'We are delighted to confirm your appointment to the position of <Position Title (Local Job Name)> at IKEA and wish to confirm the terms and conditions of your employment.',
 	@retSalTcEmployGreetingTextAHeadline NVARCHAR(MAX) = '',
@@ -179,7 +179,7 @@ END
 
 ---- Create or update text B, No contract end date
 DECLARE @retSalTcEmployGreetingTextBGuid UNIQUEIDENTIFIER = 'BA6D3614-9C2D-4FE5-9B19-BB757885E1ED',
-	@retSalTcEmployGreetingTextBName NVARCHAR(MAX) = @prefix + ' Greeting, Has contract end date',
+	@retSalTcEmployGreetingTextBName NVARCHAR(MAX) = @prefix + ' Greeting, B',
 	@retSalTcEmployGreetingTextBDescription NVARCHAR(MAX) = '',
 	@retSalTcEmployGreetingTextBText NVARCHAR(MAX) = 'We are delighted to confirm your appointment to the fixed term position of <Position Title (Local Job Name)> at IKEA, and wish to confirm the terms and conditions of your employment.',
 	@retSalTcEmployGreetingTextBHeadline NVARCHAR(MAX) = '',
@@ -264,7 +264,7 @@ END
 
 --Text C
 DECLARE @retSalTcEmployGreetingTextCGuid UNIQUEIDENTIFIER = 'BA6D3614-9C2D-4FE5-9B19-BB757885E1ED',
-	@retSalTcEmployGreetingTextCName NVARCHAR(MAX) = @prefix + ' Greeting, has contract end date & fixterm',
+	@retSalTcEmployGreetingTextCName NVARCHAR(MAX) = @prefix + ' Greeting, C',
 	@retSalTcEmployGreetingTextCDescription NVARCHAR(MAX) = '',
 	@retSalTcEmployGreetingTextCText NVARCHAR(MAX) = 'We are delighted to confirm the extension of your fixed term position of <Position Title (Local Job Name)> at IKEA, and wish to confirm the terms and conditions of your employment.',
 	@retSalTcEmployGreetingTextCHeadline NVARCHAR(MAX) = '',
@@ -556,7 +556,7 @@ END
 
 ---- Commencement A
 DECLARE @retSalTcTermsComAGuid UNIQUEIDENTIFIER = '9B15024D-F436-4923-978C-25E6FCDAD07D',
-	@retSalTcTermsComAName NVARCHAR(MAX) = @prefix + ' Commencement, no contract end date, no add',
+	@retSalTcTermsComAName NVARCHAR(MAX) = @prefix + ' Commencement, A',
 	@retSalTcTermsComADescription NVARCHAR(MAX) = '',
 	@retSalTcTermsComAText NVARCHAR(MAX) = 'Your date of commencement will be <Change Valid From>.',
 	@retSalTcTermsComAHeadline NVARCHAR(MAX) = 'Commencement Date',
@@ -694,7 +694,7 @@ END
 
 ---- Position B
 DECLARE @retSalTcTermsComBGuid UNIQUEIDENTIFIER = '6B40FCB6-78AE-4ECF-B644-546030FA2FCF',
-	@retSalTcTermsComBName NVARCHAR(MAX) = @prefix + ' Commencement, has change valid to',
+	@retSalTcTermsComBName NVARCHAR(MAX) = @prefix + ' Commencement, B',
 	@retSalTcTermsComBDescription NVARCHAR(MAX) = '',
 	@retSalTcTermsComBText NVARCHAR(MAX) = 'This is a limited tenure contract. The contract is effective from <Change Valid From> and will cease on <Change Valid To>, unless otherwise terminated in accordance with this contract.',
 	@retSalTcTermsComBHeadline NVARCHAR(MAX) = 'Commencement date',
@@ -908,7 +908,7 @@ END
 --TODO: Fix Work A
 ---- Hours of Work A
 DECLARE @retSalTcTermsHWAGuid UNIQUEIDENTIFIER = '45296772-BE49-4A2C-95BD-5521A6017F23',
-	@retSalTcTermsHWAName NVARCHAR(MAX) = @prefix + ' Hours of Work, not nsw',
+	@retSalTcTermsHWAName NVARCHAR(MAX) = @prefix + ' Hours of Work, A',
 	@retSalTcTermsHWADescription NVARCHAR(MAX) = '',
 	@retSalTcTermsHWAText NVARCHAR(MAX) = 
 	'Your contracted hours will be <Contracted Hours> hours, plus reasonable additional hours, per fortnight, worked on a rotating 14-day roster.  This roster will include some late night and weekend work.<br>
@@ -1001,7 +1001,7 @@ END
 -- TODO: Fix Work B
 ---- Hours of Work B
 DECLARE @retSalTcTermsHWBGuid UNIQUEIDENTIFIER = '1596C6A3-57CC-49FA-AF47-7E7999294D6A',
-	@retSalTcTermsHWBName NVARCHAR(MAX) = @prefix + ' Hours of Work, part time',
+	@retSalTcTermsHWBName NVARCHAR(MAX) = @prefix + ' Hours of Work, B',
 	@retSalTcTermsHWBDescription NVARCHAR(MAX) = '',
 	@retSalTcTermsHWBText NVARCHAR(MAX) = 
 	'Your contracted hours of work will be <Contracted Hours> hours between Monday to Friday per fortnight.  This may include some late night and weekend work from time to time during peak periods.<br>
@@ -1305,7 +1305,7 @@ END
 
 -- #################################### Confidential Information
 DECLARE @retSalTcTermsConfGuid UNIQUEIDENTIFIER = 'D5D2902D-98B1-4891-9401-B3EB78DCCE1E',
-	@retSalTcTermsConfName NVARCHAR(MAX) = @prefix + ' - Confidential Information',
+	@retSalTcTermsConfName NVARCHAR(MAX) = @prefix + ' Confidential Information',
 	@retSalTcTermsConfDescription NVARCHAR(MAX) = '',
 	@retSalTcTermsConfText NVARCHAR(MAX) = 'In the course of your employment, you may be exposed to “Confidential Information” concerning IKEA. Confidential Information means any information obtained by you in the course of your employment, including:
 <ul>
@@ -1610,7 +1610,7 @@ END
 
 -- #################################### Equal Employment Opportunity 
 DECLARE @retSalTcTermsEqualGuid UNIQUEIDENTIFIER = '8C2C7434-17BD-4E0A-BF21-459212D978E3',
-	@retSalTcTermsEqualName NVARCHAR(MAX) = @prefix + 'Equal Employment',
+	@retSalTcTermsEqualName NVARCHAR(MAX) = @prefix + ' Equal Employment',
 	@retSalTcTermsEqualDescription NVARCHAR(MAX) = '',
 	@retSalTcTermsEqualText NVARCHAR(MAX) = 'IKEA''s policy is to provide all co-workers with equal opportunity.  This policy precludes discrimination and harassment based on, but not limited to, race, colour, religion, gender, age, marital status and disability.  You are required to familiarise yourself with this policy and comply with it at all times.',
 	@retSalTcTermsEqualHeadline NVARCHAR(MAX) = 'Equal Employment Opportunity ',
@@ -1715,7 +1715,7 @@ END
 
 -- #################################### Occupational Health & Safety
 DECLARE @retSalTcTermsSafetyGuid UNIQUEIDENTIFIER = '89F0B307-A266-4EE5-B947-EEAA665E6216',
-	@retSalTcTermsSafetyName NVARCHAR(MAX) = @prefix + ' - Safety',
+	@retSalTcTermsSafetyName NVARCHAR(MAX) = @prefix + ' Safety',
 	@retSalTcTermsSafetyDescription NVARCHAR(MAX) = '',
 	@retSalTcTermsSafetyText NVARCHAR(MAX) = 'IKEA understands the requirement of ensuring a safe and healthy working environment for all co-workers in its offices, warehouses and stores, and a safe and healthy shopping environment for customers.  In fulfilling this aim, we undertake regular consultation with co-workers on health and safety issues and concerns.',
 	@retSalTcTermsSafetyHeadline NVARCHAR(MAX) = 'Occupational Health & Safety',
@@ -2056,7 +2056,7 @@ END
 
 -- #################################### Communications with Media
 DECLARE @retSalTcTermsMediaGuid UNIQUEIDENTIFIER = '1F791297-DDEA-443B-BCA4-73FADC2079EF',
-	@retSalTcTermsMediaName NVARCHAR(MAX) = @prefix + ' - Media',
+	@retSalTcTermsMediaName NVARCHAR(MAX) = @prefix + ' Media',
 	@retSalTcTermsMediaDescription NVARCHAR(MAX) = '',
 	@retSalTcTermsMediaText NVARCHAR(MAX) = 'You shall not provide information or speak on behalf of IKEA or otherwise to the media on any matters concerning IKEA’s business or activities.  You must refer all requests from the media for information and/or interviews to the Retail Manager.',
 	@retSalTcTermsMediaHeadline NVARCHAR(MAX) = 'Communications with Media',
@@ -2089,7 +2089,7 @@ END
 
 -- #################################### Obligation to report unlawful activities
 DECLARE @retSalTcTermsUnlawGuid UNIQUEIDENTIFIER = '396D9C6E-9736-4488-8565-6DED348C6350',
-	@retSalTcTermsUnlawName NVARCHAR(MAX) = @prefix + ' - Unlawful',
+	@retSalTcTermsUnlawName NVARCHAR(MAX) = @prefix + ' Unlawful',
 	@retSalTcTermsUnlawDescription NVARCHAR(MAX) = '',
 	@retSalTcTermsUnlawText NVARCHAR(MAX) = 'If you become aware of or suspect any unlawful act or omission by any IKEA employee, you must advise IKEA immediately.',
 	@retSalTcTermsUnlawHeadline NVARCHAR(MAX) = 'Obligation to report unlawful activities',
@@ -2121,7 +2121,7 @@ BEGIN
 END
 -- #################################### Variation
 DECLARE @retSalTcTermsVarGuid UNIQUEIDENTIFIER = 'F6DAD77B-F1AA-4DB3-B7BE-3DF045BA39EA',
-	@retSalTcTermsVarName NVARCHAR(MAX) = @prefix + ' - Variation',
+	@retSalTcTermsVarName NVARCHAR(MAX) = @prefix + ' Variation',
 	@retSalTcTermsVarDescription NVARCHAR(MAX) = '',
 	@retSalTcTermsVarText NVARCHAR(MAX) = 'This Agreement may only be varied by a written agreement signed by IKEA and you.',
 	@retSalTcTermsVarHeadline NVARCHAR(MAX) = 'Variation',
@@ -2155,7 +2155,7 @@ END
 
 -- #################################### Intellectual Property
 DECLARE @retSalTcTermsIntelPropGuid UNIQUEIDENTIFIER = '1A6945FA-F51F-4623-822C-3E61DF5491F7',
-	@retSalTcTermsIntelPropName NVARCHAR(MAX) = @prefix + ' - Int. Property',
+	@retSalTcTermsIntelPropName NVARCHAR(MAX) = @prefix + ' Int. Property',
 	@retSalTcTermsIntelPropDescription NVARCHAR(MAX) = '',
 	@retSalTcTermsIntelPropText NVARCHAR(MAX) = 'IKEA owns all copyright in any works and all inventions, discoveries, novel designs, improvements or modifications, computer program material and trademarks which you write or develop in the course of your employment (in or out of working hours) (“Intellectual Property”).<br>
 <br>
@@ -2197,7 +2197,7 @@ END
 
 -- #################################### Suspension
 DECLARE @retSalTcTermsSuspGuid UNIQUEIDENTIFIER = 'AF8CCD89-989F-4537-83A1-7D56E205CCEE',
-	@retSalTcTermsSuspName NVARCHAR(MAX) = @prefix + ' - Suspension',
+	@retSalTcTermsSuspName NVARCHAR(MAX) = @prefix + ' Suspension',
 	@retSalTcTermsSuspDescription NVARCHAR(MAX) = '',
 	@retSalTcTermsSuspText NVARCHAR(MAX) = 'If we have reason to believe that you may have engaged in a serious breach of your employment obligations, IKEA may at its discretion suspend you from your duties, either with or without pay, while an investigation is conducted.',
 	@retSalTcTermsSuspHeadline NVARCHAR(MAX) = 'Suspension',
@@ -2301,7 +2301,7 @@ SET @counter = @counter + 1
 ---- Create or update paragraph
 -- Paragraph guid
 DECLARE @retSalTcConSignParagraphGuid UNIQUEIDENTIFIER = '0A42E6C4-AE79-4368-8F56-E3C4F185099E',
-	@retSalTcConSignParagraphName NVARCHAR(MAX) = @prefix + ' - Con. Sign.',
+	@retSalTcConSignParagraphName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@retSalTcConSignParagraphType INT = @ParagraphTypeText,
 	@retSalTcConSignParagraphDescription NVARCHAR(MAX) = ''
 
@@ -2320,7 +2320,7 @@ DECLARE @retSalTcConSignParagraphID INT = (SELECT ID FROM tblCaseDocumentParagra
 
 -- Create a text field
 DECLARE @retSalTcConSignGuid UNIQUEIDENTIFIER = '2AC56CC7-5967-4FD2-81E5-77A5E1E7DE8B',
-	@retSalTcConSignName NVARCHAR(MAX) = @prefix + ' - Con. Sign.',
+	@retSalTcConSignName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@retSalTcConSignDescription NVARCHAR(MAX) = '',
 	@retSalTcConSignText NVARCHAR(MAX) = 'Yours sincerely<br>
 	<Reports to Line Manager><br>
@@ -2443,5 +2443,5 @@ ORDER BY CDCDP.SortOrder, CDT.SortOrder
 
 
 
-ROLLBACK
+COMMIT
 
