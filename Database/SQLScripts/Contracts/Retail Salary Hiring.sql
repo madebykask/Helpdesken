@@ -1,5 +1,5 @@
 --########################################
---########## Retail Retail Salary Hiring #
+--########## RET SAL HIR #################
 --########################################
 
 BEGIN TRAN
@@ -49,7 +49,7 @@ DELETE CDCDP FROM tblCaseDocument_CaseDocumentParagraph CDCDP
 JOIN tblCaseDocument CD ON CDCDP.CaseDocument_Id = CD.ID
 WHERE CD.CaseDocumentGUID = @retSalHiringGuid
 
--- #################################### 1. Logo
+-- #################################### Logo
 INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentParagraph_Id, SortOrder)
 SELECT @retSalHiringID, @logoID, @counter
 SET @counter = @counter + 1
@@ -268,7 +268,7 @@ INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentP
 SELECT @retSalHiringID, @retSalHiringEmployGreetingID, @counter
 SET @counter = @counter + 1
 
--- #################################### 11a-33 Terms
+-- #################################### Terms
 
 DECLARE @termsCounter INT = 0
 
@@ -467,7 +467,7 @@ BEGIN
 	WHERE CDTC.CaseDocumentTextConditionGUID = @retSalHiringTermsPositionBCondGuid
 END
 
--- #################################### 12a-b Commencement Date
+-- #################################### Commencement Date
 
 ---- Commencement A
 DECLARE @retSalHiringTermsComAGuid UNIQUEIDENTIFIER = '5D926BEA-7199-4EB5-B5C1-10C8D1974D01',
@@ -1098,7 +1098,7 @@ BEGIN
 END
 
 
--- #################################### 17 Confidential Information
+-- #################################### Confidential Information
 DECLARE @retSalHiringTermsConfGuid UNIQUEIDENTIFIER = '6FDBEA72-1B45-46F0-B6C9-C1FC6D921AB4',
 	@retSalHiringTermsConfName NVARCHAR(MAX) = @prefix + ' Confidential Information',
 	@retSalHiringTermsConfDescription NVARCHAR(MAX) = '',

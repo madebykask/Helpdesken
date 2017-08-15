@@ -269,7 +269,7 @@ INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentP
 SELECT @dcTcID, @dcTcEmployGreetingID, @counter
 SET @counter = @counter + 1
 
--- #################################### 11a-33 Terms
+-- #################################### Terms
 
 DECLARE @termsCounter INT = 0
 ---- Create or update a terms paragraph
@@ -470,7 +470,7 @@ END
 
 ---- Commencement A
 DECLARE @dcTcTermsComAGuid UNIQUEIDENTIFIER = '93803913-df3b-4477-a545-cb0b15111444',
-	@dcTcTermsComAName NVARCHAR(MAX) = @prefix + ' Commencement, har no end date',
+	@dcTcTermsComAName NVARCHAR(MAX) = @prefix + ' Commencement, has no end date',
 	@dcTcTermsComADescription NVARCHAR(MAX) = '',
 	@dcTcTermsComAText NVARCHAR(MAX) = 'Your commencement date is <Change Valid From>, unless otherwise terminated in accordance with this contract.',
 	@dcTcTermsComAHeadline NVARCHAR(MAX) = 'Commencement Date',
