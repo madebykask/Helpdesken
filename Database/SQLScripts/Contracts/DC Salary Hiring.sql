@@ -21,7 +21,7 @@ DECLARE @addressInfoID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE C
 
 -- Draft ID
 DECLARE @draftGuid UNIQUEIDENTIFIER = '51220147-E756-492E-88A1-C1671BDE6AA5'
-DECLARE @draftID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @addressInfoGuid)
+DECLARE @draftID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @draftGuid)
 
 -- Paragraph types
 DECLARE @ParagraphTypeText INT = 1
@@ -76,7 +76,7 @@ SET @counter = @counter + 1
 ---- Create or update paragraph
 -- Paragraph guid
 DECLARE @dcSalHirEmployGreetingGuid UNIQUEIDENTIFIER = 'ED67B092-7BDA-42D1-93A8-74A6C65208CF',
-	@cdpName NVARCHAR(MAX) = @prefix + ' Employment greeting',
+	@cdpName NVARCHAR(MAX) = @prefix + ' Greeting',
 	@cdpParagraphType INT = @ParagraphTypeText,
 	@cdpDescription NVARCHAR(MAX) = ''
 
@@ -97,7 +97,7 @@ DECLARE @dcSalHirEmployGreetingID INT = (SELECT ID FROM tblCaseDocumentParagraph
 DECLARE @dcSalHirEmployGreetingTextAGuid UNIQUEIDENTIFIER = '0C4283EA-FBF2-456C-9216-FB3ADD8D76EB',
 	@dcSalHirEmployGreetingTextAName NVARCHAR(MAX) = @prefix + ' Greeting, full time',
 	@dcSalHirEmployGreetingTextADescription NVARCHAR(MAX) = '',
-	@dcSalHirEmployGreetingTextAText NVARCHAR(MAX) = 'We are delighted to confirm that your application for the position of Full Time <Position Title (Local Job Name)> <Shift Type> Shift has been successful, and wish to confirm the terms and conditions of your employment.',
+	@dcSalHirEmployGreetingTextAText NVARCHAR(MAX) = 'We are delighted to confirm that your application for the position of Full Time <Position Title (Local Job Name)> at IKEA has been successful, and wish to confirm the terms and conditions of your employment.',
 	@dcSalHirEmployGreetingTextAHeadline NVARCHAR(MAX) = '',
 	@dcSalHirEmployGreetingTextASortOrder INT = 0
 
@@ -182,7 +182,7 @@ END
 DECLARE @dcSalHirEmployGreetingTextBGuid UNIQUEIDENTIFIER = 'B3402432-AA9D-43BF-97D1-FFE53D38F627',
 	@dcSalHirEmployGreetingTextBName NVARCHAR(MAX) = @prefix + ' Greeting, part time',
 	@dcSalHirEmployGreetingTextBDescription NVARCHAR(MAX) = '',
-	@dcSalHirEmployGreetingTextBText NVARCHAR(MAX) = 'We are delighted to confirm that your application for the position of Part Time <Position Title (Local Job Name)> <Shift Type> Shift has been successful, and wish to confirm the terms and conditions of your employment.',
+	@dcSalHirEmployGreetingTextBText NVARCHAR(MAX) = 'We are delighted to confirm that your application for the position of Part Time <Position Title (Local Job Name)> at IKEA has been successful, and wish to confirm the terms and conditions of your employment.',
 	@dcSalHirEmployGreetingTextBHeadline NVARCHAR(MAX) = '',
 	@dcSalHirEmployGreetingTextBSortOrder INT = 1
 
@@ -298,7 +298,7 @@ DECLARE @dcSalHirTermsID INT = (SELECT ID FROM tblCaseDocumentParagraph WHERE Ca
 DECLARE @dcSalHirTermsPositionAGuid UNIQUEIDENTIFIER = '5F717D6F-2F83-4E66-AB5D-EEE48F5FD742',
 	@dcSalHirTermsPositionAName NVARCHAR(MAX) = @prefix + ' Position, full time',
 	@dcSalHirTermsPositionADescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to the [<Position Title (Local Job Name)> of <Reports To Line Manager>]. Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
+	@dcSalHirTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to the <Position Title (Local Job Name)> of <Reports To Line Manager>. Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
 	@dcSalHirTermsPositionAHeadline NVARCHAR(MAX) = '<i>Position</i>',
 	@dcSalHirTermsPositionASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -504,7 +504,7 @@ DECLARE @dcSalHirTermsComAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE
 
 -- Create condition for Commencement A
 DECLARE @dcSalHirTermsComACondAGuid UNIQUEIDENTIFIER = '3E9337BF-859B-4B20-87B3-D07A38BF2AFB',
-	@dcSalHirTermsComACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
+	@dcSalHirTermsComACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
 	@dcSalHirTermsComACondAOperator NVARCHAR(MAX) = 'IsEmpty',
 	@dcSalHirTermsComACondAValues NVARCHAR(MAX) = '',
 	@dcSalHirTermsComACondADescription NVARCHAR(MAX) = 'Has no end date',
@@ -642,7 +642,7 @@ DECLARE @dcSalHirTermsComBID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE
 
 -- Create condition for Commence B
 DECLARE @dcSalHirTermsComBCondAGuid UNIQUEIDENTIFIER = 'D71A75F7-1479-4992-9B98-AC8787A44EEA',
-	@dcSalHirTermsComBCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
+	@dcSalHirTermsComBCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
 	@dcSalHirTermsComBCondAOperator NVARCHAR(MAX) = 'HasValue',
 	@dcSalHirTermsComBCondAValues NVARCHAR(MAX) = '',
 	@dcSalHirTermsComBCondADescription NVARCHAR(MAX) = 'Has end date',
@@ -1623,5 +1623,5 @@ ORDER BY CDCDP.SortOrder, CDT.SortOrder
 
 
 
-ROLLBACK
+COMMIT
 
