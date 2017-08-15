@@ -74,7 +74,7 @@ SET @counter = @counter + 1
 ---- Create or update paragraph
 -- Paragraph guid
 DECLARE @dcHiringEmployGreetingGuid UNIQUEIDENTIFIER = 'ac3e675e-79dc-4045-87d3-69e52c07aee5',
-	@cdpName NVARCHAR(MAX) = @prefix + 'Greeting',
+	@cdpName NVARCHAR(MAX) = @prefix + ' Greeting',
 	@cdpParagraphType INT = @ParagraphTypeText,
 	@cdpDescription NVARCHAR(MAX) = ''
 
