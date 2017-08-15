@@ -468,7 +468,7 @@ END
 
 ---- Position B
 DECLARE @retSalTcTermsPositionBGuid UNIQUEIDENTIFIER = '186EFA0E-BEA7-432E-BB73-4D48229D20DA',
-	@retSalTcTermsPositionBName NVARCHAR(MAX) = @prefix + ' Employment - Position - Part time',
+	@retSalTcTermsPositionBName NVARCHAR(MAX) = @prefix + ' Position, part time',
 	@retSalTcTermsPositionBDescription NVARCHAR(MAX) = '',
 	@retSalTcTermsPositionBText NVARCHAR(MAX) = 'Your position is Part Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to  [<Position Title (Local Job Name)> of <Reports To Line Manager>].  Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs',
 	@retSalTcTermsPositionBHeadline NVARCHAR(MAX) = '<i>Position</i>',

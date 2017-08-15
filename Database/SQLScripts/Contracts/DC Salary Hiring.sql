@@ -61,17 +61,17 @@ INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentP
 SELECT @dcSalHirID, @footerID, @counter
 SET @counter = @counter + 1
 
--- #################################### 1. Logo
+-- #################################### Logo
 INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentParagraph_Id, SortOrder)
 SELECT @dcSalHirID, @logoID, @counter
 SET @counter = @counter + 1
 
--- #################################### 2-8. Address and company info
+-- #################################### Address and company info
 INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentParagraph_Id, SortOrder)
 SELECT @dcSalHirID, @addressInfoID, @counter
 SET @counter = @counter + 1
 
--- #################################### 10a-b. Employment greeting
+-- #################################### Employment greeting
 
 ---- Create or update paragraph
 -- Paragraph guid
@@ -95,7 +95,7 @@ DECLARE @dcSalHirEmployGreetingID INT = (SELECT ID FROM tblCaseDocumentParagraph
 
 ---- Create or update text A, Full Time
 DECLARE @dcSalHirEmployGreetingTextAGuid UNIQUEIDENTIFIER = '0C4283EA-FBF2-456C-9216-FB3ADD8D76EB',
-	@dcSalHirEmployGreetingTextAName NVARCHAR(MAX) = @prefix + ' Employment greeting, Text A - Full time',
+	@dcSalHirEmployGreetingTextAName NVARCHAR(MAX) = @prefix + ' Greeting, full time',
 	@dcSalHirEmployGreetingTextADescription NVARCHAR(MAX) = '',
 	@dcSalHirEmployGreetingTextAText NVARCHAR(MAX) = 'We are delighted to confirm that your application for the position of Full Time <Position Title (Local Job Name)> <Shift Type> Shift has been successful, and wish to confirm the terms and conditions of your employment.',
 	@dcSalHirEmployGreetingTextAHeadline NVARCHAR(MAX) = '',
@@ -180,7 +180,7 @@ END
 
 ---- Create or update text B, Part Time
 DECLARE @dcSalHirEmployGreetingTextBGuid UNIQUEIDENTIFIER = 'B3402432-AA9D-43BF-97D1-FFE53D38F627',
-	@dcSalHirEmployGreetingTextBName NVARCHAR(MAX) = @prefix + ' Employment greeting, Text B - Part time',
+	@dcSalHirEmployGreetingTextBName NVARCHAR(MAX) = @prefix + ' Greeting, part time',
 	@dcSalHirEmployGreetingTextBDescription NVARCHAR(MAX) = '',
 	@dcSalHirEmployGreetingTextBText NVARCHAR(MAX) = 'We are delighted to confirm that your application for the position of Part Time <Position Title (Local Job Name)> <Shift Type> Shift has been successful, and wish to confirm the terms and conditions of your employment.',
 	@dcSalHirEmployGreetingTextBHeadline NVARCHAR(MAX) = '',
@@ -269,7 +269,7 @@ INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentP
 SELECT @dcSalHirID, @dcSalHirEmployGreetingID, @counter
 SET @counter = @counter + 1
 
--- #################################### 11a-33 Terms
+-- #################################### Terms
 
 DECLARE @termsCounter INT = 0
 ---- Create or update a terms paragraph
@@ -292,13 +292,13 @@ BEGIN
 END
 DECLARE @dcSalHirTermsID INT = (SELECT ID FROM tblCaseDocumentParagraph WHERE CaseDocumentParagraphGUID = @dcSalHirTermsGuid)
 
--- #################################### 11a-b Position
+-- #################################### Position
 
 ---- Position A
 DECLARE @dcSalHirTermsPositionAGuid UNIQUEIDENTIFIER = '5F717D6F-2F83-4E66-AB5D-EEE48F5FD742',
-	@dcSalHirTermsPositionAName NVARCHAR(MAX) = @prefix + ' Employment - Position - Full time',
+	@dcSalHirTermsPositionAName NVARCHAR(MAX) = @prefix + ' Position, full time',
 	@dcSalHirTermsPositionADescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to the <Position Title (Local Job Name)> of <Reports To Line Manager>. Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
+	@dcSalHirTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to the [<Position Title (Local Job Name)> of <Reports To Line Manager>]. Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
 	@dcSalHirTermsPositionAHeadline NVARCHAR(MAX) = '<i>Position</i>',
 	@dcSalHirTermsPositionASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -382,9 +382,9 @@ END
 
 ---- Position B
 DECLARE @dcSalHirTermsPositionBGuid UNIQUEIDENTIFIER = 'E11537F9-D94B-41BA-95F3-C99C7E4138AF',
-	@dcSalHirTermsPositionBName NVARCHAR(MAX) = @prefix + ' Employment - Position - Part time',
+	@dcSalHirTermsPositionBName NVARCHAR(MAX) = @prefix + '  Position, part time',
 	@dcSalHirTermsPositionBDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsPositionBText NVARCHAR(MAX) = 'Your position is Part Time <Position Title (Local Job Name)> <Shift Type> Shift, reporting to  <Position Title (Local Job Name)> of <Reports To Line Manager>, which will be based at <Business Unit>. Your position (in terms of your duties & responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
+	@dcSalHirTermsPositionBText NVARCHAR(MAX) = 'Your position is Part Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to the <Position Title (Local Job Name)> of <Reports To Line Manager>. Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
 	@dcSalHirTermsPositionBHeadline NVARCHAR(MAX) = '<i>Position</i>',
 	@dcSalHirTermsPositionBSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -466,13 +466,13 @@ BEGIN
 	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalHirTermsPositionBCondGuid
 END
 
--- #################################### 12a-b Commencement Date
+-- #################################### Commencement Date
 
 ---- Commencement A
 DECLARE @dcSalHirTermsComAGuid UNIQUEIDENTIFIER = '31D29CB8-6E01-4523-B125-B6DD41165CD9',
-	@dcSalHirTermsComAName NVARCHAR(MAX) = @prefix + ' Employment - Commencement - No date',
+	@dcSalHirTermsComAName NVARCHAR(MAX) = @prefix + ' Commencemen, no date',
 	@dcSalHirTermsComADescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsComAText NVARCHAR(MAX) = 'Your commencement date is <Change Valid From>, unless otherwise terminated in accordance with this contract.',
+	@dcSalHirTermsComAText NVARCHAR(MAX) = 'Your commencement date is <Contract Start Date>, unless otherwise terminated in accordance with this contract.',
 	@dcSalHirTermsComAHeadline NVARCHAR(MAX) = 'Commencement Date',
 	@dcSalHirTermsComASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -608,9 +608,9 @@ END
 
 ---- Commencement B
 DECLARE @dcSalHirTermsComBGuid UNIQUEIDENTIFIER = 'C8A45005-DB67-456C-B8D0-31976EE668C9',
-	@dcSalHirTermsComBName NVARCHAR(MAX) = @prefix + ' - Commencement - Has end date',
+	@dcSalHirTermsComBName NVARCHAR(MAX) = @prefix + ' Commencement, has end date',
 	@dcSalHirTermsComBDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsComBText NVARCHAR(MAX) = 'Your commencement date is <Change Valid From> and will cease on <Change Valid To>, unless otherwise terminated in accordance with this contract.',
+	@dcSalHirTermsComBText NVARCHAR(MAX) = 'Your commencement date is <Contract Start Date> and will cease on <Contract End Date>, unless otherwise terminated in accordance with this contract.',
 	@dcSalHirTermsComBHeadline NVARCHAR(MAX) = 'Commencement date',
 	@dcSalHirTermsComBSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -744,11 +744,13 @@ BEGIN
 	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalHirTermsComBCondBGuid
 END*/
 
--- #################################### 13 Remuneration
+-- #################################### Remuneration
 DECLARE @dcSalHirTermsRemunGuid UNIQUEIDENTIFIER = '4AF86F83-273C-44D7-A081-2894032D8C8A',
-	@dcSalHirTermsRemunName NVARCHAR(MAX) = @prefix + ' Employment - Remuneration',
+	@dcSalHirTermsRemunName NVARCHAR(MAX) = @prefix + ' Remuneration',
 	@dcSalHirTermsRemunDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your base hourly rate will be as per the <b>IKEA Distributions Services Australia Pty Ltd Enterprise Agreement 2016</b>.  This amount will be paid directly into your nominated bank account on a fortnightly basis.',
+	@dcSalHirTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your Total Remuneration package will be $<Basic Pay Amount> per annum.  Attached is a Remuneration Statement, which outlines the break-up of your Total Remuneration package.<br>
+<br>
+Your salary will be paid directly into your nominated bank account on a fortnightly basis.',
 	@dcSalHirTermsRemunHeadline NVARCHAR(MAX) = 'Remuneration',
 	@dcSalHirTermsRemunSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -779,7 +781,7 @@ END
 
 -- #################################### 16 Superannuation
 DECLARE @dcSalHirTermsSuperGuid UNIQUEIDENTIFIER = '79D00B1E-741B-4FF5-8D5D-2F3FFF8D9093',
-	@dcSalHirTermsSuperName NVARCHAR(MAX) = @prefix + ' Employment - Superannuation',
+	@dcSalHirTermsSuperName NVARCHAR(MAX) = @prefix + ' Superannuation',
 	@dcSalHirTermsSuperDescription NVARCHAR(MAX) = '',
 	@dcSalHirTermsSuperText NVARCHAR(MAX) = 'IKEA will make superannuation contributions, on your behalf, to a government approved Superannuation Fund, at the rate payable under the Superannuation Guarantee Legislation (SGL). This rate is currently 9.5% of your wage.
 <br>
@@ -814,50 +816,46 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsSuperGuid
 END
 
--- #################################### 13a-b Hours of Work
+-- #################################### Hours of Work
 
----- Hours of Work A
-DECLARE @dcSalHirTermsHWAGuid UNIQUEIDENTIFIER = '76C14D99-C2E0-4853-A27D-6DCBB15336AE',
-	@dcSalHirTermsHWAName NVARCHAR(MAX) = @prefix + ' - Hours of Work - Full time',
-	@dcSalHirTermsHWADescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsHWAText NVARCHAR(MAX) = 
-	'You will be rostered to work 76 ordinary hours per fortnight.  Such details of your initial roster will be discussed with you upon your commencement.  However, where there is a change in the business’ needs, your hours may also be subject to change with appropriate notice.
-You should note that ordinary hours in the Distribution Centre include Saturday’s and you have mutually agreed to work more than one in three Saturdays as part of your contracted ordinary hours.',
-	@dcSalHirTermsHWAHeadline NVARCHAR(MAX) = 'Position',
-	@dcSalHirTermsHWASortOrder INT = @termsCounter
+DECLARE @dcSalHirTermsHWGuid UNIQUEIDENTIFIER = '76C14D99-C2E0-4853-A27D-6DCBB15336AE',
+	@dcSalHirTermsHWName NVARCHAR(MAX) = @prefix + ' Hours of Work',
+	@dcSalHirTermsHWDescription NVARCHAR(MAX) = '',
+	@dcSalHirTermsHWText NVARCHAR(MAX) = 
+	'Your normal working hours are <Contracted Hours> hours between Monday to Sunday per fortnight.  However, your position will require you to work beyond these hours from time to time and on weekends.  Your level of salary takes into account these additional hours, which may be required from time to time to fulfill the responsibilities of your role.',
+	@dcSalHirTermsHWHeadline NVARCHAR(MAX) = 'Hours of work',
+	@dcSalHirTermsHWSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
 
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcSalHirTermsHWAGuid)
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcSalHirTermsHWGuid)
 BEGIN
 	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
 	VALUES (@dcSalHirTermsID, 
-		@dcSalHirTermsHWAName, 
-		@dcSalHirTermsHWADescription,
-		@dcSalHirTermsHWAText, 
-		@dcSalHirTermsHWAHeadline,
-		@dcSalHirTermsHWASortOrder,
-		@dcSalHirTermsHWAGuid)
+		@dcSalHirTermsHWName, 
+		@dcSalHirTermsHWDescription,
+		@dcSalHirTermsHWText, 
+		@dcSalHirTermsHWHeadline,
+		@dcSalHirTermsHWSortOrder,
+		@dcSalHirTermsHWGuid)
 END
 ELSE
 BEGIN
 	UPDATE CDT SET 
 		CaseDocumentParagraph_Id = @dcSalHirTermsID,
-		[Name] = @dcSalHirTermsHWAName, 
-		[Description] = @dcSalHirTermsHWADescription, 
-		[Text] = @dcSalHirTermsHWAText,
-		[Headline] = @dcSalHirTermsHWAHeadline,
-		SortOrder = @dcSalHirTermsHWASortOrder
+		[Name] = @dcSalHirTermsHWName, 
+		[Description] = @dcSalHirTermsHWDescription, 
+		[Text] = @dcSalHirTermsHWText,
+		[Headline] = @dcSalHirTermsHWHeadline,
+		SortOrder = @dcSalHirTermsHWSortOrder
 	FROM tblCaseDocumentText CDT 
-	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsHWAGuid
+	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsHWGuid
 END
-DECLARE @dcSalHirTermsHWAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsHWAGuid)
+DECLARE @dcSalHirTermsHWID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsHWGuid)
 
 
--- #################################### 14 Probationary Period
-
----- Probationary Period
+-- #################################### Probationary Period
 DECLARE @dcSalHirTermsProbTimeGuid UNIQUEIDENTIFIER = 'C7664560-0FAB-4D77-804B-F76471D7D9BA',
-	@dcSalHirTermsProbTimeName NVARCHAR(MAX) = @prefix + ' Employment - Probationary Period',
+	@dcSalHirTermsProbTimeName NVARCHAR(MAX) = @prefix + ' Probation',
 	@dcSalHirTermsProbTimeDescription NVARCHAR(MAX) = '',
 	@dcSalHirTermsProbTimeText NVARCHAR(MAX) = 'IKEA offers this employment to you on a probationary basis for a period of six (6) months, during which time your performance standards will be subject to regular review and assessment.  In the six (6)-month period, if either you or IKEA wishes to terminate the employment relationship, then either party can effect that termination with one week’s notice in writing.',
 	@dcSalHirTermsProbTimeHeadline NVARCHAR(MAX) = 'Probationary Period',
@@ -890,9 +888,9 @@ END
 
 DECLARE @dcSalHirTermsProbID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsProbTimeGuid)
 
--- #################################### 28 Performance Management
+-- #################################### Performance Management
 DECLARE @dcSalHirTermsPerfAGuid UNIQUEIDENTIFIER = '7673FB67-8DDF-40BE-B999-D4C0804FEC7B',
-	@dcSalHirTermsPerfAName NVARCHAR(MAX) = @prefix + ' Employment - Performance',
+	@dcSalHirTermsPerfAName NVARCHAR(MAX) = @prefix + ' Performance',
 	@dcSalHirTermsPerfADescription NVARCHAR(MAX) = '',
 	@dcSalHirTermsPerfAText NVARCHAR(MAX) = 'A Co-worker Performance Review will be conducted at least once a year, usually between September and November.  However, your first review will be conducted during your 6-month probationary period.  This review will be based on your initial Co-worker discussion and your position’s Performance Criteria and Job Profile.  Areas of performance and non-performance will be discussed and addressed in accordance with company guidelines. Whilst the company conducts annual performance reviews, it also maintains an ongoing performance management program with its co-workers.',
 	@dcSalHirTermsPerfAHeadline NVARCHAR(MAX) = 'Performance Management',
@@ -961,9 +959,9 @@ BEGIN
 END
 
 DECLARE @dcSalHirTermsRemunRevAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsRemunRevAGuid)
--- #################################### 17 Confidential Information
+-- #################################### Confidential Information
 DECLARE @dcSalHirTermsConfGuid UNIQUEIDENTIFIER = '43928C15-8F1B-443B-98CD-E78E2241E2BF',
-	@dcSalHirTermsConfName NVARCHAR(MAX) = @prefix + ' Employment - Confidential Information',
+	@dcSalHirTermsConfName NVARCHAR(MAX) = @prefix + ' Confidential Information',
 	@dcSalHirTermsConfDescription NVARCHAR(MAX) = '',
 	@dcSalHirTermsConfText NVARCHAR(MAX) = '',
 	@dcSalHirTermsConfHeadline NVARCHAR(MAX) = 'Confidential Information',
@@ -994,50 +992,50 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsConfGuid
 END
 
--- #################################### 18a-b Leave Entitlements 
+-- #################################### Leave Entitlements 
 
 ---- Leave Entitlements
-DECLARE @dcSalHirTermsLeaveAGuid UNIQUEIDENTIFIER = 'C8D02802-F6D3-43EB-A05B-74CB01ED0412',
-	@dcSalHirTermsLeaveAName NVARCHAR(MAX) = @prefix + ' Employment - Leave - Full time',
-	@dcSalHirTermsLeaveADescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsLeaveAText NVARCHAR(MAX) = 'You will accrue entitlements to leave in accordance with relevant legislation and company policy.  This currently includes annual leave (4 weeks per annum, excluding annual leave loading), personal leave (10 days per annum) to be used for absence due to personal illness or to care for a member of your immediate family, parental leave and long service leave.  Company policy may change at any time at IKEA’s sole discretion.<br>
+DECLARE @dcSalHirTermsLeaveGuid UNIQUEIDENTIFIER = 'C8D02802-F6D3-43EB-A05B-74CB01ED0412',
+	@dcSalHirTermsLeaveName NVARCHAR(MAX) = @prefix + ' Leave',
+	@dcSalHirTermsLeaveDescription NVARCHAR(MAX) = '',
+	@dcSalHirTermsLeaveText NVARCHAR(MAX) = 'You will accrue entitlements to leave in accordance with relevant legislation and company policy.  This currently includes annual leave (4 weeks per annum, excluding annual leave loading), personal leave (10 days per annum) to be used for absence due to personal illness or to care for a member of your immediate family, parental leave and long service leave.  Company policy may change at any time at IKEA’s sole discretion.<br>
 	<br>
 Annual leave is ordinarily to be taken within the year it is accrued, or within 12 months from the date it becomes due.  Annual leave is to be taken at times mutually agreed to, taking into consideration peak periods in business operations, which may vary from year to year.  Peak periods may be such that no annual leave will be authorised during those periods.  Peak periods can be identified in consultation with your manager.',
-	@dcSalHirTermsLeaveAHeadline NVARCHAR(MAX) = 'Leave Entitlements',
-	@dcSalHirTermsLeaveASortOrder INT = @termsCounter
+	@dcSalHirTermsLeaveHeadline NVARCHAR(MAX) = 'Leave Entitlements',
+	@dcSalHirTermsLeaveSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
 
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcSalHirTermsLeaveAGuid)
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcSalHirTermsLeaveGuid)
 BEGIN
 	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
 	VALUES (@dcSalHirTermsID, 
-		@dcSalHirTermsLeaveAName, 
-		@dcSalHirTermsLeaveADescription,
-		@dcSalHirTermsLeaveAText, 
-		@dcSalHirTermsLeaveAHeadline,
-		@dcSalHirTermsLeaveASortOrder,
-		@dcSalHirTermsLeaveAGuid)
+		@dcSalHirTermsLeaveName, 
+		@dcSalHirTermsLeaveDescription,
+		@dcSalHirTermsLeaveText, 
+		@dcSalHirTermsLeaveHeadline,
+		@dcSalHirTermsLeaveSortOrder,
+		@dcSalHirTermsLeaveGuid)
 END
 ELSE
 BEGIN
 	UPDATE CDT SET 
 		CaseDocumentParagraph_Id = @dcSalHirTermsID,
-		[Name] = @dcSalHirTermsLeaveAName, 
-		[Description] = @dcSalHirTermsLeaveADescription, 
-		[Text] = @dcSalHirTermsLeaveAText,
-		[Headline] = @dcSalHirTermsLeaveAHeadline,
-		SortOrder = @dcSalHirTermsLeaveASortOrder
+		[Name] = @dcSalHirTermsLeaveName, 
+		[Description] = @dcSalHirTermsLeaveDescription, 
+		[Text] = @dcSalHirTermsLeaveText,
+		[Headline] = @dcSalHirTermsLeaveHeadline,
+		SortOrder = @dcSalHirTermsLeaveSortOrder
 	FROM tblCaseDocumentText CDT 
-	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsLeaveAGuid
+	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsLeaveGuid
 END 
 
-DECLARE @dcSalHirTermsLeaveAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsLeaveAGuid)
+DECLARE @dcSalHirTermsLeaveID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsLeaveGuid)
 
--- #################################### 19 Issues Resolution
+-- #################################### Issues Resolution
 DECLARE @dcSalHirTermsIssuesGuid UNIQUEIDENTIFIER = '93D2EA1A-A8A0-4A8E-A386-63354E414AA4',
-	@dcSalHirTermsIssuesName NVARCHAR(MAX) = @prefix + ' Employment - Issues Resolution',
+	@dcSalHirTermsIssuesName NVARCHAR(MAX) = @prefix + ' Issues Resolution',
 	@dcSalHirTermsIssuesDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsIssuesText NVARCHAR(MAX) = 'If any issues arise during your employment with IKEA, the matter should initially be discussed with your immediate manager, in accordance with IKEA’s Issue Resolution Procedure.  If the problem remains unresolved, you may refer it to more senior levels of management for further discussion in accordance with the Issue Resolution Procedure and the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016.',
+	@dcSalHirTermsIssuesText NVARCHAR(MAX) = 'If any issues arise during your employment with IKEA, the matter should initially be discussed with your immediate manager, in accordance with IKEA’s Issue Resolution Procedure.  If the problem remains unresolved, you may refer it to more senior levels of management for further discussion in accordance with the Issue Resolution Procedure.',
 	@dcSalHirTermsIssuesHeadline NVARCHAR(MAX) = 'Issues Resolution',
 	@dcSalHirTermsIssuesSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1066,9 +1064,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsIssuesGuid
 END
 
--- #################################### 20 Equal Employment Opportunity 
+-- #################################### Equal Employment Opportunity 
 DECLARE @dcSalHirTermsEqualGuid UNIQUEIDENTIFIER = '22E63997-2EE8-417F-B2B2-AC213D2EC2F7',
-	@dcSalHirTermsEqualName NVARCHAR(MAX) = @prefix + ' Employment - Equal Employment',
+	@dcSalHirTermsEqualName NVARCHAR(MAX) = @prefix + ' Equal Employment',
 	@dcSalHirTermsEqualDescription NVARCHAR(MAX) = '',
 	@dcSalHirTermsEqualText NVARCHAR(MAX) = 'IKEA''s policy is to provide all co-workers with equal opportunity.  This policy precludes discrimination and harassment based on, but not limited to, race, colour, religion, gender, age, marital status and disability.  You are required to familiarise yourself with this policy and comply with it at all times.',
 	@dcSalHirTermsEqualHeadline NVARCHAR(MAX) = 'Equal Employment Opportunity ',
@@ -1099,13 +1097,13 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsEqualGuid
 END
 
--- #################################### 21 Appearance & Conduct
+-- #################################### Appearance & Conduct
 DECLARE @dcSalHirTermsUniformGuid UNIQUEIDENTIFIER = '675E5D06-86CA-45EC-AA36-61EC5971CA16',
-	@dcSalHirTermsUniformName NVARCHAR(MAX) = @prefix + ' Terms - Appearance & Conduct',
+	@dcSalHirTermsUniformName NVARCHAR(MAX) = @prefix + ' Appearance',
 	@dcSalHirTermsUniformDescription NVARCHAR(MAX) = '',
 	@dcSalHirTermsUniformText NVARCHAR(MAX) = 'IKEA has established guidelines necessary for the professional appearance that the company expects all co-workers to present, and as such co-workers are supplied with uniforms and name badges within these guidelines.<br>
-	<br>
-Co-workers are expected to project a favorable and professional image for IKEA, and are to be courteous, efficient and reliable in their dealings with colleagues, existing and potential customers and suppliers to IKEA.',
+<br>
+Co-workers are expected to project a favorable and professional image for IKEA, and are to be courteous, efficient and reliable in their dealings with colleagues, existing and potential customers and suppliers to IKEA. ',
 	@dcSalHirTermsUniformHeadline NVARCHAR(MAX) = 'Appearance & Conduct',
 	@dcSalHirTermsUniformSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1134,13 +1132,13 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsUniformGuid
 END
 
--- #################################### 22 Induction & Ongoing Learning & Development
+-- #################################### Induction & Ongoing Learning & Development
 DECLARE @dcSalHirTermsInductionGuid UNIQUEIDENTIFIER = '68D3B896-744D-4D17-933B-CE309154AC0A',
-	@dcSalHirTermsInductionName NVARCHAR(MAX) = @prefix + ' Employment - Induction',
+	@dcSalHirTermsInductionName NVARCHAR(MAX) = @prefix + ' Induction',
 	@dcSalHirTermsInductionDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsInductionText NVARCHAR(MAX) = 'IKEA is committed to your induction and ongoing development and as such, has a requirement that you undertake and are committed to training as offered by the company.  Whilst the majority of training is conducted on the job, you may be required from time to time to attend external training programs at different locations as organised by IKEA.
-<br><br>
-IKEA also encourages its co-workers to take responsibility for their own learning and development.',
+	@dcSalHirTermsInductionText NVARCHAR(MAX) = 'IKEA is committed to your induction and ongoing development and as such, has a requirement that you undertake and are committed to training as offered by the company.  Whilst the majority of training is conducted on the job, you may be required from time to time to attend external training programs at different locations as organised by the company.<br>
+<br>
+IKEA encourages its co-workers to take responsibility for their own learning and development.',
 	@dcSalHirTermsInductionHeadline NVARCHAR(MAX) = 'Induction & Ongoing Learning & Development',
 	@dcSalHirTermsInductionSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1169,9 +1167,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsInductionGuid
 END
 
--- #################################### 23 Occupational Health & Safety
+-- #################################### Occupational Health & Safety
 DECLARE @dcSalHirTermsSafetyGuid UNIQUEIDENTIFIER = '7E6D73FD-80DA-45A3-B367-6BA89C764E56',
-	@dcSalHirTermsSafetyName NVARCHAR(MAX) = @prefix + ' Employment - Safety',
+	@dcSalHirTermsSafetyName NVARCHAR(MAX) = @prefix + ' Safety',
 	@dcSalHirTermsSafetyDescription NVARCHAR(MAX) = '',
 	@dcSalHirTermsSafetyText NVARCHAR(MAX) = 'IKEA understands the requirement of ensuring a safe and healthy working environment for all co-workers in its offices, warehouses and stores, and a safe and healthy shopping environment for customers.  In fulfilling this aim, we undertake regular consultation with co-workers on health and safety issues and concerns.',
 	@dcSalHirTermsSafetyHeadline NVARCHAR(MAX) = 'Occupational Health & Safety',
@@ -1202,15 +1200,19 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsSafetyGuid
 END
 
--- #################################### 24 Termination
+-- #################################### Termination
 DECLARE @dcSalHirTermsTerminationGuid UNIQUEIDENTIFIER = 'EA08282D-87DB-4DE1-8146-6004329663F3',
-	@dcSalHirTermsTerminationName NVARCHAR(MAX) = @prefix + ' Employment - Termination',
+	@dcSalHirTermsTerminationName NVARCHAR(MAX) = @prefix + ' Termination',
 	@dcSalHirTermsTerminationDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsTerminationText NVARCHAR(MAX) = 'Either party may terminate the employment relationship with the appropriate notice as prescribed in the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016.  Notice provisions do not apply in the case of summary dismissal.
-<br><br>
-Upon termination of your employment, all material, equipment, uniforms, information, company records, data etc issued to you or created by you in your employment is to be returned to IKEA or its nominee.
-<br><br>
-IKEA reserves the right to withhold an appropriate sum of money from a co-worker’s termination payment until such time as any outstanding company property as detailed above is returned.',
+	@dcSalHirTermsTerminationText NVARCHAR(MAX) = 'IKEA may terminate your employment by giving four (4) weeks’ notice or payment in lieu at your ordinary rate of pay.  If you are over 45 years of age and have at least two years’ continuous employment with IKEA, you will be entitled to an additional week’s notice.<br>
+<br>
+If you wish to resign, you must provide IKEA with four (4) weeks’ notice.  If you fail to give the appropriate notice to IKEA, IKEA shall have the right to withhold any monies due to you up to a maximum of your ordinary rate of pay for the shortfall in period of notice not served. IKEA may at its election not require you to attend the workplace during the notice period.<br>
+<br>
+Notices of resignation or termination must be supplied in writing, and must comply with the above named notice periods unless a new period is agreed to in writing between you and IKEA.  A failure on your part to resign in writing will not affect the validity of your resignation.<br>
+<br>
+IKEA retains the right to terminate your employment without notice in the case of summary dismissal.<br>
+<br>
+Upon termination of your employment, all material, equipment, uniforms, information, company records, data etc issued to you or created by you in your employment is to be returned to IKEA or its nominee. IKEA reserves the right to withhold an appropriate sum of money from a co-worker’s termination payment until such time as any outstanding company property as detailed above is returned.',
 	@dcSalHirTermsTerminationHeadline NVARCHAR(MAX) = 'Termination',
 	@dcSalHirTermsTerminationSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1239,11 +1241,11 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsTerminationGuid
 END
 
--- #################################### 25 Company Policies & Procedures 
+-- #################################### Company Policies & Procedures 
 DECLARE @dcSalHirTermsPoliciesGuid UNIQUEIDENTIFIER = 'F62963CD-B709-436B-997B-8D41FFF60E3B',
-	@dcSalHirTermsPoliciesName NVARCHAR(MAX) = @prefix + ' Employment - Policies',
+	@dcSalHirTermsPoliciesName NVARCHAR(MAX) = @prefix + ' Policies',
 	@dcSalHirTermsPoliciesDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsPoliciesText NVARCHAR(MAX) = 'You shall be required to comply with all IKEA Policies and Procedures as amended from time to time and as outlined in IKEA’s Policy Guidelines and Welcome Program. The IKEA Policies and Procedures form part of your contract of employment.',
+	@dcSalHirTermsPoliciesText NVARCHAR(MAX) = 'You shall be required to comply with all Company Policies and Procedures as advised to you and as outlined in IKEA’s Policy Guidelines. These Policies and Procedures may be subject to change/amendment from time to time, and form part of your contract of employment.',
 	@dcSalHirTermsPoliciesHeadline NVARCHAR(MAX) = 'Company Policies & Procedures',
 	@dcSalHirTermsPoliciesSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1272,206 +1274,43 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsPoliciesGuid
 END
 
--- #################################### 26 Other Terms and Conditions
-DECLARE @dcSalHirTermsOtherTermsGuid UNIQUEIDENTIFIER = 'B6A4C2A9-C14E-4B0C-9874-8AE9BC2B9F3B',
-	@dcSalHirTermsOtherTermsName NVARCHAR(MAX) = @prefix + ' Employment - Other T&C',
-	@dcSalHirTermsOtherTermsDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsOtherTermsText NVARCHAR(MAX) = 'The terms and conditions contained within the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016 (and any subsequent statutory agreement binding you and IKEA) also apply to your employment.  A copy of this Agreement is available for your perusal at all times.',
-	@dcSalHirTermsOtherTermsHeadline NVARCHAR(MAX) = 'Other Terms and Conditions',
-	@dcSalHirTermsOtherTermsSortOrder INT = @termsCounter
+-- #################################### Communcations with Media
+DECLARE @dcSalHirTermsComGuid UNIQUEIDENTIFIER = '6DBF6539-F1B0-4DC9-BEE4-B31996A9E7A2',
+	@dcSalHirTermsComName NVARCHAR(MAX) = @prefix + ' Communications',
+	@dcSalHirTermsComDescription NVARCHAR(MAX) = '',
+	@dcSalHirTermsComText NVARCHAR(MAX) = 'You shall not provide information or speak on behalf of IKEA or otherwise to the media on any matters concerning IKEA’s business or activities.  You must refer all requests from the media for information and/or interviews to your immediate Manager.',
+	@dcSalHirTermsComHeadline NVARCHAR(MAX) = ' Communcations with Media',
+	@dcSalHirTermsComSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
 
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcSalHirTermsOtherTermsGuid)
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcSalHirTermsComGuid)
 BEGIN
 	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
 	VALUES (@dcSalHirTermsID, 
-		@dcSalHirTermsOtherTermsName, 
-		@dcSalHirTermsOtherTermsDescription,
-		@dcSalHirTermsOtherTermsText, 
-		@dcSalHirTermsOtherTermsHeadline,
-		@dcSalHirTermsOtherTermsSortOrder,
-		@dcSalHirTermsOtherTermsGuid)
+		@dcSalHirTermsComName, 
+		@dcSalHirTermsComDescription,
+		@dcSalHirTermsComText, 
+		@dcSalHirTermsComHeadline,
+		@dcSalHirTermsComSortOrder,
+		@dcSalHirTermsComGuid)
 END
 ELSE
 BEGIN
 	UPDATE CDT SET 
 		CaseDocumentParagraph_Id = @dcSalHirTermsID,
-		[Name] = @dcSalHirTermsOtherTermsName, 
-		[Description] = @dcSalHirTermsOtherTermsDescription, 
-		[Text] = @dcSalHirTermsOtherTermsText,
-		[Headline] = @dcSalHirTermsOtherTermsHeadline,
-		SortOrder = @dcSalHirTermsOtherTermsSortOrder
+		[Name] = @dcSalHirTermsComName, 
+		[Description] = @dcSalHirTermsComDescription, 
+		[Text] = @dcSalHirTermsComText,
+		[Headline] = @dcSalHirTermsComHeadline,
+		SortOrder = @dcSalHirTermsComSortOrder
 	FROM tblCaseDocumentText CDT 
-	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsOtherTermsGuid
-END
-
--- #################################### 27 Police Checks
-DECLARE @dcSalHirTermsPoliceGuid UNIQUEIDENTIFIER = '40344DB8-F736-4D70-89AF-E7B20E6E2C1E',
-	@dcSalHirTermsPoliceName NVARCHAR(MAX) = @prefix + ' Employment - Police',
-	@dcSalHirTermsPoliceDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsPoliceText NVARCHAR(MAX) = 'Some positions at IKEA require evidence of good character (for example - positions that deal with children or cash).  Obtaining details of your criminal history via a police check/s is an integral part of the assessment of your suitability for such positions.
-<br><br>
-You may be required to provide a police check/s at the time you are given this offer of employment.  Alternatively, you may be required to provide a police check/s during your employment (for instance, when it is suspected that you have incurred a criminal record since the commencement of your employment, or where you begin working in a position requiring evidence of good character).  By signing this offer of employment, you consent to complete, sign and lodge the relevant police check application documentation (which will be provided to you by IKEA), and to direct that the corresponding police check record/s be forwarded directly to IKEA (where permitted) or (otherwise) to provide IKEA with the original police check record/s immediately on receipt.
-<br><br>
-If you are required to provide the police check/s at the time you are given this offer of employment, you acknowledge that the offer of employment will be subject to the check being satisfactory to IKEA.
-<br><br>
-If you are required to provide the police check/s at any other time during your employment and the check is not satisfactory to IKEA, it may give grounds for dismissal.
-<br><br>
-Please note that the existence of a criminal record does not mean that the check will automatically be unsatisfactory, or that you will be assessed automatically as being unsuitable.  Each case will be assessed on its merits and will depend upon the inherent requirements of the position.',
-	@dcSalHirTermsPoliceHeadline NVARCHAR(MAX) = 'Police Checks',
-	@dcSalHirTermsPoliceSortOrder INT = @termsCounter
-SET @termsCounter = @termsCounter + 1
-
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcSalHirTermsPoliceGuid)
-BEGIN
-	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
-	VALUES (@dcSalHirTermsID, 
-		@dcSalHirTermsPoliceName, 
-		@dcSalHirTermsPoliceDescription,
-		@dcSalHirTermsPoliceText, 
-		@dcSalHirTermsPoliceHeadline,
-		@dcSalHirTermsPoliceSortOrder,
-		@dcSalHirTermsPoliceGuid)
-END
-ELSE
-BEGIN
-	UPDATE CDT SET 
-		CaseDocumentParagraph_Id = @dcSalHirTermsID,
-		[Name] = @dcSalHirTermsPoliceName, 
-		[Description] = @dcSalHirTermsPoliceDescription, 
-		[Text] = @dcSalHirTermsPoliceText,
-		[Headline] = @dcSalHirTermsPoliceHeadline,
-		SortOrder = @dcSalHirTermsPoliceSortOrder
-	FROM tblCaseDocumentText CDT 
-	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsPoliceGuid
+	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsComGuid
 END
 
 
-
--- Con B
-DECLARE @dcSalHirTermsPerfBGuid UNIQUEIDENTIFIER = '18BF9520-1844-4FE7-8F67-6EB6D863B007',
-	@dcSalHirTermsPerfBName NVARCHAR(MAX) = @prefix + ' Employment - Performance',
-	@dcSalHirTermsPerfBDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsPerfBText NVARCHAR(MAX) = 'A Co-worker Performance Review will be conducted at least once a year, usually between September and November. This review will be based on your initial Co-worker discussion and your position’s Performance Criteria and Job Profile.  Areas of performance and non-performance will be discussed and addressed in accordance with company guidelines. Whilst the company conducts annual performance reviews, it also maintains an ongoing performance management program with its co-workers.',
-	@dcSalHirTermsPerfBHeadline NVARCHAR(MAX) = 'Performance Management',
-	@dcSalHirTermsPerfBSortOrder INT = @termsCounter
-SET @termsCounter = @termsCounter + 1
-
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcSalHirTermsPerfBGuid)
-BEGIN
-	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
-	VALUES (@dcSalHirTermsID, 
-		@dcSalHirTermsPerfBName, 
-		@dcSalHirTermsPerfBDescription,
-		@dcSalHirTermsPerfBText, 
-		@dcSalHirTermsPerfBHeadline,
-		@dcSalHirTermsPerfBSortOrder,
-		@dcSalHirTermsPerfBGuid)
-END
-ELSE
-BEGIN
-	UPDATE CDT SET 
-		CaseDocumentParagraph_Id = @dcSalHirTermsID,
-		[Name] = @dcSalHirTermsPerfBName, 
-		[Description] = @dcSalHirTermsPerfBDescription, 
-		[Text] = @dcSalHirTermsPerfBText,
-		[Headline] = @dcSalHirTermsPerfBHeadline,
-		SortoRder = @dcSalHirTermsPerfBSortOrder
-	FROM tblCaseDocumentText CDT 
-	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsPerfBGuid
-END
-
-DECLARE @dcSalHirTermsPerfBID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsPerfBGuid)
-
--- Create condition for probation period 
-DECLARE @dcSalHirTermsPerfBCondGuid UNIQUEIDENTIFIER = 'A337468A-39F2-4FE8-BEB4-3B8D56CF8449',
-	@dcSalHirTermsPerfBCondPropertyName NVARCHAR(MAX) = 'extendedcase_ProbationPeriod',
-	@dcSalHirTermsPerfBCondOperator NVARCHAR(MAX) = 'Equal',
-	@dcSalHirTermsPerfBCondValues NVARCHAR(MAX) = 'No',
-	@dcSalHirTermsPerfBCondDescription NVARCHAR(MAX) = 'Has not probation period',
-	@dcSalHirTermsPerfBCondStatus INT = 1
-
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcSalHirTermsPerfBCondGuid)
-BEGIN
-	INSERT INTO tblCaseDocumentTextCondition(
-		CaseDocumentTextConditionGUID, 
-		CaseDocumentText_Id, 
-		Property_Name,
-		Operator,
-		[Values],
-		[Description],
-		[Status],
-		CreatedDate,
-		CreatedByUser_Id,
-		ChangedDate,
-		ChangedByUser_Id)
-	VALUES(
-		@dcSalHirTermsPerfBCondGuid,
-		@dcSalHirTermsPerfBID,
-		@dcSalHirTermsPerfBCondPropertyName,
-		@dcSalHirTermsPerfBCondOperator,
-		@dcSalHirTermsPerfBCondValues,
-		@dcSalHirTermsPerfBCondDescription,
-		@dcSalHirTermsPerfBCondStatus,
-		@now, 
-		@userID,
-		@now,
-		@userID
-	)
-END
-ELSE
-BEGIN
-	UPDATE CDTC SET CaseDocumentText_Id = @dcSalHirTermsPerfBID,
-		Property_Name = @dcSalHirTermsPerfBCondPropertyName,
-		Operator = @dcSalHirTermsPerfBCondOperator,
-		[Values] = @dcSalHirTermsPerfBCondValues,
-		[Description] = @dcSalHirTermsPerfBCondDescription,
-		[Status] = @dcSalHirTermsPerfBCondStatus,
-		CreatedDate = @now,
-		CreatedByUser_Id = @userID,
-		ChangedDate = @now,
-		ChangedByUser_Id = @userID
-	FROM tblCaseDocumentTextCondition CDTC
-	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalHirTermsPerfBCondGuid
-END
-
-
--- #################################### 29 Communications with Media
-DECLARE @dcSalHirTermsMediaGuid UNIQUEIDENTIFIER = '6DBF6539-F1B0-4DC9-BEE4-B31996A9E7A2',
-	@dcSalHirTermsMediaName NVARCHAR(MAX) = @prefix + ' Employment - Media',
-	@dcSalHirTermsMediaDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsMediaText NVARCHAR(MAX) = 'You shall not provide information or speak on behalf of IKEA or otherwise to the media on any matters concerning IKEA’s business or activities.  You must refer all requests from the media for information and/or interviews to the DC Manager.',
-	@dcSalHirTermsMediaHeadline NVARCHAR(MAX) = 'Communications with Media',
-	@dcSalHirTermsMediaSortOrder INT = @termsCounter
-SET @termsCounter = @termsCounter + 1
-
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcSalHirTermsMediaGuid)
-BEGIN
-	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
-	VALUES (@dcSalHirTermsID, 
-		@dcSalHirTermsMediaName, 
-		@dcSalHirTermsMediaDescription,
-		@dcSalHirTermsMediaText, 
-		@dcSalHirTermsMediaHeadline,
-		@dcSalHirTermsMediaSortOrder,
-		@dcSalHirTermsMediaGuid)
-END
-ELSE
-BEGIN
-	UPDATE CDT SET 
-		CaseDocumentParagraph_Id = @dcSalHirTermsID,
-		[Name] = @dcSalHirTermsMediaName, 
-		[Description] = @dcSalHirTermsMediaDescription, 
-		[Text] = @dcSalHirTermsMediaText,
-		[Headline] = @dcSalHirTermsMediaHeadline,
-		SortOrder = @dcSalHirTermsMediaSortOrder
-	FROM tblCaseDocumentText CDT 
-	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsMediaGuid
-END
-
--- #################################### 30 Obligation to report unlawful activities
+-- #################################### Obligation to report unlawful activities
 DECLARE @dcSalHirTermsUnlawGuid UNIQUEIDENTIFIER = '276C55C5-7383-4B05-8D21-5ADFA82340A5',
-	@dcSalHirTermsUnlawName NVARCHAR(MAX) = @prefix + ' Employment - Unlawful',
+	@dcSalHirTermsUnlawName NVARCHAR(MAX) = @prefix + ' Unlawful',
 	@dcSalHirTermsUnlawDescription NVARCHAR(MAX) = '',
 	@dcSalHirTermsUnlawText NVARCHAR(MAX) = 'If you become aware of or suspect any unlawful act or omission by any IKEA employee, you must advise IKEA immediately.',
 	@dcSalHirTermsUnlawHeadline NVARCHAR(MAX) = 'Obligation to report unlawful activities',
@@ -1502,9 +1341,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsUnlawGuid
 END
 
--- #################################### 31 Intellectual Property
+-- #################################### Intellectual Property
 DECLARE @dcSalHirTermsIntelPropGuid UNIQUEIDENTIFIER = '18E2F0ED-36A0-4B42-8A68-F5AF0AE575BB',
-	@dcSalHirTermsIntelPropName NVARCHAR(MAX) = @prefix + ' Employment - Int. Property',
+	@dcSalHirTermsIntelPropName NVARCHAR(MAX) = @prefix + ' Int. Property',
 	@dcSalHirTermsIntelPropDescription NVARCHAR(MAX) = '',
 	@dcSalHirTermsIntelPropText NVARCHAR(MAX) = 'IKEA owns all copyright in any works and all inventions, discoveries, novel designs, improvements or modifications, computer program material and trademarks which you write or develop in the course of your employment (in or out of working hours) (“Intellectual Property”).<br>
 <br>
@@ -1544,44 +1383,11 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsIntelPropGuid
 END
 
--- #################################### 32 Variation
-DECLARE @dcSalHirTermsVarGuid UNIQUEIDENTIFIER = 'E1B62EF7-34FC-4B53-828B-2805A5B7C18F',
-	@dcSalHirTermsVarName NVARCHAR(MAX) = @prefix + ' Employment - Variation',
-	@dcSalHirTermsVarDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsVarText NVARCHAR(MAX) = 'This Agreement may only be varied by a written agreement signed by yourself and IKEA.',
-	@dcSalHirTermsVarHeadline NVARCHAR(MAX) = 'Variation',
-	@dcSalHirTermsVarSortOrder INT = @termsCounter
-SET @termsCounter = @termsCounter + 1
-
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcSalHirTermsVarGuid)
-BEGIN
-	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
-	VALUES (@dcSalHirTermsID, 
-		@dcSalHirTermsVarName, 
-		@dcSalHirTermsVarDescription,
-		@dcSalHirTermsVarText, 
-		@dcSalHirTermsVarHeadline,
-		@dcSalHirTermsVarSortOrder,
-		@dcSalHirTermsVarGuid)
-END
-ELSE
-BEGIN
-	UPDATE CDT SET 
-		CaseDocumentParagraph_Id = @dcSalHirTermsID,
-		[Name] = @dcSalHirTermsVarName, 
-		[Description] = @dcSalHirTermsVarDescription, 
-		[Text] = @dcSalHirTermsVarText,
-		[Headline] = @dcSalHirTermsVarHeadline,
-		SortOrder = @dcSalHirTermsVarSortOrder
-	FROM tblCaseDocumentText CDT 
-	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsVarGuid
-END
-
--- #################################### 33 Suspension
+-- #################################### Suspension
 DECLARE @dcSalHirTermsSuspGuid UNIQUEIDENTIFIER = 'A555CCC0-24DA-4669-849E-7596BDFD83EF',
-	@dcSalHirTermsSuspName NVARCHAR(MAX) = @prefix + ' Employment - Suspension',
+	@dcSalHirTermsSuspName NVARCHAR(MAX) = @prefix + ' Suspension',
 	@dcSalHirTermsSuspDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsSuspText NVARCHAR(MAX) = 'If we have reason to believe that you may have engaged in a serious breach of your employment obligations, IKEA may at its discretion suspend you from your duties, either with or without pay, while and investigation is conducted.',
+	@dcSalHirTermsSuspText NVARCHAR(MAX) = 'If we have reason to believe that you may have engaged in a serious breach of your employment obligations, IKEA may at its discretion suspend you from your duties, either with or without pay, while an investigation is conducted.',
 	@dcSalHirTermsSuspHeadline NVARCHAR(MAX) = 'Suspension',
 	@dcSalHirTermsSuspSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1616,11 +1422,9 @@ SELECT @dcSalHirID, @dcSalHirTermsID, @counter
 SET @counter = @counter + 1
 
 
--- #################################### 34-36 End Text
----- Create or update paragraph
--- Paragraph guid
+-- #################################### End Text
 DECLARE @dcSalHirEndTextParagraphGuid UNIQUEIDENTIFIER = '3CC01BED-A4CC-4464-83D5-C3A12790746B',
-	@dcSalHirEndTextParagraphName NVARCHAR(MAX) = @prefix + ' Employment - End Text',
+	@dcSalHirEndTextParagraphName NVARCHAR(MAX) = @prefix + ' End Text',
 	@dcSalHirEndTextParagraphType INT = @ParagraphTypeText,
 	@dcSalHirEndTextParagraphDescription NVARCHAR(MAX) = ''
 
@@ -1639,13 +1443,11 @@ DECLARE @dcSalHirEndTextParagraphID INT = (SELECT ID FROM tblCaseDocumentParagra
 
 -- Create a text field
 DECLARE @dcSalHirEndTextGuid UNIQUEIDENTIFIER = 'E82C5361-3148-4962-8191-CB298F43B11D',
-	@dcSalHirEndTextName NVARCHAR(MAX) = @prefix + ' Employment - End Text',
+	@dcSalHirEndTextName NVARCHAR(MAX) = @prefix + ' End Text',
 	@dcSalHirEndTextDescription NVARCHAR(MAX) = '',
-	@dcSalHirEndTextText NVARCHAR(MAX) = 'IKEA recognises that its co-workers are essential to the success of the company’s operations.  IKEA remains committed to ensuring that all co-workers are treated fairly and equitably and encourages co-workers to reach their full potential.  We believe that the basis of your employment outlined above, will achieve these objectives and greatly benefit those co-workers willing to develop themselves.
-	<br><br>
-	As an indication of your understanding and acceptance of these conditions, please sign this letter of offer, and return to the undersigned within seven (7) days.  Please retain the second copy for your records.
-	<br><br>
-	If you have any questions pertaining to this offer of employment or any of the information contained herein, please do not hesitate to contact me before signing this letter.',
+	@dcSalHirEndTextText NVARCHAR(MAX) = 'IKEA recognises that its co-workers are essential to the success of the company’s operations.  IKEA remains committed to ensuring that all co-workers are treated fairly and equitably and encourages co-workers to reach their full potential.  We believe that the basis of your employment outlined above, will achieve these objectives and greatly benefit those co-workers willing to develop themselves.<br>
+<Co-worker First Name>, as an indication of your understanding and acceptance of these conditions, please sign one copy of this letter of offer, and return one copy to the Human Resources Manager.  Please retain the second copy for your records.<br>
+If you have any questions pertaining to this offer of employment or any of the information contained herein, please do not hesitate to contact me before signing this letter.',
 	@dcSalHirEndTextHeadline NVARCHAR(MAX) = '',
 	@dcSalHirEndTextSortOrder INT = 0
 
@@ -1678,11 +1480,11 @@ INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentP
 SELECT @dcSalHirID, @dcSalHirEndTextParagraphID, @counter
 SET @counter = @counter + 1
 
--- #################################### 37-40 Contractor Signature
+-- #################################### Contractor Signature
 ---- Create or update paragraph
 -- Paragraph guid
 DECLARE @dcSalHirConSignParagraphGuid UNIQUEIDENTIFIER = 'C1E8ACDF-508E-4EF0-AC39-F47D92B12489',
-	@dcSalHirConSignParagraphName NVARCHAR(MAX) = @prefix + ' Employment - Con. Sign.',
+	@dcSalHirConSignParagraphName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@dcSalHirConSignParagraphType INT = @ParagraphTypeText,
 	@dcSalHirConSignParagraphDescription NVARCHAR(MAX) = ''
 
@@ -1701,7 +1503,7 @@ DECLARE @dcSalHirConSignParagraphID INT = (SELECT ID FROM tblCaseDocumentParagra
 
 -- Create a text field
 DECLARE @dcSalHirConSignGuid UNIQUEIDENTIFIER = 'FA6C49A6-4483-4C23-913A-45D159557523',
-	@dcSalHirConSignName NVARCHAR(MAX) = @prefix + ' Employment - Con. Sign.',
+	@dcSalHirConSignName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@dcSalHirConSignDescription NVARCHAR(MAX) = '',
 	@dcSalHirConSignText NVARCHAR(MAX) = 'Yours sincerely<br>
 	<Reports to Line Manager><br>
@@ -1739,11 +1541,11 @@ INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentP
 SELECT @dcSalHirID, @dcSalHirConSignParagraphID, @counter
 SET @counter = @counter + 1
 
--- #################################### 41-48 Acceptance
+-- #################################### Acceptance
 ---- Create or update paragraph
 -- Paragraph guid
 DECLARE @dcSalHirAcceptParagraphGuid UNIQUEIDENTIFIER = '95419F05-9B86-479F-A22C-810E3A27D130',
-	@dcSalHirAcceptParagraphName NVARCHAR(MAX) = @prefix + ' Employment - Acceptance',
+	@dcSalHirAcceptParagraphName NVARCHAR(MAX) = @prefix + ' Acceptance',
 	@dcSalHirAcceptParagraphType INT = @ParagraphTypeText,
 	@dcSalHirAcceptParagraphDescription NVARCHAR(MAX) = ''
 
@@ -1762,7 +1564,7 @@ DECLARE @dcSalHirAcceptParagraphID INT = (SELECT ID FROM tblCaseDocumentParagrap
 
 -- Create a text field
 DECLARE @dcSalHirAcceptGuid UNIQUEIDENTIFIER = '08EADA4B-5C0F-4816-9650-EDB2784FDF01',
-	@dcSalHirAcceptName NVARCHAR(MAX) = @prefix + ' Employment - Acceptance',
+	@dcSalHirAcceptName NVARCHAR(MAX) = @prefix + ' Acceptance',
 	@dcSalHirAcceptDescription NVARCHAR(MAX) = '',
 	@dcSalHirAcceptText NVARCHAR(MAX) = '<table style="border: 1px solid black">
 <tr><th align="center">ACCEPTANCE</th></tr>
@@ -1810,8 +1612,6 @@ SELECT @dcSalHirID, @dcSalHirAcceptParagraphID, @counter
 SET @counter = @counter + 1
 
 
-
-
 -- Preview result
 SELECT CDT.ID, CDCDP.Id, CDCDP.SortOrder, CDP.ID ParagraphID, CDP.Name ParagraphName, CDP.Description ParagraphDescription, CDT.Name ConditionalTextName, CDT.Headline, CDT.Text Content, CDTC.Operator, CDTC.Property_Name, CDTC.[Values], CDTC.Status, CDTC.Description, CDT.SortOrder, CDTC.Status  FROM tblCaseDocument CD
 LEFT JOIN tblCaseDocument_CaseDocumentParagraph CDCDP ON CDCDP.CaseDocument_Id = CD.Id
@@ -1823,5 +1623,5 @@ ORDER BY CDCDP.SortOrder, CDT.SortOrder
 
 
 
-COMMIT
+ROLLBACK
 
