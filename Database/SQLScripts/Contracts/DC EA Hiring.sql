@@ -298,7 +298,7 @@ DECLARE @dcHiringTermsID INT = (SELECT ID FROM tblCaseDocumentParagraph WHERE Ca
 DECLARE @dcHiringTermsPositionAGuid UNIQUEIDENTIFIER = '7f5dc325-98b0-44b7-a812-562b0b368954',
 	@dcHiringTermsPositionAName NVARCHAR(MAX) = @prefix + ' Employment - Position - Full time',
 	@dcHiringTermsPositionADescription NVARCHAR(MAX) = '',
-	@dcHiringTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)> <Shift Type> Shift, reporting to  <Position Title (Local Job Name)> of <Reports To Line Manager>, which will be based at <Business Unit>. Your position (in terms of your duties & responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
+	@dcHiringTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)> <Shift Type> Shift, reporting to <Position Title (Local Job Name) of Reports To Line Manager>, which will be based at <Business Unit>. Your position (in terms of your duties & responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
 	@dcHiringTermsPositionAHeadline NVARCHAR(MAX) = '<i>Position</i>',
 	@dcHiringTermsPositionASortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
@@ -385,7 +385,7 @@ END
 DECLARE @dcHiringTermsPositionBGuid UNIQUEIDENTIFIER = 'fbec3308-d3bf-47d1-8dcc-48acb82b6b18',
 	@dcHiringTermsPositionBName NVARCHAR(MAX) = @prefix + ' Employment - Position - Part time',
 	@dcHiringTermsPositionBDescription NVARCHAR(MAX) = '',
-	@dcHiringTermsPositionBText NVARCHAR(MAX) = 'Your position is Part Time <Position Title (Local Job Name)> <Shift Type> Shift, reporting to  <Position Title (Local Job Name)> of <Reports To Line Manager>, which will be based at <Business Unit>. Your position (in terms of your duties & responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
+	@dcHiringTermsPositionBText NVARCHAR(MAX) = 'Your position is Part Time <Position Title (Local Job Name)> <Shift Type> Shift, reporting to <Position Title (Local Job Name) of Reports To Line Manager>, which will be based at <Business Unit>. Your position (in terms of your duties & responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
 	@dcHiringTermsPositionBHeadline NVARCHAR(MAX) = '<i>Position</i>',
 	@dcHiringTermsPositionBSortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
@@ -1878,7 +1878,7 @@ DECLARE @dcHiringConSignGuid UNIQUEIDENTIFIER = 'f0682a33-53e2-4bd0-9a1c-5a57987
 	@dcHiringConSignDescription NVARCHAR(MAX) = '',
 	@dcHiringConSignText NVARCHAR(MAX) = 'Yours sincerely<br>
 	<Reports to Line Manager><br>
-	<Position Title (Local Job Name)> of <Reports To Line Manager><br>
+	<Position Title (Local Job Name) of Reports To Line Manager><br>
 	<strong>IKEA Distribution Services Australia Pty Ltd</strong>',
 	@dcHiringConSignHeadline NVARCHAR(MAX) = '',
 	@dcHiringConSignSortOrder INT = @termsCounter

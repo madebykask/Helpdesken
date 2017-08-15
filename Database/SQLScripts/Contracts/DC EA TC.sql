@@ -21,7 +21,7 @@ DECLARE @addressInfoID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE C
 
 -- Draft ID
 DECLARE @draftGuid UNIQUEIDENTIFIER = '51220147-E756-492E-88A1-C1671BDE6AA5'
-DECLARE @draftID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @addressInfoGuid)
+DECLARE @draftID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @draftGuid)
 
 -- Paragraph types
 DECLARE @ParagraphTypeText INT = 1
@@ -76,7 +76,7 @@ SET @counter = @counter + 1
 ---- Create or update paragraph
 -- Paragraph guid
 DECLARE @dcTcEmployGreetingGuid UNIQUEIDENTIFIER = 'bac42e4f-f520-449d-9e23-103ac6ac8591',
-	@cdpName NVARCHAR(MAX) = @prefix + ' Employment greeting',
+	@cdpName NVARCHAR(MAX) = @prefix + ' Greeting',
 	@cdpParagraphType INT = @ParagraphTypeText,
 	@cdpDescription NVARCHAR(MAX) = ''
 
@@ -95,9 +95,9 @@ DECLARE @dcTcEmployGreetingID INT = (SELECT ID FROM tblCaseDocumentParagraph WHE
 
 ---- Create or update text A, Full Time
 DECLARE @dcTcEmployGreetingTextAGuid UNIQUEIDENTIFIER = '224a94ef-a37d-4693-ad30-c7b79354c631',
-	@dcTcEmployGreetingTextAName NVARCHAR(MAX) = @prefix + ' Employment greeting, Text A - Full time',
+	@dcTcEmployGreetingTextAName NVARCHAR(MAX) = @prefix + ' Greeting, full time',
 	@dcTcEmployGreetingTextADescription NVARCHAR(MAX) = '',
-	@dcTcEmployGreetingTextAText NVARCHAR(MAX) = 'We are delighted to confirm that your application for the position of Full Time <Position Title (Local Job Name)> <Shift Type> Shift has been successful, and wish to confirm the terms and conditions of your employment.',
+	@dcTcEmployGreetingTextAText NVARCHAR(MAX) = 'We are delighted to confirm that your application for transfer to the position of Full Time <Position Title (Local Job Name)> <Shift Type> Shift at IKEA has been successful, and wish to confirm the terms and conditions of your transfer.',
 	@dcTcEmployGreetingTextAHeadline NVARCHAR(MAX) = '',
 	@dcTcEmployGreetingTextASortOrder INT = 0
 
@@ -180,9 +180,9 @@ END
 
 ---- Create or update text B, Part Time
 DECLARE @dcTcEmployGreetingTextBGuid UNIQUEIDENTIFIER = '9122a18f-4352-4396-99db-9be6fc0e0a2e',
-	@dcTcEmployGreetingTextBName NVARCHAR(MAX) = @prefix + ' Employment greeting, Text B - Part time',
+	@dcTcEmployGreetingTextBName NVARCHAR(MAX) = @prefix + ' Greeting, part time',
 	@dcTcEmployGreetingTextBDescription NVARCHAR(MAX) = '',
-	@dcTcEmployGreetingTextBText NVARCHAR(MAX) = 'We are delighted to confirm that your application for the position of Part Time <Position Title (Local Job Name)> <Shift Type> Shift has been successful, and wish to confirm the terms and conditions of your employment.',
+	@dcTcEmployGreetingTextBText NVARCHAR(MAX) = 'We are delighted to confirm that your application for transfer to the position of Part Time <Position Title (Local Job Name)> <Shift Type> Shift at IKEA has been successful, and wish to confirm the terms and conditions of your transfer.',
 	@dcTcEmployGreetingTextBHeadline NVARCHAR(MAX) = '',
 	@dcTcEmployGreetingTextBSortOrder INT = 1
 
@@ -292,13 +292,13 @@ BEGIN
 END
 DECLARE @dcTcTermsID INT = (SELECT ID FROM tblCaseDocumentParagraph WHERE CaseDocumentParagraphGUID = @dcTcTermsGuid)
 
--- #################################### 11a-b Position
+-- #################################### Position
 
 ---- Position A
 DECLARE @dcTcTermsPositionAGuid UNIQUEIDENTIFIER = 'd84526d7-6791-4f2c-ab1a-78e38f63f616',
-	@dcTcTermsPositionAName NVARCHAR(MAX) = @prefix + ' Employment - Position - Full time',
+	@dcTcTermsPositionAName NVARCHAR(MAX) = @prefix + ' Position, full time',
 	@dcTcTermsPositionADescription NVARCHAR(MAX) = '',
-	@dcTcTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to the <Position Title (Local Job Name)> of <Reports To Line Manager>. Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
+	@dcTcTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)> <Shift Type> Shift, reporting to <Position Title (Local Job Name) of Reports To Line Manager>, which will be based at <Business Unit>. Your position (in terms of your duties & responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
 	@dcTcTermsPositionAHeadline NVARCHAR(MAX) = '<i>Position</i>',
 	@dcTcTermsPositionASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -382,9 +382,9 @@ END
 
 ---- Position B
 DECLARE @dcTcTermsPositionBGuid UNIQUEIDENTIFIER = '5716b2bc-72f3-427c-82bc-e482f2fbd616',
-	@dcTcTermsPositionBName NVARCHAR(MAX) = @prefix + ' Employment - Position - Part time',
+	@dcTcTermsPositionBName NVARCHAR(MAX) = @prefix + ' Position, part time',
 	@dcTcTermsPositionBDescription NVARCHAR(MAX) = '',
-	@dcTcTermsPositionBText NVARCHAR(MAX) = 'Your position is Part Time <Position Title (Local Job Name)> <Shift Type> Shift, reporting to  <Position Title (Local Job Name)> of <Reports To Line Manager>, which will be based at <Business Unit>. Your position (in terms of your duties & responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
+	@dcTcTermsPositionBText NVARCHAR(MAX) = 'Your position is Part Time <Position Title (Local Job Name)> <Shift Type> Shift, reporting to <Position Title (Local Job Name) of Reports To Line Manager>, which will be based at <Business Unit>. Your position (in terms of your duties & responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
 	@dcTcTermsPositionBHeadline NVARCHAR(MAX) = '<i>Position</i>',
 	@dcTcTermsPositionBSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -466,11 +466,11 @@ BEGIN
 	WHERE CDTC.CaseDocumentTextConditionGUID = @dcTcTermsPositionBCondGuid
 END
 
--- #################################### 12a-b Commencement Date
+-- #################################### Commencement Date
 
 ---- Commencement A
 DECLARE @dcTcTermsComAGuid UNIQUEIDENTIFIER = '93803913-df3b-4477-a545-cb0b15111444',
-	@dcTcTermsComAName NVARCHAR(MAX) = @prefix + ' Employment - Commencement - No date',
+	@dcTcTermsComAName NVARCHAR(MAX) = @prefix + ' Commencement, har no end date',
 	@dcTcTermsComADescription NVARCHAR(MAX) = '',
 	@dcTcTermsComAText NVARCHAR(MAX) = 'Your commencement date is <Change Valid From>, unless otherwise terminated in accordance with this contract.',
 	@dcTcTermsComAHeadline NVARCHAR(MAX) = 'Commencement Date',
@@ -608,7 +608,7 @@ END
 
 ---- Commencement B
 DECLARE @dcTcTermsComBGuid UNIQUEIDENTIFIER = 'e367cd79-7c5c-40d5-b334-3c1991b735dc',
-	@dcTcTermsComBName NVARCHAR(MAX) = @prefix + ' Employment - Commencement - Has end date',
+	@dcTcTermsComBName NVARCHAR(MAX) = @prefix + ' Commencement, has end date',
 	@dcTcTermsComBDescription NVARCHAR(MAX) = '',
 	@dcTcTermsComBText NVARCHAR(MAX) = 'Your commencement date is <Change Valid From> and will cease on <Change Valid To>, unless otherwise terminated in accordance with this contract.',
 	@dcTcTermsComBHeadline NVARCHAR(MAX) = 'Commencement date',
@@ -745,14 +745,15 @@ BEGIN
 END*/
 
 
--- #################################### 13a-b Hours of Work
+-- #################################### Hours of Work
 
 ---- Hours of Work A
 DECLARE @dcTcTermsHWAGuid UNIQUEIDENTIFIER = 'a5f8db11-a408-4aac-af4c-0f9cfd7a55dc',
-	@dcTcTermsHWAName NVARCHAR(MAX) = @prefix + ' Employment - Hours of Work - Full time',
+	@dcTcTermsHWAName NVARCHAR(MAX) = @prefix + ' Hours of Work, full time',
 	@dcTcTermsHWADescription NVARCHAR(MAX) = '',
 	@dcTcTermsHWAText NVARCHAR(MAX) = 
-	'You will be rostered to work 76 ordinary hours per fortnight.  Such details of your initial roster will be discussed with you upon your commencement.  However, where there is a change in the business’ needs, your hours may also be subject to change with appropriate notice.
+	'You will be rostered to work 76 ordinary hours per fortnight.  Such details of your initial roster will be discussed with you upon your commencement.  However, where there is a change in the business’ needs, your hours may also be subject to change with appropriate notice.<br>
+<br>
 You should note that ordinary hours in the Distribution Centre include Saturday’s and you have mutually agreed to work more than one in three Saturdays as part of your contracted ordinary hours.',
 	@dcTcTermsHWAHeadline NVARCHAR(MAX) = 'Position',
 	@dcTcTermsHWASortOrder INT = @termsCounter
@@ -837,11 +838,12 @@ END
 
 ---- Hours of Work B
 DECLARE @dcTcTermsHWBGuid UNIQUEIDENTIFIER = 'b055c31a-16e4-4544-b542-30ca4204d2a2',
-	@dcTcTermsHWBName NVARCHAR(MAX) = @prefix + ' Employment - Hours of Work - Part time',
+	@dcTcTermsHWBName NVARCHAR(MAX) = @prefix + ' Hours of Work, part time',
 	@dcTcTermsHWBDescription NVARCHAR(MAX) = '',
 	@dcTcTermsHWBText NVARCHAR(MAX) = 
-	'Your contracted hours are <Contracted Hours> per fortnight, you may be offered additional ‘varied hours’ paid at your ordinary rate of pay.
-	You will be rostered in accordance to your availability schedule which you filled out at the time of your employment. Your availability schedule forms part of your employment contract.',
+	'Your contracted hours are <Contracted Hours> per fortnight, you may be offered additional ‘varied hours’ paid at your ordinary rate of pay.<br>
+<br>
+You will be rostered in accordance to your availability schedule which you filled out at the time of your employment. Your availability schedule forms part of your employment contract.',
 	@dcTcTermsHWBHeadline NVARCHAR(MAX) = 'Hours of Work',
 	@dcTcTermsHWBSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -924,11 +926,11 @@ BEGIN
 END
 
 
--- #################################### 14 Probationary Period
+-- #################################### Probationary Period
 
 ---- Probationary Period
 DECLARE @dcTcTermsProbTimeGuid UNIQUEIDENTIFIER = '63913abd-c604-4a0f-a380-1838ceb23bf2',
-	@dcTcTermsProbTimeName NVARCHAR(MAX) = @prefix + ' Employment - Probationary Period',
+	@dcTcTermsProbTimeName NVARCHAR(MAX) = @prefix + ' Probation',
 	@dcTcTermsProbTimeDescription NVARCHAR(MAX) = '',
 	@dcTcTermsProbTimeText NVARCHAR(MAX) = 'IKEA offers this employment to you on a probationary basis for a period of six (6) months, during which time your performance standards will be subject to regular review and assessment.  In the six (6)-month period, if either you or IKEA wishes to terminate the employment relationship, then either party can effect that termination with one week’s notice in writing.',
 	@dcTcTermsProbTimeHeadline NVARCHAR(MAX) = 'Probationary Period',
@@ -1015,11 +1017,11 @@ END
 
 
 
--- #################################### 15 Remuneration
+-- #################################### Remuneration
 DECLARE @dcTcTermsRemunGuid UNIQUEIDENTIFIER = '91714198-1a98-4040-be64-207db37023e2',
-	@dcTcTermsRemunName NVARCHAR(MAX) = @prefix + ' Employment - Remuneration',
+	@dcTcTermsRemunName NVARCHAR(MAX) = @prefix + ' Remuneration',
 	@dcTcTermsRemunDescription NVARCHAR(MAX) = '',
-	@dcTcTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your base hourly rate will be as per the <b>IKEA Distributions Services Australia Pty Ltd Enterprise Agreement 2016</b>.  This amount will be paid directly into your nominated bank account on a fortnightly basis.',
+	@dcTcTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your base hourly rate will be as per the <strong>IKEA Distributions Services Australia Pty Ltd Enterprise Agreement 2016.</strong>  This amount will be paid directly into your nominated bank account on a fortnightly basis.',
 	@dcTcTermsRemunHeadline NVARCHAR(MAX) = 'Remuneration',
 	@dcTcTermsRemunSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1048,9 +1050,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsRemunGuid
 END
 
--- #################################### 16 Superannuation
+-- #################################### Superannuation
 DECLARE @dcTcTermsSuperGuid UNIQUEIDENTIFIER = 'fa1b4355-4524-4bc1-ade6-0a9431ef2b10',
-	@dcTcTermsSuperName NVARCHAR(MAX) = @prefix + ' Employment - Superannuation',
+	@dcTcTermsSuperName NVARCHAR(MAX) = @prefix + ' Superannuation',
 	@dcTcTermsSuperDescription NVARCHAR(MAX) = '',
 	@dcTcTermsSuperText NVARCHAR(MAX) = 'IKEA will make superannuation contributions, on your behalf, to a government approved Superannuation Fund, at the rate payable under the Superannuation Guarantee Legislation (SGL). This rate is currently 9.5% of your wage.
 <br>
@@ -1086,9 +1088,9 @@ BEGIN
 END
 
 
--- #################################### 17 Confidential Information
+-- #################################### Confidential Information
 DECLARE @dcTcTermsConfGuid UNIQUEIDENTIFIER = '53f40d5e-a14e-4b0b-afbe-eedbbe2a07ad',
-	@dcTcTermsConfName NVARCHAR(MAX) = @prefix + ' Employment - Confidential Information',
+	@dcTcTermsConfName NVARCHAR(MAX) = @prefix + ' Confidential Information',
 	@dcTcTermsConfDescription NVARCHAR(MAX) = '',
 	@dcTcTermsConfText NVARCHAR(MAX) = 'In the course of your employment, you may be exposed to “Confidential Information” concerning IKEA. Confidential Information means any information obtained by you in the course of your employment, including:
 <ul>
@@ -1143,11 +1145,11 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsConfGuid
 END
 
--- #################################### 18a-b Leave Entitlements 
+-- #################################### Leave Entitlements 
 
 ---- Leave Entitlements  A
 DECLARE @dcTcTermsLeaveAGuid UNIQUEIDENTIFIER = 'ec1d8852-2d25-4440-b051-f3022f343526',
-	@dcTcTermsLeaveAName NVARCHAR(MAX) = @prefix + ' Employment - Leave - Full time',
+	@dcTcTermsLeaveAName NVARCHAR(MAX) = @prefix + ' Leave, full time',
 	@dcTcTermsLeaveADescription NVARCHAR(MAX) = '',
 	@dcTcTermsLeaveAText NVARCHAR(MAX) = 'From your commencement date, you are entitled to leave in accordance with the relevant legislation and the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016. These entitlements are processed as detailed in the IKEA policies.',
 	@dcTcTermsLeaveAHeadline NVARCHAR(MAX) = 'Leave Entitlements',
@@ -1235,7 +1237,7 @@ END
 
 ---- Leave Entitlements  B
 DECLARE @dcTcTermsLeaveBGuid UNIQUEIDENTIFIER = 'c8417748-c47b-419d-8eea-2d36e57bccbb',
-	@dcTcTermsLeaveBName NVARCHAR(MAX) = @prefix + ' Employment - Leave - Part time',
+	@dcTcTermsLeaveBName NVARCHAR(MAX) = @prefix + ' Leave, part time',
 	@dcTcTermsLeaveBDescription NVARCHAR(MAX) = '',
 	@dcTcTermsLeaveBText NVARCHAR(MAX) = 'You will accrue entitlements to leave in accordance with relevant legislation and company policy on a pro rata basis (compared to a full-time employee). As stated in the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016.  These entitlements are processed as detailed in the IKEA policies.  This includes personal leave, annual leave, parental leave and long service leave.',
 	@dcTcTermsLeaveBHeadline NVARCHAR(MAX) = 'Leave Entitlements',
@@ -1319,7 +1321,7 @@ BEGIN
 	WHERE CDTC.CaseDocumentTextConditionGUID = @dcTcTermsLeaveBCondGuid
 END
 
--- #################################### 19 Issues Resolution
+-- #################################### Issues Resolution
 DECLARE @dcTcTermsIssuesGuid UNIQUEIDENTIFIER = 'c55a5c5f-9271-46f0-9fb5-b43c1e43b0d6',
 	@dcTcTermsIssuesName NVARCHAR(MAX) = @prefix + ' Employment - Issues Resolution',
 	@dcTcTermsIssuesDescription NVARCHAR(MAX) = '',
@@ -1352,9 +1354,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsIssuesGuid
 END
 
--- #################################### 20 Equal Employment Opportunity 
+-- #################################### Equal Employment Opportunity 
 DECLARE @dcTcTermsEqualGuid UNIQUEIDENTIFIER = 'a8c2b37f-051e-4d32-b87c-ba9930f599a1',
-	@dcTcTermsEqualName NVARCHAR(MAX) = @prefix + ' Employment - Equal Employment',
+	@dcTcTermsEqualName NVARCHAR(MAX) = @prefix + ' Equal Employment',
 	@dcTcTermsEqualDescription NVARCHAR(MAX) = '',
 	@dcTcTermsEqualText NVARCHAR(MAX) = 'IKEA''s policy is to provide all co-workers with equal opportunity.  This policy precludes discrimination and harassment based on, but not limited to, race, colour, religion, gender, age, marital status and disability.  You are required to familiarise yourself with this policy and comply with it at all times.',
 	@dcTcTermsEqualHeadline NVARCHAR(MAX) = 'Equal Employment Opportunity ',
@@ -1385,9 +1387,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsEqualGuid
 END
 
--- #################################### 21 Uniform & Conduct
+-- #################################### Uniform & Conduct
 DECLARE @dcTcTermsUniformGuid UNIQUEIDENTIFIER = '8661a234-5724-41b6-9ca5-16dd672dcf04',
-	@dcTcTermsUniformName NVARCHAR(MAX) = @prefix + ' Employment - Uniform & Conduct',
+	@dcTcTermsUniformName NVARCHAR(MAX) = @prefix + ' Uniform & Conduct',
 	@dcTcTermsUniformDescription NVARCHAR(MAX) = '',
 	@dcTcTermsUniformText NVARCHAR(MAX) = 'IKEA has established guidelines necessary for the professional appearance that IKEA expects all co-workers to present, and as such co-workers are supplied with uniforms and name badges within these guidelines.
 <br><br>
@@ -1420,9 +1422,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsUniformGuid
 END
 
--- #################################### 22 Induction & Ongoing Learning & Development
+-- #################################### Induction & Ongoing Learning & Development
 DECLARE @dcTcTermsInductionGuid UNIQUEIDENTIFIER = '03a639f7-eab2-4bd2-abed-e930d3894a67',
-	@dcTcTermsInductionName NVARCHAR(MAX) = @prefix + ' Employment - Induction',
+	@dcTcTermsInductionName NVARCHAR(MAX) = @prefix + ' Induction',
 	@dcTcTermsInductionDescription NVARCHAR(MAX) = '',
 	@dcTcTermsInductionText NVARCHAR(MAX) = 'IKEA is committed to your induction and ongoing development and as such, has a requirement that you undertake and are committed to training as offered by the company.  Whilst the majority of training is conducted on the job, you may be required from time to time to attend external training programs at different locations as organised by IKEA.
 <br><br>
@@ -1455,9 +1457,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsInductionGuid
 END
 
--- #################################### 23 Occupational Health & Safety
+-- #################################### Occupational Health & Safety
 DECLARE @dcTcTermsSafetyGuid UNIQUEIDENTIFIER = 'd77f8309-6bb0-41ab-b93c-053f73a2b34d',
-	@dcTcTermsSafetyName NVARCHAR(MAX) = @prefix + ' Employment - Safety',
+	@dcTcTermsSafetyName NVARCHAR(MAX) = @prefix + ' Safety',
 	@dcTcTermsSafetyDescription NVARCHAR(MAX) = '',
 	@dcTcTermsSafetyText NVARCHAR(MAX) = 'IKEA understands the requirement of ensuring a safe and healthy working environment for all co-workers in its offices, warehouses and stores, and a safe and healthy shopping environment for customers.  In fulfilling this aim, we undertake regular consultation with co-workers on health and safety issues and concerns.',
 	@dcTcTermsSafetyHeadline NVARCHAR(MAX) = 'Occupational Health & Safety',
@@ -1488,9 +1490,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsSafetyGuid
 END
 
--- #################################### 24 Termination
+-- #################################### Termination
 DECLARE @dcTcTermsTerminationGuid UNIQUEIDENTIFIER = '43393eed-c718-4bf4-a588-e3c2945f1ccc',
-	@dcTcTermsTerminationName NVARCHAR(MAX) = @prefix + ' Employment - Termination',
+	@dcTcTermsTerminationName NVARCHAR(MAX) = @prefix + ' Termination',
 	@dcTcTermsTerminationDescription NVARCHAR(MAX) = '',
 	@dcTcTermsTerminationText NVARCHAR(MAX) = 'Either party may terminate the employment relationship with the appropriate notice as prescribed in the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016.  Notice provisions do not apply in the case of summary dismissal.
 <br><br>
@@ -1525,9 +1527,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsTerminationGuid
 END
 
--- #################################### 25 Company Policies & Procedures 
+-- #################################### Company Policies & Procedures 
 DECLARE @dcTcTermsPoliciesGuid UNIQUEIDENTIFIER = 'a53f323b-545c-4fd7-b474-c2a933fc5243',
-	@dcTcTermsPoliciesName NVARCHAR(MAX) = @prefix + ' Employment - Policies',
+	@dcTcTermsPoliciesName NVARCHAR(MAX) = @prefix + ' Policies',
 	@dcTcTermsPoliciesDescription NVARCHAR(MAX) = '',
 	@dcTcTermsPoliciesText NVARCHAR(MAX) = 'You shall be required to comply with all IKEA Policies and Procedures as amended from time to time and as outlined in IKEA’s Policy Guidelines and Welcome Program. The IKEA Policies and Procedures form part of your contract of employment.',
 	@dcTcTermsPoliciesHeadline NVARCHAR(MAX) = 'Company Policies & Procedures',
@@ -1558,9 +1560,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsPoliciesGuid
 END
 
--- #################################### 26 Other Terms and Conditions
+-- #################################### Other Terms and Conditions
 DECLARE @dcTcTermsOtherTermsGuid UNIQUEIDENTIFIER = '4e4af9b2-68e2-4376-b269-c5018646511a',
-	@dcTcTermsOtherTermsName NVARCHAR(MAX) = @prefix + ' Employment - Other T&C',
+	@dcTcTermsOtherTermsName NVARCHAR(MAX) = @prefix + ' Other T&C',
 	@dcTcTermsOtherTermsDescription NVARCHAR(MAX) = '',
 	@dcTcTermsOtherTermsText NVARCHAR(MAX) = 'The terms and conditions contained within the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016 (and any subsequent statutory agreement binding you and IKEA) also apply to your employment.  A copy of this Agreement is available for your perusal at all times.',
 	@dcTcTermsOtherTermsHeadline NVARCHAR(MAX) = 'Other Terms and Conditions',
@@ -1591,9 +1593,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsOtherTermsGuid
 END
 
--- #################################### 27 Police Checks
+-- #################################### Police Checks
 DECLARE @dcTcTermsPoliceGuid UNIQUEIDENTIFIER = 'b7d588ef-304c-43ac-ba82-cd0c8933bf9a',
-	@dcTcTermsPoliceName NVARCHAR(MAX) = @prefix + ' Employment - Police',
+	@dcTcTermsPoliceName NVARCHAR(MAX) = @prefix + ' Police',
 	@dcTcTermsPoliceDescription NVARCHAR(MAX) = '',
 	@dcTcTermsPoliceText NVARCHAR(MAX) = 'Some positions at IKEA require evidence of good character (for example - positions that deal with children or cash).  Obtaining details of your criminal history via a police check/s is an integral part of the assessment of your suitability for such positions.
 <br><br>
@@ -1632,9 +1634,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsPoliceGuid
 END
 
--- #################################### 28 Performance Management
+-- ####################################  Performance Management
 DECLARE @dcTcTermsPerfAGuid UNIQUEIDENTIFIER = 'f262417d-f0a8-4b17-8ef8-2757166ed84f',
-	@dcTcTermsPerfAName NVARCHAR(MAX) = @prefix + ' Employment - Performance',
+	@dcTcTermsPerfAName NVARCHAR(MAX) = @prefix + ' Performance',
 	@dcTcTermsPerfADescription NVARCHAR(MAX) = '',
 	@dcTcTermsPerfAText NVARCHAR(MAX) = 'A Co-worker Performance Review will be conducted at least once a year, usually between September and November.  However, your first review will be conducted during your 6-month probationary period.  This review will be based on your initial Co-worker discussion and your position’s Performance Criteria and Job Profile.  Areas of performance and non-performance will be discussed and addressed in accordance with company guidelines. Whilst the company conducts annual performance reviews, it also maintains an ongoing performance management program with its co-workers.',
 	@dcTcTermsPerfAHeadline NVARCHAR(MAX) = 'Performance Management',
@@ -1722,7 +1724,7 @@ END
 
 -- Con B
 DECLARE @dcTcTermsPerfBGuid UNIQUEIDENTIFIER = '1802ed22-0ce0-4e2f-ad0e-7b20d65691e7',
-	@dcTcTermsPerfBName NVARCHAR(MAX) = @prefix + ' Employment - Performance',
+	@dcTcTermsPerfBName NVARCHAR(MAX) = @prefix + ' Performance',
 	@dcTcTermsPerfBDescription NVARCHAR(MAX) = '',
 	@dcTcTermsPerfBText NVARCHAR(MAX) = 'A Co-worker Performance Review will be conducted at least once a year, usually between September and November. This review will be based on your initial Co-worker discussion and your position’s Performance Criteria and Job Profile.  Areas of performance and non-performance will be discussed and addressed in accordance with company guidelines. Whilst the company conducts annual performance reviews, it also maintains an ongoing performance management program with its co-workers.',
 	@dcTcTermsPerfBHeadline NVARCHAR(MAX) = 'Performance Management',
@@ -1808,9 +1810,9 @@ BEGIN
 END
 
 
--- #################################### 29 Communications with Media
+-- #################################### Communications with Media
 DECLARE @dcTcTermsMediaGuid UNIQUEIDENTIFIER = '9b691976-4767-496f-b394-33ca4c0087b3',
-	@dcTcTermsMediaName NVARCHAR(MAX) = @prefix + ' Employment - Media',
+	@dcTcTermsMediaName NVARCHAR(MAX) = @prefix + ' Media',
 	@dcTcTermsMediaDescription NVARCHAR(MAX) = '',
 	@dcTcTermsMediaText NVARCHAR(MAX) = 'You shall not provide information or speak on behalf of IKEA or otherwise to the media on any matters concerning IKEA’s business or activities.  You must refer all requests from the media for information and/or interviews to the DC Manager.',
 	@dcTcTermsMediaHeadline NVARCHAR(MAX) = 'Communications with Media',
@@ -1841,9 +1843,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsMediaGuid
 END
 
--- #################################### 30 Obligation to report unlawful activities
+-- #################################### Obligation to report unlawful activities
 DECLARE @dcTcTermsUnlawGuid UNIQUEIDENTIFIER = '58feef2e-241f-491e-b315-cecd82be4518',
-	@dcTcTermsUnlawName NVARCHAR(MAX) = @prefix + ' Employment - Unlawful',
+	@dcTcTermsUnlawName NVARCHAR(MAX) = @prefix + ' Unlawful',
 	@dcTcTermsUnlawDescription NVARCHAR(MAX) = '',
 	@dcTcTermsUnlawText NVARCHAR(MAX) = 'If you become aware of or suspect any unlawful act or omission by any IKEA employee, you must advise IKEA immediately.',
 	@dcTcTermsUnlawHeadline NVARCHAR(MAX) = 'Obligation to report unlawful activities',
@@ -1874,9 +1876,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsUnlawGuid
 END
 
--- #################################### 31 Intellectual Property
+-- #################################### Intellectual Property
 DECLARE @dcTcTermsIntelPropGuid UNIQUEIDENTIFIER = '1868d234-a7a5-42f1-af23-2a3a2a6300b0',
-	@dcTcTermsIntelPropName NVARCHAR(MAX) = @prefix + ' Employment - Int. Property',
+	@dcTcTermsIntelPropName NVARCHAR(MAX) = @prefix + ' Int. Property',
 	@dcTcTermsIntelPropDescription NVARCHAR(MAX) = '',
 	@dcTcTermsIntelPropText NVARCHAR(MAX) = 'IKEA owns all copyright in any works and all inventions, discoveries, novel designs, improvements or modifications, computer program material and trademarks which you write or develop in the course of your employment (in or out of working hours) (“Intellectual Property”).<br>
 <br>
@@ -1916,9 +1918,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsIntelPropGuid
 END
 
--- #################################### 32 Variation
+-- #################################### Variation
 DECLARE @dcTcTermsVarGuid UNIQUEIDENTIFIER = '0ea70ddd-53ee-4eec-aeab-7cf3821af6df',
-	@dcTcTermsVarName NVARCHAR(MAX) = @prefix + ' Employment - Variation',
+	@dcTcTermsVarName NVARCHAR(MAX) = @prefix + ' Variation',
 	@dcTcTermsVarDescription NVARCHAR(MAX) = '',
 	@dcTcTermsVarText NVARCHAR(MAX) = 'This Agreement may only be varied by a written agreement signed by yourself and IKEA.',
 	@dcTcTermsVarHeadline NVARCHAR(MAX) = 'Variation',
@@ -1949,9 +1951,9 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcTcTermsVarGuid
 END
 
--- #################################### 33 Suspension
+-- #################################### Suspension
 DECLARE @dcTcTermsSuspGuid UNIQUEIDENTIFIER = 'f0667d2f-d9c2-4e9f-a474-a112dd724a16',
-	@dcTcTermsSuspName NVARCHAR(MAX) = @prefix + ' Employment - Suspension',
+	@dcTcTermsSuspName NVARCHAR(MAX) = @prefix + ' Suspension',
 	@dcTcTermsSuspDescription NVARCHAR(MAX) = '',
 	@dcTcTermsSuspText NVARCHAR(MAX) = 'If we have reason to believe that you may have engaged in a serious breach of your employment obligations, IKEA may at its discretion suspend you from your duties, either with or without pay, while and investigation is conducted.',
 	@dcTcTermsSuspHeadline NVARCHAR(MAX) = 'Suspension',
@@ -1988,11 +1990,11 @@ SELECT @dcTcID, @dcTcTermsID, @counter
 SET @counter = @counter + 1
 
 
--- #################################### 34-36 End Text
+-- #################################### End Text
 ---- Create or update paragraph
 -- Paragraph guid
 DECLARE @dcTcEndTextParagraphGuid UNIQUEIDENTIFIER = '2bc81adb-bee8-4ae8-a95b-8496d15af89d',
-	@dcTcEndTextParagraphName NVARCHAR(MAX) = @prefix + ' Employment - End Text',
+	@dcTcEndTextParagraphName NVARCHAR(MAX) = @prefix + ' End Text',
 	@dcTcEndTextParagraphType INT = @ParagraphTypeText,
 	@dcTcEndTextParagraphDescription NVARCHAR(MAX) = ''
 
@@ -2011,7 +2013,7 @@ DECLARE @dcTcEndTextParagraphID INT = (SELECT ID FROM tblCaseDocumentParagraph W
 
 -- Create a text field
 DECLARE @dcTcEndTextGuid UNIQUEIDENTIFIER = 'da2d2c05-5c77-4aef-8821-148a8398c61a',
-	@dcTcEndTextName NVARCHAR(MAX) = @prefix + ' Employment - End Text',
+	@dcTcEndTextName NVARCHAR(MAX) = @prefix + ' End Text',
 	@dcTcEndTextDescription NVARCHAR(MAX) = '',
 	@dcTcEndTextText NVARCHAR(MAX) = 'IKEA recognises that its co-workers are essential to the success of the company’s operations.  IKEA remains committed to ensuring that all co-workers are treated fairly and equitably and encourages co-workers to reach their full potential.  We believe that the basis of your employment outlined above, will achieve these objectives and greatly benefit those co-workers willing to develop themselves.
 	<br><br>
@@ -2050,11 +2052,11 @@ INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentP
 SELECT @dcTcID, @dcTcEndTextParagraphID, @counter
 SET @counter = @counter + 1
 
--- #################################### 37-40 Contractor Signature
+-- #################################### Contractor Signature
 ---- Create or update paragraph
 -- Paragraph guid
 DECLARE @dcTcConSignParagraphGuid UNIQUEIDENTIFIER = '0ae9381f-c4e2-46c0-b64b-d8eac5b8cfb7',
-	@dcTcConSignParagraphName NVARCHAR(MAX) = @prefix + ' Employment - Con. Sign.',
+	@dcTcConSignParagraphName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@dcTcConSignParagraphType INT = @ParagraphTypeText,
 	@dcTcConSignParagraphDescription NVARCHAR(MAX) = ''
 
@@ -2073,11 +2075,11 @@ DECLARE @dcTcConSignParagraphID INT = (SELECT ID FROM tblCaseDocumentParagraph W
 
 -- Create a text field
 DECLARE @dcTcConSignGuid UNIQUEIDENTIFIER = '52d9e99f-a51f-4d02-9fac-c1523053ed64',
-	@dcTcConSignName NVARCHAR(MAX) = @prefix + ' Employment - Con. Sign.',
+	@dcTcConSignName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@dcTcConSignDescription NVARCHAR(MAX) = '',
 	@dcTcConSignText NVARCHAR(MAX) = 'Yours sincerely<br>
 	<Reports to Line Manager><br>
-	<Position Title (Local Job Name)> of <Reports To Line Manager><br>
+	<Position Title (Local Job Name) of Reports To Line Manager><br>
 	<strong>IKEA Distribution Services Australia Pty Ltd</strong>',
 	@dcTcConSignHeadline NVARCHAR(MAX) = '',
 	@dcTcConSignSortOrder INT = 0
@@ -2111,11 +2113,11 @@ INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentP
 SELECT @dcTcID, @dcTcConSignParagraphID, @counter
 SET @counter = @counter + 1
 
--- #################################### 41-48 Acceptance
+-- #################################### Acceptance
 ---- Create or update paragraph
 -- Paragraph guid
 DECLARE @dcTcAcceptParagraphGuid UNIQUEIDENTIFIER = '34779b4c-2a06-473f-912a-e03e367dbe99',
-	@dcTcAcceptParagraphName NVARCHAR(MAX) = @prefix + ' Employment - Acceptance',
+	@dcTcAcceptParagraphName NVARCHAR(MAX) = @prefix + ' Acceptance',
 	@dcTcAcceptParagraphType INT = @ParagraphTypeText,
 	@dcTcAcceptParagraphDescription NVARCHAR(MAX) = ''
 
@@ -2195,5 +2197,5 @@ ORDER BY CDCDP.SortOrder, CDT.SortOrder
 
 
 
-COMMIT
+ROLLBACK
 

@@ -383,7 +383,7 @@ DECLARE @retSalTcTermsID INT = (SELECT ID FROM tblCaseDocumentParagraph WHERE Ca
 DECLARE @retSalTcTermsPositionAGuid UNIQUEIDENTIFIER = '413683D9-1521-45A6-9687-6C65CA7CC698',
 	@retSalTcTermsPositionAName NVARCHAR(MAX) = @prefix + ' Position, full time',
 	@retSalTcTermsPositionADescription NVARCHAR(MAX) = '',
-	@retSalTcTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to  <Position Title (Local Job Name)> of <Reports To Line Manager>.  Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.  ',
+	@retSalTcTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to  <Position Title (Local Job Name) of Reports To Line Manager>.  Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.  ',
 	@retSalTcTermsPositionAHeadline NVARCHAR(MAX) = '<i>Position</i>',
 	@retSalTcTermsPositionASortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
@@ -470,7 +470,7 @@ END
 DECLARE @retSalTcTermsPositionBGuid UNIQUEIDENTIFIER = '186EFA0E-BEA7-432E-BB73-4D48229D20DA',
 	@retSalTcTermsPositionBName NVARCHAR(MAX) = @prefix + ' Position, part time',
 	@retSalTcTermsPositionBDescription NVARCHAR(MAX) = '',
-	@retSalTcTermsPositionBText NVARCHAR(MAX) = 'Your position is Part Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to  [<Position Title (Local Job Name)> of <Reports To Line Manager>].  Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs',
+	@retSalTcTermsPositionBText NVARCHAR(MAX) = 'Your position is Part Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to  <Position Title (Local Job Name) of Reports To Line Manager>.  Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs',
 	@retSalTcTermsPositionBHeadline NVARCHAR(MAX) = '<i>Position</i>',
 	@retSalTcTermsPositionBSortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
@@ -2324,7 +2324,7 @@ DECLARE @retSalTcConSignGuid UNIQUEIDENTIFIER = '2AC56CC7-5967-4FD2-81E5-77A5E1E
 	@retSalTcConSignDescription NVARCHAR(MAX) = '',
 	@retSalTcConSignText NVARCHAR(MAX) = 'Yours sincerely<br>
 	<Reports to Line Manager><br>
-	<Position Title (Local Job Name)> of <Reports To Line Manager><br>
+	<Position Title (Local Job Name) of Reports To Line Manager><br>
 	<strong>IKEA Pty Limited</strong>',
 	@retSalTcConSignHeadline NVARCHAR(MAX) = '',
 	@retSalTcConSignSortOrder INT = @termsCounter
