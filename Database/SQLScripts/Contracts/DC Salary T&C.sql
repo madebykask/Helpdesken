@@ -76,7 +76,7 @@ SET @counter = @counter + 1
 ---- Create or update paragraph
 -- Paragraph guid
 DECLARE @dcSalTcEmployGreetingGuid UNIQUEIDENTIFIER = '805476D1-42A1-4CED-8C85-53DBF80C63D9',
-	@cdpName NVARCHAR(MAX) = @prefix + ' Employment greeting',
+	@cdpName NVARCHAR(MAX) = @prefix + ' Greeting',
 	@cdpParagraphType INT = @ParagraphTypeText,
 	@cdpDescription NVARCHAR(MAX) = ''
 
@@ -470,7 +470,7 @@ END
 
 ---- Commencement A
 DECLARE @dcSalTcTermsComAGuid UNIQUEIDENTIFIER = '7ACE12E4-2FA4-43D8-AC8D-CDAFF36A7756',
-	@dcSalTcTermsComAName NVARCHAR(MAX) = @prefix + ' Employment - Commencement - No date',
+	@dcSalTcTermsComAName NVARCHAR(MAX) = @prefix + ' Commencement, no end date',
 	@dcSalTcTermsComADescription NVARCHAR(MAX) = '',
 	@dcSalTcTermsComAText NVARCHAR(MAX) = 'Your commencement date is <Change Valid From>, unless otherwise terminated in accordance with this contract.',
 	@dcSalTcTermsComAHeadline NVARCHAR(MAX) = 'Commencement Date',
@@ -608,7 +608,7 @@ END
 
 ---- Commencement B
 DECLARE @dcSalTcTermsComBGuid UNIQUEIDENTIFIER = '7C948166-2E52-40D0-827D-FE5F054A61AB',
-	@dcSalTcTermsComBName NVARCHAR(MAX) = @prefix + ' Employment - Commencement - Has end date',
+	@dcSalTcTermsComBName NVARCHAR(MAX) = @prefix + ' Commencement, has end date',
 	@dcSalTcTermsComBDescription NVARCHAR(MAX) = '',
 	@dcSalTcTermsComBText NVARCHAR(MAX) = 'Your commencement date is <Change Valid From> and will cease on <Change Valid To>, unless otherwise terminated in accordance with this contract.',
 	@dcSalTcTermsComBHeadline NVARCHAR(MAX) = 'Commencement date',
@@ -1616,11 +1616,11 @@ INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentP
 SELECT @dcSalTcID, @dcSalTcConSignParagraphID, @counter
 SET @counter = @counter + 1
 
--- #################################### 41-48 Acceptance
+-- #################################### Acceptance
 ---- Create or update paragraph
 -- Paragraph guid
 DECLARE @dcSalTcAcceptParagraphGuid UNIQUEIDENTIFIER = '5F3474F9-C991-4E07-B386-7C02B6D73DF0',
-	@dcSalTcAcceptParagraphName NVARCHAR(MAX) = @prefix + ' Employment - Acceptance',
+	@dcSalTcAcceptParagraphName NVARCHAR(MAX) = @prefix + ' Acceptance',
 	@dcSalTcAcceptParagraphType INT = @ParagraphTypeText,
 	@dcSalTcAcceptParagraphDescription NVARCHAR(MAX) = ''
 
@@ -1639,7 +1639,7 @@ DECLARE @dcSalTcAcceptParagraphID INT = (SELECT ID FROM tblCaseDocumentParagraph
 
 -- Create a text field
 DECLARE @dcSalTcAcceptGuid UNIQUEIDENTIFIER = '224E290B-E833-4823-B0A6-DDCFF34C65A1',
-	@dcSalTcAcceptName NVARCHAR(MAX) = @prefix + ' Employment - Acceptance',
+	@dcSalTcAcceptName NVARCHAR(MAX) = @prefix + ' Acceptance',
 	@dcSalTcAcceptDescription NVARCHAR(MAX) = '',
 	@dcSalTcAcceptText NVARCHAR(MAX) = '<table style="border: 1px solid black">
 <tr><th align="center">ACCEPTANCE</th></tr>
