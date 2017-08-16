@@ -21,7 +21,7 @@ DECLARE @addressInfoID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE C
 
 -- Draft ID
 DECLARE @draftGuid UNIQUEIDENTIFIER = '51220147-E756-492E-88A1-C1671BDE6AA5'
-DECLARE @draftID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @addressInfoGuid)
+DECLARE @draftID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @draftGuid)
 
 -- Paragraph types
 DECLARE @ParagraphTypeText INT = 1
@@ -263,7 +263,7 @@ END
 
 -- Add greeting paragraph to case document
 INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentParagraph_Id, SortOrder)
-SELECT @retTcID, @retTcEmployGreetingGuid, @counter
+SELECT @retTcID, @retTcEmployGreetingID, @counter
 SET @counter = @counter + 1
 
 
@@ -537,7 +537,7 @@ END
 -- #################################### Employment type
 
 -- A. Employment, full time
-DECLARE @retTcTableEmployAGuid UNIQUEIDENTIFIER = 'AC848C86-0AC0-4404-99E0-E75F4B87C177',
+DECLARE @retTcTableEmployAGuid UNIQUEIDENTIFIER = '482D32A0-FB45-45F8-B244-6919FF446242',
 	@retTcTableEmployAName NVARCHAR(MAX) = @prefix + ' Employment, full time',
 	@retTcTableEmployADescription NVARCHAR(MAX) = '',
 	@retTcTableEmployAText NVARCHAR(MAX) = 'Full Time',
@@ -946,7 +946,7 @@ SET @counter = @counter + 1
 ---- Create or update paragraph
 -- Paragraph guid
 DECLARE @retTcSignatureGuid UNIQUEIDENTIFIER = 'C73950D0-CDCF-49D8-A6F3-BFE32D62FED5',
-	@retTcSignatureName NVARCHAR(MAX) = @prefix + ' Greeting',
+	@retTcSignatureName NVARCHAR(MAX) = @prefix + ' Signature',
 	@retTcSignatureParagraphType INT = @ParagraphTypeText,
 	@retTcSignatureDescription NVARCHAR(MAX) = ''
 
@@ -1079,4 +1079,4 @@ ORDER BY CDCDP.SortOrder, CDT.SortOrder
 
 
 
-ROLLBACK
+COMMIT
