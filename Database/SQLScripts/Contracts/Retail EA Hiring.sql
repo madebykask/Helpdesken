@@ -850,48 +850,48 @@ END
 -- #################################### Contracted hours per fortnight
 
 -- Has contracted hours
-DECLARE @retHiringTableHoursGuid UNIQUEIDENTIFIER = '8FF33EAD-BEF3-469E-ABC1-37B5A5B9D681',
-	@retHiringTableHoursName NVARCHAR(MAX) = @prefix + ' Contracted hours',
-	@retHiringTableHoursDescription NVARCHAR(MAX) = '',
-	@retHiringTableHoursText NVARCHAR(MAX) = '<Contracted Hours>',
-	@retHiringTableHoursHeadline NVARCHAR(MAX) = 'Contracted Hours per Fortnight:',
-	@retHiringTableHoursSortOrder INT = @tableCounter 
+DECLARE @retHiringTableHoursAGuid UNIQUEIDENTIFIER = '8FF33EAD-BEF3-469E-ABC1-37B5A5B9D681',
+	@retHiringTableHoursAName NVARCHAR(MAX) = @prefix + ' Contracted hours, has',
+	@retHiringTableHoursADescription NVARCHAR(MAX) = '',
+	@retHiringTableHoursAText NVARCHAR(MAX) = '<Contracted Hours>',
+	@retHiringTableHoursAHeadline NVARCHAR(MAX) = 'Contracted Hours per Fortnight:',
+	@retHiringTableHoursASortOrder INT = @tableCounter 
  SET @tableCounter = @tableCounter + 1
 
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retHiringTableHoursGuid)
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retHiringTableHoursAGuid)
 BEGIN
 	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
 	VALUES (@retHiringTableID, 
-		@retHiringTableHoursName, 
-		@retHiringTableHoursDescription,
-		@retHiringTableHoursText, 
-		@retHiringTableHoursHeadline,
-		@retHiringTableHoursSortOrder,
-		@retHiringTableHoursGuid)
+		@retHiringTableHoursAName, 
+		@retHiringTableHoursADescription,
+		@retHiringTableHoursAText, 
+		@retHiringTableHoursAHeadline,
+		@retHiringTableHoursASortOrder,
+		@retHiringTableHoursAGuid)
 END
 ELSE
 BEGIN
 	UPDATE CDT SET 
 		CaseDocumentParagraph_Id = @retHiringTableID,
-		[Name] = @retHiringTableHoursName, 
-		[Description] = @retHiringTableHoursDescription, 
-		[Text] = @retHiringTableHoursText,
-		[Headline] = @retHiringTableHoursHeadline,
-		SortOrder = @retHiringTableHoursSortOrder
+		[Name] = @retHiringTableHoursAName, 
+		[Description] = @retHiringTableHoursADescription, 
+		[Text] = @retHiringTableHoursAText,
+		[Headline] = @retHiringTableHoursAHeadline,
+		SortOrder = @retHiringTableHoursASortOrder
 	FROM tblCaseDocumentText CDT 
-	WHERE CDT.CaseDocumentTextGUID = @retHiringTableHoursGuid
+	WHERE CDT.CaseDocumentTextGUID = @retHiringTableHoursAGuid
 END
-DECLARE @retHiringTableHoursID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @retHiringTableHoursGuid)
+DECLARE @retHiringTableHoursAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @retHiringTableHoursAGuid)
 
--- Has contracted hours
-DECLARE @retHiringTableHoursCondAGuid UNIQUEIDENTIFIER = 'C7E9D22F-A65B-4E8C-9A70-0FB0E2F22F58',
-	@retHiringTableHoursCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractedHours',
-	@retHiringTableHoursCondAOperator NVARCHAR(MAX) = 'LargerThan',
-	@retHiringTableHoursCondAValues NVARCHAR(MAX) = '0',
-	@retHiringTableHoursCondADescription NVARCHAR(MAX) = 'Has contracted hours',
-	@retHiringTableHoursCondAStatus INT = 1
+-- A. Has contracted hours
+DECLARE @retHiringTableHoursACondAGuid UNIQUEIDENTIFIER = 'C7E9D22F-A65B-4E8C-9A70-0FB0E2F22F58',
+	@retHiringTableHoursACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractedHours',
+	@retHiringTableHoursACondAOperator NVARCHAR(MAX) = 'LargerThan',
+	@retHiringTableHoursACondAValues NVARCHAR(MAX) = '0',
+	@retHiringTableHoursACondADescription NVARCHAR(MAX) = 'Has contracted hours',
+	@retHiringTableHoursACondAStatus INT = 1
 
-IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retHiringTableHoursCondAGuid)
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retHiringTableHoursACondAGuid)
 BEGIN
 	INSERT INTO tblCaseDocumentTextCondition(
 		CaseDocumentTextConditionGUID, 
@@ -906,13 +906,13 @@ BEGIN
 		ChangedDate,
 		ChangedByUser_Id)
 	VALUES(
-		@retHiringTableHoursCondAGuid,
-		@retHiringTableHoursID,
-		@retHiringTableHoursCondAPropertyName,
-		@retHiringTableHoursCondAOperator,
-		@retHiringTableHoursCondAValues,
-		@retHiringTableHoursCondADescription,
-		@retHiringTableHoursCondAStatus,
+		@retHiringTableHoursACondAGuid,
+		@retHiringTableHoursAID,
+		@retHiringTableHoursACondAPropertyName,
+		@retHiringTableHoursACondAOperator,
+		@retHiringTableHoursACondAValues,
+		@retHiringTableHoursACondADescription,
+		@retHiringTableHoursACondAStatus,
 		@now, 
 		@userID,
 		@now,
@@ -921,19 +921,108 @@ BEGIN
 END
 ELSE
 BEGIN
-	UPDATE CDTC SET CaseDocumentText_Id = @retHiringTableHoursID,
-		Property_Name = @retHiringTableHoursCondAPropertyName,
-		Operator = @retHiringTableHoursCondAOperator,
-		[Values] = @retHiringTableHoursCondAValues,
-		[Description] = @retHiringTableHoursCondADescription,
-		[Status] = @retHiringTableHoursCondAStatus,
+	UPDATE CDTC SET CaseDocumentText_Id = @retHiringTableHoursAID,
+		Property_Name = @retHiringTableHoursACondAPropertyName,
+		Operator = @retHiringTableHoursACondAOperator,
+		[Values] = @retHiringTableHoursACondAValues,
+		[Description] = @retHiringTableHoursACondADescription,
+		[Status] = @retHiringTableHoursACondAStatus,
 		CreatedDate = @now,
 		CreatedByUser_Id = @userID,
 		ChangedDate = @now,
 		ChangedByUser_Id = @userID
 	FROM tblCaseDocumentTextCondition CDTC
-	WHERE CDTC.CaseDocumentTextConditionGUID = @retHiringTableHoursCondAGuid
+	WHERE CDTC.CaseDocumentTextConditionGUID = @retHiringTableHoursACondAGuid
 END
+
+
+-- B. Has no contracted hours
+DECLARE @retHiringTableHoursBGuid UNIQUEIDENTIFIER = 'B64FE969-F1DB-46E1-A893-0CDA60212619',
+	@retHiringTableHoursBName NVARCHAR(MAX) = @prefix + ' Contracted hours, has no',
+	@retHiringTableHoursBDescription NVARCHAR(MAX) = '',
+	@retHiringTableHoursBText NVARCHAR(MAX) = '',
+	@retHiringTableHoursBHeadline NVARCHAR(MAX) = '',
+	@retHiringTableHoursBSortOrder INT = @tableCounter 
+ SET @tableCounter = @tableCounter + 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retHiringTableHoursBGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
+	VALUES (@retHiringTableID, 
+		@retHiringTableHoursBName, 
+		@retHiringTableHoursBDescription,
+		@retHiringTableHoursBText, 
+		@retHiringTableHoursBHeadline,
+		@retHiringTableHoursBSortOrder,
+		@retHiringTableHoursBGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDT SET 
+		CaseDocumentParagraph_Id = @retHiringTableID,
+		[Name] = @retHiringTableHoursBName, 
+		[Description] = @retHiringTableHoursBDescription, 
+		[Text] = @retHiringTableHoursBText,
+		[Headline] = @retHiringTableHoursBHeadline,
+		SortOrder = @retHiringTableHoursBSortOrder
+	FROM tblCaseDocumentText CDT 
+	WHERE CDT.CaseDocumentTextGUID = @retHiringTableHoursBGuid
+END
+DECLARE @retHiringTableHoursBID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @retHiringTableHoursBGuid)
+
+-- Has contracted hours
+DECLARE @retHiringTableHoursBCondAGuid UNIQUEIDENTIFIER = 'A8F95C94-3900-4B92-B846-506B5E105DFE',
+	@retHiringTableHoursBCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractedHours',
+	@retHiringTableHoursBCondAOperator NVARCHAR(MAX) = 'Equal',
+	@retHiringTableHoursBCondAValues NVARCHAR(MAX) = '0',
+	@retHiringTableHoursBCondADescription NVARCHAR(MAX) = 'Has no contracted hours',
+	@retHiringTableHoursBCondAStatus INT = 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retHiringTableHoursBCondAGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentTextCondition(
+		CaseDocumentTextConditionGUID, 
+		CaseDocumentText_Id, 
+		Property_Name,
+		Operator,
+		[Values],
+		[Description],
+		[Status],
+		CreatedDate,
+		CreatedByUser_Id,
+		ChangedDate,
+		ChangedByUser_Id)
+	VALUES(
+		@retHiringTableHoursBCondAGuid,
+		@retHiringTableHoursBID,
+		@retHiringTableHoursBCondAPropertyName,
+		@retHiringTableHoursBCondAOperator,
+		@retHiringTableHoursBCondAValues,
+		@retHiringTableHoursBCondADescription,
+		@retHiringTableHoursBCondAStatus,
+		@now, 
+		@userID,
+		@now,
+		@userID
+	)
+END
+ELSE
+BEGIN
+	UPDATE CDTC SET CaseDocumentText_Id = @retHiringTableHoursBID,
+		Property_Name = @retHiringTableHoursBCondAPropertyName,
+		Operator = @retHiringTableHoursBCondAOperator,
+		[Values] = @retHiringTableHoursBCondAValues,
+		[Description] = @retHiringTableHoursBCondADescription,
+		[Status] = @retHiringTableHoursBCondAStatus,
+		CreatedDate = @now,
+		CreatedByUser_Id = @userID,
+		ChangedDate = @now,
+		ChangedByUser_Id = @userID
+	FROM tblCaseDocumentTextCondition CDTC
+	WHERE CDTC.CaseDocumentTextConditionGUID = @retHiringTableHoursBCondAGuid
+END
+
+
 
 
 -- Add table paragraph to case document
@@ -1077,6 +1166,6 @@ LEFT JOIN tblCaseDocumentTextCondition CDTC ON CDTC.CaseDocumentText_Id = CDT.Id
 WHERE CD.CaseDocumentGUID = @retHiringGuid
 ORDER BY CDCDP.SortOrder, CDT.SortOrder
 
-
-
 ROLLBACK
+
+
