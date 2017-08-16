@@ -11,9 +11,10 @@ BEGIN TRAN
 DECLARE @logoGuid UNIQUEIDENTIFIER = 'EB0434AA-0BBF-4CA8-AB0A-BF853129FB9D'
 DECLARE @logoID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @logoGuid)
 
--- Get footer info
-DECLARE @footerGuid UNIQUEIDENTIFIER = 'd43619b6-be1c-4def-af32-460cf8d38f63'
-DECLARE @footerID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @footerGuid)
+
+-- Get footer info with initials
+DECLARE @footerWithInitialsGuid UNIQUEIDENTIFIER = 'A7626F89-C428-475C-8E10-160CCE0F2B5D'
+DECLARE @footerWithInitialsID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @footerWithInitialsGuid)
 
 -- Draft ID
 DECLARE @draftGuid UNIQUEIDENTIFIER = '51220147-E756-492E-88A1-C1671BDE6AA5'
@@ -52,9 +53,9 @@ INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentP
 SELECT @dcTcID, @draftID, @counter
 SET @counter = @counter + 1
 
--- #################################### Footer
+-- #################################### Footer with initials
 INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentParagraph_Id, SortOrder)
-SELECT @dcTcID, @footerID, @counter
+SELECT @dcTcID, @footerWithInitialsID, @counter
 SET @counter = @counter + 1
 
 -- #################################### Logo
@@ -843,7 +844,7 @@ DECLARE @dcTcTermsHWAGuid UNIQUEIDENTIFIER = 'a5f8db11-a408-4aac-af4c-0f9cfd7a55
 	'You will be rostered to work 76 ordinary hours per fortnight.  Such details of your initial roster will be discussed with you upon your commencement.  However, where there is a change in the business’ needs, your hours may also be subject to change with appropriate notice.<br>
 <br>
 You should note that ordinary hours in the Distribution Centre include Saturday’s and you have mutually agreed to work more than one in three Saturdays as part of your contracted ordinary hours.',
-	@dcTcTermsHWAHeadline NVARCHAR(MAX) = 'Position',
+	@dcTcTermsHWAHeadline NVARCHAR(MAX) = 'Hours of Work',
 	@dcTcTermsHWASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
 

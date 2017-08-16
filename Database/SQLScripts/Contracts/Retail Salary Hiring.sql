@@ -11,9 +11,9 @@ BEGIN TRAN
 DECLARE @logoGuid UNIQUEIDENTIFIER = 'EB0434AA-0BBF-4CA8-AB0A-BF853129FB9D'
 DECLARE @logoID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @logoGuid)
 
--- Get footer info
-DECLARE @footerGuid UNIQUEIDENTIFIER = 'd43619b6-be1c-4def-af32-460cf8d38f63'
-DECLARE @footerID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @footerGuid)
+-- Get footer info with initials
+DECLARE @footerWithInitialsGuid UNIQUEIDENTIFIER = 'A7626F89-C428-475C-8E10-160CCE0F2B5D'
+DECLARE @footerWithInitialsID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @footerWithInitialsGuid)
 
 -- Draft ID
 DECLARE @draftGuid UNIQUEIDENTIFIER = '51220147-E756-492E-88A1-C1671BDE6AA5'
@@ -55,9 +55,9 @@ INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentP
 SELECT @retSalHiringID, @draftID, @counter
 SET @counter = @counter + 1
 
--- #################################### Footer
+-- #################################### Footer with initials
 INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentParagraph_Id, SortOrder)
-SELECT @retSalHiringID, @footerID, @counter
+SELECT @retSalHiringID, @footerWithInitialsID, @counter
 SET @counter = @counter + 1
 
 
@@ -837,7 +837,9 @@ END*/
 DECLARE @retSalHiringTermsRemunGuid UNIQUEIDENTIFIER = '00149C22-1C23-48B1-A246-51274F3AB8BC',
 	@retSalHiringTermsRemunName NVARCHAR(MAX) = @prefix + ' Remuneration',
 	@retSalHiringTermsRemunDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your base hourly rate will be as per the <b>IKEA Distributions Services Australia Pty Ltd Enterprise Agreement 2016</b>.  This amount will be paid directly into your nominated bank account on a fortnightly basis.',
+	@retSalHiringTermsRemunText NVARCHAR(MAX) = 'Your total remuneration per annum including superannuation is $<Basic Pay Amount>.<br>
+<br>
+Your salary will be paid directly into your nominated bank account on a fortnightly basis, two weeks in arrears. ',
 	@retSalHiringTermsRemunHeadline NVARCHAR(MAX) = 'Remuneration',
 	@retSalHiringTermsRemunSortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
@@ -1631,11 +1633,21 @@ END
 DECLARE @retSalHiringTermsTerminationAGuid UNIQUEIDENTIFIER = '62896AB1-1E21-4476-B403-2C08E9297DAF',
 	@retSalHiringTermsTerminationAName NVARCHAR(MAX) = @prefix + ' Termination, No contract end date',
 	@retSalHiringTermsTerminationADescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsTerminationAText NVARCHAR(MAX) = 'Either party may terminate the employment relationship with the appropriate notice as prescribed in the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016.  Notice provisions do not apply in the case of summary dismissal.
-<br><br>
-Upon termination of your employment, all material, equipment, uniforms, information, company records, data etc issued to you or created by you in your employment is to be returned to IKEA or its nominee.
-<br><br>
-IKEA reserves the right to withhold an appropriate sum of money from a co-worker’s termination payment until such time as any outstanding company property as detailed above is returned.',
+	@retSalHiringTermsTerminationAText NVARCHAR(MAX) = 'IKEA may terminate your employment by giving four (4) weeks’ notice, or payment in lieu at your ordinary rate of pay.  If you are over 45 years of age and have at least two years’ continuous employment with IKEA, you will be entitled to an additional week’s notice.<br>
+<br>
+If you wish to resign, you must provide IKEA with four (4) weeks’ notice.  If you fail to give the appropriate notice to IKEA, IKEA shall have the right to withhold monies due to you up to a maximum of your ordinary rate of pay for the period of notice not served.<br>
+<br>
+IKEA may at its election not require you to attend the workplace during the notice period.<br>
+<br>
+Notices of resignation or termination must be supplied in writing, and must comply with the above named notice periods unless a new period is agreed to in writing between you and IKEA.<br>
+<br>
+A failure on your part to resign in writing will not affect the validity of your resignation.<br>
+<br>
+IKEA retains the right to terminate your employment without notice in the case of summary dismissal.<br>
+<br>
+Upon termination of your employment, all material, equipment, uniforms, information, company records, data etc issued to you or created by you in your employment is to be returned to IKEA or its nominee. IKEA reserves the right to withhold an appropriate sum of money from a co-worker’s termination payment until such time as any outstanding company property as detailed above is returned.<br>
+<br>
+Termination payments will be made by way of Electronic Funds Transfer within 4 days of the end of the termination pay period.',
 	@retSalHiringTermsTerminationAHeadline NVARCHAR(MAX) = 'Termination',
 	@retSalHiringTermsTerminationASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1722,13 +1734,13 @@ END
 DECLARE @retSalHiringTermsTerminationBGuid UNIQUEIDENTIFIER = '7F836435-FC2E-4C8A-8AC2-0E941FD98FF6',
 	@retSalHiringTermsTerminationBName NVARCHAR(MAX) = @prefix + ' Termination, Has contract end date',
 	@retSalHiringTermsTerminationBDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsTerminationBText NVARCHAR(MAX) = 'Your employment will terminate on the date specified in clause 2 above. <br> 
+	@retSalHiringTermsTerminationBText NVARCHAR(MAX) = 'Your employment will terminate on the date specified in clause 2 above.<br> 
 <br>
 Despite clause 2, IKEA may terminate your employment by giving 4 weeks’ notice, or payment in lieu at your ordinary rate of pay.  If you are over 45 years of age and have at least two years’ continuous employment with IKEA, you will be entitled to an additional week’s notice.<br>
 <br>
 If you wish to resign, you must provide IKEA with four (4) weeks’ notice.  If you fail to give the appropriate notice to IKEA, IKEA shall have the right to withhold monies due to you up to a maximum of your ordinary rate of pay for the period of notice not served.<br>
 <br>
-Notices of resignation or termination must be supplied in writing, and must comply with the abovenamed notice periods unless a new period is agreed to in writing between you and IKEA.  A failure on your part to resign in writing will not affect the validity of your resignation.  <br>
+Notices of resignation or termination must be supplied in writing, and must comply with the abovenamed notice periods unless a new period is agreed to in writing between you and IKEA.  A failure on your part to resign in writing will not affect the validity of your resignation.<br>
 <br>
 IKEA retains the right to terminate your employment without notice in the case of summary dismissal.<br>
 <br>

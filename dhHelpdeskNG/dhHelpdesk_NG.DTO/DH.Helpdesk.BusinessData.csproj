@@ -151,6 +151,7 @@
     <Compile Include="Enums\Users\StartPage.cs" />
     <Compile Include="Enums\Users\TimeZoneAutodetectResult.cs" />
     <Compile Include="Enums\Users\WorkingGroupUserPermission.cs" />
+    <Compile Include="Enums\ValueCompare.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\HeadersFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Overview\AccountFieldsSettingsOverviewWithActivity.cs" />
     <Compile Include="Models\Accounts\Read\Overview\AccountInformation.cs" />
@@ -180,6 +181,7 @@
     <Compile Include="Models\CaseDocument\CaseDocumentParagraphModel.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentModel.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentConditionModel.cs" />
+    <Compile Include="Models\CaseDocument\CaseDocumentParagraphType.cs" />
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
     <Compile Include="Models\Case\AuxCaseModel.cs" />
     <Compile Include="Models\Case\CaseModel.cs" />

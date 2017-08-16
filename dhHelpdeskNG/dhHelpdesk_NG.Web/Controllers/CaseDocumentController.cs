@@ -199,7 +199,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             string draftText = "";
-             try
+            try
             {
                 draftText = m.CaseDocumentParagraphs.Where(x => x.CaseDocumentParagraph.ParagraphType == 6).FirstOrDefault().CaseDocumentParagraph.CaseDocumentTexts.FirstOrDefault().Text;
             }
@@ -245,7 +245,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         public override void ExecuteResult(ControllerContext context)
         {
-            context.HttpContext.Response.ClearHeaders();
+             context.HttpContext.Response.ClearHeaders();
 
             base.ExecuteResult(context);
 

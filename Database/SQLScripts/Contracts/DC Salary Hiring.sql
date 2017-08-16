@@ -11,9 +11,10 @@ BEGIN TRAN
 DECLARE @logoGuid UNIQUEIDENTIFIER = 'EB0434AA-0BBF-4CA8-AB0A-BF853129FB9D'
 DECLARE @logoID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @logoGuid)
 
--- Get footer info
-DECLARE @footerGuid UNIQUEIDENTIFIER = 'd43619b6-be1c-4def-af32-460cf8d38f63'
-DECLARE @footerID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @footerGuid)
+
+-- Get footer info with initials
+DECLARE @footerWithInitialsGuid UNIQUEIDENTIFIER = 'A7626F89-C428-475C-8E10-160CCE0F2B5D'
+DECLARE @footerWithInitialsID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @footerWithInitialsGuid)
 
 -- Draft ID
 DECLARE @draftGuid UNIQUEIDENTIFIER = '51220147-E756-492E-88A1-C1671BDE6AA5'
@@ -52,9 +53,9 @@ INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentP
 SELECT @dcSalHirID, @draftID, @counter
 SET @counter = @counter + 1
 
--- #################################### Footer
+-- #################################### Footer with initials
 INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentParagraph_Id, SortOrder)
-SELECT @dcSalHirID, @footerID, @counter
+SELECT @dcSalHirID, @footerWithInitialsID, @counter
 SET @counter = @counter + 1
 
 -- #################################### Logo
@@ -1433,15 +1434,31 @@ END
 DECLARE @dcSalHirTermsIntelPropGuid UNIQUEIDENTIFIER = '18E2F0ED-36A0-4B42-8A68-F5AF0AE575BB',
 	@dcSalHirTermsIntelPropName NVARCHAR(MAX) = @prefix + ' Int. Property',
 	@dcSalHirTermsIntelPropDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsIntelPropText NVARCHAR(MAX) = 'IKEA owns all copyright in any works and all inventions, discoveries, novel designs, improvements or modifications, computer program material and trademarks which you write or develop in the course of your employment (in or out of working hours) (“Intellectual Property”).<br>
-<br>
-You assign to IKEA any interest you have in the Intellectual Property, and you must disclose any Intellectual Property to IKEA.<br>
-<br>
-During and after your employment, you must do anything IKEA reasonably requires (at IKEA''s cost) to:
+	@dcSalHirTermsIntelPropText NVARCHAR(MAX) = 'In the course of your employment, you may be exposed to “Confidential Information” concerning IKEA. Confidential Information means any information obtained by you in the course of your employment, including:<br>
 <ul>
-<li>obtain statutory protection (including by patent, design registration, trade mark registration or copyright) for the Intellectual Property for IKEA in any country; or</li>
-<li>Perfect or evidence IKEA’s ownership of the Intellectual Property.</li>
-</ul>',
+<li>trade secrets;</li>
+<li>technical information and technical drawings;</li>
+<li>commercial information about IKEA and persons with whom IKEA deals;</li>
+<li>Product and market information;</li>
+<li>this letter of appointment;</li>
+<li>any information marked “confidential” or which IKEA informs you is confidential or a trade secret; and</li>
+<li>Co-worker and customer personal details.</li>
+</ul>
+<br>
+but excluding:<br>
+<ul>
+<li>information available to the public; and</li>
+<li>information which you can prove you lawfully possessed before obtaining it in the course of your employment (other than this letter of appointment)</li>
+</ul>
+<br>
+During and after your employment, you must not use or disclose Confidential Information to any person (including an employee of IKEA) other than:<br>
+<ul>
+<li>to perform your duties;</li>
+<li>if IKEA has consented in writing; or</li>
+<li>if required by law.</li>
+</ul>
+<br>
+As an IKEA co-worker, you must keep Confidential Information in a secure manner and treat such information with appropriate sensitivity. On demand by IKEA and at the end of your employment, you must deliver to IKEA all copies of Confidential Information in your possession or control (including all Confidential Information held electronically in any medium) and then delete all Confidential Information held electronically in any medium in your possession or control.',
 
 	@dcSalHirTermsIntelPropHeadline NVARCHAR(MAX) = 'Intellectual Property',
 	@dcSalHirTermsIntelPropSortOrder INT = @termsCounter
@@ -1533,8 +1550,8 @@ DECLARE @dcSalHirEndTextParagraphID INT = (SELECT ID FROM tblCaseDocumentParagra
 DECLARE @dcSalHirEndTextGuid UNIQUEIDENTIFIER = 'E82C5361-3148-4962-8191-CB298F43B11D',
 	@dcSalHirEndTextName NVARCHAR(MAX) = @prefix + ' End Text',
 	@dcSalHirEndTextDescription NVARCHAR(MAX) = '',
-	@dcSalHirEndTextText NVARCHAR(MAX) = 'IKEA recognises that its co-workers are essential to the success of the company’s operations.  IKEA remains committed to ensuring that all co-workers are treated fairly and equitably and encourages co-workers to reach their full potential.  We believe that the basis of your employment outlined above, will achieve these objectives and greatly benefit those co-workers willing to develop themselves.<br>
-<Co-worker First Name>, as an indication of your understanding and acceptance of these conditions, please sign one copy of this letter of offer, and return one copy to the Human Resources Manager.  Please retain the second copy for your records.<br>
+	@dcSalHirEndTextText NVARCHAR(MAX) = 'IKEA recognises that its co-workers are essential to the success of the company’s operations.  IKEA remains committed to ensuring that all co-workers are treated fairly and equitably and encourages co-workers to reach their full potential.  We believe that the basis of your employment outlined above, will achieve these objectives and greatly benefit those co-workers willing to develop themselves.<br><br>
+<Co-worker First Name>, as an indication of your understanding and acceptance of these conditions, please sign one copy of this letter of offer, and return one copy to the Human Resources Manager.  Please retain the second copy for your records.<br><br>
 If you have any questions pertaining to this offer of employment or any of the information contained herein, please do not hesitate to contact me before signing this letter.',
 	@dcSalHirEndTextHeadline NVARCHAR(MAX) = '',
 	@dcSalHirEndTextSortOrder INT = 0

@@ -6,16 +6,17 @@ using System.Globalization;
 
 namespace DH.Helpdesk.Services.Services
 {
-    using DH.Helpdesk.Common.Extensions.String;
-    using DH.Helpdesk.Dal.Repositories.CaseDocument;
-    using DH.Helpdesk.Dal.Repositories.Cases;
-    using DH.Helpdesk.BusinessData.Models.CaseDocument;
-    using DH.Helpdesk.Domain;
-    using System.Reflection;
-    using DH.Helpdesk.BusinessData.Models.User.Input;
-    using DH.Helpdesk.Common.Enums;
+	using DH.Helpdesk.Common.Extensions.String;
+	using DH.Helpdesk.Dal.Repositories.CaseDocument;
+	using DH.Helpdesk.Dal.Repositories.Cases;
+	using DH.Helpdesk.BusinessData.Models.CaseDocument;
+	using DH.Helpdesk.Domain;
+	using System.Reflection;
+	using DH.Helpdesk.BusinessData.Models.User.Input;
+	using DH.Helpdesk.Common.Enums;
+	using BusinessData.Enums;
 
-    public interface ICaseDocumentService
+	public interface ICaseDocumentService
     {
         CaseDocumentModel GetCaseDocument(Guid caseDocumentGUID, int caseId);
         IEnumerable<CaseDocumentModel> GetCaseDocuments(int customerId, Case _case, UserOverview user, ApplicationType applicationType);
@@ -88,7 +89,8 @@ namespace DH.Helpdesk.Services.Services
 
                     if (string.IsNullOrEmpty(value))
                     {
-                        return "[" + displayName.Replace("<", "").Replace(">", "").Replace("[", "").Replace("]", "") + "]";
+						var name = displayName.Replace("<", "").Replace(">", "").Replace("[", "").Replace("]", "");
+						return $"<p style='background-color: red'>Can't match field {name} with property {fieldId}</p>";
                     }
                 }
 
@@ -104,7 +106,9 @@ namespace DH.Helpdesk.Services.Services
             }
             catch (Exception ex)
             {
-                return  "[" + displayName.Replace("<", "").Replace(">", "").Replace("[", "").Replace("]", "") + "]";
+				var name = displayName.Replace("<", "").Replace(">", "").Replace("[", "").Replace("]", "");
+				return $"<p style='background-color: red'>Can't match field {name} with property {fieldId}</p>";
+				//return  "[" + displayName.Replace("<", "").Replace(">", "").Replace("[", "").Replace("]", "") + "]";
                  
             }
         }
@@ -234,15 +238,21 @@ namespace DH.Helpdesk.Services.Services
                     {
                         foreach (var paragraphText in item.CaseDocumentParagraph.CaseDocumentTexts)
                         {
-                            //TODO: Refactor. For performance, at the moment we are fetching values that dont need to be fetched.
-                            if (checkCaseDocumentTextConditions(_case, paragraphText.Id))
+							//TODO: Refactor. For performance, at the moment we are fetching values that dont need to be fetched.
+							var conditionResult = CheckCaseDocumentTextConditions(_case, paragraphText.Id);
+
+							if (conditionResult.Show)
                             {
                                 paragraphText.Text = ReplaceWithValue(caseDocument.Id, caseId, paragraphText.Text);
                             }
-                            else
+                            else if (conditionResult.FieldException != null)
                             {
-                                paragraphText.Text = "";
-                            }
+								paragraphText.Text = $"<span style=\"background-color: red\">{conditionResult.FieldException.Message}</span>";
+							}
+							else
+							{
+								paragraphText.Text = "";
+							}
 
                         }
                     }
@@ -266,29 +276,55 @@ namespace DH.Helpdesk.Services.Services
 
             }).OrderBy(c => c.SortOrder).ToList();
 
-            return caseDocuments.Where(c => showCaseDocument(customerId, _case, c.Id, user, applicationType) == true).ToList();
+            return caseDocuments.Where(c =>
+			{
+				var result = ShowCaseDocument(customerId, _case, c.Id, user, applicationType);
+				return result.Show;
+			}).ToList();
         }
 
-        //TODO: REFACTOR, this could be used the "same" way as workflowstep... 
-        private bool showCaseDocument(int customerId, Case _case, int caseDocumentId, UserOverview user, ApplicationType applicationType)
-        {
-            //ALL conditions must be met
-            bool showDocument = false;
 
-            //If no conditions are set in (CaseSolutionCondition) for the template, do not show step in list
-            var condtions = this.GetCaseDocumentConditions(caseDocumentId);
+		// TODO: Move to own files, JWE
+		public class ConditionResult
+		{
+			public bool Show { get; set; }
+			public ConditionResultException FieldException { get; set; }
+		}
 
-            if (condtions == null || condtions.Count() == 0)
-                return false;
+		public class ConditionResultException : Exception
+		{
+			public ConditionResultException(string field, string message) : base(message)
+			{
+				Field = field;
+			}
+			public string Field { get; set; }
+		}
+
+		//TODO: REFACTOR, this could be used the "same" way as workflowstep... 
+		private ConditionResult ShowCaseDocument(int customerId, Case _case, int caseDocumentId, UserOverview user, ApplicationType applicationType)
+		{
+			//ALL conditions must be met
+			bool showDocument = false;
+
+			//If no conditions are set in (CaseSolutionCondition) for the template, do not show step in list
+			var condtions = this.GetCaseDocumentConditions(caseDocumentId);
+
+			if (condtions == null || condtions.Count() == 0)
+			{
+				return new ConditionResult()
+				{
+					Show = false
+				};
+			}
 
             foreach (var condition in condtions)
             {
                 var conditionValue = condition.Value.Tidy().ToLower();
                 var conditionKey = condition.Key.Tidy();
 
-                try
-                {
-                    var value = "";
+				try
+				{
+					var value = "";
 
                     //GET FROM APPLICATION
                     if (conditionKey.ToLower() == "application_type")
@@ -337,22 +373,38 @@ namespace DH.Helpdesk.Services.Services
                     }
                     else
                     {
-                        return false;
+                        return new ConditionResult
+						{
+							Show = false
+						};
                     }
                 }
-                catch (Exception ex)
+                catch (ConditionResultException ex)
                 {
-                    //throw;
-                    //TODO?
-                    return false;
+					return new ConditionResult
+					{
+						Show = false,
+						FieldException = ex
+					};
                 }
+				catch (Exception ex) // TODO: Handle this better
+				{
+					return new ConditionResult
+					{
+						Show = false,
+						FieldException = new ConditionResultException("unkown", "unkown error when running a condition test")
+					};
+				}
             }
 
-            //To be true all conditions needs to be fulfilled
-            return showDocument;
+			//To be true all conditions needs to be fulfilled
+			return new ConditionResult
+			{
+				Show = showDocument
+			}; 
         }
         //TODO: REFACTOR
-        private bool checkCaseDocumentTextConditions(Case _case, int caseDocumentText_Id)
+        private ConditionResult CheckCaseDocumentTextConditions(Case _case, int caseDocumentText_Id)
         {
             //If there are more than one conditions, all conditions must be fulfilled
 
@@ -363,7 +415,12 @@ namespace DH.Helpdesk.Services.Services
 
             //IF there are no conditions set, it should be visible
             if (condtions == null || condtions.Count() == 0)
-                return true;
+			{
+				return new ConditionResult
+				{
+					Show = true
+				};
+			}
 
 
             int extendedCaseFormId = 0;
@@ -372,219 +429,286 @@ namespace DH.Helpdesk.Services.Services
                 extendedCaseFormId = _case.CaseExtendedCaseDatas.First().ExtendedCaseData.ExtendedCaseFormId;
             }
 
-            foreach (var condition in condtions)
-            {
-                
-                var conditionValue = condition.Values.Tidy().ToLower();
-                var conditionKey = condition.Property_Name.Tidy();
+			foreach (var condition in condtions)
+			{
+
+				var conditionValue = condition.Values.Tidy().ToLower();
+				var conditionKey = condition.Property_Name.Tidy();
 
 
-                var mapper = _caseCaseDocumentTextConditionIdentifierRepository.GetCaseDocumentTextConditionPropertyName(extendedCaseFormId, conditionKey);
+				var mapper = _caseCaseDocumentTextConditionIdentifierRepository.GetCaseDocumentTextConditionPropertyName(extendedCaseFormId, conditionKey);
 
-                if (mapper != null)
-                { 
-                    conditionKey = mapper.PropertyName;
-                }
+				if (mapper != null)
+				{
+					conditionKey = mapper.PropertyName;
+				}
 
 
 
-                var conditionOperator = condition.Operator.Tidy();
+				var conditionOperator = condition.Operator.Tidy();
 
-                try
-                {
+				try
+				{
 
-                    var value = "";
+					var value = "";
 
-                    //GET FROM EXTENDEDCASE
-                    if (condition.Property_Name.ToLower().StartsWith("extendedcase_"))
-                    {
-                       //conditionKey = conditionKey.Replace("extendedcase_", "");
-                        value = _extendedCaseValueRepository.GetExtendedCaseValue(_case.CaseExtendedCaseDatas.FirstOrDefault().ExtendedCaseData_Id, conditionKey).Value;
-                    }
-                   
-                    //Get the specific property of Case in "Property_Name"
-                    else if (_case != null && _case.Id != 0 && conditionKey.ToLower().StartsWith("case_"))
-                    {
-                        conditionKey = conditionKey.Replace("case_", "");
+					//GET FROM EXTENDEDCASE
+					if (condition.Property_Name.ToLower().StartsWith("extendedcase_"))
+					{
+						//conditionKey = conditionKey.Replace("extendedcase_", "");
+						var ext = _extendedCaseValueRepository.GetExtendedCaseValue(_case.CaseExtendedCaseDatas.FirstOrDefault().ExtendedCaseData_Id, conditionKey);
 
-                        if (!conditionKey.Contains("."))
-                        {
-                            //Get value from Case Model by casting to dictionary and look for property name
-                            value = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[conditionKey].ToString();
-                        }
-                        else
-                        {
-                            var parentClassName = string.Concat(conditionKey.TakeWhile((c) => c != '.'));
-                            var propertyName = conditionKey.Substring(conditionKey.LastIndexOf('.') + 1);
+						if (ext == null)
+							throw new ConditionResultException(conditionKey, $"Could not find key {conditionKey} in the extended case setup");
 
-                            var parentClass = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[parentClassName];
-                            value = parentClass.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(parentClass, null))[propertyName].ToString();
-                        }
-                    }
+						value = ext.Value;
+					}
 
-                    // Check conditions
-                    //FOR NOW, only one value (NO COMMA SEPARATION)
-                    //TODO: Split values
-                    if (condition.Operator.ToLower() == "HasValue".ToLower())
-                    {
-                        if (!string.IsNullOrEmpty(value))
-                        {
-                            showText = true;
-                            continue;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else if (condition.Operator.ToLower() == "IsEmpty".ToLower())
-                    {
-                        if (string.IsNullOrEmpty(value))
-                        {
-                            showText = true;
-                            continue;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else if (condition.Operator.ToLower() == "Equal".ToLower())
-                    {
-                      
-                        if (value.Length > 0 && conditionValue.ToLower() == value.ToLower())
-                        {
-                            showText = true;
-                            continue;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else if (condition.Operator.ToLower() == "NotEqual".ToLower())
-                    {
-                        if (value.Length > 0 && conditionValue.ToLower() != value.ToLower())
-                        {
-                            showText = true;
-                            continue;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else if (condition.Operator.ToLower() == "LessThan".ToLower())
-                    {
-                        
-                        if (string.IsNullOrEmpty(value))
-                            return false;
+					//Get the specific property of Case in "Property_Name"
+					else if (_case != null && _case.Id != 0 && conditionKey.ToLower().StartsWith("case_"))
+					{
+						conditionKey = conditionKey.Replace("case_", "");
 
-                        //ASSUME IT IS AN INT
-                        int intValue;
-                        int.TryParse(value, out intValue);
+						if (!conditionKey.Contains("."))
+						{
+							//Get value from Case Model by casting to dictionary and look for property name
+							value = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[conditionKey].ToString();
+						}
+						else
+						{
+							var parentClassName = string.Concat(conditionKey.TakeWhile((c) => c != '.'));
+							var propertyName = conditionKey.Substring(conditionKey.LastIndexOf('.') + 1);
 
-                        //ASSUME THAT WE ONLY HAVE ONE VALUE, no commaseparted here
-                        int intConditionValue;
-                        int.TryParse(condition.Values, out intConditionValue);
+							var parentClass = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[parentClassName];
+							value = parentClass.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(parentClass, null))[propertyName].ToString();
+						}
+					}
 
-                        if (intValue < intConditionValue)
-                        {
-                            showText = true;
-                            continue;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else if (condition.Operator.ToLower() == "LessThanOrEqual".ToLower())
-                    {
+					// Check conditions
+					//FOR NOW, only one value (NO COMMA SEPARATION)
+					//TODO: Split values
+					if (condition.Operator.ToLower() == "HasValue".ToLower())
+					{
+						if (!string.IsNullOrEmpty(value))
+						{
+							showText = true;
+							continue;
+						}
+						else
+						{
+							return new ConditionResult
+							{
+								Show = false
+							};
+						}
+					}
+					else if (condition.Operator.ToLower() == "IsEmpty".ToLower())
+					{
+						if (string.IsNullOrEmpty(value))
+						{
+							showText = true;
+							continue;
+						}
+						else
+						{
+							return new ConditionResult
+							{
+								Show = false
+							};
+						}
+					}
+					else if (condition.Operator.ToLower() == "Equal".ToLower())
+					{
 
-                        if (string.IsNullOrEmpty(value))
-                            return false;
+						if (value.Length > 0 && conditionValue.ToLower() == value.ToLower())
+						{
+							showText = true;
+							continue;
+						}
+						else
+						{
+							return new ConditionResult
+							{
+								Show = false
+							};
+						}
+					}
+					else if (condition.Operator.ToLower() == "NotEqual".ToLower())
+					{
+						if (value.Length > 0 && conditionValue.ToLower() != value.ToLower())
+						{
+							showText = true;
+							continue;
+						}
+						else
+						{
+							return new ConditionResult
+							{
+								Show = false
+							};
+						}
+					}
+					else if (condition.Operator.ToLower() == "LessThan".ToLower())
+					{
 
-                        //ASSUME IT IS AN INT
-                        int intValue;
-                        int.TryParse(value, out intValue);
+						if (string.IsNullOrEmpty(value))
+						{
+							return new ConditionResult
+							{
+								Show = false
+							};
+						}
 
-                        //ASSUME THAT WE ONLY HAVE ONE VALUE, no commaseparted here
-                        int intConditionValue;
-                        int.TryParse(condition.Values, out intConditionValue);
+						var comparableValue = TryParse(value);
+						var comparableConditionValue = TryParse(condition.Values);
 
-                        if (intValue <= intConditionValue)
-                        {
-                            showText = true;
-                            continue;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else if (condition.Operator.ToLower() == "LargerThan".ToLower())
-                    {
+						if (comparableValue == null)
+							throw new ArgumentException("Parameter is not a comparable value", "value");
+						if (comparableConditionValue == null)
+							throw new ArgumentException("Parameter is not a comparable value", "comparableConditionValue");
 
-                        if (string.IsNullOrEmpty(value))
-                            return false;
+						var result = Compare(comparableValue, comparableConditionValue);
 
-                        //ASSUME IT IS AN INT
-                        int intValue;
-                        int.TryParse(value, out intValue);
+						if (result == ValueCompare.LessThan)
+						{
+							showText = true;
+							continue;
+						}
+						else
+						{
+							return new ConditionResult
+							{
+								Show = false
+							};
+						}
+					}
+					else if (condition.Operator.ToLower() == "LessThanOrEqual".ToLower())
+					{
 
-                        //ASSUME THAT WE ONLY HAVE ONE VALUE, no commaseparted here
-                        int intConditionValue;
-                        int.TryParse(condition.Values, out intConditionValue);
+						if (string.IsNullOrEmpty(value))
+						{
+							return new ConditionResult
+							{
+								Show = false
+							};
+						}
 
-                        if (intValue > intConditionValue)
-                        {
-                            showText = true;
-                            continue;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else if (condition.Operator.ToLower() == "LargerThanOrEqual".ToLower())
-                    {
+						var comparableValue = TryParse(value);
+						var comparableConditionValue = TryParse(condition.Values);
 
-                        if (string.IsNullOrEmpty(value))
-                            return false;
+						if (comparableValue == null)
+							throw new ArgumentException("Parameter is not a comparable value", "value");
+						if (comparableConditionValue == null)
+							throw new ArgumentException("Parameter is not a comparable value", "comparableConditionValue");
 
-                        //ASSUME IT IS AN INT
-                        int intValue;
-                        int.TryParse(value, out intValue);
+						var result = Compare(comparableValue, comparableConditionValue);
 
-                        //ASSUME THAT WE ONLY HAVE ONE VALUE, no commaseparted here
-                        int intConditionValue;
-                        int.TryParse(condition.Values, out intConditionValue);
+						if (result == ValueCompare.LessThan || result == ValueCompare.Equal)
+						{
+							showText = true;
+							continue;
+						}
+						else
+						{
+							return new ConditionResult
+							{
+								Show = false
+							};
+						}
+					}
+					else if (condition.Operator.ToLower() == "LargerThan".ToLower())
+					{
 
-                        if (intValue >= intConditionValue)
-                        {
-                            showText = true;
-                            continue;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //throw;
-                    //TODO?
-                    return false;
-                }
-            }
+						if (string.IsNullOrEmpty(value))
+						{
+							return new ConditionResult
+							{
+								Show = false
+							};
+						}
 
-            //If there are more than one conditions, all conditions must be fulfilled
-            return showText;
+						var comparableValue = TryParse(value);
+						var comparableConditionValue = TryParse(condition.Values);
+
+						if (comparableValue == null)
+							throw new ArgumentException("Parameter is not a comparable value", "value");
+						if (comparableConditionValue == null)
+							throw new ArgumentException("Parameter is not a comparable value", "comparableConditionValue");
+
+						var result = Compare(comparableValue, comparableConditionValue);
+
+						if (result == ValueCompare.GreaterThan)
+						{
+							showText = true;
+							continue;
+						}
+						else
+						{
+							return new ConditionResult
+							{
+								Show = false
+							};
+						}
+					}
+					else if (condition.Operator.ToLower() == "LargerThanOrEqual".ToLower())
+					{
+
+						if (string.IsNullOrEmpty(value))
+						{
+							return new ConditionResult
+							{
+								Show = false
+							};
+						}
+
+						var comparableValue = TryParse(value);
+						var comparableConditionValue = TryParse(condition.Values);
+
+						if (comparableValue == null)
+							throw new ArgumentException("Parameter is not a comparable value", "value");
+						if (comparableConditionValue == null)
+							throw new ArgumentException("Parameter is not a comparable value", "comparableConditionValue");
+
+						var result = Compare(comparableValue, comparableConditionValue);
+
+						if (result == ValueCompare.GreaterThan || result == ValueCompare.Equal)
+						{
+							showText = true;
+							continue;
+						}
+						else
+						{
+							return new ConditionResult
+							{
+								Show = false
+							};
+						}
+					}
+					else
+					{
+						return new ConditionResult
+						{
+							Show = false
+						};
+					}
+				}
+
+				catch (Exception ex)
+				{
+					return new ConditionResult
+					{
+						Show = false,
+						FieldException = new ConditionResultException("unkown", "unkown exception when running field condition")
+					};
+				}
+			}
+
+
+			//If there are more than one conditions, all conditions must be fulfilled
+			return new ConditionResult
+			{
+				Show = showText
+			};
         }
 
 
@@ -594,17 +718,41 @@ namespace DH.Helpdesk.Services.Services
             return caseDocumentConditions;
         }
 
-        //public Tuple<string, string,string> GetCaseDocumentTextConditions(int caseDocumentText_Id)
-        //{
-        //    //.Select(x => new Tuple<app_subjects, bool>(x, false)).ToList();
-        //    //.Select(x => new Tuple<>(x.Property_Name, x.Values, x.Operator>)
+		public ValueCompare Compare(IComparable a, IComparable b)
+		{
+			var comp = a.CompareTo(b);
 
-        //    Tuple<string, string, string> caseDocumentTextConditions = (Tuple<string, string, string>)_caseDocumentTextConditionRepository.GetCaseDocumentTextConditions(caseDocumentText_Id).Select(x => Tuple.Create(x.Property_Name,x.Values,x.Operator));
-        //    return caseDocumentTextConditions;
-        //}
+			return comp > 0 ? ValueCompare.GreaterThan :
+				comp == 0 ? ValueCompare.Equal :
+				ValueCompare.LessThan;
+		}
+
+		public IComparable TryParse(string value)
+		{
+			// TODO: Add support for other types and refactor
+			int compInt;
+			if (int.TryParse(value, out compInt))
+				return compInt;
+			DateTime compDate;
+			if (DateTime.TryParse(value, out compDate))
+				return compDate;
+
+			return null;
+			
+		}
 
 
-        public IEnumerable<CaseDocumentTextConditionModel> GetCaseDocumentTextConditions(int caseDocumentText_Id)
+		//public Tuple<string, string,string> GetCaseDocumentTextConditions(int caseDocumentText_Id)
+		//{
+		//    //.Select(x => new Tuple<app_subjects, bool>(x, false)).ToList();
+		//    //.Select(x => new Tuple<>(x.Property_Name, x.Values, x.Operator>)
+
+		//    Tuple<string, string, string> caseDocumentTextConditions = (Tuple<string, string, string>)_caseDocumentTextConditionRepository.GetCaseDocumentTextConditions(caseDocumentText_Id).Select(x => Tuple.Create(x.Property_Name,x.Values,x.Operator));
+		//    return caseDocumentTextConditions;
+		//}
+
+
+		public IEnumerable<CaseDocumentTextConditionModel> GetCaseDocumentTextConditions(int caseDocumentText_Id)
         {
             var caseDocumentTextConditions = _caseDocumentTextConditionRepository.GetCaseDocumentTextConditions(caseDocumentText_Id);
 

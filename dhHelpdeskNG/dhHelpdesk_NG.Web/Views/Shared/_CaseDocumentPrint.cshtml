@@ -1,5 +1,6 @@
 ﻿@model DH.Helpdesk.BusinessData.Models.CaseDocument.CaseDocumentModel
 @using DH.Helpdesk.Common.Extensions.String
+@using DH.Helpdesk.BusinessData.Models.CaseDocument
 @{
     Layout = null;
 
@@ -224,7 +225,7 @@
                     //TODO: OrderBy
                     //Check ParagraphType
 
-                    if (item.CaseDocumentParagraph.ParagraphType == 1)
+                    if (item.CaseDocumentParagraph.ParagraphType == (int)CaseDocumentParagraphType.Text)
                     {
                         <p style="text-align: justify;">
 
@@ -242,7 +243,7 @@
 
                     }
 
-                    if (item.CaseDocumentParagraph.ParagraphType == 2)
+                    if (item.CaseDocumentParagraph.ParagraphType == (int)CaseDocumentParagraphType.TableNumeric)
                     {
                         int nr = 1;
 
@@ -266,13 +267,13 @@
                         </table>
 
                     }
-                    if (item.CaseDocumentParagraph.ParagraphType == 3)
+                    if (item.CaseDocumentParagraph.ParagraphType == (int)CaseDocumentParagraphType.Logo)
                     {
                         <img src="~/img-profile/IKEA_logo_RGB_2.jpg" style="width:200px;" />
                     }
 
 
-                    if (item.CaseDocumentParagraph.ParagraphType == 4)
+                    if (item.CaseDocumentParagraph.ParagraphType == (int)CaseDocumentParagraphType.TableTwoColumns)
                     {
                         <table class="table-full-width table-two-colums">
                             @foreach (var paragraphText in item.CaseDocumentParagraph.CaseDocumentTexts.OrderBy(x => x.SortOrder))
