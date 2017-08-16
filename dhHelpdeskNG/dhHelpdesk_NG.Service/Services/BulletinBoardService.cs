@@ -96,8 +96,9 @@
                         query = query.RestrictByWorkingGroupsOnyRead(this.workContext);
                 }
 
-                query.GetByCustomer(customerId);
-             
+                //query.GetByCustomer(customerId);
+                query = query.Where(x => x.Customer_Id == customerId);
+
                 if (!string.IsNullOrEmpty(SearchBulletinBoards.SearchBbs))
                 {
                     query = query.Where(x => x.Text.Trim().ToLower().Contains(SearchBulletinBoards.SearchBbs.Trim().ToLower()));
