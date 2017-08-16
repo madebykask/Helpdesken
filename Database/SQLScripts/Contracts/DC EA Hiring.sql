@@ -1965,7 +1965,7 @@ DECLARE @dcHiringConSignGuid UNIQUEIDENTIFIER = 'f0682a33-53e2-4bd0-9a1c-5a57987
 	@dcHiringConSignName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@dcHiringConSignDescription NVARCHAR(MAX) = '',
 	@dcHiringConSignText NVARCHAR(MAX) = 'Yours sincerely<br>
-	<Reports to Line Manager><br>
+	<Reports To Line Manager><br>
 	<Position Title (Local Job Name) of Reports To Line Manager><br>
 	<strong>IKEA Distribution Services Australia Pty Ltd</strong>',
 	@dcHiringConSignHeadline NVARCHAR(MAX) = '',

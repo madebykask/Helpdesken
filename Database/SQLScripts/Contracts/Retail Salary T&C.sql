@@ -2409,7 +2409,7 @@ DECLARE @retSalTcConSignGuid UNIQUEIDENTIFIER = '2AC56CC7-5967-4FD2-81E5-77A5E1E
 	@retSalTcConSignName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@retSalTcConSignDescription NVARCHAR(MAX) = '',
 	@retSalTcConSignText NVARCHAR(MAX) = 'Yours sincerely<br>
-	<Reports to Line Manager><br>
+	<Reports To Line Manager><br>
 	<Position Title (Local Job Name) of Reports To Line Manager><br>
 	<strong>IKEA Pty Limited</strong>',
 	@retSalTcConSignHeadline NVARCHAR(MAX) = '',

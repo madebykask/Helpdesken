@@ -2167,7 +2167,7 @@ DECLARE @dcTcConSignGuid UNIQUEIDENTIFIER = '52d9e99f-a51f-4d02-9fac-c1523053ed6
 	@dcTcConSignName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@dcTcConSignDescription NVARCHAR(MAX) = '',
 	@dcTcConSignText NVARCHAR(MAX) = 'Yours sincerely<br>
-	<Reports to Line Manager><br>
+	<Reports To Line Manager><br>
 	<Position Title (Local Job Name) of Reports To Line Manager><br>
 	<strong>IKEA Distribution Services Australia Pty Ltd</strong>',
 	@dcTcConSignHeadline NVARCHAR(MAX) = '',

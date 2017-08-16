@@ -1611,7 +1611,7 @@ DECLARE @dcSalHirConSignGuid UNIQUEIDENTIFIER = 'FA6C49A6-4483-4C23-913A-45D1595
 	@dcSalHirConSignName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@dcSalHirConSignDescription NVARCHAR(MAX) = '',
 	@dcSalHirConSignText NVARCHAR(MAX) = 'Yours sincerely<br>
-	<Reports to Line Manager><br>
+	<Reports To Line Manager><br>
 	<Position Title (Local Job Name) of Reports To Line Manager><br>
 	<strong>IKEA Distribution Services Australia Pty Ltd</strong>',
 	@dcSalHirConSignHeadline NVARCHAR(MAX) = '',

@@ -1672,7 +1672,7 @@ DECLARE @dcSalTcConSignGuid UNIQUEIDENTIFIER = '877E3C5B-141B-46E2-9A56-B1259817
 	@dcSalTcConSignName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@dcSalTcConSignDescription NVARCHAR(MAX) = '',
 	@dcSalTcConSignText NVARCHAR(MAX) = 'Yours sincerely<br>
-	<Reports to Line Manager><br>
+	<Reports To Line Manager><br>
 	<Position Title (Local Job Name) of Reports To Line Manager><br>
 	<strong>IKEA Distribution Services Australia Pty Ltd</strong>',
 	@dcSalTcConSignHeadline NVARCHAR(MAX) = '',
