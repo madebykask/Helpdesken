@@ -1732,13 +1732,13 @@ table th.thpointer {
 .nav-tabs > .notice > a,
 .nav-tabs > .notice > a:hover,
 .nav-tabs > .notice > a:focus {
-  color: red;
-  cursor: default;
-  background-color: transparent;
-  border: 1px solid #ddd;
-  border-bottom-color: transparent;
-  border-color: transparent;
-  font-weight:bold;
+  color: red !important;
+  cursor: default !important;
+  background-color: transparent !important;
+  border: 1px solid #ddd !important;
+  border-bottom-color: transparent !important;
+  border-color: transparent !important;
+  font-weight:bold !important;
 }
 
 
