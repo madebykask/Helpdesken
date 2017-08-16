@@ -1048,11 +1048,38 @@ BEGIN
 END
 
 DECLARE @dcSalHirTermsRemunRevAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsRemunRevAGuid)
+
 -- #################################### Confidential Information
 DECLARE @dcSalHirTermsConfGuid UNIQUEIDENTIFIER = '43928C15-8F1B-443B-98CD-E78E2241E2BF',
 	@dcSalHirTermsConfName NVARCHAR(MAX) = @prefix + ' Confidential Information',
 	@dcSalHirTermsConfDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsConfText NVARCHAR(MAX) = '',
+	@dcSalHirTermsConfText NVARCHAR(MAX) = 'In the course of your employment, you may be exposed to “Confidential Information” concerning IKEA. Confidential Information means any information obtained by you in the course of your employment, including:<br>
+<br>
+<ul>
+<li>trade secrets;</li>
+<li>technical information and technical drawings;</li>
+<li>commercial information about IKEA and persons with whom IKEA deals;</li>
+<li>Product and market information;</li>
+<li>this letter of appointment;</li>
+<li>any information marked “confidential” or which IKEA informs you is confidential or a trade secret; and</li>
+<li>co-worker and customer personal details;</li>
+</ul>
+<br>
+but excluding:
+<ul>
+<li>information available to the public; and</li>
+<li>information which you can prove you lawfully possessed before obtaining it in the course of your employment (other than this letter of appointment)</li>
+</ul>
+<br>
+During and after your employment, you must not use or disclose Confidential Information to any person (including an employee of IKEA) other than:
+<ul>
+<li>to perform your duties;</li>
+<li>if IKEA has consented in writing; or</li>
+<li>if required by law.  </li>
+</ul>
+<br>
+
+As an IKEA co-worker, you must keep Confidential Information in a secure manner and treat such information with appropriate sensitivity.  On demand by IKEA and at the end of your employment, you must deliver to IKEA all copies of Confidential Information in your possession or control (including all Confidential Information held electronically in any medium) and then delete all Confidential Information held electronically in any medium in your possession or control.',
 	@dcSalHirTermsConfHeadline NVARCHAR(MAX) = 'Confidential Information',
 	@dcSalHirTermsConfSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
