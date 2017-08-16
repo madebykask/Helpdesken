@@ -215,7 +215,7 @@ END
 DECLARE @dcHiringEmployGreetingTextAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcHiringEmployGreetingTextAGuid)
 
 -- Create condition for Text A, Full time
-DECLARE @dcHiringEmployGreetingTextACondAGuid UNIQUEIDENTIFIER = '1cce66c3-03eb-47b4-8928-e53489ec6c3e',
+DECLARE @dcHiringEmployGreetingTextACondAGuid UNIQUEIDENTIFIER = '2247139F-6294-4CAB-BF62-5C2F828DAC77',
 	@dcHiringEmployGreetingTextACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractedHours',
 	@dcHiringEmployGreetingTextACondAOperator NVARCHAR(MAX) = 'Equal',
 	@dcHiringEmployGreetingTextACondAValues NVARCHAR(MAX) = '76',
@@ -266,7 +266,7 @@ BEGIN
 END
 
 ---- Create or update text B, Part Time
-DECLARE @dcHiringEmployGreetingTextBGuid UNIQUEIDENTIFIER = '0df6a940-6107-48aa-8ac0-369b40620bdf',
+DECLARE @dcHiringEmployGreetingTextBGuid UNIQUEIDENTIFIER = '6F56B42A-A052-4B98-A438-ECA5C30E0A3E',
 	@dcHiringEmployGreetingTextBName NVARCHAR(MAX) = @prefix + ' Greeting, part time',
 	@dcHiringEmployGreetingTextBDescription NVARCHAR(MAX) = '',
 	@dcHiringEmployGreetingTextBText NVARCHAR(MAX) = 'We are delighted to confirm that your application for the position of Part Time <Position Title (Local Job Name)> <Shift Type> Shift has been successful, and wish to confirm the terms and conditions of your employment.',

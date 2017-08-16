@@ -81,7 +81,7 @@ VALUES(15, 'Change Terms & Conditions', '<Change Valid To>', 'tabs.ServiceReques
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
 VALUES(15, 'Change Terms & Conditions', '<Contracted Hours>', 'tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditions.instances[0].controls.ContractedHours', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(15, 'Change Terms & Conditions', '<Position Title (Local Job Name) of Reports To Line Manager>', 'tabs.OrganisationalAssignment.sections.STD_S_OrganisationHiring.instances[0].controls.ReportsToLineManagerPositionTitle', NULL)
+VALUES(15, 'Change Terms & Conditions', '<Position Title (Local Job Name) of Reports To Line Manager>', 'tabs.OrganisationalAssignment.sections.STD_S_OrganisationChange.instances[0].controls.ReportsToLineManagerPositionTitle', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
 VALUES(15, 'Change Terms & Conditions', '<Position Title (Local Job Name)>', 'tabs.OrganisationalAssignment.sections.STD_S_JobChange.instances[0].controls.PositionTitleLocalJobName', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)

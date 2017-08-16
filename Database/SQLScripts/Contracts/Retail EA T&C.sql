@@ -114,7 +114,7 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @retTcHeaderTextAGuid
 END
 ---- Create or update text B. Co-worker info
-DECLARE @retTcHeaderTextBGuid UNIQUEIDENTIFIER = 'F9DFA613-9D0B-4C06-AB14-6577DA9184DC',
+DECLARE @retTcHeaderTextBGuid UNIQUEIDENTIFIER = 'E2C02758-DF4A-45FF-9CBD-C657E0F41F6A',
 	@retTcHeaderTextBName NVARCHAR(MAX) = @prefix + ' Header, Co-worker',
 	@retTcHeaderTextBDescription NVARCHAR(MAX) = '',
 	@retTcHeaderTextBText NVARCHAR(MAX) = '<p><Todays Date - Long></p>

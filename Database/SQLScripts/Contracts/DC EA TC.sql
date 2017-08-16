@@ -1053,7 +1053,7 @@ END
 DECLARE @dcTcTermsProbID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcTcTermsProbTimeGuid)
 
 -- Create condition for probation period 
-DECLARE @dcTcTermsProbCondGuid UNIQUEIDENTIFIER = '32ab33cf-2f93-4bf5-a371-978fe20f3ed3',
+DECLARE @dcTcTermsProbCondGuid UNIQUEIDENTIFIER = 'a27f3ef6-e1f9-427c-986d-41d291117d3c',
 	@dcTcTermsProbCondPropertyName NVARCHAR(MAX) = 'extendedcase_ProbationPeriod',
 	@dcTcTermsProbCondOperator NVARCHAR(MAX) = 'Equal',
 	@dcTcTermsProbCondValues NVARCHAR(MAX) = 'Yes',
@@ -1759,7 +1759,7 @@ END
 DECLARE @dcTcTermsPerfAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcTcTermsPerfAGuid)
 
 -- Create condition for probation period 
-DECLARE @dcTcTermsPerfACondGuid UNIQUEIDENTIFIER = '32ab33cf-2f93-4bf5-a371-978fe20f3ed3',
+DECLARE @dcTcTermsPerfACondGuid UNIQUEIDENTIFIER = '8f418d6a-7b32-451a-bede-053056e838a1',
 	@dcTcTermsPerfACondPropertyName NVARCHAR(MAX) = 'extendedcase_ProbationPeriod',
 	@dcTcTermsPerfACondOperator NVARCHAR(MAX) = 'Equal',
 	@dcTcTermsPerfACondValues NVARCHAR(MAX) = 'Yes',

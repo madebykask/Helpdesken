@@ -1930,7 +1930,114 @@ begin /* Paragraph - FOOTER*/
 	end
 
 end /* Paragraph - FOOTER */
+begin /* Paragraph - FOOTER with Initials*/
+	
+	
+	set @CaseDocumentParagraphGUID = 'A7626F89-C428-475C-8E10-160CCE0F2B5D'
+	set @CaseDocumentParagraphName = 'AU - FOOTER Initial'
 
+	if not exists(select * from tblCaseDocumentParagraph where CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID)
+	begin
+
+		INSERT INTO [dbo].[tblCaseDocumentParagraph]
+				   ([Name]
+				   ,[Description]
+				   ,[ParagraphType]
+				   ,CaseDocumentParagraphGUID)
+			 VALUES
+				   (@CaseDocumentParagraphName
+				   ,'Footer section with initials'
+				   ,@ParagraphTypeFooter
+				   ,@CaseDocumentParagraphGUID
+				   )
+
+	end
+	else
+	begin
+		
+		update [tblCaseDocumentParagraph] set
+		[Name] = @CaseDocumentParagraphName,
+		[ParagraphType] = @ParagraphTypeFooter
+
+		where CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID
+	end
+
+	select @CaseDocumentParagraph_Id = Id from tblCaseDocumentParagraph where  CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID
+
+		begin /* Text - Footer with intial */
+
+		set @CaseDocumentTextGUID = '8D7DFEFF-F5DB-4A57-985B-AE22FDB85C76'
+		set @CaseDocumentTextName  = 'Text - Footer initial'
+		set @TextSortOrder = 1
+	
+
+		set @Text = 
+		'<!DOCTYPE html>
+<html>
+	<head></head>
+	<body style="text-align:center !important; width:100%;">
+		<p style="color:#ccc; font-size:16px; font-family:Verdana !important;">
+			<strong>Confidential</strong>
+			<br />
+			Contract with <Co-worker First Name> <Co-worker Last Name> dated <Todays Date - Short>
+			<br />
+			Initials: _____
+		</p>
+	</body>
+</html>'
+	
+		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
+		begin
+
+			INSERT INTO [dbo].[tblCaseDocumentText]
+					   ([CaseDocumentParagraph_Id]
+					   ,[Name]
+					   ,[Description]
+					   ,[Text]
+					   ,[Headline]
+					   ,[SortOrder]
+					   ,CaseDocumentTextGUID)
+				 VALUES
+					   (@CaseDocumentParagraph_Id
+					   ,@CaseDocumentTextName
+					   ,''
+					   ,@Text
+					   ,''
+					   ,@TextSortOrder
+					   ,@CaseDocumentTextGUID)
+		end
+		else
+		begin
+
+			update [tblCaseDocumentText] set
+			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
+			[Name] = @CaseDocumentTextName,
+			[Text] = @Text,
+			[SortOrder] = @TextSortOrder
+			where CaseDocumentTextGUID = @CaseDocumentTextGUID
+		end
+
+	end /* Text - CompanyText */
+
+
+	
+	--CONNNECT PARAGRAPH WITH DOCUMENT
+
+	set @SortOrder = 0
+	if not exists(select * from tblCaseDocument_CaseDocumentParagraph where CaseDocument_id = @CaseDocumentId and CaseDocumentParagraph_Id = @CaseDocumentParagraph_Id)
+	begin
+
+		
+		insert into tblCaseDocument_CaseDocumentParagraph
+		(CaseDocument_id, CaseDocumentParagraph_Id, SortOrder)
+		VALUES (@CaseDocumentId, @CaseDocumentParagraph_Id,@SortOrder)
+
+	end
+	begin
+		update tblCaseDocument_CaseDocumentParagraph set SortOrder = @SortOrder where CaseDocument_id = @CaseDocumentId and CaseDocumentParagraph_Id = @CaseDocumentParagraph_Id 
+	end
+
+end /* Paragraph - FOOTER with Initials*/
 
 begin /* Paragraph - DRAFT*/
 	
