@@ -16,10 +16,14 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.BusinessData.Models.User.Input;
+    using System.Data;
+    using System.Configuration;
+    using System.Data.SqlClient;
 
     public interface ICaseSolutionService
     {
         IList<CaseSolution> GetCaseSolutions(int customerId);
+        IList<Application> GetAllApplications(int customerId);
         IList<CaseSolutionCategory> GetCaseSolutionCategories(int customerId);
         IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch SearchCaseSolutions, bool isFirstNamePresentation);
 
@@ -38,10 +42,13 @@ namespace DH.Helpdesk.Services.Services
         void SaveEmptyForm(Guid formGuid, int caseId);
         void Commit();
         IList<WorkflowStepModel> GetGetWorkflowSteps(int customerId, Case _case, UserOverview user, ApplicationType applicationType, int? templateId);
+
+
     }
 
     public class CaseSolutionService : ICaseSolutionService
     {
+        private readonly IApplicationRepository _applicationRepository;
         private readonly ICaseSolutionRepository _caseSolutionRepository;
         private readonly ICaseSolutionCategoryRepository _caseSolutionCategoryRepository;
         private readonly ICaseSolutionScheduleRepository _caseSolutionScheduleRepository;
@@ -72,7 +79,8 @@ namespace DH.Helpdesk.Services.Services
             ICacheProvider cache,
             IWorkingGroupService workingGroupService,
             ICaseSolutionConditionService caseSolutionCondtionService,
-            IStateSecondaryService stateSecondaryService
+            IStateSecondaryService stateSecondaryService,
+            IApplicationRepository applicationRepository
             )
         {
             this._caseSolutionRepository = caseSolutionRepository;
@@ -89,6 +97,7 @@ namespace DH.Helpdesk.Services.Services
             this._caseSolutionConditionService = caseSolutionCondtionService;
             this.caseSolutionConditionRepository = caseSolutionConditionRepository;
             this._stateSecondaryService = stateSecondaryService;
+            this._applicationRepository = applicationRepository;
         }
 
         //public int GetAntal(int customerId, int userid)
@@ -207,6 +216,52 @@ namespace DH.Helpdesk.Services.Services
             return this._caseSolutionRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
+        public IList<Application> GetAllApplications(int customerId)
+        {
+            string sql = string.Empty;
+            sql = "SELECT * FROM tblApplicationType  ";//WHERE Customer_Id= " + customerId + "";
+            string ConnectionStringExt = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+            DataTable dtExt = null;
+
+            using (var connectionExt = new SqlConnection(ConnectionStringExt))
+            {
+                if (connectionExt.State == ConnectionState.Closed)
+                {
+                    connectionExt.Open();
+                }
+                using (var commandExt = new SqlCommand { Connection = connectionExt, CommandType = CommandType.StoredProcedure, CommandTimeout = 0 })
+                {
+                    commandExt.CommandType = CommandType.Text;
+                    commandExt.CommandText = sql;
+                    var reader = commandExt.ExecuteReader();
+                    dtExt = new DataTable();
+                    dtExt.Load(reader);
+
+                }
+            }
+
+            List<Application> lapp = new List<Application>();
+
+            foreach (DataRow rowExt in dtExt.Rows)
+            {
+                Application a = new Application();
+
+                if (rowExt["Id"].ToString() != null)
+                {
+                    a.Id = Convert.ToInt32(rowExt["Id"].ToString());
+                }
+                if (rowExt["ApplicationType"].ToString() != null)
+                {
+                    a.Name = Convert.ToString(rowExt["ApplicationType"].ToString());
+                }
+
+                lapp.Add(a);
+            }
+
+            return lapp;
+            //return this._applicationRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+        }
+
         public IList<WorkflowStepModel> GetGetWorkflowSteps(int customerId, Case _case, UserOverview user, ApplicationType applicationType, int? templateId)
         {
             var templates = GetCaseSolutions(customerId).Where(c => c.Status != 0 && c.ConnectedButton == 0).Select(c => new WorkflowStepModel()
@@ -259,7 +314,7 @@ namespace DH.Helpdesk.Services.Services
                         var workingGroups = this._workingGroupService.GetWorkingGroups(customerId, user.Id);
                         bool wgShowWorkflowStep = false;
 
-                      //  conditionKey = conditionKey.Replace("user_workinggroup", "");
+                        //  conditionKey = conditionKey.Replace("user_workinggroup", "");
 
                         string[] conditionValues = conditionValue.Split(',').Select(sValue => sValue.Trim()).ToArray();
 
@@ -393,6 +448,138 @@ namespace DH.Helpdesk.Services.Services
             if (SearchCaseSolutions.CategoryIds != null && SearchCaseSolutions.CategoryIds.Any())
             {
                 query = query.Where(x => x.CaseSolutionCategory_Id.HasValue && SearchCaseSolutions.CategoryIds.Contains(x.CaseSolutionCategory_Id.Value));
+            }
+
+
+            if (SearchCaseSolutions.OnlyActive == true)
+            {
+                query = query.Where(x => x.Status == 1);
+
+            }
+            else
+            {
+                query = query.Where(x => x.Status == 1 | x.Status == 0);
+            }
+
+            //Sub status
+            if (SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.SubStatusIds.Any())
+            {
+
+                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
+                         select cs);
+
+                var res = from cust in query
+                          join so in q on cust.Id equals so.CaseSolution_Id
+                          where SearchCaseSolutions.SubStatusIds.Contains(so.Values)
+                          select cust;
+
+                query = res;
+
+
+
+
+            }
+
+            //Working group
+            if (SearchCaseSolutions.WgroupIds != null && SearchCaseSolutions.WgroupIds.Any())
+            {
+                //query = query.Where(x => x.WorkingGroup_Id.HasValue && SearchCaseSolutions.WgroupIds.Contains(x.WorkingGroup_Id.Value));
+
+                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
+                         select cs);
+
+                var res = from cust in query
+                          join so in q on cust.Id equals so.CaseSolution_Id
+                          where SearchCaseSolutions.WgroupIds.Contains(so.Values)
+                          select cust;
+
+                query = res;
+
+            }
+
+            //Priority
+            if (SearchCaseSolutions.PriorityIds != null && SearchCaseSolutions.PriorityIds.Any())
+            {
+                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
+                         select cs);
+
+                var res = from cust in query
+                          join so in q on cust.Id equals so.CaseSolution_Id
+                          where SearchCaseSolutions.PriorityIds.Contains(so.Values)
+                          select cust;
+
+                query = res;
+            }
+
+            //Status
+            if (SearchCaseSolutions.StatusIds != null && SearchCaseSolutions.StatusIds.Any())
+            {
+
+                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
+                         select cs);
+
+                var res = from cust in query
+                          join so in q on cust.Id equals so.CaseSolution_Id
+                          where SearchCaseSolutions.StatusIds.Contains(so.Values)
+                          select cust;
+
+                query = res;
+            }
+
+            //ProductArea
+            if (SearchCaseSolutions.ProductAreaIds != null && SearchCaseSolutions.ProductAreaIds.Any())
+            {
+                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
+                         select cs);
+
+                var res = from cust in query
+                          join so in q on cust.Id equals so.CaseSolution_Id
+                          where SearchCaseSolutions.ProductAreaIds.Contains(so.Values)
+                          select cust;
+
+                query = res;
+            }
+
+            //UserWGroup, ????????????
+            if (SearchCaseSolutions.UserWGroupIds != null && SearchCaseSolutions.UserWGroupIds.Any())
+            {
+                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
+                         select cs);
+
+                var res = from cust in query
+                          join so in q on cust.Id equals so.CaseSolution_Id
+                          where SearchCaseSolutions.UserWGroupIds.Contains(so.Values)
+                          select cust;
+
+                query = res;
+            }
+
+            //TemplateProduct, ????????????
+            if (SearchCaseSolutions.TemplateProductAreaIds != null && SearchCaseSolutions.TemplateProductAreaIds.Any())
+            {
+                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
+                         select cs);
+
+                var res = from cust in query
+                          join so in q on cust.Id equals so.CaseSolution_Id
+                          where SearchCaseSolutions.TemplateProductAreaIds.Contains(so.Values)
+                          select cust;
+
+                query = res;
+            }
+
+            //Application, ????????????
+            if (SearchCaseSolutions.ApplicationIds != null && SearchCaseSolutions.ApplicationIds.Any())
+            {
+                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
+                         select cs);
+
+                var res = from cust in query
+                          join so in q on cust.Id equals so.CaseSolution_Id
+                          where SearchCaseSolutions.ApplicationIds.Contains(so.Values)
+                          select cust;
+
+                query = res;
             }
 
             #endregion
@@ -693,7 +880,7 @@ namespace DH.Helpdesk.Services.Services
             if (caseSolutionConditions == null)
             {
                 caseSolutionConditions = _caseSolutionConditionRepository.GetCaseSolutionConditions(caseSolution_Id).Select(x => new { x.Property_Name, x.Values }).ToDictionary(x => x.Property_Name, x => x.Values);
-                
+
                 if (caseSolutionConditions.Any())
                     this._cache.Set(string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionConditionWithId, caseSolution_Id), caseSolutionConditions, DH.Helpdesk.Common.Constants.Cache.Duration);
             }

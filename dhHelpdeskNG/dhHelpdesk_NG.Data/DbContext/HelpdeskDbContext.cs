@@ -110,6 +110,12 @@
 
         public DbSet<CaseFieldSetting> CaseFieldSettings { get; set; }
 
+        public DbSet<CaseSection> CaseSections { get; set; }
+
+        public DbSet<CaseSectionLanguage> CaseSectionLanguages { get; set; }
+
+        public DbSet<CaseSectionField> CaseSectionFields { get; set; }
+
         public DbSet<CaseFile> CaseFiles { get; set; }
 
         public DbSet<CaseFilterFavoriteEntity> CaseFilterFavorite { get; set; }
@@ -335,6 +341,8 @@
         public DbSet<LogicalDrive> LogicalDrives { get; set; }
 
         public DbSet<LogFile> LogFiles { get; set; }
+
+        public DbSet<LogFileExisting> LogFilesExisting { get; set; }
 
         public DbSet<LogProgramEntity> LogPrograms { get; set; }
 
@@ -660,6 +668,9 @@
             modelBuilder.Configurations.Add(new CaseStatisticConfiguration());
             modelBuilder.Configurations.Add(new CaseFollowUpConfiguration());
             modelBuilder.Configurations.Add(new CaseExtraFollowerConfiguration());
+            modelBuilder.Configurations.Add(new CaseSectionsConfiguration());
+            modelBuilder.Configurations.Add(new CaseSectionsLanguageConfiguration());
+            modelBuilder.Configurations.Add(new CaseSectionFieldConfiguration());
 
             modelBuilder.Configurations.Add(new CaseInvoiceRowConfiguration());
             modelBuilder.Configurations.Add(new CaseIsAboutConfiguration());
@@ -736,6 +747,7 @@
             modelBuilder.Configurations.Add(new LinkGroupConfiguration());            
             modelBuilder.Configurations.Add(new LogConfiguration());
             modelBuilder.Configurations.Add(new LogFileConfiguration());
+            modelBuilder.Configurations.Add(new LogFileExistingConfiguration());
             modelBuilder.Configurations.Add(new LogProgramConfiguration());
             modelBuilder.Configurations.Add(new Mail2TicketConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateConfiguration());

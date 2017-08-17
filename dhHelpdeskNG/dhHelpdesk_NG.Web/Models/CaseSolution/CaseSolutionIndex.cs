@@ -25,6 +25,11 @@
 
         public int SortOrder { get; set; }
 
+        public string CaseSolutionDescription { get; set; }
+
+        public bool IsShowOnlyActive { get; set; }
+
+        public string ImageClass { get; set; }
     }
 
     public static class CaseSolutionRowIndexMapper
@@ -79,6 +84,8 @@
 
         public string SearchCss { get; set; }
 
+        
+
         public CaseSolution CaseSolution { get; set; }
 
         public IEnumerable<CaseSolution> CSolutions { get; set; }
@@ -88,5 +95,22 @@
         public IList<CaseSolutionCategory> CaseSolutionCategories { get; set; }
 
         public string ActiveTab { get; set; }
+
+
+        public IList<Status> CaseSolutionStatuses { get; set; }
+
+        public IList<WorkingGroupEntity> CaseSolutionWGroup { get; set; }
+
+        public IList<Priority> CaseSolutionPriorities { get; set; }
+
+        public IList<StateSecondary> CaseSolutionSubStatus { get; set; }
+
+        public IList<ProductArea> CaseSolutionProductArea { get; set; }
+
+        public IList<WorkingGroupEntity> CaseSolutionUserWGroup { get; set; }
+
+        public IList<ProductArea> CaseSolutionCTemplateProductArea { get; set; }
+
+        public IList<Application> CaseSolutionApplication { get; set; }
     }
 }

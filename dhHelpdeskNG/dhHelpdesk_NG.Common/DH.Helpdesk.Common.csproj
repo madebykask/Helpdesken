@@ -63,6 +63,7 @@
     </Compile>
     <Compile Include="Collections\INamedObject.cs" />
     <Compile Include="Collections\NamedObjectCollection.cs" />
+    <Compile Include="Constants\CaseSections.cs" />
     <Compile Include="Constants\Shared.cs" />
     <Compile Include="Constants\DataTypeValue.cs" />
     <Compile Include="Constants\BRConstItem.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Enums\BusinessRules\BRActionParamType.cs" />
     <Compile Include="Enums\CaseSolution\CaseSolutionLocationShow.cs" />
     <Compile Include="Enums\Cases\CaseListTypes.cs" />
+    <Compile Include="Enums\Cases\CaseSectionType.cs" />
     <Compile Include="Enums\Cases\FieldTypes.cs" />
     <Compile Include="Enums\CircularStateId.cs" />
     <Compile Include="Enums\ActionObject.cs" />

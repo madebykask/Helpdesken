@@ -126,7 +126,9 @@ namespace DH.Helpdesk.Domain
         public virtual List<ExtendedCaseEntity.ExtendedCaseFormEntity> ExtendedCaseForms { get; set; }
 
 
-		public virtual CaseSolution SplitToCaseSolution { get; set; }
-        
+	public virtual CaseSolution SplitToCaseSolution { get; set; }
+        public string CaseSolutionDescription { get; set; }
+
+
     }
 }

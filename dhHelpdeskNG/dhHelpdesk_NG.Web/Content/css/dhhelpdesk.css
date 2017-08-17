@@ -2945,6 +2945,14 @@ body.login {
   text-align: center;
 }
 
+.modal-body-left {
+  position: relative;
+  max-height: 400px;
+  padding: 15px;
+  overflow-y: auto;
+  text-align: left;
+}
+
 .modal-footer {
   padding: 5px 15px 5px;
   margin-bottom: 0;
@@ -2959,9 +2967,27 @@ body.login {
      -moz-box-shadow: inset 0 1px 0 #ffffff;
           box-shadow: inset 0 1px 0 #ffffff;
 }
+
+.modal-footer-right {
+  padding: 5px 15px 5px;
+  margin-bottom: 0;
+  text-align: right;
+  background-color: #ffffff;
+  border-top: 1px solid #ddd;
+  -webkit-border-radius: 0 0 6px 6px;
+     -moz-border-radius: 0 0 6px 6px;
+          border-radius: 0 0 6px 6px;
+  *zoom: 1;
+  -webkit-box-shadow: inset 0 1px 0 #ffffff;
+     -moz-box-shadow: inset 0 1px 0 #ffffff;
+          box-shadow: inset 0 1px 0 #ffffff;
+}
 .modal-backdrop {
   z-index: 10400;
 }
+
+
+
 .infop
 {
 	margin: 20px;
@@ -3535,51 +3561,57 @@ div.DTFC_LeftFootWrapper table {
 
 
 /**TEMPORARY SOLUTION****/
- .newmode .hidebtn, .newmode .showbtn {
+.newmode .hidebtn {
+    display: inline-block;
+}
+
+.newmode .showbtn {
     display: none;
+}
+
+.newmode .hideshow .showbtn {
+    display: inline-block;
+}
+
+.newmode .hideshow .hidebtn {
+    display: none;
+}
+
+.newmode .hideshow {
+    height:35px; overflow:hidden;
+}
+
+.newmode .hideshow .displaytr {
+    display: none;
+}
+
+.hidefollowers {
+    position: inherit !important;
 }
 
 .editmode .showbtn {
     display: none;
 }
+
+.editmode .hidebtn {
+    display: inline-block;
+}
+
 .editmode .hideshow .showbtn
  {
-    display: none;
+    display: inline-block;
 }
 .editmode .hideshow .hidebtn {
     display: none;
 }
+.editmode .hideshow {
+    height:35px; overflow:hidden;
+}
+
 .editmode .hideshow .displaytr {
-    /*display: none;*/
-}
-
-/**HIDE SHOW REGARDING*******/
-
-.editmode .hideshowregarding .caselogoverflow {
-    height:300px; overflow:auto;
-}
-.editmode .hideshowregarding .showbtn
- {
-    display: inline-block;
-}
-.editmode .hideshowregarding .hidebtn,
-.editmode .hideshowregarding .displaytr {
     display: none;
 }
 
-/**HIDE SHOW COMPUTER INFO*******/
-
-.editmode .hideshowcomputer .caselogoverflow {
-    height:300px; overflow:auto;
-}
-.editmode .hideshowcomputer .showbtn
- {
-    display: inline-block;
-}
-.editmode .hideshowcomputer .hidebtn,
-.editmode .hideshowcomputer .displaytr {
-    display: none;
-}
 /*****END TEMPORARY SOLUTION******/
  /*.newmode .hidebtn, .newmode .showbtn {
     display: none;
@@ -4037,4 +4069,42 @@ a.export-order {
 .toplabel {
     padding: 5px 5px 0px 10px;
     word-wrap: break-word;
+}
+
+.tableth1 {
+    width: 2%;
+}
+.tableth2 {
+    width: 9%;
+}
+.tableth3 {
+    width: 5%;
+}
+.tableth4 {
+    width: 8%;
+}
+.tableth5 {
+    width: 20%;
+}
+.tableth6 {
+    width: 8%;
+}
+.tableth7 {
+    width: 7%;
+}
+.tableth8 {
+    width: 20%;
+}
+.tableth9 {
+    width: 20%;
+}
+
+td > div.checkbox.commun {
+    line-height: 20px;
+    padding-left: 40px;
+}
+
+.attachedFile {
+    background-image: url(../icons/clip.png);
+    background-position: 2px 1px;
 }

@@ -1,0 +1,40 @@
+﻿
+@using DH.Helpdesk.Web
+@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
+
+@Scripts.Render(BundleConfig.ScriptNames.CaseAttachExistingFiles)
+
+<div id="case_attach_ex_file_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h5>@Translation.GetCoreTextTranslation("Bifogade filer")</h5>
+            </div>
+            <div class="">
+                <table class="table-striped table-bordered table-hover" style="width: 100%" id="table_attached_files">
+                        @foreach (var file in Model.CaseAttachedExFiles)
+                        {
+                            <tr>
+                                <td style="padding: 3px;">
+                                    <div class="checkbox commun">
+                                        <input type="hidden" id="isCaseFile" value="@file.IsCaseFile.ToString()"/>
+                                        @if (!file.IsCaseFile)
+                                        {
+                                            <input type="hidden" id="file_logId" value="@file.LogId" />
+                                        }
+                                        <input type="checkbox" value="@file.Id" />
+                                        <span class="lbl">@file.FileName</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                </table>
+            </div>
+            <div class="modal-footer-right">
+                <button type="button" id="btnAttach" class="btn btn-ok btn-default" data-dismiss="modal">@Translation.GetCoreTextTranslation("Bifoga")</button>
+                <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.GetCoreTextTranslation("Avbryt")</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -171,6 +171,7 @@
             this.Property(x => x.ShortDescription).IsOptional().HasMaxLength(100);
             this.Property(x => x.Information).IsOptional();
             this.Property(x => x.DefaultTab).IsRequired().HasMaxLength(100);
+            this.Property(x => x.CaseSolutionDescription).IsOptional();
             this.Property(x => x.ValidateOnChange).IsOptional().HasMaxLength(100);
 
             this.ToTable("tblcasesolution");

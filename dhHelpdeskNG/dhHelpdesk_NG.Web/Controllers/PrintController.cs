@@ -298,12 +298,15 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 caseModel.Change = this.changeService.GetChangeOverview(caseModel.ChangeId.Value);
             }
-
+            var files = caseFileService.FindFileNamesByCaseId(caseId).Select(x => new LogFileModel
+            {
+                Name = x
+            }).ToList();
             var model = new CasePrintModel()
                         {
                             CustomerId = customerId,
                             Case = caseModel,
-                            CaseFilesModel = new FilesModel(caseId.ToString(CultureInfo.InvariantCulture), this.caseFileService.FindFileNamesByCaseId(caseId), false),
+                            CaseFilesModel = new FilesModel(caseId.ToString(CultureInfo.InvariantCulture), files, false),
                             CaseFieldSettings = fields,
                             CaseLog = this.logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty),
                             FinishingCauses = this.finishingCauseService.GetFinishingCauses(customerId),

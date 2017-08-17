@@ -178,14 +178,18 @@ namespace DH.Helpdesk.BusinessData.Models.Logs.Output
 
     public class LogFileOverview
     {
-        public LogFileOverview(int id, string fileName)
+        public LogFileOverview(int id, string fileName, int? caseId = null, int? logId = null)
         {
             Id = id;
             FileName = fileName;
+            CaseId = caseId;
+            LogId = logId;
         }
 
         public int Id { get; }
         public string FileName { get;  }
+        public int? CaseId { get; set; }
+        public int? LogId { get; set; }
     }
 
     public class LogUserOverview : IUserInfo

@@ -132,7 +132,16 @@
                                     };
                                     return JSON.stringify(aItem);
                                 });
-                            searchSelected = resultList.length > 0;
+                            if (resultList.length > 0) {
+                                searchSelected = true;
+                            }
+                            else {
+                                var noRes = {
+                                    name: window.parameters.noResultLabel,
+                                    isNoResult: true
+                                }
+                                resultList.push(JSON.stringify(noRes));
+                            }
                             return process(resultList);
                         }
                     });
@@ -144,6 +153,9 @@
                 var item = JSON.parse(obj);
                 var tquery = getSimpleQuery(this.query);
                 if (!tquery) return false;
+                if (~item.isNoResult) {
+                    return 1;
+                }
                 if (~item.email && (item.groupType === 0 || item.groupType === 1)) {
                     return ~item.name.toLowerCase().indexOf(tquery.toLowerCase()) ||
                         ~item.name_family.toLowerCase().indexOf(tquery.toLowerCase()) ||
@@ -175,6 +187,9 @@
 
             highlighter: function (obj) {
                 var item = JSON.parse(obj);
+                if (item.isNoResult) {
+                    return item.name;
+                }
                 var grType = "";
                 if (item.groupType === 0)
                     grType = document.parameters.initLabel + ": ";
@@ -200,14 +215,17 @@
 
             updater: function (obj) {
                 var item = JSON.parse(obj);
-                var emailsToAdd = [];
-                $.each(item.email, function (index, value) {
-                    if (checkAndAddEmailsTo(value) === true)
-                        emailsToAdd.push(value);
-                });
-                mainFakeFollowersInput.html(getHtmlFromEmails(mainFollowersInput.val()));
-                popupFollowersInput.html(getHtmlFromEmails(mainFollowersInput.val()));
-                placeCaretAtEnd(this.$element);
+                if (!item.isNoResult) {
+                    var emailsToAdd = [];
+                    $.each(item.email,
+                        function(index, value) {
+                            if (checkAndAddEmailsTo(value) === true)
+                                emailsToAdd.push(value);
+                        });
+                    mainFakeFollowersInput.html(getHtmlFromEmails(mainFollowersInput.val()));
+                    popupFollowersInput.html(getHtmlFromEmails(mainFollowersInput.val()));
+                    placeCaretAtEnd(this.$element);
+                }
                 return;
             }
         };

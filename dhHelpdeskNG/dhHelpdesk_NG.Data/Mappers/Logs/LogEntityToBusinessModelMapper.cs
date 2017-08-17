@@ -50,7 +50,7 @@ namespace DH.Helpdesk.Dal.Mappers.Logs
 
                 LogFiles =
                     data.LogFiles.Where(e => e.Id.HasValue)
-                        .Select(t => new LogFileOverview(t.Id.Value, t.FileName))
+                        .Select(t => new LogFileOverview(t.Id.Value, t.FileName, t.CaseId, t.LogId))
                         .ToList(),
 
                 User = new LogUserOverview( (data.User != null && data.User.Id.HasValue ? data.User.Id.Value : 0) , data.User?.FirstName, data.User?.SurName)

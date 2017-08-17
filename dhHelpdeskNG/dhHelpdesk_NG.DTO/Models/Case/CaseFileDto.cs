@@ -45,6 +45,28 @@
             this.UserId = userId;
         }
 
+        public CaseFileDto(
+            string basePath,
+            string filename,
+            int referenceId,
+            bool isCaseFile)
+        {
+            if (string.IsNullOrEmpty(filename))
+            {
+                throw new ArgumentNullException("filename", "Value cannot be null or empty.");
+            }
+
+            if (referenceId <= 0)
+            {
+                throw new ArgumentOutOfRangeException("referenceId", "Must be more than zero.");
+            }
+            
+            this.BasePath = basePath;
+            this.FileName = filename;
+            this.ReferenceId = referenceId;
+            this.IsCaseFile = isCaseFile;
+        }
+
         public int Id { get; set; }
 
         public byte[] Content { get; private set; }
@@ -60,5 +82,7 @@
         public DateTime CreatedDate { get; private set; }
 
         public int? UserId { get; private set; }
+
+        public bool IsCaseFile { get; set; }
     }
 }

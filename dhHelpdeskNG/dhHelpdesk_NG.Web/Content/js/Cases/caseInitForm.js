@@ -271,8 +271,14 @@ function GetComputerUserSearchOptions() {
                                 
                         };
                         return JSON.stringify(aItem);
-                        
-                    });
+                   });
+                   if (resultList.length === 0) {
+                       var noRes = {
+                           name: window.parameters.noResultLabel,
+                           isNoResult: true
+                       }
+                       resultList.push(JSON.stringify(noRes));
+                   }
                     
                     return process(resultList);
                 }
@@ -281,6 +287,9 @@ function GetComputerUserSearchOptions() {
 
         matcher: function (obj) {            
             var item = JSON.parse(obj);
+            if (~item.isNoResult) {
+                return 1;
+            }
             //console.log(JSON.stringify(item));
             return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.name_family.toLowerCase().indexOf(this.query.toLowerCase())
@@ -292,18 +301,25 @@ function GetComputerUserSearchOptions() {
 
         sorter: function (items) {
             var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
-            while (aItem = items.shift()) {
-                var item = JSON.parse(aItem);
-                if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
-                else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
-                else caseInsensitive.push(JSON.stringify(item));
-            }
-
+                while (aItem = items.shift()) {
+                    var item = JSON.parse(aItem);
+                    if (!item.isNoResult) {
+                        if (!item.num
+                            .toLowerCase()
+                            .indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                        else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                        else caseInsensitive.push(JSON.stringify(item));
+                    }
+                    else caseInsensitive.push(JSON.stringify(item));
+                }
             return beginswith.concat(caseSensitive, caseInsensitive);
         },
 
         highlighter: function (obj) {
             var item = JSON.parse(obj);
+            if (item.isNoResult) {
+                return item.name;
+            }
             var orgQuery = this.query;
             if (item.departmentname == null)
                 item.departmentname = ""
@@ -324,48 +340,51 @@ function GetComputerUserSearchOptions() {
 
         updater: function (obj) {
             var item = JSON.parse(obj);
-            var departmentFilterFormat = $('#DepartmentFilterFormat').val();
-            
-            $('#case__ReportedBy').val(item.num);
-         
-            // Raise event about UserId changed.
-            $(document).trigger("OnUserIdChanged", [item.num]);
-            
-            if (item.name != "" && item.name != null)
-                $('#case__PersonsName').val(item.name);
+            if (!item.isNoResult) {
+                var departmentFilterFormat = $('#DepartmentFilterFormat').val();
 
-            if (item.email != "" && item.email != null)
-                $('#case__PersonsEmail').val(item.email);
-            
-            if (item.phone != null)
-                $('#case__PersonsPhone').val(item.phone);
+                $('#case__ReportedBy').val(item.num);
 
-            if (item.cellphone != null)
-                $('#case__PersonsCellphone').val(item.cellphone);
+                // Raise event about UserId changed.
+                $(document).trigger("OnUserIdChanged", [item.num]);
 
-            if (item.place != null)
-                $('#case__Place').val(item.place);
+                if (item.name != "" && item.name != null)
+                    $('#case__PersonsName').val(item.name);
 
-            if (item.usercode != null)
-                $('#case__UserCode').val(item.usercode);
+                if (item.email != "" && item.email != null)
+                    $('#case__PersonsEmail').val(item.email);
 
-            if (item.costcentre != null)
-                $('#case__CostCentre').val(item.costcentre);
-            
+                if (item.phone != null)
+                    $('#case__PersonsPhone').val(item.phone);
 
+                if (item.cellphone != null)
+                    $('#case__PersonsCellphone').val(item.cellphone);
 
-            if (item.regionid != "" && item.regionid != null) {
-                $('#case__Region_Id').val(item.regionid);
-                $('#RegionName').val(item.regionname);
+                if (item.place != null)
+                    $('#case__Place').val(item.place);
+
+                if (item.usercode != null)
+                    $('#case__UserCode').val(item.usercode);
+
+                if (item.costcentre != null)
+                    $('#case__CostCentre').val(item.costcentre);
+
+                if (item.regionid != "" && item.regionid != null) {
+                    $('#case__Region_Id').val(item.regionid);
+                    $('#RegionName').val(item.regionname);
+                }
+
+                if (item.regionid != "" &&
+                    item.regionid != null &&
+                    item.departmentid != "" &&
+                    item.departmentid != null) {
+                    //$(publicDepartmentControlName).val(item.departmentid).trigger('change');
+                    refreshDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);
+                }
+
+                return item.num;
             }
-
-            if (item.regionid != "" && item.regionid != null && 
-                item.departmentid != "" && item.departmentid != null) {
-                //$(publicDepartmentControlName).val(item.departmentid).trigger('change');
-                refreshDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);
-            }
-
-            return item.num;
+            return "";
         }
     };
 
@@ -409,8 +428,14 @@ function GetComputerUserSearchOptionsForIsAbout() {
                                     , costcentre: item.CostCentre
                         };
                         return JSON.stringify(aItem);
-
                     });
+                    if (resultList.length === 0) {
+                        var noRes = {
+                            name: window.parameters.noResultLabel,
+                            isNoResult: true
+                        }
+                        resultList.push(JSON.stringify(noRes));
+                    }
 
                     return process(resultList);
                 }
@@ -419,6 +444,9 @@ function GetComputerUserSearchOptionsForIsAbout() {
 
         matcher: function (obj) {
             var item = JSON.parse(obj);
+            if (~item.isNoResult) {
+                return 1;
+            }
             //console.log(JSON.stringify(item));
             return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.name_family.toLowerCase().indexOf(this.query.toLowerCase())
@@ -432,9 +460,13 @@ function GetComputerUserSearchOptionsForIsAbout() {
             var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
             while (aItem = items.shift()) {
                 var item = JSON.parse(aItem);
-                if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
-                else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
-                else caseInsensitive.push(JSON.stringify(item));
+                if (!item.isNoResult) {
+                    if (!item.num
+                        .toLowerCase()
+                        .indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                    else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                    else caseInsensitive.push(JSON.stringify(item));
+                } else caseInsensitive.push(JSON.stringify(item));
             }
 
             return beginswith.concat(caseSensitive, caseInsensitive);
@@ -442,6 +474,9 @@ function GetComputerUserSearchOptionsForIsAbout() {
 
         highlighter: function (obj) {
             var item = JSON.parse(obj);
+            if (item.isNoResult) {
+                return item.name;
+            }
             var orgQuery = this.query;
             if (item.departmentname == null)
                 item.departmentname = ""
@@ -462,46 +497,51 @@ function GetComputerUserSearchOptionsForIsAbout() {
 
         updater: function (obj) {
             var item = JSON.parse(obj);
-            var departmentFilterFormat = $('#DepartmentFilterFormat').val();
+            if (!item.isNoResult) {
+                var departmentFilterFormat = $('#DepartmentFilterFormat').val();
 
-            $('#case__IsAbout_ReportedBy').val(item.num);
+                $('#case__IsAbout_ReportedBy').val(item.num);
 
-            // Raise event about UserId changed.
-            $(document).trigger("OnUserIdChanged", [item.num]);
+                // Raise event about UserId changed.
+                $(document).trigger("OnUserIdChanged", [item.num]);
 
-           
-            // Case Is About
-            if (item.name != "" && item.name != null)
-                $('#case__IsAbout_Person_Name').val(item.name);
 
-            if (item.email != null)
-                $('#case__IsAbout_Person_Email').val(item.email);
+                // Case Is About
+                if (item.name != "" && item.name != null)
+                    $('#case__IsAbout_Person_Name').val(item.name);
 
-            if (item.phone != null)
-                $('#case__IsAbout_Person_Phone').val(item.phone);
+                if (item.email != null)
+                    $('#case__IsAbout_Person_Email').val(item.email);
 
-            if (item.cellphone != null)
-                $('#case__IsAbout_Person_Cellphone').val(item.cellphone);
+                if (item.phone != null)
+                    $('#case__IsAbout_Person_Phone').val(item.phone);
 
-            if (item.place != null)
-                $('#case__IsAbout_Place').val(item.place);
+                if (item.cellphone != null)
+                    $('#case__IsAbout_Person_Cellphone').val(item.cellphone);
 
-            if (item.usercode != null)
-                $('#case__IsAbout_UserCode').val(item.usercode);
+                if (item.place != null)
+                    $('#case__IsAbout_Place').val(item.place);
 
-            if (item.costcentre != null)
-                $('#case__IsAbout_CostCentre').val(item.costcentre);
+                if (item.usercode != null)
+                    $('#case__IsAbout_UserCode').val(item.usercode);
 
-            if (item.regionid != "" && item.regionid != null) {
-                $('#case__IsAbout_Region_Id').val(item.regionid);
-                $('#IsAboutRegionName').val(item.regionname);
+                if (item.costcentre != null)
+                    $('#case__IsAbout_CostCentre').val(item.costcentre);
+
+                if (item.regionid != "" && item.regionid != null) {
+                    $('#case__IsAbout_Region_Id').val(item.regionid);
+                    $('#IsAboutRegionName').val(item.regionname);
+                }
+
+                if (item.regionid != "" &&
+                    item.regionid != null &&
+                    item.departmentid != "" &&
+                    item.departmentid != null) {
+                    refreshIsAboutDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);
+                }
+                return item.num;
             }
-
-            if (item.regionid != "" && item.regionid != null &&
-                item.departmentid != "" && item.departmentid != null) {
-                refreshIsAboutDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);
-            }
-            return item.num;
+            return "";
         }
     };
 
@@ -978,7 +1018,7 @@ function CaseInitForm() {
     };
 
     var getLogFiles = function () {
-        $.get('/Cases/LogFiles', { id: $('#LogKey').val(), now: Date.now() }, function (data) {
+        $.get('/Cases/LogFiles', { id: $('#LogKey').val(), now: Date.now(), caseId: $("#case__Id").val() }, function (data) {
             $('#divCaseLogFiles').html(data);
             // Raise event about rendering of uploaded file
             $(document).trigger("OnUploadedCaseLogFileRendered", []);

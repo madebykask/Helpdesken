@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Services.Services.Feedback;
+﻿using DH.Helpdesk.Services.Services.Cases;
+using DH.Helpdesk.Services.Services.Feedback;
 using DH.Helpdesk.Services.Services.Invoice;
 
 namespace DH.Helpdesk.Web.NinjectModules.Common
@@ -58,6 +59,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<ICaseTypeService>().To<CaseTypeService>();
             this.Bind<ICaseFollowUpService>().To<CaseFollowUpService>();
             this.Bind<ICaseSearchService>().To<CaseSearchService>();
+            this.Bind<ICaseSectionService>().To<CaseSectionService>();
             this.Bind<ICategoryService>().To<CategoryService>();
             this.Bind<IChecklistActionService>().To<ChecklistActionService>();
             this.Bind<ICheckListServiceService>().To<CheckListServiceService>();

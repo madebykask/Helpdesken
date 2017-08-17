@@ -186,6 +186,7 @@
     <Compile Include="Models\Case\CaseFileDate.cs" />
     <Compile Include="Models\Case\CaseHistoryOverview.cs" />
     <Compile Include="Models\Case\CaseLock\CaseLockOverview.cs" />
+    <Compile Include="Models\Case\CaseSections\CaseSectionModel.cs" />
     <Compile Include="Models\Case\CategoryOverview.cs" />
     <Compile Include="Models\Case\CaseTimeMetricsModel.cs" />
     <Compile Include="Models\Case\ExtendedCaseFormModel.cs" />
@@ -299,6 +300,7 @@
     <Compile Include="Models\Licenses\Computers\ComputerOverview.cs" />
     <Compile Include="Models\DailyReport\Output\DailyReportSubject.cs" />
     <Compile Include="Models\LogProgram\LogProgram.cs" />
+    <Compile Include="Models\Logs\LogExistingFileModel.cs" />
     <Compile Include="Models\Logs\Output\EmailLogsOverview.cs" />
     <Compile Include="Models\MailTemplates\CustomMailTemplateLanguage.cs" />
     <Compile Include="Models\Modules\Output\ModulesOverview.cs" />

@@ -70,7 +70,14 @@
                                         @Html.DropDownListFor(model => model.CaseSolution.CaseSolutionCategory_Id, Model.CsCategories, "")
                                     </td>
                                 </tr>
-
+                                <tr>
+                                    <td style="width: 200px">
+                                        @Translation.GetCoreTextTranslation("Beskrivning")
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.CaseSolution.CaseSolutionDescription, new { id = "CaseSolutionDescription", maxlength = "4000" })
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td style="width: 200px">
                                         @Translation.GetCoreTextTranslation("Kort beskrivning")
@@ -2189,7 +2196,7 @@
         submitHandler: function (form) {
 
             setHiddenField();
-            //var id=document.getElementById('CaseSolution_Id').value;            
+            //var id=document.getElementById('CaseSolution_Id').value;
             //if (id==0)
             //{
             //    var form = $("#target").serialize();
@@ -2198,11 +2205,11 @@
             //        url: "/CaseSolution/NewAndEdit",
             //        data: form,
             //        success: function (data) {
-                   
+
             //            $('#divReplaceConditions').html($(data));
             //        },
             //        error: function (result) {
-                   
+
             //        }
             //    });
             //}
@@ -2251,6 +2258,36 @@
 
 
             $('#target').submit();
+        })
+
+
+        $('#CopyCaseSolution').on('click', function () {
+            //if (confirm("Copy?") == true)
+            //{
+
+
+
+
+            var id=0;
+            if (id==0)
+            {
+                var form = $("#target").serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: "/CaseSolution/Copy",
+                    data: form,
+                    success: function (data) {
+
+                        window.location.href = '/CaseSolution/Index/';
+                        //$('#divReplaceConditions').html($(data));
+                    },
+                    error: function (result) {
+
+                    }
+                });
+            }
+            //}
+            //form.submit();
         })
     });
 
@@ -2340,7 +2377,7 @@
         }
         var h=document.getElementById('selectedValues');
         h.value=final;
-        
+
     }
 
     //function DropDownChange(v)
@@ -2432,11 +2469,11 @@
                 url: "/CaseSolution/NewAndEdit",
                 data: form,
                 success: function (data) {
-                   
+
                     $('#divReplaceConditions').html($(data));
                 },
                 error: function (result) {
-                   
+
                 }
             });
 

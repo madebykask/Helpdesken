@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
 
 namespace DH.Helpdesk.Web.Models.Case
 {
@@ -47,7 +48,8 @@ namespace DH.Helpdesk.Web.Models.Case
                                                            }
                                                    };
 			ExternalInvoices = new List<ExternalInvoiceModel>();
-            this.SelectedWorkflowStep = 0;
+            		this.SelectedWorkflowStep = 0;
+			CaseAttachedExFiles = new List<CaseAttachedExFileModel>();
         }
 
         public string CaseKey { get; set; }
@@ -61,7 +63,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public int ShowInvoiceFields { get; set; }
         public int ShowExternalInvoiceFields { get; set; }
         public bool TimeRequired { get; set; }
-		public CaseLockModel CaseLock { get; set; }
+	public CaseLockModel CaseLock { get; set; }
         public int MinWorkingTime { get; set; }        
         public Infrastructure.Enums.AccessMode EditMode { get; set; } //(-1,0,1)
         public bool Disable_SendMailAboutCaseToNotifier { get; set; }
@@ -91,6 +93,8 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public IEnumerable<CaseFieldSettingsWithLanguage> CaseFieldSettingWithLangauges { get; set; }
         public IList<CaseSolutionSettingModel> CaseSolutionSettingModels { get; set; }
+
+        public IEnumerable<CaseSectionModel> CaseSectionModels { get; set; }
 
         public IList<CaseType> caseTypes { get; set; }
         public IList<StandardText> standardTexts { get; set; }
@@ -174,6 +178,8 @@ namespace DH.Helpdesk.Web.Models.Case
         public string LogFileNames { get; set; }
 
         public string SavedFiles { get; set; }
+
+        public List<CaseAttachedExFileModel> CaseAttachedExFiles { get; set; }
 
         /// <summary>
         /// Gets or sets the case owner default working group.

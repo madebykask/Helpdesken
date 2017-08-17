@@ -283,6 +283,7 @@
     <Compile Include="Services\CaseSolutionConditionService.cs" />
     <Compile Include="Services\CaseStatistic\CaseStatisticService.cs" />
     <Compile Include="Services\ExtendedCase\ExtendedCaseService.cs" />
+    <Compile Include="Services\Cases\CaseSectionService.cs" />
     <Compile Include="Services\IExtendedCaseService.cs" />
     <Compile Include="Services\UniversalCase\IUniversalCaseService.cs" />
     <Compile Include="Services\Concrete\CaseLockService.cs" />

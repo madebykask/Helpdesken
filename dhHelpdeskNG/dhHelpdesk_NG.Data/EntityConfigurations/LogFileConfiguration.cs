@@ -20,6 +20,8 @@
             this.Property(l => l.FileName).IsRequired().HasMaxLength(200);
             this.Property(l => l.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(l => l.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.Property(l => l.IsCaseFile).IsOptional();
+            this.Property(l => l.ParentLog_Id).IsOptional();
 
             this.ToTable("tbllogfile");
         }

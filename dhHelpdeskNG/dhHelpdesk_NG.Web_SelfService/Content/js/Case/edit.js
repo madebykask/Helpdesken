@@ -513,9 +513,14 @@
 
                                 };
                                 return JSON.stringify(aItem);
-
                             });
-
+                            if (resultList.length === 0) {
+                                var noRes = {
+                                    name: window.parameters.noResultLabel,
+                                    isNoResult: true
+                                }
+                                resultList.push(JSON.stringify(noRes));
+                            }
                             return process(resultList);
                         }
                     });
@@ -523,6 +528,9 @@
 
                 matcher: function (obj) {
                     var item = JSON.parse(obj);
+                    if (~item.isNoResult) {
+                        return 1;
+                    }
                     return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
                         || ~item.name_family.toLowerCase().indexOf(this.query.toLowerCase())
                         || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
@@ -535,9 +543,11 @@
                     var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
                     while (aItem = items.shift()) {
                         var item = JSON.parse(aItem);
-                        if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
-                        else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
-                        else caseInsensitive.push(JSON.stringify(item));
+                        if (!item.isNoResult) {
+                            if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                            else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                            else caseInsensitive.push(JSON.stringify(item));
+                        } else caseInsensitive.push(JSON.stringify(item));
                     }
 
                     return beginswith.concat(caseSensitive, caseInsensitive);
@@ -545,6 +555,9 @@
 
                 highlighter: function (obj) {
                     var item = JSON.parse(obj);
+                    if (item.isNoResult) {
+                        return item.name;
+                    }
                     var orgQuery = this.query;
                     var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
                     var resultArr = [];
@@ -588,6 +601,9 @@
                 updater: function (obj) {
 
                     var item = JSON.parse(obj);
+                    if (item.isNoResult) {
+                        return "";
+                    }
                     //console.log(JSON.stringify(item));
                     $('#NewCase_ReportedBy').val(item.num);
                     $('#NewCase_PersonsName').val(item.name);
@@ -630,7 +646,13 @@
                                 };
                                 return JSON.stringify(aItem);
                             });
-
+                            if (resultList.length === 0) {
+                                var noRes = {
+                                    name: window.parameters.noResultLabel,
+                                    isNoResult: true
+                                }
+                                resultList.push(JSON.stringify(noRes));
+                            }
                             return process(resultList);
                         }
                     });
@@ -638,6 +660,9 @@
 
                 matcher: function (obj) {
                     var item = JSON.parse(obj);
+                    if (~item.isNoResult) {
+                        return 1;
+                    }
                     return ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
                         || ~item.computertype.toLowerCase().indexOf(this.query.toLowerCase())
                         || ~item.location.toLowerCase().indexOf(this.query.toLowerCase());
@@ -647,9 +672,11 @@
                     var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
                     while (aItem = items.shift()) {
                         var item = JSON.parse(aItem);
-                        if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
-                        else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
-                        else caseInsensitive.push(JSON.stringify(item));
+                        if (!item.isNoResult) {
+                            if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                            else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                            else caseInsensitive.push(JSON.stringify(item));
+                        } else caseInsensitive.push(JSON.stringify(item));
                     }
 
                     return beginswith.concat(caseSensitive, caseInsensitive);
@@ -657,6 +684,9 @@
 
                 highlighter: function (obj) {
                     var item = JSON.parse(obj);
+                    if (item.isNoResult) {
+                        return item.name;
+                    }
                     var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
                     var result = item.num + ' - ' + item.location + ' - ' + (item.computertype == null ? ' ' : item.computertype);
 
@@ -667,6 +697,9 @@
 
                 updater: function (obj) {
                     var item = JSON.parse(obj);
+                    if (item.isNoResult) {
+                        return "";
+                    }
                     $('#NewCase_InventoryNumber').val(item.num);
                     $('#NewCase_InventoryType').val(item.computertype);
                     $('#NewCase_InventoryLocation').val(item.location);
