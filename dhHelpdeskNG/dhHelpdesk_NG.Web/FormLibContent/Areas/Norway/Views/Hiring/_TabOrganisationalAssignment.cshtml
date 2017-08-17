@@ -1,0 +1,140 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+<div class="tab-pane" id="OrganisationalAssignment">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Organisation")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("OrganisationCountry")</td>
+                    <td>@Model.Translate("Norway")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Company")</td>
+                    <td>@Model.Element("Company")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BusinessUnit")</td>
+                    <td>@Model.Element("BusinessUnit")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ServiceArea")</td>
+                    <td>@Model.Element("ServiceArea")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Department")</td>
+                    <td>@Model.Element("Department")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CostCentre")</td>
+                    <td>@Model.Element("CostCentre")
+                    </td>
+                </tr>             
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Job")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PositionTitle")</td>
+                    <td>@Model.Element("PositionTitle")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("JobTitle")</td>
+                    <td>@Model.Element("JobTitle")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("IsManager")</td>
+                    <td>@Model.Element("IsManager")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NewPosition")</td>
+                    <td>@Model.Element("NewPosition")</td>
+                </tr>               
+                <tr>
+                    <td class="tdstrong">@Model.Label("ReportsToLineManager")</td>
+                    <td>@Model.Element("ReportsToLineManager")
+                    </td>
+                </tr>        
+                <tr>
+                    <td class="tdstrong">@Model.Label("LineManagersJobTitle")</td>
+                    <td>@Model.Element("LineManagersJobTitle")
+                    </td>
+                </tr>        
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Employment Conditions")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ContractType")</td>
+                    <td>@Model.Element("ContractType")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmploymentPercentage")</td>
+                    <td>@Model.Element("EmploymentPercentage")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MidlertidigKarakter")</td>
+                    <td>@Model.Element("MidlertidigKarakter")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PersonReplaced")</td>
+                    <td>@Model.Element("PersonReplaced")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ProjectName")</td>
+                    <td>@Model.Element("ProjectName")</td>
+                </tr>                
+                <tr>
+                    <td class="tdstrong">@Model.Label("ContractEndDate")</td>
+                    <td>@Model.Element("ContractEndDate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ProbationPeriod")</td>
+                    <td>@Model.Element("ProbationPeriod")</td>
+                </tr>              
+                <tr>
+                    <td class="tdstrong">@Model.Label("ProbationLength")</td>
+                    <td>@Model.Element("ProbationLength")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NoticePeriod")</td>
+                    <td>@Model.Element("NoticePeriod")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("CDS")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PrimarySite")</td>
+                    <td>@Model.Element("PrimarySite")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TECApprover")</td>
+                    <td>@Model.Element("TECApprover")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HelpDesk")</td>
+                    <td>@Model.Translate("ICC3 HBG Retail")</td>
+                </tr>             
+            </tbody>
+        </table>
+    </div>
+</div>
+@*Scripts Moved to _TabHiringJS*@

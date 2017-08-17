@@ -1,0 +1,70 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    ViewBag.Title = Model.Translate("Netherlands") + " - " + Model.Translate("Hiring");
+}
+
+@section Validation {
+
+    @Html.Partial("_Validate", Model)
+
+}
+
+@section Script {
+
+    <script>
+
+        $(document).on('click', '#btnMailingAddress, #btnEmergencyAddress', function (e) {
+            e.preventDefault();
+
+            var prefix = $(this).attr('data-prefix');
+            document.getElementById(prefix + "AddressLine1").value = document.getElementById('PermanentAddressLine1').value;
+            document.getElementById(prefix + "AddressLine2").value = document.getElementById('PermanentAddressLine2').value;
+            document.getElementById(prefix + "AddressLine3").value = document.getElementById('PermanentAddressLine3').value;
+            document.getElementById(prefix + "PostalCode").value = document.getElementById('PermanentPostalCode').value;
+            document.getElementById(prefix + "City").value = document.getElementById('PermanentCity').value;
+
+            var value = document.getElementById('PermanentCountry').value;
+
+            if ($('#PermanentCountry')[0].selectize) {
+
+                var selectedText = $('#PermanentCountry')[0].selectize.getItem(value).text();
+
+                if ($('#' + prefix + 'Country')[0].selectize) {
+                    $('#' + prefix + 'Country')[0].selectize.setValue(selectedText);
+                }
+                else {
+                    $('#' + prefix + 'Country').val(selectedText);
+                }
+            }
+            else {
+
+                var selectedText = $('#PermanentCountry').find('option:selected').text();
+                if ($('#' + prefix + 'Country')[0].selectize) {
+                    $('#' + prefix + 'Country')[0].selectize.setValue(selectedText);
+                }
+                else {
+                    var selectedText = $('#PermanentCountry').find('option:selected').text();
+                    $('#' + prefix + 'Country').val(selectedText);
+                }
+            }
+        });
+
+        validate.run($('#actionState').val());
+
+        $(document).on('change', '#actionState', function (e) {
+            var val = $(this).val();
+            validate.run(val);
+        });
+
+    </script>
+
+}
+
+@Html.Partial("_Edit", Model)
+
+<script>
+    //InitIntegration();
+</script>

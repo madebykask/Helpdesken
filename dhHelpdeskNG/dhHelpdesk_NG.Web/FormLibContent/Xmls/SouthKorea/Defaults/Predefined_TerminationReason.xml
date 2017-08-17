@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+    <name>TerminationReason</name>
+    <dependent>
+        <selected>Expiry of Contract</selected>
+        <show>
+          Expiry of Contract,International Transfer begins,Internationa Transfer ends</show>
+    </dependent>
+    <dependent>
+        <selected>Dismissal</selected>
+        <show>Dismissal - Without Notice,Dismissal - With Notice</show>
+    </dependent>
+    <dependent>
+        <selected>Retirement</selected>
+        <show>Retirement</show>
+    </dependent>
+    <dependent>
+          <selected>Redundancy</selected>
+          <show>Redundancy</show>
+    </dependent>
+    <dependent>
+      <selected>Resignation</selected>
+      <show>Resignation</show>
+    </dependent>
+
+    <dependent>
+      <selected>Other</selected>
+      <show>Invalidity,Death</show>
+    </dependent>
+</predefined>
+

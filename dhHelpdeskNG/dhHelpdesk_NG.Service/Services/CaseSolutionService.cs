@@ -13,7 +13,6 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Domain;
     using System.Reflection;
-    using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.BusinessData.Models.User.Input;
@@ -65,6 +64,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseSolutionConditionRepository _caseSolutionConditionRepository;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly ICaseSolutionConditionService _caseSolutionConditionService;
+        private readonly IStateSecondaryService _stateSecondaryService;
 
         public CaseSolutionService(
             ICaseSolutionRepository caseSolutionRepository,
@@ -79,7 +79,9 @@ namespace DH.Helpdesk.Services.Services
             ICacheProvider cache,
             IWorkingGroupService workingGroupService,
             ICaseSolutionConditionService caseSolutionCondtionService,
-            IApplicationRepository applicationRepository)
+            IStateSecondaryService stateSecondaryService,
+            IApplicationRepository applicationRepository
+            )
         {
             this._caseSolutionRepository = caseSolutionRepository;
             this._caseSolutionCategoryRepository = caseSolutionCategoryRepository;
@@ -94,6 +96,7 @@ namespace DH.Helpdesk.Services.Services
             this._workingGroupService = workingGroupService;
             this._caseSolutionConditionService = caseSolutionCondtionService;
             this.caseSolutionConditionRepository = caseSolutionConditionRepository;
+            this._stateSecondaryService = stateSecondaryService;
             this._applicationRepository = applicationRepository;
         }
 
@@ -265,7 +268,9 @@ namespace DH.Helpdesk.Services.Services
             {
                 CaseTemplateId = c.Id,
                 Name = c.Name,
-                SortOrder = c.SortOrder
+                SortOrder = c.SortOrder,
+                NextStep = (c.StateSecondary_Id != null ? _stateSecondaryService.GetStateSecondary(c.StateSecondary_Id.Value).StateSecondaryId : 0)
+
             }).OrderBy(c => c.SortOrder).ToList();
 
 
@@ -287,6 +292,11 @@ namespace DH.Helpdesk.Services.Services
             {
                 var conditionValue = condition.Value.Tidy().ToLower();
                 var conditionKey = condition.Key.Tidy();
+
+                if (conditionValue == "null")
+                {
+                    return true;
+                }
 
                 try
                 {
@@ -426,12 +436,12 @@ namespace DH.Helpdesk.Services.Services
             {
                 SearchCaseSolutions.SearchCss = SearchCaseSolutions.SearchCss.ToLower();
 
-                query = query.Where(x => x.Caption.ToLower().Contains(SearchCaseSolutions.SearchCss)
-                                      || x.Description.ToLower().Contains(SearchCaseSolutions.SearchCss)
-                                      || x.Miscellaneous.ToLower().Contains(SearchCaseSolutions.SearchCss)
-                                      || x.Name.ToLower().Contains(SearchCaseSolutions.SearchCss)
-                                      || x.Text_External.ToLower().Contains(SearchCaseSolutions.SearchCss)
-                                      || x.Text_Internal.ToLower().Contains(SearchCaseSolutions.SearchCss)
+                query = query.Where(x => (!string.IsNullOrEmpty(x.Caption) &&x.Caption.ToLower().Contains(SearchCaseSolutions.SearchCss))
+                                      || (!string.IsNullOrEmpty(x.Description) && x.Description.ToLower().Contains(SearchCaseSolutions.SearchCss))
+                                      || (!string.IsNullOrEmpty(x.Miscellaneous) && x.Miscellaneous.ToLower().Contains(SearchCaseSolutions.SearchCss))
+                                      || (!string.IsNullOrEmpty(x.Name) && x.Name.ToLower().Contains(SearchCaseSolutions.SearchCss))
+                                      || (!string.IsNullOrEmpty(x.Text_External) && x.Text_External.ToLower().Contains(SearchCaseSolutions.SearchCss))
+                                      || (!string.IsNullOrEmpty(x.Text_Internal) && x.Text_Internal.ToLower().Contains(SearchCaseSolutions.SearchCss))
                                    );
             }
 

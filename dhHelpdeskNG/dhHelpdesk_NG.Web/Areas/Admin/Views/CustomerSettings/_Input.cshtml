@@ -270,6 +270,15 @@
                                         &nbsp;@Translation.Get("Fakturering artikel")
                                         </label>
                                     </td>
+                                    <td>
+                                        @*<label class="checkbox hidden">
+                                            <input type="checkbox" name="setting.ModuleExtendedCase" @(Model.Setting.ModuleExtendedCase == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleExtendedCase" value="0" />
+                                            &nbsp;@Translation.Get("Extended Case", Enums.TranslationSource.TextTranslation)
+                                        </label>*@
+                                        @*TODO: this is hidden for now, add above code when customer should be able to decide this /TAN*@
+                                        <input type="hidden" name="setting.ModuleExtendedCase" value="@Model.Setting.ModuleExtendedCase" />
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -498,6 +507,18 @@
                                         </span>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Bilagor", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input type="radio" name="Setting.AttachmentPlacement" @(Model.Setting.AttachmentPlacement == 0 ? "checked='checked'" : "") id="Customer_Setting_AttachmentPlacement0" value="0" />
+                                        @Translation.Get("Visa på Case tab", Enums.TranslationSource.TextTranslation)
+                                        <br />
+                                        <input type="radio" name="Setting.AttachmentPlacement" @(Model.Setting.AttachmentPlacement == 1 ? "checked='checked'" : "") id="Customer_Setting_AttachmentPlacement1" value="1" />
+                                        @Translation.Get("Visa på Bilagor tab", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>      
                             </table>
                         </div>
                     </div>

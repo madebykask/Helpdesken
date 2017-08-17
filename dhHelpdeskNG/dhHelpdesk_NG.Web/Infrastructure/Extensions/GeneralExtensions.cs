@@ -155,7 +155,10 @@
             if(model.DynamicCase != null && model.caseFieldSettings.IsFieldLocked(caseFieldName))
                 return true;
 
-            if(!isGlobalVisibility || !isLocalVisibility)
+            if (model.ExtendedCases != null && model.ExtendedCases.Count > 0 && model.caseFieldSettings.IsFieldLocked(caseFieldName))
+                return true;
+
+            if (!isGlobalVisibility || !isLocalVisibility)
             {
                 return false;
             }

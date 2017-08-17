@@ -1,0 +1,165 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using System.Collections;
+
+@{
+    ArrayList contracts = GetContract();
+    
+    //Get Allowances
+    if (!string.IsNullOrEmpty(GetAllowance("")))
+    {
+        contracts.Add(GetAllowance(""));
+    }
+    if (!string.IsNullOrEmpty(GetAllowance(2.ToString())))
+    {
+        contracts.Add(GetAllowance(2.ToString()));
+    }
+    if (!string.IsNullOrEmpty(GetAllowance(3.ToString())))
+    {
+        contracts.Add(GetAllowance(3.ToString()));
+    }
+    if (!string.IsNullOrEmpty(GetAllowance(4.ToString())))
+    {
+        contracts.Add(GetAllowance(4.ToString()));
+    }
+    if (!string.IsNullOrEmpty(GetAllowance(5.ToString())))
+    {
+        contracts.Add(GetAllowance(5.ToString()));
+    }
+}
+
+@functions{
+    public ArrayList GetContract()
+    {
+        ArrayList contracts = new ArrayList();
+
+        
+        if (Model.GetAnswer(FormLibConstants.FormField.ChangeType).ToLower() == "Secondment".ToLower())
+        {
+            contracts.Add("Secondment");
+        }
+        if (Model.GetAnswer(FormLibConstants.FormField.ChangeType).ToLower() == "Career Break End".ToLower())
+        {
+            contracts.Add("CareerBreakReturn");
+        }
+        if (Model.GetAnswer(FormLibConstants.FormField.ChangeType).ToLower() == "Renewal of Temp Contract".ToLower())
+        {
+            contracts.Add("RenewTempContract");
+        }
+        if (Model.GetAnswer(FormLibConstants.FormField.ChangeType).ToLower() == "Temp Contract to Permanent".ToLower())
+        {
+            contracts.Add("TemporaryToPermanent");
+        }
+
+        if (Model.GetAnswer(FormLibConstants.FormField.ChangeType).ToLower() == "Promotion".ToLower() && (Model.GetAnswer(FormLibConstants.FormField.BenefitLevel).ToLower() == "Level 1".ToLower() || Model.GetAnswer(FormLibConstants.FormField.BenefitLevel).ToLower() == "Level 2".ToLower()))
+        {
+            contracts.Add("TCManagerLevel1And2");
+        }
+
+        if (Model.GetAnswer(FormLibConstants.FormField.PayScaleGroup).ToLower() == "FOUNDN1".ToLower())
+        {
+            contracts.Add("LevelAchieved");
+        }
+        if (Model.GetAnswer(FormLibConstants.FormField.PayScaleGroup).ToLower() == "FOUNDN2".ToLower())
+        {
+            contracts.Add("LevelAchieved");
+        }
+        if (Model.GetAnswer(FormLibConstants.FormField.PayScaleGroup).ToLower() == "FOUNDN3".ToLower())
+        {
+            contracts.Add("LevelAchieved");
+        }
+        if (Model.GetAnswer(FormLibConstants.FormField.PayScaleGroup).ToLower() == "FOUNDN4".ToLower())
+        {
+            contracts.Add("LevelAchieved");
+        }
+        
+
+        return contracts;
+
+    }
+
+    public string GetAllowance(string allowanceNr)
+    {
+        string allowanceType = Model.GetDocumentAnswer("AllowancesType" + allowanceNr).Trim().ToLower();
+
+
+        switch (allowanceType)
+        {
+            case "fork lift truck":
+                return "Allowances" + " " + allowanceNr;
+            case "100f salary flt skills":
+                return "Allowances" + " " + allowanceNr;
+            case "power stacker":
+                return "Allowances" + " " + allowanceNr;
+            default:
+                return "";
+        }
+
+    }
+
+    public string PrintText()
+    {
+        return Model.Translate("Print");
+    }
+}
+
+<div class="tab-pane" id="documents">
+    <div class="span12">
+        <table class="table-striped">
+            <thead>
+                <tr>
+                    <th>@Model.Translate("Document")
+                    </th>
+                    <th>@Model.Translate("Type")
+                    </th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (contracts.Count > 0)
+            {
+                for (int i = 0; i < contracts.Count; i++)
+                {
+                    //TODO: Solve this beautiful
+                    string[] contractAr = contracts[i].ToString().Split(' ');
+                    if(contractAr.Length > 0)
+                    {
+                        string allowanceNr = "";
+                        if (contractAr.Length > 1)
+                        {
+                            allowanceNr = contractAr[1];
+                        }
+                        <tr>
+                            <td>@Model.Translate("Contract") &nbsp; @contracts[i].ToString() </td>
+                            <td>pdf</td>
+                            <td>&nbsp;</td>
+                            <td>
+                                <a href="@Url.Action("print", "ChangeTermsConditions", new
+                                {
+                                    id = contractAr[0],
+                                    caseId = Model.Contract.Id,
+                                    path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
+                                    userId = FormLibSessions.User.UserId,
+                                    allowanceNr = allowanceNr
+                                })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@PrintText()</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                 }
+            else
+            {
+                <tr><td colspan="4"><div class="alert alert-info"><strong><i class="icon-info-sign"></i>&nbsp;@Model.Translate("A document can not be created based on current selections")</strong></div></td></tr>
+            }
+             @Html.Partial("_StaticDocuments", Model)
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+

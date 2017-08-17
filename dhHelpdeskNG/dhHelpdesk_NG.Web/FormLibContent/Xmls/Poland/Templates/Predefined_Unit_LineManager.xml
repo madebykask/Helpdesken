@@ -1,0 +1,453 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+    <name>LineManager</name>
+    <dependent>
+        <selected>﻿OP01</selected>
+        <show>
+            Boratyński Tomasz,
+            Thau Marek
+        </show>
+    </dependent>
+    <dependent>
+        <selected>OS01</selected>
+        <show>
+            Bittner Dorota,
+            Dfouni Katia,
+            Dobra-Stefańska Elwira,
+            Frela Małgorzata,
+            Fuente Yague Juan Carlos,
+            Górzna Krzysztofa,
+            Gromadzka Magdalena,
+            Kołecka Katarzyna,
+            Kozłowska Joanna,
+            Leusink Dennis,
+            Mackiewicz Karolina,
+            Martens Oliver,
+            Morta Aleksandra,
+            Narwusz Daria,
+            Parton Jon,
+            Rakowska Barbara,
+            Reinsch Marta,
+            Rogińska-Rossiwall Anna,
+            Siepietowska Joanna,
+            Sioda Dorota,
+            Solarska Anna,
+            Stasiak Katarzyna,
+            Steenbrink Daniel,
+            Steppa Piotr,
+            Szeptun Agnieszka,
+            Szwaja Marek,
+            Szymańska Monika,
+            Wichtowska Justyna,
+            Własiuk Dominika,
+            Wolf-Szymańska Karolina
+        </show>
+    </dependent>
+    <dependent>
+        <selected>OD01</selected>
+        <show>
+            Gajewski Sylwester,
+            Romański Piotr,
+            Żerdzińska-Nowak Anna
+        </show>
+    </dependent>
+    <dependent>
+        <selected>OD02</selected>
+        <show>
+            Barankiewicz Marcin,
+            Hansson Goran,
+            Sadowniczyk Natalia,
+            Szewczyk Magdalena,
+            Ziąbski Konrad
+        </show>
+    </dependent>
+    <dependent>
+        <selected>O018</selected>
+        <show>
+            Biernat Iwona,
+            Boratyński Tomasz,
+            Boruc Grzegorz,
+            Bralska-Kotlińska Agnieszka,
+            Drosik Rafał,
+            Drozdowski Maciej,
+            Dyliński Bartłomiej,
+            Dysli Tanja,
+            Gadacz Natalia,
+            Gradkowska Edyta,
+            Grund Bartosz,
+            Higler Wijdoogen Evelyn,
+            Horoszczak Karolina,
+            Jachacy-Thommen Barbara,
+            Jodziewicz Luiza,
+            Korbasiewicz Zofia,
+            Krupa Robert,
+            Krysztofowicz Grażyna,
+            Kulik Agata,
+            Maliszewska Renata,
+            Möbius Aditsa,
+            Nowak Adam,
+            Onderski Rafał,
+            Pawlak-Kuliga Anna,
+            Perzyna Alicja,
+            Pióro Michał,
+            Porycka Renata,
+            Pyda Joanna,
+            Roman Wojciech,
+            Rozengart-Grzelczak Magdalena,
+            Rudnik Witold,
+            Rzemek Małgorzata,
+            Szczęka Iwona,
+            Szlacheta Hanna,
+            Thau Marek,
+            Więch Beata,
+            Woźniak Irena,
+            Zarzycka Dorota
+        </show>
+    </dependent>
+    <dependent>
+        <selected>O188</selected>
+        <show>
+            Barcal Karol,
+            Bartosiewicz Krzysztofa,
+            Bartrzak Aneta,
+            Budziszewski Andrzej,
+            Dziki Lucyna,
+            Ferszter Paweł,
+            Forycki Mirosław,
+            Głownia Bogumiła,
+            Iszczyński Andrzej,
+            Kałużyński Mirosław,
+            Kamińska Ewa,
+            Kotkiewicz Bartosz,
+            Kukla Łukasz,
+            Kusyk Agnieszka,
+            Łukiewska Marta,
+            Olszewski Adam,
+            Paziewski Mariusz,
+            Prusak Szymon,
+            Prusik Leszek,
+            Rybarczyk Mariusz,
+            Sawicka Diana,
+            Socha Wojciech,
+            Strapczuk Krzysztof,
+            Tandecka Anna,
+            Tomaszek Eliza,
+            Tucholski Adam,
+            Turos Magdalena,
+            Wąsowska Katarzyna,
+            Weiss-Bartkowiak Agata,
+            Żal Katarzyna,
+            Żórawicki Sławomir
+        </show>
+    </dependent>
+    <dependent>
+        <selected>O203</selected>
+        <show>
+            Augustenowicz Ewa,
+            Baldowski Łukasz,
+            Bzdeń Renata,
+            Cesarz Piotr,
+            Cirkowski Adam,
+            Dwórznik Robert,
+            Gontarska Barbara,
+            Karpińska Barbara,
+            Konarska Kinga,
+            Korpacka Danuta,
+            Krzemień Patrick,
+            Kucharski Jakub,
+            Kulbicki Rafał,
+            Landsberg Krystian,
+            Nahajowski Karol,
+            Olejnik Monika,
+            Piotrkowska Agnieszka,
+            Pupka-Lipińska Anna,
+            Ranachowski Karol,
+            Rejnsz Tomasz,
+            Romańczuk Rafał,
+            Sadowska Kinga,
+            Skrodzka Agnieszka,
+            Sobantka Wojciech,
+            Strupiechowski Jacek,
+            Szostak Magdalena,
+            Tade Krystyna
+        </show>
+    </dependent>
+    <dependent>
+        <selected>O204</selected>
+        <show>
+            Dudzic-Wąsala Elżbieta,
+            Dworzak Maciej,
+            Frycze Mateusz,
+            Fujawa Agnieszka,
+            Gładki Michał,
+            Hebda Bogusław,
+            Janus Beata,
+            Jaworski Piotr,
+            Knapik Anna,
+            Kosiba-Seweryn Katarzyna,
+            Kowalski Robert,
+            Krokowska-Wicherek Magdalena,
+            Kuliga Tomasz,
+            Ladachowski Jacek,
+            Łysek Sławomir,
+            Marcinkowski Piotr,
+            Oprzędek Jacek,
+            Pasławska Bernadeta,
+            Pawlak Marzena,
+            Piechociński Wojciech,
+            Polanowski Dariusz,
+            Poprawa Zbigniew,
+            Rejmer Małgorzata,
+            Rogowiec Małgorzata,
+            Ściebura Paweł,
+            Skowronek Jarosław,
+            Skowronek Maria,
+            Strzeszewski Sebastian,
+            Szpetkowski Mateusz,
+            Vatralova Zuzana,
+            Walczak Jakub,
+            Wąs Konrad
+        </show>
+    </dependent>
+    <dependent>
+        <selected>O205</selected>
+        <show>
+            Bałdyga Krzysztof,
+            Budziński Rafał,
+            Chybowski Marcin,
+            Gbiorczyk Iwona,
+            Gryczyńska Agnieszka,
+            Grzegorowska Anna,
+            Kośny Adam,
+            Krenz Michał,
+            Krug Anna,
+            Majcher Jacek,
+            Michalec Jakub,
+            Mikołajczyk Małgorzata,
+            Murawa Sebastian,
+            Nawrocki Tomasz,
+            Nowak Zbigniew,
+            Pawłowska Katarzyna,
+            Rakoczy-Frankowska Aleksandra,
+            Rzepka Beata,
+            Sowińska Arleta,
+            Stefańska-Schwerkolt Małgorzata,
+            Surdyk Przemysław,
+            Topolska Beata,
+            Walkowiak Krzysztof,
+            Welke Joanna,
+            Wiąz Tomasz,
+            Wilczek Maciej,
+            Włodarczak Zbyszko,
+            Zwierzchowski Dariusz
+        </show>
+    </dependent>
+    <dependent>
+        <selected>O294</selected>
+        <show>
+            Adaszyńska Aneta,
+            Antczak Agnieszka,
+            Bejmowicz Szymon,
+            Błaszczuk Paulina,
+            Bób Łukasz,
+            Bujko Paweł,
+            Bulla-Kubiak Katarzyna,
+            Chiżyński Albert,
+            Deć Łukasz,
+            Franko Mariola,
+            Gajdur Piotr,
+            Gąsior Aleksandra,
+            Gruszczyński Michał,
+            Honsza Sabina,
+            Kędra Eryk,
+            Latawiec Marcin,
+            Liszewski Marcin,
+            Mędlarski Maciej,
+            Michalkiewicz Agnieszka,
+            Mikołajczak Michał,
+            Paśnik Wojciech,
+            Pilarski Piotr,
+            Raczyńska Agnieszka,
+            Szanecki Krzysztof,
+            Szymecki Aleksander,
+            Tomczyk Karol
+        </show>
+    </dependent>
+    <dependent>
+        <selected>O306</selected>
+        <show>
+            Banik Iwona,
+            Bownik Piotr,
+            Buryan Mirosław,
+            Chadzińska Joanna,
+            Czech Sylwester,
+            Gawędzka Agnieszka,
+            Gawor Adam,
+            Gil Aneta,
+            Jasińska Monika,
+            Kierska Katarzyna,
+            Krzciuk-Smolarska Karolina,
+            Kurczych-Jabłońska Katarzyna,
+            Litwiński Marcin,
+            Mazurek Roman,
+            Ostaszewski Michał,
+            Pałka Miłosz,
+            Piszczek Katarzyna,
+            Skawiński Dariusz,
+            Sojka Michał,
+            Tasiemski Piotr,
+            Wagner Katarzyna,
+            Witkowska Katarzyna,
+            Zakrzewska Ewa,
+            Żbikowska Katarzyna
+        </show>
+    </dependent>
+    <dependent>
+        <selected>O307</selected>
+        <show>
+            Banaszek Robert,
+            Bernatowicz Maciej,
+            Bochenek Grzegorz,
+            Frelik Justyna,
+            Gałązka Marek,
+            Glinka Aleksandra,
+            Golędzinowski Adam,
+            Grabski Bartosz,
+            Grzegorek Justyna,
+            Jadacki Marcin,
+            Kuśnierczyk Grażyna,
+            Lewandowski Robert,
+            Łuczyński Marcin,
+            Marcinkowska Joanna,
+            Nawrocki Paweł,
+            Nogieć Marek,
+            Nowak Karol,
+            Orłowska Agnieszka,
+            Pelic Marek,
+            Piekut Marek,
+            Popławska Katarzyna,
+            Reszczyńska Barbara,
+            Śmierzyński Wojciech,
+            Szlaski Przemysław,
+            Wiktorzak Mariusz,
+            Wilczak Urszula,
+            Żyłowski Marcin
+        </show>
+    </dependent>
+    <dependent>
+        <selected>OI01</selected>
+        <show>
+            Andersson Mikael,
+            Borkowska Iwona,
+            Dzwonkowski Wojciech,
+            Forysiak Dariusz,
+            Gawlik Katarzyna,
+            Jelonek-Sikora Małgorzata,
+            Kaczmarek Ewa,
+            Lipowska Katarzyna,
+            Machałowska Anna,
+            Malewski Maciej,
+            Ostaszewska Marzanna,
+            Ratajczak Olaf,
+            Rybka Maciej,
+            Selwet Andrzej,
+            Szefler Marcin,
+            Szymańska Elżbieta,
+            Szymański Rafał,
+            Teodorczyk Ewa,
+            Walendzik Iwona
+        </show>
+    </dependent>
+    <dependent>
+        <selected>OI03</selected>
+        <show>
+            Kończyński Andrzej,
+            Szymczak Agnieszka
+        </show>
+    </dependent>
+    <dependent>
+        <selected>OI07</selected>
+        <show>
+            Ciemiecki Robert
+        </show>
+    </dependent>
+    <dependent>
+        <selected>OI08</selected>
+        <show>
+            Cieślik Andrzej,
+            Lange-Cichocka Emilia,
+            Panas Janusz,
+            Pozowska Dagmara,
+            Zarębska Katarzyna
+        </show>
+    </dependent>
+    <dependent>
+        <selected>O329</selected>
+        <show>
+            Arnold Joanna,
+            Bartoszewska Magdalena,
+            Chrześcijanek Piotr,
+            Cybulska Olga,
+            Dankowska Anna,
+            Fuk Bartłomiej,
+            Kapitułka-Wojdak Dagmara,
+            Karbowski Marek,
+            Kosińska Milena,
+            Kowalczyk Michał,
+            Kozera Katarzyna,
+            Kuziak Marcin,
+            Kuźma Anna,
+            Łata Marcin,
+            Maciaszczyk Dorota,
+            Miąsko Michał,
+            Michalak Agnieszka,
+            Nikołajewski Michał,
+            Nowaczyk Michał,
+            Polowiec Elżbieta,
+            Rakowski Daniel,
+            Szczepaniak Małgorzata,
+            Szkopiecka Małgorzata,
+            Wasiela Tomasz,
+            Wiktorska Anna,
+            Wojtaszewska Agnieszka
+        </show>
+    </dependent>
+    <dependent>
+        <selected>OT21</selected>
+        <show>
+            Barszczewski Marek,
+            Bińkowska Maria,
+            Dembska Magdalena,
+            Fedorowicz Michał,
+            Hladka Blanka,
+            Jakubiak Piotr,
+            Kołdej Bartosz,
+            Kowalczyk-Krosnowska Katarzyna,
+            Łaszkiewicz Jacek,
+            Mroczek Dariusz,
+            Osemlak Artur,
+            Oztunc Bora,
+            Pokorska Beata,
+            Resnati Daniele,
+            Staranowicz Janusz,
+            Stoińska Dorota,
+            Turek Marcin,
+            Wajszczak Tomasz,
+            Wardak Dominik
+        </show>
+    </dependent>
+    <dependent>
+        <selected>OI02</selected>
+        <show>
+            Ciemiecki Robert,
+            Koronkiewicz Agnieszka,
+            Skrzyńska Olivia
+        </show>
+    </dependent>
+    <dependent>
+        <selected>OI05</selected>
+        <show>
+            Pawlak Alicja
+        </show>
+    </dependent>
+</predefined>

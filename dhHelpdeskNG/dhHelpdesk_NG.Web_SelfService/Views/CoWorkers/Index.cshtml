@@ -170,6 +170,13 @@
 </div>
 
 <script type="text/javascript">
+    
+    $('#searchTxt').keydown(function (e) {
+        var code = e.which;
+        if (code == 13) {
+            DoSearch();
+        }
+    });
 
     function DoSearch() {
         var s = $("#searchTxt").val();        

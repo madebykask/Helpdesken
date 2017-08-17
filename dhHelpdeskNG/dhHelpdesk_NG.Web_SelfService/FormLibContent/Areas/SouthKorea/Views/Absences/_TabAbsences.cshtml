@@ -1,0 +1,456 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+<div class="tab-pane" id="Absences">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Absences")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AbsenceType")</td>
+                    <td>
+                        @Model.Element("AbsenceType")
+                    </td>
+                </tr>               
+                <tr>
+                    <td class="tdstrong">@Model.Label("AbsenceStartFrom")</td>
+                    <td>
+                        @Model.Element("AbsenceStartFrom")
+                        <div id="notice_FutureDate" style="display: none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Absence start from?")
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AbsenceEndsOn")</td>
+                    <td>
+                        @Model.Element("AbsenceEndsOn")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AbsenceHours")</td>
+                    <td>
+                        @Model.Element("AbsenceHours")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AbsenceDays")</td>
+                    <td>
+                        @Model.Element("AbsenceDays")
+                    </td>
+                </tr>
+                
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="absence@(i.ToString())" id="absence@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Absences") @(i.ToString())</h4>
+                        </td>
+                    </tr>
+                    <tr class="absence@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AbsenceType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AbsenceType" + i.ToString())</td>
+                    </tr>                   
+                    <tr class="absence@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AbsenceStartFrom" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AbsenceStartFrom" + i.ToString())
+                            <div id="notice_FutureDate@(i.ToString())" style="display: none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Absence start from?")
+                        </div>
+                        </td>
+                    </tr>
+                    <tr class="absence@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AbsenceEndsOn" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AbsenceEndsOn" + i.ToString())</td>
+                    </tr>                    
+                    <tr class="absence@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AbsenceHours" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AbsenceHours" + i.ToString())</td>
+                    </tr>  
+                    <tr class="absence@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AbsenceDays" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AbsenceDays" + i.ToString())</td>
+                    </tr>                                           
+                }
+
+                <tr id="addAbsenceTrr">
+                    <td colspan="2">
+                        @Model.Element("AbsencesMulti")
+                        <a id="addAbsence" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Absence")</a></td>
+                </tr>           
+            </tbody>
+        </table>
+
+         </div>
+  
+    <div class="span6">
+ <table class="table">
+    <tbody>
+
+                @* DETAILS ON GLOBAL COMMUTING *@
+
+                <tr class="globalcommuting-first">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Details on Global Commuting")</h4>
+                    </td>
+                </tr>
+                <tr class="globalcommuting-first">
+                    <td class="tdstrong">@Model.Label("CommutingType")</td>
+                    <td>
+                        @Model.Element("CommutingType")
+                    </td>
+                </tr>    
+
+                <tr class="globalcommuting-first">
+                    <td class="tdstrong">@Model.Label("StartFrom")</td>
+                    <td>
+                        @Model.Element("StartFrom")
+                    </td>
+                </tr>    
+
+                <tr class="globalcommuting-first">
+                    <td class="tdstrong">@Model.Label("EndsOn")</td>
+                    <td>
+                        @Model.Element("EndsOn")
+                    </td>
+                </tr>    
+
+                <tr class="globalcommuting-first">
+                    <td class="tdstrong">@Model.Label("DestinationCountry")</td>
+                    <td>
+                        @Model.Element("DestinationCountry")
+                    </td>
+                </tr>    
+
+                <tr class="globalcommuting-first">
+                    <td class="tdstrong">@Model.Label("TaxRelevant")</td>
+                    <td>
+                        @Model.Element("TaxRelevant")
+                    </td>
+                </tr>
+                
+                
+                 @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="detailsonglobalcommuting@(i.ToString()) globalcommuting" id="detailsonglobalcommuting@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Details on Global Commuting") @(i.ToString())</h4>
+                        </td>
+                    </tr>
+                    <tr class="detailsonglobalcommuting@(i.ToString()) globalcommuting">
+                        <td class="tdstrong">@Model.Label("CommutingType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("CommutingType" + i.ToString())</td>
+                    </tr>
+                     <tr class="detailsonglobalcommuting@(i.ToString()) globalcommuting">
+                        <td class="tdstrong">@Model.Label("StartFrom" + i.ToString())</td>
+                        <td>
+                            @Model.Element("StartFrom" + i.ToString())</td>
+                    </tr>
+                     <tr class="detailsonglobalcommuting@(i.ToString()) globalcommuting">
+                        <td class="tdstrong">@Model.Label("EndsOn" + i.ToString())</td>
+                        <td>
+                            @Model.Element("EndsOn" + i.ToString())</td>
+                    </tr>
+                     <tr class="detailsonglobalcommuting@(i.ToString()) globalcommuting">
+                        <td class="tdstrong">@Model.Label("DestinationCountry" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DestinationCountry" + i.ToString())</td>
+                    </tr>
+                     <tr class="detailsonglobalcommuting@(i.ToString()) globalcommuting">
+                        <td class="tdstrong">@Model.Label("TaxRelevant" + i.ToString())</td>
+                        <td>
+                            @Model.Element("TaxRelevant" + i.ToString())</td>
+                    </tr>
+                 }
+                <tr class="globalcommuting-first" id="addDetailsOnGlobalCommutingTrr">
+                    <td colspan="2">
+                        @Model.Element("DetailsOnGlobalCommutings")
+                        <a id="addDetailsOnGlobalCommuting" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Details On Global Commuting")</a></td>
+                </tr>    
+
+            </tbody>
+        </table>
+
+    </div>
+    <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
+     @*Set Visibility to 0 to GlobalCommuting if LM *@
+     <input type="hidden" id="GlobalCommutingVisibility" value="@(FormLibUtils.IsSelfService() ? "0" : "1")" />
+</div>
+
+<script>
+
+
+    function setGlobalCommutingBehavior(value) {
+        if (!(value == 'Yes')) {
+            $("[class*=globalcommuting]").hide();
+            $("[class*=globalcommuting] input:not(input[type=hidden])").val("");
+            $("[class*=globalcommuting] select option:not([value])").prop('selected', true);
+        } else {
+            $(".globalcommuting-first").show();
+        }
+
+        $("[class*=globalcommuting-first] input[type=hidden]").val("1");
+    }
+
+    if ($('#GlobalCommutingVisibility').val() == "1") {
+
+        if (!($('#TECoWorker').val() == 'Yes')) {
+            $(".globalcommuting-first").hide();
+            $(".globalcommuting").hide();
+        }
+    }
+    else {
+        $(".globalcommuting-first").hide();
+        $(".globalcommuting").hide();
+    }
+
+    $('#TECoWorker').change(function () {
+
+        if ($('#GlobalCommutingVisibility').val() == "1") {
+
+            setGlobalCommutingBehavior($(this).val());
+        }
+    });
+
+
+    var futureNotice = $('#notice_FutureDate');
+    var nowTemp = new Date();
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+    var start = $('#date_AbsenceStartFrom').not(".disabled").datepicker({
+        onRender: function (date) {
+            return '';
+        }
+    }).on('changeDate', function (ev) {
+
+        futureNotice.hide();
+
+        if (ev.date.valueOf() < now.valueOf())
+            futureNotice.show();
+
+        if (ev.date.valueOf() > end.date.valueOf()) {
+            var newDate = new Date(ev.date);
+            newDate.setDate(newDate.getDate() + 1);
+            end.setValue(newDate);
+            $('#AbsenceEndsOn').val('');
+        }
+        end.update();
+        start.hide();
+    }).data('datepicker');
+
+    var end = $('#date_AbsenceEndsOn').not(".disabled").datepicker({
+        onRender: function (date) {
+            return date.valueOf() <= start.date.valueOf() ? 'disabled' : '';
+        }
+    }).on('changeDate', function (ev) {
+
+        end.hide();
+    }).data('datepicker');
+
+    //$('#AbsenceStartFrom').change(function () {
+       
+    //});
+
+
+    // Absence 2 
+    var futureNotice2 = $('#notice_FutureDate2');
+    var start2 = $('#date_AbsenceStartFrom2').not(".disabled").datepicker({
+        onRender: function (date) {
+            return '';
+        }
+    }).on('changeDate', function (ev) {
+
+        futureNotice2.hide();
+
+        if (ev.date.valueOf() < now.valueOf())
+            futureNotice2.show();
+
+        if (ev.date.valueOf() > end2.date.valueOf()) {
+            var newDate = new Date(ev.date);
+            newDate.setDate(newDate.getDate() + 1);
+            end2.setValue(newDate);
+            $('#AbsenceEndsOn2').val('');
+        }
+        end2.update();
+        start.hide();
+    }).data('datepicker');
+
+    var end2 = $('#date_AbsenceEndsOn2').not(".disabled").datepicker({
+        onRender: function (date) {
+            return date.valueOf() <= start2.date.valueOf() ? 'disabled' : '';
+        }
+    }).on('changeDate', function (ev) {
+
+        end2.hide();
+    }).data('datepicker');
+    
+
+    // Absence 3 
+    var futureNotice3 = $('#notice_FutureDate3');
+    var start3 = $('#date_AbsenceStartFrom3').not(".disabled").datepicker({
+        onRender: function (date) {
+            return '';
+        }
+    }).on('changeDate', function (ev) {
+
+        futureNotice3.hide();
+
+        if (ev.date.valueOf() < now.valueOf())
+            futureNotice3.show();
+
+        if (ev.date.valueOf() > end3.date.valueOf()) {
+            var newDate = new Date(ev.date);
+            newDate.setDate(newDate.getDate() + 1);
+            end3.setValue(newDate);
+            $('#AbsenceEndsOn3').val('');
+        }
+        end3.update();
+        start.hide();
+    }).data('datepicker');
+
+    var end3 = $('#date_AbsenceEndsOn3').not(".disabled").datepicker({
+        onRender: function (date) {
+            return date.valueOf() <= start3.date.valueOf() ? 'disabled' : '';
+        }
+    }).on('changeDate', function (ev) {
+
+        end3.hide();
+    }).data('datepicker');
+
+    // Absence 4 
+    var futureNotice4 = $('#notice_FutureDate4');
+    var start4 = $('#date_AbsenceStartFrom4').not(".disabled").datepicker({
+        onRender: function (date) {
+            return '';
+        }
+    }).on('changeDate', function (ev) {
+
+        futureNotice4.hide();
+
+        if (ev.date.valueOf() < now.valueOf())
+            futureNotice4.show();
+
+        if (ev.date.valueOf() > end4.date.valueOf()) {
+            var newDate = new Date(ev.date);
+            newDate.setDate(newDate.getDate() + 1);
+            end4.setValue(newDate);
+            $('#AbsenceEndsOn4').val('');
+        }
+        end4.update();
+        start.hide();
+    }).data('datepicker');
+
+    var end4 = $('#date_AbsenceEndsOn4').not(".disabled").datepicker({
+        onRender: function (date) {
+            return date.valueOf() <= start4.date.valueOf() ? 'disabled' : '';
+        }
+    }).on('changeDate', function (ev) {
+
+        end4.hide();
+    }).data('datepicker');
+
+    
+
+    // Absence 5 
+    var futureNotice5 = $('#notice_FutureDate5');
+    var start5 = $('#date_AbsenceStartFrom5').not(".disabled").datepicker({
+        onRender: function (date) {
+            return '';
+        }
+    }).on('changeDate', function (ev) {
+
+        futureNotice5.hide();
+
+        if (ev.date.valueOf() < now.valueOf())
+            futureNotice5.show();
+
+        if (ev.date.valueOf() > end5.date.valueOf()) {
+            var newDate = new Date(ev.date);
+            newDate.setDate(newDate.getDate() + 1);
+            end5.setValue(newDate);
+            $('#AbsenceEndsOn5').val('');
+        }
+        end5.update();
+        start.hide();
+    }).data('datepicker');
+
+    var end5 = $('#date_AbsenceEndsOn5').not(".disabled").datepicker({
+        onRender: function (date) {
+            return date.valueOf() <= start5.date.valueOf() ? 'disabled' : '';
+        }
+    }).on('changeDate', function (ev) {
+
+        end5.hide();
+    }).data('datepicker');
+    
+
+    //$(function () {
+
+    //    //function showAbsenceNotice(absenceTypeId, absenceNoticeId, value) {
+
+    //    //    var intValue = parseInt(value, 10);
+
+    //    //    $('#' + absenceNoticeId).hide();
+
+    //    //    if ($('#' + absenceTypeId).val() == 'Maternity leave') {
+    //    //        if (intValue <= 2 || intValue > 52) {
+    //    //            $('#' + absenceNoticeId).show();
+    //    //        }
+    //    //    }
+    //    //    else if ($('#' + absenceTypeId).val() == 'Paternity leave') {
+    //    //        if (intValue < 1 || intValue > 2) {
+    //    //            $('#' + absenceNoticeId).show();
+    //    //        }
+    //    //    }
+    //    //}
+
+    //    //$('#NumberOfWeeks').on('change', function () {
+    //    //    showAbsenceNotice('AbsenceType', 'AbsenceNotice', $(this).val());
+    //    //});
+    //    //$('#NumberOfWeeks2').on('input', function () {
+    //    //    showAbsenceNotice('AbsenceType2', 'AbsenceNotice2', $(this).val());
+    //    //});
+    //    //$('#NumberOfWeeks3').on('input', function () {
+    //    //    showAbsenceNotice('AbsenceType3', 'AbsenceNotice3', $(this).val());
+    //    //});
+    //    //$('#NumberOfWeeks4').on('input', function () {
+    //    //    showAbsenceNotice('AbsenceType4', 'AbsenceNotice4', $(this).val());
+    //    //});
+    //    //$('#NumberOfWeeks5').on('input', function () {
+    //    //    showAbsenceNotice('AbsenceType5', 'AbsenceNotice5', $(this).val());
+    //    //});
+
+    //    //$('#AbsenceType').change(function () {
+    //    //    $('#AbsenceNotice').hide();
+    //    //    showAbsenceNotice('AbsenceType', 'AbsenceNotice', $('#NumberOfWeeks').val());
+    //    //});
+    //    //$('#AbsenceType2').change(function () {
+    //    //    $('#AbsenceNotice2').hide();
+    //    //    showAbsenceNotice('AbsenceType2', 'AbsenceNotice2', $('#NumberOfWeeks2').val());
+    //    //});
+    //    //$('#AbsenceType3').change(function () {
+    //    //    $('#AbsenceNotice3').hide();
+    //    //    showAbsenceNotice('AbsenceType3', 'AbsenceNotice3', $('#NumberOfWeeks3').val());
+    //    //});
+    //    //$('#AbsenceType4').change(function () {
+    //    //    $('#AbsenceNotice4').hide();
+    //    //    showAbsenceNotice('AbsenceType4', 'AbsenceNotice4', $('#NumberOfWeeks4').val());
+    //    //});
+    //    //$('#AbsenceType5').change(function () {
+    //    //    $('#AbsenceNotice5').hide();
+    //    //    showAbsenceNotice('AbsenceType5', 'AbsenceNotice5', $('#NumberOfWeeks5').val());
+    //    //});
+
+    //});
+
+</script>

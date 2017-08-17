@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?><predefined><name>Function</name><dependent><selectedCode>0005</selectedCode>
+<selected>Cafe</selected>
+<show>INDIVID,TRINN Fra fylte 16 år,TRINN Fra fylte 17 år,TRINN Fra fylte 18 år,TRINN Kokk med Fagbrev,TRINN Kokk uten Fagbrev,TRINN Øvrig Restaurantarb. med Fagbrev,TRINN Øvrig Restaurantarb. uten Fagbrev</show></dependent><dependent><selectedCode>0001</selectedCode>
+<selected>Hjemme</selected>
+<show>INDIVID,Over 18,Trainee 40%,Trainee 60%,TRINN Under 16 år,TRINN Under 18 år</show></dependent><dependent><selectedCode>0001</selectedCode>
+<selected>Holding</selected>
+<show>INDIVID</show></dependent><dependent><selectedCode>0010</selectedCode>
+<selected>IKEA AS Tromsø</selected>
+<show>INDIVID,Over 18,Trainee 40%,Trainee 60%,TRINN Under 16 år,TRINN Under 18 år</show></dependent><dependent><selectedCode>0001</selectedCode>
+<selected>Service Office</selected>
+<show>INDIVID</show></dependent><dependent><selectedCode>0001</selectedCode>
+<selected>Varehus</selected>
+<show>INDIVID,Over 18,Trainee 40%,Trainee 60%,TRINN Under 16 år,TRINN Under 18 år</show></dependent></predefined>

@@ -8,165 +8,168 @@
 @if (Model != null && Model.Logs != null)
 {
     var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
-    <div class="tab-pane tab-pane-border active" id="logtab">
+    
+        <div class="tab-pane tab-pane-border active" id="logtab">
     <table class="table table-striped table-bordered table-hover caselog">
-	    @if (Model.Logs.Any())
-	    {            
-		    <thead>
-		    <tr>
-			    <th>@Translation.Get("Datum",SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
-			    <th>@Translation.Get("Registrerad av",SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
-			    @if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote).ToString() == String.Empty)
-			    {
-				    <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(),SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
-			    }
-			    <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(),SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
-			    <th>@Translation.Get("E-post",SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
-			    <th>@Translation.Get("Filer",SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
-		    </tr>
-		    </thead>
-		    <tbody>
-		    @foreach (var r in Model.Logs)
-		    {
-			    <tr>
-				    <td style="max-width:105px">
-					    @if (r.FinishingDate.HasValue)
-					    {
-						    <span class="case-icon solved" title="@Translation.GetCoreTextTranslation("Stängt")"></span>
-					    }
-					    else
-					    {
-                                @*<span class="case-icon"></span>*@
-					    }
-					    @{
-						    r.LogDate = TimeZoneInfo.ConvertTimeFromUtc(r.LogDate.ToUniversalTime(), userTimeZone);
-					    }
-					    <a href="@GetLogLink(r)">@Html.DisplayFor(m => r.LogDate, "DateAndTime") </a>
-				    </td>
-				    <td style="max-width:110px" class="wordbreak">
-					    <a href="@GetLogLink(r)">@(r.User == null ? r.RegUser : Html.FormatUserName(r.User, Model.Setting))</a>
-				    </td>
-				    @if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote).ToString() == String.Empty)
-				    {
-					    <td class="wordbreak" style="width:25%; max-width:300px">
-						    <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextExternal).ForHtmlView()</a>
-					    </td> 
-				    }  
-				    @if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote).ToString() == String.Empty)
-				    {                      
-					    <td class="wordbreak" style="width:25%; max-width:300px">
-						    <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextInternal).ForHtmlView()</a>
-					    </td>  
-				    }else
-				    {
-					    <td class="wordbreak" style="width:40%; max-width:300px">
-						    <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextInternal).ForHtmlView()</a>
-					    </td>  
-				    }             
-				    <td class="wordbreak" style="max-width:150px">                          
-					    @{ var curLogMail2Tickets = Model.case_.Mail2Tickets.Where(m => m.Log_Id == r.Id).ToList();  }  
 
-					    @if (r.CaseHistory != null)
-					    {
-						    if (r.CaseHistory.Emaillogs != null)
-						    {   
-							    if (curLogMail2Tickets.Any())
-							    {
-								    var countTO = 0;
-								    var countCC = 0;
-								    var mailTO = "";
-								    var mailCC = "";
-								    var boldTO = false;
-								    var boldCC = false; 
-								    var show = false;
-								    foreach (var mail in curLogMail2Tickets)
-								    {                                                
-									    if (mail.Type.ToLower() == "to")
-									    {
-										    countTO = countTO + 1;
-										    mailTO += mail.EMailAddress + "; <br />";
-										    if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
-										    {
-											    boldTO = true;
-										    }
-									    }
+                @if (Model.Logs.Any())
+                {
+                    <thead>
+                        <tr>
+                            <th>@Translation.Get("Datum", SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
+                            <th>@Translation.Get("Registrerad av", SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
+                            @if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote).ToString() == String.Empty)
+                            {
+                                <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
+                            }
+                            <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
+                            <th>@Translation.Get("E-post", SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
+                            <th>@Translation.Get("Filer", SessionFacade.CurrentCaseLanguageId, Enums.TranslationSource.TextTranslation)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model.Logs)
+                        {
+                            <tr id="@r.Id">
+                                <td style="max-width:105px">
+                                    @if (r.FinishingDate.HasValue)
+                                    {
+                                        <span class="case-icon solved" title="@Translation.GetCoreTextTranslation("Stängt")"></span>
+                                    }
+                                    else
+                                    {
+                                        @*<span class="case-icon"></span>*@
+                                    }
+                                    @{
+                                        r.LogDate = TimeZoneInfo.ConvertTimeFromUtc(r.LogDate.ToUniversalTime(), userTimeZone);
+                                    }
+                                    <a href="@GetLogLink(r)">@Html.DisplayFor(m => r.LogDate, "DateAndTime") </a>
+                                </td>
+                                <td style="max-width:110px" class="wordbreak">
+                                    <a href="@GetLogLink(r)">@(r.User == null ? r.RegUser : Html.FormatUserName(r.User, Model.Setting))</a>
+                                </td>
+                                @if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote).ToString() == String.Empty)
+                                {
+                                    <td class="wordbreak" style="width:25%; max-width:300px">
+                                        <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextExternal).ForHtmlView()</a>
+                                    </td>
+                                }
+                                @if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote).ToString() == String.Empty)
+                                {
+                                    <td class="wordbreak" style="width:25%; max-width:300px">
+                                        <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextInternal).ForHtmlView()</a>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="wordbreak" style="width:40%; max-width:300px">
+                                        <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextInternal).ForHtmlView()</a>
+                                    </td>
+                                }
+                                <td class="wordbreak" style="max-width:150px">
+                                    @{ var curLogMail2Tickets = Model.case_.Mail2Tickets.Where(m => m.Log_Id == r.Id).ToList();  }
 
-									    if (mail.Type.ToLower() == "cc")
-									    {
-										    countCC = countCC + 1;
-										    mailCC += mail.EMailAddress + "; <br />";
-										    if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
-										    {
-											    boldCC = true;
-										    }
-									    }
+                                    @if (r.CaseHistory != null)
+                                    {
+                                        if (r.CaseHistory.Emaillogs != null)
+                                        {
+                                            if (curLogMail2Tickets.Any())
+                                            {
+                                                var countTO = 0;
+                                                var countCC = 0;
+                                                var mailTO = "";
+                                                var mailCC = "";
+                                                var boldTO = false;
+                                                var boldCC = false;
+                                                var show = false;
+                                                foreach (var mail in curLogMail2Tickets)
+                                                {
+                                                    if (mail.Type.ToLower() == "to")
+                                                    {
+                                                        countTO = countTO + 1;
+                                                        mailTO += mail.EMailAddress + "; <br />";
+                                                        if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                        {
+                                                            boldTO = true;
+                                                        }
+                                                    }
 
-									    show = true;                                            
-								    }
-                                      
-								    if (show)
-								    {
-									    var lastElmSelectedId = "lastMailSelected" + r.Id;
-									    var logMailToId = "mailto" + r.Id;
-									    var logMailCcId = "mailcc" + r.Id;
-									    <div>
-										    <input type="hidden" id="@lastElmSelectedId"  value="">
-										    @if (boldTO)
-										    {
-											    <p>
-												    <b>TO[@countTO]</b>&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailTO" data-expand-element="mailto" data-expand-log-id="@r.Id"></span>
-											    </p>
-										    }
-										    else
-										    {
-											    <p>
-												    TO[@countTO]&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailTO" data-expand-element="mailto" data-expand-log-id="@r.Id"></span>
-											    </p>
-										    }
-									    </div>
-									    <div>
-										    <p id="@logMailToId" class="" style="display:none">@Html.Raw(mailTO)</p>
-									    </div>
-									    <div>
-										    @if (boldCC)
-										    {
-											    <p>
-												    <b>CC[@countCC]</b>&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailCC" data-expand-element="mailcc" data-expand-log-id="@r.Id"></span>
-											    </p>
-										    }
-										    else
-										    {
-											    <p>
-												    CC[@countCC]&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailCC" data-expand-element="mailcc" data-expand-log-id="@r.Id"></span>
-											    </p>
-										    }
-									    </div>
-									    <div>
-										    <p id="@logMailCcId" class="" style="display:none">@Html.Raw(mailCC)</p>
-									    </div>
-								    }
-							    }
-							    else
-							    {                                     
-								    foreach (var l in r.CaseHistory.Emaillogs)      
-								    {                                            
-									    <div>
-										    <p>
-											    @l.EmailAddress 
-										    </p>
-									    </div>
-								    }
-							    }                                    
-						    }                                        
-					    }
-				    </td>                        
-				    <td class="wordbreak" style="max-width:150px">
-					    @if (r.LogFiles != null)
-					    {
-						    foreach (var l in r.LogFiles)      
-						    {                                            
-							    <div>
-								    <p>
+                                                    if (mail.Type.ToLower() == "cc")
+                                                    {
+                                                        countCC = countCC + 1;
+                                                        mailCC += mail.EMailAddress + "; <br />";
+                                                        if (mail.EMailAddress == Model.case_.Customer.HelpdeskEmail)
+                                                        {
+                                                            boldCC = true;
+                                                        }
+                                                    }
+
+                                                    show = true;
+                                                }
+
+                                                if (show)
+                                                {
+                                                    var lastElmSelectedId = "lastMailSelected" + r.Id;
+                                                    var logMailToId = "mailto" + r.Id;
+                                                    var logMailCcId = "mailcc" + r.Id;
+                                                    <div>
+                                                        <input type="hidden" id="@lastElmSelectedId" value="">
+                                                        @if (boldTO)
+                                                        {
+                                                            <p>
+                                                                <b>TO[@countTO]</b>&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailTO" data-expand-element="mailto" data-expand-log-id="@r.Id"></span>
+                                                            </p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>
+                                                                TO[@countTO]&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailTO" data-expand-element="mailto" data-expand-log-id="@r.Id"></span>
+                                                            </p>
+                                                        }
+                                                    </div>
+                                                    <div>
+                                                        <p id="@logMailToId" class="" style="display:none">@Html.Raw(mailTO)</p>
+                                                    </div>
+                                                    <div>
+                                                        @if (boldCC)
+                                                        {
+                                                            <p>
+                                                                <b>CC[@countCC]</b>&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailCC" data-expand-element="mailcc" data-expand-log-id="@r.Id"></span>
+                                                            </p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>
+                                                                CC[@countCC]&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailCC" data-expand-element="mailcc" data-expand-log-id="@r.Id"></span>
+                                                            </p>
+                                                        }
+                                                    </div>
+                                                    <div>
+                                                        <p id="@logMailCcId" class="" style="display:none">@Html.Raw(mailCC)</p>
+                                                    </div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                foreach (var l in r.CaseHistory.Emaillogs)
+                                                {
+                                                    <div>
+                                                        <p>
+                                                            @l.EmailAddress
+                                                        </p>
+                                                    </div>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td class="wordbreak" style="max-width:150px">
+                                    @if (r.LogFiles != null)
+                                    {
+                                        foreach (var l in r.LogFiles)
+                                        {
+                                            <div>
+                                                <p>
 									    @if (Model.CaseFilesModel.VirtualDirectory)
                                         {
                                             if (l.CaseId.HasValue)
@@ -209,17 +212,23 @@
 
 
 @*										    <a href="@Url.Action("DownloadLogFile", new { id = r.Id, fileName = l.FileName })"><i class="icon-file"></i> @l.FileName</a>    *@
-									    }
-								    </p>
-							    </div>
-						    }                                    
-					    }
-				    </td>
-			    </tr>
-		    }
-		    </tbody>
-	    }                
-    </table>
+                                                }
+                                            }
+
+
+@*										    <a href="@Url.Action("DownloadLogFile", new { id = r.Id, fileName = l.FileName })"><i class="icon-file"></i> @l.FileName</a>    *@
+                                                    }
+                                                </p>
+                                            </div>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                                        }
+                    </tbody>
+                                        }
+
+            </table>
 		@if (Model.CustomerSettings.ModuleInvoice)
 		{
 			<table id="tblCaseChargeSummary" style="@Model.ShowInvoiceFields.displayHtml()">
@@ -269,8 +278,8 @@
 				</tbody>
 			</table>
 		}
-    </div>
-}
+        </div>    
+                                        }
 
 @functions 
 {

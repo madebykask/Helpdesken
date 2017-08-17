@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<state status="0">
+    <status value="0">
+        <visibleTabs>#ServiceRequestDetails,#Absences,#attachments</visibleTabs>
+        <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
+        <actions>
+            <action status="30" internal-val="30" text="Submit Service Request to SSC">
+                <validateTabs>#ServiceRequestDetails,#Absences</validateTabs>
+            </action>
+            <action status="99" internal-val="70" text="Cancel service request"></action>
+        </actions>
+    </status>
+    <!--LM-->
+    <status value="10">
+        <userGroup name="Line Manager">
+            <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
+            <readOnlyTabs></readOnlyTabs>
+            <readOnlyFields>
+                Company,BusinessUnit,ServiceArea,Department,
+                CommutingType,StartFrom,EndsOn,DestinationCountry,TaxRelevant,
+                CommutingType2,StartFrom2,EndsOn2,DestinationCountry2,TaxRelevant2,
+                CommutingType3,StartFrom3,EndsOn3,DestinationCountry3,TaxRelevant3,
+                CommutingType4,StartFrom4,EndsOn4,DestinationCountry4,TaxRelevant4,
+                CommutingType5,StartFrom5,EndsOn5,DestinationCountry5,TaxRelevant5
+            </readOnlyFields>
+        </userGroup>
+        <visibleTabs>#ServiceRequestDetails,#Absences,#attachments</visibleTabs>
+        <readOnlyTabs></readOnlyTabs>
+        <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
+        <actions>
+            <action status="20" internal-val="20" text="Submit to HR Unit">
+                <validateTabs>#ServiceRequestDetails</validateTabs>
+            </action>
+            <action status="99" internal-val="70" text="Cancel service request"></action>
+        </actions>
+    </status>
+    <!-- HRU -->
+    <status value="20">
+        <userGroup name="Line Manager">
+            <visibleTabs>#ServiceRequestDetails,#Absences</visibleTabs>
+            <readOnlyTabs>#ServiceRequestDetails,#Absences</readOnlyTabs>
+        </userGroup>
+        <visibleTabs>#ServiceRequestDetails,#Absences,#attachments</visibleTabs>
+        <readOnlyTabs></readOnlyTabs>
+        <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
+        <actions>
+            <action status="30" internal-val="30" text="Submit Service Request to SSC">
+                <validateTabs>#ServiceRequestDetails,#Absences</validateTabs>
+            </action>
+            <action status="99" internal-val="70" text="Cancel service request"></action>
+        </actions>
+    </status>
+    <!-- SSC -->
+    <status value="30">
+        <visibleTabs>#ServiceRequestDetails,#Absences,#attachments</visibleTabs>
+        <readOnlyTabs>#ServiceRequestDetails,#Absences,#attachments</readOnlyTabs>
+        <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
+        <actions>
+            <action status="40" internal-val="40" text="Validity check OK">
+                <validateTabs>#ServiceRequestDetails,#Absences</validateTabs>
+            </action>
+            <action status="20" internal-val="20" text="Validity check not OK"></action>
+            <action status="99" internal-val="70" text="Cancel service request"></action>
+        </actions>
+    </status>
+    <!-- SSC -->
+    <status value="40">
+        <visibleTabs>#ServiceRequestDetails,#Absences,#attachments</visibleTabs>
+        <readOnlyTabs>#ServiceRequestDetails,#Absences,#attachments</readOnlyTabs>
+        <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
+        <actions>
+            <action status="60" internal-val="60" text="Global View Update"></action>
+            <action status="99" internal-val="70" text="Cancel service request"></action>
+        </actions>
+    </status>
+    <!-- SSC -->
+    <status value="60">
+        <visibleTabs>#ServiceRequestDetails,#Absences,#attachments</visibleTabs>
+        <readOnlyTabs>#ServiceRequestDetails,#Absences,#attachments</readOnlyTabs>
+    </status>
+    <!-- SSC -->
+    <status value="70">
+        <visibleTabs>#ServiceRequestDetails,#Absences,#attachments</visibleTabs>
+        <readOnlyTabs>#ServiceRequestDetails,#Absences,#attachments</readOnlyTabs>
+    </status>
+</state>

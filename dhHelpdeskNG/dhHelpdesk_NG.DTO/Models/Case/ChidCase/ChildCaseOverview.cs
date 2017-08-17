@@ -25,5 +25,7 @@
         public bool IsRequriedToApprive { get; set; }
 
         public int ParentId { get; set; }
+
+        public bool Indepandent { get; set; }
     }
 }

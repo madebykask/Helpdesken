@@ -320,7 +320,7 @@
 						<div id="divFinishingType" class="btn-group">
 							@{
 								string disabled = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause);
-								if (readonlyMode || (Model.IsItParentCase() && Model.IsAnyNotClosedChild()))
+								if (readonlyMode || (Model.IsItParentCase() && Model.IsAnyNotClosedChild(true)))
 								{
 									disabled = "disabled";
 								}
@@ -346,8 +346,7 @@
 					</td>
 					<td>
 						@if (!(Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)
-			|| readonlyMode
-			|| (Model.IsItParentCase() && Model.IsAnyNotClosedChild())))
+			                  || readonlyMode || (Model.IsItParentCase() && Model.IsAnyNotClosedChild(true))))
 						{
 							if (Model.Setting.DisableCaseEndDate == 0)
 							{

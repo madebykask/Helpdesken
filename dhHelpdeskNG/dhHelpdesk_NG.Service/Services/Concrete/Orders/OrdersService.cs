@@ -606,7 +606,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     }
                     newCase.Description = string.IsNullOrEmpty(description) ? "." : description;
 
-                    var caseHistoryId = this._caseService.SaveCase(newCase, null, caseMailSetting, 0, userId, ei, out errors);
+                    var caseHistoryId = this._caseService.SaveCase(newCase, null, 0, userId, ei, out errors);
 
                     //get casenumber
                     var newcase = this._caseService.GetCaseById(newCase.Id);

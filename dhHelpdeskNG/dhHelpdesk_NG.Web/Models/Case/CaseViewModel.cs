@@ -17,6 +17,7 @@ namespace DH.Helpdesk.Web.Models.Case
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.CaseDocument;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Web.Infrastructure.CaseOverview;
@@ -47,6 +48,7 @@ namespace DH.Helpdesk.Web.Models.Case
                                                            }
                                                    };
 			ExternalInvoices = new List<ExternalInvoiceModel>();
+            		this.SelectedWorkflowStep = 0;
 			CaseAttachedExFiles = new List<CaseAttachedExFileModel>();
         }
 
@@ -61,7 +63,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public int ShowInvoiceFields { get; set; }
         public int ShowExternalInvoiceFields { get; set; }
         public bool TimeRequired { get; set; }
-		public CaseLockModel CaseLock { get; set; }
+	public CaseLockModel CaseLock { get; set; }
         public int MinWorkingTime { get; set; }        
         public Infrastructure.Enums.AccessMode EditMode { get; set; } //(-1,0,1)
         public bool Disable_SendMailAboutCaseToNotifier { get; set; }
@@ -70,7 +72,9 @@ namespace DH.Helpdesk.Web.Models.Case
         public int? OrderId { get; set; }
         public int? AccountId { get; set; }
         public int? AccountActivityId { get; set; }
-
+        public string ActiveTab { get; set; }
+        public int? SelectedWorkflowStep { get; set; }
+        
         [Obsolete("Put all fields that you required into this CaseInputViewModel model")]
         public Case case_  { get; set; }
 
@@ -201,11 +205,15 @@ namespace DH.Helpdesk.Web.Models.Case
         public int? templateistrue { get; set; }
 
         public string CaseTemplateName { get; set; }
+		public int? CaseTemplateSplitToCaseSolutionID { get; set; }
 
-        public string BackUrl { get; set; }
+		public string BackUrl { get; set; }
 
         public bool CanGetRelatedCases { get; set; }
 
+        public IList<ExtendedCaseFormModel> ExtendedCases { get; set; }
+
+        public IEnumerable<CaseDocumentModel> CaseDocuments { get; set; }
 
         #region Date field from case_. Converted to user time zone
 
@@ -237,7 +245,7 @@ namespace DH.Helpdesk.Web.Models.Case
             return this.ChildCaseViewModel != null && this.ChildCaseViewModel.ChildCaseList != null && this.ChildCaseViewModel.ChildCaseList.Length > 0;
         }
 
-        public bool IsAnyNotClosedChild()
+        public bool IsAnyNotClosedChild(bool containsIndependents = false)
         {
             if (this.ChildCaseViewModel == null)
             {
@@ -250,7 +258,7 @@ namespace DH.Helpdesk.Web.Models.Case
                 return false;
             }
 
-            return childList.Any(it => it.ClosingDate == null);
+            return childList.Any(it => it.ClosingDate == null && (containsIndependents? !it.Indepandent : true));
         }
 
         public OutputFormatter OutFormatter { get; set; }
@@ -268,9 +276,13 @@ namespace DH.Helpdesk.Web.Models.Case
         public bool editLog { get; set; }
         public IList<WorkflowStepModel> WorkflowSteps { get; set; }
 
-        public int LanguageId { get; set; }        
+        public int LanguageId { get; set; }
 
-    }
+        public bool ContainsExtendedCase { get; set; }
+        public Guid ExtendedCaseGuid { get; set; }
+		public bool IndependentChild { get; internal set; }
+		public CaseSolution CurrentCaseSolution { get; internal set; }
+	}
 
     public class CaseIndexViewModel
     {

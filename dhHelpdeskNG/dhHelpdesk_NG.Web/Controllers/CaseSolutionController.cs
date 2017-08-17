@@ -1296,6 +1296,7 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.CausingPartId,
                     caseSolution.InvoiceNumber,
                     caseSolution.ReferenceNumber,
+					SplitToCaseSolution_Id = caseSolution.SplitToCaseSolution_Id.HasValue ? caseSolution.SplitToCaseSolution_Id : null,
 
                     SMS = caseSolution.SMS.ToBool(),
                     AgreedDate = caseSolution.AgreedDate.HasValue ? caseSolution.AgreedDate.Value.ToShortDateString() : string.Empty,
@@ -2810,6 +2811,11 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = caseSolution.SaveAndClose.HasValue && caseSolution.SaveAndClose.Value != 0
             });
 
+			// 
+
+			var splitToCaseSolutions = _caseSolutionService.GetCaseSolutions(curCustomerId);
+
+
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolution = caseSolution,
@@ -2908,7 +2914,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 CaseSolutionFieldSettings = feildSettings,
                 CSSettingsField = lFieldSetting.ToList(),
-                CSSelectedSettingsField = lFieldSettingSelected.ToList()
+                CSSelectedSettingsField = lFieldSettingSelected.ToList(),
+				SplitToCaseSolutions = splitToCaseSolutions
 
             };
 
@@ -3038,6 +3045,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             model.RuleModel = caseRuleModel;
             model.CaseSolution.Name = model.CaseSolution.Name;
+            model.CustomerSetting = _settingService.GetCustomerSetting(model.CaseSolution.Customer_Id);
             return model;
         }
 

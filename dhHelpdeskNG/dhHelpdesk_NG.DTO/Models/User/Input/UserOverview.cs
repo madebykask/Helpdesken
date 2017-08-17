@@ -47,7 +47,8 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             int startPage,
             bool showSolutionTime,
             bool showCaseStatistics,
-            string timeZoneId)
+            string timeZoneId,
+            Guid? userGuid)
         {
             this.StartPage = startPage;
             this.Id = id;
@@ -87,6 +88,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.ShowSolutionTime = showSolutionTime;
             this.ShowCaseStatistics = showCaseStatistics;
             this.TimeZoneId = timeZoneId;
+            this.UserGUID = userGuid;
         }
 
         [IsId]
@@ -177,5 +179,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
         {
             return this.UserGroupId > (int)UserGroup.User;
         }
+
+        public Guid? UserGUID { get; set; }
     }
 }

@@ -47,6 +47,7 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
     using Ninject.Modules;
     using Dal.DbQueryExecutor;
     using Services.Services;
+    using Domain.ExtendedCaseEntity;
 
     /// <summary>
     /// The common module.
@@ -228,7 +229,38 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
                 .To<SqlDbQueryExecutorFactory>()
                 .InSingletonScope();
 
-            this.Bind<ICaseSolutionConditionService>().To<CaseSolutionConditionService>();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseModel, Case>>()
+                .To<CaseModelToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<Case, CaseModel>>()
+                .To<CaseToCaseModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<ExtendedCaseFormModel, ExtendedCaseFormEntity>>()
+               .To<ExtendedCaseFormToEntityMapper>()
+               .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel>>()
+                .To<ExtendedCaseFormToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity>>()
+                .To<ExtendedCaseDataToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ExtendedCaseDataEntity, ExtendedCaseDataModel>>()
+                .To<ExtendedCaseDataToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<ExtendedCaseValueModel, ExtendedCaseValueEntity>>()
+                .To<ExtendedCaseValueToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ExtendedCaseValueEntity, ExtendedCaseValueModel>>()
+                .To<ExtendedCaseValueToBusinessModelMapper>()
+                .InSingletonScope();
         }
     }
 }

@@ -1,0 +1,35 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<tr>
+    <td>@Model.Translate("English Contract")</td>
+    <td>pdf</td>
+    <td>@Model.GetAnswer("Contract")</td>
+    <td>@Model.Element("ContractConcludedOn", Model.Language, false, "concludedOn")</td>
+    <td>
+        <a href="@Url.Action("print", "hiring", new
+                {
+                    id = "Contract",
+                    caseId = Model.Contract.Id,
+                    path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
+                    userId = FormLibSessions.User.UserId
+                })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+    </td>
+</tr>
+<tr>
+    <td>@Model.Translate("Polish Contract")</td>
+    <td>pdf</td>
+    <td>@Model.GetAnswer("ContractPolish")</td>
+    <td>@Model.Element("ContractPolishConcludedOn", Model.Language, false, "concludedOn")</td>
+    <td>
+        <a href="@Url.Action("print", "hiring", new
+                {
+                    id = "ContractPolish",
+                    caseId = Model.Contract.Id,
+                    path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
+                    userId = FormLibSessions.User.UserId,
+                    
+                })" class="btn pull-right print" ><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+    </td>
+</tr>

@@ -1,0 +1,128 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    ViewBag.Title = Model.Translate("Global") + " - " + Model.Translate("Service Request Details");       
+}
+
+
+@section Script {
+    <script type="text/javascript">
+
+        validate.run($('#actionState').val());
+
+        $(document).on('change', '#actionState', function (e) {
+            var val = $(this).val();
+            validate.run(val);
+        });
+
+        //var iconFlag = '<i class="icon-flag"></i>';
+        //var elemOld = $('input[name^="OLD_"]');
+        //var elem = new Array();
+
+        //elemOld.each(function (e) {
+        //    var $this = $(this);
+        //    var $that = $('#' + $this.attr('id').replace('OLD_', ''));
+        //    $this.parent().find('.icon-flag').remove();
+        //    if ($that.val() !== $this.val() && $this.parent().find('.icon-flag').length == 0)
+        //        $this.parent().prepend($(iconFlag));
+
+        //    var tagName = $that.get(0).tagName;
+
+        //    if ($that.is('input')) {
+
+        //        $that.keyup(function (e) {
+        //            var old = $('#OLD_' + $(this).attr('id'));
+        //            old.parent().find('.icon-flag').remove();
+
+        //            if ($(this).val() !== old.val().replace(/[\r\n]/g, "") && old.parent().find('.icon-flag').length == 0)
+        //                old.parent().prepend($(iconFlag));
+
+        //        });
+        //    }
+
+        //    if ($that.is('select')) {
+        //        $that.change(function (e) {
+        //            var old = $('#OLD_' + $(this).attr('id'));
+        //            old.parent().find('.icon-flag').remove();
+
+        //            if ($(this).val() !== old.val().replace(/[\r\n]/g, "") && old.parent().find('.icon-flag').length == 0)
+        //                old.parent().prepend($(iconFlag));
+
+        //        });
+        //    }
+        //});
+
+    </script>
+
+    @Html.Partial("_Validate", Model)
+}
+
+@using(Html.BeginForm("new", "ChangeTermsConditions", FormMethod.Post, new { area = "Global", novalidate = "novalidate" }))
+{
+    @Html.Partial("_GlobalNavRev", Model)
+    <div class="container containeralignright">
+        @Html.Partial("_CurrentUser")
+        @Html.Partial("_ErrorMessage", Model)
+        <ul class="nav nav-tabs">
+            @if(Model.VisibleTab("#ServiceRequestDetails"))
+            {
+                <li class="active @(Model.TabHasError("#ServiceRequestDetails") ? "error" : "")">
+                    <a href="#ServiceRequestDetails">@Model.Translate("Service Request Details")</a></li>
+            }
+            @if(Model.VisibleTab("#OrganisationalAssignment"))
+            {
+                <li class="@(Model.TabHasError("#OrganisationalAssignment") ? "error" : "")">
+                    <a href="#OrganisationalAssignment">@Model.Translate("Organisational Assignment")</a></li>
+            }
+            @if(Model.VisibleTab("#Payment"))
+            {
+                <li class="@(Model.TabHasError("#Payment") ? "error" : "")">
+                    <a href="#Payment">@Model.Translate("Payment Information")</a></li>
+            }
+            @if(Model.VisibleTab("#attachments"))
+            {
+                <li class="pull-right">
+                    <a href="#attachments"><i class="icon-file icon-white"></i>&nbsp;@Model.Translate("Attachments")&nbsp;(<b id="attachmentCounter">0</b>)</a>
+                </li>
+            }
+        </ul>
+        <div class="content">
+            <div class="row-fluid">
+                <div class="tab-content">
+
+
+                    @if(Model.VisibleTab("#ServiceRequestDetails"))
+                    {
+                        @Html.Partial("_TabServiceRequestDetails", Model)
+                    }
+                    @if(Model.VisibleTab("#OrganisationalAssignment"))
+                    {
+                        @Html.Partial("_TabOrganisationalAssignment", Model)
+                    }
+                    @if(Model.VisibleTab("#Payment"))
+                    {
+                        @Html.Partial("_TabPayment", Model)
+                    }
+                    @if(Model.VisibleTab("#attachments"))
+                    {
+                        @Html.Partial("_GlobalAttachments", Model)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />    
+}
+
+<script type="text/javascript">
+
+    function changeBusinessUnitCallback() {
+        SetHelpDeskDefault();
+        //SetPrimarySiteDefault();
+        GetXML('Predefined_BusinessUnit_JobTitle.xml', setJobTitle);
+        GetXML('Predefined_LocalJobTitle_JobTitle.xml', setLocalJobTitle);
+    }
+
+</script>

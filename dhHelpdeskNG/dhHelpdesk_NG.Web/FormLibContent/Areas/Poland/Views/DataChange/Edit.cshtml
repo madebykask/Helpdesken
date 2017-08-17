@@ -1,0 +1,48 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    ViewBag.Title = Model.Translate("Poland") + " - " + Model.Translate("Data change");
+}
+
+@section Validation {
+
+    @Html.Partial("_Validate", Model)
+
+}
+
+@section Script {
+
+    <script>
+
+        $(document).on('change', '#Extent', function (e) {
+            e.preventDefault();
+            if ($(this).val() === 'Full time')
+                $('#Workload').val('100');
+        });
+        
+        validate.run($('#actionState').val());
+
+        $(document).on('change', '#actionState', function (e) {
+            var val = $(this).val();
+            validate.run(val);
+        });
+
+        var unitWorkTimeSystemArr = ["O188", "O203", "O204", "O205", "O294", "O306", "O307", "O329"];
+
+        if ($('#WorkingTimeSchedule').val() === '') {
+            $('#WorkingTimeSchedule').val('basic');
+            for (var i = 0; i < unitWorkTimeSystemArr.length; i++) {
+                if (unitWorkTimeSystemArr[i] === $('#Unit').val()) {
+                    $('#WorkingTimeSchedule').val('equivalent');
+                    break;
+                }
+            }
+        }
+
+    </script>
+
+}
+
+@Html.Partial("_Edit", Model)

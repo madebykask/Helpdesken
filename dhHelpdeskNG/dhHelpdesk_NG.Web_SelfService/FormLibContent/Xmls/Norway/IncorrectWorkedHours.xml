@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/IncorrectWorkedHoursState.xml">
+
+  <!--GLOBAL DATA-->
+  <!ENTITY data_global_costcentre SYSTEM "Data/Data_Global_CostCentre.xml">
+
+  <!--COMMON DATA-->
+  <!ENTITY dat_ServiceRequestPriority SYSTEM "Data/Data_Common_ServiceRequestPriority.xml">
+  <!ENTITY dat_YesNo SYSTEM "Data/Data_Common_YesNo.xml">
+
+  <!--PROCESS SPECIFIC DATA-->
+  <!ENTITY dat_CorrectionType SYSTEM "Data/IncorrectWorkedHours/Data_IncorrectWorkedHours_CorrectionType.xml">
+]>
+
+<form id="0" guid="728B227B-E603-4C6E-A1F3-B46D0F0A5D37" customerId="0">
+  &languages;
+  &regexs;
+  &state;
+  <fields>
+    <!--Tab ServiceRequestDetails-->
+    <tab name="#ServiceRequestDetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" casefield="reportedby" type="text" label="Co-worker Globalview ID" mandatory="1">
+        <regex inherit="employeeno" pattern="" message=""></regex>
+      </element>
+      <element name="FirstName" casefield="persons_name" type="text" label="Co-worker First Name" mandatory="1"></element>
+      <element name="LastName" casefield="persons_phone" type="text" label="Co-worker Last Name" mandatory="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1">
+        <regex inherit="email" pattern="" message=""></regex>
+      </element>
+      <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1"></element>
+      <element name="Company" type="text" casefield="region_id" label="Company" mandatory="1"></element>
+      <element name="BusinessUnit" casefield="department_id" type="text" label="Business Unit" mandatory="1"></element>
+      <element name="ServiceArea" type="text" label="Function" mandatory="1"></element>
+      <element name="Department" type="text" label="Department" mandatory="1" casefield="ou_id"></element>
+
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
+        &dat_ServiceRequestPriority;
+      </element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+    </tab>
+    <tab name="#Payment" label="Payment Information">
+      <element type="hidden" default="1" name="Allowances" label="MULTI"></element>
+      
+      <element type="date" name="Date" label="Date" format="dd.MM.yyyy" mandatory="1">
+        <regex inherit="date" message="" pattern=""></regex>
+      </element>
+      <element type="select" name="CorrectionType" label="Correction Type" mandatory="1">
+        &dat_CorrectionType;
+      </element>
+      <element name="CrossCharge" label="Cross Charge?" type="select">
+        &dat_YesNo;
+      </element>   
+      <element name="WorkedCompany" source="database" label="Company" type="select" formfieldidentifier="P0001.BUKRS">
+        <mandatoryIf name="CrossCharge">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedBusinessUnit" source="database" label="Business Unit" type="search-select">
+        <mandatoryIf name="CrossCharge">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedFunction" source="database" label="Function" type="search-select">
+        <mandatoryIf name="CrossCharge">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedDepartment" source="database" label="Department" type="search-select">
+        <mandatoryIf name="CrossCharge">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedCostCentre" label="Cost Centre" type="search-select">
+        <mandatoryIf name="CrossCharge">Yes</mandatoryIf>
+        &data_global_costcentre;
+      </element>
+      <element name="TotalNumberOfHours" label="Total Number of hours" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="UBOne" label="UB1" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="UBTwo" label="UB2" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="UBThree" label="UB3" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentNights" label="50% Nights" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentNights" label="100% Nights" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentOvertime" label="50% Overtime" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentOvertime" label="100% Overtime" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="150PercentOvertime" label="150% Overtime" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="EveningAllowance" label="Evening Allowance" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="WeekendAllowance" label="Weekend Allowance" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+     
+
+      <element type="date" name="Date2" label="Date" format="dd.MM.yyyy">
+        <mandatoryIfNotEmpty name="CorrectionType2"></mandatoryIfNotEmpty>
+        <regex inherit="date" message="" pattern=""></regex>
+      </element>
+      <element type="select" name="CorrectionType2" label="Correction Type">
+        <mandatoryIfNotEmpty name="Date2"></mandatoryIfNotEmpty>
+        &dat_CorrectionType;
+      </element>
+      <element name="CrossCharge2" label="Cross Charge?" type="select">
+        &dat_YesNo;
+      </element>
+      <element name="WorkedCompany2" source="database" label="Company" type="select"  formfieldidentifier="P0001.BUKRS">
+        <mandatoryIf name="CrossCharge2">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedBusinessUnit2" source="database" label="Business Unit" type="search-select">
+        <mandatoryIf name="CrossCharge2">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedFunction2" source="database" label="Function" type="search-select">
+        <mandatoryIf name="CrossCharge2">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedDepartment2" source="database" label="Department" type="search-select">
+        <mandatoryIf name="CrossCharge2">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedCostCentre2" label="Cost Centre" type="search-select">
+        <mandatoryIf name="CrossCharge2">Yes</mandatoryIf>
+        &data_global_costcentre;
+      </element>
+      <element name="TotalNumberOfHours2" label="Total Number of hours" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="UBOne2" label="UB1" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="UBTwo2" label="UB2" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="UBThree2" label="UB3" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentNights2" label="50% Nights" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentNights2" label="100% Nights" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentOvertime2" label="50% Overtime" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentOvertime2" label="100% Overtime" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="150PercentOvertime2" label="150% Overtime" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="EveningAllowance2" label="Evening Allowance" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="WeekendAllowance2" label="Weekend Allowance" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+     
+
+
+      <element type="date" name="Date3" label="Date" format="dd.MM.yyyy" >
+        <mandatoryIfNotEmpty name="CorrectionType3"></mandatoryIfNotEmpty>
+        <regex inherit="date" message="" pattern=""></regex>
+      </element>
+      <element type="select" name="CorrectionType3" label="Correction Type" >
+        <mandatoryIfNotEmpty name="Date3"></mandatoryIfNotEmpty>
+        &dat_CorrectionType;
+      </element>
+      <element name="CrossCharge3" label="Cross Charge?" type="select">
+        &dat_YesNo;
+      </element>
+      <element name="WorkedCompany3" source="database" label="Company" type="select"  formfieldidentifier="P0001.BUKRS">
+        <mandatoryIf name="CrossCharge3">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedBusinessUnit3" source="database" label="Business Unit" type="search-select">
+        <mandatoryIf name="CrossCharge3">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedFunction3" source="database" label="Function" type="search-select">
+        <mandatoryIf name="CrossCharge3">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedDepartment3" source="database" label="Department" type="search-select">
+        <mandatoryIf name="CrossCharge3">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedCostCentre3" label="Cost Centre" type="search-select">
+        <mandatoryIf name="CrossCharge3">Yes</mandatoryIf>
+        &data_global_costcentre;
+      </element>
+      <element name="TotalNumberOfHours3" label="Total Number of hours" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="UBOne3" label="UB1" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="UBTwo3" label="UB2" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="UBThree3" label="UB3" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentNights3" label="50% Nights" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentNights3" label="100% Nights" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentOvertime3" label="50% Overtime" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentOvertime3" label="100% Overtime" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="150PercentOvertime3" label="150% Overtime" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="EveningAllowance3" label="Evening Allowance" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="WeekendAllowance3" label="Weekend Allowance" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      
+
+
+
+      <element type="date" name="Date4" label="Date" format="dd.MM.yyyy" >
+        <mandatoryIfNotEmpty name="CorrectionType4"></mandatoryIfNotEmpty>
+        <regex inherit="date" message="" pattern=""></regex>
+      </element>
+      <element type="select" name="CorrectionType4" label="Correction Type" >
+        <mandatoryIfNotEmpty name="Date4"></mandatoryIfNotEmpty>
+        &dat_CorrectionType;
+      </element>
+      <element name="CrossCharge4" label="Cross Charge?" type="select">
+        &dat_YesNo;
+      </element>
+      <element name="WorkedCompany4" source="database" label="Company" type="select"  formfieldidentifier="P0001.BUKRS">
+        <mandatoryIf name="CrossCharge4">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedBusinessUnit4" source="database" label="Business Unit" type="search-select">
+        <mandatoryIf name="CrossCharge4">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedFunction4" source="database" label="Function" type="search-select">
+        <mandatoryIf name="CrossCharge4">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedDepartment4" source="database" label="Department" type="search-select">
+        <mandatoryIf name="CrossCharge4">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedCostCentre4" label="Cost Centre" type="search-select">
+        <mandatoryIf name="CrossCharge4">Yes</mandatoryIf>
+        &data_global_costcentre;
+      </element>
+      <element name="TotalNumberOfHours4" label="Total Number of hours" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="UBOne4" label="UB1" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="UBTwo4" label="UB2" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="UBThree4" label="UB3" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentNights4" label="50% Nights" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentNights4" label="100% Nights" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentOvertime4" label="50% Overtime" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentOvertime4" label="100% Overtime" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="150PercentOvertime4" label="150% Overtime" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="EveningAllowance4" label="Evening Allowance" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="WeekendAllowance4" label="Weekend Allowance" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      
+
+
+      <element type="date" name="Date5" label="Date" format="dd.MM.yyyy" >
+        <mandatoryIfNotEmpty name="CorrectionType5"></mandatoryIfNotEmpty>
+        <regex inherit="date" message="" pattern=""></regex>
+      </element>
+      <element type="select" name="CorrectionType5" label="Correction Type" >
+        <mandatoryIfNotEmpty name="Date5"></mandatoryIfNotEmpty>
+        &dat_CorrectionType;
+      </element>
+      <element name="CrossCharge5" label="Cross Charge?" type="select">
+        &dat_YesNo;
+      </element>
+      <element name="WorkedCompany5" source="database" label="Company" type="select"  formfieldidentifier="P0001.BUKRS">
+        <mandatoryIf name="CrossCharge5">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedBusinessUnit5" source="database" label="Business Unit" type="search-select">
+        <mandatoryIf name="CrossCharge5">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedFunction5" source="database" label="Function" type="search-select">
+        <mandatoryIf name="CrossCharge5">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedDepartment5" source="database" label="Department" type="search-select">
+        <mandatoryIf name="CrossCharge5">Yes</mandatoryIf>
+      </element>
+      <element name="WorkedCostCentre5" label="Cost Centre" type="search-select">
+        <mandatoryIf name="CrossCharge5">Yes</mandatoryIf>
+        &data_global_costcentre;
+      </element>
+      <element name="TotalNumberOfHours5" label="Total Number of hours" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="UBOne5" label="UB1" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="UBTwo5" label="UB2" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="UBThree5" label="UB3" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentNights5" label="50% Nights" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentNights5" label="100% Nights" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentOvertime5" label="50% Overtime" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentOvertime5" label="100% Overtime" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="150PercentOvertime5" label="150% Overtime" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="EveningAllowance5" label="Evening Allowance" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      <element name="WeekendAllowance5" label="Weekend Allowance" type="text">
+        <regex inherit="minusnum" pattern="" message=""></regex>
+      </element>
+      
+    </tab>
+  </fields>
+</form>

@@ -1,0 +1,20 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@if(Model.GetErrorMessages().Length > 0)
+{
+    <div class="row-fluid">
+        <div class="alert alert-error">
+            <strong>@Model.Translate("Complete mandatory fields and correct errors")</strong>
+        </div>
+    </div>
+}
+else if(TempData["Error"] != null)
+{
+    <div class="row-fluid">
+        <div class="alert alert-error">
+            <strong>@TempData["Error"]</strong>
+        </div>
+    </div>
+}

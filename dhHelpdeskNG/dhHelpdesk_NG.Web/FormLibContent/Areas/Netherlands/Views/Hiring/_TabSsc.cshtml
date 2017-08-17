@@ -1,0 +1,27 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="SSCUseOnly">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NewCo-WorkerID")</td>
+                    <td>
+                        @Model.Element("NewCo-WorkerID")
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $('#NewCo-WorkerID').on('change', function () {
+        $('#Co-WorkerID').val($('#NewCo-WorkerID').val());
+        $('#hidden_Co-WorkerID').val($('#NewCo-WorkerID').val());
+
+    }); 
+</script>
+   

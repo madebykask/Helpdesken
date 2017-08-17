@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<options>
+  <option value=""></option>
+  <option value="﻿Passport">﻿Passport</option>
+  <option value="Work permit">Work permit</option>
+  <option value="Resident Permit">Resident Permit</option>
+  <option value="Visa">Visa</option>
+  <option value="Tax Registration">Tax Registration</option>
+  <option value="Social security registration">Social security registration</option>
+  <option value="Co-worker&apos;s Medical Form">Co-worker&apos;s Medical Form</option>
+  <option value="Co-worker&apos;s Dental Form">Co-worker&apos;s Dental Form</option>
+  <option value="Acc.Partner Medical Form">Acc.Partner Medical Form</option>
+  <option value="Acc.Partner Dental Form">Acc.Partner Dental Form</option>
+  <option value="Acc.Child Medical Form">Acc.Child Medical Form</option>
+  <option value="Acc.Child Dental Form">Acc.Child Dental Form</option>
+</options>

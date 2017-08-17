@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<options>
+    <option value=""></option>
+    <option value="(2501) - Annual Leave">(2501) - Annual Leave</option>
+    <option value="(2510) - Leave Balance">(2510) - Leave Balance</option>
+    <option value="(2600) - Short Term Sick Leave">(2600) - Short Term Sick Leave</option>
+    <option value="(2601) - Long Term Sick 50%">(2601) - Long Term Sick 50%</option>
+    <option value="(2602) - Long Term Sick 30%">(2602) - Long Term Sick 30%</option>
+    <option value="(2610) - Maternity 60 Days">(2610) - Maternity 60 Days</option>
+    <option value="(2611) - Maternity 61-90">(2611) - Maternity 61-90</option>
+    <option value="(2612) - Maternity 91-180">(2612) - Maternity 91-180</option>
+    <option value="(2615) - Maternity Adjustment">(2615) - Maternity Adjustment</option>
+    <option value="(2620) - Paternity Lv Paid">(2620) - Paternity Lv Paid</option>
+    <option value="(2825) - Family Care Leave">(2825) - Family Care Leave</option>
+    <option value="(2830) - Child care Leave">(2830) - Child care Leave</option>
+    <option value="(2840) - Menstruation Leave">(2840) - Menstruation Leave</option>
+    <option value="(2630) - Military Training">(2630) - Military Training</option>
+    <option value="(2635) - Relocation">(2635) - Relocation</option>
+    <option value="(2640) - Funeral Leave">(2640) - Funeral Leave</option>
+    <option value="(2645) - Marriage Leave">(2645) - Marriage Leave</option>
+    <option value="(2901) - Planned Unpaid Lv – Hrs">(2901) - Planned Unpaid Lv – Hrs</option>
+    <option value="(2902) - Unplanned Unpaid Lv - Hrs">(2902) - Unplanned Unpaid Lv - Hrs</option>  
+    <option value="(2605) - Short Term Lv Unpaid">(2605) - Short Term Lv Unpaid</option>
+    <option value="(2606) - Long Term Lv Unpaid">(2606) - Long Term Lv Unpaid</option>
+    <option value="(2613) - Maternity Unpaid">(2613) - Maternity Unpaid</option>
+    <option value="(2910) - Military Service">(2910) - Military Service</option>
+    <option value="(2520) - Administrative  Leave">(2520) - Administrative  Leave</option>
+    <option value="(=1) - Expiry of probation">(=1) - Expiry of probation</option>
+    <option value="(=2) - Expiry temp.contract">(=2) - Expiry temp.contract</option>
+    <option value="(=4) - Train.Period expires">(=4) - Train.Period expires</option>
+    <option value="(=8) - End of mat.leave">(=8) - End of mat.leave</option>
+    <option value="(=B) - Periodic examination">(=B) - Periodic examination</option>
+    <option value="(=F) - Work permit expires">(=F) - Work permit expires</option>
+    <option value="(50) - KR Expiry Internship">(50) - KR Expiry Internship</option>
+    <option value="(52) - KR End of LOA">(52) - KR End of LOA</option>
+    <option value="(51) - KR Expiry of Cert">(51) - KR Expiry of Cert</option>
+    <option value="(55) - KR Visa expires*">(55) - KR Visa expires*</option>
+    <option value="(56) - KR Residence permit*">(56) - KR Residence permit*</option>
+    <option value="(57) - KR Residence contract*">(57) - KR Residence contract*</option>
+    <option value="(58) - KR Check Passport*">(58) - KR Check Passport*</option>
+</options>

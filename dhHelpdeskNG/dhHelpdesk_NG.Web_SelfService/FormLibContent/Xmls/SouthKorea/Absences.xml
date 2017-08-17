@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/AbsencesState.xml">
+  <!ENTITY dat_country SYSTEM "Data/Data_Country.xml">
+  <!ENTITY dat_absencetype SYSTEM "Data/Data_AbsenceType.xml">
+]>
+
+<form id="232" guid="b183f307-85df-47e8-8c1d-de2edbb0ebd3" customerId="32">
+  &languages;
+  &regexs;
+  &state; 
+  <fields>
+    <!--Tab ServiceRequestDetails-->
+    <tab name="#ServiceRequestDetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
+        <regex inherit="employeeno" pattern="" message=""></regex>
+      </element>
+      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
+      <element name="LastName" type="text" label="Co-Worker Last name" mandatory="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
+        <regex inherit="email" pattern="" message=""></regex>
+      </element>
+      <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1"></element>
+      <element name="Company" type="text" label="Company"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="ServiceArea" type="text" label="Function"></element>
+      <element name="Department" type="text" label="Department"></element>
+      <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" mandatory="1" default="No">
+        <options>
+          <option value=""></option>
+          <option value ="No">No</option>
+          <option value ="Yes">Yes</option>
+        </options>
+      </element>
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
+        <options>
+          <option value=""></option>
+          <option value ="Urgent">Urgent</option>
+          <option value ="Standard">Standard</option>
+        </options>
+      </element>
+      <element type="textarea" name="InternalLogNote" label="Comment"></element>
+    </tab>
+
+    <!--Absences-->
+    <tab name="#Absences" label="Absences">
+      <element name="AbsencesMulti" type="hidden" default="1"></element>
+      <!--1-->
+      <element name="AbsenceType" type="select" label="Absence Type">
+        &dat_absencetype;
+      </element>     
+      <element name="AbsenceStartFrom" type="date" format="dd.MM.yyyy" label="Absence starts from">        
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceEndsOn" type="date" format="dd.MM.yyyy" label="Absence ends on">       
+        <!--<laterThanOrEqual name="AbsenceStartFrom"></laterThanOrEqual>-->
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceHours" type="text" label="Absence hours">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceDays" type="text" label="Absence days">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <!--2-->
+      <element name="AbsenceType2" type="select" label="Absence Type">
+        &dat_absencetype;
+      </element>    
+      <element name="AbsenceStartFrom2" type="date" format="dd.MM.yyyy"  label="Absence starts from">      
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceEndsOn2" type="date" format="dd.MM.yyyy"  label="Absence ends on">
+        <!--<laterThanOrEqual name="AbsenceStartFrom2"></laterThanOrEqual>-->       
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceHours2" type="text" label="Absence hours">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceDays2" type="text" label="Absence days">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <!--3-->
+      <element name="AbsenceType3" type="select" label="Absence Type" >
+        &dat_absencetype;
+      </element>    
+      <element name="AbsenceStartFrom3" type="date" format="dd.MM.yyyy" label="Absence starts from">        
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceEndsOn3" type="date" format="dd.MM.yyyy" label="Absence ends on">
+        <!--<laterThanOrEqual name="AbsenceStartFrom3"></laterThanOrEqual>-->  
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceHours3" type="text" label="Absence hours">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceDays3" type="text" label="Absence days">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <!--4-->
+      <element name="AbsenceType4" type="select" label="Absence Type" >
+        &dat_absencetype;
+      </element>     
+      <element name="AbsenceStartFrom4" type="date" format="dd.MM.yyyy" label="Absence starts from">     
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceEndsOn4" type="date" format="dd.MM.yyyy" label="Absence ends on">
+        <!--<laterThanOrEqual name="AbsenceStartFrom4"></laterThanOrEqual>-->       
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceHours4" type="text" label="Absence hours">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceDays4" type="text" label="Absence days">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <!--5-->
+      <element name="AbsenceType5" type="select" label="Absence Type" >
+        &dat_absencetype;
+      </element>      
+      <element name="AbsenceStartFrom5" type="date" format="dd.MM.yyyy" label="Absence starts from">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceEndsOn5" type="date" format="dd.MM.yyyy" label="Absence ends on">
+        <!--<laterThanOrEqual name="AbsenceStartFrom5"></laterThanOrEqual>-->
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceHours5" type="text" label="Absence hours">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceDays5" type="text" label="Absence days">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      
+      <!-- Details on Global Commuting -->
+      <element name="DetailsOnGlobalCommutings" type="hidden" default="1"></element>
+      <!--1-->
+      <element  name="CommutingType" type="select" label="CommutingType">
+        <mandatoryIf name="TECoWorker">Yes</mandatoryIf>
+        <options>
+          <option value=""></option>
+          <option value="Business Trip">Business Trip</option>
+          <option value="Global Commuter">Global Commuter</option>
+          <option value="Home Leave">Home Leave</option>
+          <option value="Home trip">Home trip</option>
+          <option value="Look&amp;See Trip">Look&amp;See Trip</option>
+          <option value="Move without Mobility">Move without Mobility</option>
+          <option value="ReloCountr">ReloCountr</option>
+          <option value="Short term assignment">Short term assignment</option>
+          <option value="Vacation">Vacation</option>
+        </options>
+      </element>
+      <element name="StartFrom" type="date" format="dd.MM.yyyy"  label="Start from">
+        <mandatoryIf name="TECoWorker">Yes</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>      
+      </element>
+      <element name="EndsOn" type="date" format="dd.MM.yyyy"  label="Ends on">
+        <mandatoryIf name="TECoWorker">Yes</mandatoryIf>
+        <laterThanOrEqual name="StartFrom"></laterThanOrEqual>
+        <regex inherit="date" pattern="" message=""></regex>        
+      </element>
+      <element  name="DestinationCountry" type="search-select" label="Destination Country">
+        &dat_country;
+        <mandatoryIf name="TECoWorker">Yes</mandatoryIf>
+      </element>
+      <element  name="TaxRelevant" type="select" label="Tax Relevant?">
+        <mandatoryIf name="TECoWorker">Yes</mandatoryIf>
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>
+      <!--2-->
+      <element  name="CommutingType2" type="select" label="CommutingType">
+        <options>
+          <option value=""></option>
+          <option value="Business Trip">Business Trip</option>
+          <option value="Global Commuter">Global Commuter</option>
+          <option value="Home Leave">Home Leave</option>
+          <option value="Home trip">Home trip</option>
+          <option value="Look&amp;See Trip">Look&amp;See Trip</option>
+          <option value="Move without Mobility">Move without Mobility</option>
+          <option value="ReloCountr">ReloCountr</option>
+          <option value="Short term assignment">Short term assignment</option>
+          <option value="Vacation">Vacation</option>
+        </options>
+      </element>
+      <element name="StartFrom2" type="date" format="dd.MM.yyyy" label="Start from">
+        <mandatoryIfNotEmpty name="CommutingType2"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="EndsOn2" type="date" format="dd.MM.yyyy"  label="Ends on">
+        <mandatoryIfNotEmpty name="CommutingType2"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element  name="DestinationCountry2" type="search-select" label="Destination Country">
+        &dat_country;
+        <mandatoryIfNotEmpty name="CommutingType2"></mandatoryIfNotEmpty>
+      </element>
+      <element  name="TaxRelevant2" type="select" label="Tax Relevant?">
+        <mandatoryIfNotEmpty name="CommutingType2"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>
+      <!--3-->
+      <element  name="CommutingType3" type="select" label="CommutingType">
+        <options>
+          <option value=""></option>
+          <option value="Business Trip">Business Trip</option>
+          <option value="Global Commuter">Global Commuter</option>
+          <option value="Home Leave">Home Leave</option>
+          <option value="Home trip">Home trip</option>
+          <option value="Look&amp;See Trip">Look&amp;See Trip</option>
+          <option value="Move without Mobility">Move without Mobility</option>
+          <option value="ReloCountr">ReloCountr</option>
+          <option value="Short term assignment">Short term assignment</option>
+          <option value="Vacation">Vacation</option>
+        </options>
+      </element>
+      <element name="StartFrom3" type="date" format="dd.MM.yyyy" label="Start from">
+        <mandatoryIfNotEmpty name="CommutingType3"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="EndsOn3" type="date" format="dd.MM.yyyy"  label="Ends on">
+        <mandatoryIfNotEmpty name="CommutingType3"></mandatoryIfNotEmpty>        
+        <laterThanOrEqual name="StartFrom3"></laterThanOrEqual>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element  name="DestinationCountry3" type="search-select" label="Destination Country">
+        &dat_country;
+        <mandatoryIfNotEmpty name="CommutingType3"></mandatoryIfNotEmpty>
+      </element>
+      <element  name="TaxRelevant3" type="select" label="Tax Relevant?">
+        <mandatoryIfNotEmpty name="CommutingType3"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>
+      <!--4-->
+      <element  name="CommutingType4" type="select" label="CommutingType">
+        <options>
+          <option value=""></option>
+          <option value="Business Trip">Business Trip</option>
+          <option value="Global Commuter">Global Commuter</option>
+          <option value="Home Leave">Home Leave</option>
+          <option value="Home trip">Home trip</option>
+          <option value="Look&amp;See Trip">Look&amp;See Trip</option>
+          <option value="Move without Mobility">Move without Mobility</option>
+          <option value="ReloCountr">ReloCountr</option>
+          <option value="Short term assignment">Short term assignment</option>
+          <option value="Vacation">Vacation</option>
+        </options>
+      </element>
+      <element name="StartFrom4" type="date" format="dd.MM.yyyy" label="Start from">
+        <mandatoryIfNotEmpty name="CommutingType4"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="EndsOn4" type="date" format="dd.MM.yyyy"  label="Ends on">
+        <mandatoryIfNotEmpty name="CommutingType4"></mandatoryIfNotEmpty>
+        <laterThanOrEqual name="StartFrom4"></laterThanOrEqual>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element  name="DestinationCountry4" type="search-select" label="Destination Country">
+        &dat_country;
+        <mandatoryIfNotEmpty name="CommutingType4"></mandatoryIfNotEmpty>
+      </element>
+      <element  name="TaxRelevant3" type="select" label="Tax Relevant?">
+        <mandatoryIfNotEmpty name="CommutingType4"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>
+      <!--5-->
+      <element  name="CommutingType5" type="select" label="CommutingType">
+        <options>
+          <option value=""></option>
+          <option value="Business Trip">Business Trip</option>
+          <option value="Global Commuter">Global Commuter</option>
+          <option value="Home Leave">Home Leave</option>
+          <option value="Home trip">Home trip</option>
+          <option value="Look&amp;See Trip">Look&amp;See Trip</option>
+          <option value="Move without Mobility">Move without Mobility</option>
+          <option value="ReloCountr">ReloCountr</option>
+          <option value="Short term assignment">Short term assignment</option>
+          <option value="Vacation">Vacation</option>
+        </options>
+      </element>
+      <element name="StartFrom5" type="date" format="dd.MM.yyyy" label="Start from">
+        <mandatoryIfNotEmpty name="CommutingType5"></mandatoryIfNotEmpty>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="EndsOn5" type="date" format="dd.MM.yyyy"  label="Ends on">
+        <mandatoryIfNotEmpty name="CommutingType5"></mandatoryIfNotEmpty>
+        <laterThanOrEqual name="StartFrom5"></laterThanOrEqual>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element  name="DestinationCountry5" type="search-select" label="Destination Country">
+        &dat_country;
+        <mandatoryIfNotEmpty name="CommutingType5"></mandatoryIfNotEmpty>
+      </element>
+      <element  name="TaxRelevant5" type="select" label="Tax Relevant?">
+        <mandatoryIfNotEmpty name="CommutingType5"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>
+    </tab>  
+  </fields>
+</form>
+

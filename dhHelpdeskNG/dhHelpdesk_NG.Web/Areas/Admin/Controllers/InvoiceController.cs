@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DH.Helpdesk.BusinessData.Models.Grid;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
@@ -27,6 +28,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IInvoiceArticleService invoiceArticleService;
 
         private readonly ICaseInvoiceSettingsService caseInvoiceSettingsService;
+
 
         public InvoiceController(
                 IMasterDataService masterDataService, 
@@ -224,5 +226,80 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this.caseInvoiceSettingsService.SaveSettings(model.Settings);
             return this.RedirectToAction("Index", new { customerId = model.Settings.CustomerId });
         }
+
+        public ActionResult GetArticleProductAreaList(InvoiceArticleProductAreaSelectedFilter filter)
+        {
+            var ResolveName = true;
+
+            var res = new List<InvoiceArticleProductAreaIndexRowModel>();
+
+            var articles = invoiceArticleService.GetActiveArticles(filter.CustomerId);
+            if (filter.SelectedInvoiceArticles.Any())
+            {
+                articles = articles.Where(x => filter.SelectedInvoiceArticles.Contains(x.Id)).ToList();
+            }
+
+            foreach (var article in articles)
+            {
+                var productAreas = filter.SelectedProductAreas.Any() ? article.ProductAreas.Where(x => filter.SelectedProductAreas.Contains(x.Id)).ToList() : article.ProductAreas;
+                res.AddRange(productAreas.Select(productArea => new InvoiceArticleProductAreaIndexRowModel
+                {
+                    InvoiceArticleId = article.Id,
+                    InvoiceArticleName = article.Name, // add desction as well
+                    InvoiceArticleNameEng = article.NameEng,
+                    InvoiceArticleNumber = article.Number,
+                    ProductAreaId = productArea.Id,
+                    ProductAreaName = productArea.ResolveFullName()
+                }));
+
+                if (!filter.SelectedProductAreas.Any() && !article.ProductAreas.Any())
+                {
+                    res.Add(new InvoiceArticleProductAreaIndexRowModel
+                    {
+                        InvoiceArticleId = article.Id,
+                        InvoiceArticleName = article.Name, // add desction as well
+                        InvoiceArticleNameEng = article.NameEng,
+                        InvoiceArticleNumber = article.Number,
+                    });
+                }
+            }
+
+            var dir = GridSortOptions.SortDirectionFromString(filter.Dir);
+            if (filter.Order == 0)
+            {
+                if (dir == SortingDirection.Asc)
+                {
+                    res = res.OrderBy(x => x.InvoiceArticleNumber)
+                            .ThenBy(x => x.InvoiceArticleName)
+                            .ThenBy(x => x.InvoiceArticleNameEng)
+                            .ToList();
+                }
+                else
+                {
+                    res = res.OrderByDescending(x => x.InvoiceArticleNumber)
+                            .ThenByDescending(x => x.InvoiceArticleName)
+                            .ThenByDescending(x => x.InvoiceArticleNameEng)
+                            .ToList();
+                }
+            }
+            else if (filter.Order == 1)
+            {
+                if (dir == SortingDirection.Desc)
+                {
+                    res = res.OrderBy(x => x.ProductAreaName)
+                            .ToList();
+                }
+                else
+                {
+                    res = res.OrderByDescending(x => x.ProductAreaName)
+                            .ToList();
+                }
+            }
+
+            SessionFacade.CurrentInvoiceArticleProductAreaSearch = filter;
+
+            return JsonDefault(res);
+        }
+
     }
 }

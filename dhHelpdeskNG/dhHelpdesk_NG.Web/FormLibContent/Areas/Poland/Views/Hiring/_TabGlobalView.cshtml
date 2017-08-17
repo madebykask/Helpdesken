@@ -1,0 +1,1392 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="globalview">
+    <div class="span12">
+        <div class="well">
+            <p>@Model.Label("EmployeeNumber")</p>
+            @Model.Element("EmployeeNumber")
+            <p>@Model.Element("SubmittedToExternalBody")</p>
+        </div>
+        <table class="table-striped table-gv">
+            <thead>
+                <tr>
+                    <th>@Model.Translate("Label")</th>
+                    <th>@Model.Translate("Value")</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="tdstrong globalview" colspan="3">
+                        @Model.Translate("Basic data")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmployeeNumberOld")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EmployeeNumberOld")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TypeOfHiring")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("TypeOfHiring")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EffectiveDate")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EffectiveDate")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MobilityStatus")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("MobilityStatus")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ReasonForHiring")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("ReasonForHiring")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Prefix")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("Prefix")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmployeeLastName")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EmployeeLastName")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmployeeFirstName")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EmployeeFirstName")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DateOfBirth")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("DateOfBirth")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>                
+                <tr>
+                    <td class="tdstrong">@Model.Label("PESEL")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("PESEL")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MonthlyHourly")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("MonthlyHourly")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Company")</td>
+                    <td class="copy-me">@Model.Contract.Company.Name</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Department")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("Department")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>       
+                <tr>
+                    <td class="tdstrong">@Model.Label("JobTitle")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("JobTitle")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PolishJobTitle")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("PolishJobTitle")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>                
+                <tr>
+                    <td class="tdstrong">@Model.Label("Unit")</td>
+                    <td class="copy-me">@Model.Contract.Unit.Name</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>                        
+                <tr>
+                    <td class="tdstrong">@Model.Label("LineManager")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("LineManager")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeCostCenter")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("HomeCostCenter")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeCostCenterAllocation")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("HomeCostCenterAllocation")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AdditionalCostCenter")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("AdditionalCostCenter")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AdditionalCostCenterAllocation")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("AdditionalCostCenterAllocation")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Extent")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("Extent")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Workload")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("Workload")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong globalview" colspan="3">
+                        @Model.Translate("Personal data 1")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CountryCode")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("CountryCode")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>                            
+                <tr>
+                    <td class="tdstrong">@Model.Label("Street")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("Street")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("StreetNumber")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("StreetNumber")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HouseNumber")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("HouseNumber")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("City")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("City")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PostCode")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("PostCode")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Region")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("Region")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("District")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("District")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Community")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("Community")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Family member -->
+
+                <tr>
+                    <td class="tdstrong globalview" colspan="3">
+                        @Model.Translate("Family members")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="sub-globalview tdstrong globalview" colspan="3">@Model.Translate("Family member")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberRelationship")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberRelationship")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberLastName")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberLastName")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberFirstName")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberFirstName")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberDateOfBirth")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberDateOfBirth")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberHealthInsurance")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberHealthInsurance")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberJoinedHousehold")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberJoinedHousehold")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberExclusivelyDependent")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberExclusivelyDependent")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberDisabilityScale")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberDisabilityScale")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberPESEL")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberPESEL")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>                
+               
+
+                @{
+                    var counter = 0;
+                    int.TryParse(Model.GetTranslatedAnswer("FamilyMembers"), out counter);
+                }
+
+                @for(int i = 2; i <= counter; i++)
+                {
+                    <tr>
+                        <td class="sub-globalview tdstrong globalview" colspan="3">@Model.Translate("Family member")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("FamilyMemberRelationship" + i.ToString())</td>
+                        <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberRelationship" + i.ToString())</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("FamilyMemberLastName" + i.ToString())</td>
+                        <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberLastName" + i.ToString())</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("FamilyMemberFirstName" + i.ToString())</td>
+                        <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberFirstName" + i.ToString())</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("FamilyMemberDateOfBirth" + i.ToString())</td>
+                        <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberDateOfBirth" + i.ToString())</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("FamilyMemberHealthInsurance" + i.ToString())</td>
+                        <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberHealthInsurance" + i.ToString())</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("FamilyMemberJoinedHousehold" + i.ToString())</td>
+                        <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberJoinedHousehold" + i.ToString())</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("FamilyMemberExclusivelyDependent" + i.ToString())</td>
+                        <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberExclusivelyDependent" + i.ToString())</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("FamilyMemberDisabilityScale" + i.ToString())</td>
+                        <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberDisabilityScale" + i.ToString())</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("FamilyMemberPESEL" + i.ToString())</td>
+                        <td class="copy-me">@Model.GetTranslatedAnswer("FamilyMemberPESEL" + i.ToString())</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                        </td>
+                    </tr>                   
+                    
+                }
+                <tr>
+                    <td class="tdstrong globalview" colspan="3">
+                        @Model.Translate("Additional payment data 1")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ECMCompensationProgram")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("ECMCompensationProgram")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PSArea")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("PSArea")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PSGroup")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("PSGroup")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CollectiveScaleSalary")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("CollectiveScaleSalary")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BasicPay")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("BasicPay")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FunctionAllowance")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("FunctionAllowance")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FunctionAllowanceAmount")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("FunctionAllowanceAmount")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FunctionAllowanceGrossNett")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("FunctionAllowanceGrossNett")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("OneIKEABonusType")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("OneIKEABonusType")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong globalview" colspan="3">
+                        @Model.Translate("Additional contract information")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ContractType")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("ContractType")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EndDate")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EndDate")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong globalview" colspan="3">
+                        @Model.Translate("Bank account details")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong globalview sub-globalview" colspan="3">@Model.Translate("Bank account")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AccountNo")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("AccountNo")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AccountHolder")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("AccountHolder")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NameOfBank")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("NameOfBank")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AmountToBeTransferred")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("AmountToBeTransferred")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong globalview sub-globalview" colspan="3">@Model.Translate("Bank account")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AccountNo2")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("AccountNo2")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AccountHolder2")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("AccountHolder2")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NameOfBank2")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("NameOfBank2")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AmountToBeTransferred2")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("AmountToBeTransferred2")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong globalview sub-globalview" colspan="3">@Model.Translate("Bank account")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AccountNo3")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("AccountNo3")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AccountHolder3")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("AccountHolder3")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NameOfBank3")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("NameOfBank3")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AmountToBeTransferred3")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("AmountToBeTransferred3")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong globalview" colspan="3">
+                        @Model.Translate("Tax data")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxOfficeLocation")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("TaxOfficeLocation")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong globalview" colspan="3">
+                        @Model.Translate("Health insurance")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HealthInsuranceLocation")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("HealthInsuranceLocation")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PensionerStatus")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("PensionerStatus")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("WaitingPeriod")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("WaitingPeriod")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                @{
+                    var allowances = 0;       
+                }
+                @if(Model.GetTranslatedAnswer("Allowances") != "1" && int.TryParse(Model.GetTranslatedAnswer("Allowances"), out allowances))
+                {
+                    <tr>
+                        <td class="tdstrong globalview" colspan="3">
+                            @Model.Translate("Additional payment data 2")
+                        </td>
+                    </tr>
+                    
+                    for(int i = 2; i <= allowances; i++)
+                    {
+                    <tr>
+                        <td class="tdstrong globalview sub-globalview" colspan="3">@Model.Translate("Allowance")</td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("FunctionAllowance" + i.ToString())</td>
+                        <td class="copy-me">@Model.GetTranslatedAnswer("FunctionAllowance" + i.ToString())</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("FunctionAllowanceAmount" + i.ToString())</td>
+                        <td class="copy-me">@Model.GetTranslatedAnswer("FunctionAllowanceAmount" + i.ToString())</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("FunctionAllowanceGrossNett" + i.ToString())</td>
+                        <td class="copy-me">@Model.GetTranslatedAnswer("FunctionAllowanceGrossNett" + i.ToString())</td>
+                        <td>
+                            <div class="pull-right">
+                                <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                }
+                <tr>
+                    <td class="tdstrong globalview" colspan="3">
+                        @Model.Translate("Personal data 2")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BirthName")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("BirthName")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("SecondName")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("SecondName")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FathersFirstName")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("FathersFirstName")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MothersFirstName")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("MothersFirstName")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MothersBirthName")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("MothersBirthName")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PlaceOfBirth")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("PlaceOfBirth")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Nationality")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("Nationality")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CommunicationLanguage")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("CommunicationLanguage")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Gender")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("Gender")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NIP")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("NIP")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>               
+                <tr>
+                    <td class="tdstrong globalview" colspan="3">
+                        @Model.Translate("Home address")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeStreet")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("HomeStreet")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeStreetNumber")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("HomeStreetNumber")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeHouseNumber")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("HomeHouseNumber")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeCity")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("HomeCity")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomePostCode")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("HomePostCode")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeCountryCode")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("HomeCountryCode")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeRegion")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("HomeRegion")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeDistrict")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("HomeDistrict")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeCommunity")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("HomeCommunity")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                 <tr>
+                    <td class="tdstrong">@Model.Label("Phone")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("Phone")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Email")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("Email")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong globalview" colspan="3">
+                        @Model.Translate("Mailing address")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingStreet")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("MailingStreet")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingStreetNumber")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("MailingStreetNumber")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingHouseNumber")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("MailingHouseNumber")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingCity")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("MailingCity")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingPostCode")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("MailingPostCode")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingCountryCode")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("MailingCountryCode")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingRegion")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("MailingRegion")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingDistrict")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("MailingDistrict")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingCommunity")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("MailingCommunity")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong globalview" colspan="3">
+                        @Model.Translate("Emergency address")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyFirstName")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EmergencyFirstName")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyLastName")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EmergencyLastName")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyStreet")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EmergencyStreet")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyStreetNumber")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EmergencyStreetNumber")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyHouseNumber")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EmergencyHouseNumber")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyCity")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EmergencyCity")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyPostCode")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EmergencyPostCode")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyCountryCode")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EmergencyCountryCode")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyRegion")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EmergencyRegion")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyDistrict")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EmergencyDistrict")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyCommunity")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EmergencyCommunity")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyPhone")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("EmergencyPhone")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong globalview" colspan="3">
+                        @Model.Translate("Tax declaration address")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxStreet")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("TaxStreet")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxStreetNumber")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("TaxStreetNumber")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxHouseNumber")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("TaxHouseNumber")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxCity")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("TaxCity")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxPostCode")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("TaxPostCode")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxCountryCode")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("TaxCountryCode")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxRegion")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("TaxRegion")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxDistrict")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("TaxDistrict")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxCommunity")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("TaxCommunity")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong globalview" colspan="3">
+                        @Model.Translate("Documents")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("IdentityDocument")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("IdentityDocument")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("IdentityCardNo")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("IdentityCardNo")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("IdentityCardIssueAuthority")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("IdentityCardIssueAuthority")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("IdentityCardIssueDate")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("IdentityCardIssueDate")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("RecidencePermitNo")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("RecidencePermitNo")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("RecidencePermitIssueDate")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("RecidencePermitIssueDate")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NoOfWorkPermit")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("NoOfWorkPermit")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NoOfWorkIssueDate")</td>
+                    <td class="copy-me">@Model.GetTranslatedAnswer("NoOfWorkIssueDate")</td>
+                    <td>
+                        <div class="pull-right">
+                            <button class="btn btn-small copy"><i class="icon-share"></i>&nbsp;@Model.Translate("Select")</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

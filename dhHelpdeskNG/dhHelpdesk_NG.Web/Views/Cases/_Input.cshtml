@@ -9,9 +9,11 @@
 @using DH.Helpdesk.Web
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
-@using DH.Helpdesk.Web.Models.Invoice
+@using DH.Helpdesk.Common.Constants;
 
 <script type="text/javascript">
+
+
     window.parameters = {
         isCaseLocked: '@Model.CaseLock.IsLocked',
         currentCaseId: '@Model.case_.Id',
@@ -33,6 +35,7 @@
         caseLockChecker: '@Url.Content("~/Cases/IsCaseAvailable/")',
         caseLockExtender: '@Url.Content("~/Cases/ReExtendCaseLock/")',
         caseActiveDataChecker: '@Url.Content("~/Cases/CheckCaseForActiveData/")',
+        getTokenUrl: '@Url.Content("~/Cases/GetToken/")',
         preventToSaveCaseWithInactiveValue: '@Model.Setting.PreventToSaveCaseWithInactiveValue',
         saveLockedCaseMessage: '@Translation.GetForJS("Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.")',
         deleteLockedCaseMessage: '@Translation.GetForJS("Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.")',
@@ -55,27 +58,69 @@
         noResultLabel: '@Translation.GetForJS("Inga resultat matchar")',
 
         fileNameError: '@Translation.GetForJS("Filnamn är inte giltigt. Special tecken (!@#=$&?*) är inte tillåtna")',
+        containsExtendedCase: '@Model.ContainsExtendedCase',
+        containsEForm: '@(Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)',
+        extendedCaseFormId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Id.ToString() : "" )',
+        extendedCaseGuid: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().ExtendedCaseGuid.ToString() : "" )',
+        extendedCaseLanguageId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().LanguageId.ToString() : "" )',
+        extendedCasePath: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Path.ToString() : "" )',
 
-        caseFieldNames:{
+        caseFieldIds:{
+            CaseId: "case__Id",
             CustomerId: "case__Customer_Id",
             RegionId: "case__Region_Id",
+            RegionName: "RegionName",
             DepartmentId: "case__Department_Id",
+            DepartmentName: "DepartmentName",
             OUId: "case__Ou_Id",
+            OUName: "OuName",
             SourceId: "CustomerRegistrationSourceId",
             CaseTypeId: "case__CaseType_Id",
             ProductAreaId: "case__ProductArea_Id",
             CategoryId: "case__Category_Id",
             SupplierId: "case__Supplier_Id",
             WorkingGroupId: "case__WorkingGroup_Id",
+            WorkingGroupName: "workingGroup_Name",
             ResponsibleId: "ResponsibleUser_Id",
             AdministratorId: "Performer_Id",
             PriorityId: "case__Priority_Id",
+            PriorityName: "priority_Name",
             StatusId: "case__Status_Id",
+            StatusName: "statusName",
             SubStatusId: "case__StateSecondary_Id",
+            SubStatusName: "subStateName",
             CausingPartId: "case__CausingPartId",
             ClosingReasonId: "CaseLog_FinishingType",
-            FinishingDate: "CaseLog_FinishingDate"
+            FinishingDate: "CaseLog_FinishingDate",
+            UserCode: "case__UserCode",
+            ReportedBy: "case__ReportedBy",
+            CaseLanguageId: "case__RegLanguage_Id",
+            PersonsName: "case__PersonsName",
+            PersonsPhone:  "case__PersonsPhone",
+            PlanDate: "case__PlanDate",
+            WatchDate: "case__WatchDate",
+            log_InternalText: "CaseLog_TextInternal"
         },
+
+        caseInitValues: {
+            CaseId: '@Model.case_.Id',
+            CustomerId: '@Model.case_.Customer_Id',
+            ReportedBy:  '@Model.case_.ReportedBy',
+            PersonsName:  '@Model.case_.PersonsName',
+            PersonsPhone:   '@Model.case_.PersonsPhone',
+            UserCode:  '@Model.case_.UserCode',
+            RegionId: '@Model.case_.Region_Id',
+            DepartmentId: '@Model.case_.Department_Id',
+            ParentOUId: '@(Model.case_.Ou != null && Model.case_.Ou.Parent_OU_Id != null? Model.case_.Ou.Parent_OU_Id: null)',
+            ChildOUId: '@Model.case_.OU_Id',
+            ProductAreaId: '@Model.case_.ProductArea_Id',
+            StatusId:  '@Model.case_.Status_Id',
+            SubStatusId:  '@Model.case_.StateSecondary_Id',
+            PlanDate:  '@(Model.case_.PlanDate !=null ? Model.case_.PlanDate.Value.ToString() : "" )',
+            WatchDate:   '@(Model.case_.WatchDate !=null ? Model.case_.WatchDate.Value.ToString() : "" )',
+            PriorityId: '@Model.case_.Priority_Id',
+        },
+
         casesScopeInitParameters: {
             requiredFieldsMessage: '@Translation.GetForJS("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")',
             getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")',
@@ -90,57 +135,43 @@
             noText: '@Translation.GetForJS("Nej")',
             validationMessages:  ['@Html.Raw(Translation.GetForJS("måste anges"))'],
             mandatoryFieldsText: '@Translation.GetForJS("Obligatoriska fält")',
-            formatFieldsText: '@Translation.GetForJS("Giltiga Format är")'
+            formatFieldsText: '@Translation.GetForJS("Giltiga Format är")',
+            descriptionText: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)'
+
         }
     };
-
-
-
-
 
 </script>
 
 @Scripts.Render("~/bundles/cases/_input")
+<script type="text/javascript" src="@Url.Content("~/Content/js/Cases/components/EditPage.js")"></script>
 @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseSolutionFields.AddFollowersBtn) && Model.caseFieldSettings.IsFieldVisible(GlobalEnums.TranslationCaseFields.AddFollowersBtn))
 {
     @Scripts.Render(BundleConfig.ScriptNames.CaseUserSearchCommon)
 }
 
 <script type="text/javascript">
-    function CalcSLA()
-    {
-        $.post('@Url.Content("~/Cases/CalculateSLA/")', {caseId:'@Model.case_.Id', userId:'@SessionFacade.CurrentUser.Id', simulateTime:'@Model.case_.ChangeTime.AddSeconds(5)'},
-            function(data) {
-                alert(data);
-            });
-    }
-
-    function GetLanguage()
-    {
-
-        var caseid = document.getElementById('case__Id').value;
-        
-        if (caseid == 0)
-        {
-        
-            var reported  = document.getElementById('case__UserCode').value;
-            var reportedId  = document.getElementById('case__ReportedBy').value;
+    /* CHECK: moved to EditPage.js*/ 
+    //function GetLanguage()
+    //{
+    //    var caseid = document.getElementById('case__Id').value;
+    //    alert('old');
+    //    if (caseid == 0)
+    //    {        
+    //        var reported  = document.getElementById('case__UserCode').value;
+    //        var reportedId  = document.getElementById('case__ReportedBy').value;
             
-            var region = document.getElementById('case__Region_Id').value;            
-            var dep = document.getElementById('case__Department_Id').value;            
-            var customer = document.getElementById('case__Customer_Id').value;
-        
+    //        var region = document.getElementById('case__Region_Id').value;            
+    //        var dep = document.getElementById('case__Department_Id').value;            
+    //        var customer = document.getElementById('case__Customer_Id').value;
             
-            $.get("/cases/LookupLanguage/", { customerid: "'" + customer.toString() + "'", notifier: "'" + reported.toString() + "'", region: "'" + region.toString() + "'", department: "'" + dep.toString() + "'", notifierid: "'" + reportedId.toString() + "'" }, function (result) {
-
-                if (parseInt(result) > 0) {            
-                    $("#case__RegLanguage_Id").val(result);
-                }
-            });
-
-        }
-    }
-
+    //        $.get("/cases/LookupLanguage/", { customerid: "'" + customer.toString() + "'", notifier: "'" + reported.toString() + "'", region: "'" + region.toString() + "'", department: "'" + dep.toString() + "'", notifierid: "'" + reportedId.toString() + "'" }, function (result) {
+    //            if (parseInt(result) > 0) {            
+    //                $("#case__RegLanguage_Id").val(result);
+    //            }
+    //        });
+    //    }
+    //}
 
 </script>
 
@@ -148,21 +179,21 @@
 {
     <div class="content onemenu editcase" id="mm1">
         <div class="container">
-            <ul class="nav nav-tabs" id="myTab">
-                <li class="active">
+            <ul class="nav nav-tabs" id="tabsArea">
+                <li data-active-tab="case-tab" class="@((Model.ActiveTab == "" || Model.ActiveTab == CaseTabs.CaseTab) ? "active" : "")">
 
-                    @if (Model.CaseTemplateName != null)
-                {
+                    @if (Model.CaseTemplateName != null && Model.ExtendedCases == null)
+                    {
                         <a id="case-tab" href="#case" class="case">@Model.CaseTemplateName</a>
                     }
                     else
                     {
                         <a id="case-tab" href="#case" class="case">
-                            @Translation.GetCoreTextTranslation("Ärende")
-                            @if (Model.case_.Id != 0)
-                            {
-                                @Model.case_.CaseNumber
-                            }
+                        @Translation.GetCoreTextTranslation("Ärende")
+                        @if (Model.case_.Id != 0)
+                        {
+                            @Model.case_.CaseNumber
+                        }
                         </a>
                     }
                 </li>
@@ -180,8 +211,9 @@
                     if (Model.DynamicCase.ViewMode == 0)
                     {
                         <li>
-                            <a href="#dh-form-area" id="loadContainer" class="eform">@(Translation.GetCoreTextTranslation(Model.DynamicCase.FormName))</a>
-                        </li>
+                            <a href="#dh-form-area" id="loadContainer" class="eform" data-state="">@(Translation.Get(Model.DynamicCase.FormName))</a>                                                        
+                        </li>                        
+
                     }
                     else if (Model.DynamicCase.ViewMode == 1)
                     {
@@ -189,6 +221,35 @@
                             <a id="openContainer">@(Translation.GetCoreTextTranslation(Model.DynamicCase.FormName))</a>
                         </li>
                     }
+                }
+
+                @if (Model.ContainsExtendedCase)
+                {
+
+                    foreach (var extendedCase in Model.ExtendedCases)
+                    {
+                        <li data-active-tab="@CaseTabs.ExtendedCaseTab" class="@((Model.ActiveTab.StartsWith(CaseTabs.ExtendedCaseTab)) ? "active" : "")" >
+                            <a href="#container_@extendedCase.Id" id="extendedcase-tab" class="extendedcase" data-id="@extendedCase.Id" data-state="">
+                                @(Translation.GetCoreTextTranslation(extendedCase.Name))
+                                <i id="exTabIndicator_@extendedCase.Id" class="tab-indicator" style="display:none">&nbsp;</i>
+                            </a>                            
+                        </li>
+                    }
+                }
+
+                @if (Model.Setting.AttachmentPlacement == 1)
+                {
+                    <li>
+                        <a id="attachment-tab" href="#attachment-container">@(Translation.GetCoreTextTranslation("Bilagor")) <span id="nrOfAttachedFiles">(@(Model.CaseFilesModel.SavedFiles != null ? Model.CaseFilesModel.Files.Count():0))</span></a>
+
+                    </li>
+                }
+
+                @if (Model.CaseDocuments != null && Model.CaseDocuments.Count() > 0)
+                { 
+                    <li>
+                        <a id="casedocument-tab" href="#casedocument-container">@(Translation.GetCoreTextTranslation("Dokument")) <span id="nrOfCaseDocuments">(@(Model.CaseDocuments != null ? Model.CaseDocuments.Count() : 0))</span></a>
+                    </li>
                 }
 
                 @if (Model.CaseLock != null && Model.CaseLock.IsLocked && Model.CaseLock.User != null)
@@ -207,12 +268,14 @@
                         </li>
                     }
                 }
+
                 @if (Model.OrderId.HasValue)
                 {
                     <li>
                         <a id="case-order-url" href="@Url.Content("~/Orders/Orders/Edit/" + Model.OrderId.Value + "?retToCase=" + Model.IsReturnToCase)">@Translation.GetCoreTextTranslation("Beställning")</a>
                     </li>
                 }
+
                 @if (Model.AccountId.HasValue && Model.AccountActivityId.HasValue)
                 {
                     <li>
@@ -221,7 +284,7 @@
                 }
             </ul>
             <div class="tab-content">
-                <div class="tab-pane tab-pane-border active" id="case">
+                <div class="tab-pane tab-pane-border @((Model.ActiveTab == "" || Model.ActiveTab == CaseTabs.CaseTab) ? "active" : "")" id="case">
                     <div class="container">
                         @Html.HiddenFor(model => model.case_.Id, new { data_field = "caseId" })
                         @Html.HiddenFor(model => model.case_.CaseGUID)
@@ -260,6 +323,8 @@
                         @Html.HiddenFor(model => model.ProductAreaHasChild)
                         @Html.HiddenFor(model => model.CustomerSettings.ModuleCaseInvoice)
                         @Html.HiddenFor(model => model.MovedFromCustomerId)
+                        @Html.HiddenFor(model => model.ContainsExtendedCase)
+                        @Html.HiddenFor(model => model.ExtendedCaseGuid)                        
 
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
@@ -276,8 +341,15 @@
                         @Html.Hidden("CaseHasInvoiceOrder", "")
                         @Html.Hidden("IsAnyFileAdded", "0")
                         @Html.Hidden("CaseSolution_Id", (Model.NewModeParams != null && Model.NewModeParams.templateId != null) ? Model.NewModeParams.templateId : Model.case_.CaseSolution_Id)
+                        @Html.Hidden("CurrentCaseSolution_Id", (Model.CurrentCaseSolution == null ? (int?)null : Model.CurrentCaseSolution.Id))
+                        @Html.Hidden("SplitToCaseSolution_Id", "")
+
+                        @Html.HiddenFor(model => model.ActiveTab)
+                        @Html.HiddenFor(model => model.SelectedWorkflowStep)
+                        @Html.Hidden("ButtonClick", "") @*TEMP, used to define if "Send" button is clicked*@
 
                         @Html.HiddenFor(model => Model.CaseLock.LockGUID)
+                        @Html.HiddenFor(model => Model.CaseLock.ActiveTab)
                         @*<input type="button" id="sla_test" value="SLA Test" onclick="CalcSLA();" />*@
                         @if (Model.IsItChildCase())
                         {
@@ -289,6 +361,11 @@
                                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Model.case_.Customer_Id)
                                     <strong>@Model.ParentCaseInfo.Administrator</strong>
                                 }
+                                <br />
+                                @*@Translation.Get("Independent child")&nbsp;<input id="IndependentChild" name="IndependentChild" type="checkbox" @(Model.IndependentChild ? "checked" : "") value="true" />
+                                @Html.HiddenFor(model => Model.IndependentChild)*@
+                                @Translation.Get("Independent child")&nbsp;
+                                @Html.CheckBoxFor(model => Model.IndependentChild)
                             </div>
                         }
 
@@ -318,11 +395,11 @@
                                                     @Html.Hidden("ShowReportedBy", Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage)
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber))
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", data_field = "userId", onblur = "GetLanguage()" })
+                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", data_field = "userId", onblur = "EditPage.prototype.getLanguage()" })
                                                     }
                                                     else
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", @readonly = true, data_field = "userId", onblur = "GetLanguage()" })
+                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", @readonly = true, data_field = "userId", onblur = "EditPage.prototype.getLanguage()" })
                                                     }
                                                 </td>
                                                 <td>
@@ -1563,26 +1640,31 @@
                                                 </table>
                                             </td>
                                         </tr>
-                                        <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Filename, CaseSolutionFields.FileName)">
-                                            @*<tr class="displaytr" style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Filename.ToString())">*@
-                                            <td>
-                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Filename, "Bifogad fil")
-                                            </td>
-                                            <td colspan="2">
-                                                @if (Model.EditMode == Enums.AccessMode.FullAccess)
-                                                {
-                                                    <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
-                                                    <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="case">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
 
-                                                }
-                                                <div id="divCaseFiles">
-                                                    @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary { { "CaseInactive", Model.case_.FinishingDate.HasValue } })
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr class="displaytr">
-                                            <td colspan="3" class="span3"></td>
-                                        </tr>
+
+                                        @if (Model.Setting.AttachmentPlacement == 0)
+                                        {
+                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Filename, CaseSolutionFields.FileName)">
+                                                @*<tr class="displaytr" style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Filename.ToString())">*@
+                                                <td>
+                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Filename, "Bifogad fil")
+                                                </td>
+                                                <td colspan="2">
+                                                    @if (Model.EditMode == Enums.AccessMode.FullAccess)
+                                                    {
+                                                        <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
+                                                        <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="case">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
+
+                                                    }
+                                                    <div id="divCaseFiles">
+                                                        @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary { { "CaseInactive", Model.case_.FinishingDate.HasValue } })
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="displaytr">
+                                                <td colspan="3" class="span3"></td>
+                                            </tr>
+                                        }
                                     </table>
                                 </div>
                             </div>
@@ -1757,11 +1839,12 @@
                                                 {
                                                     if (!Model.case_.Status_Id.HasValue)
                                                     {
-                                                        @Html.TextBoxFor(m => m.case_.Status_Id, new { @readonly = true })
+                                                        @Html.TextBox("statusName", "", new { @readonly = true, id = "statusName" })
+                                                        @Html.HiddenFor(x => x.case_.Status_Id)
                                                     }
                                                     else
                                                     {
-                                                        @Html.TextBoxFor(m => m.statuses.SingleOrDefault(x => x.Id == Model.case_.Status_Id).Name, new { @readonly = true })
+                                                        @Html.TextBoxFor(m => m.statuses.SingleOrDefault(x => x.Id == Model.case_.Status_Id).Name, new { @readonly = true, id = "statusName" })
                                                         @Html.HiddenFor(x => x.case_.Status_Id)
                                                     }
                                                 }
@@ -1797,7 +1880,7 @@
                                                     }
                                                     else
                                                     {
-                                                        @Html.TextBoxFor(m => m.stateSecondaries.SingleOrDefault(x => x.Id == Model.case_.StateSecondary_Id).Name, new { @readonly = true })
+                                                        @Html.TextBoxFor(m => m.stateSecondaries.SingleOrDefault(x => x.Id == Model.case_.StateSecondary_Id).Name, new { @readonly = true, id = "subStateName" })
                                                         @Html.HiddenFor(x => x.case_.StateSecondary_Id)
                                                     }
                                                 }
@@ -1880,44 +1963,44 @@
                                             }
                                         }
                                         @* <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart)">
-                                                <td>
-                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CausingPart, "Rotorsak")
-                                                </td>
-                                                <td class="span1" style="float: left;">
-                                                    @Html.HiddenFor(model => model.case_.CausingPartId, new { ModelId = "causing-type" })
-                                                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart))
+                                        <td>
+                                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CausingPart, "Rotorsak")
+                                        </td>
+                                        <td class="span1" style="float: left;">
+                                            @Html.HiddenFor(model => model.case_.CausingPartId, new { ModelId = "causing-type" })
+                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart))
+                                            {
+                                                @Html.CausingPartList(Model.case_.Customer_Id, Model.case_.CausingPartId, "causing-type")
+                                            }
+                                            else
+                                            {
+                                                var causingpart = Model.case_.CausingPartId.HasValue ? Model.causingParts.SingleOrDefault(x => x.Id == Model.case_.CausingPartId) : null;
+
+                                                if (causingpart == null)
+                                                {
+                                                    if (Model.case_.CausingPart != null)
                                                     {
-                                                        @Html.CausingPartList(Model.case_.Customer_Id, Model.case_.CausingPartId, "causing-type")
+                                                        var transName = Translation.GetMasterDataTranslation(Model.case_.CausingPart.Name);
+                                                        @Html.TextBoxFor(m => transName, new { @readonly = true })
+
                                                     }
                                                     else
                                                     {
-                                                        var causingpart = Model.case_.CausingPartId.HasValue ? Model.causingParts.SingleOrDefault(x => x.Id == Model.case_.CausingPartId) : null;
-
-                                                        if (causingpart == null)
-                                                        {
-                                                            if (Model.case_.CausingPart != null)
-                                                            {
-                                                                var transName = Translation.GetMasterDataTranslation(Model.case_.CausingPart.Name);
-                                                                @Html.TextBoxFor(m => transName, new { @readonly = true })
-
-                                                            }
-                                                            else
-                                                            {
-                                                                @Html.TextBoxFor(m => m.case_.CausingPart.Name, new { @readonly = true })
-                                                            }
-
-                                                        }
-                                                        else
-                                                        {
-                                                            var transName = Translation.GetMasterDataTranslation(causingpart.Name);
-                                                             @Html.TextBoxFor(m => transName, new { @readonly = true })
-                                                             @Html.HiddenFor(x => x.case_.CausingPartId)
-                                                        }
-
+                                                        @Html.TextBoxFor(m => m.case_.CausingPart.Name, new { @readonly = true })
                                                     }
 
-                                                </td>
-                                            </tr>*@
+                                                }
+                                                else
+                                                {
+                                                    var transName = Translation.GetMasterDataTranslation(causingpart.Name);
+                                                     @Html.TextBoxFor(m => transName, new { @readonly = true })
+                                                     @Html.HiddenFor(x => x.case_.CausingPartId)
+                                                }
+
+                                            }
+
+                                        </td>
+                                    </tr>*@
 
                                         <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart)">
                                             <td>
@@ -2259,7 +2342,24 @@
                 @if (Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)
                 {
                     <div id="dh-form-area" class="tab-pane tab-pane-border">
+
                     </div>
+                }
+
+                @if (Model.ContainsExtendedCase)
+                {
+                    foreach (var extendedCase in Model.ExtendedCases)
+                    {
+
+                        <div id="container_@extendedCase.Id" class="tab-pane tab-pane-border @((Model.ActiveTab.StartsWith(CaseTabs.ExtendedCaseTab)) ? "active" : "")">
+                            <div class="container">
+                                @Html.Partial("_CaseInformation", Model, new ViewDataDictionary { { "Headline", Translation.GetCoreTextTranslation(extendedCase.Name) } })
+                                @*<div>@extendedCase.Version</div>*@
+                                </div>
+                         
+                            </div>
+                        
+                    }
                 }
 
                 @if (Model.IsItParentCase())
@@ -2267,8 +2367,45 @@
                     @Html.Partial("_ChildCases", Model.ChildCaseViewModel);
                 }
 
+                @if (Model.Setting.AttachmentPlacement == 1)
+                {
+                    <div id="attachment-container" class="tab-pane tab-pane-border">
+                        <div class="container">
+                            @Html.Partial("_CaseInformation", Model, new ViewDataDictionary { { "Headline", Translation.GetCoreTextTranslation("Bilagor") } })
+                            <div class="row">
+                                <div class="span12">
+                                    <table class="tableform">
+                                        <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Filename, CaseSolutionFields.FileName)">
+                                            <td colspan="3" class="span3">
+                                                @if (Model.EditMode == Enums.AccessMode.FullAccess)
+                                            {
+                                            <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
+                                            <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="case">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
+                                            }
+                                                <div id="divCaseFiles" style="margin-top:10px;">
+                                                    @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary { { "CaseInactive", Model.case_.FinishingDate.HasValue } })
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="displaytr">
+                                            <td colspan="3" class="span3"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div id="casedocument-container" class="tab-pane tab-pane-border">
+                    <div class="container">
+                        @Html.Partial("_CaseInformation", Model, new ViewDataDictionary { { "Headline", Translation.GetCoreTextTranslation("Dokument") } })
+                        @Html.Partial("_CaseDocument", Model.CaseDocuments)
+                    </div>
+                </div>
             </div>
-        </div>
+
+                    </div>
     </div>
     <div id="overwriteDlg" class="modal fade" style="display: none">
         <div class="modal-dialog">
@@ -2283,14 +2420,14 @@
         </div>
     </div>
 
-                                                    if (Model.case_.Id > 0 && Model.CasePrintView != null)
-                                                    {
-                                                        <div>
-                                                            @Html.Partial("_CasePrint", Model.CasePrintView)
-                                                        </div>
-                                                    }
-                                                    <div class="toast-container toast-position-top-center" style="z-index: 100051;"></div>
-                                                    }
+    if (Model.case_.Id > 0 && Model.CasePrintView != null)
+    {
+        <div>
+            @Html.Partial("_CasePrint", Model.CasePrintView)
+        </div>
+    }
+    <div class="toast-container toast-position-top-center" style="z-index: 100051;"></div>
+}
 
 @functions    {
 
@@ -2465,21 +2602,21 @@
                 @if (Model.CustomerSettings.ModuleInvoice)
                 {
                     <text>
-                require_from_group: {
-                    param: [1, ".log-field"],
-                    depends: function(element) {
-                        var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
-                        var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
-                        var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
-                        var overTimeMin = $("#CaseLog_OvertimeMinute").val().replace(/\r/g, "") !== "";
-                        var material = $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "0"
-                        && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
-                        var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
-                        && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
-                        return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
+                    require_from_group: {
+                        param: [1, ".log-field"],
+                        depends: function(element) {
+                            var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
+                            var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
+                            var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
+                            var overTimeMin = $("#CaseLog_OvertimeMinute").val().replace(/\r/g, "") !== "";
+                            var material = $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "0"
+                            && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
+                            var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
+                            && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
+                            return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
+                        }
                     }
-                }
-                </text>
+                    </text>
                 }
             },
             "CaseLog.TextInternal": {
@@ -2487,21 +2624,21 @@
                 @if (Model.CustomerSettings.ModuleInvoice)
                 {
                     <text>
-                require_from_group: {
-                    param: [1, ".log-field"],
-                    depends: function(element) {
-                        var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
-                        var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
-                        var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
-                        var overTimeMin = $("#CaseLog_OvertimeMinute").val().replace(/\r/g, "") !== "";
-                        var material = $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "0"
-                        && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
-                        var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
-                        && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
-                        return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
+                    require_from_group: {
+                        param: [1, ".log-field"],
+                        depends: function(element) {
+                            var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
+                            var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
+                            var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
+                            var overTimeMin = $("#CaseLog_OvertimeMinute").val().replace(/\r/g, "") !== "";
+                            var material = $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "0"
+                            && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
+                            var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
+                            && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
+                            return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
+                        }
                     }
-                }
-                </text>
+                    </text>
                 }
             },
             "CaseLog.WorkingTimeHour": {
@@ -2698,9 +2835,7 @@
             "CaseLog.OvertimeMinute": {
                 require_from_group: "@Translation.GetForJS("Välj en eller flera")"
             },
-        },
-        //        submitHandler: function(form) {
-        //        }
+        }
     });
 
     function isProductAreaValid() {
@@ -2723,149 +2858,14 @@
     }
 
     $(function() {
+
         var isVisible = @Model.caseFieldSettings.IsFieldVisible(GlobalEnums.TranslationCaseFields.AddFollowersBtn).ToJavaScriptBool();
         if (isVisible) {
             $("#fakeCaseFollowerUsersInput").html(getHtmlFromEmails($("#caseFollowerUsersInput").val()));
-        }
-    });
-
-    $(function() {
-
-        SetDynamicDropDowns();
-
-        $(".dropdown-submenu.DynamicDropDown_Up")
-            .mousemove(function(event) {
-                var target = $(event.target.parentElement);
-                if (target != undefined && target.hasClass('DynamicDropDown_Up') && target.index(0) != -1) {
-                    var objPos = GetObjectPosInView(target[0].id);
-                    var subMenu = "#subDropDownMenu_" + target[0].id;
-                    $(subMenu).css("bottom", "auto");
-                    $(subMenu).css("top", "auto");
-                    if ($(".DynamicDropDown").hasClass('dropup')) {
-                        if (objPos.ToTop < objPos.ToDown) {
-                            var h = -$(subMenu).height() + 25;
-                            var hstr = h + "px";
-                            $(subMenu).css("bottom", hstr);
-                        } else
-                            $(subMenu).css("bottom", "0");
-                    } else {
-                        if (objPos.ToTop < objPos.ToDown || $(subMenu).height() < objPos.ToDown)
-                            $(subMenu).css("top", "0");
-                        else {
-                            var h = -$(subMenu).height() + 25;
-                            var hstr = h + "px";
-                            $(subMenu).css("top", hstr);
-                        }
-                    }
-                }
-            });
-
-        function GetObjectPosInView(objectId) {
-            var fixedArea = 90;
-            var pageSize = $(window).height() - fixedArea;
-            var scrollPos = $(window).scrollTop();
-            var elementToTop = $("#" + objectId).offset().top - scrollPos - fixedArea;
-            var elementToDown = pageSize - elementToTop;
-            return { ToTop: elementToTop, ToDown: elementToDown };
-        }
-
-        $(window)
-            .scroll(function() {
-                SetDynamicDropDowns()
-            });
-
-        function SetDynamicDropDowns() {
-            var fixedArea = 90;
-            var pageSize = $(window).height() - fixedArea;
-            var scrollPos = $(window).scrollTop();
-            var elementToTop = $(".DynamicDropDown").offset().top - scrollPos - fixedArea;
-            var elementToDown = pageSize - elementToTop;
-            if (elementToTop < -$(".DynamicDropDown").height())
-                $(".DynamicDropDown").removeClass('open');
-
-            if (elementToTop <= elementToDown) {
-                $(".DynamicDropDown").removeClass('dropup');
-            } else {
-                $(".DynamicDropDown").addClass('dropup');
-            }
-        }
-
-        $("#caseDescriptionPreview")
-            .click(function() {
-                var description = $(".case-description")
-                    .attr("value")
-                    .replace(/\r\n|\r|\n/g, "<br />");
-                var d = $(document.createElement("div"))
-                    .html(description)
-                    .dialog({
-                        title:
-                            "@Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)",
-                        modal: true,
-                        width: 600,
-                        height: 400,
-                        close: function() {
-                            d.dialog("destroy");
-                        }
-                    });
-            });
-
-        $(".case-description")
-            .keyup(function(ev) {
-                var visibility = 'visible';
-                if (ev.target.value.length == 0) {
-                    visibility = 'hidden';
-                }
-                $("#caseDescriptionPreview").css('visibility', visibility);
-            });
-
-        @if (Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)
-        {
-            <text>
-
-        var tab = $("#myTab li a");
-
-        tab.on('shown',
-            function(e) {
-                window.scrollTo(0, 0);
-            });
-
-        tab.click(function(ev) {
-
-            if (ev.target.className.indexOf("case") >= 0) {
-                if ($(".secnav").hasClass("hide")) {
-                    $(".secnav")
-                        .fadeIn(300,
-                            function() {
-                                $(".secnav").removeClass("hide");
-                            });
-                }
-
-                location.reload(true);
-            }
-
-            if (ev.target.className.indexOf("eform") >= 0) {
-                var secnav = $(".secnav");
-                if (secnav.hasClass("hide") == false) {
-                    secnav.fadeOut(300,
-                        function() {
-                            secnav.addClass("hide");
-                        });
-                }
-            }
-        });
-
-        </text>
         }
 
         var scope = dhHelpdesk.cases.scope(window.parameters.casesScopeInitParameters);
     });
 
-    //$('#divCase__WatchDate').datepicker({
-    //    format: 'yyyy-mm-dd',
-    //    weekStart: 1,
-    //    todayHighlight: true,
-    //    clearBtn : true,
-    //    autoclose:true,
-    //});
-
 </script>
+

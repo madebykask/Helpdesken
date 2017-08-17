@@ -1,0 +1,48 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="Basic">
+    <div class="span6">
+        <table class="table">       
+            <tr>
+                <td class="tdstrong">@Model.Label("BasicTerminationType")</td>
+                <td>
+                    @Model.Element("BasicTerminationType")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("LastDayOfEmployment")</td>
+                <td>
+                    @Model.Element("LastDayOfEmployment")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong" colspan="2">
+                    <h4>@Model.Translate("CDS")</h4>
+                </td>                
+            </tr>  
+            <tr>
+                <td class="tdstrong">@Model.Label("LockCDSAccountFrom")</td>
+                <td>
+                    @Model.Element("LockCDSAccountFrom")</td>
+            </tr>         
+        </table>
+    </div>
+</div>
+
+<script>
+
+    $('#BasicTerminationType').change(function () {
+        if (document.getElementById('CompleteTerminationType')) {
+            document.getElementById('CompleteTerminationType').value = document.getElementById('BasicTerminationType').value;
+        }
+        setValueForTerminationReason();
+    });
+
+    $('#LastDayOfEmployment').change(function(){
+        $('#LockCDSAccountFrom').val($('#LastDayOfEmployment').val());
+    });
+
+
+</script>

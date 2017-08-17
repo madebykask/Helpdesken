@@ -29,6 +29,21 @@ namespace DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc.Invoices
 			{
 				get { return GetAction(e => e.InvoiceFile(Guid.Empty)); }
 			}
-		}
+
+		    public static string GetInvoicesOverviewList
+		    {
+		        get { return GetAction(e => e.GetInvoicesOverviewList(null)); }
+		    }
+
+		    public static string SaveInvoiceValues
+		    {
+		        get { return GetAction(e => e.SaveInvoiceValues(null)); }
+		    }
+
+		    public static string InvoiceAction
+		    {
+		        get { return GetAction(e => e.InvoiceAction(null)); }
+		    }
+        }
 	}
 }

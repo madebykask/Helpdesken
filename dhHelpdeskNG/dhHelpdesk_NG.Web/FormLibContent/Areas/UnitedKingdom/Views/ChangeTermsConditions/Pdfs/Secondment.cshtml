@@ -1,0 +1,177 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using System.Globalization;
+@using ECT.Model.Entities;
+
+@{
+    Layout = null;
+    Model.Language = "en";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+            <tr style="text-align: right;">
+                <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
+            </tr>
+        </table>
+        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
+            <strong>Private & Confidential</strong><br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.FirstName, true) @Model.GetDocumentAnswer(FormLibConstants.FormField.LastName, true)<br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine1, true)
+            @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine2)))
+            {
+                <br />
+                @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine2)
+            }
+            <br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentCity, true)
+            <br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentPostalCode, true)
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            Dear @Model.GetDocumentAnswer(FormLibConstants.FormField.FirstName, true),<br />
+            <br />
+            I am very pleased to be able to confirm to you our offer of a secondment for the temporary position of 
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.JobTitle, true)
+            , within the 
+            @if (Model.GetDocumentAnswer(FormLibConstants.FormField.NewDepartment) != Model.GetDocumentAnswer(FormLibConstants.FormField.Department))
+            {   
+                <text>@Model.GetDocumentAnswer(FormLibConstants.FormField.NewDepartment, true)</text>            
+            }
+            else
+            {
+                <text>@Model.GetDocumentAnswer(FormLibConstants.FormField.Department, true)</text>            
+            }
+            @if (Model.GetDocumentAnswer(FormLibConstants.FormField.NewBusinessUnit) != Model.GetDocumentAnswer(FormLibConstants.FormField.BusinessUnit))
+            {   
+                <text>, in IKEA @Model.GetDocumentAnswer(FormLibConstants.FormField.NewBusinessUnit, true)</text>            
+            }
+            else
+            {
+                <text>, in IKEA @Model.GetDocumentAnswer(FormLibConstants.FormField.BusinessUnit, true)</text>            
+            }
+            <br />
+            <br />
+            The principle changes in the terms and conditions of your employment are as follows:
+            <br />
+            <br />
+            1. You will be seconded to the role of  @Model.GetDocumentAnswer(FormLibConstants.FormField.JobTitle, true) reporting to the
+            @if (Model.GetDocumentAnswer(FormLibConstants.FormField.ReportsToLineManager).ToLower() == "Shopkeeper".ToLower())
+            {
+                <text>@Model.GetDocumentAnswer(FormLibConstants.FormField.ReportsToLineManager, true)</text>
+                if(Model.GetDocumentAnswer(FormLibConstants.FormField.Department) != Model.GetDocumentAnswer(FormLibConstants.FormField.NewDepartment))
+                {   
+                    <text>@Model.GetDocumentAnswer(FormLibConstants.FormField.NewDepartment, true)</text>            
+                }
+                else
+                {
+                    <text>@Model.GetDocumentAnswer(FormLibConstants.FormField.Department, true)</text>            
+                }
+            }
+            else
+            {
+                <text>@Model.GetDocumentAnswer(FormLibConstants.FormField.ReportsToLineManager, true).</text>
+            }
+            <br />
+            <br />
+            2. For the duration of the secondment you will be paid by IKEA @Model.GetDocumentAnswer(FormLibConstants.FormField.NewBusinessUnit, true) but continue to be employed by IKEA @Model.GetDocumentAnswer(FormLibConstants.FormField.BusinessUnit, true) .
+            <br />
+            <br />
+            3. Your start date for this role is @Model.GetDocumentAnswer(FormLibConstants.FormField.ChangeValidFrom, true) and will cease on @Model.GetDocumentAnswer(FormLibConstants.FormField.ChangeValidTo, true).
+            <br />
+            <br />
+            <!-- Dynamic count -->
+            @{var paragraphNo = 4;}
+            @switch(Model.GetDocumentAnswer(FormLibConstants.FormField.SecondmentDuration, true).ToLower())
+            {       
+                case "less than 1 year":
+                case "1-2 years":
+                    <text>@(paragraphNo.ToString()). At the end of the secondment you will return to your previous store/unit and wherever possible, to a similar role on the same terms and conditions to your role prior to the secondment (see secondment policy attached for more details).</text>
+                    <text><br /><br /></text>        
+                    paragraphNo++;
+                  break;
+                case "over 2 years":
+                    <text>@(paragraphNo.ToString()). At the end of the secondment state what is on the terms and conditions form (see secondment policy attached for more details).</text>    
+                    <text><br /><br /></text>    
+                    paragraphNo++;                     
+                  break; 
+                  
+            }<!-- end of switch--> 
+           
+            <!-- PARAGRAPH -->
+            @(paragraphNo.ToString()). Your worked hours for the period of the secondment will be @Model.GetDocumentAnswer(FormLibConstants.FormField.ContractedHours, true).
+            @{ paragraphNo++;} 
+            <br />
+            <br />
+            @if(!string.IsNullOrEmpty(Model.GetDocumentAnswer(FormLibConstants.FormField.BasicPayAmount)))
+            {
+               
+                switch(Model.GetDocumentAnswer(FormLibConstants.FormField.PayrollCategory, true).ToLower())
+                {
+                    case "monthly":  
+                        <text>@(paragraphNo.ToString()). Your salary for the period of the secondment will be </text>
+                        @Model.GetDocumentAnswer(FormLibConstants.FormField.BasicPayAmount, true)            
+                        <text><br /><br /></text>        
+                        paragraphNo++;
+                        break;
+                    case "hourly":
+                        <text>@(paragraphNo.ToString()). Your hourly rate for the period of the secondment will be </text>         
+                        @Model.GetDocumentAnswer(FormLibConstants.FormField.BasicPayAmount, true)            
+                        <text><br /><br /></text>        
+                        paragraphNo++;            
+                        break; 
+                        
+                }<!-- end of switch--> 
+                
+            }
+            
+            <!-- PARAGRAPH -->
+            @(paragraphNo.ToString()). Your holiday accruals for this period are @Model.GetDocumentAnswer(FormLibConstants.FormField.HolidayFull, true)
+            @{ paragraphNo++;} 
+            <br />
+            <br />
+            <!-- PARAGRAPH -->
+            @(paragraphNo.ToString()). Your next pay review will be September @Model.GetDocumentAnswer(FormLibConstants.FormField.DateOfNextSalaryReview, true)
+            @{ paragraphNo++;} 
+            <br />
+            <br />
+            @switch(Model.GetDocumentAnswer(FormLibConstants.FormField.AllowancesType, true).ToLower())
+            {
+                case "150v - hourly responsibility":
+                case "350c - adj-responsibility allow":
+                case "100c - responsibility allow":
+                    
+                    <!-- PARAGRAPH -->
+                    <text>@(paragraphNo.ToString()). 9.	In recognition of the extra responsibility you will receive a responsibility allowance of £</text> 
+                    @Model.GetDocumentAnswer(FormLibConstants.FormField.AllowancesAmountUnits, true) 
+                    <text> per annum pro rata paid monthly in arrears and shown on a different line on your pay slip. The allowance will cease at the end of the secondment.</text> 
+                    <text><br /><br /></text>  
+                    break;
+            }<!-- end of switch--> 
+
+            <br />
+            <br />
+            All other terms and conditions remain the same.
+            <br />
+            <br />
+            To ensure a secondment benefits both the individual and IKEA it is important to be aware of and apply the Secondment Policy which you will find enclosed with this letter.  
+            <br />
+            <br />
+            Please place this letter together with your copy of Terms and Conditions of Employment and co-worker handbook as together these form the basis of your contract.
+        </p>
+
+        <endpage />
+    </div>
+</body>
+</html>

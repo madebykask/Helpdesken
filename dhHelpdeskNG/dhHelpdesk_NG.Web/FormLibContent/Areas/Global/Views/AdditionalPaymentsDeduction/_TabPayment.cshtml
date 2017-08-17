@@ -1,0 +1,45 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="Payment">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                 
+                <!--ALLOWANCES-->
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Allowances")</h4>
+                    </td>
+                </tr>
+
+                @Html.Partial("Sections/_Allowances", Model)
+                <!--ALLOWANCES END-->
+
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <table class="table">
+            <tbody>
+               <!--DEDUCTIONS-->
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Deductions")</h4>
+                    </td>
+                </tr>
+               @Html.Partial("Sections/_Deductions", Model)
+                <!--DEDUCTIONS END-->
+
+                             </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    
+    
+
+    
+</script>

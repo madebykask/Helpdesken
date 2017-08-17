@@ -1,0 +1,558 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="personal">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Personal Information")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BirthName")</td>
+                    <td>
+                        @Model.Element("BirthName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("SecondName")</td>
+                    <td>
+                        @Model.Element("SecondName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FathersFirstName")</td>
+                    <td>
+                        @Model.Element("FathersFirstName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MothersFirstName")</td>
+                    <td>
+                        @Model.Element("MothersFirstName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MothersBirthName")</td>
+                    <td>
+                        @Model.Element("MothersBirthName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PlaceOfBirth")</td>
+                    <td>
+                        @Model.Element("PlaceOfBirth")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Nationality")</td>
+                    <td>
+                        @Model.Element("Nationality")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CommunicationLanguage")</td>
+                    <td>
+                        @Model.Element("CommunicationLanguage")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Gender")</td>
+                    <td>
+                        @Model.Element("Gender")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NIP")</td>
+                    <td>
+                        @Model.Element("NIP")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Phone")</td>
+                    <td>
+                        @Model.Element("Phone")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Email")</td>
+                    <td>
+                        @Model.Element("Email")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxOfficeLocation")</td>
+                    <td>
+                        @Model.Element("TaxOfficeLocation")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("WaitingPeriod")</td>
+                    <td>
+                        @Model.Element("WaitingPeriod")
+                    </td>
+                </tr>
+                <!-- Family members -->
+                <tr class="familyMember" id="familyMember">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Family member")</h4>
+                    </td>
+                </tr>
+                <tr class="familyMember">
+                    <td class="tdstrong">@Model.Label("FamilyMemberRelationship")</td>
+                    <td>
+                        @Model.Element("FamilyMemberRelationship")</td>
+                </tr>
+                <tr class="familyMember">
+                    <td class="tdstrong">@Model.Label("FamilyMemberFirstName")</td>
+                    <td>
+                        @Model.Element("FamilyMemberFirstName")</td>
+                </tr>
+                <tr class="familyMember">
+                    <td class="tdstrong">@Model.Label("FamilyMemberLastName")</td>
+                    <td>
+                        @Model.Element("FamilyMemberLastName")</td>
+                </tr>
+                <tr class="familyMember">
+                    <td class="tdstrong">@Model.Label("FamilyMemberDateOfBirth")</td>
+                    <td>
+                        @Model.Element("FamilyMemberDateOfBirth")</td>
+                </tr>
+                <tr class="familyMember">
+                    <td class="tdstrong">@Model.Label("FamilyMemberPESEL")</td>
+                    <td>
+                        @Model.Element("FamilyMemberPESEL")</td>
+                </tr>
+                <tr class="familyMember">
+                    <td class="tdstrong">@Model.Label("FamilyMemberDisabilityScale")</td>
+                    <td>
+                        @Model.Element("FamilyMemberDisabilityScale")</td>
+                </tr>
+                <tr class="familyMember">
+                    <td class="tdstrong">@Model.Label("FamilyMemberHealthInsurance")</td>
+                    <td>
+                        @Model.Element("FamilyMemberHealthInsurance")</td>
+                </tr>
+                <tr class="familyMember">
+                    <td class="tdstrong">@Model.Label("FamilyMemberJoinedHousehold")</td>
+                    <td>
+                        @Model.Element("FamilyMemberJoinedHousehold")</td>
+                </tr>
+                <tr class="familyMember">
+                    <td class="tdstrong">@Model.Label("FamilyMemberExclusivelyDependent")</td>
+                    <td>
+                        @Model.Element("FamilyMemberExclusivelyDependent")</td>
+                </tr>
+
+                @for(int i = 2; i <= 5; i++)
+                {
+                    <tr class="familyMember@(i.ToString())" id="familyMember@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Family member")</h4>
+                        </td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberRelationship" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberRelationship" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberFirstName" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberFirstName" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberLastName" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberLastName" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberDateOfBirth" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberDateOfBirth" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberPESEL" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberPESEL" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberDisabilityScale" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberDisabilityScale" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberHealthInsurance" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberHealthInsurance" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberJoinedHousehold" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberJoinedHousehold" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberExclusivelyDependent" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberExclusivelyDependent" + i.ToString())</td>
+                    </tr>
+                }
+
+                <tr id="addFamilyMemberTr">
+                    <td colspan="2">
+                        @Model.Element("FamilyMembers")
+                        <a id="addFamilyMember" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another family member")</a></td>
+                </tr>
+
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Home address")
+                            <button class="btn btn-mini pull-right" id="btnHomeAddress" data-prefix="Home">
+                                <i class="icon-share"></i>&nbsp;@Model.Translate("Copy from basic data")
+                            </button>
+                        </h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeStreet")</td>
+                    <td>
+                        @Model.Element("HomeStreet")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeStreetNumber")</td>
+                    <td>
+                        @Model.Element("HomeStreetNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeHouseNumber")</td>
+                    <td>
+                        @Model.Element("HomeHouseNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeCity")</td>
+                    <td>
+                        @Model.Element("HomeCity")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomePostCode")</td>
+                    <td>
+                        @Model.Element("HomePostCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeCountryCode")</td>
+                    <td>
+                        @Model.Element("HomeCountryCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeRegion")</td>
+                    <td>
+                        @Model.Element("HomeRegion")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeDistrict")</td>
+                    <td>
+                        @Model.Element("HomeDistrict")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("HomeCommunity")</td>
+                    <td>
+                        @Model.Element("HomeCommunity")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Mailing address")
+                            <button class="btn btn-mini pull-right" id="btnMailingAddress" data-prefix="Mailing">
+                                <i class="icon-share"></i>&nbsp;@Model.Translate("Copy from basic data")
+                            </button>
+                        </h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingStreet")</td>
+                    <td>
+                        @Model.Element("MailingStreet")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingStreetNumber")</td>
+                    <td>
+                        @Model.Element("MailingStreetNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingHouseNumber")</td>
+                    <td>
+                        @Model.Element("MailingHouseNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingCity")</td>
+                    <td>
+                        @Model.Element("MailingCity")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingPostCode")</td>
+                    <td>
+                        @Model.Element("MailingPostCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingCountryCode")</td>
+                    <td>
+                        @Model.Element("MailingCountryCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingRegion")</td>
+                    <td>
+                        @Model.Element("MailingRegion")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingDistrict")</td>
+                    <td>
+                        @Model.Element("MailingDistrict")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingCommunity")</td>
+                    <td>
+                        @Model.Element("MailingCommunity")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Emergency address")
+                            <button class="btn btn-mini pull-right" id="btnEmergencyAddress" data-prefix="Emergency">
+                                <i class="icon-share"></i>&nbsp;@Model.Translate("Copy from basic data")
+                            </button>
+                        </h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyFirstName")</td>
+                    <td>
+                        @Model.Element("EmergencyFirstName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyLastName")</td>
+                    <td>
+                        @Model.Element("EmergencyLastName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyStreet")</td>
+                    <td>
+                        @Model.Element("EmergencyStreet")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyStreetNumber")</td>
+                    <td>
+                        @Model.Element("EmergencyStreetNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyHouseNumber")</td>
+                    <td>
+                        @Model.Element("EmergencyHouseNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyCity")</td>
+                    <td>
+                        @Model.Element("EmergencyCity")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyPostCode")</td>
+                    <td>
+                        @Model.Element("EmergencyPostCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyCountryCode")</td>
+                    <td>
+                        @Model.Element("EmergencyCountryCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyRegion")</td>
+                    <td>
+                        @Model.Element("EmergencyRegion")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyPhone")</td>
+                    <td>
+                        @Model.Element("EmergencyPhone")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyDistrict")</td>
+                    <td>
+                        @Model.Element("EmergencyDistrict")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyCommunity")</td>
+                    <td>
+                        @Model.Element("EmergencyCommunity")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Tax declaration address")
+                            <button class="btn btn-mini pull-right" id="btnTaxAddress" data-prefix="Tax">
+                                <i class="icon-share"></i>&nbsp;@Model.Translate("Copy from basic data")
+                            </button>
+                        </h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxStreet")</td>
+                    <td>
+                        @Model.Element("TaxStreet")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxStreetNumber")</td>
+                    <td>
+                        @Model.Element("TaxStreetNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxHouseNumber")</td>
+                    <td>
+                        @Model.Element("TaxHouseNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxCity")</td>
+                    <td>
+                        @Model.Element("TaxCity")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxPostCode")</td>
+                    <td>
+                        @Model.Element("TaxPostCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxCountryCode")</td>
+                    <td>
+                        @Model.Element("TaxCountryCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxRegion")</td>
+                    <td>
+                        @Model.Element("TaxRegion")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxDistrict")</td>
+                    <td>
+                        @Model.Element("TaxDistrict")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxCommunity")</td>
+                    <td>
+                        @Model.Element("TaxCommunity")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Documents")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("IdentityDocument")</td>
+                    <td>
+                        @Model.Element("IdentityDocument")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("IdentityCardNo")</td>
+                    <td>
+                        @Model.Element("IdentityCardNo")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("IdentityCardIssueAuthority")</td>
+                    <td>
+                        @Model.Element("IdentityCardIssueAuthority")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("IdentityCardIssueDate")</td>
+                    <td>
+                        @Model.Element("IdentityCardIssueDate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("RecidencePermitNo")</td>
+                    <td>
+                        @Model.Element("RecidencePermitNo")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("RecidencePermitIssueDate")</td>
+                    <td>
+                        @Model.Element("RecidencePermitIssueDate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NoOfWorkPermit")</td>
+                    <td>
+                        @Model.Element("NoOfWorkPermit")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NoOfWorkIssueDate")</td>
+                    <td>
+                        @Model.Element("NoOfWorkIssueDate")</td>
+                </tr>
+
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Bank account details")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AccountNo")</td>
+                    <td>
+                        @Model.Element("AccountNo")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AccountHolder")</td>
+                    <td>
+                        @Model.Element("AccountHolder")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NameOfBank")</td>
+                    <td>
+                        @Model.Element("NameOfBank")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AmountToBeTransferred")</td>
+                    <td>
+                        @Model.Element("AmountToBeTransferred")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Additional bank account details")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AccountNo2")</td>
+                    <td>
+                        @Model.Element("AccountNo2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AccountHolder2")</td>
+                    <td>
+                        @Model.Element("AccountHolder2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NameOfBank2")</td>
+                    <td>
+                        @Model.Element("NameOfBank2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AmountToBeTransferred2")</td>
+                    <td>
+                        @Model.Element("AmountToBeTransferred2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Additional bank account details")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AccountNo3")</td>
+                    <td>
+                        @Model.Element("AccountNo3")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AccountHolder3")</td>
+                    <td>
+                        @Model.Element("AccountHolder3")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NameOfBank3")</td>
+                    <td>
+                        @Model.Element("NameOfBank3")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AmountToBeTransferred3")</td>
+                    <td>
+                        @Model.Element("AmountToBeTransferred3")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

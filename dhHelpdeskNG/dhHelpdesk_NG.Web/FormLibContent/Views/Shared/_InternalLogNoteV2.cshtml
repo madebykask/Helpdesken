@@ -1,0 +1,66 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@{
+    var freeze = "span12";
+
+    if (ECT.FormLib.FormLibSessions.User.WorkingGroups != null
+        && ECT.FormLib.FormLibSessions.User.WorkingGroups.FirstOrDefault(x => x.Id == Model.Contract.WorkingGroupId) == null)
+    {
+        freeze = "disabled span12";
+    }
+
+    if (Model.IsLooked || Model.Contract.StateSecondaryId > 59)
+    {
+        freeze = "disabled span12";
+    }
+
+    if (Model.Contract.StateSecondaryId == 0)
+    {
+        freeze = "span12";
+    }
+}
+
+@*
+Just render answer if case is lower or equal to 10 and no case history above 10
+*@
+
+@* use model.element(internal log note) because we need to save value if error is returned on data *@
+
+@if ((!FormLibUtils.IsSelfService()) || (FormLibUtils.IsSelfService() && Model.Contract.StateSecondaryId < 10))
+{
+    
+        if (Model.GetErrorMessages().Any())
+        {
+            <tr>
+                <td class="tdstrong" colspan="2">
+                    <br />
+                    <h4>@Model.Translate("Internal Log Note")</h4>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @Model.Element("InternalLogNote", "", false, @freeze)
+                </td>
+            </tr>
+        }
+        else{
+        
+                        <tr>
+                <td class="tdstrong" colspan="2">
+                    <br />
+                    <h4>@Model.Translate("Internal Log Note")</h4>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <textarea name="InternalLogNote" class="span12" rows="7" @freeze></textarea>
+                </td>
+            </tr>
+        }
+
+    
+    
+
+
+}

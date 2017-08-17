@@ -1,0 +1,21 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@*<div class="row-fluid">
+    <ul class="inline alignrighttop marginbuttontop">
+        @if(Model.Form != null)
+        {
+            <li id="TempFixFormName" class="pull-left">@Model.Translate(Model.Form.FormName)</li>
+        }
+        @if(Model.Contract.ParentCaseNumber != 0)
+        {
+            <li>@Model.Translate("Parent case number") @Model.Contract.ParentCaseNumber</li>
+        }
+        @if(Model.Contract.ChildCaseNumbers.FirstOrDefault() != null && Model.Contract.ChildCaseNumbers.FirstOrDefault() != 0)
+        {
+            <li>@Model.Translate("Child case number") @Model.Contract.ChildCaseNumbers.FirstOrDefault()</li>
+        }
+        <li>@ECT.FormLib.FormLibSessions.User.FullName</li>
+    </ul>
+</div>*@

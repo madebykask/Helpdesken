@@ -1,0 +1,72 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+
+<!-- FAMILY MEMBER / DEPENDENTS -->
+              <tr class="familymember-first">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Family Member / Dependents")</h4>
+                    </td>
+                </tr>
+                <tr class="familymember-first">
+                    <td class="tdstrong">@Model.Label("FamilyMember")</td>
+                    <td>@Model.Element("FamilyMember")</td>
+                </tr>
+                <tr class="familymember-first">
+                    <td class="tdstrong">@Model.Label("FamilyMemberLastName")</td>
+                    <td>@Model.Element("FamilyMemberLastName")</td>
+                </tr>
+                <tr class="familymember-first">
+                    <td class="tdstrong">@Model.Label("FamilyMemberFirstName")</td>
+                    <td>@Model.Element("FamilyMemberFirstName")</td>
+                </tr>
+                <tr class="familymember-first">
+                    <td class="tdstrong">@Model.Label("FamilyMemberGender")</td>
+                    <td>@Model.Element("FamilyMemberGender")</td>
+                </tr>
+                <tr class="familymember-first">
+                    <td class="tdstrong">@Model.Label("FamilyMemberDateOfBirth")</td>
+                    <td>@Model.Element("FamilyMemberDateOfBirth")</td>
+                </tr>
+
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="familyMember@(i.ToString()) familymember" id="familyMember@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Family Member & Dependents") @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString()) familymember">
+                        <td class="tdstrong">@Model.Label("FamilyMember" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMember" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString()) familymember">
+                        <td class="tdstrong">@Model.Label("FamilyMemberLastName" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberLastName" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString()) familymember">
+                        <td class="tdstrong">@Model.Label("FamilyMemberFirstName" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberFirstName" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString()) familymember">
+                        <td class="tdstrong">@Model.Label("FamilyMemberGender" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberGender" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString()) familymember">
+                        <td class="tdstrong">@Model.Label("FamilyMemberDateOfBirth" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberDateOfBirth" + i.ToString())</td>
+                    </tr>
+                }
+
+                <tr id="addFamilyMemberTrr" class="familymember-first">
+                    <td colspan="2">
+                        @Model.Element("FamilyMembers")
+                        <a id="addFamilyMember" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another family member")</a></td>
+                </tr>

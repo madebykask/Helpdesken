@@ -19,10 +19,20 @@
     using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
     using Models.Login;
     using System.Web.Hosting;
-    
+    using Infrastructure.WebApi;
+    using Infrastructure.Helpers;
+    using Models.WebApi;
+    using Infrastructure.Cryptography;
+    using System.Configuration;
+    using System.Collections.Generic;
+
     public class LoginController : Controller
     {
         private const string Root = "/";
+        private const string TokenKey = "Token_Data";
+        private const string Access_Token_Key = "Access_Token";
+        private const string Refresh_Token_Key = "Refresh_Token";
+
         private readonly IUserService userService;
         private readonly ICustomerService customerService;
         private readonly ILanguageService languageService;
@@ -62,24 +72,26 @@
             }
 
             FormsAuthentication.SignOut();
+
+            TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
+
             return this.View("Login");
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)]
         public ViewResult Login()
-        {          
-            TempData["NumOfUsers"] = GetLiveUserCount();
-            TempData["CurrentWebSiteID"] = HostingEnvironment.ApplicationHost.GetSiteID();
-            TempData["CurrentWebSiteName"] = HostingEnvironment.ApplicationHost.GetSiteName();
-            
+        {
+            TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);            
             return View();
         }
 
         [HttpPost]
         public ActionResult Login(FormCollection coll, string returnUrl)
         {
+           
             string userName = coll["txtUid"].Trim();
             string password = coll["txtPwd"].Trim();
+
 
             if (this.IsValidLoginArgument(userName, password))
             {
@@ -197,7 +209,15 @@
                         this.RedirectFromLoginPage(userName, "~/Profile/Edit/", user.StartPage);
                         return null;
                     }
+
+                    var token = GetToken(userName, password);
+                    TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
                     
+                    if (token != null)
+                    {
+                        TempData[TokenKey] = GetTokenData(token.access_token, token.refresh_token);                        
+                    }
+
                     this.RedirectFromLoginPage(userName, redirectTo, user.StartPage);
                 }
                 else
@@ -258,6 +278,32 @@
             this.Response.Cookies.Add(cookie);
 
             this.Response.Redirect(!string.IsNullOrEmpty(returnUrl) ? returnUrl : this.routeResolver.ResolveStartPage(this.Url, startPage));
+        }
+
+        private SimpleToken GetToken(string userName, string password)
+        {
+            var baseUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Request.ApplicationPath.TrimEnd('/'));
+            var webApiService = new WebApiService(baseUrl);
+            var token = AsyncHelper.RunSync(() => webApiService.GetAccessToken(userName, password));
+
+            if (token != null)
+            {
+                var encriptionKey = ConfigurationManager.AppSettings.AllKeys.Contains(AppSettingsKey.EncryptionKey) ?
+                                    ConfigurationManager.AppSettings[AppSettingsKey.EncryptionKey].ToString() : string.Empty;
+                            
+                token.access_token = AESCryptoProvider.Encrypt256(token.access_token, encriptionKey);
+                token.refresh_token = AESCryptoProvider.Encrypt256(token.refresh_token, encriptionKey);                
+            }
+
+            return token;
+        }
+
+        private Dictionary<string,string> GetTokenData(string access_token, string refresh_token)
+        {
+            var tempData = new Dictionary<string, string>();
+            tempData.Add(Access_Token_Key, access_token);
+            tempData.Add(Refresh_Token_Key, refresh_token);
+            return tempData;
         }
     }
 }

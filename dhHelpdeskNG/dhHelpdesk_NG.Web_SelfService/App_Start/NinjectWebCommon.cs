@@ -59,6 +59,8 @@ namespace DH.Helpdesk.SelfService
     using Dal.Repositories.Faq.Concrete;
     using Dal.Repositories.Questionnaire;
     using Dal.Repositories.Questionnaire.Concrete;
+    using Services.Services.ExtendedCase;
+    using Services.Services.UniversalCase;
 
     public static class NinjectWebCommon 
     {
@@ -227,7 +229,12 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IOrderLogRepository>().To<OrderLogRepository>();
             kernel.Bind<IOrderRepository>().To<OrderRepository>();
             kernel.Bind<IOrderStateRepository>().To<OrderStateRepository>();
-
+            kernel.Bind<IExtendedCaseFormRepository>().To<ExtendedCaseFormRepository>();
+            kernel.Bind<IExtendedCaseDataRepository>().To<ExtendedCaseDataRepository>();
+            kernel.Bind<ITextTranslationRepository>().To<TextTranslationRepository>();
+            kernel.Bind<ITextTypeRepository>().To<TextTypeRepository>();
+            kernel.Bind<IExtendedCaseValueRepository>().To<ExtendedCaseValueRepository>();
+            
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
             kernel.Bind<ISettingService>().To<SettingService>();
@@ -289,9 +296,13 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IRegistrationSourceCustomerService>().To<RegistrationSourceCustomerService>();
             kernel.Bind<IRegistrationSourceCustomerRepository>().To<RegistrationSourceCustomerRepository>();
             kernel.Bind<ICaseSolutionConditionRepository>().To<CaseSolutionConditionRepository>();
+            kernel.Bind<ICaseSolutionConditionService>().To<CaseSolutionConditionService>();
+            kernel.Bind<IUniversalCaseService>().To<UniversalCaseService>();
+            kernel.Bind<IExtendedCaseService>().To<ExtendedCaseService>();
+            kernel.Bind<ITextTranslationService>().To<TextTranslationService>();			
 
-            // Cache
-            kernel.Bind<ICacheProvider>().To<CacheProvider>();
+			// Cache
+			kernel.Bind<ICacheProvider>().To<CacheProvider>();
 
 
             // FormLib

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?><predefined><name>Function</name><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>INDIVID</selected>
+<show>n/a</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>TRINN Kokk med Fagbrev</selected>
+<show>Ansatt over 15 år sammenhengende IKEA Food,Ansatte over 20 år sammenhengende IKEA Food,Beg.lønn (fra fylte 18 år),Etter 10 års praksis som kokk,Etter 2. års praksis som kokk,Etter 4. års praksis som kokk,Etter 6. års praksis som kokk,Etter 8. års praksis som kokk</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>TRINN Kokk uten Fagbrev</selected>
+<show>Ansatt over 15 år sammenhengende IKEA Food,Ansatte over 20 år sammenhengende IKEA Food,Begynnerlønn for arbeidstakere over 20 år / etter 4 mnd. Praksis over 18 år,Etter 10 års praksis som kokk,Etter 2. års praksis som kokk,Etter 4. års praksis som kokk,Etter 6. års praksis som kokk,Etter 8. års praksis som kokk</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Trainee 40%</selected>
+<show>n/a</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Trainee 60%</selected>
+<show>n/a</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>TRINN Fra fylte 16 år</selected>
+<show>n/a</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>TRINN Fra fylte 17 år</selected>
+<show>n/a</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>TRINN Fra fylte 18 år</selected>
+<show>n/a</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>TRINN Øvrig Restaurantarb. med Fagbrev</selected>
+<show>Ansatt over 15 år sammenhengende IKEA Food,Ansatte over 20 år sammenhengende IKEA Food,Beg.lønn (fra fylte 18 år),Etter 10 års praksis i bransjen,Etter 2. års praksis i bransjen,Etter 4. års praksis i bransjen,Etter 6. års praksis i bransjen,Etter 8. års praksis i bransjen</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>TRINN Øvrig Restaurantarb. uten Fagbrev</selected>
+<show>Ansatt over 15 år sammenhengende IKEA Food,Ansatte over 20 år sammenhengende IKEA Food,Begynnerlønn for arbeidstakere over 20 år / etter 4 mnd. Praksis over 18 år,Etter 10 års praksis i bransjen,Etter 2. års praksis i bransjen,Etter 4. års praksis i bransjen,Etter 6. års praksis i bransjen,Etter 8. års praksis i bransjen</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Over 18</selected>
+<show>TRINN 1     18år,TRINN 2,TRINN 3     25år,TRINN 4,TRINN 5,TRINN 6,TRINN 7- IKEA SPESIAL</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>TRINN Under 16 år</selected>
+<show>n/a</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>TRINN Under 18 år</selected>
+<show>n/a</show></dependent></predefined>

@@ -84,6 +84,11 @@
      
         public CaseRuleModel RuleModel { get; set; }
 
+        public Setting CustomerSetting { get; set; }
+
+        //public IList<SelectListItem> TabList { get; set; }
+        public string DefaultTab { get; set; }
+        public string ValidateOnChange { get; set; }
 
         
 
@@ -98,5 +103,6 @@
         public List<CaseSolutionSettingsField> CSSettingsField { get; set; }
 
         public List<CaseSolutionSettingsField> CSSelectedSettingsField { get; set; }
-    }
+		public IList<CaseSolution> SplitToCaseSolutions { get; internal set; }
+	}
 }

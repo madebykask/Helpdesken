@@ -579,6 +579,15 @@ var ApplyTemplate = function (data, doOverwrite) {
                     //#13311(redmine) Case template_list of administrators doesn't narrows depending on the choice of working group
                     //cfg['doNotTriggerEvent'] = true;
                     SetValueIfElVisible(el, val, cfg);
+
+                    if (el && (el.val() == "" || cfg.doOverwrite)) {
+                        //Todo: refactor
+                        //if connected to workflow we need to set the value
+                        if ($('#steps').length) {
+                            el.val(val);
+                        }
+                    }
+
                     break;
                 case 'PerformerUser_Id':
                     el = $('#Performer_Id');
@@ -589,6 +598,15 @@ var ApplyTemplate = function (data, doOverwrite) {
                     //Diabled to show WatchDate 
                     //cfg['doNotTriggerEvent'] = true;
                     SetValueIfElVisible(el, val, cfg);
+
+                    if (el && (el.val() == "" || cfg.doOverwrite)) {
+                        //Todo: refactor
+                        //if connected to workflow we need to set the value
+                        if ($('#steps').length) {
+                            el.val(val);
+                        }
+                    }
+
                     break;
                 case 'Project_Id':
                     el = $("#case__Project_Id");
@@ -614,6 +632,12 @@ var ApplyTemplate = function (data, doOverwrite) {
                     SetValueIfElVisible(el, val, cfg);
                     if (el && (el.val() == "" || cfg.doOverwrite)) {
                         $(".reaonlySubstate").val(val);
+                        //Todo: refactor
+                        //if connected to workflow we need to set the value
+                        if ($('#steps').length)
+                        {
+                            el.val(val);
+                        }
                     }
                     break;
                 case 'Status_Id':
@@ -916,16 +940,6 @@ function IsValueApplicableFor(templateFieldId, val) {
     return false;
 }
 
-
-$("#btnGo").on("click", function () {
-    var templateId = parseInt($('#steps').val()) || 0;
-    //only load if templateId exist
-    if (templateId > 0)
-        {
-        LoadTemplate(templateId);
-    }
-});
-
 function LoadTemplate(id) {
     var caseInvoiceIsActive = false;
     var curCaseId = $('#case__Id').val();
@@ -939,19 +953,27 @@ function LoadTemplate(id) {
                 ShowToastMessage(mes, 'warning', false);                
             }
             else {
-                GetTemplateData(id);
+                GetTemplateData(id).done(function (template) {
+                    if (template.SplitToCaseSolution_Id != null) {
+                        $("#SplitToCaseSolution_Id").val(template.SplitToCaseSolution_Id);
+                    }
+                });
             }
         });
     }
     else {
-         GetTemplateData(id);
+        GetTemplateData(id).done(function (template) {
+            if (template.SplitToCaseSolution_Id != null) {
+                $("#SplitToCaseSolution_Id").val(template.SplitToCaseSolution_Id);
+            }
+        });
     }
     
 }
 
 function GetTemplateData(id) {
     
-    $.get('/CaseSolution/GetTemplate',
+    return $.get('/CaseSolution/GetTemplate',
         { 'id': id, myTime: Date.now },
         function (caseTemplate) {
 
@@ -978,8 +1000,7 @@ function GetTemplateData(id) {
                     window.ApplyTemplate(caseTemplate);
                 }
             }
-
-                       
+            return caseTemplate;
         }
     );
 }

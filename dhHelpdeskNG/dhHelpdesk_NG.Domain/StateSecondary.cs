@@ -20,6 +20,10 @@
         public int RecalculateWatchDate { get; set; }
         public Guid StateSecondaryGUID { get; set; }
 
+        public string AlternativeStateSecondaryName { get; set; }
+        /// <summary>StateSecondaryId is used for communication with Extended Case. This value should be the same in all environments.
+        /// </summary>
+        public int StateSecondaryId { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual WorkingGroupEntity WorkingGroup { get; set; }

@@ -1,0 +1,567 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    const string IsTeWorker = "International Transfer";
+    const string DefaultCountry = "Ireland";
+}
+<div class="tab-pane" id="personal">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Contact Details")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TelephoneNumber")</td>
+                    <td>@Model.Element("TelephoneNumber")</td>
+                </tr>
+                                <tr>
+                    <td class="tdstrong">@Model.Label("MobilePhoneNumber")</td>
+                    <td>@Model.Element("MobilePhoneNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ContactEMailAddress")</td>
+                    <td>@Model.Element("ContactEMailAddress")</td>
+                </tr>
+
+                <!-- MAILING ADDRESS -->
+                @*<tr class="mailingaddress" id="mailingaddress">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Mailing Address")
+                            <button class="btn btn-mini pull-right" id="btnMailingAddress" data-prefix="Mailing">
+                                <i class="icon-share"></i>&nbsp;@Model.Translate("Copy from Permanent Address")
+                            </button>
+                        </h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingAddressLine1")</td>
+                    <td>@Model.Element("MailingAddressLine1")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingAddressLine2")</td>
+                    <td>@Model.Element("MailingAddressLine2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingPostalCode")</td>
+                    <td>@Model.Element("MailingPostalCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingCity")</td>
+                    <td>@Model.Element("MailingCity")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MailingCountry")</td>
+                    <td>@Model.Element("MailingCountry")</td>
+                </tr>*@
+
+                <!-- EMERGENCY ADDRESS -->
+                <tr class="emergencyaddress" id="emergencyaddress">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Emergency Address")
+                            <button class="btn btn-mini pull-right" id="btnEmergencyAddress" data-prefix="Emergency">
+                                <i class="icon-share"></i>&nbsp;@Model.Translate("Copy from Permanent Address")
+                            </button>
+                        </h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyAddressLine1")</td>
+                    <td>@Model.Element("EmergencyAddressLine1")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyAddressLine2")</td>
+                    <td>@Model.Element("EmergencyAddressLine2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyPostalCode")</td>
+                    <td>@Model.Element("EmergencyPostalCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyCity")</td>
+                    <td>@Model.Element("EmergencyCity")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyCountry")</td>
+                    <td>@Model.Element("EmergencyCountry")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyContactNumber")</td>
+                    <td>@Model.Element("EmergencyContactNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyContactRelationship")</td>
+                    <td>@Model.Element("EmergencyContactRelationship")</td>
+                </tr>
+
+                <!-- FAMILY MEMBER / DEPENDENTS -->
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Family Member / Dependents")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMember")</td>
+                    <td>@Model.Element("FamilyMember")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberLastName")</td>
+                    <td>@Model.Element("FamilyMemberLastName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberFirstName")</td>
+                    <td>@Model.Element("FamilyMemberFirstName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberGender")</td>
+                    <td>@Model.Element("FamilyMemberGender")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberDateOfBirth")</td>
+                    <td>@Model.Element("FamilyMemberDateOfBirth")</td>
+                </tr>
+
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="familyMember@(i.ToString())" id="familyMember@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Family Member & Dependents") @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMember" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMember" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberLastName" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberLastName" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberFirstName" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberFirstName" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberGender" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberGender" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberDateOfBirth" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberDateOfBirth" + i.ToString())</td>
+                    </tr>
+                }
+
+                <tr id="addFamilyMemberTrr">
+                    <td colspan="2">
+                        @Model.Element("FamilyMembers")
+                        <a id="addFamilyMember" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another family member")</a></td>
+                </tr>
+
+
+
+
+
+                                <!-- Global Mobility Employee Documents -->
+                <tr class="globalmobility-first">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Global Mobility - Employee Documents")</h4>
+                    </td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("EmployeeDocumentType")</td>
+                    <td>@Model.Element("EmployeeDocumentType")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("EmployeeDocumentCountry")</td>
+                    <td>@Model.Element("EmployeeDocumentCountry")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("EmployeeDocumentNo")</td>
+                    <td>@Model.Element("EmployeeDocumentNo")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("EmployeeDocumentIssueDate")</td>
+                    <td>@Model.Element("EmployeeDocumentIssueDate")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("EmployeeDocumentIssuePlace")</td>
+                    <td>@Model.Element("EmployeeDocumentIssuePlace")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("EmployeeDocumentIssuePlaceCountry")</td>
+                    <td>@Model.Element("EmployeeDocumentIssuePlaceCountry")</td>
+                </tr>
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="employeeDocument@(i.ToString()) globalmobility" id="employeeDocument@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Global Mobility - Employee Documents")  @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="employeeDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("EmployeeDocumentType" + i.ToString())</td>
+                        <td>@Model.Element("EmployeeDocumentType" + i.ToString())</td>
+                    </tr>
+                    <tr class="employeeDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("EmployeeDocumentCountry" + i.ToString())</td>
+                        <td>@Model.Element("EmployeeDocumentCountry" + i.ToString())</td>
+                    </tr>
+                    <tr class="employeeDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("EmployeeDocumentNo" + i.ToString())</td>
+                        <td>@Model.Element("EmployeeDocumentNo" + i.ToString())</td>
+                    </tr>
+                    <tr class="employeeDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("EmployeeDocumentIssueDate" + i.ToString())</td>
+                        <td>@Model.Element("EmployeeDocumentIssueDate" + i.ToString())</td>
+                    </tr>
+                    <tr class="employeeDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("EmployeeDocumentIssuePlace" + i.ToString())</td>
+                        <td>@Model.Element("EmployeeDocumentIssuePlace" + i.ToString())</td>
+                    </tr>
+                    <tr class="employeeDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("EmployeeDocumentIssuePlaceCountry" + i.ToString())</td>
+                        <td>@Model.Element("EmployeeDocumentIssuePlaceCountry" + i.ToString())</td>
+                    </tr>
+                }
+
+                <tr class="globalmobility-first" id="addEmployeeDocumentTrr">
+                    <td colspan="2">
+                      @Model.Element("EmployeeDocuments")
+                        <a id="addEmployeeDocument" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another employee documents")</a></td>
+                </tr>
+
+                <!-- Global Mobility Dependants -->
+                <tr class="globalmobility-first">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Global Mobility - Dependants")</h4>
+                    </td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantFamilyMember")</td>
+                    <td>@Model.Element("DependantFamilyMember")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("Accompanying")</td>
+                    <td>@Model.Element("Accompanying")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsLastName")</td>
+                    <td>@Model.Element("DependantsLastName")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsFirstName")</td>
+                    <td>@Model.Element("DependantsFirstName")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsDateOfBirth")</td>
+                    <td>@Model.Element("DependantsDateOfBirth")</td>
+                </tr>
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility" id="dependantFamilyMember@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Global Mobility - Dependants") @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantFamilyMember")</td>
+                        <td>@Model.Element("DependantFamilyMember" + i.ToString())</td>
+                    </tr>
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("Accompanying" + i.ToString())</td>
+                        <td>@Model.Element("Accompanying" + i.ToString())</td>
+                    </tr>
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsLastName" + i.ToString())</td>
+                        <td>@Model.Element("DependantsLastName" + i.ToString())</td>
+                    </tr>
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsFirstName" + i.ToString())</td>
+                        <td>@Model.Element("DependantsFirstName" + i.ToString())</td>
+                    </tr>
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility ">
+                        <td class="tdstrong">@Model.Label("DependantsDateOfBirth" + i.ToString())</td>
+                        <td>@Model.Element("DependantsDateOfBirth" + i.ToString())</td>
+                    </tr>
+                }
+
+                <tr class="globalmobility-first" id="addDependantFamilyMembersTrr">
+                    <td colspan="2">
+                        @Model.Element("DependantFamilyMembers")
+                        <a id="addDependantFamilyMember" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another global mobility dependant")</a></td>
+                </tr>
+
+                <!-- Global Mobility Dependants Documents -->
+                <tr class="globalmobility-first">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Global Mobility - Dependants Documents")</h4>
+                    </td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsDocumentType")</td>
+                    <td>@Model.Element("DependantsDocumentType")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsDocumentCountry")</td>
+                    <td>@Model.Element("DependantsDocumentCountry")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsDocumentNo")</td>
+                    <td>@Model.Element("DependantsDocumentNo")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsDocumentIssueDate")</td>
+                    <td>@Model.Element("DependantsDocumentIssueDate")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsDocumentIssuePlace")</td>
+                    <td>@Model.Element("DependantsDocumentIssuePlace")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsDocumentIssuePlaceCountry")</td>
+                    <td>@Model.Element("DependantsDocumentIssuePlaceCountry")</td>
+                </tr>
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility" id="globalMobilityDependantDocument@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Global Mobility - Dependants Documents") @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsDocumentType" + i.ToString())</td>
+                        <td>@Model.Element("DependantsDocumentType" + i.ToString())</td>
+                    </tr>
+                    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsDocumentCountry" + i.ToString())</td>
+                        <td>@Model.Element("DependantsDocumentCountry" + i.ToString())</td>
+                    </tr>
+                    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsDocumentNo" + i.ToString())</td>
+                        <td>@Model.Element("DependantsDocumentNo" + i.ToString())</td>
+                    </tr>
+                    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsDocumentIssueDate" + i.ToString())</td>
+                        <td>@Model.Element("DependantsDocumentIssueDate" + i.ToString())</td>
+                    </tr>
+                    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsDocumentIssuePlace" + i.ToString())</td>
+                        <td>@Model.Element("DependantsDocumentIssuePlace" + i.ToString())</td>
+                    </tr>
+                    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsDocumentIssuePlaceCountry" + i.ToString())</td>
+                        <td>@Model.Element("DependantsDocumentIssuePlaceCountry" + i.ToString())</td>
+                    </tr>
+                }
+
+                <tr class="globalmobility-first" id="addGlobalMobilityDependantDocumentTrr">
+                    <td colspan="2">
+                        @Model.Element("DependantsDocuments")
+                        <a id="addGlobalMobilityDependantDocument" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another global mobility dependant document")</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <!-- Bank Account Details -->
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Bank Account Details")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Payee")</td>
+                    <td>@Model.Element("Payee")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BankCountry")</td>
+                    <td>@Model.Element("BankCountry")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BankKey")</td>
+                    <td>@Model.Element("BankKey")
+                        <div class="notice">
+                            @Model.Translate("Bank Key = Sort Code")
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AccountNumber")</td>
+                    <td>@Model.Element("AccountNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("IBAN")</td>
+                    <td>@Model.Element("IBAN")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BuildingSocietyRollNo")</td>
+                    <td>@Model.Element("BuildingSocietyRollNo")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PaymentCurrency")</td>
+                    <td>@Model.Element("PaymentCurrency")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Fiscal Data")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxInformation")</td>
+                    <td>@Model.Element("TaxInformation")
+                        <div class="notice" id="taxInformationNotice">
+                            @Model.Translate("Please remember to attach the form.")
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Social Insurance")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PPSNumber")</td>
+                    <td>@Model.Element("PPSNumber")</td>
+                </tr>
+
+                <!-- Nationality / Language -->
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Nationality / Language")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Nationality")</td>
+                    <td>@Model.Element("Nationality")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Language")</td>
+                    <td>@Model.Element("Language")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Country Specifics")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MaritalStatus")</td>
+                    <td>@Model.Element("MaritalStatus")</td>
+                </tr>
+
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Documents")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DocumentType")</td>
+                    <td>@Model.Element("DocumentType")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DocumentCountryOfIssue")</td>
+                    <td>@Model.Element("DocumentCountryOfIssue")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DocumentCountryOfUse")</td>
+                    <td>@Model.Element("DocumentCountryOfUse")</td>
+                </tr>
+
+                <tr>
+                    <td class="tdstrong">@Model.Label("DocumentNO")</td>
+                    <td>@Model.Element("DocumentNO")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DocumentValidUntil")</td>
+                    <td>@Model.Element("DocumentValidUntil")
+                        <div id="notice_ValidUntilDate" style="display: none;" class="notice">
+                            @Model.Translate("Please choose a date in the future")
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+
+    $(function () {
+
+        function setGlobalMobilityBehavior(value) {
+
+            if (!(value == '@IsTeWorker')) {
+                $("[class*=globalmobility]").hide();
+                $("[class*=globalmobility] input:not(input[type=hidden])").val("");
+                $("[class*=globalmobility] input[type=text][name*='Country']").val('@DefaultCountry');
+                $("[class*=globalmobility] select option:not([value])").prop('selected', true);
+            } else {
+                $(".globalmobility-first").show();
+            }
+
+            $("[class*=globalmobility-first] input[type=hidden]").val("1");
+
+        }
+
+            if (!($('#NewToIKEA').val() == '@IsTeWorker')) {
+                $(".globalmobility-first").hide();
+                $(".globalmobility").hide();
+            }
+
+            $('#NewToIKEA').change(function () {
+                setGlobalMobilityBehavior($(this).val());
+            });
+        });
+
+
+    $('#ContractStartDate').change(function () {
+        var startDate = $('#DocumentValidUntil').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+        var noticeValidUntilDate = $('#notice_ValidUntilDate');
+        noticeValidUntilDate.hide();
+
+        if (dstartDate.valueOf() < now.valueOf()) {
+            noticeHiringDate.show();
+        }
+    });
+
+
+
+    function setTaxInformationBehavior(value)
+    {
+        if (value == 'P45 attached') {
+            $('#taxInformationNotice').show();
+        }
+        else {
+            $('#taxInformationNotice').hide();
+        }
+    }
+
+    setTaxInformationBehavior($('#TaxInformation').val());
+
+    $('#TaxInformation').change(function () {
+        setTaxInformationBehavior($(this).val());
+    });
+
+   
+
+
+</script>

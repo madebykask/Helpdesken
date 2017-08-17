@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<options>
+    <option value=""></option>
+    <option Unit="OS01" value="Human Resources">Human Resources</option>
+    <option Unit="OS01" value="Personnel Admin">Personnel Admin</option>
+    <option Unit="OS01" value="Fin.&amp;Accounting">Fin.&amp;Accounting</option>
+    <option Unit="OS01" value="Management Grp">Management Grp</option>
+    <option Unit="OS01" value="HR Systems Supp">HR Systems Supp</option>
+    <option Unit="OS01" value="Admin.Support">Admin.Support</option>
+    <option Unit="OS01" value="PA/Payroll">PA/Payroll</option>
+    <option Unit="OS01" value="Payroll">Payroll</option>
+    <option Unit="OD01" value="DC Operations">DC Operations</option>
+    <option Unit="OD01" value="Customs">Customs</option>
+    <option Unit="OD01" value="DC Op. Support">DC Op. Support</option>
+    <option Unit="OD01" value="Busi.Navigation">Busi.Navigation</option>
+    <option Unit="O203" value="Sales">Sales</option>
+    <option Unit="O203" value="Customer Servic">Customer Servic</option>
+    <option Unit="O203" value="IKEA Food">IKEA Food</option>
+    <option Unit="O203" value="Management Grp">Management Grp</option>
+    <option Unit="O203" value="Human Resources">Human Resources</option>
+    <option Unit="O203" value="Cash">Cash</option>
+    <option Unit="O203" value="Marketing">Marketing</option>
+    <option Unit="O203" value="Comm-in">Comm-in</option>
+    <option Unit="O203" value="Logistic">Logistic</option>
+    <option Unit="O203" value="Warehouse">Warehouse</option>
+    <option Unit="O203" value="Rec. andQuality">Rec. andQuality</option>
+    <option Unit="O203" value="Refilling">Refilling</option>
+    <option Unit="OI04" value="Property">Property</option>
+    <option Unit="OD02" value="Transport Op.">Transport Op.</option>
+    <option Unit="OD02" value="Busi.Navigation">Busi.Navigation</option>
+    <option Unit="OD02" value="Trans.Busi.Dev.">Trans.Busi.Dev.</option>
+    <option Unit="OD02" value="Human Resources">Human Resources</option>
+    <option Unit="OD02" value="Management Grp.">Management Grp.</option>
+    <option Unit="OD02" value="DC Op. Support">DC Op. Support</option>
+    <option Unit="OD02" value="Handl.Materials">Handl.Materials</option>
+    <option Unit="OI01" value="Projects">Projects</option>
+    <option Unit="OI01" value="Overhead">Overhead</option>
+    <option Unit="OI01" value="Expansion">Expansion</option>
+    <option Unit="OI01" value="Property">Property</option>
+    <option Unit="OI01" value="Management Grp.">Management Grp.</option>
+    <option Unit="OI01" value="Finance &amp; Accou">Finance &amp; Accou</option>
+    <option Unit="OI01" value="Leasing">Leasing</option>
+    <option Unit="OI01" value="Temporary">Temporary</option>
+    <option Unit="OI01" value="Marketing">Marketing</option>
+    <option Unit="OI01" value="Administration">Administration</option>
+    <option Unit="OP01" value="Projects">Projects</option>
+    <option Unit="OP01" value="Management Grp.">Management Grp.</option>
+    <option Unit="O188" value="Customer Servic">Customer Servic</option>
+    <option Unit="O188" value="Logistic">Logistic</option>
+    <option Unit="O188" value="IKEA Food">IKEA Food</option>
+    <option Unit="O188" value="Sales">Sales</option>
+    <option Unit="O188" value="Rec. andQuality">Rec. andQuality</option>
+    <option Unit="O188" value="Cash">Cash</option>
+    <option Unit="O188" value="Warehouse">Warehouse</option>
+    <option Unit="O188" value="Comm-in">Comm-in</option>
+    <option Unit="O188" value="Management Grp">Management Grp</option>
+    <option Unit="O188" value="Human Resources">Human Resources</option>
+    <option Unit="O188" value="Refilling">Refilling</option>
+    <option Unit="O188" value="Marketing">Marketing</option>
+    <option Unit="O306" value="Sales">Sales</option>
+    <option Unit="O306" value="IKEA Food">IKEA Food</option>
+    <option Unit="O306" value="Human Resources">Human Resources</option>
+    <option Unit="O306" value="Busi.Navigation">Busi.Navigation</option>
+    <option Unit="O306" value="Marketing">Marketing</option>
+    <option Unit="O306" value="Comm-in">Comm-in</option>
+    <option Unit="O306" value="Warehouse">Warehouse</option>
+    <option Unit="O306" value="Logistic">Logistic</option>
+    <option Unit="O306" value="Customer Servic">Customer Servic</option>
+    <option Unit="O306" value="Cash">Cash</option>
+    <option Unit="O306" value="Management Grp">Management Grp</option>
+    <option Unit="O306" value="Rec. andQuality">Rec. andQuality</option>
+    <option Unit="O306" value="Refilling">Refilling</option>
+    <option Unit="OI06" value="Property">Property</option>
+    <option Unit="O204" value="Management Grp">Management Grp</option>
+    <option Unit="O204" value="Sales">Sales</option>
+    <option Unit="O204" value="Customer Servic">Customer Servic</option>
+    <option Unit="O204" value="Warehouse">Warehouse</option>
+    <option Unit="O204" value="Marketing">Marketing</option>
+    <option Unit="O204" value="IKEA Food">IKEA Food</option>
+    <option Unit="O204" value="Refilling">Refilling</option>
+    <option Unit="O204" value="Cash">Cash</option>
+    <option Unit="O204" value="Human Resources">Human Resources</option>
+    <option Unit="O204" value="Comm-in">Comm-in</option>
+    <option Unit="O204" value="Logistic">Logistic</option>
+    <option Unit="O204" value="Rec. andQuality">Rec. andQuality</option>
+    <option Unit="O329" value="Customer Servic">Customer Servic</option>
+    <option Unit="O329" value="Sales">Sales</option>
+    <option Unit="O329" value="Comm-in">Comm-in</option>
+    <option Unit="O329" value="Management Grp">Management Grp</option>
+    <option Unit="O329" value="Warehouse">Warehouse</option>
+    <option Unit="O329" value="Logistic">Logistic</option>
+    <option Unit="O329" value="Rec. andQuality">Rec. andQuality</option>
+    <option Unit="O329" value="Human Resources">Human Resources</option>
+    <option Unit="O329" value="Marketing">Marketing</option>
+    <option Unit="O329" value="Cash">Cash</option>
+    <option Unit="O329" value="IKEA Food">IKEA Food</option>
+    <option Unit="O329" value="Refilling">Refilling</option>
+    <option Unit="OI08" value="Marketing">Marketing</option>
+    <option Unit="OI08" value="Property">Property</option>
+    <option Unit="OI08" value="Tenant relat.">Tenant relat.</option>
+    <option Unit="OI08" value="Mainten. &amp; Op.">Mainten. &amp; Op.</option>
+    <option Unit="O205" value="Management Grp">Management Grp</option>
+    <option Unit="O205" value="Logistic">Logistic</option>
+    <option Unit="O205" value="Customer Servic">Customer Servic</option>
+    <option Unit="O205" value="Sales">Sales</option>
+    <option Unit="O205" value="Comm-in">Comm-in</option>
+    <option Unit="O205" value="Marketing">Marketing</option>
+    <option Unit="O205" value="Cash">Cash</option>
+    <option Unit="O205" value="Warehouse">Warehouse</option>
+    <option Unit="O205" value="IKEA Food">IKEA Food</option>
+    <option Unit="O205" value="Human Resources">Human Resources</option>
+    <option Unit="O205" value="Rec. andQuality">Rec. andQuality</option>
+    <option Unit="O205" value="Refilling">Refilling</option>
+    <option Unit="OI05" value="Property">Property</option>
+    <option Unit="OI05" value="Administration">Administration</option>
+    <option Unit="O018" value="Human Resources">Human Resources</option>
+    <option Unit="O018" value="Busi.Navigation">Busi.Navigation</option>
+    <option Unit="O018" value="Customer Servic">Customer Servic</option>
+    <option Unit="O018" value="IT">IT</option>
+    <option Unit="O018" value="Fin.&amp;Accounting">Fin.&amp;Accounting</option>
+    <option Unit="O018" value="Sales">Sales</option>
+    <option Unit="O018" value="Expansion">Expansion</option>
+    <option Unit="O018" value="Logistic">Logistic</option>
+    <option Unit="O018" value="Management Grp">Management Grp</option>
+    <option Unit="O018" value="Marketing">Marketing</option>
+    <option Unit="O018" value="Comm-in">Comm-in</option>
+    <option Unit="OT21" value="Free Range Cen.">Free Range Cen.</option>
+    <option Unit="OT21" value="Social &amp; Envir.">Social &amp; Envir.</option>
+    <option Unit="OT21" value="Human Resources">Human Resources</option>
+    <option Unit="OT21" value="Logistic">Logistic</option>
+    <option Unit="OT21" value="Area Management">Area Management</option>
+    <option Unit="OT21" value="Operations Com.">Operations Com.</option>
+    <option Unit="OT21" value="Board on Frame">Board on Frame</option>
+    <option Unit="OT21" value="Product Quality">Product Quality</option>
+    <option Unit="OT21" value="CategoryLeaders">CategoryLeaders</option>
+    <option Unit="OT21" value="Upholstery">Upholstery</option>
+    <option Unit="OT21" value="Paraffin">Paraffin</option>
+    <option Unit="OT21" value="Administration">Administration</option>
+    <option Unit="OT21" value="Solid Wood">Solid Wood</option>
+    <option Unit="OT21" value="Mattresses">Mattresses</option>
+    <option Unit="OT21" value="ICOMP-Slovakia">ICOMP-Slovakia</option>
+    <option Unit="OT21" value="Busi.Navigation">Busi.Navigation</option>
+    <option Unit="OT21" value="ICOMP-Sweden">ICOMP-Sweden</option>
+    <option Unit="OT21" value="Pigment Laquer">Pigment Laquer</option>
+    <option Unit="OT21" value="Internal Info.">Internal Info.</option>
+    <option Unit="OT21" value="Frames">Frames</option>
+    <option Unit="OI02" value="Property">Property</option>
+    <option Unit="OI07" value="Property">Property</option>
+    <option Unit="OI07" value="Temporary">Temporary</option>
+    <option Unit="OI07" value="Marketing">Marketing</option>
+    <option Unit="O307" value="Call center">Call center</option>
+    <option Unit="O307" value="Management Grp">Management Grp</option>
+    <option Unit="O307" value="Cash">Cash</option>
+    <option Unit="O307" value="Sales">Sales</option>
+    <option Unit="O307" value="Marketing">Marketing</option>
+    <option Unit="O307" value="Warehouse">Warehouse</option>
+    <option Unit="O307" value="Logistic">Logistic</option>
+    <option Unit="O307" value="Comm-in">Comm-in</option>
+    <option Unit="O307" value="Human Resources">Human Resources</option>
+    <option Unit="O307" value="Rec. andQuality">Rec. andQuality</option>
+    <option Unit="O307" value="Customer Servic">Customer Servic</option>
+    <option Unit="O307" value="IKEA Food">IKEA Food</option>
+    <option Unit="O307" value="Refilling">Refilling</option>
+    <option Unit="OI09" value="Property">Property</option>
+    <option Unit="OI09" value="Tenant relat.">Tenant relat.</option>
+    <option Unit="O294" value="Human Resources">Human Resources</option>
+    <option Unit="O294" value="Comm-in">Comm-in</option>
+    <option Unit="O294" value="Cash">Cash</option>
+    <option Unit="O294" value="Sales">Sales</option>
+    <option Unit="O294" value="Logistic">Logistic</option>
+    <option Unit="O294" value="IKEA Food">IKEA Food</option>
+    <option Unit="O294" value="Management Grp">Management Grp</option>
+    <option Unit="O294" value="Warehouse">Warehouse</option>
+    <option Unit="O294" value="Customer Servic">Customer Servic</option>
+    <option Unit="O294" value="Rec. andQuality">Rec. andQuality</option>
+    <option Unit="O294" value="Refilling">Refilling</option>
+    <option Unit="O294" value="Marketing">Marketing</option>
+    <option Unit="OI03" value="Property">Property</option>
+    <option Unit="OI03" value="Administration">Administration</option>
+    <option Unit="OI03" value="Centre Manag.">Centre Manag.</option>
+</options>

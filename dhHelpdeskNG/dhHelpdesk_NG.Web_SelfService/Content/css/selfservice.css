@@ -421,6 +421,19 @@ table th.thpointer {
 }
 
 /***TABS**************/
+
+.tab-indicator {
+    width: 20px !important;
+    height: 20px !important;
+    background: url('/content/img/ajax-loader.gif');
+    background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border: none;
+    display: inline-block;
+}
+
 .tab-pane
 {
 	border-left: 1px solid #ddd;
@@ -1031,4 +1044,10 @@ div .multitext i {
 .inputmh100
 {
 	min-height: 150px !important;
+}
+
+.dropdown-group{
+    width:320px;
+    height: 34px;
+    margin-top: -2px;
 }

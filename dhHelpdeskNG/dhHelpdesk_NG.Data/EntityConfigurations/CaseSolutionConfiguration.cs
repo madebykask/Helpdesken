@@ -71,6 +71,19 @@
                 .HasForeignKey(x => x.WorkingGroup_Id)
                 .WillCascadeOnDelete(false);
 
+
+			this.HasOptional(x => x.SplitToCaseSolution)
+				.WithMany()
+				.HasForeignKey(x => x.SplitToCaseSolution_Id)
+				.WillCascadeOnDelete(false);
+
+            this.HasMany(cs => cs.ExtendedCaseForms).WithMany(ecf => ecf.CaseSolutions).Map(m =>
+             {
+                 m.MapLeftKey("CaseSolution_Id");
+                 m.MapRightKey("ExtendedCaseForms_Id");
+                 m.ToTable("tblCaseSolution_ExtendedCaseForms");
+             });
+
             this.Property(x => x.Caption).IsRequired().HasMaxLength(60);
             this.Property(x => x.CaseSolutionCategory_Id).IsOptional();
             this.Property(x => x.CaseWorkingGroup_Id).IsOptional();
@@ -157,7 +170,9 @@
             this.Property(x => x.SortOrder).IsRequired();
             this.Property(x => x.ShortDescription).IsOptional().HasMaxLength(100);
             this.Property(x => x.Information).IsOptional();
+            this.Property(x => x.DefaultTab).IsRequired().HasMaxLength(100);
             this.Property(x => x.CaseSolutionDescription).IsOptional();
+            this.Property(x => x.ValidateOnChange).IsOptional().HasMaxLength(100);
 
             this.ToTable("tblcasesolution");
         }

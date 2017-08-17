@@ -1,0 +1,61 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane active" id="MandatoryAgreements">
+    <div class="row-fluid">
+        <div class="span12">
+            <table class="table">
+                <tr>
+                    <td class="tdstrong">@Model.Translate("Initiator")</td>
+                    <td>
+                        <input type="text" value="@Model.Contract.Initiator" readonly="readonly"/></td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Company")</td>
+                    <td>
+                        @Model.Element("Company")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Unit")</td>
+                    <td>
+                        @Model.Element("Unit")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmployeeNumber")</td>
+                    <td>
+                        @Model.Element("EmployeeNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmployeeFirstName")</td>
+                    <td>
+                        @Model.Element("EmployeeFirstName")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmployeeLastName")</td>
+                    <td>
+                        @Model.Element("EmployeeLastName")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EffectiveDate")</td>
+                    <td>
+                        @Model.Element("EffectiveDate")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EndDate")</td>
+                    <td>
+                        @Model.Element("EndDate")
+                    </td>
+                </tr>
+                @Html.Partial("_Attachments", Model)
+                @Html.Partial("_InternalLogNote", Model)
+                <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+            </table>
+        </div>
+    </div>
+</div>

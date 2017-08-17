@@ -58,10 +58,9 @@ var dhform = function (options) {
                 _this.closeModal();
             })
         }
-        else if (_this._options.modal == 2)
-        {
+        else if (_this._options.modal == 2) {
             _this._formAreaId = 'dh-form-on-case-area';
-           // _this._options.url = _this._options.url.substr(1);
+            // _this._options.url = _this._options.url.substr(1);
             _this.load({ url: _this._options.url });
         }
     })();

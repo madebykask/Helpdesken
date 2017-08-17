@@ -4,6 +4,7 @@
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using DH.Helpdesk.Web.Controllers;
 
     public static class ControllerExtensions
     {
@@ -29,6 +30,16 @@
             else
                 return Translation.GetMasterDataTranslation(productArea.Name);
         }
-        
+
+        public static FormLibPdfContentResult Pdf(this Controller controller, byte[] fileContents)
+        {
+            return new FormLibPdfContentResult(fileContents);
+        }
+
+        public static FormLibPdfContentResult Pdf(this Controller controller, byte[] fileContents, string fileName)
+        {
+            return new FormLibPdfContentResult(fileContents, fileName);
+        }
+
     }    
 }

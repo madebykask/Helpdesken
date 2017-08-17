@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+  <name>DeductionsNetGross</name>
+  <dependent>
+    <selected>Union Membership</selected>
+    <show>Net</show>
+  </dependent>
+  <dependent>
+    <selected>Staff Association membership</selected>
+    <show>Net</show>
+  </dependent>
+</predefined>

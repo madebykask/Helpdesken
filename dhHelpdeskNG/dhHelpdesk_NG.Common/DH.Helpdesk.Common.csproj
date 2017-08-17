@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DH.Helpdesk.Common</RootNamespace>
     <AssemblyName>DH.Helpdesk.Common</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SccProjectName>
@@ -30,6 +30,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,6 +39,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -51,6 +53,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web">
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
@@ -60,9 +65,12 @@
     <Compile Include="Collections\NamedObjectCollection.cs" />
     <Compile Include="Constants\CaseSections.cs" />
     <Compile Include="Constants\Shared.cs" />
+    <Compile Include="Constants\DataTypeValue.cs" />
     <Compile Include="Constants\BRConstItem.cs" />
+    <Compile Include="Constants\UserAccessRole.cs" />
     <Compile Include="Constraints\NotifierConstraint.cs" />
     <Compile Include="Enums\AppSettingsKey.cs" />
+    <Compile Include="Enums\UserRoleType.cs" />
     <Compile Include="Enums\BusinessRules\BREventType.cs" />
     <Compile Include="Enums\BusinessRules\BRFieldType.cs" />
     <Compile Include="Enums\BusinessRules\BRActionType.cs" />
@@ -99,6 +107,9 @@
     <Compile Include="Extensions\Boolean\BoolExtensions.cs" />
     <Compile Include="Extensions\Boolean\ToIntExtension.cs" />
     <Compile Include="Extensions\DateTime\DateExtensions.cs" />
+    <Compile Include="Extensions\GUID\GuidExtension.cs" />
+    <Compile Include="Extensions\Decimal\DecimalExtension.cs" />
+    <Compile Include="Extensions\Integer\IntExtension.cs" />
     <Compile Include="Extensions\Integer\ToBoolExtension.cs" />
     <Compile Include="Extensions\String\SplitExtension.cs" />
     <Compile Include="Extensions\String\StringExtension.cs" />

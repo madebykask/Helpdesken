@@ -1,0 +1,144 @@
+﻿<hides>
+  <hide>
+    <hideVal></hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+    <hideSelector type="class">Holiday</hideSelector>
+    <hideSelector type="class">AdditionalAllowance</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Sick leave</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+    <hideSelector type="class">AdditionalAllowance</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Parental leave 80%</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Parental leave 100%</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Holiday</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Chronic illness</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+    <hideSelector type="class">Holiday</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Chronic illness - Pregnancy</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+    <hideSelector type="class">Holiday</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Compassionate Leave</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+    <hideSelector type="class">Holiday</hideSelector>
+    <hideSelector type="class">AdditionalAllowance</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Compassionate Leave - for father after childbirth</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+    <hideSelector type="class">Holiday</hideSelector>
+    <hideSelector type="class">AdditionalAllowance</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Agreed short term unpaid leave</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+    <hideSelector type="class">Holiday</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Agreed long term unpaid leave</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+    <hideSelector type="class">Holiday</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Transferred to NAV</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+    <hideSelector type="class">Holiday</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>One-week extra paid leave</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+    <hideSelector type="class">Holiday</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Back from long term leave</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+    <hideSelector type="class">Holiday</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Military service</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+    <hideSelector type="class">Holiday</hideSelector>
+    <hideSelector type="class">AdditionalAllowance</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Other</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+    <hideSelector type="class">Holiday</hideSelector>
+    <hideSelector type="class">AdditionalAllowance</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Paid Absence</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+    <hideSelector type="class">Holiday</hideSelector>
+    <hideSelector type="class">AdditionalAllowance</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Refresher training for military service</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+    <hideSelector type="class">Holiday</hideSelector>
+    <hideSelector type="class">AdditionalAllowance</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Self-declared illness</hideVal>
+    <hideSelector type="class">Illness</hideSelector>
+    <hideSelector type="class">SickLeave</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+    <hideSelector type="class">Holiday</hideSelector>
+    <hideSelector type="class">AdditionalAllowance</hideSelector>
+  </hide>
+  <hide>
+    <hideVal>Self-declared illness - Sick Child/Sick Nanny</hideVal>
+    <hideSelector type="class">SickLeave</hideSelector>
+    <hideSelector type="class">ParentalLeave</hideSelector>
+    <hideSelector type="class">Holiday</hideSelector>
+    <hideSelector type="class">AdditionalAllowance</hideSelector>
+  </hide>
+</hides>

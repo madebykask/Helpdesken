@@ -16,7 +16,8 @@
             entity.LockGUID = businessModel.LockGUID;
             entity.BrowserSession = businessModel.BrowserSession ?? string.Empty;
             entity.CreatedTime = businessModel.CreatedTime;
-            entity.ExtendedTime = businessModel.ExtendedTime;            
+            entity.ExtendedTime = businessModel.ExtendedTime;
+            entity.ActiveTab = businessModel.ActiveTab;
         }
     }
 }

@@ -21,7 +21,8 @@ namespace DH.Helpdesk.Web.Models.CaseLock
             DateTime extendedTime,            
             int extendValue,
             int timerInterval,
-            User user)
+            User user,
+            string activeTab = "")
         {
             this.IsLocked = isLocked;
             this.CaseId = caseId;
@@ -32,7 +33,8 @@ namespace DH.Helpdesk.Web.Models.CaseLock
             this.ExtendedTime = extendedTime;
             this.ExtendValue = extendValue;
             this.TimerInterval = timerInterval;
-            this.User = user;                            
+            this.User = user;
+            this.ActiveTab = activeTab;
         }
 
         public bool IsLocked { get; private set; }
@@ -54,6 +56,8 @@ namespace DH.Helpdesk.Web.Models.CaseLock
         public int TimerInterval { get; private set; }
 
         public User User { get; private set; }
+
+        public string ActiveTab { get; set; }
     }
 
 }

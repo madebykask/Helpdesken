@@ -1,0 +1,194 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane active" id="termination">
+    <div class="span12">
+        <table class="table">
+            <tr>
+                <td class="tdstrong">@Model.Translate("Initiator")</td>
+                <td>
+                    <input type="text" value="@Model.Contract.Initiator" readonly="readonly"/></td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("Company")</td>
+                <td>
+                    @Model.Element("Company")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("Unit")</td>
+                <td>
+                    @Model.Element("Unit")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("EmployeeNumber")</td>
+                <td>
+                    @Model.Element("EmployeeNumber")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("EmployeeFirstName")</td>
+                <td>
+                    @Model.Element("EmployeeFirstName")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("EmployeeLastName")</td>
+                <td>
+                    @Model.Element("EmployeeLastName")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("EmployeeCountry")</td>
+                <td>
+                    @Model.Element("EmployeeCountry")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("LastDayAtWork")</td>
+                <td>
+                    @Model.Element("LastDayAtWork")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("EffectiveDate")</td>
+                <td>
+                    @Model.Element("EffectiveDate")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("TerminationInitiatedBy")</td>
+                <td>
+                    @Model.Element("TerminationInitiatedBy")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("ReasonForTermination")</td>
+                <td>
+                    @Model.Element("ReasonForTermination")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong" colspan="2">
+                    <h4>@Model.Translate("Additional information")</h4>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("MedicoverContinuation")</td>
+                <td>
+                    @Model.Element("MedicoverContinuation")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("RemainingOvertime")</td>
+                <td>
+                    @Model.Element("RemainingOvertime")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("RemainingVacation")</td>
+                <td>
+                    @Model.Element("RemainingVacation")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("OpenDeduction")</td>
+                <td>
+                    @Model.Element("OpenDeduction")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("RemainingAmount")</td>
+                <td>@Model.Element("RemainingAmount")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong" colspan="2">
+                    <h4>@Model.Translate("Documents")</h4>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("CreateAnnualIncomeStatement")</td>
+                <td>@Model.Element("CreateAnnualIncomeStatement")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("CreateStatementRP7ForEmploymentPeriod")</td>
+                <td>@Model.Element("CreateStatementRP7ForEmploymentPeriod")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong" colspan="2">
+                    <h4>@Model.Translate("Leaving documents to be sent to")</h4>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("MailingAddress")</td>
+                <td>@Model.Element("MailingAddress")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("Country")</td>
+                <td>@Model.Element("Country")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("Street")</td>
+                <td>@Model.Element("Street")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("StreetNumber")</td>
+                <td>@Model.Element("StreetNumber")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("HouseNumber")</td>
+                <td>@Model.Element("HouseNumber")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("City")</td>
+                <td>@Model.Element("City")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("PostalCode")</td>
+                <td>@Model.Element("PostalCode")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("Region")</td>
+                <td>@Model.Element("Region")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("District")</td>
+                <td>@Model.Element("District")</td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("Community")</td>
+                <td>@Model.Element("Community")</td>
+            </tr>
+            @Html.Partial("_Attachments", Model)
+            @Html.Partial("_InternalLogNote", Model)
+            <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+        </table>
+    </div>
+</div>
+<script>
+
+    var object = document.getElementById('MailingAddress');
+
+    object.onchange = function () {
+        var val = this.options[this.selectedIndex].value;
+        if (val == "Yes") {
+            document.getElementById('Street').setAttribute('readonly', 'readonly');
+            document.getElementById('HouseNumber').setAttribute('readonly', 'readonly');
+            document.getElementById('City').setAttribute('readonly', 'readonly');
+            document.getElementById('StreetNumber').setAttribute('readonly', 'readonly');
+            document.getElementById('PostalCode').setAttribute('readonly', 'readonly');
+            document.getElementById('Country').setAttribute('readonly', 'readonly');
+            document.getElementById('Region').setAttribute('readonly', 'readonly');
+            document.getElementById('District').setAttribute('readonly', 'readonly');
+            document.getElementById('Community').setAttribute('readonly', 'readonly');
+        }
+        else {
+            document.getElementById('Street').removeAttribute('readonly');
+            document.getElementById('HouseNumber').removeAttribute('readonly');
+            document.getElementById('City').removeAttribute('readonly');
+            document.getElementById('StreetNumber').removeAttribute('readonly');
+            document.getElementById('PostalCode').removeAttribute('readonly');
+            document.getElementById('Country').removeAttribute('readonly');
+            document.getElementById('Region').removeAttribute('readonly');
+            document.getElementById('District').removeAttribute('readonly');
+            document.getElementById('Community').removeAttribute('readonly');
+        }
+    };
+
+    object.onchange();
+
+</script>

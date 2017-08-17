@@ -2,9 +2,11 @@
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Users;
 
+
 namespace DH.Helpdesk.Dal.Repositories
 {
     using System;
+    using System.Data.Entity;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
@@ -19,6 +21,8 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+    using System.Threading.Tasks;
+    using System.Data.Entity;
 
     #region USER
 
@@ -43,6 +47,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IList<User> GetUsersForUserSettingList(UserSearch searchUser);
         IList<User> GetUsersForUserSettingListByUserGroup(UserSearch searchUser);
         UserOverview Login(string uId, string pwd);
+        Task<UserOverview> GetByUserIdAsync(string userId, string passw);
         UserOverview GetUser(int userid);
 
         IList<UserLists> GetUserOnCases(int customerId, bool isTakeOnlyActive = false);
@@ -62,6 +67,8 @@ namespace DH.Helpdesk.Dal.Repositories
         int? GetUserDefaultWorkingGroupId(int userId, int customerId);
 
         WorkingGroupEntity GetUserDefaultWorkingGroup(int userId, int customerId);
+
+        string GetUserTimeZoneId(int userId);
     }
 
     public sealed class UserRepository : RepositoryBase<User>, IUserRepository
@@ -126,6 +133,14 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             return null;
+        }
+
+        public string GetUserTimeZoneId(int userId)
+        {
+            var entity = (from u in this.DataContext.Users.Where(u => u.Id == userId)                                                        
+                          select u.TimeZoneId).FirstOrDefault();
+
+            return entity == null ? string.Empty : entity;            
         }
 
         public WorkingGroupEntity GetUserDefaultWorkingGroup(int userId, int customerId)
@@ -398,7 +413,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var user = this.GetUser(x => x.Id == userid);
             return user;
         }
-
+        
         public IList<UserLists> GetUserOnCases(int customerId, bool isTakeOnlyActive = false)
         {
             var query = from u in this.DataContext.Users
@@ -440,6 +455,58 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return users.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture)))
                         .FirstOrDefault();
+        }
+
+        public async Task<UserOverview> GetByUserIdAsync(string userId, string passw)
+        {
+            var ret2 = await Task.Run(() =>
+                DataContext.Users.Where(u => u.UserID.Equals(userId, StringComparison.CurrentCultureIgnoreCase) && u.Password == passw).ToListAsync()
+            );
+            
+            var ret =  ret2.Select(x => new UserOverview(
+                        x.Id,
+                        x.UserID,
+                        x.Customer_Id,
+                        x.Language_Id,
+                        x.UserGroup_Id,
+                        x.FollowUpPermission,
+                        x.RestrictedCasePermission,
+                        x.ShowNotAssignedWorkingGroups,
+                        x.CreateCasePermission,
+                        x.CreateSubCasePermission,
+                        x.CopyCasePermission,
+                        x.OrderPermission,
+                        x.CaseSolutionPermission,
+                        x.DeleteCasePermission,
+                        x.DeleteAttachedFilePermission,
+                        x.MoveCasePermission,
+                        x.ActivateCasePermission,
+                        x.ReportPermission,
+                        x.CloseCasePermission,
+                        x.CalendarPermission,
+                        x.FAQPermission,
+                        x.BulletinBoardPermission,
+                        x.DocumentPermission,
+                        x.InventoryPermission,
+                        x.SetPriorityPermission,
+                        x.InvoicePermission,
+                        x.DataSecurityPermission,
+                        x.RefreshContent,
+                        x.FirstName,
+                        x.SurName,
+                        x.Phone,
+                        x.Email,
+                        x.UserWorkingGroups,
+                        x.StartPage,
+                        x.ShowSolutionTime.ToBool(),
+                        x.ShowCaseStatistics.ToBool(),
+                        x.TimeZoneId,
+                         x.UserGUID
+
+                        )).FirstOrDefault();
+            
+
+            return ret;
         }
 
         private UserOverview GetUser(Expression<Func<User, bool>> expression)
@@ -484,7 +551,10 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.StartPage,
                         x.ShowSolutionTime.ToBool(),
                         x.ShowCaseStatistics.ToBool(),
-                        x.TimeZoneId)).SingleOrDefault();
+                        x.TimeZoneId,
+                         x.UserGUID
+
+                        )).SingleOrDefault();
             return u;
         }
     }

@@ -1,5 +1,13 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
 @using System.Web.Optimization
+@using DH.Helpdesk.Web
+@using System
+
+@if (Model.ExtendedCases != null)
+{
+    @Styles.Render("~/cases/dynamic-cases")
+    @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
+}
 
 @Scripts.Render("~/bundles/cases/new")
 @section Scripts {
@@ -10,18 +18,30 @@
 
             $("#case-action-save").click(function (e) {
                 e.preventDefault();                
-                //$('#case__StateSecondary_Id').removeAttr('disabled');                
+                //$('#case__StateSecondary_Id').removeAttr('disabled');      
+                $('#ButtonClick').val('save');
             });
 
             $("#case-action-save-and-close").click(function (e) {
                 e.preventDefault();                
                 //$('#case__StateSecondary_Id').removeAttr('disabled');                
+                $('#ButtonClick').val('save');
             });
 
             $("#case-action-save-and-new").click(function (e) {
                 e.preventDefault();                
                 //$('#case__StateSecondary_Id').removeAttr('disabled');                
+                $('#ButtonClick').val('save');
             });
+
+            //$("#case-action-save-close-and-split").click(function (e) {
+            //    e.preventDefault();
+            //    //$('#case__StateSecondary_Id').removeAttr('disabled');
+
+            //    $('#ButtonClick').val('save');
+
+            //    // Todo set new url
+            //});
         });
 
         $("#case__RegLanguage_Id").change(function () {
@@ -86,6 +106,11 @@
                     {
                         <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn save", id = "case-action-save" })</li>
                     }
+                    @if (Model.CaseTemplateSplitToCaseSolutionID.HasValue)
+                    {
+                        <li>@Html.ActionLink(Translation.Get("Save and split", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn new-close-split", id = "case-action-save-close-and-split", href="#"})</li>
+                        @*<li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara, stäng och dela"), null, null, new { @class = "btn save-close-split", id = "case-action-save-close-and-split" })</li>*@
+                    }
 
 
                     <li><i id="TemplateQuickButtonIndicator" class="gif-loader" style="display:none">&nbsp;</i></li>
@@ -141,11 +166,7 @@
                     }
 
                     @*At the moment we do not check access for this /TAN*@
-        
-                    @if (!Model.IsItChildCase())
-                    {
-                        @Html.Partial("WorkflowStep", Model.WorkflowSteps)
-                    }
+                    @Html.Partial("WorkflowStep", Model.WorkflowSteps)
                 </ul>
             </div>
             <div class="pull-right">

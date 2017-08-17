@@ -29,6 +29,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
     using BusinessData.Enums.Admin.Users;
     using BusinessData.Models.Case;
     using Web.Infrastructure.Extensions;
+    using Services.Services.Concrete;
 
     public class OrdersController : BaseController
     {
@@ -64,6 +65,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
 
         private readonly IDocumentService _documentService;
 
+        private readonly IOrganizationService _organizationService;
+
         public OrdersController(
                 IMasterDataService masterDataService,
                 IOrdersService ordersService,
@@ -81,7 +84,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
                 IOrderTypeService orderTypeService,
                 ICustomerService customerService,
                 ISettingService settingService,
-                IDocumentService documentService)
+                IDocumentService documentService,
+                IOrganizationService organizationService)
             : base(masterDataService)
         {
             _ordersService = ordersService;
@@ -431,6 +435,15 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
                 throw new HttpException((int)HttpStatusCode.NotFound, null);
             }
             return File(file.File, MimeType.BinaryFile, file.FileName);
+        }
+
+        [HttpGet]
+        public JsonResult SearchDepartmentsByRegionId(int? regionId)
+        {
+            var models = _organizationService.GetDepartments(
+                SessionFacade.CurrentCustomer.Id,
+                regionId);
+            return this.Json(models, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

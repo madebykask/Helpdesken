@@ -13,19 +13,19 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
-    using DH.Helpdesk.BusinessData.Models.Email;
+    using DH.Helpdesk.BusinessData.Models.Email;    
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Constants;
     using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Common.Enums.BusinessRule;
+    using DH.Helpdesk.Common.Enums.BusinessRule;        
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Dal.Repositories.Cases;
-    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Dal.Repositories.Cases;    
+    using DH.Helpdesk.Domain;    
     using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Domain.Problems;
     using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
@@ -37,11 +37,13 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Services.Infrastructure.Email;
     using DH.Helpdesk.Services.Localization;
     using DH.Helpdesk.Services.Services.CaseStatistic;
-    using DH.Helpdesk.Services.utils;
+    using DH.Helpdesk.Services.utils;    
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
     using DH.Helpdesk.Services.Infrastructure;
     using Feedback;
     using BusinessData.Models.MailTemplates;
+    using DH.Helpdesk.Domain.ExtendedCaseEntity;
+
 
     public interface ICaseService
     {
@@ -72,13 +74,16 @@ namespace DH.Helpdesk.Services.Services
         List<DynamicCase> GetAllDynamicCases();
         DynamicCase GetDynamicCase(int id);
         IList<Case> GetProblemCases(int problemId);
+        IList<ExtendedCaseFormModel> GetExtendedCaseForm(int? caseSolutionId, int customerId, int? caseId, int userLanguageId, string userGuid, int? caseStateSecondaryId, int? caseWorkingGroupId, string extendedCasePath, int? userId, string userName, ApplicationType applicationType, int userWorkingGroupId);
+        ExtendedCaseDataEntity GetExtendedCaseData(Guid extendedCaseGuid);
+
+        void CreateExtendedCaseRelationship(int caseId, int extendedCaseDataId);
 
         int LookupLanguage(int custid, string notid, int regid, int depid, string notifierid);
 
         int SaveCase(
             Case cases,
-            CaseLog caseLog,
-            CaseMailSetting caseMailSetting,
+            CaseLog caseLog,            
             int userId,
             string adUser,
             CaseExtraInfo caseExtraInfo,
@@ -149,8 +154,9 @@ namespace DH.Helpdesk.Services.Services
 
         string DeleteFavorite(int favoriteId);
         void DeleteChildCaseFromParent(int id, int parentId);
-        bool AddParentCase(int id, int parentId);
-    }
+        bool AddParentCase(int id, int parentId, bool independent = false);
+		void SetIndependentChild(int caseID, bool independentChild);
+	}
 
     public class CaseService : ICaseService
     {
@@ -197,6 +203,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly IEmailSendingSettingsProvider _emailSendingSettingsProvider;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
         private readonly IProductAreaService _productAreaService;
+        private readonly IExtendedCaseFormRepository _extendedCaseFormRepository;
+        private readonly IExtendedCaseDataRepository _extendedCaseDataRepository;
+
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -234,7 +243,9 @@ namespace DH.Helpdesk.Services.Services
             IEmailSendingSettingsProvider emailSendingSettingsProvider,
             ICaseExtraFollowersService caseExtraFollowersService,
             IFeedbackTemplateService feedbackTemplateService,
-            IProductAreaService productAreaService
+            IProductAreaService productAreaService,
+            IExtendedCaseFormRepository extendedCaseFormRepository,
+            IExtendedCaseDataRepository extendedCaseDataRepository
             )
 
         {
@@ -275,6 +286,8 @@ namespace DH.Helpdesk.Services.Services
             _caseExtraFollowersService = caseExtraFollowersService;
             _feedbackTemplateService = feedbackTemplateService;
             _productAreaService = productAreaService;
+            this._extendedCaseFormRepository = extendedCaseFormRepository;
+            this._extendedCaseDataRepository = extendedCaseDataRepository;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -312,6 +325,30 @@ namespace DH.Helpdesk.Services.Services
             return _caseRepository.GetDynamicCase(id);
         }
 
+        public IList<ExtendedCaseFormModel> GetExtendedCaseForm(int? caseSolutionId, int customerId, int? caseId, int userLanguageId, string userGuid, int? caseStateSecondaryId, int? caseWorkingGroupId, string extendedCasePath, int? userId, string userName, ApplicationType applicationType, int userWorkingGroupId)
+        {
+            return _extendedCaseFormRepository.GetExtendedCaseForm((caseSolutionId.HasValue ? caseSolutionId.Value: 0), customerId, (caseId.HasValue ? caseId.Value : 0), userLanguageId, userGuid, (caseStateSecondaryId.HasValue ? caseStateSecondaryId.Value : 0), (caseWorkingGroupId.HasValue ? caseWorkingGroupId.Value : 0), extendedCasePath, userId, userName, applicationType, userWorkingGroupId);
+        }
+
+        public ExtendedCaseDataEntity GetExtendedCaseData(Guid extendedCaseGuid)
+        {
+            return _extendedCaseDataRepository.GetExtendedCaseData(extendedCaseGuid);
+        }
+
+        public void CreateExtendedCaseRelationship(int caseId, int extendedCaseDataId)
+        {
+            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var rep = uow.GetRepository<Case_ExtendedCaseEntity>();
+                var relation = rep.Find(it => it.Case_Id == caseId && it.ExtendedCaseData_Id == extendedCaseDataId).FirstOrDefault();
+                if (relation == null)
+                {
+                    rep.Add(new Case_ExtendedCaseEntity() { Case_Id = caseId, ExtendedCaseData_Id = extendedCaseDataId });
+                    uow.Save();
+                }                                
+            }
+        }
+
         public Guid Delete(int id, string basePath, int? parentCaseId)
         {
             Guid ret = Guid.Empty;
@@ -334,6 +371,8 @@ namespace DH.Helpdesk.Services.Services
             }
 
             this.DeleteChildCasesFor(id);
+
+            DeleteExtendedCase(id);
 
             //delete CaseIsAbout
             this.DeleteCaseIsAboutFor(id);
@@ -503,7 +542,7 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        public bool AddParentCase(int childCaseId, int parentCaseId)
+        public bool AddParentCase(int childCaseId, int parentCaseId, bool independent = false)
         {
             if (childCaseId == parentCaseId)
                 return false;
@@ -523,7 +562,8 @@ namespace DH.Helpdesk.Services.Services
                 parentChildRelationRepo.Add(new ParentChildRelation()
                 {
                     AncestorId = parentCaseId,
-                    DescendantId = childCaseId
+                    DescendantId = childCaseId,
+					Independent = independent
                 });
                 uow.Save();
             }
@@ -593,7 +633,7 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-
+        //TODO: Extremely needs to be refactored
         public ChildCaseOverview[] GetChildCasesFor(int caseId)
         {
             using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
@@ -605,7 +645,7 @@ namespace DH.Helpdesk.Services.Services
                 var caseTypes = uow.GetRepository<CaseType>().GetAll();
                 var res =
                     childCaseRelations.Where(it => it.AncestorId == caseId)
-                        .Select(it => new { id = it.DescendantId, parentId = it.AncestorId })
+                        .Select(it => new { id = it.DescendantId, parentId = it.AncestorId, independent = it.Independent })
                         .GroupJoin(
                             allCases,
                             it => it.id,
@@ -618,6 +658,7 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 id = t.parentChild.id,
                                 parentId = t.parentChild.parentId,
+                                independent = t.parentChild.independent,
                                 caseNumber = case_.CaseNumber,
                                 subject = case_.Caption,
                                 performerId = case_.Performer_User_Id,
@@ -625,7 +666,7 @@ namespace DH.Helpdesk.Services.Services
                                 caseTypeId = case_.CaseType_Id,
                                 registrationDate = case_.RegTime,
                                 closingDate = case_.FinishingDate,
-                                approvedDate = case_.ApprovedDate
+                                approvedDate = case_.ApprovedDate                                
                             })
                         .GroupJoin(
                             allPerformers,
@@ -639,6 +680,7 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 id = t.tmpParentChild.id,
                                 parentId = t.tmpParentChild.parentId,
+                                independent = t.tmpParentChild.independent,
                                 caseNumber = t.tmpParentChild.caseNumber,
                                 subject = t.tmpParentChild.subject,
                                 performerFirstName = performer == null ? string.Empty : performer.FirstName,
@@ -661,6 +703,7 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 id = t.tmpParentChild.id,
                                 parentId = t.tmpParentChild.parentId,
+                                independent = t.tmpParentChild.independent,
                                 subject = t.tmpParentChild.subject,
                                 caseNumber = t.tmpParentChild.caseNumber,
                                 performerFirstName = t.tmpParentChild.performerFirstName,
@@ -683,6 +726,7 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 id = t.tmpParentChild.id,
                                 parentId = t.tmpParentChild.parentId,
+                                independent = t.tmpParentChild.independent,
                                 caseNumber = t.tmpParentChild.caseNumber,
                                 subject = t.tmpParentChild.subject,
                                 performerFirstName = t.tmpParentChild.performerFirstName,
@@ -691,7 +735,7 @@ namespace DH.Helpdesk.Services.Services
                                 caseType = caseType == null ? string.Empty : caseType.Name,
                                 IsApprovingRequired = caseType != null && caseType.RequireApproving == 1,
                                 registrationDate = t.tmpParentChild.registrationDate,
-                                closingDate = t.tmpParentChild.closingDate,
+                                closingDate = t.tmpParentChild.closingDate,                                
                                 t.tmpParentChild.approvedDate
                             })
                         .AsQueryable();
@@ -711,11 +755,13 @@ namespace DH.Helpdesk.Services.Services
                     ClosingDate = it.closingDate,
                     ApprovedDate = it.approvedDate,
                     IsRequriedToApprive = it.IsApprovingRequired,
-                    ParentId = it.parentId
+                    ParentId = it.parentId,
+                    Indepandent = it.independent
                 }).ToArray();
             }
         }
 
+        //TODO: Extremely needs to be refactored
         public ParentCaseInfo GetParentInfo(int caseId)
         {
             using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
@@ -725,7 +771,7 @@ namespace DH.Helpdesk.Services.Services
                 var allPerformers = uow.GetRepository<User>().GetAll();
                 var relationInfo = allRelations
                     .Where(it => it.DescendantId == caseId)
-                    .Select(it => new { id = it.DescendantId, parentId = it.AncestorId })
+                    .Select(it => new { id = it.DescendantId, parentId = it.AncestorId, independent = it.Independent })
                     .GroupJoin(
                             allCases,
                             it => it.parentId,
@@ -738,6 +784,7 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 id = t.parentChild.id,
                                 parentId = t.parentChild.parentId,
+								independent = t.parentChild.independent,
                                 caseNumber = case_.CaseNumber,
                                 subject = case_.Caption,
                                 performerId = case_.Performer_User_Id,
@@ -761,6 +808,7 @@ namespace DH.Helpdesk.Services.Services
                                 finishingDate = t.tmpParentChild.finishingDate,
                                 performerFirstName = performer == null ? string.Empty : performer.FirstName,
                                 performerLastName = performer == null ? string.Empty : performer.SurName,
+								isChildIndependent = t.tmpParentChild.independent
                             })
                         .FirstOrDefault();
                 if (relationInfo != null)
@@ -769,7 +817,8 @@ namespace DH.Helpdesk.Services.Services
                     {
                         ParentId = relationInfo.parentId,
                         CaseNumber = relationInfo.caseNumber,
-                        CaseAdministrator =
+						IsChildIndependent = relationInfo.isChildIndependent,
+						CaseAdministrator =
                                        new UserNamesStruct()
                                        {
                                            FirstName = relationInfo.performerFirstName,
@@ -1056,7 +1105,6 @@ namespace DH.Helpdesk.Services.Services
         public int SaveCase(
                 Case cases,
                 CaseLog caseLog,
-                CaseMailSetting caseMailSetting,
                 int userId,
                 string adUser,
                 CaseExtraInfo caseExtraInfo,
@@ -1977,6 +2025,15 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
+        private void DeleteExtendedCase(int caseId)
+        {
+            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                uow.GetRepository<Case_ExtendedCaseEntity>().DeleteWhere(it => it.Case_Id == caseId);
+                uow.Save();
+            }
+        }
+
         private void DeleteCaseIsAboutFor(int caseId)
         {
             using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
@@ -2880,6 +2937,25 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
         }
-        #endregion
-    }
+
+		public void SetIndependentChild(int caseID, bool independentChild)
+		{
+			using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+			{
+				var parentCaseRelation = uow.GetRepository<ParentChildRelation>()
+					.GetAll()
+					.Where(o => o.DescendantId == caseID)
+					.SingleOrDefault();
+
+				if (parentCaseRelation == null)
+				{
+					throw new ArgumentException($"No parent for case id {caseID}");
+				}
+
+				parentCaseRelation.Independent = independentChild;
+				uow.Save();
+			}
+		}
+		#endregion
+	}
 }

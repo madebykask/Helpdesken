@@ -18,7 +18,8 @@
             Guid lockGUID,
             string browserSession,
             DateTime createTime,
-            DateTime extendedTime)
+            DateTime extendedTime,
+            string activeTab = "")
         {
             this.CaseId = caseId;
             this.UserId = userId;
@@ -26,6 +27,7 @@
             this.BrowserSession = browserSession;
             this.CreatedTime = createTime;
             this.ExtendedTime = extendedTime;
+            this.ActiveTab = activeTab;
         }
 
         public CaseLock(
@@ -35,8 +37,9 @@
             string browserSession,
             DateTime createTime,
             DateTime extendedTime,
-            User user)
-            : this(caseId, userId, lockGUID, browserSession, createTime, extendedTime)
+            User user,
+            string activeTab)
+            : this(caseId, userId, lockGUID, browserSession, createTime, extendedTime, activeTab)
         {
             this.User = user;
         }
@@ -59,5 +62,6 @@
         
         public User User { get; private set; }
 
+        public string ActiveTab { get; set; }
     }
 }

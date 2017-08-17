@@ -7,6 +7,8 @@
     using DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete;
     using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
+    using DH.Helpdesk.Dal.Repositories.CaseDocument;
+    using DH.Helpdesk.Dal.Repositories.CaseDocument.Concrete;
     using DH.Helpdesk.Dal.Repositories.Changes;
     using DH.Helpdesk.Dal.Repositories.Changes.Concrete;
     using DH.Helpdesk.Dal.Repositories.Computers;
@@ -278,6 +280,15 @@
             this.Bind<ICaseExtraFollowersRepository>().To<CaseExtraFollowersRepository>();
 			this.Bind<IInvoiceRepository>().To<InvoiceRepository>();
             this.Bind<ICaseSolutionConditionRepository>().To<CaseSolutionConditionRepository>();
+            this.Bind<IExtendedCaseFormRepository>().To<ExtendedCaseFormRepository>();
+            this.Bind<IExtendedCaseDataRepository>().To<ExtendedCaseDataRepository>();
+            this.Bind<ICaseDocumentRepository>().To<CaseDocumentRepository>();
+            this.Bind<ICaseDocumentConditionRepository>().To<CaseDocumentConditionRepository>();
+            this.Bind<IExtendedCaseValueRepository>().To<ExtendedCaseValueRepository>();
+            //   this.Bind<ICaseDocumentParagraphRepository>().To<CaseDocumentParagraphRepository>();
+            this.Bind<ICaseDocumentTextConditionRepository>().To<CaseDocumentTextConditionRepository>();
+            this.Bind<ICaseDocumentTextIdentifierRepository>().To<CaseDocumentTextIdentifierRepository>();
+            this.Bind<ICaseDocumentTextConditionIdentifierRepository>().To<CaseDocumentTextConditionIdentifierRepository>();
         }
 
         #endregion

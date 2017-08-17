@@ -42,7 +42,11 @@
             <br />
             <input type="hidden" id="timeZoneOffsetInJan1" name="timeZoneOffsetInJan1"/>
             <input type="hidden" id="timeZoneOffsetInJul1" name="timeZoneOffsetInJul1"/>
-            <input type="submit" value="Login" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />            
+            <input type="submit" value="Login" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />
+            @*<input type="button" value="Get Access Token" name="btnAccessToken" id="btnAccessToken" class="btn btn-large btn-danger" style="width:100%;" />
+            <input type="button" value="Get New Access Token" name="btnRefreshToken" id="btnRefreshToken" class="btn btn-large btn-danger" style="width:100%;" />
+            <input type="button" value="Get Case" name="btnGetCase" id="btnGetCase" class="btn btn-large btn-warning" style="width:100%;" />
+            <input type="button" value="Save Case" name="btnSaveCase" id="btnSaveCase" class="btn btn-large btn-warning" style="width:100%;" />*@
         }
     </div>
     <div class="signin-bottom">
@@ -60,7 +64,103 @@
         document.getElementById('timeZoneOffsetInJan1').value = Jan1.getTimezoneOffset();
         document.getElementById('timeZoneOffsetInJul1').value = Jul1.getTimezoneOffset();
         $("input:text:visible:first").focus();
-    };    
+    };
 
+    localStorage.removeItem("TokenData");
+    sessionStorage.removeItem("GlobalData");
+
+    localStorage.removeItem("AccessToken");
+    localStorage.removeItem("RefreshToken");
+
+    $('#btnAccessToken').click(function () {
+        getToken();
+    });
+
+    $('#btnRefreshToken').click(function () {
+        refreshToken();
+    });
+
+    $('#btnGetCase').click(function () {
+        getCase();
+    });
+
+    $('#btnSaveCase').click(function () {
+        saveCase();
+    });
+
+    function getToken() {        
+        $.post("@Url.Content("~/token")",
+                "username=admin" +
+                "&password=3edc4rfv" +
+                "&grant_type=password",
+                { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }                
+        ).success(function (data) {
+            if (data == null)
+                alert("Error occurred!");
+            else {
+                localStorage.setItem('AccessToken', data.access_token);
+                localStorage.setItem('RefreshToken', data.refresh_token);
+            }
+        });
+    };
+
+    function refreshToken() {
+        var _reftoken = localStorage.getItem('RefreshToken');
+        $.post("@Url.Content("~/token")",
+                "grant_type=refresh_token" +
+                "&refresh_token=" + _reftoken,
+                { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+        ).success(function (data) {
+            if (data == null)
+                alert("Error occurred!");
+            else {
+                localStorage.setItem('AccessToken', data.access_token);                
+            }
+        });
+    };
+
+    function getCase() {
+        var _token = localStorage.getItem('AccessToken');        
+        if (_token == null || _token == "") {
+            alert("Not authenticated!");
+            return;
+        }
+
+        $.ajax({
+            url: "@Url.Content("~/Api/CaseApi/GetCase?id=95879")",
+            type: 'GET',
+            headers: { "Authorization": "Bearer " + _token },
+            error: function (request, status, error) {
+            },
+            success: function (res, status, xhr) {
+
+            }
+        });
+    };
+
+    function saveCase() {
+        var _token = localStorage.getItem('AccessToken');
+        if (_token == null || _token == "") {
+            alert("Not authenticated!");
+            return;
+        }
+
+        var caseInfo = {
+            Id: 0,            
+            Caption: "My Case Caption1",
+            Customer_Id: 29,            
+            ProductAreaSetDate:"2017-05-12T12:41:55",
+            PersonsEmail: "mg@dhsolutions.se",
+            CurrentLanguageId: 1            
+        };
+
+        $.ajax({
+            url: "@Url.Content("~/Api/CaseApi/SaveCase")",
+            data: JSON.stringify(caseInfo),
+            contentType: "application/json; charset=utf-8",
+            type: 'POST',
+            headers: { "Authorization": "Bearer " + _token }
+        });
+    };
 </script>
 </html>

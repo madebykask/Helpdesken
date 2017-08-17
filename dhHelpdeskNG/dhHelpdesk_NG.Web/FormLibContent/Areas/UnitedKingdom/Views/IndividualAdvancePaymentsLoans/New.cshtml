@@ -1,0 +1,71 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    ViewBag.Title = Model.Translate("United Kingdom") + " - " + Model.Translate("Service Request Details");
+}
+@section Script {
+    <script type="text/javascript">
+
+        //$(function () {
+        //    validate.run(20);
+        //});
+
+        validate.run($('#actionState').val());
+
+        $(document).on('change', '#actionState', function (e) {
+            var val = $(this).val();
+            validate.run(val);
+        });
+
+    </script>
+
+     @Html.Partial("_Validate", Model)
+}
+@using (Html.BeginForm("new", "IndividualAdvancePaymentsLoans", FormMethod.Post, new { area = "UnitedKingdom", novalidate = "novalidate" }))
+{
+    @Html.Partial("_GlobalNavRev", Model)
+    <div class="container containeralignright">
+        @Html.Partial("_CurrentUser")  
+        @Html.Partial("_ErrorMessage", Model)    
+        <ul class="nav nav-tabs">
+                        @if(Model.VisibleTab("#servicerequestdetails"))
+            {
+                <li class="active @(Model.TabHasError("#servicerequestdetails") ? "error" : "")">
+                    <a href="#servicerequestdetails">@Model.Translate("Service Request Details")</a></li>
+            }
+                        @if(Model.VisibleTab("#payment"))
+            {
+                <li class="@(Model.TabHasError("#payment") ? "error" : "")">
+                    <a href="#payment">@Model.Translate("Payment Information")</a></li>
+            }
+            @if(Model.VisibleTab("#attachments"))
+            {
+                <li class="pull-right">
+                    <a href="#attachments"><i class="icon-file icon-white"></i>&nbsp;@Model.Translate("Attachments")&nbsp;(<b id="attachmentCounter">0</b>)</a>
+                </li>
+            }
+
+            
+        </ul>
+        <div class="content">
+            <div class="row-fluid">
+                <div class="tab-content overflow-visible">   
+                     
+                        @Html.Partial("_TabServiceRequestDetails", Model)
+                       
+                        @Html.Partial("_TabPayment", Model)
+            
+                    @if(Model.VisibleTab("#attachments"))
+                    {
+                        @Html.Partial("_GlobalAttachments", Model)
+                    }
+                                                                                      
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />    
+}
+

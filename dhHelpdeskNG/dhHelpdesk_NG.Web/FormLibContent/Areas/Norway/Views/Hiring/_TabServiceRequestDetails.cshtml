@@ -1,0 +1,119 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane active" id="servicerequestdetails">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Details")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NewToIKEA")</td>
+                    <td>@Model.Element("NewToIKEA")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ContractStartDate")</td>
+                    <td>@Model.Element("ContractStartDate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ServiceRequestPriority")</td>
+                    <td>@Model.Element("ServiceRequestPriority")</td>
+                </tr>
+                @if(!FormLibUtils.IsSelfService())
+                {
+                    <tr>
+                        <td class="tdstrong">@Model.Translate("SLA")</td>
+                        <td>
+                            @if(Model.Contract.CaseNumber != null)
+                            {
+                                @Model.Translate(Model.Contract.PriorityName);
+                            }
+                            else
+                            {
+                                if(Model.Form != null)
+                                {
+                                    @Model.Translate(Model.Form.PriorityName);
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td class="tdstrong">@Model.Label("Co-WorkerID")</td>
+                    <td>@Model.Element("Co-WorkerID", false)</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("GlobalHRID")</td>
+                    <td>@Model.Element("GlobalHRID")</td>
+                </tr> 
+                <tr>
+                    <td class="tdstrong">@Model.Label("FirstName")</td>
+                    <td>@Model.Element("FirstName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MiddleName")</td>
+                    <td>@Model.Element("MiddleName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LastName")</td>
+                    <td>@Model.Element("LastName")</td>
+                </tr>               
+                <tr>
+                    <td class="tdstrong">@Model.Label("DateOfBirth")</td>
+                    <td>@Model.Element("DateOfBirth")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PersonalIDNumber")</td>
+                    <td>@Model.Element("PersonalIDNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MaritalStatus")</td>
+                    <td>@Model.Element("MaritalStatus")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Permanent Address")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine1")</td>
+                    <td>@Model.Element("PermanentAddressLine1")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine2")</td>
+                    <td>@Model.Element("PermanentAddressLine2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
+                    <td>@Model.Element("PermanentPostalCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentCity")</td>
+                    <td>@Model.Element("PermanentCity")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentCountry")</td>
+                    <td>@Model.Element("PermanentCountry")</td>
+                </tr>
+                @Html.Partial("_InternalLogNoteV2", Model)
+ 
+            </tbody>
+        </table>
+    </div>
+ 
+    <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
+    <input type="hidden" id="AllCoWorker" value="1" />
+    <input type="hidden" id="formGuid" value="@Model.FormGuid" />
+</div>
+
+@*Scripts Moved to _TabHiringJS*@

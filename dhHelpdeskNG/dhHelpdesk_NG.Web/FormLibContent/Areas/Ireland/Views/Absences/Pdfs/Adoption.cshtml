@@ -1,0 +1,103 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using System.Globalization;
+@using ECT.Model.Entities;
+
+@{
+    Layout = null;
+    Model.Language = "en";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+      @*  <table style="@IrelandPdfPage.StyleValue() width: 100%;" border="0">
+            <tr style="text-align: right;">
+                <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
+            </tr>
+        </table>*@
+        <p style="@IrelandPdfPage.StyleValue()">
+            @*<strong>Private & Confidential</strong><br />
+            @Html.Partial("_HeaderAddress", Model)
+            <br />
+            <br />
+            <br />*@
+
+            Dear @Model.GetDocumentAnswer("FirstName", true),<br />
+            <br />
+            Congratulations and thank you for telling me that you will be adopting a child. I am writing to you about your adoption leave and pay.
+            <br />
+            <br />
+            As we have discussed you are eligible for 26 weeks' adoption leave.<br />
+            <br />
+            You have told me you intend to return to work. Based upon your chosen start date for Ordinary Adoption Leave, which you have given as @Model.GetDocumentAnswer("AbsenceStartFrom" + Model.MultiNr, true), you will return to work on @Model.GetDocumentAnswer("AbsenceEndsOn" + Model.MultiNr, true).
+            <br />
+            <br />
+            Should you want to change the date on which your leave starts you must, if at all possible, give at least 28 days notice before your proposed new start date and at the latest by 
+            @if (!string.IsNullOrEmpty(Model.GetAnswer(FormLibConstants.FormField.AbsenceStartFrom + Model.MultiNr)))
+            {
+                <text>@DateTime.ParseExact(Model.GetDocumentAnswer(FormLibConstants.FormField.AbsenceStartFrom + Model.MultiNr, true), "dd.MM.yyyy", CultureInfo.InvariantCulture).AddDays(-28).ToString("dd.MM.yyyy")</text>
+            }.
+            <br />
+            <br />
+            In addition please be aware if you decide to return to work before the date we have agreed, you must give at least 28 days notice.
+            <br />
+            <br />
+
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "1 - 2 years".ToLower())
+            {
+                <text>As we discussed, you are eligible for 13 weeks payment from IKEA based on your average weekly earnings.</text>
+                <text><br />
+                <br /></text>
+            }
+
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Over 2 years".ToLower())
+            {
+                <text>As we discussed, you are eligible for 19 weeks payment from IKEA based on your average weekly earnings.</text>
+                   
+                <text><br />
+                <br /></text>
+
+            }
+
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "1 - 2 years".ToLower() | Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Over 2 years".ToLower())
+            {
+                <text>Your Adoption pay will be &euro; @Model.GetDocumentAnswer("AdoptionPay"+ Model.MultiNr, true) per week.</text>
+                  
+                <text><br />
+                <br /></text>
+            }
+
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Under 26 weeks".ToLower())
+            {
+                <text>The SAP1 form (enclosed) explains why you do not qualify for Statutory Adoption Pay and if you speak to your Incapacity Benefits Branch you may be entitled to income support.</text>
+                <text><br />
+                <br /></text>
+            }
+
+            @if (Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "1 - 2 years".ToLower() | Model.GetDocumentAnswer("Seniority" + Model.MultiNr).ToLower() == "Over 2 years".ToLower())
+            {
+                <text>As you have more than one year continuous service as at the 4th week before the expected week of placement, IKEA offers you an additional benefit:<br />
+                <br />
+
+                &bull; returning on 50% of your contractual hours for the first 12 weeks where you will be paid on the basis of your full contractual hours.
+
+            </text>
+                <text><br />
+                <br /></text>
+            }
+
+
+            If you decide not to return to work, you must still give IKEA notice as per your contract of employment. Your decision will not affect your entitlement to Statutory Adoption Pay.
+        </p>
+
+        <endpage />
+    </div>
+</body>
+</html>

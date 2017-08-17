@@ -1,0 +1,294 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using System.Collections.Generic;
+
+@{
+    Layout = null;
+    Model.Language = "pl";
+}
+<!DOCTYPE html>
+<html>
+<body>
+    <div>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px; ">
+            <br />
+        </p>
+        <p style="text-align: right; font-family: Verdana; font-size: 13px;">
+            <strong>@Model.GetTranslatedAnswer("Prefix") @Model.GetAnswer("EmployeeFirstName") @Model.GetAnswer("EmployeeLastName")</strong><br />
+        </p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+        <p style="text-align: center; font-family: Verdana; font-size: 13px;"><strong>ANEKS DO UMOWY O PRACĘ</strong></p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+        <p style="text-align:justify; font-family: Verdana; font-size: 10px;">
+               @if (Model.GetAnswer("ContractType") != "Replacement contract")
+            {
+                if(string.IsNullOrEmpty(Model.GetAnswer("EndDate")))
+                {   
+                   <text> 
+                   Z dniem <strong>@Model.GetAnswer("EffectiveDate") </strong> wprowadza się następujące zmiany do umowy o pracę, zawartej na <strong>@Model.GetTranslatedAnswer("ContractType") </strong> w dniu 
+                   </text> 
+                    if(string.IsNullOrEmpty(Model.GetAnswer("AppendixPolishConcludedOn")))
+                    {
+                         <text>
+                         ..........................
+                         </text> 
+                    }
+                    else
+                    {
+                        <text>
+                         @Model.GetAnswer("AppendixPolishConcludedOn").
+                         </text> 
+                    }
+                   
+                }
+                if(!string.IsNullOrEmpty(Model.GetAnswer("EndDate")))
+                {   
+                   <text> 
+                   Z dniem <strong>@Model.GetAnswer("EffectiveDate") </strong> do dnia <strong>@Model.GetAnswer("EndDate")</strong> wprowadza się następujące zmiany do umowy o pracę, zawartej na <strong>@Model.GetTranslatedAnswer("ContractType") </strong> w dniu               
+                   </text>
+                if(string.IsNullOrEmpty(Model.GetAnswer("AppendixPolishConcludedOn")))
+                    {
+                         <text>
+                         ..........................
+                         </text> 
+                    }
+                    else
+                    {
+                        <text>
+                         @Model.GetAnswer("AppendixPolishConcludedOn").
+                         </text> 
+                    }
+                }
+                }
+            @if (Model.GetAnswer("ContractType") == "Replacement contract")
+            {
+                if(string.IsNullOrEmpty(Model.GetAnswer("EndDate")))
+                {   
+                   <text> 
+                   Z dniem <strong>@Model.GetAnswer("EffectiveDate") </strong> wprowadza się następujące zmiany do umowy o pracę, zawartej na <strong>czas zastępstwa </strong> w dniu 
+                   </text> 
+                    if(string.IsNullOrEmpty(Model.GetAnswer("AppendixPolishConcludedOn")))
+                    {
+                         <text>
+                         ..........................
+                         </text> 
+                    }
+                    else
+                    {
+                        <text>
+                         @Model.GetAnswer("AppendixPolishConcludedOn").
+                         </text> 
+                    }
+                }
+                
+               if(!string.IsNullOrEmpty(Model.GetAnswer("EndDate")))
+                {   
+                   <text> 
+                   Z dniem <strong>@Model.GetAnswer("EffectiveDate") </strong> do dnia <strong>@Model.GetAnswer("EndDate")</strong> wprowadza się następujące zmiany do umowy o pracę, zawartej na <strong>czas zastępstwa </strong> w dniu               
+                   </text>
+                if(string.IsNullOrEmpty(Model.GetAnswer("AppendixPolishConcludedOn")))
+                    {
+                         <text>
+                         ..........................
+                         </text> 
+                    }
+                    else
+                    {
+                        <text>
+                         @Model.GetAnswer("AppendixPolishConcludedOn").
+                         </text> 
+                    }
+                }
+                }
+        </p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+           <br />
+        </p>
+        @{
+            var list = new List<string>();
+
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("4"))
+            {
+                list.Add( "Pracownik będzie świadczyć pracę na stanowisku <strong> " + Model.GetAnswer("PolishJobTitle") + "</strong>.");
+
+            }
+
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("5") && Model.GetAnswer("Extent") != "Part time")
+            {
+                list.Add(" Wymiar czasu pracy ustala się na <strong> " + Model.GetTranslatedAnswer("Extent") + "</strong>." );}
+                
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("5") && Model.GetAnswer("Extent") == "Part time")
+            {
+                list.Add(" Wymiar czasu pracy ustala się na <strong> " + Model.GetTranslatedAnswer("Extent") + "</strong>." + " Wymiar etatu ustala się na  <strong>" + Model.GetAnswer("Workload") + "%</strong>.");                
+                list.Add("Dopuszczalna liczba godzin pracy ponad określony w umowie wymiar czasu pracy, których przekroczenie uprawnia pracownika, oprócz normalnego wynagrodzenia, do dodatku do wynagrodzenia, o którym mowa w art. 151<sup>1</sup> § 1 Kodeksu pracy wynosi " + "<strong>39 godzin.</strong>");
+            }
+
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "monthly"
+                && !string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish")))
+            {
+                list.Add(" Pracownik będzie otrzymywał wynagrodzenie zasadnicze wg stawki <strong>" + Model.GetTranslatedAnswer("MonthlyHourly") + "</strong>w wysokości <strong>" + Model.GetAnswer("BasicPay") +
+                         " </strong> PLN brutto " + "(słownie: " + Model.GetAnswer("BasicPayInWordsPolish") + ").<br />");
+            }
+
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "monthly"
+            //    && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish")) && Model.Contract.Company.Key == "OI")
+            //{
+            //    list.Add(" Pracownik będzie otrzymywał wynagrodzenie zasadnicze wg stawki <strong>" + Model.GetTranslatedAnswer("MonthlyHourly") + "</strong>w wysokości <strong>" + Model.GetAnswer("BasicPay") +
+            //        " </strong> PLN brutto " + "(słownie: .......................................................................................................).<br />");
+            //}
+
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "monthly"
+                && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish"))) //&&  Model.Contract.Company.Key != "OI"
+            {
+                list.Add(" Pracownik będzie otrzymywał wynagrodzenie zasadnicze wg stawki <strong>" + Model.GetTranslatedAnswer("MonthlyHourly") + "</strong>w wysokości <strong>" + Model.GetAnswer("BasicPay") +
+                    " </strong> PLN brutto " + "(słownie: .........................................................................................................................).<br />");
+            }
+            
+            
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "hourly"
+                && !string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish")))
+            {
+                list.Add(" Pracownik będzie otrzymywał wynagrodzenie zasadnicze wg stawki <strong>" + Model.GetTranslatedAnswer("MonthlyHourly") + "</strong> w wysokości  <strong>" + Model.GetAnswer("BasicPay") +
+                         "</strong> PLN brutto " + " <strong> za godzinę </strong> (słownie: " + Model.GetAnswer("BasicPayInWordsPolish") + ").<br />");
+            }
+
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "hourly"
+            //    && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish")) && Model.Contract.Company.Key == "OI")
+            //{
+            //    list.Add(" Pracownik będzie otrzymywał wynagrodzenie zasadnicze wg stawki <strong>" + Model.GetTranslatedAnswer("MonthlyHourly") + "</strong> w wysokości  <strong>" + Model.GetAnswer("BasicPay") +
+            //             "</strong> PLN brutto " + " <strong> za godzinę </strong> (słownie: .......................................................................................................).<br />");
+            //}
+
+
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "hourly"
+                && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish"))) //&& Model.Contract.Company.Key != "OI"
+            {
+                list.Add(" Pracownik będzie otrzymywał wynagrodzenie zasadnicze wg stawki <strong>" + Model.GetTranslatedAnswer("MonthlyHourly") + "</strong> w wysokości  <strong>" + Model.GetAnswer("BasicPay") +
+                         "</strong> PLN brutto " + " <strong> za godzinę </strong> (słownie: .........................................................................................................................).<br />");
+            }
+
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("1") && string.IsNullOrEmpty(Model.GetAnswer("AdditionalPlaceOfWork")))
+            {
+                string a = Model.Translate(Model.GetOptionText("EmployeeUnit", Model.GetAnswer("EmployeeUnit")));
+                list.Add(" Miejsce pracy ustala się na <strong>" +  a + "</strong>.");
+            }
+
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("1") && !string.IsNullOrEmpty(Model.GetAnswer("AdditionalPlaceOfWork")))
+            {
+                string a = Model.Translate( Model.GetOptionText("EmployeeUnit", Model.GetAnswer("EmployeeUnit")));
+                list.Add(" Miejsce pracy ustala się na <strong>" + a + "</strong>" + " i <strong>" + Model.Translate(Model.GetAnswer("AdditionalPlaceOfWork")) + "</strong>.");
+            }
+
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
+            //    && Model.GetTranslatedAnswer("FunctionAllowance") == "1045-Dodatek funkcyjny" && Model.Contract.Company.Key == "OI")
+            //{
+            //    list.Add("Pracownik będzie otrzymywał dodatek funkcyjny wg stawki miesięcznej w wysokości <strong>" + Model.GetAnswer("FunctionAllowanceAmount") + " PLN brutto</strong><br />"
+            //              + "(słownie: .......................................................................................................).<br />");
+            //}
+
+            
+            string inWords = "(słownie: .........................................................................................................................).<br />";
+            string text = "Pracownik będzie otrzymywał dodatek funkcyjny wg stawki miesięcznej w wysokości <strong>";
+            
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
+               && Model.GetTranslatedAnswer("FunctionAllowance") == "1045-Dodatek funkcyjny") //&& Model.Contract.Company.Key != "OI"
+            {
+                if (string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish1")))
+                {
+                    list.Add(text + Model.GetAnswer("FunctionAllowanceAmount") + " PLN brutto</strong><br />"
+                          + inWords);
+                }
+                else
+                {
+                    list.Add(text + Model.GetAnswer("FunctionAllowanceAmount") + " PLN brutto.</strong><br />"
+                          + "(słownie: " + Model.GetAnswer("BasicPayInWordsPolish1") + ").");
+                }
+                
+            }
+
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
+            //    && Model.GetTranslatedAnswer("FunctionAllowance2") == "1045-Dodatek funkcyjny" && Model.Contract.Company.Key == "OI")
+            //{
+            //    list.Add("Pracownik będzie otrzymywał dodatek funkcyjny wg stawki miesięcznej w wysokości <strong>" + Model.GetAnswer("FunctionAllowanceAmount2") + " PLN brutto</strong><br />"
+            //              + "(słownie: .......................................................................................................).<br />");
+            //}
+
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
+               && Model.GetTranslatedAnswer("FunctionAllowance2") == "1045-Dodatek funkcyjny") //&& Model.Contract.Company.Key != "OI"
+            {
+                if (string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish2")))
+                 {
+                    list.Add(text + Model.GetAnswer("FunctionAllowanceAmount2") + " PLN brutto</strong><br />"
+                          + inWords);
+                }
+
+                else
+                {
+                    list.Add(text + Model.GetAnswer("FunctionAllowanceAmount2") + " PLN brutto.</strong><br />"
+                          + "(słownie: " + Model.GetAnswer("BasicPayInWordsPolish2") + ").");
+                }
+                
+            }
+
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
+            //   && Model.GetTranslatedAnswer("FunctionAllowance3") == "1045-Dodatek funkcyjny" && Model.Contract.Company.Key == "OI")
+            //{
+            //    list.Add("Pracownik będzie otrzymywał dodatek funkcyjny wg stawki miesięcznej w wysokości <strong>" + Model.GetAnswer("FunctionAllowanceAmount3") + " PLN brutto</strong><br />"
+            //              + "(słownie: .......................................................................................................).<br />");
+            //}
+
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
+               && Model.GetTranslatedAnswer("FunctionAllowance3") == "1045-Dodatek funkcyjny" ) // && Model.Contract.Company.Key != "OI"
+            {
+                
+                if (string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsPolish3")))
+                 {
+                    list.Add(text + Model.GetAnswer("FunctionAllowanceAmount3") + " PLN brutto</strong><br />"
+                          + inWords);                
+                 }
+                 else
+                 {
+                     list.Add(text + Model.GetAnswer("FunctionAllowanceAmount3") + " PLN brutto.</strong><br />"
+                           + "(słownie: " + Model.GetAnswer("BasicPayInWordsPolish3") + ").");
+                 }
+            }
+        }
+
+
+       @if (list.Count>1)
+      	{
+          for (int i = 0; i < list.Count; i++)
+          {
+            <p style=" text-align:justify; font-family: Verdana; font-size: 10px;">@( i + 1) ) @Html.Raw(list[i])</p>
+          }
+	    }  
+        else
+         { for (int i = 0; i == list.Count-1; i++)
+          {
+	        <p style="text-align:justify; font-family: Verdana; font-size: 10px;">@Html.Raw(list[i])</p>
+	      }     
+         }     
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+        <p style="font-family: Verdana; font-size: 10px;">
+            Pozostałe warunki pracy pozostają bez zmian.
+        </p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+        <p style="text-align:justify; font-family: Verdana; font-size: 10px;">
+            Pracownik oświadcza, iż egzemplarz niniejszego aneksu otrzymał i przyjmuje powyższe warunki pracy.  
+        </p>
+    </div>
+    <endpage/>
+</body>
+</html>

@@ -1732,14 +1732,47 @@ table th.thpointer {
 .nav-tabs > .notice > a,
 .nav-tabs > .notice > a:hover,
 .nav-tabs > .notice > a:focus {
-  color: red;
-  cursor: default;
-  background-color: transparent;
-  border: 1px solid #ddd;
-  border-bottom-color: transparent;
-  border-color: transparent;
-  font-weight:bold;
+  color: red !important;
+  cursor: default !important;
+  background-color: transparent !important;
+  border: 1px solid #ddd !important;
+  border-bottom-color: transparent !important;
+  border-color: transparent !important;
+  font-weight:bold !important;
 }
+
+
+.nav-tabs li.error a {
+    background-color: #ffeeee;
+    color: #a94442;
+    border: 1px solid transparent;
+    padding-bottom: 7px;
+}
+
+.nav-tabs > li.error > a:hover,
+.nav-tabs > li.error > a:focus {
+    color: #a94442;
+    cursor: pointer;
+    background-color: #ffeeee;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    border-color: #eeeeee #eeeeee #dddddd;
+    padding-bottom: 8px;
+}
+
+.nav-tabs > li.error.active > a,
+.nav-tabs > li.error.active > a:hover,
+.nav-tabs > li.error.active > a:focus {
+    color: #a94442;
+    cursor: default;
+    background-color: #ffeeee;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    padding-bottom: 8px;
+}
+
+
+
 
 .nav-tabs-actions {
     
@@ -1874,6 +1907,18 @@ table th.thpointer {
         border:none;
         display: inline-block;
     }
+
+.tab-indicator {
+    width: 20px !important;
+    height: 20px !important;
+    background: url('/content/img/ajax-loader.gif');
+    background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border: none;
+    display: inline-block;
+}
 
 .case-overview.page .table-cases 
 {

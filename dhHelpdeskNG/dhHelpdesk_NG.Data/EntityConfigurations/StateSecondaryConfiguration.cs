@@ -40,6 +40,9 @@
             this.Property(x => x.ReminderDays).IsOptional();
             this.Property(x => x.StateSecondaryGUID).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
+            this.Property(x => x.AlternativeStateSecondaryName).IsOptional().HasMaxLength(50).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(x => x.StateSecondaryId).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+
             this.ToTable("tblstatesecondary");
         }
     }

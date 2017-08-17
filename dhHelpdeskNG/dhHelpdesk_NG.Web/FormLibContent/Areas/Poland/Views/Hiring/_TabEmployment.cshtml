@@ -1,0 +1,78 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="employment">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmployeeSource")</td>
+                    <td>@Model.Element("EmployeeSource")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ContractType")</td>
+                    <td>@Model.Element("ContractType")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PersonReplaced")</td>
+                    <td>@Model.Element("PersonReplaced")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TwoWeekNotice")</td>
+                    <td>@Model.Element("TwoWeekNotice")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EffectiveDate")</td>
+                    <td>@Model.Element("EffectiveDate")
+                        <div id="notice_EffectiveDate" style="display:none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Hiring date?")
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EndDate")</td>
+                    <td>@Model.Element("EndDate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FirstDayAtWork")</td>
+                    <td>@Model.Element("FirstDayAtWork")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Extent")</td>
+                    <td>@Model.Element("Extent")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Workload")</td>
+                    <td>@Model.Element("Workload")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("WorkingTimeSchedule")</td>
+                    <td>@Model.Element("WorkingTimeSchedule")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BasicPay")</td>
+                    <td>@Model.Element("BasicPay")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BasicPayInWordsPolish")</td>
+                    <td>@Model.Element("BasicPayInWordsPolish")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BasicPayInWords")</td>
+                    <td>@Model.Element("BasicPayInWords")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MonthlyHourly")</td>
+                    <td>@Model.Element("MonthlyHourly")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

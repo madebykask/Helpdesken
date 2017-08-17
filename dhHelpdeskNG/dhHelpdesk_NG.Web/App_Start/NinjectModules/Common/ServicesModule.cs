@@ -17,6 +17,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
     using DH.Helpdesk.Services.Services.Users;
 
     using Ninject.Modules;
+    using Services.Services.ExtendedCase;
+    using Services.Services.UniversalCase;
 
     public sealed class ServicesModule : NinjectModule
     {
@@ -150,8 +152,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IOrderAccountSettingsProxyService>().To<OrderAccountSettingsProxyService>();
 
             this.Bind<IOrderAccountDefaultSettingsCreator>().To<OrderAccountDefaultSettingsCreator>();
+            this.Bind<ICaseDocumentService>().To<CaseDocumentService>();
 
-            
 
             // Survey service
             this.Bind<ISurveyService>().To<SurveyService>();
@@ -169,7 +171,9 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
 			Bind<IInvoiceService>().To<InvoiceService>();
 
 			Bind<ICaseExtraFollowersService>().To<CaseExtraFollowersService>();
-		}
+            Bind<IUniversalCaseService>().To<UniversalCaseService>();
+            Bind<IExtendedCaseService>().To<ExtendedCaseService>();
+        }
 
         #endregion
     }

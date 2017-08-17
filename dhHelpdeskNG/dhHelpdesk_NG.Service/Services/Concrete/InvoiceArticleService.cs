@@ -269,7 +269,7 @@
                                                  ProcessResult.ResultTypeEnum.ERROR, "There is no invoice settings for Customer");
                     
                     var res = ExportOrder(orderToExport, caseInvoiceSettings, caseId, caseNumber);
-                    if (!res.IsSuccess)
+                    if (!res.IsSucceed)
                     {
                         this.caseInvoiceArticleRepository.CancelInvoiced(caseId, orderIdToXML.Value);
                         return new ProcessResult(res.ProcessName, ProcessResult.ResultTypeEnum.WARNING, res.LastMessage);
@@ -301,7 +301,7 @@
             {                    
                 var salesDoc = MapToSalesDoc(order, caseInvoiceSettings, caseId, caseNumber);
                 var xmlData = salesDoc.ConvertToXML();
-                if (xmlData.IsSuccess)
+                if (xmlData.IsSucceed)
                 {
                     try
                     {

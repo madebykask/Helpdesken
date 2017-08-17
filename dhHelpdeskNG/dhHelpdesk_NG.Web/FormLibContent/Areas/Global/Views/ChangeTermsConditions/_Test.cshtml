@@ -1,0 +1,48 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    var fillOldVal = TempData["oldValues"];
+    var newfill = (List<KeyValuePair<string, string>>)fillOldVal;        
+}
+<div class="tab-pane active" id="ServiceRequestDetails">    
+    <div class="span8">
+        <table class="table">
+            <tbody> 
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Change Type")</h4>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td>Please make a change selection:</td>
+                </tr>
+                <tr>
+                    <td>
+                        
+                    <select>
+                        <option value=""></option>
+                        <option value="Org Transfer Change Company">Org Transfer Change Company</option>
+                        <option value="Org Transfer Change Business Unit">Org Transfer Change Business Unit</option>
+                        <option value="Org Transfer Change Function">Org Transfer Change Function</option>
+                        <option value="Org Transfer Change Deptartment">Org Transfer Change Deptartment</option>
+                        <option value="Job Change">Job Change</option>
+                        <option value="ONLY Pay Change">ONLY Pay Change</option>
+                        <option value="ONLY Change Work Hours">ONLY Change Work Hours</option>
+                        <option value="ONLY Cost Centre Change">ONLY Cost Centre Change</option>
+                        <option value="Renew Temporary Contract">Renew Temporary Contract</option>
+                        
+                    </select>
+                        </td>
+                    <td> <button type="button" style="height:30px; width:70px;">Next</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
+    <input type="hidden" id="formGuid" value="@Model.FormGuid" />
+
+</div>

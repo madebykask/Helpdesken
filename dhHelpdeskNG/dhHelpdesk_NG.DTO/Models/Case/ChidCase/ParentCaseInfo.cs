@@ -14,5 +14,6 @@
         public UserNamesStruct CaseAdministrator { get; set; }
 
         public DateTime? FinishingDate { get; set; }
-    }
+		public bool IsChildIndependent { get; internal set; }
+	}
 }

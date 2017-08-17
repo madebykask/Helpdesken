@@ -127,9 +127,29 @@
 
         private const string _REPORT_SERVICE_SESSION_MODEL = "REPORT_SERVICE_SESSION_MODEL";
 
+        private const string _IS_CASE_DATA_CHANGED = "Is_CASE_DATA_CHANGED";
+
         #endregion
 
         #region Public Properties
+
+        public static bool IsCaseDataChanged
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_IS_CASE_DATA_CHANGED] != null)
+                    return (bool)HttpContext.Current.Session[_IS_CASE_DATA_CHANGED];
+                else
+                    return false;
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_IS_CASE_DATA_CHANGED] == null)
+                    HttpContext.Current.Session.Add(_IS_CASE_DATA_CHANGED, value);
+                else
+                    HttpContext.Current.Session[_IS_CASE_DATA_CHANGED] = value;
+            }
+        }
 
         public static string ActiveTab
         {

@@ -27,6 +27,9 @@
     using DH.Helpdesk.Dal.EntityConfigurations.WorkstationModules;
     using DH.Helpdesk.Dal.EntityConfigurations.ADFS;
     using DH.Helpdesk.Dal.NewInfrastructure;
+    using DH.Helpdesk.Dal.EntityConfigurations.CaseDocument;
+
+
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
     using DH.Helpdesk.Domain.Cases;
@@ -45,12 +48,14 @@
     using DH.Helpdesk.Domain.Users;
     using DH.Helpdesk.Domain.WorkstationModules;
     using DH.Helpdesk.Domain.ADFS;
+    using DH.Helpdesk.Domain.ExtendedCaseEntity;
 
     using OperatingSystemConfiguration = DH.Helpdesk.Dal.EntityConfigurations.OperatingSystemConfiguration;
     using DH.Helpdesk.Domain.BusinessRules;
     using DH.Helpdesk.Dal.EntityConfigurations.BusinessRule;
     using DH.Helpdesk.Domain.Orders;
     using Domain.MetaDataEntity;
+    using EntityConfigurations.ExtendedCaseEntity;
 
     public class HelpdeskDbContext : DbContext, IDbContext
     {
@@ -569,6 +574,29 @@
 
         public DbSet<CaseSolutionConditionPropertyEntity> CaseSolutionConditionProperties { get; set; }
 
+        public DbSet<ExtendedCaseFormEntity> ExtendedCaseForms { get; set; }
+
+        public DbSet<ExtendedCaseDataEntity> ExtendedCaseDatas { get; set; }
+
+        public DbSet<ExtendedCaseValueEntity> ExtendedCaseValues { get; set; }
+
+        public DbSet<Case_ExtendedCaseEntity> Case_ExtendedCases { get; set; }
+
+        public DbSet<CaseDocumentEntity> CaseDocuments { get; set; }
+
+        public DbSet<CaseDocumentConditionEntity> CaseDocumentConditions { get; set; }
+        public DbSet<CaseDocumentParagraphEntity> CaseDocumentParagraphs { get; set; }
+
+        public DbSet<CaseDocument_CaseDocumentParagraphEntity> CaseDocument_CaseDocumentParagraphs { get; set; }
+        public DbSet<CaseDocumentTextEntity> CaseDocumentTexts { get; set; }
+
+        public DbSet<CaseDocumentParagraphConditionEntity> CaseDocumentParagraphConditions { get; set; }
+        public DbSet<CaseDocumentTextConditionEntity> CaseDocumentTextConditions { get; set; }
+        public DbSet<CaseDocumentTemplateEntity> CaseDocumentTemplates { get; set; }
+
+        public DbSet<CaseDocumentTextIdentifierEntity> CaseDocumentTextIdentifiers { get; set; }
+        public DbSet<CaseDocumentTextConditionIdentifierEntity> CaseDocumentTextConditionIdentifiers { get; set; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -850,9 +878,24 @@
 			modelBuilder.Configurations.Add(new InvoiceRowConfiguration());
 			modelBuilder.Configurations.Add(new InvoiceHeaderConfiguration());
 
-            //Workflow Step - Condition
             modelBuilder.Configurations.Add(new CaseSolutionConditionConfiguration());
+            modelBuilder.Configurations.Add(new ExtendedCaseFormConfiguration());
             modelBuilder.Configurations.Add(new CaseSolutionConditionPropertyConfiguration());
+            modelBuilder.Configurations.Add(new ExtendedCaseDataConfiguration());
+            modelBuilder.Configurations.Add(new ExtendedCaseValueConfiguration());
+            modelBuilder.Configurations.Add(new Case_ExtendedCaseDataConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentConditionConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentParagraphConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocument_CaseDocumentParagraphConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentTextConfiguration());
+
+            modelBuilder.Configurations.Add(new CaseDocumentParagraphConditionConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentTextConditionConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentTemplateConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentTextIdentifierConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentTextConditionIdentifierConfiguration());
+
             #endregion
 
             base.OnModelCreating(modelBuilder);

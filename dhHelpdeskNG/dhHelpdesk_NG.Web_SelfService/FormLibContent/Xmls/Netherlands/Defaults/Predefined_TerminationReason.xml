@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+    <name>TerminationReason</name>
+    <dependent>
+        <selected>Casual Termination</selected>
+        <show>Casual Termination</show>
+    </dependent>
+    <dependent>
+        <selected>Expiry of Contract</selected>
+        <show>Expiry of Contract,International Transfer Begins,International Transfer Ends,End of Backpacker Assignment</show>
+    </dependent>
+    <dependent>
+        <selected>Dismissal</selected>
+        <show>Dismissal - Without Notice</show>
+    </dependent>
+    <dependent>
+        <selected>Retirement</selected>
+        <show>Early Retirement,Retirement</show>
+    </dependent>
+  <dependent>
+        <selected>Resignation</selected>
+        <show>Resignation</show>
+  </dependent>
+  <dependent>
+        <selected>Redundancy</selected>
+        <show>Redundancy</show>
+  </dependent>
+  <dependent>
+        <selected>Other</selected>
+        <show>Invalidity,Death,Termination in probation period by employee,Termination in probation period by employer,Mutual cancelation agreement</show>
+  </dependent>
+</predefined>
+

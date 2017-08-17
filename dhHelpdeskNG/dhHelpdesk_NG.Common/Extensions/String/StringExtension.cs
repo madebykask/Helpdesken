@@ -9,6 +9,9 @@
 
 using System.Linq;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Constants;
+using System.Web;
+
 namespace DH.Helpdesk.Common.Extensions.String
 {
     /// <summary>
@@ -270,6 +273,9 @@ namespace DH.Helpdesk.Common.Extensions.String
 
         public static string CleanSpaceAndLowStr(this string value)
         {
+            if (string.IsNullOrEmpty(value))
+                return string.Empty;
+
             return value.Replace(" ", string.Empty).ToLower();
         }
 
@@ -332,12 +338,40 @@ namespace DH.Helpdesk.Common.Extensions.String
             return value.Replace("″", "\"");
         }
 
+        public static bool IsValueChanged(this string value)
+        {
+            return (value != NotChangedValue.STRING);
+        }
+
         /// <summary>
-        /// Removes \r and \n from string and Trims
+        /// Removes \r and \n from string and Trim
         /// </summary>
         public static string Tidy(this string value)
         {
             return value.Replace("\r", "").Replace("\n", "").Trim();
         }
+
+        public static string IfNullThenElse(this string value, string elseValue)
+        {
+            return string.IsNullOrEmpty(value)? elseValue : value;
+        }
+
+
+        /// <summary>
+        /// Removes \r and \n from string and Trims
+        /// </summary>
+        public static HtmlString ToHtmlString(this string value)
+        {
+            return new HtmlString(value);
+        }
+
+        /// <summary>
+        /// Removes \r and \n and  * from string and Trim
+        /// </summary>
+        public static string RemoveRequiredText(this string value)
+        {
+            return value.Replace("\r", "").Replace("\n", "").Replace(" *", "").Trim();
+        }
+
     }
 }

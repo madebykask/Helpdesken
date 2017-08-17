@@ -1,0 +1,87 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using System.Globalization;
+@using ECT.Model.Entities;
+
+@{
+    Layout = null;
+    Model.Language = "en";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        <table style="font-family: Verdana; font-size: 11px; width: 100%;" border="0">
+            <tr style="text-align: right;">
+                <td>@string.Format(new System.Globalization.CultureInfo("en-GB"), "{0:d MMMMMM yyyy}", DateTime.Now)</td>
+            </tr>
+        </table>
+        <p style="text-align: left; font-family: Verdana; font-size: 11px;">
+            <strong>Private & Confidential</strong><br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.FirstName, true) @Model.GetDocumentAnswer(FormLibConstants.FormField.LastName, true)<br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine1, true)
+            @if (!string.IsNullOrEmpty(Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine2)))
+            {
+                <br />
+                @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentAddressLine2)
+            }
+            <br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentCity, true)
+            <br />
+            @Model.GetDocumentAnswer(FormLibConstants.FormField.PermanentPostalCode, true)
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            Dear @Model.GetDocumentAnswer(FormLibConstants.FormField.FirstName, true),<br />
+            <br />
+            Congratulations on achieving @Model.GetDocumentAnswer(FormLibConstants.FormField.PayScaleGroup, true)
+            @switch (Model.GetDocumentAnswer(FormLibConstants.FormField.PayScaleGroup).ToUpper())
+            {
+                case "ADVANCD2":
+                case "ADVANCD3": 
+                case "ADVANCD4": 
+                case "ADVANCP": 
+                case "ADVANCED":
+                case "ADVANCED HIGH":
+                    <text> Advanced </text>
+                    <text> Level, this will be effective from @Model.GetDocumentAnswer(FormLibConstants.FormField.ChangeValidFrom, true)</text>
+                    <text><br /><br /></text>
+                    <text>I can confirm that your addition will be £@Model.GetDocumentAnswer(FormLibConstants.FormField.AllowancesAmountUnits) per hour which will be added to your present hourly rate.</text>
+                    <text><br /><br /></text>
+                    <text>The Advanced rate is paid provided that you continue to perform at this level, if this is not maintained then the allowance may be removed. </text>
+                    break;
+                case "FOUNDN1":
+                case "FOUNDN2": 
+                case "FOUNDN3": 
+                case "FOUNDN4": 
+                case "FOUNDP":
+                case "FOUNDN":
+                case "FOUNDN HIGH":
+                case "FOUNDFLT1":
+                case "FOUNDFLT2":
+                case "FOUNDFLT3":
+                case "FOUNDFLT4":
+                case "FOUNDFLP":
+                case "FOUNDFLT":
+                case "FOUNDFLT HIGH":
+                    <text> Foundation </text>
+                    <text> Level, this will be effective from @Model.GetDocumentAnswer(FormLibConstants.FormField.ChangeValidFrom, true)</text>
+                    
+                    break;
+            }<!-- end of switch--> 
+            <br /><br />
+            All other Terms and Conditions remain the same. IKEA reserves the right to vary terms and conditions of employment subject to consultation and reasonable notice. Please retain this letter for your records.
+        </p>
+
+        <endpage />
+    </div>
+</body>
+</html>
