@@ -976,5 +976,113 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 GO
 
 
+if not exists(select * from sysobjects WHERE Name = N'tblCaseSections')
+begin
+CREATE TABLE [dbo].[tblCaseSections](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Customer_Id] [int] NOT NULL,
+	[SectionType] [int] NOT NULL,
+	[IsNewCollapsed] [bit] NOT NULL DEFAULT (0),
+	[IsEditCollapsed] [bit] NOT NULL DEFAULT (0),
+	[CreatedDate] [datetime] NOT NULL CONSTRAINT [DF_tblCaseSections_CreatedDate]  DEFAULT (getdate()),
+	[UpdatedDate] [datetime] NULL,
+ CONSTRAINT [PK_tblCaseSections] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+ALTER TABLE [dbo].[tblCaseSections] ADD  CONSTRAINT [FK_tblCaseSections_tblCustomer] FOREIGN KEY([Customer_Id])
+REFERENCES [dbo].[tblCustomer] ([Id])
+
+END
+GO
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseSectionFields')
+begin
+CREATE TABLE [dbo].[tblCaseSectionFields](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[CaseSection_Id] [int] NOT NULL,
+	[CaseFieldSetting_Id] [int] NOT NULL,
+ CONSTRAINT [PK_tblCaseSectionFields] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+ALTER TABLE [dbo].[tblCaseSectionFields] ADD  CONSTRAINT [FK_tblCaseSectionFields_tblCaseSections] FOREIGN KEY([CaseSection_Id])
+REFERENCES [dbo].[tblCaseSections] ([Id])
+
+ALTER TABLE [dbo].[tblCaseSectionFields] ADD  CONSTRAINT [FK_tblCaseSectionFields_tblCaseFieldSettings] FOREIGN KEY([CaseFieldSetting_Id])
+REFERENCES [dbo].[tblCaseFieldSettings] ([Id])
+
+END
+GO
+
+
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseSections_tblLang')
+begin
+CREATE TABLE [dbo].[tblCaseSections_tblLang](
+	[CaseSection_Id] [int] NOT NULL,
+	[Language_Id] [int] NOT NULL,
+	[Label] [nvarchar](50) NULL
+ CONSTRAINT [PK_tblCaseSections_tblLang] PRIMARY KEY CLUSTERED 
+(
+	[CaseSection_Id] ASC,
+	[Language_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+ALTER TABLE [dbo].[tblCaseSections_tblLang] ADD  CONSTRAINT [FK_tblCaseSections_tblLang_tblCaseSections] FOREIGN KEY([CaseSection_Id])
+REFERENCES [dbo].[tblCaseSections] ([Id])
+
+ALTER TABLE [dbo].[tblCaseSections_tblLang] ADD  CONSTRAINT [FK_tblCaseSections_tblLang_tblLanguage] FOREIGN KEY([Language_Id])
+REFERENCES [dbo].[tblLanguage] ([Id])
+
+END
+GO
+
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaseSolutionDescription' and sysobjects.name = N'tblCaseSolution')
+	ALTER TABLE tblCaseSolution
+	ADD CaseSolutionDescription nvarchar(4000)
+GO
+
+if not exists(select * from sysobjects WHERE Name = N'tblLogFileExisting')
+BEGIN
+CREATE TABLE [dbo].[tblLogFileExisting](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Log_Id] [int] NULL,
+	[Case_Id] [int] NOT NULL,
+	[FileName] [nvarchar](200) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL CONSTRAINT [DF_tblLogFileExisting_CreatedDate]  DEFAULT (getdate())
+ CONSTRAINT [PK_tblLogFileExisting] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+ALTER TABLE [dbo].[tblLogFileExisting] ADD  CONSTRAINT [FK_tblLogFileExisting_tblLog] FOREIGN KEY([Log_Id])
+REFERENCES [dbo].[tblLog] ([Id])
+
+ALTER TABLE [dbo].[tblLogFileExisting] ADD  CONSTRAINT [FK_tblLogFileExisting_tblCase] FOREIGN KEY([Case_Id])
+REFERENCES [dbo].[tblCase] ([Id])
+
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IsCaseFile' and sysobjects.name = N'tblLogFile')
+	ALTER TABLE tblLogFile
+	ADD [IsCaseFile] bit NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ParentLog_Id' and sysobjects.name = N'tblLogFile')
+	ALTER TABLE tblLogFile
+	ADD [ParentLog_Id] int NULL
+GO
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.33'
