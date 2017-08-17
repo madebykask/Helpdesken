@@ -118,6 +118,64 @@ LEFT JOIN tblCaseDocumentTextIdentifier CDTI ON CDTI.ExtendedCaseFormId = M.Exte
 WHERE CDTI.Id IS NULL
 
 
+
+-- ########################################## tblCaseDocumentTextIdentifier - Populate
+
+DECLARE @master_tblCaseDocumentTextConditionIdentifier TABLE
+(
+	ExtendedCaseFormId INT,
+	Process NVARCHAR(MAX),
+	Identifier NVARCHAR(MAX),
+	PropertyName NVARCHAR(MAX),
+	DisplayName NVARCHAR(MAX)
+)
+
+SET NOCOUNT ON 
+
+-- tblCaseDocumentTextConditionIdentifier
+
+INSERT INTO @master_tblCaseDocumentTextConditionIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
+VALUES(0, 'Hiring', 'case_BusinessUnit', 'Department.DepartmentName', NULL)
+INSERT INTO @master_tblCaseDocumentTextConditionIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
+VALUES(0, 'Hiring', 'case_StateSecondaryID', 'StateSecondary.StateSecondaryId', NULL)
+INSERT INTO @master_tblCaseDocumentTextConditionIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
+VALUES(13, 'Hiring', 'extendedcase_ContractedHours', 'tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditionsHiring.instances[0].controls.ContractedHours', NULL)
+INSERT INTO @master_tblCaseDocumentTextConditionIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
+VALUES(13, 'Hiring', 'extendedcase_ContractEndDate', 'tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditionsHiring.instances[0].controls.ContractEndDate', NULL)
+INSERT INTO @master_tblCaseDocumentTextConditionIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
+VALUES(15, 'Change Terms & C', 'extendedcase_ChangeValidFrom', 'tabs.ServiceRequestDetails.sections.STD_S_Details.instances[0].controls.ChangeValidFrom', NULL)
+INSERT INTO @master_tblCaseDocumentTextConditionIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
+VALUES(15, 'Change Terms & C', 'extendedcase_ChangeValidTo', 'tabs.ServiceRequestDetails.sections.STD_S_DetailsCTC.instances[0].controls.ChangeValidTo', NULL)
+INSERT INTO @master_tblCaseDocumentTextConditionIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
+VALUES(15, 'Change Terms & C', 'extendedcase_ContractedHours', 'tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditions.instances[0].controls.ContractedHours', NULL)
+INSERT INTO @master_tblCaseDocumentTextConditionIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
+VALUES(15, 'Change Terms & C', 'extendedcase_ProbationPeriod', 'tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditions.instances[0].controls.ProbationPeriod', NULL)
+SET NOCOUNT OFF
+
+-- UPDATE Existing value
+PRINT 'UPDATE changed values in tblCaseDocumentTextConditionIdentifier'
+UPDATE CDTCI SET Process = M.Process,
+	CDTCI.DisplayName = M.DisplayName,
+	CDTCI.PropertyName = M.PropertyName
+FROM tblCaseDocumentTextConditionIdentifier CDTCI
+JOIN @master_tblCaseDocumentTextConditionIdentifier M ON CDTCI.ExtendedCaseFormId = M.ExtendedCaseFormId 
+	AND CDTCI.Identifier = M.Identifier
+WHERE CDTCI.Process <> M.Process OR 
+	CDTCI.DisplayName <> M.Process OR
+	CDTCI.PropertyName <> M.PropertyName
+
+
+-- UPDATE Existing value
+PRINT 'INSERT new values in tblCaseDocumentTextConditionIdentifier'
+INSERT INTO tblCaseDocumentTextConditionIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
+SELECT M.ExtendedCaseFormId, M.Process, M.Identifier, M.PropertyName, M.DisplayName 
+FROM @master_tblCaseDocumentTextConditionIdentifier M
+LEFT JOIN tblCaseDocumentTextConditionIdentifier CDTI ON CDTI.ExtendedCaseFormId = M.ExtendedCaseFormId 
+	AND CDTI.Identifier = M.Identifier
+WHERE CDTI.Id IS NULL
+
+
+
 -- ########################################## Paragraph - FOOTER with Initials
 begin 
 	set @CaseDocumentParagraphGUID = 'A7626F89-C428-475C-8E10-160CCE0F2B5D'
