@@ -2087,46 +2087,6 @@ namespace DH.Helpdesk.Web.Controllers
 			return this.PartialView("_CaseFiles", model);
 		}
 
-		[HttpGet]
-		public ActionResult GetCaseFilesJS(int caseId)
-		{
-			var files = _caseFileService.FindFileNamesAndDatesByCaseId(caseId);
-			var cfs = MakeCaseFileModel(files, string.Empty);
-			var customerId = 0;
-			customerId = _caseService.GetCaseById(caseId).Customer_Id;
-
-			bool UseVD = false;
-			if (customerId != 0 && !string.IsNullOrEmpty(_masterDataService.GetVirtualDirectoryPath(customerId)))
-			{
-				UseVD = true;
-			}
-
-			var model = new CaseFilesModel(caseId.ToString(), cfs.ToArray(), string.Empty, UseVD);
-			return PartialView("_CaseFiles", model);
-		}
-
-
-		[HttpGet]
-		public ActionResult GetCaseInputModelForLog(int caseId)
-		{
-			var customerId = SessionFacade.CurrentCustomer.Id;
-			var userId = SessionFacade.CurrentUser.Id;
-			var caseLockModel = new CaseLockModel();
-			var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
-			var model = this.GetCaseInputViewModel(userId, customerId, caseId, caseLockModel, caseFieldSettings);
-			return PartialView("_CaseLog", model);
-		}
-
-		[HttpGet]
-		public ActionResult GetCaseInputModelForHistory(int caseId)
-		{
-			var customerId = SessionFacade.CurrentCustomer.Id;
-			var userId = SessionFacade.CurrentUser.Id;
-			var caseLockModel = new CaseLockModel();
-			var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
-			var model = this.GetCaseInputViewModel(userId, customerId, caseId, caseLockModel, caseFieldSettings);
-			return PartialView("_CaseHistory", model);
-		}
 
 		[HttpGet]
 		public ActionResult LogFiles(string id)
@@ -2327,11 +2287,52 @@ namespace DH.Helpdesk.Web.Controllers
 
 		}
 
-		#endregion
+        [HttpGet]
+        public ActionResult GetCaseFilesJS(int caseId)
+        {
+            var files = _caseFileService.FindFileNamesAndDatesByCaseId(caseId);
+            var cfs = MakeCaseFileModel(files, string.Empty);
+            var customerId = 0;
+            customerId = _caseService.GetCaseById(caseId).Customer_Id;
 
-		#region --Case Actions--
+            bool UseVD = false;
+            if (customerId != 0 && !string.IsNullOrEmpty(_masterDataService.GetVirtualDirectoryPath(customerId)))
+            {
+                UseVD = true;
+            }
 
-		public JsonResult MarkAsUnread(int id, int customerId)
+            var model = new CaseFilesModel(caseId.ToString(), cfs.ToArray(), string.Empty, UseVD);
+            return PartialView("_CaseFiles", model);
+        }
+
+
+        [HttpGet]
+        public ActionResult GetCaseInputModelForLog(int caseId)
+        {
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var userId = SessionFacade.CurrentUser.Id;
+            var caseLockModel = new CaseLockModel();
+            var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
+            var model = this.GetCaseInputViewModel(userId, customerId, caseId, caseLockModel, caseFieldSettings);
+            return PartialView("_CaseLog", model);
+        }
+
+        [HttpGet]
+        public ActionResult GetCaseInputModelForHistory(int caseId)
+        {
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var userId = SessionFacade.CurrentUser.Id;
+            var caseLockModel = new CaseLockModel();
+            var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
+            var model = this.GetCaseInputViewModel(userId, customerId, caseId, caseLockModel, caseFieldSettings);
+            return PartialView("_CaseHistory", model);
+        }
+
+        #endregion
+
+        #region --Case Actions--
+
+        public JsonResult MarkAsUnread(int id, int customerId)
 		{
 			this._caseService.MarkAsUnread(id);
 			//return this.RedirectToAction("index", "cases", new { customerId = customerId });
