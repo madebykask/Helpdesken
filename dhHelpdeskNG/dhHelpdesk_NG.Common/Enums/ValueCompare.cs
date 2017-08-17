@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DH.Helpdesk.BusinessData.Enums
+namespace DH.Helpdesk.Common.Enums
 {
 	public enum ValueCompare
 	{
 		LessThan,
 		Equal,
-		GreaterThan
+		LargerThan
 	};
 }

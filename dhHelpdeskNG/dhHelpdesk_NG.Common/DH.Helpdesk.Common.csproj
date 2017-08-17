@@ -103,12 +103,14 @@
     <Compile Include="Enums\Settings\CaseSolutionModes.cs" />
     <Compile Include="Enums\SortBy.cs" />
     <Compile Include="Enums\SurveyVoteResult.cs" />
+    <Compile Include="Enums\ValueCompare.cs" />
     <Compile Include="Exceptions\PropertyNotFoundException.cs" />
     <Compile Include="Extensions\Boolean\BoolExtensions.cs" />
     <Compile Include="Extensions\Boolean\ToIntExtension.cs" />
     <Compile Include="Extensions\DateTime\DateExtensions.cs" />
     <Compile Include="Extensions\GUID\GuidExtension.cs" />
     <Compile Include="Extensions\Decimal\DecimalExtension.cs" />
+    <Compile Include="Extensions\ComparableInterface\ComparableInterfaceExtension.cs" />
     <Compile Include="Extensions\Integer\IntExtension.cs" />
     <Compile Include="Extensions\Integer\ToBoolExtension.cs" />
     <Compile Include="Extensions\String\SplitExtension.cs" />

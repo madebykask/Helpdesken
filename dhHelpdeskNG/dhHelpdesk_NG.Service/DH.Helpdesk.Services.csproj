@@ -118,6 +118,15 @@
     <Compile Include="BusinessLogic\BusinessModelValidators\Inventory\Concrete\PrinterValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Orders\Concrete\UpdateOrderRequestValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Orders\IUpdateOrderRequestValidator.cs" />
+    <Compile Include="BusinessLogic\CaseDocument\CaseDocumentConditionEvaluator.cs" />
+    <Compile Include="BusinessLogic\CaseDocument\CaseDocumentConditionBaseException.cs" />
+    <Compile Include="BusinessLogic\CaseDocument\CaseDocumentConditionPropertyException.cs" />
+    <Compile Include="BusinessLogic\CaseDocument\CaseDocumentConditionException.cs" />
+    <Compile Include="BusinessLogic\CaseDocument\CaseDocumentConditionOperator.cs" />
+    <Compile Include="BusinessLogic\CaseDocument\CaseDocumentConditionParseException.cs" />
+    <Compile Include="BusinessLogic\CaseDocument\CaseDocumentConditionKeyException.cs" />
+    <Compile Include="BusinessLogic\CaseDocument\CaseDocumentConditionResult.cs" />
+    <Compile Include="BusinessLogic\CaseDocument\CaseDocumentReplacePropertiesResult.cs" />
     <Compile Include="BusinessLogic\Cases\CaseHelper.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\MailTemplateFormatterNew.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\OrderMailTemplateFormatter.cs" />

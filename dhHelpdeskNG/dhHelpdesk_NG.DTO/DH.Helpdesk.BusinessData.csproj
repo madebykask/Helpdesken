@@ -151,7 +151,6 @@
     <Compile Include="Enums\Users\StartPage.cs" />
     <Compile Include="Enums\Users\TimeZoneAutodetectResult.cs" />
     <Compile Include="Enums\Users\WorkingGroupUserPermission.cs" />
-    <Compile Include="Enums\ValueCompare.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\HeadersFieldSettings.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\Overview\AccountFieldsSettingsOverviewWithActivity.cs" />
     <Compile Include="Models\Accounts\Read\Overview\AccountInformation.cs" />
@@ -1053,6 +1052,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Enums\CaseDocument\" />
     <Folder Include="Models\Case\CaseHistory\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

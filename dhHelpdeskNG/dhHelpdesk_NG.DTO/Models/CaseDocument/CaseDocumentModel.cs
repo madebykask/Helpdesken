@@ -33,7 +33,7 @@ namespace DH.Helpdesk.BusinessData.Models.CaseDocument
 
 
 		// Invalid Fields
-		public ICollection<string> InvalidFields { get; set; }
+		public string Errors { get; set; }
     }
 
 

@@ -5627,7 +5627,7 @@ namespace DH.Helpdesk.Web.Controllers
 
 				//TODO: Do not check in
 				//extendedCasePath = "http://cfdhsschr.ikeadt.com" + extendedCasePath;
-				//extendedCasePath = "http://dhhelpdesk-ikea-bschr-v5.datahalland.se" + extendedCasePath;
+				extendedCasePath = "http://dhhelpdesk-ikea-bschr-v5.datahalland.se" + extendedCasePath;
 
 				if (!string.IsNullOrEmpty(extendedCasePath))
 				{
