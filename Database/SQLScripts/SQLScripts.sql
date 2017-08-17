@@ -1,5 +1,4 @@
-﻿﻿-- update DB from 5.3.32 to 5.3.33 version
-
+﻿--update DB from 5.3.32 to 5.3.33 version
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ExcludeAdministrators' and sysobjects.name = N'tblQuestionnaire')
 	ALTER TABLE [dbo].[tblQuestionnaire] ADD [ExcludeAdministrators] bit not null DEFAULT(0)
 GO
@@ -1083,6 +1082,12 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	ADD [ParentLog_Id] int NULL
 GO
 
+-- OK
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'NextStepState' and sysobjects.name = N'tblCaseSolution')
+	begin
+		ALTER TABLE [dbo].tblCaseSolution ADD NextStepState int NULL
+	end
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.33'

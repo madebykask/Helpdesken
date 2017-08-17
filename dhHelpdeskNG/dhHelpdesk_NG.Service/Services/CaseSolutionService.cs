@@ -269,7 +269,8 @@ namespace DH.Helpdesk.Services.Services
                 CaseTemplateId = c.Id,
                 Name = c.Name,
                 SortOrder = c.SortOrder,
-                NextStep = (c.StateSecondary_Id != null ? _stateSecondaryService.GetStateSecondary(c.StateSecondary_Id.Value).StateSecondaryId : 0)
+                //If value exist in NextStepState - use it. Otherwise check if caseSolution.StateSecondary_id have value, otherwise return 0;
+                NextStep = (c.NextStepState != null ? c.NextStepState.Value : (c.StateSecondary_Id != null ? _stateSecondaryService.GetStateSecondary(c.StateSecondary_Id.Value).StateSecondaryId : 0))
 
             }).OrderBy(c => c.SortOrder).ToList();
 

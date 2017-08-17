@@ -53,6 +53,7 @@
                                 @{ Model.CaseSolution.DefaultTab = (string.IsNullOrEmpty(Model.CaseSolution.DefaultTab) ? "case-tab" : Model.CaseSolution.DefaultTab); }
                                 @Html.HiddenFor(model => model.CaseSolution.DefaultTab)
                                 @Html.HiddenFor(model => model.CaseSolution.ValidateOnChange)
+                                @Html.HiddenFor(model => model.CaseSolution.NextStepState)
                                 <tr>
                                     <td style="width:200px">
                                         @Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)

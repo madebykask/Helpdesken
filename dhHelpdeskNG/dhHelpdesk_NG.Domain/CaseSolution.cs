@@ -106,8 +106,9 @@ namespace DH.Helpdesk.Domain
         public string Information { get; set; }
         public string DefaultTab { get; set; }
         public string ValidateOnChange { get; set; }
+        public int? NextStepState { get; set; }
 
-		public int? SplitToCaseSolution_Id { get; set; }
+        public int? SplitToCaseSolution_Id { get; set; }
 
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }

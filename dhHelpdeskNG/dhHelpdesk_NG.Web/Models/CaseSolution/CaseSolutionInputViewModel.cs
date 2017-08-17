@@ -89,11 +89,9 @@
         //public IList<SelectListItem> TabList { get; set; }
         public string DefaultTab { get; set; }
         public string ValidateOnChange { get; set; }
-
-        
+        public int? NextStepState { get; set; }
 
         public string SelectedCaseSecondaries { get; set; }
-
 
         public List<SelectListItem> CaseSolutionFieldSettings { get; set; }
 
