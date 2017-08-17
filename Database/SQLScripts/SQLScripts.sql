@@ -1,4 +1,5 @@
-﻿--update DB from 5.3.32 to 5.3.33 version
+﻿use DH_Support
+--update DB from 5.3.32 to 5.3.33 version
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ExcludeAdministrators' and sysobjects.name = N'tblQuestionnaire')
 	ALTER TABLE [dbo].[tblQuestionnaire] ADD [ExcludeAdministrators] bit not null DEFAULT(0)
 GO
@@ -45,6 +46,9 @@ END
 
 
 	TRUNCATE TABLE [dbo].[tblCaseSolutionConditionProperties]
+
+	declare @sortOrder int = 0
+
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
            ([CaseSolutionConditionProperty]
            ,[Text]
@@ -60,9 +64,9 @@ END
 			'Id',
 			'StateSecondary',
 			'StateSecondaryGUID',
-			0)
+			@sortOrder)
 
-
+	set @sortOrder = @sortOrder+1
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
            ([CaseSolutionConditionProperty]
            ,[Text]
@@ -78,8 +82,9 @@ END
 			'Id',
 			'WorkingGroup',
 			'WorkingGroupGUID',
-			1)
+			@sortOrder)
 
+	set @sortOrder = @sortOrder+1
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
            ([CaseSolutionConditionProperty]
            ,[Text]
@@ -95,8 +100,9 @@ END
 			'Id',
 			'PriorityName',
 			'PriorityGUID',
-			2)
+			@sortOrder)
 
+	set @sortOrder = @sortOrder+1
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
            ([CaseSolutionConditionProperty]
            ,[Text]
@@ -113,8 +119,9 @@ END
 			'Id',
 			'StatusName',
 			'StatusGUID'
-			,3)
+			,@sortOrder)
 
+	set @sortOrder = @sortOrder+1
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
            ([CaseSolutionConditionProperty]
            ,[Text]
@@ -131,10 +138,28 @@ END
 			'Id',
 			'ProductArea',
 			'ProductAreaGUID'
-			,4
+			,@sortOrder
 			,'Parent_ProductArea_Id')
 
+	set @sortOrder = @sortOrder+1
+	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
+           ([CaseSolutionConditionProperty]
+           ,[Text]
+           ,[Table]
+           ,[TableFieldId]
+           ,[TableFieldName]
+           ,[TableFieldGuid]
+		   ,[SortOrder])
+     VALUES
+           ('case_Relation',
+			'Underärende',
+			'tblYesNo',
+			'Id',
+			'Value',
+			'Id',
+			@sortOrder)
 
+	set @sortOrder = @sortOrder+1
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
            ([CaseSolutionConditionProperty]
            ,[Text]
@@ -150,10 +175,10 @@ END
 			'Id',
 			'WorkingGroup',
 			'WorkingGroupGUID'
-			,5
+			,@sortOrder
 			)
 
-
+	set @sortOrder = @sortOrder+1
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
            ([CaseSolutionConditionProperty]
            ,[Text]
@@ -170,10 +195,10 @@ END
 			'Id',
 			'ProductArea',
 			'ProductAreaGUID',
-			6,
+			@sortOrder,
 			'Parent_ProductArea_Id')
 
-
+	set @sortOrder = @sortOrder+1
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
            ([CaseSolutionConditionProperty]
            ,[Text]
@@ -189,7 +214,10 @@ END
 			'Id',
 			'ApplicationType',
 			'Id',
-			7)
+			@sortOrder)
+
+
+
 
 
 update tblCaseSolutionCondition set property_name =  'user_WorkingGroup.WorkingGroupGUID' where property_name = 'user_WorkingGroup'
@@ -249,10 +277,6 @@ IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblApplicationType' AND xtyp
            (2,
 			'Selfservice'
 			)
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IconSrc' and sysobjects.name = N'tblQuestionnaireQuestionOption')
-	ALTER TABLE [dbo].[tblQuestionnaireQuestionOption] ADD [IconSrc] varbinary(2048) null
-GO
 
 
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
@@ -1088,6 +1112,53 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 		ALTER TABLE [dbo].tblCaseSolution ADD NextStepState int NULL
 	end
 GO
+
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='tblYesNo' AND xtype='U')
+begin
+	DROP TABLE tblYesNo
+end
+GO
+
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblYesNo' AND xtype='U')
+	BEGIN
+
+		CREATE TABLE [dbo].[tblYesNo](
+			[Id] [int] NULL,
+			[Value] [nvarchar](50) NULL,
+			[GUID] [uniqueidentifier] NULL,
+			[Customer_Id] [int] NULL
+		) ON [PRIMARY]
+
+
+		ALTER TABLE [dbo].[tblYesNo] ADD  CONSTRAINT [DF_tblYesNo_GUID]  DEFAULT (newid()) FOR [GUID]
+
+	END
+
+
+	TRUNCATE TABLE [dbo].[tblYesNo]
+	INSERT INTO [dbo].[tblYesNo]
+           ([Id]
+           ,[Value]
+		   )
+     VALUES
+           (0,
+			'No'
+			)
+
+	INSERT INTO [dbo].[tblYesNo]
+           ([Id]
+           ,[Value]
+		   )
+     VALUES
+           (1,
+			'Yes'
+			)
+
+
+
+
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.33'
