@@ -146,6 +146,8 @@
 
         public DbSet<CaseType> CaseTypes { get; set; }
 
+        public DbSet<CaseTypeProductArea> CaseTypeProductAreas { get; set; }
+
         public DbSet<Case> Cases { get; set; }
 
         public DbSet<CaseSolutionSetting> CaseSolutionSettings { get; set; }
@@ -681,6 +683,7 @@
             modelBuilder.Configurations.Add(new CaseSolutionConfiguration());
             modelBuilder.Configurations.Add(new CaseSolutionScheduleConfiguration());
             modelBuilder.Configurations.Add(new CaseTypeConfiguration());
+            modelBuilder.Configurations.Add(new CaseTypeProductAreaConfiguration());
             modelBuilder.Configurations.Add(new CaseSolutionSettingConfiguration());
             modelBuilder.Configurations.Add(new CategoryConfiguration());
             modelBuilder.Configurations.Add(new ChangeConfiguration());

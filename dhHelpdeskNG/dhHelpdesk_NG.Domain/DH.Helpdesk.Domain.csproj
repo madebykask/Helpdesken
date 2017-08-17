@@ -115,6 +115,7 @@
     <Compile Include="Cases\CaseFilterFavoriteEntity.cs" />
     <Compile Include="CaseType.cs" />
     <Compile Include="Cases\CausingPart.cs" />
+    <Compile Include="CaseTypeProductArea.cs" />
     <Compile Include="Changes\ChangeChangeEntity.cs" />
     <Compile Include="Changes\ChangeChangeGroupEntity.cs" />
     <Compile Include="Changes\ChangeContactEntity.cs" />

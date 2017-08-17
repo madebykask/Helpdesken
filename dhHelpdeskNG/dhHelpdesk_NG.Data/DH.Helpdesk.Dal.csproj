@@ -126,6 +126,7 @@
     <Compile Include="EntityConfigurations\Cases\CaseFollowUpConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseSectionFieldConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseSectionsConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseTypeProductAreaConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractFileConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractHistoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractConfiguration.cs" />

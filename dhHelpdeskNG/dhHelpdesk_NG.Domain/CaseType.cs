@@ -29,5 +29,7 @@
         public virtual CaseType ParentCaseType { get; set; }
         public virtual User Administrator { get; set; }
         public virtual ICollection<CaseType> SubCaseTypes { get; set; }
+
+        public virtual ICollection<CaseTypeProductArea> CaseTypeProductAreas { get; set; }
     }
 }

@@ -1119,7 +1119,8 @@
                                                     </button>
                                                     <ul class="dropdown-menu">
                                                         <li><a href="#">@Translation.Get("--")</a></li>
-                                                        @Html.CaseTypeDropdownButtonString(Model.caseTypes)
+@*                                                        @Html.CaseTypeDropdownButtonString(Model.caseTypes)*@
+                                                        @Html.CaseTypeLowestDropdownButtonString(Model.caseTypes)
                                                     </ul>
 
                                                     <input type="hidden" id="case__CaseType_Id" name="case_.CaseType_Id" value="@Model.case_.CaseType_Id.supressZero()" />

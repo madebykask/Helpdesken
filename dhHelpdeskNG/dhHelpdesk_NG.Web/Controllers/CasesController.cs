@@ -2022,11 +2022,58 @@ namespace DH.Helpdesk.Web.Controllers
 			});
 		}
 
-		#endregion
+        public JsonResult GetProductAreaByCaseType(int? caseTypeId)
+        {
+            if (caseTypeId.HasValue)
+            {
+                var ctProductAreas = _caseTypeService.GetCaseType(caseTypeId.Value).CaseTypeProductAreas.Select(x => x.ProductArea).ToList();
+                if (ctProductAreas.Any())
+                {
+                    var paIds = ctProductAreas.Select(x => x.Id).ToList();
+                    foreach (var ctProductArea in ctProductAreas)
+                    {
+                        paIds.AddRange(GetSubProductAreasIds(ctProductArea));
+                    }
+                    var drString = Infrastructure.Extensions.HtmlHelperExtension.ProductAreaDropdownString(ctProductAreas);
+                    return Json(new { success = true, data = drString, paIds });
+                }
+            }
+            var pa = _productAreaService.GetTopProductAreasForUserOnCase(SessionFacade.CurrentCustomer.Id, null, SessionFacade.CurrentUser)
+                    .OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
+            var praIds = pa.Select(x => x.Id).ToList();
+            foreach (var ctProductArea in pa)
+            {
+                praIds.AddRange(GetSubProductAreasIds(ctProductArea));
+            }
+            var dropString = Infrastructure.Extensions.HtmlHelperExtension.ProductAreaDropdownString(pa);
+            return Json(new { success = true, data = dropString, praIds });
+        }
 
-		#region --Validation--
+        private IEnumerable<int> GetSubProductAreasIds(ProductArea ctProductArea)
+        {
+            var result = new List<int>();
+            if (ctProductArea.SubProductAreas != null && ctProductArea.SubProductAreas.Any())
+            {
+                foreach (var subProductArea in ctProductArea.SubProductAreas)
+                {
+                    if (subProductArea.IsActive == 1)
+                    {
+                        result.Add(subProductArea.Id);
+                        if (subProductArea.SubProductAreas != null && subProductArea.SubProductAreas.Any())
+                        {
+                            GetSubProductAreasIds(subProductArea);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
 
-		[HttpPost]
+        #endregion
+
+        #region --Validation--
+
+        [HttpPost]
 		public JsonResult CheckCaseForActiveData(CaseMasterDataFieldsModel caseMasterDataFields)
 		{
 			var inactiveFields = GetInactiveFieldsValue(caseMasterDataFields);

@@ -182,6 +182,11 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 return new MvcHtmlString(string.Empty);
         }
 
+        public static MvcHtmlString CaseTypeLowestDropdownButtonString(this HtmlHelper helper, IList<CaseType> caseTypes, bool isTakeOnlyActive = true)
+        {
+            return caseTypes != null ? BuildCaseTypeLowestDropdownButton(caseTypes, isTakeOnlyActive) : new MvcHtmlString(string.Empty);
+        }
+
         public static MvcHtmlString ProductAreaDropdownButtonString(this HtmlHelper helper, IList<ProductArea> pal, bool isTakeOnlyActive = true)
         {
             if (pal != null)
@@ -190,6 +195,11 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             }
             else
                 return new MvcHtmlString(string.Empty);
+        }
+
+        public static string ProductAreaDropdownString(IList<ProductArea> pal, bool isTakeOnlyActive = true)
+        {
+            return pal != null ? BuildProcuctAreaDropdownButtonString(pal, isTakeOnlyActive) : string.Empty;
         }
 
         public static MvcHtmlString CategoryDropdownButtonString(this HtmlHelper helper, IList<Category> cats, bool isTakeOnlyActive = true)
@@ -1058,7 +1068,39 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
 
             return new MvcHtmlString(res.ToString());
         }
-        
+
+        private static MvcHtmlString BuildCaseTypeLowestDropdownButton(IList<CaseType> caseTypes, bool isTakeOnlyActive = true)
+        {
+            var res = new StringBuilder();
+
+            foreach (CaseType item in caseTypes)
+            {
+                var childs = new List<CaseType>();
+                if (item.SubCaseTypes != null)
+                {
+                    childs = isTakeOnlyActive
+                                    ? item.SubCaseTypes.Where(p => p.IsActive != 0 && p.Selectable != 0).ToList()
+                                    : item.SubCaseTypes.ToList();
+                }
+
+                var cls = item.IsActive == 1 ? string.Empty : "inactive";
+
+                if (childs.Count == 0)
+                {
+                    res.Append("<li class='" + cls + "'>");
+                    res.AppendFormat("<a href='#' value='{0}'>{1}</a>", item.Id, Translation.GetMasterDataTranslation(item.Name));
+                }
+                if (childs.Count > 0)
+                {
+                    res.Append(BuildCaseTypeLowestDropdownButton(childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive));
+                }
+
+                res.Append("</li>");
+            }
+
+            return new MvcHtmlString(res.ToString());
+        }
+
         private static MvcHtmlString BuildFinishingCauseDropdownButton(IList<FinishingCause> causes, bool isTakeOnlyActive = true)
         {
             StringBuilder sb = new StringBuilder();
@@ -1145,6 +1187,15 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             bool isTakeOnlyActive = true,
             Dictionary<int, bool> userGroupDictionary = null)
         {
+            var pas = BuildProcuctAreaDropdownButtonString(pal, isTakeOnlyActive, userGroupDictionary);
+            return new MvcHtmlString(pas);
+        }
+
+        private static string BuildProcuctAreaDropdownButtonString(
+            IList<ProductArea> pal,
+            bool isTakeOnlyActive = true,
+            Dictionary<int, bool> userGroupDictionary = null)
+        {
             string htmlOutput = string.Empty;
             var user = SessionFacade.CurrentUser;
 
@@ -1174,7 +1225,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     }
 
                     childList = childs.ToList();
-                }                
+                }
 
                 var cls = pa.IsActive == 1 ? string.Empty : "inactive";
                 if (childList != null && childList.Count > 0)
@@ -1191,18 +1242,17 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                         "<a href='#' value=\"{0}\">{1}</a>",
                         pa.Id,
                         Translation.GetMasterDataTranslation(pa.Name));
-                
+
                 if (childList != null && childList.Count > 0)
                 {
-                    htmlOutput += string.Format("<ul class='dropdown-menu' id=\"subDropDownMenu_{0}\" >", pa.Id);                    
-                    htmlOutput += BuildProcuctAreaDropdownButton(childList.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive, userGroupDictionary);
+                    htmlOutput += string.Format("<ul class='dropdown-menu' id=\"subDropDownMenu_{0}\" >", pa.Id);
+                    htmlOutput += BuildProcuctAreaDropdownButtonString(childList.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive, userGroupDictionary);
                     htmlOutput += "</ul>";
                 }
 
                 htmlOutput += "</li>";
             }
-
-            return new MvcHtmlString(htmlOutput);
+            return htmlOutput;
         }
 
         private static MvcHtmlString BuildCategoryDropdownButton(

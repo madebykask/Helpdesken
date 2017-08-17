@@ -30,6 +30,7 @@
         public virtual ICollection<ProductArea> SubProductAreas { get; set; }
         public virtual ICollection<WorkingGroupEntity> WorkingGroups { get; set; }
         public virtual ICollection<Invoice.InvoiceArticleEntity> InvoiceArticles { get; set; }
+        public virtual ICollection<CaseTypeProductArea> CaseTypeProductAreas { get; set; }
         //public virtual Priority Priority { get; set; }
     }
 
