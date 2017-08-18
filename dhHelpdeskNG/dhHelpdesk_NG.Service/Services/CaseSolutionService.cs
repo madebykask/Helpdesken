@@ -65,6 +65,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IWorkingGroupService _workingGroupService;
         private readonly ICaseSolutionConditionService _caseSolutionConditionService;
         private readonly IStateSecondaryService _stateSecondaryService;
+        private readonly ICaseService _caseService;
 
         public CaseSolutionService(
             ICaseSolutionRepository caseSolutionRepository,
@@ -80,7 +81,8 @@ namespace DH.Helpdesk.Services.Services
             IWorkingGroupService workingGroupService,
             ICaseSolutionConditionService caseSolutionCondtionService,
             IStateSecondaryService stateSecondaryService,
-            IApplicationRepository applicationRepository
+            IApplicationRepository applicationRepository,
+            ICaseService caseService
             )
         {
             this._caseSolutionRepository = caseSolutionRepository;
@@ -95,9 +97,10 @@ namespace DH.Helpdesk.Services.Services
             this._cache = cache;
             this._workingGroupService = workingGroupService;
             this._caseSolutionConditionService = caseSolutionCondtionService;
-            this.caseSolutionConditionRepository = caseSolutionConditionRepository;
+            this._caseSolutionConditionRepository = caseSolutionConditionRepository;
             this._stateSecondaryService = stateSecondaryService;
             this._applicationRepository = applicationRepository;
+            this._caseService = caseService;
         }
 
         //public int GetAntal(int customerId, int userid)
@@ -289,6 +292,8 @@ namespace DH.Helpdesk.Services.Services
             if (caseSolutionConditions == null || caseSolutionConditions.Count() == 0)
                 return false;
 
+            bool isRelatedCase = (_case != null ? this._caseService.IsRelated(_case.Id) : false);
+
             foreach (var condition in caseSolutionConditions)
             {
                 var conditionValue = condition.Value.Tidy().ToLower();
@@ -303,8 +308,20 @@ namespace DH.Helpdesk.Services.Services
                 {
                     var value = "";
 
+                    //Check if case is related (either child or parent);
+                    if (conditionKey.ToLower() == "case_relation")
+                    {
+                        if (isRelatedCase)
+                        { 
+                            value = "1";
+                        }
+                        else
+                        {
+                            value = "0";
+                        }
+                    }
                     //GET FROM APPLICATION
-                    if (conditionKey.ToLower() == "application_type")
+                   else if (conditionKey.ToLower() == "application_type")
                     {
                         int appType = (int)((ApplicationType)Enum.Parse(typeof(ApplicationType), applicationType.ToString()));
                         value = appType.ToString();

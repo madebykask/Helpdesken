@@ -1,4 +1,4 @@
-﻿
+﻿use dhHelpdesk_IKEA_BSCHR
 
 UPDATE tblTextTranslation Set TextTranslation = 'Cases on hold' WHERE Text_Id=6 AND Language_Id=2;
 GO
@@ -6033,11 +6033,32 @@ GO
 
 
 If not exists (select * from tbltext where id = 1840)
+begin
 	insert into tbltext (id, TextString) VALUES (1840, 'Underärende')
+end
+else
+begin
+	update tbltext set TextString = 'Kopplat ärende' where id = 1840
+end	
 GO
 If not exists (select * from tblTextTranslation where text_id = 1840 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1840, 2, 'Related Case')
 GO
+
+
+If not exists (select * from tbltext where id = 1841)
+begin
+	insert into tbltext (id, TextString) VALUES (1841, 'Ärendemall för underärende')
+end
+else
+begin
+	update tbltext set TextString = 'Ärendemall för underärende' where id = 1841
+end	
+GO
+If not exists (select * from tblTextTranslation where text_id = 1841 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1841, 2, 'Case template for child case')
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

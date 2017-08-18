@@ -140,6 +140,8 @@ namespace DH.Helpdesk.Services.Services
 
         int GetCaseRelatedCasesCount(int caseId, int customerId, string userId, UserOverview currentUser);
 
+        bool IsRelated(int caseId);
+
         ChildCaseOverview[] GetChildCasesFor(int caseId);
 
         ParentCaseInfo GetParentInfo(int caseId);
@@ -631,6 +633,25 @@ namespace DH.Helpdesk.Services.Services
                         .GetRelatedCases(caseId, userId, currentUser)
                         .Count();
             }
+        }
+        
+        public bool IsRelated(int caseId)
+        {
+            var isChildCase = GetChildCasesFor(caseId);
+
+            if (isChildCase != null)
+            {
+                return true;
+            }
+
+            var isParentCase = GetParentInfo(caseId);
+
+            if (isParentCase != null)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         //TODO: Extremely needs to be refactored

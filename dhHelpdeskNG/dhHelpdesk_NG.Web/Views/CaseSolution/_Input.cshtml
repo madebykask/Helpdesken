@@ -177,12 +177,11 @@
                                             @*// TODO: Use a enable button to show (and reset value if saved when disabled) of split to dropdown*@
                           
                                             <td style="width:150px;padding-left:20px;">
-                                                @Translation.Get("Split to case template", Enums.TranslationSource.TextTranslation)
+                                                @Translation.Get("Ärendemall för underärende", Enums.TranslationSource.TextTranslation)
                                             </td>
                                             <td>
                                                 @Html.DropDownListFor(model => model.CaseSolution.SplitToCaseSolution_Id, Model.SplitToCaseSolutions.Select(o => new SelectListItem() { Text = o.Name + (o.CaseSolutionCategory == null ? "" : " " + o.CaseSolutionCategory.Name), Value = o.Id.ToString() }).ToList(), "")
                                             </td>
-                       
                                         </tr>
                                         <tr>
                                             <td>
