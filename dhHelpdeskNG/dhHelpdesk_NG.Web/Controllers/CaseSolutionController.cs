@@ -1296,7 +1296,7 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.CausingPartId,
                     caseSolution.InvoiceNumber,
                     caseSolution.ReferenceNumber,
-					SplitToCaseSolution_Id = caseSolution.SplitToCaseSolution_Id.HasValue ? caseSolution.SplitToCaseSolution_Id : null,
+                    SplitToCaseSolution_Id = caseSolution.SplitToCaseSolution_Id.HasValue ? caseSolution.SplitToCaseSolution_Id : null,
 
                     SMS = caseSolution.SMS.ToBool(),
                     AgreedDate = caseSolution.AgreedDate.HasValue ? caseSolution.AgreedDate.Value.ToShortDateString() : string.Empty,
@@ -2217,6 +2217,10 @@ namespace DH.Helpdesk.Web.Controllers
                 int WorkingGroup_Id = Convert.ToInt32(collection["CaseSolution.WorkingGroup_Id"].ToString());
                 caseSolutionInputViewModel.CaseSolution.WorkingGroup_Id = WorkingGroup_Id;
             }
+
+
+            caseSolutionInputViewModel.DefaultTab = "case-tab";
+            caseSolutionInputViewModel.CaseSolution.DefaultTab = "case-tab";
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
             CaseSettingsSolutionAggregate settingsSolutionAggregate = this.CreateCaseSettingsSolutionAggregate(caseSolutionInputViewModel.CaseSolution.Id, caseSolutionSettingModels);
@@ -2811,9 +2815,9 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = caseSolution.SaveAndClose.HasValue && caseSolution.SaveAndClose.Value != 0
             });
 
-			// 
+            // 
 
-			var splitToCaseSolutions = _caseSolutionService.GetCaseSolutions(curCustomerId);
+            var splitToCaseSolutions = _caseSolutionService.GetCaseSolutions(curCustomerId);
 
 
             var model = new CaseSolutionInputViewModel
@@ -2915,7 +2919,7 @@ namespace DH.Helpdesk.Web.Controllers
                 CaseSolutionFieldSettings = feildSettings,
                 CSSettingsField = lFieldSetting.ToList(),
                 CSSelectedSettingsField = lFieldSettingSelected.ToList(),
-				SplitToCaseSolutions = splitToCaseSolutions
+                SplitToCaseSolutions = splitToCaseSolutions
 
             };
 
