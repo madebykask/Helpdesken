@@ -181,7 +181,7 @@ DECLARE @retSalTcEmployGreetingID INT = (SELECT ID FROM tblCaseDocumentParagraph
 
 ---- Create or update text A, No contract end date
 DECLARE @retSalTcEmployGreetingTextAGuid UNIQUEIDENTIFIER = 'BA6D3614-9C2D-4FE5-9B19-BB757885E1ED',
-	@retSalTcEmployGreetingTextAName NVARCHAR(MAX) = @prefix + ' Greeting, A',
+	@retSalTcEmployGreetingTextAName NVARCHAR(MAX) = @prefix + ' Greeting, no change valid to date',
 	@retSalTcEmployGreetingTextADescription NVARCHAR(MAX) = '',
 	@retSalTcEmployGreetingTextAText NVARCHAR(MAX) = 'We are delighted to confirm your appointment to the position of <Position Title (Local Job Name)> at IKEA and wish to confirm the terms and conditions of your employment.',
 	@retSalTcEmployGreetingTextAHeadline NVARCHAR(MAX) = '',
@@ -263,7 +263,7 @@ BEGIN
 	WHERE CDTC.CaseDocumentTextConditionGUID = @retSalTcEmployGreetingTextACondAGuid
 END
 
----- Create or update text B, No contract end date
+---- Create or update text B, Change valid to date and has no extension to fixed term
 DECLARE @retSalTcEmployGreetingTextBGuid UNIQUEIDENTIFIER = 'CCE45E91-9A72-4D39-9DB7-FF75DF8655F5',
 	@retSalTcEmployGreetingTextBName NVARCHAR(MAX) = @prefix + ' Greeting, B',
 	@retSalTcEmployGreetingTextBDescription NVARCHAR(MAX) = '',
@@ -296,7 +296,7 @@ BEGIN
 END
 DECLARE @retSalTcEmployGreetingTextBID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @retSalTcEmployGreetingTextBGuid)
 
--- Create condition for Text B, Has contract end date
+-- Create condition A for Text B, Has change valid to end date
 DECLARE @retSalTcEmployGreetingTextBCondAGuid UNIQUEIDENTIFIER = 'E22A9E8C-983D-4839-A753-BC26CD7E3DC4',
 	@retSalTcEmployGreetingTextBCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
 	@retSalTcEmployGreetingTextBCondAOperator NVARCHAR(MAX) = 'HasValue',
@@ -348,6 +348,58 @@ BEGIN
 END
 
 
+-- Create condition B for Text B, Has no extension to fixed term
+DECLARE @retSalTcEmployGreetingTextBCondBGuid UNIQUEIDENTIFIER = '1F2E2F8C-A658-4C04-9859-27B80D5C6111',
+	@retSalTcEmployGreetingTextBCondBPropertyName NVARCHAR(MAX) = 'extendedcase_ExtensionFixedTerm',
+	@retSalTcEmployGreetingTextBCondBOperator NVARCHAR(MAX) = 'EqualOrEmpty',
+	@retSalTcEmployGreetingTextBCondBValues NVARCHAR(MAX) = 'No',
+	@retSalTcEmployGreetingTextBCondBDescription NVARCHAR(MAX) = 'No extension to fixed term',
+	@retSalTcEmployGreetingTextBCondBStatus INT = 1
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalTcEmployGreetingTextBCondBGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentTextCondition(
+		CaseDocumentTextConditionGUID, 
+		CaseDocumentText_Id, 
+		Property_Name,
+		Operator,
+		[Values],
+		[Description],
+		[Status],
+		CreatedDate,
+		CreatedByUser_Id,
+		ChangedDate,
+		ChangedByUser_Id)
+	VALUES(
+		@retSalTcEmployGreetingTextBCondBGuid,
+		@retSalTcEmployGreetingTextBID,
+		@retSalTcEmployGreetingTextBCondBPropertyName,
+		@retSalTcEmployGreetingTextBCondBOperator,
+		@retSalTcEmployGreetingTextBCondBValues,
+		@retSalTcEmployGreetingTextBCondBDescription,
+		@retSalTcEmployGreetingTextBCondBStatus,
+		@now, 
+		@userID,
+		@now,
+		@userID
+	)
+END
+ELSE
+BEGIN
+	UPDATE CDTC SET CaseDocumentText_Id = @retSalTcEmployGreetingTextBID,
+		Property_Name = @retSalTcEmployGreetingTextBCondBPropertyName,
+		Operator = @retSalTcEmployGreetingTextBCondBOperator,
+		[Values] = @retSalTcEmployGreetingTextBCondBValues,
+		[Description] = @retSalTcEmployGreetingTextBCondBDescription,
+		[Status] = @retSalTcEmployGreetingTextBCondBStatus,
+		CreatedDate = @now,
+		CreatedByUser_Id = @userID,
+		ChangedDate = @now,
+		ChangedByUser_Id = @userID
+	FROM tblCaseDocumentTextCondition CDTC
+	WHERE CDTC.CaseDocumentTextConditionGUID = @retSalTcEmployGreetingTextBCondBGuid
+END
+
+
 --Text C
 DECLARE @retSalTcEmployGreetingTextCGuid UNIQUEIDENTIFIER = '1CD7DB6A-12B6-4808-AA0D-783CA8E1548D',
 	@retSalTcEmployGreetingTextCName NVARCHAR(MAX) = @prefix + ' Greeting, C',
@@ -381,13 +433,13 @@ BEGIN
 END
 DECLARE @retSalTcEmployGreetingTextCID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @retSalTcEmployGreetingTextCGuid)
 
--- TODO: Fix Text C
--- Create condition for Text C, Has contract end date and fixed term position
-DECLARE @retSalTcEmployGreetingTextCCondAGuid UNIQUEIDENTIFIER = 'FC31A329-AD04-47E1-8B17-188241785CBC',
+
+-- Create condition A for Text C, Has change valid to end date
+DECLARE @retSalTcEmployGreetingTextCCondAGuid UNIQUEIDENTIFIER = '6300EE79-CF90-4E6A-ACDA-350B006C9B1D',
 	@retSalTcEmployGreetingTextCCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
 	@retSalTcEmployGreetingTextCCondAOperator NVARCHAR(MAX) = 'HasValue',
 	@retSalTcEmployGreetingTextCCondAValues NVARCHAR(MAX) = '',
-	@retSalTcEmployGreetingTextCCondADescription NVARCHAR(MAX) = 'Valid to change date',
+	@retSalTcEmployGreetingTextCCondADescription NVARCHAR(MAX) = 'Has change valid to date',
 	@retSalTcEmployGreetingTextCCondAStatus INT = 1
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalTcEmployGreetingTextCCondAGuid)
 BEGIN
@@ -432,6 +484,59 @@ BEGIN
 	FROM tblCaseDocumentTextCondition CDTC
 	WHERE CDTC.CaseDocumentTextConditionGUID = @retSalTcEmployGreetingTextCCondAGuid
 END
+
+
+-- Create condition B for Text C, Has extension to fixed term
+DECLARE @retSalTcEmployGreetingTextCCondBGuid UNIQUEIDENTIFIER = '2D0E9F79-735B-489C-8B17-00AE0E819652',
+	@retSalTcEmployGreetingTextCCondBPropertyName NVARCHAR(MAX) = 'extendedcase_ExtensionFixedTerm',
+	@retSalTcEmployGreetingTextCCondBOperator NVARCHAR(MAX) = 'Equal',
+	@retSalTcEmployGreetingTextCCondBValues NVARCHAR(MAX) = 'Yes',
+	@retSalTcEmployGreetingTextCCondBDescription NVARCHAR(MAX) = 'Has extension to fixed term',
+	@retSalTcEmployGreetingTextCCondBStatus INT = 1
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalTcEmployGreetingTextCCondBGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentTextCondition(
+		CaseDocumentTextConditionGUID, 
+		CaseDocumentText_Id, 
+		Property_Name,
+		Operator,
+		[Values],
+		[Description],
+		[Status],
+		CreatedDate,
+		CreatedByUser_Id,
+		ChangedDate,
+		ChangedByUser_Id)
+	VALUES(
+		@retSalTcEmployGreetingTextCCondBGuid,
+		@retSalTcEmployGreetingTextCID,
+		@retSalTcEmployGreetingTextCCondBPropertyName,
+		@retSalTcEmployGreetingTextCCondBOperator,
+		@retSalTcEmployGreetingTextCCondBValues,
+		@retSalTcEmployGreetingTextCCondBDescription,
+		@retSalTcEmployGreetingTextCCondBStatus,
+		@now, 
+		@userID,
+		@now,
+		@userID
+	)
+END
+ELSE
+BEGIN
+	UPDATE CDTC SET CaseDocumentText_Id = @retSalTcEmployGreetingTextCID,
+		Property_Name = @retSalTcEmployGreetingTextCCondBPropertyName,
+		Operator = @retSalTcEmployGreetingTextCCondBOperator,
+		[Values] = @retSalTcEmployGreetingTextCCondBValues,
+		[Description] = @retSalTcEmployGreetingTextCCondBDescription,
+		[Status] = @retSalTcEmployGreetingTextCCondBStatus,
+		CreatedDate = @now,
+		CreatedByUser_Id = @userID,
+		ChangedDate = @now,
+		ChangedByUser_Id = @userID
+	FROM tblCaseDocumentTextCondition CDTC
+	WHERE CDTC.CaseDocumentTextConditionGUID = @retSalTcEmployGreetingTextCCondBGuid
+END
+
 
 
 -- Add paragraph to case document

@@ -180,6 +180,9 @@ INSERT INTO @master_tblCaseDocumentTextConditionIdentifier(ExtendedCaseFormId, P
 VALUES(15, 'Change Terms & C', 'extendedcase_ContractedHours', 'tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditions.instances[0].controls.ContractedHours', NULL)
 INSERT INTO @master_tblCaseDocumentTextConditionIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
 VALUES(15, 'Change Terms & C', 'extendedcase_ProbationPeriod', 'tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditions.instances[0].controls.ProbationPeriod', NULL)
+INSERT INTO @master_tblCaseDocumentTextConditionIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
+VALUES(15, 'Change Terms & C', 'extendedcase_ExtensionFixedTerm', 'tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditions.instances[0].controls.ExtensionFixedPosition', NULL)
+
 SET NOCOUNT OFF
 
 -- UPDATE Existing value
@@ -205,6 +208,7 @@ LEFT JOIN tblCaseDocumentTextConditionIdentifier CDTI ON CDTI.ExtendedCaseFormId
 WHERE CDTI.Id IS NULL
 
 -- ########################################## tblCaseDocumentCondition - Populate
+SET NOCOUNT ON
 
 DECLARE @master_tblCaseDocumentCondition TABLE
 (
@@ -220,11 +224,11 @@ DECLARE @master_tblCaseDocumentCondition TABLE
 	[ChangedByUser_Id] [int] NULL
 )
 INSERT INTO @master_tblCaseDocumentCondition(CaseDocumentConditionGuid, CaseDocument_Id, Property_Name, [Values], [Description],  [Status], CreatedDate, CreatedByUser_Id, ChangedDate, ChangedByUser_Id)
-VALUES('92D4FE4F-A1E5-4922-A744-2BE1569D1056', @retHiringGuid, 'case_ProductArea.ProductAreaGUID', '10ED7779-E56E-4C75-B02C-4486D8029DCE', 'ProductArea = Hiring ', 1, '2017-07-18 21:14:38.753', 2, '2017-07-19 16:45:43.007', 2)
+VALUES('92D4FE4F-A1E5-4922-A744-2BE1569D1056', @retHiringID, 'case_ProductArea.ProductAreaGUID', '10ED7779-E56E-4C75-B02C-4486D8029DCE', 'ProductArea = Hiring ', 1, '2017-07-18 21:14:38.753', 2, '2017-07-19 16:45:43.007', 2)
 INSERT INTO @master_tblCaseDocumentCondition(CaseDocumentConditionGuid, CaseDocument_Id, Property_Name, [Values], [Description],  [Status], CreatedDate, CreatedByUser_Id, ChangedDate, ChangedByUser_Id)
-VALUES('D1A696B0-E14A-4270-91CB-7B9A56927E02', @retHiringGuid, 'extendedcase_tabs.PaymentInformation.sections.STD_S_BasicPayHiring.instances[0].controls.PayrollCategory', 'QW', 'PayRollCategory = Waged', 1, '2017-07-18 21:14:38.757', 2, '2017-07-19 16:45:43.010', 2)
+VALUES('D1A696B0-E14A-4270-91CB-7B9A56927E02', @retHiringID, 'extendedcase_tabs.PaymentInformation.sections.STD_S_BasicPayHiring.instances[0].controls.PayrollCategory', 'QW', 'PayRollCategory = Waged', 1, '2017-07-18 21:14:38.757', 2, '2017-07-19 16:45:43.010', 2)
 INSERT INTO @master_tblCaseDocumentCondition(CaseDocumentConditionGuid, CaseDocument_Id, Property_Name, [Values], [Description],  [Status], CreatedDate, CreatedByUser_Id, ChangedDate, ChangedByUser_Id)
-VALUES('4EE7578E-876A-421E-B19C-00713449AB90', @retHiringGuid, 'case_Region.Code', '1300', 'Company Code = 1300', 1, '2017-07-18 21:14:38.760', 2, '2017-07-19 16:45:43.010', 2)
+VALUES('4EE7578E-876A-421E-B19C-00713449AB90', @retHiringID, 'case_Region.Code', '1300', 'Company Code = 1300', 1, '2017-07-18 21:14:38.760', 2, '2017-07-19 16:45:43.010', 2)
 INSERT INTO @master_tblCaseDocumentCondition(CaseDocumentConditionGuid, CaseDocument_Id, Property_Name, [Values], [Description],  [Status], CreatedDate, CreatedByUser_Id, ChangedDate, ChangedByUser_Id)
 VALUES('3EA2EE2E-2941-4538-A043-F74B57BCF17B', @retSalHiringID, 'case_ProductArea.ProductAreaGUID', '10ED7779-E56E-4C75-B02C-4486D8029DCE', 'ProductArea = Hiring', 1, '2017-07-19 13:56:44.590', 2, '2017-07-19 13:56:44.590', NULL)
 INSERT INTO @master_tblCaseDocumentCondition(CaseDocumentConditionGuid, CaseDocument_Id, Property_Name, [Values], [Description],  [Status], CreatedDate, CreatedByUser_Id, ChangedDate, ChangedByUser_Id)
@@ -264,11 +268,11 @@ VALUES('59F20986-8FA9-4520-B609-A0AD0EFE7122', @dcTcID, 'case_Region.Code', '130
 INSERT INTO @master_tblCaseDocumentCondition(CaseDocumentConditionGuid, CaseDocument_Id, Property_Name, [Values], [Description],  [Status], CreatedDate, CreatedByUser_Id, ChangedDate, ChangedByUser_Id)
 VALUES('10C156FC-67A2-4A74-B7DE-0430C66897DC', @dcSalTcID, 'case_ProductArea.ProductAreaGUID', '1754BBBC-B572-459B-B7CF-CB024CDED347', 'ProductArea = Change Terms & Conditions', 1, '2017-07-19 13:57:09.960', 2, '2017-07-19 13:57:09.960', NULL)
 INSERT INTO @master_tblCaseDocumentCondition(CaseDocumentConditionGuid, CaseDocument_Id, Property_Name, [Values], [Description],  [Status], CreatedDate, CreatedByUser_Id, ChangedDate, ChangedByUser_Id)
-VALUES('5462E9F6-7993-47CA-84B6-D91F0FB392BA', @dcSalTcID, 'extendedcase_tabs.PaymentInformation.sections.STD_S_BasicPayChangeTC.instances[0].controls.PayrollCategory', 'QS', 'PayRollCategory = Salaried', 1, '2017-07-19 13:57:09.960', 2, '2017-07-19 13:57:09.960', NULL)
+VALUES('5462E9F6-7993-47CA-84B6-D91F0FB392BA', @dcSalTcID, 'extendedcase_tabs.PaymentInformation.sections.STD_S_BasicPayChange.instances[0].controls.PayrollCategory', 'QS', 'PayRollCategory = Salaried', 1, '2017-07-19 13:57:09.960', 2, '2017-07-19 13:57:09.960', NULL)
 INSERT INTO @master_tblCaseDocumentCondition(CaseDocumentConditionGuid, CaseDocument_Id, Property_Name, [Values], [Description],  [Status], CreatedDate, CreatedByUser_Id, ChangedDate, ChangedByUser_Id)
 VALUES('4C791C34-CFC4-4380-BB6D-84783F774C0E', @dcSalTcID, 'case_Region.Code', '1301', 'Company Code = 1301', 1, '2017-07-19 13:57:09.960', 2, '2017-07-19 13:57:09.960', NULL)
 
-
+SET NOCOUNT OFF
 -- UPDATE Existing value
 PRINT 'UPDATE changed values in tblCaseDocumentCondition'
 UPDATE CDC SET 
@@ -289,7 +293,7 @@ WHERE CDC.CaseDocument_Id <> M.CaseDocument_Id OR
 	CDC.[Status] <> M.[Status]
 
 
--- UPDATE Existing value
+-- INSERT new value
 PRINT 'INSERT new values in tblCaseDocumentCondition'
 INSERT INTO tblCaseDocumentCondition([CaseDocumentConditionGUID], 
 	[CaseDocument_Id],
@@ -316,10 +320,8 @@ LEFT JOIN tblCaseDocumentCondition CDC ON CDC.CaseDocumentConditionGUID = M.Case
 WHERE CDC.Id IS NULL
 
 
-
-
-
 -- ########################################## Paragraph - FOOTER with Initials
+SET NOCOUNT ON
 begin 
 	set @CaseDocumentParagraphGUID = 'A7626F89-C428-475C-8E10-160CCE0F2B5D'
 	set @CaseDocumentParagraphName = 'AU - FOOTER Initial'
