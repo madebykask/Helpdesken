@@ -31,17 +31,17 @@
                             {
                                 if (filename.IsExistCaseFile && filename.ObjId.HasValue)
                                 {
-                                    <a target="_blank" class="isExisted" href="@Html.Action("CaseFileLinkVD", "Files", new RouteValueDictionary {{"id", filename.ObjId}, {"fileName", filename.Name}})"><i class="icon- attachedFile"></i>@filename.Name</a>
+                                    <a target="_blank" class="isExisted" href="@Html.Action("CaseFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", filename.ObjId}, {"fileName", filename.Name}})"><i class="icon- attachedFile"></i>@filename.Name</a>
                                 }
                                 else
                                 {
                                     if (filename.IsExistLogFile && filename.ObjId.HasValue)
                                     {
-                                        <a target="_blank" class="isExisted" href="@Html.Action("LogFileLinkVD", "Files", new RouteValueDictionary {{"id", filename.ObjId}, {"fileName", filename.Name}})"><i class="icon- attachedFile"></i> @filename.Name</a>
+                                        <a target="_blank" class="isExisted" href="@Html.Action("LogFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", filename.ObjId}, {"fileName", filename.Name}})"><i class="icon- attachedFile"></i> @filename.Name</a>
                                     }
                                     else
                                     {
-                                        <a target="_blank" href="@Html.Action("LogFileLinkVD", "Files", new RouteValueDictionary {{"id", Model.Id}, {"fileName", filename.Name}})"><i class="icon-file"></i> @filename.Name</a>
+                                        <a target="_blank" href="@Html.Action("LogFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", Model.Id}, {"fileName", filename.Name}})"><i class="icon-file"></i> @filename.Name</a>
                                     }
                                 }
                             }
@@ -49,7 +49,7 @@
                             {
                                 if (filename.IsExistCaseFile && filename.ObjId.HasValue)
                                 {
-                                    <a target="_blank" class="isExisted" href="@Html.Action("CaseFileLinkVD", "Files", new RouteValueDictionary {{"id", filename.ObjId}, {"fileName", filename.Name}})">
+                                    <a target="_blank" class="isExisted" href="@Html.Action("CaseFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", filename.ObjId}, {"fileName", filename.Name}})">
                                         <i class="icon- attachedFile"></i>@filename.Name
                                     </a>
                                 }
@@ -57,7 +57,7 @@
                                 {
                                     if (filename.IsExistLogFile && filename.ObjId.HasValue)
                                     {
-                                        <a target="_blank" class="isExisted" href="@Html.Action("LogFileLinkVD", "Files", new RouteValueDictionary {{"id", filename.ObjId}, {"fileName", filename.Name}})"><i class="icon- attachedFile"></i> @filename.Name</a>
+                                        <a target="_blank" class="isExisted" href="@Html.Action("LogFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", filename.ObjId}, {"fileName", filename.Name}})"><i class="icon- attachedFile"></i> @filename.Name</a>
                                     }
                                     else
                                     {

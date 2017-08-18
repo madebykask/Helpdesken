@@ -505,7 +505,9 @@ EditPage.prototype.propagateLogNote = function () {
     var propagateMessage = { log_textinternal: { Value: data } };
     
     var $_ex_Container = EditPage.prototype.getExtendedCaseContainer();
-    $_ex_Container.contentWindow.updateCaseFields(propagateMessage);    
+    if ($_ex_Container != null) {
+        $_ex_Container.contentWindow.updateCaseFields(propagateMessage);
+    }
 };
 
 EditPage.prototype.onExtendedCaseLoaded = function () {
