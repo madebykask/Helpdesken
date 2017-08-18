@@ -328,7 +328,10 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CurrentCaseSolutionSearch = caseSolutionSearch;
 
             var model = CreateIndexViewModel(caseSolutionSearch);
+
+
             return PartialView("_RowsOverview", model.Rows);
+
         }
 
         public ActionResult New(int? backToPageId)

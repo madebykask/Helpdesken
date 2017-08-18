@@ -35,7 +35,7 @@
                      SessionFacade.CurrentCaseSolutionSearch.CategoryIds != null && SessionFacade.CurrentCaseSolutionSearch.CategoryIds.Any())
                      ? SessionFacade.CurrentCaseSolutionSearch.CategoryIds : null;
 
-  
+
 }
 
 @*@Scripts.Render("~/bundles/casetemplates/index")*@
@@ -190,11 +190,12 @@
                                 }
                             </select>
                         </td>
-                    </tr>                    
+                    </tr>
                 </table>
+
                 
                 @Html.Partial("_RowsOverview", Model.Rows)
-
+                
 
             </div>
             <div class="tab-pane tab-pane-border @menu2TabClass" id="fragment-2">
