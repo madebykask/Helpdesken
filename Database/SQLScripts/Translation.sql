@@ -6034,15 +6034,22 @@ GO
 
 If not exists (select * from tbltext where id = 1840)
 begin
-	insert into tbltext (id, TextString) VALUES (1840, 'Underärende')
+	insert into tbltext (id, TextString) VALUES (1840, 'Kopplat ärende')
 end
 else
 begin
 	update tbltext set TextString = 'Kopplat ärende' where id = 1840
 end	
 GO
+
 If not exists (select * from tblTextTranslation where text_id = 1840 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1840, 2, 'Related Case')
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1840, 2, 'Connected case')
+end
+else
+begin
+	update tblTextTranslation set TextTranslation = 'Connected case' where Text_Id = 1840 and Language_Id = 2
+end
 GO
 
 
