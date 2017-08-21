@@ -6067,5 +6067,9 @@ If not exists (select * from tblTextTranslation where text_id = 1841 and Languag
 GO
 
 
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to invoice article' where Text_Id = 1724 and Language_Id = 2;
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
