@@ -1057,12 +1057,12 @@ BEGIN
 	WHERE CDTC.CaseDocumentTextConditionGUID = @retSalTcTermsComCCondAGuid
 END
 
--- Create condition B for Commence C, has additional clause "Homecoming - Same Role"
+-- Create condition B for Commence C, has additional clause "Homecoming – Same Role"
 DECLARE @retSalTcTermsComCCondBGuid UNIQUEIDENTIFIER = 'C915DC82-AB45-4AFF-A5DA-4901CAC34148',
 	@retSalTcTermsComCCondBPropertyName NVARCHAR(MAX) = 'extendedcase_AdditionalClause',
 	@retSalTcTermsComCCondBOperator NVARCHAR(MAX) = 'Equal',
-	@retSalTcTermsComCCondBValues NVARCHAR(MAX) = 'Homecoming - Same Role',
-	@retSalTcTermsComCCondBDescription NVARCHAR(MAX) = 'Has additional clause Homecoming - Same Role',
+	@retSalTcTermsComCCondBValues NVARCHAR(MAX) = 'Homecoming – Same Role',
+	@retSalTcTermsComCCondBDescription NVARCHAR(MAX) = 'Has additional clause Homecoming – Same Role',
 	@retSalTcTermsComCCondBStatus INT = 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalTcTermsComCCondBGuid)
@@ -1109,7 +1109,7 @@ BEGIN
 	WHERE CDTC.CaseDocumentTextConditionGUID = @retSalTcTermsComCCondBGuid
 END
 
----- Commencement D, Has change valid to date, additional clause "Homecoming - Similar role"
+---- Commencement D, Has change valid to date, additional clause "Homecoming – Similar role"
 DECLARE @retSalTcTermsComDGuid UNIQUEIDENTIFIER = 'E51466CA-EFEE-4331-B990-4CD7D4A4BF56',
 	@retSalTcTermsComDName NVARCHAR(MAX) = @prefix + ' Commencement, D',
 	@retSalTcTermsComDDescription NVARCHAR(MAX) = '',
@@ -1199,12 +1199,12 @@ BEGIN
 	WHERE CDTC.CaseDocumentTextConditionGUID = @retSalTcTermsComDCondAGuid
 END
 
--- Create condition B for Commence D, has additional clause "Homecoming - Similar role"
+-- Create condition B for Commence D, has additional clause "Homecoming – Similar role"
 DECLARE @retSalTcTermsComDCondBGuid UNIQUEIDENTIFIER = 'CEBD02D8-D902-44F4-A934-6F5D7A87857C',
 	@retSalTcTermsComDCondBPropertyName NVARCHAR(MAX) = 'extendedcase_AdditionalClause',
 	@retSalTcTermsComDCondBOperator NVARCHAR(MAX) = 'Equal',
-	@retSalTcTermsComDCondBValues NVARCHAR(MAX) = 'Homecoming - Similar role',
-	@retSalTcTermsComDCondBDescription NVARCHAR(MAX) = 'Has additional clause Homecoming - Similar role',
+	@retSalTcTermsComDCondBValues NVARCHAR(MAX) = 'Homecoming – Similar role',
+	@retSalTcTermsComDCondBDescription NVARCHAR(MAX) = 'Has additional clause Homecoming – Similar role',
 	@retSalTcTermsComDCondBStatus INT = 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalTcTermsComDCondBGuid)
@@ -1251,7 +1251,7 @@ BEGIN
 	WHERE CDTC.CaseDocumentTextConditionGUID = @retSalTcTermsComDCondBGuid
 END
 
----- Commencement E, Has change valid to date, additional clause "Parental Leave Cover - Same Role"
+---- Commencement E, Has change valid to date, additional clause "Parental Leave Cover – Same Role"
 DECLARE @retSalTcTermsComEGuid UNIQUEIDENTIFIER = '063C0D80-1224-4741-BA49-AB35A46906C5',
 	@retSalTcTermsComEName NVARCHAR(MAX) = @prefix + ' Commencement, E',
 	@retSalTcTermsComEDescription NVARCHAR(MAX) = '',
@@ -1341,12 +1341,12 @@ BEGIN
 	WHERE CDTC.CaseDocumentTextConditionGUID = @retSalTcTermsComECondAGuid
 END
 
--- Create condition B for Commence E, has additional clause "Parental Leave Cover - Same Role"
+-- Create condition B for Commence E, has additional clause "Parental Leave Cover – Same Role"
 DECLARE @retSalTcTermsComECondBGuid UNIQUEIDENTIFIER = '65E63293-A4D9-47DA-8AFC-E391A38A9E85',
 	@retSalTcTermsComECondBPropertyName NVARCHAR(MAX) = 'extendedcase_AdditionalClause',
 	@retSalTcTermsComECondBOperator NVARCHAR(MAX) = 'Equal',
-	@retSalTcTermsComECondBValues NVARCHAR(MAX) = 'Parental Leave Cover - Same Role',
-	@retSalTcTermsComECondBDescription NVARCHAR(MAX) = 'Has additional clause Parental Leave Cover - Same Role',
+	@retSalTcTermsComECondBValues NVARCHAR(MAX) = 'Parental Leave Cover – Same Role',
+	@retSalTcTermsComECondBDescription NVARCHAR(MAX) = 'Has additional clause Parental Leave Cover – Same Role',
 	@retSalTcTermsComECondBStatus INT = 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalTcTermsComECondBGuid)
@@ -1488,8 +1488,8 @@ END
 DECLARE @retSalTcTermsComFCondBGuid UNIQUEIDENTIFIER = 'BA23B46D-F6A6-4C38-A841-0C567C27AB51',
 	@retSalTcTermsComFCondBPropertyName NVARCHAR(MAX) = 'extendedcase_AdditionalClause',
 	@retSalTcTermsComFCondBOperator NVARCHAR(MAX) = 'Equal',
-	@retSalTcTermsComFCondBValues NVARCHAR(MAX) = 'Parental Leave Cover - Similar Role',
-	@retSalTcTermsComFCondBDescription NVARCHAR(MAX) = 'Has additional clause Parental Leave Cover - Similar Role',
+	@retSalTcTermsComFCondBValues NVARCHAR(MAX) = 'Parental Leave Cover – Similar Role',
+	@retSalTcTermsComFCondBDescription NVARCHAR(MAX) = 'Has additional clause Parental Leave Cover – Similar Role',
 	@retSalTcTermsComFCondBStatus INT = 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalTcTermsComFCondBGuid)
@@ -1612,8 +1612,8 @@ BEGIN
 END
 
 
--- #################################### 13a-b Hours of Work
---TODO: Fix Work A
+-- #################################### Hours of Work
+
 ---- Hours of Work A
 DECLARE @retSalTcTermsHWAGuid UNIQUEIDENTIFIER = '45296772-BE49-4A2C-95BD-5521A6017F23',
 	@retSalTcTermsHWAName NVARCHAR(MAX) = @prefix + ' Hours of Work, A',
@@ -1653,13 +1653,12 @@ BEGIN
 END
 DECLARE @retSalTcTermsHWAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @retSalTcTermsHWAGuid)
 
--- TODO: Fix condition A (not a list of departments)
 -- Create condition for Hours of Work A
 DECLARE @retSalTcTermsHWACondGuid UNIQUEIDENTIFIER = 'C5C4C06B-AAE0-4D56-8C5D-AA2D556B07FC',
-	@retSalTcTermsHWACondPropertyName NVARCHAR(MAX) = 'extendedcase_ContractedHours',
-	@retSalTcTermsHWACondOperator NVARCHAR(MAX) = 'Equal',
-	@retSalTcTermsHWACondValues NVARCHAR(MAX) = '76',
-	@retSalTcTermsHWACondDescription NVARCHAR(MAX) = 'Is full time',
+	@retSalTcTermsHWACondPropertyName NVARCHAR(MAX) = 'case_BusinessUnit',
+	@retSalTcTermsHWACondOperator NVARCHAR(MAX) = 'NotExists',
+	@retSalTcTermsHWACondValues NVARCHAR(MAX) = 'Service Office NSW,Service Office QLD,Service Office VIC,Service Office ACT',
+	@retSalTcTermsHWACondDescription NVARCHAR(MAX) = 'Business unit does not exists in list',
 	@retSalTcTermsHWACondStatus INT = 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalTcTermsHWACondGuid)
@@ -1705,8 +1704,6 @@ BEGIN
 	FROM tblCaseDocumentTextCondition CDTC
 	WHERE CDTC.CaseDocumentTextConditionGUID = @retSalTcTermsHWACondGuid
 END
-
--- TODO: Fix Work B
 ---- Hours of Work B
 DECLARE @retSalTcTermsHWBGuid UNIQUEIDENTIFIER = '1596C6A3-57CC-49FA-AF47-7E7999294D6A',
 	@retSalTcTermsHWBName NVARCHAR(MAX) = @prefix + ' Hours of Work, B',
@@ -1748,10 +1745,10 @@ DECLARE @retSalTcTermsHWBID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE 
 
 -- Create condition for hours of work B
 DECLARE @retSalTcTermsHWBCondGuid UNIQUEIDENTIFIER = 'BD5939D5-FFA8-418A-95B9-7A5699C4796A',
-	@retSalTcTermsHWBCondPropertyName NVARCHAR(MAX) = 'extendedcase_ContractedHours',
-	@retSalTcTermsHWBCondOperator NVARCHAR(MAX) = 'LessThan',
-	@retSalTcTermsHWBCondValues NVARCHAR(MAX) = '76',
-	@retSalTcTermsHWBCondDescription NVARCHAR(MAX) = 'Is part time',
+	@retSalTcTermsHWBCondPropertyName NVARCHAR(MAX) = 'case_BusinessUnit',
+	@retSalTcTermsHWBCondOperator NVARCHAR(MAX) = 'Exists',
+	@retSalTcTermsHWBCondValues NVARCHAR(MAX) = 'Service Office NSW,Service Office QLD,Service Office VIC,Service Office ACT',
+	@retSalTcTermsHWBCondDescription NVARCHAR(MAX) = 'Business unit does not exists in list',
 	@retSalTcTermsHWBCondStatus INT = 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalTcTermsHWBCondGuid)
