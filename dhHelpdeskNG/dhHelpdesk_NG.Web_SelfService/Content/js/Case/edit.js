@@ -602,7 +602,7 @@
 
                     var item = JSON.parse(obj);
                     if (item.isNoResult) {
-                        return "";
+                        return this.query;
                     }
                     //console.log(JSON.stringify(item));
                     $('#NewCase_ReportedBy').val(item.num);

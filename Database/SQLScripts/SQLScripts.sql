@@ -1162,6 +1162,28 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO
 
+if not exists(select * from sysobjects WHERE Name = N'tblCaseType_tblProductArea')
+BEGIN
+
+CREATE TABLE [dbo].[tblCaseType_tblProductArea](
+	[CaseType_Id] [int] NOT NULL,
+	[ProductArea_Id] [int] NOT NULL,
+ CONSTRAINT [PK_tblCaseType_tblProductArea] PRIMARY KEY CLUSTERED 
+(
+	[CaseType_Id] ASC,
+	[ProductArea_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+ALTER TABLE [dbo].[tblCaseType_tblProductArea] ADD  CONSTRAINT [FK_tblCaseType_tblProductArea_tblCaseType] FOREIGN KEY([CaseType_Id])
+REFERENCES [dbo].[tblCaseType] ([Id])
+
+ALTER TABLE [dbo].[tblCaseType_tblProductArea] ADD  CONSTRAINT [FK_tblCaseType_tblProductArea_tblProductArea] FOREIGN KEY([ProductArea_Id])
+REFERENCES [dbo].[tblProductArea] ([Id])
+
+END
+GO
+
 
 
 -- Last Line to update database version

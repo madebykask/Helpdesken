@@ -381,10 +381,9 @@ function GetComputerUserSearchOptions() {
                     //$(publicDepartmentControlName).val(item.departmentid).trigger('change');
                     refreshDepartment(item.regionid, departmentFilterFormat, item.departmentid, item.ouid);
                 }
-
                 return item.num;
             }
-            return "";
+            return this.query;
         }
     };
 
@@ -541,7 +540,7 @@ function GetComputerUserSearchOptionsForIsAbout() {
                 }
                 return item.num;
             }
-            return "";
+            return this.query;
         }
     };
 

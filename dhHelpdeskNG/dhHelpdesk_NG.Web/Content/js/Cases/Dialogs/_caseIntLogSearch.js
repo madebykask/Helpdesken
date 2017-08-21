@@ -198,6 +198,7 @@
                                     isNoResult: true
                                 }
                                 resultList.push(JSON.stringify(noRes));
+                                searchSelected = false;
                             }
                             return process(resultList);
                         }

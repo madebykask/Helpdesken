@@ -3836,6 +3836,7 @@ div.modal-body.max-height-600 {
 .case-dropdown-area {
     display: inline-flex;
     text-align: left;
+    padding-top: 30px;
 }
 
 .case-dropdown-div {
