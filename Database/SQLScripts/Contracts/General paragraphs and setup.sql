@@ -182,6 +182,10 @@ INSERT INTO @master_tblCaseDocumentTextConditionIdentifier(ExtendedCaseFormId, P
 VALUES(15, 'Change Terms & C', 'extendedcase_ProbationPeriod', 'tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditions.instances[0].controls.ProbationPeriod', NULL)
 INSERT INTO @master_tblCaseDocumentTextConditionIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
 VALUES(15, 'Change Terms & C', 'extendedcase_ExtensionFixedTerm', 'tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditions.instances[0].controls.ExtensionFixedPosition', NULL)
+INSERT INTO @master_tblCaseDocumentTextConditionIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
+VALUES(15, 'Change Terms & C', 'extendedcase_AdditionalClause', 'tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditions.instances[0].controls.AdditionalClause', NULL)
+
+
 
 SET NOCOUNT OFF
 
