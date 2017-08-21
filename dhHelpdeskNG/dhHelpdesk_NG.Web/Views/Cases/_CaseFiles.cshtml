@@ -33,7 +33,7 @@
                     <td>
                         @if (Model.VirtualDirectory)
                         {
-                            <a target="_blank" href="@Url.Action("CaseFileLinkVD","FileHandler", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
+                            <a target="_blank" href="@Html.Action("CaseFileLinkVD","FileHandler", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
                         }
                         else
                         {
