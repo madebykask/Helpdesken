@@ -89,7 +89,7 @@ namespace DH.Helpdesk.Services.Services
 				{
 					var name = displayName.Replace("<", "").Replace(">", "").Replace("[", "").Replace("]", "");
 
-					failedMappings.Add(new KeyValuePair<string, string>(fieldId, $"Could not find property {fieldId} with display name {name}"));
+					failedMappings.Add(new KeyValuePair<string, string>(displayName, $"Could not find property {fieldId} with display name [{name}]"));
 					return name;
 				}
 
@@ -103,7 +103,7 @@ namespace DH.Helpdesk.Services.Services
 					{
 						var name = displayName.Replace("<", "").Replace(">", "").Replace("[", "").Replace("]", "");
 
-						failedMappings.Add(new KeyValuePair<string, string>(fieldId, $"Value and secondary value was NULL or empty for property {fieldId} with display name {name}"));
+						failedMappings.Add(new KeyValuePair<string, string>(displayName, $"Value and secondary value was NULL or empty for property {fieldId} with display name [{name}]"));
 						return name;
 					}	
 				}
@@ -122,7 +122,7 @@ namespace DH.Helpdesk.Services.Services
             {
 				var name = displayName.Replace("<", "").Replace(">", "").Replace("[", "").Replace("]", "");
 
-				failedMappings.Add(new KeyValuePair<string, string>(fieldId, $"Could not retrieve {fieldId} with display name {name}, cause unknown."));
+				failedMappings.Add(new KeyValuePair<string, string>(displayName, $"Could not retrieve {fieldId} with display name [{name}], cause unknown."));
 
 				return name;
                  
@@ -268,13 +268,21 @@ namespace DH.Helpdesk.Services.Services
                             {
 								var results = ReplaceWithValue(caseDocument.Id, caseId, paragraphText.Text);
 
-								var errorMesssage = results.FailedMappings.Count == 0 ? "" :
-									results
-									.FailedMappings
-									.Select(o => $"{o.Value}")
-									.Aggregate((o, p) => $"{o}\r\n{p}");
+								var errors = results.FailedMappings.Count == 0 ? new List<string>() :
+									results.FailedMappings
+										.Where(o => paragraphText.Text.Contains(o.Key))
+										.Select(o => $"{o.Key}: {o.Value}")
+										.ToList();
 
-								errorMessageBuilder.AppendLine($"{paragraphText.Name}:\r\n{errorMesssage}\r\n\r\n");
+								if (errors.Count > 0)
+								{
+									var errorMessage = errors.Aggregate((o, p) =>
+									{
+										var aggr = $"{o}\r\n{p}";
+										return aggr;
+									});
+									errorMessageBuilder.AppendLine($"{paragraphText.Name}:\r\n{errorMessage}\r\n\r\n");
+								}
 								paragraphText.Text = results.Results;
 
 							}
@@ -355,7 +363,16 @@ namespace DH.Helpdesk.Services.Services
                     else if (conditionKey.ToLower().StartsWith("extendedcase_"))
                     {
                         conditionKey = conditionKey.Replace("extendedcase_", "");
-                        value = _extendedCaseValueRepository.GetExtendedCaseValue(_case.CaseExtendedCaseDatas.FirstOrDefault().ExtendedCaseData_Id, conditionKey).Value;
+
+						var extData = _case.CaseExtendedCaseDatas.FirstOrDefault();
+
+						var extDataID = extData.ExtendedCaseData_Id;
+
+						var extValue = _extendedCaseValueRepository.GetExtendedCaseValue(extDataID, conditionKey);
+						if (extValue == null)
+							throw new CaseDocumentConditionException(conditionKey, 
+								$"Can't get extended case values from condition key {conditionKey} in extended case data ID {extDataID}");
+						value = extValue.Value;
                     }
                     //GET FROM USER
                     else if (conditionKey.ToLower().StartsWith("user_"))
@@ -406,14 +423,14 @@ namespace DH.Helpdesk.Services.Services
 						FieldException = ex
 					};
                 }
-				catch (Exception ex) // TODO: Handle this better
+			/*	catch (Exception ex) // TODO: Handle this better
 				{
 					return new CaseDocumentConditionResult
 					{
 						Show = false,
 						FieldException = new CaseDocumentConditionException(conditionKey, $"Unkown error when running a condition evaluation of key {conditionKey}")
 					};
-				}
+				}*/
             }
 
 			//To be true all conditions needs to be fulfilled
@@ -427,11 +444,10 @@ namespace DH.Helpdesk.Services.Services
         {
             //If there are more than one conditions, all conditions must be fulfilled
 
-            //IF there are no conditions set, it should be visible
-            bool showText = true;
-         
+            //IF there are no conditions set, it should be visible         
             var condtions = this.GetCaseDocumentTextConditions(caseDocumentText_Id);
 
+			bool results = false;
             //IF there are no conditions set, it should be visible
             if (condtions == null || condtions.Count() == 0)
 			{
@@ -502,13 +518,7 @@ namespace DH.Helpdesk.Services.Services
 
 
 					var evaluator = new CaseDocumentConditionEvaluator();
-					var result = evaluator.EvaluateCondition(value, conditionOperator, conditionValue);
-
-					return new CaseDocumentConditionResult
-					{
-						Show = result
-					};
-
+					results = evaluator.EvaluateCondition(value, conditionOperator, conditionValue);
 				}
 				catch (CaseDocumentConditionBaseException parseEx)
 				{
@@ -532,7 +542,7 @@ namespace DH.Helpdesk.Services.Services
 			//If there are more than one conditions, all conditions must be fulfilled
 			return new CaseDocumentConditionResult
 			{
-				Show = showText
+				Show = results
 			};
         }
 
