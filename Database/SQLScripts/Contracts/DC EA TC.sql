@@ -89,8 +89,8 @@ DECLARE @dcTcHeaderID INT = (SELECT ID FROM tblCaseDocumentParagraph WHERE CaseD
 DECLARE @dcTcHeaderTextAGuid UNIQUEIDENTIFIER = '8E505DE7-6E09-4E22-8F0C-E4BCFC4A2F36',
 	@dcTcHeaderTextAName NVARCHAR(MAX) = @prefix + ' Header, Company',
 	@dcTcHeaderTextADescription NVARCHAR(MAX) = '',
-	@dcTcHeaderTextAText NVARCHAR(MAX) = '<p style="text-align:left;">IKEA Distribution Services Australia Pty Ltd</p>	
-<p>ABN 96 001 264 179</p>',
+	@dcTcHeaderTextAText NVARCHAR(MAX) = '<p style="font-family:''Microsoft Sans''; font-size: 6pt; text-align:left; line-height:10px; margin-top:-10px">IKEA Distribution Services Australia Pty Ltd<br>	
+ABN 96 001 264 179</p>',
 	@dcTcHeaderTextAHeadline NVARCHAR(MAX) = '',
 	@dcTcHeaderTextASortOrder INT = 0
 
@@ -122,7 +122,7 @@ DECLARE @dcTcHeaderTextBGuid UNIQUEIDENTIFIER = '138D75E2-55D0-4658-B5A8-ABE1919
 	@dcTcHeaderTextBName NVARCHAR(MAX) = @prefix + ' Header, Co-worker',
 	@dcTcHeaderTextBDescription NVARCHAR(MAX) = '',
 	@dcTcHeaderTextBText NVARCHAR(MAX) = '<p><Todays Date - Long></p>
-		<p><Co-worker First Name> <Co-worker Last Name></p>
+		<p><strong><Co-worker First Name> <Co-worker Last Name></strong></p>
 		<p><Address Line 1><br />
 		<Address Line 2> <State> <Postal Code><br />
 		<Address Line 3><br />
@@ -1110,7 +1110,8 @@ END
 DECLARE @dcTcTermsRemunGuid UNIQUEIDENTIFIER = '91714198-1a98-4040-be64-207db37023e2',
 	@dcTcTermsRemunName NVARCHAR(MAX) = @prefix + ' Remuneration',
 	@dcTcTermsRemunDescription NVARCHAR(MAX) = '',
-	@dcTcTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your base hourly rate will be as per the <strong>IKEA Distributions Services Australia Pty Ltd Enterprise Agreement 2016.</strong>  This amount will be paid directly into your nominated bank account on a fortnightly basis.',
+	@dcTcTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your base hourly rate will be as per the <strong>IKEA Distributions Services Australia Pty Ltd Enterprise Agreement 2016.</strong>  This amount will be paid directly into your nominated bank account on a fortnightly basis.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcTcTermsRemunHeadline NVARCHAR(MAX) = 'Remuneration',
 	@dcTcTermsRemunSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1147,7 +1148,7 @@ DECLARE @dcTcTermsSuperGuid UNIQUEIDENTIFIER = 'fa1b4355-4524-4bc1-ade6-0a9431ef
 <br>
 IKEA’s current employer superannuation fund is the Labour Union Co-operative Retirement Fund (LUCRF), which is the fund into which the superannuation contributions will be made unless an alternate fund is nominated by you in writing, in accordance with the SGL.
 <br>
-It is your responsibility to nominate a Super Fund for your contributions to be made to, and to ensure that you complete the necessary paperwork for enrolment into your nominated fund.  IKEA will supply you with a LUCRF Member Guide, including an application form.',
+It is your responsibility to nominate a Super Fund for your contributions to be made to, and to ensure that you complete the necessary paperwork for enrolment into your nominated fund.  IKEA will supply you with a LUCRF Member Guide, including an application form.', 
 	@dcTcTermsSuperHeadline NVARCHAR(MAX) = 'Superannuation',
 	@dcTcTermsSuperSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1205,7 +1206,8 @@ During and after your employment, you must not use or disclose Confidential Info
 <li>if required by law.</li>
 </ul>
 <br>
-As an IKEA co-worker, you must keep Confidential Information in a secure manner and treat such information with appropriate sensitivity. On demand by IKEA and at the end of your employment, you must deliver to IKEA all copies of Confidential Information in your possession or control (including all Confidential Information held electronically in any medium) and then delete all Confidential Information held electronically in any medium in your possession or control.',
+As an IKEA co-worker, you must keep Confidential Information in a secure manner and treat such information with appropriate sensitivity. On demand by IKEA and at the end of your employment, you must deliver to IKEA all copies of Confidential Information in your possession or control (including all Confidential Information held electronically in any medium) and then delete all Confidential Information held electronically in any medium in your possession or control.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcTcTermsConfHeadline NVARCHAR(MAX) = 'Confidential Information',
 	@dcTcTermsConfSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1587,7 +1589,8 @@ DECLARE @dcTcTermsTerminationGuid UNIQUEIDENTIFIER = '43393eed-c718-4bf4-a588-e3
 <br><br>
 Upon termination of your employment, all material, equipment, uniforms, information, company records, data etc issued to you or created by you in your employment is to be returned to IKEA or its nominee.
 <br><br>
-IKEA reserves the right to withhold an appropriate sum of money from a co-worker’s termination payment until such time as any outstanding company property as detailed above is returned.',
+IKEA reserves the right to withhold an appropriate sum of money from a co-worker’s termination payment until such time as any outstanding company property as detailed above is returned.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcTcTermsTerminationHeadline NVARCHAR(MAX) = 'Termination',
 	@dcTcTermsTerminationSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1

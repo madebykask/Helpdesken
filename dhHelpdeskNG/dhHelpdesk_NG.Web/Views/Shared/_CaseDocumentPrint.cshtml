@@ -31,10 +31,23 @@
 
 
         body, table, p, ul, li {
-            font-size: 10pt;
-            line-height: 22px;
+            font-size: 9pt;
+            line-height: 17px;
             font-family: Verdana;
             vertical-align: top;
+        }
+
+        li {
+            list-style-type: none;
+        }
+        li:before {
+            content: '';
+            font-family: Wingdings;
+            display: block;
+            float: left;
+            width: 1.2em;
+            position: absolute;
+            margin-left: -20px;
         }
 
         p {
@@ -256,7 +269,7 @@
 
                     <tr style="page-break-inside: avoid">
                         <td style="padding-right:10px;margin-right:10px; text-align:unset;"><strong>@nr.</strong></td>
-                        <td style="padding-right:10px;margin-right:10px; text-align:unset;"><strong>@paragraphText.Headline.ToHtmlString()</strong></td>
+                        <td style="padding-right:10px;margin-right:10px; text-align:unset; width: 130px; "><strong>@paragraphText.Headline.ToHtmlString()</strong></td>
                         <td style="text-align: justify;">@paragraphText.Text.ToHtmlString()</td>
                     </tr>
 
