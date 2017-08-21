@@ -14,5 +14,7 @@ namespace DH.Helpdesk.Domain.MetaDataEntity
 
         public bool Translate { get; set; }
 
+        public int? Source { get; set; }
+
     }
 }

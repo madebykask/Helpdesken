@@ -1156,7 +1156,11 @@ IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblYesNo' AND xtype='U')
 			)
 
 
-
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Source' and sysobjects.name = N'tblEntityInfo')
+	begin
+		ALTER TABLE [dbo].tblEntityInfo ADD [Source] int NULL
+	end
+GO
 
 
 
