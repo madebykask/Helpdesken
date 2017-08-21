@@ -11,116 +11,129 @@
 @Scripts.Render("~/bundles/casetemplates/index")
 
 
-    <div id="caseTemplateRowsArea">
-        <div>
-            <table class="tableform">
-                <tr>
-                    <td style="width:200px">
+<div id="caseTemplateRowsArea">
+    <div>
+        <table class="tableform">
+            <tr>
+                <td style="width:200px">
 
-                        @Translation.GetCoreTextTranslation("Sök")
+                    @Translation.GetCoreTextTranslation("Sök")
 
-                    </td>
-                    <td>
-                        <input type="text" id="caseSolutionSearch" maxlength="50" style="width: 285px;" value="@searchText" />
-                        <input type="button" id="btnCaseSolutionSearch" class="btn" value="@Translation.GetCoreTextTranslation("Sök")" />
+                </td>
+                <td>
+                    <input type="text" id="caseSolutionSearch" maxlength="50" style="width: 285px;" value="@searchText" />
+                    <input type="button" id="btnCaseSolutionSearch" class="btn" value="@Translation.GetCoreTextTranslation("Sök")" />
+                    @if (Model != null && Model.Count() > 0)
+                    {
                         <i id="icoImg" class="@Model.FirstOrDefault().ImageClass" ; style="cursor: pointer;" onclick="showDiv()"></i>
-
-                        @*class="icon-plus-sign"*@
-                    </td>
-                </tr>
-                <tr>
-                    <td style="width:200px">
-                        <span>@Translation.Get("Visa endast aktiva")</span>
-                    </td>
-                    <td>
+                    }
+                    else
+                    {
+                        <i id="icoImg" class="icon-plus-sign" ; style="cursor: pointer;" onclick="showDiv()"></i>
+                    }
+                    @*class="icon-plus-sign"*@
+                </td>
+            </tr>
+            <tr>
+                <td style="width:200px">
+                    <span>@Translation.Get("Visa endast aktiva")</span>
+                </td>
+                <td>
+                    @if (Model != null && Model.Count() > 0)
+                    {
                         <input type="checkbox" onclick="test(this)" id="chkActive" @(Model.FirstOrDefault().IsShowOnlyActive ? "checked" : string.Empty)>
-                        @* <input type="checkbox" onclick="test(this)" id="chkActive">*@
+                    }
+                    else
+                    {
+                        <input type="checkbox" onclick="test(this)" id="chkActive" false : string.Empty)>
+                    }
+                    @* <input type="checkbox" onclick="test(this)" id="chkActive">*@
 
-                    </td>
+                </td>
 
 
 
-                </tr>
-            </table>
-        </div>
-        <table class="table table-striped table-bordered table-hover" id="tblCaseSolution">
-            <thead>
-                <tr>
-                    <th class="sortable" data-sort="@CaseSolutionIndexColumns.Name" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
-                        @Translation.GetCoreTextTranslation("Namn")
-                        <i class="@CaseSolutionIndexColumns.Name.SetCaseSolutionSortIcon()"></i>
-                    </th>
-                    <th class="sortable" data-sort="@CaseSolutionIndexColumns.Category" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 12%">
-                        @Translation.GetCoreTextTranslation("Kategori")
-                        <i class="@CaseSolutionIndexColumns.Category.SetCaseSolutionSortIcon()"></i>
-                    </th>
-                    <th class="sortable" data-sort="@CaseSolutionIndexColumns.Caption" data-asc="@_asc" style="cursor: pointer; width: 15%">
-                        @Translation.GetCoreTextTranslation("Beskrivning")
-                        <i class="@CaseSolutionIndexColumns.Caption.SetCaseSolutionSortIcon()"></i>
-                    </th>
-                    <th class="sortable" data-sort="@CaseSolutionIndexColumns.ConnectedToButton" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
-                        @Translation.GetCoreTextTranslation("Kopplat till")
-                        <i class="@CaseSolutionIndexColumns.ConnectedToButton.SetCaseSolutionSortIcon()"></i>
-                    </th>
-                    <th class="sortable" data-sort="@CaseSolutionIndexColumns.Caption" data-asc="@_asc" style="cursor: pointer; width: 15%">
-                        @Translation.GetCoreTextTranslation("Rubrik")
-                        <i class="@CaseSolutionIndexColumns.Caption.SetCaseSolutionSortIcon()"></i>
-                    </th>
-                    <th class="sortable" data-sort="@CaseSolutionIndexColumns.Administrator" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 10%">
-                        @Translation.GetCoreTextTranslation("Handläggare")
-                        <i class="@CaseSolutionIndexColumns.Administrator.SetCaseSolutionSortIcon()"></i>
-                    </th>
-                    <th class="sortable" data-sort="@CaseSolutionIndexColumns.Priority" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
-                        @Translation.GetCoreTextTranslation("Prioritet")
-                        <i class="@CaseSolutionIndexColumns.Priority.SetCaseSolutionSortIcon()"></i>
-                    </th>
-                    <th class="sortable" data-sort="@CaseSolutionIndexColumns.Status" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 8%">
-                        @Translation.GetCoreTextTranslation("Aktiv")
-                        <i class="@CaseSolutionIndexColumns.Status.SetCaseSolutionSortIcon()"></i>
-                    </th>
-                    <th class="sortable" data-sort="@CaseSolutionIndexColumns.SortOrder" data-asc="@_asc" style="cursor: pointer; width: 10%">
-                        @Translation.GetCoreTextTranslation("Sorteringsordning")
-                        <i class="@CaseSolutionIndexColumns.SortOrder.SetCaseSolutionSortIcon()"></i>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    var inactiveVal = item.IsActive ? string.Empty : "inactive";
-                    <tr>
-                        <td>
-                            <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
-                        </td>
-                        <td>
-                            <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CategoryName)</a>
-                        </td>
-                        <td>
-                            <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CaseSolutionDescription)</a>
-                        </td>
-                        <td>
-                            <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })"> @item.ConnectedToButton</a>
-                        </td>
-                        <td>
-                            <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CaseCaption)</a>
-                        </td>
-                        <td>
-                            <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.PerformerUserName)</a>
-                        </td>
-                        <td>
-                            <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.PriorityName)</a>
-                        </td>
-                        <td>
-                            <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })"> @item.IsActive.BoolToYesNo()</a>
-                        </td>
-                        <td>
-                            <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.SortOrder)</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
+            </tr>
         </table>
     </div>
+    <table class="table table-striped table-bordered table-hover" id="tblCaseSolution">
+        <thead>
+            <tr>
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.Name" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
+                    @Translation.GetCoreTextTranslation("Namn")
+                    <i class="@CaseSolutionIndexColumns.Name.SetCaseSolutionSortIcon()"></i>
+                </th>
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.Category" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 12%">
+                    @Translation.GetCoreTextTranslation("Kategori")
+                    <i class="@CaseSolutionIndexColumns.Category.SetCaseSolutionSortIcon()"></i>
+                </th>
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.Caption" data-asc="@_asc" style="cursor: pointer; width: 15%">
+                    @Translation.GetCoreTextTranslation("Beskrivning")
+                    <i class="@CaseSolutionIndexColumns.Caption.SetCaseSolutionSortIcon()"></i>
+                </th>
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.ConnectedToButton" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
+                    @Translation.GetCoreTextTranslation("Kopplat till")
+                    <i class="@CaseSolutionIndexColumns.ConnectedToButton.SetCaseSolutionSortIcon()"></i>
+                </th>
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.Caption" data-asc="@_asc" style="cursor: pointer; width: 15%">
+                    @Translation.GetCoreTextTranslation("Rubrik")
+                    <i class="@CaseSolutionIndexColumns.Caption.SetCaseSolutionSortIcon()"></i>
+                </th>
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.Administrator" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 10%">
+                    @Translation.GetCoreTextTranslation("Handläggare")
+                    <i class="@CaseSolutionIndexColumns.Administrator.SetCaseSolutionSortIcon()"></i>
+                </th>
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.Priority" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
+                    @Translation.GetCoreTextTranslation("Prioritet")
+                    <i class="@CaseSolutionIndexColumns.Priority.SetCaseSolutionSortIcon()"></i>
+                </th>
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.Status" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 8%">
+                    @Translation.GetCoreTextTranslation("Aktiv")
+                    <i class="@CaseSolutionIndexColumns.Status.SetCaseSolutionSortIcon()"></i>
+                </th>
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.SortOrder" data-asc="@_asc" style="cursor: pointer; width: 10%">
+                    @Translation.GetCoreTextTranslation("Sorteringsordning")
+                    <i class="@CaseSolutionIndexColumns.SortOrder.SetCaseSolutionSortIcon()"></i>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var inactiveVal = item.IsActive ? string.Empty : "inactive";
+                <tr>
+                    <td>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
+                    </td>
+                    <td>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CategoryName)</a>
+                    </td>
+                    <td>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CaseSolutionDescription)</a>
+                    </td>
+                    <td>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })"> @item.ConnectedToButton</a>
+                    </td>
+                    <td>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CaseCaption)</a>
+                    </td>
+                    <td>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.PerformerUserName)</a>
+                    </td>
+                    <td>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.PriorityName)</a>
+                    </td>
+                    <td>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })"> @item.IsActive.BoolToYesNo()</a>
+                    </td>
+                    <td>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.SortOrder)</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <script type="text/javascript">
 
