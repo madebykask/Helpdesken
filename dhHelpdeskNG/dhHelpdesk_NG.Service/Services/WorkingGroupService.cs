@@ -123,7 +123,8 @@
             else
             {
                 userWorkingGroups = userWorkingGroupRepository.GetAll()
-                .Where(uw => uw.User_Id == userId && uw.UserRole == 2).Select(uw => uw.WorkingGroup_Id);
+                .Where(uw => uw.User_Id == userId).Select(uw => uw.WorkingGroup_Id);
+                //.Where(uw => uw.User_Id == userId && uw.UserRole == 2).Select(uw => uw.WorkingGroup_Id);
             }
             return  this.workingGroupRepository
                     .GetMany(x => x.Customer_Id == customerId && (!isTakeOnlyActive || (isTakeOnlyActive && x.IsActive == 1)))
