@@ -6070,6 +6070,17 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = 'User has permission to invoice article' where Text_Id = 1724 and Language_Id = 2;
 GO
 
+UPDATE tblTextTranslation Set TextTranslation = 'Show Customer specific page' where Text_Id = 1395 and Language_Id = 2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'Group Case templates' where Text_Id = 1830 and Language_Id = 2;
+GO
+
+update tbltext set TextString = 'Visa Kundspecifik sida' where id = 1395
+GO
+
+update tbltext set TextString = 'Gruppera Ärendemallar' where id = 1830
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
