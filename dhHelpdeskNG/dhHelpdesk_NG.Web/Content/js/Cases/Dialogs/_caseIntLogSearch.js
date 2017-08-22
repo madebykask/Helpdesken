@@ -160,6 +160,10 @@
     }
 
     function getCasesIntLogEmailSearchOptions() {
+
+        var lastIntLogEmailSearchKey = '';
+        var delayFunc = CommonUtils.createDelayFunc();
+
         var options = {
             items: 20,
             minLength: 2,
@@ -167,42 +171,50 @@
                 var arr = query.replace(/<[^>]*>/g, "").split(";");
                 var searchText = $.trim(arr[arr.length - 1]);
                 if (searchText) {
-                    var lastInitiatorSearchKey = generateRandomKey();
-                    return $.ajax({
-                        url: "/cases/CaseSearchUserEmails",
-                        type: "post",
-                        data: { query: searchText, searchKey: lastInitiatorSearchKey, isInternalLog: true },
-                        dataType: "json",
-                        success: function(result) {
-                            if (result.searchKey !== lastInitiatorSearchKey)
-                                return;
+                    lastIntLogEmailSearchKey = generateRandomKey();
 
-                            var resultList = $.map(result.result,
-                                function(item) {
-                                    var aItem = {
-                                        userId: item.UserId,
-                                        name: item.FirstName + " " + item.SurName,
-                                        email: item.Emails,
-                                        groupType: item.GroupType,
-                                        departmentname: item.DepartmentName,
-                                        name_family: item.SurName + " " + item.FirstName
-                                    };
-                                    return JSON.stringify(aItem);
-                                });
-                            if (resultList.length > 0) {
-                                searchSelected = true;
-                            }
-                            else {
-                                var noRes = {
-                                    name: window.parameters.noResultLabel,
-                                    isNoResult: true
+                    delayFunc(function (){
+                        //console.log('getCasesIntLogEmailSearchOptions: running ajax request.');
+                        $.ajax({
+                            url: "/cases/CaseSearchUserEmails",
+                            type: "post",
+                            data: { query: searchText, searchKey: lastIntLogEmailSearchKey, isInternalLog: true },
+                            dataType: "json",
+                            success: function(result) {
+                                if (result.searchKey !== lastIntLogEmailSearchKey) {
+                                    return;
                                 }
-                                resultList.push(JSON.stringify(noRes));
-                                searchSelected = false;
+
+                                var resultList = $.map(result.result,
+                                    function(item) {
+                                        var aItem = {
+                                            userId: item.UserId,
+                                            name: item.FirstName + " " + item.SurName,
+                                            email: item.Emails,
+                                            groupType: item.GroupType,
+                                            departmentname: item.DepartmentName,
+                                            name_family: item.SurName + " " + item.FirstName
+                                        };
+                                        return JSON.stringify(aItem);
+                                    });
+
+                                if (resultList.length > 0) {
+                                    searchSelected = true;
+                                }
+                                else {
+                                    var noRes = {
+                                        name: window.parameters.noResultLabel,
+                                        isNoResult: true
+                                    }
+                                    resultList.push(JSON.stringify(noRes));
+                                    searchSelected = false;
+                                }
+
+                                process(resultList);
                             }
-                            return process(resultList);
-                        }
-                    });
+                        });    
+                    },
+                    300);
                 }
                 return;
             },
