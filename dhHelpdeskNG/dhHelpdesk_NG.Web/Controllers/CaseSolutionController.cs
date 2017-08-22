@@ -2820,8 +2820,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             // 
 
-            var splitToCaseSolutions = _caseSolutionService.GetCaseSolutions(curCustomerId);
-
+            //var splitToCaseSolutions = _caseSolutionService.GetCaseSolutions(curCustomerId).Where(z=>z.Status==1);
+            IList <CaseSolution> splitToCaseSolutions = _caseSolutionService.GetCaseSolutions(curCustomerId).Where(z => z.Status == 1).ToList();
 
             var model = new CaseSolutionInputViewModel
             {
