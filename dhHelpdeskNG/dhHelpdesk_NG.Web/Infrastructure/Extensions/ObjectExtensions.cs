@@ -892,6 +892,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             {
                 result = !string.IsNullOrEmpty(secton.SectionHeader) ? secton.SectionHeader : Translation.GetCoreTextTranslation(defaultHeader);
             }
+            else
+            {
+                result = Translation.GetCoreTextTranslation(defaultHeader);
+            }
             return result;
         }
 
