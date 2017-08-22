@@ -101,6 +101,7 @@ namespace DH.Helpdesk.Services.Services
             this._stateSecondaryService = stateSecondaryService;
             this._applicationRepository = applicationRepository;
             this._caseService = caseService;
+            this.caseSolutionConditionRepository = caseSolutionConditionRepository;
         }
 
         //public int GetAntal(int customerId, int userid)
@@ -731,7 +732,7 @@ namespace DH.Helpdesk.Services.Services
 
                     return DeleteMessage.Success;
                 }
-                catch
+                catch (Exception ex)
                 {
                     return DeleteMessage.UnExpectedError;
                 }
