@@ -6067,6 +6067,14 @@ If not exists (select * from tblTextTranslation where text_id = 1841 and Languag
 GO
 
 
+If not exists (select * from tbltext where id = 1842)
+	insert into tbltext (id, TextString) VALUES (1842, 'Obligatorisk vid aktivering')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1842 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1842, 2, 'Mandatory on reopen')
+GO
+
+
 UPDATE tblTextTranslation Set TextTranslation = 'User has permission to invoice article' where Text_Id = 1724 and Language_Id = 2;
 GO
 

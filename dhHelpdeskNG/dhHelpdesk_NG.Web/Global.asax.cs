@@ -51,10 +51,15 @@ namespace DH.Helpdesk.Web
             ECT.FormLib.FormLibSetup.SetupRoutes(RouteTable.Routes);
 
             MvcHandler.DisableMvcResponseHeader = true;
-			//System.Web.Helpers.AntiForgeryConfig.SuppressXFrameOptionsHeader = true;//uncomment this if XFrameOptions is added in web.config headers
+            //System.Web.Helpers.AntiForgeryConfig.SuppressXFrameOptionsHeader = true;//uncomment this if XFrameOptions is added in web.config headers            
+            // ECT.FormLib.FormLibSetup.Setup(); todo
 
-			// ECT.FormLib.FormLibSetup.Setup(); todo
-		}
+            //#if DEBUG
+            //    BundleTable.EnableOptimizations = false;
+            //#else
+            //    BundleTable.EnableOptimizations = true;
+            //#endif
+        }
 
         private void ViewEngineInit()
         {

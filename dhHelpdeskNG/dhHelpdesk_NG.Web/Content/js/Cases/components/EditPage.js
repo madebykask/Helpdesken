@@ -1399,6 +1399,16 @@ EditPage.prototype.init = function (p) {
         self.$descriptionDialog.css('visibility', visibility);
     });   
 
+    if ($(".chosen-single-select").length > 0) {
+        $(".chosen-single-select").each(function () {
+            if ($(this).attr('aria-invalid') !== "true") {
+                $(this).on("change", function () {
+                    $(this).valid();
+                });
+            }
+        });
+    }
+
     /*Enable if you have case print preview*/
     //var update_iFrame = function (iframeId) {
     //    setTimeout(function () {           

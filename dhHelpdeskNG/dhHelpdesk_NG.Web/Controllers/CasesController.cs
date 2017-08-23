@@ -5737,6 +5737,7 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.InsideTheCase);
             m.CasePrintView = new ReportModel(false);
             m.UserHasInvoicePermission = userHasInvoicePermission;
+            m.IsCaseReopened = m.case_.CaseHistories != null && m.case_.CaseHistories.Where(ch => ch.FinishingDate.HasValue).Any(); 
 
             return m;
         }

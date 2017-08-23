@@ -654,3 +654,4 @@ $(".chosen-single-select").chosen({
     'placeholder_text_multiple': placeholder_text_multiple,
     'no_results_text': no_results_text
 });
+

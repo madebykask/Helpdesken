@@ -184,6 +184,7 @@
                 newCustomerCaseFieldSettings.Name = cfs.Name;
                 newCustomerCaseFieldSettings.ShowOnStartPage = cfs.ShowOnStartPage;
                 newCustomerCaseFieldSettings.Required = cfs.Required;
+                newCustomerCaseFieldSettings.RequiredIfReopened = cfs.RequiredIfReopened;
                 newCustomerCaseFieldSettings.ShowExternal = cfs.ShowExternal;
                 newCustomerCaseFieldSettings.EMailIdentifier = cfs.EMailIdentifier;
                 newCustomerCaseFieldSettings.ChangedDate = DateTime.UtcNow;
@@ -913,6 +914,7 @@
                 newCustomerCaseFieldSettings.Name = cfs.Name;
                 newCustomerCaseFieldSettings.ShowOnStartPage = cfs.ShowOnStartPage;
                 newCustomerCaseFieldSettings.Required = cfs.Required;
+                newCustomerCaseFieldSettings.RequiredIfReopened = cfs.RequiredIfReopened;
                 newCustomerCaseFieldSettings.ShowExternal = cfs.ShowExternal;
                 newCustomerCaseFieldSettings.FieldSize = cfs.FieldSize;
                 newCustomerCaseFieldSettings.ListEdit = cfs.ListEdit;

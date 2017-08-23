@@ -1185,6 +1185,10 @@ END
 GO
 
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'RequiredIfReopened' and sysobjects.name = N'tblCaseFieldSettings')
+   ALTER TABLE tblCaseFieldSettings ADD RequiredIfReopened int NOT NULL Default(0)
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.33'

@@ -9,10 +9,12 @@ $(function () {
         var curElement = jQuery('[name="' + elementName + '"]');
         console.log('catch me');
         var $requiredElement = $(this).parents('tr').find('[name$="Required"]:checkbox').not(':disabled');
+        var $requiredIfReopendElement = $(this).parents('tr').find('[name$="RequiredIfReopened"]:checkbox').not(':disabled');
         var visibleElement = curElement.filter(':visible').get(0);
         if (this.checked == false && visibleElement != undefined) {
             visibleElement.checked = false;
             $requiredElement.prop('checked', false);
+            $requiredIfReopendElement.prop('checked', false);
         }
     });
 
@@ -49,6 +51,15 @@ $(function () {
     });
 
     $('input[name$=".Required"]').on('click', function (ev) {
+        var $mainEl = $(this).parents('tr').find('[name$=".ShowOnStartPage"]:checkbox');
+        if (!$mainEl.prop('checked')) {
+            ev.preventDefault();
+            return false;
+        }
+        return true;
+    });
+
+    $('input[name$=".RequiredIfReopened"]').on('click', function (ev) {
         var $mainEl = $(this).parents('tr').find('[name$=".ShowOnStartPage"]:checkbox');
         if (!$mainEl.prop('checked')) {
             ev.preventDefault();
@@ -133,16 +144,19 @@ $(function () {
     });
 
     $(document).ready(function () {
-        $(".th1").css({ 'width': ($(".tableth1").width() + 'px') });
-        $(".th2").css({'width': ($(".tableth2").width() + 'px') });
-        $(".th3").css({'width': ($(".tableth3").width() + 'px') });
-        $(".th4").css({'width': ($(".tableth4").width() + 'px') });
-        $(".th5").css({'width': ($(".tableth5").width() + 'px') });
-        $(".th6").css({'width': ($(".tableth6").width() + 'px') });
-        $(".th7").css({'width': ($(".tableth7").width() + 'px') });
-        $(".th8").css({'width': ($(".tableth8").width() + 'px') });
-        $(".th9").css({'width': ($(".tableth9").width() + 'px') });
-        });
+        $(".th1").css({ 'width': ($(".tableth2x").width() + 'px') });
+        $(".th2").css({ 'width': ($(".tableth9x").width() + 'px') });
+        $(".th3").css({ 'width': ($(".tableth5x").width() + 'px') });
+        $(".th4").css({ 'width': ($(".tableth8x").width() + 'px') });
+        $(".th5").css({ 'width': ($(".tableth20x").width() + 'px') });
+        $(".th6").css({ 'width': ($(".tableth8x").width() + 'px') });
+        $(".th7").css({ 'width': ($(".tableth8x").width() + 'px') });
+        $(".th8").css({ 'width': ($(".tableth6x").width() + 'px') });
+        $(".th9").css({ 'width': ($(".tableth20x").width() + 'px') });
+        $(".th10").css({ 'width': ($(".tableth18x").width() + 'px') });
+
+        
+    });
 });
 
 $(function () {    

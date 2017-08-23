@@ -212,7 +212,7 @@
                 return false;
             }
 
-            bool isRequired = model.caseFieldSettings.CaseFieldSettingRequiredCheck(caseFieldName.ToString()) == 1;
+            bool isRequired = model.caseFieldSettings.CaseFieldSettingRequiredCheck(caseFieldName.ToString(), model.IsCaseReopened) == 1;
             return isRequired;
         }
 

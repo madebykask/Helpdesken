@@ -4072,31 +4072,45 @@ a.export-order {
     word-wrap: break-word;
 }
 
-.tableth1 {
+
+.tableth2x {
     width: 2%;
 }
-.tableth2 {
-    width: 9%;
+
+.tableth4x {
+    width: 4%;
 }
-.tableth3 {
+
+.tableth5x {
     width: 5%;
 }
-.tableth4 {
-    width: 8%;
+
+.tableth6x {
+    width: 6%;
 }
-.tableth5 {
-    width: 20%;
-}
-.tableth6 {
-    width: 8%;
-}
-.tableth7 {
+
+
+.tableth7x {
     width: 7%;
 }
-.tableth8 {
-    width: 20%;
+
+.tableth8x {
+    width: 8%;
 }
-.tableth9 {
+
+.tableth9x {
+    width: 9%;
+}
+
+.tableth16x {
+    width: 16%;
+}
+
+.tableth18x {
+    width: 18%;
+}
+
+.tableth20x {
     width: 20%;
 }
 

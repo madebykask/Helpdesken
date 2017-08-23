@@ -18,6 +18,7 @@
                                 IEnumerable<CaseFieldSettingsWithLanguage> settingsEx,
                                 GlobalEnums.TranslationCaseFields field,
                                 int customerId,
+                                bool isCaseReopened,
                                 int languageId = 0,
                                 string defaultCaption = "")
         {
@@ -45,7 +46,7 @@
             tag.SetInnerText(caption);
             result.Append(tag);
 
-            if (setting.Required.ToBool())
+            if (setting.Required.ToBool() || (isCaseReopened && setting.RequiredIfReopened != 0))
             {
                 tag = new TagBuilder("span");
                 tag.MergeAttribute("class", "mandatorystar");

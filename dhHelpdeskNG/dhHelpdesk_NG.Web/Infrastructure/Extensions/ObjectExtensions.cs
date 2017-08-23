@@ -159,7 +159,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         }
 
 
-        public static int CaseFieldSettingRequiredCheck(this IList<CaseFieldSetting> cfs, string valueToFind)
+        public static int CaseFieldSettingRequiredCheck(this IList<CaseFieldSetting> cfs, string valueToFind, bool isCaseReopend)
         {
             int ret = 0;
             if (cfs != null)
@@ -167,7 +167,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     if (string.Compare(c.Name, valueToFind.getCaseFieldName(), true) == 0)
                     {
-                        if (c.Required == 1 && c.ShowOnStartPage == 1)
+                        if ((c.Required == 1 || (isCaseReopend && c.RequiredIfReopened == 1)) && c.ShowOnStartPage == 1)
                             ret = 1;   
                         break;
                     }
@@ -220,6 +220,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         public static int getRequired(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
         {
             return cfs.ToList().getCaseSettingsValue(valueToFind).Required;
+        }
+
+        public static int getRequiredIfReopened(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
+        {
+            return cfs.ToList().getCaseSettingsValue(valueToFind).RequiredIfReopened;
         }
 
         public static int getFieldSize(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
