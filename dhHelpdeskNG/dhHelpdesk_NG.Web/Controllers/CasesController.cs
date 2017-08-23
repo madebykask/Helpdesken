@@ -1650,7 +1650,14 @@ namespace DH.Helpdesk.Web.Controllers
         {
             this.NewCaselog(case_, caseLog);
             //this.UpdateCaseLogForCase(case_, caseLog);
-            return this.RedirectToAction("edit", "cases", new { id = caseLog.CaseId });
+            if (caseLog.FinishingType > 0)
+            {
+                return this.RedirectToAction("index", "cases", new { id = case_.Customer_Id });
+            }else
+            {
+                return this.RedirectToAction("edit", "cases", new { id = caseLog.CaseId });
+            }
+            
         }
 
         [HttpGet]
