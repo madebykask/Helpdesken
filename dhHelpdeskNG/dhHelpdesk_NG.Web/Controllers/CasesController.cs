@@ -5679,14 +5679,11 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 string extendedCasePath = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
 
-                //TODO: Do not check in
-                //extendedCasePath = "http://cfdhsschr.ikeadt.com" + extendedCasePath;
-                //extendedCasePath = "http://dhhelpdesk-ikea-bschr-v5.datahalland.se" + extendedCasePath;
-
+           
                 if (!string.IsNullOrEmpty(extendedCasePath))
                 {
-                    //Take the highest workinggroupId
-                    var userWorkingGroup = this._workingGroupService.GetWorkingGroups(customerId, SessionFacade.CurrentUser.Id).OrderByDescending(x => x.WorkingGroupId).FirstOrDefault();
+                    //Take the highest workinggroupId with "Admin" access (UserRole)
+                    var userWorkingGroup = this._workingGroupService.GetWorkingGroupsAdmin(customerId, SessionFacade.CurrentUser.Id).OrderByDescending(x => x.WorkingGroupId).FirstOrDefault();
 
                     int userWorkingGroupId = 0;
 

@@ -637,16 +637,16 @@ namespace DH.Helpdesk.Services.Services
         
         public bool IsRelated(int caseId)
         {
-            var isChildCase = GetChildCasesFor(caseId);
+            var isParentCase = GetChildCasesFor(caseId);
 
-            if (isChildCase != null)
+            if (isParentCase != null && isParentCase.Count() > 0)
             {
                 return true;
             }
 
-            var isParentCase = GetParentInfo(caseId);
+            var isChildCase = GetParentInfo(caseId);
 
-            if (isParentCase != null)
+            if (isChildCase != null)
             {
                 return true;
             }
