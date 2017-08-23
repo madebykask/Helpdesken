@@ -289,7 +289,16 @@
         else {
             $('#spNums').hide();
             $('#StartPageFAQNums').hide();
+        };
+
+        if ('@Model.Customer.ShowCasesOnExternalPage' == 1) {
+            $('#divCases').show()
+            $('#headCases').show();
         }
+        else {
+            $('#divCases').hide();
+            $('#headCases').hide()
+        };
 
         $('#chkDoc').click(function () {
             if ($('#chkDoc').attr('checked')) {
@@ -312,7 +321,7 @@
         });
 
         $('#chkFAQOnStartPage').click(function () {
-            if ($('#chkFAQOnStartPage').attr('checked')) {                
+            if ($('#chkFAQOnStartPage').attr('checked')) {
                 $('#spNums').show();
                 $('#StartPageFAQNums').show();
             }
@@ -369,7 +378,7 @@
         //$("Customer_ShowFAQOnExternalStartPage").change(function () {
         //    $("#SelectedCategories option").attr("selected", "selected");
         //});
-           
+
         function submitForm() {
             $("#SelectedCategories option").attr("selected", "selected");
             $("#SelectedCaseTypes option").attr("selected", "selected");
