@@ -30,6 +30,10 @@ namespace DH.Helpdesk.BusinessData.Models.CaseDocument
         //TODO: use model instead
         public ICollection<DH.Helpdesk.Domain.CaseDocument_CaseDocumentParagraphEntity> CaseDocumentParagraphs { get; set; }
         public DH.Helpdesk.Domain.CaseDocumentTemplateEntity CaseDocumentTemplate { get; set; }
+
+
+		// Invalid Fields
+		public string Errors { get; set; }
     }
 
 

@@ -11,9 +11,9 @@ BEGIN TRAN
 DECLARE @logoGuid UNIQUEIDENTIFIER = 'EB0434AA-0BBF-4CA8-AB0A-BF853129FB9D'
 DECLARE @logoID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @logoGuid)
 
--- Get footer info with initials
-DECLARE @footerWithInitialsGuid UNIQUEIDENTIFIER = 'A7626F89-C428-475C-8E10-160CCE0F2B5D'
-DECLARE @footerWithInitialsID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @footerWithInitialsGuid)
+-- Get footer info
+DECLARE @footerGuid UNIQUEIDENTIFIER = 'd43619b6-be1c-4def-af32-460cf8d38f63'
+DECLARE @footerID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @footerGuid)
 
 -- Draft ID
 DECLARE @draftGuid UNIQUEIDENTIFIER = '51220147-E756-492E-88A1-C1671BDE6AA5'
@@ -55,9 +55,9 @@ INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentP
 SELECT @dcHiringID, @draftID, @counter
 SET @counter = @counter + 1
 
--- #################################### Footer with initials
+-- #################################### Footer
 INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentParagraph_Id, SortOrder)
-SELECT @dcHiringID, @footerWithInitialsID, @counter
+SELECT @dcHiringID, @footerID, @counter
 SET @counter = @counter + 1
 
 -- #################################### Header
@@ -119,12 +119,12 @@ DECLARE @dcHiringHeaderTextBGuid UNIQUEIDENTIFIER = 'E79BBDDB-E17B-4B4D-BD36-56F
 	@dcHiringHeaderTextBName NVARCHAR(MAX) = @prefix + ' Header, Co-worker',
 	@dcHiringHeaderTextBDescription NVARCHAR(MAX) = '',
 	@dcHiringHeaderTextBText NVARCHAR(MAX) = '<p><Todays Date - Long></p>
-		<p><strong><Co-worker First Name> <Co-worker Last Name></strong></p>
+		<p><Co-worker First Name> <Co-worker Last Name></p>
 		<p><Address Line 1><br />
 		<Address Line 2> <State> <Postal Code><br />
 		<Address Line 3><br />
 		<br /><br />
-		Dear <Co-worker First Name>,</p>',
+		Dear <Co-worker First Name></p>',
 	@dcHiringHeaderTextBHeadline NVARCHAR(MAX) = '',
 	@dcHiringHeaderTextBSortOrder INT = 0
 
@@ -215,7 +215,7 @@ END
 DECLARE @dcHiringEmployGreetingTextAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcHiringEmployGreetingTextAGuid)
 
 -- Create condition for Text A, Full time
-DECLARE @dcHiringEmployGreetingTextACondAGuid UNIQUEIDENTIFIER = '2247139F-6294-4CAB-BF62-5C2F828DAC77',
+DECLARE @dcHiringEmployGreetingTextACondAGuid UNIQUEIDENTIFIER = '1cce66c3-03eb-47b4-8928-e53489ec6c3e',
 	@dcHiringEmployGreetingTextACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractedHours',
 	@dcHiringEmployGreetingTextACondAOperator NVARCHAR(MAX) = 'Equal',
 	@dcHiringEmployGreetingTextACondAValues NVARCHAR(MAX) = '76',
@@ -266,7 +266,7 @@ BEGIN
 END
 
 ---- Create or update text B, Part Time
-DECLARE @dcHiringEmployGreetingTextBGuid UNIQUEIDENTIFIER = '6F56B42A-A052-4B98-A438-ECA5C30E0A3E',
+DECLARE @dcHiringEmployGreetingTextBGuid UNIQUEIDENTIFIER = '0df6a940-6107-48aa-8ac0-369b40620bdf',
 	@dcHiringEmployGreetingTextBName NVARCHAR(MAX) = @prefix + ' Greeting, part time',
 	@dcHiringEmployGreetingTextBDescription NVARCHAR(MAX) = '',
 	@dcHiringEmployGreetingTextBText NVARCHAR(MAX) = 'We are delighted to confirm that your application for the position of Part Time <Position Title (Local Job Name)> <Shift Type> Shift has been successful, and wish to confirm the terms and conditions of your employment.',
@@ -1050,8 +1050,7 @@ END
 DECLARE @dcHiringTermsRemunGuid UNIQUEIDENTIFIER = 'a5452cb7-54f9-4f0e-acd9-b27da4e95a50',
 	@dcHiringTermsRemunName NVARCHAR(MAX) = @prefix + ' Remuneration',
 	@dcHiringTermsRemunDescription NVARCHAR(MAX) = '',
-	@dcHiringTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your base hourly rate will be as per the <b>IKEA Distributions Services Australia Pty Ltd Enterprise Agreement 2016</b>.  This amount will be paid directly into your nominated bank account on a fortnightly basis.
-<p style="page-break-after: always;"></p>', -- New PDF page after this',
+	@dcHiringTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your base hourly rate will be as per the <b>IKEA Distributions Services Australia Pty Ltd Enterprise Agreement 2016</b>.  This amount will be paid directly into your nominated bank account on a fortnightly basis.',
 	@dcHiringTermsRemunHeadline NVARCHAR(MAX) = 'Remuneration',
 	@dcHiringTermsRemunSortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
@@ -1123,8 +1122,6 @@ DECLARE @dcHiringTermsConfGuid UNIQUEIDENTIFIER = '38786f09-515d-4cb5-9fba-921fc
 	@dcHiringTermsConfName NVARCHAR(MAX) = @prefix + ' Confidential Information',
 	@dcHiringTermsConfDescription NVARCHAR(MAX) = '',
 	@dcHiringTermsConfText NVARCHAR(MAX) = 'In the course of your employment, you may be exposed to “Confidential Information” concerning IKEA. Confidential Information means any information obtained by you in the course of your employment, including:
-<br>
-<br>
 <ul>
 <li>trade secrets;</li>
 <li>technical information and technical drawings;</li>
@@ -1134,23 +1131,21 @@ DECLARE @dcHiringTermsConfGuid UNIQUEIDENTIFIER = '38786f09-515d-4cb5-9fba-921fc
 <li>any information marked “confidential” or which IKEA informs you is confidential or a trade secret; and</li>
 <li>Co-worker and customer personal details.</li>
 </ul>
+<br>
 but excluding:
-<br>
-<br>
 <ul>
 <li>information available to the public; and</li>
 <li>information which you can prove you lawfully possessed before obtaining it in the course of your employment (other than this letter of appointment)</li>
 </ul>
+<br>
 During and after your employment, you must not use or disclose Confidential Information to any person (including an employee of IKEA) other than:
-<br>
-<br>
 <ul>
 <li>to perform your duties;</li>
 <li>if IKEA has consented in writing; or</li>
 <li>if required by law.</li>
 </ul>
-As an IKEA co-worker, you must keep Confidential Information in a secure manner and treat such information with appropriate sensitivity. On demand by IKEA and at the end of your employment, you must deliver to IKEA all copies of Confidential Information in your possession or control (including all Confidential Information held electronically in any medium) and then delete all Confidential Information held electronically in any medium in your possession or control.
-<p style="page-break-after: always;"></p>', -- New PDF page after this',
+<br>
+As an IKEA co-worker, you must keep Confidential Information in a secure manner and treat such information with appropriate sensitivity. On demand by IKEA and at the end of your employment, you must deliver to IKEA all copies of Confidential Information in your possession or control (including all Confidential Information held electronically in any medium) and then delete all Confidential Information held electronically in any medium in your possession or control.',
 	@dcHiringTermsConfHeadline NVARCHAR(MAX) = 'Confidential Information',
 	@dcHiringTermsConfSortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
@@ -1532,8 +1527,7 @@ DECLARE @dcHiringTermsTerminationGuid UNIQUEIDENTIFIER = '70cf8691-6792-4ddd-974
 <br><br>
 Upon termination of your employment, all material, equipment, uniforms, information, company records, data etc issued to you or created by you in your employment is to be returned to IKEA or its nominee.
 <br><br>
-IKEA reserves the right to withhold an appropriate sum of money from a co-worker’s termination payment until such time as any outstanding company property as detailed above is returned.
-<p style="page-break-after: always;"></p>', -- New PDF page after this',
+IKEA reserves the right to withhold an appropriate sum of money from a co-worker’s termination payment until such time as any outstanding company property as detailed above is returned.',
 	@dcHiringTermsTerminationHeadline NVARCHAR(MAX) = 'Termination',
 	@dcHiringTermsTerminationSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1814,8 +1808,7 @@ END
 DECLARE @dcHiringTermsVarGuid UNIQUEIDENTIFIER = '99ab359a-d4c9-4fba-a1ce-9ae064b7251b',
 	@dcHiringTermsVarName NVARCHAR(MAX) = @prefix + ' Variation',
 	@dcHiringTermsVarDescription NVARCHAR(MAX) = '',
-	@dcHiringTermsVarText NVARCHAR(MAX) = 'This Agreement may only be varied by a written agreement signed by yourself and IKEA.
-<p style="page-break-after: always;"></p>', -- New PDF page after this',
+	@dcHiringTermsVarText NVARCHAR(MAX) = 'This Agreement may only be varied by a written agreement signed by yourself and IKEA.',
 	@dcHiringTermsVarHeadline NVARCHAR(MAX) = 'Variation',
 	@dcHiringTermsVarSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1972,7 +1965,7 @@ DECLARE @dcHiringConSignGuid UNIQUEIDENTIFIER = 'f0682a33-53e2-4bd0-9a1c-5a57987
 	@dcHiringConSignName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@dcHiringConSignDescription NVARCHAR(MAX) = '',
 	@dcHiringConSignText NVARCHAR(MAX) = 'Yours sincerely<br>
-	<Reports To Line Manager><br>
+	<Reports to Line Manager><br>
 	<Position Title (Local Job Name) of Reports To Line Manager><br>
 	<strong>IKEA Distribution Services Australia Pty Ltd</strong>',
 	@dcHiringConSignHeadline NVARCHAR(MAX) = '',

@@ -11,13 +11,9 @@ BEGIN TRAN
 DECLARE @logoGuid UNIQUEIDENTIFIER = 'EB0434AA-0BBF-4CA8-AB0A-BF853129FB9D'
 DECLARE @logoID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @logoGuid)
 
--- Get footer info
-DECLARE @footerGuid UNIQUEIDENTIFIER = 'd43619b6-be1c-4def-af32-460cf8d38f63'
-DECLARE @footerID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @footerGuid)
-
--- Get address and company info
-DECLARE @addressInfoGuid UNIQUEIDENTIFIER = '3E55AA5C-B241-4C01-9DB3-837B07118BF7'
-DECLARE @addressInfoID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @addressInfoGuid)
+-- Get footer info with initials
+DECLARE @footerWithInitialsGuid UNIQUEIDENTIFIER = 'A7626F89-C428-475C-8E10-160CCE0F2B5D'
+DECLARE @footerWithInitialsID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @footerWithInitialsGuid)
 
 -- Draft ID
 DECLARE @draftGuid UNIQUEIDENTIFIER = '51220147-E756-492E-88A1-C1671BDE6AA5'
@@ -59,17 +55,108 @@ INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentP
 SELECT @retSalHiringID, @draftID, @counter
 SET @counter = @counter + 1
 
--- #################################### Footer
+-- #################################### Footer with initials
 INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentParagraph_Id, SortOrder)
-SELECT @retSalHiringID, @footerID, @counter
+SELECT @retSalHiringID, @footerWithInitialsID, @counter
 SET @counter = @counter + 1
 
 
+-- #################################### Header
 
--- #################################### Address and company info
+---- Create or update paragraph
+-- Paragraph guid
+DECLARE @retSalHiringHeaderGuid UNIQUEIDENTIFIER = 'D9AAC55C-7024-4FA1-A521-A14173588766',
+	@retSalHiringHeaderName NVARCHAR(MAX) = @prefix + ' Header',
+	@retSalHiringHeaderParagraphType INT = @ParagraphTypeText,
+	@retSalHiringHeaderDescription NVARCHAR(MAX) = ''
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentParagraph CDP WHERE  CDP.CaseDocumentParagraphGUID = @retSalHiringHeaderGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentParagraph([Name], [Description], ParagraphType, CaseDocumentParagraphGUID)
+	VALUES (@retSalHiringHeaderName, @retSalHiringHeaderDescription, @retSalHiringHeaderParagraphType, @retSalHiringHeaderGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDP SET [Name] = @retSalHiringHeaderName, [Description] = @retSalHiringHeaderDescription, ParagraphType = @retSalHiringHeaderParagraphType
+	FROM tblCaseDocumentParagraph CDP 
+	WHERE CDP.CaseDocumentParagraphGUID = @retSalHiringHeaderGuid
+END
+DECLARE @retSalHiringHeaderID INT = (SELECT ID FROM tblCaseDocumentParagraph WHERE CaseDocumentParagraphGUID = @retSalHiringHeaderGuid)
+
+---- Create or update text A. Company info
+DECLARE @retSalHiringHeaderTextAGuid UNIQUEIDENTIFIER = '8FC8AD17-7918-4D05-BFBE-5B27ED62597F',
+	@retSalHiringHeaderTextAName NVARCHAR(MAX) = @prefix + ' Header, Company',
+	@retSalHiringHeaderTextADescription NVARCHAR(MAX) = '',
+	@retSalHiringHeaderTextAText NVARCHAR(MAX) = '<p style="text-align:left;">IKEA Pty Limited ABN 84 006 270 757</p>',
+	@retSalHiringHeaderTextAHeadline NVARCHAR(MAX) = '',
+	@retSalHiringHeaderTextASortOrder INT = 0
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retSalHiringHeaderTextAGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
+	VALUES (@retSalHiringHeaderID, 
+		@retSalHiringHeaderTextAName, 
+		@retSalHiringHeaderTextADescription,
+		@retSalHiringHeaderTextAText, 
+		@retSalHiringHeaderTextAHeadline,
+		@retSalHiringHeaderTextASortOrder,
+		@retSalHiringHeaderTextAGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDT SET 
+		CaseDocumentParagraph_Id = @retSalHiringHeaderID,
+		[Name] = @retSalHiringHeaderTextAName, 
+		[Description] = @retSalHiringHeaderTextADescription, 
+		[Text] = @retSalHiringHeaderTextAText,
+		[Headline] = @retSalHiringHeaderTextAHeadline,
+		SortOrder = @retSalHiringHeaderTextASortOrder
+	FROM tblCaseDocumentText CDT 
+	WHERE CDT.CaseDocumentTextGUID = @retSalHiringHeaderTextAGuid
+END
+---- Create or update text B. Co-worker info
+DECLARE @retSalHiringHeaderTextBGuid UNIQUEIDENTIFIER = 'DFC45851-14A9-44FF-B02E-7397D9B664D7',
+	@retSalHiringHeaderTextBName NVARCHAR(MAX) = @prefix + ' Header, Co-worker',
+	@retSalHiringHeaderTextBDescription NVARCHAR(MAX) = '',
+	@retSalHiringHeaderTextBText NVARCHAR(MAX) = '<p><Todays Date - Long></p>
+		<p><Co-worker First Name> <Co-worker Last Name></p>
+		<p><Address Line 1><br />
+		<Address Line 2> <State> <Postal Code><br />
+		<Address Line 3><br />
+		<br /><br />
+		Dear <Co-worker First Name></p>',
+	@retSalHiringHeaderTextBHeadline NVARCHAR(MAX) = '',
+	@retSalHiringHeaderTextBSortOrder INT = 0
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retSalHiringHeaderTextBGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
+	VALUES (@retSalHiringHeaderID, 
+		@retSalHiringHeaderTextBName, 
+		@retSalHiringHeaderTextBDescription,
+		@retSalHiringHeaderTextBText, 
+		@retSalHiringHeaderTextBHeadline,
+		@retSalHiringHeaderTextBSortOrder,
+		@retSalHiringHeaderTextBGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDT SET 
+		CaseDocumentParagraph_Id = @retSalHiringHeaderID,
+		[Name] = @retSalHiringHeaderTextBName, 
+		[Description] = @retSalHiringHeaderTextBDescription, 
+		[Text] = @retSalHiringHeaderTextBText,
+		[Headline] = @retSalHiringHeaderTextBHeadline,
+		SortOrder = @retSalHiringHeaderTextBSortOrder
+	FROM tblCaseDocumentText CDT 
+	WHERE CDT.CaseDocumentTextGUID = @retSalHiringHeaderTextBGuid
+END
+
+-- Add header paragraph to case document
 INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentParagraph_Id, SortOrder)
-SELECT @retSalHiringID, @addressInfoID, @counter
+SELECT @retSalHiringID, @retSalHiringHeaderID, @counter
 SET @counter = @counter + 1
+
 
 -- #################################### Employment greeting
 
@@ -129,8 +216,8 @@ DECLARE @retSalHiringEmployGreetingTextAID INT = (SELECT ID FROM tblCaseDocument
 -- Create condition for Text A, Full time
 DECLARE @retSalHiringEmployGreetingTextACondAGuid UNIQUEIDENTIFIER = '719D11A1-C743-4FAF-B7B6-A60E10496FF0',
 	@retSalHiringEmployGreetingTextACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
-	@retSalHiringEmployGreetingTextACondAOperator NVARCHAR(MAX) = 'Empty',
-	@retSalHiringEmployGreetingTextACondAValues NVARCHAR(MAX) = '76',
+	@retSalHiringEmployGreetingTextACondAOperator NVARCHAR(MAX) = 'IsEmpty',
+	@retSalHiringEmployGreetingTextACondAValues NVARCHAR(MAX) = '',
 	@retSalHiringEmployGreetingTextACondADescription NVARCHAR(MAX) = 'Has no contract end date',
 	@retSalHiringEmployGreetingTextACondAStatus INT = 1
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalHiringEmployGreetingTextACondAGuid)
@@ -214,7 +301,7 @@ DECLARE @retSalHiringEmployGreetingTextBID INT = (SELECT ID FROM tblCaseDocument
 DECLARE @retSalHiringEmployGreetingTextBCondAGuid UNIQUEIDENTIFIER = '0EF15E2F-7644-4480-9744-76C5B2D59030',
 	@retSalHiringEmployGreetingTextBCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
 	@retSalHiringEmployGreetingTextBCondAOperator NVARCHAR(MAX) = 'HasValue',
-	@retSalHiringEmployGreetingTextBCondAValues NVARCHAR(MAX) = '76',
+	@retSalHiringEmployGreetingTextBCondAValues NVARCHAR(MAX) = '',
 	@retSalHiringEmployGreetingTextBCondADescription NVARCHAR(MAX) = 'Has contract end date',
 	@retSalHiringEmployGreetingTextBCondAStatus INT = 1
 
@@ -750,7 +837,9 @@ END*/
 DECLARE @retSalHiringTermsRemunGuid UNIQUEIDENTIFIER = '00149C22-1C23-48B1-A246-51274F3AB8BC',
 	@retSalHiringTermsRemunName NVARCHAR(MAX) = @prefix + ' Remuneration',
 	@retSalHiringTermsRemunDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your base hourly rate will be as per the <b>IKEA Distributions Services Australia Pty Ltd Enterprise Agreement 2016</b>.  This amount will be paid directly into your nominated bank account on a fortnightly basis.',
+	@retSalHiringTermsRemunText NVARCHAR(MAX) = 'Your total remuneration per annum including superannuation is $<Basic Pay Amount>.<br>
+<br>
+Your salary will be paid directly into your nominated bank account on a fortnightly basis, two weeks in arrears. ',
 	@retSalHiringTermsRemunHeadline NVARCHAR(MAX) = 'Remuneration',
 	@retSalHiringTermsRemunSortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
@@ -820,11 +909,14 @@ END
 -- #################################### Hours of Work
 ---- Hours of Work A
 DECLARE @retSalHiringTermsHWAGuid UNIQUEIDENTIFIER = '19E0C4DA-0FC7-49FD-8E91-78F98AA20EA3',
-	@retSalHiringTermsHWAName NVARCHAR(MAX) = @prefix + ' Hours of Work, full time',
+	@retSalHiringTermsHWAName NVARCHAR(MAX) = @prefix + ' Hours of Work, not exists',
 	@retSalHiringTermsHWADescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsHWAText NVARCHAR(MAX) = 
-	'You will be rostered to work 76 ordinary hours per fortnight.  Such details of your initial roster will be discussed with you upon your commencement.  However, where there is a change in the business’ needs, your hours may also be subject to change with appropriate notice.
-You should note that ordinary hours in the Distribution Centre include Saturday’s and you have mutually agreed to work more than one in three Saturdays as part of your contracted ordinary hours.',
+	'Your contracted hours will be <Contracted Hours> hours, plus reasonable additional hours, per fortnight, worked on a rotating 14-day roster.  This roster will include some late night and weekend work.<br>
+<br>
+Your level of salary takes into account these additional hours, which may be required from time to time to fulfill the responsibilities of your role.<br>
+<br>
+If you are a part-time co-worker, the days and times for your part-time arrangement are to be discussed and agreed with your manager in writing.  If an additional day/s are worked upon mutual agreement with your direct manager these will be paid at the normal rate of pay.',
 	@retSalHiringTermsHWAHeadline NVARCHAR(MAX) = 'Hours of Work',
 	@retSalHiringTermsHWASortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
@@ -856,10 +948,10 @@ DECLARE @retSalHiringTermsHWAID INT = (SELECT ID FROM tblCaseDocumentText CDT WH
 
 -- Create condition for Hours of Work A
 DECLARE @retSalHiringTermsHWACondGuid UNIQUEIDENTIFIER = '22CCD872-5C39-48F8-8D63-4A5EFB9165F3',
-	@retSalHiringTermsHWACondPropertyName NVARCHAR(MAX) = 'extendedcase_ContractedHours',
-	@retSalHiringTermsHWACondOperator NVARCHAR(MAX) = 'Equal',
-	@retSalHiringTermsHWACondValues NVARCHAR(MAX) = '76',
-	@retSalHiringTermsHWACondDescription NVARCHAR(MAX) = 'Is full time',
+	@retSalHiringTermsHWACondPropertyName NVARCHAR(MAX) = 'case_BusinessUnit',
+	@retSalHiringTermsHWACondOperator NVARCHAR(MAX) = 'NotExists',
+	@retSalHiringTermsHWACondValues NVARCHAR(MAX) = 'Service Office NSW,Service Office QLD,Service Office VIC,Service Office ACT',
+	@retSalHiringTermsHWACondDescription NVARCHAR(MAX) = 'Business unit does not exists in list',
 	@retSalHiringTermsHWACondStatus INT = 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalHiringTermsHWACondGuid)
@@ -908,11 +1000,13 @@ END
 
 ---- Hours of Work B
 DECLARE @retSalHiringTermsHWBGuid UNIQUEIDENTIFIER = '9A40A689-16CB-423E-8A96-E75882AC099C',
-	@retSalHiringTermsHWBName NVARCHAR(MAX) = @prefix + ' Hours of Work, part time',
+	@retSalHiringTermsHWBName NVARCHAR(MAX) = @prefix + ' Hours of Work, exists',
 	@retSalHiringTermsHWBDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsHWBText NVARCHAR(MAX) = 
-	'Your contracted hours are <Contracted Hours> per fortnight, you may be offered additional ‘varied hours’ paid at your ordinary rate of pay.
-	You will be rostered in accordance to your availability schedule which you filled out at the time of your employment. Your availability schedule forms part of your employment contract.',
+	@retSalHiringTermsHWBText NVARCHAR(MAX) = 'Your contracted hours of work will be <Contracted Hours> hours between Monday to Friday per fortnight.  This may include some late night and weekend work from time to time during peak periods.<br>
+<br>
+As a salaried co-worker you are paid for the job and therefore your level of Remuneration takes into account these additional hours, which may be require to fulfill the responsibilities of your role.<br>
+<br>
+If you are a part-time co-worker, the days and times for your part-time arrangement are to be discussed and agreed with your manager in writing.  If an additional day/s are worked upon mutual agreement with your direct manager these will be paid at the normal rate of pay.',
 	@retSalHiringTermsHWBHeadline NVARCHAR(MAX) = 'Hours of Work',
 	@retSalHiringTermsHWBSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -944,10 +1038,10 @@ DECLARE @retSalHiringTermsHWBID INT = (SELECT ID FROM tblCaseDocumentText CDT WH
 
 -- Create condition for hours of work B
 DECLARE @retSalHiringTermsHWBCondGuid UNIQUEIDENTIFIER = '55423447-FA0B-4406-8207-14D54FC89F1D',
-	@retSalHiringTermsHWBCondPropertyName NVARCHAR(MAX) = 'extendedcase_ContractedHours',
-	@retSalHiringTermsHWBCondOperator NVARCHAR(MAX) = 'LessThan',
-	@retSalHiringTermsHWBCondValues NVARCHAR(MAX) = '76',
-	@retSalHiringTermsHWBCondDescription NVARCHAR(MAX) = 'Is part time',
+	@retSalHiringTermsHWBCondPropertyName NVARCHAR(MAX) = 'case_BusinessUnit',
+	@retSalHiringTermsHWBCondOperator NVARCHAR(MAX) = 'Exists',
+	@retSalHiringTermsHWBCondValues NVARCHAR(MAX) = 'Service Office NSW,Service Office QLD,Service Office VIC,Service Office ACT',
+	@retSalHiringTermsHWBCondDescription NVARCHAR(MAX) = 'Business Unit exists in list',
 	@retSalHiringTermsHWBCondStatus INT = 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retSalHiringTermsHWBCondGuid)
@@ -1544,11 +1638,21 @@ END
 DECLARE @retSalHiringTermsTerminationAGuid UNIQUEIDENTIFIER = '62896AB1-1E21-4476-B403-2C08E9297DAF',
 	@retSalHiringTermsTerminationAName NVARCHAR(MAX) = @prefix + ' Termination, No contract end date',
 	@retSalHiringTermsTerminationADescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsTerminationAText NVARCHAR(MAX) = 'Either party may terminate the employment relationship with the appropriate notice as prescribed in the IKEA Distribution Services Australia Pty Ltd Enterprise Agreement 2016.  Notice provisions do not apply in the case of summary dismissal.
-<br><br>
-Upon termination of your employment, all material, equipment, uniforms, information, company records, data etc issued to you or created by you in your employment is to be returned to IKEA or its nominee.
-<br><br>
-IKEA reserves the right to withhold an appropriate sum of money from a co-worker’s termination payment until such time as any outstanding company property as detailed above is returned.',
+	@retSalHiringTermsTerminationAText NVARCHAR(MAX) = 'IKEA may terminate your employment by giving four (4) weeks’ notice, or payment in lieu at your ordinary rate of pay.  If you are over 45 years of age and have at least two years’ continuous employment with IKEA, you will be entitled to an additional week’s notice.<br>
+<br>
+If you wish to resign, you must provide IKEA with four (4) weeks’ notice.  If you fail to give the appropriate notice to IKEA, IKEA shall have the right to withhold monies due to you up to a maximum of your ordinary rate of pay for the period of notice not served.<br>
+<br>
+IKEA may at its election not require you to attend the workplace during the notice period.<br>
+<br>
+Notices of resignation or termination must be supplied in writing, and must comply with the above named notice periods unless a new period is agreed to in writing between you and IKEA.<br>
+<br>
+A failure on your part to resign in writing will not affect the validity of your resignation.<br>
+<br>
+IKEA retains the right to terminate your employment without notice in the case of summary dismissal.<br>
+<br>
+Upon termination of your employment, all material, equipment, uniforms, information, company records, data etc issued to you or created by you in your employment is to be returned to IKEA or its nominee. IKEA reserves the right to withhold an appropriate sum of money from a co-worker’s termination payment until such time as any outstanding company property as detailed above is returned.<br>
+<br>
+Termination payments will be made by way of Electronic Funds Transfer within 4 days of the end of the termination pay period.',
 	@retSalHiringTermsTerminationAHeadline NVARCHAR(MAX) = 'Termination',
 	@retSalHiringTermsTerminationASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1635,13 +1739,13 @@ END
 DECLARE @retSalHiringTermsTerminationBGuid UNIQUEIDENTIFIER = '7F836435-FC2E-4C8A-8AC2-0E941FD98FF6',
 	@retSalHiringTermsTerminationBName NVARCHAR(MAX) = @prefix + ' Termination, Has contract end date',
 	@retSalHiringTermsTerminationBDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsTerminationBText NVARCHAR(MAX) = 'Your employment will terminate on the date specified in clause 2 above. <br> 
+	@retSalHiringTermsTerminationBText NVARCHAR(MAX) = 'Your employment will terminate on the date specified in clause 2 above.<br> 
 <br>
 Despite clause 2, IKEA may terminate your employment by giving 4 weeks’ notice, or payment in lieu at your ordinary rate of pay.  If you are over 45 years of age and have at least two years’ continuous employment with IKEA, you will be entitled to an additional week’s notice.<br>
 <br>
 If you wish to resign, you must provide IKEA with four (4) weeks’ notice.  If you fail to give the appropriate notice to IKEA, IKEA shall have the right to withhold monies due to you up to a maximum of your ordinary rate of pay for the period of notice not served.<br>
 <br>
-Notices of resignation or termination must be supplied in writing, and must comply with the abovenamed notice periods unless a new period is agreed to in writing between you and IKEA.  A failure on your part to resign in writing will not affect the validity of your resignation.  <br>
+Notices of resignation or termination must be supplied in writing, and must comply with the abovenamed notice periods unless a new period is agreed to in writing between you and IKEA.  A failure on your part to resign in writing will not affect the validity of your resignation.<br>
 <br>
 IKEA retains the right to terminate your employment without notice in the case of summary dismissal.<br>
 <br>

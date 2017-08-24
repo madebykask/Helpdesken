@@ -180,6 +180,7 @@
     <Compile Include="Models\CaseDocument\CaseDocumentParagraphModel.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentModel.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentConditionModel.cs" />
+    <Compile Include="Models\CaseDocument\CaseDocumentParagraphType.cs" />
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
     <Compile Include="Models\Case\AuxCaseModel.cs" />
     <Compile Include="Models\Case\CaseModel.cs" />
@@ -1051,6 +1052,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Enums\CaseDocument\" />
     <Folder Include="Models\Case\CaseHistory\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

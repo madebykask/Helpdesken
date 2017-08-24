@@ -1,5 +1,6 @@
 ﻿@model DH.Helpdesk.BusinessData.Models.CaseDocument.CaseDocumentModel
 @using DH.Helpdesk.Common.Extensions.String
+@using DH.Helpdesk.BusinessData.Models.CaseDocument
 @{
     Layout = null;
 
@@ -30,10 +31,23 @@
 
 
         body, table, p, ul, li {
-            font-size: 10pt;
-            line-height: 22px;
+            font-size: 9pt;
+            line-height: 17px;
             font-family: Verdana;
             vertical-align: top;
+        }
+
+        li {
+            list-style-type: none;
+        }
+        li:before {
+            content: '';
+            font-family: Wingdings;
+            display: block;
+            float: left;
+            width: 1.2em;
+            position: absolute;
+            margin-left: -20px;
         }
 
         p {
@@ -224,7 +238,7 @@
                     //TODO: OrderBy
                     //Check ParagraphType
 
-                    if (item.CaseDocumentParagraph.ParagraphType == 1)
+                    if (item.CaseDocumentParagraph.ParagraphType == (int)CaseDocumentParagraphType.Text)
                     {
                         <p style="text-align: justify;">
 
@@ -242,7 +256,7 @@
 
                     }
 
-                    if (item.CaseDocumentParagraph.ParagraphType == 2)
+                    if (item.CaseDocumentParagraph.ParagraphType == (int)CaseDocumentParagraphType.TableNumeric)
                     {
                         int nr = 1;
 
@@ -255,7 +269,7 @@
 
                     <tr style="page-break-inside: avoid">
                         <td style="padding-right:10px;margin-right:10px; text-align:unset;"><strong>@nr.</strong></td>
-                        <td style="padding-right:10px;margin-right:10px; text-align:unset;"><strong>@paragraphText.Headline.ToHtmlString()</strong></td>
+                        <td style="padding-right:10px;margin-right:10px; text-align:unset; width: 130px; "><strong>@paragraphText.Headline.ToHtmlString()</strong></td>
                         <td style="text-align: justify;">@paragraphText.Text.ToHtmlString()</td>
                     </tr>
 
@@ -266,13 +280,13 @@
                         </table>
 
                     }
-                    if (item.CaseDocumentParagraph.ParagraphType == 3)
+                    if (item.CaseDocumentParagraph.ParagraphType == (int)CaseDocumentParagraphType.Logo)
                     {
                         <img src="~/img-profile/IKEA_logo_RGB_2.jpg" style="width:200px;" />
                     }
 
 
-                    if (item.CaseDocumentParagraph.ParagraphType == 4)
+                    if (item.CaseDocumentParagraph.ParagraphType == (int)CaseDocumentParagraphType.TableTwoColumns)
                     {
                         <table class="table-full-width table-two-colums">
                             @foreach (var paragraphText in item.CaseDocumentParagraph.CaseDocumentTexts.OrderBy(x => x.SortOrder))

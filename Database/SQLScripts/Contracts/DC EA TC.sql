@@ -11,13 +11,10 @@ BEGIN TRAN
 DECLARE @logoGuid UNIQUEIDENTIFIER = 'EB0434AA-0BBF-4CA8-AB0A-BF853129FB9D'
 DECLARE @logoID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @logoGuid)
 
--- Get footer info
-DECLARE @footerGuid UNIQUEIDENTIFIER = 'd43619b6-be1c-4def-af32-460cf8d38f63'
-DECLARE @footerID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @footerGuid)
 
--- Get address and company info
-DECLARE @addressInfoGuid UNIQUEIDENTIFIER = '3E55AA5C-B241-4C01-9DB3-837B07118BF7'
-DECLARE @addressInfoID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @addressInfoGuid)
+-- Get footer info with initials
+DECLARE @footerWithInitialsGuid UNIQUEIDENTIFIER = 'A7626F89-C428-475C-8E10-160CCE0F2B5D'
+DECLARE @footerWithInitialsID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @footerWithInitialsGuid)
 
 -- Draft ID
 DECLARE @draftGuid UNIQUEIDENTIFIER = '51220147-E756-492E-88A1-C1671BDE6AA5'
@@ -56,22 +53,114 @@ INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentP
 SELECT @dcTcID, @draftID, @counter
 SET @counter = @counter + 1
 
--- #################################### Footer
+-- #################################### Footer with initials
 INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentParagraph_Id, SortOrder)
-SELECT @dcTcID, @footerID, @counter
+SELECT @dcTcID, @footerWithInitialsID, @counter
 SET @counter = @counter + 1
 
--- #################################### 1. Logo
+-- #################################### Logo
 INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentParagraph_Id, SortOrder)
 SELECT @dcTcID, @logoID, @counter
 SET @counter = @counter + 1
 
--- #################################### 2-8. Address and company info
+-- #################################### Header
+
+---- Create or update paragraph
+-- Paragraph guid
+DECLARE @dcTcHeaderGuid UNIQUEIDENTIFIER = '7F40497F-1DB4-468C-96AC-0EDC34F7751B',
+	@dcTcHeaderName NVARCHAR(MAX) = @prefix + ' Header',
+	@dcTcHeaderParagraphType INT = @ParagraphTypeText,
+	@dcTcHeaderDescription NVARCHAR(MAX) = ''
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentParagraph CDP WHERE  CDP.CaseDocumentParagraphGUID = @dcTcHeaderGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentParagraph([Name], [Description], ParagraphType, CaseDocumentParagraphGUID)
+	VALUES (@dcTcHeaderName, @dcTcHeaderDescription, @dcTcHeaderParagraphType, @dcTcHeaderGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDP SET [Name] = @dcTcHeaderName, [Description] = @dcTcHeaderDescription, ParagraphType = @dcTcHeaderParagraphType
+	FROM tblCaseDocumentParagraph CDP 
+	WHERE CDP.CaseDocumentParagraphGUID = @dcTcHeaderGuid
+END
+DECLARE @dcTcHeaderID INT = (SELECT ID FROM tblCaseDocumentParagraph WHERE CaseDocumentParagraphGUID = @dcTcHeaderGuid)
+
+---- Create or update text A. Company info
+DECLARE @dcTcHeaderTextAGuid UNIQUEIDENTIFIER = '8E505DE7-6E09-4E22-8F0C-E4BCFC4A2F36',
+	@dcTcHeaderTextAName NVARCHAR(MAX) = @prefix + ' Header, Company',
+	@dcTcHeaderTextADescription NVARCHAR(MAX) = '',
+	@dcTcHeaderTextAText NVARCHAR(MAX) = '<p style="font-family:''Microsoft Sans''; font-size: 6pt; text-align:left; line-height:10px; margin-top:-10px">IKEA Distribution Services Australia Pty Ltd<br>	
+ABN 96 001 264 179</p>',
+	@dcTcHeaderTextAHeadline NVARCHAR(MAX) = '',
+	@dcTcHeaderTextASortOrder INT = 0
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcHeaderTextAGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
+	VALUES (@dcTcHeaderID, 
+		@dcTcHeaderTextAName, 
+		@dcTcHeaderTextADescription,
+		@dcTcHeaderTextAText, 
+		@dcTcHeaderTextAHeadline,
+		@dcTcHeaderTextASortOrder,
+		@dcTcHeaderTextAGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDT SET 
+		CaseDocumentParagraph_Id = @dcTcHeaderID,
+		[Name] = @dcTcHeaderTextAName, 
+		[Description] = @dcTcHeaderTextADescription, 
+		[Text] = @dcTcHeaderTextAText,
+		[Headline] = @dcTcHeaderTextAHeadline,
+		SortOrder = @dcTcHeaderTextASortOrder
+	FROM tblCaseDocumentText CDT 
+	WHERE CDT.CaseDocumentTextGUID = @dcTcHeaderTextAGuid
+END
+---- Create or update text B. Co-worker info
+DECLARE @dcTcHeaderTextBGuid UNIQUEIDENTIFIER = '138D75E2-55D0-4658-B5A8-ABE1919002A0',
+	@dcTcHeaderTextBName NVARCHAR(MAX) = @prefix + ' Header, Co-worker',
+	@dcTcHeaderTextBDescription NVARCHAR(MAX) = '',
+	@dcTcHeaderTextBText NVARCHAR(MAX) = '<p><Todays Date - Long></p>
+		<p><strong><Co-worker First Name> <Co-worker Last Name></strong></p>
+		<p><Address Line 1><br />
+		<Address Line 2> <State> <Postal Code><br />
+		<Address Line 3><br />
+		<br /><br />
+		Dear <Co-worker First Name></p>',
+	@dcTcHeaderTextBHeadline NVARCHAR(MAX) = '',
+	@dcTcHeaderTextBSortOrder INT = 0
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcTcHeaderTextBGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
+	VALUES (@dcTcHeaderID, 
+		@dcTcHeaderTextBName, 
+		@dcTcHeaderTextBDescription,
+		@dcTcHeaderTextBText, 
+		@dcTcHeaderTextBHeadline,
+		@dcTcHeaderTextBSortOrder,
+		@dcTcHeaderTextBGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDT SET 
+		CaseDocumentParagraph_Id = @dcTcHeaderID,
+		[Name] = @dcTcHeaderTextBName, 
+		[Description] = @dcTcHeaderTextBDescription, 
+		[Text] = @dcTcHeaderTextBText,
+		[Headline] = @dcTcHeaderTextBHeadline,
+		SortOrder = @dcTcHeaderTextBSortOrder
+	FROM tblCaseDocumentText CDT 
+	WHERE CDT.CaseDocumentTextGUID = @dcTcHeaderTextBGuid
+END
+
+-- Add header paragraph to case document
 INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentParagraph_Id, SortOrder)
-SELECT @dcTcID, @addressInfoID, @counter
+SELECT @dcTcID, @dcTcHeaderID, @counter
 SET @counter = @counter + 1
 
--- #################################### 10a-b. Employment greeting
+-- #################################### Employment greeting
 
 ---- Create or update paragraph
 -- Paragraph guid
@@ -755,7 +844,7 @@ DECLARE @dcTcTermsHWAGuid UNIQUEIDENTIFIER = 'a5f8db11-a408-4aac-af4c-0f9cfd7a55
 	'You will be rostered to work 76 ordinary hours per fortnight.  Such details of your initial roster will be discussed with you upon your commencement.  However, where there is a change in the business’ needs, your hours may also be subject to change with appropriate notice.<br>
 <br>
 You should note that ordinary hours in the Distribution Centre include Saturday’s and you have mutually agreed to work more than one in three Saturdays as part of your contracted ordinary hours.',
-	@dcTcTermsHWAHeadline NVARCHAR(MAX) = 'Position',
+	@dcTcTermsHWAHeadline NVARCHAR(MAX) = 'Hours of Work',
 	@dcTcTermsHWASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
 
@@ -964,7 +1053,7 @@ END
 DECLARE @dcTcTermsProbID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcTcTermsProbTimeGuid)
 
 -- Create condition for probation period 
-DECLARE @dcTcTermsProbCondGuid UNIQUEIDENTIFIER = '32ab33cf-2f93-4bf5-a371-978fe20f3ed3',
+DECLARE @dcTcTermsProbCondGuid UNIQUEIDENTIFIER = 'a27f3ef6-e1f9-427c-986d-41d291117d3c',
 	@dcTcTermsProbCondPropertyName NVARCHAR(MAX) = 'extendedcase_ProbationPeriod',
 	@dcTcTermsProbCondOperator NVARCHAR(MAX) = 'Equal',
 	@dcTcTermsProbCondValues NVARCHAR(MAX) = 'Yes',
@@ -1021,7 +1110,8 @@ END
 DECLARE @dcTcTermsRemunGuid UNIQUEIDENTIFIER = '91714198-1a98-4040-be64-207db37023e2',
 	@dcTcTermsRemunName NVARCHAR(MAX) = @prefix + ' Remuneration',
 	@dcTcTermsRemunDescription NVARCHAR(MAX) = '',
-	@dcTcTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your base hourly rate will be as per the <strong>IKEA Distributions Services Australia Pty Ltd Enterprise Agreement 2016.</strong>  This amount will be paid directly into your nominated bank account on a fortnightly basis.',
+	@dcTcTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your base hourly rate will be as per the <strong>IKEA Distributions Services Australia Pty Ltd Enterprise Agreement 2016.</strong>  This amount will be paid directly into your nominated bank account on a fortnightly basis.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcTcTermsRemunHeadline NVARCHAR(MAX) = 'Remuneration',
 	@dcTcTermsRemunSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1058,7 +1148,7 @@ DECLARE @dcTcTermsSuperGuid UNIQUEIDENTIFIER = 'fa1b4355-4524-4bc1-ade6-0a9431ef
 <br>
 IKEA’s current employer superannuation fund is the Labour Union Co-operative Retirement Fund (LUCRF), which is the fund into which the superannuation contributions will be made unless an alternate fund is nominated by you in writing, in accordance with the SGL.
 <br>
-It is your responsibility to nominate a Super Fund for your contributions to be made to, and to ensure that you complete the necessary paperwork for enrolment into your nominated fund.  IKEA will supply you with a LUCRF Member Guide, including an application form.',
+It is your responsibility to nominate a Super Fund for your contributions to be made to, and to ensure that you complete the necessary paperwork for enrolment into your nominated fund.  IKEA will supply you with a LUCRF Member Guide, including an application form.', 
 	@dcTcTermsSuperHeadline NVARCHAR(MAX) = 'Superannuation',
 	@dcTcTermsSuperSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1093,6 +1183,8 @@ DECLARE @dcTcTermsConfGuid UNIQUEIDENTIFIER = '53f40d5e-a14e-4b0b-afbe-eedbbe2a0
 	@dcTcTermsConfName NVARCHAR(MAX) = @prefix + ' Confidential Information',
 	@dcTcTermsConfDescription NVARCHAR(MAX) = '',
 	@dcTcTermsConfText NVARCHAR(MAX) = 'In the course of your employment, you may be exposed to “Confidential Information” concerning IKEA. Confidential Information means any information obtained by you in the course of your employment, including:
+<br>
+<br>
 <ul>
 <li>trade secrets;</li>
 <li>technical information and technical drawings;</li>
@@ -1102,21 +1194,23 @@ DECLARE @dcTcTermsConfGuid UNIQUEIDENTIFIER = '53f40d5e-a14e-4b0b-afbe-eedbbe2a0
 <li>any information marked “confidential” or which IKEA informs you is confidential or a trade secret; and</li>
 <li>Co-worker and customer personal details.</li>
 </ul>
-<br>
 but excluding:
+<br>
+<br>
 <ul>
 <li>information available to the public; and</li>
 <li>information which you can prove you lawfully possessed before obtaining it in the course of your employment (other than this letter of appointment)</li>
 </ul>
-<br>
 During and after your employment, you must not use or disclose Confidential Information to any person (including an employee of IKEA) other than:
+<br>
+<br>
 <ul>
 <li>to perform your duties;</li>
 <li>if IKEA has consented in writing; or</li>
 <li>if required by law.</li>
 </ul>
-<br>
-As an IKEA co-worker, you must keep Confidential Information in a secure manner and treat such information with appropriate sensitivity. On demand by IKEA and at the end of your employment, you must deliver to IKEA all copies of Confidential Information in your possession or control (including all Confidential Information held electronically in any medium) and then delete all Confidential Information held electronically in any medium in your possession or control.',
+As an IKEA co-worker, you must keep Confidential Information in a secure manner and treat such information with appropriate sensitivity. On demand by IKEA and at the end of your employment, you must deliver to IKEA all copies of Confidential Information in your possession or control (including all Confidential Information held electronically in any medium) and then delete all Confidential Information held electronically in any medium in your possession or control.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcTcTermsConfHeadline NVARCHAR(MAX) = 'Confidential Information',
 	@dcTcTermsConfSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1498,7 +1592,8 @@ DECLARE @dcTcTermsTerminationGuid UNIQUEIDENTIFIER = '43393eed-c718-4bf4-a588-e3
 <br><br>
 Upon termination of your employment, all material, equipment, uniforms, information, company records, data etc issued to you or created by you in your employment is to be returned to IKEA or its nominee.
 <br><br>
-IKEA reserves the right to withhold an appropriate sum of money from a co-worker’s termination payment until such time as any outstanding company property as detailed above is returned.',
+IKEA reserves the right to withhold an appropriate sum of money from a co-worker’s termination payment until such time as any outstanding company property as detailed above is returned.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcTcTermsTerminationHeadline NVARCHAR(MAX) = 'Termination',
 	@dcTcTermsTerminationSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1670,7 +1765,7 @@ END
 DECLARE @dcTcTermsPerfAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcTcTermsPerfAGuid)
 
 -- Create condition for probation period 
-DECLARE @dcTcTermsPerfACondGuid UNIQUEIDENTIFIER = '32ab33cf-2f93-4bf5-a371-978fe20f3ed3',
+DECLARE @dcTcTermsPerfACondGuid UNIQUEIDENTIFIER = '8f418d6a-7b32-451a-bede-053056e838a1',
 	@dcTcTermsPerfACondPropertyName NVARCHAR(MAX) = 'extendedcase_ProbationPeriod',
 	@dcTcTermsPerfACondOperator NVARCHAR(MAX) = 'Equal',
 	@dcTcTermsPerfACondValues NVARCHAR(MAX) = 'Yes',
@@ -2078,7 +2173,7 @@ DECLARE @dcTcConSignGuid UNIQUEIDENTIFIER = '52d9e99f-a51f-4d02-9fac-c1523053ed6
 	@dcTcConSignName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@dcTcConSignDescription NVARCHAR(MAX) = '',
 	@dcTcConSignText NVARCHAR(MAX) = 'Yours sincerely<br>
-	<Reports to Line Manager><br>
+	<Reports To Line Manager><br>
 	<Position Title (Local Job Name) of Reports To Line Manager><br>
 	<strong>IKEA Distribution Services Australia Pty Ltd</strong>',
 	@dcTcConSignHeadline NVARCHAR(MAX) = '',

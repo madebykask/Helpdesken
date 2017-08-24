@@ -15,10 +15,6 @@ DECLARE @logoID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseD
 DECLARE @footerGuid UNIQUEIDENTIFIER = 'd43619b6-be1c-4def-af32-460cf8d38f63'
 DECLARE @footerID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @footerGuid)
 
--- Get address and company info
-DECLARE @addressInfoGuid UNIQUEIDENTIFIER = '3E55AA5C-B241-4C01-9DB3-837B07118BF7'
-DECLARE @addressInfoID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @addressInfoGuid)
-
 -- Draft ID
 DECLARE @draftGuid UNIQUEIDENTIFIER = '51220147-E756-492E-88A1-C1671BDE6AA5'
 DECLARE @draftID INT = (SELECT ID FROM tblCaseDocumentParagraph CP WHERE CP.CaseDocumentParagraphGUID = @draftGuid)
@@ -64,10 +60,102 @@ INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentP
 SELECT @retHiringID, @footerID, @counter
 SET @counter = @counter + 1
 
--- #################################### Address and company info
+-- #################################### Header
+
+---- Create or update paragraph
+-- Paragraph guid
+DECLARE @retHiringHeaderGuid UNIQUEIDENTIFIER = '4FE8781E-AD86-43B5-8E46-F0209C1BDB3C',
+	@retHiringHeaderName NVARCHAR(MAX) = @prefix + ' Header',
+	@retHiringHeaderParagraphType INT = @ParagraphTypeText,
+	@retHiringHeaderDescription NVARCHAR(MAX) = ''
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentParagraph CDP WHERE  CDP.CaseDocumentParagraphGUID = @retHiringHeaderGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentParagraph([Name], [Description], ParagraphType, CaseDocumentParagraphGUID)
+	VALUES (@retHiringHeaderName, @retHiringHeaderDescription, @retHiringHeaderParagraphType, @retHiringHeaderGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDP SET [Name] = @retHiringHeaderName, [Description] = @retHiringHeaderDescription, ParagraphType = @retHiringHeaderParagraphType
+	FROM tblCaseDocumentParagraph CDP 
+	WHERE CDP.CaseDocumentParagraphGUID = @retHiringHeaderGuid
+END
+DECLARE @retHiringHeaderID INT = (SELECT ID FROM tblCaseDocumentParagraph WHERE CaseDocumentParagraphGUID = @retHiringHeaderGuid)
+
+---- Create or update text A. Company info
+DECLARE @retHiringHeaderTextAGuid UNIQUEIDENTIFIER = '0763A595-8C56-4DE3-93D1-6FE2522FC3A6',
+	@retHiringHeaderTextAName NVARCHAR(MAX) = @prefix + ' Header, Company',
+	@retHiringHeaderTextADescription NVARCHAR(MAX) = '',
+	@retHiringHeaderTextAText NVARCHAR(MAX) = '<p style="text-align:left;">IKEA Pty Limited ABN 84 006 270 757</p>',
+	@retHiringHeaderTextAHeadline NVARCHAR(MAX) = '',
+	@retHiringHeaderTextASortOrder INT = 0
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retHiringHeaderTextAGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
+	VALUES (@retHiringHeaderID, 
+		@retHiringHeaderTextAName, 
+		@retHiringHeaderTextADescription,
+		@retHiringHeaderTextAText, 
+		@retHiringHeaderTextAHeadline,
+		@retHiringHeaderTextASortOrder,
+		@retHiringHeaderTextAGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDT SET 
+		CaseDocumentParagraph_Id = @retHiringHeaderID,
+		[Name] = @retHiringHeaderTextAName, 
+		[Description] = @retHiringHeaderTextADescription, 
+		[Text] = @retHiringHeaderTextAText,
+		[Headline] = @retHiringHeaderTextAHeadline,
+		SortOrder = @retHiringHeaderTextASortOrder
+	FROM tblCaseDocumentText CDT 
+	WHERE CDT.CaseDocumentTextGUID = @retHiringHeaderTextAGuid
+END
+---- Create or update text B. Co-worker info
+DECLARE @retHiringHeaderTextBGuid UNIQUEIDENTIFIER = 'D2850EBB-053B-427D-9C3C-2AAA3C191961',
+	@retHiringHeaderTextBName NVARCHAR(MAX) = @prefix + ' Header, Co-worker',
+	@retHiringHeaderTextBDescription NVARCHAR(MAX) = '',
+	@retHiringHeaderTextBText NVARCHAR(MAX) = '<p><Todays Date - Long></p>
+		<p><Co-worker First Name> <Co-worker Last Name></p>
+		<p><Address Line 1><br />
+		<Address Line 2> <State> <Postal Code><br />
+		<Address Line 3><br />
+		<br /><br />
+		Dear <Co-worker First Name></p>',
+	@retHiringHeaderTextBHeadline NVARCHAR(MAX) = '',
+	@retHiringHeaderTextBSortOrder INT = 0
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @retHiringHeaderTextBGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
+	VALUES (@retHiringHeaderID, 
+		@retHiringHeaderTextBName, 
+		@retHiringHeaderTextBDescription,
+		@retHiringHeaderTextBText, 
+		@retHiringHeaderTextBHeadline,
+		@retHiringHeaderTextBSortOrder,
+		@retHiringHeaderTextBGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDT SET 
+		CaseDocumentParagraph_Id = @retHiringHeaderID,
+		[Name] = @retHiringHeaderTextBName, 
+		[Description] = @retHiringHeaderTextBDescription, 
+		[Text] = @retHiringHeaderTextBText,
+		[Headline] = @retHiringHeaderTextBHeadline,
+		SortOrder = @retHiringHeaderTextBSortOrder
+	FROM tblCaseDocumentText CDT 
+	WHERE CDT.CaseDocumentTextGUID = @retHiringHeaderTextBGuid
+END
+
+-- Add header paragraph to case document
 INSERT INTO tblCaseDocument_CaseDocumentParagraph(CaseDocument_Id, CaseDocumentParagraph_Id, SortOrder)
-SELECT @retHiringID, @addressInfoID, @counter
+SELECT @retHiringID, @retHiringHeaderID, @counter
 SET @counter = @counter + 1
+
 
 
 -- #################################### Employment greeting
@@ -1166,6 +1254,6 @@ LEFT JOIN tblCaseDocumentTextCondition CDTC ON CDTC.CaseDocumentText_Id = CDT.Id
 WHERE CD.CaseDocumentGUID = @retHiringGuid
 ORDER BY CDCDP.SortOrder, CDT.SortOrder
 
-ROLLBACK
+COMMIT
 
 
