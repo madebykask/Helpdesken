@@ -35,11 +35,11 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         public void DeleteByCaseSolutionId(int id)
         {
 
-           // this.DataContext.CaseSolutionsConditions.ToList().RemoveAll(x => x.CaseSolution_Id == id);
+            // this.DataContext.CaseSolutionsConditions.ToList().RemoveAll(x => x.CaseSolution_Id == id);
             //query.RemoveAll(x => x.CaseSolution_Id == id);
             string sql = "DELETE FROM tblCaseSolutionCondition WHERE CaseSolution_Id = " + id + "";
             string ConnectionStringExt = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
-            
+
             using (var connectionExt = new SqlConnection(ConnectionStringExt))
             {
                 if (connectionExt.State == ConnectionState.Closed)
@@ -50,7 +50,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 {
                     commandExt.CommandType = CommandType.Text;
                     commandExt.CommandText = sql;
-                    commandExt.ExecuteNonQuery();                    
+                    commandExt.ExecuteNonQuery();
 
                 }
             }
@@ -63,7 +63,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
             List<CaseSolutionSettingsField> list = new List<CaseSolutionSettingsField>();
 
-            
+
 
             string sqlExt = string.Empty;
 
@@ -193,7 +193,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     if (string.IsNullOrEmpty(tableParentId))
                     {
                         sql += "[" + tablefieldname + "] AS Name, ";
-                        
+
                     }
                     else
                     {
@@ -299,7 +299,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
 
 
-             
+
             //var query = from contact in this.DataContext.CaseSolutionsConditions
             //            join dealer in this.DataContext.CaseSolutionConditionProperties on contact.Property_Name equals dealer.CaseSolutionConditionProperty
             //            where contact.CaseSolution_Id == casesolutionid
@@ -338,13 +338,13 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             //        }
             //    }
 
-                
+
             //    string tablename = nameGroup.Table.ToString();
             //    string tablefieldid = nameGroup.TableFieldId.ToString();
             //    string tablefieldname = nameGroup.TableFieldName.ToString();
             //    string tablefieldguid = nameGroup.TableFieldGuid.ToString();
 
-                
+
             //    string selvals = string.Empty;
             //    foreach (var it in c.SelectedValues)
             //    {
@@ -443,7 +443,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
             //        }
             //    }
-              
+
             //    list.Add(c);
             //}
 
@@ -621,31 +621,35 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             string sql = string.Empty;
             int istatus = 1;
 
-                sql = "IF EXISTS (SELECT Id FROM tblCaseSolutionCondition WHERE Property_Name = '" + model.Property_Name + "' AND CaseSolution_Id= " + model.CaseSolution_Id + ") BEGIN ";
-                sql += "UPDATE tblCaseSolutionCondition SET [Values]='" + model.Values + "' WHERE Property_Name = '" + model.Property_Name + "' AND CaseSolution_Id = " + model.CaseSolution_Id + " END ";
-                sql += " ELSE BEGIN INSERT INTO tblCaseSolutionCondition (CaseSolution_Id, Property_Name, [Values], Status) ";
-                sql += " VALUES ( " + model.CaseSolution_Id + ", '" + model.Property_Name + "', '" + model.Values + "', " + istatus + " ) END;";
-                //TEMP
-                sql += "delete from tblCaseSolutionCondition where[Values] = 'null' ";
+            sql = "IF EXISTS (SELECT Id FROM tblCaseSolutionCondition WHERE Property_Name = '" + model.Property_Name + "' AND CaseSolution_Id= " + model.CaseSolution_Id + ") BEGIN ";
+            sql += "UPDATE tblCaseSolutionCondition SET [Values]='" + model.Values + "' WHERE Property_Name = '" + model.Property_Name + "' AND CaseSolution_Id = " + model.CaseSolution_Id + " END ";
+            sql += " ELSE BEGIN INSERT INTO tblCaseSolutionCondition (CaseSolution_Id, Property_Name, [Values], Status) ";
+            sql += " VALUES ( " + model.CaseSolution_Id + ", '" + model.Property_Name + "', '" + model.Values + "', " + istatus + " ) END;";
+            //TEMP
+            sql += "delete from tblCaseSolutionCondition where[Values] = 'null' ";
 
-                string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+            string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
 
-                using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand { Connection = connection, CommandType = CommandType.Text })
                 {
-                    using (SqlCommand cmd = new SqlCommand { Connection = connection, CommandType = CommandType.Text })
+                    cmd.CommandText = sql;
+                    if (connection.State == ConnectionState.Closed)
                     {
-                        cmd.CommandText = sql;
-                        if (connection.State == ConnectionState.Closed)
-                        {
-                            connection.Open();
-                        }
-                        cmd.ExecuteNonQuery();
-
+                        connection.Open();
                     }
-                }
+                    cmd.ExecuteNonQuery();
 
-           
+                }
+            }
+
+
         }
+
+
+
+       
 
         public IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid)
         {

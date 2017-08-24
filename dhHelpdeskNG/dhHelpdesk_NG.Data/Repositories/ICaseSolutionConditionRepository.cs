@@ -30,5 +30,7 @@
        // IList<CaseSolutionCondition> GetCaseSolutionConditionModel(int casesolutionid, int customerid, string constString);
 
         void DeleteByCaseSolutionId(int id);
+
+     
     }
 }

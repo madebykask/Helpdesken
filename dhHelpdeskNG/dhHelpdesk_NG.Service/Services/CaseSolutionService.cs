@@ -19,8 +19,7 @@ namespace DH.Helpdesk.Services.Services
     using System.Data;
     using System.Configuration;
     using System.Data.SqlClient;
-
-
+    using BusinessData.Models.Case;
 
     public interface ICaseSolutionService
     {
@@ -648,23 +647,77 @@ namespace DH.Helpdesk.Services.Services
 
             //Sub status
             List<CaseSolution> cresList = new List<CaseSolution>();
+            List<CaseSolutionConditionModel> cmoList = new List<CaseSolutionConditionModel>();
 
             if (SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.SubStatusIds.Any())
             {
+                foreach (CaseSolution ca in cresList)
+                {
+                    IEnumerable<CaseSolutionConditionModel> cco = _caseSolutionConditionRepository.GetCaseSolutionConditions(ca.Id);
 
-                //var q = (from cs in this._caseSolutionConditionRepository.GetAll()
-                //         select cs);
+                    foreach (CaseSolutionConditionModel cm in cco)
+                    {
+                        cmoList.Add(cm);
+                    }
+                }
 
-                //var res = from cust in query
-                //          join so in q on cust.Id equals so.CaseSolution_Id
-                //          where SearchCaseSolutions.SubStatusIds.Contains(so.Values)
-                //          select cust;
+                if (cmoList != null && cmoList.Count() > 0)
+                {
+                    var results1 = from d in cmoList
+                                   where SearchCaseSolutions.SubStatusIds.Contains(d.Values)
+                                   select d;
 
-                //query = res;
+                    if (results1 != null)
+                    {
+                        if (results1.Count() > 0)
+                        {
+                            cresList = new List<CaseSolution>();
+                            foreach (var r in results1)
+                            {
+                                CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                cresList.Add(cres);
+                            }
+                        }
+                        else
+                        {
+                            cresList = new List<CaseSolution>();
+                        }
+                    }
+                    else
+                    {
+                        cresList = new List<CaseSolution>();
+                    }
+                }
+                else
+                {
+                    var results1 = from c in results
+                                   where SearchCaseSolutions.SubStatusIds.Contains(c.Values)
+                                   select c;
 
-                results = from c in results
-                           where SearchCaseSolutions.SubStatusIds.Contains(c.Values)
-                           select c;
+                    if (results1 != null)
+                    {
+                        if (results1.Count() > 0)
+                        {
+                            cresList = new List<CaseSolution>();
+                            foreach (var r in results1)
+                            {
+                                CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                cresList.Add(cres);
+                            }
+                        }
+                        else
+                        {
+                            cresList = new List<CaseSolution>();
+                        }
+                    }
+                    else
+                    {
+                        cresList = new List<CaseSolution>();
+                    }
+                }
+
+
+
                 //if (results != null)
                 //{
                 //    foreach (var r in results)
@@ -681,150 +734,532 @@ namespace DH.Helpdesk.Services.Services
             //Working group
             if (SearchCaseSolutions.WgroupIds != null && SearchCaseSolutions.WgroupIds.Any())
             {
+                foreach (CaseSolution ca in cresList)
+                {
+                    IEnumerable<CaseSolutionConditionModel> cco = _caseSolutionConditionRepository.GetCaseSolutionConditions(ca.Id);
 
-                results = from c in results
-                           where SearchCaseSolutions.WgroupIds.Contains(c.Values)
-                           select c;
-                //if (res1 != null)
-                //{
-                //    foreach (var r in res1)
-                //    {
+                    foreach (CaseSolutionConditionModel cm in cco)
+                    {
+                        cmoList.Add(cm);
+                    }
+                }
 
-                //        CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
+                if (cmoList != null && cmoList.Count() > 0)
+                {
+                    var results1 = from d in cmoList
+                                   where SearchCaseSolutions.WgroupIds.Contains(d.Values)
+                                   select d;
 
-                //        cresList.Add(cres);
-                //    }
-                //}
+                    if (results1 != null)
+                    {
+                        if (results1.Count() > 0)
+                        {
+                            cresList = new List<CaseSolution>();
+                            foreach (var r in results1)
+                            {
+                                CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                cresList.Add(cres);
+                            }
+                        }
+                        else
+                        {
+                            cresList = new List<CaseSolution>();
+                        }
+                    }
+                    else
+                    {
+                        cresList = new List<CaseSolution>();
+                    }
+                }
+                else
+                {
+                    var results1 = from c in results
+                                   where SearchCaseSolutions.WgroupIds.Contains(c.Values)
+                                   select c;
 
+                    if (results1 != null)
+                    {
+                        if (results1.Count() > 0)
+                        {
+                            cresList = new List<CaseSolution>();
+                            foreach (var r in results1)
+                            {
+                                CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                cresList.Add(cres);
+                            }
+                        }
+                        else
+                        {
+                            cresList = new List<CaseSolution>();
+                        }
+                    }
+                    else
+                    {
+                        cresList = new List<CaseSolution>();
+                    }
+                }
             }
 
             //Priority
             if (SearchCaseSolutions.PriorityIds != null && SearchCaseSolutions.PriorityIds.Any())
             {
-                results = from c in results
-                           where SearchCaseSolutions.PriorityIds.Contains(c.Values)
-                           select c;
-                //if (res1 != null)
-                //{
-                //    foreach (var r in res1)
-                //    {
+                foreach (CaseSolution ca in cresList)
+                {
+                    IEnumerable<CaseSolutionConditionModel> cco = _caseSolutionConditionRepository.GetCaseSolutionConditions(ca.Id);
 
-                //        CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
+                    foreach (CaseSolutionConditionModel cm in cco)
+                    {
+                        cmoList.Add(cm);
+                    }
+                }
 
-                //        cresList.Add(cres);
-                //    }
-                //}
+                if (cmoList != null && cmoList.Count() > 0)
+                {
+                    var results1 = from d in cmoList
+                                   where SearchCaseSolutions.PriorityIds.Contains(d.Values)
+                                   select d;
+
+                    if (results1 != null)
+                    {
+                        if (results1.Count() > 0)
+                        {
+                            cresList = new List<CaseSolution>();
+                            foreach (var r in results1)
+                            {
+                                CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                cresList.Add(cres);
+                            }
+                        }
+                        else
+                        {
+                            cresList = new List<CaseSolution>();
+                        }
+                    }
+                    else
+                    {
+                        cresList = new List<CaseSolution>();
+                    }
+                }
+                else
+                {
+                    var results1 = from c in results
+                                   where SearchCaseSolutions.PriorityIds.Contains(c.Values)
+                                   select c;
+
+                    if (results1 != null)
+                    {
+                        if (results1.Count() > 0)
+                        {
+                            cresList = new List<CaseSolution>();
+                            foreach (var r in results1)
+                            {
+                                CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                cresList.Add(cres);
+                            }
+                        }
+                        else
+                        {
+                            cresList = new List<CaseSolution>();
+                        }
+                    }
+                    else
+                    {
+                        cresList = new List<CaseSolution>();
+                    }
+                }
             }
 
             //Status
             if (SearchCaseSolutions.StatusIds != null && SearchCaseSolutions.StatusIds.Any())
             {
 
-                results = from c in results
-                           where SearchCaseSolutions.StatusIds.Contains(c.Values)
-                           select c;
-                //if (res1 != null)
-                //{
-                //    foreach (var r in res1)
-                //    {
+                foreach (CaseSolution ca in cresList)
+                {
+                    IEnumerable<CaseSolutionConditionModel> cco = _caseSolutionConditionRepository.GetCaseSolutionConditions(ca.Id);
 
-                //        CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
+                    foreach (CaseSolutionConditionModel cm in cco)
+                    {
+                        cmoList.Add(cm);
+                    }
+                }
 
-                //        cresList.Add(cres);
-                //    }
-                //}
+                if (cmoList != null && cmoList.Count() > 0)
+                {
+                    var results1 = from d in cmoList
+                                   where SearchCaseSolutions.StatusIds.Contains(d.Values)
+                                   select d;
+
+                    if (results1 != null)
+                    {
+                        if (results1.Count() > 0)
+                        {
+                            cresList = new List<CaseSolution>();
+                            foreach (var r in results1)
+                            {
+                                CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                cresList.Add(cres);
+                            }
+                        }
+                        else
+                        {
+                            cresList = new List<CaseSolution>();
+                        }
+                    }
+                    else
+                    {
+                        cresList = new List<CaseSolution>();
+                    }
+                }
+                else
+                {
+                    var results1 = from c in results
+                                   where SearchCaseSolutions.StatusIds.Contains(c.Values)
+                                   select c;
+
+                    if (results1 != null)
+                    {
+                        if (results1.Count() > 0)
+                        {
+                            cresList = new List<CaseSolution>();
+                            foreach (var r in results1)
+                            {
+                                CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                cresList.Add(cres);
+                            }
+                        }
+                        else
+                        {
+                            cresList = new List<CaseSolution>();
+                        }
+                    }
+                    else
+                    {
+                        cresList = new List<CaseSolution>();
+                    }
+                }
             }
 
             //ProductArea
             if (SearchCaseSolutions.ProductAreaIds != null && SearchCaseSolutions.ProductAreaIds.Any())
             {
-                results = from c in results
-                           where SearchCaseSolutions.ProductAreaIds.Contains(c.Values)
-                           select c;
-                //if (res1 != null)
-                //{
-                //    foreach (var r in res1)
-                //    {
+                foreach (CaseSolution ca in cresList)
+                {
+                    IEnumerable<CaseSolutionConditionModel> cco = _caseSolutionConditionRepository.GetCaseSolutionConditions(ca.Id);
 
-                //        CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
+                    foreach (CaseSolutionConditionModel cm in cco)
+                    {
+                        cmoList.Add(cm);
+                    }
+                }
 
-                //        cresList.Add(cres);
-                //    }
-                //}
+                if (cmoList != null && cmoList.Count() > 0)
+                {
+                    var results1 = from d in cmoList
+                                   where SearchCaseSolutions.ProductAreaIds.Contains(d.Values)
+                                   select d;
+
+                    if (results1 != null)
+                    {
+                        if (results1.Count() > 0)
+                        {
+                            cresList = new List<CaseSolution>();
+                            foreach (var r in results1)
+                            {
+                                CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                cresList.Add(cres);
+                            }
+                        }
+                        else
+                        {
+                            cresList = new List<CaseSolution>();
+                        }
+                    }
+                    else
+                    {
+                        cresList = new List<CaseSolution>();
+                    }
+                }
+                else
+                {
+                    var results1 = from c in results
+                                   where SearchCaseSolutions.ProductAreaIds.Contains(c.Values)
+                                   select c;
+
+                    if (results1 != null)
+                    {
+                        if (results1.Count() > 0)
+                        {
+                            cresList = new List<CaseSolution>();
+                            foreach (var r in results1)
+                            {
+                                CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                cresList.Add(cres);
+                            }
+                        }
+                        else
+                        {
+                            cresList = new List<CaseSolution>();
+                        }
+                    }
+                    else
+                    {
+                        cresList = new List<CaseSolution>();
+                    }
+                }
             }
 
             //UserWGroup, ????????????
             if (SearchCaseSolutions.UserWGroupIds != null && SearchCaseSolutions.UserWGroupIds.Any())
             {
-                results = from c in results
-                           where SearchCaseSolutions.UserWGroupIds.Contains(c.Values)
-                           select c;
-                //if (res1 != null)
-                //{
-                //    foreach (var r in res1)
-                //    {
+                foreach (CaseSolution ca in cresList)
+                {
+                    IEnumerable<CaseSolutionConditionModel> cco = _caseSolutionConditionRepository.GetCaseSolutionConditions(ca.Id);
 
-                //        CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
+                    foreach (CaseSolutionConditionModel cm in cco)
+                    {
+                        cmoList.Add(cm);
+                    }
+                }
 
-                //        cresList.Add(cres);
-                //    }
-                //}
+                if (cmoList != null && cmoList.Count() > 0)
+                {
+                    var results1 = from d in cmoList
+                                   where SearchCaseSolutions.UserWGroupIds.Contains(d.Values)
+                                   select d;
+
+                    if (results1 != null)
+                    {
+                        if (results1.Count() > 0)
+                        {
+                            cresList = new List<CaseSolution>();
+                            foreach (var r in results1)
+                            {
+                                CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                cresList.Add(cres);
+                            }
+                        }
+                        else
+                        {
+                            cresList = new List<CaseSolution>();
+                        }
+                    }
+                    else
+                    {
+                        cresList = new List<CaseSolution>();
+                    }
+                }
+                else
+                {
+                    var results1 = from c in results
+                                   where SearchCaseSolutions.UserWGroupIds.Contains(c.Values)
+                                   select c;
+
+                    if (results1 != null)
+                    {
+                        if (results1.Count() > 0)
+                        {
+                            cresList = new List<CaseSolution>();
+                            foreach (var r in results1)
+                            {
+                                CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                cresList.Add(cres);
+                            }
+                        }
+                        else
+                        {
+                            cresList = new List<CaseSolution>();
+                        }
+                    }
+                    else
+                    {
+                        cresList = new List<CaseSolution>();
+                    }
+                }
             }
 
             //TemplateProduct, ????????????
             if (SearchCaseSolutions.TemplateProductAreaIds != null && SearchCaseSolutions.TemplateProductAreaIds.Any())
             {
-                results = from c in results
-                           where SearchCaseSolutions.TemplateProductAreaIds.Contains(c.Values)
-                           select c;
-                //if (res1 != null)
-                //{
-                //    foreach (var r in res1)
-                //    {
+                foreach (CaseSolution ca in cresList)
+                {
+                    IEnumerable<CaseSolutionConditionModel> cco = _caseSolutionConditionRepository.GetCaseSolutionConditions(ca.Id);
 
-                //        CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
+                    foreach (CaseSolutionConditionModel cm in cco)
+                    {
+                        cmoList.Add(cm);
+                    }
+                }
 
-                //        cresList.Add(cres);
-                //    }
-                //}
+                if (cmoList != null && cmoList.Count() > 0)
+                {
+                    var results1 = from d in cmoList
+                                   where SearchCaseSolutions.TemplateProductAreaIds.Contains(d.Values)
+                                   select d;
+
+                    if (results1 != null)
+                    {
+                        if (results1.Count() > 0)
+                        {
+                            cresList = new List<CaseSolution>();
+                            foreach (var r in results1)
+                            {
+                                CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                cresList.Add(cres);
+                            }
+                        }
+                        else
+                        {
+                            cresList = new List<CaseSolution>();
+                        }
+                    }
+                    else
+                    {
+                        cresList = new List<CaseSolution>();
+                    }
+                }
+                else
+                {
+                    var results1 = from c in results
+                                   where SearchCaseSolutions.TemplateProductAreaIds.Contains(c.Values)
+                                   select c;
+
+                    if (results1 != null)
+                    {
+                        if (results1.Count() > 0)
+                        {
+                            cresList = new List<CaseSolution>();
+                            foreach (var r in results1)
+                            {
+                                CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                cresList.Add(cres);
+                            }
+                        }
+                        else
+                        {
+                            cresList = new List<CaseSolution>();
+                        }
+                    }
+                    else
+                    {
+                        cresList = new List<CaseSolution>();
+                    }
+                }
             }
 
             //Application, ????????????
             if (SearchCaseSolutions.ApplicationIds != null && SearchCaseSolutions.ApplicationIds.Any())
             {
-                results = from c in results
-                           where SearchCaseSolutions.ApplicationIds.Contains(c.Values)
-                           select c;
-                //if (res1 != null)
-                //{
-                //    foreach (var r in res1)
-                //    {
+                foreach (CaseSolution ca in cresList)
+                {
+                    IEnumerable<CaseSolutionConditionModel> cco = _caseSolutionConditionRepository.GetCaseSolutionConditions(ca.Id);
 
-                //        CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
+                    foreach (CaseSolutionConditionModel cm in cco)
+                    {
+                        cmoList.Add(cm);
+                    }
+                }
 
-                //        cresList.Add(cres);
-                //    }
-                //}
+                if (cmoList != null && cmoList.Count() > 0)
+                {
+                    var results1 = from d in cmoList
+                                   where SearchCaseSolutions.ApplicationIds.Contains(d.Values)
+                                   select d;
+
+                    if (results1 != null)
+                    {
+                        if (results1.Count() > 0)
+                        {
+                            cresList = new List<CaseSolution>();
+                            foreach (var r in results1)
+                            {
+                                CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                cresList.Add(cres);
+                            }
+                        }
+                        else
+                        {
+                            cresList = new List<CaseSolution>();
+                        }
+                    }
+                    else
+                    {
+                        cresList = new List<CaseSolution>();
+                    }
+                }
+                else
+                {
+                    var results1 = from c in results
+                                   where SearchCaseSolutions.ApplicationIds.Contains(c.Values)
+                                   select c;
+
+                    if (results1 != null)
+                    {
+                        if (results1.Count() > 0)
+                        {
+                            cresList = new List<CaseSolution>();
+                            foreach (var r in results1)
+                            {
+                                CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                cresList.Add(cres);
+                            }
+                        }
+                        else
+                        {
+                            cresList = new List<CaseSolution>();
+                        }
+                    }
+                    else
+                    {
+                        cresList = new List<CaseSolution>();
+                    }
+                }
             }
 
             #endregion
 
             #region Sort
 
-            if (results != null)
+            if (SearchCaseSolutions.ApplicationIds == null && SearchCaseSolutions.CategoryIds == null && SearchCaseSolutions.PriorityIds == null && SearchCaseSolutions.ProductAreaIds == null && SearchCaseSolutions.StatusIds == null && SearchCaseSolutions.SubStatusIds == null && SearchCaseSolutions.TemplateProductAreaIds == null && SearchCaseSolutions.UserWGroupIds == null && SearchCaseSolutions.WgroupIds == null)
             {
-                foreach (var r in results)
+                if (cresList.Count == 0 | cresList == null)
+                {
+                    if (results != null)
+                    {
+                        foreach (var r in results)
+                        {
+
+                            CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
+
+                            cresList.Add(cres);
+                        }
+                    }
+                }
+            }
+
+            if (SearchCaseSolutions.ApplicationIds != null && SearchCaseSolutions.CategoryIds != null && SearchCaseSolutions.PriorityIds != null && SearchCaseSolutions.ProductAreaIds != null && SearchCaseSolutions.StatusIds != null && SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.TemplateProductAreaIds != null && SearchCaseSolutions.UserWGroupIds != null && SearchCaseSolutions.WgroupIds != null)
+            {
+                if (SearchCaseSolutions.ApplicationIds.Count==0 && SearchCaseSolutions.CategoryIds.Count == 0 && SearchCaseSolutions.PriorityIds.Count == 0 && SearchCaseSolutions.ProductAreaIds.Count == 0 && SearchCaseSolutions.StatusIds.Count == 0 && SearchCaseSolutions.SubStatusIds.Count == 0 && SearchCaseSolutions.TemplateProductAreaIds.Count == 0 && SearchCaseSolutions.UserWGroupIds.Count == 0 && SearchCaseSolutions.WgroupIds.Count == 0)
                 {
 
-                    CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
+                    if (cresList.Count == 0 | cresList == null)
+                    {
+                        if (results != null)
+                        {
+                            foreach (var r in results)
+                            {
 
-                    cresList.Add(cres);
+                                CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
+
+                                cresList.Add(cres);
+                            }
+                        }
+                    }
                 }
             }
 
             cresList = cresList.GroupBy(test => test.Id)
-                   .Select(grp => grp.First())
-                   .ToList();
+               .Select(grp => grp.First())
+               .ToList();
 
             if (!string.IsNullOrEmpty(SearchCaseSolutions.SortBy) && (SearchCaseSolutions.SortBy != "undefined"))
             {
@@ -916,10 +1351,10 @@ namespace DH.Helpdesk.Services.Services
                         return query1.ToList();
                         break;
 
-                        
+
                 }
 
-                
+
             }
             else
             {
