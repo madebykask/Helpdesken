@@ -825,22 +825,26 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
 
 EditPage.prototype.doTotalValidationAndSave = function (submitUrl) {
     var self = this;
-
-    if (!self.isFormValid()) {
-        self.setCaseStatus(self.CASE_IN_IDLE);
-        return false;
-    }
-
+    
     var $_ex_Container = self.getExtendedCaseContainer();
     if (!self.isNullOrUndefined($_ex_Container)) {
         if (!self.isExtendedCaseValid()) {
             self.setCaseStatus(self.CASE_IN_IDLE);            
             return false;
         }
+        
+        if (!self.isFormValid()) {
+            self.setCaseStatus(self.CASE_IN_IDLE);
+            return false;
+        }
 
         var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
         return promise.then(self.doSaveCase(submitUrl), self.onSaveError);
     } else {
+        if (!self.isFormValid()) {
+            self.setCaseStatus(self.CASE_IN_IDLE);
+            return false;
+        }
         return self.doSaveCase(submitUrl);
     }
     
@@ -1215,7 +1219,7 @@ EditPage.prototype.init = function (p) {
     EditPage.prototype.Current_EC_Path = p.extendedCasePath;
 
     /*Debug mode*/    
-    //EditPage.prototype.Current_EC_Path = "http://dhhelpdesk-ikea-bschr-v5.datahalland.se/ExtendedCase/?formId=[ExtendedCaseFormId]&autoLoad=1";
+    EditPage.prototype.Current_EC_Path = "http://dhhelpdesk-ikea-bschr-v5.datahalland.se/ExtendedCase/?formId=[ExtendedCaseFormId]&autoLoad=1";
 
     /// controls binding
     self.$form = $('#target');
