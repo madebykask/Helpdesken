@@ -186,7 +186,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 string propertyName = item.PropertyName;
                 //TODO: Translate DisplayName from MasterData
-                string displayName = (!string.IsNullOrEmpty(item.DisplayName) ? item.DisplayName : item.Identifier);
+                string displayName = (item.DisplayName != null ? item.DisplayName : item.Identifier);
 
                 if (item.ExtendedCaseFormId == 0)
                 {

@@ -119,12 +119,12 @@ DECLARE @dcHiringHeaderTextBGuid UNIQUEIDENTIFIER = 'E79BBDDB-E17B-4B4D-BD36-56F
 	@dcHiringHeaderTextBName NVARCHAR(MAX) = @prefix + ' Header, Co-worker',
 	@dcHiringHeaderTextBDescription NVARCHAR(MAX) = '',
 	@dcHiringHeaderTextBText NVARCHAR(MAX) = '<p><Todays Date - Long></p>
-		<p><Co-worker First Name> <Co-worker Last Name></p>
+		<p><strong><Co-worker First Name> <Co-worker Last Name></strong></p>
 		<p><Address Line 1><br />
 		<Address Line 2> <State> <Postal Code><br />
 		<Address Line 3><br />
 		<br /><br />
-		Dear <Co-worker First Name></p>',
+		Dear <Co-worker First Name>,</p>',
 	@dcHiringHeaderTextBHeadline NVARCHAR(MAX) = '',
 	@dcHiringHeaderTextBSortOrder INT = 0
 
@@ -1050,7 +1050,8 @@ END
 DECLARE @dcHiringTermsRemunGuid UNIQUEIDENTIFIER = 'a5452cb7-54f9-4f0e-acd9-b27da4e95a50',
 	@dcHiringTermsRemunName NVARCHAR(MAX) = @prefix + ' Remuneration',
 	@dcHiringTermsRemunDescription NVARCHAR(MAX) = '',
-	@dcHiringTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your base hourly rate will be as per the <b>IKEA Distributions Services Australia Pty Ltd Enterprise Agreement 2016</b>.  This amount will be paid directly into your nominated bank account on a fortnightly basis.',
+	@dcHiringTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your base hourly rate will be as per the <b>IKEA Distributions Services Australia Pty Ltd Enterprise Agreement 2016</b>.  This amount will be paid directly into your nominated bank account on a fortnightly basis.
+<p style="page-break-after: always;"></p>', -- New PDF page after this',
 	@dcHiringTermsRemunHeadline NVARCHAR(MAX) = 'Remuneration',
 	@dcHiringTermsRemunSortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
@@ -1122,6 +1123,8 @@ DECLARE @dcHiringTermsConfGuid UNIQUEIDENTIFIER = '38786f09-515d-4cb5-9fba-921fc
 	@dcHiringTermsConfName NVARCHAR(MAX) = @prefix + ' Confidential Information',
 	@dcHiringTermsConfDescription NVARCHAR(MAX) = '',
 	@dcHiringTermsConfText NVARCHAR(MAX) = 'In the course of your employment, you may be exposed to “Confidential Information” concerning IKEA. Confidential Information means any information obtained by you in the course of your employment, including:
+<br>
+<br>
 <ul>
 <li>trade secrets;</li>
 <li>technical information and technical drawings;</li>
@@ -1131,21 +1134,23 @@ DECLARE @dcHiringTermsConfGuid UNIQUEIDENTIFIER = '38786f09-515d-4cb5-9fba-921fc
 <li>any information marked “confidential” or which IKEA informs you is confidential or a trade secret; and</li>
 <li>Co-worker and customer personal details.</li>
 </ul>
-<br>
 but excluding:
+<br>
+<br>
 <ul>
 <li>information available to the public; and</li>
 <li>information which you can prove you lawfully possessed before obtaining it in the course of your employment (other than this letter of appointment)</li>
 </ul>
-<br>
 During and after your employment, you must not use or disclose Confidential Information to any person (including an employee of IKEA) other than:
+<br>
+<br>
 <ul>
 <li>to perform your duties;</li>
 <li>if IKEA has consented in writing; or</li>
 <li>if required by law.</li>
 </ul>
-<br>
-As an IKEA co-worker, you must keep Confidential Information in a secure manner and treat such information with appropriate sensitivity. On demand by IKEA and at the end of your employment, you must deliver to IKEA all copies of Confidential Information in your possession or control (including all Confidential Information held electronically in any medium) and then delete all Confidential Information held electronically in any medium in your possession or control.',
+As an IKEA co-worker, you must keep Confidential Information in a secure manner and treat such information with appropriate sensitivity. On demand by IKEA and at the end of your employment, you must deliver to IKEA all copies of Confidential Information in your possession or control (including all Confidential Information held electronically in any medium) and then delete all Confidential Information held electronically in any medium in your possession or control.
+<p style="page-break-after: always;"></p>', -- New PDF page after this',
 	@dcHiringTermsConfHeadline NVARCHAR(MAX) = 'Confidential Information',
 	@dcHiringTermsConfSortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
@@ -1527,7 +1532,8 @@ DECLARE @dcHiringTermsTerminationGuid UNIQUEIDENTIFIER = '70cf8691-6792-4ddd-974
 <br><br>
 Upon termination of your employment, all material, equipment, uniforms, information, company records, data etc issued to you or created by you in your employment is to be returned to IKEA or its nominee.
 <br><br>
-IKEA reserves the right to withhold an appropriate sum of money from a co-worker’s termination payment until such time as any outstanding company property as detailed above is returned.',
+IKEA reserves the right to withhold an appropriate sum of money from a co-worker’s termination payment until such time as any outstanding company property as detailed above is returned.
+<p style="page-break-after: always;"></p>', -- New PDF page after this',
 	@dcHiringTermsTerminationHeadline NVARCHAR(MAX) = 'Termination',
 	@dcHiringTermsTerminationSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1808,7 +1814,8 @@ END
 DECLARE @dcHiringTermsVarGuid UNIQUEIDENTIFIER = '99ab359a-d4c9-4fba-a1ce-9ae064b7251b',
 	@dcHiringTermsVarName NVARCHAR(MAX) = @prefix + ' Variation',
 	@dcHiringTermsVarDescription NVARCHAR(MAX) = '',
-	@dcHiringTermsVarText NVARCHAR(MAX) = 'This Agreement may only be varied by a written agreement signed by yourself and IKEA.',
+	@dcHiringTermsVarText NVARCHAR(MAX) = 'This Agreement may only be varied by a written agreement signed by yourself and IKEA.
+<p style="page-break-after: always;"></p>', -- New PDF page after this',
 	@dcHiringTermsVarHeadline NVARCHAR(MAX) = 'Variation',
 	@dcHiringTermsVarSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1

@@ -1183,6 +1183,8 @@ DECLARE @dcTcTermsConfGuid UNIQUEIDENTIFIER = '53f40d5e-a14e-4b0b-afbe-eedbbe2a0
 	@dcTcTermsConfName NVARCHAR(MAX) = @prefix + ' Confidential Information',
 	@dcTcTermsConfDescription NVARCHAR(MAX) = '',
 	@dcTcTermsConfText NVARCHAR(MAX) = 'In the course of your employment, you may be exposed to “Confidential Information” concerning IKEA. Confidential Information means any information obtained by you in the course of your employment, including:
+<br>
+<br>
 <ul>
 <li>trade secrets;</li>
 <li>technical information and technical drawings;</li>
@@ -1192,20 +1194,21 @@ DECLARE @dcTcTermsConfGuid UNIQUEIDENTIFIER = '53f40d5e-a14e-4b0b-afbe-eedbbe2a0
 <li>any information marked “confidential” or which IKEA informs you is confidential or a trade secret; and</li>
 <li>Co-worker and customer personal details.</li>
 </ul>
-<br>
 but excluding:
+<br>
+<br>
 <ul>
 <li>information available to the public; and</li>
 <li>information which you can prove you lawfully possessed before obtaining it in the course of your employment (other than this letter of appointment)</li>
 </ul>
-<br>
 During and after your employment, you must not use or disclose Confidential Information to any person (including an employee of IKEA) other than:
+<br>
+<br>
 <ul>
 <li>to perform your duties;</li>
 <li>if IKEA has consented in writing; or</li>
 <li>if required by law.</li>
 </ul>
-<br>
 As an IKEA co-worker, you must keep Confidential Information in a secure manner and treat such information with appropriate sensitivity. On demand by IKEA and at the end of your employment, you must deliver to IKEA all copies of Confidential Information in your possession or control (including all Confidential Information held electronically in any medium) and then delete all Confidential Information held electronically in any medium in your possession or control.
 <p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcTcTermsConfHeadline NVARCHAR(MAX) = 'Confidential Information',
