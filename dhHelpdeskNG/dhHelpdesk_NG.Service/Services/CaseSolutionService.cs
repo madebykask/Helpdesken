@@ -20,6 +20,8 @@ namespace DH.Helpdesk.Services.Services
     using System.Configuration;
     using System.Data.SqlClient;
 
+    
+
     public interface ICaseSolutionService
     {
         IList<CaseSolution> GetCaseSolutions(int customerId);
@@ -313,7 +315,7 @@ namespace DH.Helpdesk.Services.Services
                     if (conditionKey.ToLower() == "case_relation")
                     {
                         if (isRelatedCase)
-                        { 
+                        {
                             value = "1";
                         }
                         else
@@ -322,7 +324,7 @@ namespace DH.Helpdesk.Services.Services
                         }
                     }
                     //GET FROM APPLICATION
-                   else if (conditionKey.ToLower() == "application_type")
+                    else if (conditionKey.ToLower() == "application_type")
                     {
                         int appType = (int)((ApplicationType)Enum.Parse(typeof(ApplicationType), applicationType.ToString()));
                         value = appType.ToString();
@@ -455,7 +457,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 SearchCaseSolutions.SearchCss = SearchCaseSolutions.SearchCss.ToLower();
 
-                query = query.Where(x => (!string.IsNullOrEmpty(x.Caption) &&x.Caption.ToLower().Contains(SearchCaseSolutions.SearchCss))
+                query = query.Where(x => (!string.IsNullOrEmpty(x.Caption) && x.Caption.ToLower().Contains(SearchCaseSolutions.SearchCss))
                                       || (!string.IsNullOrEmpty(x.Description) && x.Description.ToLower().Contains(SearchCaseSolutions.SearchCss))
                                       || (!string.IsNullOrEmpty(x.Miscellaneous) && x.Miscellaneous.ToLower().Contains(SearchCaseSolutions.SearchCss))
                                       || (!string.IsNullOrEmpty(x.Name) && x.Name.ToLower().Contains(SearchCaseSolutions.SearchCss))
@@ -480,6 +482,170 @@ namespace DH.Helpdesk.Services.Services
                 query = query.Where(x => x.Status == 1 | x.Status == 0);
             }
 
+            DataTable table = new DataTable();
+            if (query.Count() > 0)
+            {
+                table.Columns.Add("Id", typeof(int));
+                table.Columns.Add("Name", typeof(string));
+                table.Columns.Add("CategoryName", typeof(string));
+                table.Columns.Add("CaseSolutionDescription", typeof(string));
+                table.Columns.Add("ConnectedToButton", typeof(int));
+                table.Columns.Add("CaseCaption", typeof(string));
+
+                table.Columns.Add("PerformerUserName", typeof(string));
+                table.Columns.Add("PriorityName", typeof(string));
+                table.Columns.Add("IsActive", typeof(int));
+                table.Columns.Add("SortOrder", typeof(int));
+
+                foreach (var category in query)
+                {
+                    int id = 0;
+                    if (category.Id != null)
+                    {
+                        id = category.Id;
+                    }
+
+
+                    string name = string.Empty;
+                    if (category.Name != null)
+                    {
+                        name = category.Name;
+                    }
+
+                    string catname = string.Empty;
+                    if (category.Category != null)
+                    {
+                        if (category.Category.Name != null)
+                        {
+                            catname = category.Category.Name;
+                        }
+                    }
+
+                    string casedesc = string.Empty;
+                    if (category.CaseSolutionDescription != null)
+                    {
+                        casedesc = category.CaseSolutionDescription;
+                    }
+
+                    int conbut = 0;
+                    if (category.ConnectedButton != null)
+                    {
+                        conbut = (int)category.ConnectedButton;
+                    }
+                    else
+                    {
+                        conbut = 0;
+                    }
+
+                    string cap = string.Empty;
+                    if (category.Caption != null)
+                    {
+                        cap = category.Caption;
+                    }
+
+                    string perf = string.Empty;
+                    if (category.PerformerUser != null)
+                    {
+                        if (category.PerformerUser.FirstName != null && category.PerformerUser.SurName != null)
+                        {
+                            perf = category.PerformerUser.FirstName + " " + category.PerformerUser.SurName;
+                        }
+                    }
+
+                    string prio = string.Empty;
+                    if (category.Priority != null)
+                    {
+                        if (category.Priority.Name != null)
+                        {
+                            prio = category.Priority.Name;
+                        }
+                    }
+
+                    int stat = 0;
+                    if (category.Status != null)
+                    {
+                        stat = category.Status;
+                    }
+
+                    int sort = 0;
+                    if (category.SortOrder != null)
+                    {
+                        sort = category.SortOrder;
+                    }
+
+                    table.Rows.Add(id, name, catname, casedesc, conbut, cap, perf, prio, stat, sort);
+                }
+            }
+
+            var t = (from cs in this._caseSolutionConditionRepository.GetAll().OrderBy(z=>z.CaseSolution_Id).ThenBy(z=>z.Property_Name).ThenBy(z=>z.Values)
+                     select cs);
+
+            DataTable tableCond = new DataTable();
+            if (t.Count() > 0)
+            {
+                tableCond.Columns.Add("Id_Cond", typeof(int));
+                tableCond.Columns.Add("CaseSolution_Id", typeof(int));
+                tableCond.Columns.Add("Property_Name", typeof(string));
+                tableCond.Columns.Add("Values", typeof(string));
+
+                foreach (var c in t)
+                {
+                    int id = 0;
+                    if (c.Id != null)
+                    {
+                        id = c.Id;
+                    }
+                    int casedsolid = 0;
+                    if (c.CaseSolution_Id != null)
+                    {
+                        casedsolid = c.CaseSolution_Id;
+                    }
+
+                    string pname=string.Empty;
+                    if (c.Property_Name != null)
+                    {
+                        pname = c.Property_Name;
+                    }
+                    string values = string.Empty;
+                    if (c.Values != null)
+                    {
+                        values = c.Values;
+                    }
+                    char[] delimiterChars = { ',' };
+                    string[] words = values.Split(delimiterChars);
+
+                    foreach (string s in words)
+                    {
+                        
+                        tableCond.Rows.Add(id, casedsolid, pname, s);
+                    }
+
+                    
+                }
+
+            }
+
+
+            var results = from table1 in table.AsEnumerable()
+                          join table2 in tableCond.AsEnumerable() on (int)table1["Id"] equals (int)table2["CaseSolution_Id"]
+                          select new
+                          {
+                              Id = (int)table1["Id"],
+                              Name = (string)table1["Name"],
+                              CategoryName = (string)table1["CategoryName"],
+                              CaseSolutionDescription = (string)table1["CaseSolutionDescription"],
+                              ConnectedToButton = (int)table1["ConnectedToButton"],
+                              CaseCaption = (string)table1["CaseCaption"],
+                              PerformerUserName = (string)table1["PerformerUserName"],
+                              PriorityName = (string)table1["PriorityName"],
+                              IsActive = (int)table1["IsActive"],
+                              SortOrder = (int)table1["SortOrder"],
+                              Id_Cond = (int)table2["Id_Cond"],
+                              CaseSolution_Id = (int)table2["CaseSolution_Id"],
+                              Property_Name = (string)table2["Property_Name"],
+                              Values = (string)table2["Values"]
+                          };
+
             //Sub status
             if (SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.SubStatusIds.Any())
             {
@@ -493,6 +659,8 @@ namespace DH.Helpdesk.Services.Services
                           select cust;
 
                 query = res;
+
+
 
 
 
@@ -513,6 +681,10 @@ namespace DH.Helpdesk.Services.Services
                           select cust;
 
                 query = res;
+
+
+
+
 
             }
 
@@ -680,6 +852,11 @@ namespace DH.Helpdesk.Services.Services
 
             return query.ToList();
         }
+
+        //public  IEnumerable<DataRow> AsEnumerable(this DataTable table)
+        //{
+        //    return table.Rows.Cast<DataRow>();
+        //}
 
         public IList<CaseSolutionCategory> GetCaseSolutionCategories(int customerId)
         {

@@ -15,6 +15,8 @@ namespace DH.Helpdesk.Web.Infrastructure
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure.Attributes;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
+    //using DH.Helpdesk.Web.Infrastructure.StringExtensions;
+    
     using DH.Helpdesk.Web.Models;
     using System.Configuration;
     using System.Security.Claims;

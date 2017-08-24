@@ -11,6 +11,8 @@ using System.Linq;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Constants;
 using System.Web;
+using System.Data;
+using System.Collections.Generic;
 
 namespace DH.Helpdesk.Common.Extensions.String
 {
@@ -39,6 +41,11 @@ namespace DH.Helpdesk.Common.Extensions.String
             }
 
             return str.Trim().ToLower().Contains(text.Trim().ToLower());
+        }
+
+        public static IEnumerable<DataRow> AsEnumerable(this DataTable table)
+        {
+            return table.Rows.Cast<DataRow>();
         }
 
         /// <summary>
