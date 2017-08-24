@@ -20,7 +20,7 @@ namespace DH.Helpdesk.Services.Services
     using System.Configuration;
     using System.Data.SqlClient;
 
-    
+
 
     public interface ICaseSolutionService
     {
@@ -577,7 +577,7 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
-            var t = (from cs in this._caseSolutionConditionRepository.GetAll().OrderBy(z=>z.CaseSolution_Id).ThenBy(z=>z.Property_Name).ThenBy(z=>z.Values)
+            var t = (from cs in this._caseSolutionConditionRepository.GetAll().OrderBy(z => z.CaseSolution_Id).ThenBy(z => z.Property_Name).ThenBy(z => z.Values)
                      select cs);
 
             DataTable tableCond = new DataTable();
@@ -601,7 +601,7 @@ namespace DH.Helpdesk.Services.Services
                         casedsolid = c.CaseSolution_Id;
                     }
 
-                    string pname=string.Empty;
+                    string pname = string.Empty;
                     if (c.Property_Name != null)
                     {
                         pname = c.Property_Name;
@@ -616,11 +616,11 @@ namespace DH.Helpdesk.Services.Services
 
                     foreach (string s in words)
                     {
-                        
+
                         tableCond.Rows.Add(id, casedsolid, pname, s);
                     }
 
-                    
+
                 }
 
             }
@@ -647,135 +647,184 @@ namespace DH.Helpdesk.Services.Services
                           };
 
             //Sub status
+            List<CaseSolution> cresList = new List<CaseSolution>();
+
             if (SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.SubStatusIds.Any())
             {
 
-                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
-                         select cs);
+                //var q = (from cs in this._caseSolutionConditionRepository.GetAll()
+                //         select cs);
 
-                var res = from cust in query
-                          join so in q on cust.Id equals so.CaseSolution_Id
-                          where SearchCaseSolutions.SubStatusIds.Contains(so.Values)
-                          select cust;
+                //var res = from cust in query
+                //          join so in q on cust.Id equals so.CaseSolution_Id
+                //          where SearchCaseSolutions.SubStatusIds.Contains(so.Values)
+                //          select cust;
 
-                query = res;
+                //query = res;
 
+                results = from c in results
+                           where SearchCaseSolutions.SubStatusIds.Contains(c.Values)
+                           select c;
+                //if (results != null)
+                //{
+                //    foreach (var r in results)
+                //    {
 
+                //        CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
 
-
-
+                //        cresList.Add(cres);
+                //    }
+                //}
 
             }
 
             //Working group
             if (SearchCaseSolutions.WgroupIds != null && SearchCaseSolutions.WgroupIds.Any())
             {
-                //query = query.Where(x => x.WorkingGroup_Id.HasValue && SearchCaseSolutions.WgroupIds.Contains(x.WorkingGroup_Id.Value));
 
-                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
-                         select cs);
+                results = from c in results
+                           where SearchCaseSolutions.WgroupIds.Contains(c.Values)
+                           select c;
+                //if (res1 != null)
+                //{
+                //    foreach (var r in res1)
+                //    {
 
-                var res = from cust in query
-                          join so in q on cust.Id equals so.CaseSolution_Id
-                          where SearchCaseSolutions.WgroupIds.Contains(so.Values)
-                          select cust;
+                //        CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
 
-                query = res;
-
-
-
-
+                //        cresList.Add(cres);
+                //    }
+                //}
 
             }
 
             //Priority
             if (SearchCaseSolutions.PriorityIds != null && SearchCaseSolutions.PriorityIds.Any())
             {
-                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
-                         select cs);
+                results = from c in results
+                           where SearchCaseSolutions.PriorityIds.Contains(c.Values)
+                           select c;
+                //if (res1 != null)
+                //{
+                //    foreach (var r in res1)
+                //    {
 
-                var res = from cust in query
-                          join so in q on cust.Id equals so.CaseSolution_Id
-                          where SearchCaseSolutions.PriorityIds.Contains(so.Values)
-                          select cust;
+                //        CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
 
-                query = res;
+                //        cresList.Add(cres);
+                //    }
+                //}
             }
 
             //Status
             if (SearchCaseSolutions.StatusIds != null && SearchCaseSolutions.StatusIds.Any())
             {
 
-                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
-                         select cs);
+                results = from c in results
+                           where SearchCaseSolutions.StatusIds.Contains(c.Values)
+                           select c;
+                //if (res1 != null)
+                //{
+                //    foreach (var r in res1)
+                //    {
 
-                var res = from cust in query
-                          join so in q on cust.Id equals so.CaseSolution_Id
-                          where SearchCaseSolutions.StatusIds.Contains(so.Values)
-                          select cust;
+                //        CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
 
-                query = res;
+                //        cresList.Add(cres);
+                //    }
+                //}
             }
 
             //ProductArea
             if (SearchCaseSolutions.ProductAreaIds != null && SearchCaseSolutions.ProductAreaIds.Any())
             {
-                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
-                         select cs);
+                results = from c in results
+                           where SearchCaseSolutions.ProductAreaIds.Contains(c.Values)
+                           select c;
+                //if (res1 != null)
+                //{
+                //    foreach (var r in res1)
+                //    {
 
-                var res = from cust in query
-                          join so in q on cust.Id equals so.CaseSolution_Id
-                          where SearchCaseSolutions.ProductAreaIds.Contains(so.Values)
-                          select cust;
+                //        CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
 
-                query = res;
+                //        cresList.Add(cres);
+                //    }
+                //}
             }
 
             //UserWGroup, ????????????
             if (SearchCaseSolutions.UserWGroupIds != null && SearchCaseSolutions.UserWGroupIds.Any())
             {
-                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
-                         select cs);
+                results = from c in results
+                           where SearchCaseSolutions.UserWGroupIds.Contains(c.Values)
+                           select c;
+                //if (res1 != null)
+                //{
+                //    foreach (var r in res1)
+                //    {
 
-                var res = from cust in query
-                          join so in q on cust.Id equals so.CaseSolution_Id
-                          where SearchCaseSolutions.UserWGroupIds.Contains(so.Values)
-                          select cust;
+                //        CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
 
-                query = res;
+                //        cresList.Add(cres);
+                //    }
+                //}
             }
 
             //TemplateProduct, ????????????
             if (SearchCaseSolutions.TemplateProductAreaIds != null && SearchCaseSolutions.TemplateProductAreaIds.Any())
             {
-                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
-                         select cs);
+                results = from c in results
+                           where SearchCaseSolutions.TemplateProductAreaIds.Contains(c.Values)
+                           select c;
+                //if (res1 != null)
+                //{
+                //    foreach (var r in res1)
+                //    {
 
-                var res = from cust in query
-                          join so in q on cust.Id equals so.CaseSolution_Id
-                          where SearchCaseSolutions.TemplateProductAreaIds.Contains(so.Values)
-                          select cust;
+                //        CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
 
-                query = res;
+                //        cresList.Add(cres);
+                //    }
+                //}
             }
 
             //Application, ????????????
             if (SearchCaseSolutions.ApplicationIds != null && SearchCaseSolutions.ApplicationIds.Any())
             {
-                var q = (from cs in this._caseSolutionConditionRepository.GetAll()
-                         select cs);
+                results = from c in results
+                           where SearchCaseSolutions.ApplicationIds.Contains(c.Values)
+                           select c;
+                //if (res1 != null)
+                //{
+                //    foreach (var r in res1)
+                //    {
 
-                var res = from cust in query
-                          join so in q on cust.Id equals so.CaseSolution_Id
-                          where SearchCaseSolutions.ApplicationIds.Contains(so.Values)
-                          select cust;
+                //        CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
 
-                query = res;
+                //        cresList.Add(cres);
+                //    }
+                //}
             }
 
             #endregion
 
             #region Sort
+
+            if (results != null)
+            {
+                foreach (var r in results)
+                {
+
+                    CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
+
+                    cresList.Add(cres);
+                }
+            }
+
+            cresList = cresList.GroupBy(test => test.Id)
+                   .Select(grp => grp.First())
+                   .ToList();
 
             if (!string.IsNullOrEmpty(SearchCaseSolutions.SortBy) && (SearchCaseSolutions.SortBy != "undefined"))
             {
@@ -783,74 +832,175 @@ namespace DH.Helpdesk.Services.Services
                 {
 
                     case CaseSolutionIndexColumns.Name:
-                        query = (SearchCaseSolutions.Ascending) ?
-                                query.OrderBy(l => (l.Name != null ? l.Name : string.Empty)) :
-                                query.OrderByDescending(l => (l.Name != null ? l.Name : string.Empty));
+
+
+                        var query1 = (SearchCaseSolutions.Ascending) ?
+                                cresList.OrderBy(l => (l.Name != null ? l.Name : string.Empty)) :
+                                cresList.OrderByDescending(l => (l.Name != null ? l.Name : string.Empty));
+
+                        return query1.ToList();
+
                         break;
 
                     case CaseSolutionIndexColumns.Category:
-                        query = (SearchCaseSolutions.Ascending) ?
-                                query.OrderBy(l => (l.CaseSolutionCategory != null ? l.CaseSolutionCategory.Name : string.Empty)) :
-                                query.OrderByDescending(l => (l.CaseSolutionCategory != null ? l.CaseSolutionCategory.Name : string.Empty));
+                        query1 = (SearchCaseSolutions.Ascending) ?
+                                cresList.OrderBy(l => (l.CaseSolutionCategory != null ? l.CaseSolutionCategory.Name : string.Empty)) :
+                                cresList.OrderByDescending(l => (l.CaseSolutionCategory != null ? l.CaseSolutionCategory.Name : string.Empty));
+
+                        return query1.ToList();
                         break;
 
                     case CaseSolutionIndexColumns.Caption:
-                        query = (SearchCaseSolutions.Ascending) ?
-                                query.OrderBy(l => (l.Caption != null ? l.Caption : string.Empty)) :
-                                query.OrderByDescending(l => (l.Caption != null ? l.Caption : string.Empty));
+                        query1 = (SearchCaseSolutions.Ascending) ?
+                                cresList.OrderBy(l => (l.Caption != null ? l.Caption : string.Empty)) :
+                                cresList.OrderByDescending(l => (l.Caption != null ? l.Caption : string.Empty));
+
+                        return query1.ToList();
                         break;
 
                     case CaseSolutionIndexColumns.Administrator:
                         if (SearchCaseSolutions.Ascending)
-                            query = isFirstNamePresentation ?
-                                        query.OrderBy(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty))
+                            query1 = isFirstNamePresentation ?
+                                        cresList.OrderBy(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty))
                                             .ThenBy(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty)) :
 
-                                        query.OrderBy(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty))
+                                        cresList.OrderBy(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty))
                                         .ThenBy(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));
                         else
-                            query = isFirstNamePresentation ?
-                                       query.OrderByDescending(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty))
+                            query1 = isFirstNamePresentation ?
+                                       cresList.OrderByDescending(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty))
                                            .ThenByDescending(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty)) :
 
-                                       query.OrderByDescending(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty))
+                                       cresList.OrderByDescending(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty))
                                        .ThenByDescending(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));
+
+                        return query1.ToList();
                         break;
 
                     case CaseSolutionIndexColumns.Priority:
-                        query = (SearchCaseSolutions.Ascending) ?
-                                    query.OrderBy(l => (l.Priority != null ? l.Priority.Name : string.Empty)) :
-                                    query.OrderByDescending(l => (l.Priority != null ? l.Priority.Name : string.Empty));
+                        query1 = (SearchCaseSolutions.Ascending) ?
+                                    cresList.OrderBy(l => (l.Priority != null ? l.Priority.Name : string.Empty)) :
+                                    cresList.OrderByDescending(l => (l.Priority != null ? l.Priority.Name : string.Empty));
+
+                        return query1.ToList();
                         break;
 
 
                     case CaseSolutionIndexColumns.Status:
-                        query = (SearchCaseSolutions.Ascending) ?
-                                query.OrderBy(l => l.Status) :
-                                query.OrderByDescending(l => l.Status);
+                        query1 = (SearchCaseSolutions.Ascending) ?
+                                cresList.OrderBy(l => l.Status) :
+                                cresList.OrderByDescending(l => l.Status);
+
+                        return query1.ToList();
                         break;
 
                     case CaseSolutionIndexColumns.ConnectedToButton:
-                        query = (SearchCaseSolutions.Ascending) ?
-                                query.OrderBy(l => l.ConnectedButton) :
-                                query.OrderByDescending(l => l.ConnectedButton);
+                        query1 = (SearchCaseSolutions.Ascending) ?
+                                cresList.OrderBy(l => l.ConnectedButton) :
+                                cresList.OrderByDescending(l => l.ConnectedButton);
+
+                        return query1.ToList();
                         break;
                     case CaseSolutionIndexColumns.SortOrder:
-                        query = (SearchCaseSolutions.Ascending) ?
-                                query.OrderBy(l => l.SortOrder) :
-                                query.OrderByDescending(l => l.SortOrder);
+                        query1 = (SearchCaseSolutions.Ascending) ?
+                                cresList.OrderBy(l => l.SortOrder) :
+                                cresList.OrderByDescending(l => l.SortOrder);
+
+                        return query1.ToList();
                         break;
                     default:
-                        query = (SearchCaseSolutions.Ascending) ?
-                                query.OrderBy(l => (l.Name != null ? l.Name : string.Empty)) :
-                                query.OrderByDescending(l => (l.Name != null ? l.Name : string.Empty));
+                        query1 = (SearchCaseSolutions.Ascending) ?
+                                cresList.OrderBy(l => (l.Name != null ? l.Name : string.Empty)) :
+                                cresList.OrderByDescending(l => (l.Name != null ? l.Name : string.Empty));
+
+                        return query1.ToList();
                         break;
+
+                        
                 }
+
+                
             }
+            else
+            {
+                var query1 = cresList;
+                return query1.ToList();
+            }
+            //if (!string.IsNullOrEmpty(SearchCaseSolutions.SortBy) && (SearchCaseSolutions.SortBy != "undefined"))
+            //{
+            //    switch (SearchCaseSolutions.SortBy)
+            //    {
+
+            //        case CaseSolutionIndexColumns.Name:
+            //            query = (SearchCaseSolutions.Ascending) ?
+            //                    query.OrderBy(l => (l.Name != null ? l.Name : string.Empty)) :
+            //                    query.OrderByDescending(l => (l.Name != null ? l.Name : string.Empty));
+            //            break;
+
+            //        case CaseSolutionIndexColumns.Category:
+            //            query = (SearchCaseSolutions.Ascending) ?
+            //                    query.OrderBy(l => (l.CaseSolutionCategory != null ? l.CaseSolutionCategory.Name : string.Empty)) :
+            //                    query.OrderByDescending(l => (l.CaseSolutionCategory != null ? l.CaseSolutionCategory.Name : string.Empty));
+            //            break;
+
+            //        case CaseSolutionIndexColumns.Caption:
+            //            query = (SearchCaseSolutions.Ascending) ?
+            //                    query.OrderBy(l => (l.Caption != null ? l.Caption : string.Empty)) :
+            //                    query.OrderByDescending(l => (l.Caption != null ? l.Caption : string.Empty));
+            //            break;
+
+            //        case CaseSolutionIndexColumns.Administrator:
+            //            if (SearchCaseSolutions.Ascending)
+            //                query = isFirstNamePresentation ?
+            //                            query.OrderBy(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty))
+            //                                .ThenBy(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty)) :
+
+            //                            query.OrderBy(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty))
+            //                            .ThenBy(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));
+            //            else
+            //                query = isFirstNamePresentation ?
+            //                           query.OrderByDescending(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty))
+            //                               .ThenByDescending(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty)) :
+
+            //                           query.OrderByDescending(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty))
+            //                           .ThenByDescending(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));
+            //            break;
+
+            //        case CaseSolutionIndexColumns.Priority:
+            //            query = (SearchCaseSolutions.Ascending) ?
+            //                        query.OrderBy(l => (l.Priority != null ? l.Priority.Name : string.Empty)) :
+            //                        query.OrderByDescending(l => (l.Priority != null ? l.Priority.Name : string.Empty));
+            //            break;
+
+
+            //        case CaseSolutionIndexColumns.Status:
+            //            query = (SearchCaseSolutions.Ascending) ?
+            //                    query.OrderBy(l => l.Status) :
+            //                    query.OrderByDescending(l => l.Status);
+            //            break;
+
+            //        case CaseSolutionIndexColumns.ConnectedToButton:
+            //            query = (SearchCaseSolutions.Ascending) ?
+            //                    query.OrderBy(l => l.ConnectedButton) :
+            //                    query.OrderByDescending(l => l.ConnectedButton);
+            //            break;
+            //        case CaseSolutionIndexColumns.SortOrder:
+            //            query = (SearchCaseSolutions.Ascending) ?
+            //                    query.OrderBy(l => l.SortOrder) :
+            //                    query.OrderByDescending(l => l.SortOrder);
+            //            break;
+            //        default:
+            //            query = (SearchCaseSolutions.Ascending) ?
+            //                    query.OrderBy(l => (l.Name != null ? l.Name : string.Empty)) :
+            //                    query.OrderByDescending(l => (l.Name != null ? l.Name : string.Empty));
+            //            break;
+            //    }
+            //}
 
             #endregion
 
-            return query.ToList();
+
+            //return query.ToList();
         }
 
         //public  IEnumerable<DataRow> AsEnumerable(this DataTable table)
