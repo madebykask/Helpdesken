@@ -306,10 +306,12 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public void ClearExistingAttachedFiles(int caseId)
         {
-            var files = DataContext.LogFilesExisting.Where(x => x.Case_Id == caseId);
-            DataContext.LogFilesExisting.RemoveRange(files);
-            DataContext.SaveChanges();
-
+            var files = DataContext.LogFilesExisting.Where(x => x.Case_Id == caseId).ToList();
+            if (files.Any())
+            {
+                DataContext.LogFilesExisting.RemoveRange(files);
+                DataContext.SaveChanges();
+            }
         }
 
         public void AddExistLogFiles(IEnumerable<LogFile> logExFiles)

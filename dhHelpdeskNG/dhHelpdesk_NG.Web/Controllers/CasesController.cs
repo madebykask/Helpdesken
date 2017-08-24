@@ -1401,8 +1401,6 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 /* Used for Extended Case */
                 TempData["Case_Id"] = id;
-                        _logFileService.ClearExistingAttachedFiles(id);
-
 
                 var userId = SessionFacade.CurrentUser.Id;
 
@@ -5530,6 +5528,11 @@ namespace DH.Helpdesk.Web.Controllers
                 performersList.Insert(0, admUser);
             }
 
+            var temporaryUserHasAccessToWG = redirectFrom.ToLower() == "save";
+            m.EditMode = EditMode(m, ModuleName.Cases, deps, acccessToGroups, temporaryUserHasAccessToWG);
+            if (m.EditMode == Enums.AccessMode.FullAccess)
+                _logFileService.ClearExistingAttachedFiles(caseId);
+
             if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.OU_Id.ToString()).ShowOnStartPage == 1)
             {
                 //m.ous = this._ouService.GetOUs(customerId);
@@ -5621,9 +5624,7 @@ namespace DH.Helpdesk.Web.Controllers
                         m.CaseLog.SendMailAboutCaseToNotifier = true;
                 }
             }
-
-            var temporaryUserHasAccessToWG = redirectFrom.ToLower() == "save";
-            m.EditMode = EditMode(m, ModuleName.Cases, deps, acccessToGroups, temporaryUserHasAccessToWG);
+            
             if (isCreateNewCase)
             {
                 m.case_.DefaultOwnerWG_Id = null;
