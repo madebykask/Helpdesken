@@ -1575,7 +1575,9 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult Copy(FormCollection collection, string selectedValues)
+        //public RedirectToRouteResult Copy(FormCollection collection, string selectedValues)
+        public ActionResult Copy(FormCollection collection, string selectedValues)
+            
         {
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -2314,7 +2316,25 @@ namespace DH.Helpdesk.Web.Controllers
 
             //return this.RedirectToAction("index", "casesolution");
 
-            return null;
+            // return null;
+
+
+            var caseSolution = this._caseSolutionService.GetCaseSolution(casesoilutionid);
+
+
+            int? backToPageId = null;
+            if (backToPageId == null)
+                ViewBag.PageId = 0;
+            else
+                ViewBag.PageId = backToPageId;
+
+
+            var caseSolution1 = this._caseSolutionService.GetCaseSolution(Convert.ToInt32(casesoilutionid));
+
+
+            var model = this.CreateInputViewModel(caseSolution);
+            model.isCopy = true;
+            return this.View("/Views/CaseSolution/Edit.cshtml", model);
 
         }
 
@@ -2821,7 +2841,7 @@ namespace DH.Helpdesk.Web.Controllers
             // 
 
             //var splitToCaseSolutions = _caseSolutionService.GetCaseSolutions(curCustomerId).Where(z=>z.Status==1);
-            IList <CaseSolution> splitToCaseSolutions = _caseSolutionService.GetCaseSolutions(curCustomerId).Where(z => z.Status == 1).ToList();
+            IList<CaseSolution> splitToCaseSolutions = _caseSolutionService.GetCaseSolutions(curCustomerId).Where(z => z.Status == 1).ToList();
             //IList<CaseSolution> splitToCaseSolutions = _caseSolutionService.GetCaseSolutions(curCustomerId).Where(z => z.Status == 1).ToList();
 
             var model = new CaseSolutionInputViewModel
@@ -3054,6 +3074,9 @@ namespace DH.Helpdesk.Web.Controllers
             model.RuleModel = caseRuleModel;
             model.CaseSolution.Name = model.CaseSolution.Name;
             model.CustomerSetting = _settingService.GetCustomerSetting(model.CaseSolution.Customer_Id);
+
+            model.isCopy = false;
+
             return model;
         }
 

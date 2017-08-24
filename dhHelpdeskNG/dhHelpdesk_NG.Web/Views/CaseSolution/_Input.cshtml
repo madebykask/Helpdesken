@@ -62,6 +62,13 @@
                                     <td>
                                         @Html.TextBoxFor(model => model.CaseSolution.Name, new { id = "Name", maxlength = "50" })
                                     </td>
+                                    <td>
+                                        <div id="inputCopy" style="display: none">
+                                            @Html.Label("Kopia", new { @id = "lblCopy", @Style = "color:red" })
+                                        </div>
+
+
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>
@@ -168,12 +175,12 @@
                                                     <td>
                                                         <select id="savaAndClose" name="CaseSolution.SaveAndClose" @(Model.CaseSolution.ShowInsideCase == 1 ? "" : "disabled='true'")>
                                                             @foreach (var action in Model.ActionList)
-                                                    {
-                                                            <option value="@action.Value" @(action.Selected ? "selected" : "")> @action.Text </option>}
+                                                            {
+                                                                <option value="@action.Value" @(action.Selected ? "selected" : "")> @action.Text </option>}
 
                                                             @if (Model.CaseSolution.ShowInsideCase != 1)
-                                                    {
-                                                            <option value="-2" selected> @saveDropDownText </option>}
+                                                            {
+                                                                <option value="-2" selected> @saveDropDownText </option>}
                                                         </select>
                                                     </td>
                                                 </tr>
@@ -183,13 +190,13 @@
                                                     </td>
                                                     <td>
                                                         @if (Model.CaseSolution.ShowInsideCase == 1)
-                                                {
-                                                        @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new { @Id = "ConnectTo", @onchange = "GetSelectedTextValue(this)" })
-                                                }
-                                                else
-                                                {
-                                                        @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new { @Id = "ConnectTo", disabled = "disabled", @onchange = "GetSelectedTextValue(this)" })
-                                                }
+                                                        {
+                                                            @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new { @Id = "ConnectTo", @onchange = "GetSelectedTextValue(this)" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new { @Id = "ConnectTo", disabled = "disabled", @onchange = "GetSelectedTextValue(this)" })
+                                                        }
 
                                                     </td>
                                                 </tr>
@@ -2286,7 +2293,13 @@
                     data: form,
                     success: function (data) {
 
-                        window.location.href = '/CaseSolution/Index/';
+                        var t = document.getElementById('inputCopy');
+                        //t.style.visibility = 'visible'
+                        //alert(t);
+                        t.style.display = 'block';          // Show
+                        //t.style.display = 'inline';         // Show
+                        //style="display: none">
+                        //window.location.href = '/CaseSolution/Edit/';
                         //$('#divReplaceConditions').html($(data));
                     },
                     error: function (result) {
