@@ -1184,10 +1184,13 @@ REFERENCES [dbo].[tblProductArea] ([Id])
 END
 GO
 
-
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
                where syscolumns.name = N'RequiredIfReopened' and sysobjects.name = N'tblCaseFieldSettings')
    ALTER TABLE tblCaseFieldSettings ADD RequiredIfReopened int NOT NULL Default(0)
+GO
+
+-- REBUILD tblCase INDEXES to fix index fragmentation
+ALTER INDEX ALL ON tblCase REBUILD
 GO
 
 -- Last Line to update database version
