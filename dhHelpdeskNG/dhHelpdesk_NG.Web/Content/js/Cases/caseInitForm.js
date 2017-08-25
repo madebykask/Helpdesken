@@ -748,6 +748,12 @@ function CaseInitForm() {
     }
 
     $('#case__Priority_Id').change(function () {
+        var isInheritingMode = $('#CaseTemplate_ExternalLogNote').val();
+        if (isInheritingMode == "True") {
+            $('#CaseTemplate_ExternalLogNote').val("");
+            return;
+        }
+
         $.post('/Cases/ChangePriority/', { 'id': $(this).val() }, function (data) {
             if (data.ExternalLogText != null && data.ExternalLogText != "") {
                 $('#CaseLog_TextExternal').val(data.ExternalLogText);

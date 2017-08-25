@@ -54,11 +54,11 @@ namespace DH.Helpdesk.Web
             //System.Web.Helpers.AntiForgeryConfig.SuppressXFrameOptionsHeader = true;//uncomment this if XFrameOptions is added in web.config headers            
             // ECT.FormLib.FormLibSetup.Setup(); todo
 
-            //#if DEBUG
-            //    BundleTable.EnableOptimizations = false;
-            //#else
-            //    BundleTable.EnableOptimizations = true;
-            //#endif
+            #if DEBUG
+                BundleTable.EnableOptimizations = false;
+            #else
+                BundleTable.EnableOptimizations = true;
+            #endif
         }
 
         private void ViewEngineInit()

@@ -11,9 +11,8 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @using DH.Helpdesk.Common.Constants;
 
-<script type="text/javascript">
+<script type="text/javascript">    
 
-    
     window.parameters = {
         isCaseLocked: '@Model.CaseLock.IsLocked',
         currentCaseId: '@Model.case_.Id',
@@ -336,6 +335,7 @@
                         @Html.Hidden("CaseTemplate_OU_Id", "")
                         @Html.Hidden("CaseTemplate_IsAbout_Department_Id", "")
                         @Html.Hidden("CaseTemplate_IsAbout_OU_Id", "")
+                        @Html.Hidden("CaseTemplate_ExternalLogNote", "")
                         @Html.Hidden("LastProductAreaId", Model.case_.ProductArea_Id)
                         @Html.Hidden("LastProjectId", Model.case_.Project_Id)
                         @Html.Hidden("CaseHasInvoiceOrder", "")

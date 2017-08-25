@@ -337,6 +337,7 @@ var ApplyTemplate = function (data, doOverwrite) {
 
     var cfg = { doOverwrite: doOverwrite };
     var dateFormat = data["dateFormat"];
+    $('#CaseTemplate_ExternalLogNote').val("True");
     for (var fieldId in data) {
         var val = data[fieldId];
         var el;
@@ -598,7 +599,7 @@ var ApplyTemplate = function (data, doOverwrite) {
                     //Diabled to show WatchDate 
                     //cfg['doNotTriggerEvent'] = true;
                     SetValueIfElVisible(el, val, cfg);
-
+                    
                     if (el && (el.val() == "" || cfg.doOverwrite)) {
                         //Todo: refactor
                         //if connected to workflow we need to set the value
@@ -612,7 +613,7 @@ var ApplyTemplate = function (data, doOverwrite) {
                     el = $("#case__Project_Id");
                     SetValueIfElVisible(el, val, cfg);
                     break;
-                case 'Text_External':
+                case 'Text_External':                    
                     el = $("#CaseLog_TextExternal");
                     SetValueIfElVisible(el, val, cfg);
                     break;
