@@ -349,6 +349,7 @@ namespace DH.Helpdesk.Web.Controllers
                 return new HttpNotFoundResult("No case solution found...");
 
             TempData["NewOrOld"] = "0";
+            //ViewBag.IdVal = 0;
             var model = this.CreateInputViewModel(caseSolution);
 
             return this.View(model);
@@ -1185,7 +1186,7 @@ namespace DH.Helpdesk.Web.Controllers
             else
                 ViewBag.PageId = backToPageId;
 
-
+            //ViewBag.IdVal = caseSolution.Id;
             var model = this.CreateInputViewModel(caseSolution);
 
             return this.View(model);
@@ -1576,8 +1577,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         [HttpPost]
         //public RedirectToRouteResult Copy(FormCollection collection, string selectedValues)
-        public ActionResult Copy(FormCollection collection, string selectedValues)
-            
+        public int Copy(FormCollection collection, string selectedValues)
+
         {
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -1840,18 +1841,15 @@ namespace DH.Helpdesk.Web.Controllers
 
             caseSolutionInputViewModel.CaseSolution.ChangedDate = DateTime.Now;
 
-
-            if (collection["CaseSolution.ConnectedButton"].ToString().Trim() != string.Empty)
+            if (collection["CaseSolution.ConnectedButton"] != null)
             {
-                int ConnectedButton = Convert.ToInt32(collection["CaseSolution.ConnectedButton"].ToString());
-                caseSolutionInputViewModel.CaseSolution.ConnectedButton = ConnectedButton;
+                if (collection["CaseSolution.ConnectedButton"].ToString().Trim() != string.Empty)
+                {
+                    int ConnectedButton = Convert.ToInt32(collection["CaseSolution.ConnectedButton"].ToString());
+                    caseSolutionInputViewModel.CaseSolution.ConnectedButton = ConnectedButton;
+                }
             }
 
-            //if (collection["CaseSolution.ContactBeforeAction"].ToString().Trim() != string.Empty)
-            //{
-            //    int ContactBeforeAction = Convert.ToInt32(collection["CaseSolution.ContactBeforeAction"].ToString());
-            //    caseSolutionInputViewModel.CaseSolution.ContactBeforeAction = ContactBeforeAction;
-            //}
 
             if (collection["CaseSolution.ContactBeforeAction"].ToString().Trim() != string.Empty)
             {
@@ -2100,10 +2098,13 @@ namespace DH.Helpdesk.Web.Controllers
 
 
 
-            if (collection["CaseSolution.SaveAndClose"].ToString().Trim() != string.Empty)
+            if (collection["CaseSolution.SaveAndClose"] != null)
             {
-                int SaveAndClose = Convert.ToInt32(collection["CaseSolution.SaveAndClose"].ToString());
-                caseSolutionInputViewModel.CaseSolution.SaveAndClose = SaveAndClose;
+                if (collection["CaseSolution.SaveAndClose"].ToString().Trim() != string.Empty)
+                {
+                    int SaveAndClose = Convert.ToInt32(collection["CaseSolution.SaveAndClose"].ToString());
+                    caseSolutionInputViewModel.CaseSolution.SaveAndClose = SaveAndClose;
+                }
             }
 
 
@@ -2206,12 +2207,29 @@ namespace DH.Helpdesk.Web.Controllers
                 int Urgency_Id = Convert.ToInt32(collection["CaseSolution.Urgency_Id"].ToString());
                 caseSolutionInputViewModel.CaseSolution.Urgency_Id = Urgency_Id;
             }
+            
 
             if (collection["CaseSolution.Verified"].ToString().Trim() != string.Empty)
             {
-                int Verified = Convert.ToInt32(collection["CaseSolution.Verified"].ToString());
-                caseSolutionInputViewModel.CaseSolution.Verified = Verified;
+                string Verified = Convert.ToString(collection["CaseSolution.Verified"].ToString());
+                pos = Verified.IndexOf(",");
+                if (pos > 0)
+                {
+                    Verified = Verified.Substring(0, pos);
+
+                    caseSolutionInputViewModel.CaseSolution.Verified = Convert.ToInt32(Verified);
+
+                }
+
+
             }
+
+
+
+
+
+
+
             if (collection["CaseSolution.WatchDate"].ToString().Trim() != string.Empty)
             {
                 string WatchDate = Convert.ToString(collection["CaseSolution.WatchDate"].ToString());
@@ -2312,29 +2330,29 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
 
+            return Convert.ToInt32(casesoilutionid);
+
+            
+
+            //ModelState.Clear();
+            //ModelState.Remove("Id");
+            //var caseSolution = this._caseSolutionService.GetCaseSolution(casesoilutionid);
 
 
-            //return this.RedirectToAction("index", "casesolution");
-
-            // return null;
-
-
-            var caseSolution = this._caseSolutionService.GetCaseSolution(casesoilutionid);
-
-
-            int? backToPageId = null;
-            if (backToPageId == null)
-                ViewBag.PageId = 0;
-            else
-                ViewBag.PageId = backToPageId;
+            //int? backToPageId = null;
+            //if (backToPageId == null)
+            //    ViewBag.PageId = 0;
+            //else
+            //    ViewBag.PageId = backToPageId;
 
 
-            var caseSolution1 = this._caseSolutionService.GetCaseSolution(Convert.ToInt32(casesoilutionid));
+            //var caseSolution1 = this._caseSolutionService.GetCaseSolution(Convert.ToInt32(casesoilutionid));
 
 
-            var model = this.CreateInputViewModel(caseSolution);
-            model.isCopy = true;
-            return this.View("/Views/CaseSolution/Edit.cshtml", model);
+            //var model = this.CreateInputViewModel(caseSolution);
+            //model.isCopy = true;
+            
+            //return this.View("/Views/CaseSolution/Edit.cshtml", model);
 
         }
 

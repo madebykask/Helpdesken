@@ -15,7 +15,20 @@
                                    Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation));
 
     var jsSerializer = new JavaScriptSerializer();
+
+   
 }
+
+
+@*@{
+    int idValue = ViewBag.IdVal;
+}
+
+@{
+    var unauthorized = TempData["TempId"];
+}*@
+
+
 <script type="text/javascript">
     window.params = {
         saveDropDownCaption: '@saveDropDownText',
@@ -28,6 +41,7 @@
         toText: '@Translation.GetForJS("till")',
         andText: '@Translation.GetForJS("och")'
     };
+
 
 </script>
 
@@ -2180,7 +2194,8 @@
                                 </tr>
                             </table>
                             @Html.HiddenFor(model => model.CaseSolution.Customer_Id)
-                            @Html.HiddenFor(model => model.CaseSolution.Id)
+                            @Html.HiddenFor(model => model.CaseSolution.Id, new { id = "hidId" })
+                            
                             @Html.HiddenFor(model => model.CaseSolution.FormGUID)
                         </div>
                     </div>
@@ -2294,13 +2309,21 @@
                     success: function (data) {
 
                         var t = document.getElementById('inputCopy');
-                        //t.style.visibility = 'visible'
-                        //alert(t);
                         t.style.display = 'block';          // Show
-                        //t.style.display = 'inline';         // Show
-                        //style="display: none">
-                        //window.location.href = '/CaseSolution/Edit/';
-                        //$('#divReplaceConditions').html($(data));
+
+
+                        
+                        document.getElementById('hidId').value=data;
+                        
+
+                        @*var tid = document.getElementById('hidId');
+
+                            alert(@unauthorized);
+                        
+                        alert(@idValue);
+                        var number = parseInt(@ViewBag.IdVal); //Accessing the number from the ViewBag
+                        alert("Number is: " + number);*@
+
                     },
                     error: function (result) {
 
