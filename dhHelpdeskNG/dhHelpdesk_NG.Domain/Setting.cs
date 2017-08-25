@@ -140,5 +140,11 @@ namespace DH.Helpdesk.Domain
         /// If 1 - indicates that users should be presented(and sorted by) as "FirstName LastName", and vice versa
         /// </summary>
         public int IsUserFirstLastNameRepresentation { get; set; }
+
+        public bool ShowQuickNewCaseLink { get; set; }
+
+        public string QuickNewCaseLinkText { get; set; }
+
+        public string QuickNewCaseLinkUrl { get; set; }
     }
 }
