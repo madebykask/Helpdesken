@@ -2,9 +2,9 @@
 @using DH.Helpdesk.Web.Infrastructure
 <!DOCTYPE html>
 <html>
-    @{
+@{
     var model = Html.MasterModel();
-    
+
     var GlobalSetting = model.GlobalSettings.Where(x => x.ApplicationName != null).FirstOrDefault();
 }
 <head>
@@ -17,98 +17,109 @@
         var placeholder_text_multiple = '@Html.Raw(Translation.GetForJS("Välj en eller flera"))';
         var no_results_text = '@Translation.GetForJS("Inga resultat matchar")';
     </script>
-               
+
     @Styles.Render("~/Content/css/admin")
-    @Styles.Render("~/img-profile/css")    
+    @Styles.Render("~/img-profile/css")
     @Scripts.Render("~/bundles/common/admin")
-    @*@Scripts.Render("~/bundles/common/admin/tinymce") TODO: make tinymce as bundle *@ 
-	<script type="text/javascript" src="@Url.Content("~/Content/js/tinymce/tinymce.min.js")"></script>
-	<script type="text/javascript" src="@Url.Content("~/Areas/Admin/Content/js/Common/tinymce.initiate.js")"></script>
+    @*@Scripts.Render("~/bundles/common/admin/tinymce") TODO: make tinymce as bundle *@
+    <script type="text/javascript" src="@Url.Content("~/Content/js/tinymce/tinymce.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Areas/Admin/Content/js/Common/tinymce.initiate.js")"></script>
 </head>
 
 <body>
-@Html.AntiForgeryToken()
-@if (SessionFacade.CurrentUser != null)
-{
-    if (SessionFacade.CurrentUser.UserGroupId > 2)
+    @Html.AntiForgeryToken()
+    @if (SessionFacade.CurrentUser != null)
     {
-        <div class="navbar navbar-admin fixed">
-            <div class="navbar-container">
-                <a href="@Url.Action("index", "start", new {area = "admin"})">
-                    <div class="navbar-header pull-left navbar-brand-admin">
-                        @*<img src="@Url.Content("~/Content/img/dhhelpdeskadministration.png")" class="navbar-brand" />*@
+        if (SessionFacade.CurrentUser.UserGroupId > 2)
+        {
+            <div class="navbar navbar-admin fixed">
+                <div class="navbar-container">
+                    <a href="@Url.Action("index", "start", new {area = "admin"})">
+                        <div class="navbar-header pull-left navbar-brand-admin">
+                            @*<img src="@Url.Content("~/Content/img/dhhelpdeskadministration.png")" class="navbar-brand" />*@
+                        </div>
+                    </a>
+                    <div class="navbar-header pull-right">
+                        <ul class="nav dh-nav">
+
+                            
+
+                            <li class="orange">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <i class="icon-wrench icon-white"></i>@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)<i class="icon-chevron-down icon-white"></i>
+                                </a>
+                                <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+                                    @if (SessionFacade.CurrentUser != null)
+                                    {
+                                        if (SessionFacade.CurrentUser.UserGroupId > 2)
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("index", "customer", new {area = "admin"})">
+                                                    <img src="@Url.Content("~/Content/icons/customer.png")" alt="customer" />
+                                                    @Translation.Get("Kunder", Enums.TranslationSource.TextTranslation)
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    <li>
+                                        <a href="@Url.Action("index", "users", new {area = "admin"})">
+                                            <img src="@Url.Content("~/Content/icons/user.png")" alt="user" />
+                                            @Translation.Get("Användare", Enums.TranslationSource.TextTranslation)
+                                        </a>
+                                    </li>
+
+                                    @if (SessionFacade.CurrentUser != null)
+                                    {
+                                        if (SessionFacade.CurrentUser.UserGroupId > 2)
+                                        {
+
+                                            <li>
+                                                <a href="@Url.Action("index", "globalsetting", new {area = "admin", texttypeid = 0, textSearch = "", compareMethod = 1})">
+                                                    <img src="@Url.Content("~/Content/icons/setup.png")" alt="globalsetting" />
+                                                    @Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    <li>
+                                        <img src="@Url.Content("~/Content/img/dhhelpdesk-menuend.png")" alt="Start" />
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="light-blue">
+                                <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                                    <i class="icon-user icon-white"></i>@SessionFacade.CurrentUser.FirstName @SessionFacade.CurrentUser.SurName
+                                    <i class="icon-chevron-down icon-white"></i>
+                                </a>
+                                <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                                    <li>
+                                        <a href="javascript:Close_AdminWindow();">
+                                            <i class="icon-off"></i>
+                                            @Translation.Get("Stäng", Enums.TranslationSource.TextTranslation) @Translation.Get("Administration", Enums.TranslationSource.TextTranslation)
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
                     </div>
-                </a>
-                <div class="navbar-header pull-right">
-                    <ul class="nav dh-nav">
-
-                        <li class="orange">
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <i class="icon-wrench icon-white"></i>@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)<i class="icon-chevron-down icon-white"></i>
-                            </a>
-                            <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                                @if (SessionFacade.CurrentUser != null)
-                                {
-                                    if (SessionFacade.CurrentUser.UserGroupId > 2)
-                                    {
-                                        <li><a href="@Url.Action("index", "customer", new {area = "admin"})">
-                                            <img src="@Url.Content("~/Content/icons/customer.png")" alt="customer"/>
-                                            @Translation.Get("Kunder", Enums.TranslationSource.TextTranslation)</a></li>
-                                    }
-                                }
-                                <li><a href="@Url.Action("index", "users", new {area = "admin"})">
-                                    <img src="@Url.Content("~/Content/icons/user.png")" alt="user"/>
-                                    @Translation.Get("Användare", Enums.TranslationSource.TextTranslation)</a></li>
-
-                                @if (SessionFacade.CurrentUser != null)
-                                {
-                                    if (SessionFacade.CurrentUser.UserGroupId > 2)
-                                    {
-
-                                        <li><a href="@Url.Action("index", "globalsetting", new {area = "admin", texttypeid = 0, textSearch = "", compareMethod = 1})">
-                                            <img src="@Url.Content("~/Content/icons/setup.png")" alt="globalsetting"/>
-                                            @Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
-                                    }
-                                }
-                                <li>
-                                    <img src="@Url.Content("~/Content/img/dhhelpdesk-menuend.png")" alt="Start"/>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="light-blue">
-                            <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                                <i class="icon-user icon-white"></i>@SessionFacade.CurrentUser.FirstName @SessionFacade.CurrentUser.SurName
-                                <i class="icon-chevron-down icon-white"></i>
-                            </a>
-                            <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-                                <li>
-                                    <a href="javascript:Close_AdminWindow();">
-                                        <i class="icon-off"></i>
-                                        @Translation.Get("Stäng", Enums.TranslationSource.TextTranslation) @Translation.Get("Administration", Enums.TranslationSource.TextTranslation)
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
                 </div>
             </div>
-        </div>
-        @RenderBody()
-        @Html.Partial("_Version")
-        @RenderSection("Dialogs", false)
-        @Scripts.Render("~/bundles/dhhelpdesk")
-        @RenderSection("Scripts", false)
-        <input type="hidden" value="@Request.RawUrl" id="rawUrl"/>
-        @Html.Partial("_Translations", null)
+            @RenderBody()
+            @Html.Partial("_Version")
+            @RenderSection("Dialogs", false)
+            @Scripts.Render("~/bundles/dhhelpdesk")
+            @RenderSection("Scripts", false)
+            <input type="hidden" value="@Request.RawUrl" id="rawUrl" />
+            @Html.Partial("_Translations", null)
+        }
     }
-}
 </body>
 </html>
 
 <script>
-        var Close_AdminWindow = function () {
+    var Close_AdminWindow = function () {
         $.post("@Url.Action("ClearAdminSessions","Start")");
         setTimeout(function () { close(); }, 30);
-        
+
     };
 </script>
