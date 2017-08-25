@@ -285,6 +285,7 @@ namespace DH.Helpdesk.Services.Services
 
         private bool showWorkflowStep(int customerId, Case _case, int caseSolution_Id, UserOverview user, ApplicationType applicationType, int? templateId)
         {
+
             //ALL conditions must be met
             bool showWorkflowStep = false;
 
@@ -331,10 +332,10 @@ namespace DH.Helpdesk.Services.Services
                     //GET FROM USER
                     else if (conditionKey.ToLower().StartsWith("user_WorkingGroup.WorkingGroupGUID".ToLower()))
                     {
-                        var workingGroups = this._workingGroupService.GetWorkingGroups(customerId, user.Id);
-                        bool wgShowWorkflowStep = false;
+                        //Get working groups connected to "UserRole.Admin"
+                        var workingGroups = this._workingGroupService.GetWorkingGroupsAdmin(customerId, user.Id);
 
-                        //  conditionKey = conditionKey.Replace("user_workinggroup", "");
+                        bool wgShowWorkflowStep = false;
 
                         string[] conditionValues = conditionValue.Split(',').Select(sValue => sValue.Trim()).ToArray();
 
@@ -342,7 +343,6 @@ namespace DH.Helpdesk.Services.Services
                         {
                             var val = conditionValues[i];
 
-                            //if (workingGroups.Where(x => x.Id == int.Parse(conditionValues[i])).Count() > 0)
                             if (workingGroups.Where(x => x.WorkingGroupGUID.ToString().ToLower() == conditionValues[i]).Count() > 0)
                             {
                                 wgShowWorkflowStep = true;
