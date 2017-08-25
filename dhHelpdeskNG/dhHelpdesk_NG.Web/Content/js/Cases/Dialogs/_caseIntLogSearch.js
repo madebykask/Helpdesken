@@ -203,7 +203,7 @@
                                 }
                                 else {
                                     var noRes = {
-                                        name: window.parameters.noResultLabel,
+                                        name: document.parameters.noResultLabel,
                                         isNoResult: true
                                     }
                                     resultList.push(JSON.stringify(noRes));
