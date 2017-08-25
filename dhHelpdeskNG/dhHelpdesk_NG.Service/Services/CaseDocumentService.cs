@@ -519,6 +519,9 @@ namespace DH.Helpdesk.Services.Services
 
 					var evaluator = new CaseDocumentConditionEvaluator();
 					results = evaluator.EvaluateCondition(value, conditionOperator, conditionValue);
+
+					if (!results)
+						break;
 				}
 				catch (CaseDocumentConditionBaseException parseEx)
 				{

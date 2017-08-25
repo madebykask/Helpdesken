@@ -86,7 +86,7 @@ DECLARE @retTcHeaderID INT = (SELECT ID FROM tblCaseDocumentParagraph WHERE Case
 DECLARE @retTcHeaderTextAGuid UNIQUEIDENTIFIER = '489F5D53-E9D5-4EBD-92A1-0AD98C35BF3A',
 	@retTcHeaderTextAName NVARCHAR(MAX) = @prefix + ' Header, Company',
 	@retTcHeaderTextADescription NVARCHAR(MAX) = '',
-	@retTcHeaderTextAText NVARCHAR(MAX) = '<p style="text-align:left;">IKEA Pty Limited ABN 84 006 270 757</p>',
+	@retTcHeaderTextAText NVARCHAR(MAX) = '<p style="font-family:''Microsoft Sans''; font-size: 6pt; text-align:left; line-height:10px; margin-top:-10px">IKEA Pty Limited ABN 84 006 270 757</p>',
 	@retTcHeaderTextAHeadline NVARCHAR(MAX) = '',
 	@retTcHeaderTextASortOrder INT = 0
 
@@ -118,12 +118,12 @@ DECLARE @retTcHeaderTextBGuid UNIQUEIDENTIFIER = 'E2C02758-DF4A-45FF-9CBD-C657E0
 	@retTcHeaderTextBName NVARCHAR(MAX) = @prefix + ' Header, Co-worker',
 	@retTcHeaderTextBDescription NVARCHAR(MAX) = '',
 	@retTcHeaderTextBText NVARCHAR(MAX) = '<p><Todays Date - Long></p>
-		<p><Co-worker First Name> <Co-worker Last Name></p>
+		<p><strong><Co-worker First Name> <Co-worker Last Name></strong></p>
 		<p><Address Line 1><br />
 		<Address Line 2> <State> <Postal Code><br />
 		<Address Line 3><br />
 		<br /><br />
-		Dear <Co-worker First Name></p>',
+		Dear <Co-worker First Name>,</p>',
 	@retTcHeaderTextBHeadline NVARCHAR(MAX) = '',
 	@retTcHeaderTextBSortOrder INT = 0
 
@@ -1142,7 +1142,9 @@ DECLARE @retTcSignatureID INT = (SELECT ID FROM tblCaseDocumentParagraph WHERE C
 DECLARE @retTcSignatureTextAGuid UNIQUEIDENTIFIER = '982E9BAC-0134-4749-9D56-770F2458CC67',
 	@retTcSignatureTextAName NVARCHAR(MAX) = @prefix + ' Signature A',
 	@retTcSignatureTextADescription NVARCHAR(MAX) = '',
-	@retTcSignatureTextAText NVARCHAR(MAX) = 'Your terms and conditions of employment will be as per the IKEA Enterprise Agreement 2017, the IKEA Group Code of Conduct and IKEA policies and procedures, as amended from time to time.  You can access this information via ‘ico-worker.com’ <i>(the IKEA co-worker website)</i> or ‘IKEA Inside’ <i>(the IKEA intranet)</i>.',
+	@retTcSignatureTextAText NVARCHAR(MAX) = 'Your terms and conditions of employment will be as per the IKEA Enterprise Agreement 2017, the IKEA Group Code of Conduct and IKEA policies and procedures, as amended from time to time.  You can access this information via ‘ico-worker.com’ <i>(the IKEA co-worker website)</i> or ‘IKEA Inside’ <i>(the IKEA intranet)</i>.
+<br><br>
+Yours faithfully,<br><br><br><br>',
 	@retTcSignatureTextAHeadline NVARCHAR(MAX) = '',
 	@retTcSignatureTextASortOrder INT = 0
 

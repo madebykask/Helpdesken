@@ -86,7 +86,7 @@ DECLARE @retHiringHeaderID INT = (SELECT ID FROM tblCaseDocumentParagraph WHERE 
 DECLARE @retHiringHeaderTextAGuid UNIQUEIDENTIFIER = '0763A595-8C56-4DE3-93D1-6FE2522FC3A6',
 	@retHiringHeaderTextAName NVARCHAR(MAX) = @prefix + ' Header, Company',
 	@retHiringHeaderTextADescription NVARCHAR(MAX) = '',
-	@retHiringHeaderTextAText NVARCHAR(MAX) = '<p style="text-align:left;">IKEA Pty Limited ABN 84 006 270 757</p>',
+	@retHiringHeaderTextAText NVARCHAR(MAX) = '<p style="font-family:''Microsoft Sans''; font-size: 6pt; text-align:left; line-height:10px; margin-top:-10px">IKEA Pty Limited ABN 84 006 270 757</p>',
 	@retHiringHeaderTextAHeadline NVARCHAR(MAX) = '',
 	@retHiringHeaderTextASortOrder INT = 0
 
@@ -123,7 +123,7 @@ DECLARE @retHiringHeaderTextBGuid UNIQUEIDENTIFIER = 'D2850EBB-053B-427D-9C3C-2A
 		<Address Line 2> <State> <Postal Code><br />
 		<Address Line 3><br />
 		<br /><br />
-		Dear <Co-worker First Name></p>',
+		Dear <Co-worker First Name>,</p>',
 	@retHiringHeaderTextBHeadline NVARCHAR(MAX) = '',
 	@retHiringHeaderTextBSortOrder INT = 0
 
@@ -1144,7 +1144,10 @@ DECLARE @retHiringSignatureID INT = (SELECT ID FROM tblCaseDocumentParagraph WHE
 DECLARE @retHiringSignatureTextAGuid UNIQUEIDENTIFIER = '696409BA-C2D0-4BA2-809D-9ED7E9D0141C',
 	@retHiringSignatureTextAName NVARCHAR(MAX) = @prefix + ' Signature A',
 	@retHiringSignatureTextADescription NVARCHAR(MAX) = '',
-	@retHiringSignatureTextAText NVARCHAR(MAX) = 'Your terms and conditions of employment will be as per the IKEA Enterprise Agreement 2017, the IKEA Group Code of Conduct and IKEA policies and procedures, as amended from time to time.  You can access this information via ‘ico-worker.com’ <i>(the IKEA co-worker website)</i> or ‘IKEA Inside’ <i>(the IKEA intranet)</i>.',
+	@retHiringSignatureTextAText NVARCHAR(MAX) = 'Your terms and conditions of employment will be as per the IKEA Enterprise Agreement 2017, the IKEA Group Code of Conduct and IKEA policies and procedures, as amended from time to time.  You can access this information via ‘ico-worker.com’ <i>(the IKEA co-worker website)</i> or ‘IKEA Inside’ <i>(the IKEA intranet)</i>.
+	<br>
+	<br>
+	Yours faithfully,<br><br><br><br>',
 	@retHiringSignatureTextAHeadline NVARCHAR(MAX) = '',
 	@retHiringSignatureTextASortOrder INT = 0
 
@@ -1176,7 +1179,9 @@ END
 DECLARE @retHiringSignatureTextBGuid UNIQUEIDENTIFIER = '2E936F7F-62C2-4A60-BDDB-66852F6FD273',
 	@retHiringSignatureTextBName NVARCHAR(MAX) = @prefix + ' Signature B',
 	@retHiringSignatureTextBDescription NVARCHAR(MAX) = '',
-	@retHiringSignatureTextBText NVARCHAR(MAX) = '<p><Reports To Line Manager><br />		<Position Title (Local Job Name) of Reports To Line Manager><br />		IKEA <Business Unit></p>		<hr style="height:2px;border:none;color:#000;background-color:#000;" />		',
+	@retHiringSignatureTextBText NVARCHAR(MAX) = '<p><Reports To Line Manager><br />
+<Position Title (Local Job Name) of Reports To Line Manager><br />		IKEA <Business Unit></p>
+<hr style="height:2px;border:none;color:#000;background-color:#000;" />		',
 	@retHiringSignatureTextBHeadline NVARCHAR(MAX) = '',
 	@retHiringSignatureTextBSortOrder INT = 1
 
@@ -1209,7 +1214,10 @@ END
 DECLARE @retHiringSignatureTextCGuid UNIQUEIDENTIFIER = '6D8BA196-5157-4765-8933-05F23FA6775E',
 	@retHiringSignatureTextCName NVARCHAR(MAX) = @prefix + ' Signature C',
 	@retHiringSignatureTextCDescription NVARCHAR(MAX) = '',
-	@retHiringSignatureTextCText NVARCHAR(MAX) = '<p style="text-align:center;"><strong>Acknowledgement</strong></p>		<p>I accept the terms and conditions of employment as detailed above.</p>		<p>Signed:  _____________________________        Date:  _______________</p>		<p>Co-worker Name: <Co-worker First Name> <Co-worker Last Name></p>		',
+	@retHiringSignatureTextCText NVARCHAR(MAX) = '<p style="text-align:center;"><strong>Acknowledgement</strong></p>
+<p>I accept the terms and conditions of employment as detailed above.</p>		
+<p>Signed:  _____________________________        Date:  _______________</p>		
+<p>Co-worker Name: <Co-worker First Name> <Co-worker Last Name></p>		',
 	@retHiringSignatureTextCHeadline NVARCHAR(MAX) = '',
 	@retHiringSignatureTextCSortOrder INT = 2
 
