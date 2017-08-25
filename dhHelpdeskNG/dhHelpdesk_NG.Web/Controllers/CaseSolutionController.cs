@@ -1575,7 +1575,8 @@ namespace DH.Helpdesk.Web.Controllers
             }
         }
 
-        [HttpPost]
+        //[HttpPost]
+        [HttpPost, ValidateInput(false)]
         //public RedirectToRouteResult Copy(FormCollection collection, string selectedValues)
         public int Copy(FormCollection collection, string selectedValues)
 
@@ -1604,11 +1605,24 @@ namespace DH.Helpdesk.Web.Controllers
 
             var caseSolutionSchedule = new CaseSolutionSchedule();
 
-
-
-            if (Convert.ToInt32(Schedule) != 0)
+            string Sc = string.Empty;
+            if (Schedule.ToString().Trim() != string.Empty)
             {
-                caseSolutionSchedule.CaseSolution_Id = Convert.ToInt32(caseSolutionId);
+                Sc = Convert.ToString(Schedule.ToString());
+
+                int pos1 = Sc.IndexOf(",");
+                if (pos1 > 0)
+                {
+                    Sc = Sc.Substring(0, pos1);
+
+                    //caseSolutionInputViewModel.CaseSolution.ShowInsideCase = Convert.ToInt32(ShowInsideCase.Substring(0, pos));
+
+                }
+            }
+
+            if (Convert.ToInt32(Sc) != 0)
+            {
+                caseSolutionSchedule.CaseSolution_Id = Convert.ToInt32(0);
                 caseSolutionSchedule.ScheduleType = Convert.ToInt32(scheduleType);
                 caseSolutionSchedule.ScheduleTime = Convert.ToInt32(scheduleTime);
                 caseSolutionSchedule.ScheduleWatchDate = Convert.ToInt32(scheduleWatchDate);
@@ -1956,24 +1970,24 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (collection["CaseSolution.IsAbout_PersonsEmail"].ToString().Trim() != string.Empty)
             {
-                int IsAbout_PersonsEmail = Convert.ToInt32(collection["CaseSolution.IsAbout_PersonsEmail"].ToString());
+                string IsAbout_PersonsEmail = Convert.ToString(collection["CaseSolution.IsAbout_PersonsEmail"].ToString());
                 caseSolutionInputViewModel.CaseSolution.IsAbout_PersonsEmail = IsAbout_PersonsEmail.ToString();
             }
             if (collection["CaseSolution.IsAbout_PersonsName"].ToString().Trim() != string.Empty)
             {
-                int IsAbout_PersonsName = Convert.ToInt32(collection["CaseSolution.IsAbout_PersonsName"].ToString());
+                string IsAbout_PersonsName = Convert.ToString(collection["CaseSolution.IsAbout_PersonsName"].ToString());
                 caseSolutionInputViewModel.CaseSolution.IsAbout_PersonsName = IsAbout_PersonsName.ToString();
             }
 
             if (collection["CaseSolution.IsAbout_PersonsPhone"].ToString().Trim() != string.Empty)
             {
-                int IsAbout_PersonsPhone = Convert.ToInt32(collection["CaseSolution.IsAbout_PersonsPhone"].ToString());
+                string IsAbout_PersonsPhone = Convert.ToString(collection["CaseSolution.IsAbout_PersonsPhone"].ToString());
                 caseSolutionInputViewModel.CaseSolution.IsAbout_PersonsPhone = IsAbout_PersonsPhone.ToString();
             }
 
             if (collection["CaseSolution.IsAbout_Place"].ToString().Trim() != string.Empty)
             {
-                int IsAbout_Place = Convert.ToInt32(collection["CaseSolution.IsAbout_Place"].ToString());
+                string IsAbout_Place = Convert.ToString(collection["CaseSolution.IsAbout_Place"].ToString());
                 caseSolutionInputViewModel.CaseSolution.IsAbout_Place = IsAbout_Place.ToString();
             }
 
@@ -1985,12 +1999,12 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (collection["CaseSolution.IsAbout_ReportedBy"].ToString().Trim() != string.Empty)
             {
-                int IsAbout_ReportedBy = Convert.ToInt32(collection["CaseSolution.IsAbout_ReportedBy"].ToString());
+                string IsAbout_ReportedBy = Convert.ToString(collection["CaseSolution.IsAbout_ReportedBy"].ToString());
                 caseSolutionInputViewModel.CaseSolution.IsAbout_ReportedBy = IsAbout_ReportedBy.ToString();
             }
             if (collection["CaseSolution.IsAbout_UserCode"].ToString().Trim() != string.Empty)
             {
-                int IsAbout_UserCode = Convert.ToInt32(collection["CaseSolution.IsAbout_UserCode"].ToString());
+                string IsAbout_UserCode = Convert.ToString(collection["CaseSolution.IsAbout_UserCode"].ToString());
                 caseSolutionInputViewModel.CaseSolution.IsAbout_UserCode = IsAbout_UserCode.ToString();
             }
 

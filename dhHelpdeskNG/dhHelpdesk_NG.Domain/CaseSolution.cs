@@ -5,6 +5,7 @@ namespace DH.Helpdesk.Domain
     using global::System.Collections.Generic;
     using DH.Helpdesk.Domain.Projects;
     using global::System;
+    using global::System.Web.Mvc;
 
     public class CaseSolution : Entity
     {
@@ -103,6 +104,7 @@ namespace DH.Helpdesk.Domain
         public int? SaveAndClose { get; set; }
 
         public string ShortDescription { get; set; }
+        
         public string Information { get; set; }
         public string DefaultTab { get; set; }
         public string ValidateOnChange { get; set; }

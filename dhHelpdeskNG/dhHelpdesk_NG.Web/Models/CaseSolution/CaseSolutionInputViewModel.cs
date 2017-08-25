@@ -8,6 +8,7 @@
     using CaseRules;
     using DH.Helpdesk.Domain.Cases;
 
+    
     public class CaseSolutionInputViewModel
     {
         public CaseSolutionInputViewModel()
