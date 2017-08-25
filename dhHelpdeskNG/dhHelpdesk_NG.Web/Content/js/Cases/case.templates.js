@@ -14,6 +14,10 @@ function SetValueIfElVisible(el, val, opt, forceApply) {
                 $("#CaseTemplate_WorkingGroup_Id").val(val);
             }
 
+            if (el.selector == "#case__Priority_Id") {
+                $("#CaseTemplate_Priority_Id").val(val);
+            }
+
             if (el.selector == "#case__StateSecondary_Id") {
                 $("#CaseTemplate_StateSecondary_Id").val(val);
             }

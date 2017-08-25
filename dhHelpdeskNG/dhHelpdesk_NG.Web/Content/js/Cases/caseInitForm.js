@@ -798,6 +798,7 @@ function CaseInitForm() {
                         }
 
                     exists = $('#case__Priority_Id option[value=' + data.Priority_Id + ']').length;
+                    alreadySetByCaseTemplate = ($('#CaseTemplate_Priority_Id').val() != "");
 
                     if (exists > 0 || $('#priority_Name') != undefined){
                         if (data.Priority_Id > 0 && !alreadySetByCaseTemplate) {
@@ -816,11 +817,10 @@ function CaseInitForm() {
                 }
 
                 $('#CaseTemplate_WorkingGroup_Id').val("");
+                $('#CaseTemplate_Priority_Id').val("");
             });
             
-        }
-        
-        
+        }        
     });
 
     $('#case__WorkingGroup_Id').change(function () {
