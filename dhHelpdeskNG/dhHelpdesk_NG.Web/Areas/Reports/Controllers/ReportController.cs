@@ -731,13 +731,16 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 reportViewer.SizeToReportContent = true;
                 reportViewer.ShowZoomControl = false;
                 reportViewer.LocalReport.ReportPath = reportFile;
+
+                /*Temp solution*/
+                if (reportName == "NumberOfCases")
+                {
+                    ReportParameter rp1 = new ReportParameter("Category", "3", false);
+                    List<ReportParameter> paramList = new List<ReportParameter>();
+                    paramList.Add(rp1);
+                    reportViewer.LocalReport.SetParameters(paramList);
+                }
                 
-                ReportParameter rp1 = new ReportParameter("Category", "3", false);                
-                List<ReportParameter> paramList = new List<ReportParameter>();
-                paramList.Add(rp1);
-                reportViewer.LocalReport.SetParameters(paramList);
-                
-                reportViewer.ShowParameterPrompts = true;
                 foreach (var dataSet in reportData.DataSets)
                     reportViewer.LocalReport.DataSources.Add(new ReportDataSource(dataSet.DataSetName, dataSet.DataSet));
 
