@@ -89,8 +89,8 @@ DECLARE @dcSalHirHeaderID INT = (SELECT ID FROM tblCaseDocumentParagraph WHERE C
 DECLARE @dcSalHirHeaderTextAGuid UNIQUEIDENTIFIER = 'AB177551-B4DD-4EBE-BE15-418208E32BB4',
 	@dcSalHirHeaderTextAName NVARCHAR(MAX) = @prefix + ' Header, Company',
 	@dcSalHirHeaderTextADescription NVARCHAR(MAX) = '',
-	@dcSalHirHeaderTextAText NVARCHAR(MAX) = '<p style="text-align:left;">IKEA Distribution Services Australia Pty Ltd</p>	
-<p>ABN 96 001 264 179</p>',
+	@dcSalHirHeaderTextAText NVARCHAR(MAX) = '<p style="font-family:''Microsoft Sans''; font-size: 6pt; text-align:left; line-height:10px; margin-top:-10px">IKEA Distribution Services Australia Pty Ltd<br>	
+ABN 96 001 264 179</p>',
 	@dcSalHirHeaderTextAHeadline NVARCHAR(MAX) = '',
 	@dcSalHirHeaderTextASortOrder INT = 0
 
@@ -122,12 +122,12 @@ DECLARE @dcSalHirHeaderTextBGuid UNIQUEIDENTIFIER = '438E9603-AA97-4AA3-B866-AF5
 	@dcSalHirHeaderTextBName NVARCHAR(MAX) = @prefix + ' Header, Co-worker',
 	@dcSalHirHeaderTextBDescription NVARCHAR(MAX) = '',
 	@dcSalHirHeaderTextBText NVARCHAR(MAX) = '<p><Todays Date - Long></p>
-		<p><Co-worker First Name> <Co-worker Last Name></p>
+		<p><strong><Co-worker First Name> <Co-worker Last Name></strong></p>
 		<p><Address Line 1><br />
 		<Address Line 2> <State> <Postal Code><br />
 		<Address Line 3><br />
 		<br /><br />
-		Dear <Co-worker First Name></p>',
+		Dear <Co-worker First Name>,</p>',
 	@dcSalHirHeaderTextBHeadline NVARCHAR(MAX) = '',
 	@dcSalHirHeaderTextBSortOrder INT = 0
 
@@ -388,7 +388,7 @@ DECLARE @dcSalHirTermsPositionAGuid UNIQUEIDENTIFIER = '5F717D6F-2F83-4E66-AB5D-
 	@dcSalHirTermsPositionAName NVARCHAR(MAX) = @prefix + ' Position, full time',
 	@dcSalHirTermsPositionADescription NVARCHAR(MAX) = '',
 	@dcSalHirTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to the <Position Title (Local Job Name) of Reports To Line Manager>. Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
-	@dcSalHirTermsPositionAHeadline NVARCHAR(MAX) = '<i>Position</i>',
+	@dcSalHirTermsPositionAHeadline NVARCHAR(MAX) = 'Position',
 	@dcSalHirTermsPositionASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
 
@@ -868,7 +868,7 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @dcSalHirTermsRemunGuid
 END
 
--- #################################### 16 Superannuation
+-- #################################### Superannuation
 DECLARE @dcSalHirTermsSuperGuid UNIQUEIDENTIFIER = '79D00B1E-741B-4FF5-8D5D-2F3FFF8D9093',
 	@dcSalHirTermsSuperName NVARCHAR(MAX) = @prefix + ' Superannuation',
 	@dcSalHirTermsSuperDescription NVARCHAR(MAX) = '',
@@ -876,7 +876,8 @@ DECLARE @dcSalHirTermsSuperGuid UNIQUEIDENTIFIER = '79D00B1E-741B-4FF5-8D5D-2F3F
 <br>
 IKEA’s current employer superannuation fund is the Labour Union Co-operative Retirement Fund (LUCRF), which is the fund into which the superannuation contributions will be made unless an alternate fund is nominated by you in writing, in accordance with the SGL.
 <br>
-It is your responsibility to nominate a Super Fund for your contributions to be made to, and to ensure that you complete the necessary paperwork for enrolment into your nominated fund.  IKEA will supply you with a LUCRF Member Guide, including an application form.',
+It is your responsibility to nominate a Super Fund for your contributions to be made to, and to ensure that you complete the necessary paperwork for enrolment into your nominated fund.  IKEA will supply you with a LUCRF Member Guide, including an application form.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcSalHirTermsSuperHeadline NVARCHAR(MAX) = 'Superannuation',
 	@dcSalHirTermsSuperSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1018,7 +1019,8 @@ DECLARE @dcSalHirTermsRemunRevAGuid UNIQUEIDENTIFIER = '0259B029-DB44-46F8-83C0-
 	@dcSalHirTermsRemunRevADescription NVARCHAR(MAX) = '',
 	@dcSalHirTermsRemunRevAText NVARCHAR(MAX) = 'In line with IKEA’s Remuneration Policy, your Total Remuneration package will be reviewed annually following your performance review.  Any increase in your total remuneration package will take effect from the next pay cycle.<br>
 	<br>
-The earliest your Total Remuneration package will be reviewed will be in January <Next Salary Review Year>.',
+The earliest your Total Remuneration package will be reviewed will be in January <Next Salary Review Year>.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcSalHirTermsRemunRevAHeadline NVARCHAR(MAX) = 'Remuneration Review',
 	@dcSalHirTermsRemunRevASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1116,7 +1118,8 @@ DECLARE @dcSalHirTermsLeaveGuid UNIQUEIDENTIFIER = 'C8D02802-F6D3-43EB-A05B-74CB
 	@dcSalHirTermsLeaveDescription NVARCHAR(MAX) = '',
 	@dcSalHirTermsLeaveText NVARCHAR(MAX) = 'You will accrue entitlements to leave in accordance with relevant legislation and company policy.  This currently includes annual leave (4 weeks per annum, excluding annual leave loading), personal leave (10 days per annum) to be used for absence due to personal illness or to care for a member of your immediate family, parental leave and long service leave.  Company policy may change at any time at IKEA’s sole discretion.<br>
 	<br>
-Annual leave is ordinarily to be taken within the year it is accrued, or within 12 months from the date it becomes due.  Annual leave is to be taken at times mutually agreed to, taking into consideration peak periods in business operations, which may vary from year to year.  Peak periods may be such that no annual leave will be authorised during those periods.  Peak periods can be identified in consultation with your manager.',
+Annual leave is ordinarily to be taken within the year it is accrued, or within 12 months from the date it becomes due.  Annual leave is to be taken at times mutually agreed to, taking into consideration peak periods in business operations, which may vary from year to year.  Peak periods may be such that no annual leave will be authorised during those periods.  Peak periods can be identified in consultation with your manager.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcSalHirTermsLeaveHeadline NVARCHAR(MAX) = 'Leave Entitlements',
 	@dcSalHirTermsLeaveSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1287,7 +1290,8 @@ END
 DECLARE @dcSalHirTermsSafetyGuid UNIQUEIDENTIFIER = '7E6D73FD-80DA-45A3-B367-6BA89C764E56',
 	@dcSalHirTermsSafetyName NVARCHAR(MAX) = @prefix + ' Safety',
 	@dcSalHirTermsSafetyDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsSafetyText NVARCHAR(MAX) = 'IKEA understands the requirement of ensuring a safe and healthy working environment for all co-workers in its offices, warehouses and stores, and a safe and healthy shopping environment for customers.  In fulfilling this aim, we undertake regular consultation with co-workers on health and safety issues and concerns.',
+	@dcSalHirTermsSafetyText NVARCHAR(MAX) = 'IKEA understands the requirement of ensuring a safe and healthy working environment for all co-workers in its offices, warehouses and stores, and a safe and healthy shopping environment for customers.  In fulfilling this aim, we undertake regular consultation with co-workers on health and safety issues and concerns.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcSalHirTermsSafetyHeadline NVARCHAR(MAX) = 'Occupational Health & Safety',
 	@dcSalHirTermsSafetySortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1519,7 +1523,8 @@ END
 DECLARE @dcSalHirTermsSuspGuid UNIQUEIDENTIFIER = 'A555CCC0-24DA-4669-849E-7596BDFD83EF',
 	@dcSalHirTermsSuspName NVARCHAR(MAX) = @prefix + ' Suspension',
 	@dcSalHirTermsSuspDescription NVARCHAR(MAX) = '',
-	@dcSalHirTermsSuspText NVARCHAR(MAX) = 'If we have reason to believe that you may have engaged in a serious breach of your employment obligations, IKEA may at its discretion suspend you from your duties, either with or without pay, while an investigation is conducted.',
+	@dcSalHirTermsSuspText NVARCHAR(MAX) = 'If we have reason to believe that you may have engaged in a serious breach of your employment obligations, IKEA may at its discretion suspend you from your duties, either with or without pay, while an investigation is conducted.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcSalHirTermsSuspHeadline NVARCHAR(MAX) = 'Suspension',
 	@dcSalHirTermsSuspSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1637,7 +1642,8 @@ DECLARE @dcSalHirConSignParagraphID INT = (SELECT ID FROM tblCaseDocumentParagra
 DECLARE @dcSalHirConSignGuid UNIQUEIDENTIFIER = 'FA6C49A6-4483-4C23-913A-45D159557523',
 	@dcSalHirConSignName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@dcSalHirConSignDescription NVARCHAR(MAX) = '',
-	@dcSalHirConSignText NVARCHAR(MAX) = 'Yours sincerely<br>
+	@dcSalHirConSignText NVARCHAR(MAX) = 'Yours sincerely,
+	<br><br><br><br>
 	<Reports To Line Manager><br>
 	<Position Title (Local Job Name) of Reports To Line Manager><br>
 	<strong>IKEA Distribution Services Australia Pty Ltd</strong>',
@@ -1698,18 +1704,54 @@ DECLARE @dcSalHirAcceptParagraphID INT = (SELECT ID FROM tblCaseDocumentParagrap
 DECLARE @dcSalHirAcceptGuid UNIQUEIDENTIFIER = '08EADA4B-5C0F-4816-9650-EDB2784FDF01',
 	@dcSalHirAcceptName NVARCHAR(MAX) = @prefix + ' Acceptance',
 	@dcSalHirAcceptDescription NVARCHAR(MAX) = '',
-	@dcSalHirAcceptText NVARCHAR(MAX) = '<table style="border: 1px solid black">
-<tr><th align="center">ACCEPTANCE</th></tr>
-<tr><td>I accept the terms and conditions of employment as detailed above.</td></tr>
-<tr><td style="height:100px;vertical-align: bottom;"><Co-worker First Name> <Co-worker Last Name></td></tr>
-<tr><td style="height:5px">.......................................</td></tr>
-<tr><td style="vertical-align: top;">Name</td></tr>
-<tr><td></td></tr>
-<tr><td>.......................................</td></tr>
-<tr><td style="vertical-align: top;">Signature</td></tr>
-<tr><td></td></tr>
-<tr><td>.......................................</td></tr>
-<tr><td style="vertical-align: top;">Date</td></tr>
+	@dcSalHirAcceptText NVARCHAR(MAX) = '<style>
+
+#acceptance {
+	font-family: Verdana; 
+	border: 1px solid black; 
+	width: 500px;
+}
+
+
+#acceptance th {
+	font-size: 16pt; 
+	text-decoration: underline;
+	text-align: center;
+	padding-top: 20px;
+	width: 500px;
+}
+#acceptance td {
+
+	padding-left: 20px;
+}
+
+#acceptance td .signHeader {
+	vertical-align: top;
+}
+
+#acceptance  td .signLine {
+	height:5px
+}
+
+#acceptance td .sign {
+	height:100px;
+	vertical-align: bottom;
+}
+
+</style>
+<br><br>
+<table id="acceptance">
+<tr><th>ACCEPTANCE</th></tr>
+<tr><td><br>I accept the terms and conditions of employment as detailed above.</td></tr>
+<tr><td class="sign"><br><br><Co-worker First Name> <Co-worker Last Name></td></tr>
+<tr><td class="signLine">.................................................................</td></tr>
+<tr><td class="signHeader">Name</td></tr>
+<tr><td><br><br></td></tr>
+<tr><td>.................................................................</td></tr>
+<tr><td class="signHeader">Signature</td></tr>
+<tr><td><br><br></td></tr>
+<tr><td>.................................................................</td></tr>
+<tr><td class="signHeader">Date<br><br></td></tr>
 </table>',
 	@dcSalHirAcceptHeadline NVARCHAR(MAX) = '',
 	@dcSalHirAcceptSortOrder INT = 0

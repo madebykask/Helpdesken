@@ -87,7 +87,7 @@ DECLARE @retSalHiringHeaderID INT = (SELECT ID FROM tblCaseDocumentParagraph WHE
 DECLARE @retSalHiringHeaderTextAGuid UNIQUEIDENTIFIER = '8FC8AD17-7918-4D05-BFBE-5B27ED62597F',
 	@retSalHiringHeaderTextAName NVARCHAR(MAX) = @prefix + ' Header, Company',
 	@retSalHiringHeaderTextADescription NVARCHAR(MAX) = '',
-	@retSalHiringHeaderTextAText NVARCHAR(MAX) = '<p style="text-align:left;">IKEA Pty Limited ABN 84 006 270 757</p>',
+	@retSalHiringHeaderTextAText NVARCHAR(MAX) = '<p style="font-family:''Microsoft Sans''; font-size: 6pt; text-align:left; line-height:10px; margin-top:-10px">IKEA Pty Limited ABN 84 006 270 757</p>',
 	@retSalHiringHeaderTextAHeadline NVARCHAR(MAX) = '',
 	@retSalHiringHeaderTextASortOrder INT = 0
 
@@ -119,12 +119,12 @@ DECLARE @retSalHiringHeaderTextBGuid UNIQUEIDENTIFIER = 'DFC45851-14A9-44FF-B02E
 	@retSalHiringHeaderTextBName NVARCHAR(MAX) = @prefix + ' Header, Co-worker',
 	@retSalHiringHeaderTextBDescription NVARCHAR(MAX) = '',
 	@retSalHiringHeaderTextBText NVARCHAR(MAX) = '<p><Todays Date - Long></p>
-		<p><Co-worker First Name> <Co-worker Last Name></p>
+		<p><strong><Co-worker First Name> <Co-worker Last Name></strong></p>
 		<p><Address Line 1><br />
 		<Address Line 2> <State> <Postal Code><br />
 		<Address Line 3><br />
 		<br /><br />
-		Dear <Co-worker First Name></p>',
+		Dear <Co-worker First Name>,</p>',
 	@retSalHiringHeaderTextBHeadline NVARCHAR(MAX) = '',
 	@retSalHiringHeaderTextBSortOrder INT = 0
 
@@ -386,7 +386,7 @@ DECLARE @retSalHiringTermsPositionAGuid UNIQUEIDENTIFIER = '864CCBC4-FF1F-4CF7-A
 	@retSalHiringTermsPositionAName NVARCHAR(MAX) = @prefix + ' Position, Full time',
 	@retSalHiringTermsPositionADescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)>, located at <Business Unit>, reporting to <Position Title (Local Job Name) of Reports To Line Manager>.  Your position (in terms of your duties and responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.  ',
-	@retSalHiringTermsPositionAHeadline NVARCHAR(MAX) = '<i>Position</i>',
+	@retSalHiringTermsPositionAHeadline NVARCHAR(MAX) = 'Position',
 	@retSalHiringTermsPositionASortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
 
@@ -876,7 +876,8 @@ DECLARE @retSalHiringTermsSuperGuid UNIQUEIDENTIFIER = 'A47D9626-268F-4B1E-A584-
 <br>
 IKEA’s current employer superannuation fund is the Labour Union Co-operative Retirement Fund (LUCRF), which is the fund into which the superannuation contributions will be made unless an alternate fund is nominated by you in writing, in accordance with the SGL.
 <br>
-It is your responsibility to nominate a Super Fund for your contributions to be made to, and to ensure that you complete the necessary paperwork for enrolment into your nominated fund.  IKEA will supply you with a LUCRF Member Guide, including an application form.',
+It is your responsibility to nominate a Super Fund for your contributions to be made to, and to ensure that you complete the necessary paperwork for enrolment into your nominated fund.  IKEA will supply you with a LUCRF Member Guide, including an application form.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@retSalHiringTermsSuperHeadline NVARCHAR(MAX) = 'Superannuation',
 	@retSalHiringTermsSuperSortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
@@ -1162,7 +1163,8 @@ DECLARE @retSalHiringTermsRenRevGuid UNIQUEIDENTIFIER = 'E6F5000E-41DE-4F9F-8F22
 	@retSalHiringTermsRenRevDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsRenRevText NVARCHAR(MAX) = 'In line with IKEA’s Remuneration Policy, your Total Remuneration package will be reviewed annually following your performance review.<br>
 	<br>
-The earliest your Total Remuneration package will be reviewed will be in January <Next Salary Review Year>.',
+The earliest your Total Remuneration package will be reviewed will be in January <Next Salary Review Year>.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@retSalHiringTermsRenRevHeadline NVARCHAR(MAX) = 'Remuneration review',
 	@retSalHiringTermsRenRevSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1197,6 +1199,7 @@ DECLARE @retSalHiringTermsConfGuid UNIQUEIDENTIFIER = '6FDBEA72-1B45-46F0-B6C9-C
 	@retSalHiringTermsConfName NVARCHAR(MAX) = @prefix + ' Confidential Information',
 	@retSalHiringTermsConfDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsConfText NVARCHAR(MAX) = 'In the course of your employment, you may be exposed to “Confidential Information” concerning IKEA. Confidential Information means any information obtained by you in the course of your employment, including:
+<br><br>
 <ul>
 <li>trade secrets;</li>
 <li>technical information and technical drawings;</li>
@@ -1208,19 +1211,22 @@ DECLARE @retSalHiringTermsConfGuid UNIQUEIDENTIFIER = '6FDBEA72-1B45-46F0-B6C9-C
 </ul>
 <br>
 but excluding:
+<br><br>
 <ul>
 <li>information available to the public; and</li>
 <li>information which you can prove you lawfully possessed before obtaining it in the course of your employment (other than this letter of appointment)</li>
 </ul>
 <br>
 During and after your employment, you must not use or disclose Confidential Information to any person (including an employee of IKEA) other than:
+<br><br>
 <ul>
 <li>to perform your duties;</li>
 <li>if IKEA has consented in writing; or</li>
 <li>if required by law.</li>
 </ul>
 <br>
-As an IKEA co-worker, you must keep Confidential Information in a secure manner and treat such information with appropriate sensitivity. On demand by IKEA and at the end of your employment, you must deliver to IKEA all copies of Confidential Information in your possession or control (including all Confidential Information held electronically in any medium) and then delete all Confidential Information held electronically in any medium in your possession or control.',
+As an IKEA co-worker, you must keep Confidential Information in a secure manner and treat such information with appropriate sensitivity. On demand by IKEA and at the end of your employment, you must deliver to IKEA all copies of Confidential Information in your possession or control (including all Confidential Information held electronically in any medium) and then delete all Confidential Information held electronically in any medium in your possession or control.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@retSalHiringTermsConfHeadline NVARCHAR(MAX) = 'Confidential Information',
 	@retSalHiringTermsConfSortOrder INT = @termsCounter 
  SET @termsCounter = @termsCounter + 1
@@ -1274,7 +1280,8 @@ a. any absences in excess of one day;<br>
 b. absences on a single day if they occur on either side of a Non-Working Day or Public Holiday;<br>
 c. where IKEA management believes that the co-worker has had an excessive amount of single day absences or a pattern of absence has been identified; or<br>
 <br>
-d. where IKEA management has previously performance managed a co-worker in relation to an excessive amount of sick leave and has requested in writing that all future claims for sick leave be supported by a medical certificate.<br>',
+d. where IKEA management has previously performance managed a co-worker in relation to an excessive amount of sick leave and has requested in writing that all future claims for sick leave be supported by a medical certificate.<br>
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@retSalHiringTermsLeaveAHeadline NVARCHAR(MAX) = 'Leave Entitlements',
 	@retSalHiringTermsLeaveASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1530,14 +1537,14 @@ BEGIN
 	WHERE CDT.CaseDocumentTextGUID = @retSalHiringTermsEqualGuid
 END
 
--- #################################### Apperance & Conduct
+-- #################################### Appearance & Conduct
 DECLARE @retSalHiringTermsAppearGuid UNIQUEIDENTIFIER = '1B7CAAF4-3606-442C-8CB8-4D98FA79BDE8',
-	@retSalHiringTermsAppearName NVARCHAR(MAX) = @prefix + ' Apperance & Conduct',
+	@retSalHiringTermsAppearName NVARCHAR(MAX) = @prefix + ' Appearance & Conduct',
 	@retSalHiringTermsAppearDescription NVARCHAR(MAX) = '',
 	@retSalHiringTermsAppearText NVARCHAR(MAX) = 'IKEA has established guidelines necessary for the professional appearance that the company expects all co-workers to present, and as such co-workers are to wear smart casual attire within these guidelines.<br>
 	<br>
 Co-workers are expected to project a favorable and professional image for IKEA, and are to be courteous, efficient and reliable in their dealings with colleagues, existing and potential customers and suppliers to IKEA.<br>',
-	@retSalHiringTermsAppearHeadline NVARCHAR(MAX) = 'Apperance & Conduct',
+	@retSalHiringTermsAppearHeadline NVARCHAR(MAX) = 'Appearance & Conduct',
 	@retSalHiringTermsAppearSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
 
@@ -1604,7 +1611,8 @@ END
 DECLARE @retSalHiringTermsSafetyGuid UNIQUEIDENTIFIER = '068FED85-1E7F-4D2C-A3F9-F9D281188A70',
 	@retSalHiringTermsSafetyName NVARCHAR(MAX) = @prefix + ' Safety',
 	@retSalHiringTermsSafetyDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsSafetyText NVARCHAR(MAX) = 'IKEA understands the requirement of ensuring a safe and healthy working environment for all co-workers in its offices, warehouses and stores, and a safe and healthy shopping environment for customers.  In fulfilling this aim, we undertake regular consultation with co-workers on health and safety issues and concerns.',
+	@retSalHiringTermsSafetyText NVARCHAR(MAX) = 'IKEA understands the requirement of ensuring a safe and healthy working environment for all co-workers in its offices, warehouses and stores, and a safe and healthy shopping environment for customers.  In fulfilling this aim, we undertake regular consultation with co-workers on health and safety issues and concerns.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@retSalHiringTermsSafetyHeadline NVARCHAR(MAX) = 'Occupational Health & Safety',
 	@retSalHiringTermsSafetySortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1872,7 +1880,8 @@ END
 DECLARE @retSalHiringTermsOtherTermsGuid UNIQUEIDENTIFIER = '32AD2BDD-8B69-49E7-9975-773F45DF856F',
 	@retSalHiringTermsOtherTermsName NVARCHAR(MAX) = @prefix + ' Other T&C',
 	@retSalHiringTermsOtherTermsDescription NVARCHAR(MAX) = '',
-	@retSalHiringTermsOtherTermsText NVARCHAR(MAX) = 'The terms and conditions contained within the IKEA Everyday Work Ways Handbook, ico-worker.com/au, IKEA Intranet website and the IKEA Group Code of Conduct may also apply to your employment. These documents may be amended from time to time.',
+	@retSalHiringTermsOtherTermsText NVARCHAR(MAX) = 'The terms and conditions contained within the IKEA Everyday Work Ways Handbook, ico-worker.com/au, IKEA Intranet website and the IKEA Group Code of Conduct may also apply to your employment. These documents may be amended from time to time.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@retSalHiringTermsOtherTermsHeadline NVARCHAR(MAX) = 'Other Terms and Conditions',
 	@retSalHiringTermsOtherTermsSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -2059,8 +2068,8 @@ During and after your employment, you must do anything IKEA reasonably requires 
 <li>
 Ø  perfect or evidence IKEA’s ownership of the Intellectual Property.
 </li>
-</ul>',
-
+</ul>
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@retSalHiringTermsIntelPropHeadline NVARCHAR(MAX) = 'Intellectual Property',
 	@retSalHiringTermsIntelPropSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -2215,7 +2224,7 @@ DECLARE @retSalHiringConSignParagraphID INT = (SELECT ID FROM tblCaseDocumentPar
 DECLARE @retSalHiringConSignGuid UNIQUEIDENTIFIER = 'E0D4CACD-C0AC-44D6-BE61-067A74D75D24',
 	@retSalHiringConSignName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@retSalHiringConSignDescription NVARCHAR(MAX) = '',
-	@retSalHiringConSignText NVARCHAR(MAX) = 'Yours sincerely<br>		
+	@retSalHiringConSignText NVARCHAR(MAX) = 'Yours sincerely,<br><br><br><br>		
 <Reports To Line Manager><br>
 <Position Title (Local Job Name) of Reports To Line Manager><br>
 <strong>IKEA Pty Limited</strong>
@@ -2278,18 +2287,54 @@ DECLARE @retSalHiringAcceptParagraphID INT = (SELECT ID FROM tblCaseDocumentPara
 DECLARE @retSalHiringAcceptGuid UNIQUEIDENTIFIER = '746561EF-0FD3-46FA-A485-312E1C73D568',
 	@retSalHiringAcceptName NVARCHAR(MAX) = @prefix + ' Acceptance',
 	@retSalHiringAcceptDescription NVARCHAR(MAX) = '',
-	@retSalHiringAcceptText NVARCHAR(MAX) = '<table style="border: 1px solid black">
-<tr><th align="center">ACCEPTANCE</th></tr>
-<tr><td>I accept the terms and conditions of employment as detailed above.</td></tr>
-<tr><td style="height:100px;vertical-align: bottom;"><Co-worker First Name> <Co-worker Last Name></td></tr>
-<tr><td style="height:5px">.......................................</td></tr>
-<tr><td style="vertical-align: top;">Name</td></tr>
-<tr><td></td></tr>
-<tr><td>.......................................</td></tr>
-<tr><td style="vertical-align: top;">Signature</td></tr>
-<tr><td></td></tr>
-<tr><td>.......................................</td></tr>
-<tr><td style="vertical-align: top;">Date</td></tr>
+	@retSalHiringAcceptText NVARCHAR(MAX) = '<style>
+
+#acceptance {
+	font-family: Verdana; 
+	border: 1px solid black; 
+	width: 500px;
+}
+
+
+#acceptance th {
+	font-size: 16pt; 
+	text-decoration: underline;
+	text-align: center;
+	padding-top: 20px;
+	width: 500px;
+}
+#acceptance td {
+
+	padding-left: 20px;
+}
+
+#acceptance td .signHeader {
+	vertical-align: top;
+}
+
+#acceptance  td .signLine {
+	height:5px
+}
+
+#acceptance td .sign {
+	height:100px;
+	vertical-align: bottom;
+}
+
+</style>
+<br><br>
+<table id="acceptance">
+<tr><th>ACCEPTANCE</th></tr>
+<tr><td><br>I accept the terms and conditions of employment as detailed above.</td></tr>
+<tr><td class="sign"><br><br><Co-worker First Name> <Co-worker Last Name></td></tr>
+<tr><td class="signLine">.................................................................</td></tr>
+<tr><td class="signHeader">Name</td></tr>
+<tr><td><br><br></td></tr>
+<tr><td>.................................................................</td></tr>
+<tr><td class="signHeader">Signature</td></tr>
+<tr><td><br><br></td></tr>
+<tr><td>.................................................................</td></tr>
+<tr><td class="signHeader">Date<br><br></td></tr>
 </table>',
 	@retSalHiringAcceptHeadline NVARCHAR(MAX) = '',
 	@retSalHiringAcceptSortOrder INT = 0

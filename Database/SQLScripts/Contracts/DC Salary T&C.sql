@@ -90,8 +90,8 @@ DECLARE @dcSalTcHeaderID INT = (SELECT ID FROM tblCaseDocumentParagraph WHERE Ca
 DECLARE @dcSalTcHeaderTextAGuid UNIQUEIDENTIFIER = '0E9E3A04-E048-4D61-A56C-F6A38B436261',
 	@dcSalTcHeaderTextAName NVARCHAR(MAX) = @prefix + ' Header, Company',
 	@dcSalTcHeaderTextADescription NVARCHAR(MAX) = '',
-	@dcSalTcHeaderTextAText NVARCHAR(MAX) = '<p style="text-align:left;">IKEA Distribution Services Australia Pty Ltd</p>	
-<p>ABN 96 001 264 179</p>',
+	@dcSalTcHeaderTextAText NVARCHAR(MAX) = '<p style="font-family:''Microsoft Sans''; font-size: 6pt; text-align:left; line-height:10px; margin-top:-10px">IKEA Distribution Services Australia Pty Ltd<br>	
+ABN 96 001 264 179</p>',
 	@dcSalTcHeaderTextAHeadline NVARCHAR(MAX) = '',
 	@dcSalTcHeaderTextASortOrder INT = 0
 
@@ -122,13 +122,13 @@ END
 DECLARE @dcSalTcHeaderTextBGuid UNIQUEIDENTIFIER = '823EB07F-4D22-4534-89AF-478B1015A000',
 	@dcSalTcHeaderTextBName NVARCHAR(MAX) = @prefix + ' Header, Co-worker',
 	@dcSalTcHeaderTextBDescription NVARCHAR(MAX) = '',
-	@dcSalTcHeaderTextBText NVARCHAR(MAX) = '<p><Todays Date - Long></p>
-		<p><Co-worker First Name> <Co-worker Last Name></p>
+	@dcSalTcHeaderTextBText NVARCHAR(MAX) = '<br><br><p><Todays Date - Long></p>
+		<p><strong><Co-worker First Name> <Co-worker Last Name></strong></p>
 		<p><Address Line 1><br />
 		<Address Line 2> <State> <Postal Code><br />
 		<Address Line 3><br />
 		<br /><br />
-		Dear <Co-worker First Name></p>',
+		Dear <Co-worker First Name>,</p>',
 	@dcSalTcHeaderTextBHeadline NVARCHAR(MAX) = '',
 	@dcSalTcHeaderTextBSortOrder INT = 0
 
@@ -558,15 +558,14 @@ BEGIN
 END
 
 -- #################################### Commencement Date
-
----- Commencement A
+---- Commencement A,  No change valid to date
 DECLARE @dcSalTcTermsComAGuid UNIQUEIDENTIFIER = '7ACE12E4-2FA4-43D8-AC8D-CDAFF36A7756',
-	@dcSalTcTermsComAName NVARCHAR(MAX) = @prefix + ' Commencement, no end date',
+	@dcSalTcTermsComAName NVARCHAR(MAX) = @prefix + ' Commencement, A',
 	@dcSalTcTermsComADescription NVARCHAR(MAX) = '',
 	@dcSalTcTermsComAText NVARCHAR(MAX) = 'Your commencement date is <Change Valid From>, unless otherwise terminated in accordance with this contract.',
 	@dcSalTcTermsComAHeadline NVARCHAR(MAX) = 'Commencement Date',
-	@dcSalTcTermsComASortOrder INT = @termsCounter
-SET @termsCounter = @termsCounter + 1
+	@dcSalTcTermsComASortOrder INT = @termsCounter 
+ SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcSalTcTermsComAGuid)
 BEGIN
@@ -593,12 +592,12 @@ BEGIN
 END
 DECLARE @dcSalTcTermsComAID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcSalTcTermsComAGuid)
 
--- Create condition for Commencement A
+-- Create condition for Commencement A, Condition A, No change valid to date
 DECLARE @dcSalTcTermsComACondAGuid UNIQUEIDENTIFIER = 'D44099CA-6B08-49DB-858F-18C0B0DD7CA9',
 	@dcSalTcTermsComACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
 	@dcSalTcTermsComACondAOperator NVARCHAR(MAX) = 'IsEmpty',
 	@dcSalTcTermsComACondAValues NVARCHAR(MAX) = '',
-	@dcSalTcTermsComACondADescription NVARCHAR(MAX) = 'Has no end date',
+	@dcSalTcTermsComACondADescription NVARCHAR(MAX) = 'No change ValidTo date',
 	@dcSalTcTermsComACondAStatus INT = 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcSalTcTermsComACondAGuid)
@@ -645,66 +644,14 @@ BEGIN
 	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalTcTermsComACondAGuid
 END
 
--- No support for 31.12.9999 yet
---DECLARE @dcSalTcTermsComACondBGuid UNIQUEIDENTIFIER = 'e68e3e7c-52b0-4018-964b-99a1d9d471b9',
---	@dcSalTcTermsComACondBPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
---	@dcSalTcTermsComACondBOperator NVARCHAR(MAX) = 'Equal',
---	@dcSalTcTermsComACondBValues NVARCHAR(MAX) = '31.12.9999',
---	@dcSalTcTermsComACondBDescription NVARCHAR(MAX) = 'Equal 31.12.9999',
---	@dcSalTcTermsComACondBStatus INT = 1
-
---IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcSalTcTermsComACondBGuid)
---BEGIN
---	INSERT INTO tblCaseDocumentTextCondition(
---		CaseDocumentTextConditionGUID, 
---		CaseDocumentText_Id, 
---		Property_Name,
---		Operator,
---		[Values],
---		[Description],
---		[Status],
---		CreatedDate,
---		CreatedByUser_Id,
---		ChangedDate,
---		ChangedByUser_Id)
---	VALUES(
---		@dcSalTcTermsComACondBGuid,
---		@dcSalTcTermsComAID,
---		@dcSalTcTermsComACondBPropertyName,
---		@dcSalTcTermsComACondBOperator,
---		@dcSalTcTermsComACondBValues,
---		@dcSalTcTermsComACondBDescription,
---		@dcSalTcTermsComACondBStatus,
---		@now, 
---		@userID,
---		@now,
---		@userID
---	)
---END
---ELSE
---BEGIN
---	UPDATE CDTC SET CaseDocumentText_Id = @dcSalTcTermsComAID,
---		Property_Name = @dcSalTcTermsComACondBPropertyName,
---		Operator = @dcSalTcTermsComACondBOperator,
---		[Values] = @dcSalTcTermsComACondBValues,
---		[Description] = @dcSalTcTermsComACondBDescription,
---		[Status] = @dcSalTcTermsComACondBStatus,
---		CreatedDate = @now,
---		CreatedByUser_Id = @userID,
---		ChangedDate = @now,
---		ChangedByUser_Id = @userID
---	FROM tblCaseDocumentTextCondition CDTC
---	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalTcTermsComACondBGuid
---END
-
----- Commencement B
+---- Commencement B,  Has change valid to date, no additional clause
 DECLARE @dcSalTcTermsComBGuid UNIQUEIDENTIFIER = '7C948166-2E52-40D0-827D-FE5F054A61AB',
-	@dcSalTcTermsComBName NVARCHAR(MAX) = @prefix + ' Commencement, has end date',
+	@dcSalTcTermsComBName NVARCHAR(MAX) = @prefix + ' Commencement, B',
 	@dcSalTcTermsComBDescription NVARCHAR(MAX) = '',
 	@dcSalTcTermsComBText NVARCHAR(MAX) = 'Your commencement date is <Change Valid From> and will cease on <Change Valid To>, unless otherwise terminated in accordance with this contract.',
 	@dcSalTcTermsComBHeadline NVARCHAR(MAX) = 'Commencement date',
-	@dcSalTcTermsComBSortOrder INT = @termsCounter
-SET @termsCounter = @termsCounter + 1
+	@dcSalTcTermsComBSortOrder INT = @termsCounter 
+ SET @termsCounter = @termsCounter + 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcSalTcTermsComBGuid)
 BEGIN
@@ -731,12 +678,12 @@ BEGIN
 END
 DECLARE @dcSalTcTermsComBID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcSalTcTermsComBGuid)
 
--- Create condition for Commence B
+-- Create condition A for Commence B, has change valid to
 DECLARE @dcSalTcTermsComBCondAGuid UNIQUEIDENTIFIER = '46303E6E-55DC-4091-B742-D2A290D888B1',
 	@dcSalTcTermsComBCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
 	@dcSalTcTermsComBCondAOperator NVARCHAR(MAX) = 'HasValue',
 	@dcSalTcTermsComBCondAValues NVARCHAR(MAX) = '',
-	@dcSalTcTermsComBCondADescription NVARCHAR(MAX) = 'Has end date',
+	@dcSalTcTermsComBCondADescription NVARCHAR(MAX) = 'Has change valid to',
 	@dcSalTcTermsComBCondAStatus INT = 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcSalTcTermsComBCondAGuid)
@@ -783,12 +730,12 @@ BEGIN
 	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalTcTermsComBCondAGuid
 END
 
--- No support for 31.12.9999 yet
-/*DECLARE @dcSalTcTermsComBCondBGuid UNIQUEIDENTIFIER = '43c72a21-96c1-4d3c-a44a-5279593332c7',
-	@dcSalTcTermsComBCondBPropertyName NVARCHAR(MAX) = 'extendedcase_ContractEndDate',
-	@dcSalTcTermsComBCondBOperator NVARCHAR(MAX) = 'NotEqual',
-	@dcSalTcTermsComBCondBValues NVARCHAR(MAX) = '31.12.9999',
-	@dcSalTcTermsComBCondBDescription NVARCHAR(MAX) = 'Not equals 31.12.9999',
+-- Create condition B for Commence B, has no additional clause
+DECLARE @dcSalTcTermsComBCondBGuid UNIQUEIDENTIFIER = '61A33E7A-7A8E-424E-9F0A-3A8105A41B41',
+	@dcSalTcTermsComBCondBPropertyName NVARCHAR(MAX) = 'extendedcase_AdditionalClause',
+	@dcSalTcTermsComBCondBOperator NVARCHAR(MAX) = 'Equal',
+	@dcSalTcTermsComBCondBValues NVARCHAR(MAX) = 'None',
+	@dcSalTcTermsComBCondBDescription NVARCHAR(MAX) = 'Has no additional clause',
 	@dcSalTcTermsComBCondBStatus INT = 1
 
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcSalTcTermsComBCondBGuid)
@@ -833,8 +780,574 @@ BEGIN
 		ChangedByUser_Id = @userID
 	FROM tblCaseDocumentTextCondition CDTC
 	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalTcTermsComBCondBGuid
-END*/
+END
 
+---- Commencement C,  Has change valid to date, additional clause Homecoming - Same role
+DECLARE @dcSalTcTermsComCGuid UNIQUEIDENTIFIER = '692447B0-ECB1-4E83-888B-210C6100E491',
+	@dcSalTcTermsComCName NVARCHAR(MAX) = @prefix + ' Commencement, C',
+	@dcSalTcTermsComCDescription NVARCHAR(MAX) = '',
+	@dcSalTcTermsComCText NVARCHAR(MAX) = 'Your commencement date is <Change Valid From> and will cease on <Change Valid To>, unless otherwise terminated in accordance with this contract.<br>
+<br>
+At the end of this contract you will return to your current position.',
+	@dcSalTcTermsComCHeadline NVARCHAR(MAX) = 'Commencement date',
+	@dcSalTcTermsComCSortOrder INT = @termsCounter 
+ SET @termsCounter = @termsCounter + 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcSalTcTermsComCGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
+	VALUES (@dcSalTcTermsID, 
+		@dcSalTcTermsComCName, 
+		@dcSalTcTermsComCDescription,
+		@dcSalTcTermsComCText, 
+		@dcSalTcTermsComCHeadline,
+		@dcSalTcTermsComCSortOrder,
+		@dcSalTcTermsComCGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDT SET 
+		CaseDocumentParagraph_Id = @dcSalTcTermsID,
+		[Name] = @dcSalTcTermsComCName, 
+		[Description] = @dcSalTcTermsComCDescription, 
+		[Text] = @dcSalTcTermsComCText,
+		[Headline] = @dcSalTcTermsComCHeadline,
+		SortOrder = @dcSalTcTermsComCSortOrder
+	FROM tblCaseDocumentText CDT 
+	WHERE CDT.CaseDocumentTextGUID = @dcSalTcTermsComCGuid
+END
+DECLARE @dcSalTcTermsComCID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcSalTcTermsComCGuid)
+
+-- Create condition A for Commence C, has change valid to
+DECLARE @dcSalTcTermsComCCondAGuid UNIQUEIDENTIFIER = '118AAA44-4EC1-42E0-8296-7202899215FF',
+	@dcSalTcTermsComCCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
+	@dcSalTcTermsComCCondAOperator NVARCHAR(MAX) = 'HasValue',
+	@dcSalTcTermsComCCondAValues NVARCHAR(MAX) = '',
+	@dcSalTcTermsComCCondADescription NVARCHAR(MAX) = 'Has change valid to',
+	@dcSalTcTermsComCCondAStatus INT = 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcSalTcTermsComCCondAGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentTextCondition(
+		CaseDocumentTextConditionGUID, 
+		CaseDocumentText_Id, 
+		Property_Name,
+		Operator,
+		[Values],
+		[Description],
+		[Status],
+		CreatedDate,
+		CreatedByUser_Id,
+		ChangedDate,
+		ChangedByUser_Id)
+	VALUES(
+		@dcSalTcTermsComCCondAGuid,
+		@dcSalTcTermsComCID,
+		@dcSalTcTermsComCCondAPropertyName,
+		@dcSalTcTermsComCCondAOperator,
+		@dcSalTcTermsComCCondAValues,
+		@dcSalTcTermsComCCondADescription,
+		@dcSalTcTermsComCCondAStatus,
+		@now, 
+		@userID,
+		@now,
+		@userID
+	)
+END
+ELSE
+BEGIN
+	UPDATE CDTC SET CaseDocumentText_Id = @dcSalTcTermsComCID,
+		Property_Name = @dcSalTcTermsComCCondAPropertyName,
+		Operator = @dcSalTcTermsComCCondAOperator,
+		[Values] = @dcSalTcTermsComCCondAValues,
+		[Description] = @dcSalTcTermsComCCondADescription,
+		[Status] = @dcSalTcTermsComCCondAStatus,
+		CreatedDate = @now,
+		CreatedByUser_Id = @userID,
+		ChangedDate = @now,
+		ChangedByUser_Id = @userID
+	FROM tblCaseDocumentTextCondition CDTC
+	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalTcTermsComCCondAGuid
+END
+
+-- Create condition B for Commence C, has additional clause "Homecoming – Same Role"
+DECLARE @dcSalTcTermsComCCondBGuid UNIQUEIDENTIFIER = '721027BD-EB56-41BF-8EE7-A101E8B32533',
+	@dcSalTcTermsComCCondBPropertyName NVARCHAR(MAX) = 'extendedcase_AdditionalClause',
+	@dcSalTcTermsComCCondBOperator NVARCHAR(MAX) = 'Equal',
+	@dcSalTcTermsComCCondBValues NVARCHAR(MAX) = 'Homecoming – Same Role',
+	@dcSalTcTermsComCCondBDescription NVARCHAR(MAX) = 'Has additional clause Homecoming – Same Role',
+	@dcSalTcTermsComCCondBStatus INT = 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcSalTcTermsComCCondBGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentTextCondition(
+		CaseDocumentTextConditionGUID, 
+		CaseDocumentText_Id, 
+		Property_Name,
+		Operator,
+		[Values],
+		[Description],
+		[Status],
+		CreatedDate,
+		CreatedByUser_Id,
+		ChangedDate,
+		ChangedByUser_Id)
+	VALUES(
+		@dcSalTcTermsComCCondBGuid,
+		@dcSalTcTermsComCID,
+		@dcSalTcTermsComCCondBPropertyName,
+		@dcSalTcTermsComCCondBOperator,
+		@dcSalTcTermsComCCondBValues,
+		@dcSalTcTermsComCCondBDescription,
+		@dcSalTcTermsComCCondBStatus,
+		@now, 
+		@userID,
+		@now,
+		@userID
+	)
+END
+ELSE
+BEGIN
+	UPDATE CDTC SET CaseDocumentText_Id = @dcSalTcTermsComCID,
+		Property_Name = @dcSalTcTermsComCCondBPropertyName,
+		Operator = @dcSalTcTermsComCCondBOperator,
+		[Values] = @dcSalTcTermsComCCondBValues,
+		[Description] = @dcSalTcTermsComCCondBDescription,
+		[Status] = @dcSalTcTermsComCCondBStatus,
+		CreatedDate = @now,
+		CreatedByUser_Id = @userID,
+		ChangedDate = @now,
+		ChangedByUser_Id = @userID
+	FROM tblCaseDocumentTextCondition CDTC
+	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalTcTermsComCCondBGuid
+END
+
+---- Commencement D, Has change valid to date, additional clause "Homecoming – Similar role"
+DECLARE @dcSalTcTermsComDGuid UNIQUEIDENTIFIER = '38F0D019-E6CF-47D9-9A3D-92CAF93C3E3F',
+	@dcSalTcTermsComDName NVARCHAR(MAX) = @prefix + ' Commencement, D',
+	@dcSalTcTermsComDDescription NVARCHAR(MAX) = '',
+	@dcSalTcTermsComDText NVARCHAR(MAX) = 'This is a limited tenure contract. The contract is effective from <Change Valid From> and will cease on <Change Valid To>, unless otherwise terminated in accordance with this contract.<br>
+<br>
+Prior to the end of this temporary contract we encourage you to review the job competency profiles for current vacancies available within IKEA and to apply for any positions which interest you and for which you meet the job requirements.<br>
+<br>
+Should you not secure a new permanent or temporary role prior to the end of this contract IKEA will appoint you to a position within your skills and competence at the same (or higher) Position Class.',
+	@dcSalTcTermsComDHeadline NVARCHAR(MAX) = 'Commencement date',
+	@dcSalTcTermsComDSortOrder INT = @termsCounter 
+ SET @termsCounter = @termsCounter + 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcSalTcTermsComDGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
+	VALUES (@dcSalTcTermsID, 
+		@dcSalTcTermsComDName, 
+		@dcSalTcTermsComDDescription,
+		@dcSalTcTermsComDText, 
+		@dcSalTcTermsComDHeadline,
+		@dcSalTcTermsComDSortOrder,
+		@dcSalTcTermsComDGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDT SET 
+		CaseDocumentParagraph_Id = @dcSalTcTermsID,
+		[Name] = @dcSalTcTermsComDName, 
+		[Description] = @dcSalTcTermsComDDescription, 
+		[Text] = @dcSalTcTermsComDText,
+		[Headline] = @dcSalTcTermsComDHeadline,
+		SortOrder = @dcSalTcTermsComDSortOrder
+	FROM tblCaseDocumentText CDT 
+	WHERE CDT.CaseDocumentTextGUID = @dcSalTcTermsComDGuid
+END
+DECLARE @dcSalTcTermsComDID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcSalTcTermsComDGuid)
+
+-- Create condition A for Commence D, has change valid to
+DECLARE @dcSalTcTermsComDCondAGuid UNIQUEIDENTIFIER = 'B748B514-4DF4-4B2F-990A-9315476A8822',
+	@dcSalTcTermsComDCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
+	@dcSalTcTermsComDCondAOperator NVARCHAR(MAX) = 'HasValue',
+	@dcSalTcTermsComDCondAValues NVARCHAR(MAX) = '',
+	@dcSalTcTermsComDCondADescription NVARCHAR(MAX) = 'Has change valid to',
+	@dcSalTcTermsComDCondAStatus INT = 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcSalTcTermsComDCondAGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentTextCondition(
+		CaseDocumentTextConditionGUID, 
+		CaseDocumentText_Id, 
+		Property_Name,
+		Operator,
+		[Values],
+		[Description],
+		[Status],
+		CreatedDate,
+		CreatedByUser_Id,
+		ChangedDate,
+		ChangedByUser_Id)
+	VALUES(
+		@dcSalTcTermsComDCondAGuid,
+		@dcSalTcTermsComDID,
+		@dcSalTcTermsComDCondAPropertyName,
+		@dcSalTcTermsComDCondAOperator,
+		@dcSalTcTermsComDCondAValues,
+		@dcSalTcTermsComDCondADescription,
+		@dcSalTcTermsComDCondAStatus,
+		@now, 
+		@userID,
+		@now,
+		@userID
+	)
+END
+ELSE
+BEGIN
+	UPDATE CDTC SET CaseDocumentText_Id = @dcSalTcTermsComDID,
+		Property_Name = @dcSalTcTermsComDCondAPropertyName,
+		Operator = @dcSalTcTermsComDCondAOperator,
+		[Values] = @dcSalTcTermsComDCondAValues,
+		[Description] = @dcSalTcTermsComDCondADescription,
+		[Status] = @dcSalTcTermsComDCondAStatus,
+		CreatedDate = @now,
+		CreatedByUser_Id = @userID,
+		ChangedDate = @now,
+		ChangedByUser_Id = @userID
+	FROM tblCaseDocumentTextCondition CDTC
+	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalTcTermsComDCondAGuid
+END
+
+-- Create condition B for Commence D, has additional clause "Homecoming – Similar role"
+DECLARE @dcSalTcTermsComDCondBGuid UNIQUEIDENTIFIER = 'F16BA989-CFE9-4BDD-A486-BF9376B36557',
+	@dcSalTcTermsComDCondBPropertyName NVARCHAR(MAX) = 'extendedcase_AdditionalClause',
+	@dcSalTcTermsComDCondBOperator NVARCHAR(MAX) = 'Equal',
+	@dcSalTcTermsComDCondBValues NVARCHAR(MAX) = 'Homecoming – Similar role',
+	@dcSalTcTermsComDCondBDescription NVARCHAR(MAX) = 'Has additional clause Homecoming – Similar role',
+	@dcSalTcTermsComDCondBStatus INT = 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcSalTcTermsComDCondBGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentTextCondition(
+		CaseDocumentTextConditionGUID, 
+		CaseDocumentText_Id, 
+		Property_Name,
+		Operator,
+		[Values],
+		[Description],
+		[Status],
+		CreatedDate,
+		CreatedByUser_Id,
+		ChangedDate,
+		ChangedByUser_Id)
+	VALUES(
+		@dcSalTcTermsComDCondBGuid,
+		@dcSalTcTermsComDID,
+		@dcSalTcTermsComDCondBPropertyName,
+		@dcSalTcTermsComDCondBOperator,
+		@dcSalTcTermsComDCondBValues,
+		@dcSalTcTermsComDCondBDescription,
+		@dcSalTcTermsComDCondBStatus,
+		@now, 
+		@userID,
+		@now,
+		@userID
+	)
+END
+ELSE
+BEGIN
+	UPDATE CDTC SET CaseDocumentText_Id = @dcSalTcTermsComDID,
+		Property_Name = @dcSalTcTermsComDCondBPropertyName,
+		Operator = @dcSalTcTermsComDCondBOperator,
+		[Values] = @dcSalTcTermsComDCondBValues,
+		[Description] = @dcSalTcTermsComDCondBDescription,
+		[Status] = @dcSalTcTermsComDCondBStatus,
+		CreatedDate = @now,
+		CreatedByUser_Id = @userID,
+		ChangedDate = @now,
+		ChangedByUser_Id = @userID
+	FROM tblCaseDocumentTextCondition CDTC
+	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalTcTermsComDCondBGuid
+END
+
+---- Commencement E, Has change valid to date, additional clause "Parental Leave Cover – Same Role"
+DECLARE @dcSalTcTermsComEGuid UNIQUEIDENTIFIER = '0CFB1E60-6FD5-47B9-A140-14C5D9803FBA',
+	@dcSalTcTermsComEName NVARCHAR(MAX) = @prefix + ' Commencement, E',
+	@dcSalTcTermsComEDescription NVARCHAR(MAX) = '',
+	@dcSalTcTermsComEText NVARCHAR(MAX) = 'This is a fixed term contract to replace a co-worker on a period of parental leave.<br>
+<br>
+This contract is effective from <Change Valid From> and will cease on <Change Valid To>.<br>
+<br>
+In the event that the co-worker on Parental Leave advises IKEA they intend to return to work prior to the end of their approved period of parental leave, IKEA may terminate this contract with 4 weeks’ notice at which time you will return to the position held prior to commencement of this fixed term contract, at the applicable rate of pay.',
+	@dcSalTcTermsComEHeadline NVARCHAR(MAX) = 'Commencement date',
+	@dcSalTcTermsComESortOrder INT = @termsCounter 
+ SET @termsCounter = @termsCounter + 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcSalTcTermsComEGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
+	VALUES (@dcSalTcTermsID, 
+		@dcSalTcTermsComEName, 
+		@dcSalTcTermsComEDescription,
+		@dcSalTcTermsComEText, 
+		@dcSalTcTermsComEHeadline,
+		@dcSalTcTermsComESortOrder,
+		@dcSalTcTermsComEGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDT SET 
+		CaseDocumentParagraph_Id = @dcSalTcTermsID,
+		[Name] = @dcSalTcTermsComEName, 
+		[Description] = @dcSalTcTermsComEDescription, 
+		[Text] = @dcSalTcTermsComEText,
+		[Headline] = @dcSalTcTermsComEHeadline,
+		SortOrder = @dcSalTcTermsComESortOrder
+	FROM tblCaseDocumentText CDT 
+	WHERE CDT.CaseDocumentTextGUID = @dcSalTcTermsComEGuid
+END
+DECLARE @dcSalTcTermsComEID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcSalTcTermsComEGuid)
+
+-- Create condition A for Commence E, has change valid to
+DECLARE @dcSalTcTermsComECondAGuid UNIQUEIDENTIFIER = 'A62AB825-EAF3-49B2-BC7B-DE0999F846AF',
+	@dcSalTcTermsComECondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
+	@dcSalTcTermsComECondAOperator NVARCHAR(MAX) = 'HasValue',
+	@dcSalTcTermsComECondAValues NVARCHAR(MAX) = '',
+	@dcSalTcTermsComECondADescription NVARCHAR(MAX) = 'Has change valid to',
+	@dcSalTcTermsComECondAStatus INT = 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcSalTcTermsComECondAGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentTextCondition(
+		CaseDocumentTextConditionGUID, 
+		CaseDocumentText_Id, 
+		Property_Name,
+		Operator,
+		[Values],
+		[Description],
+		[Status],
+		CreatedDate,
+		CreatedByUser_Id,
+		ChangedDate,
+		ChangedByUser_Id)
+	VALUES(
+		@dcSalTcTermsComECondAGuid,
+		@dcSalTcTermsComEID,
+		@dcSalTcTermsComECondAPropertyName,
+		@dcSalTcTermsComECondAOperator,
+		@dcSalTcTermsComECondAValues,
+		@dcSalTcTermsComECondADescription,
+		@dcSalTcTermsComECondAStatus,
+		@now, 
+		@userID,
+		@now,
+		@userID
+	)
+END
+ELSE
+BEGIN
+	UPDATE CDTC SET CaseDocumentText_Id = @dcSalTcTermsComEID,
+		Property_Name = @dcSalTcTermsComECondAPropertyName,
+		Operator = @dcSalTcTermsComECondAOperator,
+		[Values] = @dcSalTcTermsComECondAValues,
+		[Description] = @dcSalTcTermsComECondADescription,
+		[Status] = @dcSalTcTermsComECondAStatus,
+		CreatedDate = @now,
+		CreatedByUser_Id = @userID,
+		ChangedDate = @now,
+		ChangedByUser_Id = @userID
+	FROM tblCaseDocumentTextCondition CDTC
+	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalTcTermsComECondAGuid
+END
+
+-- Create condition B for Commence E, has additional clause "Parental Leave Cover – Same Role"
+DECLARE @dcSalTcTermsComECondBGuid UNIQUEIDENTIFIER = '69A67729-F28E-4906-8BC4-9CF183773AC1',
+	@dcSalTcTermsComECondBPropertyName NVARCHAR(MAX) = 'extendedcase_AdditionalClause',
+	@dcSalTcTermsComECondBOperator NVARCHAR(MAX) = 'Equal',
+	@dcSalTcTermsComECondBValues NVARCHAR(MAX) = 'Parental Leave Cover – Same Role',
+	@dcSalTcTermsComECondBDescription NVARCHAR(MAX) = 'Has additional clause Parental Leave Cover – Same Role',
+	@dcSalTcTermsComECondBStatus INT = 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcSalTcTermsComECondBGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentTextCondition(
+		CaseDocumentTextConditionGUID, 
+		CaseDocumentText_Id, 
+		Property_Name,
+		Operator,
+		[Values],
+		[Description],
+		[Status],
+		CreatedDate,
+		CreatedByUser_Id,
+		ChangedDate,
+		ChangedByUser_Id)
+	VALUES(
+		@dcSalTcTermsComECondBGuid,
+		@dcSalTcTermsComEID,
+		@dcSalTcTermsComECondBPropertyName,
+		@dcSalTcTermsComECondBOperator,
+		@dcSalTcTermsComECondBValues,
+		@dcSalTcTermsComECondBDescription,
+		@dcSalTcTermsComECondBStatus,
+		@now, 
+		@userID,
+		@now,
+		@userID
+	)
+END
+ELSE
+BEGIN
+	UPDATE CDTC SET CaseDocumentText_Id = @dcSalTcTermsComEID,
+		Property_Name = @dcSalTcTermsComECondBPropertyName,
+		Operator = @dcSalTcTermsComECondBOperator,
+		[Values] = @dcSalTcTermsComECondBValues,
+		[Description] = @dcSalTcTermsComECondBDescription,
+		[Status] = @dcSalTcTermsComECondBStatus,
+		CreatedDate = @now,
+		CreatedByUser_Id = @userID,
+		ChangedDate = @now,
+		ChangedByUser_Id = @userID
+	FROM tblCaseDocumentTextCondition CDTC
+	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalTcTermsComECondBGuid
+END
+
+
+---- Commencement F, Has change valid to date, additional clause "Parental Leave Cover - Similar Role"
+DECLARE @dcSalTcTermsComFGuid UNIQUEIDENTIFIER = 'B5E3F810-F04C-4FE0-A7DB-1A6394E0697E',
+	@dcSalTcTermsComFName NVARCHAR(MAX) = @prefix + ' Commencement, F',
+	@dcSalTcTermsComFDescription NVARCHAR(MAX) = '',
+	@dcSalTcTermsComFText NVARCHAR(MAX) = 'This is a fixed term contract to replace a co-worker on a period of parental leave.<br>
+<br>
+This contract is effective from <Change Valid From> and will cease on <Change Valid To>.<br>
+<br>
+In the event that the co-worker on Parental Leave advises IKEA they intend to return to work prior to the end of their approved period of parental leave, IKEA may terminate this contract with 4 weeks’ notice at which time you will return to a similar role prior to commencement of this fixed term contract, at the applicable rate of pay. ',
+	@dcSalTcTermsComFHeadline NVARCHAR(MAX) = 'Commencement date',
+	@dcSalTcTermsComFSortOrder INT = @termsCounter 
+ SET @termsCounter = @termsCounter + 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentText CDT WHERE  CDT.CaseDocumentTextGUID = @dcSalTcTermsComFGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentText(CaseDocumentParagraph_Id, [Name], [Description], [Text],[Headline], SortOrder, CaseDocumentTextGUID)
+	VALUES (@dcSalTcTermsID, 
+		@dcSalTcTermsComFName, 
+		@dcSalTcTermsComFDescription,
+		@dcSalTcTermsComFText, 
+		@dcSalTcTermsComFHeadline,
+		@dcSalTcTermsComFSortOrder,
+		@dcSalTcTermsComFGuid)
+END
+ELSE
+BEGIN
+	UPDATE CDT SET 
+		CaseDocumentParagraph_Id = @dcSalTcTermsID,
+		[Name] = @dcSalTcTermsComFName, 
+		[Description] = @dcSalTcTermsComFDescription, 
+		[Text] = @dcSalTcTermsComFText,
+		[Headline] = @dcSalTcTermsComFHeadline,
+		SortOrder = @dcSalTcTermsComFSortOrder
+	FROM tblCaseDocumentText CDT 
+	WHERE CDT.CaseDocumentTextGUID = @dcSalTcTermsComFGuid
+END
+DECLARE @dcSalTcTermsComFID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @dcSalTcTermsComFGuid)
+
+-- Create condition A for Commence F, has change valid to
+DECLARE @dcSalTcTermsComFCondAGuid UNIQUEIDENTIFIER = 'C275730B-A81B-4EDF-9675-624908B10DAF',
+	@dcSalTcTermsComFCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
+	@dcSalTcTermsComFCondAOperator NVARCHAR(MAX) = 'HasValue',
+	@dcSalTcTermsComFCondAValues NVARCHAR(MAX) = '',
+	@dcSalTcTermsComFCondADescription NVARCHAR(MAX) = 'Has change valid to',
+	@dcSalTcTermsComFCondAStatus INT = 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcSalTcTermsComFCondAGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentTextCondition(
+		CaseDocumentTextConditionGUID, 
+		CaseDocumentText_Id, 
+		Property_Name,
+		Operator,
+		[Values],
+		[Description],
+		[Status],
+		CreatedDate,
+		CreatedByUser_Id,
+		ChangedDate,
+		ChangedByUser_Id)
+	VALUES(
+		@dcSalTcTermsComFCondAGuid,
+		@dcSalTcTermsComFID,
+		@dcSalTcTermsComFCondAPropertyName,
+		@dcSalTcTermsComFCondAOperator,
+		@dcSalTcTermsComFCondAValues,
+		@dcSalTcTermsComFCondADescription,
+		@dcSalTcTermsComFCondAStatus,
+		@now, 
+		@userID,
+		@now,
+		@userID
+	)
+END
+ELSE
+BEGIN
+	UPDATE CDTC SET CaseDocumentText_Id = @dcSalTcTermsComFID,
+		Property_Name = @dcSalTcTermsComFCondAPropertyName,
+		Operator = @dcSalTcTermsComFCondAOperator,
+		[Values] = @dcSalTcTermsComFCondAValues,
+		[Description] = @dcSalTcTermsComFCondADescription,
+		[Status] = @dcSalTcTermsComFCondAStatus,
+		CreatedDate = @now,
+		CreatedByUser_Id = @userID,
+		ChangedDate = @now,
+		ChangedByUser_Id = @userID
+	FROM tblCaseDocumentTextCondition CDTC
+	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalTcTermsComFCondAGuid
+END
+
+-- Create condition B for Commence F, has additional clause "Parental Leave Cover - Similar Role"
+DECLARE @dcSalTcTermsComFCondBGuid UNIQUEIDENTIFIER = 'A1AD99EE-1C68-48B2-BEBD-900699A6F97C',
+	@dcSalTcTermsComFCondBPropertyName NVARCHAR(MAX) = 'extendedcase_AdditionalClause',
+	@dcSalTcTermsComFCondBOperator NVARCHAR(MAX) = 'Equal',
+	@dcSalTcTermsComFCondBValues NVARCHAR(MAX) = 'Parental Leave Cover – Similar Role',
+	@dcSalTcTermsComFCondBDescription NVARCHAR(MAX) = 'Has additional clause Parental Leave Cover – Similar Role',
+	@dcSalTcTermsComFCondBStatus INT = 1
+
+IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @dcSalTcTermsComFCondBGuid)
+BEGIN
+	INSERT INTO tblCaseDocumentTextCondition(
+		CaseDocumentTextConditionGUID, 
+		CaseDocumentText_Id, 
+		Property_Name,
+		Operator,
+		[Values],
+		[Description],
+		[Status],
+		CreatedDate,
+		CreatedByUser_Id,
+		ChangedDate,
+		ChangedByUser_Id)
+	VALUES(
+		@dcSalTcTermsComFCondBGuid,
+		@dcSalTcTermsComFID,
+		@dcSalTcTermsComFCondBPropertyName,
+		@dcSalTcTermsComFCondBOperator,
+		@dcSalTcTermsComFCondBValues,
+		@dcSalTcTermsComFCondBDescription,
+		@dcSalTcTermsComFCondBStatus,
+		@now, 
+		@userID,
+		@now,
+		@userID
+	)
+END
+ELSE
+BEGIN
+	UPDATE CDTC SET CaseDocumentText_Id = @dcSalTcTermsComFID,
+		Property_Name = @dcSalTcTermsComFCondBPropertyName,
+		Operator = @dcSalTcTermsComFCondBOperator,
+		[Values] = @dcSalTcTermsComFCondBValues,
+		[Description] = @dcSalTcTermsComFCondBDescription,
+		[Status] = @dcSalTcTermsComFCondBStatus,
+		CreatedDate = @now,
+		CreatedByUser_Id = @userID,
+		ChangedDate = @now,
+		ChangedByUser_Id = @userID
+	FROM tblCaseDocumentTextCondition CDTC
+	WHERE CDTC.CaseDocumentTextConditionGUID = @dcSalTcTermsComFCondBGuid
+END
 
 -- #################################### Remuneration
 DECLARE @dcSalTcTermsRemunGuid UNIQUEIDENTIFIER = 'D5BF811E-3F66-4686-860F-E6FB557607D3',
@@ -842,7 +1355,8 @@ DECLARE @dcSalTcTermsRemunGuid UNIQUEIDENTIFIER = 'D5BF811E-3F66-4686-860F-E6FB5
 	@dcSalTcTermsRemunDescription NVARCHAR(MAX) = '',
 	@dcSalTcTermsRemunText NVARCHAR(MAX) = 'Upon commencement, your Total Remuneration package will be $<Basic Pay Amount> per annum.  Attached is a Remuneration Statement, which outlines the break-up of your Total Remuneration package.<br>
 	<br>
-Your salary will be paid directly into your nominated bank account on a fortnightly basis.',
+Your salary will be paid directly into your nominated bank account on a fortnightly basis.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcSalTcTermsRemunHeadline NVARCHAR(MAX) = 'Remuneration',
 	@dcSalTcTermsRemunSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1073,7 +1587,8 @@ DECLARE @dcSalTcTermsRemunRevAGuid UNIQUEIDENTIFIER = 'bfc9980b-fee7-4d92-9399-5
 	@dcSalTcTermsRemunRevADescription NVARCHAR(MAX) = '',
 	@dcSalTcTermsRemunRevAText NVARCHAR(MAX) = 'In line with IKEA’s Remuneration Policy, your Total Remuneration package will be reviewed annually following your performance review.  Any increase in your total remuneration package will take effect from the next pay cycle.<br>
 <br>
-The earliest your Total Remuneration package will be reviewed will be in January <Next Salary Review Year>.',
+The earliest your Total Remuneration package will be reviewed will be in January <Next Salary Review Year>.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcSalTcTermsRemunRevAHeadline NVARCHAR(MAX) = 'Remuneration Review',
 	@dcSalTcTermsRemunRevASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1167,7 +1682,8 @@ DECLARE @dcSalTcTermsLeaveGuid UNIQUEIDENTIFIER = '81A42F7D-D872-467F-8A73-FB2E6
 	@dcSalTcTermsLeaveDescription NVARCHAR(MAX) = '',
 	@dcSalTcTermsLeaveText NVARCHAR(MAX) = 'You will accrue entitlements to leave in accordance with relevant legislation and company policy.  This currently includes annual leave (4 weeks per annum, excluding annual leave loading), personal leave (10 days per annum) to be used for absence due to personal illness or to care for a member of your immediate family, parental leave and long service leave.  Company policy may change at any time at IKEA’s sole discretion.<br>
 <br>
-Annual leave is ordinarily to be taken within the year it is accrued, or within 12 months from the date it becomes due.  Annual leave is to be taken at times mutually agreed to, taking into consideration peak periods in business operations, which may vary from year to year.  Peak periods may be such that no annual leave will be authorised during those periods.  Peak periods can be identified in consultation with your manager.',
+Annual leave is ordinarily to be taken within the year it is accrued, or within 12 months from the date it becomes due.  Annual leave is to be taken at times mutually agreed to, taking into consideration peak periods in business operations, which may vary from year to year.  Peak periods may be such that no annual leave will be authorised during those periods.  Peak periods can be identified in consultation with your manager.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcSalTcTermsLeaveHeadline NVARCHAR(MAX) = 'Leave Entitlements',
 	@dcSalTcTermsLeaveSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1336,7 +1852,8 @@ END
 DECLARE @dcSalTcTermsSafetyGuid UNIQUEIDENTIFIER = 'BC958CF2-2280-407F-9647-89B553E992A8',
 	@dcSalTcTermsSafetyName NVARCHAR(MAX) = @prefix + ' Safety',
 	@dcSalTcTermsSafetyDescription NVARCHAR(MAX) = '',
-	@dcSalTcTermsSafetyText NVARCHAR(MAX) = 'IKEA understands the requirement of ensuring a safe and healthy working environment for all co-workers in its offices, warehouses and stores, and a safe and healthy shopping environment for customers.  In fulfilling this aim, we undertake regular consultation with co-workers on health and safety issues and concerns.',
+	@dcSalTcTermsSafetyText NVARCHAR(MAX) = 'IKEA understands the requirement of ensuring a safe and healthy working environment for all co-workers in its offices, warehouses and stores, and a safe and healthy shopping environment for customers.  In fulfilling this aim, we undertake regular consultation with co-workers on health and safety issues and concerns.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcSalTcTermsSafetyHeadline NVARCHAR(MAX) = 'Occupational Health & Safety',
 	@dcSalTcTermsSafetySortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1478,7 +1995,8 @@ END
 DECLARE @dcSalTcTermsUnlawGuid UNIQUEIDENTIFIER = '53164802-5B17-4E23-ABBC-A14AF1D70F80',
 	@dcSalTcTermsUnlawName NVARCHAR(MAX) = @prefix + ' Unlawful',
 	@dcSalTcTermsUnlawDescription NVARCHAR(MAX) = '',
-	@dcSalTcTermsUnlawText NVARCHAR(MAX) = 'If you become aware of or suspect any unlawful act or omission by any IKEA employee, you must advise IKEA immediately.',
+	@dcSalTcTermsUnlawText NVARCHAR(MAX) = 'If you become aware of or suspect any unlawful act or omission by any IKEA employee, you must advise IKEA immediately.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcSalTcTermsUnlawHeadline NVARCHAR(MAX) = 'Obligation to report unlawful activities',
 	@dcSalTcTermsUnlawSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1553,7 +2071,8 @@ END
 DECLARE @dcSalTcTermsSuspGuid UNIQUEIDENTIFIER = '0553635E-0832-4ECA-AD53-20D6D1E2DEB2',
 	@dcSalTcTermsSuspName NVARCHAR(MAX) = @prefix + ' Suspension',
 	@dcSalTcTermsSuspDescription NVARCHAR(MAX) = '',
-	@dcSalTcTermsSuspText NVARCHAR(MAX) = 'If we have reason to believe that you may have engaged in a serious breach of your employment obligations, IKEA may at its discretion suspend you from your duties, either with or without pay, while an investigation is conducted.',
+	@dcSalTcTermsSuspText NVARCHAR(MAX) = 'If we have reason to believe that you may have engaged in a serious breach of your employment obligations, IKEA may at its discretion suspend you from your duties, either with or without pay, while an investigation is conducted.
+<p style="page-break-after: always;"></p>', -- New PDF page after this
 	@dcSalTcTermsSuspHeadline NVARCHAR(MAX) = 'Suspension',
 	@dcSalTcTermsSuspSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1671,7 +2190,7 @@ DECLARE @dcSalTcConSignParagraphID INT = (SELECT ID FROM tblCaseDocumentParagrap
 DECLARE @dcSalTcConSignGuid UNIQUEIDENTIFIER = '877E3C5B-141B-46E2-9A56-B1259817B833',
 	@dcSalTcConSignName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@dcSalTcConSignDescription NVARCHAR(MAX) = '',
-	@dcSalTcConSignText NVARCHAR(MAX) = 'Yours sincerely<br>
+	@dcSalTcConSignText NVARCHAR(MAX) = 'Yours sincerely,<br><br><br><br>
 	<Reports To Line Manager><br>
 	<Position Title (Local Job Name) of Reports To Line Manager><br>
 	<strong>IKEA Distribution Services Australia Pty Ltd</strong>',
@@ -1732,18 +2251,54 @@ DECLARE @dcSalTcAcceptParagraphID INT = (SELECT ID FROM tblCaseDocumentParagraph
 DECLARE @dcSalTcAcceptGuid UNIQUEIDENTIFIER = '224E290B-E833-4823-B0A6-DDCFF34C65A1',
 	@dcSalTcAcceptName NVARCHAR(MAX) = @prefix + ' Acceptance',
 	@dcSalTcAcceptDescription NVARCHAR(MAX) = '',
-	@dcSalTcAcceptText NVARCHAR(MAX) = '<table style="border: 1px solid black">
-<tr><th align="center">ACCEPTANCE</th></tr>
-<tr><td>I accept the terms and conditions of employment as detailed above.</td></tr>
-<tr><td style="height:100px;vertical-align: bottom;"><Co-worker First Name> <Co-worker Last Name></td></tr>
-<tr><td style="height:5px">.......................................</td></tr>
-<tr><td style="vertical-align: top;">Name</td></tr>
-<tr><td></td></tr>
-<tr><td>.......................................</td></tr>
-<tr><td style="vertical-align: top;">Signature</td></tr>
-<tr><td></td></tr>
-<tr><td>.......................................</td></tr>
-<tr><td style="vertical-align: top;">Date</td></tr>
+	@dcSalTcAcceptText NVARCHAR(MAX) = '<style>
+
+#acceptance {
+	font-family: Verdana; 
+	border: 1px solid black; 
+	width: 500px;
+}
+
+
+#acceptance th {
+	font-size: 16pt; 
+	text-decoration: underline;
+	text-align: center;
+	padding-top: 20px;
+	width: 500px;
+}
+#acceptance td {
+
+	padding-left: 20px;
+}
+
+#acceptance td .signHeader {
+	vertical-align: top;
+}
+
+#acceptance  td .signLine {
+	height:5px
+}
+
+#acceptance td .sign {
+	height:100px;
+	vertical-align: bottom;
+}
+
+</style>
+<br><br>
+<table id="acceptance">
+<tr><th>ACCEPTANCE</th></tr>
+<tr><td><br>I accept the terms and conditions of employment as detailed above.</td></tr>
+<tr><td class="sign"><br><br><Co-worker First Name> <Co-worker Last Name></td></tr>
+<tr><td class="signLine">.................................................................</td></tr>
+<tr><td class="signHeader">Name</td></tr>
+<tr><td><br><br></td></tr>
+<tr><td>.................................................................</td></tr>
+<tr><td class="signHeader">Signature</td></tr>
+<tr><td><br><br></td></tr>
+<tr><td>.................................................................</td></tr>
+<tr><td class="signHeader">Date<br><br></td></tr>
 </table>',
 	@dcSalTcAcceptHeadline NVARCHAR(MAX) = '',
 	@dcSalTcAcceptSortOrder INT = 0

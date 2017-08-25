@@ -1814,8 +1814,7 @@ END
 DECLARE @dcHiringTermsVarGuid UNIQUEIDENTIFIER = '99ab359a-d4c9-4fba-a1ce-9ae064b7251b',
 	@dcHiringTermsVarName NVARCHAR(MAX) = @prefix + ' Variation',
 	@dcHiringTermsVarDescription NVARCHAR(MAX) = '',
-	@dcHiringTermsVarText NVARCHAR(MAX) = 'This Agreement may only be varied by a written agreement signed by yourself and IKEA.
-<p style="page-break-after: always;"></p>', -- New PDF page after this',
+	@dcHiringTermsVarText NVARCHAR(MAX) = 'This Agreement may only be varied by a written agreement signed by yourself and IKEA.',
 	@dcHiringTermsVarHeadline NVARCHAR(MAX) = 'Variation',
 	@dcHiringTermsVarSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1912,6 +1911,7 @@ DECLARE @dcHiringEndTextGuid UNIQUEIDENTIFIER = '8aebf89f-11b1-4231-bfce-a05e10f
 	<br><br>
 	As an indication of your understanding and acceptance of these conditions, please sign this letter of offer, and return to the undersigned within seven (7) days.  Please retain the second copy for your records.
 	<br><br>
+	<p style="page-break-after: always;"></p> <!-- New PDF page after this -->
 	If you have any questions pertaining to this offer of employment or any of the information contained herein, please do not hesitate to contact me before signing this letter.',
 	@dcHiringEndTextHeadline NVARCHAR(MAX) = '',
 	@dcHiringEndTextSortOrder INT = @termsCounter
@@ -1971,7 +1971,8 @@ DECLARE @dcHiringConSignParagraphID INT = (SELECT ID FROM tblCaseDocumentParagra
 DECLARE @dcHiringConSignGuid UNIQUEIDENTIFIER = 'f0682a33-53e2-4bd0-9a1c-5a57987697d6',
 	@dcHiringConSignName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@dcHiringConSignDescription NVARCHAR(MAX) = '',
-	@dcHiringConSignText NVARCHAR(MAX) = 'Yours sincerely<br>
+	@dcHiringConSignText NVARCHAR(MAX) = '<br><br><br>
+	Yours sincerely,<br>
 	<Reports To Line Manager><br>
 	<Position Title (Local Job Name) of Reports To Line Manager><br>
 	<strong>IKEA Distribution Services Australia Pty Ltd</strong>',
@@ -2033,18 +2034,55 @@ DECLARE @dcHiringAcceptParagraphID INT = (SELECT ID FROM tblCaseDocumentParagrap
 DECLARE @dcHiringAcceptGuid UNIQUEIDENTIFIER = 'c7caffaf-1e22-46fe-a5b3-e301660b9cdb',
 	@dcHiringAcceptName NVARCHAR(MAX) = @prefix + ' Acceptance',
 	@dcHiringAcceptDescription NVARCHAR(MAX) = '',
-	@dcHiringAcceptText NVARCHAR(MAX) = '<table style="border: 1px solid black">
-<tr><th align="center">ACCEPTANCE</th></tr>
-<tr><td>I accept the terms and conditions of employment as detailed above.</td></tr>
-<tr><td style="height:100px;vertical-align: bottom;"><Co-worker First Name> <Co-worker Last Name></td></tr>
-<tr><td style="height:5px">.......................................</td></tr>
-<tr><td style="vertical-align: top;">Name</td></tr>
-<tr><td></td></tr>
-<tr><td>.......................................</td></tr>
-<tr><td style="vertical-align: top;">Signature</td></tr>
-<tr><td></td></tr>
-<tr><td>.......................................</td></tr>
-<tr><td style="vertical-align: top;">Date</td></tr>
+	@dcHiringAcceptText NVARCHAR(MAX) = '
+<style>
+
+#acceptance {
+	font-family: Verdana; 
+	border: 1px solid black; 
+	width: 5000px;
+}
+
+
+#acceptance th {
+	font-size: 16pt; 
+	text-decoration: underline;
+	text-align: center;
+	padding-top: 20px;
+	width: 5000px;
+}
+#acceptance td {
+
+	padding-left: 20px;
+}
+
+#acceptance td .signHeader {
+	vertical-align: top;
+}
+
+#acceptance  td .signLine {
+	height:5px
+}
+
+#acceptance td .sign {
+	height:100px;
+	vertical-align: bottom;
+}
+
+</style>
+<br><br>
+<table id="acceptance">
+<tr><th>ACCEPTANCE</th></tr>
+<tr><td><br>I accept the terms and conditions of employment as detailed above.</td></tr>
+<tr><td class="sign"><br><br><Co-worker First Name> <Co-worker Last Name></td></tr>
+<tr><td class="signLine">.................................................................</td></tr>
+<tr><td class="signHeader">Name</td></tr>
+<tr><td><br><br></td></tr>
+<tr><td>.................................................................</td></tr>
+<tr><td class="signHeader">Signature</td></tr>
+<tr><td><br><br></td></tr>
+<tr><td>.................................................................</td></tr>
+<tr><td class="signHeader">Date<br><br></td></tr>
 </table>',
 	@dcHiringAcceptHeadline NVARCHAR(MAX) = '',
 	@dcHiringAcceptSortOrder INT = 0

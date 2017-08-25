@@ -388,7 +388,7 @@ DECLARE @dcTcTermsPositionAGuid UNIQUEIDENTIFIER = 'd84526d7-6791-4f2c-ab1a-78e3
 	@dcTcTermsPositionAName NVARCHAR(MAX) = @prefix + ' Position, full time',
 	@dcTcTermsPositionADescription NVARCHAR(MAX) = '',
 	@dcTcTermsPositionAText NVARCHAR(MAX) = 'Your position is Full Time <Position Title (Local Job Name)> <Shift Type> Shift, reporting to <Position Title (Local Job Name) of Reports To Line Manager>, which will be based at <Business Unit>. Your position (in terms of your duties & responsibilities), and location may be varied from time to time in accordance with IKEA’s needs.',
-	@dcTcTermsPositionAHeadline NVARCHAR(MAX) = '<i>Position</i>',
+	@dcTcTermsPositionAHeadline NVARCHAR(MAX) = 'Position',
 	@dcTcTermsPositionASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
 
@@ -1733,7 +1733,8 @@ END
 DECLARE @dcTcTermsPerfAGuid UNIQUEIDENTIFIER = 'f262417d-f0a8-4b17-8ef8-2757166ed84f',
 	@dcTcTermsPerfAName NVARCHAR(MAX) = @prefix + ' Performance',
 	@dcTcTermsPerfADescription NVARCHAR(MAX) = '',
-	@dcTcTermsPerfAText NVARCHAR(MAX) = 'A Co-worker Performance Review will be conducted at least once a year, usually between September and November.  However, your first review will be conducted during your 6-month probationary period.  This review will be based on your initial Co-worker discussion and your position’s Performance Criteria and Job Profile.  Areas of performance and non-performance will be discussed and addressed in accordance with company guidelines. Whilst the company conducts annual performance reviews, it also maintains an ongoing performance management program with its co-workers.',
+	@dcTcTermsPerfAText NVARCHAR(MAX) = 'A Co-worker Performance Review will be conducted at least once a year, usually between September and November.  However, your first review will be conducted during your 6-month probationary period.  This review will be based on your initial Co-worker discussion and your position’s Performance Criteria and Job Profile.  Areas of performance and non-performance will be discussed and addressed in accordance with company guidelines. Whilst the company conducts annual performance reviews, it also maintains an ongoing performance management program with its co-workers.
+<p style="page-break-after: always;"></p>', -- New PDF page after this'
 	@dcTcTermsPerfAHeadline NVARCHAR(MAX) = 'Performance Management',
 	@dcTcTermsPerfASortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -1821,7 +1822,8 @@ END
 DECLARE @dcTcTermsPerfBGuid UNIQUEIDENTIFIER = '1802ed22-0ce0-4e2f-ad0e-7b20d65691e7',
 	@dcTcTermsPerfBName NVARCHAR(MAX) = @prefix + ' Performance',
 	@dcTcTermsPerfBDescription NVARCHAR(MAX) = '',
-	@dcTcTermsPerfBText NVARCHAR(MAX) = 'A Co-worker Performance Review will be conducted at least once a year, usually between September and November. This review will be based on your initial Co-worker discussion and your position’s Performance Criteria and Job Profile.  Areas of performance and non-performance will be discussed and addressed in accordance with company guidelines. Whilst the company conducts annual performance reviews, it also maintains an ongoing performance management program with its co-workers.',
+	@dcTcTermsPerfBText NVARCHAR(MAX) = 'A Co-worker Performance Review will be conducted at least once a year, usually between September and November. This review will be based on your initial Co-worker discussion and your position’s Performance Criteria and Job Profile.  Areas of performance and non-performance will be discussed and addressed in accordance with company guidelines. Whilst the company conducts annual performance reviews, it also maintains an ongoing performance management program with its co-workers.
+<p style="page-break-after: always;"></p>', -- New PDF page after this',
 	@dcTcTermsPerfBHeadline NVARCHAR(MAX) = 'Performance Management',
 	@dcTcTermsPerfBSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -2050,7 +2052,8 @@ END
 DECLARE @dcTcTermsSuspGuid UNIQUEIDENTIFIER = 'f0667d2f-d9c2-4e9f-a474-a112dd724a16',
 	@dcTcTermsSuspName NVARCHAR(MAX) = @prefix + ' Suspension',
 	@dcTcTermsSuspDescription NVARCHAR(MAX) = '',
-	@dcTcTermsSuspText NVARCHAR(MAX) = 'If we have reason to believe that you may have engaged in a serious breach of your employment obligations, IKEA may at its discretion suspend you from your duties, either with or without pay, while and investigation is conducted.',
+	@dcTcTermsSuspText NVARCHAR(MAX) = 'If we have reason to believe that you may have engaged in a serious breach of your employment obligations, IKEA may at its discretion suspend you from your duties, either with or without pay, while and investigation is conducted.
+<p style="page-break-after: always;"></p>', -- New PDF page after this'
 	@dcTcTermsSuspHeadline NVARCHAR(MAX) = 'Suspension',
 	@dcTcTermsSuspSortOrder INT = @termsCounter
 SET @termsCounter = @termsCounter + 1
@@ -2114,7 +2117,8 @@ DECLARE @dcTcEndTextGuid UNIQUEIDENTIFIER = 'da2d2c05-5c77-4aef-8821-148a8398c61
 	<br><br>
 	As an indication of your understanding and acceptance of these conditions, please sign this letter of offer, and return to the undersigned within seven (7) days.  Please retain the second copy for your records.
 	<br><br>
-	If you have any questions pertaining to this offer of employment or any of the information contained herein, please do not hesitate to contact me before signing this letter.',
+	If you have any questions pertaining to this offer of employment or any of the information contained herein, please do not hesitate to contact me before signing this letter.
+	<br><br><br>',
 	@dcTcEndTextHeadline NVARCHAR(MAX) = '',
 	@dcTcEndTextSortOrder INT = 0
 
@@ -2231,20 +2235,56 @@ DECLARE @dcTcAcceptParagraphID INT = (SELECT ID FROM tblCaseDocumentParagraph WH
 
 -- Create a text field
 DECLARE @dcTcAcceptGuid UNIQUEIDENTIFIER = 'dc225aae-e266-4621-b4ea-f23263027947',
-	@dcTcAcceptName NVARCHAR(MAX) = @prefix + ' Employment - Acceptance',
+	@dcTcAcceptName NVARCHAR(MAX) = @prefix + ' Acceptance',
 	@dcTcAcceptDescription NVARCHAR(MAX) = '',
-	@dcTcAcceptText NVARCHAR(MAX) = '<table style="border: 1px solid black">
-<tr><th align="center">ACCEPTANCE</th></tr>
-<tr><td>I accept the terms and conditions of employment as detailed above.</td></tr>
-<tr><td style="height:100px;vertical-align: bottom;"><Co-worker First Name> <Co-worker Last Name></td></tr>
-<tr><td style="height:5px">.......................................</td></tr>
-<tr><td style="vertical-align: top;">Name</td></tr>
-<tr><td></td></tr>
-<tr><td>.......................................</td></tr>
-<tr><td style="vertical-align: top;">Signature</td></tr>
-<tr><td></td></tr>
-<tr><td>.......................................</td></tr>
-<tr><td style="vertical-align: top;">Date</td></tr>
+	@dcTcAcceptText NVARCHAR(MAX) = '<style>
+
+#acceptance {
+	font-family: Verdana; 
+	border: 1px solid black; 
+	width: 500px;
+}
+
+
+#acceptance th {
+	font-size: 16pt; 
+	text-decoration: underline;
+	text-align: center;
+	padding-top: 20px;
+	width: 5000px;
+}
+#acceptance td {
+
+	padding-left: 20px;
+}
+
+#acceptance td .signHeader {
+	vertical-align: top;
+}
+
+#acceptance  td .signLine {
+	height:5px
+}
+
+#acceptance td .sign {
+	height:100px;
+	vertical-align: bottom;
+}
+
+</style>
+<br><br>
+<table id="acceptance">
+<tr><th>ACCEPTANCE</th></tr>
+<tr><td><br>I accept the terms and conditions of employment as detailed above.</td></tr>
+<tr><td class="sign"><br><br><Co-worker First Name> <Co-worker Last Name></td></tr>
+<tr><td class="signLine">.................................................................</td></tr>
+<tr><td class="signHeader">Name</td></tr>
+<tr><td><br><br></td></tr>
+<tr><td>.................................................................</td></tr>
+<tr><td class="signHeader">Signature</td></tr>
+<tr><td><br><br></td></tr>
+<tr><td>.................................................................</td></tr>
+<tr><td class="signHeader">Date<br><br></td></tr>
 </table>',
 	@dcTcAcceptHeadline NVARCHAR(MAX) = '',
 	@dcTcAcceptSortOrder INT = 0
