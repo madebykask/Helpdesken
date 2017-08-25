@@ -1116,7 +1116,7 @@
                 newCustomerProductArea.Parent_ProductArea_Id = p.Parent_ProductArea_Id;
                 newCustomerProductArea.IsActive = p.IsActive;
 
-                this._productAreaService.SaveProductArea(newCustomerProductArea, null, out errors);
+                this._productAreaService.SaveProductArea(newCustomerProductArea, null, 0, out errors);
             }
             
             //Get StateSecondary to copy

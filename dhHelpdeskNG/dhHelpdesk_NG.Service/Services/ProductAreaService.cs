@@ -43,7 +43,7 @@
 
         IList<ProductArea> GetChildrenInRow(IList<ProductArea> productAreas, bool isTakeOnlyActive = false);
 
-        void SaveProductArea(ProductAreaEntity productArea, int[] wg, out IDictionary<string, string> errors);
+        void SaveProductArea(ProductAreaEntity productArea, int[] wg, int caseTypeId, out IDictionary<string, string> errors);
 
         void Commit();
 
@@ -282,6 +282,7 @@
             {
                 try
                 {
+                    productArea.CaseTypeProductAreas.Clear();
                     this.productAreaRepository.Delete(productArea);
                     this.Commit();
                     return DeleteMessage.Success;
@@ -366,7 +367,7 @@
         //    return ret;
         //}
 
-        public void SaveProductArea(ProductAreaEntity productArea, int[] wg, out IDictionary<string, string> errors)
+        public void SaveProductArea(ProductAreaEntity productArea, int[] wg, int caseTypeId, out IDictionary<string, string> errors)
         {
             if (productArea == null)
                 throw new ArgumentNullException("productarea");
@@ -388,7 +389,28 @@
                     if (parent.IsActive == 0)
                         errors.Add("ProductArea.IsActive", "Denna produktarea kan inte aktiveras, eftersom huvudnivån är inaktiv");
                 }
+            }
 
+            if (caseTypeId > 0)
+            {
+                if (productArea.CaseTypeProductAreas != null)
+                {
+                    productArea.CaseTypeProductAreas.Clear();
+                    productArea.CaseTypeProductAreas.Add(new CaseTypeProductArea
+                    {
+                        CaseType_Id = caseTypeId
+                    });
+                }
+                else
+                {
+                    productArea.CaseTypeProductAreas = new List<CaseTypeProductArea>
+                    {
+                        new CaseTypeProductArea
+                        {
+                            CaseType_Id = caseTypeId
+                        }
+                    };
+                }
             }
 
             if (productArea.IsActive == 0)
@@ -406,7 +428,7 @@
                         if (childProductArea.IsActive == 1)
                             childProductArea.IsActive = 0;
 
-                        SaveProductArea(childProductArea, null, out errors);
+                        SaveProductArea(childProductArea, null, 0, out errors);
                     }
                 }
 

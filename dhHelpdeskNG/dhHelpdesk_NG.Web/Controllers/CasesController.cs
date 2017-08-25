@@ -2034,9 +2034,13 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult GetProductAreaByCaseType(int? caseTypeId)
         {
+            var pa = _productAreaService.GetTopProductAreasForUserOnCase(SessionFacade.CurrentCustomer.Id, null, SessionFacade.CurrentUser)
+                    .OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
             if (caseTypeId.HasValue)
             {
                 var ctProductAreas = _caseTypeService.GetCaseType(caseTypeId.Value).CaseTypeProductAreas.Select(x => x.ProductArea).ToList();
+                var paNoCaseType = pa.Where(x => x.CaseTypeProductAreas == null || !x.CaseTypeProductAreas.Any()).ToList();
+                ctProductAreas.AddRange(paNoCaseType);
                 if (ctProductAreas.Any())
                 {
                     var paIds = ctProductAreas.Select(x => x.Id).ToList();
@@ -2048,8 +2052,6 @@ namespace DH.Helpdesk.Web.Controllers
                     return Json(new { success = true, data = drString, paIds });
                 }
             }
-            var pa = _productAreaService.GetTopProductAreasForUserOnCase(SessionFacade.CurrentCustomer.Id, null, SessionFacade.CurrentUser)
-                    .OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
             var praIds = pa.Select(x => x.Id).ToList();
             foreach (var ctProductArea in pa)
             {
@@ -4750,16 +4752,6 @@ namespace DH.Helpdesk.Web.Controllers
             return defaultFileName;
         }
 
-        private DHDomain.CaseType TranslateCaseType(DHDomain.CaseType caseType)
-        {
-            if (caseType.ParentCaseType != null)
-                caseType.ParentCaseType = TranslateCaseType(caseType.ParentCaseType);
-
-            caseType.Name = Translation.Get(caseType.Name);
-
-            return caseType;
-        }
-
         private string GetFinishingCauseFullPath(
                         FinishingCauseInfo[] finishingCauses,
                         int? finishingCauseId)
@@ -5553,7 +5545,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);
                 if (c != null)
                 {
-                    c = TranslateCaseType(c);
+                    c = TranslateHelper.TranslateCaseType(c);
                     m.ParantPath_CaseType = c.getCaseTypeParentPath();
                     if (isCreateNewCase && c.User_Id.HasValue)
                     {

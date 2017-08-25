@@ -183,7 +183,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     wgs = prodareawgs.ToArray();
                 }
 
-                _productAreaService.SaveProductArea(prod, wgs, out errors);
+                _productAreaService.SaveProductArea(prod, wgs, 0, out errors);
             }
 
 

@@ -314,6 +314,7 @@
     <Compile Include="Infrastructure\Extensions\DicExtentions.cs" />
     <Compile Include="Infrastructure\Extensions\NewtonsoftJsonExtensions.cs" />
     <Compile Include="Infrastructure\Helpers\AsyncHelper.cs" />
+    <Compile Include="Infrastructure\Helpers\TranslateHelper.cs" />
     <Compile Include="Infrastructure\WebApi\WebApiService.cs" />
     <Compile Include="Models\JsonModels\Base\BaseJsonModel.cs" />
     <Compile Include="Models\JsonModels\Case\CaseJsonModel.cs" />

@@ -182,11 +182,6 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 return new MvcHtmlString(string.Empty);
         }
 
-        public static MvcHtmlString CaseTypeLowestDropdownButtonString(this HtmlHelper helper, IList<CaseType> caseTypes, bool isTakeOnlyActive = true)
-        {
-            return caseTypes != null ? BuildCaseTypeLowestDropdownButton(caseTypes, isTakeOnlyActive) : new MvcHtmlString(string.Empty);
-        }
-
         public static MvcHtmlString ProductAreaDropdownButtonString(this HtmlHelper helper, IList<ProductArea> pal, bool isTakeOnlyActive = true)
         {
             if (pal != null)
@@ -1065,38 +1060,6 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
 
                 res.Append("</li>");
            }
-
-            return new MvcHtmlString(res.ToString());
-        }
-
-        private static MvcHtmlString BuildCaseTypeLowestDropdownButton(IList<CaseType> caseTypes, bool isTakeOnlyActive = true)
-        {
-            var res = new StringBuilder();
-
-            foreach (CaseType item in caseTypes)
-            {
-                var childs = new List<CaseType>();
-                if (item.SubCaseTypes != null)
-                {
-                    childs = isTakeOnlyActive
-                                    ? item.SubCaseTypes.Where(p => p.IsActive != 0 && p.Selectable != 0).ToList()
-                                    : item.SubCaseTypes.ToList();
-                }
-
-                var cls = item.IsActive == 1 ? string.Empty : "inactive";
-
-                if (childs.Count == 0)
-                {
-                    res.Append("<li class='" + cls + "'>");
-                    res.AppendFormat("<a href='#' value='{0}'>{1}</a>", item.Id, Translation.GetMasterDataTranslation(item.Name));
-                }
-                if (childs.Count > 0)
-                {
-                    res.Append(BuildCaseTypeLowestDropdownButton(childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive));
-                }
-
-                res.Append("</li>");
-            }
 
             return new MvcHtmlString(res.ToString());
         }
