@@ -89,7 +89,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 {"-3", "CasesPerSource"},
                 {"-4", "CasesPerWorkingGroup"},
                 {"-5", "CasesPerAdministrator"},
-                {"-6", "CasesPerDepartment"}
+                {"-6", "CasesPerDepartment"},
+                {"-7", "NumberOfCases"}
         };
         }
 
@@ -682,6 +683,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             ret.Items.AddItem("-4", "CasesPerWorkingGroup");
             ret.Items.AddItem("-5", "CasesPerAdministrator");
             ret.Items.AddItem("-6", "CasesPerDepartment");
+            ret.Items.AddItem("-7", "NumberOfCases");            
 
             foreach (var customReport in reports)
             {
@@ -729,6 +731,13 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 reportViewer.SizeToReportContent = true;
                 reportViewer.ShowZoomControl = false;
                 reportViewer.LocalReport.ReportPath = reportFile;
+                
+                ReportParameter rp1 = new ReportParameter("Category", "3", false);                
+                List<ReportParameter> paramList = new List<ReportParameter>();
+                paramList.Add(rp1);
+                reportViewer.LocalReport.SetParameters(paramList);
+                
+                reportViewer.ShowParameterPrompts = true;
                 foreach (var dataSet in reportData.DataSets)
                     reportViewer.LocalReport.DataSources.Add(new ReportDataSource(dataSet.DataSetName, dataSet.DataSet));
 

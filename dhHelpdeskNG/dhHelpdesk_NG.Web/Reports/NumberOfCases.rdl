@@ -1,0 +1,627 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <Body>
+    <ReportItems>
+      <Chart Name="Chart1">
+        <ChartCategoryHierarchy>
+          <ChartMembers>
+            <ChartMember>
+              <Group Name="Chart1_CategoryGroup">
+                <GroupExpressions>
+                  <GroupExpression>=Switch
+(Parameters!Category.Label="Case Type", Fields!CaseType.Value, 
+Parameters!Category.Label="Registration Year", Fields!Registration_Year.Value, 
+Parameters!Category.Label="Registration Weekday", Fields!Registration_Weekday.Value, 
+Parameters!Category.Label="Registration Month", Fields!Registration_Month.Value,
+Parameters!Category.Label="Registration Date", Fields!Registration_Date.Value, 
+Parameters!Category.Label="Registration Hour", Fields!Registration_Hour.Value,
+Parameters!Category.Label="Source", Fields!Source.Value, 
+Parameters!Category.Label="Working Group", Fields!Working_group.Value, 
+Parameters!Category.Label="SubStatus", Fields!SubStatus.Value, 
+Parameters!Category.Label="Department", Fields!Department.Value, 
+Parameters!Category.Label="Priority", Fields!Priority.Value, 
+Parameters!Category.Label="Closing Date", Fields!Closing_Date.Value, 
+Parameters!Category.Label="Product Area", Fields!ProductArea.Value
+)</GroupExpression>
+                </GroupExpressions>
+              </Group>
+              <SortExpressions>
+                <SortExpression>
+                  <Value>=Switch
+(Parameters!Category.Label="Case Type", Fields!CaseType.Value, 
+Parameters!Category.Label="Registration Year", Fields!Registration_Year.Value, 
+Parameters!Category.Label="Registration Weekday", Fields!Registration_Weekday.Value, 
+Parameters!Category.Label="Registration Month", Fields!Registration_Month.Value,
+Parameters!Category.Label="Registration Date", Fields!Registration_Date.Value, 
+Parameters!Category.Label="Registration Hour", Fields!Registration_Hour.Value,
+Parameters!Category.Label="Source", Fields!Source.Value, 
+Parameters!Category.Label="Working Group", Fields!Working_group.Value, 
+Parameters!Category.Label="SubStatus", Fields!SubStatus.Value, 
+Parameters!Category.Label="Department", Fields!Department.Value, 
+Parameters!Category.Label="Priority", Fields!Priority.Value, 
+Parameters!Category.Label="Closing Date", Fields!Closing_Date.Value
+)</Value>
+                </SortExpression>
+              </SortExpressions>
+              <Label>=Switch
+(Parameters!Category.Label="Case Type", Fields!CaseType.Value, 
+Parameters!Category.Label="Registration Year", Fields!Registration_Year.Value, 
+Parameters!Category.Label="Registration Weekday", Fields!Registration_Weekday.Value, 
+Parameters!Category.Label="Registration Month", Fields!Registration_Month.Value,
+Parameters!Category.Label="Registration Date", Fields!Registration_Date.Value, 
+Parameters!Category.Label="Registration Hour", Fields!Registration_Hour.Value,
+Parameters!Category.Label="Source", Fields!Source.Value, 
+Parameters!Category.Label="Working Group", Fields!Working_group.Value, 
+Parameters!Category.Label="SubStatus", Fields!SubStatus.Value, 
+Parameters!Category.Label="Department", Fields!Department.Value, 
+Parameters!Category.Label="Priority", Fields!Priority.Value, 
+Parameters!Category.Label="Closing Date", Fields!Closing_Date.Value, 
+Parameters!Category.Label="Product Area", Fields!ProductArea.Value
+)</Label>
+            </ChartMember>
+          </ChartMembers>
+        </ChartCategoryHierarchy>
+        <ChartSeriesHierarchy>
+          <ChartMembers>
+            <ChartMember>
+              <Label>Volume</Label>
+            </ChartMember>
+          </ChartMembers>
+        </ChartSeriesHierarchy>
+        <ChartData>
+          <ChartSeriesCollection>
+            <ChartSeries Name="Volume">
+              <ChartDataPoints>
+                <ChartDataPoint>
+                  <ChartDataPointValues>
+                    <Y>=Sum(Fields!Volume.Value)</Y>
+                  </ChartDataPointValues>
+                  <ChartDataLabel>
+                    <Style />
+                  </ChartDataLabel>
+                  <Style />
+                  <ChartMarker>
+                    <Style />
+                  </ChartMarker>
+                  <DataElementOutput>Output</DataElementOutput>
+                </ChartDataPoint>
+              </ChartDataPoints>
+              <Style />
+              <ChartEmptyPoints>
+                <Style />
+                <ChartMarker>
+                  <Style />
+                </ChartMarker>
+                <ChartDataLabel>
+                  <Style />
+                </ChartDataLabel>
+              </ChartEmptyPoints>
+              <ValueAxisName>Primary</ValueAxisName>
+              <CategoryAxisName>Primary</CategoryAxisName>
+              <ChartSmartLabel>
+                <CalloutLineColor>Black</CalloutLineColor>
+                <MinMovingDistance>0pt</MinMovingDistance>
+              </ChartSmartLabel>
+            </ChartSeries>
+          </ChartSeriesCollection>
+        </ChartData>
+        <ChartAreas>
+          <ChartArea Name="Default">
+            <ChartCategoryAxes>
+              <ChartAxis Name="Primary">
+                <Style>
+                  <FontSize>8pt</FontSize>
+                </Style>
+                <ChartAxisTitle>
+                  <Caption>=Switch
+(Parameters!Category.Label="Case Type", "Case Type", 
+Parameters!Category.Label="Registration Date", "Registration Date", 
+Parameters!Category.Label="Registration Year", "Registration Year", 
+Parameters!Category.Label="Source", "Source", 
+Parameters!Category.Label="Working Group", "Working Group", 
+Parameters!Category.Label="SubStatus", "SubStatus", 
+Parameters!Category.Label="Registration Hour", "Registration Hour",
+Parameters!Category.Label="Department", "Department", 
+Parameters!Category.Label="Priority", "Priority", 
+Parameters!Category.Label="Closing Date", "Closing Date", 
+Parameters!Category.Label="Registration Weekday", "Registration Weekday", 
+Parameters!Category.Label="Registration Month", "Registration Month",
+Parameters!Category.Label="Product Area", "ProductArea"
+)</Caption>
+                  <Style>
+                    <FontSize>9pt</FontSize>
+                    <FontWeight>Bold</FontWeight>
+                  </Style>
+                </ChartAxisTitle>
+                <Interval>1</Interval>
+                <ChartMajorGridLines>
+                  <Enabled>False</Enabled>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                    </Border>
+                  </Style>
+                </ChartMajorGridLines>
+                <ChartMinorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                      <Style>Dotted</Style>
+                    </Border>
+                  </Style>
+                </ChartMinorGridLines>
+                <ChartMinorTickMarks>
+                  <Length>0.5</Length>
+                </ChartMinorTickMarks>
+                <CrossAt>NaN</CrossAt>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
+                <Angle>-45</Angle>
+                <LabelsAutoFitDisabled>true</LabelsAutoFitDisabled>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
+              </ChartAxis>
+              <ChartAxis Name="Secondary">
+                <Style>
+                  <FontSize>8pt</FontSize>
+                </Style>
+                <ChartAxisTitle>
+                  <Caption>Axis Title</Caption>
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                  </Style>
+                </ChartAxisTitle>
+                <ChartMajorGridLines>
+                  <Enabled>False</Enabled>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                    </Border>
+                  </Style>
+                </ChartMajorGridLines>
+                <ChartMinorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                      <Style>Dotted</Style>
+                    </Border>
+                  </Style>
+                </ChartMinorGridLines>
+                <ChartMinorTickMarks>
+                  <Length>0.5</Length>
+                </ChartMinorTickMarks>
+                <CrossAt>NaN</CrossAt>
+                <Location>Opposite</Location>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
+              </ChartAxis>
+            </ChartCategoryAxes>
+            <ChartValueAxes>
+              <ChartAxis Name="Primary">
+                <Style>
+                  <FontSize>8pt</FontSize>
+                </Style>
+                <ChartAxisTitle>
+                  <Caption />
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                  </Style>
+                </ChartAxisTitle>
+                <ChartMajorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                    </Border>
+                  </Style>
+                </ChartMajorGridLines>
+                <ChartMinorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                      <Style>Dotted</Style>
+                    </Border>
+                  </Style>
+                </ChartMinorGridLines>
+                <ChartMinorTickMarks>
+                  <Length>0.5</Length>
+                </ChartMinorTickMarks>
+                <CrossAt>NaN</CrossAt>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
+              </ChartAxis>
+              <ChartAxis Name="Secondary">
+                <Style>
+                  <FontSize>8pt</FontSize>
+                </Style>
+                <ChartAxisTitle>
+                  <Caption>Axis Title</Caption>
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                  </Style>
+                </ChartAxisTitle>
+                <ChartMajorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                    </Border>
+                  </Style>
+                </ChartMajorGridLines>
+                <ChartMinorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                      <Style>Dotted</Style>
+                    </Border>
+                  </Style>
+                </ChartMinorGridLines>
+                <ChartMinorTickMarks>
+                  <Length>0.5</Length>
+                </ChartMinorTickMarks>
+                <CrossAt>NaN</CrossAt>
+                <Location>Opposite</Location>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
+              </ChartAxis>
+            </ChartValueAxes>
+            <Style>
+              <BackgroundGradientType>None</BackgroundGradientType>
+            </Style>
+          </ChartArea>
+        </ChartAreas>
+        <ChartLegends>
+          <ChartLegend Name="Default">
+            <Style>
+              <BackgroundGradientType>None</BackgroundGradientType>
+              <FontSize>8pt</FontSize>
+            </Style>
+            <ChartLegendTitle>
+              <Caption />
+              <Style>
+                <FontSize>8pt</FontSize>
+                <FontWeight>Bold</FontWeight>
+                <TextAlign>Center</TextAlign>
+              </Style>
+            </ChartLegendTitle>
+            <HeaderSeparatorColor>Black</HeaderSeparatorColor>
+            <ColumnSeparatorColor>Black</ColumnSeparatorColor>
+          </ChartLegend>
+        </ChartLegends>
+        <Palette>BrightPastel</Palette>
+        <ChartBorderSkin>
+          <Style>
+            <BackgroundColor>Gray</BackgroundColor>
+            <BackgroundGradientType>None</BackgroundGradientType>
+            <Color>White</Color>
+          </Style>
+        </ChartBorderSkin>
+        <ChartNoDataMessage Name="NoDataMessage">
+          <Caption>No Data Available</Caption>
+          <Style>
+            <BackgroundGradientType>None</BackgroundGradientType>
+            <TextAlign>General</TextAlign>
+            <VerticalAlign>Top</VerticalAlign>
+          </Style>
+        </ChartNoDataMessage>
+        <DataSetName>VariabelAxel</DataSetName>
+        <Top>1.09361cm</Top>
+        <Height>12.28287cm</Height>
+        <Width>26.25896cm</Width>
+        <Style>
+          <Border>
+            <Color>LightGrey</Color>
+            <Style>Solid</Style>
+          </Border>
+          <BackgroundColor>White</BackgroundColor>
+          <BackgroundGradientType>None</BackgroundGradientType>
+        </Style>
+      </Chart>
+      <Textbox Name="Textbox6">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Total cases:</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox6</rd:DefaultName>
+        <Top>0.31722cm</Top>
+        <Left>14.24905cm</Left>
+        <Height>0.6cm</Height>
+        <Width>2.07667cm</Width>
+        <ZIndex>1</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox5">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Sum(Fields!Volume.Value, "VariabelAxel")</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox5</rd:DefaultName>
+        <Top>0.31722cm</Top>
+        <Left>16.32571cm</Left>
+        <Height>0.6cm</Height>
+        <Width>2.5cm</Width>
+        <ZIndex>2</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox1">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>= "Number of Cases by " + 
+Switch
+(Parameters!Category.Label="Case Type", "Case Type", 
+Parameters!Category.Label="Registration Year", "Registration Year", 
+Parameters!Category.Label="Registration Weekday", "Registration Weekday", 
+Parameters!Category.Label="Registration Month", "Registration Month",
+Parameters!Category.Label="Registration Date", "Registration Date", 
+Parameters!Category.Label="Registration Hour", "Registration Hour",
+Parameters!Category.Label="Source", "Source", 
+Parameters!Category.Label="Working Group","Working Group", 
+Parameters!Category.Label="SubStatus", "SubStatus", 
+Parameters!Category.Label="Department", "Department", 
+Parameters!Category.Label="Priority", "Priority", 
+Parameters!Category.Label="Closing Date","Closing Date",
+Parameters!Category.Label="Product Area", "Product Area"
+)</Value>
+                <Style>
+                  <FontSize>12pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox1</rd:DefaultName>
+        <Top>0.31722cm</Top>
+        <Left>1.87537cm</Left>
+        <Height>0.6cm</Height>
+        <Width>12.19729cm</Width>
+        <ZIndex>3</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+    </ReportItems>
+    <Height>6.59178in</Height>
+    <Style />
+  </Body>
+  <Width>10.33817in</Width>
+  <Page>
+    <PageHeight>29.7cm</PageHeight>
+    <PageWidth>21cm</PageWidth>
+    <LeftMargin>2cm</LeftMargin>
+    <RightMargin>2cm</RightMargin>
+    <TopMargin>2cm</TopMargin>
+    <BottomMargin>2cm</BottomMargin>
+    <ColumnSpacing>0.13cm</ColumnSpacing>
+    <Style />
+  </Page>
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource1">
+      <DataSourceReference>Helpdesk</DataSourceReference>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>e2ddc81e-2bd5-40c2-96eb-480e62b90040</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="VariabelAxel">
+      <Query>
+        <DataSourceName>DataSource1</DataSourceName>        
+        <CommandText>Select 
+COUNT(CaseType) AS Volume
+,CaseType
+,ProductArea
+,[Registration Year]
+,[Registration Date]
+,[Source]
+,[Working group]
+,[Sub State] AS SubStatus
+,[Registration Hour]
+,Department
+,[Priority]
+,[Closing Date]
+--,ClosingWeek- saknas i vyn!
+--,ClosingMonth- saknas i vyn!
+,[Registration Weekday]
+,[Registration Month]
+
+From vwCaseStatistics
+where [Registration Year] IN (@Year) AND [Registration Month] IN (@Month)
+group by CaseType
+, ProductArea
+ ,[Registration Year]
+,[Registration Date]
+,[Source]
+,[Working group]
+,[Sub State]
+,[Registration Hour]
+,Department
+,[Priority]
+,[Closing Date]
+--,ClosingWeek- saknas i vyn!
+--,ClosingMonth- saknas i vyn!
+,[Registration Weekday]
+,[Registration Month]</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Volume">
+          <DataField>Volume</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CaseType">
+          <DataField>CaseType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Registration_Date">
+          <DataField>Registration Date</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ProductArea">
+          <DataField>ProductArea</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Registration_Year">
+          <DataField>Registration Year</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Source">
+          <DataField>Source</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Working_group">
+          <DataField>Working group</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SubStatus">
+          <DataField>SubStatus</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Registration_Hour">
+          <DataField>Registration Hour</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Department">
+          <DataField>Department</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Priority">
+          <DataField>Priority</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Closing_Date">
+          <DataField>Closing Date</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Registration_Weekday">
+          <DataField>Registration Weekday</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Registration_Month">
+          <DataField>Registration Month</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>  
+  </DataSets>
+  <ReportParameters>       
+    <ReportParameter Name="Category">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>2</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Choose Category</Prompt>
+      <ValidValues>
+        <ParameterValues>
+          <ParameterValue>
+            <Value>1</Value>
+            <Label>Case Type</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>2</Value>
+            <Label>Registration Year</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>3</Value>
+            <Label>Registration Weekday</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>4</Value>
+            <Label>Registration Month</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>5</Value>
+            <Label>Registration Date</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>6</Value>
+            <Label>Registration Hour</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>7</Value>
+            <Label>Source</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>8</Value>
+            <Label>Working Group</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>9</Value>
+            <Label>SubStatus</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>10</Value>
+            <Label>Department</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>11</Value>
+            <Label>Priority</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>12</Value>
+            <Label>Closing Date</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>13</Value>
+            <Label>Product Area</Label>
+          </ParameterValue>
+        </ParameterValues>
+      </ValidValues>
+    </ReportParameter>
+  </ReportParameters>
+  <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>db2292d4-3403-4c4e-9c04-b254dec2b70f</rd:ReportID>
+</Report>

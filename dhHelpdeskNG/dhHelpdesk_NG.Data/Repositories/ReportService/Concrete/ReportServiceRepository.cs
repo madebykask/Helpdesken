@@ -170,6 +170,25 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                             );
                     break;
 
+                case "NumberOfCases":
+                    ret.Add(
+                          new Tuple<string, string, int>(
+                            "VariabelAxel",
+                            "Select COUNT(CaseType) AS Volume, CaseType, ProductArea,"+
+                                   "[Registration Year], [Registration Date], [Source], [Working group]," +
+                                   "[Sub State] AS SubStatus, [Registration Hour], Department, [Priority]," + 
+                                   "[Closing Date], [Registration Weekday], [Registration Month] " +
+                            "From vwCaseStatistics " +
+                            //_whereClause + " AND (tblCase.Deleted = 0) " +
+                            "Where[Registration Year] IN(2017) AND[Registration Month] IN(1, 2, 3, 4, 5, 6, 7, 8)" +
+                            "Group by CaseType, ProductArea, [Registration Year]," +
+                                     "[Registration Date], [Source], [Working group]," +
+                                     "[Sub State], [Registration Hour], Department, [Priority]," +
+                                     "[Closing Date], [Registration Weekday], [Registration Month]" ,
+                            (int)QueryType.SQLQUERY)
+                            );
+                    break;
+
                 case "CaseDetailsList":
                     ret.Add(
                             new Tuple<string, string, int>(
