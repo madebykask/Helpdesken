@@ -2661,6 +2661,20 @@ namespace DH.Helpdesk.Services.Services
             ret.Add(new Field { Key = "[#12]", StringValue = c.Priority != null ? c.Priority.Name : string.Empty });
             ret.Add(new Field { Key = "[#20]", StringValue = c.Priority != null ? c.Priority.Description : string.Empty });
             ret.Add(new Field { Key = "[#21]", StringValue = c.WatchDate.ToString() });
+
+            if (c.User_Id.HasValue)
+            {
+                var user = this._userService.GetUser(c.User_Id.Value);
+                ret.Add(new Field { Key = "[#65]", StringValue = user != null ? user.FirstName + " " + user.SurName : string.Empty });
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(c.RegUserName))
+                {
+                    ret.Add(new Field { Key = "[#65]", StringValue = c.RegUserName });
+                }
+            }
+
             if (c.ProductArea?.Parent_ProductArea_Id != null)
             {
                 var names = _productAreaService.GetParentPath(c.ProductArea.Id, c.Customer_Id).ToList();
