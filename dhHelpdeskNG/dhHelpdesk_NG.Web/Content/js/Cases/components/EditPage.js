@@ -279,7 +279,8 @@ EditPage.prototype.loadExtendedCase = function () {
                     plandate: { Value: fieldValues.PlanDate },
                     watchdate: { Value: fieldValues.WatchDate },
                     priority_id: { Value: fieldValues.PriorityId },
-                    log_textinternal: { Value: '' }
+                    log_textinternal: { Value: '' },
+                    case_relation_type: { Value: fieldValues.CaseRelationType },
                 }
             });
         pr.then(function () { self.onExtendedCaseLoaded() });

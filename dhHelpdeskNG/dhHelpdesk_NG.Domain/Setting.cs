@@ -141,10 +141,11 @@ namespace DH.Helpdesk.Domain
         /// </summary>
         public int IsUserFirstLastNameRepresentation { get; set; }
 
-        public bool ShowQuickNewCaseLink { get; set; }
+        //TEMP, add again
+        //public bool ShowQuickNewCaseLink { get; set; }
 
-        public string QuickNewCaseLinkText { get; set; }
+        //public string QuickNewCaseLinkText { get; set; }
 
-        public string QuickNewCaseLinkUrl { get; set; }
+        //public string QuickNewCaseLinkUrl { get; set; }
     }
 }

@@ -247,6 +247,22 @@ namespace DH.Helpdesk.Web.Models.Case
             return this.ChildCaseViewModel != null && this.ChildCaseViewModel.ChildCaseList != null && this.ChildCaseViewModel.ChildCaseList.Length > 0;
         }
 
+        public string CaseRelationType()
+        {
+            if (this.IsItChildCase())
+            {
+                return "Child";
+            }
+
+            if (this.IsItParentCase())
+            {
+                return "Parent";
+            }
+
+            return "";
+        }
+
+
         public bool IsAnyNotClosedChild(bool containsIndependents = false)
         {
             if (this.ChildCaseViewModel == null)
