@@ -600,7 +600,11 @@ EditPage.prototype.fetchWatchDateByDept = function (deptId) {
         function (response) {
             if (response.result === 'success') {
                 if (response.data != null) {
-                    var dt = new Date(parseInt(response.data.replace("/Date(", "").replace(")/", ""), 10));                                        
+
+                    var utcTime = parseInt(response.data.replace("/Date(", "").replace(")/", ""), 10)
+
+                    var dt = new Date(utcTime);
+                    dt = new Date(utcTime - (dt.getTimezoneOffset() * 1000 * 60));
                     me.$watchDate.datepicker('update', dt);
 
                     var readOnly = $(me.$watchDateEdit).attr("readonly");
