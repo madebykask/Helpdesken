@@ -6090,5 +6090,33 @@ GO
 update tbltext set TextString = 'Gruppera Ärendemallar' where id = 1830
 GO
 
+
+If not exists (select * from tbltext where id = 1843)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1843, 'Ja', 1)
+end
+else
+begin
+	update tbltext set TextString = 'Ja' where id = 1843
+end	
+GO
+If not exists (select * from tblTextTranslation where text_id = 1843 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1843, 2, 'Yes')
+GO
+
+If not exists (select * from tbltext where id = 1844)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1844, 'Nej', 1)
+end
+else
+begin
+	update tbltext set TextString = 'Nej' where id = 1844
+end	
+GO
+If not exists (select * from tblTextTranslation where text_id = 1844 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1844, 2, 'No')
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
