@@ -74,7 +74,7 @@
         public IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool isOnlyActive = true)
         {
             var departments = _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, isOnlyActive);
-            return departments.Where(d => d.Region_Id == null || (isOnlyActive && d.Region != null && d.Region.IsActive != 0)).ToList();
+            return departments.Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0) && (isOnlyActive? d.IsActive !=0: true)).ToList();
         }
 
         public List<ItemOverview> GetUserDepartments(int customerId, int? userId, int? regionId, int departmentFilterFormat)
