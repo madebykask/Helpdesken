@@ -2691,7 +2691,13 @@ namespace DH.Helpdesk.Web.Controllers
             //Get selected case solution conditions
             IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
             lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(caseSolution.Id, Convert.ToInt32(curCustomerId));
-
+            foreach (var k in lFieldSettingSelected)
+            {
+                foreach (var l in k.SelectList)
+                {
+                    l.Text = Translation.Get(l.Text, Enums.TranslationSource.TextTranslation);
+                }
+            }
 
             string selval = string.Empty;
             string bagresult = string.Empty;
