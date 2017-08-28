@@ -1143,7 +1143,7 @@ IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblYesNo' AND xtype='U')
 		   )
      VALUES
            (0,
-			'No'
+			'Nej'
 			)
 
 	INSERT INTO [dbo].[tblYesNo]
@@ -1152,7 +1152,7 @@ IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblYesNo' AND xtype='U')
 		   )
      VALUES
            (1,
-			'Yes'
+			'Ja'
 			)
 
 
