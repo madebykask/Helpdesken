@@ -114,15 +114,6 @@
                         <div class="span12">
                             <table class="tableform">
                                 <tr>
-                                    <td class="span3">
-                                        @Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td class="span9">
-                                        <input type="checkbox" name="productarea.IsActive" @(Model.ProductArea.IsActive == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="productarea.IsActive" value="0" />
-                                    </td>
-                                </tr>
-                                <tr>
                                     <td>
                                         @*@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)*@
                                         @*#57740*@
@@ -135,6 +126,15 @@
                                         @*#57740*@
                                         @Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)
                                         </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        <input type="checkbox" name="productarea.IsActive" @(Model.ProductArea.IsActive == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="productarea.IsActive" value="0" />
                                     </td>
                                 </tr>
                             </table>
