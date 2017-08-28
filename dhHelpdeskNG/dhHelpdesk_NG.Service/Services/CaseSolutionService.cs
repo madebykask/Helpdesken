@@ -627,9 +627,9 @@ namespace DH.Helpdesk.Services.Services
             List<CaseSolution> cresList = new List<CaseSolution>();
             List<CaseSolutionConditionModel> cmoList = new List<CaseSolutionConditionModel>();
 
-            if (SearchCaseSolutions.ApplicationIds != null | SearchCaseSolutions.CategoryIds != null | SearchCaseSolutions.PriorityIds != null | SearchCaseSolutions.ProductAreaIds != null | SearchCaseSolutions.StatusIds != null | SearchCaseSolutions.SubStatusIds != null | SearchCaseSolutions.TemplateProductAreaIds != null | SearchCaseSolutions.UserWGroupIds != null | SearchCaseSolutions.WgroupIds != null)
+            if (SearchCaseSolutions.ApplicationIds != null | SearchCaseSolutions.PriorityIds != null | SearchCaseSolutions.ProductAreaIds != null | SearchCaseSolutions.StatusIds != null | SearchCaseSolutions.SubStatusIds != null | SearchCaseSolutions.TemplateProductAreaIds != null | SearchCaseSolutions.UserWGroupIds != null | SearchCaseSolutions.WgroupIds != null)
             {
-                if (SearchCaseSolutions.ApplicationIds.Count > 0 | SearchCaseSolutions.CategoryIds.Count > 0 | SearchCaseSolutions.PriorityIds.Count > 0 | SearchCaseSolutions.ProductAreaIds.Count > 0 | SearchCaseSolutions.StatusIds.Count > 0 | SearchCaseSolutions.SubStatusIds.Count > 0 | SearchCaseSolutions.TemplateProductAreaIds.Count > 0 | SearchCaseSolutions.UserWGroupIds.Count > 0 | SearchCaseSolutions.WgroupIds.Count > 0)
+                if (SearchCaseSolutions.ApplicationIds.Count > 0 | SearchCaseSolutions.PriorityIds.Count > 0 | SearchCaseSolutions.ProductAreaIds.Count > 0 | SearchCaseSolutions.StatusIds.Count > 0 | SearchCaseSolutions.SubStatusIds.Count > 0 | SearchCaseSolutions.TemplateProductAreaIds.Count > 0 | SearchCaseSolutions.UserWGroupIds.Count > 0 | SearchCaseSolutions.WgroupIds.Count > 0)
                 {
                     var results = from table1 in table.AsEnumerable()
                                   join table2 in tableCond.AsEnumerable() on (int)table1["Id"] equals (int)table2["CaseSolution_Id"]
@@ -1207,7 +1207,7 @@ namespace DH.Helpdesk.Services.Services
                         }
                     }
 
-                    if (SearchCaseSolutions.ApplicationIds == null && SearchCaseSolutions.CategoryIds == null && SearchCaseSolutions.PriorityIds == null && SearchCaseSolutions.ProductAreaIds == null && SearchCaseSolutions.StatusIds == null && SearchCaseSolutions.SubStatusIds == null && SearchCaseSolutions.TemplateProductAreaIds == null && SearchCaseSolutions.UserWGroupIds == null && SearchCaseSolutions.WgroupIds == null)
+                    if (SearchCaseSolutions.ApplicationIds == null && SearchCaseSolutions.PriorityIds == null && SearchCaseSolutions.ProductAreaIds == null && SearchCaseSolutions.StatusIds == null && SearchCaseSolutions.SubStatusIds == null && SearchCaseSolutions.TemplateProductAreaIds == null && SearchCaseSolutions.UserWGroupIds == null && SearchCaseSolutions.WgroupIds == null)
                     {
                         if (cresList.Count == 0 | cresList == null)
                         {
@@ -1224,9 +1224,9 @@ namespace DH.Helpdesk.Services.Services
                         }
                     }
 
-                    if (SearchCaseSolutions.ApplicationIds != null && SearchCaseSolutions.CategoryIds != null && SearchCaseSolutions.PriorityIds != null && SearchCaseSolutions.ProductAreaIds != null && SearchCaseSolutions.StatusIds != null && SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.TemplateProductAreaIds != null && SearchCaseSolutions.UserWGroupIds != null && SearchCaseSolutions.WgroupIds != null)
+                    if (SearchCaseSolutions.ApplicationIds != null && SearchCaseSolutions.PriorityIds != null && SearchCaseSolutions.ProductAreaIds != null && SearchCaseSolutions.StatusIds != null && SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.TemplateProductAreaIds != null && SearchCaseSolutions.UserWGroupIds != null && SearchCaseSolutions.WgroupIds != null)
                     {
-                        if (SearchCaseSolutions.ApplicationIds.Count == 0 && SearchCaseSolutions.CategoryIds.Count == 0 && SearchCaseSolutions.PriorityIds.Count == 0 && SearchCaseSolutions.ProductAreaIds.Count == 0 && SearchCaseSolutions.StatusIds.Count == 0 && SearchCaseSolutions.SubStatusIds.Count == 0 && SearchCaseSolutions.TemplateProductAreaIds.Count == 0 && SearchCaseSolutions.UserWGroupIds.Count == 0 && SearchCaseSolutions.WgroupIds.Count == 0)
+                        if (SearchCaseSolutions.ApplicationIds.Count == 0 && SearchCaseSolutions.PriorityIds.Count == 0 && SearchCaseSolutions.ProductAreaIds.Count == 0 && SearchCaseSolutions.StatusIds.Count == 0 && SearchCaseSolutions.SubStatusIds.Count == 0 && SearchCaseSolutions.TemplateProductAreaIds.Count == 0 && SearchCaseSolutions.UserWGroupIds.Count == 0 && SearchCaseSolutions.WgroupIds.Count == 0)
                         {
 
                             if (cresList.Count == 0 | cresList == null)
@@ -1270,7 +1270,7 @@ namespace DH.Helpdesk.Services.Services
 
 
 
-                    if (SearchCaseSolutions.ApplicationIds == null && SearchCaseSolutions.CategoryIds == null && SearchCaseSolutions.PriorityIds == null && SearchCaseSolutions.ProductAreaIds == null && SearchCaseSolutions.StatusIds == null && SearchCaseSolutions.SubStatusIds == null && SearchCaseSolutions.TemplateProductAreaIds == null && SearchCaseSolutions.UserWGroupIds == null && SearchCaseSolutions.WgroupIds == null)
+                    if (SearchCaseSolutions.ApplicationIds == null && SearchCaseSolutions.PriorityIds == null && SearchCaseSolutions.ProductAreaIds == null && SearchCaseSolutions.StatusIds == null && SearchCaseSolutions.SubStatusIds == null && SearchCaseSolutions.TemplateProductAreaIds == null && SearchCaseSolutions.UserWGroupIds == null && SearchCaseSolutions.WgroupIds == null)
                     {
                         if (cresList.Count == 0 | cresList == null)
                         {
@@ -1287,9 +1287,9 @@ namespace DH.Helpdesk.Services.Services
                         }
                     }
 
-                    if (SearchCaseSolutions.ApplicationIds != null && SearchCaseSolutions.CategoryIds != null && SearchCaseSolutions.PriorityIds != null && SearchCaseSolutions.ProductAreaIds != null && SearchCaseSolutions.StatusIds != null && SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.TemplateProductAreaIds != null && SearchCaseSolutions.UserWGroupIds != null && SearchCaseSolutions.WgroupIds != null)
+                    if (SearchCaseSolutions.ApplicationIds != null && SearchCaseSolutions.PriorityIds != null && SearchCaseSolutions.ProductAreaIds != null && SearchCaseSolutions.StatusIds != null && SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.TemplateProductAreaIds != null && SearchCaseSolutions.UserWGroupIds != null && SearchCaseSolutions.WgroupIds != null)
                     {
-                        if (SearchCaseSolutions.ApplicationIds.Count == 0 && SearchCaseSolutions.CategoryIds.Count == 0 && SearchCaseSolutions.PriorityIds.Count == 0 && SearchCaseSolutions.ProductAreaIds.Count == 0 && SearchCaseSolutions.StatusIds.Count == 0 && SearchCaseSolutions.SubStatusIds.Count == 0 && SearchCaseSolutions.TemplateProductAreaIds.Count == 0 && SearchCaseSolutions.UserWGroupIds.Count == 0 && SearchCaseSolutions.WgroupIds.Count == 0)
+                        if (SearchCaseSolutions.ApplicationIds.Count == 0 && SearchCaseSolutions.PriorityIds.Count == 0 && SearchCaseSolutions.ProductAreaIds.Count == 0 && SearchCaseSolutions.StatusIds.Count == 0 && SearchCaseSolutions.SubStatusIds.Count == 0 && SearchCaseSolutions.TemplateProductAreaIds.Count == 0 && SearchCaseSolutions.UserWGroupIds.Count == 0 && SearchCaseSolutions.WgroupIds.Count == 0)
                         {
 
                             if (cresList.Count == 0 | cresList == null)
@@ -1334,7 +1334,7 @@ namespace DH.Helpdesk.Services.Services
 
 
 
-                if (SearchCaseSolutions.ApplicationIds == null && SearchCaseSolutions.CategoryIds == null && SearchCaseSolutions.PriorityIds == null && SearchCaseSolutions.ProductAreaIds == null && SearchCaseSolutions.StatusIds == null && SearchCaseSolutions.SubStatusIds == null && SearchCaseSolutions.TemplateProductAreaIds == null && SearchCaseSolutions.UserWGroupIds == null && SearchCaseSolutions.WgroupIds == null)
+                if (SearchCaseSolutions.ApplicationIds == null && SearchCaseSolutions.PriorityIds == null && SearchCaseSolutions.ProductAreaIds == null && SearchCaseSolutions.StatusIds == null && SearchCaseSolutions.SubStatusIds == null && SearchCaseSolutions.TemplateProductAreaIds == null && SearchCaseSolutions.UserWGroupIds == null && SearchCaseSolutions.WgroupIds == null)
                 {
                     if (cresList.Count == 0 | cresList == null)
                     {
@@ -1351,9 +1351,9 @@ namespace DH.Helpdesk.Services.Services
                     }
                 }
 
-                if (SearchCaseSolutions.ApplicationIds != null && SearchCaseSolutions.CategoryIds != null && SearchCaseSolutions.PriorityIds != null && SearchCaseSolutions.ProductAreaIds != null && SearchCaseSolutions.StatusIds != null && SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.TemplateProductAreaIds != null && SearchCaseSolutions.UserWGroupIds != null && SearchCaseSolutions.WgroupIds != null)
+                if (SearchCaseSolutions.ApplicationIds != null && SearchCaseSolutions.PriorityIds != null && SearchCaseSolutions.ProductAreaIds != null && SearchCaseSolutions.StatusIds != null && SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.TemplateProductAreaIds != null && SearchCaseSolutions.UserWGroupIds != null && SearchCaseSolutions.WgroupIds != null)
                 {
-                    if (SearchCaseSolutions.ApplicationIds.Count == 0 && SearchCaseSolutions.CategoryIds.Count == 0 && SearchCaseSolutions.PriorityIds.Count == 0 && SearchCaseSolutions.ProductAreaIds.Count == 0 && SearchCaseSolutions.StatusIds.Count == 0 && SearchCaseSolutions.SubStatusIds.Count == 0 && SearchCaseSolutions.TemplateProductAreaIds.Count == 0 && SearchCaseSolutions.UserWGroupIds.Count == 0 && SearchCaseSolutions.WgroupIds.Count == 0)
+                    if (SearchCaseSolutions.ApplicationIds.Count == 0 && SearchCaseSolutions.PriorityIds.Count == 0 && SearchCaseSolutions.ProductAreaIds.Count == 0 && SearchCaseSolutions.StatusIds.Count == 0 && SearchCaseSolutions.SubStatusIds.Count == 0 && SearchCaseSolutions.TemplateProductAreaIds.Count == 0 && SearchCaseSolutions.UserWGroupIds.Count == 0 && SearchCaseSolutions.WgroupIds.Count == 0)
                     {
 
                         if (cresList.Count == 0 | cresList == null)
