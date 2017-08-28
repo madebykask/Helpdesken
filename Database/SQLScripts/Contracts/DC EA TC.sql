@@ -2242,7 +2242,7 @@ DECLARE @dcTcAcceptGuid UNIQUEIDENTIFIER = 'dc225aae-e266-4621-b4ea-f23263027947
 #acceptance {
 	font-family: Verdana; 
 	border: 1px solid black; 
-	width: 500px;
+	width: 600px;
 }
 
 
@@ -2251,8 +2251,8 @@ DECLARE @dcTcAcceptGuid UNIQUEIDENTIFIER = 'dc225aae-e266-4621-b4ea-f23263027947
 	text-decoration: underline;
 	text-align: center;
 	padding-top: 20px;
-	width: 5000px;
 }
+
 #acceptance td {
 
 	padding-left: 20px;

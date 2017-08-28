@@ -2256,17 +2256,16 @@ DECLARE @dcSalTcAcceptGuid UNIQUEIDENTIFIER = '224E290B-E833-4823-B0A6-DDCFF34C6
 #acceptance {
 	font-family: Verdana; 
 	border: 1px solid black; 
-	width: 500px;
+	width: 600px;
 }
-
 
 #acceptance th {
 	font-size: 16pt; 
 	text-decoration: underline;
 	text-align: center;
 	padding-top: 20px;
-	width: 500px;
 }
+
 #acceptance td {
 
 	padding-left: 20px;

@@ -3104,7 +3104,7 @@ DECLARE @retSalTcAcceptGuid UNIQUEIDENTIFIER = '742FEB07-C415-46EC-B171-7D897F26
 #acceptance {
 	font-family: Verdana; 
 	border: 1px solid black; 
-	width: 500px;
+	width: 600px;
 }
 
 
@@ -3113,8 +3113,8 @@ DECLARE @retSalTcAcceptGuid UNIQUEIDENTIFIER = '742FEB07-C415-46EC-B171-7D897F26
 	text-decoration: underline;
 	text-align: center;
 	padding-top: 20px;
-	width: 500px;
 }
+
 #acceptance td {
 
 	padding-left: 20px;

@@ -445,11 +445,11 @@ namespace DH.Helpdesk.Services.Services
             //If there are more than one conditions, all conditions must be fulfilled
 
             //IF there are no conditions set, it should be visible         
-            var condtions = this.GetCaseDocumentTextConditions(caseDocumentText_Id);
+            var conditions = this.GetCaseDocumentTextConditions(caseDocumentText_Id).ToList();
 
 			bool results = false;
             //IF there are no conditions set, it should be visible
-            if (condtions == null || condtions.Count() == 0)
+            if (conditions == null || conditions.Count() == 0)
 			{
 				return new CaseDocumentConditionResult
 				{
@@ -464,7 +464,7 @@ namespace DH.Helpdesk.Services.Services
                 extendedCaseFormId = _case.CaseExtendedCaseDatas.First().ExtendedCaseData.ExtendedCaseFormId;
             }
 
-			foreach (var condition in condtions)
+			foreach (var condition in conditions)
 			{
 
 				var conditionValue = condition.Values.Tidy().ToLower();

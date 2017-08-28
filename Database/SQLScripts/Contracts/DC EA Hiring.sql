@@ -86,8 +86,8 @@ DECLARE @dcHiringHeaderID INT = (SELECT ID FROM tblCaseDocumentParagraph WHERE C
 DECLARE @dcHiringHeaderTextAGuid UNIQUEIDENTIFIER = 'C4BC8899-4704-47C2-88ED-120DDFC36DE3',
 	@dcHiringHeaderTextAName NVARCHAR(MAX) = @prefix + ' Header, Company',
 	@dcHiringHeaderTextADescription NVARCHAR(MAX) = '',
-	@dcHiringHeaderTextAText NVARCHAR(MAX) = '<p style="text-align:left;">IKEA Distribution Services Australia Pty Ltd</p>	
-<p>ABN 96 001 264 179</p>',
+	@dcHiringHeaderTextAText NVARCHAR(MAX) = '<p style="font-family:''Microsoft Sans''; font-size: 6pt; text-align:left; line-height:10px; margin-top:-10px">IKEA Distribution Services Australia Pty Ltd<br>
+ABN 96 001 264 179</p>',
 	@dcHiringHeaderTextAHeadline NVARCHAR(MAX) = '',
 	@dcHiringHeaderTextASortOrder INT = 0
 
@@ -1971,8 +1971,8 @@ DECLARE @dcHiringConSignParagraphID INT = (SELECT ID FROM tblCaseDocumentParagra
 DECLARE @dcHiringConSignGuid UNIQUEIDENTIFIER = 'f0682a33-53e2-4bd0-9a1c-5a57987697d6',
 	@dcHiringConSignName NVARCHAR(MAX) = @prefix + ' Con. Sign.',
 	@dcHiringConSignDescription NVARCHAR(MAX) = '',
-	@dcHiringConSignText NVARCHAR(MAX) = '<br><br><br>
-	Yours sincerely,<br>
+	@dcHiringConSignText NVARCHAR(MAX) = '<br><br>
+	Yours sincerely,<br><br><br><br>
 	<Reports To Line Manager><br>
 	<Position Title (Local Job Name) of Reports To Line Manager><br>
 	<strong>IKEA Distribution Services Australia Pty Ltd</strong>',
@@ -2040,7 +2040,7 @@ DECLARE @dcHiringAcceptGuid UNIQUEIDENTIFIER = 'c7caffaf-1e22-46fe-a5b3-e301660b
 #acceptance {
 	font-family: Verdana; 
 	border: 1px solid black; 
-	width: 5000px;
+	width: 600px;
 }
 
 
@@ -2049,7 +2049,6 @@ DECLARE @dcHiringAcceptGuid UNIQUEIDENTIFIER = 'c7caffaf-1e22-46fe-a5b3-e301660b
 	text-decoration: underline;
 	text-align: center;
 	padding-top: 20px;
-	width: 5000px;
 }
 #acceptance td {
 

@@ -2292,19 +2292,17 @@ DECLARE @retSalHiringAcceptGuid UNIQUEIDENTIFIER = '746561EF-0FD3-46FA-A485-312E
 #acceptance {
 	font-family: Verdana; 
 	border: 1px solid black; 
-	width: 500px;
+	width: 600px;
 }
-
 
 #acceptance th {
 	font-size: 16pt; 
 	text-decoration: underline;
 	text-align: center;
 	padding-top: 20px;
-	width: 500px;
 }
-#acceptance td {
 
+#acceptance td {
 	padding-left: 20px;
 }
 

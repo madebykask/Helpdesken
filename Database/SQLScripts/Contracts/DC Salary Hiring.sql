@@ -1709,17 +1709,16 @@ DECLARE @dcSalHirAcceptGuid UNIQUEIDENTIFIER = '08EADA4B-5C0F-4816-9650-EDB2784F
 #acceptance {
 	font-family: Verdana; 
 	border: 1px solid black; 
-	width: 500px;
+	width: 600px;
 }
-
 
 #acceptance th {
 	font-size: 16pt; 
 	text-decoration: underline;
 	text-align: center;
 	padding-top: 20px;
-	width: 500px;
 }
+
 #acceptance td {
 
 	padding-left: 20px;
