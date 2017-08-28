@@ -6,7 +6,9 @@ BEGIN TRAN
 -- ########################################## Basic properties of script
 
 DECLARE @userID INT = 1,
-	@now DATETIME = GETDATE()
+	@now DATETIME = GETDATE(),
+	@caseTemplateID INT = 1
+	--@customerID INT = 43
 
 -- ########################################## General variables (used for paragraph creation)
 
@@ -17,7 +19,9 @@ DECLARE @CaseDocumentParagraphGUID UNIQUEIDENTIFIER,
 	@CaseDocumentTextName NVARCHAR(MAX),
 	@TextSortOrder INT,
 	@Text NVARCHAR(MAX),
-	@ParagraphTypeFooter INT = 5
+	@ParagraphTypeFooter INT = 5,
+	@extendedCaseHiringFormID INT = 13,
+	@extendedCaseTCFormID INT = 15
 
 
 -- ########################################## Form GUIDS & IDs
@@ -31,6 +35,80 @@ DECLARE @dcHiringGuid UNIQUEIDENTIFIER = '33216A30-3CE1-40CE-8C15-40D2F364B547',
 	@retSalHiringGuid UNIQUEIDENTIFIER = 'E11C26B9-C538-4BBB-AB9E-DB2D49D49CD4', -- Retail Salaried (Hiring)
 	@retSalTcGuid UNIQUEIDENTIFIER = 'EA1D92DF-AF56-4D3E-BA70-C45E4C3C30DA' -- Retail Salaried (T&C)
 
+
+--	DECLARE @master_tblCaseDocument TABLE
+--(
+--	[CaseDocumentGUID] UNIQUEIDENTIFIER,
+--	[Name] NVARCHAR(MAX),
+--	[Description] NVARCHAR(MAX),
+--	[Customer_Id] INT,
+--	[FileType] NVARCHAR(MAX),
+--	[SortOrder] INT,
+--	[Status] INT,
+--	[CaseDocumentTemplate_Id] INT,
+--	[Version] INT
+--)
+
+
+--SET NOCOUNT ON
+
+--INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
+--VALUES(@retHiringGuid, 'Retail EA (Hiring)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
+
+--INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
+--VALUES(@retSalHiringGuid, 'Retail Salaried (Hiring)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
+
+--INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
+--VALUES(@dcHiringGuid, 'DC EA (Hiring)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
+
+--INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
+--VALUES(@dcSalHiringGuid, 'DC Salaried (Hiring)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
+
+--INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
+--VALUES(@retTcGuid, 'Retail EA (T&C)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
+
+--INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
+--VALUES(@retSalTcGuid, 'Retail Salaried (T&C)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
+
+--INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
+--VALUES(@dcTcGuid, 'DC EA (T&C)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
+
+--INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
+--VALUES(@dcSalTcGuid, 'DC Salaried (T&C)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
+
+
+
+--SET NOCOUNT OFF
+
+---- UPDATE Existing value
+--PRINT 'UPDATE changed values in tblCaseDocument'
+--UPDATE CD SET CD.[Name] = M.[Name], 
+--	CD.[Description] = M.[Description],
+--	CD.Customer_Id = M.Customer_Id,
+--	CD.FileType = M.FileType,
+--	CD.SortOrder = M.SortOrder,
+--	CD.[Status] = M.[Status],
+--	CD.ChangedDate = @now,
+--	CD.ChangedByUser_Id = @userID
+--FROM tblCaseDocument CD
+--JOIN @master_tblCaseDocument M ON CD.[CaseDocumentGUID] = M.CaseDocumentGUID
+--WHERE CD.[Name] <> M.[Name] OR
+--	CD.[Description]  <> M.[Description] OR
+--	CD.Customer_Id <> M.Customer_Id OR
+--	CD.FileType <> M.FileType OR
+--	CD.SortOrder <> M.SortOrder OR
+--	CD.[Status] <> M.[Status]
+
+
+
+---- INSERT new values
+--PRINT 'INSERT new values in tblCaseDocument'
+--INSERT INTO tblCaseDocument([CaseDocumentGUID],	[Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], [CreatedDate], [CreatedByUser_Id], [CaseDocumentTemplate_Id], [Version], ChangedDate, ChangedByUser_Id)
+--SELECT M.[CaseDocumentGUID], M.[Name], M.[Description], M.[Customer_Id], M.[FileType], M.[SortOrder], M.[Status], @now, @userID, M.[CaseDocumentTemplate_Id], M.[Version], @now, @userID FROM @master_tblCaseDocument M
+--LEFT JOIN tblCaseDocument CD ON CD.CaseDocumentGUID = M.CaseDocumentGUID
+--WHERE CD.Id IS NULL
+
+---- GET IDs for forms
 DECLARE @dcHiringID INT = (SELECT ID FROM tblCaseDocument CD WHERE CD.CaseDocumentGUID = @dcHiringGuid), -- DC EA (Hiring)
 	@dcTcID INT = (SELECT ID FROM tblCaseDocument CD WHERE CD.CaseDocumentGUID = @dcTcGuid), -- DC EA (T&C)
 	@dcSalHiringID INT = (SELECT ID FROM tblCaseDocument CD WHERE CD.CaseDocumentGUID = @dcSalHiringGuid), -- DC Salaried (Hiring)
@@ -69,61 +147,69 @@ VALUES(0, '', '<Todays Date - Long>', 'Date.NowLong', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
 VALUES(0, '', '<Todays Date - Short>', 'Date.NowShort', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(13, 'Hiring', '<Address Line 1>', 'tabs.ServiceRequestDetails.sections.STD_S_PermanentAddressHiring.instances[0].controls.AddressLine1', NULL)
+VALUES(@extendedCaseHiringFormID, 'Hiring', '<Address Line 1>', 'tabs.ServiceRequestDetails.sections.STD_S_PermanentAddressHiring.instances[0].controls.AddressLine1', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(13, 'Hiring', '<Address Line 2>', 'tabs.ServiceRequestDetails.sections.STD_S_PermanentAddressHiring.instances[0].controls.AddressLine2', NULL)
+VALUES(@extendedCaseHiringFormID, 'Hiring', '<Address Line 2>', 'tabs.ServiceRequestDetails.sections.STD_S_PermanentAddressHiring.instances[0].controls.AddressLine2', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(13, 'Hiring', '<Address Line 3>', 'tabs.ServiceRequestDetails.sections.STD_S_PermanentAddressHiring.instances[0].controls.AddressLine3', NULL)
+VALUES(@extendedCaseHiringFormID, 'Hiring', '<Address Line 3>', 'tabs.ServiceRequestDetails.sections.STD_S_PermanentAddressHiring.instances[0].controls.AddressLine3', '')
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(13, 'Hiring', '<Basic Pay Amount>', 'tabs.PaymentInformation.sections.STD_S_BasicPayHiring.instances[0].controls.BasicPayAmount', NULL)
+VALUES(@extendedCaseHiringFormID, 'Hiring', '<Basic Pay Amount>', 'tabs.PaymentInformation.sections.STD_S_BasicPayHiring.instances[0].controls.BasicPayAmount', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(13, 'Hiring', '<Contract End Date>', 'tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditionsHiring.instances[0].controls.ContractEndDate', NULL)
+VALUES(@extendedCaseHiringFormID, 'Hiring', '<Contract End Date>', 'tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditionsHiring.instances[0].controls.ContractEndDate', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(13, 'Hiring', '<Contract Start Date>', 'tabs.ServiceRequestDetails.sections.AU_S_ProcessingDetailsHiring.instances[0].controls.ContractStartDate', NULL)
+VALUES(@extendedCaseHiringFormID, 'Hiring', '<Contract Start Date>', 'tabs.ServiceRequestDetails.sections.AU_S_ProcessingDetailsHiring.instances[0].controls.ContractStartDate', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(13, 'Hiring', '<Contracted Hours>', 'tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditionsHiring.instances[0].controls.ContractedHours', NULL)
+VALUES(@extendedCaseHiringFormID, 'Hiring', '<Contracted Hours>', 'tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditionsHiring.instances[0].controls.ContractedHours', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(13, 'Hiring', '<Next Salary Review Year>', 'tabs.PaymentInformation.sections.STD_S_BasicPayHiring.instances[0].controls.NextSalaryReviewYear', NULL)
+VALUES(@extendedCaseHiringFormID, 'Hiring', '<Next Salary Review Year>', 'tabs.PaymentInformation.sections.STD_S_BasicPayHiring.instances[0].controls.NextSalaryReviewYear', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(13, 'Hiring', '<Position Title (Local Job Name) of Reports To Line Manager>', 'tabs.OrganisationalAssignment.sections.STD_S_OrganisationHiring.instances[0].controls.ReportsToLineManagerPositionTitle', NULL)
+VALUES(@extendedCaseHiringFormID, 'Hiring', '<Position Title (Local Job Name) of Reports To Line Manager>', 'tabs.OrganisationalAssignment.sections.STD_S_OrganisationHiring.instances[0].controls.ReportsToLineManagerPositionTitle', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(13, 'Hiring', '<Position Title (Local Job Name)>', 'tabs.OrganisationalAssignment.sections.STD_S_JobHiring.instances[0].controls.PositionTitleLocalJobName', NULL)
+VALUES(@extendedCaseHiringFormID, 'Hiring', '<Position Title (Local Job Name)>', 'tabs.OrganisationalAssignment.sections.STD_S_JobHiring.instances[0].controls.PositionTitleLocalJobName', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(13, 'Hiring', '<Postal Code>', 'tabs.ServiceRequestDetails.sections.STD_S_PermanentAddressHiring.instances[0].controls.PostalCode', NULL)
+VALUES(@extendedCaseHiringFormID, 'Hiring', '<Postal Code>', 'tabs.ServiceRequestDetails.sections.STD_S_PermanentAddressHiring.instances[0].controls.PostalCode', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(13, 'Hiring', '<Reports To Line Manager>', 'tabs.OrganisationalAssignment.sections.STD_S_OrganisationHiring.instances[0].controls.ReportsToLineManager', NULL)
+VALUES(@extendedCaseHiringFormID, 'Hiring', '<Reports To Line Manager>', 'tabs.OrganisationalAssignment.sections.STD_S_OrganisationHiring.instances[0].controls.ReportsToLineManager', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(13, 'Hiring', '<Shift Type>', 'tabs.PaymentInformation.sections.STD_S_BasicPayHiring.instances[0].controls.ShiftType', NULL)
+VALUES(@extendedCaseHiringFormID, 'Hiring', '<Shift Type>', 'tabs.PaymentInformation.sections.STD_S_BasicPayHiring.instances[0].controls.ShiftType', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(13, 'Hiring', '<State>', 'tabs.ServiceRequestDetails.sections.STD_S_PermanentAddressHiring.instances[0].controls.State', NULL)
+VALUES(@extendedCaseHiringFormID, 'Hiring', '<State>', 'tabs.ServiceRequestDetails.sections.STD_S_PermanentAddressHiring.instances[0].controls.State', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(15, 'Change Terms & Conditions', '<Address Line 1>', 'tabs.ServiceRequestDetails.sections.Address.instances[0].controls.AddressLine1', NULL)
+VALUES(@extendedCaseTCFormID, 'Change Terms & Conditions', '<Address Line 1>', 'tabs.ServiceRequestDetails.sections.Address.instances[0].controls.AddressLine1', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(15, 'Change Terms & Conditions', '<Address Line 2>', 'tabs.ServiceRequestDetails.sections.Address.instances[0].controls.AddressLine2', NULL)
+VALUES(@extendedCaseTCFormID, 'Change Terms & Conditions', '<Address Line 2>', 'tabs.ServiceRequestDetails.sections.Address.instances[0].controls.AddressLine2', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(15, 'Change Terms & Conditions', '<Address Line 3>', 'tabs.ServiceRequestDetails.sections.Address.instances[0].controls.AddressLine3', NULL)
+VALUES(@extendedCaseTCFormID, 'Change Terms & Conditions', '<Address Line 3>', 'tabs.ServiceRequestDetails.sections.Address.instances[0].controls.AddressLine3', '')
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(15, 'Change Terms & Conditions', '<Basic Pay Amount>', 'tabs.PaymentInformation.sections.STD_S_BasicPayChange.instances[0].controls.BasicPayAmount', NULL)
+VALUES(@extendedCaseTCFormID, 'Change Terms & Conditions', '<Basic Pay Amount>', 'tabs.PaymentInformation.sections.STD_S_BasicPayChange.instances[0].controls.BasicPayAmount', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(15, 'Change Terms & Conditions', '<Change Valid From>', 'tabs.ServiceRequestDetails.sections.STD_S_DetailsCTC.instances[0].controls.ChangeValidFrom', NULL)
+VALUES(@extendedCaseTCFormID, 'Change Terms & Conditions', '<Change Valid From>', 'tabs.ServiceRequestDetails.sections.STD_S_DetailsCTC.instances[0].controls.ChangeValidFrom', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(15, 'Change Terms & Conditions', '<Change Valid To>', 'tabs.ServiceRequestDetails.sections.STD_S_DetailsCTC.instances[0].controls.ChangeValidTo', NULL)
+VALUES(@extendedCaseTCFormID, 'Change Terms & Conditions', '<Change Valid To>', 'tabs.ServiceRequestDetails.sections.STD_S_DetailsCTC.instances[0].controls.ChangeValidTo', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(15, 'Change Terms & Conditions', '<Contracted Hours>', 'tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditions.instances[0].controls.ContractedHours', NULL)
+VALUES(@extendedCaseTCFormID, 'Change Terms & Conditions', '<Contracted Hours>', 'tabs.OrganisationalAssignment.sections.STD_S_EmploymentConditions.instances[0].controls.ContractedHours', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(15, 'Change Terms & Conditions', '<Position Title (Local Job Name) of Reports To Line Manager>', 'tabs.OrganisationalAssignment.sections.STD_S_OrganisationChange.instances[0].controls.ReportsToLineManagerPositionTitle', NULL)
+VALUES(@extendedCaseTCFormID, 'Change Terms & Conditions', '<Position Title (Local Job Name) of Reports To Line Manager>', 'tabs.OrganisationalAssignment.sections.STD_S_OrganisationChange.instances[0].controls.ReportsToLineManagerPositionTitle', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(15, 'Change Terms & Conditions', '<Position Title (Local Job Name)>', 'tabs.OrganisationalAssignment.sections.STD_S_JobChange.instances[0].controls.PositionTitleLocalJobName', NULL)
+VALUES(@extendedCaseTCFormID, 'Change Terms & Conditions', '<Position Title (Local Job Name)>', 'tabs.OrganisationalAssignment.sections.STD_S_JobChange.instances[0].controls.PositionTitleLocalJobName', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(15, 'Change Terms & Conditions', '<Postal Code>', 'tabs.ServiceRequestDetails.sections.Address.instances[0].controls.PostalCode', NULL)
+VALUES(@extendedCaseTCFormID, 'Change Terms & Conditions', '<Postal Code>', 'tabs.ServiceRequestDetails.sections.Address.instances[0].controls.PostalCode', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(15, 'Change Terms & Conditions', '<Reports To Line Manager>', 'tabs.OrganisationalAssignment.sections.STD_S_OrganisationChange.instances[0].controls.ReportsToLineManager', NULL)
+VALUES(@extendedCaseTCFormID, 'Change Terms & Conditions', '<Reports To Line Manager>', 'tabs.OrganisationalAssignment.sections.STD_S_OrganisationChange.instances[0].controls.ReportsToLineManager', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(15, 'Change Terms & Conditions', '<Shift Type>', 'tabs.PaymentInformation.sections.STD_S_BasicPayChange.instances[0].controls.ShiftType', NULL)
+VALUES(@extendedCaseTCFormID, 'Change Terms & Conditions', '<Shift Type>', 'tabs.PaymentInformation.sections.STD_S_BasicPayChange.instances[0].controls.ShiftType', NULL)
 INSERT INTO @master_tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
-VALUES(15, 'Change Terms & Conditions', '<State>', 'tabs.ServiceRequestDetails.sections.Address.instances[0].controls.State', NULL)
+VALUES(@extendedCaseTCFormID, 'Change Terms & Conditions', '<State>', 'tabs.ServiceRequestDetails.sections.Address.instances[0].controls.State', NULL)
 
 SET NOCOUNT OFF
+
+
+SELECT * FROM tblCaseDocumentTextIdentifier CDTI
+JOIN @master_tblCaseDocumentTextIdentifier M ON CDTI.ExtendedCaseFormId = M.ExtendedCaseFormId 
+	AND CDTI.Identifier = M.Identifier
+WHERE CDTI.Process <> M.Process OR 
+	CDTI.DisplayName <> M.Process OR
+	CDTI.PropertyName <> M.PropertyName
 
 -- UPDATE Existing value
 PRINT 'UPDATE changed values in tblCaseDocumentTextIdentifier'
@@ -138,7 +224,7 @@ WHERE CDTI.Process <> M.Process OR
 	CDTI.PropertyName <> M.PropertyName
 
 
--- UPDATE Existing value
+-- INSERT new values
 PRINT 'INSERT new values in tblCaseDocumentTextIdentifier'
 INSERT INTO tblCaseDocumentTextIdentifier(ExtendedCaseFormId, Process, Identifier, PropertyName, DisplayName)
 SELECT M.ExtendedCaseFormId, M.Process, M.Identifier, M.PropertyName, M.DisplayName 
@@ -418,5 +504,9 @@ end /* Paragraph - FOOTER with Initials*/
 
 
 
+--PRINT 'ROLLBACK'
+--ROLLBACK
 
+
+PRINT 'COMMIT'
 COMMIT

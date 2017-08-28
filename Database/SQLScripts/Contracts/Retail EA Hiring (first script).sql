@@ -527,1309 +527,1310 @@ end /* Paragraph - AU - Address */
 
 
 
-begin  /* Paragraph - REST */
-	
-	--select newid()
-	set @CaseDocumentParagraphGUID = 'AC6891B8-18CF-45F3-A4C0-CC27294C6DF2'
-	set @CaseDocumentParagraphName = 'Contract Clusters - DC EA - BODY'
-
-
-
-
-	if not exists(select * from tblCaseDocumentParagraph where CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID)
-	begin
-
-		INSERT INTO [dbo].[tblCaseDocumentParagraph]
-				   ([Name]
-				   ,[Description]
-				   ,[ParagraphType]
-				   ,CaseDocumentParagraphGUID)
-			 VALUES
-				   (@CaseDocumentParagraphName
-				   ,'Contract Clusters - DC EA'
-				   ,@ParagraphTypeText
-				   ,@CaseDocumentParagraphGUID
-				   )
-
-	end
-	else
-	begin
-		
-		update [tblCaseDocumentParagraph] set
-		[Name] = @CaseDocumentParagraphName,
-		[ParagraphType] = @ParagraphTypeText
-
-		where CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID
-	end
-
-	select @CaseDocumentParagraph_Id = Id from tblCaseDocumentParagraph where  CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID
-
-		begin /* 10a */
-		
-		set @CaseDocumentTextGUID = '8E52C1BE-9CB5-43DF-87BF-E4EA8B9A91E2'
-		set @CaseDocumentTextName  = '10a'
-		set @TextSortOrder = 0
-	
-		set @Text = 
-		'IKEA Pty Ltd (IKEA) is pleased to present you with a contract of employment under the terms and conditions of the IKEA Enterprise Agreement 2017.'
-	
-		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
-		begin
-
-			INSERT INTO [dbo].[tblCaseDocumentText]
-					   ([CaseDocumentParagraph_Id]
-					   ,[Name]
-					   ,[Description]
-					   ,[Text]
-					   ,[Headline]
-					   ,[SortOrder]
-					   ,CaseDocumentTextGUID)
-				 VALUES
-					   (@CaseDocumentParagraph_Id
-					   ,@CaseDocumentTextName
-					   ,''
-					   ,@Text
-					   ,''
-					   ,@TextSortOrder
-					   ,@CaseDocumentTextGUID)
-		end
-		else
-		begin
-
-			update [tblCaseDocumentText] set
-			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
-			[Name] = @CaseDocumentTextName,
-			[Text] = @Text,
-			[SortOrder] = @TextSortOrder
-			where CaseDocumentTextGUID = @CaseDocumentTextGUID
-		end
-
-		begin /* 10a CONDITIONS */
-
-			--select newid()
-			set @CaseDocumentTextConditionGUID = 'C547488F-E403-471F-A1F7-A36948018CB9'
-			
-			set @Property_Name= 'extendedcase_ContractEndDate'
-			
-			set @Operator= 'IsEmpty'
-			
-			set @Values = ''
-
-			-- GET FROM ABOVE 
-			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
-			
-			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
-			begin
-				
-				Insert into tblCaseDocumentTextCondition
-				(CaseDocumentTextConditionGUID, 
-				CaseDocumentText_Id,
-				Property_Name,
-				[Operator],
-				[Values],
-				[Status])
-				VALUES
-				(
-				@CaseDocumentTextConditionGUID,
-				@CaseDocumentTextId,
-				@Property_Name,
-				@Operator,
-				@Values,
-				1
-				)
-
-				
-
-			end
-			else
-			begin
-
-				update tblCaseDocumentTextCondition 
-				set CaseDocumentText_Id = @CaseDocumentTextId,
-				Property_Name = @Property_Name,
-				Operator = @Operator,
-				[Values]= @Values
-				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
-
-			end
-
-
-
-
-		end /* 10a CONDITIONS */
-
-	end /* 10a */
-
-
-	begin /* 10b */
-
-		set @TextSortOrder = 0
-
-		
-		set @CaseDocumentTextGUID  = 'E8B2F985-D317-4E06-9934-7593AC6C1A1E'
-		set @CaseDocumentTextName = '10b'
-	
-		set @Text = 
-		'IKEA Pty Ltd (IKEA) is pleased to present you with a temporary contract of employment under the terms and conditions of the IKEA Enterprise Agreement 2017.'
-	
-		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
-		begin
-
-			INSERT INTO [dbo].[tblCaseDocumentText]
-					   ([CaseDocumentParagraph_Id]
-					   ,[Name]
-					   ,[Description]
-					   ,[Text]
-					   ,[Headline]
-					   ,[SortOrder]
-					   ,CaseDocumentTextGUID)
-				 VALUES
-					   (@CaseDocumentParagraph_Id
-					   ,@CaseDocumentTextName
-					   ,''
-					   ,@Text
-					   ,''
-					   ,@TextSortOrder
-					   ,@CaseDocumentTextGUID)
-		end
-		else
-		begin
-
-			update [tblCaseDocumentText] set
-			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
-			[Name] = @CaseDocumentTextName,
-			[Text] = @Text,
-			[SortOrder] = @TextSortOrder
-			where CaseDocumentTextGUID = @CaseDocumentTextGUID
-		end
-
-
-			begin /* 10b CONDITIONS */
-
-			--select newid()
-			set @CaseDocumentTextConditionGUID = '6B682E31-49E6-4A85-9251-69F279ECBFB1'
-			
-			set @Property_Name= 'extendedcase_ContractEndDate'
-			set @Operator= 'HasValue'
-			set @Values = ''
-
-			-- GET FROM ABOVE 
-			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
-			
-			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
-			begin
-				
-				Insert into tblCaseDocumentTextCondition
-				(CaseDocumentTextConditionGUID, 
-				CaseDocumentText_Id,
-				Property_Name,
-				[Operator],
-				[Values],
-				[Status])
-				VALUES
-				(
-				@CaseDocumentTextConditionGUID,
-				@CaseDocumentTextId,
-				@Property_Name,
-				@Operator,
-				@Values,
-				1
-				)
-
-				
-
-			end
-			else
-			begin
-
-				update tblCaseDocumentTextCondition 
-				set CaseDocumentText_Id = @CaseDocumentTextId,
-				Property_Name = @Property_Name,
-				Operator = @Operator,
-				[Values]= @Values
-				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
-
-			end
-
-
-
-
-		end /* 10b CONDITIONS */
-
-
-	end /* 10b */
-
-
-	--CONNNECT PARAGRAPH WITH DOCUMENT
-
-	set @SortOrder = 3
-	if not exists(select * from tblCaseDocument_CaseDocumentParagraph where CaseDocument_id = @CaseDocumentId and CaseDocumentParagraph_Id = @CaseDocumentParagraph_Id)
-	begin
-
-		
-		insert into tblCaseDocument_CaseDocumentParagraph
-		(CaseDocument_id, CaseDocumentParagraph_Id, SortOrder)
-		VALUES (@CaseDocumentId, @CaseDocumentParagraph_Id,@SortOrder)
-
-	end
-	begin
-		update tblCaseDocument_CaseDocumentParagraph set SortOrder = @SortOrder where CaseDocument_id = @CaseDocumentId and CaseDocumentParagraph_Id = @CaseDocumentParagraph_Id 
-	end
-
-end /* Paragraph - REST */
-
-begin  /* Paragraph - TABLE */
-	
-	--select newid()
-	set @CaseDocumentParagraphGUID = '9138949C-F253-4803-9E0E-4643811D5DEA'
-	set @CaseDocumentParagraphName = 'Contract Clusters - DC EA - TABLE'
-
-	if not exists(select * from tblCaseDocumentParagraph where CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID)
-	begin
-
-		INSERT INTO [dbo].[tblCaseDocumentParagraph]
-				   ([Name]
-				   ,[Description]
-				   ,[ParagraphType]
-				   ,CaseDocumentParagraphGUID)
-			 VALUES
-				   (@CaseDocumentParagraphName
-				   ,'Contract Clusters - DC EA - TABLE'
-				   ,@ParagraphTypeTableTwoColumns
-				   ,@CaseDocumentParagraphGUID
-				   )
-
-	end
-	else
-	begin
-		
-		update [tblCaseDocumentParagraph] set
-		[Name] = @CaseDocumentParagraphName,
-		[ParagraphType] = @ParagraphTypeTableTwoColumns
-
-		where CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID
-	end
-
-	select @CaseDocumentParagraph_Id = Id from tblCaseDocumentParagraph where  CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID
-
-	begin /* 11 */
-
-		set @TextSortOrder = 0
-		
-		set @CaseDocumentTextGUID  = '350AE198-CABA-47C9-BA6D-10441E0DD3D7'
-		set @CaseDocumentTextName = '11'
-	
-		set @Headline = 'Classification:'
-		set @Text = '<Position Title (Local Job Name)>'
-	
-		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
-		begin
-
-			INSERT INTO [dbo].[tblCaseDocumentText]
-					   ([CaseDocumentParagraph_Id]
-					   ,[Name]
-					   ,[Description]
-					   ,[Text]
-					   ,[Headline]
-					   ,[SortOrder]
-					   ,CaseDocumentTextGUID)
-				 VALUES
-					   (@CaseDocumentParagraph_Id
-					   ,@CaseDocumentTextName
-					   ,''
-					   ,@Text
-					   ,@Headline
-					   ,@TextSortOrder
-					   ,@CaseDocumentTextGUID)
-		end
-		else
-		begin
-
-			update [tblCaseDocumentText] set
-			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
-			[Name] = @CaseDocumentTextName,
-			[Text] = @Text,
-			[Headline] = @Headline,
-			[SortOrder] = @TextSortOrder
-			where CaseDocumentTextGUID = @CaseDocumentTextGUID
-		end
-
-	end /* 11 */
-
-
-		begin /* 12 */
-
-		set @TextSortOrder = 0
-		
-		set @CaseDocumentTextGUID  = '53CF156C-7029-4D46-8C4B-0BF44A4FDE82'
-		set @CaseDocumentTextName = '12'
-	
-		set @Headline = 'Location:'
-		set @Text = '<Business Unit>'
-	
-		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
-		begin
-
-			INSERT INTO [dbo].[tblCaseDocumentText]
-					   ([CaseDocumentParagraph_Id]
-					   ,[Name]
-					   ,[Description]
-					   ,[Text]
-					   ,[Headline]
-					   ,[SortOrder]
-					   ,CaseDocumentTextGUID)
-				 VALUES
-					   (@CaseDocumentParagraph_Id
-					   ,@CaseDocumentTextName
-					   ,''
-					   ,@Text
-					   ,@Headline
-					   ,@TextSortOrder
-					   ,@CaseDocumentTextGUID)
-		end
-		else
-		begin
-
-			update [tblCaseDocumentText] set
-			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
-			[Name] = @CaseDocumentTextName,
-			[Text] = @Text,
-			[Headline] = @Headline,
-			[SortOrder] = @TextSortOrder
-			where CaseDocumentTextGUID = @CaseDocumentTextGUID
-		end
-
-	end /* 12 */
-
-	
-		begin /* 13a */
-
-		set @TextSortOrder = 0
-		--select newid()
-		set @CaseDocumentTextGUID  = 'C1122EE9-4EA2-4365-B091-F2AC6C8915ED'
-		set @CaseDocumentTextName = '13a'
-	
-		set @Headline = 'Effective date:'
-		set @Text = '<Contract Start Date>'
-	
-		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
-		begin
-
-			INSERT INTO [dbo].[tblCaseDocumentText]
-					   ([CaseDocumentParagraph_Id]
-					   ,[Name]
-					   ,[Description]
-					   ,[Text]
-					   ,[Headline]
-					   ,[SortOrder]
-					   ,CaseDocumentTextGUID)
-				 VALUES
-					   (@CaseDocumentParagraph_Id
-					   ,@CaseDocumentTextName
-					   ,''
-					   ,@Text
-					   ,@Headline
-					   ,@TextSortOrder
-					   ,@CaseDocumentTextGUID)
-		end
-		else
-		begin
-
-			update [tblCaseDocumentText] set
-			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
-			[Name] = @CaseDocumentTextName,
-			[Text] = @Text,
-			[Headline] = @Headline,
-			[SortOrder] = @TextSortOrder
-			where CaseDocumentTextGUID = @CaseDocumentTextGUID
-		end
-
-
-			begin /* 13a CONDITIONS */
-
-			--select newid()
-			set @CaseDocumentTextConditionGUID = 'CF362805-DA68-4548-A5F5-8A9E47577436'
-			
-			set @Property_Name= 'extendedcase_ContractEndDate'
-			
-			set @Operator= 'IsEmpty'
-			
-			set @Values = ''
-
-			-- GET FROM ABOVE 
-			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
-			
-			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
-			begin
-				
-				Insert into tblCaseDocumentTextCondition
-				(CaseDocumentTextConditionGUID, 
-				CaseDocumentText_Id,
-				Property_Name,
-				[Operator],
-				[Values],
-				[Status])
-				VALUES
-				(
-				@CaseDocumentTextConditionGUID,
-				@CaseDocumentTextId,
-				@Property_Name,
-				@Operator,
-				@Values,
-				1
-				)
-
-				
-
-			end
-			else
-			begin
-
-				update tblCaseDocumentTextCondition 
-				set CaseDocumentText_Id = @CaseDocumentTextId,
-				Property_Name = @Property_Name,
-				Operator = @Operator,
-				[Values]= @Values
-				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
-
-			end
-
-
-
-
-		end /* 13a CONDITIONS */
-
-
-
-	end /* 13a */
-
-
-
-		begin /* 13b */
-
-		set @TextSortOrder = 0
-		--select newid()
-		set @CaseDocumentTextGUID  = '445B4588-CD93-4F51-BC70-C2B2FD1B3810'
-		set @CaseDocumentTextName = '13b'
-	
-		set @Headline = 'Temporary Contract Period:'
-		set @Text = 'from <Contract Start Date>'
-	
-		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
-		begin
-
-			INSERT INTO [dbo].[tblCaseDocumentText]
-					   ([CaseDocumentParagraph_Id]
-					   ,[Name]
-					   ,[Description]
-					   ,[Text]
-					   ,[Headline]
-					   ,[SortOrder]
-					   ,CaseDocumentTextGUID)
-				 VALUES
-					   (@CaseDocumentParagraph_Id
-					   ,@CaseDocumentTextName
-					   ,''
-					   ,@Text
-					   ,@Headline
-					   ,@TextSortOrder
-					   ,@CaseDocumentTextGUID)
-		end
-		else
-		begin
-
-			update [tblCaseDocumentText] set
-			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
-			[Name] = @CaseDocumentTextName,
-			[Text] = @Text,
-			[Headline] = @Headline,
-			[SortOrder] = @TextSortOrder
-			where CaseDocumentTextGUID = @CaseDocumentTextGUID
-		end
-
-
-			begin /* 13b CONDITIONS */
-
-			--select newid()
-			set @CaseDocumentTextConditionGUID = 'DADC6E18-B2F2-4450-A61E-E2E29210CE32'
-			
-			set @Property_Name= 'extendedcase_ContractEndDate'
-			
-			set @Operator= 'HasValue'
-			
-			set @Values = ''
-
-			-- GET FROM ABOVE 
-			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
-			
-			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
-			begin
-				
-				Insert into tblCaseDocumentTextCondition
-				(CaseDocumentTextConditionGUID, 
-				CaseDocumentText_Id,
-				Property_Name,
-				[Operator],
-				[Values],
-				[Status])
-				VALUES
-				(
-				@CaseDocumentTextConditionGUID,
-				@CaseDocumentTextId,
-				@Property_Name,
-				@Operator,
-				@Values,
-				1
-				)
-			end
-			else
-			begin
-
-				update tblCaseDocumentTextCondition 
-				set CaseDocumentText_Id = @CaseDocumentTextId,
-				Property_Name = @Property_Name,
-				Operator = @Operator,
-				[Values]= @Values
-				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
-
-			end
-
-
-
-
-		end /* 13b CONDITIONS */
-
-
-
-	end /* 13b */
-
-
-
-
-		begin /* 14a */
-
-		set @TextSortOrder = 0
-		--select newid()
-		set @CaseDocumentTextGUID  = '488A0CCB-F937-428D-9271-0F9947E34A10'
-		set @CaseDocumentTextName = '14a'
-	
-		set @Headline = 'Employment type:'
-		set @Text = 'Full Time'
-	
-		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
-		begin
-
-			INSERT INTO [dbo].[tblCaseDocumentText]
-					   ([CaseDocumentParagraph_Id]
-					   ,[Name]
-					   ,[Description]
-					   ,[Text]
-					   ,[Headline]
-					   ,[SortOrder]
-					   ,CaseDocumentTextGUID)
-				 VALUES
-					   (@CaseDocumentParagraph_Id
-					   ,@CaseDocumentTextName
-					   ,''
-					   ,@Text
-					   ,@Headline
-					   ,@TextSortOrder
-					   ,@CaseDocumentTextGUID)
-		end
-		else
-		begin
-
-			update [tblCaseDocumentText] set
-			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
-			[Name] = @CaseDocumentTextName,
-			[Text] = @Text,
-			[Headline] = @Headline,
-			[SortOrder] = @TextSortOrder
-			where CaseDocumentTextGUID = @CaseDocumentTextGUID
-		end
-
-			begin /* 14a CONDITIONS */
-
-			--select newid()
-			set @CaseDocumentTextConditionGUID = 'EC6ED1A1-0DB5-40EE-A71D-B72CE9E9405E'
-			
-			set @Property_Name= 'extendedcase_ContractedHours'
-			
-			set @Operator= 'Equal'
-			
-			set @Values = '76'
-
-			-- GET FROM ABOVE 
-			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
-			
-			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
-			begin
-				
-				Insert into tblCaseDocumentTextCondition
-				(CaseDocumentTextConditionGUID, 
-				CaseDocumentText_Id,
-				Property_Name,
-				[Operator],
-				[Values],
-				[Status])
-				VALUES
-				(
-				@CaseDocumentTextConditionGUID,
-				@CaseDocumentTextId,
-				@Property_Name,
-				@Operator,
-				@Values,
-				1
-				)
-			end
-			else
-			begin
-
-				update tblCaseDocumentTextCondition 
-				set CaseDocumentText_Id = @CaseDocumentTextId,
-				Property_Name = @Property_Name,
-				Operator = @Operator,
-				[Values]= @Values
-				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
-
-			end
-
-
-
-
-		end /* 14a CONDITIONS */
-
-	end /* 14a */
-
-	begin /* 14b */
-
-		set @TextSortOrder = 0
-		--select newid()
-		set @CaseDocumentTextGUID  = 'D4FB935F-8AD2-4F73-BD10-A616DAD2B46F'
-		set @CaseDocumentTextName = '14b'
-	
-		set @Headline = 'Employment type:'
-		set @Text = 'Part Time'
-	
-		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
-		begin
-
-			INSERT INTO [dbo].[tblCaseDocumentText]
-					   ([CaseDocumentParagraph_Id]
-					   ,[Name]
-					   ,[Description]
-					   ,[Text]
-					   ,[Headline]
-					   ,[SortOrder]
-					   ,CaseDocumentTextGUID)
-				 VALUES
-					   (@CaseDocumentParagraph_Id
-					   ,@CaseDocumentTextName
-					   ,''
-					   ,@Text
-					   ,@Headline
-					   ,@TextSortOrder
-					   ,@CaseDocumentTextGUID)
-		end
-		else
-		begin
-
-			update [tblCaseDocumentText] set
-			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
-			[Name] = @CaseDocumentTextName,
-			[Text] = @Text,
-			[Headline] = @Headline,
-			[SortOrder] = @TextSortOrder
-			where CaseDocumentTextGUID = @CaseDocumentTextGUID
-		end
-
-			begin /* 14b CONDITIONS NR 1 */
-
-			--select newid()
-			set @CaseDocumentTextConditionGUID = 'A9786F2D-441E-4EB9-909C-00C619838ECC'
-			
-			set @Property_Name= 'extendedcase_ContractedHours'
-			
-			set @Operator= 'LessThan'
-			
-			set @Values = '76'
-
-			-- GET FROM ABOVE 
-			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
-			
-			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
-			begin
-				
-				Insert into tblCaseDocumentTextCondition
-				(CaseDocumentTextConditionGUID, 
-				CaseDocumentText_Id,
-				Property_Name,
-				[Operator],
-				[Values],
-				[Status])
-				VALUES
-				(
-				@CaseDocumentTextConditionGUID,
-				@CaseDocumentTextId,
-				@Property_Name,
-				@Operator,
-				@Values,
-				1
-				)
-			end
-			else
-			begin
-
-				update tblCaseDocumentTextCondition 
-				set CaseDocumentText_Id = @CaseDocumentTextId,
-				Property_Name = @Property_Name,
-				Operator = @Operator,
-				[Values]= @Values
-				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
-
-			end
-
-
-		end  /* 14b CONDITIONS NR 1 */
-
-			begin /* 14b CONDITIONS NR 2 */
-
-			--select newid()
-			set @CaseDocumentTextConditionGUID = '08E59549-8574-4DDD-AE75-724486A49CE3'
-			
-			set @Property_Name= 'extendedcase_ContractedHours'
-			
-			set @Operator= 'LargerThan'
-			
-			set @Values = '0'
-
-			-- GET FROM ABOVE 
-			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
-			
-			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
-			begin
-				
-				Insert into tblCaseDocumentTextCondition
-				(CaseDocumentTextConditionGUID, 
-				CaseDocumentText_Id,
-				Property_Name,
-				[Operator],
-				[Values],
-				[Status])
-				VALUES
-				(
-				@CaseDocumentTextConditionGUID,
-				@CaseDocumentTextId,
-				@Property_Name,
-				@Operator,
-				@Values,
-				1
-				)
-			end
-			else
-			begin
-
-				update tblCaseDocumentTextCondition 
-				set CaseDocumentText_Id = @CaseDocumentTextId,
-				Property_Name = @Property_Name,
-				Operator = @Operator,
-				[Values]= @Values
-				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
-
-			end
-
-
-		end  /* 14b CONDITIONS NR 2 */
-
-	end /* 14b */
-
-	begin /* 14c */
-
-		set @TextSortOrder = 0
-		--select newid()
-		set @CaseDocumentTextGUID  = '00B85E9F-FAC3-4FF6-AD75-01326E096231'
-		set @CaseDocumentTextName = '14c'
-	
-		set @Headline = 'Employment type:'
-		set @Text = 'Casual'
-	
-		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
-		begin
-
-			INSERT INTO [dbo].[tblCaseDocumentText]
-					   ([CaseDocumentParagraph_Id]
-					   ,[Name]
-					   ,[Description]
-					   ,[Text]
-					   ,[Headline]
-					   ,[SortOrder]
-					   ,CaseDocumentTextGUID)
-				 VALUES
-					   (@CaseDocumentParagraph_Id
-					   ,@CaseDocumentTextName
-					   ,''
-					   ,@Text
-					   ,@Headline
-					   ,@TextSortOrder
-					   ,@CaseDocumentTextGUID)
-		end
-		else
-		begin
-
-			update [tblCaseDocumentText] set
-			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
-			[Name] = @CaseDocumentTextName,
-			[Text] = @Text,
-			[Headline] = @Headline,
-			[SortOrder] = @TextSortOrder
-			where CaseDocumentTextGUID = @CaseDocumentTextGUID
-		end
-
-		begin /* 14c CONDITIONS */
-
-			--select newid()
-			set @CaseDocumentTextConditionGUID = 'FDADC78A-E395-442B-9BAD-355AE56AEBC3'
-			
-			set @Property_Name= 'extendedcase_ContractedHours'
-			
-			set @Operator= 'Equal'
-			
-			set @Values = '0'
-
-			-- GET FROM ABOVE 
-			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
-			
-			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
-			begin
-				
-				Insert into tblCaseDocumentTextCondition
-				(CaseDocumentTextConditionGUID, 
-				CaseDocumentText_Id,
-				Property_Name,
-				[Operator],
-				[Values],
-				[Status])
-				VALUES
-				(
-				@CaseDocumentTextConditionGUID,
-				@CaseDocumentTextId,
-				@Property_Name,
-				@Operator,
-				@Values,
-				1
-				)
-			end
-			else
-			begin
-
-				update tblCaseDocumentTextCondition 
-				set CaseDocumentText_Id = @CaseDocumentTextId,
-				Property_Name = @Property_Name,
-				Operator = @Operator,
-				[Values]= @Values
-				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
-
-			end
-
-
-		end  /* 14c CONDITIONS */
-
-	end /* 14c */
-
-
-		begin /* 15a */
-
-		set @TextSortOrder = 0
-		--select newid()
-		set @CaseDocumentTextGUID  = '8FF33EAD-BEF3-469E-ABC1-37B5A5B9D681'
-		set @CaseDocumentTextName = '15a'
-	
-		set @Headline = 'Contracted Hours per Fortnight:'
-		set @Text = '<Contracted Hours>'
-	
-		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
-		begin
-
-			INSERT INTO [dbo].[tblCaseDocumentText]
-					   ([CaseDocumentParagraph_Id]
-					   ,[Name]
-					   ,[Description]
-					   ,[Text]
-					   ,[Headline]
-					   ,[SortOrder]
-					   ,CaseDocumentTextGUID)
-				 VALUES
-					   (@CaseDocumentParagraph_Id
-					   ,@CaseDocumentTextName
-					   ,''
-					   ,@Text
-					   ,@Headline
-					   ,@TextSortOrder
-					   ,@CaseDocumentTextGUID)
-		end
-		else
-		begin
-
-			update [tblCaseDocumentText] set
-			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
-			[Name] = @CaseDocumentTextName,
-			[Text] = @Text,
-			[Headline] = @Headline,
-			[SortOrder] = @TextSortOrder
-			where CaseDocumentTextGUID = @CaseDocumentTextGUID
-		end
-
-		begin /* 15a CONDITIONS */
-
-			--select newid()
-			set @CaseDocumentTextConditionGUID = 'C7E9D22F-A65B-4E8C-9A70-0FB0E2F22F58'
-			
-			set @Property_Name= 'extendedcase_ContractedHours'
-			
-			set @Operator= 'LargerThan'
-			
-			set @Values = '0'
-
-			-- GET FROM ABOVE 
-			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
-			
-			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
-			begin
-				
-				Insert into tblCaseDocumentTextCondition
-				(CaseDocumentTextConditionGUID, 
-				CaseDocumentText_Id,
-				Property_Name,
-				[Operator],
-				[Values],
-				[Status])
-				VALUES
-				(
-				@CaseDocumentTextConditionGUID,
-				@CaseDocumentTextId,
-				@Property_Name,
-				@Operator,
-				@Values,
-				1
-				)
-			end
-			else
-			begin
-
-				update tblCaseDocumentTextCondition 
-				set CaseDocumentText_Id = @CaseDocumentTextId,
-				Property_Name = @Property_Name,
-				Operator = @Operator,
-				[Values]= @Values
-				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
-
-			end
-
-
-		end  /* 15a CONDITIONS */
-
-
-	end /* 15a */
-
-	begin /* 15b */
-
-		set @TextSortOrder = 0
-		--select newid()
-		set @CaseDocumentTextGUID  = 'B64FE969-F1DB-46E1-A893-0CDA60212619'
-		set @CaseDocumentTextName = '15b'
-	
-		set @Headline = ''
-		set @Text = ''
-	
-		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
-		begin
-
-			INSERT INTO [dbo].[tblCaseDocumentText]
-					   ([CaseDocumentParagraph_Id]
-					   ,[Name]
-					   ,[Description]
-					   ,[Text]
-					   ,[Headline]
-					   ,[SortOrder]
-					   ,CaseDocumentTextGUID)
-				 VALUES
-					   (@CaseDocumentParagraph_Id
-					   ,@CaseDocumentTextName
-					   ,''
-					   ,@Text
-					   ,@Headline
-					   ,@TextSortOrder
-					   ,@CaseDocumentTextGUID)
-		end
-		else
-		begin
-
-			update [tblCaseDocumentText] set
-			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
-			[Name] = @CaseDocumentTextName,
-			[Text] = @Text,
-			[Headline] = @Headline,
-			[SortOrder] = @TextSortOrder
-			where CaseDocumentTextGUID = @CaseDocumentTextGUID
-		end
-
-			begin /* 15b CONDITIONS */
-
-			--select newid()
-			set @CaseDocumentTextConditionGUID = 'A8F95C94-3900-4B92-B846-506B5E105DFE'
-			
-			set @Property_Name= 'extendedcase_ContractedHours'
-			
-			set @Operator= 'Equal'
-			
-			set @Values = '0'
-
-			-- GET FROM ABOVE 
-			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
-			
-			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
-			begin
-				
-				Insert into tblCaseDocumentTextCondition
-				(CaseDocumentTextConditionGUID, 
-				CaseDocumentText_Id,
-				Property_Name,
-				[Operator],
-				[Values],
-				[Status])
-				VALUES
-				(
-				@CaseDocumentTextConditionGUID,
-				@CaseDocumentTextId,
-				@Property_Name,
-				@Operator,
-				@Values,
-				1
-				)
-			end
-			else
-			begin
-
-				update tblCaseDocumentTextCondition 
-				set CaseDocumentText_Id = @CaseDocumentTextId,
-				Property_Name = @Property_Name,
-				Operator = @Operator,
-				[Values]= @Values
-				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
-
-			end
-
-
-		end  /* 15b CONDITIONS */
-
-
-	end /* 15b */
-
-	--CONNNECT PARAGRAPH WITH DOCUMENT
-
-	set @SortOrder = 4
-	if not exists(select * from tblCaseDocument_CaseDocumentParagraph where CaseDocument_id = @CaseDocumentId and CaseDocumentParagraph_Id = @CaseDocumentParagraph_Id)
-	begin
-
-		
-		insert into tblCaseDocument_CaseDocumentParagraph
-		(CaseDocument_id, CaseDocumentParagraph_Id, SortOrder)
-		VALUES (@CaseDocumentId, @CaseDocumentParagraph_Id,@SortOrder)
-
-	end
-	begin
-		update tblCaseDocument_CaseDocumentParagraph set SortOrder = @SortOrder where CaseDocument_id = @CaseDocumentId and CaseDocumentParagraph_Id = @CaseDocumentParagraph_Id 
-	end
-
-end /* Paragraph - TABLE */
-
-
-begin  /* Paragraph - SIGNATURE */
-	
-	--select newid()
-	set @CaseDocumentParagraphGUID = 'A933C122-8E38-43CD-B857-1249C9AD463C'
-	set @CaseDocumentParagraphName = 'Contract Clusters - DC EA - SIGNATURE'
-
-	if not exists(select * from tblCaseDocumentParagraph where CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID)
-	begin
-
-		INSERT INTO [dbo].[tblCaseDocumentParagraph]
-				   ([Name]
-				   ,[Description]
-				   ,[ParagraphType]
-				   ,CaseDocumentParagraphGUID)
-			 VALUES
-				   (@CaseDocumentParagraphName
-				   ,'Contract Clusters - DC EA - SIGNATURE'
-				   ,@ParagraphTypeText
-				   ,@CaseDocumentParagraphGUID
-				   )
-
-	end
-	else
-	begin
-		
-		update [tblCaseDocumentParagraph] set
-		[Name] = @CaseDocumentParagraphName,
-		[ParagraphType] = @ParagraphTypeText
-
-		where CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID
-	end
-
-	select @CaseDocumentParagraph_Id = Id from tblCaseDocumentParagraph where  CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID
-
-		begin /* 16 */
-		--select newId()
-		set @CaseDocumentTextGUID = '696409BA-C2D0-4BA2-809D-9ED7E9D0141C'
-		set @CaseDocumentTextName  = '16'
-		set @TextSortOrder = 0
-	
-		set @Text = 
-		'Your terms and conditions of employment will be as per the IKEA Enterprise Agreement 2017, the IKEA Group Code of Conduct and IKEA policies and procedures, as amended from time to time.  You can access this information via ‘ico-worker.com’ <i>(the IKEA co-worker website)</i> or ‘IKEA Inside’ <i>(the IKEA intranet)</i>.'
-	
-		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
-		begin
-
-			INSERT INTO [dbo].[tblCaseDocumentText]
-					   ([CaseDocumentParagraph_Id]
-					   ,[Name]
-					   ,[Description]
-					   ,[Text]
-					   ,[Headline]
-					   ,[SortOrder]
-					   ,CaseDocumentTextGUID)
-				 VALUES
-					   (@CaseDocumentParagraph_Id
-					   ,@CaseDocumentTextName
-					   ,''
-					   ,@Text
-					   ,''
-					   ,@TextSortOrder
-					   ,@CaseDocumentTextGUID)
-		end
-		else
-		begin
-
-			update [tblCaseDocumentText] set
-			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
-			[Name] = @CaseDocumentTextName,
-			[Text] = @Text,
-			[SortOrder] = @TextSortOrder
-			where CaseDocumentTextGUID = @CaseDocumentTextGUID
-		end
-
-	end /* 16 */
-
-
-		begin /* 17,18,19 */
-		--select newId()
-		set @CaseDocumentTextGUID = '2E936F7F-62C2-4A60-BDDB-66852F6FD273'
-		set @CaseDocumentTextName  = '17,18,19'
-		set @TextSortOrder = 0
-	
-		set @Text = 
-		'<p><Reports To Line Manager><br />
-		<Position Title (Local Job Name) of Reports To Line Manager><br />
-		<Business Unit></p>
-		<hr style="height:2px;border:none;color:#000;background-color:#000;" />
-		'
-	
-		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
-		begin
-
-			INSERT INTO [dbo].[tblCaseDocumentText]
-					   ([CaseDocumentParagraph_Id]
-					   ,[Name]
-					   ,[Description]
-					   ,[Text]
-					   ,[Headline]
-					   ,[SortOrder]
-					   ,CaseDocumentTextGUID)
-				 VALUES
-					   (@CaseDocumentParagraph_Id
-					   ,@CaseDocumentTextName
-					   ,''
-					   ,@Text
-					   ,''
-					   ,@TextSortOrder
-					   ,@CaseDocumentTextGUID)
-		end
-		else
-		begin
-
-			update [tblCaseDocumentText] set
-			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
-			[Name] = @CaseDocumentTextName,
-			[Text] = @Text,
-			[SortOrder] = @TextSortOrder
-			where CaseDocumentTextGUID = @CaseDocumentTextGUID
-		end
-
-	end /* 17,18,19 */
-
-		begin /* 20 */
-		--select newId()
-		set @CaseDocumentTextGUID = '6D8BA196-5157-4765-8933-05F23FA6775E'
-		set @CaseDocumentTextName  = '20'
-		set @TextSortOrder = 0
-	
-		set @Text = 
-		'<p style="text-align:center;"><strong>Acknowledgement</strong></p>
-		<p>I accept the terms and conditions of employment as detailed above.</p>
-		<p>Signed:  _____________________________        Date:  _______________</p>
-		<p>Co-worker Name: <Co-worker First Name> <Co-worker Last Name></p>
-		'
-	
-		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
-		begin
-
-			INSERT INTO [dbo].[tblCaseDocumentText]
-					   ([CaseDocumentParagraph_Id]
-					   ,[Name]
-					   ,[Description]
-					   ,[Text]
-					   ,[Headline]
-					   ,[SortOrder]
-					   ,CaseDocumentTextGUID)
-				 VALUES
-					   (@CaseDocumentParagraph_Id
-					   ,@CaseDocumentTextName
-					   ,''
-					   ,@Text
-					   ,''
-					   ,@TextSortOrder
-					   ,@CaseDocumentTextGUID)
-		end
-		else
-		begin
-
-			update [tblCaseDocumentText] set
-			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
-			[Name] = @CaseDocumentTextName,
-			[Text] = @Text,
-			[SortOrder] = @TextSortOrder
-			where CaseDocumentTextGUID = @CaseDocumentTextGUID
-		end
-
-	end /* 20 */
-
-	--CONNNECT PARAGRAPH WITH DOCUMENT
-
-	set @SortOrder = 5
-	if not exists(select * from tblCaseDocument_CaseDocumentParagraph where CaseDocument_id = @CaseDocumentId and CaseDocumentParagraph_Id = @CaseDocumentParagraph_Id)
-	begin
-
-		
-		insert into tblCaseDocument_CaseDocumentParagraph
-		(CaseDocument_id, CaseDocumentParagraph_Id, SortOrder)
-		VALUES (@CaseDocumentId, @CaseDocumentParagraph_Id,@SortOrder)
-
-	end
-	begin
-		update tblCaseDocument_CaseDocumentParagraph set SortOrder = @SortOrder where CaseDocument_id = @CaseDocumentId and CaseDocumentParagraph_Id = @CaseDocumentParagraph_Id 
-	end
-
-end /* Paragraph - SIGNATURE */
+--begin  /* Paragraph - REST */
+--	
+--	--select newid()
+--	set @CaseDocumentParagraphGUID = 'AC6891B8-18CF-45F3-A4C0-CC27294C6DF2'
+--	set @CaseDocumentParagraphName = 'Contract Clusters - DC EA - BODY'
+--
+--
+--
+--
+--	if not exists(select * from tblCaseDocumentParagraph where CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID)
+--	begin
+--
+--		INSERT INTO [dbo].[tblCaseDocumentParagraph]
+--				   ([Name]
+--				   ,[Description]
+--				   ,[ParagraphType]
+--				   ,CaseDocumentParagraphGUID)
+--			 VALUES
+--				   (@CaseDocumentParagraphName
+--				   ,'Contract Clusters - DC EA'
+--				   ,@ParagraphTypeText
+--				   ,@CaseDocumentParagraphGUID
+--				   )
+--
+--	end
+--	else
+--	begin
+--		
+--		update [tblCaseDocumentParagraph] set
+--		[Name] = @CaseDocumentParagraphName,
+--		[ParagraphType] = @ParagraphTypeText
+--
+--		where CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID
+--	end
+--
+--	select @CaseDocumentParagraph_Id = Id from tblCaseDocumentParagraph where  CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID
+--
+--		begin /* 10a */
+--		
+--		
+--		set @CaseDocumentTextGUID = '8E52C1BE-9CB5-43DF-87BF-E4EA8B9A91E2'
+--		set @CaseDocumentTextName  = '10a'
+--		set @TextSortOrder = 0
+--	
+--		set @Text = 
+--		'IKEA Pty Ltd (IKEA) is pleased to present you with a contract of employment under the terms and conditions of the IKEA Enterprise Agreement 2017.'
+--	
+--		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
+--		begin
+--
+--			INSERT INTO [dbo].[tblCaseDocumentText]
+--					   ([CaseDocumentParagraph_Id]
+--					   ,[Name]
+--					   ,[Description]
+--					   ,[Text]
+--					   ,[Headline]
+--					   ,[SortOrder]
+--					   ,CaseDocumentTextGUID)
+--				 VALUES
+--					   (@CaseDocumentParagraph_Id
+--					   ,@CaseDocumentTextName
+--					   ,''
+--					   ,@Text
+--					   ,''
+--					   ,@TextSortOrder
+--					   ,@CaseDocumentTextGUID)
+--		end
+--		else
+--		begin
+--
+--			update [tblCaseDocumentText] set
+--			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
+--			[Name] = @CaseDocumentTextName,
+--			[Text] = @Text,
+--			[SortOrder] = @TextSortOrder
+--			where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--		end
+--
+--		begin /* 10a CONDITIONS */
+--		/*
+--			--select newid()
+--			set @CaseDocumentTextConditionGUID = 'C547488F-E403-471F-A1F7-A36948018CB9'
+--			
+--			set @Property_Name= 'extendedcase_ContractEndDate'
+--			
+--			set @Operator= 'IsEmpty'
+--			
+--			set @Values = ''
+--
+--			-- GET FROM ABOVE 
+--			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--			
+--			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
+--			begin
+--				
+--				Insert into tblCaseDocumentTextCondition
+--				(CaseDocumentTextConditionGUID, 
+--				CaseDocumentText_Id,
+--				Property_Name,
+--				[Operator],
+--				[Values],
+--				[Status])
+--				VALUES
+--				(
+--				@CaseDocumentTextConditionGUID,
+--				@CaseDocumentTextId,
+--				@Property_Name,
+--				@Operator,
+--				@Values,
+--				1
+--				)
+--
+--				
+--
+--			end
+--			else
+--			begin
+--
+--				update tblCaseDocumentTextCondition 
+--				set CaseDocumentText_Id = @CaseDocumentTextId,
+--				Property_Name = @Property_Name,
+--				Operator = @Operator,
+--				[Values]= @Values
+--				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
+--
+--			end
+--
+--
+--
+--
+--		end /* 10a CONDITIONS */
+--
+--	end /* 10a */
+--
+--
+--	begin /* 10b */
+--
+--		set @TextSortOrder = 0
+--
+--		
+--		set @CaseDocumentTextGUID  = 'E8B2F985-D317-4E06-9934-7593AC6C1A1E'
+--		set @CaseDocumentTextName = '10b'
+--	
+--		set @Text = 
+--		'IKEA Pty Ltd (IKEA) is pleased to present you with a temporary contract of employment under the terms and conditions of the IKEA Enterprise Agreement 2017.'
+--	
+--		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
+--		begin
+--
+--			INSERT INTO [dbo].[tblCaseDocumentText]
+--					   ([CaseDocumentParagraph_Id]
+--					   ,[Name]
+--					   ,[Description]
+--					   ,[Text]
+--					   ,[Headline]
+--					   ,[SortOrder]
+--					   ,CaseDocumentTextGUID)
+--				 VALUES
+--					   (@CaseDocumentParagraph_Id
+--					   ,@CaseDocumentTextName
+--					   ,''
+--					   ,@Text
+--					   ,''
+--					   ,@TextSortOrder
+--					   ,@CaseDocumentTextGUID)
+--		end
+--		else
+--		begin
+--
+--			update [tblCaseDocumentText] set
+--			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
+--			[Name] = @CaseDocumentTextName,
+--			[Text] = @Text,
+--			[SortOrder] = @TextSortOrder
+--			where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--		end
+--
+--
+--			begin /* 10b CONDITIONS */
+--
+--			--select newid()
+--			set @CaseDocumentTextConditionGUID = '6B682E31-49E6-4A85-9251-69F279ECBFB1'
+--			
+--			set @Property_Name= 'extendedcase_ContractEndDate'
+--			set @Operator= 'HasValue'
+--			set @Values = ''
+--
+--			-- GET FROM ABOVE 
+--			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--			
+--			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
+--			begin
+--				
+--				Insert into tblCaseDocumentTextCondition
+--				(CaseDocumentTextConditionGUID, 
+--				CaseDocumentText_Id,
+--				Property_Name,
+--				[Operator],
+--				[Values],
+--				[Status])
+--				VALUES
+--				(
+--				@CaseDocumentTextConditionGUID,
+--				@CaseDocumentTextId,
+--				@Property_Name,
+--				@Operator,
+--				@Values,
+--				1
+--				)
+--
+--				
+--
+--			end
+--			else
+--			begin
+--
+--				update tblCaseDocumentTextCondition 
+--				set CaseDocumentText_Id = @CaseDocumentTextId,
+--				Property_Name = @Property_Name,
+--				Operator = @Operator,
+--				[Values]= @Values
+--				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
+--
+--			end
+--
+--
+--
+--
+--		end /* 10b CONDITIONS */
+--
+--
+--	end /* 10b */
+--
+--
+--	--CONNNECT PARAGRAPH WITH DOCUMENT
+--
+--	set @SortOrder = 3
+--	if not exists(select * from tblCaseDocument_CaseDocumentParagraph where CaseDocument_id = @CaseDocumentId and CaseDocumentParagraph_Id = @CaseDocumentParagraph_Id)
+--	begin
+--
+--		
+--		insert into tblCaseDocument_CaseDocumentParagraph
+--		(CaseDocument_id, CaseDocumentParagraph_Id, SortOrder)
+--		VALUES (@CaseDocumentId, @CaseDocumentParagraph_Id,@SortOrder)
+--
+--	end
+--	begin
+--		update tblCaseDocument_CaseDocumentParagraph set SortOrder = @SortOrder where CaseDocument_id = @CaseDocumentId and CaseDocumentParagraph_Id = @CaseDocumentParagraph_Id 
+--	end
+--
+--end /* Paragraph - REST */
+--
+--begin  /* Paragraph - TABLE */
+--	
+--	--select newid()
+--	set @CaseDocumentParagraphGUID = '9138949C-F253-4803-9E0E-4643811D5DEA'
+--	set @CaseDocumentParagraphName = 'Contract Clusters - DC EA - TABLE'
+--
+--	if not exists(select * from tblCaseDocumentParagraph where CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID)
+--	begin
+--
+--		INSERT INTO [dbo].[tblCaseDocumentParagraph]
+--				   ([Name]
+--				   ,[Description]
+--				   ,[ParagraphType]
+--				   ,CaseDocumentParagraphGUID)
+--			 VALUES
+--				   (@CaseDocumentParagraphName
+--				   ,'Contract Clusters - DC EA - TABLE'
+--				   ,@ParagraphTypeTableTwoColumns
+--				   ,@CaseDocumentParagraphGUID
+--				   )
+--
+--	end
+--	else
+--	begin
+--		
+--		update [tblCaseDocumentParagraph] set
+--		[Name] = @CaseDocumentParagraphName,
+--		[ParagraphType] = @ParagraphTypeTableTwoColumns
+--
+--		where CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID
+--	end
+--
+--	select @CaseDocumentParagraph_Id = Id from tblCaseDocumentParagraph where  CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID
+--
+--	begin /* 11 */
+--
+--		set @TextSortOrder = 0
+--		
+--		set @CaseDocumentTextGUID  = '350AE198-CABA-47C9-BA6D-10441E0DD3D7'
+--		set @CaseDocumentTextName = '11'
+--	
+--		set @Headline = 'Classification:'
+--		set @Text = '<Position Title (Local Job Name)>'
+--	
+--		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
+--		begin
+--
+--			INSERT INTO [dbo].[tblCaseDocumentText]
+--					   ([CaseDocumentParagraph_Id]
+--					   ,[Name]
+--					   ,[Description]
+--					   ,[Text]
+--					   ,[Headline]
+--					   ,[SortOrder]
+--					   ,CaseDocumentTextGUID)
+--				 VALUES
+--					   (@CaseDocumentParagraph_Id
+--					   ,@CaseDocumentTextName
+--					   ,''
+--					   ,@Text
+--					   ,@Headline
+--					   ,@TextSortOrder
+--					   ,@CaseDocumentTextGUID)
+--		end
+--		else
+--		begin
+--
+--			update [tblCaseDocumentText] set
+--			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
+--			[Name] = @CaseDocumentTextName,
+--			[Text] = @Text,
+--			[Headline] = @Headline,
+--			[SortOrder] = @TextSortOrder
+--			where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--		end
+--
+--	end /* 11 */
+--
+--
+--		begin /* 12 */
+--
+--		set @TextSortOrder = 0
+--		
+--		set @CaseDocumentTextGUID  = '53CF156C-7029-4D46-8C4B-0BF44A4FDE82'
+--		set @CaseDocumentTextName = '12'
+--	
+--		set @Headline = 'Location:'
+--		set @Text = '<Business Unit>'
+--	
+--		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
+--		begin
+--
+--			INSERT INTO [dbo].[tblCaseDocumentText]
+--					   ([CaseDocumentParagraph_Id]
+--					   ,[Name]
+--					   ,[Description]
+--					   ,[Text]
+--					   ,[Headline]
+--					   ,[SortOrder]
+--					   ,CaseDocumentTextGUID)
+--				 VALUES
+--					   (@CaseDocumentParagraph_Id
+--					   ,@CaseDocumentTextName
+--					   ,''
+--					   ,@Text
+--					   ,@Headline
+--					   ,@TextSortOrder
+--					   ,@CaseDocumentTextGUID)
+--		end
+--		else
+--		begin
+--
+--			update [tblCaseDocumentText] set
+--			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
+--			[Name] = @CaseDocumentTextName,
+--			[Text] = @Text,
+--			[Headline] = @Headline,
+--			[SortOrder] = @TextSortOrder
+--			where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--		end
+--
+--	end /* 12 */
+--
+--	
+--		begin /* 13a */
+--
+--		set @TextSortOrder = 0
+--		--select newid()
+--		set @CaseDocumentTextGUID  = 'C1122EE9-4EA2-4365-B091-F2AC6C8915ED'
+--		set @CaseDocumentTextName = '13a'
+--	
+--		set @Headline = 'Effective date:'
+--		set @Text = '<Contract Start Date>'
+--	
+--		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
+--		begin
+--
+--			INSERT INTO [dbo].[tblCaseDocumentText]
+--					   ([CaseDocumentParagraph_Id]
+--					   ,[Name]
+--					   ,[Description]
+--					   ,[Text]
+--					   ,[Headline]
+--					   ,[SortOrder]
+--					   ,CaseDocumentTextGUID)
+--				 VALUES
+--					   (@CaseDocumentParagraph_Id
+--					   ,@CaseDocumentTextName
+--					   ,''
+--					   ,@Text
+--					   ,@Headline
+--					   ,@TextSortOrder
+--					   ,@CaseDocumentTextGUID)
+--		end
+--		else
+--		begin
+--
+--			update [tblCaseDocumentText] set
+--			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
+--			[Name] = @CaseDocumentTextName,
+--			[Text] = @Text,
+--			[Headline] = @Headline,
+--			[SortOrder] = @TextSortOrder
+--			where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--		end
+--
+--
+--			begin /* 13a CONDITIONS */
+--
+--			--select newid()
+--			set @CaseDocumentTextConditionGUID = 'CF362805-DA68-4548-A5F5-8A9E47577436'
+--			
+--			set @Property_Name= 'extendedcase_ContractEndDate'
+--			
+--			set @Operator= 'IsEmpty'
+--			
+--			set @Values = ''
+--
+--			-- GET FROM ABOVE 
+--			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--			
+--			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
+--			begin
+--				
+--				Insert into tblCaseDocumentTextCondition
+--				(CaseDocumentTextConditionGUID, 
+--				CaseDocumentText_Id,
+--				Property_Name,
+--				[Operator],
+--				[Values],
+--				[Status])
+--				VALUES
+--				(
+--				@CaseDocumentTextConditionGUID,
+--				@CaseDocumentTextId,
+--				@Property_Name,
+--				@Operator,
+--				@Values,
+--				1
+--				)
+--
+--				
+--
+--			end
+--			else
+--			begin
+--
+--				update tblCaseDocumentTextCondition 
+--				set CaseDocumentText_Id = @CaseDocumentTextId,
+--				Property_Name = @Property_Name,
+--				Operator = @Operator,
+--				[Values]= @Values
+--				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
+--
+--			end
+--
+--
+--
+--
+--		end /* 13a CONDITIONS */
+--
+--
+--
+--	end /* 13a */
+--
+--
+--
+--		begin /* 13b */
+--
+--		set @TextSortOrder = 0
+--		--select newid()
+--		set @CaseDocumentTextGUID  = '445B4588-CD93-4F51-BC70-C2B2FD1B3810'
+--		set @CaseDocumentTextName = '13b'
+--	
+--		set @Headline = 'Temporary Contract Period:'
+--		set @Text = 'from <Contract Start Date>'
+--	
+--		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
+--		begin
+--
+--			INSERT INTO [dbo].[tblCaseDocumentText]
+--					   ([CaseDocumentParagraph_Id]
+--					   ,[Name]
+--					   ,[Description]
+--					   ,[Text]
+--					   ,[Headline]
+--					   ,[SortOrder]
+--					   ,CaseDocumentTextGUID)
+--				 VALUES
+--					   (@CaseDocumentParagraph_Id
+--					   ,@CaseDocumentTextName
+--					   ,''
+--					   ,@Text
+--					   ,@Headline
+--					   ,@TextSortOrder
+--					   ,@CaseDocumentTextGUID)
+--		end
+--		else
+--		begin
+--
+--			update [tblCaseDocumentText] set
+--			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
+--			[Name] = @CaseDocumentTextName,
+--			[Text] = @Text,
+--			[Headline] = @Headline,
+--			[SortOrder] = @TextSortOrder
+--			where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--		end
+--
+--
+--			begin /* 13b CONDITIONS */
+--
+--			--select newid()
+--			set @CaseDocumentTextConditionGUID = 'DADC6E18-B2F2-4450-A61E-E2E29210CE32'
+--			
+--			set @Property_Name= 'extendedcase_ContractEndDate'
+--			
+--			set @Operator= 'HasValue'
+--			
+--			set @Values = ''
+--
+--			-- GET FROM ABOVE 
+--			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--			
+--			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
+--			begin
+--				
+--				Insert into tblCaseDocumentTextCondition
+--				(CaseDocumentTextConditionGUID, 
+--				CaseDocumentText_Id,
+--				Property_Name,
+--				[Operator],
+--				[Values],
+--				[Status])
+--				VALUES
+--				(
+--				@CaseDocumentTextConditionGUID,
+--				@CaseDocumentTextId,
+--				@Property_Name,
+--				@Operator,
+--				@Values,
+--				1
+--				)
+--			end
+--			else
+--			begin
+--
+--				update tblCaseDocumentTextCondition 
+--				set CaseDocumentText_Id = @CaseDocumentTextId,
+--				Property_Name = @Property_Name,
+--				Operator = @Operator,
+--				[Values]= @Values
+--				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
+--
+--			end
+--
+--
+--
+--
+--		end /* 13b CONDITIONS */
+--
+--
+--
+--	end /* 13b */
+--
+--
+--
+--
+--		begin /* 14a */
+--
+--		set @TextSortOrder = 0
+--		--select newid()
+--		set @CaseDocumentTextGUID  = '488A0CCB-F937-428D-9271-0F9947E34A10'
+--		set @CaseDocumentTextName = '14a'
+--	
+--		set @Headline = 'Employment type:'
+--		set @Text = 'Full Time'
+--	
+--		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
+--		begin
+--
+--			INSERT INTO [dbo].[tblCaseDocumentText]
+--					   ([CaseDocumentParagraph_Id]
+--					   ,[Name]
+--					   ,[Description]
+--					   ,[Text]
+--					   ,[Headline]
+--					   ,[SortOrder]
+--					   ,CaseDocumentTextGUID)
+--				 VALUES
+--					   (@CaseDocumentParagraph_Id
+--					   ,@CaseDocumentTextName
+--					   ,''
+--					   ,@Text
+--					   ,@Headline
+--					   ,@TextSortOrder
+--					   ,@CaseDocumentTextGUID)
+--		end
+--		else
+--		begin
+--
+--			update [tblCaseDocumentText] set
+--			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
+--			[Name] = @CaseDocumentTextName,
+--			[Text] = @Text,
+--			[Headline] = @Headline,
+--			[SortOrder] = @TextSortOrder
+--			where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--		end
+--
+--			begin /* 14a CONDITIONS */
+--
+--			--select newid()
+--			set @CaseDocumentTextConditionGUID = 'EC6ED1A1-0DB5-40EE-A71D-B72CE9E9405E'
+--			
+--			set @Property_Name= 'extendedcase_ContractedHours'
+--			
+--			set @Operator= 'Equal'
+--			
+--			set @Values = '76'
+--
+--			-- GET FROM ABOVE 
+--			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--			
+--			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
+--			begin
+--				
+--				Insert into tblCaseDocumentTextCondition
+--				(CaseDocumentTextConditionGUID, 
+--				CaseDocumentText_Id,
+--				Property_Name,
+--				[Operator],
+--				[Values],
+--				[Status])
+--				VALUES
+--				(
+--				@CaseDocumentTextConditionGUID,
+--				@CaseDocumentTextId,
+--				@Property_Name,
+--				@Operator,
+--				@Values,
+--				1
+--				)
+--			end
+--			else
+--			begin
+--
+--				update tblCaseDocumentTextCondition 
+--				set CaseDocumentText_Id = @CaseDocumentTextId,
+--				Property_Name = @Property_Name,
+--				Operator = @Operator,
+--				[Values]= @Values
+--				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
+--
+--			end
+--
+--
+--
+--
+--		end /* 14a CONDITIONS */
+--
+--	end /* 14a */
+--
+--	begin /* 14b */
+--
+--		set @TextSortOrder = 0
+--		--select newid()
+--		set @CaseDocumentTextGUID  = 'D4FB935F-8AD2-4F73-BD10-A616DAD2B46F'
+--		set @CaseDocumentTextName = '14b'
+--	
+--		set @Headline = 'Employment type:'
+--		set @Text = 'Part Time'
+--	
+--		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
+--		begin
+--
+--			INSERT INTO [dbo].[tblCaseDocumentText]
+--					   ([CaseDocumentParagraph_Id]
+--					   ,[Name]
+--					   ,[Description]
+--					   ,[Text]
+--					   ,[Headline]
+--					   ,[SortOrder]
+--					   ,CaseDocumentTextGUID)
+--				 VALUES
+--					   (@CaseDocumentParagraph_Id
+--					   ,@CaseDocumentTextName
+--					   ,''
+--					   ,@Text
+--					   ,@Headline
+--					   ,@TextSortOrder
+--					   ,@CaseDocumentTextGUID)
+--		end
+--		else
+--		begin
+--
+--			update [tblCaseDocumentText] set
+--			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
+--			[Name] = @CaseDocumentTextName,
+--			[Text] = @Text,
+--			[Headline] = @Headline,
+--			[SortOrder] = @TextSortOrder
+--			where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--		end
+--
+--			begin /* 14b CONDITIONS NR 1 */
+--
+--			--select newid()
+--			set @CaseDocumentTextConditionGUID = 'A9786F2D-441E-4EB9-909C-00C619838ECC'
+--			
+--			set @Property_Name= 'extendedcase_ContractedHours'
+--			
+--			set @Operator= 'LessThan'
+--			
+--			set @Values = '76'
+--
+--			-- GET FROM ABOVE 
+--			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--			
+--			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
+--			begin
+--				
+--				Insert into tblCaseDocumentTextCondition
+--				(CaseDocumentTextConditionGUID, 
+--				CaseDocumentText_Id,
+--				Property_Name,
+--				[Operator],
+--				[Values],
+--				[Status])
+--				VALUES
+--				(
+--				@CaseDocumentTextConditionGUID,
+--				@CaseDocumentTextId,
+--				@Property_Name,
+--				@Operator,
+--				@Values,
+--				1
+--				)
+--			end
+--			else
+--			begin
+--
+--				update tblCaseDocumentTextCondition 
+--				set CaseDocumentText_Id = @CaseDocumentTextId,
+--				Property_Name = @Property_Name,
+--				Operator = @Operator,
+--				[Values]= @Values
+--				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
+--
+--			end
+--
+--
+--		end  /* 14b CONDITIONS NR 1 */
+--
+--			begin /* 14b CONDITIONS NR 2 */
+--
+--			--select newid()
+--			set @CaseDocumentTextConditionGUID = '08E59549-8574-4DDD-AE75-724486A49CE3'
+--			
+--			set @Property_Name= 'extendedcase_ContractedHours'
+--			
+--			set @Operator= 'LargerThan'
+--			
+--			set @Values = '0'
+--
+--			-- GET FROM ABOVE 
+--			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--			
+--			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
+--			begin
+--				
+--				Insert into tblCaseDocumentTextCondition
+--				(CaseDocumentTextConditionGUID, 
+--				CaseDocumentText_Id,
+--				Property_Name,
+--				[Operator],
+--				[Values],
+--				[Status])
+--				VALUES
+--				(
+--				@CaseDocumentTextConditionGUID,
+--				@CaseDocumentTextId,
+--				@Property_Name,
+--				@Operator,
+--				@Values,
+--				1
+--				)
+--			end
+--			else
+--			begin
+--
+--				update tblCaseDocumentTextCondition 
+--				set CaseDocumentText_Id = @CaseDocumentTextId,
+--				Property_Name = @Property_Name,
+--				Operator = @Operator,
+--				[Values]= @Values
+--				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
+--
+--			end
+--
+--
+--		end  /* 14b CONDITIONS NR 2 */
+--
+--	end /* 14b */
+--
+--	begin /* 14c */
+--
+--		set @TextSortOrder = 0
+--		--select newid()
+--		set @CaseDocumentTextGUID  = '00B85E9F-FAC3-4FF6-AD75-01326E096231'
+--		set @CaseDocumentTextName = '14c'
+--	
+--		set @Headline = 'Employment type:'
+--		set @Text = 'Casual'
+--	
+--		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
+--		begin
+--
+--			INSERT INTO [dbo].[tblCaseDocumentText]
+--					   ([CaseDocumentParagraph_Id]
+--					   ,[Name]
+--					   ,[Description]
+--					   ,[Text]
+--					   ,[Headline]
+--					   ,[SortOrder]
+--					   ,CaseDocumentTextGUID)
+--				 VALUES
+--					   (@CaseDocumentParagraph_Id
+--					   ,@CaseDocumentTextName
+--					   ,''
+--					   ,@Text
+--					   ,@Headline
+--					   ,@TextSortOrder
+--					   ,@CaseDocumentTextGUID)
+--		end
+--		else
+--		begin
+--
+--			update [tblCaseDocumentText] set
+--			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
+--			[Name] = @CaseDocumentTextName,
+--			[Text] = @Text,
+--			[Headline] = @Headline,
+--			[SortOrder] = @TextSortOrder
+--			where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--		end
+--
+--		begin /* 14c CONDITIONS */
+--
+--			--select newid()
+--			set @CaseDocumentTextConditionGUID = 'FDADC78A-E395-442B-9BAD-355AE56AEBC3'
+--			
+--			set @Property_Name= 'extendedcase_ContractedHours'
+--			
+--			set @Operator= 'Equal'
+--			
+--			set @Values = '0'
+--
+--			-- GET FROM ABOVE 
+--			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--			
+--			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
+--			begin
+--				
+--				Insert into tblCaseDocumentTextCondition
+--				(CaseDocumentTextConditionGUID, 
+--				CaseDocumentText_Id,
+--				Property_Name,
+--				[Operator],
+--				[Values],
+--				[Status])
+--				VALUES
+--				(
+--				@CaseDocumentTextConditionGUID,
+--				@CaseDocumentTextId,
+--				@Property_Name,
+--				@Operator,
+--				@Values,
+--				1
+--				)
+--			end
+--			else
+--			begin
+--
+--				update tblCaseDocumentTextCondition 
+--				set CaseDocumentText_Id = @CaseDocumentTextId,
+--				Property_Name = @Property_Name,
+--				Operator = @Operator,
+--				[Values]= @Values
+--				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
+--
+--			end
+--
+--
+--		end  /* 14c CONDITIONS */
+--
+--	end /* 14c */
+--
+--
+--		begin /* 15a */
+--
+--		set @TextSortOrder = 0
+--		--select newid()
+--		set @CaseDocumentTextGUID  = '8FF33EAD-BEF3-469E-ABC1-37B5A5B9D681'
+--		set @CaseDocumentTextName = '15a'
+--	
+--		set @Headline = 'Contracted Hours per Fortnight:'
+--		set @Text = '<Contracted Hours>'
+--	
+--		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
+--		begin
+--
+--			INSERT INTO [dbo].[tblCaseDocumentText]
+--					   ([CaseDocumentParagraph_Id]
+--					   ,[Name]
+--					   ,[Description]
+--					   ,[Text]
+--					   ,[Headline]
+--					   ,[SortOrder]
+--					   ,CaseDocumentTextGUID)
+--				 VALUES
+--					   (@CaseDocumentParagraph_Id
+--					   ,@CaseDocumentTextName
+--					   ,''
+--					   ,@Text
+--					   ,@Headline
+--					   ,@TextSortOrder
+--					   ,@CaseDocumentTextGUID)
+--		end
+--		else
+--		begin
+--
+--			update [tblCaseDocumentText] set
+--			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
+--			[Name] = @CaseDocumentTextName,
+--			[Text] = @Text,
+--			[Headline] = @Headline,
+--			[SortOrder] = @TextSortOrder
+--			where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--		end
+--
+--		begin /* 15a CONDITIONS */
+--
+--			--select newid()
+--			set @CaseDocumentTextConditionGUID = 'C7E9D22F-A65B-4E8C-9A70-0FB0E2F22F58'
+--			
+--			set @Property_Name= 'extendedcase_ContractedHours'
+--			
+--			set @Operator= 'LargerThan'
+--			
+--			set @Values = '0'
+--
+--			-- GET FROM ABOVE 
+--			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--			
+--			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
+--			begin
+--				
+--				Insert into tblCaseDocumentTextCondition
+--				(CaseDocumentTextConditionGUID, 
+--				CaseDocumentText_Id,
+--				Property_Name,
+--				[Operator],
+--				[Values],
+--				[Status])
+--				VALUES
+--				(
+--				@CaseDocumentTextConditionGUID,
+--				@CaseDocumentTextId,
+--				@Property_Name,
+--				@Operator,
+--				@Values,
+--				1
+--				)
+--			end
+--			else
+--			begin
+--
+--				update tblCaseDocumentTextCondition 
+--				set CaseDocumentText_Id = @CaseDocumentTextId,
+--				Property_Name = @Property_Name,
+--				Operator = @Operator,
+--				[Values]= @Values
+--				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
+--
+--			end
+--
+--
+--		end  /* 15a CONDITIONS */
+--
+--
+--	end /* 15a */
+--
+--	begin /* 15b */
+--
+--		set @TextSortOrder = 0
+--		--select newid()
+--		set @CaseDocumentTextGUID  = 'B64FE969-F1DB-46E1-A893-0CDA60212619'
+--		set @CaseDocumentTextName = '15b'
+--	
+--		set @Headline = ''
+--		set @Text = ''
+--	
+--		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
+--		begin
+--
+--			INSERT INTO [dbo].[tblCaseDocumentText]
+--					   ([CaseDocumentParagraph_Id]
+--					   ,[Name]
+--					   ,[Description]
+--					   ,[Text]
+--					   ,[Headline]
+--					   ,[SortOrder]
+--					   ,CaseDocumentTextGUID)
+--				 VALUES
+--					   (@CaseDocumentParagraph_Id
+--					   ,@CaseDocumentTextName
+--					   ,''
+--					   ,@Text
+--					   ,@Headline
+--					   ,@TextSortOrder
+--					   ,@CaseDocumentTextGUID)
+--		end
+--		else
+--		begin
+--
+--			update [tblCaseDocumentText] set
+--			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
+--			[Name] = @CaseDocumentTextName,
+--			[Text] = @Text,
+--			[Headline] = @Headline,
+--			[SortOrder] = @TextSortOrder
+--			where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--		end
+--
+--			begin /* 15b CONDITIONS */
+--
+--			--select newid()
+--			set @CaseDocumentTextConditionGUID = 'A8F95C94-3900-4B92-B846-506B5E105DFE'
+--			
+--			set @Property_Name= 'extendedcase_ContractedHours'
+--			
+--			set @Operator= 'Equal'
+--			
+--			set @Values = '0'
+--
+--			-- GET FROM ABOVE 
+--			select @CaseDocumentTextId = Id from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--			
+--			if not exists(select * from tblCaseDocumentTextCondition where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID)
+--			begin
+--				
+--				Insert into tblCaseDocumentTextCondition
+--				(CaseDocumentTextConditionGUID, 
+--				CaseDocumentText_Id,
+--				Property_Name,
+--				[Operator],
+--				[Values],
+--				[Status])
+--				VALUES
+--				(
+--				@CaseDocumentTextConditionGUID,
+--				@CaseDocumentTextId,
+--				@Property_Name,
+--				@Operator,
+--				@Values,
+--				1
+--				)
+--			end
+--			else
+--			begin
+--
+--				update tblCaseDocumentTextCondition 
+--				set CaseDocumentText_Id = @CaseDocumentTextId,
+--				Property_Name = @Property_Name,
+--				Operator = @Operator,
+--				[Values]= @Values
+--				where CaseDocumentTextConditionGUID = @CaseDocumentTextConditionGUID
+--
+--			end
+--
+--
+--		end  /* 15b CONDITIONS */
+--
+--
+--	end /* 15b */
+--
+--	--CONNNECT PARAGRAPH WITH DOCUMENT
+--
+--	set @SortOrder = 4
+--	if not exists(select * from tblCaseDocument_CaseDocumentParagraph where CaseDocument_id = @CaseDocumentId and CaseDocumentParagraph_Id = @CaseDocumentParagraph_Id)
+--	begin
+--
+--		
+--		insert into tblCaseDocument_CaseDocumentParagraph
+--		(CaseDocument_id, CaseDocumentParagraph_Id, SortOrder)
+--		VALUES (@CaseDocumentId, @CaseDocumentParagraph_Id,@SortOrder)
+--
+--	end
+--	begin
+--		update tblCaseDocument_CaseDocumentParagraph set SortOrder = @SortOrder where CaseDocument_id = @CaseDocumentId and CaseDocumentParagraph_Id = @CaseDocumentParagraph_Id 
+--	end
+--
+--end /* Paragraph - TABLE */
+--
+--
+--begin  /* Paragraph - SIGNATURE */
+--	
+--	--select newid()
+--	set @CaseDocumentParagraphGUID = 'A933C122-8E38-43CD-B857-1249C9AD463C'
+--	set @CaseDocumentParagraphName = 'Contract Clusters - DC EA - SIGNATURE'
+--
+--	if not exists(select * from tblCaseDocumentParagraph where CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID)
+--	begin
+--
+--		INSERT INTO [dbo].[tblCaseDocumentParagraph]
+--				   ([Name]
+--				   ,[Description]
+--				   ,[ParagraphType]
+--				   ,CaseDocumentParagraphGUID)
+--			 VALUES
+--				   (@CaseDocumentParagraphName
+--				   ,'Contract Clusters - DC EA - SIGNATURE'
+--				   ,@ParagraphTypeText
+--				   ,@CaseDocumentParagraphGUID
+--				   )
+--
+--	end
+--	else
+--	begin
+--		
+--		update [tblCaseDocumentParagraph] set
+--		[Name] = @CaseDocumentParagraphName,
+--		[ParagraphType] = @ParagraphTypeText
+--
+--		where CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID
+--	end
+--
+--	select @CaseDocumentParagraph_Id = Id from tblCaseDocumentParagraph where  CaseDocumentParagraphGUID = @CaseDocumentParagraphGUID
+--
+--		begin /* 16 */
+--		--select newId()
+--		set @CaseDocumentTextGUID = '696409BA-C2D0-4BA2-809D-9ED7E9D0141C'
+--		set @CaseDocumentTextName  = '16'
+--		set @TextSortOrder = 0
+--	
+--		set @Text = 
+--		'Your terms and conditions of employment will be as per the IKEA Enterprise Agreement 2017, the IKEA Group Code of Conduct and IKEA policies and procedures, as amended from time to time.  You can access this information via ‘ico-worker.com’ <i>(the IKEA co-worker website)</i> or ‘IKEA Inside’ <i>(the IKEA intranet)</i>.'
+--	
+--		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
+--		begin
+--
+--			INSERT INTO [dbo].[tblCaseDocumentText]
+--					   ([CaseDocumentParagraph_Id]
+--					   ,[Name]
+--					   ,[Description]
+--					   ,[Text]
+--					   ,[Headline]
+--					   ,[SortOrder]
+--					   ,CaseDocumentTextGUID)
+--				 VALUES
+--					   (@CaseDocumentParagraph_Id
+--					   ,@CaseDocumentTextName
+--					   ,''
+--					   ,@Text
+--					   ,''
+--					   ,@TextSortOrder
+--					   ,@CaseDocumentTextGUID)
+--		end
+--		else
+--		begin
+--
+--			update [tblCaseDocumentText] set
+--			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
+--			[Name] = @CaseDocumentTextName,
+--			[Text] = @Text,
+--			[SortOrder] = @TextSortOrder
+--			where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--		end
+--
+--	end /* 16 */
+--
+--
+--		begin /* 17,18,19 */
+--		--select newId()
+--		set @CaseDocumentTextGUID = '2E936F7F-62C2-4A60-BDDB-66852F6FD273'
+--		set @CaseDocumentTextName  = '17,18,19'
+--		set @TextSortOrder = 0
+--	
+--		set @Text = 
+--		'<p><Reports To Line Manager><br />
+--		<Position Title (Local Job Name) of Reports To Line Manager><br />
+--		<Business Unit></p>
+--		<hr style="height:2px;border:none;color:#000;background-color:#000;" />
+--		'
+--	
+--		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
+--		begin
+--
+--			INSERT INTO [dbo].[tblCaseDocumentText]
+--					   ([CaseDocumentParagraph_Id]
+--					   ,[Name]
+--					   ,[Description]
+--					   ,[Text]
+--					   ,[Headline]
+--					   ,[SortOrder]
+--					   ,CaseDocumentTextGUID)
+--				 VALUES
+--					   (@CaseDocumentParagraph_Id
+--					   ,@CaseDocumentTextName
+--					   ,''
+--					   ,@Text
+--					   ,''
+--					   ,@TextSortOrder
+--					   ,@CaseDocumentTextGUID)
+--		end
+--		else
+--		begin
+--
+--			update [tblCaseDocumentText] set
+--			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
+--			[Name] = @CaseDocumentTextName,
+--			[Text] = @Text,
+--			[SortOrder] = @TextSortOrder
+--			where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--		end
+--
+--	end /* 17,18,19 */
+--
+--		begin /* 20 */
+--		--select newId()
+--		set @CaseDocumentTextGUID = '6D8BA196-5157-4765-8933-05F23FA6775E'
+--		set @CaseDocumentTextName  = '20'
+--		set @TextSortOrder = 0
+--	
+--		set @Text = 
+--		'<p style="text-align:center;"><strong>Acknowledgement</strong></p>
+--		<p>I accept the terms and conditions of employment as detailed above.</p>
+--		<p>Signed:  _____________________________        Date:  _______________</p>
+--		<p>Co-worker Name: <Co-worker First Name> <Co-worker Last Name></p>
+--		'
+--	
+--		if not exists(select * from tblCaseDocumentText where CaseDocumentTextGUID = @CaseDocumentTextGUID)
+--		begin
+--
+--			INSERT INTO [dbo].[tblCaseDocumentText]
+--					   ([CaseDocumentParagraph_Id]
+--					   ,[Name]
+--					   ,[Description]
+--					   ,[Text]
+--					   ,[Headline]
+--					   ,[SortOrder]
+--					   ,CaseDocumentTextGUID)
+--				 VALUES
+--					   (@CaseDocumentParagraph_Id
+--					   ,@CaseDocumentTextName
+--					   ,''
+--					   ,@Text
+--					   ,''
+--					   ,@TextSortOrder
+--					   ,@CaseDocumentTextGUID)
+--		end
+--		else
+--		begin
+--
+--			update [tblCaseDocumentText] set
+--			[CaseDocumentParagraph_Id] = @CaseDocumentParagraph_Id,
+--			[Name] = @CaseDocumentTextName,
+--			[Text] = @Text,
+--			[SortOrder] = @TextSortOrder
+--			where CaseDocumentTextGUID = @CaseDocumentTextGUID
+--		end
+--
+--	end /* 20 */
+--
+--	--CONNNECT PARAGRAPH WITH DOCUMENT
+--
+--	set @SortOrder = 5
+--	if not exists(select * from tblCaseDocument_CaseDocumentParagraph where CaseDocument_id = @CaseDocumentId and CaseDocumentParagraph_Id = @CaseDocumentParagraph_Id)
+--	begin
+--
+--		
+--		insert into tblCaseDocument_CaseDocumentParagraph
+--		(CaseDocument_id, CaseDocumentParagraph_Id, SortOrder)
+--		VALUES (@CaseDocumentId, @CaseDocumentParagraph_Id,@SortOrder)
+--
+--	end
+--	begin
+--		update tblCaseDocument_CaseDocumentParagraph set SortOrder = @SortOrder where CaseDocument_id = @CaseDocumentId and CaseDocumentParagraph_Id = @CaseDocumentParagraph_Id 
+--	end
+--
+--end /* Paragraph - SIGNATURE */
 
 
 
