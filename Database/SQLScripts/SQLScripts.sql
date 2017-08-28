@@ -1209,5 +1209,21 @@ BEGIN
 
 END
 
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'ShowQuickNewCaseLink' and sysobjects.name = N'tblSettings')
+   ALTER TABLE tblSettings ADD ShowQuickNewCaseLink int NOT NULL Default(0)
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'QuickNewCaseLinkText' and sysobjects.name = N'tblSettings')
+   ALTER TABLE tblSettings ADD QuickNewCaseLinkText nvarchar(50) NOT NULL Default(N'+')
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'QuickNewCaseLinkUrl' and sysobjects.name = N'tblSettings')
+   ALTER TABLE tblSettings ADD QuickNewCaseLinkUrl nvarchar(255) NOT NULL Default(N'/cases/new')
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.33'

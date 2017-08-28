@@ -2,8 +2,8 @@
 @using DH.Helpdesk.Web.Infrastructure
 
 @{
-    var passChangeText = Translation.Get("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation);    
-    
+    var passChangeText = Translation.Get("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation);
+
     var passChangeError = Translation.Get("De lösenord du angav stämmer inte överens med varandra. Försök igen", Enums.TranslationSource.TextTranslation);
 }
 <div class="content">
@@ -56,19 +56,20 @@
                                         @Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.TextBoxFor(model => model.Setting.LDAPPassword, new { maxlength = "20", disabled = "disable" } ) <input type="button" value="@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)" name="changePassword" class="changePassword btn"
-                                                onclick="ChangePassword()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                                        @Html.TextBoxFor(model => model.Setting.LDAPPassword, new { maxlength = "20", disabled = "disable" }) <input type="button" value="@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)" name="changePassword" class="changePassword btn"
+                                                                                                                                                     onclick="ChangePassword()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';" />
                                     </td>
-                                    
+
                                 </tr>
                                 <tr>
                                     <td>
                                         @Translation.Get("Skriv över", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="customer.OverwriteFromMasterDirectory" @(Model.Customer.OverwriteFromMasterDirectory == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="customer.OverwriteFromMasterDirectory" value="0" />
-                                        &nbsp;@Translation.Get("Skriv alltid över befintlig information vid synkronisering", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="customer.OverwriteFromMasterDirectory" @(Model.Customer.OverwriteFromMasterDirectory == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="customer.OverwriteFromMasterDirectory" value="0" />
+                                            &nbsp;@Translation.Get("Skriv alltid över befintlig information vid synkronisering", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
@@ -79,18 +80,19 @@
                                     <td>
                                         @Translation.Get("Ta bort poster som inte synkroniserats på", Enums.TranslationSource.TextTranslation)
                                         &nbsp;
-                @Html.TextBoxFor(model => model.Customer.Days2WaitBeforeDelete, new { style = "width: 40px;" })
+                                        @Html.TextBoxFor(model => model.Customer.Days2WaitBeforeDelete, new { style = "width: 40px;" })
                                         &nbsp;
-                @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         @Translation.Get("Loggning", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.LDAPLogLevel" @(Model.Setting.LDAPLogLevel == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.LDAPLogLevel" value="0" />
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.LDAPLogLevel" @(Model.Setting.LDAPLogLevel == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.LDAPLogLevel" value="0" />
                                         </label>
                                     </td>
                                 </tr>
@@ -116,9 +118,10 @@
                                     <td>
                                         @Translation.Get("Läs in alla filer", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.XMLAllFiles" @(Model.Setting.XMLAllFiles == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.XMLAllFiles" value="0" />
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.XMLAllFiles" @(Model.Setting.XMLAllFiles == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.XMLAllFiles" value="0" />
                                         </label>
                                     </td>
                                 </tr>
@@ -126,9 +129,10 @@
                                     <td>
                                         @Translation.Get("Loggning", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.XMLLogLevel" @(Model.Setting.XMLLogLevel == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.XMLLogLevel" value="0" />
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.XMLLogLevel" @(Model.Setting.XMLLogLevel == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.XMLLogLevel" value="0" />
                                         </label>
                                     </td>
                                 </tr>
@@ -150,132 +154,150 @@
                                     <td colspan="3"></td>
                                 </tr>
                                 <tr>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" id="moduleCalendar" name="setting.ModuleCalendar" @(Model.Setting.ModuleCalendar == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleCalendar" value="0" />
-                                        &nbsp;@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" id="moduleCalendar" name="setting.ModuleCalendar" @(Model.Setting.ModuleCalendar == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleCalendar" value="0" />
+                                            &nbsp;@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModuleComputerUser" @(Model.Setting.ModuleComputerUser == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleComputerUser" value="0" />
-                                        &nbsp;@Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.ModuleComputerUser" @(Model.Setting.ModuleComputerUser == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleComputerUser" value="0" />
+                                            &nbsp;@Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" id="moduleBulletinBoard" name="setting.ModuleBulletinBoard" @(Model.Setting.ModuleBulletinBoard == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleBulletinBoard" value="0" />
-                                        &nbsp;@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
-                                        </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                   <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModuleContract" @(Model.Setting.ModuleContract == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleContract" value="0" />
-                                        &nbsp;@Translation.Get("Avtal", Enums.TranslationSource.TextTranslation)
-                                        </label>
-                                    </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModuleOrder" @(Model.Setting.ModuleOrder == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleOrder" value="0" />
-                                        &nbsp;@Translation.Get("Beställningar", Enums.TranslationSource.TextTranslation)
-                                        </label>
-                                    </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModuleChecklist" @(Model.Setting.ModuleChecklist == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleChecklist" value="0" />
-                                        &nbsp;@Translation.Get("Checklista", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" id="moduleBulletinBoard" name="setting.ModuleBulletinBoard" @(Model.Setting.ModuleBulletinBoard == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleBulletinBoard" value="0" />
+                                            &nbsp;@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModuleDailyReport" @(Model.Setting.ModuleDailyReport == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleDailyReport" value="0" />
-                                        &nbsp;@Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.ModuleContract" @(Model.Setting.ModuleContract == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleContract" value="0" />
+                                            &nbsp;@Translation.Get("Avtal", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModuleDocument" @(Model.Setting.ModuleDocument == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleDocument" value="0" />
-                                        &nbsp;@Translation.Get("Dokumenthantering", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.ModuleOrder" @(Model.Setting.ModuleOrder == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleOrder" value="0" />
+                                            &nbsp;@Translation.Get("Beställningar", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModuleOperationLog" @(Model.Setting.ModuleOperationLog == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleOperationLog" value="0" />
-                                        &nbsp;@Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)
-                                        </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModuleQuestionnaire" @(Model.Setting.ModuleQuestionnaire == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleQuestionnaire" value="0" />
-                                        &nbsp;@Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)
-                                        </label>
-                                    </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModuleInvoice" @(Model.Setting.ModuleInvoice == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleInvoice" value="0" />
-                                        &nbsp;@Translation.Get("Fakturering tid", Enums.TranslationSource.TextTranslation)
-                                        </label>
-                                    </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModuleFAQ" @(Model.Setting.ModuleFAQ == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleFAQ" value="0" />
-                                        &nbsp;@Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.ModuleChecklist" @(Model.Setting.ModuleChecklist == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleChecklist" value="0" />
+                                            &nbsp;@Translation.Get("Checklista", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModuleInventory" @(Model.Setting.ModuleInventory == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleInventory" value="0" />
-                                        &nbsp;@Translation.Get("Inventarier", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.ModuleDailyReport" @(Model.Setting.ModuleDailyReport == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleDailyReport" value="0" />
+                                            &nbsp;@Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModuleLicense" @(Model.Setting.ModuleLicense == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleLicense" value="0" />
-                                        &nbsp;@Translation.Get("Licenshantering", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.ModuleDocument" @(Model.Setting.ModuleDocument == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleDocument" value="0" />
+                                            &nbsp;@Translation.Get("Dokumenthantering", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModuleProblem" @(Model.Setting.ModuleProblem == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleProblem" value="0" />
-                                        &nbsp;@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.ModuleOperationLog" @(Model.Setting.ModuleOperationLog == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleOperationLog" value="0" />
+                                            &nbsp;@Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModuleProject" @(Model.Setting.ModuleProject == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleProject" value="0" />
-                                        &nbsp;@Translation.Get("Projekt", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.ModuleQuestionnaire" @(Model.Setting.ModuleQuestionnaire == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleQuestionnaire" value="0" />
+                                            &nbsp;@Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
-                                    <td><label class="checkbox">
-                                            <input type="checkbox" name="setting.ModuleChangeManagement" @(Model.Setting.ModuleChangeManagement == 1 ? "checked=checked" : "") value="1"/>
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.ModuleInvoice" @(Model.Setting.ModuleInvoice == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleInvoice" value="0" />
+                                            &nbsp;@Translation.Get("Fakturering tid", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.ModuleFAQ" @(Model.Setting.ModuleFAQ == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleFAQ" value="0" />
+                                            &nbsp;@Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.ModuleInventory" @(Model.Setting.ModuleInventory == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleInventory" value="0" />
+                                            &nbsp;@Translation.Get("Inventarier", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.ModuleLicense" @(Model.Setting.ModuleLicense == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleLicense" value="0" />
+                                            &nbsp;@Translation.Get("Licenshantering", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.ModuleProblem" @(Model.Setting.ModuleProblem == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleProblem" value="0" />
+                                            &nbsp;@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.ModuleProject" @(Model.Setting.ModuleProject == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleProject" value="0" />
+                                            &nbsp;@Translation.Get("Projekt", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.ModuleChangeManagement" @(Model.Setting.ModuleChangeManagement == 1 ? "checked=checked" : "") value="1" />
                                             <input type="hidden" name="setting.ModuleChangeManagement" value="0" />
                                             &nbsp;@Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)
                                             <input type="hidden" name="setting.ModuleAccount" value="0" />
                                             <input type="hidden" name="setting.ModulePlanning" value="0" />
                                         </label>
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModuleCaseInvoice" @(Model.Setting.ModuleCaseInvoice == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModuleCaseInvoice" value="0" />
-                                        &nbsp;@Translation.Get("Fakturering artikel")
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="setting.ModuleCaseInvoice" @(Model.Setting.ModuleCaseInvoice == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="setting.ModuleCaseInvoice" value="0" />
+                                            &nbsp;@Translation.Get("Fakturering artikel")
                                         </label>
                                     </td>
                                     <td>
                                         @*<label class="checkbox hidden">
-                                            <input type="checkbox" name="setting.ModuleExtendedCase" @(Model.Setting.ModuleExtendedCase == 1 ? "checked=checked" : "") value="1" />
-                                            <input type="hidden" name="setting.ModuleExtendedCase" value="0" />
-                                            &nbsp;@Translation.Get("Extended Case", Enums.TranslationSource.TextTranslation)
-                                        </label>*@
+                                                <input type="checkbox" name="setting.ModuleExtendedCase" @(Model.Setting.ModuleExtendedCase == 1 ? "checked=checked" : "") value="1" />
+                                                <input type="hidden" name="setting.ModuleExtendedCase" value="0" />
+                                                &nbsp;@Translation.Get("Extended Case", Enums.TranslationSource.TextTranslation)
+                                            </label>*@
                                         @*TODO: this is hidden for now, add above code when customer should be able to decide this /TAN*@
                                         <input type="hidden" name="setting.ModuleExtendedCase" value="@Model.Setting.ModuleExtendedCase" />
                                     </td>
@@ -326,17 +348,17 @@
                                         <strong>@Translation.Get("Markera de rapporter som kunden använder sig av", Enums.TranslationSource.TextTranslation)</strong>
                                     </td>
                                 </tr>
-                                <tr>
-                                </tr>
+                                <tr></tr>
                                 @{ var count = 0; }
                                 @foreach (var report in Model.ListCustomerReports)
                                 {
                                     <tr>
-                                        <td><label class="checkbox">
-                                            <input type="checkbox" name="@string.Format("ReportCustomers[{0}].ShowOnPage", count)" @(report.ActiveOnPage == 1 ? "checked=checked" : "") value="1"/>
-                                            <input type="hidden" name="@string.Format("ReportCustomers[{0}].Customer_Id", count)" value="@Model.Customer.Id" />
-                                            <input type="hidden" name="@string.Format("ReportCustomers[{0}].Report_Id", count)" value="@report.ReportId" />
-                                            &nbsp;@Translation.Get(report.ReportName, Enums.TranslationSource.TextTranslation)
+                                        <td>
+                                            <label class="checkbox">
+                                                <input type="checkbox" name="@string.Format("ReportCustomers[{0}].ShowOnPage", count)" @(report.ActiveOnPage == 1 ? "checked=checked" : "") value="1" />
+                                                <input type="hidden" name="@string.Format("ReportCustomers[{0}].Customer_Id", count)" value="@Model.Customer.Id" />
+                                                <input type="hidden" name="@string.Format("ReportCustomers[{0}].Report_Id", count)" value="@report.ReportId" />
+                                                &nbsp;@Translation.Get(report.ReportName, Enums.TranslationSource.TextTranslation)
                                             </label>
                                         </td>
                                     </tr>
@@ -379,9 +401,10 @@
                                     <td>
                                         @Translation.Get("Tillåt endast komplexa lösenord", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td ><label class="checkbox" style="width:50px">
-                                        <input type="checkbox" name="setting.ComplexPassword" id="setting_ComplexPassword" @(Model.Setting.ComplexPassword == 1 ? "checked=checked" : "") value="1" onclick="disablePasswordLength()" />
-                                        <input type="hidden" name="setting.ComplexPassword" value="0" />
+                                    <td>
+                                        <label class="checkbox" style="width:50px">
+                                            <input type="checkbox" name="setting.ComplexPassword" id="setting_ComplexPassword" @(Model.Setting.ComplexPassword == 1 ? "checked=checked" : "") value="1" onclick="disablePasswordLength()" />
+                                            <input type="hidden" name="setting.ComplexPassword" value="0" />
                                         </label>
                                     </td>
                                 </tr>
@@ -396,11 +419,11 @@
                                         }
                                         else
                                         {
-                                             @Html.DropDownListFor(model => model.Setting.MinPasswordLength, Model.MinimumPasswordLength, "", new { style = "width: 60px;" })
+                                            @Html.DropDownListFor(model => model.Setting.MinPasswordLength, Model.MinimumPasswordLength, "", new { style = "width: 60px;" })
                                         }
                                         &nbsp;@Translation.Get("tecken", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                </tr> 
+                                </tr>
                             </table>
                         </div>
                     </div>
@@ -410,12 +433,12 @@
                 <div class="container">
                     <div class="row">
                         <div class="span15">
-                            <table >
+                            <table>
                                 <tr>
                                     <td style="width:150px">
                                         @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td >
+                                    <td>
                                         <input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 0 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource1" value="0" />
                                         @Translation.Get("visa endast värde om användarens standarddriftgrupp (fält för andra driftgrupper visas som tomma)", Enums.TranslationSource.TextTranslation)
                                         <br />
@@ -425,11 +448,11 @@
                                 </tr>
                                 <tr>
                                     <td style="width:150px">
-                                         @Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation) -<br />
-                                         @Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation) -<br />
+                                        @Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td >
-                                        <input type="checkbox" name="setting.ShowOUsOnDepartmentFilter" @(Model.Setting.ShowOUsOnDepartmentFilter == 1 ? "checked=checked" : "") value="1"/>
+                                    <td>
+                                        <input type="checkbox" name="setting.ShowOUsOnDepartmentFilter" @(Model.Setting.ShowOUsOnDepartmentFilter == 1 ? "checked=checked" : "") value="1" />
                                         <input type="hidden" name="setting.ShowOUsOnDepartmentFilter" value="0" />
                                         @Translation.Get("Visa Organisationsenhet i Avdelning filter", Enums.TranslationSource.TextTranslation)
                                     </td>
@@ -438,7 +461,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <h4>@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)</h4>
                 <div class="container">
                     <div class="row">
@@ -448,8 +471,8 @@
                                     <td>
                                         @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td >
-                                        <input type="checkbox" name="setting.ComputerUserSearchRestriction" @(Model.Setting.ComputerUserSearchRestriction == 1 ? "checked=checked" : "") value="1"/>
+                                    <td>
+                                        <input type="checkbox" name="setting.ComputerUserSearchRestriction" @(Model.Setting.ComputerUserSearchRestriction == 1 ? "checked=checked" : "") value="1" />
                                         <input type="hidden" name="setting.ComputerUserSearchRestriction" value="0" />
                                         @Translation.Get("begränsa sök per avdelning", Enums.TranslationSource.TextTranslation)
                                     </td>
@@ -465,22 +488,22 @@
                                         <input type="radio" name="Setting.DontConnectUserToWorkingGroup" @(Model.Setting.DontConnectUserToWorkingGroup == 0 ? "checked='checked'" : "") id="Customer_Setting_DontConnectUserToWorkingGroup2" value="0" />
                                         @Translation.Get("visa endast handläggare i vald driftgrupp", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                </tr>       
+                                </tr>
                                 <tr>
                                     <td>
                                         &nbsp;
                                     </td>
-                                </tr>                                                       
+                                </tr>
                                 <tr>
                                     <td>
-                                       <label> @Translation.Get("Avslutsdatum", Enums.TranslationSource.TextTranslation) </label>
+                                        <label> @Translation.Get("Avslutsdatum", Enums.TranslationSource.TextTranslation) </label>
                                     </td>
                                     <td>
-                                        <input type="checkbox" name="setting.DisableCaseEndDate" @(Model.Setting.DisableCaseEndDate == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="checkbox" name="setting.DisableCaseEndDate" @(Model.Setting.DisableCaseEndDate == 1 ? "checked=checked" : "") value="1" />
                                         <input type="hidden" name="setting.DisableCaseEndDate" value="0" />
                                         <span>
-                                            @Translation.Get("Avslutsdatum sätt automatiskt till det datum då ärendet stängs (användaren kan inte ändra det)", Enums.TranslationSource.TextTranslation) 
-                                        </span>                                            
+                                            @Translation.Get("Avslutsdatum sätt automatiskt till det datum då ärendet stängs (användaren kan inte ändra det)", Enums.TranslationSource.TextTranslation)
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -488,11 +511,11 @@
                                         <label> @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) </label>
                                     </td>
                                     <td>
-                                        <input type="checkbox" name="setting.PreventToSaveCaseWithInactiveValue" @(Model.Setting.PreventToSaveCaseWithInactiveValue == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.PreventToSaveCaseWithInactiveValue" value="0"/>
+                                        <input type="checkbox" name="setting.PreventToSaveCaseWithInactiveValue" @(Model.Setting.PreventToSaveCaseWithInactiveValue == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="setting.PreventToSaveCaseWithInactiveValue" value="0" />
                                         <span>
-                                            @Translation.Get("Tillåt inte att spara ärenden med inaktiva värden.", Enums.TranslationSource.TextTranslation) 
-                                        </span>                                            
+                                            @Translation.Get("Tillåt inte att spara ärenden med inaktiva värden.", Enums.TranslationSource.TextTranslation)
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -518,11 +541,53 @@
                                         <input type="radio" name="Setting.AttachmentPlacement" @(Model.Setting.AttachmentPlacement == 1 ? "checked='checked'" : "") id="Customer_Setting_AttachmentPlacement1" value="1" />
                                         @Translation.Get("Visa på Bilagor tab", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                </tr>      
+                                </tr>
                             </table>
                         </div>
                     </div>
                 </div>
+
+                <h4>@Translation.Get("Startsida", Enums.TranslationSource.TextTranslation)</h4>
+                <div class="container">
+                    <div class="row">
+                        <div class="span15">
+                            <table>
+                                
+                                <tr>
+                                    <td style="width:150px">
+                                        @Translation.Get("Snabblänk", Enums.TranslationSource.TextTranslation) 
+                                        
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="setting.ShowQuickNewCaseLink" @(Model.Setting.ShowQuickNewCaseLink == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="setting.ShowQuickNewCaseLink" value="0" />
+                                        @Translation.Get("Visa snabblänk för nytt ärende", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:150px">
+                                        @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
+
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Setting.QuickNewCaseLinkText, new { maxlength = "100", style = "width: 400px;" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:150px">
+                                        @Translation.Get("URL", Enums.TranslationSource.TextTranslation)
+
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Setting.QuickNewCaseLinkUrl, new { maxlength = "100", style = "width: 400px;" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -541,7 +606,7 @@
 <script type="text/javascript">
     disablePasswordLength();
     function ChangePassword() {
-     
+
         var mod = $('#divPasswordDialog').modal('show');
 
         mod.find("#btnClose").on("click", function (e) {
@@ -552,7 +617,7 @@
             if ($('#NewPassword').val() != $('#ConfirmPassword').val()) {
                 var e = '@passChangeError';
                 ShowToastMessage(e, "Error");
-               
+
             } else {
                 $.post('/customersettings/SaveLDAPPassword/', { id: $('#id_customer').val(), newPassword: $('#NewPassword').val(), confirmPassword: $('#ConfirmPassword').val() }, function (data) {
                     var e = '@passChangeText';
@@ -561,15 +626,15 @@
                     $('#NewPassword').val('');
                     $('#ConfirmPassword').val('');
                 });
-                }
+            }
             mod.modal('hide');
         });
 
-            mod.on("hide", function () {
-                $("#divPasswordDialog #btnSavePassword").off("click");
-                $("#divPasswordDialog #btnClose").off("click");
-            });
-        }
+        mod.on("hide", function () {
+            $("#divPasswordDialog #btnSavePassword").off("click");
+            $("#divPasswordDialog #btnClose").off("click");
+        });
+    }
 
     function ShowToastMessage(message, msgType) {
         $().toastmessage('showToast', {
@@ -588,11 +653,11 @@
     }
 
     function disablePasswordLength() {
-        
-        if ($('#setting_ComplexPassword').is(':checked')) {            
+
+        if ($('#setting_ComplexPassword').is(':checked')) {
             $("#Setting_MinPasswordLength").val("0");
             $("#Setting_MinPasswordLength").prop("disabled", true);
-        } else {            
+        } else {
             $("#Setting_MinPasswordLength").prop("disabled", false);
             $("#Setting_MinPasswordLength").val("0");
         }
@@ -605,7 +670,7 @@
         } else {
             $("#settingForBulletinBoard").attr('style', 'display:none');
             $("#rowSettingForBulletinBoard").attr('style', 'display:none');
-            
+
         }
     });
 
