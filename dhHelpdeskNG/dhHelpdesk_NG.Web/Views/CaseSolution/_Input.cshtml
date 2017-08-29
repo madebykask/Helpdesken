@@ -73,19 +73,20 @@
                                         @Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
                                         <span class="mandatorystar">*</span>
                                     </td>
-                                    <td>
+                                    <td style="width:200px">
                                         @Html.TextBoxFor(model => model.CaseSolution.Name, new { id = "Name", maxlength = "50" })
+
                                     </td>
                                     <td>
                                         <div id="inputCopy" style="display: none">
                                             @Html.Label("Kopia", new { @id = "lblCopy", @Style = "color:red" })
                                         </div>
-
-
                                     </td>
                                 </tr>
+                            </table>
+                            <table class="tableform" border="0">
                                 <tr>
-                                    <td>
+                                    <td style="width:200px">
                                         @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
