@@ -16,17 +16,17 @@
 
     var jsSerializer = new JavaScriptSerializer();
 
-   
+
 }
 
 
 @*@{
-    int idValue = ViewBag.IdVal;
-}
+        int idValue = ViewBag.IdVal;
+    }
 
-@{
-    var unauthorized = TempData["TempId"];
-}*@
+    @{
+        var unauthorized = TempData["TempId"];
+    }*@
 
 
 <script type="text/javascript">
@@ -2195,7 +2195,7 @@
                             </table>
                             @Html.HiddenFor(model => model.CaseSolution.Customer_Id)
                             @Html.HiddenFor(model => model.CaseSolution.Id, new { id = "hidId" })
-                            
+
                             @Html.HiddenFor(model => model.CaseSolution.FormGUID)
                         </div>
                     </div>
@@ -2292,46 +2292,38 @@
 
 
         $('#CopyCaseSolution').on('click', function () {
-            //if (confirm("Copy?") == true)
+
+            var t = document.getElementById('inputCopy');
+            document.getElementById('hidId').value=0;
+            t.style.display = 'block';
+
+
+            //var id=0;
+            //if (id==0)
             //{
+            //    var form = $("#target").serialize();
+            //    $.ajax({
+            //        type: 'POST',
+            //        url: "/CaseSolution/Copy",
+            //        data: form,
+            //        success: function (data) {
+
+            //            var t = document.getElementById('inputCopy');
+            //            t.style.display = 'block';          // Show
+
+
+            //            document.getElementById('hidId').value=0;
+            //            //document.getElementById('hidId').value=data;
 
 
 
+            //        },
+            //        error: function (result) {
 
-            var id=0;
-            if (id==0)
-            {
-                var form = $("#target").serialize();
-                $.ajax({
-                    type: 'POST',
-                    url: "/CaseSolution/Copy",
-                    data: form,
-                    success: function (data) {
-
-                        var t = document.getElementById('inputCopy');
-                        t.style.display = 'block';          // Show
-
-
-                        
-                        document.getElementById('hidId').value=data;
-                        
-
-                        @*var tid = document.getElementById('hidId');
-
-                            alert(@unauthorized);
-                        
-                        alert(@idValue);
-                        var number = parseInt(@ViewBag.IdVal); //Accessing the number from the ViewBag
-                        alert("Number is: " + number);*@
-
-                    },
-                    error: function (result) {
-
-                    }
-                });
-            }
+            //        }
+            //    });
             //}
-            //form.submit();
+
         })
     });
 
