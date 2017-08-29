@@ -2221,7 +2221,7 @@ namespace DH.Helpdesk.Web.Controllers
                 int Urgency_Id = Convert.ToInt32(collection["CaseSolution.Urgency_Id"].ToString());
                 caseSolutionInputViewModel.CaseSolution.Urgency_Id = Urgency_Id;
             }
-            
+
 
             if (collection["CaseSolution.Verified"].ToString().Trim() != string.Empty)
             {
@@ -2346,7 +2346,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             return Convert.ToInt32(casesoilutionid);
 
-            
+
 
             //ModelState.Clear();
             //ModelState.Remove("Id");
@@ -2365,7 +2365,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             //var model = this.CreateInputViewModel(caseSolution);
             //model.isCopy = true;
-            
+
             //return this.View("/Views/CaseSolution/Edit.cshtml", model);
 
         }
@@ -2642,9 +2642,14 @@ namespace DH.Helpdesk.Web.Controllers
             IList<Priority> p = this._priorityService.GetPriorities(customerId);
             p = p.OrderBy(x => x.Name).ToList();
 
-            IList<ProductArea> pa = this._productAreaService.GetProductAreasForCustomer(customerId);
+            //IList<ProductArea> pa = this._productAreaService.GetProductAreasForCustomer(customerId);
+            //IList<ProductArea> pa = this._productAreaService.GetAll(customerId);
+            //pa = pa.OrderBy(x => x.Name).ToList();
+
+
+
+            IList<ProductArea> pa = this._productAreaService.GetWithHierarchy(customerId);
             pa = pa.OrderBy(x => x.Name).ToList();
-            //this._productAreaService.GetAllProductAreas(customerId)
             var model = new CaseSolutionIndexViewModel(activeTab)
             {
                 Rows = _rows,

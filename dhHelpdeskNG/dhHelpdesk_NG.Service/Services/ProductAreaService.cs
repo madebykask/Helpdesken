@@ -35,6 +35,8 @@
 
         IList<ProductAreaEntity> GetAll(int customerId);
 
+        IList<ProductAreaEntity> GetWithHierarchy(int customerId);
+
         ProductAreaEntity GetProductArea(int id);
 
         string GetProductAreaWithChildren(int id, string separator, string valueToReturn);
@@ -109,6 +111,8 @@
 
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
+        
+
         public ProductAreaService(
             IProductAreaRepository productAreaRepository,
             IWorkingGroupRepository workingGroupRepository,
@@ -128,6 +132,12 @@
                 var repository = uow.GetRepository<ProductAreaEntity>();
                 return repository.GetAll().Where(it => it.Customer_Id == customerId).ToArray();
             }
+        }
+
+
+        public IList<ProductAreaEntity> GetWithHierarchy(int customerId)
+        {
+            return this.productAreaRepository.GetWithHierarchy(customerId);
         }
 
         public IList<ProductAreaEntity> GetTopProductAreas(int customerId, bool isOnlyActive = true)
