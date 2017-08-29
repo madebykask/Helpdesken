@@ -6117,6 +6117,25 @@ If not exists (select * from tblTextTranslation where text_id = 1844 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1844, 2, 'No')
 GO
 
+If not exists (select * from tbltext where id = 1845)
+	insert into tbltext (id, TextString) VALUES (1845, 'Helpdesk meny')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1845 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1845, 2, 'Helpdesk menu')
+GO
 
+If not exists (select * from tbltext where id = 1846)
+	insert into tbltext (id, TextString) VALUES (1846, 'Genväg')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1846 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1846, 2, 'Shortcut')
+GO
+
+If not exists (select * from tbltext where id = 1847)
+	insert into tbltext (id, TextString) VALUES (1847, 'Visa genväg för Nytt ärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1847 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1847, 2, 'Show shortcut for New case')
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
