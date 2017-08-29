@@ -49,9 +49,13 @@
                         @if (model.CustomerSetting.ShowQuickNewCaseLink == 1)
                         {
                             <li class="newcase">
-            
 
-                                <a href=@url target="_blank">@text</a>
+
+                                <a href=@url target="_blank">
+                                    <span>
+                                        @text
+                                    </span>
+                                </a>
                             </li>
                         }
                         <li class="orange">
