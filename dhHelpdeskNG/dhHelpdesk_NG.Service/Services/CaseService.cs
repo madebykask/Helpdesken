@@ -2665,13 +2665,18 @@ namespace DH.Helpdesk.Services.Services
             if (c.User_Id.HasValue)
             {
                 var user = this._userService.GetUser(c.User_Id.Value);
-                ret.Add(new Field { Key = "[#65]", StringValue = user != null ? user.FirstName + " " + user.SurName : string.Empty });
+                ret.Add(new Field { Key = "[#29]", StringValue = user != null ? user.FirstName + " " + user.SurName : string.Empty });
             }
             else
             {
                 if (!string.IsNullOrEmpty(c.RegUserName))
                 {
-                    ret.Add(new Field { Key = "[#65]", StringValue = c.RegUserName });
+                    ret.Add(new Field { Key = "[#29]", StringValue = c.RegUserName });
+                }
+
+                if (!string.IsNullOrEmpty(c.RegUserId))
+                {
+                    ret.Add(new Field { Key = "[#29]", StringValue = c.RegUserId });
                 }
             }
 
