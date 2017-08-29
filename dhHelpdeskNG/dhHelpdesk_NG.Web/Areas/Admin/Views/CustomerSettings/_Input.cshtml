@@ -547,7 +547,7 @@
                     </div>
                 </div>
 
-                <h4>@Translation.Get("Startsida", Enums.TranslationSource.TextTranslation)</h4>
+                <h4>@Translation.Get("Helpdesk meny", Enums.TranslationSource.TextTranslation)</h4>
                 <div class="container">
                     <div class="row">
                         <div class="span15">
@@ -555,13 +555,13 @@
                                 
                                 <tr>
                                     <td style="width:150px">
-                                        @Translation.Get("Snabblänk", Enums.TranslationSource.TextTranslation) 
+                                        @Translation.Get("Genväg", Enums.TranslationSource.TextTranslation) 
                                         
                                     </td>
                                     <td>
                                         <input type="checkbox" name="setting.ShowQuickNewCaseLink" @(Model.Setting.ShowQuickNewCaseLink == 1 ? "checked=checked" : "") value="1" />
                                         <input type="hidden" name="setting.ShowQuickNewCaseLink" value="0" />
-                                        @Translation.Get("Visa snabblänk för nytt ärende", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Visa genväg för Nytt ärende", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
                                 <tr>
