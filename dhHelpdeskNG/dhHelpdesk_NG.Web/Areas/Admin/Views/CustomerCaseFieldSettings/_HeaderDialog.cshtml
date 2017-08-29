@@ -1,6 +1,5 @@
 ﻿@using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Common.Enums.Cases
-@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Areas.Admin.Models.CustomerInputViewModel
 
 <div id="case_header_settings_popup" role="dialog" class="modal fade" aria-hidden="true" style="display: none;">
@@ -8,37 +7,37 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h5>@Translation.GetCoreTextTranslation("Special") @Translation.GetCoreTextTranslation("Inställningar") @Translation.GetCoreTextTranslation("för") <span id="modal_header"></span> @Translation.GetCoreTextTranslation("sektion")</h5>
+                <h5>@Translation.GetCoreTextTranslation("Special inställningar för sektionen") <span id="modal_header"></span></h5>
             </div>
             <div class="modal-body-left overflow-visible">
                 <div>
                     <table class="tableform">
                         <tr>
                             <td>
-                                <span>@Translation.GetCoreTextTranslation("På") @Translation.GetCoreTextTranslation("Ny")</span>
+                                <span>@Translation.GetCoreTextTranslation("Vid nytt case")</span>
                             </td>
                             <td>
                                 <select id="isNewCollapsed">
                                     <option value="0" selected="selected">@Translation.GetCoreTextTranslation("Öppen")</option>
-                                    <option value="1">@Translation.GetCoreTextTranslation("Hopfälld")</option>
+                                    <option value="1">@Translation.GetCoreTextTranslation("Stängt")</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <span>@Translation.GetCoreTextTranslation("På") @Translation.GetCoreTextTranslation("Ändra")</span>
+                                <span>@Translation.GetCoreTextTranslation("Vi ändring av case")</span>
                             </td>
                             <td>
                                 <select id="isEditCollapsed">
                                     <option value="0" selected="selected">@Translation.GetCoreTextTranslation("Öppen")</option>
-                                    <option value="1">@Translation.GetCoreTextTranslation("Hopfälld")</option>
+                                    <option value="1">@Translation.GetCoreTextTranslation("Stängt")</option>
                                 </select>
                             </td>
                         </tr>
                         <tr><td>&nbsp;</td></tr>
                         <tr>
                             <td>
-                                <span>@Translation.GetCoreTextTranslation("Visa") in @Translation.GetCoreTextTranslation("rubrik")</span>
+                                <span>@Translation.GetCoreTextTranslation("Visa fält i rubrik")</span>
                             </td>
                             <td>
                                 <div id="sectionDiv@((int)CaseSectionType.Initiator)" class="hidden-desktop" style="display: inline-block">

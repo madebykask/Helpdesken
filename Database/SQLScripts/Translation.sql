@@ -6137,5 +6137,33 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1847 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1847, 2, 'Show shortcut for New case')
 GO
+
+If not exists (select * from tbltext where id = 1848)
+	insert into tbltext (id, TextString) VALUES (1848, 'Special inställningar för sektionen')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1848 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1848, 2, 'Special settings for section')
+GO
+
+If not exists (select * from tbltext where id = 1849)
+	insert into tbltext (id, TextString) VALUES (1849, 'Vid nytt case')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1849 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1849, 2, 'On new case')
+GO
+
+If not exists (select * from tbltext where id = 1850)
+	insert into tbltext (id, TextString) VALUES (1850, 'Vi ändring av case')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1850 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1850, 2, 'On edit of case')
+GO
+
+If not exists (select * from tbltext where id = 1851)
+	insert into tbltext (id, TextString) VALUES (1851, 'Visa fält i rubrik')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1851 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1851, 2, 'Show fields in subject')
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

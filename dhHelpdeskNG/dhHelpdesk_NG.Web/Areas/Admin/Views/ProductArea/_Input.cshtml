@@ -39,24 +39,6 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.GetCoreTextTranslation("Ärendetyp")
-                                    </td>
-                                    <td>
-                                        <div id="divCaseType" class="btn-group">
-                                            <div class="btn" id="divBreadcrumbs_CaseType">@Model.ParentPath_CaseType</div>
-                                            <button class="btn dropdown-toggle" data-toggle="dropdown">
-                                                <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="#">@Translation.GetCoreTextTranslation("--")</a></li>
-                                                @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
-                                            </ul>
-                                            <input type="hidden" id="CaseType_Id" name="CaseType_Id" value="@Model.CaseType_Id"/>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
                                         @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
@@ -120,12 +102,30 @@
                                         @Translation.Get("Visa i lista", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td><label class="checkbox">
-                                        <input type="checkbox" name="productarea.ShowOnExternalPage" @(Model.ProductArea.ShowOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="productarea.ShowOnExternalPage" value="0" />
+                                            <input type="checkbox" name="productarea.ShowOnExternalPage" @(Model.ProductArea.ShowOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
+                                            <input type="hidden" name="productarea.ShowOnExternalPage" value="0"/>
                                             &nbsp;@*@Translation.Get("Visa produktområde på självservice", Enums.TranslationSource.TextTranslation)*@
-                                        @*#57740*@
-                                        @Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)
+                                            @*#57740*@
+                                            @Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)
                                         </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Visa endast för") @Translation.GetCoreTextTranslation("Ärendetyp")
+                                    </td>
+                                    <td>
+                                        <div id="divCaseType" class="btn-group">
+                                            <div class="btn" id="divBreadcrumbs_CaseType">@Model.ParentPath_CaseType</div>
+                                            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">@Translation.GetCoreTextTranslation("--")</a></li>
+                                                @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
+                                            </ul>
+                                            <input type="hidden" id="CaseType_Id" name="CaseType_Id" value="@Model.CaseType_Id" />
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
