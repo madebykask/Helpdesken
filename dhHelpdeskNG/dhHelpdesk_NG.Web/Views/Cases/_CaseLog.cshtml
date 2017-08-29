@@ -46,7 +46,7 @@
                                     <a href="@GetLogLink(r)">@Html.DisplayFor(m => r.LogDate, "DateAndTime") </a>
                                 </td>
                                 <td style="max-width:110px" class="wordbreak">
-                                    <a href="@GetLogLink(r)">@(r.User == null ? r.RegUser : Html.FormatUserName(r.User, Model.Setting))</a>
+                                    <a href="@GetLogLink(r)">@(r.User == null || r.User.Id == 0 ? r.RegUser : Html.FormatUserName(r.User, Model.Setting))</a>
                                 </td>
                                 @if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote).ToString() == String.Empty)
                                 {
