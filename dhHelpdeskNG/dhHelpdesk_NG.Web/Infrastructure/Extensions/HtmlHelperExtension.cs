@@ -1070,11 +1070,13 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
 
             foreach (FinishingCause f in causes)
             {
-                if (!isTakeOnlyActive || (isTakeOnlyActive && f.IsActive == 1))
+                if (!isTakeOnlyActive || (isTakeOnlyActive && f.IsActive != 0))
                 {
                     bool hasChild = false;
                     if (f.SubFinishingCauses != null)
-                        if (f.SubFinishingCauses.Count > 0)
+                        if (f.SubFinishingCauses.Count > 0 && 
+                            (!isTakeOnlyActive || (isTakeOnlyActive && 
+                                                   f.SubFinishingCauses.Any(sc=> sc.IsActive != 0))))
                             hasChild = true;
 
                     var cls = f.IsActive == 1 ? string.Empty : "inactive";
