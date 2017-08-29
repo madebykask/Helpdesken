@@ -14,15 +14,18 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseService _caseService;
         private readonly IMasterDataService _masterDataService;
         private readonly ILogService _logService;
+        private readonly IQestionnaireQuestionOptionService _questionnaireQuestionOptionService;
 
         public FileHandlerController(ICaseService caseService,
             IMasterDataService masterDataService,
-            ILogService logService)
+            ILogService logService,
+            IQestionnaireQuestionOptionService qestionnaireQuestionOptionService)
             : base(masterDataService)
         {
             this._masterDataService = masterDataService;
             this._caseService = caseService;
             this._logService = logService;
+            this._questionnaireQuestionOptionService = qestionnaireQuestionOptionService;
         }
 
         /// <summary>
@@ -77,6 +80,25 @@ namespace DH.Helpdesk.Web.Controllers
             }
            
             return link;
+        }
+
+        public void GetFeedbackImg(int id)
+        {
+            var _requestContext = Request.RequestContext;
+            var routeValues = _requestContext.RouteData.Values;
+            if (routeValues.ContainsKey("id"))
+            {
+                var option = _questionnaireQuestionOptionService.GetQuestionnaireQuestionOption(id);
+                if (option.IconSrc != null && option.IconSrc.Length > 0)
+                {
+                    _requestContext.HttpContext.Response.Clear();
+                    _requestContext.HttpContext.Response.AddHeader("Content-Disposition", "inline;attachment; filename=\""+ option.IconId + "\"");
+                    _requestContext.HttpContext.Response.AddHeader("Content-Length", option.IconSrc.Length.ToString());
+                    _requestContext.HttpContext.Response.ContentType = "application/octet-stream";
+                    _requestContext.HttpContext.Response.BinaryWrite(option.IconSrc);
+                    _requestContext.HttpContext.Response.Flush();
+                }
+            }
         }
 
         private string EncodeStr(string str)

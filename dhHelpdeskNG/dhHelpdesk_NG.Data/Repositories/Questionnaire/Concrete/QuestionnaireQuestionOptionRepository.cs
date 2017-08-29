@@ -102,14 +102,37 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
             this.DbContext.QuestionnaireQuestionOptionLanguage.Remove(questionOption);
         }
 
-        public void UpdateQuestionnaireQuestionOptionIcon(int optionId, byte[] iconSrc)
+        public void UpdateQuestionnaireQuestionOptionIcon(int optionId, byte[] iconSrc, string fileName)
         {
             var option = DbContext.QuestionnaireQuestionOptions.SingleOrDefault(x => x.Id == optionId);
             if (option != null)
             {
                 option.IconSrc = iconSrc;
+                option.IconId = fileName;
                 DbContext.SaveChanges();
             }
+        }
+
+        public QuestionnaireQuesOption GetQuestionnaireQuestionOption(int optionId)
+        {
+            var option = this.DbContext.QuestionnaireQuestionOptions.SingleOrDefault(q => q.Id == optionId);
+
+            if (option != null)
+            {
+                return new QuestionnaireQuesOption
+                {
+                    Id = option.Id,
+                    IconId = option.IconId,
+                    Option = option.QuestionnaireQuestionOption,
+                    QuestionId = option.QuestionnaireQuestion_Id,
+                    LanguageId = 0,
+                    ChangedDate = option.ChangedDate,
+                    OptionPos = 0,
+                    OptionValue = option.OptionValue,
+                    IconSrc = option.IconSrc
+                };
+            }
+            return new QuestionnaireQuesOption();
         }
 
         public List<QuestionnaireQuesOption> FindQuestionnaireQuestionOptions(int questionId, int languageId, int defualtLanguageId)

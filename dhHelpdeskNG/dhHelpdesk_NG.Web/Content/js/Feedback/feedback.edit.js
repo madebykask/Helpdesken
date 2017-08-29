@@ -159,6 +159,7 @@
                         return;
                     }
                     var reader = new FileReader();
+                    var fileName = this.files[0].name;
                     reader.onload = function(e) {
                         if (selectedOptionId) {
                             $.ajax({
@@ -166,7 +167,8 @@
                                 url: parameters.UrlSaveIcon,
                                 data: {
                                     OptionId: selectedOptionId,
-                                    Src: e.target.result.split(",")[1]
+                                    Src: e.target.result.split(",")[1],
+                                    FileName: fileName
                                 },
                                 success: function(result) {
                                     if (result && result.success) {

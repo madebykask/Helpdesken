@@ -19,14 +19,13 @@ namespace DH.Helpdesk.Services.Services.Feedback
 
         private const string MainTemplate = @"<BR>{question}<BR><table><tbody><tr>{optionTemplate}</tr></tbody></table>";
         private const string OptionTemplate = @"<td ><a href='{baseurl}FeedbackAnswer/Answer?guid={guid}&optionId={id}&languageId={languageid}&customerId={customerId}' style='padding: 0px 10px'><img src = '{baseurl}Content/img/{iconId}' style='width: 27px; height: 27px' alt={icontext}></a></td>";
-        private const string OptionTemplateLoaded = @"<td ><a href='{baseurl}FeedbackAnswer/Answer?guid={guid}&optionId={id}&languageId={languageid}&customerId={customerId}' style='padding: 0px 10px'><img src = '{iconSrc}' style='width: 27px; height: 27px' alt={icontext}></a></td>";
+        private const string OptionTemplateLoaded = @"<td ><a href='{baseurl}FeedbackAnswer/Answer?guid={guid}&optionId={id}&languageId={languageid}&customerId={customerId}' style='padding: 0px 10px'><img src = '{baseurl}filehandler/GetFeedbackImg/{id}' style='width: 27px; height: 27px' alt={icontext}></a></td>";
 
         private class Templates
         {
             public const string Question = "{question}";
             public const string Option = "{optionTemplate}";
             public const string IconId = "{iconId}";
-            public const string IconSrc = "{iconSrc}";
             public const string BaseUrl = "{baseurl}";
             public const string Guid = "{guid}";
             public const string OptionId = "{id}";
@@ -128,10 +127,9 @@ namespace DH.Helpdesk.Services.Services.Feedback
             var optionsTemplate = new StringBuilder();
             foreach (var option in feedback.Options.OrderBy(o => o.Position))
             {
-                if (option.IconId == FeedBack.IconId)
+                if (!string.IsNullOrEmpty(option.IconSrc))
                 {
                     var optionTemplate = OptionTemplateLoaded
-                        .Replace(Templates.IconSrc, option.IconSrc)
                         .Replace(Templates.BaseUrl, absoluterUrl)
                         .Replace(Templates.OptionId, option.Id.ToString())
                         .Replace(Templates.LanguageId, languageId.ToString())

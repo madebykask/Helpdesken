@@ -48,9 +48,14 @@
             this._questionnaireQuestionOptionRepository.Commit();
         }
 
-        public void UpdateQuestionnaireQuestionOptionIcon(int optionId, byte[] iconSrc)
+        public void UpdateQuestionnaireQuestionOptionIcon(int optionId, byte[] iconSrc, string fileName)
         {
-            _questionnaireQuestionOptionRepository.UpdateQuestionnaireQuestionOptionIcon(optionId, iconSrc);
+            _questionnaireQuestionOptionRepository.UpdateQuestionnaireQuestionOptionIcon(optionId, iconSrc, fileName);
+        }
+
+        public QuestionnaireQuesOption GetQuestionnaireQuestionOption(int optionId)
+        {
+            return _questionnaireQuestionOptionRepository.GetQuestionnaireQuestionOption(optionId);
         }
 
         public void UpdateQuestionnaireQuestionOption(QuestionnaireQuesOption option)

@@ -249,7 +249,7 @@ namespace DH.Helpdesk.Web.Controllers
 						model.LanguageId,
 						now);
 					questionOption.IconId = option.IconId;
-				    questionOption.IconSrc = string.IsNullOrEmpty(option.IconSrc) || option.IconId != FeedBack.IconId ? null : Convert.FromBase64String(option.IconSrc.Split(',')[1]);
+				    questionOption.IconSrc = string.IsNullOrEmpty(option.IconSrc) ? null : Convert.FromBase64String(option.IconSrc.Split(',')[1]);
 					_questionnaireQuestionOptionService.UpdateQuestionnaireQuestionOption(questionOption);
 				}
 			}
@@ -698,7 +698,7 @@ namespace DH.Helpdesk.Web.Controllers
 	    public ActionResult UpdateOptionIcon(UpdateQuestionOptionIconParams data)
         {
             var imageSource = Convert.FromBase64String(data.Src);
-            _questionnaireQuestionOptionService.UpdateQuestionnaireQuestionOptionIcon(data.OptionId, imageSource);
+            _questionnaireQuestionOptionService.UpdateQuestionnaireQuestionOptionIcon(data.OptionId, imageSource, data.FileName);
             return Json(new
             {
                 success = true,
