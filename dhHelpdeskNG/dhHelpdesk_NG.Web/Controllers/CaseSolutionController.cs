@@ -2642,26 +2642,62 @@ namespace DH.Helpdesk.Web.Controllers
             IList<Priority> p = this._priorityService.GetPriorities(customerId);
             p = p.OrderBy(x => x.Name).ToList();
 
-            //IList<ProductArea> pa = this._productAreaService.GetProductAreasForCustomer(customerId);
-            //IList<ProductArea> pa = this._productAreaService.GetAll(customerId);
-            //pa = pa.OrderBy(x => x.Name).ToList();
-
-
+            
 
             IList<ProductArea> pa = this._productAreaService.GetWithHierarchy(customerId);
-            pa = pa.OrderBy(x => x.Name).ToList();
+            pa = pa.OrderBy(x => x.Name).ToList();            
+            foreach (var k in pa)
+            {
+                k.Name = Translation.Get(k.Name, Enums.TranslationSource.TextTranslation);
+            }
+
+            IList<Application> a = this._caseSolutionService.GetAllApplications(customerId);
+            a = a.OrderBy(x => x.Name).ToList();
+            foreach (var k in a)
+            {
+                k.Name = Translation.Get(k.Name, Enums.TranslationSource.TextTranslation);
+            }
+
+            IList<WorkingGroupEntity> w = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId);
+            w = w.OrderBy(x => x.WorkingGroupName).ToList();
+            foreach (var k in w)
+            {
+                k.WorkingGroupName = Translation.Get(k.WorkingGroupName, Enums.TranslationSource.TextTranslation);
+            }
+
+            IList<Status> s = this._statusService.GetStatuses(customerId);
+            s = s.OrderBy(x => x.Name).ToList();
+            foreach (var k in s)
+            {
+                k.Name = Translation.Get(k.Name, Enums.TranslationSource.TextTranslation);
+            }
+
+            IList<StateSecondary> ss = this._stateSecondaryService.GetActiveStateSecondaries(customerId);
+            ss = ss.OrderBy(x => x.Name).ToList();
+            foreach (var k in ss)
+            {
+                k.Name = Translation.Get(k.Name, Enums.TranslationSource.TextTranslation);
+            }
+
+            IList<CaseSolutionCategory> csc = this._caseSolutionService.GetCaseSolutionCategories(customerId);
+            csc = csc.OrderBy(x => x.Name).ToList();
+            foreach (var k in csc)
+            {
+                k.Name = Translation.Get(k.Name, Enums.TranslationSource.TextTranslation);
+            }
+
             var model = new CaseSolutionIndexViewModel(activeTab)
             {
                 Rows = _rows,
-                CaseSolutionCategories = this._caseSolutionService.GetCaseSolutionCategories(customerId),
-                CaseSolutionSubStatus = this._stateSecondaryService.GetActiveStateSecondaries(customerId),
-                CaseSolutionWGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId),
+                CaseSolutionCategories = csc,
+                CaseSolutionSubStatus = ss,
+                CaseSolutionWGroup = w,
                 CaseSolutionPriorities = p,
-                CaseSolutionStatuses = this._statusService.GetStatuses(customerId),
+                CaseSolutionStatuses = s,
                 CaseSolutionProductArea = pa,
-                CaseSolutionUserWGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId),
+                CaseSolutionUserWGroup = w,
                 CaseSolutionCTemplateProductArea = pa,
-                CaseSolutionApplication = this._caseSolutionService.GetAllApplications(customerId)
+                CaseSolutionApplication = a
             };
 
             return model;
