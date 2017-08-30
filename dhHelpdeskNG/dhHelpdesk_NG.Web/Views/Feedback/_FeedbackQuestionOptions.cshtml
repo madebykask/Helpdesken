@@ -94,7 +94,7 @@
                                         if (!string.IsNullOrEmpty(Model.Options[i].IconId))
                                         {
                                             @Html.HiddenFor(m => m.Options[i].IconId)
-                                            if (!string.IsNullOrEmpty(Model.Options[i].IconSrc))
+                                            if (Model.Options[i].IconId == FeedBack.IconId)
                                             {
                                                 <img class="loaded-image" src=""/>
                                                 @Html.HiddenFor(m => m.Options[i].IconSrc, new { @class = "iconSrc" })

@@ -15,11 +15,13 @@ namespace DH.Helpdesk.Web.Controllers
     {
         private readonly ICircularService _circularService;
         private readonly IInfoService _infoService;
+        private readonly IQestionnaireQuestionOptionService _questionnaireQuestionOptionService;
 
-        public FeedbackAnswerController(ICircularService circularService, IInfoService infoService)
+        public FeedbackAnswerController(ICircularService circularService, IInfoService infoService, IQestionnaireQuestionOptionService qestionnaireQuestionOptionService)
         {
             _circularService = circularService;
             _infoService = infoService;
+            _questionnaireQuestionOptionService = qestionnaireQuestionOptionService;
         }
 
         [AllowAnonymous]
@@ -70,6 +72,26 @@ namespace DH.Helpdesk.Web.Controllers
                 _circularService.SaveFeedbackNote(questionId, noteText);
             }
             return Json(new { success = true });
+        }
+
+        [AllowAnonymous]
+        public void GetFeedbackImg(int id)
+        {
+            var requestContext = Request.RequestContext;
+            var routeValues = requestContext.RouteData.Values;
+            if (routeValues.ContainsKey("id"))
+            {
+                var option = _questionnaireQuestionOptionService.GetQuestionnaireQuestionOption(id);
+                if (option.IconSrc != null && option.IconSrc.Length > 0)
+                {
+                    requestContext.HttpContext.Response.Clear();
+                    requestContext.HttpContext.Response.AddHeader("Content-Disposition", "inline;attachment; filename=\"" + option.IconId + "\"");
+                    requestContext.HttpContext.Response.AddHeader("Content-Length", option.IconSrc.Length.ToString());
+                    requestContext.HttpContext.Response.ContentType = "application/octet-stream";
+                    requestContext.HttpContext.Response.BinaryWrite(option.IconSrc);
+                    requestContext.HttpContext.Response.Flush();
+                }
+            }
         }
     }
 }

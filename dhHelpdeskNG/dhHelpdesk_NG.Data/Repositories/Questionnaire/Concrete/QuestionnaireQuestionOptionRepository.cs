@@ -102,13 +102,12 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
             this.DbContext.QuestionnaireQuestionOptionLanguage.Remove(questionOption);
         }
 
-        public void UpdateQuestionnaireQuestionOptionIcon(int optionId, byte[] iconSrc, string fileName)
+        public void UpdateQuestionnaireQuestionOptionIcon(int optionId, byte[] iconSrc)
         {
             var option = DbContext.QuestionnaireQuestionOptions.SingleOrDefault(x => x.Id == optionId);
             if (option != null)
             {
                 option.IconSrc = iconSrc;
-                option.IconId = fileName;
                 DbContext.SaveChanges();
             }
         }

@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
 
         private const string MainTemplate = @"<BR>{question}<BR><table><tbody><tr>{optionTemplate}</tr></tbody></table>";
         private const string OptionTemplate = @"<td ><a href='{baseurl}FeedbackAnswer/Answer?guid={guid}&optionId={id}&languageId={languageid}&customerId={customerId}' style='padding: 0px 10px'><img src = '{baseurl}Content/img/{iconId}' style='width: 27px; height: 27px' alt={icontext}></a></td>";
-        private const string OptionTemplateLoaded = @"<td ><a href='{baseurl}FeedbackAnswer/Answer?guid={guid}&optionId={id}&languageId={languageid}&customerId={customerId}' style='padding: 0px 10px'><img src = '{baseurl}filehandler/GetFeedbackImg/{id}' style='width: 27px; height: 27px' alt={icontext}></a></td>";
+        private const string OptionTemplateLoaded = @"<td ><a href='{baseurl}FeedbackAnswer/Answer?guid={guid}&optionId={id}&languageId={languageid}&customerId={customerId}' style='padding: 0px 10px'><img src = '{baseurl}FeedbackAnswer/GetFeedbackImg/{id}' style='width: 27px; height: 27px' alt={icontext}></a></td>";
 
         private class Templates
         {

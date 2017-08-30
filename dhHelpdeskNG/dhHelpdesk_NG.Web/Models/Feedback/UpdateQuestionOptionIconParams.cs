@@ -4,6 +4,5 @@
     {
         public int OptionId { get; set; }
         public string Src { get; set; }
-        public string FileName { get; set; }
     }
 }
