@@ -26,6 +26,9 @@ namespace DH.Helpdesk.BusinessData.Models.ReportService
         public List<ProductArea> ProductAreas { get; set; }
 
         public CustomSelectList Status { get; set; }
+
+        public CustomSelectList ReportCategory { get; set; }
+
     }
        
 }

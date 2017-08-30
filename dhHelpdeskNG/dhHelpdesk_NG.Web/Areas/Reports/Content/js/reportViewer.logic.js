@@ -22,6 +22,9 @@
         var caseCloseFrom = "#ReportFilter_CaseClosingDate_FromDate";
         var caseCloseTo = "#ReportFilter_CaseClosingDate_ToDate";
 
+        /*specify all extra parameters element*/
+        var $extraParameters = $("#reportCategoryParam");
+
         window.dhHelpdesk = window.dhHelpdesk || {};
         window.dhHelpdesk.reports = window.dhHelpdesk.reports || {};
 
@@ -355,6 +358,8 @@
                 $btnSaveAsFilter.show();
                 $("#btnDeleteFavorite").hide();
             }
+
+            dhHelpdesk.reports.showExtraParameters($(reportList).find("option:selected").data('data-identity'));
         };
 
         dhHelpdesk.reports.deleteFavorite = function () {
@@ -463,6 +468,19 @@
             $("#excelReport").each(function () { this.disabled = state; });
         }
 
+        dhHelpdesk.reports.showExtraParameters = function (reportName) {
+            $($extraParameters).css("display","none");
+
+            switch (reportName) {
+                case "NumberOfCases":
+                    $("#lstfilterReportCategory").css("display", "block");
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
         dhHelpdesk.reports.init = function () {
 
             var showReportButton = $("#btnShowReport");
@@ -482,6 +500,12 @@
                 .on("change", function (e, d) { return dhHelpdesk.reports.togglePreviewMode(true); });
 
             $(".chosen-select").chosen({
+                width: "300px",
+                'placeholder_text_multiple': placeholder_text_multiple,
+                'no_results_text': no_results_text
+            });
+
+            $(".report-chosen-single-select").chosen({
                 width: "300px",
                 'placeholder_text_multiple': placeholder_text_multiple,
                 'no_results_text': no_results_text

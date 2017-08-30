@@ -654,7 +654,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 CaseTypes = reportFilter.CaseTypes,
                 ProductAreas = reportFilter.ProductAreas,
                 Status = GetCaseStateFilter(),
-                UserNameOrientation = customerSettings != null ? customerSettings.IsUserFirstLastNameRepresentation : 1
+                UserNameOrientation = customerSettings != null ? customerSettings.IsUserFirstLastNameRepresentation : 1,
+                ReportCategory = GetReportCategoryList()
             };
 
             if (lastState != null)
@@ -697,6 +698,25 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             return ret;
         }
 
+        private CustomSelectList GetReportCategoryList()
+        {            
+            var ret = new CustomSelectList();
+            ret.Items.AddItem("Case Type", "Case Type");
+            ret.Items.AddItem("Working Group", "Working Group");
+            ret.Items.AddItem("SubStatus", "SubStatus");
+            ret.Items.AddItem("Department", "Department");
+            ret.Items.AddItem("Priority", "Priority");
+            ret.Items.AddItem("Product Area", "Product Area");
+            ret.Items.AddItem("Closing Date", "Closing Date");
+            ret.Items.AddItem("Source", "Source");
+            ret.Items.AddItem("Registration Date", "Registration Date");
+            ret.Items.AddItem("Registration Year", "Registration Year");
+            ret.Items.AddItem("Registration Month", "Registration Month");
+            ret.Items.AddItem("Registration Weekday", "Registration Weekday");
+            ret.Items.AddItem("Registration Hour", "Registration Hour");            
+
+            return ret;
+        }
         private List<SavedReportFavoriteItemModel> GetSavedReportFilters(int custometId, int userId)
         {
 			var favorites = this.reportService.GetCustomerReportFavoriteList(custometId, userId);
@@ -735,9 +755,10 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 /*Temp solution*/
                 if (reportName == "NumberOfCases")
                 {
-                    ReportParameter rp1 = new ReportParameter("Category", "3", false);
-                    List<ReportParameter> paramList = new List<ReportParameter>();
-                    paramList.Add(rp1);
+                    var reportCategory = reportSelectedFilter.SelectedReportCategory.GetSelectedStr();
+                    var categoryParam = new ReportParameter("Category", reportCategory, false);
+                    var paramList = new List<ReportParameter>();
+                    paramList.Add(categoryParam);
                     reportViewer.LocalReport.SetParameters(paramList);
                 }
                 

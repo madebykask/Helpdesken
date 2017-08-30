@@ -46,6 +46,8 @@ using System.Collections.Generic;
                 
         public List<GeneralParameter> GeneralParameter {get; set;}
 
+        public SelectedItems SelectedReportCategory { get; set; }
+
     }
        
     public class GeneralParameter 
