@@ -2011,7 +2011,6 @@ namespace DH.Helpdesk.Web.Controllers
             int workinggroupId = 0;
             int noMailToNotifier = 0;
             int reCalculateWatchDate = 0;
-            int communicateWithNotifier = 0;
 
             if (id.HasValue)
             {
@@ -2019,16 +2018,12 @@ namespace DH.Helpdesk.Web.Controllers
                 reCalculateWatchDate = s != null ? s.RecalculateWatchDate : 0;
                 noMailToNotifier = s != null ? s.NoMailToNotifier : 0;
                 workinggroupId = s != null ? s.WorkingGroup_Id.HasValue ? s.WorkingGroup_Id.Value : 0 : 0;
-
-                var customer = _customerService.GetCustomer(SessionFacade.CurrentCustomer.Id);
-                communicateWithNotifier = customer != null ? customer.CommunicateWithNotifier : 0;
             }
             return Json(new
             {
                 NoMailToNotifier = noMailToNotifier,
                 WorkingGroup_Id = workinggroupId,
-                ReCalculateWatchDate = reCalculateWatchDate,
-                CommunicateWithNotifier = communicateWithNotifier
+                ReCalculateWatchDate = reCalculateWatchDate
             });
         }
 
