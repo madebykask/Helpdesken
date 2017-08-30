@@ -210,13 +210,13 @@
                         return null;
                     }
 
-                    var token = GetToken(userName, password);
-                    TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
+                    //var token = GetToken(userName, password);
+                    //TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
                     
-                    if (token != null)
-                    {
-                        TempData[TokenKey] = GetTokenData(token.access_token, token.refresh_token);                        
-                    }
+                    //if (token != null)
+                    //{
+                    //    TempData[TokenKey] = GetTokenData(token.access_token, token.refresh_token);                        
+                    //}
 
                     this.RedirectFromLoginPage(userName, redirectTo, user.StartPage);
                 }
