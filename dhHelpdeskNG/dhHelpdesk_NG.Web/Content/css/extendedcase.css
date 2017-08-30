@@ -107,7 +107,7 @@ ec-section .actionsPanel {
     border-radius: 0px !important;
 }
 
-ec-section ec-label .col-md-6:first-child {
+ec-section ec-label .col-md-6:nth-child(2) {
   font-style:italic !important;
   
   padding-top:0px !important;
