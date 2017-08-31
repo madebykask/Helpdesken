@@ -1,4 +1,4 @@
-﻿use dhHelpdesk_IKEA_BSCHR
+﻿
 
 UPDATE tblTextTranslation Set TextTranslation = 'Cases on hold' WHERE Text_Id=6 AND Language_Id=2;
 GO
