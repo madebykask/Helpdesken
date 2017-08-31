@@ -1,0 +1,2857 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@{
+    const string CompanyName = "IKEA Dist Services Ltd";
+    const string ContractType = "Permanent";
+    const string PartTime = "Part Time";
+    const string FullTime = "Full Time";
+    const string ZeroHours = "Zero Hours";
+    const string DefaultProbationPeriod = "Yes";
+}
+<div class="tab-pane" id="payment">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Basic pay")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PayrollCategory")</td>
+                    <td>
+                        @Model.Element("PayrollCategory")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PayScaleGroup")</td>
+                    <td>
+                        @Model.Element("PayScaleGroup")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BasicPayAmount")</td>
+                    <td>
+                        @Model.Element("BasicPayAmount")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Allowances")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesType")</td>
+                    <td>
+                        @Model.Element("AllowancesType")
+                    </td>
+                </tr>
+                @* <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesPaymentType")</td>
+                    <td>
+                        @Model.Element("AllowancesPaymentType")
+                    </td>
+                </tr>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesAmountUnits")</td>
+                    <td>
+                        @Model.Element("AllowancesAmountUnits")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesPaidPer")</td>
+                    <td>
+                        @Model.Element("AllowancesPaidPer")
+                    </td>
+                </tr>
+                @*                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesNetGross")</td>
+                    <td>
+                        @Model.Element("AllowancesNetGross")
+                    </td>
+                </tr>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesValidFrom")</td>
+                    <td>
+                        @Model.Element("AllowancesValidFrom")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AllowancesValidTo")</td>
+                    <td>
+                        @Model.Element("AllowancesValidTo")
+                    </td>
+                </tr>
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="allowance@(i.ToString())" id="allowance@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Allowances") @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesType" + i.ToString())
+
+                        </td>
+                    </tr>
+@*<tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesPaymentType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesPaymentType" + i.ToString())</td>
+                    </tr>*@
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesAmountUnits" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesAmountUnits" + i.ToString())</td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesPaidPer" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesPaidPer" + i.ToString())</td>
+                    </tr>
+@*
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesNetGross" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesNetGross" + i.ToString())</td>
+                    </tr>*@
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesValidFrom" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesValidFrom" + i.ToString())</td>
+                    </tr>
+                    <tr class="allowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AllowancesValidTo" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AllowancesValidTo" + i.ToString())</td>
+                    </tr>
+                }
+                <tr id="addAllowanceTrr">
+                    <td colspan="2">
+                        @Model.Element("Allowances")
+                        <a id="addAllowance" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Allowance")</a></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Deductions")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsType")</td>
+                    <td>
+                        @Model.Element("DeductionsType")
+                    </td>
+                </tr>
+                @*                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsPaymentType")</td>
+                    <td>
+                        @Model.Element("DeductionsPaymentType")
+                    </td>
+                </tr>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsAmountUnits")</td>
+                    <td>
+                        @Model.Element("DeductionsAmountUnits")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductedPer")</td>
+                    <td>
+                        @Model.Element("DeductedPer")
+                    </td>
+                </tr>
+                @*                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsNetGross")</td>
+                    <td>
+                        @Model.Element("DeductionsNetGross")
+                    </td>
+                </tr>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsValidFrom")</td>
+                    <td>
+                        @Model.Element("DeductionsValidFrom")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DeductionsValidTo")</td>
+                    <td>
+                        @Model.Element("DeductionsValidTo")
+                    </td>
+                </tr>
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="deduction@(i.ToString())" id="deduction@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Deductions") @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsType" + i.ToString())</td>
+                    </tr>@*
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsPaymentType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsPaymentType" + i.ToString())</td>
+                    </tr>*@
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsAmountUnits" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsAmountUnits" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductedPer" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductedPer" + i.ToString())</td>
+                    </tr>
+@*
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsNetGross" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsNetGross" + i.ToString())</td>
+                    </tr>*@
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsValidFrom" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsValidFrom" + i.ToString())</td>
+                    </tr>
+                    <tr class="deduction@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("DeductionsValidTo" + i.ToString())</td>
+                        <td>
+                            @Model.Element("DeductionsValidTo" + i.ToString())</td>
+                    </tr>
+                }
+                <tr id="addDeductionTrr">
+                    <td colspan="2">
+                        @Model.Element("Deductions")
+                        <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Deduction")</a></td>
+                </tr>
+
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Bonus Eligibility")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("OneIKEABonusLevel")</td>
+                    <td>
+                        @Model.Element("OneIKEABonusLevel")
+                    </td>
+                </tr>
+
+                <tr class="globalmobility-first">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Global Mobility")</h4>
+                    </td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("TaxAssignment")</td>
+                    <td>
+                        @Model.Element("TaxAssignment")
+                    </td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("SocialInsuranceAssignment")</td>
+                    <td>
+                        @Model.Element("SocialInsuranceAssignment")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Country Specifics")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("DateOfNextSalaryReview")</td>
+                    <td>
+                        @Model.Element("DateOfNextSalaryReview")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BenefitLevel")</td>
+                    <td>@Model.Element("BenefitLevel")
+                        <div id="notice_BenefitLevel" style="display: inline-block; color: black;" class="notice">
+                            @Model.Translate("If no default value, please consult UK & IE Comps & Bens Mgr")
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
+<script>
+
+
+
+
+    var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');
+    if ("@Model.ReadOnlyTab("#payment")" == 'False' && lockedbyUserGroup == 'False') {
+
+        $(function () {
+
+            $('#PayrollCategory').change(function () {
+                if ($('#PayrollCategory').val() == 'Hourly') {
+
+                    var bus = '';
+                    if (document.getElementById('BusinessUnit')) {
+                        bus = $("#BusinessUnit option:selected").text();
+                    }
+                    if (bus == 'IKEA Service Office' | bus == 'IKEA Prop Investments Ltd') {
+                        $('#PayScaleGroup').val('INTERN');                       
+                    }
+
+                    else
+
+                        $('#PayScaleGroup').val('STARTLO');
+                }
+                
+            });
+
+            // allowance and deduction datepickers
+            var employmentCategory = document.getElementById('EmploymentCategory').value;
+            var sEnd = document.getElementById('ContractEndDate');
+
+
+            function setPaymentDatePickersBehavior() {
+                var startDate = $('#ContractStartDate').val();
+                var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+                var dStart = APIGlobal.DateTime.parseDate(startDate, format);
+                var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+                $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,' +
+                    '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker(
+                {
+                    onRender: function (ev) {
+                        return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
+                    },
+                });
+            }
+
+            setPaymentDatePickersBehavior();
+
+
+            function setSlaryReviewDatePickersBehavior() {
+
+                var startDate = $('#ContractStartDate').val();
+                if (startDate != '') {
+                    var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+                    var dStart = APIGlobal.DateTime.parseDate(startDate, format);
+                    var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+                    forcePicker.setFullYear(dStart.getFullYear());
+                    forcePicker.setMonth(0);
+                    forcePicker.setDate(1);
+
+
+                    var nowTemp = new Date();
+                    var specialDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+                    specialDate.setFullYear(dStart.getFullYear());
+                    specialDate.setMonth(0);
+                    specialDate.setDate(1);
+
+                    if (dStart < specialDate) {
+                        $('#date_DateOfNextSalaryReview').not(".disabled").datepicker(
+                        {
+                            onRender: function (ev) {
+                                return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
+                            },
+                        });
+                    }
+
+                    else {
+
+                        forcePicker.setFullYear(dStart.getFullYear() + 1);
+                        $('#date_DateOfNextSalaryReview').not(".disabled").datepicker(
+                        {
+                            onRender: function (ev) {
+                                return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
+                            },
+                        });
+                    }
+                }
+
+            }
+
+            //setSlaryReviewDatePickersBehavior();
+
+            function setSlaryReviewDatePickersValue() {
+
+                var startDate = $('#ContractStartDate').val();
+                if (startDate != '') {
+                    var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+                    var dStart = APIGlobal.DateTime.parseDate(startDate, format);
+                    var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+                    forcePicker.setFullYear(dStart.getFullYear() + 1);
+                    // November 2016 - Case 56221 : If in field ‘Contract Start Date’ date is earlier than 01.01.2017 (all dates up to: 31.12.2016 (included))
+                    forcePicker.setMonth(0);
+                    forcePicker.setDate(1);
+                    var visibleDate = APIGlobal.DateTime.formatDate(forcePicker, format);
+
+                    var nowTemp = new Date();
+                    var specialDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+                    specialDate.setFullYear(dStart.getFullYear() + 1);
+                    specialDate.setMonth(0);
+                    specialDate.setDate(1);
+
+                    if (dStart < specialDate) {
+
+                        $('#DateOfNextSalaryReview').val(visibleDate);
+                    }
+
+                    else {
+                        // November 2016 - Case 56221 : And if in field ‘Contract Start Date’ date is later than 01.01.2017 but earlier than 01.01.2018 (all dates up to: 31.12.2017 (included))
+                        //Then: 
+                        //    New default value in ‘Date of next salary review’ should be: 01.01.2018 
+
+                        forcePicker.setFullYear(dStart.getFullYear() + 1);
+                        visibleDate = APIGlobal.DateTime.formatDate(forcePicker, format);
+                        $('#DateOfNextSalaryReview').val(visibleDate);
+
+                    }
+                }
+            }
+
+            //setSlaryReviewDatePickersValue();
+
+            $('#date_ContractStartDate').on('changeDate', function (ev) {
+
+                $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,' +
+                '#date_DeductionsValidFrom,#date_DeductionsValidFrom2,#date_DeductionsValidFrom3,#date_DeductionsValidFrom4,#date_DeductionsValidFrom5').not(".disabled").datepicker('destroy');
+
+                setPaymentDatePickersBehavior();
+                var txt = $('#Company').find('option:selected').text();
+                if (txt != '' && txt != 'IKEA Dist Services Ltd') {
+                    setSlaryReviewDatePickersBehavior();
+                    setSlaryReviewDatePickersValue();
+                }
+
+
+                $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,#AllowancesValidFrom4,#AllowancesValidFrom5,' +
+                '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3,#DeductionsValidFrom4,#DeductionsValidFrom5').val($('#ContractStartDate').val());
+
+            }).data('datepicker');
+
+
+            $('#ContractStartDate').change(function () {
+                var txt = $('#Company').find('option:selected').text();
+                if (txt != '' && txt != 'IKEA Dist Services Ltd')
+                    setSlaryReviewDatePickersValue();
+
+                $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,#AllowancesValidFrom4,#AllowancesValidFrom5,' +
+                '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3,#DeductionsValidFrom4,#DeductionsValidFrom5').val($('#ContractStartDate').val());
+
+            });
+
+            $('#Company').change(function () {
+                var val = $(this).val();
+                var txt = $('#Company').find('option:selected').text();
+
+                if (txt == '' || txt == 'IKEA Dist Services Ltd') {
+                    $('#DateOfNextSalaryReview').val("");
+                }
+                else {
+                    setSlaryReviewDatePickersBehavior();
+                    setSlaryReviewDatePickersValue();
+
+                }
+            });
+
+            function setDefaultDate(id) {
+                var input = $('#' + id);
+
+                if (employmentCategory == 'Temporary') {
+                    input.val(sEnd.value);
+                }
+                else
+                    if (input.val() == '') {
+                        input.val('31.12.9999');
+                    }
+            }
+
+            function disableDatePicker(id) {
+                var input = $('#' + id);
+                var datePicker = $('#date_' + id);
+
+                datePicker.datepicker("destroy");
+                datePicker.addClass("disabled");
+                input.val("");
+                document.getElementById(id).disabled = true;
+            }
+
+            function enableDatePicker(id) {
+                var input = $('#' + id);
+                var datePicker = $('#date_' + id);
+
+                datePicker.removeClass("disabled");
+                document.getElementById(id).disabled = false;
+                setDefaultDate(id);
+                datePicker.datepicker();
+            }
+
+            function setDatePickerBehavior(id) {
+                var input = $('#' + id);
+
+
+            }
+
+            function setDefaultDatePickerBehavior(id) {
+                var input = $('#' + id);
+
+
+            }
+
+            //$('#ContractStartDate').change(function () {
+            //    setDatePickerBehavior('AllowancesValidTo');
+            //});
+            //setDefaultDatePickerBehavior('AllowancesValidTo');
+
+            ////$('#AllowancesPaymentType2').change(function () {
+            ////    setDatePickerBehavior('AllowancesValidTo2', $(this).val());
+            ////});
+            ////setDefaultDatePickerBehavior('AllowancesValidTo2', $('#AllowancesPaymentType2').val());
+
+            ////$('#AllowancesPaymentType3').change(function () {
+            ////    setDatePickerBehavior('AllowancesValidTo3', $(this).val());
+            ////});
+            ////setDefaultDatePickerBehavior('AllowancesValidTo3', $('#AllowancesPaymentType3').val());
+
+            //$('#ContractStartDate').change(function () {
+            //    setDatePickerBehavior('DeductionsValidTo');
+            //});
+            //setDefaultDatePickerBehavior('DeductionsValidTo');
+
+            ////$('#DeductionsPaymentType2').change(function () {
+            ////    setDatePickerBehavior('DeductionsValidTo2', $(this).val());
+            ////});
+            ////setDefaultDatePickerBehavior('DeductionsValidTo2', $('#DeductionsPaymentType2').val());
+
+            ////$('#DeductionsPaymentType3').change(function () {
+            ////    setDatePickerBehavior('DeductionsValidTo3', $(this).val());
+            ////});
+            ////setDefaultDatePickerBehavior('DeductionsValidTo3', $('#DeductionsPaymentType3').val());
+
+            @*        function setOneIKEABonusLevel(value) {
+            if (!value) {
+                $('#OneIKEABonusLevel option[value="' + '@Level' + '"]').prop('selected', true);
+            }
+            else {
+                $('#OneIKEABonusLevel option:not([value])').prop('selected', true);
+            }
+        };
+
+        $('#JobTitle').change(function () {
+            setOneIKEABonusLevel($(this).val());
+        });
+
+        setOneIKEABonusLevel($('#JobTitle').val());*@
+
+            function setNewToIKEA(value) {
+                if (value == 'International Transfer') {
+                    $('.globalmobility-first').show();
+                }
+                else {
+                    $('.globalmobility-first').hide();
+                }
+            };
+
+            $('#NewToIKEA').change(function () {
+
+                setNewToIKEA($(this).val());
+            });
+
+            setNewToIKEA($('#NewToIKEA').val());
+
+        }); // End Fuction 
+
+
+       
+        
+
+        
+
+        @*// Following script is for hiding global mobility class if NewToIKEA is equal to string 'International Transfer'
+    if ('@Model.GetAnswer("NewToIKEA")' == 'International Transfer') {
+        $(".globalmobility").hide();
+
+    }
+
+    document.getElementById('AllowancesValidFrom').value = '@Model.GetAnswer("ContractStartDate")';
+    document.getElementById('DeductionsValidFrom').value = '@Model.GetAnswer("ContractStartDate")';
+
+    for (var i = 2; i <= 3; i++) {
+        //Defaults variables to ContractStartDate
+        var AllowancesValidFrom = "AllowancesValidFrom" + [i].toString();
+        var DeductionsValidFrom = "DeductionsValidFrom" + [i].toString();
+        document.getElementById(AllowancesValidFrom).value = '@Model.GetAnswer("ContractStartDate")';
+        document.getElementById(DeductionsValidFrom).value = '@Model.GetAnswer("ContractStartDate")';
+    }*@
+
+
+        var AllowanceType = 0; // Global
+
+
+        function setProbationEndDate(value) {
+            var probationEndDate = $('#ProbationEndDate');
+
+            if (value == '@DefaultProbationPeriod') {
+                var sStart = $('#ContractStartDate').val();
+                var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+                var dStart = APIGlobal.DateTime.parseDate(sStart, format);
+
+                var endDate = new Date(dStart.getFullYear(), dStart.getMonth() + 6, dStart.getDate() - 1, 0, 0, 0, 0);
+                var visibleDate = APIGlobal.DateTime.formatDate(endDate, format);
+                probationEndDate.val(visibleDate.toString());
+            }
+            else {
+                probationEndDate.val("");
+            }
+
+        };
+
+
+        //SG 
+        //$(function () {
+
+        function setEmployeeBehavior(value) {
+            if (value == '@ContractType') {
+                $('#date_ContractEndDate').datepicker("destroy");
+                $('#date_ContractEndDate').addClass("disabled");
+                $('#ContractEndDate').prop('disabled', true);
+                $('#ContractEndDate').val("");
+            }
+            else {
+                $('#date_ContractEndDate').datepicker();
+                $('#ContractEndDate').prop('disabled', false);
+                $("#ContractEndDate").removeClass("disabled");
+            }
+
+            //This validation doesen´t apply to "IKEA Dist Services Ltd";
+            var newCompany = $("#Company option:selected").text();
+
+            if (newCompany != '@CompanyName') {
+
+                if (value == '@ZeroHours') {
+                    $('#ContractedHours').val("0");
+                }
+                else {
+                    if ($('#ContractedHours').val() == "0") {
+                        $('#ContractedHours').val("");
+                    }
+                }
+            }
+        }
+
+        if ($('#ContractType').val() == '@ContractType') {
+            $('#date_ContractEndDate').datepicker("destroy");
+            $('#date_ContractEndDate').addClass("disabled");
+            $('#ContractEndDate').prop('disabled', true);
+        }
+        //});
+        // setEmployeeBehavior($('#EmploymentCategory').val());
+        //setProbationEndDate($('#ProbationPeriod').val());
+
+        $('#Company').change(function () {
+            if ($("#Company option:selected").text() == 'IKEA Ltd')
+            { document.getElementById('HelpDesk').value = 'ICC3 UK Retail'; }
+            else if ($("#Company option:selected").text() == 'IKEA Prop Investments Ltd')
+            { document.getElementById('HelpDesk').value = 'ICC3 UK Retail'; }
+            else if ($("#Company option:selected").text() == 'IKEA Dist Services Ltd')
+            { document.getElementById('HelpDesk').value = 'ICC3 WER DS'; }
+            else
+            {
+                document.getElementById('HelpDesk').value = '';
+            }
+
+
+            var value = $("#Company option:selected").text();;
+
+            if (!(value == '@CompanyName')) {
+                document.getElementById('CostAllocation').disabled = true;
+                if ($('#CrossChargeCostCentre')[0].selectize)
+                { $('#CrossChargeCostCentre')[0].selectize.disable(); }
+
+                //$('#CostAllocation, #CrossChargeCostCentre').prop('disabled', true);
+            }
+            else {
+                document.getElementById('CostAllocation').disabled = false;
+                if ($('#CrossChargeCostCentre')[0].selectize)
+                { $('#CrossChargeCostCentre')[0].selectize.enable(); }
+                //$('#CostAllocation, #CrossChargeCostCentre').prop('disabled', false);
+            }
+        });
+
+        $('#ContractType').change(function () {
+            setEmployeeBehavior($(this).val());
+        });
+
+        $('#ContractedHours').change(function () {
+
+            //This validation doesen´t apply to "IKEA Dist Services Ltd";
+            var newCompany = $("#Company option:selected").text();
+            var value = $(this).val();
+
+            if (newCompany != '@CompanyName') {
+                //Order of the fieds to be changed, additional validations: 
+                //if Contracted Hours less than 38 – Employment Category default value "Part time";
+                //if Contracted Hours equals 39 – Employment Category default value "Full time"; 
+                //if Contract Type "Zero hours" – Contracted Hours default value “0”, available for all companies except for Distribution
+
+                if (value > 0 && value <= 38) {
+                    $('#EmploymentCategory option[value="' + '@PartTime' + '"]').prop('selected', true);
+                }
+                else if (value == 39) {
+                    $('#EmploymentCategory option[value="' + '@FullTime' + '"]').prop('selected', true);
+                }
+                else if (value == 0) {
+                    $('#ContractType option[value="' + '@ZeroHours' + '"]').prop('selected', true);
+                }
+                else {
+                    $('#ContractType option:not([value])').prop('selected', true);
+                }
+
+    }
+        });
+
+    $('#ProbationPeriod').change(function () {
+        setProbationEndDate($(this).val());
+    });
+
+    $('#date_ContractStartDate').not(".disabled").datepicker().on('changeDate', function (ev) {
+
+        setProbationEndDate($('#ProbationPeriod').val());
+    });
+
+    $('#ContractStartDate').not(".disabled").change(function () {
+        setProbationEndDate($('#ProbationPeriod').val());
+    });
+
+    $('#ReportsToLineManager').change(function () {
+        //////////
+        //ReportsToLineManager change function
+        //If certain business units, TEC Approver=ReportsToLinemanager
+        //////////
+
+        var bus = $("#BusinessUnit option:selected").text();
+
+        if (bus == 'IKEA Distribution Services Uni' | bus == 'IKEA Property Investments Ltd' | bus == 'IKEA Contact Centre' | bus == 'IKEA Service Office' | bus == 'IKEA Customer Delivery Centre') {
+            var line = document.getElementById('ReportsToLineManager').value;
+
+            var tec = $("#TECApprover option:selected").text();
+
+            if (tec == '') {
+
+                $('#TECApprover')[0].selectize.setValue(line);
+            }
+        }
+
+
+    });
+
+
+    $('#BusinessUnit').change(function () {
+        //////////
+        //Business unit change function
+        //Calls functions and sets Primary site=Business unit
+        //////////
+
+        addTecApprovers();
+        setPayrollCategory();
+        setBasicPayAmount();
+        AllowanceType = 1;
+        setAllowances();
+        AllowanceType = 2;
+        setAllowances();
+        AllowanceType = 3;
+        setAllowances();
+        AllowanceType = 4;
+        setAllowances();
+        AllowanceType = 5;
+        setAllowances();
+
+        var value = $(this).val();
+        if ($('#BusinessUnit')[0].selectize) {
+            var selectedText = $('#BusinessUnit')[0].selectize.getItem(value).text();
+
+            if ($('#PrimarySite')[0].selectize) {
+                $('#PrimarySite')[0].selectize.setValue(selectedText);
+            }
+            else {
+                $('#PrimarySite').val(selectedText);
+            }
+        }
+        else {
+            var selectedText = $('#BusinessUnit').find('option:selected').text();
+            if ($('#PrimarySite')[0].selectize) {
+                $('#PrimarySite')[0].selectize.setValue(selectedText);
+            }
+            else {
+                var selectedText = $('#BusinessUnit').find('option:selected').text();
+                $('#PrimarySite').val(selectedText);
+            }
+        }
+    });
+
+
+
+
+
+    $('#AllowancesType').change(function () {
+        //////////
+        //Alowance type change function
+        //Calls set Allowance type
+        //////////
+        AllowanceType = 1;
+        setAllowances();
+
+    });
+
+    $('#AllowancesType2').change(function () {
+        //////////
+        //Alowance type 2 change function
+        //Calls set Allowance type 2
+        //////////
+        AllowanceType = 2;
+        setAllowances();
+        //setAllowanceType2();
+
+    });
+
+    $('#AllowancesType3').change(function () {
+        //////////
+        //Alowance type 3 change function
+        //Calls set Allowance type 3
+        //////////
+        AllowanceType = 3;
+        setAllowances();
+
+    });
+
+    $('#AllowancesType4').change(function () {
+        //////////
+        //Alowance type 4 change function
+        //Calls set Allowance type4
+        //////////
+        AllowanceType = 4;
+        setAllowances();
+
+    });
+
+    $('#AllowancesType5').change(function () {
+        //////////
+        //Alowance type 5 change function
+        //Calls set Allowance type 5
+        //////////
+        AllowanceType = 5;
+        setAllowances();
+
+    });
+
+    $('#ServiceArea').change(function () {
+        //////////
+        //Service area change function
+        //Calls setLineManagerJobTitle to add jobtitles based on function/service area
+        //////////
+
+        //department, Line manager, cost centre NEW
+        setTimeout(function () { GetXML('predefined_function_department_linemanager_outs.xml', setLineManagerAndCostCentre); }, 1);
+
+        setTimeout(function () { GetXML('predefined_function_jobtitleUK_outs.xml', setLineManagerJobTitle); }, 1);
+
+
+
+
+    });
+
+
+
+    $('#Department').change(function () {
+
+        //////////
+        //Department change function
+        //Calls setCostCentre to set costcentre, based on department
+        //Calls setLineManager to set Linemanagaer, based on department
+        //////////
+
+        //Cost centre department
+        //GetXML('predefined_department_costcentre_outs.xml', setCostCentre);
+
+        //Line manager department
+        //GetXML('predefined_linemanager_department_outs_UK.xml', setLineManager);
+
+
+        //department, Line manager, cost centre NEW
+        GetXML('predefined_function_department_linemanager_outs.xml', setLineManagerAndCostCentre);
+
+
+        //Line manager jobtitle
+
+        setTimeout(function () { GetXML('predefined_department_jobtitle_UK_outs.xml', setLineManagerJob); }, 30);
+
+
+
+    });
+
+    $('#ReportsToLineManager').change(function () {
+        setTimeout(function () { GetXML('predefined_department_jobtitle_UK_outs.xml', setLineManagerJob); }, 30);
+    });
+
+
+    $('#PayScaleGroup').change(function () {
+        //////////
+        //Payscalegroup change function
+        //Calls setBasicPayAmount to set amount based on payscale            
+        //////////
+
+        setBasicPayAmount();
+
+    });
+
+        //$('#PayrollCategory').change(function () {
+    jQuery('#PayrollCategory').change(function () {
+        //////////
+        //PayrollCategory change function
+        //Calls fanctions concerned by payrollcategory
+        //////////
+
+        addDeductionTypesOnPayroll();
+        addAllowanceOnPayroll();
+
+        addPayScaleOnPayroll();
+        setPayrollCategory();
+        setBasicPayAmount();
+        AllowanceType = 1;
+        setAllowances();
+        AllowanceType = 2;
+        setAllowances();
+        AllowanceType = 3;
+        setAllowances();
+        AllowanceType = 4;
+        setAllowances();
+        AllowanceType = 5;
+        setAllowances();
+
+
+    });
+
+ 
+    function setDefaultPayroll() {
+        //////////
+        //setDefaultPayroll:
+        //Sets Payrpll category from jobtitle
+        //////////
+
+
+        GetXML('predefined_payroll_category_outs.xml', setDefaultPayrollXML);
+
+
+
+    }
+
+    function addDeductionTypesOnPayroll() {
+        //////////
+        //addDeductionTypesOnPayroll:
+        //Calls addDeductionTypesOnPayrollXML to add deduction types on selected payroll category
+        //////////
+
+
+        GetXML('Predefined_PayrollCategory_DeductionsType.xml', addDeductionTypesOnPayrollXML);
+
+
+
+    }
+
+    function addTecApprovers() {
+        //////////
+        //addTecApprovers:
+        //Calls addTecApproversXML to add tec providers on selected businessunit
+        //////////
+
+        GetXML('predefined_businessunit_tecprovider_outs.xml', addTecApproversXML);
+
+
+
+    }
+
+    function addAllowanceOnPayroll() {
+        //////////
+        //addAllowanceOnPayroll:
+        //Calls addAllowanceOnPayrollXML to Add Allowance types on selected payscale
+        //////////
+
+
+        GetXML('predefined_payroll_allowance_outs.xml', addAllowanceOnPayrollXML);
+
+
+
+    }
+
+
+    function addPayScaleOnPayroll() {
+        //////////
+        //addPayScaleOnPayroll:
+        //Calls addPayScaleOnPayrollXML to add payscale on selected payroll category
+        //////////
+
+        GetXML('predefined_payroll_payscale_outs.xml', addPayScaleOnPayrollXML);
+
+    }
+
+    function setAllowances() {
+        //////////
+        //setAllowances
+        //Adds allowance types based on selected payrollcategory
+        //////////
+        GetXML('predefined_allowancetype_defaults_outs.xml', setAllowancesXML);
+
+
+    }
+
+
+    function setAllowancesXML(xml) {
+        //setAllowanceTypeXML:
+        //Sets Allowance units from XML based on allowance type
+        //////////
+
+        var show = ''
+        var show2 = ''
+
+        if (AllowanceType == 1) {
+            if (document.getElementById('AllowancesAmountUnits')) {
+                document.getElementById('AllowancesAmountUnits').value = '';
+            }
+        }
+        else {
+            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '';
+            }
+        }
+
+
+
+        var res = '0';
+
+        var pay = '';
+        if (document.getElementById('PayrollCategory')) {
+            pay = document.getElementById('PayrollCategory').value;
+        }
+        var dep = '';
+        if (AllowanceType == 1) {
+            if (document.getElementById('AllowancesType')) {
+                dep = document.getElementById('AllowancesType').value;
+            }
+        }
+        else {
+            if (document.getElementById('AllowancesType' + AllowanceType.toString())) {
+                dep = document.getElementById('AllowancesType' + AllowanceType.toString()).value;
+            }
+        }
+
+        var bus = '';
+        if (document.getElementById('BusinessUnit')) {
+            bus = $("#BusinessUnit option:selected").text();
+        }
+
+        var d = dep + '_' + pay;
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+            show = '';
+            show2 = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show1').text();
+            show2 = $sel.find('show2').text();
+
+            if (dep.toString().trim() == 'Location Allowance') {
+
+                if (bus == 'IKEA Bristol') {
+                    if (pay == 'Hourly') {
+                        if (AllowanceType == 1) {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '0.10';
+                            }
+                        }
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '0.10';
+                            }
+                        }
+                    }
+                    else {
+                        if (AllowanceType == 1) {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '203.00';
+                            }
+                        }
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '203.00';
+                            }
+                        }
+                    }
+                }
+                else if (bus == 'IKEA Croydon') {
+                    if (pay == 'Hourly') {
+                        if (AllowanceType == 1) {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '1.28';
+                            }
+                        }
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '1.28';
+                            }
+                        }
+                    }
+                    else {
+                        if (AllowanceType == 1) {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '2600.00';
+                            }
+                        }
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '2600.00';
+                            }
+                        }
+                    }
+                }
+                else if (bus == 'IKEA Lakeside') {
+                    if (pay == 'Hourly') {
+                        if (AllowanceType == 1) {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '0.77';
+                            }
+                        }
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '0.77';
+                            }
+                        }
+                    }
+                    else {
+                        if (AllowanceType == 1) {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '1560.00';
+                            }
+                        }
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '1560.00';
+                            }
+                        }
+                    }
+                }
+                else if (bus == 'IKEA Milton Keynes') {
+                    if (pay == 'Hourly') {
+                        if (AllowanceType == 1) {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '0.35';
+                            }
+                        }
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '0.35';
+                            }
+                        }
+                    }
+                    else {
+                        if (AllowanceType == 1) {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '709.00';
+                            }
+                        }
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '709.00';
+                            }
+                        }
+                    }
+                }
+                else if (bus == 'IKEA Tottenham') {
+                    if (pay == 'Hourly') {
+                        if (AllowanceType == 1) {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '1.28';
+                            }
+                        }
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '1.28';
+                            }
+                        }
+                    }
+                    else {
+                        if (AllowanceType == 1) {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '2600.00';
+                            }
+                        }
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '2600.00';
+                            }
+                        }
+                    }
+                }
+                else if (bus == 'IKEA Wembley') {
+                    if (pay == 'Hourly') {
+                        if (AllowanceType == 1) {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '1.28';
+                            }
+                        }
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '1.28';
+                            }
+                        }
+                    }
+                    else {
+                        if (AllowanceType == 1) {
+                            if (document.getElementById('AllowancesAmountUnits')) {
+                                document.getElementById('AllowancesAmountUnits').value = '2600.00';
+                            }
+                        }
+                        else {
+                            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '2600.00';
+                            }
+                        }
+                    }
+                }
+                // 2015 week 36 changes : only for IKEA Service Office, no default value anymore
+                //else if (bus == 'IKEA Service Office') {
+                //    if (pay == 'Hourly') {
+                //        if (AllowanceType == 1) {
+                //            if (document.getElementById('AllowancesAmountUnits')) {
+                //                document.getElementById('AllowancesAmountUnits').value = '1.28';
+                //            }
+                //        }
+                //        else {
+                //            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                //                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '1.28';
+                //            }
+                //        }
+                //    }
+                //    else {
+                //        if (AllowanceType == 1) {
+                //            if (document.getElementById('AllowancesAmountUnits')) {
+                //                document.getElementById('AllowancesAmountUnits').value = '2600.00';
+                //            }
+                //        }
+                //        else {
+                //            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                //                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '2600.00';
+                //            }
+                //        }
+                //    }
+                //}
+            }
+            else {
+
+                if (department.toString().trim() == dep.toString().trim()) {
+
+                    if (show != '') {
+                        //if (document.getElementById('AllowancesAmountUnits')) {
+
+                        if (dep.toString().trim() == 'Advanced') {
+                            if (bus.toString().trim() != 'IKEA Contact Centre') {
+                                if (AllowanceType == 1) {
+                                    if (document.getElementById('AllowancesAmountUnits')) {
+                                        document.getElementById('AllowancesAmountUnits').value = show;
+                                    }
+                                }
+                                else {
+                                    if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                        document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = show;
+                                    }
+                                }
+                            }
+                            else {
+                                if (AllowanceType == 1) {
+                                    if (document.getElementById('AllowancesAmountUnits')) {
+                                        document.getElementById('AllowancesAmountUnits').value = '0.55';
+                                    }
+                                }
+                                else {
+                                    if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                        document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '0.55';
+                                    }
+                                }
+                            }
+                        }
+                        else if (dep.toString().trim() == 'First Aid Allowance') {
+
+                            //if (bus.toString().trim() == 'IKEA Customer Delivery Centre' | bus.toString().trim() == 'IKEA Distribution Services Uni') {
+                            if (AllowanceType == 1) {
+                                if (document.getElementById('AllowancesAmountUnits')) {
+                                    document.getElementById('AllowancesAmountUnits').value = show;
+                                }
+                            }
+                            else {
+                                if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                    document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = show;
+                                }
+                            }
+                            //}
+                        }
+                        else if (dep.toString().trim() == 'Fork Lift Truck Allowance') {
+                            if (bus.toString().trim() != 'IKEA Milton Keynes') {
+                                if (AllowanceType == 1) {
+                                    if (document.getElementById('AllowancesAmountUnits')) {
+                                        document.getElementById('AllowancesAmountUnits').value = show;
+                                    }
+                                }
+                                else {
+                                    if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                        document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = show;
+                                    }
+                                }
+                            }
+                            else {
+                                if (AllowanceType == 1) {
+                                    if (document.getElementById('AllowancesAmountUnits')) {
+                                        document.getElementById('AllowancesAmountUnits').value = '1.72';
+                                    }
+                                }
+                                else {
+                                    if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                        document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '1.72';
+                                    }
+                                }
+                            }
+                        }
+                        else if (dep.toString().trim() == 'Kitchen Skills') {
+                            if (bus.toString().trim() == 'IKEA Edinburgh') {
+                                if (AllowanceType == 1) {
+                                    if (document.getElementById('AllowancesAmountUnits')) {
+                                        document.getElementById('AllowancesAmountUnits').value = '1.00';
+                                    }
+                                }
+                                else {
+                                    if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                        document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '1.00';
+                                    }
+                                }
+                            }
+
+                            else if (bus.toString().trim() == 'IKEA Tottenham' | bus == 'IKEA Wembley' | bus == 'IKEA Croydon' | bus == 'IKEA Lakeside') {
+                                if (AllowanceType == 1) {
+                                    if (document.getElementById('AllowancesAmountUnits')) {
+                                        document.getElementById('AllowancesAmountUnits').value = '0.30';
+                                    }
+                                }
+                                else {
+                                    if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                        document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '0.30';
+                                    }
+                                }
+                            }
+                            else {
+                                if (AllowanceType == 1) {
+                                    if (document.getElementById('AllowancesAmountUnits')) {
+                                        document.getElementById('AllowancesAmountUnits').value = show;
+                                    }
+                                }
+                                else {
+                                    if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                        document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = show;
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            if (AllowanceType == 1) {
+                                if (document.getElementById('AllowancesAmountUnits')) {
+                                    document.getElementById('AllowancesAmountUnits').value = show;
+                                }
+                            }
+                            else {
+                                if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                    document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = show;
+                                }
+                            }
+                        }
+
+                    }
+
+                    res = '1';
+                }
+
+
+                if (res == 1) {
+                    return;
+                }
+            }
+
+
+        });
+    }
+
+    function setLineManagerJob(xml) {
+        //////////
+        //setLineManagerJob:
+        //Sets Line manager job title
+        //////////
+
+        var show = ''
+
+        var dep = '';
+        if (document.getElementById('ReportsToLineManager')) {
+            dep = $("#ReportsToLineManager").val();
+
+        }
+
+        $('#ManagersJobTitle')[0].selectize.setValue('');
+
+        $(xml).find('dependent').each(function () {
+
+            var $sel = $(this);
+            show = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+            if (department == dep) {
+
+                if (show != '') {
+                    var n = show.indexOf(",");
+
+                    //TEMP for Steering Group_Doncaster, Sales (problem with commas in the name) so we use  #
+                    if (show.indexOf("#") > -1) {
+                        //$.each(optionsarray, function (i) {
+                        show = show.replace(/\#/g, ",");
+                        //});
+                    }
+
+                    if (n == -1) {
+
+                        $('#ManagersJobTitle')[0].selectize.setValue(show);
+                    }
+                    else {
+                        var res = show.substring(0, n);
+
+                        $('#ManagersJobTitle')[0].selectize.setValue(res);
+                    }
+                    return;
+                }
+            }
+        });
+
+    }
+
+    function addPayScaleOnPayrollXML(xml) {
+        //////////
+        //addPayScaleOnPayrollXML:
+        //Adds payscale on selected payroll category
+        //////////
+
+        var show = ''
+        var dep = '';
+
+        if (document.getElementById('PayrollCategory')) {
+            dep = $("#PayrollCategory option:selected").text();
+        }
+
+        var temp = '';
+        //alert('dfa');
+        $(xml).find('dependent').each(function () {
+
+            var $sel = $(this);
+
+            show = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+            if (department.toString().trim() == dep.toString().trim()) {
+
+                if (show != '') {
+
+                    var optionsarray = show.split(',');
+                    var seloption = "";
+
+                    $('#PayScaleGroup')
+                        .find('option')
+                        .remove();
+
+
+                    optionsarray.push('');
+
+
+                    $.each(optionsarray, function (key, value) {
+
+
+                        var s = value.replace(/\n/g, '');
+
+                        $('#PayScaleGroup')
+                            .append($("<option></option>")
+                            .attr("value", s)
+                            .text(s));
+                    });
+
+                    var bus = '';
+                    if (document.getElementById('BusinessUnit')) {
+                        bus = $("#BusinessUnit option:selected").text();
+                    }
+                    if (bus == 'IKEA Service Office' | bus == 'IKEA Prop Investments Ltd') {
+                        document.getElementById('PayScaleGroup').value = 'INTERN';
+                    }
+
+                    if (bus == 'IKEA Tottenham' | bus == 'IKEA Wembley' | bus == 'IKEA Croydon') {
+
+                        document.getElementById('PayScaleGroup').value = 'STARTLO';
+                    }
+                    else { document.getElementById('PayScaleGroup').value = 'STARTUK'; }
+
+                    return;
+                }
+
+
+            }
+        });
+
+    }
+
+
+
+    function addAllowanceOnPayrollXML(xml) {
+        //////////
+        //addAllowanceOnPayroll:
+        //Adds Allowance types on selected payscale
+        //////////
+
+        var show = ''
+        var dep = '';
+
+        if (document.getElementById('PayrollCategory')) {
+            dep = $("#PayrollCategory option:selected").text();
+        }
+
+        var a1 = document.getElementById('AllowancesType').value;
+        var a2 = document.getElementById('AllowancesType2').value;
+        var a3 = document.getElementById('AllowancesType3').value;
+        var a4 = document.getElementById('AllowancesType4').value;
+        var a5 = document.getElementById('AllowancesType5').value;
+
+        var b1 = document.getElementById('AllowancesAmountUnits').value;
+        var b2 = document.getElementById('AllowancesAmountUnits2').value;
+        var b3 = document.getElementById('AllowancesAmountUnits3').value;
+        var b4 = document.getElementById('AllowancesAmountUnits4').value;
+        var b5 = document.getElementById('AllowancesAmountUnits5').value;
+
+        var temp = '';
+
+
+        $(xml).find('dependent').each(function () {
+
+            var $sel = $(this);
+
+            show = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+
+            if (department.toString().trim() == dep.toString().trim()) {
+
+                if (show != '') {
+
+                    var optionsarray = show.split(',');
+                    var seloption = "";
+
+                    $('#AllowancesType')
+                        .find('option')
+                        .remove();
+
+                    $('#AllowancesType2')
+                            .find('option')
+                            .remove();
+
+                    $('#AllowancesType3')
+                        .find('option')
+                        .remove();
+
+                    $('#AllowancesType4')
+                    .find('option')
+                    .remove();
+
+                    $('#AllowancesType5')
+                    .find('option')
+                    .remove();
+
+                    seloption = '<option value="' + temp + '">' + temp + '</option>';
+
+                    $.each(optionsarray, function (i) {
+                        seloption += '<option value="' + optionsarray[i] + '">' + optionsarray[i] + '</option>';
+                    });
+
+
+                    $('#AllowancesType').append(seloption);
+                    $('#AllowancesType2').append(seloption);
+                    $('#AllowancesType3').append(seloption);
+                    $('#AllowancesType4').append(seloption);
+                    $('#AllowancesType5').append(seloption);
+
+                    if (a1 != '') {
+                        document.getElementById('AllowancesType').value = a1;
+                    }
+                    if (a2 != '') {
+                        document.getElementById('AllowancesType2').value = a2;
+                    }
+                    if (a3 != '') {
+                        document.getElementById('AllowancesType3').value = a3;
+                    }
+                    if (a4 != '') {
+                        document.getElementById('AllowancesType4').value = a4;
+                    }
+                    if (a5 != '') {
+                        document.getElementById('AllowancesType5').value = a5;
+                    }
+                    if (b1 != '') {
+                        document.getElementById('AllowancesAmountUnits').value = b1;
+                    }
+                    if (b2 != '') {
+                        document.getElementById('AllowancesAmountUnits2').value = b2;
+                    }
+                    if (b3 != '') {
+                        document.getElementById('AllowancesAmountUnits3').value = b3;
+                    }
+                    if (b4 != '') {
+                        document.getElementById('AllowancesAmountUnits4').value = b4;
+                    }
+                    if (b5 != '') {
+                        document.getElementById('AllowancesAmountUnits5').value = b5;
+                    }
+
+                    return;
+                }
+
+
+            }
+        });
+
+    }
+
+    function addTecApproversXML(xml) {
+        //////////
+        //addTecApproversXML:
+        //Adds tec providers on selected businessunit
+        //////////
+
+        var show = ''
+        if (document.getElementById('TECApprover')) {
+            $('#TECApprover')[0].selectize.setValue('');
+        }
+        var dep = '';
+        if (document.getElementById('BusinessUnit')) {
+            dep = $("#BusinessUnit option:selected").text();
+        }
+
+        var line = '';
+        if (document.getElementById('ReportsToLineManager')) {
+            line = document.getElementById('ReportsToLineManager').value;
+        }
+
+        if (dep == 'IKEA Distribution Services Uni' | dep == 'IKEA Property Investments Ltd' | dep == 'IKEA Contact Centre' | dep == 'IKEA Service Office' | dep == 'IKEA Customer Delivery Centre' | dep == 'IKEA E-Commerce') {
+            if (document.getElementById('TECApprover')) {
+                $('#TECApprover')[0].selectize.setValue(line);
+            }
+        }
+
+        else {
+            $(xml).find('dependent').each(function () {
+
+                var $sel = $(this);
+                show = '';
+
+                var department = $sel.find('selected').text();
+
+                show = $sel.find('show').text();
+
+                if (department == dep) {
+
+                    if (show != '') {
+                        var n = show.indexOf(",");
+
+                        if (n == -1) {
+
+                            $('#TECApprover')[0].selectize.setValue(show);
+                        }
+                        else {
+                            var res = show.substring(0, n);
+
+                            $('#TECApprover')[0].selectize.setValue(res);
+                        }
+                        return;
+                    }
+                }
+            });
+        }
+    }
+
+
+
+
+    function addDeductionTypesOnPayrollXML(xml) {
+        //////////
+        //addDeductionTypesOnPayrollXML:
+        //Adds deduction types on selected payroll category
+        //////////
+
+        var show = ''
+
+        var dep = '';
+        if (document.getElementById('PayrollCategory')) {
+            dep = $("#PayrollCategory option:selected").text();
+        }
+
+        var temp = '';
+
+        $(xml).find('dependent').each(function () {
+
+            var $sel = $(this);
+
+            show = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+            if (department.toString().trim() == dep.toString().trim()) {
+
+                if (show != '') {
+
+                    var optionsarray = show.split(',');
+                    var seloption = "";
+
+                    $('#DeductionsType')
+                        .find('option')
+                        .remove();
+
+
+                    seloption = '<option value="' + temp + '">' + temp + '</option>';
+
+                    $.each(optionsarray, function (i) {
+                        seloption += '<option value="' + optionsarray[i] + '">' + optionsarray[i] + '</option>';
+                    });
+
+
+                    $('#DeductionsType').append(seloption);
+
+
+
+
+                    return;
+                }
+
+
+            }
+        });
+
+    }
+
+
+
+
+    function setBasicPayAmount() {
+        //////////
+        //setBasicPayAmount:
+        //Sets amount on selected payroll category
+        //////////
+
+        if (document.getElementById('BasicPayAmount')) {
+            document.getElementById('BasicPayAmount').value = ''
+        }
+
+        var comp = '';
+        if (document.getElementById('Company')) {
+            comp = $("#Company option:selected").text();
+        }
+
+        var bus = '';
+        if (document.getElementById('BusinessUnit')) {
+            bus = $("#BusinessUnit option:selected").text();
+        }
+        var grp = '';
+        if (document.getElementById('PayScaleGroup')) {
+            grp = $("#PayScaleGroup option:selected").text();
+        }
+
+        var pay = '';
+        if (document.getElementById('PayrollCategory')) {
+            pay = document.getElementById('PayrollCategory').value;
+        }
+
+
+        //if (bus != 'IKEA Delivery Centre Doncaster') {
+            if (pay.toString().trim() == 'Hourly') {
+                var show;
+
+                show = 'STARTLO';
+
+                if (grp == '') {
+                    if (bus.toString().trim() == 'IKEA Tottenham' | bus.toString().trim() == 'IKEA Wembley' | bus.toString().trim() == 'IKEA Croydon') {
+                        grp = 'STARTLO';
+                        document.getElementById('PayScaleGroup').value = grp;
+                    }
+                    else {
+                        grp = 'STARTUK';
+                        document.getElementById('PayScaleGroup').value = grp;
+                    }
+                }
+
+
+                if (bus.toString().trim() == 'IKEA Contact Centre' | bus.toString().trim() == 'IKEA Belfast' | bus.toString().trim() == 'IKEA Birmingham' | bus.toString().trim() == 'IKEA Bristol' | bus.toString().trim() == 'IKEA Cardiff' | bus.toString().trim() == 'IKEA Coventry' | bus.toString().trim() == 'IKEA Edinburgh' | bus.toString().trim() == 'IKEA Gateshead' | bus.toString().trim() == 'IKEA Glasgow' | bus.toString().trim() == 'IKEA Leeds' | bus.toString().trim() == 'IKEA Lakeside' | bus.toString().trim() == 'IKEA Manchester' | bus.toString().trim() == 'IKEA Milton Keynes' | bus.toString().trim() == 'IKEA Nottingham' | bus.toString().trim() == 'IKEA Reading' | bus.toString().trim() == 'IKEA Sheffield' | bus.toString().trim() == 'IKEA Southampton' | bus.toString().trim() == 'IKEA Warrington') {
+                    if (grp.toString().trim() == 'STARTUK') {
+
+                        if (document.getElementById('BasicPayAmount')) {
+                            document.getElementById('BasicPayAmount').value = '8.45'
+                        }
+                    }
+
+                    if (grp.toString().trim() == 'FOUNDATION') {
+
+                        if (document.getElementById('BasicPayAmount')) {
+                            document.getElementById('BasicPayAmount').value = '8.45'
+                        }
+                    }
+
+                    if (grp.toString().trim() == 'STARTER') {
+
+                        if (document.getElementById('BasicPayAmount')) {
+                            document.getElementById('BasicPayAmount').value = '8.45'
+                        }
+                    }
+                    if (grp.toString().trim() == 'FOUNDUK') {
+
+                        if (document.getElementById('BasicPayAmount')) {
+                            document.getElementById('BasicPayAmount').value = '8.45'
+                        }
+                    }                   
+
+                }
+                else
+                if (bus.toString().trim() == 'IKEA Tottenham' | bus == 'IKEA Wembley' | bus == 'IKEA Croydon' | bus == 'IKEA Service Office') {
+                    if (grp.toString().trim() == 'STARTLO') {
+
+                        if (document.getElementById('BasicPayAmount')) {
+                            document.getElementById('BasicPayAmount').value = '9.75'
+                        }
+                    }
+
+                    if (grp.toString().trim() == 'FOUNDATION') {
+
+                        if (document.getElementById('BasicPayAmount')) {
+                            document.getElementById('BasicPayAmount').value = '9.75'
+                        }
+                    }
+
+                    if (grp.toString().trim() == 'STARTER') {
+
+                        if (document.getElementById('BasicPayAmount')) {
+                            document.getElementById('BasicPayAmount').value = '9.75'
+                        }
+                    }
+                    if (grp.toString().trim() == 'FOUNDLO') {
+
+                        if (document.getElementById('BasicPayAmount')) {
+                            document.getElementById('BasicPayAmount').value = '9.75'
+                        }
+                    }
+
+                    if (grp.toString().trim() == 'MULTSKLL') {
+
+                        if (document.getElementById('BasicPayAmount')) {
+                            document.getElementById('BasicPayAmount').value = '9.13'
+                        }
+                    }
+
+                    if (grp.toString().trim() == 'BOOKOFF') {
+
+                        if (document.getElementById('BasicPayAmount')) {
+                            document.getElementById('BasicPayAmount').value = '10.12'
+                        }
+                    }
+
+                    if (grp.toString().trim() == 'QUALITY') {
+
+                        if (document.getElementById('BasicPayAmount')) {
+                            document.getElementById('BasicPayAmount').value = '10.62'
+                        }
+                    }
+
+                }
+                else {
+                    if (comp != 'IKEA Ltd') {
+
+                        if (grp.toString().trim() == 'STARTUK') {
+
+                            if (document.getElementById('BasicPayAmount')) {
+                                document.getElementById('BasicPayAmount').value = '8.25'
+                            }
+                        }
+                    }
+                    else if (grp.toString().trim() == 'INTERN') {
+
+                        if (bus.toString().trim() == 'IKEA Service Office' | bus == 'IKEA Prop Investments Ltd') {
+                            if (document.getElementById('BasicPayAmount')) {
+                                document.getElementById('BasicPayAmount').value = '6.70'
+                            }
+                        }
+                        else
+                            if (document.getElementById('BasicPayAmount')) {
+                                document.getElementById('BasicPayAmount').value = '6.50'
+                            }
+                    }
+
+                    else if (grp.toString().trim() == 'STARTER') {
+                        if (comp == 'IKEA Dist Services Ltd') {
+                            if (document.getElementById('BasicPayAmount')) {
+                                document.getElementById('BasicPayAmount').value = '8.25'
+                            }
+                        }
+                    }
+                    else if (grp.toString().trim() == 'FOUNDATION') {
+
+                        if (comp == 'IKEA Dist Services Ltd') {
+                            if (document.getElementById('BasicPayAmount')) {
+                                document.getElementById('BasicPayAmount').value = '8.25'
+                            }
+                        }
+                        else
+                            if (document.getElementById('BasicPayAmount')) {
+                                document.getElementById('BasicPayAmount').value = '7.25'
+                            }
+
+                    }
+                }
+
+            }
+        //}
+        //else {
+        //    if (document.getElementById('BasicPayAmount')) {
+        //        document.getElementById('BasicPayAmount').value = ''
+        //    }
+        //}
+
+
+
+    }
+
+    function setCostCentre(xml) {
+        //////////
+        //setCostCentre:
+        //Sets CostCentre selected department
+        //////////
+
+
+        var show = ''
+
+        if (document.getElementById('HomeCostCentre')) {
+            $('#HomeCostCentre')[0].selectize.setValue('');
+        }
+        var dep = '';
+        if (document.getElementById('Department')) {
+            dep = $("#Department option:selected").text();
+        }
+        $(xml).find('dependent').each(function () {
+
+            var $sel = $(this);
+            show = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+            if (department == dep) {
+
+                if (show != '') {
+                    var n = show.indexOf(",");
+
+                    if (n == -1) {
+
+                        $('#HomeCostCentre')[0].selectize.setValue(show);
+                    }
+                    else {
+                        var res = show.substring(0, n);
+
+                        $('#HomeCostCentre')[0].selectize.setValue(res);
+                    }
+                    return;
+                }
+            }
+        });
+    }
+
+    function setLineManagerJobTitle(xml) {
+        //////////
+        //setLineManagerJobTitle:
+        //Adds Jobtitles on selected Function
+        //////////
+
+        $('#JobTitle').off('change');
+
+        var show = ''
+
+        var dep = '';
+        var bus = '';
+
+        if (document.getElementById('ServiceArea')) {
+            dep = $("#ServiceArea option:selected").text();
+        }
+
+        if (document.getElementById('BusinessUnit')) {
+            bus = $("#BusinessUnit option:selected").text();
+        }
+
+
+        var jobtitle_value;
+        jobtitle_value = $('#JobTitle').val();
+
+        $('#JobTitle').val("");
+
+        var selectize_tags = $("#JobTitle")[0].selectize;
+        var jobtitlesoptionsfallback = $('#JobTitle')[0].selectize.options;
+        
+
+        selectize_tags.clearOptions();
+
+        //_Doncaster
+        //var n = bus.indexOf("Doncaster");
+
+        //if (n > 0) {
+        //    dep = dep + '_Doncaster';
+        //}
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+            show = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+            if (department == dep) {
+
+                if (show != '') {
+
+                    show = ' ,' + show;
+
+                    //temp, replace spaces that occours in the beginning of comma separation.
+                    show = show.replace(/\, /g, ",");
+
+                    var optionsarray = show.split(',');
+                    optionsarray.unshift('');
+
+                    //TEMP for Steering Group_Doncaster, Sales (problem with commas in the name) so we use  #
+                    if (show.indexOf("#") > -1) {
+                        $.each(optionsarray, function (i) {
+                            optionsarray[i] = optionsarray[i].replace(/\#/g, ",");
+                        });
+                    }
+
+                    var items = optionsarray.map(function (x) { return { text: x, value: x }; });
+                    selectize_tags.addOption(items);
+
+                    if (jobtitle_value != '')
+                        selectize_tags.setValue(jobtitle_value);
+                    else
+                        selectize_tags.setValue('');
+                    return;
+                }
+            }
+
+
+        });
+
+
+        var jobtitleoptions = $('#JobTitle')[0].selectize.options;
+        var jobtitleoptionslength = Object.keys(jobtitleoptions).length;
+        if (jobtitleoptionslength == 0) {
+           GetXML('Data_JobTitle.xml', SetAllJobtitles);
+        }
+        
+
+
+        $('#JobTitle')[0].selectize.setValue(jobtitle_value);
+        setDefaultPayroll();
+        addDeductionTypesOnPayroll();
+        addAllowanceOnPayroll();
+        addPayScaleOnPayroll();
+        setPayrollCategory();
+        setBasicPayAmount();
+
+        $('#JobTitle').on('change', function () {
+
+            //JobTitle change function   
+            setDefaultPayroll();
+            addDeductionTypesOnPayroll();
+            addAllowanceOnPayroll();
+            addPayScaleOnPayroll();
+            setPayrollCategory();
+            setBasicPayAmount();
+        });
+    }
+
+    function SetAllJobtitles(xml)
+    {
+        var selectize_tags = $("#JobTitle")[0].selectize;
+        var jobtitles = [''];
+        $(xml).find('option').each(function () {
+            var a = $(this).text();
+            if (!(a == 'undefined' || a == ''))
+            {
+                jobtitles.push($(this).text());
+            }
+        });
+        var items = jobtitles.map(function (x) { return { text: x, value: x }; });
+        selectize_tags.addOption(items);
+    }
+
+
+    function setLineManagerAndCostCentre(xml) {
+
+        //////////
+        //setLineManager:
+        //Sets Line manager and cost centre from predefined_function_department_linemanager_outs.XML and selected department
+        //////////
+
+        var show1 = '' //Cost Centre
+        var show2 = '' //Line manager
+
+        var originalreportstolinemanager = document.getElementById('ReportsToLineManager').value;
+
+        if (document.getElementById('ReportsToLineManager')) {
+            $('#ReportsToLineManager')[0].selectize.setValue('');
+        }
+
+        var originalhomecostcentre = document.getElementById('HomeCostCentre').value;
+
+        if (document.getElementById('HomeCostCentre')) {
+            $('#HomeCostCentre')[0].selectize.setValue('');
+        }
+
+        if (document.getElementById('ManagerJobTitle')) {
+            $('#ManagerJobTitle')[0].selectize.setValue('');
+        }
+        var func = '';
+        if (document.getElementById('ServiceArea')) {
+            func = $("#ServiceArea option:selected").text();
+        }
+        var dep = '';
+        if (document.getElementById('Department')) {
+            dep = $("#Department option:selected").text();
+        }
+        var resvar = '';
+        resvar = func + '_' + dep;
+
+
+        $(xml).find('dependent').each(function () {
+
+            var $sel = $(this);
+            show1 = '';
+            show2 = '';
+
+            var department = $sel.find('selected').text();
+
+            show1 = $sel.find('show1').text();
+            show2 = $sel.find('show2').text();
+
+            //alert(res);
+
+
+            if (department == resvar) {
+
+
+
+                if (show1 != '') {
+                    var n = show1.indexOf(",");
+                    show1 = show1.replace("#", ",");
+                    if (n == -1) {
+                        //document.getElementById('HomeCostCentre').value = show1;
+                        $('#HomeCostCentre')[0].selectize.setValue(show1);
+
+
+                    }
+                    else {
+                        var res = show1.substring(0, n);
+                        //document.getElementById('HomeCostCentre').value = res;
+                        //alert(res);
+
+                        $('#HomeCostCentre')[0].selectize.setValue(res);
+                    }
+
+
+                }
+
+                if (show2 != '') {
+                    var n = show2.indexOf(",");
+
+                    if (n == -1) {
+                        //document.getElementById('HomeCostCentre').value = show1;
+                        $('#ReportsToLineManager')[0].selectize.setValue(show2);
+                    }
+                    else {
+                        var res = show2.substring(0, n);
+                        //document.getElementById('HomeCostCentre').value = res;
+                        //alert(res);
+
+                        $('#ReportsToLineManager')[0].selectize.setValue(res);
+                    }
+                }
+            }
+
+        });
+
+        if (!('@Model.GetAnswer("ReportsToLineManager")' == '')) {
+            if (!(originalreportstolinemanager == '')) {
+                $('#ReportsToLineManager')[0].selectize.setValue('@Model.GetAnswer("ReportsToLineManager")');
+            }
+        }
+
+
+    }
+
+    function setLineManager(xml) {
+        //////////
+        //setLineManager:
+        //Sets Line manager from predefined_linemanager_department_outs.XML and selected department
+        //////////
+
+        var show = ''
+        if (document.getElementById('ReportsToLineManager')) {
+            $('#ReportsToLineManager')[0].selectize.setValue('');
+        }
+        if (document.getElementById('ManagerJobTitle')) {
+            $('#ManagerJobTitle')[0].selectize.setValue('');
+        }
+        var dep = '';
+        if (document.getElementById('Department')) {
+            dep = $("#Department option:selected").text();
+        }
+        $(xml).find('dependent').each(function () {
+
+            var $sel = $(this);
+            show = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+            if (department == dep) {
+
+                if (show != '') {
+                    var n = show.indexOf(",");
+
+                    if (n == -1) {
+
+                        $('#ReportsToLineManager')[0].selectize.setValue(show);
+                    }
+                    else {
+                        var res = show.substring(0, n);
+
+                        $('#ReportsToLineManager')[0].selectize.setValue(res);
+                    }
+                    return;
+                }
+            }
+        });
+    }
+
+
+
+    function setPayrollCategory() {
+        //////////
+        //setPayrollCategory:
+        //Sets Payscale from selected payroll cateogry
+        //////////
+
+        var sal = '';
+        if (document.getElementById('PayrollCategory')) {
+            sal = document.getElementById('PayrollCategory').value;
+            if (sal == '') {
+                sal = $("#PayrollCategory option:selected").text();
+            }
+        }
+        var bus = '';
+        if (document.getElementById('BusinessUnit')) {
+            bus = $("#BusinessUnit option:selected").text();
+
+        }
+
+
+        if (sal.toString().trim() == 'Salaried' | sal.toString().trim() == 'Salaried Management' | sal.toString().trim() == 'Salaried Senior Management') {
+
+            document.getElementById('AllowancesType').value = ''
+            document.getElementById('AllowancesAmountUnits').value = ''
+
+            //2014-10-09 - Tan - Helpdesk id: 50497 
+
+            if (bus == 'IKEA Bristol' | bus == 'IKEA Croydon' | bus == 'IKEA Lakeside' | bus == 'IKEA Milton Keynes' | bus == 'IKEA Tottenham' | bus == 'IKEA Wembley') {   // 2015-09-10 SG case : 52831  | bus == 'IKEA Service Office'
+                if (document.getElementById('AllowancesType').value == '') {
+
+                    document.getElementById('AllowancesType').value = 'Location Allowance'
+
+                    if (bus == 'IKEA Bristol') {
+                        document.getElementById('AllowancesAmountUnits').value = '203.00'
+                    }
+                    else if (bus == 'IKEA Croydon') {
+                        document.getElementById('AllowancesAmountUnits').value = '2600.00'
+                    }
+                    else if (bus == 'IKEA Lakeside') {
+                        document.getElementById('AllowancesAmountUnits').value = '1560.00'
+                    }
+                    else if (bus == 'IKEA Milton Keynes') {
+                        document.getElementById('AllowancesAmountUnits').value = '709.00'
+                    }
+                    else if (bus == 'IKEA Tottenham') {
+                        document.getElementById('AllowancesAmountUnits').value = '2600.00'
+                    }
+                    else if (bus == 'IKEA Wembley') {
+                        document.getElementById('AllowancesAmountUnits').value = '2600.00'
+                    }
+
+                    //2015-09-10 SG case : 52831 
+                    //else if (bus == 'IKEA Service Office') {
+                    //    document.getElementById('AllowancesAmountUnits').value = '2600.00'
+                    //}
+                }
+            }
+
+
+
+            GetXML('predefined_payroll_category_outs.xml', setPayrollCategoryXML);
+
+
+
+        }
+        else if (sal == 'Hourly') {
+
+            if (document.getElementById('PayScaleGroup')) {
+
+                if (bus == 'IKEA Service Office' | bus == 'IKEA Prop Investments Ltd') {
+                    document.getElementById('PayScaleGroup').value = 'INTERN';
+                }
+
+                if (bus == 'IKEA Tottenham' | bus == 'IKEA Wembley' | bus == 'IKEA Croydon') {                                                              
+                    document.getElementById('PayScaleGroup').value = 'STARTLO';
+                }
+                else {
+                    document.getElementById('PayScaleGroup').value = 'STARTUK';
+                }
+
+                if (bus == 'IKEA Bristol' | bus == 'IKEA Croydon' | bus == 'IKEA Lakeside' | bus == 'IKEA Milton Keynes' | bus == 'IKEA Tottenham' | bus == 'IKEA Wembley') { // 2015-09-10 SG case : 52831  | bus == 'IKEA Service Office'
+
+                    //2014-10-09 - Tan - Helpdesk id: 50497 
+                    //commented by - KOLLA!
+                    //if (document.getElementById('AllowancesType').value == '') {
+
+                    document.getElementById('AllowancesType').value = 'Location Allowance'
+
+                    if (bus == 'IKEA Bristol') {
+                        document.getElementById('AllowancesAmountUnits').value = '0.10'
+                    }
+                    else if (bus == 'IKEA Croydon') {
+                        document.getElementById('AllowancesAmountUnits').value = '1.28'
+                    }
+                    else if (bus == 'IKEA Lakeside') {
+                        document.getElementById('AllowancesAmountUnits').value = '0.77'
+                    }
+                    else if (bus == 'IKEA Milton Keynes') {
+                        document.getElementById('AllowancesAmountUnits').value = '0.35'
+                    }
+                    else if (bus == 'IKEA Tottenham') {
+                        document.getElementById('AllowancesAmountUnits').value = '1.28'
+                    }
+                    else if (bus == 'IKEA Wembley') {
+                        document.getElementById('AllowancesAmountUnits').value = '1.28'
+                    }
+
+                    //2015-09-10 SG case : 52831 
+                    //else if (bus == 'IKEA Service Office') {
+                    //    document.getElementById('AllowancesAmountUnits').value = '1.28'
+                    //}
+                    //}
+                }
+
+            }
+
+
+            GetXML('predefined_payroll_category_outs.xml', setPayrollCategoryHourlyXML);
+
+
+        }
+
+    }
+
+
+    function setDefaultPayrollXML(xml) {
+        //////////
+        //setDefaultPayrollXML:
+        //Sets Payroll category from jobtitle
+        //////////
+
+
+        var show = ''
+        var res = '0';
+
+        var dep = '';
+        if (document.getElementById('JobTitle')) {
+            dep = document.getElementById('JobTitle').value;
+        }
+
+        var bus = '';
+        if (document.getElementById('BusinessUnit')) {
+            bus = $("#BusinessUnit option:selected").text();
+        }
+
+
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+            show = '';
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show7').text();
+
+
+            if (department.toString().trim() == dep.toString().trim()) {
+
+
+                res = '1';
+                if (show != '') {
+                    var n = show.indexOf(",");
+                    if (n == -1) {
+                        if (document.getElementById('PayrollCategory')) {
+                            document.getElementById('PayrollCategory').value = show;
+                        }
+                    }
+                    else {
+                        var res = show.substring(0, n);
+                        if (document.getElementById('PayrollCategory')) {
+                            document.getElementById('PayrollCategory').value = res;
+                        }
+                    }
+                }
+                else {
+                    if (document.getElementById('PayrollCategory')) {
+                        document.getElementById('PayrollCategory').value = '';
+                    }
+                }
+
+
+
+            }
+        });
+
+        addPayScaleOnPayroll();
+
+        setPayrollCategory();
+
+        setBasicPayAmount();
+    }
+
+    function setPayrollCategoryHourlyXML(xml) {
+        //////////
+        //setDefaultPayrollXML:
+        //Sets Payroll category from jobtitle
+        //////////
+
+
+        var show5 = ''
+        var show6 = ''
+        var res = '0';
+
+        var dep = '';
+        if (document.getElementById('JobTitle')) {
+            dep = document.getElementById('JobTitle').value;
+        }
+
+        var bus = '';
+        if (document.getElementById('BusinessUnit')) {
+            bus = $("#BusinessUnit option:selected").text();
+        }
+
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+
+            show5 = '';
+            show6 = '';
+
+
+            var department = $sel.find('selected').text();
+            var empty = '';
+
+
+            show5 = $sel.find('show5').text();
+            show6 = $sel.find('show6').text();
+
+
+            if (department.toString().trim() == dep.toString().trim()) {
+
+
+                if (show6 != '') {
+                    var n = show6.indexOf(",");
+                    if (n == -1) {
+                        if (document.getElementById('OneIKEABonusLevel')) {
+                            document.getElementById('OneIKEABonusLevel').value = show6.toString().trim();
+                        }
+                    }
+                    else {
+                        var res = show6.substring(0, n);
+                        if (document.getElementById('OneIKEABonusLevel')) {
+                            document.getElementById('OneIKEABonusLevel').value = res.toString().trim();
+                        }
+                    }
+                    res = '1';
+                }
+                else {
+                    res = '1';
+                    if (document.getElementById('OneIKEABonusLevel')) {
+                        document.getElementById('OneIKEABonusLevel').value = '';
+                    }
+                }
+
+                if (!(show5 == '')) {
+
+                    var n = show5.indexOf(",");
+                    if (n == -1) {
+                        if (document.getElementById('BenefitLevel')) {
+                            document.getElementById('BenefitLevel').value = show5.toString().trim();
+                        }
+
+                    }
+                    else {
+                        var res = show5.substring(0, n);
+                        if (document.getElementById('BenefitLevel')) {
+                            document.getElementById('BenefitLevel').value = res.toString().trim();
+                        }
+
+                    }
+                    res = '1'
+                }
+                else {
+
+                    res = '1';
+                    if (document.getElementById('BenefitLevel')) {
+                        document.getElementById('BenefitLevel').value = '';
+                    }
+                    $('#notice_BenefitLevel').show();
+                }
+
+            }
+        });
+    }
+
+
+    function setPayrollCategoryXML(xml) {
+        //////////
+        //setPayrollCategoryXML:
+        //Sets Payrpll category from jobtitle
+        //////////
+
+        var show = ''
+        var show2 = ''
+        var show3 = ''
+        var show4 = ''
+        var show5 = ''
+        var show6 = ''
+        var show7 = ''
+        var res = '0';
+
+        var dep = '';
+        if (document.getElementById('JobTitle')) {
+            dep = document.getElementById('JobTitle').value;
+        }
+
+        var bus = '';
+        if (document.getElementById('BusinessUnit')) {
+            bus = $("#BusinessUnit option:selected").text();
+        }
+
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+            show = '';
+            show2 = '';
+            show3 = '';
+            show4 = '';
+            show5 = '';
+            show6 = '';
+            show7 = '';
+
+            var department = $sel.find('selected').text();
+            var empty = '';
+
+            show = $sel.find('show1').text();
+            show2 = $sel.find('show2').text();
+            show3 = $sel.find('show3').text();
+            show4 = $sel.find('show4').text();
+            show5 = $sel.find('show5').text();
+            show6 = $sel.find('show6').text();
+            show7 = $sel.find('show7').text();
+
+
+            if (department.toString().trim() == dep.toString().trim()) {
+
+
+                if (bus == 'IKEA Manchester' | bus == 'IKEA Belfast' | bus == 'IKEA Cardiff' | bus == 'IKEA Edinburgh' | bus == 'IKEA Gateshead' | bus == 'IKEA Milton Keynes' | bus == 'IKEA Coventry') {
+                    res = '1';
+
+
+                    if (show != '') {
+                        var n = show.indexOf(",");
+                        if (n == -1) {
+                            if (document.getElementById('PayScaleGroup')) {
+
+                                document.getElementById('PayScaleGroup').value = show;
+
+                            }
+                        }
+                        else {
+                            var res = show.substring(0, n);
+                            if (document.getElementById('PayScaleGroup')) {
+                                document.getElementById('PayScaleGroup').value = res;
+                            }
+                        }
+                    }
+                    else {
+                        if (document.getElementById('PayScaleGroup')) {
+                            document.getElementById('PayScaleGroup').value = empty;
+                        }
+                    }
+                }
+                else if (bus == 'IKEA Bristol' | bus == 'IKEA Tottenham' | bus == 'IKEA Glasgow' | bus == 'IKEA Lakeside' | bus == 'IKEA Leeds' | bus == 'IKEA Nottingham' | bus == 'IKEA Southampton' | bus == 'IKEA Warrington' | bus == 'IKEA Birmingham') {
+                    res = '1';
+                    if (show2 != '') {
+
+                        var n = show2.indexOf(",");
+                        if (n == -1) {
+                            if (document.getElementById('PayScaleGroup')) {
+
+                                document.getElementById('PayScaleGroup').value = show2;
+
+                            }
+                        }
+                        else {
+                            var res = show2.substring(0, n);
+                            if (document.getElementById('PayScaleGroup')) {
+                                document.getElementById('PayScaleGroup').value = res;
+                            }
+                        }
+
+                    }
+                    else {
+                        if (document.getElementById('PayScaleGroup')) {
+
+                            document.getElementById('PayScaleGroup').value = empty;
+                        }
+                    }
+                }
+                else if (bus == 'IKEA Croydon' | bus == 'IKEA Wembley' | bus == 'IKEA Glasgow') {
+
+                    res = '1';
+                    if (show3 != '') {
+                        var n = show3.indexOf(",");
+                        if (n == -1) {
+                            if (document.getElementById('PayScaleGroup')) {
+
+                                document.getElementById('PayScaleGroup').value = show3;
+                            }
+                        }
+                        else {
+                            var res = show3.substring(0, n);
+                            if (document.getElementById('PayScaleGroup')) {
+
+                                document.getElementById('PayScaleGroup').value = res;
+                            }
+                        }
+                    }
+                    else {
+                        if (document.getElementById('PayScaleGroup')) {
+                            document.getElementById('PayScaleGroup').value = empty;
+                        }
+                    }
+                }
+                else {
+                    res = '1';
+                    if (show4 != '') {
+                        var n = show4.indexOf(",");
+                        if (n == -1) {
+                            if (document.getElementById('PayScaleGroup')) {
+
+                                document.getElementById('PayScaleGroup').value = show4;
+                            }
+                        }
+                        else {
+                            var res = show4.substring(0, n);
+                            if (document.getElementById('PayScaleGroup')) {
+                                document.getElementById('PayScaleGroup').value = res;
+                            }
+                        }
+                    }
+                    else {
+                        if (document.getElementById('PayScaleGroup')) {
+                            document.getElementById('PayScaleGroup').value = empty;
+                        }
+                    }
+                }
+
+                if (show6 != '') {
+                    var n = show6.indexOf(",");
+                    if (n == -1) {
+                        if (document.getElementById('OneIKEABonusLevel')) {
+                            document.getElementById('OneIKEABonusLevel').value = show6.toString().trim();
+                        }
+                    }
+                    else {
+                        var res = show6.substring(0, n);
+                        if (document.getElementById('OneIKEABonusLevel')) {
+                            document.getElementById('OneIKEABonusLevel').value = res.toString().trim();
+                        }
+                    }
+                    res = '1';
+                }
+                else {
+                    res = '1';
+                    if (document.getElementById('OneIKEABonusLevel')) {
+                        document.getElementById('OneIKEABonusLevel').value = '';
+                    }
+                }
+
+                if (!(show5 == '')) {
+
+                    var n = show5.indexOf(",");
+                    if (n == -1) {
+                        if (document.getElementById('BenefitLevel')) {
+                            document.getElementById('BenefitLevel').value = show5.toString().trim();
+                        }
+
+                    }
+                    else {
+                        var res = show5.substring(0, n);
+                        if (document.getElementById('BenefitLevel')) {
+                            document.getElementById('BenefitLevel').value = res.toString().trim();
+                        }
+
+                    }
+                    res = '1'
+                }
+                else {
+
+                    res = '1';
+                    if (document.getElementById('BenefitLevel')) {
+                        document.getElementById('BenefitLevel').value = '';
+                    }
+                    $('#notice_BenefitLevel').show();
+                }
+
+            }
+        });
+    }
+
+
+
+
+
+
+
+    } // End IF REAd Only TAB
+
+
+    function GetXML(xmlFile, url) {
+        //////////
+        //Gets XML File
+        //////////
+
+        var path = window.location.protocol + '//';
+        path = path + window.location.host + '/';
+
+        path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/' + xmlFile
+
+        $.ajax({
+            type: "GET",
+            url: path,
+            dataType: "xml",
+            success: url,
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+                alert(textStatus);
+                alert(errorThrown);
+            }
+
+        });
+
+
+    }
+
+
+
+  
+    $(function () {
+        // To show and hide Induction Start and end time fields
+
+        if ($('#LengthOfInductionInDays').val() == "") {
+            $('.Induction').hide();
+        }
+        else {
+            showHideInductionDays($('#LengthOfInductionInDays').val().substring(0, 1));
+        }
+
+
+        function showHideInductionDays(val) {
+
+            $('.Induction').hide();
+            if (val != "") {
+                var intVal = parseInt(val);
+                var allElements = document.querySelectorAll('.Induction');
+
+                for (var i = 0; i <= allElements.length ; i++) {
+                    var grpVal = $(allElements[i]).attr('Group');
+                    if (parseInt(grpVal) <= intVal) {
+                        $(allElements[i]).show();
+                    }
+                }
+            }
+
+        };
+
+        $('#LengthOfInductionInDays').change(function () {
+            var val = $(this).val();
+            var v = val.substring(0, 1);
+            showHideInductionDays(v);
+        });
+
+    });
+
+</script>

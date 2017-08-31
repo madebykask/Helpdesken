@@ -13,7 +13,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers
         public static CaseLockModel MapToViewModel(this ICaseLockOverview businessModel, 
                                                    bool isLocked,
                                                    int extendValue, 
-                                                   int timerInterval)
+                                                   int timerInterval,
+                                                   string activeTab = "")
         {
             var caseLockUser = businessModel.User;
 
@@ -35,12 +36,13 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers
                                       businessModel.ExtendedTime,
                                       extendValue,
                                       timerInterval,
-                                      user
+                                      user,
+                                      activeTab
                                     );
         }
 
         public static CaseLockModel MapToViewModel(this CaseLock businessModel, bool isLocked, 
-                                                   int extendValue, int timerInterval)
+                                                   int extendValue, int timerInterval, string activeTab = "")
         {   
             return new CaseLockModel(
                                       isLocked, 
@@ -52,7 +54,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers
                                       businessModel.ExtendedTime,
                                       extendValue,
                                       timerInterval,
-                                      businessModel.User
+                                      businessModel.User,
+                                      businessModel.ActiveTab
                                     );
         }
     }

@@ -1,0 +1,123 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+
+@functions{
+    public string GetContract()
+    {
+     
+        if (Model.GetDocumentAnswer("BusinessUnit", false).ToLower().Trim() == "")
+        {
+            return "";
+        }
+
+        //no document shall be produced if SR1 New to IKEA? = Transfer between business units
+        if (Model.GetAnswer("NewToIKEA").ToLower() == "Transfer Between Business Units".ToLower())
+        {
+            return "";
+        }
+        
+        
+        //BusinessUnit = IKEA Competence B.V. = no documents yet
+        if (Model.GetDocumentAnswer("Company").ToLower() == "IKEA Competence B.V.".ToLower())
+        {
+            return "";
+        }  
+
+        else
+        {
+            //Applies to all Business Units
+            if (Model.GetAnswer("EmploymentCategory").ToLower() == "Apprentice".ToLower())
+            {
+                return "Apprentice";
+            }
+            else if (Model.GetAnswer("EmploymentCategory").ToLower() == "Holiday Co-Worker".ToLower())
+            {
+                return "";
+            }
+
+
+           
+
+        //all except Service Office Netherlands
+            else if (Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Service Office Netherlands".ToLower())
+            {
+                return "Store_cccn";
+            }
+            else
+            {
+                //Should only be: "Service Office Netherlands"
+                return "So";
+            }
+
+            //Default
+
+        }
+
+        return "";
+        //else if (Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Service Office Netherlands".ToLower() && Model.GetAnswer("EmploymentCategory").ToLower() != "Apprentice".ToLower() && Model.GetAnswer("EmploymentCategory").ToLower() != "Holiday Co-Worker".ToLower())
+        //{
+        //    return "NetherlandsServiceOfficeContract";
+
+        //}
+        //else if (Model.GetAnswer("EmploymentCategory").ToLower() == "Apprentice".ToLower())
+        //{
+        //    return "NetherlandsApprenticeContract";
+        //}
+        //else if (Model.GetAnswer("EmploymentCategory").ToLower() == "Holiday Co-Worker".ToLower())
+        //{
+        //    return "ContractHoliday";
+        //}    
+
+    }
+}
+
+
+<div class="tab-pane" id="documents">
+    <div class="span12">
+
+
+
+
+        @if (!string.IsNullOrEmpty(GetContract()))
+        {
+  
+            <table class="table-striped">
+                <thead>
+                    <tr>
+                        <th>@Model.Translate("Document")
+                        </th>
+                        <th>@Model.Translate("Type")
+                        </th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.Translate("Contract")</td>
+                        <td>pdf</td>
+                        <td>&nbsp;</td>
+                        <td>
+                            <a href="@Url.Action("print", "hiring", new
+                {
+                    id = GetContract(),
+                    caseId = Model.Contract.Id,
+                    path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
+                    userId = FormLibSessions.User.UserId
+                })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-info"><strong><i class="icon-info-sign"></i>&nbsp;@Model.Translate("A document can not be created based on current selections")</strong></div>
+        }
+
+    </div>
+</div>

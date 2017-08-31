@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+  <options>
+    <option value=""></option>
+    <option value="﻿Grand father">﻿Grand father</option>
+    <option value="Grand mother">Grand mother</option>
+    <option value="Father">Father</option>
+    <option value="Mother">Mother</option>
+    <option value="Elder brother">Elder brother</option>
+    <option value="Younger brother">Younger brother</option>
+    <option value="Elder sister">Elder sister</option>
+    <option value="Younger sister">Younger sister</option>
+    <option value="Step brother">Step brother</option>
+    <option value="Step sister">Step sister</option>
+    <option value="Wife">Wife</option>
+    <option value="1st son">1st son</option>
+    <option value="2nd son">2nd son</option>
+    <option value="3rd son">3rd son</option>
+    <option value="4th son">4th son</option>
+    <option value="1st daughter">1st daughter</option>
+    <option value="2nd daughter">2nd daughter</option>
+    <option value="3rd daughter">3rd daughter</option>
+    <option value="4th daughter">4th daughter</option>
+    <option value="Son">Son</option>
+    <option value="Daughter">Daughter</option>
+    <option value="Great grand father">Great grand father</option>
+    <option value="Great grand mother">Great grand mother</option>
+    <option value="Spouse’s father">Spouse’s father</option>
+    <option value="Spouse’s mother">Spouse’s mother</option>
+    <option value="Spouse’s grandfather">Spouse’s grandfather</option>
+    <option value="Spouse’s grandmother">Spouse’s grandmother</option>
+    <option value="Spouse’s GGP">Spouse’s GGP</option>
+    <option value="Spouse’s brother">Spouse’s brother</option>
+    <option value="Spouse’s sister">Spouse’s sister</option>
+    <option value="Uncle">Uncle</option>
+    <option value="Aunt">Aunt</option>
+    <option value="Nephew">Nephew</option>
+    <option value="Niece">Niece</option>
+    <option value="Cousin">Cousin</option>
+  </options> 

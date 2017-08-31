@@ -1,0 +1,17 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+<!-- Bank Account Details -->
+<tr>
+    <td class="tdstrong" colspan="2">
+        <h4>@Model.Translate("Bank Account Details")</h4>
+    </td>
+</tr>
+<tr>
+    <td class="tdstrong">@Model.Label("Payee")</td>
+    <td>@Model.Element("Payee")</td>
+</tr>
+<tr>
+    <td class="tdstrong">@Model.Label("AccountNumber")</td>
+    <td>@Model.Element("AccountNumber")@Model.Element("BankKey")</td>
+</tr>

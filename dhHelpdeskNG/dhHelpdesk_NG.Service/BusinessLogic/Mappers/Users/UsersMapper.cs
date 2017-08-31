@@ -129,7 +129,10 @@
                 user.StartPage,
                 user.ShowSolutionTime.ToBool(),
                 user.ShowCaseStatistics.ToBool(),
-                user.TimeZoneId);
+                user.TimeZoneId,
+                user.UserGUID
+                
+                );
         }
 
         public static List<CustomerSettings> MapToUserCustomersSettings(

@@ -55,10 +55,18 @@ namespace DH.Helpdesk.Web.NinjectModules.Modules
                 .To<CaseFilterFavoriteToBusinessModelMapper>()
                 .InSingletonScope();
 
+            this.Bind<IBusinessModelToEntityMapper<CaseModel, Case>>()
+                .To <CaseModelToEntityMapper>()
+                .InSingletonScope();
+                
             this.Bind<IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview>>()
                 .To<CaseHistoryToCaseHistoryOverviewMapper>()
                 .InSingletonScope();
 
+            this.Bind<IEntityToBusinessModelMapper<Case, CaseModel>>()
+                .To<CaseToCaseModelMapper>()
+                .InSingletonScope();
+                
             this.Bind<IEntityToBusinessModelMapper<LogMapperData, LogOverview>>()
                 .To<LogEntityToBusinessModelMapper>()
                 .InSingletonScope();

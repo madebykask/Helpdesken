@@ -1,0 +1,309 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<tab name="#SocialInsuranceAndTax" label="Social Insurance and Tax">
+    <!-- Section: Personnel tax status (IT0541) -->
+    <element name="Personnel_NonResident" type="checkbox" label="Non-resident">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Personnel_NonTaxableOverseasIncome" type="checkbox" label="Non-taxable Overseas Income">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Personnel_TypeOfNonTaxableOverseaseIncome" type="select" label="Type of Non-taxable Overseas Income">
+        <options>
+            <option value=""></option>
+            <option value="1 Overseas Worker">1 Overseas Worker</option>
+            <option value="2 Deep-sea Fishing Worker">2 Deep-sea Fishing Worker</option>
+            <option value="3 Overseas Constructor">3 Overseas Constructor</option>
+        </options>
+    </element>
+    <element name="Personnel_HandicappedEmployee" type="checkbox" label="Handicapped Employee">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Personnel_HandicappedCode" type="select" label="Handicapped Code">
+        <options>
+            <option value=""></option>
+            <option value="1 Under Welfare of Disabled Person Act">1 Under Welfare of Disabled Person Act</option>
+            <option value="2 Under Welfare of National Contributors Act">2 Under Welfare of National Contributors Act</option>
+            <option value="3 Others Patients Under Daily Intensive Care">3 Others Patients Under Daily Intensive Care</option>
+        </options>
+    </element>
+    <element name="Personnel_MatriarchOrDualIncome" type="checkbox" label="Matriarch or Dual Income">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Personnel_SingleParent" type="checkbox" label="Single Parent">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Personnel_ProductionWorker" type="checkbox" label="Production Worker">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Personnel_YoungAgedHandicappedEEInSMEs" type="checkbox" label="Young/Aged/Handicapped EE in SMEs">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Personnel_ExmptStartDate" type="date" label="Exmpt. Start Date" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+    </element>
+    <element name="Personnel_ExmptEndDate" type="date" label="Exmpt. End Date" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+    </element>
+    <element name="Personnel_Foreigner" type="checkbox" label="Foreigner">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Personnel_CalcMethod" type="select" label="Calc. Method">
+        <options>
+            <option value=""></option>
+            <option value="1 Apply Flat Tax Rate">1 Apply Flat Tax Rate</option>
+            <option value="2 Apply Basic Tax Rate">2 Apply Basic Tax Rate</option>
+            <option value="3 Compare between A and B">3 Compare between A and B</option>
+        </options>
+    </element>
+    <element name="Personnel_NonApplicable" type="checkbox" label="Non-applicable">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Personnel_ByTaxExemptrionLawFull" type="checkbox" label="By Tax Exemptrion Law (Full)">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Personnel_ByTaxExemptrionLawPartial" type="checkbox" label="By Tax Exemptrion Law (Partial)">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Personnel_ByIncomeTaxLaw" type="checkbox" label="By Income Tax Law">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Personnel_TaxTreaty" type="checkbox" label="Tax Treaty">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Personnel_Submitted" type="date" label="Submitted" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+    </element>
+    <element name="Personnel_Received" type="date" label="Received" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+    </element>
+
+    <!-- Section: Medical insurance (IT0543) -->
+    <element name="Medical_InsuranceEntitlementReason" type="select" label="Insurance entitlement reason">
+        <options>
+            <option value=""></option>
+            <option value="1 Hiring">1 Hiring</option>
+            <option value="2 Leaving company">2 Leaving company</option>
+            <option value="3 Death">3 Death</option>
+            <option value="4 Acquisition and loss in same month">4 Acquisition and loss in same month</option>
+            <option value="5 Enlist military service">5 Enlist military service</option>
+            <option value="6 Oversea work (Full reduction)">6 Oversea work (Full reduction)</option>
+            <option value="7 Oversea work (Half reduction)">7 Oversea work (Half reduction)</option>
+            <option value="8 Government advised amount">8 Government advised amount</option>
+            <option value="9 Cancellation of reduction">9 Cancellation of reduction</option>
+            <option value="10 100% Exempted – Medical and Long Term Insurance">10 100% Exempted – Medical and Long Term Insurance</option>
+            <option value="11 50% Exempted – Medical and Long Term Insurance">11 50% Exempted – Medical and Long Term Insurance</option>
+        </options>
+    </element>
+    <element name="Medical_MICardNumber" type="text" label="MI card number"></element>
+    <element name="Medical_NoPremiumInTheAcquiredMonth" type="checkbox" label="No premium in the Acquired Month">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Medical_OverseasWorker" type="checkbox" label="Overseas Worker">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Medical_EIEntitlementEEover65" type="checkbox" label="EI Entitlement( EEover 65)">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+
+    <!-- Section: National Pension (IT0543) -->
+    <element name="National_InsuranceEntitlementReason" type="select" label="Insurance entitlement reason">
+        <options>
+            <option value=""></option>
+            <option value="1 Natural acquisition">1 Natural acquisition</option>
+            <option value="2 Acquisition by request below 18 age">2 Acquisition by request below 18 age</option>
+            <option value="3 Transference(business)">3 Transference(business)</option>
+            <option value="4 Death">4 Death</option>
+            <option value="5 Leaving company">5 Leaving company</option>
+            <option value="6 Loss of nationality">6 Loss of nationality</option>
+            <option value="7 Being 60 years old">7 Being 60 years old</option>
+            <option value="8 Enlist military service">8 Enlist military service</option>
+            <option value="9 Hospitalisation more than 3 months">9 Hospitalisation more than 3 months</option>
+            <option value="10 Resumption of payment">10 Resumption of payment</option>
+            <option value="11 Government advised amount">11 Government advised amount</option>
+            <option value="12 Leave without pay">12 Leave without pay</option>
+        </options>
+    </element>
+    <element name="National_NoPremiumInTheAcquiredMonth" type="checkbox" label="No premium in the Acquired Month">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="National_OverseasWorker" type="checkbox" label="Overseas Worker">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="National_EIEntitlementEEover65" type="checkbox" label="EI Entitlement( EEover 65)">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+
+    <!-- Section: Employment insurance (IT0543) -->
+    <element name="Employment_InsuranceEntitlementReason" type="select" label="Insurance entitlement reason">
+        <options>
+            <option value=""></option>
+            <option value="1 The first hiring in the employee's life">1 The first hiring in the employee's life</option>
+            <option value="2 Hiring as person with experience">2 Hiring as person with experience</option>
+            <option value="3 Becoming applicable">3 Becoming applicable</option>
+            <option value="4 Acquisition of eligibility for other reasons">4 Acquisition of eligibility for other reasons</option>
+            <option value="5 Hiring but non-applicable">5 Hiring but non-applicable</option>
+            <option value="6 Unemployment due to changing employment">6 Unemployment due to changing employment</option>
+            <option value="7 Unemployment due to personal reason">7 Unemployment due to personal reason</option>
+            <option value="8 Unemployment due to sickness or injury">8 Unemployment due to sickness or injury</option>
+            <option value="9 Unemployment due to dismissal by disciplinary">9 Unemployment due to dismissal by disciplinary</option>
+            <option value="10 Unemployment due to change of working environment">10 Unemployment due to change of working environment</option>
+            <option value="11 Unemployment due to entering school or joining the army">11 Unemployment due to entering school or joining the army</option>
+            <option value="12 Unemployment due to recommendation from employer">12 Unemployment due to recommendation from employer</option>
+            <option value="13 Unemployment due to cessation or bankrupcy">13 Unemployment due to cessation or bankrupcy</option>
+            <option value="14 Unemployment due to cut-down">14 Unemployment due to cut-down</option>
+            <option value="15 Retirement">15 Retirement</option>
+            <option value="16 Termination of work contract">16 Termination of work contract</option>
+            <option value="17 Becoming non-applicable">17 Becoming non-applicable</option>
+            <option value="18 Loss of eligibility for other reasons">18 Loss of eligibility for other reasons</option>
+            <option value="19 EI - Employee in LOA">19 EI - Employee in LOA</option>
+            <option value="20 Unemployment due to Death">20 Unemployment due to Death</option>
+        </options>
+    </element>
+    <element name="Employment_OverseaseWorker" type="checkbox" label="Overseas Worker">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Employment_EIEntitlementEEover65" type="checkbox" label="EI Entitlement( EEover 65)">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+
+    <!-- Section: Co-workers compensation Insurance (IT0543) -->
+    <element name="CoWorkers_InsuranceEntitlementReason" type="select" label="Insurance entitlement reason">
+        <options>
+            <option value=""></option>
+            <option value="1 The first hiring in the employee's life">1 The first hiring in the employee's life</option>
+            <option value="2 Hiring as person with experience">2 Hiring as person with experience</option>
+            <option value="3 Becoming applicable">3 Becoming applicable</option>
+            <option value="4 Acquisition of eligibility for other reasons">4 Acquisition of eligibility for other reasons</option>
+            <option value="5 Hiring but non-applicable">5 Hiring but non-applicable</option>
+            <option value="6 Unemployment due to changing employment">6 Unemployment due to changing employment</option>
+            <option value="7 Unemployment due to personal reason">7 Unemployment due to personal reason</option>
+            <option value="8 Unemployment due to sickness or injury">8 Unemployment due to sickness or injury</option>
+            <option value="9 Unemployment due to dismissal by disciplinary">9 Unemployment due to dismissal by disciplinary</option>
+            <option value="10 Unemployment due to change of working environment">10 Unemployment due to change of working environment</option>
+            <option value="11 Unemployment due to entering school or joining the army">11 Unemployment due to entering school or joining the army</option>
+            <option value="12 Unemployment due to recommendation from employer">12 Unemployment due to recommendation from employer</option>
+            <option value="13 Unemployment due to cessation or bankruptcy">13 Unemployment due to cessation or bankruptcy</option>
+            <option value="14 Unemployment due to cut-down">14 Unemployment due to cut-down</option>
+            <option value="15 Retirement">15 Retirement</option>
+            <option value="16 Termination of work contract">16 Termination of work contract</option>
+            <option value="17 Becoming non-applicable">17 Becoming non-applicable</option>
+            <option value="18 Loss of eligibility for other reasons">18 Loss of eligibility for other reasons</option>
+            <option value="19 EI - Employee in LOA">19 EI - Employee in LOA</option>
+            <option value="20 Unemployment due to Death">20 Unemployment due to Death</option>
+        </options>
+    </element>
+    <element name="CoWorkers_OverseasWorker" type="checkbox" label="Overseas Worker">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="CoWorkers_EIEntitlementEEover65" type="checkbox" label="EI Entitlement( EEover 65)">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+
+    <!-- Section: Medical Insurance (IT0544) -->
+    <element name="Medical_NoHIAdjustmentInPrvYear" type="checkbox" label="No HI Adjustmen in Prv. Year">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Medical_MonthlyCompensationAmount" type="text" label="monthly compensation amount">
+        <regex inherit="amount3" pattern="" message=""></regex>
+    </element>
+    <element name="Medical_Status" type="select" label="status">
+        <options>
+            <option value=""></option>
+            <option value="1 Participate">1 Participate</option>
+            <option value="2 Non- Participate">2 Non- Participate</option>
+            <option value="3 Exempted">3 Exempted</option>
+        </options>
+    </element>
+    <element name="Medical_ReasonForChange" type="select" label="Reason for Change">
+        <options>
+            <option value=""></option>
+            <option value="1 Create">1 Create</option>
+            <option value="2 Periodic change">2 Periodic change</option>
+            <option value="3 Monthly change">3 Monthly change</option>
+        </options>
+    </element>
+
+    <!-- Section: National Pension (IT0544) -->
+    <element name="National_NoHIAdjustmentInPrvYear" type="checkbox" label="No HI Adjustmen in Prv. Year">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="National_MonthlyCompensationAmount" type="text" label="monthly compensation amount">
+        <regex inherit="amount3" pattern="" message=""></regex>
+    </element>
+    <element name="National_ReasonForChange" type="select" label="Reason for Change">
+        <options>
+            <option value=""></option>
+            <option value="1 Create">1 Create</option>
+            <option value="2 Periodic change">2 Periodic change</option>
+            <option value="3 Monthly change">3 Monthly change</option>
+        </options>
+    </element>
+
+    <!-- Section: Employment and co-workers compensation insurance (IT0544) -->
+    <element name="Employment_NoHIAdjustmentInPrvYear" type="checkbox" label="No HI Adjustmen in Prv. Year">
+        <on value="1"></on>
+        <off value="0"></off>
+        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
+    </element>
+    <element name="Employment_MonthlyCompensationAmount" type="text" label="monthly compensation amount">
+        <regex inherit="amount3" pattern="" message=""></regex>
+    </element>
+    <element name="Employment_ReasonForChange" type="select" label="Reason for Change">
+        <options>
+            <option value=""></option>
+            <option value="1 Create">1 Create</option>
+            <option value="2 Periodic change">2 Periodic change</option>
+            <option value="3 Monthly change">3 Monthly change</option>
+        </options>
+    </element>
+</tab>

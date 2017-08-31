@@ -244,16 +244,20 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             return ret;
         }
 
-        public SearchResponse Search(SearchParameters parameters, int userId)
+        public SearchResponse Search(SearchParameters parameters, int userId, bool isSelfService = false)
         {
 			var settings = this._orderFieldSettingsService.GetOrdersFieldSettingsOverview(parameters.CustomerId, parameters.OrderTypeId);
+            var user = _userRepository.GetUser(userId);
 			using (var uow = this._unitOfWorkFactory.CreateWithDisabledLazyLoading())
 			{
 				var orderTypeRep = uow.GetRepository<OrderType>();
                 var orderFieldTypesRep = uow.GetRepository<OrderFieldType>();
-                var orderTypes = orderTypeRep.GetAll(x => x.Users)
-									.GetOrderTypes(parameters.CustomerId).ToList();
-			    var filteredOrderTypes = FilterOrderTypeByUser(orderTypes, userId);
+                var orderTypes = orderTypeRep.GetAll(x => x.Users).GetOrderTypes(parameters.CustomerId).ToList();
+			    var filteredOrderTypes = orderTypes;
+                if (isSelfService && user.UserGroupId < UserGroups.Administrator)
+			    {
+			        filteredOrderTypes = FilterOrderTypeByUser(orderTypes, userId);
+			    }
                 var rootOrderType = filteredOrderTypes.Where(ot => parameters.OrderTypeId == null || ot.Id == parameters.OrderTypeId).ToList();
 				var orderTypeDescendants = GetChildrenInRow(rootOrderType, true).ToList();
 				orderTypeDescendants.AddRange(rootOrderType);
@@ -294,14 +298,17 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
         {
             for (var i = 0; i < 100000; i++)
             {
-                if (orderType.Users.Any(u => u.Id == userId))
+                if (orderType != null)
                 {
-                    return orderType;
-                }
-                if (orderType.Parent_OrderType_Id.HasValue)
-                {
-                    orderType = orderType.ParentOrderType;
-                    continue;
+                    if (orderType.Users.Any(u => u.Id == userId))
+                    {
+                        return orderType;
+                    }
+                    if (orderType.Parent_OrderType_Id.HasValue)
+                    {
+                        orderType = orderType.ParentOrderType;
+                        continue;
+                    }
                 }
                 return null;
             }
@@ -599,7 +606,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     }
                     newCase.Description = string.IsNullOrEmpty(description) ? "." : description;
 
-                    var caseHistoryId = this._caseService.SaveCase(newCase, null, caseMailSetting, 0, userId, ei, out errors);
+                    var caseHistoryId = this._caseService.SaveCase(newCase, null, 0, userId, ei, out errors);
 
                     //get casenumber
                     var newcase = this._caseService.GetCaseById(newCase.Id);

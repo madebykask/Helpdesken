@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
@@ -10,7 +11,9 @@ using DH.Helpdesk.BusinessData.Models.Questionnaire.Input;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
 using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Grid;
@@ -87,6 +90,7 @@ namespace DH.Helpdesk.Web.Controllers
 				model.Name = feedback.Name;
 				model.Description = feedback.Description;
 				model.Identifier = feedback.Identifier;
+			    model.ExcludeAdministrators = feedback.ExcludeAdministrators;
 
 				//Get Feeddback question
 				var feedbackQuestions =
@@ -129,7 +133,8 @@ namespace DH.Helpdesk.Web.Controllers
 							Option = q.Option,
 							OptionPos = q.OptionPos,
 							OptionValue = q.OptionValue,
-							IconId = q.IconId
+							IconId = q.IconId,
+                            IconSrc = q.IconSrc != null ? FeedBack.ImgId + Convert.ToBase64String(q.IconSrc) : string.Empty
 						}).OrderBy(qq => qq.OptionPos).ToList();
 					}
 
@@ -147,8 +152,7 @@ namespace DH.Helpdesk.Web.Controllers
 			return View("EditFeedback", model);
 		}
 
-
-		[HttpPost]
+        [HttpPost]
 		public ActionResult EditFeedback(EditFeedbackModel model)
 		{
 			if (model.IsNew)
@@ -174,6 +178,7 @@ namespace DH.Helpdesk.Web.Controllers
 				SessionFacade.CurrentCustomer.Id,
 				DateTime.Now);
 			newFeedback.Identifier = model.Identifier;
+			newFeedback.ExcludeAdministrators = model.ExcludeAdministrators;
 
 			var feedbackId = _feedbackService.AddFeedback(newFeedback);
 
@@ -214,6 +219,7 @@ namespace DH.Helpdesk.Web.Controllers
 				model.LanguageId,
 				DateTime.Now);
 			editFeedback.Identifier = model.Identifier;
+			editFeedback.ExcludeAdministrators = model.ExcludeAdministrators;
 
 			_feedbackService.UpdateFeedback(editFeedback);
 
@@ -243,6 +249,7 @@ namespace DH.Helpdesk.Web.Controllers
 						model.LanguageId,
 						now);
 					questionOption.IconId = option.IconId;
+				    questionOption.IconSrc = string.IsNullOrEmpty(option.IconSrc) || option.IconId != FeedBack.IconId ? null : Convert.FromBase64String(option.IconSrc.Split(',')[1]);
 					_questionnaireQuestionOptionService.UpdateQuestionnaireQuestionOption(questionOption);
 				}
 			}
@@ -292,6 +299,7 @@ namespace DH.Helpdesk.Web.Controllers
 			});
 		}
 
+        [HttpPost]
 		public ActionResult AddQuestionOption(AddQuestionOptionParams parameters)
 		{
 			var newOption = new QuestionnaireQuesOption(
@@ -303,14 +311,16 @@ namespace DH.Helpdesk.Web.Controllers
 				parameters.LanguageId,
 				DateTime.Now);
 			newOption.IconId = parameters.OptionIcon;
+			newOption.IconSrc = string.IsNullOrEmpty(parameters.IconSrc) ? null : Convert.FromBase64String(parameters.IconSrc);
 
 			_questionnaireQuestionOptionService.AddQuestionnaireQuestionOption(newOption);
 
-			return RedirectToAction(MvcUrlName.Feedback.Edit, new EditFeedbackParams
-			{
-				FeedbackId = parameters.FeedbackId,
-				LanguageId = parameters.LanguageId
-			});
+            return Json(new
+            {
+                success = true,
+                FeedbackId = parameters.FeedbackId,
+                LanguageId = parameters.LanguageId
+            });
 		}
 
 	    [HttpGet]
@@ -343,9 +353,11 @@ namespace DH.Helpdesk.Web.Controllers
             var results = this._circularService.GetResults(
                 circularId,
                 statisticsFilter.CircularCreatedDate.DateFrom,
-                statisticsFilter.CircularCreatedDate.DateTo);
+                statisticsFilter.CircularCreatedDate.DateTo.GetEndOfDay());
             var jsonCaseIndexViewModel = GetJsonCaseIndexViewModel();
             var viewModel = new FeedbackStatisticsViewModel(questionnaireId, questionnaire, results, new StatisticsFilter(), jsonCaseIndexViewModel);
+            var random = new Random();
+            viewModel.Emails = results.SelectMany(x => x.Emails).OrderBy(i => random.Next()).Take(statisticsFilter.EmailsCount).ToList();
 
             return this.PartialView("~/Views/Questionnaire/FeedBack/FeedbackStatisticsGrid.cshtml", viewModel);
         }
@@ -429,9 +441,9 @@ namespace DH.Helpdesk.Web.Controllers
 	        });
 	    }
 
-		#region Private
+        #region Private
 
-	    private JsonCaseIndexViewModel GetJsonCaseIndexViewModel()
+        private JsonCaseIndexViewModel GetJsonCaseIndexViewModel()
 	    {
             var gridSettings = _gridSettingsService.GetForCustomerUserGrid(
                             SessionFacade.CurrentCustomer.Id,
@@ -598,33 +610,70 @@ namespace DH.Helpdesk.Web.Controllers
 			_circularService.AddCircular(circular);
 		}
 
-		private List<SelectListItem> GetIcons()
-		{
-			var lst = new List<SelectListItem>();
-			lst.Add(new SelectListItem
-			{
-				Value = "ic_sentiment_very_satisfied_black_24dp_1x.png",
-				Text = "Very Satisfied"
-			});
-			lst.Add(new SelectListItem
-			{
-				Value = "ic_sentiment_satisfied_black_24dp_1x.png",
-				Text = "Satisfied"
-			});
-			lst.Add(new SelectListItem
-			{
-				Value = "ic_sentiment_neutral_black_24dp_1x.png",
-				Text = "Neutral"
-			});
-			lst.Add(new SelectListItem
-			{
-				Value = "ic_sentiment_dissatisfied_black_24dp_1x.png",
-				Text = "Dissatisfied"
-			});
-			return lst;
-		}
+        private List<SelectListItem> GetIcons()
+        {
+            var lst = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Value = "ic_sentiment_very_satisfied_black_24dp_1x.png",
+                    Text = "Very Satisfied"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_sentiment_satisfied_black_24dp_1x.png",
+                    Text = "Satisfied"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_sentiment_neutral_black_24dp_1x.png",
+                    Text = "Neutral"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_sentiment_dissatisfied_black_24dp_1x.png",
+                    Text = "Dissatisfied"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_sentiment_very_dissatisfied_black_24dp_1x.png",
+                    Text = "Very Dissatisfied"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_sentiment_shocked_black_24dp_1x.png",
+                    Text = "Shocked"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_sentiment_tongue_black_24dp_1x.png",
+                    Text = "Tongue"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_sentiment_silent_black_24dp_1x.png",
+                    Text = "Tongue"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_thumbs_up_black_24dp_1x.png",
+                    Text = "Thumbs up"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_thumbs_down_black_24dp_1x.png",
+                    Text = "Thumbs down"
+                },
+                new SelectListItem
+                {
+                    Text = Translation.GetCoreTextTranslation("Lägg till"),
+                    Value = FeedBack.IconId
+                }
+            };
+            return lst;
+        }
 
-		private void Validate(EditFeedbackModel model)
+	    private void Validate(EditFeedbackModel model)
 		{
 			//Check for unique identifier
 			var feedbacks = _feedbackService.FindFeedbackOverviews(SessionFacade.CurrentCustomer.Id);
@@ -644,5 +693,17 @@ namespace DH.Helpdesk.Web.Controllers
 			ViewBag.IconsList = GetIcons();
 		}
 		#endregion
+
+        [HttpPost]
+	    public ActionResult UpdateOptionIcon(UpdateQuestionOptionIconParams data)
+        {
+            var imageSource = Convert.FromBase64String(data.Src);
+            _questionnaireQuestionOptionService.UpdateQuestionnaireQuestionOptionIcon(data.OptionId, imageSource);
+            return Json(new
+            {
+                success = true,
+                data = Convert.ToBase64String(imageSource)
+            });
+        }
 	}
 }

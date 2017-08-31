@@ -104,7 +104,6 @@
             vmodel.Setting.EMailAnswerSeparator = setting.EMailAnswerSeparator.ToString();
             vmodel.Setting.EMailSubjectPattern = setting.EMailSubjectPattern.ToString();
             vmodel.Setting.LDAPSyncType = setting.LDAPSyncType;
-            vmodel.Setting.LDAPLogLevel = setting.LDAPLogLevel;
             vmodel.Setting.PhysicalFilePath = setting.PhysicalFilePath;
             vmodel.Setting.VirtualFilePath = setting.VirtualFilePath;
             vmodel.Setting.CaseComplaintDays = setting.CaseComplaintDays;
@@ -124,7 +123,7 @@
             vmodel.Setting.SMTPUserName = setting.SMTPUserName;
             vmodel.Setting.IsSMTPSecured = setting.IsSMTPSecured;
             vmodel.Setting.BatchEmail = setting.BatchEmail;
-
+            
             if (customerToSave == null)
                 throw new Exception("No customer found...");
 

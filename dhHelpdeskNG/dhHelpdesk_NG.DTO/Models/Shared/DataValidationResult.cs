@@ -1,24 +1,27 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+
 namespace DH.Helpdesk.BusinessData.Models.Shared
 {
     public class DataValidationResult
     {
         public DataValidationResult()
         {
-            this.IsValid = true;
-            this.LastMessage = string.Empty;
+            IsValid = true;
+            LastMessage = string.Empty;
         }
 
         public DataValidationResult(bool isValid)
         {
-            this.IsValid = isValid;
-            this.LastMessage = string.Empty;
+            IsValid = isValid;
+            LastMessage = string.Empty;
         }
 
         public DataValidationResult(bool isValid, string lastMessage)
         {
-            this.IsValid = isValid;
-            this.LastMessage = lastMessage;
+            IsValid = isValid;
+            LastMessage = lastMessage;
         }
 
         public bool IsValid { get; private set; }
@@ -57,35 +60,56 @@ namespace DH.Helpdesk.BusinessData.Models.Shared
 
         private void CreatePrecessResult(string processName, ResultTypeEnum resultType, string lastMessage, object data)
         {
-            this.ProcessName = processName;
-            this.ResultType = resultType;
+            ProcessName = processName;
+            ResultType = resultType;
             switch (resultType)
             {
                 case ResultTypeEnum.SUCCESS:
-                    this.IsSuccess = true;
+                    IsSucceed = true;
                     break;
 
                 case ResultTypeEnum.WARNING:
-                    this.IsSuccess = true;
+                    IsSucceed = true;
                     break;
 
                 case ResultTypeEnum.ERROR:
-                    this.IsSuccess = false;
+                    IsSucceed = false;
                     break;                
             }            
 
-            this.LastMessage = lastMessage;
-            this.Data = data;
+            LastMessage = lastMessage;
+            Data = data;
         }        
 
         public string ProcessName { get; private set; }
 
         public object Data { get; private set; }
 
-        public bool IsSuccess { get; private set; }
+        public bool IsSucceed { get; private set; }
 
         public string LastMessage { get; private set; }
 
         public ResultTypeEnum ResultType { get; private set; }
+
+        public string GenerateRawMessage()
+        {
+            var res = string.Empty;
+            
+            res = LastMessage;
+            var valueType = Data.GetType();
+            if (Data is IList && valueType.IsGenericType)
+            {
+                try
+                {
+                    var _data = (List<KeyValuePair<string, string>>)Data;
+                    foreach (var r in _data)
+                    {
+                        res += string.Format(" <br/> <b>{0}</b>: {1}", r.Key, r.Value);
+                    }
+                }
+                catch { }               
+            }           
+            return res;
+        }
     }
 }

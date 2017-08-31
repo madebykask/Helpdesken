@@ -30,7 +30,11 @@
         public int? StateSecondary_Id { get; set; }
         public int? SendExternalEmailToWGUsers { get; set; }
         public Guid? WorkingGroupGUID { get; set; }
-        
+
+        /// <summary>WorkingGroupId is used for communication with Extended Case. This value should be the same in all environments.
+        /// </summary>
+        public int WorkingGroupId { get; set; } 
+
         public virtual Customer Customer { get; set; }
         public virtual ICollection<BulletinBoard> BulletinBoards { get; set; }
         public virtual ICollection<Document> Documents { get; set; }

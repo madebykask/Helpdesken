@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+    <!ENTITY languages SYSTEM "Templates/Languages.xml">
+    <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+    <!ENTITY state SYSTEM "Templates/TerminationCompleteState.xml">
+    <!ENTITY pre_termination_reason SYSTEM "Defaults/Predefined_TerminationReason.xml">
+    <!ENTITY data_country SYSTEM "Data/Data_Country.xml">
+]>
+
+<form id="51" guid="9726B3D4-8D1C-4A65-A0BB-BC9817581D5C" customerId="29">
+    &languages;
+    &regexs;
+    &state;
+    <fields>
+        <tab name="#ServiceRequestDetails" label="Service Request Details">
+            <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1" casefield="reportedby" HcmData="1" SortOrder="1" ParentGVFields="1">
+                <regex inherit="employeeno" message="" pattern=""></regex>
+            </element>
+            <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1" casefield="persons_name" HcmData="1" SortOrder="2" ParentGVFields="1"></element>
+            <element name="LastName" type="text" label="Co-Worker Last name" mandatory="1" casefield="persons_phone" HcmData="1" SortOrder="3" ParentGVFields="1"></element>
+            <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
+                <regex inherit="email" message="" pattern=""></regex>
+            </element>
+            <element name="IKEANetworkID" type="text"  label="IKEA Network ID"></element>
+            <element name="Company" type="text" label="Company" mandatory="1" casefield="region_id"></element>
+            <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1" casefield="department_id" HcmData="1" SortOrder="4" ParentGVFields="1"></element>
+            <element name="ServiceArea" type="text" label="Function"></element>
+            <element name="Department" type="text" label="Department" casefield="ou_id" HcmData="1" SortOrder="5" ParentGVFields="1"></element>
+            <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" mandatory="1" HcmData="1" SortOrder="7" ParentGVFields="1">
+                <options>
+                    <option value ="No">No</option>
+                    <option value ="Yes">Yes</option>
+                </options>
+            </element>
+            <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard" casefield="status_id">
+                <options>
+                    <option value=""></option>
+                    <option value ="Urgent">Urgent</option>
+                    <option value ="Standard">Standard</option>
+                </options>
+            </element>
+
+            <element type="text" name="PermanentAddressLine1" label="Address line 1" formfieldidentifier="E1P0006.STRAS:1" HcmData="1" SortOrder="14" ParentGVFields="1"></element>
+            <element type="text" name="PermanentAddressLine2" label="Address line 2" formfieldidentifier="E1P0006.HSNMR:1" HcmData="1" SortOrder="15" ParentGVFields="1"></element>
+            <element type="text" name="PermanentAddressLine3" label="Address line 3" formfieldidentifier="E1P0006.POSTA:1" HcmData="1" SortOrder="16" ParentGVFields="1"></element>
+            <element type="text" name="PermanentPostalCode" label="Postal code" formfieldidentifier="E1P0006.PSTLZ:1" HcmData="1" SortOrder="17" ParentGVFields="1">
+              <validateIf name="PermanentCountry">Netherlands</validateIf>
+              <regex inherit="postcode" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="PermanentCity" label="City" formfieldidentifier="E1P0006.ORT01:1" HcmData="1" SortOrder="18" ParentGVFields="1"></element>
+            <element name="PermanentCountry" label="Country" type="search-select" default="Netherlands" formfieldidentifier="E1P0006.LAND1:1">
+                &data_country;
+            </element>
+          <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+        </tab>
+        <!--Basic Termination Details-->
+        <tab name="#Basic" label="Basic">
+            <element name="BasicTerminationType" type="select" label="Termination Type" mandatory="1" HcmData="1" SortOrder="9" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value ="Expiry of Contract">Expiry of Contract</option>
+                    <option value ="Dismissal">Dismissal</option>
+                    <option value ="Retirement">Retirement</option>
+                    <option value ="Resignation">Resignation</option>
+                    <option value ="Redundancy">Redundancy</option>
+                    <option value ="Other">Other</option>
+                </options>
+            </element>
+            <element name="TerminationReason" type="select" label="Termination Reason" mandatory="1" HcmData="1" SortOrder="10" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Death">Death</option>
+                    <option value="Dismissal - Without Notice">Dismissal - Without Notice</option>
+                    <option value="Early Retirement">Early Retirement</option>
+                    <option value="End of Backpacker assignment">End of Backpacker assignment</option>
+                    <option value="Expiry of Contract">Expiry of Contract</option>
+                    <option value="International Transfer Begins">International Transfer Begins</option>
+                    <option value="International Transfer Ends">International Transfer Ends</option>
+                    <option value="Invalidity">Invalidity</option>
+                    <option value="Mutual cancelation agreement">Mutual cancelation agreement</option>
+                    <option value="Redundancy">Redundancy</option>
+                    <option value="Resignation">Resignation</option>
+                    <option value="Retirement">Retirement</option>
+                    <option value="Termination in probation period by employee">Termination in probation period by employee</option>
+                    <option value="Termination in probation period by employer">Termination in probation period by employer</option>
+                </options>
+            </element>
+            <element name="LastDayOfEmployment" type="date" format="dd.MM.yyyy" mandatory="1" label="Last Day of Employment" casefield="plandate" HcmData="1" SortOrder="8" ParentGVFields="1">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <!--CDS Section Header-->
+            <element name="LockCDSAccountFrom" type="date" format="dd.MM.yyyy" mandatory="1" label="Lock CDS Account from:" HcmData="1" SortOrder="13" ParentGVFields="1">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element name="Co-WorkerBeenEmployedFor2Months" type="select" label="Co-worker been employed for more than two months?" mandatory="1" default="Yes" HcmData="1" SortOrder="6" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+        </tab>
+        <tab name="#Complete" label="Complete">
+            <element name="TerminationPaymentMethod" type="select" label="Termination Payment Method" default="By Payroll" mandatory="1" HcmData="1" SortOrder="11" ParentGVFields="0">
+                <options>
+                    <option value ="By Payroll">By Payroll</option>
+                    <option value ="By Off cycle">By Off cycle</option>
+                    <option value ="By Manual Payment">By Manual Payment</option>
+                </options>
+            </element>
+        </tab>
+    </fields>
+</form>
+

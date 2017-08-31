@@ -1,0 +1,478 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@{
+    const string IsTeWorker = "International Transfer (TE)";
+    const string DefaultCountry = "Norway";
+    const string area = "norway";
+}
+<script>
+    var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');
+  
+    if (("@Model.ReadOnlyTab("#OrganisationalAssignment")" == 'False' && "@Model.ReadOnlyTab("#servicerequestdetails")" == 'False'
+          && "@Model.ReadOnlyTab("#payment")" == 'False') && lockedbyUserGroup == 'False') {
+
+        $(function () {
+            setTimeout(function () { SetDefaultCompany(); checkBenefitsGroup(); lockIFNotINDIVID(); }, 10);
+
+            BlockCoWorkerID();
+            setIfCasual();
+            lockMidlertidigKarakter();
+            lockProbationLenght();
+            lockParticipatingInJour();
+            lockIFNotINDIVID();
+            checkBenefitsGroup();
+            SetPayeeDefault();
+           // setallowancesdefaultval();
+
+            if ($('#ContractType').val() == 'Permanent') {
+                $('#date_ContractEndDate').datepicker("destroy");
+                $('#date_ContractEndDate').addClass("disabled");
+                $('#ContractEndDate').prop('disabled', true);
+                $('#ContractEndDate').val("");
+            }
+
+        });// End Function
+
+        /************* Scripts for TAb Service Requests details *************/
+
+        $("#NewToIKEA").change(function () {
+            BlockCoWorkerID();
+        });
+
+        var BlockCoWorkerID = function () {
+            var val = $("#NewToIKEA").val();
+            if (val.toUpperCase() == "New Hire".toUpperCase() || val.toUpperCase() == "International Move without Mobility".toUpperCase()) {
+                $('#Co-WorkerID').attr("disabled", true);
+            }
+            else {
+                $('#Co-WorkerID').attr("disabled", false);
+            }
+        };
+
+        /*************  Scripts for TAb Organisational Assignement *************/
+
+        var startDate = $('#ContractStartDate').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dStart = APIGlobal.DateTime.parseDate(startDate, format);
+        var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+        $('#date_ContractEndDate').not(".disabled").datepicker(
+        {
+            onRender: function (ev) {
+                return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
+            }
+        });
+
+        var SetDefaultCompany = function () {
+            if ($("#Company").val() == '') {
+                if ($("#Company option").length == 2) {
+                    $("#Company option").eq(1).attr('selected', true);
+                    $("#Company").change();
+                }
+            }
+        };
+
+        /*** Narrowing down/Default related scripts***/
+        //TODO: Done Step 1 of 100 here, modify more /TAN
+
+        $('#BusinessUnit').change(function () {
+            narrowingWithXML('/Narrowing/ND_BusinessUnit_ReportsToLineManager.xml', '/Data/Data_Global_ReportsToLineManager.xml', $('#BusinessUnit'), $('#ReportsToLineManager'));
+            narrowingWithXML('/Narrowing/ND_BusinessUnit_LineManagersJobTitle.xml', '/Data/Data_Global_LineManagersJobTitle.xml', $('#BusinessUnit'), $('#LineManagersJobTitle'));
+            defaultWithXML('/Defaults/Default_BusinessUnit_PrimarySite.xml', $(this), $('#PrimarySite'));
+            
+        });
+
+        $('#ReportsToLineManager').change(function () {
+
+            @*
+            //1. Börjar här att vi kallar på den här i changeFunctionsCallback och och att selectize_tags.clearOptions(); 
+            // triggar #ReportsToLineManager.change eventet så att "Default" kallas på igen
+
+            //eftersom vi vet att det här sker 1 ggr kan vi göra så här
+            *@
+            @*//Hidden kommer endast ha värde om caset är sparat *@
+            if ($('#hidden_LineManagersJobTitle').val() == '')
+                SetDefCountReportsToLineManager = 0;
+            else {
+                SetDefCountReportsToLineManager += 1;
+            }
+
+           @*//I det här fallet är det 1 ggr den kallas på, det här kan skifta *@
+            if (SetDefCountReportsToLineManager > 1) {
+                $('#hidden_LineManagersJobTitle').val('');
+            }
+
+            if (SetDefCountReportsToLineManager == 0) {
+                defaultWithXML('/Defaults/Default_ReportsToLineManager_LineManagersJobTitle.xml', $(this), $('#LineManagersJobTitle'));
+            }
+
+        });
+      
+
+        $('#ServiceArea').change(function () {
+            narrowingWithXML2Base('/Narrowing/ND_Function_PositionTitle.xml', '/Data/Data_Global_PositionTitle.xml', $('#BusinessUnit'), $('#ServiceArea'), $('#PositionTitle'));
+            narrowingWithXML2Base('/Narrowing/ND_Function_JobTitle.xml', '/Data/Data_Global_JobTitle.xml', $('#BusinessUnit'), $('#ServiceArea'), $('#JobTitle'));
+            narrowingWithXML('/Narrowing/ND_Function_PsGroup.xml', '/Data/Data_Common_PSGroup.xml', $('#ServiceArea'), $('#PSGroup'));
+        });
+
+        $('#Department').change(function () {
+            defaultWithXML('/Defaults/Default_Department_CostCentre.xml', $(this), $('#CostCentre'));
+            defaultWithXML('/Defaults/Default_Department_ReportsToLineManager.xml', $(this), $('#ReportsToLineManager'));
+        });
+
+        $('#PositionTitle').change(function () {
+            @*
+            //1. Börjar här att vi kallar på den här i changeFunctionsCallback och och att selectize_tags.clearOptions(); 
+            // triggar #positionTitle.change eventet så att "Default" kallas på igen
+
+            //eftersom vi vet att det här sker 2 ggr kan vi göra så här
+            *@
+            @*//Hidden kommer endast ha värde om caset är sparat *@
+            if ($('#hidden_JobTitle').val() == '')
+                SetDefCount = 0;
+            else {
+                SetDefCount += 1;
+            }
+
+           @*//I det här fallet är det 2 ggr den kallas på, det här kan skifta *@
+            if (SetDefCount > 2) {
+                $('#hidden_JobTitle').val('');
+            }
+
+            if (SetDefCount == 0) {
+                defaultWithXML('/Defaults/Default_PositionTitle_JobTitle.xml', $(this), $('#JobTitle'));
+            }
+        });
+
+
+          @*//I know... vi borde göra en loop här /TAN*@
+
+        $('#AllowancesType').change(function () {
+            defaultWithXML('/Defaults/Default_Hiring_AllowanceType_PaidPer.xml', $(this), $('#AllowancesPaidPer'));
+        });
+
+        $('#AllowancesType2').change(function () {
+            defaultWithXML('/Defaults/Default_Hiring_AllowanceType_PaidPer.xml', $(this), $('#AllowancesPaidPer2'));
+        });
+
+        $('#AllowancesType3').change(function () {
+            defaultWithXML('/Defaults/Default_Hiring_AllowanceType_PaidPer.xml', $(this), $('#AllowancesPaidPer3'));
+        });
+
+        $('#AllowancesType4').change(function () {
+            defaultWithXML('/Defaults/Default_Hiring_AllowanceType_PaidPer.xml', $(this), $('#AllowancesPaidPer4'));
+        });
+
+        $('#AllowancesType5').change(function () {
+            defaultWithXML('/Defaults/Default_Hiring_AllowanceType_PaidPer.xml', $(this), $('#AllowancesPaidPer5'));
+        });
+
+        /*** END Narrowing down related scripts***/
+
+        $("#ContractType").change(function () {
+            setIfCasual();
+            lockMidlertidigKarakter();
+            setEndDateBehavior($(this).val());
+        });
+       
+        // if OA15 = "Casual", Employment Percentage default value is 0 --- Notice period  Locked if OA15 Contract type = Casual 
+        var setIfCasual = function () {
+            var val = $("#ContractType").val().toUpperCase();
+            if (val != "".toUpperCase() && val == "Casual".toUpperCase()) {
+                $('#EmploymentPercentage').val("0");
+                $('#PayrollCategory').val("Hourly");
+                $('#NoticePeriod').attr("disabled", true);
+            }
+            else {              
+                $('#NoticePeriod').attr("disabled", false);
+
+                //If OA15 Contract Type = Casual or Seasonal co-worker the value is Hourly; for other types it is monthly
+                if (val != "".toUpperCase()) {
+                        if (val == "Seasonal co-worker".toUpperCase()) {
+                            $('#PayrollCategory').val("Hourly");
+                        }
+                        else {
+                            $('#PayrollCategory').val("Monthly");
+                        }
+                }//End If Not null
+            }//End Else
+        };
+
+        //locked if OA15 Contract type other than Temporary
+        var lockMidlertidigKarakter = function () {
+            var val = $("#ContractType").val().toUpperCase();
+            if (val != "".toUpperCase()) {
+                if (val == "Temporary".toUpperCase()) {
+                    $('#MidlertidigKarakter').attr("disabled", false);
+                }
+                else {
+                    $('#MidlertidigKarakter').val("");
+                    $('#MidlertidigKarakter').attr("disabled", true);
+                }
+            }
+        };
+
+        // Contract End date locked for Permanent
+        function setEndDateBehavior(value) {
+            if (value == 'Permanent') {
+                $('#date_ContractEndDate').datepicker("destroy");
+                $('#date_ContractEndDate').addClass("disabled");
+                $('#ContractEndDate').prop('disabled', true);
+                $('#ContractEndDate').val("");
+            }
+            else {
+                $('#date_ContractEndDate').datepicker();
+                $('#ContractEndDate').prop('disabled', false);
+                $("#ContractEndDate").removeClass("disabled");
+            }
+        };
+
+        // Locked IF OA17 Probation period?  = No
+        $('#ProbationPeriod').change(function () {
+            lockProbationLenght();
+        });
+        
+        var lockProbationLenght = function () {
+            var val = $("#ProbationPeriod").val().toUpperCase();
+            if (val != "".toUpperCase() && val == "No".toUpperCase()) {
+                $('#ProbationLength').val("");
+                $('#ProbationLength').attr("disabled", true);
+            }
+            else {           
+                $('#ProbationLength').attr("disabled", false);
+            }
+        };
+
+        /*************  Scripts for TAb Payment information *************/
+ 
+        //Locked if PM.CS.1.1 PS Group is different than INDIVID
+        $("#PSGroup").change(function () {
+            lockIFNotINDIVID();
+            checkBenefitsGroup();
+            narrowingWithXML('/Narrowing/ND_PsGroup_Level.xml', '/Data/Data_Common_Level.xml', $('#PSGroup'), $('#Level'));
+        });
+
+        var lockIFNotINDIVID = function () {
+            var val = $("#PSGroup").val().toUpperCase();   
+                if (val == "INDIVID".toUpperCase()) {
+                    $('#Overtime').attr("disabled", false);
+                    $('#Autopunch').attr("disabled", false);
+
+                    // SG : Case 54681 -  Locked if PM.CS.1.1 PS Group is different than INDIVID and if PM.CS.3.1 Overtime included in the salary = No
+                    if ($('#Overtime').val() == "" || $('#Overtime').val() == "Yes")
+                    $('#ParticipatingInJour').attr("disabled", false);
+
+                    if (!$("#NextTariff_Year").is(":disabled")) {
+                        $('#NextTariff_Day_Month').html('01.09');
+                    }
+                }
+                else {
+
+                    if (!$("#NextTariff_Year").is(":disabled")) {
+                        $('#NextTariff_Day_Month').html('01.04');
+                    }
+
+                    if (val != "") {
+                        $('#Overtime').val("");
+                        $('#Autopunch').val("");
+                        $('#ParticipatingInJour').val("");
+                        $('#Overtime').attr("disabled", true);
+                        $('#Autopunch').attr("disabled", true);
+                        $('#ParticipatingInJour').attr("disabled", true);
+                       }
+                }
+
+                if (!$("#NextTariff_Year").is(":disabled")) {
+                    var NextTariff_Day_Month = $('#NextTariff_Day_Month').html();
+                    var NextTariff_Year = $('#NextTariff_Year').val();
+                    $("#NextTariff").val($.trim(NextTariff_Day_Month) + "." + $.trim(NextTariff_Year));
+                }
+        };
+
+        $("#date_NextTariff_Year").not(".disabled").datepicker({
+            format: " yyyy", // Notice the Extra space at the beginning
+            viewMode: "years",
+            minViewMode: "years"
+        });
+
+        $("#date_NextTariff_Year").not(".disabled").keyup(function () {
+                var NextTariff_Day_Month = $('#NextTariff_Day_Month').html();
+                var NextTariff_Year = $('#NextTariff_Year').val();
+                $("#NextTariff").val($.trim(NextTariff_Day_Month) + "." + $.trim(NextTariff_Year));
+       });
+
+        $('#date_NextTariff_Year').not(".disabled").datepicker().on('changeDate', function (ev) {
+                var NextTariff_Day_Month = $('#NextTariff_Day_Month').html();
+                var NextTariff_Year = ev.date.getFullYear();
+                $("#NextTariff").val($.trim(NextTariff_Day_Month) + "." + $.trim(NextTariff_Year));
+                $(this).datepicker('hide');
+        });
+    
+
+        var psGroup = $('#PSGroup');
+        var benefitsGroup = $('.benefits');
+
+        var checkBenefitsGroup = function () {
+        if (psGroup.val().toUpperCase() == 'INDIVID'.toUpperCase()) {
+                benefitsGroup.filter(':checkbox').prop('disabled', false).end().filter(':text').prop('readonly', false);
+            }
+            else {
+                benefitsGroup.filter(':checkbox').prop('checked', false).prop('disabled', true).end().filter(':text').val('').prop('readonly', true);
+            }
+        };
+
+        // default contract start date [SR2] to allowances Valid from dates
+        function setPaymentDatePickersBehavior() {
+            var startDate = $('#ContractStartDate').val();
+            var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+            var dStart = APIGlobal.DateTime.parseDate(startDate, format);
+            var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+            $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5').not(".disabled").datepicker(
+            {
+                onRender: function (ev) {
+                    return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
+                },
+            });
+        }
+
+
+        // Locked IF PM.CS.3.1 Overtime included in the salary = No
+        $('#Overtime').change(function () {
+            lockParticipatingInJour();
+        });
+
+        var lockParticipatingInJour = function () {
+            var val = $("#Overtime").val().toUpperCase();
+            if (psGroup.val().toUpperCase() == 'INDIVID'.toUpperCase()) {
+                if (val != "".toUpperCase() && val == "No".toUpperCase()) {
+                    $('#ParticipatingInJour').val("");
+                    $('#ParticipatingInJour').attr("disabled", true);
+                }
+                else {
+                    $('#ParticipatingInJour').attr("disabled", false);
+                }
+            }
+            else {
+                $('#ParticipatingInJour').attr("disabled", false);
+            }
+        };
+
+        function setallowancesdefaultval() {
+            var startDate = $('#ContractStartDate').val();
+            if (startDate) {
+                $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,#AllowancesValidFrom4,#AllowancesValidFrom5').val(startDate);
+            }
+        }
+
+        //setPaymentDatePickersBehavior();
+
+        $('#date_ContractStartDate').on('changeDate', function (ev) {
+
+            $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5').not(".disabled").datepicker('destroy');
+
+            setPaymentDatePickersBehavior();
+
+            $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,#AllowancesValidFrom4,#AllowancesValidFrom5').val($('#ContractStartDate').val());
+
+        }).data('datepicker');
+
+
+        $('#ContractStartDate').change(function () {
+            setallowancesdefaultval();
+        });
+
+        /*************  Scripts for Tab Personal Information *************/        
+
+        function setChildCare(id, choos) {
+            
+            var input = $('#' + id);
+            if (choos == 'Child') {
+                $(input).attr("disabled", false);
+            } else {
+                $(input).attr("disabled", true);
+            }
+        };
+
+        $('#FamilyMember').change(function () {
+            setChildCare('TheOnlyChildCarer', $(this).val());
+        });
+        setChildCare('TheOnlyChildCarer', $('#FamilyMember').val());
+
+        $('#FamilyMember2').change(function () {
+            setChildCare('TheOnlyChildCarer2', $(this).val());
+        });
+        setChildCare('TheOnlyChildCarer2', $('#FamilyMember2').val());
+
+        $('#FamilyMember3').change(function () {
+            setChildCare('TheOnlyChildCarer3', $(this).val());
+        });
+        setChildCare('TheOnlyChildCarer3', $('#FamilyMember3').val());
+
+        $('#FamilyMember4').change(function () {
+            setChildCare('TheOnlyChildCarer4', $(this).val());
+        });
+        setChildCare('TheOnlyChildCarer4', $('#FamilyMember4').val());
+
+        $('#FamilyMember5').change(function () {
+            setChildCare('TheOnlyChildCarer5', $(this).val());
+        });
+        setChildCare('TheOnlyChildCarer5', $('#FamilyMember5').val());
+
+
+        $("#FirstName,#LastName,#Co-WorkerID,#Prefixes").change(function () {
+            SetPayeeDefault();
+        });
+
+        function SetPayeeDefault() {
+
+            var payeevalue = $("#FirstName").val() + (" ") + $("#LastName").val();
+            
+            $("#Payee").val(payeevalue);
+        };
+
+
+    } // End If READ ONLY TABs
+
+    else {
+
+        //Set Next tarif day and month while the tab is read only.       
+        var val = $("#PSGroup").val();
+        if (val == "INDIVID") {
+
+            $('#NextTariff_Day_Month').html('01.09');
+        }
+        else {
+            $('#NextTariff_Day_Month').html('01.04');
+        }
+
+        if ($('#ContractType').val() != "Temporary") {           
+            $('#MidlertidigKarakter').val("");
+            $('#MidlertidigKarakter').attr("disabled", true);
+        }
+
+    }// END Else TAb is read ONLY
+
+    if ($('#NewToIKEA').val() == '@IsTeWorker') {
+        $(".globalmobility-first").show();
+    }
+    else {
+        $(".globalmobility-first").hide();
+    }
+
+    function setGlobalMobilityBehavior(value) {
+        if (!(value == '@IsTeWorker')) {
+                $("[class*=globalmobility]").hide();
+                $("[class*=globalmobility] input:not(input[type=hidden])").val("");
+                $("[class*=globalmobility] input[type=text][name*='Country']").val('@DefaultCountry');
+                $("[class*=globalmobility] select option:not([value])").prop('selected', true);
+            } else {
+                $(".globalmobility-first").show();
+            }
+
+            $("[class*=globalmobility-first] input[type=hidden]").val("1");
+        }
+
+    $('#NewToIKEA').change(function () {
+        setGlobalMobilityBehavior($(this).val());
+    });
+</script>

@@ -155,7 +155,10 @@
             if(model.DynamicCase != null && model.caseFieldSettings.IsFieldLocked(caseFieldName))
                 return true;
 
-            if(!isGlobalVisibility || !isLocalVisibility)
+            if (model.ExtendedCases != null && model.ExtendedCases.Count > 0 && model.caseFieldSettings.IsFieldLocked(caseFieldName))
+                return true;
+
+            if (!isGlobalVisibility || !isLocalVisibility)
             {
                 return false;
             }
@@ -209,7 +212,7 @@
                 return false;
             }
 
-            bool isRequired = model.caseFieldSettings.CaseFieldSettingRequiredCheck(caseFieldName.ToString()) == 1;
+            bool isRequired = model.caseFieldSettings.CaseFieldSettingRequiredCheck(caseFieldName.ToString(), model.IsCaseReopened) == 1;
             return isRequired;
         }
 

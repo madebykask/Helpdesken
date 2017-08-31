@@ -36,6 +36,10 @@ namespace DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc
 				get { return GetAction(e => e.AddQuestionOption(null)); }
 			}
 
-		}
+            public static string UpdateOptionIcon
+            {
+                get { return GetAction(e => e.UpdateOptionIcon(null)); }
+            }
+        }
 	}
 }

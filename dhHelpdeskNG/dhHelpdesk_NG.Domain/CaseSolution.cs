@@ -2,12 +2,18 @@
 
 namespace DH.Helpdesk.Domain
 {
-    using DH.Helpdesk.Domain.Problems;
+    using global::System.Collections.Generic;
     using DH.Helpdesk.Domain.Projects;
     using global::System;
+    using global::System.Web.Mvc;
 
     public class CaseSolution : Entity
     {
+        public CaseSolution()
+        {
+            this.ExtendedCaseForms = new List<ExtendedCaseEntity.ExtendedCaseFormEntity>();
+        }
+
         public int? CaseSolutionCategory_Id { get; set; }
         public int? CaseWorkingGroup_Id { get; set; }
         public int? CaseType_Id { get; set; }
@@ -98,8 +104,14 @@ namespace DH.Helpdesk.Domain
         public int? SaveAndClose { get; set; }
 
         public string ShortDescription { get; set; }
+        
         public string Information { get; set; }
-    
+        public string DefaultTab { get; set; }
+        public string ValidateOnChange { get; set; }
+        public int? NextStepState { get; set; }
+
+        public int? SplitToCaseSolution_Id { get; set; }
+
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }
         public virtual CaseType CaseType { get; set; }
@@ -114,6 +126,13 @@ namespace DH.Helpdesk.Domain
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
         //public virtual Problem Problem { get; set; }
         public int SortOrder { get; set; }
+        public virtual List<ExtendedCaseEntity.ExtendedCaseFormEntity> ExtendedCaseForms { get; set; }
+
+
+	    public virtual CaseSolution SplitToCaseSolution { get; set; }
+        public string CaseSolutionDescription { get; set; }
+
+
 
     }
 }

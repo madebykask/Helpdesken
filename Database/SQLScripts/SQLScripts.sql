@@ -1,621 +1,1229 @@
-﻿-- update DB from 5.3.31 to 5.3.32 version
-
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'CaseExtraFollowers' and sysobjects.name = N'tblCaseHistory')
-	begin
-		ALTER TABLE [dbo].[tblCaseHistory] ADD [CaseExtraFollowers] nvarchar(max) NOT NULL default ''
-	end
-GO
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'StandardTextName' and sysobjects.name = N'tblStandardText')
-	begin
-		ALTER TABLE [dbo].[tblStandardText] ADD [StandardTextName] nvarchar(50) NOT NULL default ''
-	end
-GO
-
---ADD GUID
---tblCaseSettings
-if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaseSettingsGUID' and sysobjects.name = N'tblCaseSettings')
-begin
-		EXECUTE  sp_executesql  "update tblCaseSettings set CaseSettingsGUID = newid() where CaseSettingsGUID is null" 
-
-		if not exists(select *
-					  from sys.all_columns c
-					  join sys.tables t on t.object_id = c.object_id
-					  join sys.schemas s on s.schema_id = t.schema_id
-					  join sys.default_constraints d on c.default_object_id = d.object_id
-					  where t.name = 'tblCaseSettings'
-					  and c.name = 'CaseSettingsGUID'
-					  and s.name = 'dbo'
-					  and d.name = 'DF_CaseSettingsGUID')
-		begin
-			Alter table tblCaseSettings
-			Add constraint DF_CaseSettingsGUID default (newid()) For CaseSettingsGUID		
-		end		
-end
-else
-begin
-	Alter table tblCaseSettings
-	Add CaseSettingsGUID uniqueIdentifier NOT NULL CONSTRAINT DF_CaseSettingsGUID default (newid())
-end
-GO
-
---tblStandardText
-if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'StandardTextGUID' and sysobjects.name = N'tblStandardText')
-begin
-		EXECUTE  sp_executesql  "update tblStandardText set StandardTextGUID = newid() where StandardTextGUID is null" 
-
-		if not exists(select *
-					  from sys.all_columns c
-					  join sys.tables t on t.object_id = c.object_id
-					  join sys.schemas s on s.schema_id = t.schema_id
-					  join sys.default_constraints d on c.default_object_id = d.object_id
-					  where t.name = 'tblStandardText'
-					  and c.name = 'StandardTextGUID'
-					  and s.name = 'dbo'
-					  and d.name = 'DF_StandardTextGUID')
-		begin
-			Alter table tblStandardText
-			Add constraint DF_StandardTextGUID default (newid()) For StandardTextGUID		
-		end		
-end
-else
-begin
-	Alter table tblStandardText
-	Add StandardTextGUID uniqueIdentifier NOT NULL CONSTRAINT DF_StandardTextGUID default (newid())
-end
-GO
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'AgreedDate' and sysobjects.name = N'tblCaseSolution')
-	begin
-		ALTER TABLE [dbo].[tblCaseSolution] ADD [AgreedDate] DateTime NULL
-	end
+﻿
+--update DB from 5.3.32 to 5.3.33 version
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ExcludeAdministrators' and sysobjects.name = N'tblQuestionnaire')
+	ALTER TABLE [dbo].[tblQuestionnaire] ADD [ExcludeAdministrators] bit not null DEFAULT(0)
 GO
 
 -- New field in tblSettings
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'EMailFolderArchive' and sysobjects.name = N'tblSettings')
-            begin
-                         ALTER TABLE tblSettings ADD EMailFolderArchive nvarchar(50) NULL
-            end
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LDAPCreateOrganization' and sysobjects.name = N'tblSettings')
+   ALTER TABLE tblSettings ADD LDAPCreateOrganization int NOT NULL Default(0)
 GO
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'Filter' and sysobjects.name = N'tblCaseInvoiceSettings')
-	begin
-		ALTER TABLE [dbo].[tblCaseInvoiceSettings] ADD [Filter] nvarchar(50) NULL
-	end
-GO
+--UPDATE tblCaseSolutionCondition field length
+ALTER TABLE tblCaseSolutionCondition
+ALTER COLUMN [Values] nvarchar(4000)
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-		where syscolumns.name = N'ShowOnExtPageCases' and sysobjects.name = N'tblCaseType')
-	begin
-		ALTER TABLE [dbo].[tblCaseType] ADD [ShowOnExtPageCases] [int] NOT NULL DEFAULT ((1))
-	end
-GO
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-		where syscolumns.name = N'ShowOnExtPageCases' and sysobjects.name = N'tblProductArea')
-	begin
-		ALTER TABLE [dbo].[tblProductArea] ADD [ShowOnExtPageCases] [int] NOT NULL DEFAULT ((1))
-	end
-GO
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SortOrder' and sysobjects.name = N'tblCaseSolution')
-	ALTER TABLE [dbo].[tblCaseSolution] ADD [SortOrder] [int] NOT NULL DEFAULT ((0))
-GO
-
-/* Add table for CaseSolution Conditions */
-if not exists(select * from sysobjects WHERE Name = N'tblCaseSolutionCondition')
+IF EXISTS (SELECT * FROM sysobjects WHERE name='tblCaseSolutionConditionProperties' AND xtype='U')
 begin
+	DROP TABLE tblCaseSolutionConditionProperties
+end
+GO
+
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblCaseSolutionConditionProperties' AND xtype='U')
+BEGIN
 	
-	CREATE TABLE [dbo].[tblCaseSolutionCondition](
+	CREATE TABLE [dbo].[tblCaseSolutionConditionProperties](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[CaseSolutionConditionProperty] [nvarchar](100) NULL,
+	[Text] [nvarchar](400) NULL,
+	[Table] [nvarchar](100) NULL,
+	[TableFieldId] [nvarchar](100) NULL,
+	[TableFieldName] [nvarchar](100) NULL,
+	[TableFieldGuid] [nvarchar](100) NULL,
+	[TableParentId] [nvarchar](100) NULL,
+	[SortOrder] [int] NULL,
+	[Status] [int] NULL,
+	 CONSTRAINT [PK_tblCaseSolutionConditionProperties] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+	ALTER TABLE [dbo].[tblCaseSolutionConditionProperties] ADD  CONSTRAINT [DF_tblCaseSolutionConditionProperties_SortOrder]  DEFAULT ((0)) FOR [SortOrder]
+
+	ALTER TABLE [dbo].[tblCaseSolutionConditionProperties] ADD  CONSTRAINT [DF_tblCaseSolutionConditionProperties_Status]  DEFAULT ((1)) FOR [Status]
+END
+
+
+	TRUNCATE TABLE [dbo].[tblCaseSolutionConditionProperties]
+
+	declare @sortOrder int = 0
+
+	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
+           ([CaseSolutionConditionProperty]
+           ,[Text]
+           ,[Table]
+           ,[TableFieldId]
+           ,[TableFieldName]
+           ,[TableFieldGuid]
+		   ,[SortOrder])
+     VALUES
+           ('case_StateSecondary.StateSecondaryGUID',
+			'Ärende - Understatus',
+			'tblStateSecondary',
+			'Id',
+			'StateSecondary',
+			'StateSecondaryGUID',
+			@sortOrder)
+
+	set @sortOrder = @sortOrder+1
+	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
+           ([CaseSolutionConditionProperty]
+           ,[Text]
+           ,[Table]
+           ,[TableFieldId]
+           ,[TableFieldName]
+           ,[TableFieldGuid]
+		   ,[SortOrder])
+     VALUES
+           ('case_WorkingGroup.WorkingGroupGUID',
+			'Ärende - Driftgrupp',
+			'tblWorkingGroup',
+			'Id',
+			'WorkingGroup',
+			'WorkingGroupGUID',
+			@sortOrder)
+
+	set @sortOrder = @sortOrder+1
+	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
+           ([CaseSolutionConditionProperty]
+           ,[Text]
+           ,[Table]
+           ,[TableFieldId]
+           ,[TableFieldName]
+           ,[TableFieldGuid]
+		   ,[SortOrder])
+     VALUES
+           ('case_Priority.PriorityGUID',
+			'Ärende - Prioritet',
+			'tblPriority',
+			'Id',
+			'PriorityName',
+			'PriorityGUID',
+			@sortOrder)
+
+	set @sortOrder = @sortOrder+1
+	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
+           ([CaseSolutionConditionProperty]
+           ,[Text]
+           ,[Table]
+           ,[TableFieldId]
+           ,[TableFieldName]
+           ,[TableFieldGuid]
+		   ,[SortOrder])
+		   
+     VALUES
+           ('case_Status.StatusGUID',
+			'Ärende - Status',
+			'tblStatus',
+			'Id',
+			'StatusName',
+			'StatusGUID'
+			,@sortOrder)
+
+	set @sortOrder = @sortOrder+1
+	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
+           ([CaseSolutionConditionProperty]
+           ,[Text]
+           ,[Table]
+           ,[TableFieldId]
+           ,[TableFieldName]
+           ,[TableFieldGuid]
+		   ,[SortOrder]
+		   ,[TableParentId])
+     VALUES
+           ('case_ProductArea.ProductAreaGUID',
+			'Ärende - Produktområde',
+			'tblProductArea',
+			'Id',
+			'ProductArea',
+			'ProductAreaGUID'
+			,@sortOrder
+			,'Parent_ProductArea_Id')
+
+	set @sortOrder = @sortOrder+1
+	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
+           ([CaseSolutionConditionProperty]
+           ,[Text]
+           ,[Table]
+           ,[TableFieldId]
+           ,[TableFieldName]
+           ,[TableFieldGuid]
+		   ,[SortOrder])
+     VALUES
+           ('case_Relation',
+			'Kopplat ärende',
+			'tblYesNo',
+			'Id',
+			'Value',
+			'Id',
+			@sortOrder)
+
+	set @sortOrder = @sortOrder+1
+	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
+           ([CaseSolutionConditionProperty]
+           ,[Text]
+           ,[Table]
+           ,[TableFieldId]
+           ,[TableFieldName]
+           ,[TableFieldGuid]
+		   ,[SortOrder])
+     VALUES
+           ('user_WorkingGroup.WorkingGroupGUID',
+			'Användare - Driftgrupp',
+			'tblWorkingGroup',
+			'Id',
+			'WorkingGroup',
+			'WorkingGroupGUID'
+			,@sortOrder
+			)
+
+	set @sortOrder = @sortOrder+1
+	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
+           ([CaseSolutionConditionProperty]
+           ,[Text]
+           ,[Table]
+           ,[TableFieldId]
+           ,[TableFieldName]
+           ,[TableFieldGuid]
+		   ,[SortOrder]
+		   ,[TableParentId])
+     VALUES
+           ('casesolution_ProductArea.ProductAreaGUID',
+			'Ärendemall - Produktområde',
+			'tblProductArea',
+			'Id',
+			'ProductArea',
+			'ProductAreaGUID',
+			@sortOrder,
+			'Parent_ProductArea_Id')
+
+	set @sortOrder = @sortOrder+1
+	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
+           ([CaseSolutionConditionProperty]
+           ,[Text]
+           ,[Table]
+           ,[TableFieldId]
+           ,[TableFieldName]
+           ,[TableFieldGuid]
+		   ,[SortOrder])
+     VALUES
+           ('application_type',
+			'Applikation',
+			'tblApplicationType',
+			'Id',
+			'ApplicationType',
+			'Id',
+			@sortOrder)
+
+
+
+
+
+update tblCaseSolutionCondition set property_name =  'user_WorkingGroup.WorkingGroupGUID' where property_name = 'user_WorkingGroup'
+delete from tblCaseSolutionCondition where [Values] = 'null'
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IconSrc' and sysobjects.name = N'tblQuestionnaireQuestionOption')
+	ALTER TABLE [dbo].[tblQuestionnaireQuestionOption] ADD [IconSrc] varbinary(2048) null
+GO
+
+-- New field in tblCustomer
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowCasesOnExternalPage' and sysobjects.name = N'tblCustomer')
+   ALTER TABLE tblCustomer ADD ShowCasesOnExternalPage int NOT NULL Default(1)
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'GroupCaseTemplates' and sysobjects.name = N'tblCustomer')
+   ALTER TABLE tblCustomer ADD GroupCaseTemplates int NOT NULL Default(0)
+GO
+
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='tblApplicationType' AND xtype='U')
+begin
+	DROP TABLE tblApplicationType
+end
+GO
+
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblApplicationType' AND xtype='U')
+	BEGIN
+
+		CREATE TABLE [dbo].[tblApplicationType](
+			[Id] [int] NULL,
+			[ApplicationType] [nvarchar](50) NULL,
+			[ApplicationTypeGUID] [uniqueidentifier] NULL,
+			[Customer_Id] [int] NULL
+		) ON [PRIMARY]
+
+
+		ALTER TABLE [dbo].[tblApplicationType] ADD  CONSTRAINT [DF_tblApplicationType_ApplicationTypeGUID]  DEFAULT (newid()) FOR [ApplicationTypeGUID]
+
+	END
+
+
+	TRUNCATE TABLE [dbo].[tblApplicationType]
+	INSERT INTO [dbo].[tblApplicationType]
+           ([Id]
+           ,[ApplicationType]
+		   )
+     VALUES
+           (1,
+			'Helpdesk'
+			)
+
+	INSERT INTO [dbo].[tblApplicationType]
+           ([Id]
+           ,[ApplicationType]
+		   )
+     VALUES
+           (2,
+			'Selfservice'
+			)
+
+
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+           where syscolumns.name = N'MetaDataText' and sysobjects.name = N'tblMetaData')
+	ALTER TABLE [dbo].[tblMetaData] ALTER COLUMN [MetaDataText] nvarchar(3500) not Null 
+GO
+
+
+
+if not exists(select * from sysobjects WHERE Name = N'ExtendedCaseForms')
+begin
+
+	CREATE TABLE [dbo].[ExtendedCaseForms]
+	(
+		[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+		[MetaData] NVARCHAR(MAX) NOT NULL, 
+		[Description] NVARCHAR(500) NULL, 
+		[CreatedOn] DATETIME NOT NULL, 
+		[CreatedBy] NVARCHAR(50) NOT NULL, 
+		[UpdatedOn] DATETIME NULL, 
+		[UpdatedBy] NVARCHAR(50) NULL
+	)
+
+end
+
+if not exists(select * from sysobjects WHERE Name = N'ExtendedCaseAssignments')
+begin
+CREATE TABLE [dbo].[ExtendedCaseAssignments]
+(
+    [Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [ExtendedCaseFormId] INT NOT NULL, 
+    [UserRole] INT NULL, 
+    [CaseStatus] INT NULL, 
+    [CustomerId] INT NULL, 
+    [CreatedOn] DATETIME NOT NULL, 
+    [CreatedBy] NVARCHAR(50) NOT NULL, 
+    [UpdatedOn] DATETIME NULL, 
+    [UpdatedBy] NVARCHAR(50) NULL, 
+    CONSTRAINT [FK_EFormAssignments_ExtendedCaseForms] FOREIGN KEY ([ExtendedCaseFormId]) REFERENCES [ExtendedCaseForms]([Id])
+)
+end
+
+if not exists(select * from sysobjects WHERE Name = N'ExtendedCaseCustomDataSources')
+begin
+
+	CREATE TABLE [dbo].[ExtendedCaseCustomDataSources]
+	(
+		[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+		[DataSourceId] NVARCHAR(100) NOT NULL, 
+		[Description] NVARCHAR(500) NULL, 
+		[MetaData] NVARCHAR(MAX) NOT NULL,
+		[CreatedOn] DATETIME NOT NULL, 
+		[CreatedBy] NVARCHAR(50) NOT NULL, 
+		[UpdatedOn] DATETIME NULL, 
+		[UpdatedBy] NVARCHAR(50) NULL
+	)
+end
+
+if not exists(select * from sysobjects WHERE Name = N'ExtendedCaseOptionDataSources')
+begin
+	CREATE TABLE [dbo].[ExtendedCaseOptionDataSources]
+	(
+		[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+		[DataSourceId] NVARCHAR(100) NOT NULL, 
+		[Description] NVARCHAR(500) NULL, 
+		[MetaData] NVARCHAR(MAX) NOT NULL,
+		[CreatedOn] DATETIME NOT NULL, 
+		[CreatedBy] NVARCHAR(50) NOT NULL, 
+		[UpdatedOn] DATETIME NULL, 
+		[UpdatedBy] NVARCHAR(50) NULL
+	)
+end
+
+if not exists(select * from sysobjects WHERE Name = N'ExtendedCaseTranslations')
+begin
+	CREATE TABLE [dbo].[ExtendedCaseTranslations]
+	(
+		[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+		[LanguageId] INT NULL, 
+		[Property] NVARCHAR(200) NOT NULL, 
+		[Text] NVARCHAR(MAX) NOT NULL
+	)
+end
+
+if not exists(select * from sysobjects WHERE Name = N'ExtendedCaseData')
+begin
+	CREATE TABLE [dbo].[ExtendedCaseData](
+		[Id] [int] NOT NULL PRIMARY KEY IDENTITY, 
+		[ExtendedCaseGuid] [uniqueidentifier]  NOT NULL DEFAULT NEWID(),
+		[ExtendedCaseFormId] [int] NOT NULL,
+		[CreatedOn] [datetime] NOT NULL,
+		[CreatedBy] [nvarchar](50) NOT NULL,
+		[UpdatedOn] [datetime] NULL,
+		[UpdatedBy] [nvarchar](50) NULL,	
+		CONSTRAINT [FK_ExtendedCaseData_ExtendedCaseForms] FOREIGN KEY([ExtendedCaseFormId]) REFERENCES [dbo].[ExtendedCaseForms] ([Id]))
+	
+		
+	end
+
+if exists(select * from sysobjects WHERE Name = N'ExtendedCaseData')
+begin
+
+	if not exists(SELECT * FROM sys.objects WHERE type = 'D' AND name = 'DF_ExtendedCaseData_CreatedOn')
+	begin
+		ALTER TABLE [dbo].[ExtendedCaseData] ADD  CONSTRAINT [DF_ExtendedCaseData_CreatedOn]  DEFAULT (getdate()) FOR [CreatedOn]
+	end
+end
+
+
+if not exists(select * from sysobjects WHERE Name = N'ExtendedCaseValues')
+begin
+
+	CREATE TABLE [dbo].[ExtendedCaseValues](
+		[Id] [int]  NOT NULL PRIMARY KEY IDENTITY,
+		[ExtendedCaseDataId] [int] NOT NULL,
+		[FieldId] [nvarchar](500) NOT NULL,
+		[Value] [nvarchar](max) NULL,
+		[SecondaryValue] [nvarchar](max) NULL,
+		CONSTRAINT [FK_ExtendedCaseValues_ExtendedCaseData] FOREIGN KEY([ExtendedCaseDataId]) REFERENCES [dbo].[ExtendedCaseData] ([Id])
+	)
+
+end
+
+if not exists(select * from sysobjects WHERE Name = N'tblCase_ExtendedCaseData')
+begin
+	SET ANSI_NULLS ON
+
+	SET QUOTED_IDENTIFIER ON
+
+	CREATE TABLE [dbo].[tblCase_ExtendedCaseData](
+		[Case_Id] [int] NOT NULL,
+		[ExtendedCaseData_Id] [int] NOT NULL,
+	 CONSTRAINT [PK_tblCase_ExtendedCaseData] PRIMARY KEY CLUSTERED 
+	(
+		[Case_Id] ASC,
+		[ExtendedCaseData_Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90) ON [PRIMARY]
+	) ON [PRIMARY]
+
+
+	ALTER TABLE [dbo].[tblCase_ExtendedCaseData]  WITH NOCHECK ADD  CONSTRAINT [FK_tblCase_ExtendedCaseData_ExtendedCaseData] FOREIGN KEY([ExtendedCaseData_Id])
+	REFERENCES [dbo].[ExtendedCaseData] ([Id])
+
+	ALTER TABLE [dbo].[tblCase_ExtendedCaseData] CHECK CONSTRAINT [FK_tblCase_ExtendedCaseData_ExtendedCaseData]
+
+	ALTER TABLE [dbo].[tblCase_ExtendedCaseData]  WITH NOCHECK ADD  CONSTRAINT [FK_tblCase_ExtendedCaseData_tblCase] FOREIGN KEY([Case_Id])
+	REFERENCES [dbo].[tblCase] ([Id])
+
+	ALTER TABLE [dbo].[tblCase_ExtendedCaseData] CHECK CONSTRAINT [FK_tblCase_ExtendedCaseData_tblCase]
+end
+
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseSolution_ExtendedCaseForms')
+begin
+
+	SET ANSI_NULLS ON
+
+	SET QUOTED_IDENTIFIER ON
+
+	CREATE TABLE [dbo].[tblCaseSolution_ExtendedCaseForms](
+		[CaseSolution_Id] [int] NOT NULL,
+		[ExtendedCaseForms_Id] [int] NOT NULL,
+	 CONSTRAINT [PK_tblCaseSolution_ExtendedCaseForms] PRIMARY KEY CLUSTERED 
+	(
+		[CaseSolution_Id] ASC,
+		[ExtendedCaseForms_Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90) ON [PRIMARY]
+	) ON [PRIMARY]
+
+	ALTER TABLE [dbo].[tblCaseSolution_ExtendedCaseForms]  WITH NOCHECK ADD  CONSTRAINT [FK_tblCaseSolution_ExtendedCaseForms_ExtendedCaseForms] FOREIGN KEY([ExtendedCaseForms_Id])
+	REFERENCES [dbo].[ExtendedCaseForms] ([Id])
+
+	ALTER TABLE [dbo].[tblCaseSolution_ExtendedCaseForms] CHECK CONSTRAINT [FK_tblCaseSolution_ExtendedCaseForms_ExtendedCaseForms]
+
+	ALTER TABLE [dbo].[tblCaseSolution_ExtendedCaseForms]  WITH NOCHECK ADD  CONSTRAINT [FK_tblCaseSolution_ExtendedCaseForms_tblCaseSolution] FOREIGN KEY([CaseSolution_Id])
+	REFERENCES [dbo].[tblCaseSolution] ([Id])
+
+	ALTER TABLE [dbo].[tblCaseSolution_ExtendedCaseForms] CHECK CONSTRAINT [FK_tblCaseSolution_ExtendedCaseForms_tblCaseSolution]
+
+end
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Name' and sysobjects.name = N'ExtendedCaseForms')
+	ALTER TABLE [dbo].[ExtendedCaseForms] ADD [Name] nvarchar(100) null
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Guid' and sysobjects.name = N'ExtendedCaseForms')
+	ALTER TABLE [dbo].[ExtendedCaseForms] ADD [Guid] [uniqueidentifier] NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Status' and sysobjects.name = N'ExtendedCaseForms')
+	ALTER TABLE [dbo].[ExtendedCaseForms] ADD [Status] [int] NOT NULL Default(0)
+GO
+
+
+-- OK
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DefaultTab' and sysobjects.name = N'tblCaseSolution')
+	begin
+		ALTER TABLE [dbo].tblCaseSolution ADD DefaultTab nvarchar(100) NOT NULL DEFAULT('case-tab')
+	end
+GO
+
+-- OK
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ModuleExtendedCase' and sysobjects.name = N'tblSettings')
+	begin
+		ALTER TABLE [dbo].[tblSettings] ADD [ModuleExtendedCase] int not null Default(0)
+	end
+GO
+
+-- OK
+/* StateSecondary columns, Make sure they exist in db, these are old ones.... */
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AlternativeStateSecondaryName' and sysobjects.name = N'tblStateSecondary')
+	begin
+		ALTER TABLE [dbo].[tblStateSecondary] ADD [AlternativeStateSecondaryName] [nvarchar](50) NULL
+	end
+GO
+
+-- OK
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'StateSecondaryId' and sysobjects.name = N'tblStateSecondary')
+	begin
+		ALTER TABLE [dbo].[tblStateSecondary] ADD [StateSecondaryId] int not null Default(0)
+	end
+GO
+
+/* StateSecondary columns, Make sure they exist in db, these are old ones.... */
+
+
+-- OK
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'WorkingGroupId' and sysobjects.name = N'tblWorkingGroup')
+	begin
+		ALTER TABLE [dbo].[tblWorkingGroup] ADD [WorkingGroupId] int not null Default(0)
+	end
+GO
+
+
+--FOR CURRENT RECORD - TEST
+
+-- EJ MED I TRANSFER SCRIPT = OK
+----tblComputerUsers - make sure it does not allow null and add newid()
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ComputerUserGUID' and sysobjects.name = N'tblComputerUsers')
+begin
+		EXECUTE  sp_executesql  "update tblComputerUsers set ComputerUserGUID = newid() where ComputerUserGUID is null"
+
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblComputerUsers'
+					  and c.name = 'ComputerUserGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_ComputerUserGUID')
+		begin
+			Alter table tblComputerUsers
+			Add constraint DF_ComputerUserGUID default (newid()) For ComputerUserGUID		
+		end		
+
+		Alter table tblComputerUsers
+		ALTER COLUMN [ComputerUserGUID] uniqueIdentifier NOT NULL
+end
+else
+begin
+	Alter table tblComputerUsers
+	Add ComputerUserGUID uniqueIdentifier NOT NULL CONSTRAINT DF_ComputerUserGUID default (newid())
+end
+GO
+
+-- EJ MED I TRANSFER SCRIPT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ExtendedCasePath' and sysobjects.name = N'tblGlobalSettings')
+	begin
+		ALTER TABLE [dbo].tblGlobalSettings ADD ExtendedCasePath nvarchar(500) NULL 
+	end
+GO
+
+-- EJ MED I TRANSFER SCRIPT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ActiveTab' and sysobjects.name = N'tblCaseLock')
+	begin
+		ALTER TABLE [dbo].tblCaseLock ADD ActiveTab nvarchar(100) NULL 
+	end
+GO
+
+-- OK
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ValidateOnChange' and sysobjects.name = N'tblCaseSolution')
+	begin
+		ALTER TABLE [dbo].tblCaseSolution ADD ValidateOnChange nvarchar(100) NULL 
+	end
+GO
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CacheData' and sysobjects.name = N'tblFormSettings')
+	begin
+		ALTER TABLE [dbo].tblFormSettings ADD CacheData bit
+	end
+GO
+
+-- OK
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AttachmentPlacement' and sysobjects.name = N'tblSettings')
+	begin
+		ALTER TABLE [dbo].[tblSettings] ADD [AttachmentPlacement] int not null Default(0)
+	end
+GO
+
+-- OK - Not used in Transfer script
+----tblUsers - make sure it does not allow null and add newid()
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserGUID' and sysobjects.name = N'tblUsers')
+begin
+		EXECUTE  sp_executesql  "update tblUsers set UserGUID = newid() where UserGUID is null"
+
+		if not exists(select *
+					  from sys.all_columns c
+					  join sys.tables t on t.object_id = c.object_id
+					  join sys.schemas s on s.schema_id = t.schema_id
+					  join sys.default_constraints d on c.default_object_id = d.object_id
+					  where t.name = 'tblUsers'
+					  and c.name = 'UserGUID'
+					  and s.name = 'dbo'
+					  and d.name = 'DF_UserGUID')
+		begin
+			Alter table tblUsers
+			Add constraint DF_UserGUID default (newid()) For UserGUID		
+		end		
+
+		Alter table tblUsers
+		ALTER COLUMN [UserGUID] uniqueIdentifier NOT NULL
+end
+else
+begin
+	Alter table tblUsers
+	Add UserGUID uniqueIdentifier NOT NULL CONSTRAINT DF_UserGUID default (newid())
+end
+GO
+
+---- OK - not used in Transfer Script
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Customer_Id' and sysobjects.name = N'tblEntityDefault')
+	begin
+		ALTER TABLE [dbo].[tblEntityDefault] ADD [Customer_Id] int not null
+
+		ALTER TABLE [dbo].[tblEntityDefault]  WITH CHECK ADD  CONSTRAINT [FK_tblEntityDefault_tblCustomer] FOREIGN KEY([Customer_Id])
+		REFERENCES [dbo].[tblCustomer] ([Id])
+
+		ALTER TABLE [dbo].[tblEntityDefault] CHECK CONSTRAINT [FK_tblEntityDefault_tblCustomer]
+
+	end
+GO
+
+---- OK - not used in Transfer Script
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Customer_Id' and sysobjects.name = N'tblEntityRelationship')
+	begin
+		ALTER TABLE [dbo].[tblEntityRelationship] ADD [Customer_Id] int not null 
+
+		ALTER TABLE [dbo].[tblEntityRelationship]  WITH CHECK ADD  CONSTRAINT [FK_tblEntityRelationship_tblCustomer] FOREIGN KEY([Customer_Id])
+		REFERENCES [dbo].[tblCustomer] ([Id])
+
+		ALTER TABLE [dbo].[tblEntityRelationship] CHECK CONSTRAINT [FK_tblEntityRelationship_tblCustomer]
+
+	end
+GO
+
+---- OK - not used in Transfer Script
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Customer_Id' and sysobjects.name = N'tblEntityAttribute')
+	begin
+		ALTER TABLE [dbo].[tblEntityAttribute] ADD [Customer_Id] int not null 
+
+		ALTER TABLE [dbo].[tblEntityAttribute]  WITH CHECK ADD  CONSTRAINT [FK_tblEntityAttribute_tblCustomer] FOREIGN KEY([Customer_Id])
+		REFERENCES [dbo].[tblCustomer] ([Id])
+
+		ALTER TABLE [dbo].[tblEntityAttribute] CHECK CONSTRAINT [FK_tblEntityAttribute_tblCustomer]
+
+	end
+GO
+
+-- 20170628 Johan Weinitz, added support for independent child cases (parent case can be closed with open independent child cases)
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Independent' and sysobjects.name = N'tblParentChildCaseRelations')
+	begin
+		ALTER TABLE [dbo].tblParentChildCaseRelations ADD Independent BIT DEFAULT(0) NOT NULL
+	end
+GO
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentTemplate')
+begin
+
+	CREATE TABLE [dbo].[tblCaseDocumentTemplate](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](50) NULL,
+	[PageNumbersUse] [bit] NOT NULL,
+	[CaseDocumentTemplateGUID] [uniqueidentifier] NULL,
+	[MarginTop] [int] NOT NULL,
+	[MarginBottom] [int] NOT NULL,
+	[MarginLeft] [int] NOT NULL,
+	[MarginRight] [int] NOT NULL,
+	[FooterHeight] [int] NOT NULL,
+	[HeaderHeight] [int] NOT NULL,
+	 CONSTRAINT [PK_tblCaseDocumentTemplate] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_PageNumbersUse]  DEFAULT ((0)) FOR [PageNumbersUse]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_CaseDocumentTemplateGUID]  DEFAULT (newid()) FOR [CaseDocumentTemplateGUID]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_MarginTop]  DEFAULT ((0)) FOR [MarginTop]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_MarginBottom]  DEFAULT ((0)) FOR [MarginBottom]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_MarginLeft]  DEFAULT ((0)) FOR [MarginLeft]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_MarginRight]  DEFAULT ((0)) FOR [MarginRight]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_FooterHeight]  DEFAULT ((0)) FOR [FooterHeight]
+	
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD  CONSTRAINT [DF_tblCaseDocumentTemplate_HeaderHeight]  DEFAULT ((0)) FOR [HeaderHeight]
+	
+end
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocument')
+begin
+
+	CREATE TABLE [dbo].[tblCaseDocument](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[CaseSolutionConditionGUID] [uniqueidentifier] NULL,
-		[CaseSolution_Id] [int] NULL,
-		[Property_Name] [nvarchar](100) NULL,
-		[Values] [nvarchar](max) NULL,
+		[CaseDocumentGUID] [uniqueidentifier] NULL,
+		[Name] [nvarchar](100) NULL,
 		[Description] [nvarchar](200) NULL,
-		[Status] [int] NULL,
-		[CreatedDate] [datetime] NULL,
+		[Customer_Id] [int] NULL,
+		[FileType] [nvarchar](10) NOT NULL,
+		[SortOrder] [int] NOT NULL,
+		[Status] [int] NOT NULL,
+		[CreatedDate] [datetime] NOT NULL,
 		[CreatedByUser_Id] [int] NULL,
-		[ChangedDate] [datetime] NULL,
+		[ChangedDate] [datetime] NOT NULL,
 		[ChangedByUser_Id] [int] NULL,
-	 CONSTRAINT [PK_tblCaseSolutionCondition] PRIMARY KEY CLUSTERED 
+		[CaseDocumentTemplate_Id] [int] NOT NULL,
+		[Version] [int] NOT NULL,
+	 CONSTRAINT [PK_ExtendedCaseDocuments] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 
 
-	ALTER TABLE [dbo].[tblCaseSolutionCondition] ADD  CONSTRAINT [DF_tblCaseSolutionCondition_CaseSolutionConditionGUID]  DEFAULT (newid()) FOR [CaseSolutionConditionGUID]
+	ALTER TABLE [dbo].[tblCaseDocument] ADD  CONSTRAINT [DF_tblCaseDocument_CaseDocumentGUID]  DEFAULT (newid()) FOR [CaseDocumentGUID]
 
-	ALTER TABLE [dbo].[tblCaseSolutionCondition] ADD  CONSTRAINT [DF_tblCaseSolutionCondition_Status]  DEFAULT ((0)) FOR [Status]
+	ALTER TABLE [dbo].[tblCaseDocument] ADD  CONSTRAINT [DF_tblCaseDocument_SortOrder]  DEFAULT ((0)) FOR [SortOrder]
 
-	ALTER TABLE [dbo].[tblCaseSolutionCondition] ADD  CONSTRAINT [DF_tblCaseSolutionCondition_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+	ALTER TABLE [dbo].[tblCaseDocument] ADD  CONSTRAINT [DF_tblCaseDocument_Status]  DEFAULT ((1)) FOR [Status]
 
-	ALTER TABLE [dbo].[tblCaseSolutionCondition] ADD  CONSTRAINT [DF_tblCaseSolutionCondition_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
+	ALTER TABLE [dbo].[tblCaseDocument] ADD  CONSTRAINT [DF_tblCaseDocument_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
 
-	ALTER TABLE [dbo].[tblCaseSolutionCondition]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseSolutionCondition_tblCaseSolution] FOREIGN KEY([CaseSolution_Id])
-	REFERENCES [dbo].[tblCaseSolution] ([Id])
+	ALTER TABLE [dbo].[tblCaseDocument] ADD  CONSTRAINT [DF_tblCaseDocument_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
 
-	ALTER TABLE [dbo].[tblCaseSolutionCondition] CHECK CONSTRAINT [FK_tblCaseSolutionCondition_tblCaseSolution]
+	ALTER TABLE [dbo].[tblCaseDocument] ADD  DEFAULT ((0)) FOR [Version]
 
 end
 
-if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'[Values]' and sysobjects.name = N'tblCaseSolutionCondition')
+
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentCondition')
 begin
-	ALTER TABLE [dbo].[tblCaseSolutionCondition] ALTER COLUMN [Values] [nvarchar](max) NULL
-end
-GO
-
-/* ADD LOG */
-
-if not exists(select * from sysobjects WHERE Name = N'tblCaseSolutionConditionLog')
-begin
-
-	CREATE TABLE [dbo].[tblCaseSolutionConditionLog](
+	CREATE TABLE [dbo].[tblCaseDocumentCondition](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[CaseSoluionCondition_Id] [int] NOT NULL,
-		[CaseSolutionConditionGUID] [uniqueidentifier] NULL,
-		[CaseSolution_Id] [int] NULL,
-		[Property_Name] [nvarchar](100) NULL,
-		[Values] [nvarchar](max) NULL,
+		[CaseDocumentConditionGUID] [uniqueidentifier] NULL,
+		[CaseDocument_Id] [int] NULL,
+		[Property_Name] [nvarchar](500) NULL,
+		[Values] [nvarchar](max) NOT NULL,
 		[Description] [nvarchar](200) NULL,
 		[Status] [int] NULL,
 		[CreatedDate] [datetime] NULL,
 		[CreatedByUser_Id] [int] NULL,
 		[ChangedDate] [datetime] NULL,
 		[ChangedByUser_Id] [int] NULL,
-	 CONSTRAINT [PK_tblCaseSolutionConditionLog] PRIMARY KEY CLUSTERED 
+	 CONSTRAINT [PK_ExtendedCaseDocumentsCondition] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-	
-	ALTER TABLE [dbo].[tblCaseSolutionConditionLog] ADD  CONSTRAINT [DF_tblCaseSolutionConditionLog_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
-	
-	ALTER TABLE [dbo].[tblCaseSolutionConditionLog] ADD  CONSTRAINT [DF_tblCaseSolutionConditionLog_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
-	
-	ALTER TABLE [dbo].[tblCaseSolutionConditionLog]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseSolutionConditionLog_tblCaseSolution] FOREIGN KEY([CaseSolution_Id])
-	REFERENCES [dbo].[tblCaseSolution] ([Id])
-	
-	ALTER TABLE [dbo].[tblCaseSolutionConditionLog] CHECK CONSTRAINT [FK_tblCaseSolutionConditionLog_tblCaseSolution]
+	ALTER TABLE [dbo].[tblCaseDocumentCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentsCondition_CaseSolutionConditionGUID]  DEFAULT (newid()) FOR [CaseDocumentConditionGUID]
+
+	ALTER TABLE [dbo].[tblCaseDocumentCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentsCondition_Status]  DEFAULT ((0)) FOR [Status]
+
+	ALTER TABLE [dbo].[tblCaseDocumentCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentsCondition_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+
+	ALTER TABLE [dbo].[tblCaseDocumentCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentsCondition_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
+
+	ALTER TABLE [dbo].[tblCaseDocumentCondition]  WITH NOCHECK ADD  CONSTRAINT [FK_CaseDocumentsCondition_CaseDocument] FOREIGN KEY([CaseDocument_Id])
+	REFERENCES [dbo].[tblCaseDocument] ([Id])
+
+	ALTER TABLE [dbo].[tblCaseDocumentCondition] NOCHECK CONSTRAINT [FK_CaseDocumentsCondition_CaseDocument]
+
+	ALTER TABLE [dbo].[tblCaseDocumentCondition]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseDocumentCondition_tblCaseDocument] FOREIGN KEY([CaseDocument_Id])
+	REFERENCES [dbo].[tblCaseDocument] ([Id])
+
+	ALTER TABLE [dbo].[tblCaseDocumentCondition] CHECK CONSTRAINT [FK_tblCaseDocumentCondition_tblCaseDocument]
 	
 end
 
-
-/* END TABLE CASE SOLUTION CONDITIONS */
-
-
-/* ADD TABLES FOR META DATA */
-if not exists(select * from sysobjects WHERE Name = N'tblEntityInfo')
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentParagraph')
 begin
-	CREATE TABLE [dbo].[tblEntityInfo](
+	CREATE TABLE [dbo].[tblCaseDocumentParagraph](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[EntityGuid] [uniqueidentifier] NOT NULL,
-		[EntityName] [nvarchar](50) NOT NULL,
-		[EntityType] [nvarchar](50) NOT NULL,
-		[EntityDescription] [nvarchar](3000) NULL,
-		[Translate] [bit] NOT NULL,
-	 CONSTRAINT [PK_tblEntityInfo] PRIMARY KEY CLUSTERED 
+		[Name] [nvarchar](500) NULL,
+		[Description] [nvarchar](50) NULL,
+		[ParagraphType] [int] NULL,
+		[CaseDocumentParagraphGUID] [uniqueidentifier] NULL,
+	 CONSTRAINT [PK_tblCaseDocumentParagraph] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 
 
-	ALTER TABLE [dbo].[tblEntityInfo] ADD  CONSTRAINT [DF_tblEntityInfo_EntityGuid]  DEFAULT (newid()) FOR [EntityGuid]
+	ALTER TABLE [dbo].[tblCaseDocumentParagraph] ADD  CONSTRAINT [DF_tblCaseDocumentParagraph_ParagraphType]  DEFAULT ((1)) FOR [ParagraphType]
+end
 
-	ALTER TABLE [dbo].[tblEntityInfo] ADD  DEFAULT ((0)) FOR [Translate]
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentParagraph')
+begin
+
+	CREATE TABLE [dbo].[tblCaseDocumentParagraph](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[Name] [nvarchar](50) NULL,
+		[Description] [nvarchar](50) NULL,
+		[ParagraphType] [int] NULL,
+	 CONSTRAINT [PK_tblCaseDocumentParagraph] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+
+	ALTER TABLE [dbo].[tblCaseDocumentParagraph] ADD  CONSTRAINT [DF_tblCaseDocumentParagraph_ParagraphType]  DEFAULT ((1)) FOR [ParagraphType]
 
 end
-GO
 
-IF NOT EXISTS (SELECT * FROM sys.indexes WHERE NAME = N'IX_tblEntityInfo') 
-	BEGIN
 
-	/****** Object:  Index [IX_tblEntityInfo]    Script Date: 2017-05-23 14:27:54 ******/
-	CREATE UNIQUE NONCLUSTERED INDEX [IX_tblEntityInfo] ON [dbo].[tblEntityInfo]
-	(
-		[EntityGuid] ASC
-	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 
-END
-GO
-
-IF COL_LENGTH('tblEntityInfo','Translate') IS NULL
-BEGIN
-	  ALTER TABLE [tblEntityInfo] ADD [Translate] bit NOT NULL default(0)
-END
-GO
-
-if not exists(select * from sysobjects WHERE Name = N'tblMetaData')
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentText')
 begin
-	CREATE TABLE [dbo].[tblMetaData](
+
+	CREATE TABLE [dbo].[tblCaseDocumentText](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[Customer_Id] [int] NOT NULL,
-		[MetaDataGuid] [uniqueidentifier] NOT NULL,
-		[EntityInfo_Guid] [uniqueidentifier] NOT NULL,
-		[MetaDataCode] [nvarchar](100) NOT NULL,
-		[MetaDataText] [nvarchar](250) NOT NULL,		
-		[ExternalId] [int] NULL,
-		[Status] [int] NOT NULL,
-		[CreatedDate] [datetime] NOT NULL,
+		[CaseDocumentParagraph_Id] [int] NULL,
+		[Name] [nvarchar](50) NULL,
+		[Description] [nvarchar](50) NULL,
+		[Text] [nvarchar](max) NOT NULL,
+		[Headline] [nvarchar](200) NULL,
+		[SortOrder] [int] NOT NULL,
+		[CaseDocumentTextGUID] [uniqueidentifier] NULL,
+	 CONSTRAINT [PK_tblCaseDocumentText] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+
+	ALTER TABLE [dbo].[tblCaseDocumentText] ADD  CONSTRAINT [DF_tblCaseDocumentText_SortOrder]  DEFAULT ((0)) FOR [SortOrder]
+
+	ALTER TABLE [dbo].[tblCaseDocumentText]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseDocumentText_tblCaseDocumentParagraph] FOREIGN KEY([CaseDocumentParagraph_Id])
+	REFERENCES [dbo].[tblCaseDocumentParagraph] ([Id])
+
+	ALTER TABLE [dbo].[tblCaseDocumentText] CHECK CONSTRAINT [FK_tblCaseDocumentText_tblCaseDocumentParagraph]
+
+end
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocument_CaseDocumentParagraph')
+begin
+
+	CREATE TABLE [dbo].[tblCaseDocument_CaseDocumentParagraph](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[CaseDocument_Id] [int] NOT NULL,
+		[CaseDocumentParagraph_Id] [int] NOT NULL,
+		[SortOrder] [int] NOT NULL,
+	 CONSTRAINT [PK_tblCaseDocument_CaseDocumentParagraph] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+
+	ALTER TABLE [dbo].[tblCaseDocument_CaseDocumentParagraph]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseDocument_tblCaseDocumentParagraph_tblCaseDocument] FOREIGN KEY([CaseDocument_Id])
+	REFERENCES [dbo].[tblCaseDocument] ([Id])
+
+	ALTER TABLE [dbo].[tblCaseDocument_CaseDocumentParagraph] CHECK CONSTRAINT [FK_tblCaseDocument_tblCaseDocumentParagraph_tblCaseDocument]
+
+	ALTER TABLE [dbo].[tblCaseDocument_CaseDocumentParagraph]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseDocument_tblCaseDocumentParagraph_tblCaseDocumentParagraph] FOREIGN KEY([CaseDocumentParagraph_Id])
+	REFERENCES [dbo].[tblCaseDocumentParagraph] ([Id])
+
+	ALTER TABLE [dbo].[tblCaseDocument_CaseDocumentParagraph] CHECK CONSTRAINT [FK_tblCaseDocument_tblCaseDocumentParagraph_tblCaseDocumentParagraph]
+end
+
+
+-- New column in ExtendedCaseForms
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Version' and sysobjects.name = N'ExtendedCaseForms')
+begin
+   ALTER TABLE ExtendedCaseForms ADD [Version] int NOT NULL Default(0)
+end
+
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentParagraphCondition')
+begin
+	CREATE TABLE [dbo].[tblCaseDocumentParagraphCondition](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[CaseDocumentParagraphConditionGUID] [uniqueidentifier] NULL,
+		[CaseDocumentParagraph_Id] [int] NULL,
+		[Property_Name] [nvarchar](500) NULL,
+		[Operator] [nvarchar](50) NULL,
+		[Values] [nvarchar](max) NULL,
+		[Description] [nvarchar](200) NULL,
+		[Status] [int] NULL,
+		[CreatedDate] [datetime] NULL,
+		[CreatedByUser_Id] [int] NULL,
 		[ChangedDate] [datetime] NULL,
-		[SynchronizedDate] [datetime] NULL,
-	 CONSTRAINT [PK_tblMetaData] PRIMARY KEY CLUSTERED 
+		[ChangedByUser_Id] [int] NULL,
+	 CONSTRAINT [PK_ExtendedCaseDocumentParagraphsCondition] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-	) ON [PRIMARY]
+	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 
+	ALTER TABLE [dbo].[tblCaseDocumentParagraphCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentParagraphsCondition_CaseSolutionConditionGUID]  DEFAULT (newid()) FOR [CaseDocumentParagraphConditionGUID]
 
-	ALTER TABLE [dbo].[tblMetaData]  WITH CHECK ADD  CONSTRAINT [FK_tblMetaData_tblCustomer] FOREIGN KEY([Customer_Id])
-	REFERENCES [dbo].[tblCustomer] ([Id])
+	ALTER TABLE [dbo].[tblCaseDocumentParagraphCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentParagraphsCondition_Status]  DEFAULT ((0)) FOR [Status]
 
-	ALTER TABLE [dbo].[tblMetaData] CHECK CONSTRAINT [FK_tblMetaData_tblCustomer]
+	ALTER TABLE [dbo].[tblCaseDocumentParagraphCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentParagraphsCondition_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
 
-	ALTER TABLE [dbo].[tblMetaData]  WITH CHECK ADD  CONSTRAINT [FK_tblMetaData_tblEntityInfo] FOREIGN KEY([EntityInfo_Guid])
-	REFERENCES [dbo].[tblEntityInfo] ([EntityGuid])
-	ON UPDATE CASCADE
+	ALTER TABLE [dbo].[tblCaseDocumentParagraphCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentParagraphsCondition_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
 
-	ALTER TABLE [dbo].[tblMetaData] CHECK CONSTRAINT [FK_tblMetaData_tblEntityInfo]
+end
 
-End
-Go
-
-
-if not exists(select * from sysobjects WHERE Name = N'tblEntityRelationship')
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentTextCondition')
 begin
-	CREATE TABLE [dbo].[tblEntityRelationship](
+
+	CREATE TABLE [dbo].[tblCaseDocumentTextCondition](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[ParentEntity_Guid] [uniqueidentifier] NOT NULL,
-		[ChildEntity_Guid] [uniqueidentifier] NOT NULL,
-		[ParentItem_Guid] [uniqueidentifier] NOT NULL,
-		[ChildItem_Guid] [uniqueidentifier] NOT NULL,
-		[CreatedDate] [datetime] NOT NULL,
+		[CaseDocumentTextConditionGUID] [uniqueidentifier] NULL,
+		[CaseDocumentText_Id] [int] NULL,
+		[Property_Name] [nvarchar](500) NULL,
+		[Operator] [nvarchar](50) NULL,
+		[Values] [nvarchar](max) NULL,
+		[Description] [nvarchar](200) NULL,
+		[Status] [int] NULL,
+		[CreatedDate] [datetime] NULL,
+		[CreatedByUser_Id] [int] NULL,
 		[ChangedDate] [datetime] NULL,
-		[SynchronizedDate] [datetime] NULL,
-	 CONSTRAINT [PK_tblEntityRelationship] PRIMARY KEY CLUSTERED 
+		[ChangedByUser_Id] [int] NULL,
+	 CONSTRAINT [PK_ExtendedCaseDocumentTextsCondition] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-	) ON [PRIMARY]
+	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-	
-	ALTER TABLE [dbo].[tblEntityRelationship]  WITH CHECK ADD  CONSTRAINT [FK_tblEntityRelationship_tblEntityInfo] FOREIGN KEY([ParentEntity_Guid])
-	REFERENCES [dbo].[tblEntityInfo] ([EntityGuid])
+	ALTER TABLE [dbo].[tblCaseDocumentTextCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentTextsCondition_CaseSolutionConditionGUID]  DEFAULT (newid()) FOR [CaseDocumentTextConditionGUID]
 
-	ALTER TABLE [dbo].[tblEntityRelationship] CHECK CONSTRAINT [FK_tblEntityRelationship_tblEntityInfo]
+	ALTER TABLE [dbo].[tblCaseDocumentTextCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentTextsCondition_Status]  DEFAULT ((0)) FOR [Status]
 
-	ALTER TABLE [dbo].[tblEntityRelationship]  WITH CHECK ADD  CONSTRAINT [FK_tblEntityRelationship_tblEntityInfo1] FOREIGN KEY([ChildEntity_Guid])
-	REFERENCES [dbo].[tblEntityInfo] ([EntityGuid])
+	ALTER TABLE [dbo].[tblCaseDocumentTextCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentTextsCondition_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
 
-	ALTER TABLE [dbo].[tblEntityRelationship] CHECK CONSTRAINT [FK_tblEntityRelationship_tblEntityInfo1]
-End
-Go
+	ALTER TABLE [dbo].[tblCaseDocumentTextCondition] ADD  CONSTRAINT [DF_ExtendedCaseDocumentTextsCondition_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
 
+	ALTER TABLE [dbo].[tblCaseDocumentTextCondition]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseDocumentTextCondition_tblCaseDocumentText] FOREIGN KEY([CaseDocumentText_Id])
+	REFERENCES [dbo].[tblCaseDocumentText] ([Id])
 
-if not exists(select * from sysobjects WHERE Name = N'tblEntityDefault')
+	ALTER TABLE [dbo].[tblCaseDocumentTextCondition] CHECK CONSTRAINT [FK_tblCaseDocumentTextCondition_tblCaseDocumentText]
+end
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentTextIdentifier')
 begin
-	CREATE TABLE [dbo].[tblEntityDefault](
+
+	CREATE TABLE [dbo].[tblCaseDocumentTextIdentifier](
 		[Id] [int] IDENTITY(1,1) NOT NULL,
-		[ParentEntity_Guid] [uniqueidentifier] NOT NULL,
-		[ParentItem_Guid] [uniqueidentifier] NOT NULL,
-		[DefaultEntity_Guid] [uniqueidentifier] NOT NULL,
-		[DefaultItem_Guid] [uniqueidentifier] NOT NULL,
-		[CreatedDate] [datetime] NOT NULL,
-		[ChangedDate] [datetime] NULL,
-		[SynchronizedDate] [datetime] NULL,
-	 CONSTRAINT [PK_tblMetaDataDefaults] PRIMARY KEY CLUSTERED 
+		[ExtendedCaseFormId] [int] NOT NULL,
+		[Process] [nvarchar](50) NULL,
+		[Identifier] [nvarchar](500) NOT NULL,
+		[PropertyName] [nvarchar](500) NOT NULL,
+		[DisplayName] [nvarchar](50) NULL,
+	 CONSTRAINT [PK_tblCaseDocumentTextIdentifier] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 
+end
+GO
 
-	ALTER TABLE [dbo].[tblEntityDefault]  WITH CHECK ADD  CONSTRAINT [FK_tblEntityDefault_tblEntityInfo] FOREIGN KEY([ParentEntity_Guid])
-	REFERENCES [dbo].[tblEntityInfo] ([EntityGuid])
-
-	ALTER TABLE [dbo].[tblEntityDefault] CHECK CONSTRAINT [FK_tblEntityDefault_tblEntityInfo]
-
-	ALTER TABLE [dbo].[tblEntityDefault]  WITH CHECK ADD  CONSTRAINT [FK_tblEntityDefault_tblEntityInfo1] FOREIGN KEY([DefaultEntity_Guid])
-	REFERENCES [dbo].[tblEntityInfo] ([EntityGuid])
-
-	ALTER TABLE [dbo].[tblEntityDefault] CHECK CONSTRAINT [FK_tblEntityDefault_tblEntityInfo1]
-End
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Properties' and sysobjects.name = N'ExtendedCaseValues')
+begin
+	ALTER TABLE [dbo].[ExtendedCaseValues] ADD [Properties] [nvarchar](Max) NULL 
+end
 GO
 
 
-if not exists(select * from sysobjects WHERE Name = N'tblEntityAttribute')
+if not exists(select * from sysobjects WHERE Name = N'tblCaseDocumentTextConditionIdentifier')
 begin
-	CREATE TABLE [dbo].[tblEntityAttribute](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[ParentEntity_Guid] [uniqueidentifier] NOT NULL,
-	[ParentItem_Guid] [uniqueidentifier] NOT NULL,
-	[AttributeEntity_Guid] [uniqueidentifier] NOT NULL,
-	[Attribute_Guid] [uniqueidentifier] NOT NULL,
-	[CreatedDate] [datetime] NOT NULL,
-	[ChangedDate] [datetime] NULL,
-	[SynchronizedDate] [datetime] NULL,
-		CONSTRAINT [PK_tblEntityAttribute] PRIMARY KEY CLUSTERED 
+
+	CREATE TABLE [dbo].[tblCaseDocumentTextConditionIdentifier](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[ExtendedCaseFormId] [int] NOT NULL,
+		[Process] [nvarchar](50) NULL,
+		[Identifier] [nvarchar](500) NOT NULL,
+		[PropertyName] [nvarchar](500) NOT NULL,
+		[DisplayName] [nvarchar](50) NULL,
+	 CONSTRAINT [PK_tblCaseDocumentTextConditionIdentifier] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 
-
-	ALTER TABLE [dbo].[tblEntityAttribute]  WITH CHECK ADD  CONSTRAINT [FK_tblEntityAttribute_tblEntityInfo] FOREIGN KEY([ParentEntity_Guid])
-	REFERENCES [dbo].[tblEntityInfo] ([EntityGuid])
-
-	ALTER TABLE [dbo].[tblEntityAttribute] CHECK CONSTRAINT [FK_tblEntityAttribute_tblEntityInfo]
-
-	ALTER TABLE [dbo].[tblEntityAttribute]  WITH CHECK ADD  CONSTRAINT [FK_tblEntityAttribute_tblEntityInfo1] FOREIGN KEY([AttributeEntity_Guid])
-	REFERENCES [dbo].[tblEntityInfo] ([EntityGuid])
-
-	ALTER TABLE [dbo].[tblEntityAttribute] CHECK CONSTRAINT [FK_tblEntityAttribute_tblEntityInfo1]
-
 end
-GO
 
-/* ADD TABLES FOR META DATA */
-
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Parent_Category_Id' and sysobjects.name = N'tblCategory')
-	ALTER TABLE [dbo].[tblCategory] ADD [Parent_Category_Id] int null
-GO
-
-
---tblPriority - make sure it does not allow null and add newid()
-if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'PriorityGUID' and sysobjects.name = N'tblPriority')
-begin
-		EXECUTE  sp_executesql  "update tblPriority set PriorityGUID = newid() where PriorityGUID is null"
-
-		if not exists(select *
-					  from sys.all_columns c
-					  join sys.tables t on t.object_id = c.object_id
-					  join sys.schemas s on s.schema_id = t.schema_id
-					  join sys.default_constraints d on c.default_object_id = d.object_id
-					  where t.name = 'tblPriority'
-					  and c.name = 'PriorityGUID'
-					  and s.name = 'dbo'
-					  and d.name = 'DF_PriorityGUID')
-		begin
-			Alter table tblPriority 
-			Add constraint DF_PriorityGUID default (newid()) For PriorityGUID		
-		end		
-
-		Alter table tblPriority 
-		ALTER COLUMN [PriorityGUID] uniqueIdentifier NOT NULL
-end
-else
-begin
-	Alter table tblPriority
-	Add PriorityGUID uniqueIdentifier NOT NULL CONSTRAINT DF_PriorityGUID default (newid())
-end
-GO
-
---tblStatus - make sure it does not allow null and add newid()
-if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'StatusGUID' and sysobjects.name = N'tblStatus')
-begin
-		EXECUTE  sp_executesql  "update tblStatus set StatusGUID = newid() where StatusGUID is null"
-
-		if not exists(select *
-					  from sys.all_columns c
-					  join sys.tables t on t.object_id = c.object_id
-					  join sys.schemas s on s.schema_id = t.schema_id
-					  join sys.default_constraints d on c.default_object_id = d.object_id
-					  where t.name = 'tblStatus'
-					  and c.name = 'StatusGUID'
-					  and s.name = 'dbo'
-					  and d.name = 'DF_StatusGUID')
-		begin
-			Alter table tblStatus 
-			Add constraint DF_StatusGUID default (newid()) For StatusGUID		
-		end		
-
-		Alter table tblStatus 
-		ALTER COLUMN [StatusGUID] uniqueIdentifier NOT NULL
-
-end
-else
-begin
-	Alter table tblStatus
-	Add StatusGUID uniqueIdentifier NOT NULL CONSTRAINT DF_StatusGUID default (newid())
-end
-GO
- 
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'CaseSolution_Id' and sysobjects.name = N'tblCase')
+               where syscolumns.name = N'CurrentCaseSolution_Id' and sysobjects.name = N'tblCase')
+   ALTER TABLE tblCase ADD CurrentCaseSolution_Id int NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'SplitToCaseSolution_Id' and sysobjects.name = N'tblCaseSolution')
+   ALTER TABLE tblCaseSolution ADD SplitToCaseSolution_Id int NULL
+GO
+
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseSections')
+begin
+CREATE TABLE [dbo].[tblCaseSections](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Customer_Id] [int] NOT NULL,
+	[SectionType] [int] NOT NULL,
+	[IsNewCollapsed] [bit] NOT NULL DEFAULT (0),
+	[IsEditCollapsed] [bit] NOT NULL DEFAULT (0),
+	[CreatedDate] [datetime] NOT NULL CONSTRAINT [DF_tblCaseSections_CreatedDate]  DEFAULT (getdate()),
+	[UpdatedDate] [datetime] NULL,
+ CONSTRAINT [PK_tblCaseSections] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+ALTER TABLE [dbo].[tblCaseSections] ADD  CONSTRAINT [FK_tblCaseSections_tblCustomer] FOREIGN KEY([Customer_Id])
+REFERENCES [dbo].[tblCustomer] ([Id])
+
+END
+GO
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseSectionFields')
+begin
+CREATE TABLE [dbo].[tblCaseSectionFields](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[CaseSection_Id] [int] NOT NULL,
+	[CaseFieldSetting_Id] [int] NOT NULL,
+ CONSTRAINT [PK_tblCaseSectionFields] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+ALTER TABLE [dbo].[tblCaseSectionFields] ADD  CONSTRAINT [FK_tblCaseSectionFields_tblCaseSections] FOREIGN KEY([CaseSection_Id])
+REFERENCES [dbo].[tblCaseSections] ([Id])
+
+ALTER TABLE [dbo].[tblCaseSectionFields] ADD  CONSTRAINT [FK_tblCaseSectionFields_tblCaseFieldSettings] FOREIGN KEY([CaseFieldSetting_Id])
+REFERENCES [dbo].[tblCaseFieldSettings] ([Id])
+
+END
+GO
+
+
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseSections_tblLang')
+begin
+CREATE TABLE [dbo].[tblCaseSections_tblLang](
+	[CaseSection_Id] [int] NOT NULL,
+	[Language_Id] [int] NOT NULL,
+	[Label] [nvarchar](50) NULL
+ CONSTRAINT [PK_tblCaseSections_tblLang] PRIMARY KEY CLUSTERED 
+(
+	[CaseSection_Id] ASC,
+	[Language_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+ALTER TABLE [dbo].[tblCaseSections_tblLang] ADD  CONSTRAINT [FK_tblCaseSections_tblLang_tblCaseSections] FOREIGN KEY([CaseSection_Id])
+REFERENCES [dbo].[tblCaseSections] ([Id])
+
+ALTER TABLE [dbo].[tblCaseSections_tblLang] ADD  CONSTRAINT [FK_tblCaseSections_tblLang_tblLanguage] FOREIGN KEY([Language_Id])
+REFERENCES [dbo].[tblLanguage] ([Id])
+
+END
+GO
+
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'CaseSolutionDescription' and sysobjects.name = N'tblCaseSolution')
+	ALTER TABLE tblCaseSolution
+	ADD CaseSolutionDescription nvarchar(4000)
+GO
+
+if not exists(select * from sysobjects WHERE Name = N'tblLogFileExisting')
+BEGIN
+CREATE TABLE [dbo].[tblLogFileExisting](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Log_Id] [int] NULL,
+	[Case_Id] [int] NOT NULL,
+	[FileName] [nvarchar](200) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL CONSTRAINT [DF_tblLogFileExisting_CreatedDate]  DEFAULT (getdate())
+ CONSTRAINT [PK_tblLogFileExisting] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+ALTER TABLE [dbo].[tblLogFileExisting] ADD  CONSTRAINT [FK_tblLogFileExisting_tblLog] FOREIGN KEY([Log_Id])
+REFERENCES [dbo].[tblLog] ([Id])
+
+ALTER TABLE [dbo].[tblLogFileExisting] ADD  CONSTRAINT [FK_tblLogFileExisting_tblCase] FOREIGN KEY([Case_Id])
+REFERENCES [dbo].[tblCase] ([Id])
+
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IsCaseFile' and sysobjects.name = N'tblLogFile')
+	ALTER TABLE tblLogFile
+	ADD [IsCaseFile] bit NULL
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ParentLog_Id' and sysobjects.name = N'tblLogFile')
+	ALTER TABLE tblLogFile
+	ADD [ParentLog_Id] int NULL
+GO
+
+-- OK
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'NextStepState' and sysobjects.name = N'tblCaseSolution')
 	begin
-		ALTER TABLE [dbo].[tblCase] ADD [CaseSolution_Id] int NULL
-
-		ALTER TABLE [dbo].[tblCase]  WITH NOCHECK ADD  CONSTRAINT [FK_tblCaseSolution_tblCase] FOREIGN KEY([CaseSolution_Id])
-		REFERENCES [dbo].[tblCaseSolution] ([Id])
-
+		ALTER TABLE [dbo].tblCaseSolution ADD NextStepState int NULL
 	end
 GO
 
 
-
-	
-	
---IX_tblLog_Case_Id:
-if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblLog_Case_Id')
-	DROP INDEX [IX_tblLog_Case_Id] ON [dbo].[tblLog]
-GO
-CREATE NONCLUSTERED INDEX [IX_tblLog_Case_Id] ON [dbo].[tblLog]
-(
-	[Case_Id] ASC
-)
-GO
-
--- IX_tblFormFieldValue_Case_Id
-if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblFormFieldValue_Case_Id')
-	DROP INDEX [IX_tblFormFieldValue_Case_Id] ON [dbo].[tblFormFieldValue]
-GO
-
-if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblFormFieldValue_Case_Id')
-CREATE NONCLUSTERED INDEX [IX_tblFormFieldValue_Case_Id] ON [dbo].[tblFormFieldValue]
-(
-	[Case_Id] ASC
-)
-GO
-
--- IX_tblCase_Customer_Id
-if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Id')
-	DROP INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
-GO
-
-if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Id')
-	CREATE NONCLUSTERED INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
-	(
-		[Customer_Id] ASC,
-		[Deleted] ASC,
-		[FinishingDate] ASC
-	)
-	INCLUDE ([Casenumber]) 
-GO
-
-
-
-
-/* ADD Language Columns to Region, Department and ComputerUsers */
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblRegion')
-	BEGIN
-                      ALTER TABLE tblRegion 
-                      ADD LanguageId int NULL
-                      DEFAULT 0
-    END                
-GO
-if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblRegion')
-	update tblRegion set languageid=0 where languageid is null
-GO
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblDepartment')
-	BEGIN
-                      ALTER TABLE tblDepartment
-                      ADD LanguageId int NULL
-                      DEFAULT 0      
-	END
-GO
-if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblDepartment')
-	update tblDepartment set languageid=0 where languageid is null
-GO
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblComputerUsers')
-	BEGIN
-                      ALTER TABLE tblComputerUsers
-                      ADD LanguageId int NULL
-                      DEFAULT 0
-	END
-GO	
-if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblComputerUsers')			
-	update tblComputerUsers set languageid=0 where languageid is null
-GO
-
-INSERT INTO [dbo].[tblComputerUserFieldSettings]
-			   ([Customer_Id]
-			   ,[ComputerUserField]
-			   ,[Show]
-			   ,[Required]
-			   ,[MinLength]
-			   ,[ShowInList]
-			   ,[LDAPAttribute])
-		SELECT  DISTINCT
-				Customer_Id,
-				'Language_Id',
-				0,
-				0,
-				0,
-				0,
-				''
-		FROM tblComputerUserFieldSettings	
-		WHERE Customer_Id IS NOT NULL AND Customer_Id NOT IN (SELECT Customer_Id From tblComputerUserFieldSettings WHERE Customer_Id IS NOT NULL AND ComputerUserField='Language_Id')
-			
-		
-	--Swedish
-	insert into  tblComputerUserFS_tblLanguage 
-	Select fs.Id, 1, 'Språk', '' from  tblComputerUserFieldSettings fs left join 
-					tblComputerUserFS_tblLanguage fsl on (fs.Id = fsl.ComputerUserFieldSettings_Id and fsl.Language_Id = 1)
-	where fsl.ComputerUserFieldSettings_Id is null and  fs.ComputerUserField = 'Language_Id' 
-
-
-	--English
-	insert into  tblComputerUserFS_tblLanguage 
-	Select fs.Id, 2, 'Language', '' from  tblComputerUserFieldSettings fs left join 
-					tblComputerUserFS_tblLanguage fsl on (fs.Id = fsl.ComputerUserFieldSettings_Id and fsl.Language_Id = 2)
-	where fsl.ComputerUserFieldSettings_Id is null and  fs.ComputerUserField = 'Language_Id' 
-
-				
-
-if not exists(select * from sysobjects WHERE Name = N'tblLink_tblWorkingGroup')
+IF EXISTS (SELECT * FROM sysobjects WHERE name='tblYesNo' AND xtype='U')
 begin
-
-	CREATE TABLE [dbo].[tblLink_tblWorkingGroup](
-		[Link_Id] [int] NOT NULL,
-		[WorkingGroup_Id] [int] NOT NULL,
-	 CONSTRAINT [PK_tblLink_tblWorkingGroup] PRIMARY KEY CLUSTERED 
-	(
-		[Link_Id] ASC,
-		[WorkingGroup_Id] ASC
-	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-	) ON [PRIMARY]
-
-
-
-	ALTER TABLE [dbo].[tblLink_tblWorkingGroup]  WITH CHECK ADD  CONSTRAINT [FK_tblLink_tblWorkingGroup_tblLink] FOREIGN KEY([Link_Id])
-	REFERENCES [dbo].[tblLink] ([Id])
-
-
-	ALTER TABLE [dbo].[tblLink_tblWorkingGroup] CHECK CONSTRAINT [FK_tblLink_tblWorkingGroup_tblLink]
-
-
-	ALTER TABLE [dbo].[tblLink_tblWorkingGroup]  WITH CHECK ADD  CONSTRAINT [FK_tblLink_tblWorkingGroup_tblWorkingGroup] FOREIGN KEY([WorkingGroup_Id])
-	REFERENCES [dbo].[tblWorkingGroup] ([Id])
-	
-
-	ALTER TABLE [dbo].[tblLink_tblWorkingGroup] CHECK CONSTRAINT [FK_tblLink_tblWorkingGroup_tblWorkingGroup]
-
-
+	DROP TABLE tblYesNo
 end
-
-Update tblCaseType set ShowOnExtPageCases = 0 where ShowOnExternalPage = 0
-
-Update tblProductArea set ShowOnExtPageCases = 0 where ShowOnExternalPage = 0
-
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShortDescription' and sysobjects.name = N'tblCaseSolution')
-	ALTER TABLE [dbo].[tblCaseSolution] ADD [ShortDescription] nvarchar(100) null
 GO
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Information' and sysobjects.name = N'tblCaseSolution')
-	ALTER TABLE [dbo].[tblCaseSolution] ADD [Information] nvarchar(max) null
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblYesNo' AND xtype='U')
+	BEGIN
+
+		CREATE TABLE [dbo].[tblYesNo](
+			[Id] [int] NULL,
+			[Value] [nvarchar](50) NULL,
+			[GUID] [uniqueidentifier] NULL,
+			[Customer_Id] [int] NULL
+		) ON [PRIMARY]
+
+
+		ALTER TABLE [dbo].[tblYesNo] ADD  CONSTRAINT [DF_tblYesNo_GUID]  DEFAULT (newid()) FOR [GUID]
+
+	END
+
+
+	TRUNCATE TABLE [dbo].[tblYesNo]
+	INSERT INTO [dbo].[tblYesNo]
+           ([Id]
+           ,[Value]
+		   )
+     VALUES
+           (0,
+			'Nej'
+			)
+
+	INSERT INTO [dbo].[tblYesNo]
+           ([Id]
+           ,[Value]
+		   )
+     VALUES
+           (1,
+			'Ja'
+			)
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Source' and sysobjects.name = N'tblEntityInfo')
+	begin
+		ALTER TABLE [dbo].tblEntityInfo ADD [Source] int NULL
+	end
 GO
 
---Update old casesolutions with new field "AgreedDate"
-insert into tblCaseSolutionFieldSettings(casesolution_id, fieldname_id, mode)
-select id, 68, 1 from tblCaseSolution
-where id not in (select casesolution_id from  tblCaseSolutionFieldSettings where fieldname_id = 68 )
+if not exists(select * from sysobjects WHERE Name = N'tblCaseType_tblProductArea')
+BEGIN
 
--- recreate index IX_tblCase_Customer_Id
-DROP INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
-GO
-CREATE NONCLUSTERED INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
+CREATE TABLE [dbo].[tblCaseType_tblProductArea](
+	[CaseType_Id] [int] NOT NULL,
+	[ProductArea_Id] [int] NOT NULL,
+ CONSTRAINT [PK_tblCaseType_tblProductArea] PRIMARY KEY CLUSTERED 
 (
-	[Customer_Id] ASC,	
-	[Deleted] ASC,
-	[FinishingDate] ASC    
-)INCLUDE ([Casenumber]) 
+	[CaseType_Id] ASC,
+	[ProductArea_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+ALTER TABLE [dbo].[tblCaseType_tblProductArea] ADD  CONSTRAINT [FK_tblCaseType_tblProductArea_tblCaseType] FOREIGN KEY([CaseType_Id])
+REFERENCES [dbo].[tblCaseType] ([Id])
+
+ALTER TABLE [dbo].[tblCaseType_tblProductArea] ADD  CONSTRAINT [FK_tblCaseType_tblProductArea_tblProductArea] FOREIGN KEY([ProductArea_Id])
+REFERENCES [dbo].[tblProductArea] ([Id])
+
+END
 GO
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'RequiredIfReopened' and sysobjects.name = N'tblCaseFieldSettings')
+   ALTER TABLE tblCaseFieldSettings ADD RequiredIfReopened int NOT NULL Default(0)
+GO
+
+-- REBUILD tblCase INDEXES to fix index fragmentation
+ALTER INDEX ALL ON tblCase REBUILD
+GO
+
+
+if not exists(select * from sysobjects WHERE Name = N'ExtendedCaseFormState')
+BEGIN
+
+	CREATE TABLE [dbo].[ExtendedCaseFormState](
+	[Id] [int]  NOT NULL PRIMARY KEY IDENTITY(1,1),
+	[ExtendedCaseDataId] [int] NOT NULL,
+	[TabId] [nvarchar](50) NOT NULL,
+	[SectionId] [nvarchar](50) NOT NULL,
+	[SectionIndex] [int] NOT NULL,
+	[Key] [nvarchar](50) NOT NULL,
+	[Value] [nvarchar](50) NOT NULL,
+	CONSTRAINT [FK_ExtendedCaseFormState_ExtendedCaseData] FOREIGN KEY([ExtendedCaseDataId]) REFERENCES [dbo].[ExtendedCaseData] ([Id]))
+
+END
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'ShowQuickNewCaseLink' and sysobjects.name = N'tblSettings')
+   ALTER TABLE tblSettings ADD ShowQuickNewCaseLink int NOT NULL Default(0)
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'QuickNewCaseLinkText' and sysobjects.name = N'tblSettings')
+   ALTER TABLE tblSettings ADD QuickNewCaseLinkText nvarchar(50) NOT NULL Default(N'+')
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'QuickNewCaseLinkUrl' and sysobjects.name = N'tblSettings')
+   ALTER TABLE tblSettings ADD QuickNewCaseLinkUrl nvarchar(255) NOT NULL Default(N'/cases/new')
+GO
 
 -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.32'
-
-
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.33'

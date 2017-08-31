@@ -354,18 +354,23 @@ function bindDeleteLogFileBehaviorToDeleteButtons() {
     $('#log_files_table a[id^="delete_logfile_button_"]').click(function () {
         var key = $('#LogKey').val();
         var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
+        var isAttached = $(this).parent().parent().find('a.isExisted');
+        var logFileId = null;
+        if (isAttached.length > 0) {
+            logFileId = $(this).parent().parent().find("#logfile_id").val();
+        }
         var pressedDeleteFileButton = this;
 
-        $.post("/Cases/DeleteLogFile", { id: key, fileName: fileName }, function () {
-            $(pressedDeleteFileButton).parents('tr:first').remove();
-            var fileNames = $('#LogFileNames').val();
-            fileNames = fileNames.replace("|" + fileName.trim(), "");
-            fileNames = fileNames.replace(fileName.trim() + "|", "");
-            $('#LogFileNames').val(fileNames);
+        $.post("/Cases/DeleteLogFile", { id: key, fileName: fileName, fileId: logFileId }, function () {
+                $(pressedDeleteFileButton).parents('tr:first').remove();
+                var fileNames = $('#LogFileNames').val();
+                fileNames = fileNames.replace("|" + fileName.trim(), "");
+                fileNames = fileNames.replace(fileName.trim() + "|", "");
+                $('#LogFileNames').val(fileNames);
 
-            // Raise event about deleted file
-            $(document).trigger("OnDeleteCaseLogFile", [key, fileName]);
-        });
+                // Raise event about deleted file
+                $(document).trigger("OnDeleteCaseLogFile", [key, fileName]);
+            });
     });
 }
 
@@ -649,3 +654,4 @@ $(".chosen-single-select").chosen({
     'placeholder_text_multiple': placeholder_text_multiple,
     'no_results_text': no_results_text
 });
+

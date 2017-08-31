@@ -160,6 +160,10 @@
     }
 
     function getCasesIntLogEmailSearchOptions() {
+
+        var lastIntLogEmailSearchKey = '';
+        var delayFunc = CommonUtils.createDelayFunc();
+
         var options = {
             items: 20,
             minLength: 2,
@@ -167,38 +171,59 @@
                 var arr = query.replace(/<[^>]*>/g, "").split(";");
                 var searchText = $.trim(arr[arr.length - 1]);
                 if (searchText) {
-                    var lastInitiatorSearchKey = generateRandomKey();
-                    return $.ajax({
-                        url: "/cases/CaseSearchUserEmails",
-                        type: "post",
-                        data: { query: searchText, searchKey: lastInitiatorSearchKey, isInternalLog: true },
-                        dataType: "json",
-                        success: function(result) {
-                            if (result.searchKey !== lastInitiatorSearchKey)
-                                return;
+                    lastIntLogEmailSearchKey = generateRandomKey();
 
-                            var resultList = $.map(result.result,
-                                function(item) {
-                                    var aItem = {
-                                        userId: item.UserId,
-                                        name: item.FirstName + " " + item.SurName,
-                                        email: item.Emails,
-                                        groupType: item.GroupType,
-                                        departmentname: item.DepartmentName,
-                                        name_family: item.SurName + " " + item.FirstName
-                                    };
-                                    return JSON.stringify(aItem);
-                                });
-                            searchSelected = resultList.length > 0;
-                            return process(resultList);
-                        }
-                    });
+                    delayFunc(function (){
+                        //console.log('getCasesIntLogEmailSearchOptions: running ajax request.');
+                        $.ajax({
+                            url: "/cases/CaseSearchUserEmails",
+                            type: "post",
+                            data: { query: searchText, searchKey: lastIntLogEmailSearchKey, isInternalLog: true },
+                            dataType: "json",
+                            success: function(result) {
+                                if (result.searchKey !== lastIntLogEmailSearchKey) {
+                                    return;
+                                }
+
+                                var resultList = $.map(result.result,
+                                    function(item) {
+                                        var aItem = {
+                                            userId: item.UserId,
+                                            name: item.FirstName + " " + item.SurName,
+                                            email: item.Emails,
+                                            groupType: item.GroupType,
+                                            departmentname: item.DepartmentName,
+                                            name_family: item.SurName + " " + item.FirstName
+                                        };
+                                        return JSON.stringify(aItem);
+                                    });
+
+                                if (resultList.length > 0) {
+                                    searchSelected = true;
+                                }
+                                else {
+                                    var noRes = {
+                                        name: document.parameters.noResultLabel,
+                                        isNoResult: true
+                                    }
+                                    resultList.push(JSON.stringify(noRes));
+                                    searchSelected = false;
+                                }
+
+                                process(resultList);
+                            }
+                        });    
+                    },
+                    300);
                 }
                 return;
             },
 
             matcher: function (obj) {
                 var item = JSON.parse(obj);
+                if (~item.isNoResult) {
+                    return 1;
+                }
                 var tquery = getSimpleQuery(this.query);
                 if (!tquery) return false;
                 if (~item.email && (item.groupType === 0 || item.groupType === 1)) {
@@ -232,6 +257,9 @@
 
             highlighter: function (obj) {
                 var item = JSON.parse(obj);
+                if (item.isNoResult) {
+                    return item.name;
+                }
                 var grType = "";
                 if (item.groupType === 0)
                     grType = document.parameters.initLabel + ": ";
@@ -257,13 +285,16 @@
 
             updater: function (obj) {
                 var item = JSON.parse(obj);
-                var emailsToAdd = [];
-                $.each(item.email, function (index, value) {
-                    if (checkAndAddEmailsTo(value) === true)
-                        emailsToAdd.push(value);
-                });
-                changeFakeInputValueForView();
-                placeCaretAtEnd(this.$element);
+                if (!item.isNoResult) {
+                    var emailsToAdd = [];
+                    $.each(item.email,
+                        function(index, value) {
+                            if (checkAndAddEmailsTo(value) === true)
+                                emailsToAdd.push(value);
+                        });
+                    changeFakeInputValueForView();
+                    placeCaretAtEnd(this.$element);
+                }
                 return;
             }
         };

@@ -15,6 +15,9 @@
         public IList<SelectListItem> Priorities { get; set; }
         public IList<SelectListItem> WgAvailable { get; set; }
         public IList<SelectListItem> WgSelected { get; set; }
+        public IList<CaseType> CaseTypes { get; set; }
+        public int CaseType_Id { get; set; }
+        public string ParentPath_CaseType { get; set; }
 
         public bool CanAddChild { get; set; }
     }

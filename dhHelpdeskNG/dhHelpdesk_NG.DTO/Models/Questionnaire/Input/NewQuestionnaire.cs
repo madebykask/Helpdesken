@@ -41,6 +41,8 @@ namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Input
 
 		public string Identifier { get; set; }
 
+		public bool ExcludeAdministrators { get; set; }
+
 		public QuestionnaireType Type { get; set; }
 
 		[IsId]

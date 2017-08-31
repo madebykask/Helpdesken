@@ -11,6 +11,10 @@ using DH.Helpdesk.Dal.Repositories;
 
 namespace DH.Helpdesk.SelfService.NinjectModules.Modules
 {
+    using BusinessData.Models.Case.CaseHistory;
+    using BusinessData.Models.Logs.Output;
+    using Dal.MapperData.CaseHistory;
+    using Dal.MapperData.Logs;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
     using DH.Helpdesk.BusinessData.Models.Case.Input;
@@ -23,6 +27,7 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
     using DH.Helpdesk.Dal.Infrastructure.Translate;
     using DH.Helpdesk.Dal.Mappers;
+    using DH.Helpdesk.Dal.Mappers.Logs;
     using DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity;
     using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
     using DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel;
@@ -40,6 +45,9 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
     using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
     using DH.Helpdesk.Services.BusinessLogic.Admin.Users.Concrete;
     using Ninject.Modules;
+    using Dal.DbQueryExecutor;
+    using Services.Services;
+    using Domain.ExtendedCaseEntity;
 
     /// <summary>
     /// The common module.
@@ -207,6 +215,51 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
 
             this.Bind<IEntityToBusinessModelMapper<CaseSolutionConditionEntity, CaseSolutionConditionModel>>()
                 .To<CaseSolutionConditionToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview>>()
+                .To<CaseHistoryToCaseHistoryOverviewMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<LogMapperData, LogOverview>>()
+                .To<LogEntityToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IDbQueryExecutorFactory>()
+                .To<SqlDbQueryExecutorFactory>()
+                .InSingletonScope();
+
+
+            this.Bind<IBusinessModelToEntityMapper<CaseModel, Case>>()
+                .To<CaseModelToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<Case, CaseModel>>()
+                .To<CaseToCaseModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<ExtendedCaseFormModel, ExtendedCaseFormEntity>>()
+               .To<ExtendedCaseFormToEntityMapper>()
+               .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel>>()
+                .To<ExtendedCaseFormToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity>>()
+                .To<ExtendedCaseDataToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ExtendedCaseDataEntity, ExtendedCaseDataModel>>()
+                .To<ExtendedCaseDataToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<ExtendedCaseValueModel, ExtendedCaseValueEntity>>()
+                .To<ExtendedCaseValueToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ExtendedCaseValueEntity, ExtendedCaseValueModel>>()
+                .To<ExtendedCaseValueToBusinessModelMapper>()
                 .InSingletonScope();
         }
     }

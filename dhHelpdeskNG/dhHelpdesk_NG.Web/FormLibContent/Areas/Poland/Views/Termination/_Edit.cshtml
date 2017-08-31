@@ -1,0 +1,39 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@using(Html.BeginForm("edit", "termination", FormMethod.Post, new { area = "poland" }))
+{
+    @Html.Partial("_Navigation", Model)
+    <div class="container containeralignright">
+        @Html.Partial("_CurrentUser")
+        @Html.Partial("_ErrorMessage", Model)
+        <ul class="nav nav-tabs">
+            @if(Model.VisibleTab("#termination"))
+            {
+                <li class="active @(Model.TabHasError("#termination") ? "error" : "")">
+                    <a href="#termination">@Model.Translate("Termination")</a></li>
+            }
+            @if(Model.VisibleTab("#globalview"))
+            {
+                <li class="@(Model.TabHasError("#globalview") ? "error" : "")">
+                    <a href="#globalview">@Model.Translate("Global View")</a></li>
+            }
+        </ul>
+        <div class="content">
+            <div class="row-fluid">
+                <div class="tab-content">
+                    @if(Model.VisibleTab("#termination"))
+                    {
+                        @Html.Partial("_TabTermination", Model)
+                    }
+                    @if(Model.VisibleTab("#globalview"))
+                    {
+                        @Html.Partial("_TabGlobalView", Model)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />
+}

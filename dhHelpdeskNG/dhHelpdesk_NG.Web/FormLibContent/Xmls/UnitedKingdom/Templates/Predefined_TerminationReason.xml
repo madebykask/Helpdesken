@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+    <name>TerminationReason</name>
+    <dependent>
+        <selected>Expiry of Contract</selected>
+        <show>Expiry of Contract,International transfer begins,International transfer ends,End of Backpacker Assignment</show>
+    </dependent>
+    <dependent>
+        <selected>Dismissal</selected>
+        <show>Dismissal With Notice,Dismissal Without Notice</show>
+    </dependent>
+    <dependent>
+        <selected>Retirement</selected>
+        <show>Retirement</show>
+    </dependent>
+
+  <dependent>
+        <selected>Redundancy</selected>
+        <show>Redundancy</show>
+  </dependent>
+  <dependent>
+    <selected>Resignation</selected>
+    <show>Resignation,Lack of opportunities,Salary,Unhappy with management,Domestic,Hours of work,Days of work,Health,Maternity rights,Moving away,Returning to FT education,Exams pending,Leaving IKEA/New job,Other</show>
+  </dependent>
+
+  <dependent>
+    <selected>Other</selected>
+    <show>Invalidity,Death,AWOL,Unsuccesful probation,Mutual agreement,International transfer begins</show>
+  </dependent>
+</predefined>
+

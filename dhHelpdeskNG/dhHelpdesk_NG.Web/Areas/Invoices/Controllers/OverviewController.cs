@@ -4,13 +4,18 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
+using DH.Helpdesk.BusinessData.Models.Invoice;
 using DH.Helpdesk.Domain.Invoice;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Invoice;
 using DH.Helpdesk.Web.Areas.Invoices.Models;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Models.Invoice;
 
 namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 {
@@ -20,20 +25,26 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 		private readonly IInvoiceService _invoiceService;
 	    private readonly ISettingService _settingService;
 		private readonly IGlobalSettingService _globalSettingService;
+        private readonly IExternalInvoiceService _externalInvoiceService;
+        private readonly ILogService _logService;
 
-		public OverviewController(
+        public OverviewController(
 		    IMasterDataService masterDataService,
 			IDepartmentService departmentService,
 			IInvoiceService invoiceService,
 			ISettingService settingService,
-			IGlobalSettingService globalSettingService)
+			IGlobalSettingService globalSettingService,
+            IExternalInvoiceService externalInvoiceService,
+            ILogService logService)
 		    : base(masterDataService)
 		{
 			_departmentService = departmentService;
 			_invoiceService = invoiceService;
 			_settingService = settingService;
 			_globalSettingService = globalSettingService;
-		}
+		    _externalInvoiceService = externalInvoiceService;
+		    _logService = logService;
+        }
 
 		// GET: Invoices/Overview
 		public ActionResult Index()
@@ -200,5 +211,115 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 
 			return File(Path.Combine(globalSetting.InvoiceFileFolder, file.Guid.ToString()), "text/plain", file.Name);
 	    }
-	}
+
+        [System.Web.Mvc.HttpGet]
+        public ActionResult GetInvoicesOverviewList(InvoiceOverviewFilterModel filter)
+        {
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var srvModels = _invoiceService.GetInvoiceOverviewList(customerId, filter.DepartmentId, filter.DateFrom, filter.DateTo, filter.Status, filter.CaseId, filter.DepartmentCharge);
+
+            var res = srvModels.Select(x => new InvoiceListItemViewModel
+            {
+                CaseId = x.CaseId,
+                CaseNumber = x.CaseNumber.ToString(),
+                Caption = x.Caption,
+                Department = x.Department,
+                Category = x.Category,
+                FinishingDate = x.FinishingDate?.Date,
+                LogInvoices = x.LogInvoices.Select(y => new LogInvoiceItemViewModel
+                {
+                    Id = y.Id,
+                    Date = y.LogDate,
+                    Charge = y.Charge,
+                    Material = y.Price,
+                    Price = y.EquipmentPrice,
+                    Text = y.TextInternal,
+                    Overtime = y.Overtime,
+                    WorkingTime = y.WorkingTime,
+                    OvertimeHourRate = x.OvertimeHourRate,
+                    WorkingHourRate = x.WorkingHourRate,
+                    InvoiceRow = new InvoiceRowViewModel { Status = y.InvoiceRow.Status }
+                }).ToList(),
+                ExternalInvoices = x.ExternalInvoices.Select(y => new ExternalInvoiceModel
+                {
+                    Id = y.Id,
+                    Name = y.InvoiceNumber,
+                    Amount = y.InvoicePrice,
+                    Charge = y.Charge,
+                    InvoiceRow = new InvoiceRowViewModel { Status = y.InvoiceRow.Status }
+                }).ToList()
+            }).ToList();
+
+            return JsonDefault(res);
+        }
+
+        [System.Web.Mvc.HttpPost]
+        public ActionResult SaveInvoiceValues(InvoiceValuesParams invoiceParams)
+        {
+            if (invoiceParams.ExternalInvoices != null && invoiceParams.ExternalInvoices.Any())
+            {
+                _externalInvoiceService.UpdateExternalInvoiceValues(invoiceParams.ExternalInvoices.Select(x => new ExternalInvoice
+                {
+                    Id = x.Id,
+                    InvoicePrice = x.Amount,
+                    Charge = x.Charge
+                }).ToList());
+            }
+
+            if (invoiceParams.LogInvoices != null && invoiceParams.LogInvoices.Any())
+            {
+                _logService.UpdateLogInvoices(invoiceParams.LogInvoices.Select(x => new CaseLog
+                {
+                    Id = x.Id,
+                    WorkingTime = x.WorkingTime,
+                    Overtime = x.Overtime,
+                    EquipmentPrice = x.Price,
+                    Price = x.Material,
+                    Charge = x.Charge
+                }).ToList());
+            }
+
+            return JsonDefault(true);
+        }
+
+        [System.Web.Mvc.HttpPost]
+        public ActionResult InvoiceAction(InvoiceActionParams actionParams)
+        {
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var invoiceHeader = new InvoiceHeader();
+            invoiceHeader.CreatedById = SessionFacade.CurrentUser.Id;
+
+            var invoiceLogActions = actionParams.LogInvoices.Where(x => x.Status == InvoiceStatus.Invoiced).ToList();
+            var invoiceExternalActions = actionParams.ExternalInvoices.Where(x => x.Status == InvoiceStatus.Invoiced).ToList();
+            if (invoiceLogActions.Any() || invoiceExternalActions.Any())
+            {
+                var invoiceRow = new InvoiceRow { Status = InvoiceStatus.Invoiced };
+                invoiceRow.LogInvoices.AddRange(invoiceLogActions.Select(x => new CaseLog { Id = x.Id }));
+                invoiceRow.ExternalInvoices.AddRange(invoiceExternalActions.Select(x => new ExternalInvoice { Id = x.Id }));
+                invoiceHeader.InvoiceRows.Add(invoiceRow);
+            }
+
+            var notInvoiceLogActions = actionParams.LogInvoices.Where(x => x.Status == InvoiceStatus.NotInvoiced).ToList();
+            var notInvoiceExternalActions = actionParams.ExternalInvoices.Where(x => x.Status == InvoiceStatus.NotInvoiced).ToList();
+            if (notInvoiceLogActions.Any() || notInvoiceExternalActions.Any())
+            {
+                var invoiceRow = new InvoiceRow { Status = InvoiceStatus.NotInvoiced };
+                invoiceRow.LogInvoices.AddRange(notInvoiceLogActions.Select(x => new CaseLog { Id = x.Id }));
+                invoiceRow.ExternalInvoices.AddRange(notInvoiceExternalActions.Select(x => new ExternalInvoice { Id = x.Id }));
+                invoiceHeader.InvoiceRows.Add(invoiceRow);
+            }
+
+            var translations = new List<string>
+            {
+                Translation.GetCoreTextTranslation("ServiceDesk (direktdebitering)"),
+                Translation.GetCoreTextTranslation("ÄrNr"),
+                Translation.GetCoreTextTranslation("FakturaNr"),
+                Translation.GetCoreTextTranslation("RefNr"),
+                Translation.GetCoreTextTranslation("DH"),
+            };
+            _invoiceService.SaveInvoiceActions(customerId, invoiceHeader, translations);
+
+            return JsonDefault(true);
+        }
+    }
 }

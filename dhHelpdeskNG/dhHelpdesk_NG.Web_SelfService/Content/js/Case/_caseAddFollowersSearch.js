@@ -142,7 +142,13 @@ function InitCaseAddFollowersSearch(searchUriPath) {
                                 };
                                 return JSON.stringify(aItem);
                             });
-
+                        if (resultList.length === 0) {
+                            var noRes = {
+                                name: window.parameters.noResultLabel,
+                                isNoResult: true
+                            }
+                            resultList.push(JSON.stringify(noRes));
+                        }
                         return process(resultList);
                     }
                 });
@@ -150,6 +156,9 @@ function InitCaseAddFollowersSearch(searchUriPath) {
 
             matcher: function (obj) {
                 var item = JSON.parse(obj);
+                if (~item.isNoResult) {
+                    return 1;
+                }
                 var tquery = getSimpleQuery(this.query);
                 if (!tquery) return false;
                 if (~item.email) {
@@ -183,6 +192,9 @@ function InitCaseAddFollowersSearch(searchUriPath) {
 
             highlighter: function (obj) {
                 var item = JSON.parse(obj);
+                if (item.isNoResult) {
+                    return item.name;
+                }
                 var grType = window.parameters.initGroup + ": ";
                 var userId = item.userId != null ? item.userId + ' - ' : "";
                 var query = getSimpleQuery(this.query);
@@ -200,6 +212,9 @@ function InitCaseAddFollowersSearch(searchUriPath) {
 
             updater: function (obj) {
                 var item = JSON.parse(obj);
+                if (item.isNoResult) {
+                    return "";
+                }
                 var emailsToAdd = [];
                 $.each(item.email, function (index, value) {
                     if (checkAndAddEmailsTo(value) === true)

@@ -1,0 +1,554 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="Absences">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Absences")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AbsenceType")</td>
+                    <td>
+                        @Model.Element("AbsenceType", "AbsenceType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ChangeType")</td>
+                    <td>
+                        @Model.Element("ChangeType", "ChangeType")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AbsenceStartDate")</td>
+                    <td>
+                        @Model.Element("AbsenceStartDate")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AbsenceEndDate")</td>
+                    <td>
+                        @Model.Element("AbsenceEndDate")
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AbsenceHours")</td>
+                    <td>
+                        @Model.Element("AbsenceHours")
+                    </td>
+                </tr>
+                <tr class="Illness">
+                    <td class="tdstrong" colspan="2">
+                        <h5>@Model.Translate("Self-declared illness - Sick Child/Sick Nanny")</h5>
+                    </td>
+                </tr>
+                <tr class="Illness">
+                    <td class="tdstrong">@Model.Label("IllnessAbsenceStartsOn")</td>
+                    <td>
+                        @Model.Element("IllnessAbsenceStartsOn")
+                    </td>
+                </tr>
+                <tr class="Illness">
+                    <td class="tdstrong">@Model.Label("IllnessAbsenceEndsOn")</td>
+                    <td>
+                        @Model.Element("IllnessAbsenceEndsOn")
+                    </td>
+                </tr>
+                <tr class="Illness">
+                    <td class="tdstrong">@Model.Label("IllnessChildsFirstName")</td>
+                    <td>
+                        @Model.Element("IllnessChildsFirstName")
+                    </td>
+                </tr>
+                <tr class="Illness">
+                    <td class="tdstrong">@Model.Label("IllnessChildsLastName")</td>
+                    <td>
+                        @Model.Element("IllnessChildsLastName")
+                    </td>
+                </tr>
+                <tr class="Illness">
+                    <td class="tdstrong">@Model.Label("IllnessChildsDateOfBirth")</td>
+                    <td>
+                        @Model.Element("IllnessChildsDateOfBirth")
+                    </td>
+                </tr>
+                <tr class="Illness">
+                    <td class="tdstrong">@Model.Label("IllnessOnlyChildCarer")</td>
+                    <td>
+                        @Model.Element("IllnessOnlyChildCarer")
+                    </td>
+                </tr>
+                <tr class="SickLeave">
+                    <td class="tdstrong" colspan="2">
+                        <h5>@Model.Translate("Sick leave")</h5>
+                    </td>
+                </tr>
+                <tr class="SickLeave">
+                    <td class="tdstrong">@Model.Label("SickLeaveAbsenceStartsOn")</td>
+                    <td>
+                        @Model.Element("SickLeaveAbsenceStartsOn")
+                    </td>
+                </tr>
+                <tr class="SickLeave">
+                    <td class="tdstrong">@Model.Label("SickLeaveAbsenceEndsOn")</td>
+                    <td>
+                        @Model.Element("SickLeaveAbsenceEndsOn")
+                    </td>
+                </tr>
+                <tr class="SickLeave">
+                    <td class="tdstrong">@Model.Label("SickLeavePercentageOfSickness")</td>
+                    <td>
+                        @Model.Element("SickLeavePercentageOfSickness")
+                    </td>
+                </tr>
+                <tr class="ParentalLeave">
+                    <td class="tdstrong" colspan="2">
+                        <h5>@Model.Translate("Parental Leave")</h5>
+                    </td>
+                </tr>
+                <tr class="ParentalLeave">
+                    <td class="tdstrong">@Model.Label("ParentalLeaveAbsenceStartsOn")</td>
+                    <td>
+                        @Model.Element("ParentalLeaveAbsenceStartsOn")
+                    </td>
+                </tr>
+                <tr class="ParentalLeave">
+                    <td class="tdstrong">@Model.Label("ParentalLeaveAbsenceEndsOn")</td>
+                    <td>
+                        @Model.Element("ParentalLeaveAbsenceEndsOn")
+                    </td>
+                </tr>
+                <tr class="ParentalLeave">
+                    <td class="tdstrong">@Model.Label("ParentalLeaveOtherParentLeaveStartsOn")</td>
+                    <td>
+                        @Model.Element("ParentalLeaveOtherParentLeaveStartsOn")
+                    </td>
+                </tr>
+                <tr class="ParentalLeave">
+                    <td class="tdstrong">@Model.Label("ParentalLeaveOtherParentLeaveEndsOn")</td>
+                    <td>
+                        @Model.Element("ParentalLeaveOtherParentLeaveEndsOn")
+                    </td>
+                </tr>
+
+                <tr class="Holiday">
+                    <td class="tdstrong" colspan="2">
+                        <h5>@Model.Translate("Holiday")</h5>
+                    </td>
+                </tr>
+                <tr class="Holiday">
+                    <td class="tdstrong">@Model.Label("HolidayStartDate")</td>
+                    <td>
+                        @Model.Element("HolidayStartDate")
+                    </td>
+                </tr>
+                <tr class="Holiday">
+                    <td class="tdstrong">@Model.Label("HolidayEndDate")</td>
+                    <td>
+                        @Model.Element("HolidayEndDate")
+                    </td>
+                </tr>
+                <tr class="Holiday">
+                    <td class="tdstrong">@Model.Label("HolidayDays")</td>
+                    <td>
+                        @Model.Element("HolidayDays")
+                    </td>
+                </tr>
+                <tr class="Holiday">
+                    <td class="tdstrong">@Model.Label("HolidayDaysWithoutCS")</td>
+                    <td>
+                        @Model.Element("HolidayDaysWithoutCS")
+                    </td>
+                </tr>
+
+
+                <tr class="AdditionalAllowance">
+                    <td class="tdstrong" colspan="2">
+                        <h5>@Model.Translate("Additional Allowances (Tillegg)")</h5>
+                    </td>
+                </tr>
+                <tr class="AdditionalAllowance">
+                    <td class="tdstrong">@Model.Label("UBOne")</td>
+                    <td>
+                        @Model.Element("UBOne")
+                    </td>
+                </tr>
+                <tr class="AdditionalAllowance">
+                    <td class="tdstrong">@Model.Label("UBTwo")</td>
+                    <td>
+                        @Model.Element("UBTwo")
+                    </td>
+                </tr>
+                <tr class="AdditionalAllowance">
+                    <td class="tdstrong">@Model.Label("UBThree")</td>
+                    <td>
+                        @Model.Element("UBThree")
+                    </td>
+                </tr>
+                <tr class="AdditionalAllowance">
+                    <td class="tdstrong">@Model.Label("50PercentNights")</td>
+                    <td>
+                        @Model.Element("50PercentNights")
+                    </td>
+                </tr>
+                <tr class="AdditionalAllowance">
+                    <td class="tdstrong">@Model.Label("100PercentNights")</td>
+                    <td>
+                        @Model.Element("100PercentNights")
+                    </td>
+                </tr>
+                <tr class="AdditionalAllowance">
+                    <td class="tdstrong">@Model.Label("50PercentOvertime")</td>
+                    <td>
+                        @Model.Element("50PercentOvertime")
+                    </td>
+                </tr>
+                <tr class="AdditionalAllowance">
+                    <td class="tdstrong">@Model.Label("100PercentOvertime")</td>
+                    <td>
+                        @Model.Element("100PercentOvertime")
+                    </td>
+                </tr>
+                <tr class="AdditionalAllowance">
+                    <td class="tdstrong">@Model.Label("EveningAllowance")</td>
+                    <td>
+                        @Model.Element("EveningAllowance")
+                    </td>
+                </tr>
+                <tr class="AdditionalAllowance">
+                    <td class="tdstrong">@Model.Label("WeekendAllowance")</td>
+                    <td>
+                        @Model.Element("WeekendAllowance")
+                    </td>
+                </tr>
+                <tr class="AdditionalAllowance">
+                    <td class="tdstrong">@Model.Label("CrossCharge")</td>
+                    <td>
+                        @Model.Element("CrossCharge", "CrossCharge")
+                    </td>
+                </tr>
+                <tr class="AdditionalAllowance">
+                    <td class="tdstrong">@Model.Label("WorkedCompany")</td>
+                    <td>
+                        @Model.Element("WorkedCompany")
+                    </td>
+                </tr>
+                <tr class="AdditionalAllowance">
+                    <td class="tdstrong">@Model.Label("WorkedBusinessUnit")</td>
+                    <td>
+                        @Model.Element("WorkedBusinessUnit")
+                    </td>
+                </tr>
+                <tr class="AdditionalAllowance">
+                    <td class="tdstrong">@Model.Label("WorkedFunction")</td>
+                    <td>
+                        @Model.Element("WorkedFunction")
+                    </td>
+                </tr>
+                <tr class="AdditionalAllowance">
+                    <td class="tdstrong">@Model.Label("WorkedDepartment")</td>
+                    <td>
+                        @Model.Element("WorkedDepartment")
+                    </td>
+                </tr>
+                <tr class="AdditionalAllowance">
+                    <td class="tdstrong">@Model.Label("WorkedCostCentre")</td>
+                    <td>
+                        @Model.Element("WorkedCostCentre")
+                    </td>
+                </tr>
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="absence@(i.ToString())" id="absence@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Absences") @(i.ToString())</h4>
+                        </td>
+                    </tr>
+                    <tr class="absence@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AbsenceType" + i.ToString())</td>
+                        <td data-i="@i.ToString()">
+                            @Model.Element("AbsenceType" + i.ToString(), "AbsenceType")</td>
+                    </tr>
+                    <tr class="absence@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("ChangeType" + i.ToString())</td>
+                        <td>
+                            @Model.Element("ChangeType" + i.ToString(), "ChangeType")</td>
+                    </tr>
+                    <tr class="absence@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AbsenceStartDate" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AbsenceStartDate" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AbsenceEndDate" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AbsenceEndDate" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("AbsenceHours" + i.ToString())</td>
+                        <td>
+                            @Model.Element("AbsenceHours" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) Illness@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h5>@Model.Translate("Self-declared illness - Sick Child/Sick Nanny") @(i.ToString())</h5>
+                        </td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) Illness@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("IllnessAbsenceStartsOn" + i.ToString())</td>
+                        <td>
+                            @Model.Element("IllnessAbsenceStartsOn" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) Illness@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("IllnessAbsenceEndsOn" + i.ToString())</td>
+                        <td>
+                            @Model.Element("IllnessAbsenceEndsOn" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) Illness@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("IllnessChildsFirstName" + i.ToString())</td>
+                        <td>
+                            @Model.Element("IllnessChildsFirstName" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) Illness@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("IllnessChildsLastName" + i.ToString())</td>
+                        <td>
+                            @Model.Element("IllnessChildsLastName" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) Illness@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("IllnessChildsDateOfBirth" + i.ToString())</td>
+                        <td>
+                            @Model.Element("IllnessChildsDateOfBirth" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) Illness@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("IllnessOnlyChildCarer" + i.ToString())</td>
+                        <td>
+                            @Model.Element("IllnessOnlyChildCarer" + i.ToString())</td>
+                    </tr>
+                    
+                    <tr class="absence@(i.ToString()) SickLeave@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h5>@Model.Translate("Sick leave") @(i.ToString())</h5>
+                        </td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) SickLeave@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("SickLeaveAbsenceStartsOn" + i.ToString())</td>
+                        <td>
+                            @Model.Element("SickLeaveAbsenceStartsOn" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) SickLeave@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("SickLeaveAbsenceEndsOn" + i.ToString())</td>
+                        <td>
+                            @Model.Element("SickLeaveAbsenceEndsOn" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) SickLeave@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("SickLeavePercentageOfSickness" + i.ToString())</td>
+                        <td>
+                            @Model.Element("SickLeavePercentageOfSickness" + i.ToString())</td>
+                    </tr>
+                    
+                    
+                    <tr class="absence@(i.ToString()) ParentalLeave@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h5>@Model.Translate("Parental leave") @(i.ToString())</h5>
+                        </td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) ParentalLeave@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("ParentalLeaveAbsenceStartsOn" + i.ToString())</td>
+                        <td>
+                            @Model.Element("ParentalLeaveAbsenceStartsOn" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) ParentalLeave@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("ParentalLeaveAbsenceEndsOn" + i.ToString())</td>
+                        <td>
+                            @Model.Element("ParentalLeaveAbsenceEndsOn" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) ParentalLeave@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("ParentalLeaveOtherParentLeaveStartsOn" + i.ToString())</td>
+                        <td>
+                            @Model.Element("ParentalLeaveOtherParentLeaveStartsOn" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) ParentalLeave@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("ParentalLeaveOtherParentLeaveEndsOn" + i.ToString())</td>
+                        <td>
+                            @Model.Element("ParentalLeaveOtherParentLeaveEndsOn" + i.ToString())</td>
+                    </tr>
+                    
+                    
+                    
+                    <tr class="absence@(i.ToString()) Holiday@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h5>@Model.Translate("Holiday") @(i.ToString())</h5>
+                        </td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) Holiday@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("HolidayStartDate" + i.ToString())</td>
+                        <td>
+                            @Model.Element("HolidayStartDate" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) Holiday@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("HolidayEndDate" + i.ToString())</td>
+                        <td>
+                            @Model.Element("HolidayEndDate" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) Holiday@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("HolidayDays" + i.ToString())</td>
+                        <td>
+                            @Model.Element("HolidayDays" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) Holiday@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("HolidayDaysWithoutCS" + i.ToString())</td>
+                        <td>
+                            @Model.Element("HolidayDaysWithoutCS" + i.ToString())</td>
+                    </tr>
+                    
+                    
+                    
+                    
+                    <tr class="absence@(i.ToString()) AdditionalAllowance@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h5>@Model.Translate("Additional Allowances (Tillegg)") @(i.ToString())</h5>
+                        </td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) AdditionalAllowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("UBOne" + i.ToString())</td>
+                        <td>
+                            @Model.Element("UBOne" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) AdditionalAllowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("UBTwo" + i.ToString())</td>
+                        <td>
+                            @Model.Element("UBTwo" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) AdditionalAllowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("UBThree" + i.ToString())</td>
+                        <td>
+                            @Model.Element("UBThree" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) AdditionalAllowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("50PercentNights" + i.ToString())</td>
+                        <td>
+                            @Model.Element("50PercentNights" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) AdditionalAllowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("100PercentNights" + i.ToString())</td>
+                        <td>
+                            @Model.Element("100PercentNights" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) AdditionalAllowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("50PercentOvertime" + i.ToString())</td>
+                        <td>
+                            @Model.Element("50PercentOvertime" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) AdditionalAllowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("100PercentOvertime" + i.ToString())</td>
+                        <td>
+                            @Model.Element("100PercentOvertime" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) AdditionalAllowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("EveningAllowance" + i.ToString())</td>
+                        <td>
+                            @Model.Element("EveningAllowance" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) AdditionalAllowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("WeekendAllowance" + i.ToString())</td>
+                        <td>
+                            @Model.Element("WeekendAllowance" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) AdditionalAllowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("CrossCharge" + i.ToString())</td>
+                        <td>
+                            @Model.Element("CrossCharge" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) AdditionalAllowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("WorkedCompany" + i.ToString())</td>
+                        <td>
+                            @Model.Element("WorkedCompany" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) AdditionalAllowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("WorkedBusinessUnit" + i.ToString())</td>
+                        <td>
+                            @Model.Element("WorkedBusinessUnit" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) AdditionalAllowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("WorkedFunction" + i.ToString())</td>
+                        <td>
+                            @Model.Element("WorkedFunction" + i.ToString())</td>
+                    </tr>
+                    <tr class="absence@(i.ToString()) AdditionalAllowance@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("WorkedDepartment" + i.ToString())</td>
+                        <td>
+                            @Model.Element("WorkedDepartment" + i.ToString())</td>
+                    </tr>
+                }
+                <tr id="addAbsenceTrr">
+                    <td colspan="2">
+                        @Model.Element("AbsencesMulti")
+                        <a id="addAbsence" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Absence")</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
+</div>
+<script>
+
+    var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');
+    var isTabReadOnly = "@Model.ReadOnlyTab("#Absences")";
+
+    if ("@Model.ReadOnlyTab("#Absences")" == 'False' && lockedbyUserGroup == 'False') {
+        $(function () {
+            for (var i = 0; i < '@FormLibConstants.FormField.MultipleEntrySectionsNr'; i++) {
+                var id = "";
+                if (i != 1) {
+                    id = i;
+                }
+                initOrgDataSection($('#WorkedCompany' + id), $('#WorkedBusinessUnit' + id), $('#WorkedFunction' + id), $('#WorkedDepartment' + id), $('#WorkedCostCentre' + id));
+
+            };
+
+            for (var j = 1; j <= $('#AbsencesMulti').val() ; j++) {
+                var id = "";
+                if (j != 1) {
+                    id = j;
+                }
+                LockOnAbsenceType(id);
+                LockDateOnAbsenceType(id);
+                HideOnAbsenceType(id);
+            };
+
+            $('.AbsenceType').change(function () {
+                var $me = $(this);
+                var dataid = $me.parent().data("i");
+                if (!dataid) {
+                    dataid = "";
+                }
+                LockOnAbsenceType(dataid);
+                LockDateOnAbsenceType(dataid);
+                HideOnAbsenceType(dataid);
+            });
+        });
+        var country = "norway";
+
+        var LockOnAbsenceType = function (dataid) {
+            var $BaseSelector = $('#AbsenceType' + dataid);
+            var $LockSelector = $('#AbsenceEndDate' + dataid);
+            GetXMLandCallback(country, "Locks/AbsenceType.xml", SetLock, $BaseSelector, $LockSelector, lockedbyUserGroup, isTabReadOnly);
+        };
+
+        // S.G : To set the date picker disable as well for  date fields.
+        var LockDateOnAbsenceType = function (dataid) {
+            var $BaseSelector = $('#AbsenceType' + dataid);
+            var $LockSelector = $('#date_AbsenceEndDate' + dataid);
+            GetXMLandCallback(country, "Locks/AbsenceType.xml", SetLock, $BaseSelector, $LockSelector, lockedbyUserGroup, isTabReadOnly);
+        };
+
+        var HideOnAbsenceType = function (dataid) {
+            GetXMLandCallback(country, "Hide/AbsenceType.xml", SetHideAndClear, $('#AbsenceType' + dataid), null, dataid);
+        };
+    }
+</script>

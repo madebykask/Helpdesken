@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+  <name>AllowancesNetGross</name>
+  <dependent>
+    <selected>Telephone Allowance</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Building Supplement</selected>
+    <show>Gross</show>
+  </dependent>
+  <dependent>
+    <selected>Expense Allowance</selected>
+    <show>Gross</show>
+  </dependent>
+  <dependent>
+    <selected>Comp.Serv.Allowance</selected>
+    <show>Gross</show>
+  </dependent>
+  <dependent>
+    <selected>Oberservation Allowance</selected>
+    <show>Gross</show>
+  </dependent>
+  <dependent>
+    <selected>Travel Allowance per month</selected>
+    <show>Net</show>
+  </dependent>
+  <dependent>
+    <selected>WGA Payment (UVW)</selected>
+    <show>Gross</show>
+  </dependent>
+  <dependent>
+    <selected>WGA Supplement Payment</selected>
+    <show>Gross</show>
+  </dependent>
+  <dependent>
+    <selected>Consignment Fee</selected>
+    <show>Gross</show>
+  </dependent>
+  <dependent>
+    <selected>ZKV Contribution ER N-G</selected>
+    <show>Gross</show>
+  </dependent>
+  <dependent>
+    <selected>ZVW Contribution ER</selected>
+    <show>Gross</show>
+  </dependent>
+  <dependent>
+    <selected>Miscellaneous Pay N-G</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Miscellaneous Payment</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Rent Wage in Kind ER</selected>
+    <show>Gross</show>
+  </dependent>
+  <dependent>
+    <selected>Rent of house</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Redecoration Allowance</selected>
+    <show></show>
+  </dependent>
+</predefined>

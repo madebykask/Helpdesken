@@ -5,5 +5,7 @@
         public int AncestorId { get; set; }
 
         public int DescendantId { get; set; }
+
+		public bool Independent { get; set; }
     }
 }

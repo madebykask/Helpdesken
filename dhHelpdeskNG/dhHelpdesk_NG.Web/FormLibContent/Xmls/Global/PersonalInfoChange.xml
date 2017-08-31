@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/PersonalInfoChangeState.xml">
+  <!ENTITY pre_country SYSTEM "Templates/Data_Country.xml">
+]>
+
+<form id="44" guid="ABDB20FB-57F1-41F2-8E91-EB35DDCCFB75" customerId="28">
+  &languages;
+  &regexs;
+  &state;
+  <fields>
+    <!--Tab Service Request Details-->
+    <tab name="#ServiceRequestDetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
+        
+      </element>
+      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
+      <element name="LastName" type="text" label="Co-Worker Last name" mandatory="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1"></element>
+      <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1"></element>
+      <element name="Company" type="text" label="Company"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="ServiceArea" type="text" label="Function"></element>
+      <element name="Department" type="text" label="Department"></element>
+      <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" mandatory="1" default="No">
+        <options>
+          <option value=""></option>
+          <option value ="No">No</option>
+          <option value ="Yes">Yes</option>
+        </options>
+      </element>
+      <element name="ChangeValidFrom" type="date" format="dd.MM.yyyy" mandatory="1" label="Change valid from:">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ChangeValidTo" type="date" format="dd.MM.yyyy" mandatory="1" default="31.12.9999" label="Change valid to:">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
+        <options>
+          <option value =""></option>
+          <option value ="Urgent">Urgent</option>
+          <option value ="Standard">Standard</option>
+        </options>
+      </element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+    </tab>
+    <!--Personal Information Tab-->
+    <tab name="#Personal" label="Personal Information">
+      <element type="text" name="TelephoneNumber" label="Telephone Number"></element>
+      <element type="text" name="ContactEMailAddress" label="Contact e-mail address"></element>
+
+      <!--ADDRESS HERE ACCORDING TO  PERMANENT ADDRESS ALREADY UNDER INITIAL. NECESSARY HERE?-->
+      <element type="text" name="PermanentAddressLine1" label="Address line 1" ></element>
+      <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
+      <element type="text" name="PermanentPostalCode" label="Postal code" ></element>
+      <element type="text" name="PermanentCity" label="City" ></element>
+      <element type="search-select" name="PermanentCountry" label="Country"  default="Sweden">
+        &pre_country;
+      </element>
+
+      <element type="text" name="MailingAddressLine1" label="Address line 1" ></element>
+      <element type="text" name="MailingAddressLine2" label="Address line 2"></element>
+      <element type="text" name="MailingPostalCode" label="Postal code" ></element>
+      <element type="text" name="MailingCity" label="City" ></element>
+      <element type="search-select" name="MailingCountry" label="Country" default="Sweden">
+        &pre_country;
+      </element>
+
+      <element type="text" name="EmergencyAddressLine1" label="Address line 1" ></element>
+      <element type="text" name="EmergencyAddressLine2" label="Address line 2"></element>
+      <element type="text" name="EmergencyPostalCode" label="Postal code" ></element>
+      <element type="text" name="EmergencyCity" label="City" ></element>
+      <element type="search-select" name="EmergencyCountry" label="Country" default="Sweden">
+        &pre_country;
+      </element>
+      <element type="text" name="EmergencyContactRelationship" label="Emergency Contact/Relationship">
+        
+      </element>
+      
+      
+      
+      <!--Family Member/Dependents-->
+      <element type="hidden" name="FamilyMembers" default="1"></element>
+      <element type="select" name="FamilyMember" label="Family Member">
+        <options>
+          <option value=""></option>
+          <option value="Child">Child</option>
+          <option value="Spouse">Spouse</option>
+          <option value="Father">Father</option>
+          <option value="Mother">Mother</option>
+        </options>
+      </element>
+      <element type="text" name="FamilyMemberLastName" label="Last Name"></element>
+      <element type="text" name="FamilyMemberFirstName" label="First Name"></element>
+      <element type="select" name="FamilyMemberGender" label="Gender">
+        <options>
+          <option value=""></option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </options>
+      </element>
+      <element type="date" name="FamilyMemberDateOfBirth" label="Date of Birth" format="dd.MM.yyyy"></element>
+
+      <element type="select" name="FamilyMember2" label="Family Member">
+        <options>
+          <option value=""></option>
+          <option value="Child">Child</option>
+          <option value="Spouse">Spouse</option>
+          <option value="Father">Father</option>
+          <option value="Mother">Mother</option>
+        </options>
+      </element>
+      <element type="text" name="FamilyMemberLastName2" label="Last Name"></element>
+      <element type="text" name="FamilyMemberFirstName2" label="First Name"></element>
+      <element type="select" name="FamilyMemberGender2" label="Gender">
+        <options>
+          <option value=""></option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </options>
+      </element>
+      <element type="date" name="FamilyMemberDateOfBirth2" label="Date of Birth" format="dd.MM.yyyy"></element>
+
+      <element type="select" name="FamilyMember3" label="Family Member">
+        <options>
+          <option value=""></option>
+          <option value="Child">Child</option>
+          <option value="Spouse">Spouse</option>
+          <option value="Father">Father</option>
+          <option value="Mother">Mother</option>
+        </options>
+      </element>
+      <element type="text" name="FamilyMemberLastName3" label="Last Name"></element>
+      <element type="text" name="FamilyMemberFirstName3" label="First Name"></element>
+      <element type="select" name="FamilyMemberGender3" label="Gender">
+        <options>
+          <option value=""></option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </options>
+      </element>
+      <element type="date" name="FamilyMemberDateOfBirth3" label="Date of Birth" format="dd.MM.yyyy"></element>
+
+      <element type="select" name="FamilyMember4" label="Family Member">
+        <options>
+          <option value=""></option>
+          <option value="Child">Child</option>
+          <option value="Spouse">Spouse</option>
+          <option value="Father">Father</option>
+          <option value="Mother">Mother</option>
+        </options>
+      </element>
+      <element type="text" name="FamilyMemberLastName4" label="Last Name"></element>
+      <element type="text" name="FamilyMemberFirstName4" label="First Name"></element>
+      <element type="select" name="FamilyMemberGender4" label="Gender">
+        <options>
+          <option value=""></option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </options>
+      </element>
+      <element type="date" name="FamilyMemberDateOfBirth4" label="Date of Birth" format="dd.MM.yyyy"></element>
+
+      <element type="select" name="FamilyMember5" label="Family Member">
+        <options>
+          <option value=""></option>
+          <option value="Child">Child</option>
+          <option value="Spouse">Spouse</option>
+          <option value="Father">Father</option>
+          <option value="Mother">Mother</option>
+        </options>
+      </element>
+      <element type="text" name="FamilyMemberLastName5" label="Last Name"></element>
+      <element type="text" name="FamilyMemberFirstName5" label="First Name"></element>
+      <element type="select" name="FamilyMemberGender5" label="Gender">
+        <options>
+          <option value=""></option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </options>
+      </element>
+      <element type="date" name="FamilyMemberDateOfBirth5" label="Date of Birth" format="dd.MM.yyyy"></element>
+
+      <!--Global mobility Employee Documents-->
+      <element type="hidden" name="EmployeeDocuments" default="1"></element>
+      <element type="text" name="EmployeeDocumentType" label="Document Type"></element>
+      <element type="search-select" name="EmployeeDocumentCountry" label="Country" default="Sweden">
+        &pre_country;
+      </element>
+      <element type="text" name="EmployeeDocumentNo" label="Document No"></element>
+      <element type="date" name="EmployeeDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="EmployeeDocumentIssuePlace" label="Issue Place"></element>
+      <element type="search-select" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country" default="Sweden">
+        &pre_country;
+      </element>
+
+      <element type="text" name="EmployeeDocumentType2" label="Document Type"></element>
+      <element type="search-select" name="EmployeeDocumentCountry2" label="Country" default="Sweden">
+        &pre_country;
+      </element>
+      <element type="text" name="EmployeeDocumentNo2" label="Document No"></element>
+      <element type="date" name="EmployeeDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="EmployeeDocumentIssuePlace2" label="Issue Place"></element>
+      <element type="search-select" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place Country" default="Sweden">
+        &pre_country;
+      </element>
+
+      <element type="text" name="EmployeeDocumentType3" label="Document Type"></element>
+      <element type="search-select" name="EmployeeDocumentCountry3" label="Country" default="Sweden">
+        &pre_country;
+      </element>
+      <element type="text" name="EmployeeDocumentNo3" label="Document No"></element>
+      <element type="date" name="EmployeeDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="EmployeeDocumentIssuePlace3" label="Issue Place"></element>
+      <element type="search-select" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place Country" default="Sweden">
+        &pre_country;
+      </element>
+
+      <element type="text" name="EmployeeDocumentType4" label="Document Type"></element>
+      <element type="search-select" name="EmployeeDocumentCountry4" label="Country" default="Sweden">
+        &pre_country;
+      </element>
+      <element type="text" name="EmployeeDocumentNo4" label="Document No"></element>
+      <element type="date" name="EmployeeDocumentIssueDate4" label="Issue Date" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="EmployeeDocumentIssuePlace4" label="Issue Place"></element>
+      <element type="search-select" name="EmployeeDocumentIssuePlaceCountry4" label="Issue Place Country" default="Sweden">
+        &pre_country;
+      </element>
+
+      <element type="text" name="EmployeeDocumentType5" label="Document Type"></element>
+      <element type="search-select" name="EmployeeDocumentCountry5" label="Country" default="Sweden">
+        &pre_country;
+      </element>
+      <element type="text" name="EmployeeDocumentNo5" label="Document No"></element>
+      <element type="date" name="EmployeeDocumentIssueDate5" label="Issue Date" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="EmployeeDocumentIssuePlace5" label="Issue Place"></element>
+      <element type="search-select" name="EmployeeDocumentIssuePlaceCountry5" label="Issue Place Country" default="Sweden">
+        &pre_country;
+      </element>
+
+      <!--Global mobility Dependants-->
+      <element type="hidden" name="DependantFamilyMembers" default="1"></element>
+      <element type="select" name="DependantFamilyMember" label="Dependant Family Member">
+        <options>
+          <option value=""></option>
+          <option value="Spouse">Spouse</option>
+          <option value="Child">Child</option>
+          <option value="Step Child">Step Child</option>
+        </options>
+      </element>
+      <element type="select" name="Accompanying" label="Accompanying">
+        
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>
+      <element type="text" name="DependantsLastName" label="Dependant's Last Name"></element>
+      <element type="text" name="DependantsFirstName" label="Dependant's First Name"></element>
+      <element type="date" name="DependantsDateOfBirth" label="Dependant's Date of birth" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="select" name="DependantFamilyMember2" label="Dependant Family Member">
+        <options>
+          <option value=""></option>
+          <option value="Spouse">Spouse</option>
+          <option value="Child">Child</option>
+          <option value="Step Child">Step Child</option>
+        </options>
+      </element>
+      <element type="select" name="Accompanying2" label="Accompanying">
+        
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>
+      <element type="text" name="DependantsLastName2" label="Dependant's Last Name"></element>
+      <element type="text" name="DependantsFirstName2" label="Dependant's First Name"></element>
+      <element type="date" name="DependantsDateOfBirth2" label="Dependant's Date of birth" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+
+      <element type="select" name="DependantFamilyMember3" label="Dependant Family Member">
+        <options>
+          <option value=""></option>
+          <option value="Spouse">Spouse</option>
+          <option value="Child">Child</option>
+          <option value="Step Child">Step Child</option>
+        </options>
+      </element>
+      <element type="select" name="Accompanying3" label="Accompanying">
+        
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>
+      <element type="text" name="DependantsLastName3" label="Dependant's Last Name"></element>
+      <element type="text" name="DependantsFirstName3" label="Dependant's First Name"></element>
+      <element type="date" name="DependantsDateOfBirth3" label="Dependant's Date of birth" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+
+      <element type="select" name="DependantFamilyMember4" label="Dependant Family Member">
+        <options>
+          <option value=""></option>
+          <option value="Spouse">Spouse</option>
+          <option value="Child">Child</option>
+          <option value="Step Child">Step Child</option>
+        </options>
+      </element>
+      <element type="select" name="Accompanying4" label="Accompanying">
+        
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>
+      <element type="text" name="DependantsLastName4" label="Dependant's Last Name"></element>
+      <element type="text" name="DependantsFirstName4" label="Dependant's First Name"></element>
+      <element type="date" name="DependantsDateOfBirth4" label="Dependant's Date of birth" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+
+      <element type="select" name="DependantFamilyMember5" label="Dependant Family Member">
+        <options>
+          <option value=""></option>
+          <option value="Spouse">Spouse</option>
+          <option value="Child">Child</option>
+          <option value="Step Child">Step Child</option>
+        </options>
+      </element>
+      <element type="select" name="Accompanying5" label="Accompanying">
+        
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>
+      <element type="text" name="DependantsLastName5" label="Dependant's Last Name"></element>
+      <element type="text" name="DependantsFirstName5" label="Dependant's First Name"></element>
+      <element type="date" name="DependantsDateOfBirth5" label="Dependant's Date of birth" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <!--Global Mobility Dependants Documents-->
+      <element type="hidden" name="DependantsDocuments" default="1"></element>
+      <element type="text" name="DependantsDocumentType" label="Document Type"></element>
+      <element type="search-select" name="DependantsDocumentCountry" label="Country" default="Sweden">
+        &pre_country;
+      </element>
+      <element type="text" name="DependantsDocumentNo" label="Document No"></element>
+      <element type="date" name="DependantsDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="DependantsDocumentIssuePlace" label="Issue Place" ></element>
+      <element type="search-select" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="Sweden">
+        &pre_country;
+      </element>
+
+      <element type="text" name="DependantsDocumentType2" label="Document Type"></element>
+      <element type="search-select" name="DependantsDocumentCountry2" label="Country" default="Sweden">
+        &pre_country;
+      </element>
+      <element type="text" name="DependantsDocumentNo2" label="Document No"></element>
+      <element type="date" name="DependantsDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="DependantsDocumentIssuePlace2" label="Issue Place" ></element>
+      <element type="search-select" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="Sweden">
+        &pre_country;
+      </element>
+
+
+      <element type="text" name="DependantsDocumentType3" label="Document Type"></element>
+      <element type="search-select" name="DependantsDocumentCountry3" label="Country" default="Sweden">
+        &pre_country;
+      </element>
+      <element type="text" name="DependantsDocumentNo3" label="Document No"></element>
+      <element type="date" name="DependantsDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="DependantsDocumentIssuePlace3" label="Issue Place" ></element>
+      <element type="search-select" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="Sweden" >
+        &pre_country;
+      </element>
+
+      <element type="text" name="DependantsDocumentType4" label="Document Type"></element>
+      <element type="search-select" name="DependantsDocumentCountry4" label="Country" default="Sweden">
+        &pre_country;
+      </element>
+      <element type="text" name="DependantsDocumentNo4" label="Document No"></element>
+      <element type="date" name="DependantsDocumentIssueDate4" label="Issue Date" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="DependantsDocumentIssuePlace4" label="Issue Place" ></element>
+      <element type="search-select" name="DependantsDocumentIssuePlaceCountry4" label="Issue Place Country" default="Sweden" >
+        &pre_country;
+      </element>
+
+      <element type="text" name="DependantsDocumentType5" label="Document Type"></element>
+      <element type="search-select" name="DependantsDocumentCountry5" label="Country" default="Sweden">
+        &pre_country;
+      </element>
+      <element type="text" name="DependantsDocumentNo5" label="Document No"></element>
+      <element type="date" name="DependantsDocumentIssueDate5" label="Issue Date" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="DependantsDocumentIssuePlace5" label="Issue Place" ></element>
+      <element type="search-select" name="DependantsDocumentIssuePlaceCountry5" label="Issue Place Country" default="Sweden" >
+        &pre_country;
+      </element>
+
+      <!--Bank Account Details-->
+      <element type="hidden" name="BankAccounts" default="1"> </element>
+      <!--<element type="select" name="BankType" label="Bank Type" mandatory="1" default="Main Bank">
+                <options>
+                    <option value="Main Bank">Main Bank</option>
+                    <option value="Other Bank">Other Bank</option>
+                </options>
+            </element>-->
+      <element type="text" name="Payee" label="Payee" ></element>
+      <element type="search-select" name="BankCountry" label="Bank Country"  default="Sweden">
+        &pre_country;
+      </element>
+      <element type="text" name="BankKey" label="Bank Key" ></element>
+      <element type="text" name="AccountNumber" label="Account Number" ></element>
+      <element type="text" name="IBAN" label="IBAN" ></element>
+      <element type="text" name="PaymentCurrency" label="Payment Currency"  default="SEK"></element>
+
+      <!--<element type="select" name="BankType2" label="Bank Type" default="Other Bank">
+                <options>
+                    <option value=""></option>
+                    <option value="Other Bank">Other Bank</option>
+                </options>
+            </element>-->
+      <element type="text" name="Payee2" label="Payee"></element>
+      <element type="search-select" name="BankCountry2" label="Bank Country" default="Sweden">
+        &pre_country;
+      </element>
+      <element type="text" name="BankKey2" label="Bank Key"></element>
+      <element type="text" name="AccountNumber2" label="Account Number"></element>
+      <element type="text" name="IBAN2" label="IBAN"></element>
+      <element type="text" name="PaymentCurrency2" label="Payment Currency" default="SEK">
+        
+      </element>
+      <element type="text" name="OtherBankPercentageOrAmount" label="Other Bank Percentage or Amount">
+
+      </element>
+
+      <!--FISCAL DATA and SOCIAL INSURANCE -->
+      <element type="text" name="TaxInformation" label="Tax Information"></element>
+      <element type="text" name="SocialInsurance" label="Social Insurance"></element>
+      
+      <!--Nationality / Language-->
+      <element type="text" name="Nationality" label="Nationality"></element>
+      <element type="text" name="Language" label="Language"></element>
+
+
+      <!--Education-->
+      <element type="hidden" name="Educations" default="1"></element>
+      <element type="text" name="EducationalEstablishment" label="Educational Establishment"></element>
+      <element type="text" name="InstituteLocation" label="Institute Location"></element>
+      <element type="text" name="Certificate" label="Certificate"></element>
+      <element type="text" name="DurationOfCourse" label="Duration of Course"></element>
+      <element type="text" name="BranchOfStudy" label="Branch of Study"></element>
+
+      <element type="text" name="EducationalEstablishment2" label="Educational Establishment"></element>
+      <element type="text" name="InstituteLocation2" label="Institute Location"></element>
+      <element type="text" name="Certificate2" label="Certificate"></element>
+      <element type="text" name="DurationOfCourse2" label="Duration of Course"></element>
+      <element type="text" name="BranchOfStudy2" label="Branch of Study"></element>
+
+      <element type="text" name="EducationalEstablishment3" label="Educational Establishment"></element>
+      <element type="text" name="InstituteLocation3" label="Institute Location"></element>
+      <element type="text" name="Certificate3" label="Certificate"></element>
+      <element type="text" name="DurationOfCourse3" label="Duration of Course"></element>
+      <element type="text" name="BranchOfStudy3" label="Branch of Study"></element>
+
+      <!--Other Previous employers-->
+      <element type="hidden" name="OtherPreviousEmployers" default="1"></element>
+      <element type="text" name="OtherPreviousEmployer" label="Employer"></element>
+      <element type="text" name="OtherPreviousEmployerCity" label="City"></element>
+      <element type="search-select" name="OtherPreviousEmployerCountry" label="Country"  default="Sweden">
+        &pre_country;
+      </element>
+      <element type="text" name="OtherPreviousEmployerIndustry" label="Industry"></element>
+      <element type="text" name="OtherPreviousEmployerJob" label="Job"></element>
+      <element type="text" name="OtherPreviousEmployerWorkContract" label="Work Contract"></element>
+
+      <element type="text" name="OtherPreviousEmployer2" label="Employer"></element>
+      <element type="text" name="OtherPreviousEmployerCity2" label="City"></element>
+      <element type="search-select" name="OtherPreviousEmployerCountry2" label="Country" default="Sweden">
+        &pre_country;
+      </element>
+      <element type="text" name="OtherPreviousEmployerIndustry2" label="Industry"></element>
+      <element type="text" name="OtherPreviousEmployerJob2" label="Job"></element>
+      <element type="text" name="OtherPreviousEmployerWorkContract2" label="Work Contract"></element>
+
+
+      <element type="text" name="OtherPreviousEmployer3" label="Employer"></element>
+      <element type="text" name="OtherPreviousEmployerCity3" label="City"></element>
+      <element type="search-select" name="OtherPreviousEmployerCountry3" label="Country"  default="Sweden">
+        &pre_country;
+      </element>
+      <element type="text" name="OtherPreviousEmployerIndustry3" label="Industry"></element>
+      <element type="text" name="OtherPreviousEmployerJob3" label="Job"></element>
+      <element type="text" name="OtherPreviousEmployerWorkContract3" label="Work Contract"></element>
+    </tab>    
+  </fields>
+</form>

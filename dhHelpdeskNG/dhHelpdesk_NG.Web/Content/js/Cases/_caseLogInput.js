@@ -62,7 +62,7 @@ function LogInitForm() {
                 $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', true);
             }
             else {
-                $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', true);
+                $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
                 $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', false);
             }
             // set workinggroup id

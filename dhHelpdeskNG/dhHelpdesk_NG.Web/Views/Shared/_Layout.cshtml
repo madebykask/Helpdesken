@@ -4,10 +4,13 @@
 
 <!DOCTYPE html>
 <html>
-    @{
+@{
     var model = Html.MasterModel();
-    
+
     var GlobalSetting = model != null ? model.GlobalSettings.Where(x => x.ApplicationName != null).FirstOrDefault() : null;
+
+    var text = model.CustomerSetting.QuickNewCaseLinkText;
+    var url = model.CustomerSetting.QuickNewCaseLinkUrl;
 }
 <head>
     <meta content="html/text; charset=utf-8" />
@@ -27,359 +30,466 @@
 
     @*Use this to apply changes in tinymce ?cachebuster=123*@
     <script type="text/javascript" src="@Url.Content("~/Content/js/tinymce/tinymce.min.js")"></script>
-	<script type="text/javascript" src="@Url.Content("~/Content/js/tinymce/tinymce.initiate.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/tinymce/tinymce.initiate.js")"></script>
 </head>
 
 <body>
-@Html.AntiForgeryToken()
-@if (model != null && model.CustomerSetting != null && SessionFacade.CurrentUser != null)
-{
+    @Html.AntiForgeryToken()
+    @if (model != null && model.CustomerSetting != null && SessionFacade.CurrentUser != null)
+    {
 
-    <div class="navbar fixed">
-    <div class="navbar-container">
-    <a href="/">
-        <div class="navbar-header pull-left navbar-brand">
-        </div>
-    </a>
-    <div class="navbar-header pull-right">
-    <ul class="nav dh-nav">
-    <li class="orange">
-        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-            <i class="icon-folder-open icon-white"></i><span class="mnudisplay">@Translation.Get("Ärendehanteringsmeny")</span> <i class="icon-chevron-down icon-white"></i>
-        </a>
-        <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-            @if (model.IsCaseHandlingModulesVisible())
-            {
-                if (model.IsCaseVisible())
-                {
-                    <li><a href="@Url.Action("index", "cases", new {area = ""})">
-                            <img src="@Url.Content("~/Content/icons/case.png")"/>
-                            @Translation.Get("Ärendeöversikt")</a>
-                    </li>
-                    <li><a href="@Url.Action("AdvancedSearch", "cases", new {area = "", clearFilters = true})">
-                            <img src="@Url.Content("~/Content/icons/advanced_search.png")"/>
-                            @Translation.Get("Avancerad sökning")</a>
-                    </li>
-                }
-                if (model.IsCaseSolutionVisible())
-                {
-                    <li><a href="@Url.Action("index", "casesolution", new {area = ""})">
-                        <img src="@Url.Content("~/Content/icons/casetemplate.png")"/>
-                        @Translation.Get("Ärendemallar")</a></li>
-                }
-                if (model.IsComputerUserVisible())
-                {
-                    <li><a href="@Url.Action("index", "Notifiers", new {area = ""})">
-                        <img src="@Url.Content("~/Content/icons/notifier.png")"/>
-                        @Translation.Get("Anmälare")</a></li>
-                }
-                if (model.IsChangeManagementVisible() || model.IsProblemVisible() || model.IsProjectVisible())
-                {
-                    <li class="menu-divide-border"></li>
-                }
-                if (model.IsChangeManagementVisible())
-                {
+        <div class="navbar fixed">
+            <div class="navbar-container">
+                <a href="/">
+                    <div class="navbar-header pull-left navbar-brand">
+                    </div>
+                </a>
+                <div class="navbar-header pull-right">
+                    <ul class="nav dh-nav">
+                        @if (model.CustomerSetting.ShowQuickNewCaseLink == 1)
+                        {
+                            <li class="newcase">
+
+
+                                <a href=@url target="_blank">
+                                    <span>
+                                        @text
+                                    </span>
+                                </a>
+                            </li>
+                        }
+                        <li class="orange">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <i class="icon-folder-open icon-white"></i><span class="mnudisplay">@Translation.Get("Ärendehanteringsmeny")</span> <i class="icon-chevron-down icon-white"></i>
+                            </a>
+                            <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+                                @if (model.IsCaseHandlingModulesVisible())
+                                {
+                                    if (model.IsCaseVisible())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("index", "cases", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/case.png")" />
+                                                @Translation.Get("Ärendeöversikt")
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("AdvancedSearch", "cases", new { area = "", clearFilters = true })">
+                                                <img src="@Url.Content("~/Content/icons/advanced_search.png")" />
+                                                @Translation.Get("Avancerad sökning")
+                                            </a>
+                                        </li>
+                                    }
+                                    if (model.IsCaseSolutionVisible())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("index", "casesolution", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/casetemplate.png")" />
+                                                @Translation.Get("Ärendemallar")
+                                            </a>
+                                        </li>
+                                    }
+                                    if (model.IsComputerUserVisible())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("index", "Notifiers", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/notifier.png")" />
+                                                @Translation.Get("Anmälare")
+                                            </a>
+                                        </li>
+                                    }
+                                    if (model.IsChangeManagementVisible() || model.IsProblemVisible() || model.IsProjectVisible())
+                                    {
+                                        <li class="menu-divide-border"></li>
+                                    }
+                                    if (model.IsChangeManagementVisible())
+                                    {
                     <!-- TODO finns inställningar på användare tblUsers_tblUserRole -->
-                    <li><a href="@Url.Action("index", "changes", new {area = ""})">
-                        <img src="@Url.Content("~/Content/icons/changes.png")"/>
-                        @Translation.Get("Ändringshantering")</a></li>
-                }
+                                        <li>
+                                            <a href="@Url.Action("index", "changes", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/changes.png")" />
+                                                @Translation.Get("Ändringshantering")
+                                            </a>
+                                        </li>
+                                    }
 
-                if (model.IsProblemVisible())
-                {
-                    <li><a href="@Url.Action("Index", "Problems", new {area = ""})">
-                        <img src="@Url.Content("~/Content/icons/problem.png")"/>
-                        @Translation.Get("Problem")</a></li>
-                }
-
-
-                if (model.IsProjectVisible())
-                {
-                    <li><a href="@Url.Action("Index", "Projects", new {area = ""})">
-                        <img src="@Url.Content("~/Content/icons/project.png")" alt="project"/>
-                        @Translation.Get("Projekt")</a></li>
-                }
-
-            }
-            <li></li>
-        </ul>
-    </li>
-    @if (model.IsReportsLogsModulesVisible())
-    {
-        <li class="green">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                <i class="icon-signal icon-white"></i><span class="mnudisplay">@Translation.Get("Rapportmeny")</span> <i class="icon-chevron-down icon-white"></i>
-            </a>
-            <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                @if (model.IsReportVisible())
-                {
-                    <li><a href="@Url.Action("Index", "Report", new {area = "Reports"})">
-                        <img src="@Url.Content("~/Content/icons/reports.png")"/>
-                        @Translation.Get("Rapporter")</a></li>
-                }
-                @if (model.IsDailyReportVisible())
-                {
-                    <li><a href="@Url.Action("index", "dailyreport", new {area = ""})">
-                        <img src="@Url.Content("~/Content/icons/dailyreport.png")"/>
-                        @Translation.Get("Dagrapport")</a></li>
-                }
-                @if (model.IsOperationLogVisible())
-                {
-                    <li><a href="@Url.Action("index", "operationlog", new {area = ""})">
-                        <img src="@Url.Content("~/Content/icons/operationlog.png")"/>
-                        @Translation.Get("Driftlogg")</a></li>
-                }
-                <li></li>
-            </ul>
-        </li>
-    }
-    @if (model.IsModulesVisible())
-    {
-        <li class="purple">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                <i class="icon-bullhorn icon-white"></i>
-                <span class="mnudisplay">@Translation.Get("Infomeny")</span>
-                <i class="icon-chevron-down icon-white"></i>
-            </a>
-            <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                @if (model.IsBulletinBoardVisible())
-                {
-                    <li>
-                        <a href="@Url.Action("index", "bulletinboard", new {area = ""})">
-                            <img src="@Url.Content("~/Content/icons/bulletinboard.png")"/>
-                            @Translation.Get("Anslagstavla")
-                        </a>
-                    </li>
-                }
-                @if (model.IsFaqVisible())
-                {
-                    <li><a href="@Url.Action("index", "faq", new {area = ""})">
-                        <img src="@Url.Content("~/Content/icons/faq.png")"/>
-                        @Translation.Get("FAQ")</a></li>
-                }
-                @if (model.IsCalendarVisible())
-                {
-                    <li><a href="@Url.Action("index", "calendar", new {area = ""})">
-                        <img src="@Url.Content("~/Content/icons/news.png")"/>
-                        @Translation.Get("Aktuellt")</a></li>
-                }
-
-                @if (model.IsQuestionnaireVisible())
-                {
-                    <li><a href="@Url.Action("index", "questionnaire", new {area = ""})">
-                        <img src="@Url.Content("~/Content/icons/questionnaire.png")"/>
-                        @Translation.Get("Enkät")</a></li>
-                }
-
-                @if (model.IsDocumentVisible())
-                {
-                    <li><a href="@Url.Action("index", "document", new {area = ""})">
-                        <img src="@Url.Content("~/Content/icons/documenthandling.png")"/>
-                        @Translation.Get("Dokumenthantering")</a></li>
-                }
-                <li></li>
-            </ul>
-        </li>
-    }
+                                    if (model.IsProblemVisible())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("Index", "Problems", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/problem.png")" />
+                                                @Translation.Get("Problem")
+                                            </a>
+                                        </li>
+                                    }
 
 
-    @if (model.IsSettingsModulesVisible())
-    {
-        <li class="pink">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                <i class="icon-wrench icon-white"></i>
-                <span class="mnudisplay">@Translation.Get("Tilläggsmoduler")</span>
-                <i class="icon-chevron-down icon-white"></i>
-            </a>
-            <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                @if (model.IsOrderVisible())
-                {
-                    <li><a href="@Url.Action("Index", "Orders", new {area = "Orders"})">
-                        <img src="@Url.Content("~/Content/icons/order.png")"/>
-                        @Translation.Get("Beställningar")</a></li>
-                }
-                @*@if (model.IsAccountVisible())
-                {    
-                    <li><a href="@Url.Action("Index", "Orders", new { area = "OrderAccounts" })">
-                        <img src="@Url.Content("~/Content/icons/orderaccount.png")" />
-                        @Translation.Get("Beställning kontobehörighet")</a></li>
-                }*@
-                @if (model.IsCheckListVisuble())
-                {
-                    <li><a href="@Url.Action("index", "checklist", new {area = ""})">
-                        <img src="@Url.Content("~/Content/icons/checklist.png")"/>
-                        @Translation.Get("Checklista")</a></li>
-                }
+                                    if (model.IsProjectVisible())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("Index", "Projects", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/project.png")" alt="project" />
+                                                @Translation.Get("Projekt")
+                                            </a>
+                                        </li>
+                                    }
+
+                                }
+                                <li></li>
+                            </ul>
+                        </li>
+                        @if (model.IsReportsLogsModulesVisible())
+                        {
+                            <li class="green">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <i class="icon-signal icon-white"></i><span class="mnudisplay">@Translation.Get("Rapportmeny")</span> <i class="icon-chevron-down icon-white"></i>
+                                </a>
+                                <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+                                    @if (model.IsReportVisible())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("Index", "Report", new { area = "Reports" })">
+                                                <img src="@Url.Content("~/Content/icons/reports.png")" />
+                                                @Translation.Get("Rapporter")
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (model.IsDailyReportVisible())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("index", "dailyreport", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/dailyreport.png")" />
+                                                @Translation.Get("Dagrapport")
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (model.IsOperationLogVisible())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("index", "operationlog", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/operationlog.png")" />
+                                                @Translation.Get("Driftlogg")
+                                            </a>
+                                        </li>
+                                    }
+                                    <li></li>
+                                </ul>
+                            </li>
+                        }
+                        @if (model.IsModulesVisible())
+                        {
+                            <li class="purple">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <i class="icon-bullhorn icon-white"></i>
+                                    <span class="mnudisplay">@Translation.Get("Infomeny")</span>
+                                    <i class="icon-chevron-down icon-white"></i>
+                                </a>
+                                <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+                                    @if (model.IsBulletinBoardVisible())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("index", "bulletinboard", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/bulletinboard.png")" />
+                                                @Translation.Get("Anslagstavla")
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (model.IsFaqVisible())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("index", "faq", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/faq.png")" />
+                                                @Translation.Get("FAQ")
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (model.IsCalendarVisible())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("index", "calendar", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/news.png")" />
+                                                @Translation.Get("Aktuellt")
+                                            </a>
+                                        </li>
+                                    }
+
+                                    @if (model.IsQuestionnaireVisible())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("index", "questionnaire", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/questionnaire.png")" />
+                                                @Translation.Get("Enkät")
+                                            </a>
+                                        </li>
+                                    }
+
+                                    @if (model.IsDocumentVisible())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("index", "document", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/documenthandling.png")" />
+                                                @Translation.Get("Dokumenthantering")
+                                            </a>
+                                        </li>
+                                    }
+                                    <li></li>
+                                </ul>
+                            </li>
+                        }
 
 
-                @if (model.IsInventoryVisible())
-                {
-                    <li><a href="@Url.Action("Index", "Workstation", new {area = "Inventory"})">
-                        <img src="@Url.Content("~/Content/icons/inventory.png")"/>
-                        @Translation.Get("Inventarier")</a></li>
-                }
+                        @if (model.IsSettingsModulesVisible())
+                        {
+                            <li class="pink">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <i class="icon-wrench icon-white"></i>
+                                    <span class="mnudisplay">@Translation.Get("Tilläggsmoduler")</span>
+                                    <i class="icon-chevron-down icon-white"></i>
+                                </a>
+                                <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+                                    @if (model.IsOrderVisible())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("Index", "Orders", new { area = "Orders" })">
+                                                <img src="@Url.Content("~/Content/icons/order.png")" />
+                                                @Translation.Get("Beställningar")
+                                            </a>
+                                        </li>
+                                    }
+                                    @*@if (model.IsAccountVisible())
+                                        {
+                                            <li><a href="@Url.Action("Index", "Orders", new { area = "OrderAccounts" })">
+                                                <img src="@Url.Content("~/Content/icons/orderaccount.png")" />
+                                                @Translation.Get("Beställning kontobehörighet")</a></li>
+                                        }*@
+                                    @if (model.IsCheckListVisuble())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("index", "checklist", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/checklist.png")" />
+                                                @Translation.Get("Checklista")
+                                            </a>
+                                        </li>
+                                    }
 
-                @if (model.IsLicenseVisible())
-                {
-                    <li><a href="@Url.Action("Index", "Products", new {area = "Licenses"})">
-                        <img src="@Url.Content("~/Content/icons/Licens.png")" alt="license"/>
-                        @Translation.Get("Licenshantering")</a></li>
-                }
 
-                @*@if (model.IsContractVisible())
-                {
-                    <li><a href="@Url.Action("Index", "Contracts", new {area = ""})">
-                        <img src="@Url.Content("~/Content/icons/deal.png")"/>
-                        @Translation.Get("Avtal")</a></li>
-                }*@
-				@if (model.IsInvoicesVisible())
-				{
-					<li>
-						<a href="@Url.Action(MvcInvoicesUrlName.Overview.Index, MvcInvoicesUrlName.Overview.Controller, new {area = MvcInvoicesUrlName.Name})">
-							<img src="@Url.Content("~/Content/icons/order.png")" />
-							@Translation.Get("Fakturering")
-						</a>
-					</li>
-				}
-                <li></li>
-            </ul>
-        </li>
-    }
+                                    @if (model.IsInventoryVisible())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("Index", "Workstation", new { area = "Inventory" })">
+                                                <img src="@Url.Content("~/Content/icons/inventory.png")" />
+                                                @Translation.Get("Inventarier")
+                                            </a>
+                                        </li>
+                                    }
+
+                                    @if (model.IsLicenseVisible())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("Index", "Products", new { area = "Licenses" })">
+                                                <img src="@Url.Content("~/Content/icons/Licens.png")" alt="license" />
+                                                @Translation.Get("Licenshantering")
+                                            </a>
+                                        </li>
+                                    }
+
+                                    @*@if (model.IsContractVisible())
+                                        {
+                                            <li><a href="@Url.Action("Index", "Contracts", new { area = "" })">
+                                                <img src="@Url.Content("~/Content/icons/deal.png")"/>
+                                                @Translation.Get("Avtal")</a></li>
+                                        }*@
+                                    @if (model.IsInvoicesVisible())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action(MvcInvoicesUrlName.Overview.Index, MvcInvoicesUrlName.Overview.Controller, new { area = MvcInvoicesUrlName.Name })">
+                                                <img src="@Url.Content("~/Content/icons/order.png")" />
+                                                @Translation.Get("Fakturering")
+                                            </a>
+                                        </li>
+                                    }
+                                    <li></li>
+                                </ul>
+                            </li>
+                        }
 
 
-    <li class="light-blue">
-        <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-            <i class="icon-user icon-white"></i>
-            @if (SessionFacade.CurrentCustomer != null)
-            {
-                <span class="user-info">@SessionFacade.CurrentUser.FirstName @SessionFacade.CurrentUser.SurName
+                        <li class="light-blue">
+                            <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                                <i class="icon-user icon-white"></i>
+                                @if (SessionFacade.CurrentCustomer != null)
+                                {
+                                    <span class="user-info">
+                                        @SessionFacade.CurrentUser.FirstName @SessionFacade.CurrentUser.SurName
                                         <small>@SessionFacade.CurrentCustomer.Name</small>
                                     </span>
-                <i class="icon-chevron-down icon-white"></i>
-            }
-        </a>
-        <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-            <li class="dropdown-submenu">
-                <a href="#">
-                    <i class="icon-refresh"></i>
-                    @Translation.Get("Kunder")
-                </a>
-                <ul class="customers dropdown-menu">
-                    @if (model.Customers != null)
-                    {
-                        foreach (var customer in model.Customers)
-                        {
-                            <li>
-                                @if (customer.Id == SessionFacade.CurrentCustomer.Id)
-                                {
-                                    <a href="@Url.Action("InitFilter", "cases", new {area = "", customerId = customer.Id})">@customer.Name <i class="icon-ok"></i></a>
+                                    <i class="icon-chevron-down icon-white"></i>
                                 }
-                                else
-                                {
-                                    <a href="@Url.Action("InitFilter", "cases", new {area = "", customerId = customer.Id})">@customer.Name</a>
-                                }
-                            </li>
-                        }
-                    }
-                </ul>
-            </li>
+                            </a>
+                            <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                                <li class="dropdown-submenu">
+                                    <a href="#">
+                                        <i class="icon-refresh"></i>
+                                        @Translation.Get("Kunder")
+                                    </a>
+                                    <ul class="customers dropdown-menu">
+                                        @if (model.Customers != null)
+                                        {
+                                            foreach (var customer in model.Customers)
+                                            {
+                                                <li>
+                                                    @if (customer.Id == SessionFacade.CurrentCustomer.Id)
+                                                    {
+                                                        <a href="@Url.Action("InitFilter", "cases", new { area = "", customerId = customer.Id })">@customer.Name <i class="icon-ok"></i></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="@Url.Action("InitFilter", "cases", new { area = "", customerId = customer.Id })">@customer.Name</a>
+                                                    }
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </li>
 
-            @if (model.Languages != null && model.Languages.Where(l => l.IsActive == 1).ToList().Count > 1)
-            {
-                <li class="dropdown-submenu lang">
-                    <a href="#">
-                        <i class="icon-globe"></i>
-                        @Translation.Get("Språk")
-                    </a>
-                    <ul class="dropdown-menu">
-                        @foreach (var lang in model.Languages.Where(l => l.IsActive == 1).ToList())
-                        {
-                            <li>
-                                @if (lang.Id == SessionFacade.CurrentLanguageId)
+                                @if (model.Languages != null && model.Languages.Where(l => l.IsActive == 1).ToList().Count > 1)
                                 {
-                                    <a href="@Url.Action("ChangeCurrentLanguage", "cases", new {languageId = lang.Id, area = ""})">@Translation.Get(lang.Name, model.UsersDefaultLanguage) <i class="icon-ok"></i></a>
+                                    <li class="dropdown-submenu lang">
+                                        <a href="#">
+                                            <i class="icon-globe"></i>
+                                            @Translation.Get("Språk")
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            @foreach (var lang in model.Languages.Where(l => l.IsActive == 1).ToList())
+                                            {
+                                                <li>
+                                                    @if (lang.Id == SessionFacade.CurrentLanguageId)
+                                                    {
+                                                        <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id, area = "" })">@Translation.Get(lang.Name, model.UsersDefaultLanguage) <i class="icon-ok"></i></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="@Url.Action("ChangeCurrentLanguage", "cases", new { languageId = lang.Id, area = "" })">@Translation.Get(lang.Name, model.UsersDefaultLanguage) </a>
+                                                    }
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
                                 }
-                                else
+                                @if (model.IsCustomerOrSystemAdministrator())
                                 {
-                                    <a href="@Url.Action("ChangeCurrentLanguage", "cases", new {languageId = lang.Id, area = ""})">@Translation.Get(lang.Name, model.UsersDefaultLanguage) </a>
+                                    <li>
+                                        <a href="@Url.Action("index", "start", new { area = "admin" })" target="_blank">
+                                            <i class="icon-wrench"></i>
+                                            @Translation.Get("Administration")
+                                        </a>
+                                    </li>
                                 }
-                            </li>
-                        }
+
+                                <li>
+                                    <a href="@Url.Action("edit", "profile", new { area = "", id = SessionFacade.CurrentUser.Id })">
+                                        <i class="icon-user"></i>
+                                        @Translation.Get("Profil")
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("index", "about", new { area = "" })">
+                                        <i class="icon-info-sign"></i>
+                                        @Translation.Get("Om")
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="@Url.Action("Logout", "Login", new { area = "" })">
+                                        <i class="icon-off"></i>
+                                        @Translation.Get("Logga ut")
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
-                </li>
-            }
-            @if (model.IsCustomerOrSystemAdministrator())
+                </div>
+            </div>
+        </div>
+    }
+    @RenderBody()
+    @Html.Partial("_Version")
+    @RenderSection("Dialogs", false)
+    @Scripts.Render("~/bundles/dhhelpdesk")
+    @RenderSection("Scripts", false)
+    <input type="hidden" value="@Request.RawUrl" id="rawUrl" />
+    @Html.Partial("_Translations", null)
+    @{
+        var curCustomerId = SessionFacade.CurrentCustomer != null ? SessionFacade.CurrentCustomer.Id : 0;
+        var curLanguageId = SessionFacade.CurrentCustomer != null ? SessionFacade.CurrentLanguageId : 1;
+        int curCaseId = 0;
+        if (TempData["Case_Id"] != null)
+        {
+            if (!int.TryParse(TempData["Case_Id"].ToString(), out curCaseId))
             {
-                <li>
-                    <a href="@Url.Action("index", "start", new {area = "admin"})" target="_blank">
-                        <i class="icon-wrench"></i>
-                        @Translation.Get("Administration")
-                    </a>
-                </li>
+                curCaseId = 0;
+            }
+        }
+
+        var accessToken = "";
+        var refreshToken = "";
+        object tokenData = null;
+        Dictionary<string, string> tokenDataDic;
+        accessToken = null;
+        refreshToken = null;
+        if (TempData.TryGetValue("Token_Data", out tokenData))
+        {
+            tokenDataDic = ((Dictionary<string, string>)tokenData);
+            if (tokenDataDic != null && tokenDataDic.Any())
+            {
+                accessToken = tokenDataDic["Access_Token"].ToString();
+                refreshToken = tokenDataDic["Refresh_Token"].ToString();
+            }
+        }
+
+        TempData["TokenData"] = null;
+        TempData["Case_Id"] = null;
+    }
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            if ('@accessToken' != null && '@accessToken' != '' && '@refreshToken' != null && '@refreshToken' != '') {
+                var tokenData = { 'AccessToken': '@accessToken', 'RefreshToken': '@refreshToken' };
+                localStorage.setItem("TokenData", JSON.stringify(tokenData));
             }
 
-            <li>
-                <a href="@Url.Action("edit", "profile", new {area = "", id = SessionFacade.CurrentUser.Id})">
-                    <i class="icon-user"></i>
-                    @Translation.Get("Profil")
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("index", "about", new {area = ""})">
-                    <i class="icon-info-sign"></i>
-                    @Translation.Get("Om")
-                </a>
-            </li>
-            <li class="divider"></li>
-            <li>
-                <a href="@Url.Action("Logout", "Login", new {area = ""})">
-                    <i class="icon-off"></i>
-                    @Translation.Get("Logga ut")
-                </a>
-            </li>
-        </ul>
-    </li>
-    </ul>
-    </div>
-    </div>
-    </div>
-}
-@RenderBody()
-@Html.Partial("_Version")
-@RenderSection("Dialogs", false)
-@Scripts.Render("~/bundles/dhhelpdesk")
-@RenderSection("Scripts", false)
-<input type="hidden" value="@Request.RawUrl" id="rawUrl"/>
-@Html.Partial("_Translations", null)
-<script type="text/javascript">
-    $(document).ready(function() {
-        var timezoneAutodetectRes = "@ViewBag.AutoDetectionResult";
-        var failureMsg = "@Translation.GetForJS("Vi kunde inte ange din tidszon. Var vänlig välj rätt tidszon och klicka på \"Spara\".")";
-        var successMsg = "@Translation.GetForJS("Vi har angett din tidszon baserat på din webbläsare. Om du föredrar att arbeta mot en annan tidszon så kan du ändra det i Profil i toppmenyn."))";
-        @*var noticeMsg = "@string.Format(Translation.GetForJS("Vi har upptäckt att din webbläsares tidszon skiljer sig från den som angetts i din Profil. Om du vill ändra tidszon som du arbetar i, gå till Profil i toppmenyn"), "<a href=\"Profile/Edit/\">", "</a>")";*@
-        var noticeMsg = "@Translation.GetForJS("Vi har upptäckt att din webbläsares tidszon skiljer sig från den som angetts i din Profil. Om du vill ändra tidszon som du arbetar i, gå till Profil i toppmenyn.")";
+            var globalData = { 'CurrentCustomerId': '@curCustomerId', 'CurrentLanguageId': '@curLanguageId', 'CurrentCaseId': '@curCaseId' };
+            sessionStorage.setItem("GlobalData", JSON.stringify(globalData));
 
-        function ShowToastMessage(message, msgType) {
-            msgType = msgType || 'notice';
-            $().toastmessage('showToast', {
-                text: message,
-                sticky: false,
-                position: 'top-center',
-                type: msgType,
-                closeText: '',
-                stayTime: 10000,
-                inEffectDuration: 1000
-            });
-        }
+            var timezoneAutodetectRes = "@ViewBag.AutoDetectionResult";
+            var failureMsg = "@Translation.GetForJS("Vi kunde inte ange din tidszon. Var vänlig välj rätt tidszon och klicka på \"Spara\".")";
+            var successMsg = "@Translation.GetForJS("Vi har angett din tidszon baserat på din webbläsare. Om du föredrar att arbeta mot en annan tidszon så kan du ändra det i Profil i toppmenyn."))";
+            @*var noticeMsg = "@string.Format(Translation.GetForJS("Vi har upptäckt att din webbläsares tidszon skiljer sig från den som angetts i din Profil. Om du vill ändra tidszon som du arbetar i, gå till Profil i toppmenyn"), "<a href=\"Profile/Edit/\">", "</a>")";*@
+            var noticeMsg = "@Translation.GetForJS("Vi har upptäckt att din webbläsares tidszon skiljer sig från den som angetts i din Profil. Om du vill ändra tidszon som du arbetar i, gå till Profil i toppmenyn.")";
 
-        if (timezoneAutodetectRes === 'Failure') {
-            ShowToastMessage(failureMsg, 'warning');
-        } else if (timezoneAutodetectRes === 'Success') {
-            ShowToastMessage(successMsg);
-        } else if (timezoneAutodetectRes === 'Notice') {
-            ShowToastMessage(noticeMsg);
-        }
-    });
-</script>
+            function ShowToastMessage(message, msgType) {
+                msgType = msgType || 'notice';
+                $().toastmessage('showToast', {
+                    text: message,
+                    sticky: false,
+                    position: 'top-center',
+                    type: msgType,
+                    closeText: '',
+                    stayTime: 10000,
+                    inEffectDuration: 1000
+                });
+            }
+
+            if (timezoneAutodetectRes === 'Failure') {
+                ShowToastMessage(failureMsg, 'warning');
+            } else if (timezoneAutodetectRes === 'Success') {
+                ShowToastMessage(successMsg);
+            } else if (timezoneAutodetectRes === 'Notice') {
+                ShowToastMessage(noticeMsg);
+            }
+        });
+    </script>
 </body>
 </html>

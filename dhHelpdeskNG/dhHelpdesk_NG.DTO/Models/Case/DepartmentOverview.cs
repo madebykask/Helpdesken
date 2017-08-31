@@ -1,6 +1,6 @@
 using DH.Helpdesk.BusinessData.Models.User.Interfaces;
 
-namespace DH.Helpdesk.BusinessData.Models.Case.CaseHistory
+namespace DH.Helpdesk.BusinessData.Models.Case
 {
     public class DepartmentOverview : IDepartmentInfo
     {

@@ -1,0 +1,1416 @@
+﻿/******************** BODY CONTENT****************************************************/
+
+body {
+    position: relative;
+    padding-top: 20px;
+    background: #f9f9f9;
+}
+
+/* Code in headings */
+h3 code {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.content {
+    padding: 10px 10px 10px 10px;
+    background-color: #FFFFFF;
+    border: 1px solid #dddddd;
+}
+
+.alignright {
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    text-align: right;
+}
+
+.borderline {
+    border: 1px dashed #dddddd;
+}
+
+.borderlineleft {
+    border-left: 1px solid #dddddd;
+}
+
+.borderlineright {
+    border-right: 1px solid #dddddd;
+}
+
+.borderlinetop {
+    border-top: 1px solid #dddddd;
+}
+
+fieldset {
+    border: 1px solid #e5e5e5;
+    margin-bottom: 30px;
+}
+
+legend {
+    color: #999;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.icon-save {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-top: 2px;
+    *margin-right: .3em;
+    line-height: 14px;
+    vertical-align: text-top;
+    background-image: url("../img/ico-save.png");
+    background-position: 0 0;
+    background-repeat: no-repeat;
+}
+
+.container.containeralignright {
+    margin-right: auto;
+    margin-left: 20px;
+    *zoom: 1;
+}
+
+.nobullits {
+    list-style-type: none;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+
+/****************** TOP MENU ***********************************/
+
+.navbarbgcolor {
+    background: #f0f0f0 !important;
+}
+
+.btn.btnmarginleft {
+    margin-left: 20px;
+}
+
+.navbar-inverse .navbar-inner {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff0f0f0', endColorstr='#fff0f0f0', GradientType=0);
+}
+
+.margintopleft {
+    margin-left: 40px;
+    margin-top: 5px;
+}
+
+.ieselect {
+    *margin-top: 0;
+}
+
+
+/****************** TOP LOGO ***********************************/
+
+.alignrighttop {
+    text-align: right;
+}
+
+.marginbuttontop {
+    margin-top: 30px;
+}
+
+
+
+/****************** TABLES ***********************************/
+td.tdstrong {
+    color: #999;
+    vertical-align: central;
+    width: 300px;
+}
+
+    td.tdstrong h4 {
+        color: #999;
+        font-size: 14px;
+        background: #ddd;
+        padding: 3px;
+    }
+
+    td.tdstrong h5 {
+        color: #999;
+        font-size: 14px;
+        background: #f3f3f3;
+        padding: 3px;
+    }
+
+.globalview {
+    font-size: 16px !important;
+    background: #ddd !important;
+    color: #000 !important;
+}
+
+.sub-globalview {
+    background: #f3f3f3 !important;
+    font-size: 14px !important;
+}
+
+.dateie {
+    *min-height: 10px !important;
+}
+
+    .dateie input {
+        *margin: -1px 0 0 0;
+        *min-height: 10px !important;
+    }
+
+    .dateie input.span12 {
+        height: 30px !important;
+    }
+
+
+
+/************** NAV TABS**************************************/
+.nav-tabs {
+    margin: 0;
+    margin-bottom: -1px;
+}
+
+.nav-tabs {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #145fbf;
+    background-image: -moz-linear-gradient(top, #145fbf, #0051ba);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#145fbf), to(#0051ba));
+    background-image: -webkit-linear-gradient(top, #145fbf, #0051ba);
+    background-image: -o-linear-gradient(top, #145fbf, #0051ba);
+    background-image: linear-gradient(to bottom, #145fbf, #0051ba);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff145fbf', endColorstr='#ff0051ba', GradientType=0);
+}
+
+    .nav-tabs a {
+        color: #fff;
+    }
+
+    .nav-tabs > li > a {
+        padding-top: 8px;
+        padding-bottom: 8px;
+        line-height: 20px;
+        border: 1px solid transparent;
+        -webkit-border-radius: 0 0;
+        -moz-border-radius: 0 0;
+        border-radius: 0 0;
+    }
+
+        .nav-tabs > li > a:hover,
+        .nav-tabs > li > a:focus {
+            border-color: #eeeeee #eeeeee #dddddd;
+            background: #fff;
+            color: #000;
+        }
+
+    .nav-tabs > .active > a,
+    .nav-tabs > .active > a:hover,
+    .nav-tabs > .active > a:focus {
+        color: #555555;
+        cursor: default;
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        border-bottom-color: transparent;
+    }
+
+body > .navbar {
+    font-size: 13px;
+}
+
+/*****************MULTI CHECKBOXES UL********************************/
+.multicheck ul {
+    list-style: none;
+    margin-left: 0;
+    margin-right: 30px;
+}
+
+    .multicheck ul li {
+        display: inline;
+        float: left;
+    }
+
+        .multicheck ul li ul {
+            list-style: none;
+            margin-left: 10px;
+        }
+
+            .multicheck ul li ul li {
+                display: list-item;
+                float: none;
+            }
+
+
+/* Sections
+-------------------------------------------------- */
+
+/* padding for in-page bookmarks and fixed navbar */
+section {
+    padding-top: 30px;
+}
+
+    section > .page-header,
+    section > .lead {
+        color: #5a5a5a;
+    }
+
+    section > ul li {
+        margin-bottom: 5px;
+    }
+
+/* Separators (hr) */
+.bs-docs-separator {
+    margin: 40px 0 39px;
+}
+
+/* Faded out hr */
+hr.soften {
+    height: 1px;
+    margin: 70px 0;
+    background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,.1), rgba(0,0,0,0));
+    background-image: -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,.1), rgba(0,0,0,0));
+    background-image: -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,.1), rgba(0,0,0,0));
+    background-image: -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,.1), rgba(0,0,0,0));
+    border: 0;
+}
+
+/************************* FOOTER ******************************/
+
+.footer {
+    text-align: center;
+    padding: 30px 0;
+    margin-top: 70px;
+    border-top: 1px solid #e5e5e5;
+    background-color: #f5f5f5;
+}
+
+    .footer p {
+        margin-bottom: 0;
+        color: #777;
+    }
+
+.footer-links {
+    margin: 10px 0;
+}
+
+    .footer-links li {
+        display: inline;
+        padding: 0 2px;
+    }
+
+        .footer-links li:first-child {
+            padding-left: 0;
+        }
+
+
+
+/* Special grid styles
+-------------------------------------------------- */
+
+.show-grid {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+    .show-grid [class*="span"] {
+        background-color: #eee;
+        text-align: center;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        min-height: 40px;
+        line-height: 40px;
+    }
+
+        .show-grid [class*="span"]:hover {
+            background-color: #ddd;
+        }
+
+    .show-grid .show-grid {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+        .show-grid .show-grid [class*="span"] {
+            margin-top: 5px;
+        }
+
+    .show-grid [class*="span"] [class*="span"] {
+        background-color: #ccc;
+    }
+
+        .show-grid [class*="span"] [class*="span"] [class*="span"] {
+            background-color: #999;
+        }
+
+
+
+/* Mini layout previews
+-------------------------------------------------- */
+.mini-layout {
+    border: 1px solid #ddd;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.075);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.075);
+    box-shadow: 0 1px 2px rgba(0,0,0,.075);
+}
+
+    .mini-layout,
+    .mini-layout .mini-layout-body,
+    .mini-layout.fluid .mini-layout-sidebar {
+        height: 300px;
+    }
+
+.mini-layout {
+    margin-bottom: 20px;
+    padding: 9px;
+}
+
+    .mini-layout div {
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+    }
+
+    .mini-layout .mini-layout-body {
+        background-color: #dceaf4;
+        margin: 0 auto;
+        width: 70%;
+    }
+
+    .mini-layout.fluid .mini-layout-sidebar,
+    .mini-layout.fluid .mini-layout-header,
+    .mini-layout.fluid .mini-layout-body {
+        float: left;
+    }
+
+    .mini-layout.fluid .mini-layout-sidebar {
+        background-color: #bbd8e9;
+        width: 20%;
+    }
+
+    .mini-layout.fluid .mini-layout-body {
+        width: 77.5%;
+        margin-left: 2.5%;
+    }
+
+
+
+/* Download page
+-------------------------------------------------- */
+
+.download .page-header {
+    margin-top: 36px;
+}
+
+.page-header .toggle-all {
+    margin-top: 5px;
+}
+
+/* Space out h3s when following a section */
+.download h3 {
+    margin-bottom: 5px;
+}
+
+.download-builder input + h3,
+.download-builder .checkbox + h3 {
+    margin-top: 9px;
+}
+
+/* Fields for variables */
+.download-builder input[type=text] {
+    margin-bottom: 9px;
+    font-family: Menlo, Monaco, "Courier New", monospace;
+    font-size: 12px;
+    color: #d14;
+}
+
+    .download-builder input[type=text]:focus {
+        background-color: #fff;
+    }
+
+/* Custom, larger checkbox labels */
+.download .checkbox {
+    padding: 6px 10px 6px 25px;
+    font-size: 13px;
+    line-height: 18px;
+    color: #555;
+    background-color: #f9f9f9;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+    .download .checkbox:hover {
+        color: #333;
+        background-color: #f5f5f5;
+    }
+
+    .download .checkbox small {
+        font-size: 12px;
+        color: #777;
+    }
+
+/* Variables section */
+#variables label {
+    margin-bottom: 0;
+}
+
+/* Giant download button */
+.download-btn {
+    margin: 36px 0 108px;
+}
+
+#download p,
+#download h4 {
+    max-width: 50%;
+    margin: 0 auto;
+    color: #999;
+    text-align: center;
+}
+
+#download h4 {
+    margin-bottom: 0;
+}
+
+#download p {
+    margin-bottom: 18px;
+}
+
+.download-btn .btn {
+    display: block;
+    width: auto;
+    padding: 19px 24px;
+    margin-bottom: 27px;
+    font-size: 30px;
+    line-height: 1;
+    text-align: center;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}
+
+
+
+/* Misc
+-------------------------------------------------- */
+
+/* Make tables spaced out a bit more */
+h2 + table,
+h3 + table,
+h4 + table,
+h2 + .row {
+    margin-top: 5px;
+}
+
+/* Example sites showcase */
+.example-sites {
+    xmargin-left: 20px;
+}
+
+    .example-sites img {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+.scrollspy-example {
+    height: 200px;
+    overflow: auto;
+    position: relative;
+}
+
+
+/* Fake the :focus state to demo it */
+.focused {
+    border-color: rgba(82,168,236,.8);
+    -webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,.1), 0 0 8px rgba(82,168,236,.6);
+    -moz-box-shadow: inset 0 1px 3px rgba(0,0,0,.1), 0 0 8px rgba(82,168,236,.6);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.1), 0 0 8px rgba(82,168,236,.6);
+    outline: 0;
+}
+
+/* For input sizes, make them display block */
+.docs-input-sizes select,
+.docs-input-sizes input[type=text] {
+    display: block;
+    margin-bottom: 9px;
+}
+
+/* Icons
+------------------------- */
+.the-icons {
+    margin-left: 0;
+    list-style: none;
+}
+
+    .the-icons li {
+        float: left;
+        width: 25%;
+        line-height: 25px;
+    }
+
+    .the-icons i:hover {
+        background-color: rgba(255,0,0,.25);
+    }
+
+/* Example page
+------------------------- */
+.bootstrap-examples h4 {
+    margin: 10px 0 5px;
+}
+
+.bootstrap-examples p {
+    font-size: 13px;
+    line-height: 18px;
+}
+
+.bootstrap-examples .thumbnail {
+    margin-bottom: 9px;
+    background-color: #fff;
+}
+
+
+
+/* Bootstrap code examples
+-------------------------------------------------- */
+
+/* Base class */
+.bs-docs-example {
+    position: relative;
+    margin: 15px 0;
+    padding: 39px 19px 14px;
+    *padding-top: 19px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+    /* Echo out a label for the example */
+    .bs-docs-example:after {
+        content: "Example";
+        position: absolute;
+        top: -1px;
+        left: -1px;
+        padding: 3px 7px;
+        font-size: 12px;
+        font-weight: bold;
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        color: #9da0a4;
+        -webkit-border-radius: 4px 0 4px 0;
+        -moz-border-radius: 4px 0 4px 0;
+        border-radius: 4px 0 4px 0;
+    }
+
+    /* Remove spacing between an example and it's code */
+    .bs-docs-example + .prettyprint {
+        margin-top: -20px;
+        padding-top: 15px;
+    }
+
+    /* Tweak examples
+------------------------- */
+    .bs-docs-example > p:last-child {
+        margin-bottom: 0;
+    }
+
+    .bs-docs-example .table,
+    .bs-docs-example .progress,
+    .bs-docs-example .well,
+    .bs-docs-example .alert,
+    .bs-docs-example .hero-unit,
+    .bs-docs-example .pagination,
+    .bs-docs-example .navbar,
+    .bs-docs-example > .nav,
+    .bs-docs-example blockquote {
+        margin-bottom: 5px;
+    }
+
+    .bs-docs-example .pagination {
+        margin-top: 0;
+    }
+
+.bs-navbar-top-example,
+.bs-navbar-bottom-example {
+    z-index: 1;
+    padding: 0;
+    height: 90px;
+    overflow: hidden; /* cut the drop shadows off */
+}
+
+    .bs-navbar-top-example .navbar-fixed-top,
+    .bs-navbar-bottom-example .navbar-fixed-bottom {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+.bs-navbar-top-example {
+    -webkit-border-radius: 0 0 4px 4px;
+    -moz-border-radius: 0 0 4px 4px;
+    border-radius: 0 0 4px 4px;
+}
+
+    .bs-navbar-top-example:after {
+        top: auto;
+        bottom: -1px;
+        -webkit-border-radius: 0 4px 0 4px;
+        -moz-border-radius: 0 4px 0 4px;
+        border-radius: 0 4px 0 4px;
+    }
+
+.bs-navbar-bottom-example {
+    -webkit-border-radius: 4px 4px 0 0;
+    -moz-border-radius: 4px 4px 0 0;
+    border-radius: 4px 4px 0 0;
+}
+
+    .bs-navbar-bottom-example .navbar {
+        margin-bottom: 0;
+    }
+
+form.bs-docs-example {
+    padding-bottom: 19px;
+}
+
+/* Images */
+.bs-docs-example-images img {
+    margin: 10px;
+    display: inline-block;
+}
+
+/* Tooltips */
+.bs-docs-tooltip-examples {
+    text-align: center;
+    margin: 0 0 10px;
+    list-style: none;
+}
+
+    .bs-docs-tooltip-examples li {
+        display: inline;
+        padding: 0 10px;
+    }
+
+/* Popovers */
+.bs-docs-example-popover {
+    padding-bottom: 24px;
+    background-color: #f9f9f9;
+}
+
+    .bs-docs-example-popover .popover {
+        position: relative;
+        display: block;
+        float: left;
+        width: 260px;
+        margin: 20px;
+    }
+
+/* Dropdowns */
+.bs-docs-example-submenus {
+    min-height: 180px;
+}
+
+    .bs-docs-example-submenus > .pull-left + .pull-left {
+        margin-left: 20px;
+    }
+
+    .bs-docs-example-submenus .dropup > .dropdown-menu,
+    .bs-docs-example-submenus .dropdown > .dropdown-menu {
+        display: block;
+        position: static;
+        margin-bottom: 5px;
+        *width: 180px;
+    }
+
+
+
+/* Responsive docs
+-------------------------------------------------- */
+
+/* Utility classes table
+------------------------- */
+.responsive-utilities th small {
+    display: block;
+    font-weight: normal;
+    color: #999;
+}
+
+.responsive-utilities tbody th {
+    font-weight: normal;
+}
+
+.responsive-utilities td {
+    text-align: center;
+}
+
+    .responsive-utilities td.is-visible {
+        color: #468847;
+        background-color: #dff0d8 !important;
+    }
+
+    .responsive-utilities td.is-hidden {
+        color: #ccc;
+        background-color: #f9f9f9 !important;
+    }
+
+/* Responsive tests
+------------------------- */
+.responsive-utilities-test {
+    margin-top: 5px;
+    margin-left: 0;
+    list-style: none;
+    overflow: hidden; /* clear floats */
+}
+
+    .responsive-utilities-test li {
+        position: relative;
+        float: left;
+        width: 25%;
+        height: 43px;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 43px;
+        color: #999;
+        text-align: center;
+        border: 1px solid #ddd;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+    }
+
+        .responsive-utilities-test li + li {
+            margin-left: 10px;
+        }
+
+    .responsive-utilities-test span {
+        position: absolute;
+        top: -1px;
+        left: -1px;
+        right: -1px;
+        bottom: -1px;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+    }
+
+    .responsive-utilities-test span {
+        color: #468847;
+        background-color: #dff0d8;
+        border: 1px solid #d6e9c6;
+    }
+
+
+
+/* Sidenav for Docs
+-------------------------------------------------- */
+
+.bs-docs-sidenav {
+    width: 228px;
+    margin: 30px 0 0;
+    padding: 0;
+    background-color: #fff;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+    -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+    box-shadow: 0 1px 4px rgba(0,0,0,.065);
+}
+
+    .bs-docs-sidenav > li > a {
+        display: block;
+        width: 190px \9;
+        margin: 0 0 -1px;
+        padding: 8px 14px;
+        border: 1px solid #e5e5e5;
+    }
+
+    .bs-docs-sidenav > li:first-child > a {
+        -webkit-border-radius: 6px 6px 0 0;
+        -moz-border-radius: 6px 6px 0 0;
+        border-radius: 6px 6px 0 0;
+    }
+
+    .bs-docs-sidenav > li:last-child > a {
+        -webkit-border-radius: 0 0 6px 6px;
+        -moz-border-radius: 0 0 6px 6px;
+        border-radius: 0 0 6px 6px;
+    }
+
+    .bs-docs-sidenav > .active > a {
+        position: relative;
+        z-index: 2;
+        padding: 9px 15px;
+        border: 0;
+        text-shadow: 0 1px 0 rgba(0,0,0,.15);
+        -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+        -moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+        box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+    }
+    /* Chevrons */
+    .bs-docs-sidenav .icon-chevron-right {
+        float: right;
+        margin-top: 2px;
+        margin-right: -6px;
+        opacity: .25;
+    }
+
+    .bs-docs-sidenav > li > a:hover {
+        background-color: #f5f5f5;
+    }
+
+    .bs-docs-sidenav a:hover .icon-chevron-right {
+        opacity: .5;
+    }
+
+    .bs-docs-sidenav .active .icon-chevron-right,
+    .bs-docs-sidenav .active a:hover .icon-chevron-right {
+        background-image: url(../img/glyphicons-halflings-white.png);
+        opacity: 1;
+    }
+
+    .bs-docs-sidenav.affix {
+        top: 40px;
+    }
+
+    .bs-docs-sidenav.affix-bottom {
+        position: absolute;
+        top: auto;
+        bottom: 270px;
+    }
+
+
+
+
+/* Responsive
+-------------------------------------------------- */
+
+/* Desktop large
+------------------------- */
+@media (min-width: 1200px) {
+    .bs-docs-container {
+        max-width: 970px;
+    }
+
+    .bs-docs-sidenav {
+        width: 258px;
+    }
+
+        .bs-docs-sidenav > li > a {
+            width: 230px \9; /* Override the previous IE8-9 hack */
+        }
+}
+
+/* Desktop
+------------------------- */
+@media (max-width: 980px) {
+    /* Unfloat brand */
+    body > .navbar-fixed-top .brand {
+        float: left;
+        margin-left: 0;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    /* Inline-block quick links for more spacing */
+    .quick-links li {
+        display: inline-block;
+        margin: 5px;
+    }
+
+    /* When affixed, space properly */
+    .bs-docs-sidenav {
+        top: 0;
+        width: 218px;
+        margin-top: 30px;
+        margin-right: 0;
+    }
+}
+
+/* Tablet to desktop
+------------------------- */
+@media (min-width: 768px) and (max-width: 979px) {
+    /* Remove any padding from the body */
+    body {
+        padding-top: 0;
+    }
+    /* Widen masthead and social buttons to fill body padding */
+    .jumbotron {
+        margin-top: -20px; /* Offset bottom margin on .navbar */
+    }
+    /* Adjust sidenav width */
+    .bs-docs-sidenav {
+        width: 166px;
+        margin-top: 20px;
+    }
+
+        .bs-docs-sidenav.affix {
+            top: 0;
+        }
+}
+
+/* Tablet
+------------------------- */
+@media (max-width: 767px) {
+    /* Remove any padding from the body */
+    body {
+        padding-top: 0;
+    }
+
+    /* Widen masthead and social buttons to fill body padding */
+    .jumbotron {
+        padding: 40px 20px;
+        margin-top: -20px; /* Offset bottom margin on .navbar */
+        margin-right: -20px;
+        margin-left: -20px;
+    }
+
+    .masthead h1 {
+        font-size: 90px;
+    }
+
+    .masthead p,
+    .masthead .btn {
+        font-size: 24px;
+    }
+
+    .marketing .span4 {
+        margin-bottom: 40px;
+    }
+
+    .bs-docs-social {
+        margin: 0 -20px;
+    }
+
+    /* Space out the show-grid examples */
+    .show-grid [class*="span"] {
+        margin-bottom: 5px;
+    }
+
+    /* Sidenav */
+    .bs-docs-sidenav {
+        width: auto;
+        margin-bottom: 20px;
+    }
+
+        .bs-docs-sidenav.affix {
+            position: static;
+            width: auto;
+            top: 0;
+        }
+
+    /* Unfloat the back to top link in footer */
+    .footer {
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+        .footer p {
+            margin-bottom: 9px;
+        }
+}
+
+/* Landscape phones
+------------------------- */
+@media (max-width: 480px) {
+    /* Remove padding above jumbotron */
+    body {
+        padding-top: 0;
+    }
+
+    /* Change up some type stuff */
+    h2 small {
+        display: block;
+    }
+
+    /* Downsize the jumbotrons */
+    .jumbotron h1 {
+        font-size: 45px;
+    }
+
+    .jumbotron p,
+    .jumbotron .btn {
+        font-size: 18px;
+    }
+
+    .jumbotron .btn {
+        display: block;
+        margin: 0 auto;
+    }
+
+    /* center align subhead text like the masthead */
+    .subhead h1,
+    .subhead p {
+        text-align: center;
+    }
+
+    /* Marketing on home */
+    .marketing h1 {
+        font-size: 30px;
+    }
+
+    .marketing-byline {
+        font-size: 18px;
+    }
+
+    /* center example sites */
+    .example-sites {
+        margin-left: 0;
+    }
+
+        .example-sites > li {
+            float: none;
+            display: block;
+            max-width: 280px;
+            margin: 0 auto 18px;
+            text-align: center;
+        }
+
+        .example-sites .thumbnail > img {
+            max-width: 270px;
+        }
+
+    /* Do our best to make tables work in narrow viewports */
+    table code {
+        white-space: normal;
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+
+    /* Examples: dropdowns */
+    .bs-docs-example-submenus > .pull-left {
+        float: none;
+        clear: both;
+    }
+
+        .bs-docs-example-submenus > .pull-left,
+        .bs-docs-example-submenus > .pull-left + .pull-left {
+            margin-left: 0;
+        }
+
+    .bs-docs-example-submenus p {
+        margin-bottom: 0;
+    }
+
+    .bs-docs-example-submenus .dropup > .dropdown-menu,
+    .bs-docs-example-submenus .dropdown > .dropdown-menu {
+        margin-bottom: 10px;
+        float: none;
+        max-width: 180px;
+    }
+
+    /* Examples: modal */
+    .modal-example .modal {
+        position: relative;
+        top: auto;
+        right: auto;
+        bottom: auto;
+        left: auto;
+    }
+
+    /* Tighten up footer */
+    .footer {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+}
+
+/* dl 20139024 start */
+.input-append-top {
+    margin-bottom: 0;
+}
+
+.nav-tabs li.error a {
+    background-color: #b94a48;
+    color: #fff;
+    border: 1px solid transparent;
+    padding-bottom: 7px;
+}
+
+.nav-tabs > li.error > a:hover,
+.nav-tabs > li.error > a:focus {
+    color: #555555;
+    cursor: pointer;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    border-color: #eeeeee #eeeeee #dddddd;
+    padding-bottom: 8px;
+}
+
+.nav-tabs > li.error.active > a,
+.nav-tabs > li.error.active > a:hover,
+.nav-tabs > li.error.active > a:focus {
+    color: #555555;
+    cursor: default;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    padding-bottom: 8px;
+}
+
+.nav-tabs > li:last-child > a, .nav-pills > li:last-child > a {
+    margin-right: 0px;
+}
+
+.nav-tabs a:hover i[class*="icon-"],
+.nav-tabs li.active a i[class*="icon-"] {
+    background-image: url("../img/glyphicons-halflings.png");
+}
+
+.asterisk {
+    font-weight: bold;
+    float: right;
+}
+
+p .asterisk {
+    float: none;
+}
+
+.table-gv .asterisk {
+    display: none;
+}
+
+label.error, .notice {
+    color: #b94a48;
+}
+
+.notice {
+    font-size: small;
+}
+
+.helptext {
+    color:black; 
+    padding-bottom:15px;
+}
+
+.typeahead-notice {
+    display: none;
+}
+
+/* ie-8 fix append input problem */
+.row-fluid [class*="span"] {
+    min-height: 20px\9;
+}
+
+.options_block {
+    border-left: 8px solid #d9d9d9;
+    padding: 3px 0 5px 10px;
+}
+
+#attachments h4 {
+    color: #999;
+    font-size: 14px;
+    background: #ddd;
+    padding: 3px;
+}
+
+/* Selectize jumping problem */
+.selectize-control.single .selectize-input input {
+    vertical-align: baseline;
+}
+
+/* Temporary solution for problem with text next to selectize  */
+/*.table th, .table td {
+  vertical-align: middle;
+}*/
+
+.selectize-input {
+ overflow: visible;
+}
+
+.table-striped.align-middle td {
+    vertical-align:middle;
+}
+
+#documents {
+    padding-top:10px;
+}
+
+#documents .alert-info {
+    margin-bottom:10px;
+}
+
+#documents .alert-error {
+    margin-bottom:0px;
+}
+
+.documents-error-message {
+    margin-right:20px; 
+    color:#ff0000;
+    margin-top:5px;
+}
+
+.overflow-visible {
+    overflow: visible !important;
+}
+
+input,
+textarea,
+.uneditable-input {
+  width: 306px;
+}
+
+select {
+    width: 320px;
+}
+
+option:disabled {
+    color:#CFCFCF !important;
+    text-decoration: line-through !important;
+    font-style: italic;
+}
+
+#TempFixFormName {
+    margin-left: 10px;
+}
+
+
+
+/*
+    .date input {
+    width: 279px;
+}*/
+
+/* FOR LineManager*/
+.tab-pane {
+    border:0px solid black !important;
+}
+
+/*For Employee information Case: 51017 Tan*/
+.navbarbgcolorblue {
+    color: #000 !important;
+}
+
+.navbarbgcolorblue {
+    background-color: #F0F0F0 !important;
+    background-image: none !important;
+    color: #000 !important;
+    border: 0px solid #000 !important;
+    /*border-top:1px solid #D8D8D8 !important;
+    border-bottom:1px solid #D8D8D8 !important;*/
+    filter: none !important;
+    height:20px !important;
+    max-height:20px !important;
+    vertical-align: middle !important;
+    font-size:11px;
+}
+
+.navbarbgcolorblue a, .navbarbgcolorlightblue a {
+    color: #fff !important;
+}
+
+.navbarbgcolor {
+    border-top:1px solid #D8D8D8 !important;
+    z-index:99999 !important;
+}
+
+.navbar-inverse .brand, .navbar-inverse .nav > li > a {
+    text-shadow: none !important;
+}
+
+.navbarbgcolorblue a {
+    color: #000 !important;
+}
+
+.navbarbgcolorblue .nav {
+    width: 1185px;
+   vertical-align: middle !important;
+   height:100% !important;
+   min-height:100% !important;
+
+}
+
+.navbarbgcolorblue .nav .pull-left {
+    margin-left:25px;
+    margin-top:1px; font-weight:bold;
+}
+
+.navbarbgcolorblue .nav .pull-right {
+    margin-top:1px; 
+    font-weight:bold;
+    float: right;
+}
+ 
+.navbarbgcolorblue .nav > li > a {
+    /*padding-right: 5px !important;*/
+}
+
+.employeename, .employeenumber
+{
+     float: right !important;
+}
+
+.statusbar
+{
+    color: #000 !important; 
+    background-color: #D8D8D8; 
+    
+    padding-left: 25px; 
+    font-size: 11px; 
+    height:20px;
+    min-height:20px;
+}
+
+.statusbar ul.nav
+{
+    width: 1165px !important;
+}
+
+.statusbar
+{
+    border-top: 1px solid #C0C0C0;
+    border-bottom: 1px solid #C0C0C0;
+}
+
+.selectize-dropdown, .tab-content {
+    overflow:visible !important;
+}
+
+/*Same padding for LM*/
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    padding:3px 8px !important;
+}
+
+/* same width as others for date input*/
+/*.date input {
+    width: 291px !important;
+}*/
+
+/*Current record as wide as table*/
+.current-record-th {
+    width:580px;
+    min-width:580px;
+}
+
+.upper-case {
+    text-transform: uppercase;
+}
+
+/* next_tariff in hiring*/
+
+.day-month {
+    min-height:30px;
+    line-height:30px;
+    vertical-align:middle;
+    display:block;
+    float:left;
+    padding-right:10px;
+}
+
+.date-month {
+    width: 65px;
+    max-width:65px;
+}
+
+/* next_tariff in hiring*/
+
+span.disabled, i.disabled {
+ cursor: not-allowed !important;
+}
+
+.search-select .locked {
+    cursor:not-allowed !important;
+}

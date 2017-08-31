@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
+﻿using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
+using DH.Helpdesk.Common.Enums.Cases;
+using DH.Helpdesk.Domain.Cases;
+
+namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -155,7 +159,7 @@
         }
 
 
-        public static int CaseFieldSettingRequiredCheck(this IList<CaseFieldSetting> cfs, string valueToFind)
+        public static int CaseFieldSettingRequiredCheck(this IList<CaseFieldSetting> cfs, string valueToFind, bool isCaseReopend)
         {
             int ret = 0;
             if (cfs != null)
@@ -163,7 +167,7 @@
                 {
                     if (string.Compare(c.Name, valueToFind.getCaseFieldName(), true) == 0)
                     {
-                        if (c.Required == 1 && c.ShowOnStartPage == 1)
+                        if ((c.Required == 1 || (isCaseReopend && c.RequiredIfReopened == 1)) && c.ShowOnStartPage == 1)
                             ret = 1;   
                         break;
                     }
@@ -218,6 +222,11 @@
             return cfs.ToList().getCaseSettingsValue(valueToFind).Required;
         }
 
+        public static int getRequiredIfReopened(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
+        {
+            return cfs.ToList().getCaseSettingsValue(valueToFind).RequiredIfReopened;
+        }
+
         public static int getFieldSize(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
         {
             return cfs.ToList().getCaseSettingsValue(valueToFind).FieldSize;
@@ -233,6 +242,14 @@
         public static string getLabel(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind)
         {
             return cfsl.ToList().getCaseFieldSettingsLanguageValue(valueToFind).Label;
+        }
+
+        public static string getDefaultLabel(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind, string defaultValue)
+        {
+            var label = cfsl.ToList().getCaseFieldSettingsLanguageValue(valueToFind).Label;
+            if (!string.IsNullOrEmpty(label))
+                return label;
+            return Translation.GetCoreTextTranslation(defaultValue);
         }
 
         public static string getFieldHelp(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind)
@@ -835,5 +852,537 @@
 					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString()).ShowOnStartPage == 1;
 		}
 
-	}
+        public static CaseSectionModel GetCaseSection(this IEnumerable<CaseSectionModel> lst, CaseSectionType type)
+        {
+            var secton = lst.SingleOrDefault(x => x.SectionType == (int) type);
+            return secton != null ? secton : new CaseSectionModel
+            {
+                SectionType = (int)type
+            };
+        }
+
+        public static string getSectionClass(this CaseInputViewModel model, CaseSectionType type)
+        {
+            var secton = model.CaseSectionModels.SingleOrDefault(x => x.SectionType == (int)type);
+            var result = string.Empty;
+            if (secton != null)
+            {
+                if (model.case_.IsNew() && secton.IsNewCollapsed)
+                    result = "hideshow";
+                if (!model.case_.IsNew() && secton.IsEditCollapsed)
+                    result = "hideshow";
+            }
+            return result;
+        }
+
+        public static string getSearchEmailClass(this CaseInputViewModel model, CaseSectionType type)
+        {
+            var secton = model.CaseSectionModels.SingleOrDefault(x => x.SectionType == (int)type);
+            var result = string.Empty;
+            if (secton != null)
+            {
+                if (model.case_.IsNew() && secton.IsNewCollapsed)
+                    result = "hidefollowers";
+                if (!model.case_.IsNew() && secton.IsEditCollapsed)
+                    result = "hidefollowers";
+            }
+            return result;
+        }
+
+        public static string getSectionHeader(this CaseInputViewModel model, CaseSectionType type, string defaultHeader = "")
+        {
+            var secton = model.CaseSectionModels.SingleOrDefault(x => x.SectionType == (int)type);
+            var result = string.Empty;
+            if (secton != null)
+            {
+                result = !string.IsNullOrEmpty(secton.SectionHeader) ? secton.SectionHeader : Translation.GetCoreTextTranslation(defaultHeader);
+            }
+            else
+            {
+                result = Translation.GetCoreTextTranslation(defaultHeader);
+            }
+            return result;
+        }
+
+        public static string getSectionHeaderFields(this CaseInputViewModel model, CaseSectionType type)
+        {
+            var result = new List<string>();
+            var secton = model.CaseSectionModels.SingleOrDefault(x => x.SectionType == (int)type);
+            if (secton != null)
+            {
+                var fields = model.caseFieldSettings.Where(x => secton.CaseSectionFields.Contains(x.Id));
+                result = GetCaseFieldsValues(model, fields);
+            }
+            result = result.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+            return result.Any() ? " - " + string.Join(" - ", result) : string.Empty;
+        }
+
+        #region Private
+
+        private static List<string> GetCaseFieldsValues(CaseInputViewModel model, IEnumerable<CaseFieldSetting> fields)
+        {
+            var result = new List<string>();
+            foreach (var caseFieldSetting in fields)
+            {
+                #region Initiator
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.ReportedBy.ToString())
+                {
+                    result.Add(model.case_.ReportedBy);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Persons_Name.ToString())
+                {
+                    result.Add(model.case_.PersonsName);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())
+                {
+                    result.Add(model.case_.PersonsEmail);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())
+                {
+                    result.Add(model.case_.PersonsPhone);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())
+                {
+                    result.Add(model.case_.PersonsCellphone);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Region_Id.ToString())
+                {
+                    var curRegion = model.regions.SingleOrDefault(r => r.Id == model.case_.Region_Id);
+                    if (curRegion != null)
+                        result.Add(curRegion.Name);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Department_Id.ToString())
+                {
+                    var curDep = model.departments.SingleOrDefault(d => d.Id == model.case_.Department_Id);
+                    if (curDep != null)
+                        result.Add(curDep.DepartmentName);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.OU_Id.ToString())
+                {
+                    var curOu = model.ous.SingleOrDefault(d => d.Id == model.case_.OU_Id);
+                    if (curOu != null)
+                        result.Add(curOu.Name);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.CostCentre.ToString())
+                {
+                    result.Add(model.case_.CostCentre);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Place.ToString())
+                {
+                    result.Add(model.case_.Place);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.UserCode.ToString())
+                {
+                    result.Add(model.case_.UserCode);
+                }
+                #endregion
+                #region Regarding
+
+                if (model.case_.IsAbout != null)
+                {
+                    if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString())
+                    {
+                        result.Add(model.case_.IsAbout.ReportedBy);
+                    }
+                    if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString())
+                    {
+                        result.Add(model.case_.IsAbout.Person_Name);
+                    }
+                    if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString())
+                    {
+                        result.Add(model.case_.IsAbout.Person_Email);
+                    }
+                    if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString())
+                    {
+                        result.Add(model.case_.IsAbout.Person_Phone);
+                    }
+                    if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString())
+                    {
+                        result.Add(model.case_.IsAbout.Person_Cellphone);
+                    }
+                    if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString())
+                    {
+                        var curRegion = model.regions.SingleOrDefault(r => r.Id == model.case_.IsAbout.Region_Id);
+                        if (curRegion != null)
+                            result.Add(curRegion.Name);
+                    }
+                    if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString())
+                    {
+                        var curDep = model.departments.SingleOrDefault(d => d.Id == model.case_.IsAbout.Department_Id);
+                        if (curDep != null)
+                            result.Add(curDep.DepartmentName);
+                    }
+                    if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString())
+                    {
+                        var curOu = model.ous.SingleOrDefault(d => d.Id == model.case_.IsAbout.OU_Id);
+                        if (curOu != null)
+                            result.Add(curOu.Name);
+                    }
+                    if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString())
+                    {
+                        result.Add(model.case_.IsAbout.CostCentre);
+                    }
+                    if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString())
+                    {
+                        result.Add(model.case_.IsAbout.Place);
+                    }
+                    if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString())
+                    {
+                        result.Add(model.case_.IsAbout.UserCode);
+                    }
+                }
+
+                #endregion
+                #region Computer info
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.InventoryNumber.ToString())
+                {
+                    result.Add(model.case_.InventoryNumber);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())
+                {
+                    result.Add(model.case_.InventoryType);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())
+                {
+                    result.Add(model.case_.InventoryLocation);
+                }
+                #endregion
+                #region Case info
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.CaseNumber.ToString())
+                {
+                    result.Add(model.case_.CaseNumber.ToString());
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.RegTime.ToString())
+                {
+                    result.Add(model.case_.RegTime.ToString());
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.ChangeTime.ToString())
+                {
+                    result.Add(model.case_.ChangeTime.ToString());
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.User_Id.ToString())
+                {
+                    var str = string.Empty;
+                    if (model.RegByUser != null)
+                    {
+                        str = model.RegByUser.FirstName + " " + model.RegByUser.SurName;
+                        if (model.CaseOwnerDefaultWorkingGroup != null)
+                        {
+                            str= str + " " + model.CaseOwnerDefaultWorkingGroup.WorkingGroupName;
+                        }
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(model.case_.RegUserName))
+                        {
+                            str = str + " " + model.case_.RegUserName;
+                        }
+
+                        if (!string.IsNullOrEmpty(model.case_.RegUserId))
+                        {
+                            str = str + " " + model.case_.RegUserId;
+                        }
+                    }
+                    str = str + " " + model.case_.IpAddress;
+                    result.Add(str);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())
+                {
+                    result.Add(model.SelectedCustomerRegistrationSource);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())
+                {
+                    var cur = model.caseTypes.SingleOrDefault(d => d.Id == model.case_.CaseType_Id);
+                    if (cur != null)
+                        result.Add(cur.Name);
+                    else
+                    {
+                        var curCt = GetCaseType(model.caseTypes, model.case_.CaseType_Id);
+                        if (curCt != null)
+                        {
+                            result.Add(curCt.Name);
+                        }
+                    }
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())
+                {
+                    var cur = model.productAreas.SingleOrDefault(d => d.Id == model.case_.ProductArea_Id);
+                    if (cur != null)
+                        result.Add(cur.Name);
+                    else
+                    {
+                        if (model.case_.ProductArea_Id.HasValue)
+                        {
+                            var curPa = GetProductArea(model.productAreas, model.case_.ProductArea_Id.Value);
+                            if (curPa != null)
+                            {
+                                result.Add(curPa.Name);
+                            }
+                        }
+                    }
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.System_Id.ToString())
+                {
+                    var cur = model.systems.SingleOrDefault(d => d.Id == model.case_.System_Id);
+                    if (cur != null)
+                        result.Add(cur.SystemName);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())
+                {
+                    var cur = model.urgencies.SingleOrDefault(d => d.Id == model.case_.Urgency_Id);
+                    if (cur != null)
+                        result.Add(cur.Name);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Impact_Id.ToString())
+                {
+                    var cur = model.impacts.SingleOrDefault(d => d.Id == model.case_.Impact_Id);
+                    if (cur != null)
+                        result.Add(cur.Name);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Category_Id.ToString())
+                {
+                    var cur = model.categories.SingleOrDefault(d => d.Id == model.case_.Category_Id);
+                    if (cur != null)
+                        result.Add(cur.Name);
+                    else
+                    {
+                        if (model.case_.Category_Id.HasValue)
+                        {
+                            var curPa = GetCategory(model.categories, model.case_.Category_Id.Value);
+                            if (curPa != null)
+                            {
+                                result.Add(curPa.Name);
+                            }
+                        }
+                    }
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())
+                {
+                    var cur = model.suppliers.SingleOrDefault(d => d.Id == model.case_.Supplier_Id);
+                    if (cur != null)
+                        result.Add(cur.Name);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())
+                {
+                    result.Add(model.case_.InvoiceNumber);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())
+                {
+                    result.Add(model.case_.ReferenceNumber);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Caption.ToString())
+                {
+                    result.Add(model.case_.Caption);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Description.ToString())
+                {
+                    if (!string.IsNullOrEmpty(model.case_.Description))
+                    {
+                        if (model.case_.Description.Length > 30)
+                            result.Add(model.case_.Description.Substring(0, 30));
+                        else
+                        {
+                            result.Add(model.case_.Description);
+                        }
+                    }
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())
+                {
+                    if (!string.IsNullOrEmpty(model.case_.Miscellaneous))
+                    {
+                        if (model.case_.Miscellaneous.Length > 30)
+                            result.Add(model.case_.Miscellaneous.Substring(0, 30));
+                        else
+                        {
+                            result.Add(model.case_.Miscellaneous);
+                        }
+                    }
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.AgreedDate.ToString())
+                {
+                    if (model.case_.AgreedDate.HasValue)
+                    result.Add(model.case_.AgreedDate.Value.ToShortDateString());
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Available.ToString())
+                {
+                    result.Add(model.case_.Available);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Cost.ToString())
+                {
+                    var str = model.case_.Cost + " " + model.case_.OtherCost + " " + model.case_.Currency;
+                    result.Add(str);
+                }
+                #endregion
+                #region Case management
+
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())
+                {
+                    var cur = model.workingGroups.SingleOrDefault(r => r.Id == model.case_.WorkingGroup_Id);
+                    if (cur != null)
+                        result.Add(cur.WorkingGroupName);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())
+                {
+                    var cur = model.ResponsibleUsersAvailable.SingleOrDefault(r => r.Value.Equals(model.ResponsibleUser_Id.ToString()));
+                    if (cur != null)
+                        result.Add(cur.Text);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())
+                {
+                    var cur = model.Performers.SingleOrDefault(r => r.Value.Equals(model.Performer_Id.ToString()));
+                    if (cur != null)
+                        result.Add(cur.Text);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Priority_Id.ToString())
+                {
+                    var cur = model.priorities.SingleOrDefault(r => r.Id == model.case_.Priority_Id);
+                    if (cur != null)
+                        result.Add(cur.Name);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Status_Id.ToString())
+                {
+                    var cur = model.statuses.SingleOrDefault(r => r.Id == model.case_.Status_Id);
+                    if (cur != null)
+                        result.Add(Translation.GetCoreTextTranslation(cur.Name));
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())
+                {
+                    var cur = model.stateSecondaries.SingleOrDefault(r => r.Id == model.case_.StateSecondary_Id);
+                    if (cur != null)
+                        result.Add(Translation.GetCoreTextTranslation(cur.Name));
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Project.ToString())
+                {
+                    var cur = model.projects.SingleOrDefault(d => d.Id == model.case_.Project_Id);
+                    if (cur != null)
+                        result.Add(cur.Name);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Problem.ToString())
+                {
+                    var cur = model.problems.SingleOrDefault(d => d.Id == model.case_.Problem_Id);
+                    if (cur != null)
+                        result.Add(cur.Name);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.CausingPart.ToString())
+                {
+                    var cur = model.causingParts.SingleOrDefault(d => d.Value.Equals(model.case_.CausingPartId.ToString()));
+                    if (cur != null)
+                        result.Add(cur.Value);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Change.ToString())
+                {
+                    var cur = model.changes.SingleOrDefault(d => d.Id == model.case_.Change_Id);
+                    if (cur != null)
+                        result.Add(cur.ChangeTitle);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.PlanDate.ToString())
+                {
+                    if (model.case_.PlanDate.HasValue)
+                        result.Add(model.case_.PlanDate.Value.ToShortDateString());
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.WatchDate.ToString())
+                {
+                    if (model.case_.WatchDate.HasValue)
+                        result.Add(model.case_.WatchDate.Value.ToShortDateString());
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString())
+                {
+                    result.Add(model.case_.VerifiedDescription);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.SolutionRate.ToString())
+                {
+                    result.Add(model.case_.SolutionRate);
+                }
+
+                #endregion
+                #region Status
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.ClosingReason.ToString())
+                {
+                    result.Add(model.FinishingCause);
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.FinishingDate.ToString())
+                {
+                    if (model.case_.FinishingDate.HasValue)
+                        result.Add(model.case_.FinishingDate.Value.ToShortDateString());
+                }
+                if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())
+                {
+                    if (!string.IsNullOrEmpty(model.case_.FinishingDescription))
+                    {
+                        if (model.case_.FinishingDescription.Length > 30)
+                            result.Add(model.case_.FinishingDescription.Substring(0, 30));
+                        else
+                        {
+                            result.Add(model.case_.FinishingDescription);
+                        }
+                    }
+                }
+                #endregion
+            }
+            return result;
+        }
+
+        private static ProductArea GetProductArea(IList<ProductArea> productAreas, int productAreaId)
+        {
+            ProductArea pa = null;
+            foreach (var productArea in productAreas)
+            {
+                if (productArea.SubProductAreas != null && productArea.SubProductAreas.Any())
+                {
+                    var childs = productArea.SubProductAreas;
+                    pa = childs.SingleOrDefault(x => x.Id == productAreaId);
+                    if (pa != null)
+                        return pa;
+                    if (childs.Count > 0)
+                    {
+                        pa = GetProductArea(childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), productAreaId);
+                    }
+                }
+            }
+            return pa;
+        }
+
+        private static CaseType GetCaseType(IList<CaseType> list, int id)
+        {
+            CaseType item = null;
+            foreach (var it in list)
+            {
+                if (it.SubCaseTypes != null && it.SubCaseTypes.Any())
+                {
+                    var childs = it.SubCaseTypes;
+                    item = childs.SingleOrDefault(x => x.Id == id);
+                    if (item != null)
+                        return item;
+                    if (childs.Count > 0)
+                    {
+                        item = GetCaseType(childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), id);
+                    }
+                }
+            }
+            return item;
+        }
+
+        private static Category GetCategory(IList<Category> list, int id)
+        {
+            Category item = null;
+            foreach (var it in list)
+            {
+                if (it.SubCategories != null && it.SubCategories.Any())
+                {
+                    var childs = it.SubCategories;
+                    item = childs.SingleOrDefault(x => x.Id == id);
+                    if (item != null)
+                        return item;
+                    if (childs.Count > 0)
+                    {
+                        item = GetCategory(childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), id);
+                    }
+                }
+            }
+            return item;
+        }
+
+        #endregion
+
+    }
 }

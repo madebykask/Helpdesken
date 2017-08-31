@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Dal.EntityConfigurations.ADFS
+﻿namespace DH.Helpdesk.Dal.EntityConfigurations
 {    
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.ModelConfiguration;
@@ -22,6 +22,8 @@
             Property(e => e.Status).IsRequired();
             Property(e => e.CreatedDate).IsRequired();
             Property(e => e.ChangedDate).IsRequired();
+
+
 
             ToTable("tblCaseSolutionCondition");
         }

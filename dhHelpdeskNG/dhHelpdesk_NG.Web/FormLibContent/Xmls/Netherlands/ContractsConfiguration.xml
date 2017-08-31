@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Contracts textAlign="left" fontSize="10" style="text-align: left; font-family: Verdana; font-size: 10px;" dateFormat="dd.MM.yyyy" MarginTop="69" MarginBottom="69">
+  <contract process="Hiring"  id="Store_cccn" barcodeUse="true" barcodeShowOnMinStateSecondaryId="50" draftTextUse="true" draftShowOnMinStateSecondaryId="20" draftShowOnMaxStateSecondaryId="40">
+    <employerSignatureText><![CDATA[Handtekening werkgever<br />IKEA B.V.<br />]]></employerSignatureText>
+    <employeeSignatureText><![CDATA[Handtekening medewerker<br /><br /><br />]]></employeeSignatureText>
+    <documentTypeCode><![CDATA[w101]]></documentTypeCode>
+    <pages>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Hiring/Pdfs/Store_cccn.cshtml" MarginTop="69" MarginBottom="69"></page>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_FormPersonalData.cshtml" MarginTop="50" MarginBottom="50"></page>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_IcoCoWorker.cshtml" MarginTop="0" MarginBottom="50"></page>
+    </pages>
+  </contract>
+
+  <contract process="Hiring" id="So" barcodeUse="true" barcodeShowOnMinStateSecondaryId="50"  draftTextUse="true" draftShowOnMinStateSecondaryId="20" draftShowOnMaxStateSecondaryId="40">
+    <employerSignatureText><![CDATA[Handtekening werkgever<br />IKEA B.V.<br />]]></employerSignatureText>
+    <employeeSignatureText><![CDATA[Handtekening medewerker<br /><br /><br />]]></employeeSignatureText>
+    <documentTypeCode><![CDATA[w101]]></documentTypeCode>
+    <documentTypeCode><![CDATA[w101]]></documentTypeCode>
+    <pages>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Hiring/Pdfs/so.cshtml" MarginTop="69" MarginBottom="69"></page>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_FormPersonalData.cshtml" MarginTop="50" MarginBottom="50"></page>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_IcoCoWorker.cshtml" MarginTop="0" MarginBottom="50"></page>
+    </pages>
+  </contract>
+
+  <contract process="Hiring" id="Apprentice" barcodeUse="true" barcodeShowOnMinStateSecondaryId="50" draftTextUse="true" draftShowOnMinStateSecondaryId="20" draftShowOnMaxStateSecondaryId="40">
+    <employerSignatureText><![CDATA[Handtekening werkgever<br />IKEA B.V.<br />]]></employerSignatureText>
+    <employeeSignatureText><![CDATA[Handtekening stagiair<br /><br /><br />]]></employeeSignatureText>
+    <documentTypeCode><![CDATA[w101]]></documentTypeCode>
+    <pages>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Hiring/Pdfs/Apprentice.cshtml" MarginTop="69" MarginBottom="69"></page>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_FormPersonalData.cshtml" MarginTop="50" MarginBottom="50"></page>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_IcoCoWorker.cshtml" MarginTop="0" MarginBottom="50"></page>
+    </pages>
+  </contract>
+
+  <contract process="Absences" id="Absences" barcodeUse="true" barcodeShowOnMinStateSecondaryId="40" draftTextUse="true" draftShowOnMinStateSecondaryId="20" draftShowOnMaxStateSecondaryId="30">
+    <employerSignatureText><![CDATA[Met vriendelijke groet,<br />IKEA B.V.<br />]]></employerSignatureText>
+    <employeeSignatureText><![CDATA[<br />Handtekening medewerker<br /><br /><br />]]></employeeSignatureText>
+    <documentTypeCode><![CDATA[w111]]></documentTypeCode>
+    <pages>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Absences/Pdfs/Absences.cshtml" MarginTop="55" MarginBottom="49"></page>
+    </pages>
+  </contract>
+
+  <contract process="Termination" id="Termination" barcodeUse="true" barcodeShowOnMinStateSecondaryId="40" draftTextUse="true" draftShowOnMinStateSecondaryId="20" draftShowOnMaxStateSecondaryId="30">
+    <employerSignatureText><![CDATA[Met vriendelijke groet,<br />IKEA B.V.<br />]]></employerSignatureText>
+    <employeeSignatureText><![CDATA[<br />Handtekening medewerker<br />]]></employeeSignatureText>
+    <documentTypeCode><![CDATA[w109]]></documentTypeCode>
+    <pages>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/TerminationComplete/Pdfs/Termination.cshtml" MarginTop="55" MarginBottom="49"></page>
+    </pages>
+  </contract>
+  
+  
+    <contract process="Hiring" id="Debug1" barcodeUse="true" barcodeShowOnMinStateSecondaryId="0"  draftTextUse="true" draftShowOnMinStateSecondaryId="20" draftShowOnMaxStateSecondaryId="40">
+    <employerSignatureText><![CDATA[Handtekening werkgever<br />IKEA B.V.<br />]]></employerSignatureText>
+    <employeeSignatureText><![CDATA[Handtekening medewerker<br /><br /><br />]]></employeeSignatureText>
+    <documentTypeCode><![CDATA[w101]]></documentTypeCode>
+    <documentTypeCode><![CDATA[w101]]></documentTypeCode>
+    <pages>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Hiring/Pdfs/Debug1.cshtml" MarginTop="69" MarginBottom="69"></page>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_FormPersonalData.cshtml" MarginTop="50" MarginBottom="50"></page>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_IcoCoWorker.cshtml" MarginTop="0" MarginBottom="50"></page>
+    </pages>
+  </contract>
+
+  <contract process="Hiring" id="Debug2" barcodeUse="true" barcodeShowOnMinStateSecondaryId="0"  draftTextUse="true" draftShowOnMinStateSecondaryId="20" draftShowOnMaxStateSecondaryId="40">
+    <employerSignatureText><![CDATA[Handtekening werkgever<br />IKEA B.V.<br />]]></employerSignatureText>
+    <employeeSignatureText><![CDATA[Handtekening medewerker<br /><br /><br />]]></employeeSignatureText>
+    <documentTypeCode><![CDATA[w101]]></documentTypeCode>
+    <documentTypeCode><![CDATA[w101]]></documentTypeCode>
+    <pages>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Hiring/Pdfs/Debug2.cshtml" MarginTop="69" MarginBottom="69"></page>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_FormPersonalData.cshtml" MarginTop="50" MarginBottom="50"></page>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_IcoCoWorker.cshtml" MarginTop="0" MarginBottom="50"></page>
+    </pages>
+  </contract>
+
+  <contract process="Hiring" id="Debug3" barcodeUse="true" barcodeShowOnMinStateSecondaryId="0"  draftTextUse="true" draftShowOnMinStateSecondaryId="20" draftShowOnMaxStateSecondaryId="40">
+    <employerSignatureText><![CDATA[Handtekening werkgever<br />IKEA B.V.<br />]]></employerSignatureText>
+    <employeeSignatureText><![CDATA[Handtekening medewerker<br /><br /><br />]]></employeeSignatureText>
+    <documentTypeCode><![CDATA[w101]]></documentTypeCode>
+    <documentTypeCode><![CDATA[w101]]></documentTypeCode>
+    <pages>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Hiring/Pdfs/Debug3.cshtml" MarginTop="69" MarginBottom="69"></page>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_FormPersonalData.cshtml" MarginTop="50" MarginBottom="50"></page>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_IcoCoWorker.cshtml" MarginTop="0" MarginBottom="50"></page>
+    </pages>
+  </contract>
+  
+</Contracts>

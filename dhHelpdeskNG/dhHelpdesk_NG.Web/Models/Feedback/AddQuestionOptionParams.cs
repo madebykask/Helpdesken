@@ -22,5 +22,7 @@ namespace DH.Helpdesk.Web.Models.Feedback
 
 		[LocalizedStringLength(200)]
 		public string OptionIcon { get; set; }
+
+        public string IconSrc { get; set; }
 	}
 }

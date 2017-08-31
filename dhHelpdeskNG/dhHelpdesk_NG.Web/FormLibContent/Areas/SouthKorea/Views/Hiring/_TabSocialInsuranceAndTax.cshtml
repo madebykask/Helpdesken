@@ -1,0 +1,294 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="SocialInsuranceAndTax">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Personnel tax status (IT0541)")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_NonResident")</td>
+                    <td>@Model.Element("Personnel_NonResident")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_NonTaxableOverseasIncome")</td>
+                    <td>@Model.Element("Personnel_NonTaxableOverseasIncome")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_TypeOfNonTaxableOverseaseIncome")</td>
+                    <td>@Model.Element("Personnel_TypeOfNonTaxableOverseaseIncome")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_HandicappedEmployee")</td>
+                    <td>@Model.Element("Personnel_HandicappedEmployee")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_HandicappedCode")</td>
+                    <td>@Model.Element("Personnel_HandicappedCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_MatriarchOrDualIncome")</td>
+                    <td>@Model.Element("Personnel_MatriarchOrDualIncome")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_SingleParent")</td>
+                    <td>@Model.Element("Personnel_SingleParent")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_ProductionWorker")</td>
+                    <td>@Model.Element("Personnel_ProductionWorker")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_YoungAgedHandicappedEEInSMEs")</td>
+                    <td>@Model.Element("Personnel_YoungAgedHandicappedEEInSMEs")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_ExmptStartDate")</td>
+                    <td>@Model.Element("Personnel_ExmptStartDate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_ExmptEndDate")</td>
+                    <td>@Model.Element("Personnel_ExmptEndDate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_Foreigner")</td>
+                    <td>@Model.Element("Personnel_Foreigner")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_CalcMethod")</td>
+                    <td>@Model.Element("Personnel_CalcMethod")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_NonApplicable")</td>
+                    <td>@Model.Element("Personnel_NonApplicable")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_ByTaxExemptrionLawFull")</td>
+                    <td>@Model.Element("Personnel_ByTaxExemptrionLawFull")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_ByTaxExemptrionLawPartial")</td>
+                    <td>@Model.Element("Personnel_ByTaxExemptrionLawPartial")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_ByIncomeTaxLaw")</td>
+                    <td>@Model.Element("Personnel_ByIncomeTaxLaw")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_TaxTreaty")</td>
+                    <td>@Model.Element("Personnel_TaxTreaty")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_Submitted")</td>
+                    <td>@Model.Element("Personnel_Submitted")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Personnel_Received")</td>
+                    <td>@Model.Element("Personnel_Received")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Medical insurance (IT0543)")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Medical_InsuranceEntitlementReason")</td>
+                    <td>@Model.Element("Medical_InsuranceEntitlementReason")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Medical_MICardNumber")</td>
+                    <td>@Model.Element("Medical_MICardNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Medical_NoPremiumInTheAcquiredMonth")</td>
+                    <td>@Model.Element("Medical_NoPremiumInTheAcquiredMonth")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Medical_OverseasWorker")</td>
+                    <td>@Model.Element("Medical_OverseasWorker")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Medical_EIEntitlementEEover65")</td>
+                    <td>@Model.Element("Medical_EIEntitlementEEover65")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("National Pension (IT0543)")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("National_InsuranceEntitlementReason")</td>
+                    <td>@Model.Element("National_InsuranceEntitlementReason")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("National_NoPremiumInTheAcquiredMonth")</td>
+                    <td>@Model.Element("National_NoPremiumInTheAcquiredMonth")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("National_OverseasWorker")</td>
+                    <td>@Model.Element("National_OverseasWorker")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("National_EIEntitlementEEover65")</td>
+                    <td>@Model.Element("National_EIEntitlementEEover65")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Employment insurance (IT0543)")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Employment_InsuranceEntitlementReason")</td>
+                    <td>@Model.Element("Employment_InsuranceEntitlementReason")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Employment_OverseaseWorker")</td>
+                    <td>@Model.Element("Employment_OverseaseWorker")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Employment_EIEntitlementEEover65")</td>
+                    <td>@Model.Element("Employment_EIEntitlementEEover65")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Co-workers compensation Insurance (IT0543)")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CoWorkers_InsuranceEntitlementReason")</td>
+                    <td>@Model.Element("CoWorkers_InsuranceEntitlementReason")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CoWorkers_OverseasWorker")</td>
+                    <td>@Model.Element("CoWorkers_OverseasWorker")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("CoWorkers_EIEntitlementEEover65")</td>
+                    <td>@Model.Element("CoWorkers_EIEntitlementEEover65")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Medical Insurance (IT0544)")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Medical_NoHIAdjustmentInPrvYear")</td>
+                    <td>@Model.Element("Medical_NoHIAdjustmentInPrvYear")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Medical_MonthlyCompensationAmount")</td>
+                    <td>@Model.Element("Medical_MonthlyCompensationAmount")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Medical_Status")</td>
+                    <td>@Model.Element("Medical_Status")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Medical_ReasonForChange")</td>
+                    <td>@Model.Element("Medical_ReasonForChange")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("National Pension (IT0544)")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("National_NoHIAdjustmentInPrvYear")</td>
+                    <td>@Model.Element("National_NoHIAdjustmentInPrvYear")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("National_MonthlyCompensationAmount")</td>
+                    <td>@Model.Element("National_MonthlyCompensationAmount")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("National_ReasonForChange")</td>
+                    <td>@Model.Element("National_ReasonForChange")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Employment and co-workers compensation insurance (IT0544)")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Employment_NoHIAdjustmentInPrvYear")</td>
+                    <td>@Model.Element("Employment_NoHIAdjustmentInPrvYear")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Employment_MonthlyCompensationAmount")</td>
+                    <td>@Model.Element("Employment_MonthlyCompensationAmount")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Employment_ReasonForChange")</td>
+                    <td>@Model.Element("Employment_ReasonForChange")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+@if(!Model.ReadOnlyTab("#SocialInsuranceAndTax"))
+{
+    <script type="text/javascript">
+
+        var medicalReason = $('#Medical_InsuranceEntitlementReason');
+        var medicalGroup = $('#Medical_MICardNumber, #Medical_NoPremiumInTheAcquiredMonth, #Medical_OverseasWorker, #Medical_EIEntitlementEEover65');
+
+        var nationalReason = $('#National_InsuranceEntitlementReason');
+        var nationalGroup = $('#National_NoPremiumInTheAcquiredMonth, #National_OverseasWorker, #National_EIEntitlementEEover65');
+
+        var employmentReason = $('#Employment_InsuranceEntitlementReason');
+        var employmentGroup = $('#Employment_OverseaseWorker, #Employment_EIEntitlementEEover65');
+
+        var coWorkersReason = $('#CoWorkers_InsuranceEntitlementReason');
+        var coWorkersGroup = $('#CoWorkers_OverseasWorker, #CoWorkers_EIEntitlementEEover65');
+
+        var checkMedicalGroup = function () {
+            if (medicalReason.val() == '')
+                medicalGroup.filter(':checkbox').prop('checked', false).prop('disabled', true).end().filter(':text').val('').prop('readonly', true);
+            else
+                medicalGroup.filter(':checkbox').prop('disabled', false).end().filter(':text').prop('readonly', false);
+        };
+
+        var checkNationalGroup = function () {
+            if (nationalReason.val() == '')
+                nationalGroup.filter(':checkbox').prop('checked', false).prop('disabled', true).end().filter(':text').val('').prop('readonly', true);
+            else
+                nationalGroup.filter(':checkbox').prop('disabled', false).end().filter(':text').prop('readonly', false);
+        };
+
+        var checkEmploymentGroup = function () {
+            if (employmentReason.val() == '')
+                employmentGroup.filter(':checkbox').prop('checked', false).prop('disabled', true).end().filter(':text').val('').prop('readonly', true);
+            else
+                employmentGroup.filter(':checkbox').prop('disabled', false).end().filter(':text').prop('readonly', false);
+        };
+
+        var checkCoWorkersGroup = function () {
+            if (coWorkersReason.val() == '')
+                coWorkersGroup.filter(':checkbox').prop('checked', false).prop('disabled', true).end().filter(':text').val('').prop('readonly', true);
+            else
+                coWorkersGroup.filter(':checkbox').prop('disabled', false).end().filter(':text').prop('readonly', false);
+        };
+
+        medicalReason.change(checkMedicalGroup);
+        nationalReason.change(checkNationalGroup);
+        employmentReason.change(checkEmploymentGroup);
+        coWorkersReason.change(checkCoWorkersGroup);
+
+        checkMedicalGroup();
+        checkNationalGroup();
+        checkEmploymentGroup();
+        checkCoWorkersGroup();
+
+    </script>
+}

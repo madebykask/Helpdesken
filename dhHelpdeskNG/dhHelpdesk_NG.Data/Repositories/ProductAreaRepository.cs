@@ -9,6 +9,10 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain;
     using ProductAreaEntity = DH.Helpdesk.Domain.ProductArea;
+    using System.Configuration;
+    using System.Data.SqlClient;
+    using System.Data;
+    using System;
 
     #region PRODUCTAREA
 
@@ -68,6 +72,9 @@ namespace DH.Helpdesk.Dal.Repositories
         IEnumerable<ProductAreaOverview> GetProductAreaOverviews(int customerId);
 
         int SaveProductArea(ProductAreaOverview productArea);
+
+
+        IList<ProductAreaEntity> GetWithHierarchy(int customerId);
     }
 
     /// <summary>
@@ -81,6 +88,7 @@ namespace DH.Helpdesk.Dal.Repositories
         private readonly IEntityToBusinessModelMapper<ProductAreaEntity, ProductAreaOverview> productAreaEntityToBusinessModelMapper;
 
         private readonly IBusinessModelToEntityMapper<ProductAreaOverview, ProductAreaEntity> toEntityMapper;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductAreaRepository"/> class.
@@ -101,7 +109,8 @@ namespace DH.Helpdesk.Dal.Repositories
             this.toEntityMapper = toEntityMapper;
         }
 
-        /// <summary>
+
+
         /// The get product area overview.
         /// </summary>
         /// <param name="id">
@@ -146,6 +155,52 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             return this.GetChildrenOverviews(customerId, parentId);
+        }
+
+
+        public IList<ProductAreaEntity> GetWithHierarchy(int customerId)
+        {
+            string sql = "SELECT[Id] AS Id, isnull(dbo.GetHierarchy(Id, 'tblProductArea'), '') AS Name, ";
+            sql += "ProductAreaGUID AS Guid, ";
+            sql += "cast(0 as bit) AS[Selected] ";
+            sql += "FROM tblProductArea AS[Extent1] WHERE(Customer_Id is null or Customer_Id = 1) ORDER BY Name";
+
+            List<ProductAreaEntity> l = new List<ProductAreaEntity>();
+            DataTable dt = null;
+            string con = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+
+         
+
+            using (var connection = new SqlConnection(con))
+            {
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandType = CommandType.Text;
+                    command.CommandText = sql;
+                    connection.Open();
+                    var reader = command.ExecuteReader();
+                    dt = new DataTable();
+                    dt.Load(reader);
+
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        ProductAreaEntity p = new ProductAreaEntity
+                        {
+                            Id = Convert.ToInt32(row["Id"].ToString()),
+                            Name = row["Name"].ToString()
+
+                        };
+
+                        l.Add(p);
+
+                    }
+
+                }
+
+            }
+
+            return l.ToList();
+
         }
 
         /// <summary>

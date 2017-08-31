@@ -1,0 +1,760 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+    <name>JobTitle</name>
+    <dependent>
+        <selected>Accounting Co-worker 40001319</selected>
+        <show>9</show>
+    </dependent>
+    <dependent>
+        <selected>Accounting Co-worker Senior 40001321</selected>
+        <show>11</show>
+    </dependent>
+    <dependent>
+        <selected>Accounting Manager 40001323</selected>
+        <show>14</show>
+    </dependent>
+    <dependent>
+        <selected>Accounting Team Manager 40001331</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Accounts Payable Co-worker 50024055</selected>
+        <show>7</show>
+    </dependent>
+    <dependent>
+        <selected>Activity Leader 50160841</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>Administration &amp; Routines Specialist 50224867</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Administrator 40001354</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Administrator 40001355</selected>
+        <show>7,7</show>
+    </dependent>
+    <dependent>
+        <selected>Apprentice 40001365</selected>
+        <show>0</show>
+    </dependent>
+    <dependent>
+        <selected>Back-Office Co-worker 40001391</selected>
+        <show>7</show>
+    </dependent>
+    <dependent>
+        <selected>Backpacker 50083734</selected>
+        <show>n/a</show>
+    </dependent>
+    <dependent>
+        <selected>Build Up Service Specialist 40001401</selected>
+        <show>12</show>
+    </dependent>
+    <dependent>
+        <selected>Business Analyst 40001407</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Business Creator 50057712</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Business Information Analyst 50229312</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigation Manager 40001435</selected>
+        <show>15</show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigator 40001439</selected>
+        <show>13, 13</show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigator 40001440</selected>
+        <show>14</show>
+    </dependent>
+    <dependent>
+        <selected>Business Navigator 40001441</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Call Center Representative 40001467</selected>
+        <show>6</show>
+    </dependent>
+    <dependent>
+        <selected>Call Center Representative I 40001468</selected>
+        <show>7</show>
+    </dependent>
+    <dependent>
+        <selected>Carpenter Co-worker 40001473</selected>
+        <show>6</show>
+    </dependent>
+    <dependent>
+        <selected>Carts Co-worker 40001474</selected>
+        <show>3</show>
+    </dependent>
+    <dependent>
+        <selected>Cash Line Co-worker 40000297</selected>
+        <show>6</show>
+    </dependent>
+    <dependent>
+        <selected>Checkout Coworker IKEA FOOD 50104096</selected>
+        <show>5</show>
+    </dependent>
+    <dependent>
+        <selected>Com &amp; In Co-worker 40002120</selected>
+        <show>n/a</show>
+    </dependent>
+    <dependent>
+        <selected>Com&amp;In Learning &amp; Development Leader 50282479</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Commercial Activity Leader 50038546</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Communication &amp; Interior Design Manager 50269604</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>Communication Responsible 40001557</selected>
+        <show>n/a</show>
+    </dependent>
+    <dependent>
+        <selected>Communications Specialist - Senior 40001563</selected>
+        <show>12</show>
+    </dependent>
+    <dependent>
+        <selected>Competence Development Specialist 40001586</selected>
+        <show>14, 14</show>
+    </dependent>
+    <dependent>
+        <selected>Construction Project Manager 40001606</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>Contact Center Manager 50042158</selected>
+        <show> </show>
+    </dependent>
+    <dependent>
+        <selected>Country Com&amp;In Manager 40001527</selected>
+        <show>18</show>
+    </dependent>
+    <dependent>
+        <selected>Country Communication Manager 40001554</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Country Customer Relations Manager 50101531</selected>
+        <show>17</show>
+    </dependent>
+    <dependent>
+        <selected>Country Facility Manager 40001793</selected>
+        <show>12</show>
+    </dependent>
+    <dependent>
+        <selected>Country Food Specialist 50155261</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>Country Graphic Communication Leader 50160843</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Country HR Manager 40001626</selected>
+        <show>18</show>
+    </dependent>
+    <dependent>
+        <selected>Country IKEA Food Manager 40001825</selected>
+        <show>17</show>
+    </dependent>
+    <dependent>
+        <selected>Country In-Store Logistics Manager 40001984</selected>
+        <show>14</show>
+    </dependent>
+    <dependent>
+        <selected>Country Marketing Manager 50101526</selected>
+        <show>18</show>
+    </dependent>
+    <dependent>
+        <selected>Country Retail Manager 40002376</selected>
+        <show>20</show>
+    </dependent>
+    <dependent>
+        <selected>Country Risk Manager 40002385</selected>
+        <show>14</show>
+    </dependent>
+    <dependent>
+        <selected>Country Sales Manager 40001627</selected>
+        <show>18</show>
+    </dependent>
+    <dependent>
+        <selected>Country Web &amp; Digital Manager 50368575</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Co-worker Relations Manager 40001628</selected>
+        <show>15</show>
+    </dependent>
+    <dependent>
+        <selected>Customer Delivery Coordinator 40002753</selected>
+        <show>12</show>
+    </dependent>
+    <dependent>
+        <selected>Customer Service Specialist 40001653</selected>
+        <show>12</show>
+    </dependent>
+    <dependent>
+        <selected>Customer Services Manager 40000312</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>Customer Services Team Assistant 40001655</selected>
+        <show>9</show>
+    </dependent>
+    <dependent>
+        <selected>Customer Services Team Manager 40001657</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Deputy Com &amp; In Manager 40001698</selected>
+        <show>12</show>
+    </dependent>
+    <dependent>
+        <selected>Deputy Logistics Manager 40001715</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>Deputy Marketing Manager 40001717</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Deputy Retail Manager 40001724</selected>
+        <show>18</show>
+    </dependent>
+    <dependent>
+        <selected>Deputy Sales Manager 40000342</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>Deputy Shopkeeper 50155390</selected>
+        <show>9</show>
+    </dependent>
+    <dependent>
+        <selected>Deputy Store Manager 40001732</selected>
+        <show>n/a</show>
+    </dependent>
+    <dependent>
+        <selected>Dishwasher / Attendant 40001756</selected>
+        <show>2</show>
+    </dependent>
+    <dependent>
+        <selected>Easy Buying Specialist 50224865</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>eCommerce BN Operations Manager 50348816</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>eCommerce Merchandiser 50348812</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>eCommerce Shopkeeper 50348810</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>External Communication Co-worker 50224864</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Finance &amp; Administration Manager 40001808</selected>
+        <show>18, 18</show>
+    </dependent>
+    <dependent>
+        <selected>Food Safety Specialist 50064491</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>Frontliner 50044980</selected>
+        <show>7</show>
+    </dependent>
+    <dependent>
+        <selected>Furniture Builder 40001849</selected>
+        <show>5</show>
+    </dependent>
+    <dependent>
+        <selected>Global Commercial Review Manager 50348815</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Co-worker 40001859</selected>
+        <show>3</show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Co-worker I 50104272</selected>
+        <show>5</show>
+    </dependent>
+    <dependent>
+        <selected>Goods Flow Team Leader 40001865</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Graphic Communication Co-worker 40001871</selected>
+        <show>7</show>
+    </dependent>
+    <dependent>
+        <selected>Graphic Communication Leader 50061643</selected>
+        <show>9</show>
+    </dependent>
+    <dependent>
+        <selected>Graphic Communication Leader Expansion 50409562</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>HR Generalist 40000704</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>HR Generalist 40001915</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>HR Manager 40000363</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>HR Manager 40001921</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>HR Operations Manager 40001930</selected>
+        <show>12</show>
+    </dependent>
+    <dependent>
+        <selected>HR Service Center Co-worker 40001931</selected>
+        <show>7</show>
+    </dependent>
+    <dependent>
+        <selected>HR Service Center Manager 40001932</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>HR Specialist 40000070</selected>
+        <show>12</show>
+    </dependent>
+    <dependent>
+        <selected>HRSC Payroll Specialist II 50046522</selected>
+        <show>9</show>
+    </dependent>
+    <dependent>
+        <selected>IF Bistro &amp; Sweden Shop Co-worker 40001953</selected>
+        <show>5</show>
+    </dependent>
+    <dependent>
+        <selected>IF Specialist 40001958</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>IF Team Leader 40000354</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Business Specialist 40001964</selected>
+        <show>n/a</show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Co-worker 40000367</selected>
+        <show>6</show>
+    </dependent>
+    <dependent>
+        <selected>IKEA FOOD Co-worker I 50104500</selected>
+        <show>5</show>
+    </dependent>
+    <dependent>
+        <selected>IKEA Food Manager 40000368</selected>
+        <show>12</show>
+    </dependent>
+    <dependent>
+        <selected>Info &amp; Smaland Co-worker 40000369</selected>
+        <show>4</show>
+    </dependent>
+    <dependent>
+        <selected>Information &amp; Communication Coordinator 40001969</selected>
+        <show>9</show>
+    </dependent>
+    <dependent>
+        <selected>In-store Logistics Specialist 40001985</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design Co-worker 40001988</selected>
+        <show>7</show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design Leader 50160844</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design Leader Expansion 50409565</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Interior Design Manager 40001989</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Internal Information Coordinator 40002009</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Internal Information Coordinator 40002010</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Internet Coordinator 40002017</selected>
+        <show>9</show>
+    </dependent>
+    <dependent>
+        <selected>IT Manager 40002040</selected>
+        <show>14</show>
+    </dependent>
+    <dependent>
+        <selected>IT Support 40002046</selected>
+        <show>8</show>
+    </dependent>
+    <dependent>
+        <selected>Kitchen Production Specialist 50001080</selected>
+        <show>7</show>
+    </dependent>
+    <dependent>
+        <selected>Leadership Development Manager 40002718</selected>
+        <show>15</show>
+    </dependent>
+    <dependent>
+        <selected>Learning &amp; Development Specialist 40000071</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Local Marketing Co-worker 40003012</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Local Marketing Specialist 40002083</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Logistics Administration Co-worker 40000372</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Logistics Manager 40000374</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>Logistics Team Leader 40000356</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance Co-worker 40002103</selected>
+        <show>6</show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance Manager 40002101</selected>
+        <show>9</show>
+    </dependent>
+    <dependent>
+        <selected>Maintenance Manager 40002102</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Market Intelligence Manager 50064044</selected>
+        <show>11</show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Relationship Manager 40002132</selected>
+        <show>15</show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Specialist 40002139</selected>
+        <show>11</show>
+    </dependent>
+    <dependent>
+        <selected>Marketing Web Specialist 40002141</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Operations Manager 40002171</selected>
+        <show>12</show>
+    </dependent>
+    <dependent>
+        <selected>Operations Manager 50113867</selected>
+        <show>12</show>
+    </dependent>
+    <dependent>
+        <selected>PR Co-worker 40002207</selected>
+        <show>9</show>
+    </dependent>
+    <dependent>
+        <selected>Press officer 50383525</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Product Req &amp; Compliance Specialist 50082564</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Project Co-worker 40002254</selected>
+        <show>9</show>
+    </dependent>
+    <dependent>
+        <selected>Project Manager 40002272</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>Project Manager 40002275</selected>
+        <show>11</show>
+    </dependent>
+    <dependent>
+        <selected>Project Manager 40002771</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Property Manager 40002289</selected>
+        <show>17</show>
+    </dependent>
+    <dependent>
+        <selected>Purchaser 40000163</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Q-Store Quality Manager 50218741</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Quality Assurance Analyst 40002308</selected>
+        <show> </show>
+    </dependent>
+    <dependent>
+        <selected>Quality Co-worker 50013213</selected>
+        <show>0</show>
+    </dependent>
+    <dependent>
+        <selected>Quality Specialist 40002744</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Receive Payment Leader 50096967</selected>
+        <show>9</show>
+    </dependent>
+    <dependent>
+        <selected>Receptionist 40002343</selected>
+        <show>6</show>
+    </dependent>
+    <dependent>
+        <selected>Receptionist 40002344</selected>
+        <show>6</show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Co-worker 40000377</selected>
+        <show>5</show>
+    </dependent>
+    <dependent>
+        <selected>Recovery Team Leader 40000357</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Recruitment Manager 40002356</selected>
+        <show>14</show>
+    </dependent>
+    <dependent>
+        <selected>Recruitment Specialist 40002358</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Retail Logistics Capacity &amp; Flow Planner 40002369</selected>
+        <show>11</show>
+    </dependent>
+    <dependent>
+        <selected>Retail Logistics Manager 40002375</selected>
+        <show>18</show>
+    </dependent>
+    <dependent>
+        <selected>Retail Preparation Manager 40002380</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Retail Project Mnager 50113866</selected>
+        <show>13, 13, 13</show>
+    </dependent>
+    <dependent>
+        <selected>Retail Support Integration Manager 40002384</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Retail Sustainability Manager 50101527</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>Risk Specialist 50042161</selected>
+        <show>11</show>
+    </dependent>
+    <dependent>
+        <selected>Safety &amp; Security Co-worker 40002394</selected>
+        <show>7, 7</show>
+    </dependent>
+    <dependent>
+        <selected>Sales &amp; Supply Support Co-worker 50014535</selected>
+        <show>6</show>
+    </dependent>
+    <dependent>
+        <selected>Sales &amp; Supply Support Manager 40002406</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Sales &amp; Supply Support Specialist 50051073</selected>
+        <show>9</show>
+    </dependent>
+    <dependent>
+        <selected>Sales Co-worker 40000383</selected>
+        <show>5</show>
+    </dependent>
+    <dependent>
+        <selected>Sales Co-worker II 50047407</selected>
+        <show>6</show>
+    </dependent>
+    <dependent>
+        <selected>Sales Leader 40002413</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>Sales Leader II 40003065</selected>
+        <show>15</show>
+    </dependent>
+    <dependent>
+        <selected>Sales Manager 40000387</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>Sales Manager 40002416</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>Sales Navigator 50104313</selected>
+        <show>14</show>
+    </dependent>
+    <dependent>
+        <selected>Sales Planner 40002421</selected>
+        <show> </show>
+    </dependent>
+    <dependent>
+        <selected>Sales Space Specialist 50047610</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Sales Support Co-worker 40002427</selected>
+        <show>9</show>
+    </dependent>
+    <dependent>
+        <selected>Sales Support Specialist 40002428</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Sales Team Leader 40000359</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Shopping Experience Manager 50224866</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Site Facility Manager 40000332</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Software Specialist 40002507</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Staff Scheduler 40000391</selected>
+        <show>8</show>
+    </dependent>
+    <dependent>
+        <selected>Staff Scheduler 40002510</selected>
+        <show>n/a</show>
+    </dependent>
+    <dependent>
+        <selected>Store Manager 40000392</selected>
+        <show>n/a</show>
+    </dependent>
+    <dependent>
+        <selected>Supply Support Specialist 40002554</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Support Analyst 40002662</selected>
+        <show>8</show>
+    </dependent>
+    <dependent>
+        <selected>System Developer 40001751</selected>
+        <show>11</show>
+    </dependent>
+    <dependent>
+        <selected>System Specialist 40002561</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Team Leader 40002585</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Team Manager 40002587</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Team Manager I 40002589</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Technical Specialist 50076732</selected>
+        <show>13</show>
+    </dependent>
+    <dependent>
+        <selected>Temporary Staff 40002604</selected>
+        <show>3</show>
+    </dependent>
+    <dependent>
+        <selected>Translator 40002630</selected>
+        <show>7</show>
+    </dependent>
+    <dependent>
+        <selected>User Support I 40002663</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandise Leader 50160846</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandise Leader Expansion 50409564</selected>
+        <show></show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandise/Activity Co-worker 50104274</selected>
+        <show>7</show>
+    </dependent>
+    <dependent>
+        <selected>Visual Merchandise/Activity Manager 50061645</selected>
+        <show>10</show>
+    </dependent>
+    <dependent>
+        <selected>Web Editor 40002684</selected>
+        <show></show>
+    </dependent>
+</predefined>

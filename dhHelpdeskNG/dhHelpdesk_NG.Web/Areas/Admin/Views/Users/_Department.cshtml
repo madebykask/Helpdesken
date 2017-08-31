@@ -32,7 +32,8 @@
                                     
                                         <td class="span5">
                                             <input type="checkbox" name="@string.Format("Departments")" @(d.Users.Contains(cu.User) ? "checked=checked" : "") value="@d.Id" />
-                                            @Translation.Get(d.DepartmentName, Enums.TranslationSource.TextTranslation)
+                                            @*@Translation.Get(d.DepartmentName, Enums.TranslationSource.TextTranslation)*@
+                                            @d.DepartmentName
                                         </td>
                                     
                                         if (i % 3 == 0)

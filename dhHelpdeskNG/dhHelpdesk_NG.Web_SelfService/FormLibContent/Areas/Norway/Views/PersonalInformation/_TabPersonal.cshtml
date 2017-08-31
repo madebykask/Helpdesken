@@ -1,0 +1,694 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@{
+    const string IsTeWorker = "No";
+    const string DefaultCountry = "Norway";
+
+    var fillOldVal = TempData["oldValues"];
+    var newfill = (List<KeyValuePair<string, string>>)fillOldVal;
+}
+<div class="tab-pane" id="Personal">
+    <div class="span12">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td colspan="2">
+                        @Model.Translate("Please fill in only the information which is changing")
+                    </td>               
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Personal Data Change")</h4>
+                    </td>
+                    <td class="tdstrong current-record-th">
+                        <h4>@Model.Translate("Current record")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NewFirstName")</td>
+                    <td>@Model.Element("NewFirstName")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_NewFirstName" name="OLD_NewFirstName" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewFirstName").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_NewFirstName">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewFirstName").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NewMiddleName")</td>
+                    <td>@Model.Element("NewMiddleName")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_NewMiddleName" name="OLD_NewMiddleName" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewMiddleName").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_NewMiddleName">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewMiddleName").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NewLastName")</td>
+                    <td>@Model.Element("NewLastName")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_NewLastName" name="OLD_NewLastName" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewLastName").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_NewLastName">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_NewLastName").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Gender")</td>
+                    <td>@Model.Element("Gender")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MaritalStatus")</td>
+                    <td>@Model.Element("MaritalStatus")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PersonalIDNumber")</td>
+                    <td>@Model.Element("PersonalIDNumber")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Contact Details")</h4>
+                    </td>
+                    <td class="tdstrong current-record-th">
+                        <h4>@Model.Translate("Current record")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TelephoneNumber")</td>
+                    <td>@Model.Element("TelephoneNumber")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_TelephoneNumber" name="OLD_TelephoneNumber" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_TelephoneNumber").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_TelephoneNumber">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_TelephoneNumber").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TelephoneNumber2")</td>
+                    <td>@Model.Element("TelephoneNumber2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PrivateEMailAddress")</td>
+                    <td>@Model.Element("PrivateEMailAddress")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_PrivateEMailAddress" name="OLD_PrivateEMailAddress" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PrivateEMailAddress").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_PrivateEMailAddress">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PrivateEMailAddress").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <!-- Permanent ADDRESS -->
+                    <tr>
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Permanent Address")</h4>
+                        </td>
+                        <td class="tdstrong current-record-th">
+                            <h4>@Model.Translate("Current record")</h4>
+                        </td>
+                    </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine1")</td>
+                    <td>@Model.Element("PermanentAddressLine1")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_PermanentAddressLine1" name="OLD_PermanentAddressLine1" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine1").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_PermanentAddressLine1">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine1").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine2")</td>
+                    <td>@Model.Element("PermanentAddressLine2")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_PermanentAddressLine2" name="OLD_PermanentAddressLine2" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine2").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_PermanentAddressLine2">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine2").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
+                    <td>@Model.Element("PermanentPostalCode")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_PermanentPostalCode" name="OLD_PermanentPostalCode" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentPostalCode").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_PermanentPostalCode">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentPostalCode").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentCity")</td>
+                    <td>@Model.Element("PermanentCity")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_PermanentCity" name="OLD_PermanentCity" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentCity").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_PermanentCity">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentCity").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentCountry")</td>
+                    <td>@Model.Element("PermanentCountry")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_PermanentCountry" name="OLD_PermanentCountry" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentCountry").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_PermanentCountry">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentCountry").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>                
+                <!-- EMERGENCY ADDRESS -->
+                <tr class="emergencyaddress" id="emergencyaddress">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Emergency Address")
+                            <button class="btn btn-mini pull-right" id="btnEmergencyAddress" data-prefix="Emergency">
+                                <i class="icon-share"></i>&nbsp;@Model.Translate("Copy from Permanent Address")
+                            </button>
+                        </h4>
+                    </td>
+                    <td class="tdstrong current-record-th">
+                         <h4>@Model.Translate("Current record")</h4>                        
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyAddressLine1")</td>
+                    <td>@Model.Element("EmergencyAddressLine1")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_EmergencyAddressLine1" name="OLD_EmergencyAddressLine1" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmergencyAddressLine1").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_EmergencyAddressLine1">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmergencyAddressLine1").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyAddressLine2")</td>
+                    <td>@Model.Element("EmergencyAddressLine2")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_EmergencyAddressLine2" name="OLD_EmergencyAddressLine2" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmergencyAddressLine2").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_EmergencyAddressLine2">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmergencyAddressLine2").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyPostalCode")</td>
+                    <td>@Model.Element("EmergencyPostalCode")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_EmergencyPostalCode" name="OLD_EmergencyPostalCode" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmergencyPostalCode").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_EmergencyPostalCode">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmergencyPostalCode").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyCity")</td>
+                    <td>@Model.Element("EmergencyCity")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_EmergencyCity" name="OLD_EmergencyCity" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmergencyCity").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_EmergencyCity">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmergencyCity").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyCountry")</td>
+                    <td>@Model.Element("EmergencyCountry")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_EmergencyCountry" name="OLD_EmergencyCountry" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmergencyCountry").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_EmergencyCountry">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmergencyCountry").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyContactRelationship")</td>
+                    <td>@Model.Element("EmergencyContactRelationship")</td>
+                    <td>
+                        <input type="hidden" class="oldValue"  id="OLD_EmergencyContactRelationship" name="OLD_EmergencyContactRelationship" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmergencyContactRelationship").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_EmergencyContactRelationship">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmergencyContactRelationship").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("EmergencyContactNumber")</td>
+                    <td>@Model.Element("EmergencyContactNumber")</td>
+                     <td>
+                        <input type="hidden" class="oldValue"  id="OLD_EmergencyContactNumber" name="OLD_EmergencyContactNumber" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmergencyContactNumber").Select(x => x.Value).FirstOrDefault() : "")"/>
+                        <em class="muted" id="emOLD_EmergencyContactNumber">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmergencyContactNumber").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
+                </tr>                
+                <tr>
+                    <td class="tdstrong">@Model.Label("OtherTelephoneNumber")</td>
+                    <td>@Model.Element("OtherTelephoneNumber")</td>
+                </tr>
+
+                <!-- FAMILY MEMBER / DEPENDENTS -->
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Family Member / Dependents")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMember")</td>
+                    <td>@Model.Element("FamilyMember")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberLastName")</td>
+                    <td>@Model.Element("FamilyMemberLastName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberFirstName")</td>
+                    <td>@Model.Element("FamilyMemberFirstName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberGender")</td>
+                    <td>@Model.Element("FamilyMemberGender")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberDateOfBirth")</td>
+                    <td>@Model.Element("FamilyMemberDateOfBirth")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FamilyMemberNationality")</td>
+                    <td>@Model.Element("FamilyMemberNationality")</td>
+                </tr>
+                 <tr>
+                    <td class="tdstrong">@Model.Label("TheOnlyChildCarer")</td>
+                    <td>@Model.Element("TheOnlyChildCarer")</td>
+                </tr>
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="familyMember@(i.ToString())" id="familyMember@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Family Member / Dependents") @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMember" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMember" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberLastName" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberLastName" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberFirstName" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberFirstName" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberGender" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberGender" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberDateOfBirth" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberDateOfBirth" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("FamilyMemberNationality" + i.ToString())</td>
+                        <td>
+                            @Model.Element("FamilyMemberNationality" + i.ToString())</td>
+                    </tr>
+                    <tr class="familyMember@(i.ToString())">
+                        <td class="tdstrong">@Model.Label("TheOnlyChildCarer" + i.ToString())</td>
+                        <td>
+                            @Model.Element("TheOnlyChildCarer" + i.ToString())</td>
+                    </tr>
+                  }
+
+                <tr id="addFamilyMemberTrr">
+                    <td colspan="2">
+                        @Model.Element("FamilyMembers")
+                        <a id="addFamilyMember" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another family member")</a></td>
+                </tr>
+
+                <!-- Global Mobility Employee Documents -->
+                <tr class="globalmobility-first">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Global Mobility - Employee Documents")</h4>
+                    </td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("EmployeeDocumentType")</td>
+                    <td>@Model.Element("EmployeeDocumentType")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("EmployeeDocumentCountry")</td>
+                    <td>@Model.Element("EmployeeDocumentCountry")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("EmployeeDocumentNo")</td>
+                    <td>@Model.Element("EmployeeDocumentNo")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("EmployeeDocumentIssueDate")</td>
+                    <td>@Model.Element("EmployeeDocumentIssueDate")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("EmployeeDocumentIssuePlace")</td>
+                    <td>@Model.Element("EmployeeDocumentIssuePlace")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("EmployeeDocumentIssuePlaceCountry")</td>
+                    <td>@Model.Element("EmployeeDocumentIssuePlaceCountry")</td>
+                </tr>
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="employeeDocument@(i.ToString()) globalmobility" id="employeeDocument@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Global Mobility - Employee Documents")  @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="employeeDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("EmployeeDocumentType" + i.ToString())</td>
+                        <td>@Model.Element("EmployeeDocumentType" + i.ToString())</td>
+                    </tr>
+                    <tr class="employeeDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("EmployeeDocumentCountry" + i.ToString())</td>
+                        <td>@Model.Element("EmployeeDocumentCountry" + i.ToString())</td>
+                    </tr>
+                    <tr class="employeeDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("EmployeeDocumentNo" + i.ToString())</td>
+                        <td>@Model.Element("EmployeeDocumentNo" + i.ToString())</td>
+                    </tr>
+                    <tr class="employeeDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("EmployeeDocumentIssueDate" + i.ToString())</td>
+                        <td>@Model.Element("EmployeeDocumentIssueDate" + i.ToString())</td>
+                    </tr>
+                    <tr class="employeeDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("EmployeeDocumentIssuePlace" + i.ToString())</td>
+                        <td>@Model.Element("EmployeeDocumentIssuePlace" + i.ToString())</td>
+                    </tr>
+                    <tr class="employeeDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("EmployeeDocumentIssuePlaceCountry" + i.ToString())</td>
+                        <td>@Model.Element("EmployeeDocumentIssuePlaceCountry" + i.ToString())</td>
+                    </tr>
+                }
+                <tr class="globalmobility-first" id="addEmployeeDocumentTrr">
+                    <td colspan="2">
+                        @Model.Element("EmployeeDocuments")
+                        <a id="addEmployeeDocument" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another employee documents")</a></td>
+                </tr>
+
+                <!-- Global Mobility Dependants -->
+                <tr class="globalmobility-first">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Global Mobility - Dependants")</h4>
+                    </td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantFamilyMember")</td>
+                    <td>@Model.Element("DependantFamilyMember")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("Accompanying")</td>
+                    <td>@Model.Element("Accompanying")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsLastName")</td>
+                    <td>@Model.Element("DependantsLastName")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsFirstName")</td>
+                    <td>@Model.Element("DependantsFirstName")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsDateOfBirth")</td>
+                    <td>@Model.Element("DependantsDateOfBirth")</td>
+                </tr>
+
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility" id="dependantFamilyMember@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Global Mobility - Dependants") @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantFamilyMember")</td>
+                        <td>@Model.Element("DependantFamilyMember" + i.ToString())</td>
+                    </tr>
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("Accompanying" + i.ToString())</td>
+                        <td>@Model.Element("Accompanying" + i.ToString())</td>
+                    </tr>
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsLastName" + i.ToString())</td>
+                        <td>@Model.Element("DependantsLastName" + i.ToString())</td>
+                    </tr>
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsFirstName" + i.ToString())</td>
+                        <td>@Model.Element("DependantsFirstName" + i.ToString())</td>
+                    </tr>
+                    <tr class="dependantFamilyMember@(i.ToString()) globalmobility ">
+                        <td class="tdstrong">@Model.Label("DependantsDateOfBirth" + i.ToString())</td>
+                        <td>@Model.Element("DependantsDateOfBirth" + i.ToString())</td>
+                    </tr>
+                }
+
+                <tr class="globalmobility-first" id="addDependantFamilyMembersTrr">
+                    <td colspan="2">
+                        @Model.Element("DependantFamilyMembers")
+                        <a id="addDependantFamilyMember" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another global mobility dependant")</a></td>
+                </tr>
+
+
+                <!-- Global Mobility Dependants Documents -->
+                <tr class="globalmobility-first">
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Global Mobility - Dependants Documents")</h4>
+                    </td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsDocumentType")</td>
+                    <td>@Model.Element("DependantsDocumentType")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsDocumentCountry")</td>
+                    <td>@Model.Element("DependantsDocumentCountry")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsDocumentNo")</td>
+                    <td>@Model.Element("DependantsDocumentNo")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsDocumentIssueDate")</td>
+                    <td>@Model.Element("DependantsDocumentIssueDate")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsDocumentIssuePlace")</td>
+                    <td>@Model.Element("DependantsDocumentIssuePlace")</td>
+                </tr>
+                <tr class="globalmobility-first">
+                    <td class="tdstrong">@Model.Label("DependantsDocumentIssuePlaceCountry")</td>
+                    <td>@Model.Element("DependantsDocumentIssuePlaceCountry")</td>
+                </tr>
+
+
+                @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
+                {
+                    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility" id="globalMobilityDependantDocument@(i.ToString())">
+                        <td class="tdstrong" colspan="2">
+                            <h4>@Model.Translate("Global Mobility - Dependants Documents") @i.ToString()</h4>
+                        </td>
+                    </tr>
+                    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsDocumentType" + i.ToString())</td>
+                        <td>@Model.Element("DependantsDocumentType" + i.ToString())</td>
+                    </tr>
+                    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsDocumentCountry" + i.ToString())</td>
+                        <td>@Model.Element("DependantsDocumentCountry" + i.ToString())</td>
+                    </tr>
+                    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsDocumentNo" + i.ToString())</td>
+                        <td>@Model.Element("DependantsDocumentNo" + i.ToString())</td>
+                    </tr>
+                    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsDocumentIssueDate" + i.ToString())</td>
+                        <td>@Model.Element("DependantsDocumentIssueDate" + i.ToString())</td>
+                    </tr>
+                    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsDocumentIssuePlace" + i.ToString())</td>
+                        <td>@Model.Element("DependantsDocumentIssuePlace" + i.ToString())</td>
+                    </tr>
+                    <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility">
+                        <td class="tdstrong">@Model.Label("DependantsDocumentIssuePlaceCountry" + i.ToString())</td>
+                        <td>@Model.Element("DependantsDocumentIssuePlaceCountry" + i.ToString())</td>
+                    </tr>
+                }
+
+                <tr class="globalmobility-first" id="addGlobalMobilityDependantDocumentTrr">
+                    <td colspan="2">
+                        @Model.Element("DependantsDocuments")
+                        <a id="addGlobalMobilityDependantDocument" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another global mobility dependant document")</a></td>
+                </tr>
+
+                <!-- Bank Account Details -->
+                @Html.Partial("_SectionBank", Model)
+
+
+                <!-- FISCAL DATA AND SOCIAL INSURANCE -->
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Fiscal Data")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TaxInformation")</td>
+                    <td>@Model.Element("TaxInformation")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("VoluntaryTaxDeduction")</td>
+                    <td>@Model.Element("VoluntaryTaxDeduction")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("TotalAmount")</td>
+                    <td>@Model.Element("TotalAmount")</td>
+                </tr>
+
+                <!-- Nationality / Language -->
+
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Nationality / Language")</h4>
+                    </td>
+                </tr>               
+                <tr>
+                    <td class="tdstrong">@Model.Label("Nationality")</td>
+                    <td>@Model.Element("Nationality")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Language")</td>
+                    <td>@Model.Element("Language")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Country Specifics")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Residencedate")</td>
+                    <td>@Model.Element("Residencedate")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong" style="vertical-align:top !important;">@Model.Label("ReducedHoliday")</td>
+                    <td>@Model.Element("ReducedHoliday")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FullDecemberTax")</td>
+                    <td>@Model.Element("FullDecemberTax")</td>
+                </tr>              
+            </tbody>
+        </table>
+    </div>
+
+    <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
+    <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
+    <input type="hidden" id="BusinessUnitId" name="BusinessUnitId" value="0" />
+
+</div>
+
+
+<script>
+
+    if ($('#TECoWorker').val() == '@IsTeWorker') {
+        $(".globalmobility-first").hide();
+    }
+
+    var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');
+    if ("@Model.ReadOnlyTab("#Personal")" == 'False' && lockedbyUserGroup == 'False') {
+
+
+
+        function setGlobalMobilityBehavior(value) {
+            if (value == '@IsTeWorker') {
+
+                jQuery(".globalmobility-first").hide();
+                jQuery("[class*=globalmobility]").hide();
+                $("[class*=globalmobility] input:not(input[type=hidden])").val("");
+                jQuery("[class*=globalmobility-first]").hide();
+                jQuery("[class*=globalmobility] input[type=text][name*='Country']").val('@DefaultCountry');
+                jQuery("[class*=globalmobility] select option:not([value])").prop('selected', true);
+            } else if (!(value == '@IsTeWorker')) {
+                jQuery(".globalmobility-first").show();
+            }
+
+            $("[class*=globalmobility-first] input[type=hidden]").val("1");
+
+        };
+
+        $(function () {
+
+
+            $('#TECoWorker').change(function () {
+                setGlobalMobilityBehavior($(this).val());
+            });
+
+            if ($('#TECoWorker').val() == '@IsTeWorker') {
+                $(".globalmobility-first").hide();
+            }
+
+            $("#FirstName,#Co-WorkerGlobalviewID").change(function () {
+                SetDefaultPayee();
+            });
+            $("#LastName,#Co-WorkerGlobalviewID").change(function () {
+                SetDefaultPayee();
+            });
+
+            function SetDefaultPayee () {
+
+                var payeevalue = $("#FirstName").val() + " " + $("#LastName").val();
+
+                //set first
+                $("#Payee").val(payeevalue);                
+            };
+
+        });
+
+
+
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+        var noticValidUntil = $('#notice_ValidUntilDate');
+        $('#date_DocumentValidUntil').not(".disabled").datepicker({
+            onRender: function (date) {
+                return date.valueOf() < now.valueOf() ? 'disabled' : '';
+            }
+        }).on('changeDate', function (ev) {
+
+            noticValidUntil.hide();
+
+            if (ev.date.valueOf() < now.valueOf())
+                noticValidUntil.show();
+        }).data('datepicker');
+
+        $('#DocumentValidUntil').change(function () {
+            var lastDayOfEmployment = $('#DocumentValidUntil').val();
+            var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+            var dlastDayOfEmployment = APIGlobal.DateTime.parseDate(lastDayOfEmployment, format);
+            var nowTemp = new Date();
+            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+            noticValidUntil.hide();
+            if (dlastDayOfEmployment.valueOf() < now.valueOf())
+                noticValidUntil.show();
+        });
+
+        function setChildCare(id, choos) {
+
+            var input = $('#' + id);
+            if (choos == 'Child') {
+                $(input).attr("disabled", false);
+            } else {
+                $(input).val("");
+                $(input).attr("disabled", true);
+            }
+        };
+
+        $('#FamilyMember').change(function () {
+            setChildCare('TheOnlyChildCarer', $(this).val());
+        });
+        setChildCare('TheOnlyChildCarer', $('#FamilyMember').val());
+
+        $('#FamilyMember2').change(function () {
+            setChildCare('TheOnlyChildCarer2', $(this).val());
+        });
+        setChildCare('TheOnlyChildCarer2', $('#FamilyMember2').val());
+
+        $('#FamilyMember3').change(function () {
+            setChildCare('TheOnlyChildCarer3', $(this).val());
+        });
+        setChildCare('TheOnlyChildCarer3', $('#FamilyMember3').val());
+
+        $('#FamilyMember4').change(function () {
+            setChildCare('TheOnlyChildCarer4', $(this).val());
+        });
+        setChildCare('TheOnlyChildCarer4', $('#FamilyMember4').val());
+
+        $('#FamilyMember5').change(function () {
+            setChildCare('TheOnlyChildCarer5', $(this).val());
+        });
+        setChildCare('TheOnlyChildCarer5', $('#FamilyMember5').val());
+
+
+    }
+</script>

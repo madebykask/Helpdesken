@@ -21,9 +21,14 @@
         var reportGeneratorFields = "#reportGeneratorFields";
         var caseCloseFrom = "#ReportFilter_CaseClosingDate_FromDate";
         var caseCloseTo = "#ReportFilter_CaseClosingDate_ToDate";
+        var reportCategoryDropdown = "#lstfilterReportCategory";
+
+        /*specify all extra parameters element*/
+        var $extraParameters = $("#reportCategoryParam");
 
         window.dhHelpdesk = window.dhHelpdesk || {};
         window.dhHelpdesk.reports = window.dhHelpdesk.reports || {};
+        
 
         var getFilters = function () {
             var filters = {
@@ -250,6 +255,7 @@
             var caseType = "";
             var productArea = "";
             var status = "";
+            var reportCategory = "";
 
             customer = currentCustomerId;
 
@@ -275,6 +281,8 @@
 
             status = $(statusList + " option:selected").val();
 
+            reportCategory = $(reportCategoryDropdown + " option:selected").val();
+
             var regDateFrom = $(caseCreateFrom).val();
             var regDateTo = $(caseCreateTo).val();
 
@@ -295,6 +303,7 @@
                     'filter.RegisterTo': regDateTo,
                     'filter.CloseFrom': closeDateFrom,
                     'filter.CloseTo': closeDateTo,
+                    'filter.ReportCategory': reportCategory,
                     curTime: new Date().getTime()
                 },
                 function (reportPresentation) {
@@ -355,6 +364,8 @@
                 $btnSaveAsFilter.show();
                 $("#btnDeleteFavorite").hide();
             }
+            
+            dhHelpdesk.reports.showExtraParameters($(reportList + " option:selected").attr("data-identity"));
         };
 
         dhHelpdesk.reports.deleteFavorite = function () {
@@ -463,6 +474,24 @@
             $("#excelReport").each(function () { this.disabled = state; });
         }
 
+        dhHelpdesk.reports.showExtraParameters = function (reportName) {
+            $($extraParameters).hide();
+
+            switch (reportName) {
+                case "NumberOfCases":
+                    $("#reportCategoryParam").show();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        //$("#btnShowReport").click(function (e) {
+        //    e.preventDefault();
+        //    dhHelpdesk.reports.onOtherShow();
+        //});
+
         dhHelpdesk.reports.init = function () {
 
             var showReportButton = $("#btnShowReport");
@@ -482,6 +511,12 @@
                 .on("change", function (e, d) { return dhHelpdesk.reports.togglePreviewMode(true); });
 
             $(".chosen-select").chosen({
+                width: "300px",
+                'placeholder_text_multiple': placeholder_text_multiple,
+                'no_results_text': no_results_text
+            });
+
+            $(".report-chosen-single-select").chosen({
                 width: "300px",
                 'placeholder_text_multiple': placeholder_text_multiple,
                 'no_results_text': no_results_text

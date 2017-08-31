@@ -27,36 +27,6 @@
         var attrFieldNameHolder = "standardName";
         var relatedFieldBlockPrefix = "#relatedFieldBlock-";
         var mandatorySignPrefix = "#mandatory_sign_";                
-
-        Application.prototype.init = function () {
-            var self = this;       
-            customerId = $('#NewCase_Customer_Id').val();
-            self.$regionControl = $('#NewCase_Region_Id');
-            self.$departmentControl = $('#NewCase_Department_Id');
-            self.$orgUnitControl = $('#NewCase_Ou_Id');
-            self.$caseTypeControl = $(document.getElementById("NewCase.CaseType_Id"));
-
-            $('#NewCase_ReportedBy').typeahead(Application.prototype._GetComputerUserSearchOptions());
-            $('#NewCase_InventoryNumber').typeahead(Application.prototype._GetComputerSearchOptions());            
-
-            // Remove after implementing http://redmine.fastdev.se/issues/10995
-            self.$regionControl.on('change', function () {
-                self.refreshDepartment.call(self, $(this).val());
-            });
-
-            self.$departmentControl.on('change', function () {
-                // Remove after implementing http://redmine.fastdev.se/issues/10995        
-                var departmentId = $(this).val();
-                self.refreshOrganizationUnit(departmentId);
-            });
-
-            self.$caseTypeControl.change(function () {
-                self.checkCaseTypeRelationRules($(this));
-            });
-
-            self.applyFieldAttributes();            
-            self.$caseTypeControl.change();
-        };
         
         Application.prototype.applyFieldAttributes = function () {
             if (fieldSettings == undefined || fieldSettings == null || fieldSettings.length <= 0)
@@ -105,6 +75,91 @@
             }          
         }
 
+
+        Application.prototype.isNullOrEmpty = function (val) {
+            return val == undefined || val == null || val == "";
+        }
+
+        Application.prototype.isNullOrUndefined = function (val) {
+            return val == undefined || val == null;
+        }
+
+        Application.prototype.setValueToBtnGroup = function (domContainer, domText, domValue, value) {
+            var self = this;
+            var $domValue = $(domValue);
+            var oldValue = $domValue.val();
+            var el = $(domContainer).find('a[value="' + value + '"]');
+            if (el) {
+                var _txt = self.getBreadcrumbs(el);
+                if (_txt == undefined || _txt == "")
+                    _txt = "--";
+                $(domText).text(_txt);
+                $domValue.val(value);
+                if (oldValue !== value) {
+                    $domValue.trigger('change');
+                }
+            }
+        }
+
+        Application.prototype.getBreadcrumbs = function (el) {
+            self = this;
+            var path = $(el).text();
+            var $parent = $(el).parents("li").eq(1).find("a:first");
+            if ($parent.length == 1) {
+                path = self.getBreadcrumbs($parent) + " - " + path;
+            }
+            return path;
+        }
+
+        Application.prototype.parseDate = function (dateStr) {
+            if (dateStr == undefined || dateStr == "")
+                return null;
+
+            var dateArray = dateStr.split("-");
+            if (dateArray.length != 3)
+                return null;
+
+            return new Date(parseInt(dateArray[0]), parseInt(dateArray[1] - 1), parseInt(dateArray[2]));
+        }
+
+        Application.prototype.dateToDisplayFormat = function (dateValue) {
+            var self = this;
+            if (Object.prototype.toString.call(dateValue) === "[object Date]") {
+                if (isNaN(dateValue.getTime())) {
+                    return "";
+                }
+                else {
+                    return dateValue.getFullYear() + "-" +
+                           self.padLeft(dateValue.getMonth() + 1, 2, "0") + "-" +
+                           self.padLeft(dateValue.getDate(), 2, "0");
+                }
+            }
+            else {
+                return "";
+            }
+        }
+
+        Application.prototype.padLeft = function (value, totalLength, padChar) {
+            var valLen = value.toString().length;
+            var diff = totalLength - valLen;
+            if (diff > 0) {
+                for (var i = 0; i < diff; i++)
+                    value = padChar + value;
+            }
+            return value;
+        }
+
+        Application.prototype.getDate = function (val) {
+            if (val == undefined || val == null || val == "")
+                return null;
+            else {
+                var dateStr = val.split(' ');
+                if (dateStr.length > 0)
+                    return new Date(dateStr[0]);
+                else
+                    return null;
+            }
+        };       
 
         var canApplyCaseTypeRule = function (standardFieldName) {
             var impactSetting = getFieldSetting(standardFieldName);
@@ -458,9 +513,14 @@
 
                                 };
                                 return JSON.stringify(aItem);
-
                             });
-
+                            if (resultList.length === 0) {
+                                var noRes = {
+                                    name: window.parameters.noResultLabel,
+                                    isNoResult: true
+                                }
+                                resultList.push(JSON.stringify(noRes));
+                            }
                             return process(resultList);
                         }
                     });
@@ -468,6 +528,9 @@
 
                 matcher: function (obj) {
                     var item = JSON.parse(obj);
+                    if (~item.isNoResult) {
+                        return 1;
+                    }
                     return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
                         || ~item.name_family.toLowerCase().indexOf(this.query.toLowerCase())
                         || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
@@ -480,9 +543,11 @@
                     var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
                     while (aItem = items.shift()) {
                         var item = JSON.parse(aItem);
-                        if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
-                        else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
-                        else caseInsensitive.push(JSON.stringify(item));
+                        if (!item.isNoResult) {
+                            if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                            else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                            else caseInsensitive.push(JSON.stringify(item));
+                        } else caseInsensitive.push(JSON.stringify(item));
                     }
 
                     return beginswith.concat(caseSensitive, caseInsensitive);
@@ -490,6 +555,9 @@
 
                 highlighter: function (obj) {
                     var item = JSON.parse(obj);
+                    if (item.isNoResult) {
+                        return item.name;
+                    }
                     var orgQuery = this.query;
                     var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
                     var resultArr = [];
@@ -533,6 +601,9 @@
                 updater: function (obj) {
 
                     var item = JSON.parse(obj);
+                    if (item.isNoResult) {
+                        return this.query;
+                    }
                     //console.log(JSON.stringify(item));
                     $('#NewCase_ReportedBy').val(item.num);
                     $('#NewCase_PersonsName').val(item.name);
@@ -575,7 +646,13 @@
                                 };
                                 return JSON.stringify(aItem);
                             });
-
+                            if (resultList.length === 0) {
+                                var noRes = {
+                                    name: window.parameters.noResultLabel,
+                                    isNoResult: true
+                                }
+                                resultList.push(JSON.stringify(noRes));
+                            }
                             return process(resultList);
                         }
                     });
@@ -583,6 +660,9 @@
 
                 matcher: function (obj) {
                     var item = JSON.parse(obj);
+                    if (~item.isNoResult) {
+                        return 1;
+                    }
                     return ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
                         || ~item.computertype.toLowerCase().indexOf(this.query.toLowerCase())
                         || ~item.location.toLowerCase().indexOf(this.query.toLowerCase());
@@ -592,9 +672,11 @@
                     var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
                     while (aItem = items.shift()) {
                         var item = JSON.parse(aItem);
-                        if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
-                        else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
-                        else caseInsensitive.push(JSON.stringify(item));
+                        if (!item.isNoResult) {
+                            if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                            else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                            else caseInsensitive.push(JSON.stringify(item));
+                        } else caseInsensitive.push(JSON.stringify(item));
                     }
 
                     return beginswith.concat(caseSensitive, caseInsensitive);
@@ -602,6 +684,9 @@
 
                 highlighter: function (obj) {
                     var item = JSON.parse(obj);
+                    if (item.isNoResult) {
+                        return item.name;
+                    }
                     var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
                     var result = item.num + ' - ' + item.location + ' - ' + (item.computertype == null ? ' ' : item.computertype);
 
@@ -612,6 +697,9 @@
 
                 updater: function (obj) {
                     var item = JSON.parse(obj);
+                    if (item.isNoResult) {
+                        return "";
+                    }
                     $('#NewCase_InventoryNumber').val(item.num);
                     $('#NewCase_InventoryType').val(item.computertype);
                     $('#NewCase_InventoryLocation').val(item.location);
@@ -921,6 +1009,35 @@
             globalClipboard.init.call(globalClipboard, $(e.target).attr('data-src'));
         });
        
+        Application.prototype.init = function () {
+            var self = this;
+            customerId = $('#NewCase_Customer_Id').val();
+            self.$regionControl = $('#NewCase_Region_Id');
+            self.$departmentControl = $('#NewCase_Department_Id');
+            self.$orgUnitControl = $('#NewCase_Ou_Id');
+            self.$caseTypeControl = $(document.getElementById("NewCase.CaseType_Id"));
+
+            $('#NewCase_ReportedBy').typeahead(Application.prototype._GetComputerUserSearchOptions());
+            $('#NewCase_InventoryNumber').typeahead(Application.prototype._GetComputerSearchOptions());
+
+            // Remove after implementing http://redmine.fastdev.se/issues/10995
+            self.$regionControl.on('change', function () {
+                self.refreshDepartment.call(self, $(this).val());
+            });
+
+            self.$departmentControl.on('change', function () {
+                // Remove after implementing http://redmine.fastdev.se/issues/10995        
+                var departmentId = $(this).val();
+                self.refreshOrganizationUnit(departmentId);
+            });
+
+            self.$caseTypeControl.change(function () {
+                self.checkCaseTypeRelationRules($(this));
+            });
+
+            self.applyFieldAttributes();
+            self.$caseTypeControl.change();            
+        };
     })($);
     
     //tab arrows
@@ -995,5 +1112,6 @@
         }
         return true;
     });
+
     Application.prototype.init();
 });

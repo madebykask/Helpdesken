@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using DH.Helpdesk.Common.Constants
 @using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Web
 @model DH.Helpdesk.Web.Models.Feedback.EditFeedbackModel
@@ -143,7 +144,21 @@
                                             @Translation.GetCoreTextTranslation("procent av tillgängliga ärenden")
                                         </td>
                                     </tr>
-
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Exkludera handläggare")
+                                        </td>
+                                        <td class="checkbox" style="padding-left: 20px">
+                                            @if (Model.LanguageId == LanguageIds.Swedish)
+                                            {
+                                                @Html.CheckBoxFor(m => m.ExcludeAdministrators)
+                                            }
+                                            else
+                                            {
+                                                @Html.CheckBoxFor(m => m.ExcludeAdministrators, new { disabled = "disabled" })
+                                            }
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
                         </div>
@@ -160,114 +175,33 @@
 
 @section Scripts {
     @Scripts.Render(BundleConfig.ScriptNames.Select2)
+    @Scripts.Render(BundleConfig.ScriptNames.FeedbackEdit)
     <script type="text/javascript">
-        $(function () { //TODO: Move to separate file
+        $(function () {
             var translations = {
-                OptionUnique: "@Translation.GetCoreTextTranslation("Värdet måste vara unikt")"
+                OptionUnique: "@Translation.GetCoreTextTranslation("Värdet måste vara unikt")",
+                MaxSize: "@Translation.GetCoreTextTranslation("Max") @Translation.GetCoreTextTranslation("Fil") @Translation.GetCoreTextTranslation("Storlek") 2kb"
+            };
+            var parameters = {
+                FeedbackEditUrl: "@Url.Action(MvcUrlName.Feedback.Edit, MvcUrlName.Feedback.Controller)",
+                QuestionnaireId: "@Model.QuestionnaireId.ToString(CultureInfo.InvariantCulture)",
+                AddOptionUrl: "@Url.Action(MvcUrlName.Feedback.AddQuestionOption, MvcUrlName.Feedback.Controller)",
+                FeedbcakId: @Model.QuestionnaireId,
+                QuestionId: @Model.QuestionId,
+                LanguageId: @Model.LanguageId,
+                UrlContentImage: "@Url.Content("~/Content/img/")",
+                FeedBackIconId: "@FeedBack.IconId",
+                UrlSaveIcon: "@Url.Action(MvcUrlName.Feedback.UpdateOptionIcon, MvcUrlName.Feedback.Controller)"
             };
 
-            $("#languageList").on("change", function () {
-                var selectedItem = $(this).val();
-                window.location.href = "@Url.Action(MvcUrlName.Feedback.Edit, MvcUrlName.Feedback.Controller)" +
-                    "?feedbackId=" + @Model.QuestionnaireId.ToString(CultureInfo.InvariantCulture) +
-                    "&languageId=" + selectedItem;
-            });
-
-            $("#Addbtn").on("click", function (event) {
-                var optionPos = $("#optionPos").val();
-                var optionText = $("#optionText").val();
-                var optionValue = $("#optionValue").val();
-                var optionIcon = $("#optionIcon").val();
-
-                if (optionPos < 0 || optionPos === "") {
-                    ShowToastMessage("Invalid Position !!! ", "error");
-                    return;
-                }
-
-                if (optionText === "") {
-                    ShowToastMessage("Invalid Alternative !!! ", "error");
-                    return;
-                }
-
-                if (optionValue < 0 || optionValue === "") {
-                    ShowToastMessage("Invalid Value !!!", "error");
-                    return;
-                }
-
-                var qOptions = $(".question_option");
-                if (qOptions.length > 0) {
-                    for (var i = 0; i < qOptions.length; i++) {
-                        if (optionValue !== '0' && $(qOptions[i]).val().trim() === optionValue.trim()) {
-                            ShowToastMessage(translations.OptionUnique, "error");
-                            event.preventDefault();
-                            return;
-                        }
-                    }
-                }
-
-                window.location.href = '@Url.Action(MvcUrlName.Feedback.AddQuestionOption, MvcUrlName.Feedback.Controller)' +
-                    '?feedbackId=' + @Model.QuestionnaireId +
-                    '&questionId=' + @Model.QuestionId +
-                    '&languageId=' + @Model.LanguageId +
-                    '&optionPos=' + optionPos +
-                    '&optionText=' + optionText +
-                    '&optionValue=' + optionValue +
-                    '&optionIcon=' + optionIcon;
-            });
-
-            function formatIcon(icon) {
-                if (!icon.id) {
-                    return icon.text;
-                }
-                var $icon = $(
-                    '<span><img src="@Url.Content("~/Content/img/")' + icon.element.value.toLowerCase() + '" class="" /> </span>'
-                );
-                return $icon;
-            };
-
-            function formatSelectedIcon(data) {
-                return $(
-                    '<span><img src="@Url.Content("~/Content/img/")' + data.element.value.toLowerCase() + '" class="" /> </span>'
-                );
-            }
-
-            $("#feedback_edit_form").on("submit", function (event) {
-                function unique(array) {
-                    var resArray = [];
-                    $.each(array, function (i, item) {
-                        if ($.inArray(item, resArray) === -1 || item === '0') {
-                            resArray.push(item);
-                        }
-                    });
-                    return resArray;
-                }
-
-                var qOptions = $(".question_option");
-                if (qOptions.length > 0) {
-                    var initialLength = qOptions.length;
-                    var qOptionsVal = qOptions.map(function() {
-                        return $(this).val();
-                    });
-                    var uniqueLength = unique(qOptionsVal).length;
-                    if (uniqueLength !== initialLength) {
-                        event.preventDefault();
-                        event.stopImmediatePropagation();
-                        ShowToastMessage(translations.OptionUnique, "error");
-                        return false;
-                    }
-                }
-                return true;
-            });
-
-            $(".question_icons").select2({
-                templateResult: formatIcon,
-                templateSelection: formatSelectedIcon,
-                width: '85%',
-                minimumResultsForSearch: Infinity // hides search box
-            });
+            LoadFeedbackEdit(parameters, translations);
         });
     </script>
 }
+
+
+
+
 
 
 

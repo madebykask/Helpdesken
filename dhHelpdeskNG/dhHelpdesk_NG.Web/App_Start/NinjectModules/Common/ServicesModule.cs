@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Services.Services.Feedback;
+﻿using DH.Helpdesk.Services.Services.Cases;
+using DH.Helpdesk.Services.Services.Feedback;
 using DH.Helpdesk.Services.Services.Invoice;
 
 namespace DH.Helpdesk.Web.NinjectModules.Common
@@ -16,6 +17,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
     using DH.Helpdesk.Services.Services.Users;
 
     using Ninject.Modules;
+    using Services.Services.ExtendedCase;
+    using Services.Services.UniversalCase;
 
     public sealed class ServicesModule : NinjectModule
     {
@@ -56,6 +59,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<ICaseTypeService>().To<CaseTypeService>();
             this.Bind<ICaseFollowUpService>().To<CaseFollowUpService>();
             this.Bind<ICaseSearchService>().To<CaseSearchService>();
+            this.Bind<ICaseSectionService>().To<CaseSectionService>();
             this.Bind<ICategoryService>().To<CategoryService>();
             this.Bind<IChecklistActionService>().To<ChecklistActionService>();
             this.Bind<ICheckListServiceService>().To<CheckListServiceService>();
@@ -125,6 +129,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IUsersPasswordHistoryService>().To<UsersPasswordHistoryService>();
             this.Bind<IRegistrationSourceCustomerService>().To<RegistrationSourceCustomerService>();
             this.Bind<ICaseLockService>().To<CaseLockService>();
+            this.Bind<ICaseSolutionConditionService>().To<CaseSolutionConditionService>();
 
             // Liceneses module services
             this.Bind<IProductsService>().To<ProductsService>();
@@ -147,7 +152,9 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IOrderAccountSettingsProxyService>().To<OrderAccountSettingsProxyService>();
 
             this.Bind<IOrderAccountDefaultSettingsCreator>().To<OrderAccountDefaultSettingsCreator>();
-            
+            this.Bind<ICaseDocumentService>().To<CaseDocumentService>();
+
+
             // Survey service
             this.Bind<ISurveyService>().To<SurveyService>();
 
@@ -164,7 +171,9 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
 			Bind<IInvoiceService>().To<InvoiceService>();
 
 			Bind<ICaseExtraFollowersService>().To<CaseExtraFollowersService>();
-		}
+            Bind<IUniversalCaseService>().To<UniversalCaseService>();
+            Bind<IExtendedCaseService>().To<ExtendedCaseService>();
+        }
 
         #endregion
     }

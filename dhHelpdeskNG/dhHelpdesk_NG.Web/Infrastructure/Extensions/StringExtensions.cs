@@ -11,6 +11,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using DH.Helpdesk.Services.utils;
     using DH.Helpdesk.BusinessData.Models.MailTemplates;
     using System.Collections.Generic;
+    using System.Data;
 
     public static class StringExtensions
     {
@@ -31,6 +32,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
             return null;
         }
+
+        
 
         public static string DepartmentDescription(this Department d, int departmentFilterFormat)
         {

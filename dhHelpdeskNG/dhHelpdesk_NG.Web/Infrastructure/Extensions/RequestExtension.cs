@@ -3,7 +3,10 @@ using System.Web.WebPages;
 
 namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
+    using System.Linq;
+    using System.Security.Claims;
     using System.Web;
+    using System.Web.Http.Controllers;
 
     public static class RequestExtension
     {
@@ -69,5 +72,25 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 				return isLocal;
 			}
 		}
-	}
+
+        //public static Tuple<int, string> GetCurrentUser(this HttpRequestContext request)
+        public static string[] GetClaims(this HttpRequestContext request, params string[] claimTypes)
+        {            
+            var ret = new string[] { };
+            var idt = request.Principal.Identity as ClaimsIdentity;
+            if (idt == null)
+                return ret;
+
+            ret = new string[claimTypes.Length];
+            for (var i=0; i<claimTypes.Length; i++)
+            {
+                var curClaim = idt.Claims.Where(x => x.Type == claimTypes[i])
+                                         .Select(x => x.Value)
+                                         .FirstOrDefault();
+                ret[i] = curClaim;
+            }
+
+            return ret;
+        }
+    }
 }

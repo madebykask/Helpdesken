@@ -1,0 +1,94 @@
+﻿@using ECT.FormLib
+@{
+    var area = (!string.IsNullOrEmpty(ViewContext.RouteData.DataTokens["area"].ToString()) ? ViewContext.RouteData.DataTokens["area"].ToString() : "");
+    var controller = (!string.IsNullOrEmpty(ViewContext.RouteData.Values["controller"].ToString().ToLower()) ? ViewContext.RouteData.Values["controller"].ToString().ToLower() : "");
+}
+@if(!FormLibUtils.IsSelfService())
+{
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta content="html/text; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <!-- Le styles --> 
+    @Styles.Render("~/FormLibContent/assets/css/bundle")
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="~/FormLibContent/assets/js/html5shiv.js"></script>
+    <![endif]-->
+    <!-- For IE7 support of JSON functions -->
+    <!--[if lt IE 8]>
+      <script src="~/FormLibContent/assets/js/json2.js"></script>
+    <![endif]-->
+    <!-- Le scripts -->
+    @Scripts.Render("~/FormLibContent/assets/js/bundle")
+    @RenderSection("CountrySpecificScript", required: false)
+</head>
+<body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true" data-lang="@ECT.FormLib.FormLibSessions.User.Language">
+    <div style="display: none;">
+        <span id="cancelRequest">@ECT.FormLib.FormLibI18N.Translate("Are you sure you want to cancel the request?", ECT.FormLib.FormLibSessions.User.Language)</span>
+    </div>
+    @RenderBody()
+    @RenderSection("Validation", required: false)
+    @RenderSection("Script", required: false)
+    <div class="container containeralignright" style="margin-top:5px;">
+        <small>@ECT.FormLib.FormLibI18N.Translate("Version", ECT.FormLib.FormLibSessions.User.Language)&nbsp;@ECT.FormLib.FormLibUtils.AssemblyVersion()</small>
+    </div>
+    <div id="spinnerDiv" style="position:fixed;top:50%;left:50%"></div> 
+    <input type="hidden" id="core_baseUrl" name="core_baseUrl" value="@(!HttpContext.Current.Request.Url.Host.ToLower().Contains("localhost") ? "/ect" : "")" />
+    <input type="hidden" id="core_area" name="core_area" value="@area" />
+    <input type="hidden" id="core_controller" name="core_controller" value="@controller" />
+    <input type="hidden" id="core_rooturl" name="core_rooturl" value="@Url.CurrentRoot()" />
+
+    <script type="text/javascript" src="~/FormLibContent/Assets/js/iframeResizer.contentWindow.min.js"></script>
+</body>
+</html>
+}
+else
+{
+@*Layout for LM*@
+Layout = "~/Views/Shared/_Layout.cshtml";
+
+@*@Styles.Render("~/FormLibContent/assets/css/bundle")*@
+<link href="~/FormLibContent/assets/css/bootstrap.css" rel="stylesheet">
+<link href="~/FormLibContent/assets/css/datepicker.css" rel="stylesheet">
+<link href="~/FormLibContent/assets/css/ect.css" rel="stylesheet">
+<link href="~/FormLibContent/assets/selectize/css/selectize.css" rel="stylesheet" />
+<link href="~/Content/css/dhplus.css" rel="stylesheet" />
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+      <script src="~/FormLibContent/assets/js/html5shiv.js"></script>
+    <![endif]-->
+<!-- For IE7 support of JSON functions -->
+<!--[if lt IE 8]>
+      <script src="~/FormLibContent/assets/js/json2.js"></script>
+    <![endif]-->
+<!-- Le scripts -->
+@*@Scripts.Render("~/FormLibContent/assets/js/bundle")*@
+<script src="~/FormLibContent/assets/js/typeahead.js"></script>
+<script src="~/FormLibContent/assets/js/bootstrap-datepicker.js"></script>
+<script src="~/FormLibContent/assets/selectize/js/standalone/selectize.min.js"></script>
+<script src="~/FormLibContent/assets/selectize/js/es5-shim.js"></script>
+<script src="~/FormLibContent/assets/js/integration.js"></script>
+<script src="~/FormLibContent/assets/js/spin.js"></script>
+<script src="~/FormLibContent/assets/js/ect.js"></script>
+<script src="~/FormLibContent/assets/js/norway.js"></script>
+<div id="lmEmbedded">
+    <div style="display: none;">
+        <span id="cancelRequest">@ECT.FormLib.FormLibI18N.Translate("Are you sure you want to cancel the request?", ECT.FormLib.FormLibSessions.User.Language)</span>
+    </div>
+    @RenderBody()
+    @RenderSection("Validation", required: false)
+    @RenderSection("Script", required: false)
+    <div class="container containeralignright">
+        <small>@ECT.FormLib.FormLibI18N.Translate("Version", ECT.FormLib.FormLibSessions.User.Language)&nbsp;@ECT.FormLib.FormLibUtils.AssemblyVersion()</small>
+    </div>
+</div>
+<div id="spinnerDiv" style="position:fixed;top:50%;left:50%"></div>
+<input type="hidden" id="core_controller" name="core_controller" value="@controller" />
+<input type="hidden" id="core_baseUrl" name="core_baseUrl" value="" />
+<input type="hidden" id="core_area" name="core_area" value="@area" />
+<input type="hidden" id="core_rooturl" name="core_rooturl" value="@Url.CurrentRoot()" />
+}

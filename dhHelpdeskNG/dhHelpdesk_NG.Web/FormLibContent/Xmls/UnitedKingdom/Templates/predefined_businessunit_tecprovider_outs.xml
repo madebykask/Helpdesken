@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+  <name>BusinessUnitTecProvider</name>
+  <dependent>
+    <selected>IKEA Customer Delivery Centre</selected>
+    <show>Abdulwahid Mohamed, Andrea Stringer, Deborah Cooper, George Taylor, Graham Hyde, Helena King, James Cameron, Jay Brown, Matthew Humphrey, Michael Wells, Paul Thompson, Peter Linnell, Roger Thomson, Raymond Herlihy, Stephen Baker, Tony Brown</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Distribution Services Uni</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Property Investments Ltd</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Contact Centre</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Service Office</selected>
+    <show>Lynda Childs, Paul Bedworth, Alberto Fernandez, Allan Gates, Altynay Kurmangalieva, Donna Moore, Jordi Esquinas, Lee Tupshafski, Victoria Bryant,Pauline Fowler,Christian Bugge</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Belfast</selected>
+    <show>Mary Collins</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Birmingham</selected>
+    <show>Emma Brannigan-Lawson</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Bristol</selected>
+    <show>Matthew Lewis</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Cardiff</selected>
+    <show>Michael Hawkins</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Coventry</selected>
+    <show>Katie Cairns-O’Reilly,Karen Sutton</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Edinburgh</selected>
+    <show>Christine Gordon,Steven Hamilton</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Gateshead</selected>
+    <show>Salomon Benzaquen</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Glasgow</selected>
+    <show>Bernard McCafferty</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Leeds</selected>
+    <show>Teresa Broadbent</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Croydon</selected>
+    <show>Angela Snelgrove, Giuseppe Greco</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Lakeside</selected>
+    <show>Sean Smith</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Tottenham</selected>
+    <show>Shakeel Ahmed</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Wembley</selected>
+    <show>Timothy Cox</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Manchester</selected>
+    <show>Andrew Pickup</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Milton Keynes</selected>
+    <show>Agnieszka Zabczyk</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Nottingham</selected>
+    <show>Michael Fry, Anna Kiddle</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Sheffield</selected>
+    <show>Marta Garcia</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Southampton</selected>
+    <show>Mariusz Matyja</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Warrington</selected>
+    <show>David Armstrong, Mikhail Kireev</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Delivery Centre Doncaster</selected>
+    <show>Adele Lowndes, Julia Bason, Mark Telford, Paul Sapte</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA E-Commerce</selected>
+    <show>Lotta Svedeborn, Gordon Bell</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA Reading</selected>
+    <show>James Johnson</show>
+  </dependent>
+</predefined>

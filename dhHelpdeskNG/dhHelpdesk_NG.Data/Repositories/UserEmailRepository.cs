@@ -108,6 +108,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 var newList = workGs.Select(x => new CaseEmailSendOverview
                 {
                     FirstName = x.WorkingGroup.WorkingGroupName,
+                    SurName = string.Empty,
                     Emails = x.UserWorkingGroups.Select(r => r.User.Email).ToList(),
                     GroupType = CaseUserSearchGroup.WorkingGroup,
                     DepartmentName = string.Empty
@@ -123,6 +124,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 var newList = emailGroups.Select(x => new CaseEmailSendOverview
                 {
                     FirstName = x.Name,
+                    SurName = string.Empty,
                     Emails = x.Members.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList(),
                     GroupType = CaseUserSearchGroup.EmailGroup,
                     DepartmentName = string.Empty

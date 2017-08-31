@@ -1,0 +1,313 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using System.Collections.Generic;
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<body>
+              
+    <div>
+        <p style=" text-align: center; font-family: Verdana; font-size: 10px;">
+            <br /> 
+        </p>
+        <p style="text-align: right; font-family: Verdana; font-size: 13px;">
+            <strong>@Model.GetAnswer("Prefix") @Model.GetAnswer("EmployeeFirstName") @Model.GetAnswer("EmployeeLastName")</strong><br />
+        </p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+        <p style="text-align: center; font-family: Verdana; font-size: 13px;"><strong>Addendum to Contract of Employment</strong></p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+        <p style=" text-align:justify; font-family: Verdana; font-size: 10px;">
+            @if (Model.GetAnswer("ContractType") == "Replacement contract")
+            {
+                if (string.IsNullOrEmpty(Model.GetAnswer("EndDate")))
+                {
+                  <text>
+                  As of <strong>@Model.GetAnswer("EffectiveDate") </strong> the following changes are introduced to the 
+                      <strong> @Model.GetAnswer("ContractType") </strong> 
+                  </text>
+                       if (string.IsNullOrEmpty(Model.GetAnswer("AppendixConcludedOn"))) 
+                       {
+                           <text>
+                           concluded on ..........................
+                           </text>
+                       }
+                      else 
+                      { 
+                           <text>
+                           concluded on @Model.GetAnswer("AppendixConcludedOn")
+                           </text>
+                           
+                       }
+               
+                }
+            }
+             @if (Model.GetAnswer("ContractType") == "Replacement contract")
+            {
+                if (!string.IsNullOrEmpty(Model.GetAnswer("EndDate")))
+                {
+                  <text>
+                  As of <strong>@Model.GetAnswer("EffectiveDate")</strong> until <strong>@Model.GetAnswer("EndDate")</strong> the following changes are introduced to the 
+                      <strong> @Model.GetAnswer("ContractType") </strong> 
+                  </text>
+                       if (string.IsNullOrEmpty(Model.GetAnswer("AppendixConcludedOn"))) 
+                       {
+                           <text>
+                           concluded on ..........................
+                           </text>
+                       }
+                      else 
+                      { 
+                           <text>
+                           concluded on @Model.GetAnswer("AppendixConcludedOn").
+                           </text>
+                           
+                       }
+               
+                }
+            }
+            @if (Model.GetAnswer("ContractType") != "Replacement contract") 
+            {
+                if (string.IsNullOrEmpty(Model.GetAnswer("EndDate")))
+                {
+                  <text>
+                  As of <strong>@Model.GetAnswer("EffectiveDate") </strong>the following changes are introduced to the Contract of Employment concluded for <strong>@Model.GetAnswer("ContractType") </strong>on 
+                   </text>
+                 if (string.IsNullOrEmpty(Model.GetAnswer("AppendixConcludedOn"))) 
+                       {
+                           <text>
+                           ..........................
+                           </text>
+                       }
+                      else 
+                      { 
+                           <text>
+                           @Model.GetAnswer("AppendixConcludedOn").
+                           </text>
+                           
+                       }
+                }
+                
+             }
+             @if (Model.GetAnswer("ContractType") != "Replacement contract") 
+            {
+               
+                if (!string.IsNullOrEmpty(Model.GetAnswer("EndDate")))
+                {
+                   <text>
+                   As of <strong>@Model.GetAnswer("EffectiveDate")</strong> until <strong>@Model.GetAnswer("EndDate") </strong> 
+                   the following changes are introduced to the Contract of Employment concluded for <strong>@Model.GetAnswer("ContractType") </strong>on
+                   </text>
+                    if (string.IsNullOrEmpty(Model.GetAnswer("AppendixConcludedOn"))) 
+                       {
+                           <text>
+                           ..........................
+                           </text>
+                       }
+                      else 
+                      { 
+                           <text>
+                           @Model.GetAnswer("AppendixConcludedOn").
+                           </text>
+                           
+                       } 
+                }
+            }
+
+        </p>
+        
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+           <br />
+        </p>
+        @{
+            var list = new List<string>();
+
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("4"))
+            {
+                list.Add("Employee Job Title changes to <strong> " + Model.GetAnswer("JobTitle") + "</strong>.");
+
+            }
+
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("5") && Model.GetAnswer("Extent") != "Part time")
+            {
+                list.Add("Working load is agreed as <strong> " + Model.GetAnswer("Extent") + "</strong>.");
+            }    
+   
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("5") && Model.GetAnswer("Extent") == "Part time")
+            {
+                list.Add( "Working load is agreed as <strong> " + Model.GetAnswer("Extent") + "</strong>.  " + " Workload percentage is <strong> " + Model.GetAnswer("Workload") + " % </strong>.");
+                list.Add( "Work exceeding the standard working time, specified in the Employee contract (considered as an overtime work and entitled to an additional compensation - art. 151<sup>1</sup> § 1 Labour Code) is above " + "<strong>39 hours </strong>" + " per week.");
+            }
+
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "monthly" 
+                && !string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWords")))
+            {
+                list.Add("Employee will receive a<strong> " + Model.GetAnswer("MonthlyHourly") + " </strong>gross salary of PLN <strong>" +
+                    Model.GetAnswer("BasicPay") + "</strong>" + " (in words: " + Model.GetAnswer("BasicPayInWords") + ").<br />" ); 
+            }
+            
+           //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "monthly" &&
+           //    string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWords")) && Model.Contract.Company.Key == "OI") 
+           //         {
+                    
+           //              list.Add("Employee will receive a<strong> " + Model.GetAnswer("MonthlyHourly") + " </strong>gross salary of PLN <strong>" +
+           //              Model.GetAnswer("BasicPay") + "</strong> <br/>" + "(in words: .......................................................................................................).<br />");                 
+           //          }
+                     
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "monthly" &&
+             string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWords"))) //&& Model.Contract.Company.Key != "OI"
+                     {
+
+                         list.Add("Employee will receive a<strong> " + Model.GetAnswer("MonthlyHourly") + " </strong>gross salary of PLN <strong>" +
+                              Model.GetAnswer("BasicPay") + "</strong> <br/>" + "(in words: .........................................................................................................................).<br />");                                     
+                     }  
+                   
+
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "hourly"
+                && !string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWords")) )
+            {
+                list.Add("Employee will receive a<strong> " + Model.GetAnswer("MonthlyHourly") + " </strong> gross salary of PLN <strong>" + Model.GetAnswer("BasicPay") +
+                          " per hour</strong> "+ " (in words:" + Model.GetAnswer("BasicPayInWords")+").<br />");
+            }
+            
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "hourly"
+            //     && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWords")) && Model.Contract.Company.Key == "OI")
+            //    {
+            //        list.Add("Employee will receive a<strong> " + Model.GetAnswer("MonthlyHourly") + " </strong> gross salary of PLN <strong>" + Model.GetAnswer("BasicPay") +
+            //             " per hour</strong> <br/>" + "(in words: .......................................................................................................).<br />");                 
+            //    }
+                
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("7") && Model.GetAnswer("MonthlyHourly") == "hourly"
+                && string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWords"))) // && Model.Contract.Company.Key != "OI"
+                     {
+                         list.Add("Employee will receive a<strong> " + Model.GetAnswer("MonthlyHourly") + " </strong> gross salary of PLN <strong>" + Model.GetAnswer("BasicPay") +
+                                  " per hour</strong> <br/>" + "(in words: .........................................................................................................................).<br />");                 
+                     }
+
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("1") && string.IsNullOrEmpty(Model.GetAnswer("AdditionalPlaceOfWork")))
+            {
+                list.Add("Place of Work will be <strong>" +  Model.GetOptionText("EmployeeUnit", Model.GetAnswer("EmployeeUnit")) + "</strong>.");
+            }
+
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("1") && !string.IsNullOrEmpty(Model.GetAnswer("AdditionalPlaceOfWork")))
+            {
+                list.Add("Place of Work will be <strong>" + Model.GetOptionText("EmployeeUnit", Model.GetAnswer("EmployeeUnit")) + "</strong>" + " and <strong>" + Model.GetAnswer("AdditionalPlaceOfWork") + "</strong>.");
+            }
+
+            
+            // Not Needed any more as we have changed margin for Inter Ikea documents
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8") 
+            //    && Model.GetAnswer("FunctionAllowance") == "1045 - Functional supplement" && Model.Contract.Company.Key == "OI") 
+            //{
+            //    list.Add("Employee will receive a monthly gross Function allowance of <strong> PLN " + Model.GetAnswer("FunctionAllowanceAmount") + " </strong>.<br />"
+            //              + "(in words: .......................................................................................................).<br />");
+            //}
+
+            string inWords = "(in words: .........................................................................................................................).<br />"; 
+            string text =   "Employee will receive a monthly gross Function allowance of <strong> PLN ";   
+                               
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
+                && Model.GetAnswer("FunctionAllowance") == "1045 - Functional supplement") // && Model.Contract.Company.Key != "OI"
+            {
+                if (string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsEnglish1")))
+                {
+                    list.Add( text + Model.GetAnswer("FunctionAllowanceAmount") + "</strong>.<br />"
+                           + inWords );
+                }
+                else
+                {
+                    list.Add( text + Model.GetAnswer("FunctionAllowanceAmount") + "</strong>.<br />"
+                          + "(in words: " + Model.GetAnswer("BasicPayInWordsEnglish1") + ").");
+                }
+            }
+
+            // Not Needed any more as we have changed margin for Inter Ikea documents
+            
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
+            //    && Model.GetAnswer("FunctionAllowance2") == "1045 - Functional supplement" && Model.Contract.Company.Key == "OI")
+            //{
+            //    list.Add("Employee will receive a monthly gross Function allowance of <strong> PLN " + Model.GetAnswer("FunctionAllowanceAmount2") + " </strong>.<br />"
+            //              + "(in words: .......................................................................................................).<br />");
+            //}
+
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
+                && Model.GetAnswer("FunctionAllowance2") == "1045 - Functional supplement") // && Model.Contract.Company.Key != "OI"
+            {
+                 if (string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsEnglish2")))
+                 {
+                    list.Add( text + Model.GetAnswer("FunctionAllowanceAmount2") + "</strong>.<br />"
+                              + inWords);
+                 }
+                 else
+                 {
+                     list.Add(text + Model.GetAnswer("FunctionAllowanceAmount2") + "</strong>.<br />"
+                           + "(in words: " + Model.GetAnswer("BasicPayInWordsEnglish2") + ").");
+                 }
+            }
+
+            // Not Needed any more as we have changed margin for Inter Ikea documents
+            
+            //if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
+            //  && Model.GetAnswer("FunctionAllowance3") == "1045 - Functional supplement" && Model.Contract.Company.Key == "OI")
+            //{
+            //    list.Add("Employee will receive a monthly gross Function allowance of <strong> PLN " + Model.GetAnswer("FunctionAllowanceAmount3") + " </strong>.<br />"
+            //              + "(in words: .......................................................................................................).<br />");
+            //}
+
+            if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8")
+                 && Model.GetAnswer("FunctionAllowance3") == "1045 - Functional supplement") //&& Model.Contract.Company.Key != "OI"
+            {
+                 if (string.IsNullOrEmpty(Model.GetAnswer("BasicPayInWordsEnglish3")))
+                 {
+                    list.Add( text + Model.GetAnswer("FunctionAllowanceAmount3") + "</strong>.<br />"
+                              + inWords);
+                 }
+                 else
+                 {
+                     list.Add(text + Model.GetAnswer("FunctionAllowanceAmount3") + "</strong>.<br />"
+                            + "(in words: " + Model.GetAnswer("BasicPayInWordsEnglish3") + ").");
+                 }
+                
+            }
+ 
+        }
+
+        @if (list.Count>1)
+      	{
+          for (int i = 0; i < list.Count; i++)
+          {
+            <p style=" text-align:justify; font-family: Verdana; font-size: 10px;">@(i+1) ) @Html.Raw(list[i])</p>
+          }
+	    }  
+        else
+         { for (int i = 0; i == list.Count-1; i++)
+          {
+	        <p style="font-family: Verdana; font-size: 10px;">@Html.Raw(list[i])</p>
+	      }     
+         }
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+        <p style="text-align:justify; font-family: Verdana; font-size: 10px;">
+            The remaining working conditions stay unchanged.
+        </p>
+        <p style="text-align: center; font-family: Verdana; font-size: 10px;">
+            <br />
+        </p>
+        <p style=" text-align:justify; font-family: Verdana; font-size: 10px;">
+            The Employee certifies to have received a copy of this Addendum and after familiarising with its content – accepts working conditions mentioned above.  
+        </p>        
+    </div>
+    <endpage/>
+</body>
+</html>

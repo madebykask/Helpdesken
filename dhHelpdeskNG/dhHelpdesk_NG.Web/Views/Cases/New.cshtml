@@ -1,5 +1,13 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
 @using System.Web.Optimization
+@using DH.Helpdesk.Web
+@using System
+
+@if (Model.ExtendedCases != null)
+{
+    @Styles.Render("~/cases/dynamic-cases")
+    @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
+}
 
 @Scripts.Render("~/bundles/cases/new")
 @section Scripts {
@@ -10,18 +18,30 @@
 
             $("#case-action-save").click(function (e) {
                 e.preventDefault();                
-                //$('#case__StateSecondary_Id').removeAttr('disabled');                
+                //$('#case__StateSecondary_Id').removeAttr('disabled');      
+                $('#ButtonClick').val('save');
             });
 
             $("#case-action-save-and-close").click(function (e) {
                 e.preventDefault();                
                 //$('#case__StateSecondary_Id').removeAttr('disabled');                
+                $('#ButtonClick').val('save');
             });
 
             $("#case-action-save-and-new").click(function (e) {
                 e.preventDefault();                
                 //$('#case__StateSecondary_Id').removeAttr('disabled');                
+                $('#ButtonClick').val('save');
             });
+
+            //$("#case-action-save-close-and-split").click(function (e) {
+            //    e.preventDefault();
+            //    //$('#case__StateSecondary_Id').removeAttr('disabled');
+
+            //    $('#ButtonClick').val('save');
+
+            //    // Todo set new url
+            //});
         });
 
         $("#case__RegLanguage_Id").change(function () {
@@ -40,6 +60,22 @@
                 p3 = "&copyFromCaseId=" + cfc
 
             //location.href = '/Cases/new?customerId=' + ci + p2 + p3 + '&caseLanguageId=' + cli;       
+        });
+
+        //HIDE SHOW
+        $(".hidebtn").on("click", function (e) {
+            e.preventDefault();
+            $(this).parents(".section-block").addClass("hideshow");
+            $(this).parent().parent().find("#fakeCaseFollowerUsersInput").addClass("hidefollowers");
+            $(this).parent().parent().find("#fake_CaseLog_EmailRecepientsInternalLogTo").addClass("hidefollowers");
+            $(this).parent().parent().find("#fake_CaseLog_EmailRecepientsInternalLogCc").addClass("hidefollowers");
+        });
+        $(".showbtn").on("click", function (e) {
+            e.preventDefault();
+            $(this).parents(".section-block").removeClass("hideshow");
+            $(this).parent().parent().find("#fakeCaseFollowerUsersInput").removeClass("hidefollowers");
+            $(this).parent().parent().find("#fake_CaseLog_EmailRecepientsInternalLogTo").removeClass("hidefollowers");
+            $(this).parent().parent().find("#fake_CaseLog_EmailRecepientsInternalLogCc").removeClass("hidefollowers");
         });
     </script>
 }
@@ -69,6 +105,11 @@
                     @if (!Model.IsItChildCase() && Model.WorkflowSteps.Count() > 0)
                     {
                         <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn save", id = "case-action-save" })</li>
+                    }
+                    @if (Model.CaseTemplateSplitToCaseSolutionID.HasValue)
+                    {
+                        <li>@Html.ActionLink(Translation.Get("Save and split", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn new-close-split", id = "case-action-save-close-and-split", href="#"})</li>
+                        @*<li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara, stäng och dela"), null, null, new { @class = "btn save-close-split", id = "case-action-save-close-and-split" })</li>*@
                     }
 
 
@@ -125,11 +166,7 @@
                     }
 
                     @*At the moment we do not check access for this /TAN*@
-        
-                    @if (!Model.IsItChildCase())
-                    {
-                        @Html.Partial("WorkflowStep", Model.WorkflowSteps)
-                    }
+                    @Html.Partial("WorkflowStep", Model.WorkflowSteps)
                 </ul>
             </div>
             <div class="pull-right">

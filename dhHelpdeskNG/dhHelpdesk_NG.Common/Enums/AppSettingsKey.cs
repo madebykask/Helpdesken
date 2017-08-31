@@ -25,6 +25,8 @@
         public static readonly string ApplicationId = "ApplicationId";
 
         public static readonly string SelfServiceAddress = "dh_selfserviceaddress";
-        
+
+        public static readonly string EncryptionKey = "encryptionkey";
+
     }
 }

@@ -57,6 +57,8 @@ namespace DH.Helpdesk.Web.Models.Feedback
 
 		public int? CircularId { get; set; }
 
+		public bool ExcludeAdministrators { get; set; }
+
 		public List<QuestionnaireQuesOptionModel> Options { get; set; }
 
 		public bool IsNew

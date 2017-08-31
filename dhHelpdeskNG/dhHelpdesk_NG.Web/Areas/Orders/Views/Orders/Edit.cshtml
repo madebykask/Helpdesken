@@ -95,7 +95,7 @@
                     {
                         @Html.Raw(string.Format("statuses: {0},", Html.SerializeObjectToJson(Model.Statuses)))
                     }
-                    searchDepartmentsByRegionIdUrl: "@Url.ApiOrdersAction(WebApiOrdersUrlName.Orders.SearchDepartmentsByRegionId, WebApiOrdersUrlName.Orders.Controller)",
+                    searchDepartmentsByRegionIdUrl: "@Url.Action("SearchDepartmentsByRegionId", "Orders")",
                     valuesSplitter: "&,",
                     pairSplitter: "&;"
                 });

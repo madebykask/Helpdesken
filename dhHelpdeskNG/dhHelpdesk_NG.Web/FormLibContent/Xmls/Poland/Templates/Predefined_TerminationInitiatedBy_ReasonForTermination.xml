@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+    <name>ReasonForTermination</name>
+    <dependent>
+        <selected>Employee</selected>
+        <show>
+            Employees resignation with notice,
+            Employees resignation without notice,
+            Retirement,
+            Expire of contract death,
+            Expire of contract arrest,
+            Disability,
+        </show>
+    </dependent>
+    <dependent>
+        <selected>IKEA</selected>
+        <show>
+            Expiry of contract,
+            Dismissal with notice,
+            Dismissal without notice,
+            Dismissal based on Legal Act,
+            Redundancy without notice,
+            Redundancy due to illness over 3 months employment below 6 months
+        </show>
+    </dependent>
+    <dependent>
+        <selected>Mutual agreement</selected>
+        <show>Mutual agreement</show>
+    </dependent>
+    <dependent>
+        <selected>Other</selected>
+        <show>
+            Other
+        </show>
+    </dependent>
+</predefined>

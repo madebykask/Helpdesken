@@ -7,12 +7,12 @@ namespace DH.Helpdesk.Web
 
     public partial class BundleConfig
     {
-	    public struct StylesNames
-	    {
-			
-		}
+        public struct StylesNames
+        {
+            
+        }
 
-		public partial struct ScriptNames
+        public partial struct ScriptNames
         {
             public const string DynamicCase = "~/bundles/dynamic-case";
             public const string AttributesValidation = "~/bundles/jqueryattrval";
@@ -21,12 +21,14 @@ namespace DH.Helpdesk.Web
             public const string CaseAddFollowersSearch = ("~/bundles/case/caseaddfollowerssearch");
             public const string CaseUserSearchCommon = ("~/bundles/case/caseusersearchcommon");
             public const string CaseCharge = ("~/bundles/case/CaseCharge");
-			public const string Select2 = "~/bundles/select2";
-			public const string CaseConnectToParent = "~/bundles/case/caseconnecttoparent";
-			public const string FeedbackStatisticsCases = "~/bundles/case/feedbackstatisticscases";
-			public const string QuickLinks = "~/bundles/admin/quicklinks";
-			public const string OrderTypes = "~/bundles/admin/ordertypes/index";
-		}
+            public const string Select2 = "~/bundles/select2";
+            public const string CaseConnectToParent = "~/bundles/case/caseconnecttoparent";
+            public const string FeedbackStatisticsCases = "~/bundles/case/feedbackstatisticscases";
+            public const string QuickLinks = "~/bundles/admin/quicklinks";
+            public const string OrderTypes = "~/bundles/admin/ordertypes/index";
+            public const string FeedbackEdit = "~/bundles/feedback/feedbackedit";
+            public const string CaseAttachExistingFiles = "~/bundles/case/attachexfile";
+        }
 
 
         public static void RegisterBundles(BundleCollection bundles)
@@ -55,21 +57,23 @@ namespace DH.Helpdesk.Web
             bundles.Add(new ScriptBundle(ScriptNames.DynamicCase).Include(
                             "~/Content/js/DynamicCase/iframeResizer.js",
                             "~/Content/js/DynamicCase/container.js"));
-			bundles.Add(new ScriptBundle("~/bundles/common").Include(
+
+            bundles.Add(new ScriptBundle("~/bundles/common").Include(
+                            "~/Content/js/Shared/commonUtils.js",
                             "~/Content/js/Shared/errors.js",
-							"~/Content/js/Shared/jquery.customAjax.js",
+                            "~/Content/js/Shared/jquery.customAjax.js",
 #if DEBUG
                             "~/Scripts/jquery-1.8.3.js",
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
                             "~/Content/js/jquery.validate.js",
-							"~/Content/js/additional-methods.js",
+                            "~/Content/js/additional-methods.js",
 #else
-							"~/Scripts/jquery-1.8.3.min.js",
+                            "~/Scripts/jquery-1.8.3.min.js",
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
                             "~/Content/js/jquery.validate.min.js",
-							"~/Content/js/additional-methods.min.js",
+                            "~/Content/js/additional-methods.min.js",
 #endif
-				"~/Content/js/jquery.unobtrusive-ajax.min.js",
+                "~/Content/js/jquery.unobtrusive-ajax.min.js",
                 "~/Content/js/jquery.validate.unobtrusive.min.js",
 #if DEBUG
  "~/Scripts/jquery-ui-1.9.2.js",
@@ -91,7 +95,7 @@ namespace DH.Helpdesk.Web
                             "~/Content/js/Shared/custom.validation.maxlengthfrom.notrequired.js",
                             "~/Content/js/Shared/custom.validation.requiredfrom.js",
                             "~/Content/js/Shared/custom.validation.maxlengthfrom.js",
-							"~/Content/js/Shared/custom.validation.reuiredifnotempty.js",
+                            "~/Content/js/Shared/custom.validation.reuiredifnotempty.js",
                             "~/Content/js/Shared/sortby.js",
                             "~/Content/js/jquery.toastmessage.js",
                             "~/Content/js/bootstrap-switch.min.js",
@@ -111,13 +115,13 @@ namespace DH.Helpdesk.Web
                             "~/Content/js/bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/common/popup").Include(
-							"~/Content/js/Shared/errors.js",
-							"~/Content/js/Shared/jquery.customAjax.js",
-							"~/Scripts/jquery-1.8.3.min.js",
+                            "~/Content/js/Shared/errors.js",
+                            "~/Content/js/Shared/jquery.customAjax.js",
+                            "~/Scripts/jquery-1.8.3.min.js",
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
                             "~/Content/js/jquery.validate.min.js",
-							"~/Content/js/additional-methods.min.js",
-							"~/Content/js/jquery.validate.unobtrusive.min.js",
+                            "~/Content/js/additional-methods.min.js",
+                            "~/Content/js/jquery.validate.unobtrusive.min.js",
                             "~/Content/js/jquery-ui-1.9.2.min.js",
                             "~/Content/js/bootstrap.js",
                             "~/Content/js/chosen.jquery.min.js",
@@ -147,15 +151,15 @@ namespace DH.Helpdesk.Web
             bundles.Add(new ScriptBundle("~/bundles/modules").Include(
                             "~/Content/js/Users/modules.js"));
 
-			bundles.Add(new ScriptBundle(ScriptNames.Select2).Include(
+            bundles.Add(new ScriptBundle(ScriptNames.Select2).Include(
                             "~/Content/js/select2.js"));
 
-			bundles.Add(new ScriptBundle("~/bundles/invoices").Include(                                                      
+            bundles.Add(new ScriptBundle("~/bundles/invoices").Include(                                                      
                             "~/Content/js/bootstrap-multiselect.js",
                             "~/Content/js/chosen.jquery.min.js",           
                             "~/Content/js/Invoice/invoice.js"));
 
-			bundles.Add(new ScriptBundle("~/bundles/cases/index").Include(
+            bundles.Add(new ScriptBundle("~/bundles/cases/index").Include(
                 "~/Scripts/jquery.cookie.js",
                 "~/Content/js/Cases/components/Utils.js",
                 "~/Content/js/Cases/components/BaseField.js",
@@ -199,7 +203,7 @@ namespace DH.Helpdesk.Web
                     "~/Content/js/snippets/dropdown_fix.js",
                     "~/Content/js/Cases/case.templates.js",
                     "~/Content/js/jsrender.min.js",
-					"~/Content/js/Cases/externalInvoice.js"));
+                    "~/Content/js/Cases/externalInvoice.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/_caseLogFiles").Include("~/Content/js/Cases/_caseLogFiles.js"));
             bundles.Add(
@@ -207,11 +211,11 @@ namespace DH.Helpdesk.Web
                     "~/Content/js/Cases/_childCases.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/editLog").Include("~/Content/js/Cases/editLog.logic.js"));
-			bundles.Add(new ScriptBundle(ScriptNames.CaseCharge).Include("~/Content/js/Cases/Dialogs/CaseCharge.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.CaseCharge).Include("~/Content/js/Cases/Dialogs/CaseCharge.js"));
 
-			#endregion
+            #endregion
 
-			bundles.Add(new ScriptBundle("~/bundles/casetemplates/edit").Include(
+            bundles.Add(new ScriptBundle("~/bundles/casetemplates/edit").Include(
                 "~/Content/js/CaseTemplates/edit.logic.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/casetemplates/index").Include(
@@ -294,9 +298,9 @@ namespace DH.Helpdesk.Web
                            "~/Areas/admin/Content/js/invoice/invoicearticleproductareaInput.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/common/admin").Include(
-						   "~/Content/js/Shared/errors.js",
-     					   "~/Content/js/Shared/jquery.customAjax.js",
-						   "~/Scripts/jquery-1.8.3.min.js",
+                           "~/Content/js/Shared/errors.js",
+                           "~/Content/js/Shared/jquery.customAjax.js",
+                           "~/Scripts/jquery-1.8.3.min.js",
                            "~/Scripts/jquery-ui-1.9.2.min.js",
                            "~/Content/js/bootstrap.js",
                            "~/Content/js/chosen.jquery.min.js",
@@ -305,12 +309,12 @@ namespace DH.Helpdesk.Web
                            "~/Content/js/bootstrap-tagsinput.js",
                         #if DEBUG
                             "~/Content/js/jquery.validate.js",
-							"~/Content/js/additional-methods.js",
+                            "~/Content/js/additional-methods.js",
 #else
                             "~/Content/js/jquery.validate.min.js",
-							"~/Content/js/additional-methods.min.js",
+                            "~/Content/js/additional-methods.min.js",
 #endif
-							"~/Content/js/plupload.full.min.js",
+                            "~/Content/js/plupload.full.min.js",
                            "~/Content/js/jquery.plupload.queue/jquery.plupload.queue.js",
                            "~/Content/js/dhHelpdesk-head.js",
                            "~/Content/js/jquery.form.min.js",
@@ -462,11 +466,15 @@ namespace DH.Helpdesk.Web
             bundles.Add(new ScriptBundle(ScriptNames.FeedbackStatisticsCases).Include(
                 "~/Content/js/Feedback/feedbackStatisticsCases.js",
                 "~/Content/js/Cases/components/Utils.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.FeedbackEdit).Include(
+                "~/Content/js/Feedback/feedback.edit.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.CaseAttachExistingFiles).Include(
+                "~/Content/js/Cases/Dialogs/_caseAttachExistFile.js"));
 
             RegisterOrdersAreaBundles(bundles);
-			RegisterInvoicesAreaBundles(bundles);
+            RegisterInvoicesAreaBundles(bundles);
 
-		}
+        }
 
     }
 }

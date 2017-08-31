@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+using DH.Helpdesk.Web.Infrastructure.Helpers;
+
+namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -69,10 +72,10 @@
         }
 
         [HttpPost]
-        public ActionResult New(ProductArea productArea, int[] wgSelected)
+        public ActionResult New(ProductArea productArea, int[] wgSelected, int caseType_Id)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._productAreaService.SaveProductArea(productArea, wgSelected, out errors);
+            this._productAreaService.SaveProductArea(productArea, wgSelected, caseType_Id, out errors);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "productarea", new { customerid = productArea.Customer_Id });
@@ -97,7 +100,7 @@
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, ProductArea productArea, int[] wgSelected)
+        public ActionResult Edit(int id, ProductArea productArea, int[] wgSelected, int caseType_Id)
         {
             var productAreaToSave = this._productAreaService.GetProductArea(id);
 
@@ -109,9 +112,29 @@
             productAreaToSave.MailID = productArea.MailID;
             productAreaToSave.IsActive = productArea.IsActive;
             productAreaToSave.ShowOnExternalPage = productArea.ShowOnExternalPage;
-
+            if (caseType_Id > 0)
+            {
+                if (productAreaToSave.CaseTypeProductAreas != null)
+                {
+                    productAreaToSave.CaseTypeProductAreas.Clear();
+                    productAreaToSave.CaseTypeProductAreas.Add(new CaseTypeProductArea
+                    {
+                        CaseType_Id = caseType_Id
+                    });
+                }
+                else
+                {
+                    productAreaToSave.CaseTypeProductAreas = new List<CaseTypeProductArea>
+                    {
+                        new CaseTypeProductArea
+                        {
+                            CaseType_Id = caseType_Id
+                        }
+                    };
+                }
+            }
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._productAreaService.SaveProductArea(productAreaToSave, wgSelected, out errors);
+            this._productAreaService.SaveProductArea(productAreaToSave, wgSelected, caseType_Id, out errors);
 
             
  
@@ -181,6 +204,11 @@
 
                 mailTemplateView.Add(new SelectListItem { Value = templateId.ToString(), Text = templateName });
             }
+            CaseTypeProductArea connectedCaseType = null;
+            if (productArea.Id > 0)
+            {
+                connectedCaseType = productArea.CaseTypeProductAreas?.FirstOrDefault(x => x.ProductArea_Id == productArea.Id);
+            }
 
             var model = new ProductAreaInputViewModel
             {
@@ -207,8 +235,20 @@
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
                 }).ToList(),
-                CanAddChild = level < MAX_LEVEL_DEEP
+                CanAddChild = level < MAX_LEVEL_DEEP,
+                CaseType_Id = connectedCaseType?.CaseType_Id ?? 0,
+                CaseTypes = _caseTypeService.GetCaseTypes(customer.Id, true),
+                ParentPath_CaseType = "--"
             };
+            if ( model.CaseType_Id > 0)
+            {
+                var c = _caseTypeService.GetCaseType(model.CaseType_Id);
+                if (c != null)
+                {
+                    c = TranslateHelper.TranslateCaseType(c);
+                    model.ParentPath_CaseType = c.getCaseTypeParentPath();
+                }
+            }
 
             return model;
         }

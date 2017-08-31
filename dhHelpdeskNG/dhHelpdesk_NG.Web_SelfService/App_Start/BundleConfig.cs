@@ -66,8 +66,12 @@ namespace DH.Helpdesk.SelfService
                           "~/Content/js/Shared/sortby.js",
                           "~/Content/js/Shared/app.layout.js"));
 
-            bundles.Add(new ScriptBundle("~/Content/js/Case/edit").Include(
+            bundles.Add(new ScriptBundle("~/Content/js/Case/edit").Include(                          
                           "~/Content/js/Case/edit.js"));
+
+            bundles.Add(new ScriptBundle("~/Content/js/Case/extendedCase").Include(
+                          "~/Content/js/iframeResizer.js",
+                          "~/Content/js/Case/case.extended.js"));
 
             bundles.Add(new ScriptBundle("~/Content/js/Case/log").Include(
                           "~/Content/js/Case/case.log.js"));

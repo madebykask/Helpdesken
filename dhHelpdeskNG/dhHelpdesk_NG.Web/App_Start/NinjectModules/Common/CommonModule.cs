@@ -33,13 +33,15 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
     using DH.Helpdesk.Dal.Mappers.Documents.EntityToBusinessModel;
     using DH.Helpdesk.Dal.Mappers.ProductArea.BusinessModelToEntity;
     using DH.Helpdesk.Dal.Mappers.ProductArea.EntityToBusinessModel;
+    using DH.Helpdesk.Dal.Mappers.CaseDocument;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Cases;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete;
     using DH.Helpdesk.Web.Infrastructure.Translate;
-
+    using DH.Helpdesk.BusinessData.Models.CaseDocument;
     using Ninject.Modules;
+    using DH.Helpdesk.Domain.ExtendedCaseEntity;
 
     /// <summary>
     /// The common module.
@@ -119,6 +121,87 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
 
             this.Bind<IEntityToBusinessModelMapper<CaseSolutionConditionEntity, CaseSolutionConditionModel>>()
                 .To<CaseSolutionConditionToBusinessModelMapper>()
+                .InSingletonScope();
+
+
+            this.Bind<IBusinessModelToEntityMapper<ExtendedCaseFormModel, ExtendedCaseFormEntity>>()
+                .To<ExtendedCaseFormToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel>>()
+                .To<ExtendedCaseFormToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity>>()
+            .To<ExtendedCaseDataToEntityMapper>()
+            .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ExtendedCaseDataEntity, ExtendedCaseDataModel>>()
+                .To<ExtendedCaseDataToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseDocumentModel, CaseDocumentEntity>>()
+            .To<CaseDocumentToEntityMapper>()
+            .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseDocumentEntity, CaseDocumentModel>>()
+                .To<CaseDocumentToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseDocumentConditionModel, CaseDocumentConditionEntity>>()
+                .To<CaseDocumentConditionToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseDocumentConditionEntity, CaseDocumentConditionModel>>()
+                .To<CaseDocumentConditionToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<ExtendedCaseValueModel, ExtendedCaseValueEntity>>()
+           .To<ExtendedCaseValueToEntityMapper>()
+           .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ExtendedCaseValueEntity, ExtendedCaseValueModel>>()
+                .To<ExtendedCaseValueToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseDocumentParagraphModel, CaseDocumentParagraphEntity>>()
+                .To<CaseDocumentParagraphToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseDocumentParagraphEntity, CaseDocumentParagraphModel>>()
+                .To<CaseDocumentParagraphToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseDocumentTextConditionModel, CaseDocumentTextConditionEntity>>()
+            .To<CaseDocumentTextConditionToEntityMapper>()
+            .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseDocumentTextConditionEntity, CaseDocumentTextConditionModel>>()
+                .To<CaseDocumentTextConditionToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseDocumentTemplateModel, CaseDocumentTemplateEntity>>()
+           .To<CaseDocumentTemplateToEntityMapper>()
+           .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseDocumentTemplateEntity, CaseDocumentTemplateModel>>()
+                .To<CaseDocumentTemplateToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseDocumentTextIdentifierModel, CaseDocumentTextIdentifierEntity>>()
+            .To<CaseDocumentTextIdentifierToEntityMapper>()
+            .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseDocumentTextIdentifierEntity, CaseDocumentTextIdentifierModel>>()
+                .To<CaseDocumentTextIdentifierToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CaseDocumentTextConditionIdentifierModel, CaseDocumentTextConditionIdentifierEntity>>()
+            .To<CaseDocumentTextConditionIdentifierToEntityMapper>()
+            .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CaseDocumentTextConditionIdentifierEntity, CaseDocumentTextConditionIdentifierModel>>()
+                .To<CaseDocumentTextConditionIdentifierToBusinessModelMapper>()
                 .InSingletonScope();
 
         }

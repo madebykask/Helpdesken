@@ -1,0 +1,141 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="documents">
+    @if(Model.GetAnswer("DataChangeSelection").Split(',').Contains("1")
+            || Model.GetAnswer("DataChangeSelection").Split(',').Contains("4")
+            || Model.GetAnswer("DataChangeSelection").Split(',').Contains("5")
+            || Model.GetAnswer("DataChangeSelection").Split(',').Contains("6")
+            || Model.GetAnswer("DataChangeSelection").Split(',').Contains("7")
+            || Model.GetAnswer("DataChangeSelection").Split(',').Contains("8"))
+    {
+        <div class="span12">
+
+            <table class="table-striped">
+                <thead>
+                    <tr>
+                        <th>@Model.Translate("Document")
+                        </th>
+                        <th>@Model.Translate("Type")
+                        </th>
+                        <th>
+                            @Model.Translate("Printed by")
+                        </th>
+                        <th>
+                            @Model.Translate("Contract concluded on")
+                        </th>
+                        <th>&nbsp;
+                        </th>
+                    </tr>
+                </thead>
+                @{  
+                        var answer1 = Model.GetAnswer("FunctionAllowance");
+                        var answer2 = Model.GetAnswer("FunctionAllowance2");
+                        var answer3 = Model.GetAnswer("FunctionAllowance3");
+                        string condition1 = "1035 - PPOŻ supplement";
+                        string condition2 = "1040 - Environmental protection supplement";
+                        bool isPrinted = false;
+                        
+                }
+                <tbody>
+                    @if(Model.GetAnswer("DataChangeSelection").Split(',').Contains("1")
+                            || Model.GetAnswer("DataChangeSelection").Split(',').Contains("4")
+                            || Model.GetAnswer("DataChangeSelection").Split(',').Contains("5")
+                            || Model.GetAnswer("DataChangeSelection").Split(',').Contains("7")
+                       )                     
+                    {
+                        <tr>
+                            <td>@Model.Translate("Addendum")</td>
+                            <td>pdf</td>
+                            <td>@Model.GetAnswer("Appendix")</td>
+                            <td>@Model.Element("AppendixConcludedOn", Model.Language, false, "concludedOn")</td>
+                            <td>
+                                <a href="@Url.Action("print", new { id = "Appendix", caseId = Model.Contract.Id, userId = FormLibSessions.User.UserId })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>@Model.Translate("Addendum Polish")</td>
+                            <td>pdf</td>
+                            <td>@Model.GetAnswer("AppendixPolish")</td>
+                            <td>@Model.Element("AppendixPolishConcludedOn", Model.Language, false, "concludedOn")</td>
+                            <td>
+                                <a href="@Url.Action("print", new { id = "AppendixPolish", caseId = Model.Contract.Id, userId = FormLibSessions.User.UserId })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+                            </td>
+                        </tr>
+                        isPrinted = true;
+                    }
+                    
+                    
+                    
+                    @if (Model.GetAnswer("DataChangeSelection").Split(',').Contains("8"))
+                    {
+                        if (!isPrinted) // only 8  
+                        { 
+                           if((!string.IsNullOrEmpty(answer1) && answer1 != condition1 && answer1 != condition2) ||
+                              (!string.IsNullOrEmpty(answer2) && answer2 != condition1 && answer2 != condition2) ||
+                              (!string.IsNullOrEmpty(answer3) && answer3 != condition1 && answer3 != condition2))
+                           {
+                            <tr>
+                                <td>@Model.Translate("Addendum")</td>
+                                <td>pdf</td>
+                                <td>@Model.GetAnswer("Appendix")</td>
+                                <td>@Model.Element("AppendixConcludedOn", Model.Language, false, "concludedOn")</td>
+                                <td>
+                                    <a href="@Url.Action("print", new { id = "Appendix", caseId = Model.Contract.Id, userId = FormLibSessions.User.UserId })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>@Model.Translate("Addendum Polish")</td>
+                                <td>pdf</td>
+                                <td>@Model.GetAnswer("AppendixPolish")</td>
+                                <td>@Model.Element("AppendixPolishConcludedOn", Model.Language, false, "concludedOn")</td>
+                                <td>
+                                    <a href="@Url.Action("print", new { id = "AppendixPolish", caseId = Model.Contract.Id, userId = FormLibSessions.User.UserId })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+                                </td>
+                            </tr>
+                           }
+                        } // only 8  
+                        
+                        @* To Show Addendium if the Fuction Allowance selected value is : "1035 - PPOŻ supplement" *@ 
+                        if (answer1 == condition1 || answer2 == condition1 || answer3 == condition1)
+                        {
+                            <tr>
+                                <td>@Model.Translate("Addendum Polish")</td>
+                                <td>pdf</td>
+                                <td>@Model.GetAnswer("AddendumPolish-1035")</td>
+                                <td></td>
+                                <td>
+                                    <a href="@Url.Action("print", new { id = "AddendumPolish-1035", caseId = Model.Contract.Id, userId = FormLibSessions.User.UserId })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+                                </td>
+                            </tr>
+                        }
+                        
+                        @* To Show Addendium if the Fuction Allowance selected value is : "1040 - Environmental protection supplement""  *@
+
+                        if (answer1 == condition2 || answer2 == condition2 || answer3 == condition2)
+                        {
+                            <tr>
+                                <td>@Model.Translate("Addendum Polish")</td>
+                                <td>pdf</td>
+                                <td>@Model.GetAnswer("AddendumPolish-1040")</td>
+                                <td></td>
+                                <td>
+                                    <a href="@Url.Action("print", new { id = "AddendumPolish-1040", caseId = Model.Contract.Id, userId = FormLibSessions.User.UserId })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+                                </td>
+                            </tr>
+                        }               
+                                   
+                    }  @* contain 8 *@ 
+                      
+                    @if(Model.GetAnswer("DataChangeSelection").Split(',').Contains("6"))
+                    {
+                        @Html.Partial("_Documents", Model)
+                    }
+                   
+
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

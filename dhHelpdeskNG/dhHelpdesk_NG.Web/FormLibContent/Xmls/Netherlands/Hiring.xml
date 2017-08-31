@@ -1,0 +1,1410 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+    <!ENTITY languages SYSTEM "Templates/Languages.xml">
+    <!ENTITY data_language SYSTEM "Data/Data_Languages.xml">
+    <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+    <!ENTITY state SYSTEM "Templates/HiringState.xml">
+    <!ENTITY pre_payscaletype_payscalelevel SYSTEM "Defaults/Predefined_PayScaleType_PayScaleLevel.xml">
+    <!ENTITY data_country SYSTEM "Data/Data_Country.xml">
+    <!ENTITY data_hiring_allowancestypes SYSTEM "Data/Data_Hiring_AllowancesTypes.xml">
+    <!ENTITY data_costcentre SYSTEM "Data/Data_CostCentre.xml">
+    <!ENTITY data_nationality SYSTEM "Data/Data_Nationality.xml">
+    <!ENTITY data_jobtitle SYSTEM "Data/Data_JobTitle.xml">
+    <!ENTITY data_localjobtitle SYSTEM "Data/Data_LocalJobTitle.xml">
+    <!ENTITY data_linemanager SYSTEM "Data/Data_LineManager.xml">
+    <!ENTITY data_primarysite SYSTEM "Data/Data_PrimarySite.xml">
+]>
+
+<form id="48" guid="0BCB0E6B-245E-49C5-8E0C-B3661D3A0A09" customerId="29">
+    &languages;
+    &regexs;
+    &state;
+    <fields>
+        <!--Service Request Details-->
+        <tab name="#servicerequestdetails" label="Service Request Details">
+            <element type="select" name="NewToIKEA" mandatory="1" label="New to IKEA?" HcmData="1" SortOrder="1" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="International Transfer">International Transfer</option>
+                    <option value="New-Hire">New-Hire</option>
+                    <option value="Re-Hire">Re-Hire</option>
+                    <option value="Transfer Between Business Units">Transfer Between Business Units</option>
+                </options>
+            </element>
+            <element type="date" name="ContractStartDate" mandatory="1" label="Contract Start Date" format="dd.MM.yyyy" casefield="plandate" HcmData="1" SortOrder="4" ParentGVFields="1">                
+                <regex inherit="date" pattern="" message=""></regex>
+                <checkStartDate name="EmploymentCategory" exception="Apprentice,Holiday Co-Worker" message="The date you've entered doesn't start on the 1st or the 15th of a month"></checkStartDate>
+            </element>
+            <element type="select" name="ServiceRequestPriority" mandatory="1" label="Service Request Priority" default="Standard" casefield="status_id">
+                <options>
+                    <option value=""></option>
+                    <option value="Urgent">Urgent</option>
+                    <option value="Standard">Standard</option>
+                </options>
+            </element>
+            <element type="text" name="Co-WorkerID" label="Co-Worker ID" casefield="reportedby" HcmData="1" SortOrder="2" ParentGVFields="1">
+                <mandatoryIf name="NewToIKEA">Transfer Between Business Units</mandatoryIf>
+                <regex inherit="employeeno" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="GlobalHRID" label="Global HR ID" formfieldidentifier="E1P0709.PERSONID_EXT" HcmData="1" SortOrder="3" ParentGVFields="1">
+                <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
+            </element>
+            <element type="select" name="Title" label="Title" mandatory="1" HcmData="1" SortOrder="5" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Mr">Mr</option>
+                    <option value="Ms">Ms</option>
+                </options>
+            </element>
+            <element type="text" name="FirstName" label="Name First" mandatory="1" casefield="persons_name" HcmData="1" SortOrder="7" ParentGVFields="1"></element>
+            <element type="text" name="Prefixes" label="Prefixes" HcmData="1" SortOrder="19" ParentGVFields="1"></element>
+            <element type="text" name="LastName" label="Name Last" mandatory="1" casefield="persons_phone" HcmData="1" SortOrder="6" ParentGVFields="1"></element>
+            <element type="text" name="Initials" label="Initials" mandatory="1" HcmData="1" SortOrder="20" ParentGVFields="1"></element>
+            <element type="date" name="DateOfBirth" label="Date of birth" mandatory="1" format="dd.MM.yyyy" formfieldidentifier="E1P0002.GBDAT" HcmData="1" SortOrder="8" ParentGVFields="1">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1" formfieldidentifier="E1P0006.STRAS:1" HcmData="1" SortOrder="27" ParentGVFields="1"></element>
+            <element type="text" name="PermanentAddressLine2" label="Address line 2" formfieldidentifier="E1P0006.HSNMR:1" HcmData="1" SortOrder="28" ParentGVFields="1"></element>
+            <element type="text" name="PermanentAddressLine3" label="Address line 3" formfieldidentifier="E1P0006.POSTA:1" HcmData="1" SortOrder="29" ParentGVFields="1"></element>
+            <element type="text" name="PermanentPostalCode" label="Postal code" mandatory="1" formfieldidentifier="E1P0006.PSTLZ:1" HcmData="1" SortOrder="30" ParentGVFields="1">
+                <regex inherit="postcode" pattern="" message=""></regex>
+                <validateIf name="PermanentCountry">Netherlands</validateIf>
+            </element>
+            <element type="text" name="PermanentCity" label="City" mandatory="1" formfieldidentifier="E1P0006.ORT01:1" HcmData="1" SortOrder="31" ParentGVFields="1"></element>
+            <element type="search-select" source="1" name="PermanentCountry" label="Country" mandatory="1" default="Netherlands" formfieldidentifier="E1P0006.LAND1:1" HcmData="1" SortOrder="32" ParentGVFields="1">
+                &data_country;
+            </element>
+            <element type="select" name="MaritalStatus" label="Marital Status" mandatory="1" HcmData="1" SortOrder="26" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Cohabiting">Cohabiting</option>
+                    <option value="Cohabiting with contract">Cohabiting with contract</option>
+                    <option value="Divorced">Divorced</option>
+                    <option value="Legal cohabitation">Legal cohabitation</option>
+                    <option value="Married">Married</option>
+                    <option value="Registered partner">Registered partner</option>
+                    <option value="Separated">Separated</option>
+                    <option value="Single">Single</option>
+                    <option value="Unknown">Unknown</option>
+                    <option value="Widowed">Widowed</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="Nationality" label="Nationality" default="Dutch" mandatory="1" HcmData="1" SortOrder="25" ParentGVFields="1">
+                &data_nationality;
+            </element>
+            <element type="text" name="BSNCSN" label="BSN/CSN" mandatory="1" HcmData="1" SortOrder="22" ParentGVFields="1">
+                <regex inherit="bsn" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="Birthplace" label="Birthplace" mandatory="1" HcmData="1" SortOrder="23" ParentGVFields="1"></element>
+            <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+        </tab>
+        <tab name="#OrganisationalAssignment" label="Organisational Assignment">
+            <element type="search-select" source="1" name="OrganisationCountry" label="Country" default="Netherlands" HcmData="1" SortOrder="0" ParentGVFields="1">
+                &data_country;
+            </element>
+            <element type="select" source="database" name="Company" label="Company" mandatory="1" casefield="region_id" HcmData="1" SortOrder="11" ParentGVFields="1"></element>
+            <element type="select" source="database" name="BusinessUnit" label="Business Unit" mandatory="1" casefield="department_id" HcmData="1" SortOrder="12" ParentGVFields="1"></element>
+            <element type="select" source="database" name="ServiceArea" label="Function" mandatory="1" HcmData="1" SortOrder="13" ParentGVFields="1"></element>
+            <element type="select" source="database" name="Department" label="Department" mandatory="1" casefield="ou_id" HcmData="1" SortOrder="15" ParentGVFields="1"></element>
+            <element type="search-select" source="1" name="HomeCostCentre" label="Cost Centre" mandatory="1" HcmData="1" SortOrder="14" ParentGVFields="1">
+                &data_costcentre;
+            </element>
+            <element type="text" name="CostAllocation" label="Cost Allocation" mandatory="1" default="100" HcmData="1" SortOrder="266" ParentGVFields="1">
+              <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+              <regex inherit="num100" pattern="" message=""></regex>
+            </element>
+            <element type="search-select" name="CrossChargeCostCentre" source="1" label="Cost Centre" HcmData="1" SortOrder="267" ParentGVFields="1">
+                &data_costcentre;
+                <mandatoryIfNotEqual name="CostAllocation">100</mandatoryIfNotEqual>
+            </element>
+            <element type="search-select" name="JobTitle" label="Job Title (Global Catalogue)" mandatory="1" HcmData="1" SortOrder="10" ParentGVFields="1">
+                &data_jobtitle;
+            </element>
+            <element type="search-select" name="LocalJobTitle" label="Position Title (Local Job Name)" mandatory="1" HcmData="1" SortOrder="9" ParentGVFields="1">
+                &data_localjobtitle;
+            </element>
+            <element type="select" name="NewPosition" label="New Position?" mandatory="1" default="Fill Vacant Position" HcmData="1" SortOrder="258" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="New Position">New Position</option>
+                    <option value="Fill Vacant Position">Fill Vacant Position</option>
+                    <option value="New Position for VAP store?">New Position for VAP store?</option>
+                </options>
+            </element>
+            <element type="search-select" name="ReportsToLineManager" source="1" label="Reports to Line Manager" mandatory="1" HcmData="1" SortOrder="259" ParentGVFields="1">
+                &data_linemanager;
+            </element>
+            <element type="select" name="AcknowledgedManagerInCLA" label="Acknowledged as managers in terms of CLA" mandatory="1" HcmData="1" SortOrder="260" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+            <element type="select" name="EmploymentCategory" label="Employment Category" mandatory="1" HcmData="1" SortOrder="16" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Permanent">Permanent</option>
+                    <option value="Temporary">Temporary</option>
+                    <option value="Apprentice">Apprentice</option>
+                    <option value="Holiday Co-Worker">Holiday Co-Worker</option>
+                    <option value="Detached">Detached</option>
+                    <option value="Expat (TE)">Expat (TE)</option>
+                </options>
+            </element>
+            <element type="text" name="ContractedHours" label="Contracted Hours" mandatory="1" HcmData="1" SortOrder="38" ParentGVFields="1">
+                <regex inherit="numMax40" pattern="" message=""></regex>
+            </element>
+            <element type="date" name="ContractEndDate" label="Contract End Date" format="dd.MM.yyyy" HcmData="1" SortOrder="34" ParentGVFields="1">
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+                <mandatoryIf name="EmploymentCategory">Temporary,Apprentice,Holiday Co-Worker,Detached,Expat (TE),Transferred Employee</mandatoryIf>
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="ContractType" label="Contract Type" mandatory="1" HcmData="1" SortOrder="17" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Part Time">Part Time</option>
+                    <option value="Full Time">Full Time</option>
+                </options>
+            </element>
+            <element type="select" name="ProbationPeriod" label="Probation period?" mandatory="1" HcmData="1" SortOrder="35" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+            <element type="date" name="ProbationEndDate" label="Probation End Date" format="dd.MM.yyyy" HcmData="1" SortOrder="36" ParentGVFields="1">
+                <mandatoryIf name="ProbationPeriod">Yes</mandatoryIf>
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element name="PrimarySite" type="search-select" label="Primary Site" mandatory="1">
+                &data_primarysite;
+            </element>
+            <element name="TECApprover" type="search-select" label="TEC Approver" mandatory="1">
+                &data_linemanager;
+            </element>
+            <element name="HelpDesk" type="text" label="Help Desk" default="ICC3 HBG Retail" mandatory="1"></element>
+            <element type="text" name="NameOfSchool" label="Name Of School" HcmData="1" SortOrder="261" ParentGVFields="1">
+                <mandatoryIf name="EmploymentCategory">Apprentice</mandatoryIf>
+            </element>
+            <element type="text" name="NameOfEducation" label="Name Of Education" HcmData="1" SortOrder="262" ParentGVFields="1">
+                <mandatoryIf name="EmploymentCategory">Apprentice</mandatoryIf>
+            </element>
+            <element type="text" name="CityEducationSchool" label="City Education/School" HcmData="1" SortOrder="263" ParentGVFields="1">
+                <mandatoryIf name="EmploymentCategory">Apprentice</mandatoryIf>
+            </element>
+            <element type="text" name="LevelOfEducation" label="Level Of Education" HcmData="1" SortOrder="264" ParentGVFields="1">
+                <mandatoryIf name="EmploymentCategory">Apprentice</mandatoryIf>
+            </element>
+            <element type="text" name="MentorAtIKEA" label="Mentor at IKEA" HcmData="1" SortOrder="265" ParentGVFields="1">
+                <mandatoryIf name="EmploymentCategory">Apprentice</mandatoryIf>
+            </element>
+        </tab>
+        <tab name="#payment" label="Payment Information">
+            <element type="select" name="PayrollCategory" label="Payroll Category" mandatory="1" HcmData="1" SortOrder="37" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Hourly">Hourly</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="Juvenile Hourly">Juvenile Hourly</option>
+                    <option value="Juvenile Monthly">Juvenile Monthly</option>
+                    <option value="No Salary">No Salary</option>
+                    <option value="MT/Dep/SM">MT/Dep/SM</option>
+                </options>
+            </element>
+            <element type="text" name="BasicPayAmount" label="Basic Pay Amount" mandatory="1" HcmData="1" SortOrder="41" ParentGVFields="1">
+              <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="PayScaleType" label="Pay Scale Type" default="IKEA NL CAO" mandatory="1" HcmData="1" SortOrder="39" ParentGVFields="1">
+                &pre_payscaletype_payscalelevel;
+                <options>
+                    <option value=""></option>
+                    <option value="IKEA NL CAO">IKEA NL CAO</option>
+                    <option value="IKEA NL geen CAO">IKEA NL geen CAO</option>
+                    <option value="IKEA Competence">IKEA Competence</option>
+                </options>
+            </element>
+            <element type="select" name="PayScaleLevel" label="Pay Scale Level/IPE" mandatory="1" HcmData="1" SortOrder="40" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="44">44</option>
+                    <option value="45">45</option>
+                    <option value="46">46</option>
+                    <option value="47">47</option>
+                    <option value="48">48</option>
+                    <option value="49">49</option>
+                    <option value="50">50</option>
+                    <option value="51">51</option>
+                    <option value="52">52</option>
+                    <option value="53">53</option>
+                    <option value="54">54</option>
+                    <option value="55">55</option>
+                    <option value="56">56</option>
+                    <option value="57">57</option>
+                    <option value="58">58</option>
+                    <option value="59">59</option>
+                    <option value="60">60</option>
+                    <option value="61">61</option>
+                    <option value="62">62</option>
+                    <option value="63">63</option>
+                    <option value="64">64</option>
+                    <option value="65">65</option>
+                    <option value="66">66</option>
+                </options>
+            </element>
+            <element type="hidden" name="Allowances" default="1"></element>
+            <element type="select" name="AllowancesType" label="Allowance Type" HcmData="1" SortOrder="44" ParentGVFields="1">
+                &data_hiring_allowancestypes;
+            </element>
+            <element type="select" name="AllowancesPaymentType" label="Payment Type" HcmData="1" SortOrder="45" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element type="text" name="AllowancesAmountUnits" label="Amount/Units" HcmData="1" SortOrder="46" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+                <!--<regex inherit="unsignednum" pattern="" message=""></regex>-->
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesNetGross" label="Net/Gross" HcmData="1" SortOrder="47" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element type="date" name="AllowancesValidFrom" label="Valid from:" format="dd.MM.yyyy" HcmData="1" SortOrder="48" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+                <regex inherit="date" pattern="" message=""></regex>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element type="date" name="AllowancesValidTo" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy" HcmData="1" SortOrder="49" ParentGVFields="1">
+                <mandatoryIf name="AllowancesPaymentType">Recurring</mandatoryIf>
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesType2" label="Allowance Type" HcmData="1" SortOrder="50" ParentGVFields="1">
+                &data_hiring_allowancestypes;
+            </element>
+            <element type="select" name="AllowancesPaymentType2" label="Payment Type" HcmData="1" SortOrder="51" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element type="text" name="AllowancesAmountUnits2" label="Amount/Units" HcmData="1" SortOrder="52" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesNetGross2" label="Net/Gross" HcmData="1" SortOrder="53" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element type="date" name="AllowancesValidFrom2" label="Valid from:" format="dd.MM.yyyy" HcmData="1" SortOrder="54" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+                <regex inherit="date" pattern="" message=""></regex>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element type="date" name="AllowancesValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy" HcmData="1" SortOrder="55" ParentGVFields="1">
+                <mandatoryIf name="AllowancesPaymentType2">Recurring</mandatoryIf>
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesType3" label="Allowance Type" HcmData="1" SortOrder="56" ParentGVFields="1">
+                &data_hiring_allowancestypes;
+            </element>
+            <element type="select" name="AllowancesPaymentType3" label="Payment Type" HcmData="1" SortOrder="57" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option> 
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element type="text" name="AllowancesAmountUnits3" label="Amount/Units" HcmData="1" SortOrder="58" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+              <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesNetGross3" label="Net/Gross" HcmData="1" SortOrder="59" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element type="date" name="AllowancesValidFrom3" label="Valid from:"  format="dd.MM.yyyy" HcmData="1" SortOrder="60" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+                <regex inherit="date" pattern="" message=""></regex>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element type="date" name="AllowancesValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy" HcmData="1" SortOrder="61" ParentGVFields="1">
+                <mandatoryIf name="AllowancesPaymentType3">Recurring</mandatoryIf>
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesType4" label="Allowance Type" HcmData="1" SortOrder="62" ParentGVFields="1">
+                &data_hiring_allowancestypes;
+            </element>
+            <element type="select" name="AllowancesPaymentType4" label="Payment Type" HcmData="1" SortOrder="63" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element type="text" name="AllowancesAmountUnits4" label="Amount/Units" HcmData="1" SortOrder="64" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesNetGross4" label="Net/Gross" HcmData="1" SortOrder="65" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element type="date" name="AllowancesValidFrom4" label="Valid from:"  format="dd.MM.yyyy" HcmData="1" SortOrder="66" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
+                <regex inherit="date" pattern="" message=""></regex>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element type="date" name="AllowancesValidTo4" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy" HcmData="1" SortOrder="67" ParentGVFields="1">
+                <mandatoryIf name="AllowancesPaymentType4">Recurring</mandatoryIf>
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="AllowancesType5" label="Allowance Type" HcmData="1" SortOrder="68" ParentGVFields="1">
+                &data_hiring_allowancestypes;
+            </element>
+            <element type="select" name="AllowancesPaymentType5" label="Payment Type" HcmData="1" SortOrder="69" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element type="text" name="AllowancesAmountUnits5" label="Amount/Units" HcmData="1" SortOrder="70" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>               
+            </element>
+            <element type="select" name="AllowancesNetGross5" label="Net/Gross" HcmData="1" SortOrder="71" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element type="date" name="AllowancesValidFrom5" label="Valid from:"  format="dd.MM.yyyy" HcmData="1" SortOrder="72" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
+                <regex inherit="date" pattern="" message=""></regex>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element type="date" name="AllowancesValidTo5" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy" HcmData="1" SortOrder="73" ParentGVFields="1">
+                <mandatoryIf name="AllowancesPaymentType5">Recurring</mandatoryIf>
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="hidden" default="1" name="Deductions"></element>
+            <!--1-->
+            <element name="DeductionsType" label="Deduction Type" type="select" HcmData="1" SortOrder="74" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="DeductionsAmountUnits"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Company Fitness">Company Fitness</option>
+                </options>
+            </element>
+            <element name="DeductionsPaymentType" label="Payment type" type="select" HcmData="1" SortOrder="75" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element name="DeductionsAmountUnits" label="Deduction Amount/Units" type="text"  HcmData="1" SortOrder="76" ParentGVFields="1">
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>              
+                <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+            </element>
+            <element type="select" name="DeductionsNetGross" label="Net/Gross"  HcmData="1" SortOrder="77" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element name="DeductionsValidFrom" label="Deduction Valid from" type="date" format="dd.MM.yyyy" HcmData="1" SortOrder="78" ParentGVFields="1">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element name="DeductionsValidTo" label="Deduction Valid to" type="date"  default="31.12.9999" format="dd.MM.yyyy" HcmData="1" SortOrder="79" ParentGVFields="1">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+            </element>
+            <!--2-->
+            <element name="DeductionsType2" label="Deduction Type" type="select"  HcmData="1" SortOrder="80" ParentGVFields="1" >
+                <mandatoryIfNotEmpty name="DeductionAmountUnits2"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Company Fitness">Company Fitness</option>
+                </options>
+            </element>
+            <element name="DeductionsPaymentType2" label="Payment type" type="select" HcmData="1" SortOrder="81" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element name="DeductionsAmountUnits2" label="Deduction Amount/Units" type="text"  HcmData="1" SortOrder="82" ParentGVFields="1">
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>              
+                <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+            </element>
+            <element type="select" name="DeductionsNetGross2" label="Net/Gross" HcmData="1" SortOrder="83" ParentGVFields="1" >
+                <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element name="DeductionsValidFrom2" label="Deduction Valid from" type="date" format="dd.MM.yyyy" HcmData="1" SortOrder="84" ParentGVFields="1">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element name="DeductionsValidTo2" label="Deduction Valid to" type="date"  default="31.12.9999" format="dd.MM.yyyy" HcmData="1" SortOrder="85" ParentGVFields="1">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+            </element>
+            <!--3-->
+            <element name="DeductionsType3" label="Deduction Type" type="select" HcmData="1" SortOrder="86" ParentGVFields="1" >
+                <mandatoryIfNotEmpty name="DeductionAmountUnits3"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Company Fitness">Company Fitness</option>
+                </options>
+            </element>
+            <element name="DeductionsPaymentType3" label="Payment type" type="select" HcmData="1" SortOrder="87" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element name="DeductionsAmountUnits3" label="Deduction Amount/Units" type="text"  HcmData="1" SortOrder="88" ParentGVFields="1">
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>              
+                <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+            </element>
+            <element type="select" name="DeductionsNetGross3" label="Net/Gross"  HcmData="1" SortOrder="89" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element name="DeductionsValidFrom3" label="Deduction Valid from" type="date" format="dd.MM.yyyy" HcmData="1" SortOrder="90" ParentGVFields="1">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element name="DeductionsValidTo3" label="Deduction Valid to" type="date"  default="31.12.9999" format="dd.MM.yyyy" HcmData="1" SortOrder="91" ParentGVFields="1">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+            </element>
+            <!--4-->
+            <element name="DeductionsType4" label="Deduction Type" type="select" HcmData="1" SortOrder="92" ParentGVFields="1" >
+                <mandatoryIfNotEmpty name="DeductionAmountUnits4"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Company Fitness">Company Fitness</option>
+                </options>
+            </element>
+            <element name="DeductionsPaymentType4" label="Payment type" type="select" HcmData="1" SortOrder="93" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element name="DeductionsAmountUnits4" label="Deduction Amount/Units" type="text" HcmData="1" SortOrder="94" ParentGVFields="1" >
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>              
+                <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+            </element>
+            <element type="select" name="DeductionsNetGross4" label="Net/Gross"  HcmData="1" SortOrder="95" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element name="DeductionsValidFrom4" label="Deduction Valid from" type="date" format="dd.MM.yyyy" HcmData="1" SortOrder="96" ParentGVFields="1">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element name="DeductionsValidTo4" label="Deduction Valid to" type="date"  default="31.12.9999" format="dd.MM.yyyy" HcmData="1" SortOrder="97" ParentGVFields="1">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
+            </element>
+            <!--5-->
+            <element name="DeductionsType5" label="Deduction Type" type="select" HcmData="1" SortOrder="98" ParentGVFields="1" >
+                <mandatoryIfNotEmpty name="DeductionAmountUnits5"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Company Fitness">Company Fitness</option>
+                </options>
+            </element>
+            <element name="DeductionsPaymentType5" label="Payment type" type="select" HcmData="1" SortOrder="99" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="One Time">One Time</option>
+                    <option value="Recurring">Recurring</option>
+                </options>
+            </element>
+            <element name="DeductionsAmountUnits5" label="Deduction Amount/Units" type="text"  HcmData="1" SortOrder="100" ParentGVFields="1">
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>              
+                <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+            </element>
+            <element type="select" name="DeductionsNetGross5" label="Net/Gross"  HcmData="1" SortOrder="101" ParentGVFields="1">
+                <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Net">Net</option>
+                    <option value="Gross">Gross</option>
+                </options>
+            </element>
+            <element name="DeductionsValidFrom5" label="Deduction Valid from" type="date" format="dd.MM.yyyy" HcmData="1" SortOrder="102" ParentGVFields="1">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+                <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
+            </element>
+            <element name="DeductionsValidTo5" label="Deduction Valid to" type="date"  default="31.12.9999" format="dd.MM.yyyy" HcmData="1" SortOrder="103" ParentGVFields="1">
+                <regex inherit="date" pattern="" message=""></regex>
+                <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
+            </element>
+            <element type="select" name="OneIKEABonusLevel" label="One IKEA Bonus Level " HcmData="1" SortOrder="42" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Level 1">Level 1</option>
+                    <option value="Level 2">Level 2</option>
+                    <option value="Level 3">Level 3</option>
+                </options>
+            </element>
+            <element type="select" name="TaxAssignment" label="Tax Assignment" HcmData="1" SortOrder="293" ParentGVFields="1">
+              <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="Home Country">Home Country</option>
+                    <option value="Host Country">Host Country</option>
+                </options>
+            </element>
+            <element type="select" name="SocialInsuranceAssignment" label="Social Insurance Assignment" HcmData="1" SortOrder="294" ParentGVFields="1">
+              <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>              
+                <options>
+                    <option value=""></option>
+                    <option value="Home Country">Home Country</option>
+                    <option value="Host Country">Host Country</option>
+                </options>
+            </element>
+            <element type="hidden" name="Benefits" default="1"></element>
+            <!--1-->
+            <element type="select" name="TypeOfBenefit" label="Type of benefit" HcmData="1" SortOrder="268" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Company Car">Company Car</option>
+                    <option value="Salary Revision">Salary Revision</option>
+                    <option value="Compensation Transportation costs">Compensation Transportation costs</option>
+                </options>
+            </element>
+            <element type="select" name="Category" label="Category" HcmData="1" SortOrder="269" ParentGVFields="1">
+                <mandatoryIf name="TypeOfBenefit">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="Class 1">Class 1</option>
+                    <option value="Class 2">Class 2</option>
+                </options>
+            </element>
+            <element type="select" name="TypeOfCar" label="Type of car" HcmData="1" SortOrder="270" ParentGVFields="1">
+                <mandatoryIf name="TypeOfBenefit">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="necessity car without the option to drive privately">necessity car without the option to drive privately</option>
+                    <option value="necessity car with the option to drive privately by paying € 250,- net a month">necessity car with the option to drive privately by paying € 250,- net a month</option>
+                    <option value="benefit car, for business and private use">benefit car, for business and private use</option>
+                </options>
+            </element>
+            <element type="text" name="MonthlyAmount" label="Monthly Amount" HcmData="1" SortOrder="271" ParentGVFields="1">
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="date" name="NextRevisionDate" label="Next Revision Date" future="1" format="dd.MM.yyyy" HcmData="1" SortOrder="272" ParentGVFields="1">
+                <mandatoryIf name="TypeOfBenefit">Salary Revision</mandatoryIf>
+                <regex inherit="date" message="" pattern=""></regex>
+            </element>
+            <!--2-->
+            <element type="select" name="TypeOfBenefit2" label="Type of benefit" HcmData="1" SortOrder="273" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Company Car">Company Car</option>
+                    <option value="Salary Revision">Salary Revision</option>
+                    <option value="Compensation Transportation costs">Compensation Transportation costs</option>
+                </options>
+            </element>
+            <element type="select" name="Category2" label="Category" HcmData="1" SortOrder="274" ParentGVFields="1">
+                <mandatoryIf name="TypeOfBenefit2">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="Class 1">Class 1</option>
+                    <option value="Class 2">Class 2</option>
+                </options>
+            </element>
+            <element type="select" name="TypeOfCar2" label="Type of car" HcmData="1" SortOrder="275" ParentGVFields="1">
+                <mandatoryIf name="TypeOfBenefit2">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="necessity car without the option to drive privately">necessity car without the option to drive privately</option>
+                    <option value="necessity car with the option to drive privately by paying € 250,- net a month">necessity car with the option to drive privately by paying € 250,- net a month</option>
+                    <option value="benefit car, for business and private use">benefit car, for business and private use</option>
+                </options>
+            </element>
+            <element type="text" name="MonthlyAmount2" label="Monthly Amount" HcmData="1" SortOrder="276" ParentGVFields="1">     
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>                
+            </element>
+            <element type="date" name="NextRevisionDate2" label="Next Revision Date" future="1" format="dd.MM.yyyy" HcmData="1" SortOrder="277" ParentGVFields="1">
+                <mandatoryIf name="TypeOfBenefit2">Salary Revision</mandatoryIf>
+                <regex inherit="date" message="" pattern=""></regex>
+            </element>
+            <!--3-->
+            <element type="select" name="TypeOfBenefit3" label="Type of benefit" HcmData="1" SortOrder="278" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Company Car">Company Car</option>
+                    <option value="Salary Revision">Salary Revision</option>
+                    <option value="Compensation Transportation costs">Compensation Transportation costs</option>
+                </options>
+            </element>
+            <element type="select" name="Category3" label="Category" HcmData="1" SortOrder="279" ParentGVFields="1">
+                <mandatoryIf name="TypeOfBenefit3">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="Class 1">Class 1</option>
+                    <option value="Class 2">Class 2</option>
+                </options>
+            </element>
+            <element type="select" name="TypeOfCar3" label="Type of car" HcmData="1" SortOrder="280" ParentGVFields="1">
+                <mandatoryIf name="TypeOfBenefit3">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="necessity car without the option to drive privately">necessity car without the option to drive privately</option>
+                    <option value="necessity car with the option to drive privately by paying € 250,- net a month">necessity car with the option to drive privately by paying € 250,- net a month</option>
+                    <option value="benefit car, for business and private use">benefit car, for business and private use</option>
+                </options>
+            </element>
+            <element type="text" name="MonthlyAmount3" label="Monthly Amount" HcmData="1" SortOrder="281" ParentGVFields="1">
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="date" name="NextRevisionDate3" label="Next Revision Date" future="1" format="dd.MM.yyyy" HcmData="1" SortOrder="282" ParentGVFields="1">
+                <mandatoryIf name="TypeOfBenefit3">Salary Revision</mandatoryIf>
+                <regex inherit="date" message="" pattern=""></regex>
+            </element>
+            <!--4-->
+            <element type="select" name="TypeOfBenefit4" label="Type of benefit" HcmData="1" SortOrder="283" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Company Car">Company Car</option>
+                    <option value="Salary Revision">Salary Revision</option>
+                    <option value="Compensation Transportation costs">Compensation Transportation costs</option>
+                </options>
+            </element>
+            <element type="select" name="Category4" label="Category" HcmData="1" SortOrder="284" ParentGVFields="1">
+                <mandatoryIf name="TypeOfBenefit4">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="Class 1">Class 1</option>
+                    <option value="Class 2">Class 2</option>
+                </options>
+            </element>
+            <element type="select" name="TypeOfCar4" label="Type of car" HcmData="1" SortOrder="285" ParentGVFields="1">
+                <mandatoryIf name="TypeOfBenefit4">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="necessity car without the option to drive privately">necessity car without the option to drive privately</option>
+                    <option value="necessity car with the option to drive privately by paying € 250,- net a month">necessity car with the option to drive privately by paying € 250,- net a month</option>
+                    <option value="benefit car, for business and private use">benefit car, for business and private use</option>
+                </options>
+            </element>
+            <element type="text" name="MonthlyAmount4" label="Monthly Amount" HcmData="1" SortOrder="286" ParentGVFields="1">
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="date" name="NextRevisionDate4" label="Next Revision Date" future="1" format="dd.MM.yyyy" HcmData="1" SortOrder="287" ParentGVFields="1">
+                <mandatoryIf name="TypeOfBenefit4">Salary Revision</mandatoryIf>
+                <regex inherit="date" message="" pattern=""></regex>
+            </element>
+            <!--5-->
+            <element type="select" name="TypeOfBenefit5" label="Type of benefit" HcmData="1" SortOrder="288" ParentGVFields="1">
+                <options>
+                    <option value=""></option>
+                    <option value="Company Car">Company Car</option>
+                    <option value="Salary Revision">Salary Revision</option>
+                    <option value="Compensation Transportation costs">Compensation Transportation costs</option>
+                </options>
+            </element>
+            <element type="select" name="Category5" label="Category" HcmData="1" SortOrder="289" ParentGVFields="1">
+                <mandatoryIf name="TypeOfBenefit5">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="Class 1">Class 1</option>
+                    <option value="Class 2">Class 2</option>
+                </options>
+            </element>
+            <element type="select" name="TypeOfCar5" label="Type of car" HcmData="1" SortOrder="290" ParentGVFields="1">
+                <mandatoryIf name="TypeOfBenefit5">Company Car</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="necessity car without the option to drive privately">necessity car without the option to drive privately</option>
+                    <option value="necessity car with the option to drive privately by paying € 250,- net a month">necessity car with the option to drive privately by paying € 250,- net a month</option>
+                    <option value="benefit car, for business and private use">benefit car, for business and private use</option>
+                </options>
+            </element>
+            <element type="text" name="MonthlyAmount5" label="Monthly Amount" HcmData="1" SortOrder="291" ParentGVFields="1">
+                <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+            </element>
+            <element type="date" name="NextRevisionDate5" label="Next Revision Date" future="1" format="dd.MM.yyyy" HcmData="1" SortOrder="292" ParentGVFields="1">
+                <mandatoryIf name="TypeOfBenefit5">Salary Revision</mandatoryIf>
+                <regex inherit="date" message="" pattern=""></regex>
+            </element>
+        </tab>
+        <tab name="#personal" label="Personal Information">
+            <element type="text" name="TelephoneNumber" label="Telephone Number" HcmData="1" SortOrder="33" ParentGVFields="0"></element>
+            <element type="text" name="ContactEMailAddress" label="Contact e-mail address" formfieldidentifier="E1P0105.USRID_LONG:10" HcmData="1" SortOrder="133" ParentGVFields="0">
+                <regex inherit="email" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="MailingAddressLine1" label="Address line 1" mandatory="1" HcmData="1" SortOrder="134" ParentGVFields="0"></element>
+            <element type="text" name="MailingAddressLine2" label="Address line 2" HcmData="1" SortOrder="135" ParentGVFields="0"></element>
+            <element type="text" name="MailingAddressLine3" label="Address line 3" HcmData="1" SortOrder="136" ParentGVFields="0"></element>
+            <element type="text" name="MailingPostalCode" label="Postal code" mandatory="1" HcmData="1" SortOrder="137" ParentGVFields="0">
+                <regex inherit="postcode" message="" pattern=""></regex>
+                <validateIf name="MailingCountry">Netherlands</validateIf>
+                <mandatoryIfNotEmpty name="MailingAddressLine1"></mandatoryIfNotEmpty>
+            </element>
+            <element type="text" name="MailingCity" label="City" mandatory="1" HcmData="1" SortOrder="138" ParentGVFields="0">
+                <mandatoryIfNotEmpty name="MailingAddressLine1"></mandatoryIfNotEmpty>
+            </element>
+            <element type="search-select" source="1" name="MailingCountry" label="Country" default="Netherlands" mandatory="1" HcmData="1" SortOrder="139" ParentGVFields="0">
+                <mandatoryIfNotEmpty name="MailingAddressLine1"></mandatoryIfNotEmpty>
+                &data_country;
+            </element>
+            <element type="text" name="EmergencyAddressLine1" label="Address line 1" mandatory="1" HcmData="1" SortOrder="140" ParentGVFields="0"></element>
+            <element type="text" name="EmergencyAddressLine2" label="Address line 2" HcmData="1" SortOrder="141" ParentGVFields="0"></element>
+            <element type="text" name="EmergencyAddressLine3" label="Address line 3" HcmData="1" SortOrder="142" ParentGVFields="0"></element>
+            <element type="text" name="EmergencyPostalCode" label="Postal code" mandatory="1" HcmData="1" SortOrder="143" ParentGVFields="0">
+                <regex inherit="postcode" message="" pattern=""></regex>
+                <validateIf name="EmergencyCountry">Netherlands</validateIf>
+            </element>
+            <element type="text" name="EmergencyCity" label="City" mandatory="1" HcmData="1" SortOrder="144" ParentGVFields="0"></element>
+            <element type="search-select" source="1" name="EmergencyCountry" label="Country" default="Netherlands" mandatory="1" HcmData="1" SortOrder="145" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="text" name="EmergencyContactNumber" label="Emergency contact number" HcmData="1" SortOrder="146" ParentGVFields="0"></element>
+            <element type="text" name="EmergencyContactRelationship" label="Emergency contact/relationship" mandatory="1" HcmData="1" SortOrder="147" ParentGVFields="0"></element>
+            <!--Family Member/Dependents-->
+            <element type="hidden" name="FamilyMembers" default="1"></element>
+            <element type="select" name="FamilyMember" label="Family Member" HcmData="1" SortOrder="148" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Partner (Registered)">Partner (Registered)</option>
+                    <option value="Child">Child</option>
+                    <option value="Cohabitation agreement">Cohabitation agreement</option>
+                </options>
+            </element>
+            <element type="text" name="FamilyMemberLastName" label="Last Name" HcmData="1" SortOrder="149" ParentGVFields="0"></element>
+            <element type="text" name="FamilyMemberFirstName" label="First Name" HcmData="1" SortOrder="150" ParentGVFields="0"></element>
+            <element type="select" name="FamilyMemberGender" label="Gender" HcmData="1" SortOrder="151" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </options>
+            </element>
+            <element type="date" name="FamilyMemberDateOfBirth" label="Date of Birth" format="dd.MM.yyyy" HcmData="1" SortOrder="152" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="FamilyMember2" label="Family Member" HcmData="1" SortOrder="153" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Partner (Registered)">Partner (Registered)</option>
+                    <option value="Child">Child</option>
+                    <option value="Cohabitation agreement">Cohabitation agreement</option>
+                </options>
+            </element>
+            <element type="text" name="FamilyMemberLastName2" label="Last Name" HcmData="1" SortOrder="154" ParentGVFields="0"></element>
+            <element type="text" name="FamilyMemberFirstName2" label="First Name" HcmData="1" SortOrder="155" ParentGVFields="0"></element>
+            <element type="select" name="FamilyMemberGender2" label="Gender" HcmData="1" SortOrder="156" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </options>
+            </element>
+            <element type="date" name="FamilyMemberDateOfBirth2" label="Date of Birth" format="dd.MM.yyyy" HcmData="1" SortOrder="157" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="FamilyMember3" label="Family Member" HcmData="1" SortOrder="158" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Partner (Registered)">Partner (Registered)</option>
+                    <option value="Child">Child</option>
+                    <option value="Cohabitation agreement">Cohabitation agreement</option>
+                </options>
+            </element>
+            <element type="text" name="FamilyMemberLastName3" label="Last Name" HcmData="1" SortOrder="159" ParentGVFields="0"></element>
+            <element type="text" name="FamilyMemberFirstName3" label="First Name" HcmData="1" SortOrder="160" ParentGVFields="0"></element>
+            <element type="select" name="FamilyMemberGender3" label="Gender" HcmData="1" SortOrder="161" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </options>
+            </element>
+            <element type="date" name="FamilyMemberDateOfBirth3" label="Date of Birth" format="dd.MM.yyyy" HcmData="1" SortOrder="162" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="FamilyMember4" label="Family Member" HcmData="1" SortOrder="163" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Partner (Registered)">Partner (Registered)</option>
+                    <option value="Child">Child</option>
+                    <option value="Cohabitation agreement">Cohabitation agreement</option>
+                </options>
+            </element>
+            <element type="text" name="FamilyMemberLastName4" label="Last Name" HcmData="1" SortOrder="164" ParentGVFields="0"></element>
+            <element type="text" name="FamilyMemberFirstName4" label="First Name" HcmData="1" SortOrder="165" ParentGVFields="0"></element>
+            <element type="select" name="FamilyMemberGender4" label="Gender" HcmData="1" SortOrder="166" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </options>
+            </element>
+            <element type="date" name="FamilyMemberDateOfBirth4" label="Date of Birth" format="dd.MM.yyyy" HcmData="1" SortOrder="167" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="FamilyMember5" label="Family Member" HcmData="1" SortOrder="168" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Partner (Registered)">Partner (Registered)</option>
+                    <option value="Child">Child</option>
+                    <option value="Cohabitation agreement">Cohabitation agreement</option>
+                </options>
+            </element>
+            <element type="text" name="FamilyMemberLastName5" label="Last Name" HcmData="1" SortOrder="169" ParentGVFields="0"></element>
+            <element type="text" name="FamilyMemberFirstName5" label="First Name" HcmData="1" SortOrder="170" ParentGVFields="0"></element>
+            <element type="select" name="FamilyMemberGender5" label="Gender" HcmData="1" SortOrder="171" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </options>
+            </element>
+            <element type="date" name="FamilyMemberDateOfBirth5" label="Date of Birth" format="dd.MM.yyyy" HcmData="1" SortOrder="172" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <!--Global mobility Employee Documents-->
+            <element type="hidden" name="EmployeeDocuments"> </element>
+            <element type="select" name="EmployeeDocumentType" label="Document Type" HcmData="1" SortOrder="173" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Badge ID">Badge ID</option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work Permit">Work Permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="EmployeeDocumentCountry" label="Country" default="Netherlands" HcmData="1" SortOrder="174" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="text" name="EmployeeDocumentNo" label="Document No" HcmData="1" SortOrder="175" ParentGVFields="0"></element>
+            <element type="date" name="EmployeeDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="176" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="EmployeeDocumentIssuePlace" label="Issue Place" HcmData="1" SortOrder="177" ParentGVFields="0"></element>
+            <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="178" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="select" name="EmployeeDocumentType2" label="Document Type" HcmData="1" SortOrder="179" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Badge ID">Badge ID</option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work Permit">Work Permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="EmployeeDocumentCountry2" label="Country" default="Netherlands" HcmData="1" SortOrder="180" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="text" name="EmployeeDocumentNo2" label="Document No" HcmData="1" SortOrder="181" ParentGVFields="0"></element>
+            <element type="date" name="EmployeeDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="182" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="EmployeeDocumentIssuePlace2" label="Issue Place" HcmData="1" SortOrder="183" ParentGVFields="0"></element>
+            <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="184" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="select" name="EmployeeDocumentType3" label="Document Type" HcmData="1" SortOrder="185" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Badge ID">Badge ID</option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work Permit">Work Permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="EmployeeDocumentCountry3" label="Country" default="Netherlands" HcmData="1" SortOrder="186" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="text" name="EmployeeDocumentNo3" label="Document No" HcmData="1" SortOrder="187" ParentGVFields="0"></element>
+            <element type="date" name="EmployeeDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="188" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="EmployeeDocumentIssuePlace3" label="Issue Place" HcmData="1" SortOrder="189" ParentGVFields="0"></element>
+            <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="190" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="select" name="EmployeeDocumentType4" label="Document Type" HcmData="1" SortOrder="191" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Badge ID">Badge ID</option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work Permit">Work Permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="EmployeeDocumentCountry4" label="Country" default="Netherlands" HcmData="1" SortOrder="192" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="text" name="EmployeeDocumentNo4" label="Document No" HcmData="1" SortOrder="193" ParentGVFields="0"></element>
+            <element type="date" name="EmployeeDocumentIssueDate4" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="194" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="EmployeeDocumentIssuePlace4" label="Issue Place" HcmData="1" SortOrder="195" ParentGVFields="0"></element>
+            <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry4" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="196" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="select" name="EmployeeDocumentType5" label="Document Type" HcmData="1" SortOrder="197" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Badge ID">Badge ID</option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work Permit">Work Permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="EmployeeDocumentCountry5" label="Country" default="Netherlands" HcmData="1" SortOrder="198" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="text" name="EmployeeDocumentNo5" label="Document No" HcmData="1" SortOrder="199" ParentGVFields="0"></element>
+            <element type="date" name="EmployeeDocumentIssueDate5" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="200" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="EmployeeDocumentIssuePlace5" label="Issue Place" HcmData="1" SortOrder="201" ParentGVFields="0"></element>
+            <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry5" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="202" ParentGVFields="0">
+                &data_country;
+            </element>
+            <!--Global mobility Dependants-->
+            <element type="hidden" name="DependantFamilyMembers"></element>
+            <element type="select" name="DependantFamilyMember" label="Dependant Family Member" HcmData="1" SortOrder="203" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Child">Child</option>
+                    <option value="Step Child">Step Child</option>
+                </options>
+            </element>
+            <element type="select" name="Accompanying" label="Accompanying" HcmData="1" SortOrder="204" ParentGVFields="0">
+                <mandatoryIfNotEmpty name="DependantFamilyMember"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+            <element type="text" name="DependantsLastName" label="Dependants Last Name" HcmData="1" SortOrder="205" ParentGVFields="0"></element>
+            <element type="text" name="DependantsFirstName" label="Dependants First Name" HcmData="1" SortOrder="206" ParentGVFields="0"></element>
+            <element type="date" name="DependantsDateOfBirth" label="Dependants Date of birth" format="dd.MM.yyyy" HcmData="1" SortOrder="207" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="DependantFamilyMember2" label="Dependant Family Member" HcmData="1" SortOrder="208" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Child">Child</option>
+                    <option value="Step Child">Step Child</option>
+                </options>
+            </element>
+            <element type="select" name="Accompanying2" label="Accompanying" HcmData="1" SortOrder="209" ParentGVFields="0">
+                <mandatoryIfNotEmpty name="DependantFamilyMember2"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+            <element type="text" name="DependantsLastName2" label="Dependants Last Name" HcmData="1" SortOrder="210" ParentGVFields="0"></element>
+            <element type="text" name="DependantsFirstName2" label="Dependants First Name" HcmData="1" SortOrder="211" ParentGVFields="0"></element>
+            <element type="date" name="DependantsDateOfBirth2" label="Dependants Date of birth" format="dd.MM.yyyy" HcmData="1" SortOrder="212" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="DependantFamilyMember3" label="Dependant Family Member" HcmData="1" SortOrder="213" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Child">Child</option>
+                    <option value="Step Child">Step Child</option>
+                </options>
+            </element>
+            <element type="select" name="Accompanying3" label="Accompanying" HcmData="1" SortOrder="214" ParentGVFields="0">
+                <mandatoryIfNotEmpty name="DependantFamilyMember3"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+            <element type="text" name="DependantsLastName3" label="Dependants Last Name" HcmData="1" SortOrder="215" ParentGVFields="0"></element>
+            <element type="text" name="DependantsFirstName3" label="Dependants First Name" HcmData="1" SortOrder="216" ParentGVFields="0"></element>
+            <element type="date" name="DependantsDateOfBirth3" label="Dependants Date of birth" format="dd.MM.yyyy" HcmData="1" SortOrder="217" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="DependantFamilyMember4" label="Dependant Family Member" HcmData="1" SortOrder="218" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Child">Child</option>
+                    <option value="Step Child">Step Child</option>
+                </options>
+            </element>
+            <element type="select" name="Accompanying4" label="Accompanying" HcmData="1" SortOrder="219" ParentGVFields="0">
+                <mandatoryIfNotEmpty name="DependantFamilyMember4"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+            <element type="text" name="DependantsLastName4" label="Dependants Last Name" HcmData="1" SortOrder="220" ParentGVFields="0"></element>
+            <element type="text" name="DependantsFirstName4" label="Dependants First Name" HcmData="1" SortOrder="221" ParentGVFields="0"></element>
+            <element type="date" name="DependantsDateOfBirth4" label="Dependants Date of birth" format="dd.MM.yyyy" HcmData="1" SortOrder="222" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="select" name="DependantFamilyMember5" label="Dependant Family Member" HcmData="1" SortOrder="223" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Child">Child</option>
+                    <option value="Step Child">Step Child</option>
+                </options>
+            </element>
+            <element type="select" name="Accompanying5" label="Accompanying" HcmData="1" SortOrder="224" ParentGVFields="0">
+                <mandatoryIfNotEmpty name="DependantFamilyMember5"></mandatoryIfNotEmpty>
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+            <element type="text" name="DependantsLastName5" label="Dependants Last Name" HcmData="1" SortOrder="225" ParentGVFields="0"></element>
+            <element type="text" name="DependantsFirstName5" label="Dependants First Name" HcmData="1" SortOrder="226" ParentGVFields="0"></element>
+            <element type="date" name="DependantsDateOfBirth5" label="Dependants Date of birth" format="dd.MM.yyyy" HcmData="1" SortOrder="227" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <!--Global Mobility Dependants Documents-->
+            <element type="hidden" name="DependantsDocuments"></element>
+            <element type="select" name="DependantsDocumentType" label="Document Type" HcmData="1" SortOrder="228" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work permit">Work permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="DependantsDocumentCountry" label="Country" default="Netherlands" HcmData="1" SortOrder="229" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="text" name="DependantsDocumentNo" label="Document No" HcmData="1" SortOrder="230" ParentGVFields="0"></element>
+            <element type="date" name="DependantsDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="231" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="DependantsDocumentIssuePlace" label="Issue Place"  HcmData="1" SortOrder="232" ParentGVFields="0"></element>
+            <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="233" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="select" name="DependantsDocumentType2" label="Document Type" HcmData="1" SortOrder="234" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work permit">Work permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="DependantsDocumentCountry2" label="Country" default="Netherlands" HcmData="1" SortOrder="235" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="text" name="DependantsDocumentNo2" label="Document No" HcmData="1" SortOrder="236" ParentGVFields="0"></element>
+            <element type="date" name="DependantsDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="237" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="DependantsDocumentIssuePlace2" label="Issue Place" HcmData="1" SortOrder="238" ParentGVFields="0"></element>
+            <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="239" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="select" name="DependantsDocumentType3" label="Document Type" HcmData="1" SortOrder="240" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work permit">Work permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="DependantsDocumentCountry3" label="Country" default="Netherlands" HcmData="1" SortOrder="241" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="text" name="DependantsDocumentNo3" label="Document No" HcmData="1" SortOrder="242" ParentGVFields="0"></element>
+            <element type="date" name="DependantsDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="243" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="DependantsDocumentIssuePlace3" label="Issue Place" HcmData="1" SortOrder="244" ParentGVFields="0"></element>
+            <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="245" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="select" name="DependantsDocumentType4" label="Document Type" HcmData="1" SortOrder="246" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work permit">Work permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="DependantsDocumentCountry4" label="Country" default="Netherlands" HcmData="1" SortOrder="247" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="text" name="DependantsDocumentNo4" label="Document No" HcmData="1" SortOrder="248" ParentGVFields="0"></element>
+            <element type="date" name="DependantsDocumentIssueDate4" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="249" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="DependantsDocumentIssuePlace4" label="Issue Place" HcmData="1" SortOrder="250" ParentGVFields="0"></element>
+            <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry4" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="251" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="select" name="DependantsDocumentType5" label="Document Type" HcmData="1" SortOrder="252" ParentGVFields="0">
+                <options>
+                    <option value=""></option>
+                    <option value="ID/passport">ID/passport</option>
+                    <option value="Residence permit">Residence permit</option>
+                    <option value="Work permit">Work permit</option>
+                </options>
+            </element>
+            <element type="search-select" source="1" name="DependantsDocumentCountry5" label="Country" default="Netherlands" HcmData="1" SortOrder="253" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="text" name="DependantsDocumentNo5" label="Document No" HcmData="1" SortOrder="254" ParentGVFields="0"></element>
+            <element type="date" name="DependantsDocumentIssueDate5" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="255" ParentGVFields="0">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="DependantsDocumentIssuePlace5" label="Issue Place" HcmData="1" SortOrder="256" ParentGVFields="0"></element>
+            <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry5" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="257" ParentGVFields="0">
+                &data_country;
+            </element>
+            <!--Bank Account Details-->
+            <element type="hidden" name="BankAccounts" default="1"> </element>
+            <element type="text" name="Payee" label="Payee" HcmData="1" SortOrder="104" ParentGVFields="0"></element>
+            <element type="text" name="IBAN" label="IBAN" HcmData="1" SortOrder="106" ParentGVFields="0">
+                <regexIf inherit="iban" pattern="" message="" name="BankCountry">Netherlands</regexIf>
+              <mandatoryIfNotEqual name="PayrollCategory">No Salary</mandatoryIfNotEqual>
+            </element>
+            <element type="search-select" name="BankCountry" label="Bank Country" mandatory="1" default="Netherlands" HcmData="1" SortOrder="105" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="text" name="PaymentCurrency" label="Payment Currency" mandatory="1" default="EUR" HcmData="1" SortOrder="107" ParentGVFields="0">
+                <regex inherit="currency" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="Payee2" label="Payee" HcmData="1" SortOrder="108" ParentGVFields="0"></element>
+            <element type="text" name="IBAN2" label="IBAN" HcmData="1" SortOrder="110" ParentGVFields="0">
+                <regexIf inherit="iban" pattern="" message="" name="BankCountry2">Netherlands</regexIf>         
+            </element>
+            <element type="search-select" name="BankCountry2" label="Bank Country" default="Netherlands" HcmData="1" SortOrder="109" ParentGVFields="0">
+                &data_country;
+            </element>
+            <element type="text" name="PaymentCurrency2" label="Payment Currency" default="EUR" HcmData="1" SortOrder="111" ParentGVFields="0">
+                <regex inherit="currency" pattern="" message=""></regex>
+            </element>
+            <element type="text" name="OtherBankPercentageOrAmount" label="Other Bank Percentage or Amount" HcmData="1" SortOrder="112" ParentGVFields="0">
+                <mandatoryIfNotEmpty  name="IBAN2"></mandatoryIfNotEmpty>
+                <regex inherit="percentagewithdelimiter" pattern="" message=""></regex>
+            </element>
+            <!--FISCAL DATA and SOCIAL INSURANCE -->
+            <element type="select" name="Taxdeduction" label="Tax deduction (IKEA)">
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+            <!--Nationality / Language-->
+            <element type="search-select" name="Language" label="Language" default="Dutch" HcmData="1" SortOrder="24" ParentGVFields="0">
+                &data_language;
+            </element>
+          <element type="hidden" name="Documents" default="1"></element>
+          <element type="select" name="DocumentType" label="Document Type" mandatory="1" default="ID/passport" HcmData="1" SortOrder="113" ParentGVFields="0">
+            <options>
+              <option value=""></option>
+              <option value="Badge ID">Badge ID</option>
+              <option value="ID/passport">ID/passport</option>
+              <option value="Residence permit">Residence permit</option>
+              <option value="Work Permit">Work Permit</option>
+            </options>
+          </element>
+          <element type="search-select" source="1" name="DocumentCountry" label="Country" mandatory="1" default="Netherlands" HcmData="1" SortOrder="116" ParentGVFields="0">
+            &data_country;
+            <mandatoryIfNotEmpty name="DocumentType"></mandatoryIfNotEmpty>
+          </element>
+          <element type="text" name="DocumentNO" label="Document no." mandatory="1" HcmData="1" SortOrder="114" ParentGVFields="0">
+            <mandatoryIfNotEmpty name="DocumentType"></mandatoryIfNotEmpty>
+          </element>
+          <element type="date" name="DocumentValidUntil" label="Document Valid Until" mandatory="1" future="1" format="dd.MM.yyyy" HcmData="1" SortOrder="115" ParentGVFields="0">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DocumentType"></mandatoryIfNotEmpty>
+          </element>
+
+          <element type="select" name="DocumentType2" label="Document Type" HcmData="1" SortOrder="117" ParentGVFields="0">
+            <options>
+              <option value=""></option>
+              <option value="Badge ID">Badge ID</option>
+              <option value="ID/passport">ID/passport</option>
+              <option value="Residence permit">Residence permit</option>
+              <option value="Work Permit">Work Permit</option>
+            </options>
+          </element>
+          <element type="search-select" source="1" name="DocumentCountry2" label="Country" default="Netherlands" HcmData="1" SortOrder="120" ParentGVFields="0">
+            &data_country;
+            <mandatoryIfNotEmpty name="DocumentType2"></mandatoryIfNotEmpty>
+          </element>
+          <element type="text" name="DocumentNO2" label="Document no." HcmData="1" SortOrder="118" ParentGVFields="0">
+            <mandatoryIfNotEmpty name="DocumentType2"></mandatoryIfNotEmpty>
+          </element>
+          <element type="date" name="DocumentValidUntil2" label="Document Valid Until" future="1" format="dd.MM.yyyy" HcmData="1" SortOrder="119" ParentGVFields="0">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DocumentType2"></mandatoryIfNotEmpty>
+          </element>
+
+          <element type="select" name="DocumentType3" label="Document Type" HcmData="1" SortOrder="121" ParentGVFields="0">
+            <options>
+              <option value=""></option>
+              <option value="Badge ID">Badge ID</option>
+              <option value="ID/passport">ID/passport</option>
+              <option value="Residence permit">Residence permit</option>
+              <option value="Work Permit">Work Permit</option>
+            </options>
+          </element>
+          <element type="search-select" source="1" name="DocumentCountry3" label="Country" default="Netherlands" HcmData="1" SortOrder="124" ParentGVFields="0">
+            &data_country;
+            <mandatoryIfNotEmpty name="DocumentType3"></mandatoryIfNotEmpty>
+          </element>
+          <element type="text" name="DocumentNO3" label="Document no." HcmData="1" SortOrder="122" ParentGVFields="0">
+            <mandatoryIfNotEmpty name="DocumentType3"></mandatoryIfNotEmpty>
+          </element>
+          <element type="date" name="DocumentValidUntil3" label="Document Valid Until" future="1" format="dd.MM.yyyy" HcmData="1" SortOrder="123" ParentGVFields="0">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DocumentType3"></mandatoryIfNotEmpty>
+          </element>
+
+          <element type="select" name="DocumentType4" label="Document Type" HcmData="1" SortOrder="125" ParentGVFields="0">
+            <options>
+              <option value=""></option>
+              <option value="Badge ID">Badge ID</option>
+              <option value="ID/passport">ID/passport</option>
+              <option value="Residence permit">Residence permit</option>
+              <option value="Work Permit">Work Permit</option>
+            </options>
+          </element>
+          <element type="search-select" source="1" name="DocumentCountry4" label="Country" default="Netherlands" HcmData="1" SortOrder="128" ParentGVFields="0">
+            &data_country;
+            <mandatoryIfNotEmpty name="DocumentType4"></mandatoryIfNotEmpty>
+          </element>
+          <element type="text" name="DocumentNO4" label="Document no." HcmData="1" SortOrder="126" ParentGVFields="0">
+            <mandatoryIfNotEmpty name="DocumentType4"></mandatoryIfNotEmpty>
+          </element>
+          <element type="date" name="DocumentValidUntil4" label="Document Valid Until" future="1" format="dd.MM.yyyy" HcmData="1" SortOrder="127" ParentGVFields="0">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DocumentType4"></mandatoryIfNotEmpty>
+          </element>
+
+          <element type="select" name="DocumentType5" label="Document Type" HcmData="1" SortOrder="129" ParentGVFields="0">
+            <options>
+              <option value=""></option>
+              <option value="Badge ID">Badge ID</option>
+              <option value="ID/passport">ID/passport</option>
+              <option value="Residence permit">Residence permit</option>
+              <option value="Work Permit">Work Permit</option>
+            </options>
+          </element>
+          <element type="search-select" source="1" name="DocumentCountry5" label="Country" default="Netherlands" HcmData="1" SortOrder="132" ParentGVFields="0">
+            &data_country;
+            <mandatoryIfNotEmpty name="DocumentType5"></mandatoryIfNotEmpty>
+          </element>
+          <element type="text" name="DocumentNO5" label="Document no." HcmData="1" SortOrder="130" ParentGVFields="0">
+            <mandatoryIfNotEmpty name="DocumentType5"></mandatoryIfNotEmpty>
+          </element>
+          <element type="date" name="DocumentValidUntil5" label="Document Valid Until" future="1" format="dd.MM.yyyy" HcmData="1" SortOrder="131" ParentGVFields="0">
+            <regex inherit="date" pattern="" message=""></regex>
+            <mandatoryIfNotEmpty name="DocumentType5"></mandatoryIfNotEmpty>
+          </element>
+          
+          <element type="text" name="PartnerName" label="Partner Name" HcmData="1" SortOrder="18" ParentGVFields="0"></element>
+        </tab>
+        <tab name="#SSCUseOnly" label="SSC use only">
+            <element type="text" name="NewCo-WorkerID" label="Co-Worker ID" mandatory="1">
+                <regex inherit="employeeno" pattern="" message=""></regex>
+                <regex inherit="unsignednum" pattern="" message=""></regex>
+            </element>
+        </tab>
+    </fields>
+</form>

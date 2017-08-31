@@ -17,6 +17,7 @@
             Property(e => e.EntityType).IsRequired().HasMaxLength(50);
             Property(e => e.EntityDescription).IsOptional().HasMaxLength(3000);
             Property(e => e.Translate).IsRequired();
+            Property(e => e.Source).IsOptional();
 
             ToTable("tblEntityInfo");
         }

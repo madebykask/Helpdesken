@@ -1,0 +1,1436 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/ChangeTermsConditionsState.xml">
+  <!ENTITY pre_country SYSTEM "Templates/Data_Country.xml">
+  <!ENTITY dat_allowance SYSTEM "Templates/Data_AllowancesTypeChange.xml">
+  <!ENTITY dat_jobtitle SYSTEM "Templates/Data_Jobtitle.xml">
+    <!ENTITY dat_linemanagers SYSTEM "Templates/Data_LineManagers.xml">
+  <!ENTITY dat_tecapprovers SYSTEM "Templates/Data_TecApprovers.xml">
+  <!ENTITY dat_managerjobtitles SYSTEM "Templates/Data_ManagerJobtitle.xml">
+  <!ENTITY dat_costcentre SYSTEM "Templates/Data_CostCentre.xml">
+  <!ENTITY dat_deductionstype SYSTEM "Templates/Data_DeductionsTypeHiringChange.xml">
+]>
+
+<form id="67" guid="75EA8832-B9DD-4900-B36E-E2AA46F63F48" customerId="30">
+  &languages;
+  &regexs;
+  &state;
+
+  <fields>
+
+    <!--Tab ServiceRequestDetails-->
+    <tab name="#ServiceRequestDetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" casefield="reportedby" mandatory="1" HCMData="1" SortOrder="1">
+        <regex inherit="employeeno" pattern="" message=""></regex>
+      </element>
+      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1" casefield="persons_name" HCMData="1" SortOrder="2"></element>
+      <element name="LastName" type="text" label="Co-Worker Last Name" mandatory="1" casefield="persons_phone" HCMData="1" SortOrder="2"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
+        <regex inherit="email" pattern="" message=""></regex>
+      </element>
+      <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1"></element>
+      <element name="Company" type="text" label="Company" HCMData="1" SortOrder="4"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1" HCMData="1" SortOrder="5"></element>
+      <element name="ServiceArea" type="text" label="Function" HCMData="1" SortOrder="6"></element>
+      <element name="Department" type="text" label="Department" HCMData="1" SortOrder="7"></element>
+      <!--<element name="ChangeType" type="select" label="Change Type?" mandatory="1">
+                <options>
+                    <option value=""></option>
+                    <option value="ONLY Pay Change">ONLY Pay Change</option>
+                    <option value="ONLY Change work hours">ONLY Change work hours</option>
+                    <option value="Renewal of Temp Contract">Renewal of Temp Contract</option>
+                    <option value="Temporary Contract to Permanent">Temporary Contract to Permanent</option>
+                    <option value="Promotion">Promotion</option>
+                    <option value="Lateral Move">Lateral Move</option>
+                    <option value="Demotion">Demotion</option>
+                    <option value="Re-organisation">Re-organisation</option>
+                    <option value="ONLY Cost Center Change">ONLY Cost Center Change</option>
+                    <option value="Position Change">Position Change</option>
+                    <option value="Full Time to part time">Full Time to part time</option>
+                    <option value="Part time to full time">Part time to full time</option>
+                    <option value="Gone Local">Gone Local</option>
+                    <option value="Move without Mobility">Move without Mobility</option>
+                    <option value="End Short term assignment">End Short term assignment</option>
+                    <option value="Secondment">Secondment</option>
+                    <option value="Career Break End">Career Break End</option>
+                </options>
+            </element>-->
+      <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy" HCMData="1" SortOrder="8">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ChangeValidTo" type="date" label="Change Valid to:" mandatory="1" default="31.12.9999" format="dd.MM.yyyy" HCMData="1" SortOrder="9">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
+        <options>
+          <option value=""></option>
+          <option value="Urgent">Urgent</option>
+          <option value="Standard">Standard</option>
+        </options>
+      </element>
+
+      <!--Permanent Address-->
+      <!-- mandatory -->
+      <!--     <element type="text" name="PermanentAddressLine1" label="Address line 1"></element>-->
+      <!--  <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>-->
+      <!--  <element type="text" name="PermanentAddressLine3" label="Address line 3"></element>-->
+      <!-- mandatory -->
+      <!--  <element type="text" name="PermanentPostalCode" label="Postal code"></element>-->
+      <!-- mandatory -->
+      <!--  <element type="text" name="PermanentCity" label="City"></element> -->
+      <!-- mandatory -->
+      <!-- <element type="search-select" source="1" name="PermanentCountry" label="Country" default="United Kingdom">
+              &pre_country;
+          </element> -->
+
+      <!-- Country specifics -->
+      <element type="select" name="SecondmentDuration" label="Secondment duration">
+        <options>
+          <option></option>
+          <option value="less than 1 year">less than 1 year</option>
+          <option value="1 - 2 years">1 - 2 years</option>
+          <option value="over 2 years">over 2 years</option>
+        </options>
+        <!--<mandatoryIf name="ChangeType">Secondment</mandatoryIf>-->
+      </element>
+      <element type="select" name="CareerBreakReturn" label="Career Break return - pay review">
+        <options>
+          <option></option>
+          <option value="immediately">immediately</option>
+          <option value="in six months from return">in six months from return</option>
+          <option value="timescales depend on time away">timescales depend on time away</option>
+        </options>
+        <!--<mandatoryIf name="ChangeType">Career Break End</mandatoryIf>-->
+      </element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+    </tab>
+
+    <!--Tab OrganisationalAssignment-->
+    <tab name="#OrganisationalAssignment" label="Organisational Assignment">
+      <!--Organisation Assignment-->
+      <!-- mandatory -->
+      <element name="Country" type="search-select" source="1" label="Country" default="United Kingdom">
+        &pre_country;
+      </element>
+      <!-- mandatory -->
+      <element type="select" source="database" name="NewCompany" label="Company" mandatory="1" formfieldidentifier="E1P0001.BUKRS" casefield="region_id" HCMData="1" SortOrder="10">
+        <options>
+          <option value=""></option>
+        </options>
+      </element>
+      <!-- mandatory -->
+      <element type="select" source="database" name="NewBusinessUnit" label="Business Unit" mandatory="1" formfieldidentifier="E1P0001.WERKS" casefield="department_id" HCMData="1" SortOrder="11">
+        <options>
+          <option value=""></option>
+        </options>
+      </element>
+      <!-- mandatory -->
+      <element type="select" source="database" name="NewServiceArea" label="Function" formfieldidentifier="E1P0001.BTRTL" HCMData="1" SortOrder="12">
+        <options>
+          <option value=""></option>
+        </options>
+      </element>
+      <!-- mandatory -->
+      <element type="select" source="database" name="NewDepartment" label="Department" formfieldidentifier="E1P0001.ORGEH" casefield="ou_id" HCMData="1" SortOrder="13">
+        <options>
+          <option value=""></option>
+        </options>
+      </element>
+     
+      <!-- mandatory -->
+      <element name="HomeCostCentre" type="search-select" source="1" label="Home Cost Centre" formfieldidentifier="E1P0001.KOSTL" HCMData="1" SortOrder="14">
+        &dat_costcentre;
+      </element>
+      <element name="CostAllocation" type="text" label="Cost Allocation %" default="100">
+        <regex inherit="numFrom1To100" pattern="" message=""></regex>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="CrossChargeCostCentre" type="search-select" source="1" label="Cross Charge Cost Centre" formfieldidentifier="E1P0027.KOSTL">
+        &dat_costcentre;
+      </element>
+
+      <!--Job-->
+      <!-- mandatory -->
+      <element name="JobTitle" type="search-select" source="1" label="Job Title" formfieldidentifier="E1P0001.STELL" HCMData="1" SortOrder="15">
+        &dat_jobtitle;
+      </element>
+      <!-- mandatory -->
+      <element name="NewPosition" type="select" label="New Position?">
+        <options>
+          <option value=""></option>
+          <option value="New Position">New Position</option>
+          <option value="Fill Vacant Position">Fill Vacant Position</option>
+          <option value="Local foreign Employee">Local foreign Employee</option>
+        </options>
+      </element>
+      <element name="ReportsToLineManager" type="search-select" source="1" label="Reports to Line Manager" formfieldidentifier="E1P9000.PERNRMGR" HCMData="1" SortOrder="16">
+        &dat_linemanagers;
+      </element>
+      <!-- mandatory -->
+      <element name="ManagerJobTitle" type="search-select" source="1" label="Manager's Job Title">
+        &dat_managerjobtitles;
+      </element>
+      <element type="select" name="ChiefPosition" label="Chief Position" mandatory="1" default="No">
+        <options>
+          <option value=""></option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </options>
+      </element>
+      <!--Employment Conditions-->
+      <!-- mandatory -->
+      <element name="EmploymentCategory" type="select" label="Employment Category" formfieldidentifier="E1P0001.PERSG:1" HCMData="1" SortOrder="17">
+        <options>
+          <option value=""></option>
+          <option value="Full Time">Full Time</option>
+          <option value="Part Time">Part Time</option>
+          <option value="Expats">Expats</option>
+        </options>
+      </element>
+
+      <element type="date" name="ContractEndDate" label="Contract End Date" format="dd.MM.yyyy" HCMData="1" SortOrder="18">
+      </element>
+
+      <!-- mandatory -->
+      <element type="text" name="ContractedHours" label="Contracted Hours" formfieldidentifier="E1P0007.WOSTD">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <!--<regex inherit="numMax39" pattern="" message="" dropDownFieldToValidate="Company" validateAllExceptFor="IKEA Dist Services Ltd"></regex>-->
+      </element>
+      <element name="HoursPerWeek" type="text" label="Hours per year (Annualised, Term Time)">
+        <!--<mandatoryIf name="ContractType">Annualised,Term Time</mandatoryIf>-->
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <!-- mandatory -->
+      <element name="DaysPerWeek" type="select" label="Days Per Week" default="5">
+        <options>
+          <option value=""></option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </options>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="PreviousContractStartDate" type="date" label="Previous Contract Start Date" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <!-- mandatory -->
+      <element name="ContractType" type="select" label="Contract Type" formfieldidentifier="E1P0001.PERSG:2">
+        <options>
+          <option value=""></option>
+          <option value="Permanent">Permanent</option>
+          <option value="Temporary">Temporary</option>
+          <option value="Fixed Term">Fixed Term</option>
+          <option value="Zero Hours">Zero Hours</option>
+          <option value="Compressed">Compressed</option>
+          <option value="Annualised">Annualised</option>
+          <option value="Secondment">Secondment</option>
+          <option value="Term Time">Term Time</option>
+          <option value="Apprentice">Apprentice</option>
+        </options>
+      </element>
+      <!-- mandatory -->
+      <!--<element name="ProbationPeriod" type="select" label="Probation period" default="No">
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>
+      <element name="ProbationEndDate" type="date" label="Probation end date" format="dd.MM.yyyy">
+        -->
+      <!--<mandatoryIf name="ProbationPeriod">Yes</mandatoryIf>-->
+      <!--
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>-->
+
+      <!--CDS-->
+      <!-- mandatory -->
+      <element name="PrimarySite" type="select" label="Primary Site">
+        <options>
+          <option value=""></option>
+          
+          <option value="IKEA Delivery Centre Doncaster">IKEA Delivery Centre Doncaster</option>
+          <option value="IKEA Belfast">IKEA Belfast</option>
+          <option value="IKEA Birmingham">IKEA Birmingham</option>
+          <option value="IKEA Bristol">IKEA Bristol</option>
+          <option value="IKEA Cardiff">IKEA Cardiff</option>
+          <option value="IKEA Contact Centre">IKEA Contact Centre</option>
+          <option value="IKEA Coventry">IKEA Coventry</option>
+          <option value="IKEA Croydon">IKEA Croydon</option>
+          <option value="IKEA Customer Delivery Centre">IKEA Customer Delivery Centre</option>
+          <option value="IKEA Distribution Services Uni">IKEA Distribution Services Uni</option>
+          <option value="IKEA E-Commerce">IKEA E-Commerce</option>
+          <option value="IKEA Edinburgh">IKEA Edinburgh</option>
+          <option value="IKEA Gateshead">IKEA Gateshead</option>
+          <option value="IKEA Glasgow">IKEA Glasgow</option>
+          <option value="IKEA Lakeside">IKEA Lakeside</option>
+          <option value="IKEA Leeds">IKEA Leeds</option>
+          <option value="IKEA Manchester">IKEA Manchester</option>
+          <option value="IKEA Milton Keynes">IKEA Milton Keynes</option>
+          <option value="IKEA Nottingham">IKEA Nottingham</option>
+          <option value="IKEA Reading">IKEA Reading</option>
+          <option value="IKEA Property Investments Ltd">IKEA Property Investments Ltd</option>
+          <option value="IKEA Service Office">IKEA Service Office</option>
+          <option value="IKEA Sheffield">IKEA Sheffield</option>
+          <option value="IKEA Southampton">IKEA Southampton</option>
+          <option value="IKEA Tottenham">IKEA Tottenham</option>
+          <option value="IKEA Warrington">IKEA Warrington</option>
+          <option value="IKEA Wembley">IKEA Wembley</option>
+        </options>
+      </element>
+      <!-- mandatory -->
+      <element name="TECApprover" type="search-select" source="1" label="TEC Approver">
+        &dat_tecapprovers;
+      </element>
+      <!-- mandatory -->
+      <element name="HelpDesk" type="select" label="Help Desk">
+        <options>
+          <option value=""></option>
+          <option value="ICC3 UK Retail">ICC3 UK Retail</option>
+          <option value="ICC3 WER DS">ICC3 WER DS</option>
+        </options>
+      </element>
+
+      <element name="ContractReviewDate" type="date" label="Contract Review Date (Annualised, Term Time, Zero Hours, Compressed, Zero Hours)" format="dd.MM.yyyy">
+        <!--<mandatoryIf name="ContractType">Zero Hours,Annualised</mandatoryIf>-->
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element name="PreviousJobTitle" type="search-select" source="1" label="Previous job title (Career Break End)">
+        <options>
+          <option value=""></option>
+          <option value="Account Receivable Co-worker">Account Receivable Co-worker</option>
+          <option value="Accountant">Accountant</option>
+          <option value="Accounting Assistant">Accounting Assistant</option>
+          <option value="Accounting Assistant - Bookeeping">Accounting Assistant - Bookeeping</option>
+          <option value="Accounting Assistant - Reconciliation">Accounting Assistant - Reconciliation</option>
+          <option value="Accounting Co-worker">Accounting Co-worker</option>
+          <option value="Accounting General Ledger Co-worker">Accounting General Ledger Co-worker</option>
+          <option value="Accounting Manager">Accounting Manager</option>
+          <option value="Accounts Receivable Manager/Senior Financial Accountant">Accounts Receivable Manager/Senior Financial Accountant</option>
+          <option value="Activity Co-worker">Activity Co-worker</option>
+          <option value="Activity Leader">Activity Leader</option>
+          <option value="Activity Specialist">Activity Specialist</option>
+          <option value="Admin Assistant">Admin Assistant</option>
+          <option value="Administration Specialist">Administration Specialist</option>
+          <option value="Administrative Specialist">Administrative Specialist</option>
+          <option value="Administrator">Administrator</option>
+          <option value="Advertising Manager">Advertising Manager</option>
+          <option value="After Sales Team Leader">After Sales Team Leader</option>
+          <option value="ASM">ASM</option>
+          <option value="ASM Cust &amp; Ops">ASM Cust &amp; Ops</option>
+          <option value="Asset Manager">Asset Manager</option>
+          <option value="Assistant Store Manager">Assistant Store Manager</option>
+          <option value="Backpacker">Backpacker</option>
+          <option value="Bathshop Team Leader">Bathshop Team Leader</option>
+          <option value="Benefits Specialist">Benefits Specialist</option>
+          <option value="Business Analyst">Business Analyst</option>
+          <option value="Business Development Manager">Business Development Manager</option>
+          <option value="Business Development Specialist">Business Development Specialist</option>
+          <option value="Business Intelligence Analyst">Business Intelligence Analyst</option>
+          <option value="Business Leader">Business Leader</option>
+          <option value="Business leader Kitchen &amp; Dining">Business leader Kitchen &amp; Dining</option>
+          <option value="Business Navigation &amp; Operations Manager">Business Navigation &amp; Operations Manager</option>
+          <option value="Business Navigation Analyst">Business Navigation Analyst</option>
+          <option value="Business Navigation Manager">Business Navigation Manager</option>
+          <option value="Business Navigation Team Leader">Business Navigation Team Leader</option>
+          <option value="Business Navigator">Business Navigator</option>
+          <option value="Business Navigator Trainee">Business Navigator Trainee</option>
+          <option value="Business Support Manager">Business Support Manager</option>
+          <option value="Business Support Specialist">Business Support Specialist</option>
+          <option value="Business Systems &amp; Process Specialist">Business Systems &amp; Process Specialist</option>
+          <option value="Business Systems and Process Support">Business Systems and Process Support</option>
+          <option value="Capacity &amp; Flow Planner">Capacity &amp; Flow Planner</option>
+          <option value="Carpenter">Carpenter</option>
+          <option value="Carpenter Co-worker">Carpenter Co-worker</option>
+          <option value="Cash Line Co-worker">Cash Line Co-worker</option>
+          <option value="Catalogue &amp; Brochure Specialist">Catalogue &amp; Brochure Specialist</option>
+          <option value="CC   Operations Training Specialist">CC   Operations Training Specialist</option>
+          <option value="CD Transport Operations Manager">CD Transport Operations Manager</option>
+          <option value="CDOS Co-worker">CDOS Co-worker</option>
+          <option value="CDOS Team Leader">CDOS Team Leader</option>
+          <option value="CDT Operational Field Responsible">CDT Operational Field Responsible</option>
+          <option value="Central Ordering Specialist">Central Ordering Specialist</option>
+          <option value="Change and implementation manager">Change and implementation manager</option>
+          <option value="Change Management Responsible">Change Management Responsible</option>
+          <option value="Checkout Services Co-worker">Checkout Services Co-worker</option>
+          <option value="Checkout Services Manager">Checkout Services Manager</option>
+          <option value="Checkout Services Team Leader">Checkout Services Team Leader</option>
+          <option value="Chief Financial Officer">Chief Financial Officer</option>
+          <option value="Com &amp; In Co-worker">Com &amp; In Co-worker</option>
+          <option value="Com &amp; In Manager">Com &amp; In Manager</option>
+          <option value="Com&amp;In Learning &amp; Development Leader">Com&amp;In Learning &amp; Development Leader</option>
+          <option value="Commercial Activity Leader">Commercial Activity Leader</option>
+          <option value="Commercial Manager">Commercial Manager</option>
+          <option value="Commercial Planning Manager">Commercial Planning Manager</option>
+          <option value="Commercial Restaurant Manager">Commercial Restaurant Manager</option>
+          <option value="Commercial Restaurant Team Leader">Commercial Restaurant Team Leader</option>
+          <option value="Commercial Review Manager">Commercial Review Manager</option>
+          <option value="Commercial Services Administrator">Commercial Services Administrator</option>
+          <option value="Commercial Services Team Leader">Commercial Services Team Leader</option>
+          <option value="Commercial SFM &amp; Bistro Manager">Commercial SFM &amp; Bistro Manager</option>
+          <option value="Commercial SFM &amp; Bistro Team Leader">Commercial SFM &amp; Bistro Team Leader</option>
+          <option value="Commercial Specialist">Commercial Specialist</option>
+          <option value="Communications Specialist - Senior">Communications Specialist - Senior</option>
+          <option value="Comp &amp; Bens Specialist">Comp &amp; Bens Specialist</option>
+          <option value="Compensation &amp; Benefits Manager">Compensation &amp; Benefits Manager</option>
+          <option value="Competence Developer">Competence Developer</option>
+          <option value="Competence Development Specialist">Competence Development Specialist</option>
+          <option value="Construction Manager">Construction Manager</option>
+          <option value="Construction Project Manager">Construction Project Manager</option>
+          <option value="Contact Center Manager">Contact Center Manager</option>
+          <option value="Contact Centre Specialist">Contact Centre Specialist</option>
+          <option value="Country Activity Leader">Country Activity Leader</option>
+          <option value="Country Com&amp;In Manager">Country Com&amp;In Manager</option>
+          <option value="Country Commercial Activity Leader">Country Commercial Activity Leader</option>
+          <option value="Country CommIn Manager">Country CommIn Manager</option>
+          <option value="Country Customer Relations Manager">Country Customer Relations Manager</option>
+          <option value="Country Facility Management Specialist">Country Facility Management Specialist</option>
+          <option value="Country Facility Manager">Country Facility Manager</option>
+          <option value="Country Family Manager">Country Family Manager</option>
+          <option value="Country Graphic Communication Leader">Country Graphic Communication Leader</option>
+          <option value="Country HR Manager">Country HR Manager</option>
+          <option value="Country IKEA Business Leader">Country IKEA Business Leader</option>
+          <option value="Country IKEA Food Manager">Country IKEA Food Manager</option>
+          <option value="Country Implementation Leader">Country Implementation Leader</option>
+          <option value="Country In-Store Logistics Manager">Country In-Store Logistics Manager</option>
+          <option value="Country Marketing Manager">Country Marketing Manager</option>
+          <option value="Country PR &amp; Internal comms manager">Country PR &amp; Internal comms manager</option>
+          <option value="Country Purchase Manager">Country Purchase Manager</option>
+          <option value="Country Retail Manager">Country Retail Manager</option>
+          <option value="Country Risk &amp; Compliance Manager">Country Risk &amp; Compliance Manager</option>
+          <option value="Country Risk Manager">Country Risk Manager</option>
+          <option value="Country Sales Manager">Country Sales Manager</option>
+          <option value="Country Visual Merchandise/ Activity Co-worker">Country Visual Merchandise/ Activity Co-worker</option>
+          <option value="Country Visual Merchandise/ Activity Manager">Country Visual Merchandise/ Activity Manager</option>
+          <option value="Co-worker Relations Manager">Co-worker Relations Manager</option>
+          <option value="Credit Control Co-worker">Credit Control Co-worker</option>
+          <option value="Credit Control Manager &amp; Financial Accountant">Credit Control Manager &amp; Financial Accountant</option>
+          <option value="Customer Care Manager">Customer Care Manager</option>
+          <option value="Customer Care Specialist">Customer Care Specialist</option>
+          <option value="Customer Delivery Manager">Customer Delivery Manager</option>
+          <option value="Customer Distribution Manager">Customer Distribution Manager</option>
+          <option value="Customer Fulfillment Manager">Customer Fulfillment Manager</option>
+          <option value="Customer Insight Specialist">Customer Insight Specialist</option>
+          <option value="Customer Relations Co-worker">Customer Relations Co-worker</option>
+          <option value="Customer Relations Manager">Customer Relations Manager</option>
+          <option value="Customer Relations Team Leader">Customer Relations Team Leader</option>
+          <option value="Customer Service Co-worker">Customer Service Co-worker</option>
+          <option value="Customer Service Manager">Customer Service Manager</option>
+          <option value="Customer Service Manager - After Sales">Customer Service Manager - After Sales</option>
+          <option value="Customer Service Manager - Commercial Services">Customer Service Manager - Commercial Services</option>
+          <option value="Customer Service Manager - Customer Support">Customer Service Manager - Customer Support</option>
+          <option value="Customer Service Manager - Deliveries">Customer Service Manager - Deliveries</option>
+          <option value="Customer Service Specialist">Customer Service Specialist</option>
+          <option value="Customer Service Specialsit">Customer Service Specialsit</option>
+          <option value="Customer Service Team Leader">Customer Service Team Leader</option>
+          <option value="Customer Services Co-worker">Customer Services Co-worker</option>
+          <option value="Customer Services Manager">Customer Services Manager</option>
+          <option value="Customer Services Team Manager">Customer Services Team Manager</option>
+          <option value="Customs Co-worker">Customs Co-worker</option>
+          <option value="Database specialist">Database specialist</option>
+          <option value="DC Manager">DC Manager</option>
+          <option value="DC Quality Co-worker">DC Quality Co-worker</option>
+          <option value="DCG Operational Support Coordinator">DCG Operational Support Coordinator</option>
+          <option value="Deputy Business Navigation and Operation">Deputy Business Navigation and Operation</option>
+          <option value="Deputy Business Navigation Manager">Deputy Business Navigation Manager</option>
+          <option value="Deputy Category Manager">Deputy Category Manager</option>
+          <option value="Deputy Country CommIn Manager">Deputy Country CommIn Manager</option>
+          <option value="Deputy Customer Services Manager">Deputy Customer Services Manager</option>
+          <option value="Deputy E-Commerce Manager">Deputy E-Commerce Manager</option>
+          <option value="Deputy Finance Manager">Deputy Finance Manager</option>
+          <option value="Deputy IF Manager">Deputy IF Manager</option>
+          <option value="Deputy Marketing Manager">Deputy Marketing Manager</option>
+          <option value="Deputy Retail Logistics Manager">Deputy Retail Logistics Manager</option>
+          <option value="Deputy Retail Manager">Deputy Retail Manager</option>
+          <option value="Deputy Risk Manager">Deputy Risk Manager</option>
+          <option value="Deputy Sales Manager">Deputy Sales Manager</option>
+          <option value="Deputy Store Navigation and Operations Manager">Deputy Store Navigation and Operations Manager</option>
+          <option value="Easy Buy Process Manager">Easy Buy Process Manager</option>
+          <option value="Easy Buying Process Manager">Easy Buying Process Manager</option>
+          <option value="Easy Buying Specialist">Easy Buying Specialist</option>
+          <option value="eCommerce Business Process Specialist">eCommerce Business Process Specialist</option>
+          <option value="eCommerce Fraud Specialist">eCommerce Fraud Specialist</option>
+          <option value="E-Commerce Manager">E-Commerce Manager</option>
+          <option value="Ecommerce Operations Specialist">Ecommerce Operations Specialist</option>
+          <option value="Engineering Manager">Engineering Manager</option>
+          <option value="Environmental Specialist">Environmental Specialist</option>
+          <option value="ESP Operations Coordinator">ESP Operations Coordinator</option>
+          <option value="Facilities Manager">Facilities Manager</option>
+          <option value="Facility Co-worker">Facility Co-worker</option>
+          <option value="Facility Management Specialist">Facility Management Specialist</option>
+          <option value="Facility Manager">Facility Manager</option>
+          <option value="Facility Specialist">Facility Specialist</option>
+          <option value="Family Co-ordinator">Family Co-ordinator</option>
+          <option value="Family Co-worker">Family Co-worker</option>
+          <option value="Family Manager">Family Manager</option>
+          <option value="Finance &amp; Admin Specialist">Finance &amp; Admin Specialist</option>
+          <option value="Finance Business Support Manager">Finance Business Support Manager</option>
+          <option value="Finance Manager">Finance Manager</option>
+          <option value="Financial Accountant">Financial Accountant</option>
+          <option value="Financial Systems &amp; Projects Specialist">Financial Systems &amp; Projects Specialist</option>
+          <option value="Food Business Analyst">Food Business Analyst</option>
+          <option value="Food Competence Developer">Food Competence Developer</option>
+          <option value="Food Production Specialist">Food Production Specialist</option>
+          <option value="Fraud &amp; Reconcilliation">Fraud &amp; Reconcilliation</option>
+          <option value="Fraud and Finance Specialist">Fraud and Finance Specialist</option>
+          <option value="Full Serve Manager">Full Serve Manager</option>
+          <option value="Full Serve Team Leader">Full Serve Team Leader</option>
+          <option value="Full Serve Warehouse Team Leader">Full Serve Warehouse Team Leader</option>
+          <option value="Furniture Builder">Furniture Builder</option>
+          <option value="General Ledger Co-worker">General Ledger Co-worker</option>
+          <option value="General Ledger Specialist">General Ledger Specialist</option>
+          <option value="General Ledger Supervisor">General Ledger Supervisor</option>
+          <option value="General Ledger Team Leader">General Ledger Team Leader</option>
+          <option value="Goods Flow Co-worker">Goods Flow Co-worker</option>
+          <option value="Goods Flow Manager">Goods Flow Manager</option>
+          <option value="Goods Flow Specialist">Goods Flow Specialist</option>
+          <option value="Goods Flow Team Leader">Goods Flow Team Leader</option>
+          <option value="Goods Flow Team Manager">Goods Flow Team Manager</option>
+          <option value="Graphic Communication Co-Worker">Graphic Communication Co-Worker</option>
+          <option value="Graphic Communication Leader">Graphic Communication Leader</option>
+          <option value="Greeter">Greeter</option>
+          <option value="Handling Materials Administrator">Handling Materials Administrator</option>
+          <option value="HR Admin Manager">HR Admin Manager</option>
+          <option value="HR Administrator">HR Administrator</option>
+          <option value="HR Co-worker">HR Co-worker</option>
+          <option value="HR Generalist">HR Generalist</option>
+          <option value="HR Manager">HR Manager</option>
+          <option value="HR Operations Manager">HR Operations Manager</option>
+          <option value="HR Service Center Manager">HR Service Center Manager</option>
+          <option value="HRMS Manager">HRMS Manager</option>
+          <option value="HRMS Specialist">HRMS Specialist</option>
+          <option value="HRSC Manager">HRSC Manager</option>
+          <option value="IKEA Family Coordinator">IKEA Family Coordinator</option>
+          <option value="IKEA Food Co-worker">IKEA Food Co-worker</option>
+          <option value="IKEA FOOD Manager">IKEA FOOD Manager</option>
+          <option value="IKEA Food Team Leader">IKEA Food Team Leader</option>
+          <option value="Implementation Rollout Trainer">Implementation Rollout Trainer</option>
+          <option value="Info &amp; Smaland Team Leader">Info &amp; Smaland Team Leader</option>
+          <option value="Information &amp; Communication Specialist">Information &amp; Communication Specialist</option>
+          <option value="Information Security Manager">Information Security Manager</option>
+          <option value="Information security responsible">Information security responsible</option>
+          <option value="Instore Logistics Manager">Instore Logistics Manager</option>
+          <option value="Interior Design Co-worker">Interior Design Co-worker</option>
+          <option value="Interior Design Leader">Interior Design Leader</option>
+          <option value="Interior Design Manager">Interior Design Manager</option>
+          <option value="Interior Designer Manager">Interior Designer Manager</option>
+          <option value="Internal Communication Specialist">Internal Communication Specialist</option>
+          <option value="Internal Communications">Internal Communications</option>
+          <option value="Internal Communications Specialist">Internal Communications Specialist</option>
+          <option value="Internal Communicator">Internal Communicator</option>
+          <option value="Inventory Co-worker">Inventory Co-worker</option>
+          <option value="iShop Administrator">iShop Administrator</option>
+          <option value="ISL Manager">ISL Manager</option>
+          <option value="IT Coordinator">IT Coordinator</option>
+          <option value="IT Co-ordinator">IT Co-ordinator</option>
+          <option value="IT Developer">IT Developer</option>
+          <option value="IT Manager">IT Manager</option>
+          <option value="IT Project Manager">IT Project Manager</option>
+          <option value="IT Responsible">IT Responsible</option>
+          <option value="IT Support">IT Support</option>
+          <option value="IT Team Leader">IT Team Leader</option>
+          <option value="IT Team Manager">IT Team Manager</option>
+          <option value="IT Team Manager Helpdesk">IT Team Manager Helpdesk</option>
+          <option value="Kitchen- Country Implementation Group Leader">Kitchen- Country Implementation Group Leader</option>
+          <option value="Kitchen Installation Specialist">Kitchen Installation Specialist</option>
+          <option value="Kitchen Production Manager">Kitchen Production Manager</option>
+          <option value="Kitchen Production Specialist">Kitchen Production Specialist</option>
+          <option value="Kitchen Production Team Leader">Kitchen Production Team Leader</option>
+          <option value="Law &amp; Standards Manager">Law &amp; Standards Manager</option>
+          <option value="Laws &amp; Standards Manager">Laws &amp; Standards Manager</option>
+          <option value="Learning &amp; Development Manager">Learning &amp; Development Manager</option>
+          <option value="Learning &amp; Development Specialist">Learning &amp; Development Specialist</option>
+          <option value="Legal Affairs Manager">Legal Affairs Manager</option>
+          <option value="Local Facility Management Specialist">Local Facility Management Specialist</option>
+          <option value="Local Marketing Leader">Local Marketing Leader</option>
+          <option value="Local Marketing Leader - Comms">Local Marketing Leader - Comms</option>
+          <option value="Local Marketing Leader (Store)">Local Marketing Leader (Store)</option>
+          <option value="Local Marketing Manager">Local Marketing Manager</option>
+          <option value="Local Marketing Specialist">Local Marketing Specialist</option>
+          <option value="Local Marketing Specialist - IKEA FAMILY">Local Marketing Specialist - IKEA FAMILY</option>
+          <option value="Local Marketing Specialist - Local Comms">Local Marketing Specialist - Local Comms</option>
+          <option value="Local Marketing Specialist (Web Channel)">Local Marketing Specialist (Web Channel)</option>
+          <option value="Logistics Co-worker">Logistics Co-worker</option>
+          <option value="Logistics Manager">Logistics Manager</option>
+          <option value="Maintenance Technician">Maintenance Technician</option>
+          <option value="Management &amp; Development Specialist">Management &amp; Development Specialist</option>
+          <option value="Mapping &amp; Logistics Coordinator">Mapping &amp; Logistics Coordinator</option>
+          <option value="Market Intelligence Manager">Market Intelligence Manager</option>
+          <option value="Marketing Catalogue/Brochure Specialist">Marketing Catalogue/Brochure Specialist</option>
+          <option value="Marketing Coordinator">Marketing Coordinator</option>
+          <option value="Marketing Co-ordinator">Marketing Co-ordinator</option>
+          <option value="Marketing Database Manager">Marketing Database Manager</option>
+          <option value="Marketing Intelligence Manager">Marketing Intelligence Manager</option>
+          <option value="Marketing Manager">Marketing Manager</option>
+          <option value="Meeting &amp; Travel Coordinator">Meeting &amp; Travel Coordinator</option>
+          <option value="Meeting &amp; Travel Co-ordinator">Meeting &amp; Travel Co-ordinator</option>
+          <option value="MHE Trainer">MHE Trainer</option>
+          <option value="Operational Support Co-worker">Operational Support Co-worker</option>
+          <option value="Operational Support Manager">Operational Support Manager</option>
+          <option value="Operations Manager">Operations Manager</option>
+          <option value="Operations Planning Coordinator">Operations Planning Coordinator</option>
+          <option value="Operations Specialist">Operations Specialist</option>
+          <option value="P2P Leader">P2P Leader</option>
+          <option value="Payroll &amp; Systems Manager">Payroll &amp; Systems Manager</option>
+          <option value="Payroll Manager">Payroll Manager</option>
+          <option value="Payroll Specialist">Payroll Specialist</option>
+          <option value="Payroll Team Leader">Payroll Team Leader</option>
+          <option value="PR &amp; Communication Manager">PR &amp; Communication Manager</option>
+          <option value="PR &amp; internal Communication Manager">PR &amp; internal Communication Manager</option>
+          <option value="PR Co-ordinator">PR Co-ordinator</option>
+          <option value="PR Manager">PR Manager</option>
+          <option value="PR Manager Commercial">PR Manager Commercial</option>
+          <option value="PR Manager Corporate">PR Manager Corporate</option>
+          <option value="Press &amp; PR Coordinator">Press &amp; PR Coordinator</option>
+          <option value="Press Contact Officer">Press Contact Officer</option>
+          <option value="Press Officer">Press Officer</option>
+          <option value="Process Developer">Process Developer</option>
+          <option value="Procure to Pay Leader">Procure to Pay Leader</option>
+          <option value="Product Quality Technician">Product Quality Technician</option>
+          <option value="Project Administrator">Project Administrator</option>
+          <option value="Project Implementation Manager">Project Implementation Manager</option>
+          <option value="Project Leader">Project Leader</option>
+          <option value="Project Leader - Markethall">Project Leader - Markethall</option>
+          <option value="Project Leader Business Development">Project Leader Business Development</option>
+          <option value="Project Manager">Project Manager</option>
+          <option value="Project Manager Picking and Delivery">Project Manager Picking and Delivery</option>
+          <option value="Project Specialist">Project Specialist</option>
+          <option value="Project Specialist Finance">Project Specialist Finance</option>
+          <option value="Property Assistant">Property Assistant</option>
+          <option value="Property Manager">Property Manager</option>
+          <option value="Purchase Consultant">Purchase Consultant</option>
+          <option value="Purchaser">Purchaser</option>
+          <option value="Q Store Quality Manager">Q Store Quality Manager</option>
+          <option value="Quality Auditor">Quality Auditor</option>
+          <option value="Quality Co-worker">Quality Co-worker</option>
+          <option value="Quality Manager">Quality Manager</option>
+          <option value="Quality Specialist">Quality Specialist</option>
+          <option value="Quality Support">Quality Support</option>
+          <option value="Quality Team Manager">Quality Team Manager</option>
+          <option value="Range &amp; Purchasing Manager">Range &amp; Purchasing Manager</option>
+          <option value="Range &amp;Purchasing Manager">Range &amp;Purchasing Manager</option>
+          <option value="Range Support">Range Support</option>
+          <option value="Real Estate &amp; Development Manager">Real Estate &amp; Development Manager</option>
+          <option value="Real Estate Manager">Real Estate Manager</option>
+          <option value="Real Estate Project Manager">Real Estate Project Manager</option>
+          <option value="ReceIve Payment Leader">ReceIve Payment Leader</option>
+          <option value="Receive Payment Manager">Receive Payment Manager</option>
+          <option value="Receptionist">Receptionist</option>
+          <option value="Reconciliation Co-worker">Reconciliation Co-worker</option>
+          <option value="Reconciliation Team Leader">Reconciliation Team Leader</option>
+          <option value="Reconcilliation and Administration Specialist">Reconcilliation and Administration Specialist</option>
+          <option value="Recovery Co-worker">Recovery Co-worker</option>
+          <option value="Recovery Manager">Recovery Manager</option>
+          <option value="Recovery Specialist">Recovery Specialist</option>
+          <option value="Recovery Team Leader">Recovery Team Leader</option>
+          <option value="Recruitment &amp; Succession Manager">Recruitment &amp; Succession Manager</option>
+          <option value="Recruitment Specialist">Recruitment Specialist</option>
+          <option value="Regional Safety &amp; Security Mgr">Regional Safety &amp; Security Mgr</option>
+          <option value="Replenishment Manager">Replenishment Manager</option>
+          <option value="Replenishment Team Leader">Replenishment Team Leader</option>
+          <option value="Resource Planning Manager">Resource Planning Manager</option>
+          <option value="Retail Capacity Manager">Retail Capacity Manager</option>
+          <option value="Retail Establishment Manager">Retail Establishment Manager</option>
+          <option value="Retail Information Security Manager">Retail Information Security Manager</option>
+          <option value="Retail Logistics Capacity &amp; Flow Planner">Retail Logistics Capacity &amp; Flow Planner</option>
+          <option value="Retail Logistics Manager">Retail Logistics Manager</option>
+          <option value="Retail Operations Manager">Retail Operations Manager</option>
+          <option value="Retail Preparation Manager">Retail Preparation Manager</option>
+          <option value="Retail Project Manager">Retail Project Manager</option>
+          <option value="Retail Supply Chain Integration Manager">Retail Supply Chain Integration Manager</option>
+          <option value="Retail Supply Integration Manager">Retail Supply Integration Manager</option>
+          <option value="Risk Manager">Risk Manager</option>
+          <option value="Safety &amp; Security Co-worker">Safety &amp; Security Co-worker</option>
+          <option value="Safety &amp; Security Function Support">Safety &amp; Security Function Support</option>
+          <option value="Safety &amp; Security Manager">Safety &amp; Security Manager</option>
+          <option value="Safety &amp; Security Specialist">Safety &amp; Security Specialist</option>
+          <option value="Safety &amp; Security Team Leader">Safety &amp; Security Team Leader</option>
+          <option value="Safety and Security Function Support (Specialist)">Safety and Security Function Support (Specialist)</option>
+          <option value="Sales &amp; Marketing Manager">Sales &amp; Marketing Manager</option>
+          <option value="Sales &amp; Supply Support Co-worker">Sales &amp; Supply Support Co-worker</option>
+          <option value="Sales &amp; Supply Support Manager">Sales &amp; Supply Support Manager</option>
+          <option value="Sales &amp; Supply Support Specialist">Sales &amp; Supply Support Specialist</option>
+          <option value="Sales Co-worker">Sales Co-worker</option>
+          <option value="Sales External Co-worker">Sales External Co-worker</option>
+          <option value="Sales Leader">Sales Leader</option>
+          <option value="Sales Leader Free Range">Sales Leader Free Range</option>
+          <option value="Sales Leader Range">Sales Leader Range</option>
+          <option value="Sales Leader Store">Sales Leader Store</option>
+          <option value="Sales Manager">Sales Manager</option>
+          <option value="Sales Reconcilation Team Leader">Sales Reconcilation Team Leader</option>
+          <option value="Sales Reconciliation Co-worker">Sales Reconciliation Co-worker</option>
+          <option value="Sales Specialist">Sales Specialist</option>
+          <option value="Sales Specialist - Training">Sales Specialist - Training</option>
+          <option value="Sales Support Specialist">Sales Support Specialist</option>
+          <option value="Sales Support Specialist - Print &amp; Web">Sales Support Specialist - Print &amp; Web</option>
+          <option value="Sales support Specialist - Worktops">Sales support Specialist - Worktops</option>
+          <option value="Sales Team Leader">Sales Team Leader</option>
+          <option value="Sales Team Leader BA 03">Sales Team Leader BA 03</option>
+          <option value="Season &amp; Activities Team leader">Season &amp; Activities Team leader</option>
+          <option value="Self Serve Team Leader">Self Serve Team Leader</option>
+          <option value="SEO Specialist">SEO Specialist</option>
+          <option value="Services Function Support">Services Function Support</option>
+          <option value="Services Function Support - Customer Order">Services Function Support - Customer Order</option>
+          <option value="Services Manager">Services Manager</option>
+          <option value="Services Specialist Systems">Services Specialist Systems</option>
+          <option value="Services Team Leader">Services Team Leader</option>
+          <option value="Shopkeeper">Shopkeeper</option>
+          <option value="Shopkeeper BA 60">Shopkeeper BA 60</option>
+          <option value="Shopkeeper Sales HFB 18 &amp; 19 (Home Organisation)">Shopkeeper Sales HFB 18 &amp; 19 (Home Organisation)</option>
+          <option value="Shopkeeper Sales HFB1 &amp; 2 (Livingroom)">Shopkeeper Sales HFB1 &amp; 2 (Livingroom)</option>
+          <option value="Shopkeeper Sales HFB10 (Lighting)">Shopkeeper Sales HFB10 (Lighting)</option>
+          <option value="Shopkeeper Sales HFB11, 12 &amp; 13 (Textiles)">Shopkeeper Sales HFB11, 12 &amp; 13 (Textiles)</option>
+          <option value="Shopkeeper Sales HFB14 &amp; 15 (Cooking Eating)">Shopkeeper Sales HFB14 &amp; 15 (Cooking Eating)</option>
+          <option value="Shopkeeper Sales HFB16 &amp; 17 (Home Decoration)">Shopkeeper Sales HFB16 &amp; 17 (Home Decoration)</option>
+          <option value="Shopkeeper Sales HFB3 (Work IKEA)">Shopkeeper Sales HFB3 (Work IKEA)</option>
+          <option value="Shopkeeper Sales HFB4 &amp; 5 (Bedrooms)">Shopkeeper Sales HFB4 &amp; 5 (Bedrooms)</option>
+          <option value="Shopkeeper Sales HFB6 (Bathshop)">Shopkeeper Sales HFB6 (Bathshop)</option>
+          <option value="Shopkeeper Sales HFB7 &amp; 8 (Kitchen Dining)">Shopkeeper Sales HFB7 &amp; 8 (Kitchen Dining)</option>
+          <option value="Shopkeeper Sales HFB9 (Childrens)">Shopkeeper Sales HFB9 (Childrens)</option>
+          <option value="Shopkeeper Sales IKEA Business">Shopkeeper Sales IKEA Business</option>
+          <option value="Shopkeeper Sales Self Serve (Self Serve)">Shopkeeper Sales Self Serve (Self Serve)</option>
+          <option value="Site Facility Management Co-worker">Site Facility Management Co-worker</option>
+          <option value="Site Facility Manager">Site Facility Manager</option>
+          <option value="Social &amp; Environmental Manager">Social &amp; Environmental Manager</option>
+          <option value="Social Media Manager">Social Media Manager</option>
+          <option value="Solar Project Manager">Solar Project Manager</option>
+          <option value="Solution Manager">Solution Manager</option>
+          <option value="Staff Planner">Staff Planner</option>
+          <option value="Staff Planning Business Navigator (in Training)">Staff Planning Business Navigator (in Training)</option>
+          <option value="Staff Planning Super User">Staff Planning Super User</option>
+          <option value="Staff Scheduler">Staff Scheduler</option>
+          <option value="Store Manager">Store Manager</option>
+          <option value="Store Manager Assistant">Store Manager Assistant</option>
+          <option value="Store Support Co-worker">Store Support Co-worker</option>
+          <option value="Strategic Purchase Manager">Strategic Purchase Manager</option>
+          <option value="Subject Matter Expert">Subject Matter Expert</option>
+          <option value="Succession &amp; Recruitment Manager">Succession &amp; Recruitment Manager</option>
+          <option value="Succession Manager IKEA Grp">Succession Manager IKEA Grp</option>
+          <option value="Supply Support Specialist">Supply Support Specialist</option>
+          <option value="Sustainability Developer">Sustainability Developer</option>
+          <option value="Sustainability Manager">Sustainability Manager</option>
+          <option value="Sustainability Responsible">Sustainability Responsible</option>
+          <option value="System Specialist">System Specialist</option>
+          <option value="Tax Compliance Specialist">Tax Compliance Specialist</option>
+          <option value="Tax Manager">Tax Manager</option>
+          <option value="Tax Specialist">Tax Specialist</option>
+          <option value="Team Leader">Team Leader</option>
+          <option value="Team Manager">Team Manager</option>
+          <option value="Trainer">Trainer</option>
+          <option value="Transport Planner">Transport Planner</option>
+          <option value="Treasurer">Treasurer</option>
+          <option value="Treasury Co-ordinator">Treasury Co-ordinator</option>
+          <option value="UK &amp; IE Contact Centre Manager">UK &amp; IE Contact Centre Manager</option>
+          <option value="UK &amp; IE Sustainability Manager">UK &amp; IE Sustainability Manager</option>
+          <option value="UKIT Manager">UKIT Manager</option>
+          <option value="UKIT Team Manager">UKIT Team Manager</option>
+          <option value="Visual Merchandise Leader">Visual Merchandise Leader</option>
+          <option value="Visual Merchandise/Activity Co-worker">Visual Merchandise/Activity Co-worker</option>
+          <option value="Visual Merchandise/Activity Manager">Visual Merchandise/Activity Manager</option>
+          <option value="Warehouse Co-worker">Warehouse Co-worker</option>
+          <option value="Warehouse Manager">Warehouse Manager</option>
+          <option value="Warehouse Team Leader">Warehouse Team Leader</option>
+          <option value="Warehousing Logistics Manager">Warehousing Logistics Manager</option>
+          <option value="Web Analyst">Web Analyst</option>
+          <option value="Web Communications Manager">Web Communications Manager</option>
+          <option value="Web Content Editor">Web Content Editor</option>
+          <option value="Web Editor">Web Editor</option>
+          <option value="Web Manager">Web Manager</option>
+          <option value="Web Merchandiser">Web Merchandiser</option>
+          <option value="Workforce Administrator">Workforce Administrator</option>
+          <option value="Workforce Manager">Workforce Manager</option>
+          <option value="Workforce Scheduler">Workforce Scheduler</option>
+          <option value="Workstream Leader">Workstream Leader</option>
+        </options>
+      </element>
+
+      <!--<element name="EducationAuthority" type="select" label="Education Authority (Term Time)">
+        <mandatoryIf name="ContractType">Term Time</mandatoryIf>
+        <options>
+          <option value=""></option>
+          <option value="will get information from the country">will get information from the country</option>
+        </options>
+      </element>-->
+    </tab>
+
+    <!--Tab: Payment Information-->
+    <tab name="#Payment" label="Payment Information">
+      <element type="select" name="PayrollCategory" label="Payroll Category">
+        <options>
+          <option value=""></option>
+          <option value="Hourly">Hourly</option>
+          <option value="Annualised">Annualised</option>
+          <option value="Salaried">Salaried</option>
+          <option value="Salaried Management">Salaried Management</option>
+          <option value="Salaried Senior Management">Salaried Senior Management</option>
+        </options>
+        <!--<mandatoryIf name="ChangeType">ONLY Pay Change</mandatoryIf>-->
+      </element>
+      <element type="select" name="PayScaleGroup" label="Pay Scale Group">
+        <options>
+          <option value=""></option>
+          <option value="STARTLO">STARTLO</option>
+          <option value="STARTUK">STARTUK</option>
+          <option value="INTERN">INTERN</option>
+          <!--<option value="APPRENT1">APPRENT1</option>
+          <option value="APPRENT2">APPRENT2</option>-->
+          <option value="FOUNDLO">FOUNDLO</option>
+          <option value="FOUNDUK">FOUNDUK</option>
+          <option value="ADVANCED">ADVANCED</option>
+          <option value="MULTSKLL">MULTSKLL</option>
+          <option value="BOOKOFF">BOOKOFF</option>
+          <option value="QUALITY">QUALITY</option>
+          <!--<option value="APPRENTICE 7.69">APPRENTICE 7.69</option>
+          <option value="APPRENTICE 6.66">APPRENTICE 6.66</option>-->
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="44">44</option>
+          <option value="45">45</option>
+          <option value="46">46</option>
+          <option value="47">47</option>
+          <option value="48">48</option>
+          <option value="49">49</option>
+          <option value="50">50</option>
+          <option value="51">51</option>
+          <option value="52">52</option>
+          <option value="53">53</option>
+          <option value="54">54</option>
+          <option value="55">55</option>
+          <option value="56">56</option>
+          <option value="57">57</option>
+          <option value="58">58</option>
+          <option value="59">59</option>
+          <option value="60">60</option>
+          <option value="61">61</option>
+          <option value="62">62</option>
+          <option value="63">63</option>
+          <option value="64">64</option>
+          <option value="65">65</option>
+          <option value="66">66</option>
+          <option value="67">67</option>
+          <option value="99">99</option>
+          <!--<option value=""></option>
+                    <option value="STARTER2">STARTER2</option>
+                    <option value="STARTER4">STARTER4</option>
+                    <option value="STARTRP4">STARTRP4</option>
+                    <option value="STARTER">STARTER</option>
+                    <option value="STARTER1">STARTER1</option>
+                    <option value="STARTER2">STARTER2</option>
+                    <option value="STARTER3">STARTER3</option>
+                    <option value="STARTRP">STARTRP</option>
+                    <option value="STARTER High">STARTER High</option>
+                    <option value="FOUNDN1">FOUNDN1</option>
+                    <option value="FOUNDN2">FOUNDN2</option>
+                    <option value="FOUNDN3">FOUNDN3</option>
+                    <option value="FOUNDN4">FOUNDN4</option>
+                    <option value="FOUNDP">FOUNDP</option>
+                    <option value="FOUNDN">FOUNDN</option>
+                    <option value="FOUNDN High">FOUNDN High</option>
+                    <option value="FOUNDFLT1">FOUNDFLT1</option>
+                    <option value="FOUNDFLT2">FOUNDFLT2</option>
+                    <option value="FOUNDFLT3">FOUNDFLT3</option>
+                    <option value="FOUNDFLT4">FOUNDFLT4</option>
+                    <option value="FOUNDFLP">FOUNDFLP</option>
+                    <option value="FOUNDFLT">FOUNDFLT</option>
+                    <option value="FOUNDFLT High">FOUNDFLT High</option>
+                    <option value="INTERN">INTERN</option>
+                    <option value="ADVANCD2">ADVANCD2</option>
+                    <option value="ADVANCD3">ADVANCD3</option>
+                    <option value="ADVANCD4">ADVANCD4</option>
+                    <option value="ADVANCP">ADVANCP</option>
+                    <option value="ADVANCED">ADVANCED</option>
+                    <option value="ADVANCED High">ADVANCED High</option>
+                    <option value="MULTSKLL">MULTSKLL</option>
+                    <option value="BOOKOFF">BOOKOFF</option>
+                    <option value="QUALITY">QUALITY</option>
+                    <option value="APPRENT1">APPRENT1</option>
+                    <option value="APPRENT2">APPRENT2</option>
+                    <option value="43">43</option>
+                    <option value="44">44</option>
+                    <option value="45">45</option>
+                    <option value="46">46</option>
+                    <option value="47">47</option>
+                    <option value="48">48</option>
+                    <option value="49">49</option>
+                    <option value="50">50</option>
+                    <option value="51">51</option>
+                    <option value="52">52</option>
+                    <option value="53">53</option>
+                    <option value="54">54</option>
+                    <option value="55">55</option>
+                    <option value="56">56</option>
+                    <option value="57">57</option>
+                    <option value="58">58</option>
+                    <option value="59">59</option>
+                    <option value="60">60</option>
+                    <option value="61">61</option>
+                    <option value="62">62</option>
+                    <option value="63">63</option>
+                    <option value="64">64</option>
+                    <option value="65">65</option>
+                    <option value="66">66</option>
+                    <option value="67">67</option>-->
+        </options>
+      </element>
+      <element type="text" name="BasicPayAmount" label="Basic Pay Amount">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <!--<options>
+          <option value=""></option>
+          <option value="6,31">6,31</option>
+          <option value="6,41">6,41</option>
+          <option value="6,50">6,50</option>
+          <option value="6,56">6,56</option>
+          <option value="6,66">6,66</option>
+          <option value="6,72">6,72</option>
+          <option value="6,85">6,85</option>
+          <option value="6,89">6,89</option>
+          <option value="6,92">6,92</option>
+          <option value="6,99">6,99</option>
+          <option value="7,04">7,04</option>
+          <option value="7,09">7,09</option>
+          <option value="7,13">7,13</option>
+          <option value="7,21">7,21</option>
+          <option value="7,33">7,33</option>
+          <option value="7,39">7,39</option>
+          <option value="7,48">7,48</option>
+          <option value="7,54">7,54</option>
+          <option value="7,62">7,62</option>
+          <option value="7,64">7,64</option>
+          <option value="7,69">7,69</option>
+          <option value="7,76">7,76</option>
+          <option value="7,77">7,77</option>
+          <option value="7,79">7,79</option>
+          <option value="7,84">7,84</option>
+          <option value="7,91">7,91</option>
+          <option value="7,94">7,94</option>
+          <option value="8,01">8,01</option>
+          <option value="8,09">8,09</option>
+          <option value="8,17">8,17</option>
+          <option value="8,24">8,24</option>
+          <option value="8,34">8,34</option>
+          <option value="8,45">8,45</option>
+          <option value="8,77">8,77</option>
+          <option value="10,21">10,21</option>
+          <option value="10,47">10,47</option>
+          <option value="10,77">10,77</option>
+
+        </options>-->
+        <!--<mandatoryIf name="ChangeType">ONLY Pay Change</mandatoryIf>-->
+      </element>
+      <element type="text" name="MonthlySalaryRate" label="Monthly salary rate (Annualised, Term Time)">
+        <!--<mandatoryIf name="ContractType">Annualised,Term Time</mandatoryIf>-->
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element type="select" name="BasicPayChangeReason" label="Basic Pay Change Reason" default="Change of Basic Pay">
+        <options>
+          <option value=""></option>
+          <option value="Collective agreement increase">Collective agreement increase</option>
+          <option value="Individual increase">Individual increase</option>
+          <option value="Seniority">Seniority</option>
+          <option value="Salary review">Salary review</option>
+          <option value="Career Break">Career Break</option>
+          <option value="Change of Basic Pay">Change of Basic Pay</option>
+          <option value="Annual review">Annual review</option>
+          <option value="Salary adjustment">Salary adjustment</option>
+        </options>
+        <!--<mandatoryIf name="ChangeType">ONLY Pay Change</mandatoryIf>-->
+      </element>
+      <element type="hidden" name="Allowances" default="1"></element>
+            <element type="select" name="AllowancesChangeType" label="Change Type">
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="AllowancesType" label="Allowance Type">
+                &dat_allowance;
+      </element>
+      <!--<element type="select" name="AllowancesPaymentType" label="Payment Type">
+        -->
+      <!--<mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>-->
+      <!--
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
+      <element type="text" name="AllowancesAmountUnits" label="Amount/Units">
+        <!--<mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>-->
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+      <element type="select" name="AllowancesPaidPer" label="Paid per">
+        <options>
+          <option value=""></option>
+          <option value="hour">hour</option>
+          <option value="month">month</option>
+          <option value="annum">annum</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <!--<element type="select" name="AllowancesNetGross" label="Net/Gross">
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
+      <element type="date" name="AllowancesValidFrom" label="Valid from:" format="dd.MM.yyyy">
+        <!--<mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>-->
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="AllowancesValidTo" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>-->
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="select" name="AllowancesChangeType2" label="Change Type">
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="AllowancesType2" label="Allowance Type">
+        &dat_allowance;
+      </element>
+      <!--<element type="select" name="AllowancesPaymentType2" label="Payment Type">
+        -->
+      <!--<mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>-->
+      <!--
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
+      <element type="text" name="AllowancesAmountUnits2" label="Amount/Units">
+        <!--<mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>-->
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+      <element type="select" name="AllowancesPaidPer2" label="Paid per">
+        <options>
+          <option value=""></option>
+          <option value="hour">hour</option>
+          <option value="month">month</option>
+          <option value="annum">annum</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <!--<element type="select" name="AllowancesNetGross2" label="Net/Gross">
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
+      <element type="date" name="AllowancesValidFrom2" label="Valid from:" format="dd.MM.yyyy">
+        <!--<mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>-->
+        <regex inherit="date" pattern="" message=""></regex>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+      </element>
+      <element type="date" name="AllowancesValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>-->
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="select" name="AllowancesChangeType3" label="Change Type">
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="AllowancesType3" label="Allowance Type">
+        &dat_allowance;
+      </element>
+      <!--<element type="select" name="AllowancesPaymentType3" label="Payment Type">
+        -->
+      <!--<mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>-->
+      <!--
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
+      <element type="text" name="AllowancesAmountUnits3" label="Amount/Units">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+        <!--<mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>-->
+      </element>
+      <element type="select" name="AllowancesPaidPer3" label="Paid per">
+        <options>
+          <option value=""></option>
+          <option value="hour">hour</option>
+          <option value="month">month</option>
+          <option value="annum">annum</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <!--<element type="select" name="AllowancesNetGross3" label="Net/Gross">
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
+      <element type="date" name="AllowancesValidFrom3" label="Valid from:" format="dd.MM.yyyy">
+        <!--<mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>-->
+        <regex inherit="date" pattern="" message=""></regex>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+      </element>
+      <element type="date" name="AllowancesValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>-->
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <!--4-->
+      <element type="select" name="AllowancesChangeType4" label="Change Type">
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="AllowancesType4" label="Allowance Type">
+        &dat_allowance;
+      </element>
+      <element type="text" name="AllowancesAmountUnits4" label="Amount/Units">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+      <element type="select" name="AllowancesPaidPer4" label="Paid per">
+        <options>
+          <option value=""></option>
+          <option value="hour">hour</option>
+          <option value="month">month</option>
+          <option value="annum">annum</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <element type="date" name="AllowancesValidFrom4" label="Valid from:" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+      </element>
+      <element type="date" name="AllowancesValidTo4" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <!--4-->
+
+      <!--5-->
+      <element type="select" name="AllowancesChangeType5" label="Change Type">
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="AllowancesType5" label="Allowance Type">
+        &dat_allowance;
+      </element>
+      <element type="text" name="AllowancesAmountUnits5" label="Amount/Units">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+      <element type="select" name="AllowancesPaidPer5" label="Paid per">
+        <options>
+          <option value=""></option>
+          <option value="hour">hour</option>
+          <option value="month">month</option>
+          <option value="annum">annum</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <element type="date" name="AllowancesValidFrom5" label="Valid from:" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+      </element>
+      <element type="date" name="AllowancesValidTo5" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <!--5-->
+
+      <element type="hidden" name="Deductions" default="1"></element>
+      <element type="select" name="DeductionsChangeType" label="Change Type">
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="DeductionsType" label="Deduction Type" >
+        
+          &dat_deductionstype;
+      </element>
+      <!--<element type="select" name="DeductionsPaymentType" label="Deduction Payment Type">
+        -->
+      <!--<mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>-->
+      <!--
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
+      <element type="text" name="DeductionsAmountUnits" label="Amount/Units" >
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+        <!--<mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>-->
+      </element>
+      <element type="select" name="DeductedPer" label="Deducted per:">
+        <options>
+          <option value=""></option>
+          <option value="month">month</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <!--<element type="select" name="DeductionsNetGross" label="Net/Gross" >
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
+      <element type="date" name="DeductionsValidFrom" label="Valid from:" format="dd.MM.yyyy">
+        <!--<mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>-->
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>-->
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="select" name="DeductionsChangeType2" label="Change Type">
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="DeductionsType2" label="Deduction Type">
+        &dat_deductionstype;
+      </element>
+      <!--<element type="select" name="DeductionsPaymentType2" label="Deduction Payment Type">
+        -->
+      <!--<mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>-->
+      <!--
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
+      <element type="text" name="DeductionsAmountUnits2" label="Amount/Units">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+        <!--<mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>-->
+      </element>
+      <element type="select" name="DeductedPer2" label="Deducted per:">
+        <options>
+          <option value=""></option>
+          <option value="month">month</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <!--<element type="select" name="DeductionsNetGross2" label="Net/Gross" >
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
+      <element type="date" name="DeductionsValidFrom2" label="Valid from:" format="dd.MM.yyyy">
+        <!--<mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>-->
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo2" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>-->
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="select" name="DeductionsChangeType3" label="Change Type">
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="DeductionsType3" label="Deduction Type" >
+        &dat_deductionstype;
+      </element>
+      <!--<element type="select" name="DeductionsPaymentType3" label="Deduction Payment Type">
+        -->
+      <!--<mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>-->
+      <!--
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
+      <element type="text" name="DeductionsAmountUnits3" label="Amount/Units">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+        <!--<mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>-->
+      </element>
+      <element type="select" name="DeductedPer3" label="Deducted per:">
+        <options>
+          <option value=""></option>
+          <option value="month">month</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <!--<element type="select" name="DeductionsNetGross3" label="Net/Gross">
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
+      <element type="date" name="DeductionsValidFrom3" label="Valid from:" format="dd.MM.yyyy">
+        <!--<mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>-->
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo3" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>-->
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      
+      <!--4-->
+      <element type="select" name="DeductionsChangeType4" label="Change Type">
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+       <element type="select" name="DeductionsType4" label="Deduction Type" >
+         &dat_deductionstype;
+      </element>
+      <element type="text" name="DeductionsAmountUnits4" label="Amount/Units">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+      <element type="select" name="DeductedPer4" label="Deducted per:">
+        <options>
+          <option value=""></option>
+          <option value="month">month</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <element type="date" name="DeductionsValidFrom4" label="Valid from:" format="dd.MM.yyyy">
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo4" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <!--4-->
+
+      <!--5-->
+      <element type="select" name="DeductionsChangeType5" label="Change Type">
+        <options>
+          <option value=""></option>
+          <option value="Start">Start</option>
+          <option value="Change">Change</option>
+          <option value="Stop">Stop</option>
+        </options>
+      </element>
+      <element type="select" name="DeductionsType5" label="Deduction Type" >
+        &dat_deductionstype;
+      </element>
+      <element type="text" name="DeductionsAmountUnits5" label="Amount/Units">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+      <element type="select" name="DeductedPer5" label="Deducted per:">
+        <options>
+          <option value=""></option>
+          <option value="month">month</option>
+          <option value="one off">one off</option>
+        </options>
+      </element>
+      <element type="date" name="DeductionsValidFrom5" label="Valid from:" format="dd.MM.yyyy">
+        <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" name="DeductionsValidTo5" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <!--5-->
+
+
+      <element type="select" name="OneIKEABonusLevel" label="One IKEA Bonus Level">
+        <options>
+          <option value=""></option>
+          <option value="Co-worker" disabled="1">Co-worker</option>
+          <option value="Level 1">Level 1</option>
+          <option value="Level 2">Level 2</option>
+          <option value="Level 3">Level 3</option>
+        </options>
+      </element>
+
+      <!-- mandatory -->
+      <element type="date" name="DateOfNextSalaryReview" label="Date of next salary review" format="dd.MM.yyyy">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="select" name="BenefitLevel" label="Benefit Level">
+        <options>
+          <option value=""></option>
+          <option value="Co-worker">Co-worker</option>
+          <option value="Level 1">Level 1</option>
+          <option value="Level 2">Level 2</option>
+          <option value="Level 3">Level 3</option>
+        </options>
+      </element>
+
+    </tab>
+
+    <!--Tab: SSC Use Only-->
+    <tab name="#SSCUseOnly" label="SSC use only">
+      <!-- mandatory -->
+      <element type="text" name="HolidayFull" label="Holiday full">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <!-- mandatory -->
+      <element type="select" name="AdditionDeduction" label="Addition/Deduction">
+        <options>
+          <option value=""></option>
+          <option value="addition">addition</option>
+          <option value="deduction">deduction</option>
+        </options>
+        <regex inherit="amount" pattern="" message=""></regex>
+      </element>
+      <!-- mandatory -->
+      <element type="text" name="HolidayAdjustment" label="Holiday Adjustment">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+
+      <!-- mandatory -->
+      <element type="text" name="HolidayYear" label="Holiday Year">
+        <regex inherit="yearyear" pattern="" message=""></regex>
+      </element>
+
+      <element type="text" name="HolidayFullProRata" label="Holiday full (pro rata)">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+    </tab>
+
+  </fields>
+</form>

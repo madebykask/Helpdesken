@@ -20,5 +20,7 @@ namespace DH.Helpdesk.Domain.Cases
         public DateTime ExtendedTime { get; set; }
 
         public virtual User User { get; set; }
+
+        public string ActiveTab { get; set; }
     }
 }

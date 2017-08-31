@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Dal.Repositories
+﻿using DH.Helpdesk.Dal.Mappers;
+using DH.Helpdesk.Dal.NewInfrastructure;
+
+namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
     using System.Globalization;
@@ -53,6 +56,8 @@
                         from du in d.Users
                         where d.Customer_Id == customerId && du.Id == userId
                         select d;
+
+            query.IncludePath(d => d.Country);
 
             return activeOnly
                 ? query.Where(d => d.IsActive > 0).ToList()

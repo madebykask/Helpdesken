@@ -22,6 +22,7 @@
         ProductAreaEntity[] GetProductAreasForCustomer(int customerId);
 
         IList<ProductAreaEntity> GetTopProductAreas(int customerId, bool isOnlyActive = true);
+        IList<ProductAreaEntity> GetProductAreasForSetting(int customerId, bool isOnlyActive = true);
 
         IList<ProductAreaEntity> GetTopProductAreasForUser(int customerId, UserOverview user, bool isOnlyActive = true);
 
@@ -34,6 +35,8 @@
 
         IList<ProductAreaEntity> GetAll(int customerId);
 
+        IList<ProductAreaEntity> GetWithHierarchy(int customerId);
+
         ProductAreaEntity GetProductArea(int id);
 
         string GetProductAreaWithChildren(int id, string separator, string valueToReturn);
@@ -42,7 +45,7 @@
 
         IList<ProductArea> GetChildrenInRow(IList<ProductArea> productAreas, bool isTakeOnlyActive = false);
 
-        void SaveProductArea(ProductAreaEntity productArea, int[] wg, out IDictionary<string, string> errors);
+        void SaveProductArea(ProductAreaEntity productArea, int[] wg, int caseTypeId, out IDictionary<string, string> errors);
 
         void Commit();
 
@@ -108,6 +111,8 @@
 
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
+        
+
         public ProductAreaService(
             IProductAreaRepository productAreaRepository,
             IWorkingGroupRepository workingGroupRepository,
@@ -129,6 +134,12 @@
             }
         }
 
+
+        public IList<ProductAreaEntity> GetWithHierarchy(int customerId)
+        {
+            return this.productAreaRepository.GetWithHierarchy(customerId);
+        }
+
         public IList<ProductAreaEntity> GetTopProductAreas(int customerId, bool isOnlyActive = true)
         {
             return
@@ -137,7 +148,16 @@
                     x.Customer_Id == customerId && x.Parent_ProductArea_Id == null
                     && ((isOnlyActive && x.IsActive != 0) || !isOnlyActive)).OrderBy(x => x.Name).ToList();
         }
-        
+
+        public IList<ProductAreaEntity> GetProductAreasForSetting(int customerId, bool isOnlyActive = true)
+        {
+            return
+                this.productAreaRepository.GetMany(
+                    x =>
+                    x.Customer_Id == customerId
+                    && ((isOnlyActive && x.IsActive != 0) || !isOnlyActive)).OrderBy(x => x.Name).ToList();
+        }
+
         public IList<ProductAreaEntity> GetTopProductAreasForUser(int customerId, UserOverview user, bool isOnlyActive = true)
         {
             var res =
@@ -272,6 +292,7 @@
             {
                 try
                 {
+                    productArea.CaseTypeProductAreas.Clear();
                     this.productAreaRepository.Delete(productArea);
                     this.Commit();
                     return DeleteMessage.Success;
@@ -356,7 +377,7 @@
         //    return ret;
         //}
 
-        public void SaveProductArea(ProductAreaEntity productArea, int[] wg, out IDictionary<string, string> errors)
+        public void SaveProductArea(ProductAreaEntity productArea, int[] wg, int caseTypeId, out IDictionary<string, string> errors)
         {
             if (productArea == null)
                 throw new ArgumentNullException("productarea");
@@ -378,7 +399,28 @@
                     if (parent.IsActive == 0)
                         errors.Add("ProductArea.IsActive", "Denna produktarea kan inte aktiveras, eftersom huvudnivån är inaktiv");
                 }
+            }
 
+            if (caseTypeId > 0)
+            {
+                if (productArea.CaseTypeProductAreas != null)
+                {
+                    productArea.CaseTypeProductAreas.Clear();
+                    productArea.CaseTypeProductAreas.Add(new CaseTypeProductArea
+                    {
+                        CaseType_Id = caseTypeId
+                    });
+                }
+                else
+                {
+                    productArea.CaseTypeProductAreas = new List<CaseTypeProductArea>
+                    {
+                        new CaseTypeProductArea
+                        {
+                            CaseType_Id = caseTypeId
+                        }
+                    };
+                }
             }
 
             if (productArea.IsActive == 0)
@@ -396,7 +438,7 @@
                         if (childProductArea.IsActive == 1)
                             childProductArea.IsActive = 0;
 
-                        SaveProductArea(childProductArea, null, out errors);
+                        SaveProductArea(childProductArea, null, 0, out errors);
                     }
                 }
 
@@ -558,9 +600,9 @@
             {
                 res.Add(this.productAreaCache[lookingProductAreaId.Value].Name);
 
-                //Hide this for next release #57742
-                //if (this.productAreaCache[lookingProductAreaId.Value].ShowOnExtPageCases == 0)
-                if (this.productAreaCache[lookingProductAreaId.Value].ShowOnExternalPage == 0)
+                //if (this.productAreaCache[lookingProductAreaId.Value].ShowOnExternalPage == 0)
+                    //Hide this for next release #57742
+               if (this.productAreaCache[lookingProductAreaId.Value].ShowOnExtPageCases == 0)
                     checkShowOnExtenal = false;
 
                 lookingProductAreaId = this.productAreaCache[lookingProductAreaId.Value].Parent_ProductArea_Id;

@@ -1,0 +1,109 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+@using ECT.Model.Entities;
+@{
+    Layout = null;
+    Model.Language = "nl";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    @*<link href="@Model.Contract.BaseUrl/FormLibContent/assets/css/documents.css" rel="stylesheet" type="text/css" />*@
+    @Model.GetStyleAnswer("GetStyleLink")
+    @Html.Partial("../Shared/Pdfs/_Styles", Model)
+    @Model.GetStyleAnswer("GetStyles")
+</head>
+<body>
+    <div class="default-page">@Html.Partial("../Shared/Pdfs/_Debug", Model)
+        @Html.Partial("../Shared/Pdfs/_BarCode", Model)
+         @Html.Partial("../Shared/Pdfs/_SectionAddressTop", Model)
+
+            <p>Betreft: uitdiensttreding<br />
+            <br />
+            Beste @Model.GetDocumentAnswer("FirstName", true),
+        </p>
+
+
+        @if (Model.GetDocumentAnswer("BasicTerminationType").ToLower() == "Resignation".ToLower())
+        {
+            <p>
+                Hierbij bevestigen we de ontvangst van jouw mededeling waarmee je het dienstverband tussen jou en IKEA B.V. opzegt.
+            </p>
+        
+            <p>We gaan hiermee akkoord en beschouwen @Model.GetDocumentAnswer("LastDayOfEmployment", true) als laatste dag van de arbeidsovereenkomst.</p>
+        }
+   
+        @if (Model.GetDocumentAnswer("BasicTerminationType").ToLower() == "Expiry of Contract".ToLower())
+        {
+            <p>Je arbeidsovereenkomst voor bepaalde tijd loopt af op @Model.GetDocumentAnswer("LastDayOfEmployment", true) en wordt niet verlengd. Dit betekent dat met ingang van bovengenoemde datum het dienstverband tussen jou en IKEA B.V. van rechtswege eindigt.</p>
+        }
+
+        @if (Model.GetDocumentAnswer("BasicTerminationType").ToLower() == "Termination in probation period by employer".ToLower())
+        {
+            <p>Met ingang van @Model.GetDocumentAnswer("LastDayOfEmployment", true) is het dienstverband tussen jou en IKEA B.V. tijdens de proeftijd opgezegd. De reden van het ontslag is met jou besproken.</p>
+        }
+
+        @if (Model.GetDocumentAnswer("BasicTerminationType").ToLower() == "Termination in probation period by employee".ToLower())
+        {
+            <p>Met ingang van @Model.GetDocumentAnswer("LastDayOfEmployment", true) wordt op jouw verzoek het dienstverband tussen jou en IKEA B.V. tijdens proeftijd beëindigd.</p>
+            
+            <p>We gaan hiermee akkoord en beschouwen @Model.GetDocumentAnswer("LastDayOfEmployment", true) als laatste dag van de arbeidsovereenkomst.</p>
+        }
+
+        @if (Model.GetDocumentAnswer("BasicTerminationType").ToLower() == "Retirement".ToLower())
+        {
+            <p>Hierbij bevestigen we de beëindiging van rechtswege van de arbeidsovereenkomst tussen jou en IKEA, dit vanwege het bereiken van de pensioengerechtigde leeftijd.</p>
+            
+            <p>We beschouwen @Model.GetDocumentAnswer("LastDayOfEmployment", true) als laatste dag van je arbeidsovereenkomst.</p>
+            
+            <p>De personeelspas hoef je niet in te leveren, (vroeg)gepensioneerden behouden gedurende hun hele leven de IKEA personeelspas en daarmee het recht op personeelskorting. Dit is conform CAO artikel 9F.</p>
+        }
+
+        @*(Coworkerfield is not implemented)*@
+        @if (Model.GetDocumentAnswer("Co-WorkerBeenEmployedFor2Months").ToLower() == "Yes".ToLower() && Model.GetDocumentAnswer("BasicTerminationType").ToLower() != "Retirement".ToLower())
+        {
+            <p>We willen je wijzen op de mogelijkheid van waardeoverdracht van je pensioen naar een nieuwe werkgever. Informeer bij je nieuwe pensioenuitvoerder naar de procedure. Mocht je niet besluiten tot waardeoverdracht en je pensioenuitkering is kleiner dan € 100,- per jaar op je pensioendatum, dan betaalt STIP (Stichting IKEA Pensioenfonds) dit over twee jaar je pensioenaanspraken in één keer (dit noemen we afkoop). Zodra dit van toepassing is, ontvang je hiervoor een formulier van onze pensioenuitvoerder om de gegevens te controleren. STIP informeert je later over het pensioen dat je tijdens je dienstverband bij IKEA hebt opgebouwd.</p>
+        }
+
+        <p>
+            Als je gebruik maakt van Bedrijfsfitness wordt met de eindafrekening van je salaris het resterende bedrag voor je abonnement verrekend. We verzoeken je om zelf je uitdiensttreding bij Bedrijfsfitness Nederland te melden. Voor meer informatie zie <a href="http://www.bedrijfsfitnessnederland.nl">www.bedrijfsfitnessnederland.nl</a>. 
+        </p>
+
+        <p>We vragen je om op je laatste werkdag de eigendommen van IKEA in te leveren bij de vestiging @Model.GetDocumentAnswer("BusinessUnit", true). Denk hierbij aan je bedrijfskleding (schoon en gestreken), je naambadge, de sleutel van je kluisje en eventueel van het fietsenhok, je personeelspas (tenzij je met pensioen gaat), als je die hebt je NS Business card en eventuele andere eigendommen van IKEA zoals specifieke sleutels, laptop of telefoon.</p>
+
+        <p>Indien de eigendommen niet (volledig) zijn geretourneerd kan ter compensatie een bedrag in mindering gebracht worden op de eindafrekening.</p>
+
+        <p>In de bijlage vind je een toelichting op je laatste salarisbetalingen.</p>
+
+        <p>Na @Model.GetDocumentAnswer("LastDayOfEmployment", true) vervalt je toegang tot ico-worker en ESS, de site om je salarisstroken te bekijken. Als je je salarisstroken wilt bewaren, zorg er dan voor dat je ze voor die datum hebt uitgeprint of opgeslagen. De salarisstroken die na die datum nog beschikbaar komen, ontvang je per post.</p>
+
+        <p>Graag ontvangen wij één exemplaar, met daarop je handtekening, voor akkoord retour. Deze kan je in de bijgevoegde envelop terugsturen.</p>
+
+        <p>Mocht je het met één of meerdere bepalingen uit de bevestiging van jouw uitdiensttreding niet eens zijn, dan ontvangt de HR afdeling van jouw vestiging graag een schriftelijke reactie binnen 7 (zeven) kalenderdagen.</p>
+
+        <table>
+            <tr style="page-break-inside: avoid">
+                <td>
+                    <table>
+                        <tr>
+                            <td colspan="2">We hopen je hiermee voldoende te hebben geïnformeerd. Als je nog vragen hebt kan je contact opnemen met jouw leidinggevende of met de HR afdeling van jouw vestiging.
+                                <br />
+                                <br />
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td colspan="2">
+                                @Html.Partial("../Shared/Pdfs/_Signature", Model)
+                            </td>
+
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>  
+</body>
+</html>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+    <!ENTITY languages SYSTEM "Templates/Languages.xml">
+    <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+    <!ENTITY state SYSTEM "Templates/AbsencesState.xml">
+    <!ENTITY data_country SYSTEM "Data/Data_Country.xml">
+]>
+
+<form id="52" guid="5FE55FF9-E1CC-4ACE-B331-6E6F94C983F0" customerId="29">
+    &languages;
+    &regexs;
+    &state;
+    <fields>
+        <!--Tab ServiceRequestDetails-->
+        <tab name="#ServiceRequestDetails" label="Service Request Details">
+            <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1" casefield="reportedby">
+                <regex inherit="employeeno" message="" pattern=""></regex>
+            </element>
+            <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1" casefield="persons_name"></element>
+            <element name="LastName" type="text" label="Co-Worker Last name" mandatory="1" casefield="persons_phone"></element>
+            <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
+                <regex inherit="email" message="" pattern=""></regex>
+            </element>
+            <element name="IKEANetworkID" type="text"  label="IKEA Network ID"></element>
+            <element name="Company" type="text" label="Company" mandatory="1" casefield="region_id"></element>
+            <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1" casefield="department_id"></element>
+            <element name="ServiceArea" type="text" label="Function"></element>
+            <element name="Department" type="text" label="Department" casefield="ou_id"></element>
+            <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" mandatory="1">
+                <options>
+                    <option value ="No">No</option>
+                    <option value ="Yes">Yes</option>
+                </options>
+            </element>
+            <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard" casefield="status_id">
+                <options>
+                    <option value=""></option>
+                    <option value ="Urgent">Urgent</option>
+                    <option value ="Standard">Standard</option>
+                </options>
+            </element>
+            <element type="text" name="PermanentAddressLine1" label="Address line 1" formfieldidentifier="E1P0006.STRAS:1"></element>
+            <element type="text" name="PermanentAddressLine2" label="Address line 2" formfieldidentifier="E1P0006.HSNMR:1"></element>
+            <element type="text" name="PermanentAddressLine3" label="Address line 3" formfieldidentifier="E1P0006.POSTA:1"></element>
+            <element type="text" name="PermanentPostalCode" label="Postal code" formfieldidentifier="E1P0006.PSTLZ:1">
+              <regex inherit="postcode" pattern="" message=""></regex>
+              <validateIf name="PermanentCountry">Netherlands</validateIf>
+            </element>
+            <element type="text" name="PermanentCity" label="City" formfieldidentifier="E1P0006.ORT01:1"></element>
+            <element type="search-select" name="PermanentCountry" label="Country"  default="Netherlands">
+                &data_country;
+            </element>
+            <!--Internal Log Note-->
+            <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+        </tab>
+
+        <!--Absences-->
+        <tab name="#Absences" label="Absences">
+            <element name="AbsencesMulti" type="hidden" default="1"></element>
+            <element name="AbsenceType" type="select" label="Absence Type" mandatory="1">
+                <options>
+                    <option value=""></option>
+                    <option value ="Parental leave">Parental leave</option>
+                    <option value ="Unpaid leave">Unpaid leave</option>
+                    <option value ="Long term care leave (unpaid)">Long term care leave (unpaid)</option>
+                    <option value ="Short term care leave (paid leave)">Short term care leave (paid leave)</option>
+                    <option value ="Emergency leave">Emergency leave</option>                  
+                </options>
+            </element>
+            <element name="AbsenceStartFrom" type="date" format="dd.MM.yyyy" mandatory="1" label="Absence starts from:">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element name="AbsenceEndsOn" type="date" format="dd.MM.yyyy" mandatory="1" label="Absence ends on:">     
+                <laterThanOrEqual name="AbsenceStartFrom" message="Absence end date cannot be earlier than Absence start date."></laterThanOrEqual>
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element name="AbsenceHours" type="text" label="Absence hours">
+                <regex inherit="unsignednum" message="" pattern=""></regex>
+            </element>
+            <element name="AbsenceDays" type="text" label="Absence days">
+                <regex inherit="unsignednum" message="" pattern=""></regex>
+            </element>
+            <!--Country Specifics-->
+
+            <element name="ChildName" type="text" label="Child's Name">
+                <mandatoryIf name=""></mandatoryIf>
+            </element>
+            <element name="ChildDateOfBirth" type="date" format="dd.MM.yyyy" label="Child's Date Of Birth">
+                <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element name="AbsenceHoursWeekly" type="text" label="Absence hours weekly">
+                <regex inherit="unsignednum" message="" pattern=""></regex>
+            </element>
+            <element name="Totalparentalleaveentitlement" type="text" label="Total parental leave entitlement">
+                <regex inherit="unsignednum" message="" pattern=""></regex>
+            </element>
+            <element name="ContractedHoursOldData" type="text" label="Contracted Hours old data">
+                <regex inherit="unsignednum" message="" pattern=""></regex>
+                <mandatoryIf name="AbsenceType">Unpaid leave,Long term care leave (unpaid),Parental leave</mandatoryIf>
+            </element>
+            <element name="AbsenceLongerThan2Months" type="select" label="Absence longer than 2 months (for OV users)">
+                <mandatoryIf name ="AbsenceType">Parental leave,Unpaid leave,Long term care leave (unpaid)</mandatoryIf>
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+            <!--CDS-->
+            <element name="LockCDSAccount" type="select" label="Lock CDS Account?" default="No">
+                <options>
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </options>
+            </element>
+        </tab>
+
+        <!--GlobalView-->
+        <!--<tab name="#globalview">
+      <element type="text" name="Co-WorkerGlobalviewID" label="Co-Worker Globalview ID" mandatory="1">
+        <regex inherit="employeeno" pattern="" message=""></regex>
+      </element>
+      <element type="checkbox" name="SubmittedToExternalBody" mandatory="1" label="External body contacted">
+        <on value="1">External body contacted</on>
+        <off value="0"></off>
+        <regex inherit="booltrue" pattern="" message="This field is required."></regex>
+      </element>
+    </tab>-->
+    </fields>
+</form>
+

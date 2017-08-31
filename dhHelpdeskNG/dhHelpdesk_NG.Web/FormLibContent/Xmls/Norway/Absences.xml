@@ -1,0 +1,693 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/AbsencesState.xml">
+
+  <!--GLOBAL DATA-->
+  <!ENTITY data_global_costcentre SYSTEM "Data/Data_Global_CostCentre.xml">
+
+  <!--COMMON DATA-->
+  <!ENTITY data_country SYSTEM "Data/Data_Common_Country.xml">
+
+  <!ENTITY dat_ServiceRequestPriority SYSTEM "Data/Data_Common_ServiceRequestPriority.xml">
+  <!ENTITY data_common_noyes SYSTEM "Data/Data_Common_NoYes.xml">
+
+  <!ENTITY dat_absenceType SYSTEM "Data/Absences/Data_Absences_AbsenceType.xml">
+  <!ENTITY dat_changeType SYSTEM "Data/Absences/Data_Absences_ChangeType.xml">
+]>
+
+<form id="0" guid="3C049C7E-B8B1-4802-8E5E-2C78660317E0" customerId="0">
+  &languages;
+  &regexs;
+  &state;
+  <fields>
+    <!--Tab ServiceRequestDetails-->
+    <tab name="#ServiceRequestDetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" casefield="reportedby" type="text" label="Co-worker Globalview ID" mandatory="1">
+        <regex inherit="employeeno" pattern="" message=""></regex>
+      </element>
+      <element name="FirstName" casefield="persons_name" type="text" label="Co-worker First Name" mandatory="1"></element>
+      <element name="LastName" casefield="persons_phone" type="text" label="Co-worker Last Name" mandatory="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1">
+        <regex inherit="email" pattern="" message=""></regex>
+      </element>
+      <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1"></element>
+      <element name="Company" type="text" casefield="region_id" label="Company" mandatory="1"></element>
+      <element name="BusinessUnit" casefield="department_id" type="text" label="Business Unit" mandatory="1"></element>
+      <element name="ServiceArea" type="text" label="Function" mandatory="1"></element>
+      <element name="Department" type="text" label="Department" mandatory="1" casefield="ou_id"></element>
+      <element name="TECoWorker" type="select" label="Is Co-worker a TE?" default="No" mandatory="1">
+        &data_common_noyes;
+      </element>
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
+        &dat_ServiceRequestPriority;
+      </element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+    </tab>
+
+    <!--Absences-->
+    <tab name="#Absences" label="Absences">
+      <element name="AbsencesMulti" type="hidden" default="1"></element>
+      <element name="AbsenceType" type="select" label="Absence Type" mandatory="1">
+        &dat_absenceType;
+      </element>
+      <element type="select" name="ChangeType" label="Change Type" mandatory="1">
+        &dat_changeType;
+      </element>
+      <element name="AbsenceStartDate" type="date" format="dd.MM.yyyy" label="Start date:">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceEndDate" type="date" format="dd.MM.yyyy" label="End date:">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceHours" type="text" label="Absence Hours">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+
+      <element name="AbsenceType2" type="select" label="Absence Type">
+        <mandatoryIfNotEmpty name="ChangeType2"></mandatoryIfNotEmpty>
+        &dat_absenceType;
+      </element>
+      <element type="select" name="ChangeType2" label="Change Type">
+        <mandatoryIfNotEmpty name="AbsenceType2"></mandatoryIfNotEmpty>
+        &dat_changeType;
+      </element>
+      <element name="AbsenceStartDate2" type="date" format="dd.MM.yyyy" label="Start date:">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceEndDate2" type="date" format="dd.MM.yyyy" label="End date:">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceHours2" type="text" label="Absence Hours">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+
+
+      <element name="AbsenceType3" type="select" label="Absence Type">
+        <mandatoryIfNotEmpty name="ChangeType3"></mandatoryIfNotEmpty>
+        &dat_absenceType;
+      </element>
+      <element type="select" name="ChangeType3" label="Change Type">
+        <mandatoryIfNotEmpty name="AbsenceType3"></mandatoryIfNotEmpty>
+        &dat_changeType;
+      </element>
+      <element name="AbsenceStartDate3" type="date" format="dd.MM.yyyy" label="Start date:">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceEndDate3" type="date" format="dd.MM.yyyy" label="End date:">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceHours3" type="text" label="Absence Hours">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+
+
+      <element name="AbsenceType4" type="select" label="Absence Type">
+        <mandatoryIfNotEmpty name="ChangeType4"></mandatoryIfNotEmpty>
+        &dat_absenceType;
+      </element>
+      <element type="select" name="ChangeType4" label="Change Type">
+        <mandatoryIfNotEmpty name="AbsenceType4"></mandatoryIfNotEmpty>
+        &dat_changeType;
+      </element>
+      <element name="AbsenceStartDate4" type="date" format="dd.MM.yyyy" label="Start date:">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceEndDate4" type="date" format="dd.MM.yyyy" label="End date:">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceHours4" type="text" label="Absence Hours">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+
+
+      <element name="AbsenceType5" type="select" label="Absence Type">
+        <mandatoryIfNotEmpty name="ChangeType5"></mandatoryIfNotEmpty>
+        &dat_absenceType;
+      </element>
+      <element type="select" name="ChangeType5" label="Change Type">
+        <mandatoryIfNotEmpty name="AbsenceType5"></mandatoryIfNotEmpty>
+        &dat_changeType;
+      </element>
+      <element name="AbsenceStartDate5" type="date" format="dd.MM.yyyy" label="Start date:">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceEndDate5" type="date" format="dd.MM.yyyy" label="End date:">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceHours5" type="text" label="Absence Hours">
+        <regex inherit="unsignednum" message="" pattern=""></regex>
+      </element>
+
+      <element name="IllnessAbsenceStartsOn" label="Absence starts on:" type="date" format="dd.MM.yyyy">
+        <mandatoryIf name="AbsenceType">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="IllnessAbsenceEndsOn" label="Absence ends on:" type="date" format="dd.MM.yyyy">
+        <mandatoryIf name="AbsenceType">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="IllnessChildsFirstName" type="text" label="Child's first name">
+        <mandatoryIf name="AbsenceType">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+      </element>
+      <element name="IllnessChildsLastName" type="text" label="Child's last name">
+        <mandatoryIf name="AbsenceType">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+      </element>
+      <element name="IllnessChildsDateOfBirth" type="date" format="dd.MM.yyyy" label="Child's date of birth">
+        <mandatoryIf name="AbsenceType">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="IllnessOnlyChildCarer" type="select" label="The only child carer?">
+        <mandatoryIf name="AbsenceType">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        &data_common_noyes;
+      </element>
+
+      <element name="IllnessAbsenceStartsOn2" label="Absence starts on:" type="date" format="dd.MM.yyyy">
+        <mandatoryIf name="AbsenceType2">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="IllnessAbsenceEndsOn2" label="Absence ends on:" type="date" format="dd.MM.yyyy">
+        <mandatoryIf name="AbsenceType2">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="IllnessChildsFirstName2" type="text" label="Child's first name">
+        <mandatoryIf name="AbsenceType2">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+      </element>
+      <element name="IllnessChildsLastName2" type="text" label="Child's last name">
+        <mandatoryIf name="AbsenceType2">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+      </element>
+      <element name="IllnessChildsDateOfBirth2" type="date" format="dd.MM.yyyy" label="Child's date of birth">
+        <mandatoryIf name="AbsenceType2">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="IllnessOnlyChildCarer2" type="select" label="The only child carer?">
+        <mandatoryIf name="AbsenceType2">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        &data_common_noyes;
+      </element>
+
+
+      <element name="IllnessAbsenceStartsOn3" label="Absence starts on:" type="date" format="dd.MM.yyyy">
+        <mandatoryIf name="AbsenceType3">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="IllnessAbsenceEndsOn3" label="Absence ends on:" type="date" format="dd.MM.yyyy">
+        <mandatoryIf name="AbsenceType3">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="IllnessChildsFirstName3" type="text" label="Child's first name">
+        <mandatoryIf name="AbsenceType3">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+      </element>
+      <element name="IllnessChildsLastName3" type="text" label="Child's last name">
+        <mandatoryIf name="AbsenceType3">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+      </element>
+      <element name="IllnessChildsDateOfBirth3" type="date" format="dd.MM.yyyy" label="Child's date of birth">
+        <mandatoryIf name="AbsenceType3">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="IllnessOnlyChildCarer3" type="select" label="The only child carer?">
+        <mandatoryIf name="AbsenceType3">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        &data_common_noyes;
+      </element>
+
+      <element name="IllnessAbsenceStartsOn4" label="Absence starts on:" type="date" format="dd.MM.yyyy">
+        <mandatoryIf name="AbsenceType4">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="IllnessAbsenceEndsOn4" label="Absence ends on:" type="date" format="dd.MM.yyyy">
+        <mandatoryIf name="AbsenceType4">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="IllnessChildsFirstName4" type="text" label="Child's first name">
+        <mandatoryIf name="AbsenceType4">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+      </element>
+      <element name="IllnessChildsLastName4" type="text" label="Child's last name">
+        <mandatoryIf name="AbsenceType4">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+      </element>
+      <element name="IllnessChildsDateOfBirth4" type="date" format="dd.MM.yyyy" label="Child's date of birth">
+        <mandatoryIf name="AbsenceType4">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="IllnessOnlyChildCarer4" type="select" label="The only child carer?">
+        <mandatoryIf name="AbsenceType4">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        &data_common_noyes;
+      </element>
+
+      <element name="IllnessAbsenceStartsOn5" label="Absence starts on:" type="date" format="dd.MM.yyyy">
+        <mandatoryIf name="AbsenceType5">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="IllnessAbsenceEndsOn5" label="Absence ends on:" type="date" format="dd.MM.yyyy">
+        <mandatoryIf name="AbsenceType5">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="IllnessChildsFirstName5" type="text" label="Child's first name">
+        <mandatoryIf name="AbsenceType5">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+      </element>
+      <element name="IllnessChildsLastName5" type="text" label="Child's last name">
+        <mandatoryIf name="AbsenceType5">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+      </element>
+      <element name="IllnessChildsDateOfBirth5" type="date" format="dd.MM.yyyy" label="Child's date of birth">
+        <mandatoryIf name="AbsenceType5">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="IllnessOnlyChildCarer5" type="select" label="The only child carer?">
+        <mandatoryIf name="AbsenceType5">Self-declared illness,Self-declared illness - Sick Child/Sick Nanny</mandatoryIf>
+        &data_common_noyes;
+      </element>
+
+      <element name="SickLeaveAbsenceStartsOn" type="date" format="dd.MM.yyyy" label="Absence starts on:">
+        <mandatoryIf name="AbsenceType">Sick leave</mandatoryIf>        
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="SickLeaveAbsenceEndsOn" type="date" format="dd.MM.yyyy" label="Absence ends on:">
+        <mandatoryIf name="AbsenceType">Sick leave</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="SickLeavePercentageOfSickness" type="text" label="Percentage of sickness">
+        <mandatoryIf name="AbsenceType">Sick leave</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="num100" pattern="" message=""></regex>
+      </element>
+
+      <element name="SickLeaveAbsenceStartsOn2" type="date" format="dd.MM.yyyy" label="Absence starts on:">
+        <mandatoryIf name="AbsenceType2">Sick leave</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="SickLeaveAbsenceEndsOn2" type="date" format="dd.MM.yyyy" label="Absence ends on:">
+        <mandatoryIf name="AbsenceType2">Sick leave</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="SickLeavePercentageOfSickness2" type="text" label="Percentage of sickness">
+        <mandatoryIf name="AbsenceType2">Sick leave</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="num100" pattern="" message=""></regex>
+      </element>
+
+      <element name="SickLeaveAbsenceStartsOn3" type="date" format="dd.MM.yyyy" label="Absence starts on:">
+        <mandatoryIf name="AbsenceType3">Sick leave</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="SickLeaveAbsenceEndsOn3" type="date" format="dd.MM.yyyy" label="Absence ends on:">
+        <mandatoryIf name="AbsenceType3">Sick leave</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="SickLeavePercentageOfSickness3" type="text" label="Percentage of sickness">
+        <mandatoryIf name="AbsenceType3">Sick leave</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="num100" pattern="" message=""></regex>
+      </element>
+
+      <element name="SickLeaveAbsenceStartsOn4" type="date" format="dd.MM.yyyy" label="Absence starts on:">
+        <mandatoryIf name="AbsenceType4">Sick leave</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="SickLeaveAbsenceEndsOn4" type="date" format="dd.MM.yyyy" label="Absence ends on:">
+        <mandatoryIf name="AbsenceType4">Sick leave</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="SickLeavePercentageOfSickness4" type="text" label="Percentage of sickness">
+        <mandatoryIf name="AbsenceType4">Sick leave</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="num100" pattern="" message=""></regex>
+      </element>
+
+      <element name="SickLeaveAbsenceStartsOn5" type="date" format="dd.MM.yyyy" label="Absence starts on:">
+        <mandatoryIf name="AbsenceType5">Sick leave</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="SickLeaveAbsenceEndsOn5" type="date" format="dd.MM.yyyy" label="Absence ends on:">
+        <mandatoryIf name="AbsenceType5">Sick leave</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="SickLeavePercentageOfSickness5" type="text" label="Percentage of sickness">
+        <mandatoryIf name="AbsenceType5">Sick leave</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="num100" pattern="" message=""></regex>
+      </element>
+
+      <element name="ParentalLeaveAbsenceStartsOn" type="date" format="dd.MM.yyyy" label="Absence starts on:">
+        <mandatoryIf name="AbsenceType">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ParentalLeaveAbsenceEndsOn" type="date" format="dd.MM.yyyy" label="Absence ends on:">
+        <mandatoryIf name="AbsenceType">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ParentalLeaveOtherParentLeaveStartsOn" type="date" format="dd.MM.yyyy" label="Other parent leave starts on:">
+        <mandatoryIf name="AbsenceType">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ParentalLeaveOtherParentLeaveEndsOn" type="date" format="dd.MM.yyyy" label="Other parent leave ends on:">
+        <mandatoryIf name="AbsenceType">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+
+      <element name="ParentalLeaveAbsenceStartsOn2" type="date" format="dd.MM.yyyy" label="Absence starts on:">
+        <mandatoryIf name="AbsenceType2">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ParentalLeaveAbsenceEndsOn2" type="date" format="dd.MM.yyyy" label="Absence ends on:">
+        <mandatoryIf name="AbsenceType2">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ParentalLeaveOtherParentLeaveStartsOn2" type="date" format="dd.MM.yyyy" label="Other parent leave starts on:">
+        <mandatoryIf name="AbsenceType2">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ParentalLeaveOtherParentLeaveEndsOn2" type="date" format="dd.MM.yyyy" label="Other parent leave ends on:">
+        <mandatoryIf name="AbsenceType2">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element name="ParentalLeaveAbsenceStartsOn3" type="date" format="dd.MM.yyyy" label="Absence starts on:">
+        <mandatoryIf name="AbsenceType3">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ParentalLeaveAbsenceEndsOn3" type="date" format="dd.MM.yyyy" label="Absence ends on:">
+        <mandatoryIf name="AbsenceType3">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ParentalLeaveOtherParentLeaveStartsOn3" type="date" format="dd.MM.yyyy" label="Other parent leave starts on:">
+        <mandatoryIf name="AbsenceType3">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ParentalLeaveOtherParentLeaveEndsOn3" type="date" format="dd.MM.yyyy" label="Other parent leave ends on:">
+        <mandatoryIf name="AbsenceType3">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element name="ParentalLeaveAbsenceStartsOn4" type="date" format="dd.MM.yyyy" label="Absence starts on:">
+        <mandatoryIf name="AbsenceType4">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ParentalLeaveAbsenceEndsOn4" type="date" format="dd.MM.yyyy" label="Absence ends on:">
+        <mandatoryIf name="AbsenceType4">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ParentalLeaveOtherParentLeaveStartsOn4" type="date" format="dd.MM.yyyy" label="Other parent leave starts on:">
+        <mandatoryIf name="AbsenceType4">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ParentalLeaveOtherParentLeaveEndsOn4" type="date" format="dd.MM.yyyy" label="Other parent leave ends on:">
+        <mandatoryIf name="AbsenceType4">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element name="ParentalLeaveAbsenceStartsOn5" type="date" format="dd.MM.yyyy" label="Absence starts on:">
+        <mandatoryIf name="AbsenceType5">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ParentalLeaveAbsenceEndsOn5" type="date" format="dd.MM.yyyy" label="Absence ends on:">
+        <mandatoryIf name="AbsenceType5">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ParentalLeaveOtherParentLeaveStartsOn5" type="date" format="dd.MM.yyyy" label="Other parent leave starts on:">
+        <mandatoryIf name="AbsenceType5">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ParentalLeaveOtherParentLeaveEndsOn5" type="date" format="dd.MM.yyyy" label="Other parent leave ends on:">
+        <mandatoryIf name="AbsenceType5">Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="date" format="dd.MM.yyyy" name="HolidayStartDate" label="Holiday start date:">
+        <mandatoryIf name="AbsenceType">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex> 
+      </element>
+      <element type="date" format="dd.MM.yyyy" name="HolidayEndDate" label="Holiday end date:">
+        <mandatoryIf name="AbsenceType">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" label="Holiday days" name="HolidayDays">
+        <mandatoryIf name="AbsenceType">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element type="text" label="Holiday days without CS (contract schedule)" name="HolidayDaysWithoutCS">
+        <mandatoryIf name="AbsenceType">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+
+
+      <element type="date" format="dd.MM.yyyy" name="HolidayStartDate2" label="Holiday start date:">
+        <mandatoryIf name="AbsenceType2">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" format="dd.MM.yyyy" name="HolidayEndDate2" label="Holiday end date:">
+        <mandatoryIf name="AbsenceType2">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" label="Holiday days" name="HolidayDays2">
+        <mandatoryIf name="AbsenceType2">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element type="text" label="Holiday days without CS (contract schedule)" name="HolidayDaysWithoutCS2">
+        <mandatoryIf name="AbsenceType2">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+
+      <element type="date" format="dd.MM.yyyy" name="HolidayStartDate3" label="Holiday start date:">
+        <mandatoryIf name="AbsenceType3">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" format="dd.MM.yyyy" name="HolidayEndDate3" label="Holiday end date:">
+        <mandatoryIf name="AbsenceType3">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" label="Holiday days" name="HolidayDays3">
+        <mandatoryIf name="AbsenceType3">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element type="text" label="Holiday days without CS (contract schedule)" name="HolidayDaysWithoutCS3">
+        <mandatoryIf name="AbsenceType3">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+
+      <element type="date" format="dd.MM.yyyy" name="HolidayStartDate4" label="Holiday start date:">
+        <mandatoryIf name="AbsenceType4">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" format="dd.MM.yyyy" name="HolidayEndDate4" label="Holiday end date:">
+        <mandatoryIf name="AbsenceType4">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" label="Holiday days" name="HolidayDays4">
+        <mandatoryIf name="AbsenceType4">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element type="text" label="Holiday days without CS (contract schedule)" name="HolidayDaysWithoutCS4">
+        <mandatoryIf name="AbsenceType4">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+
+      <element type="date" format="dd.MM.yyyy" name="HolidayStartDate5" label="Holiday start date:">
+        <mandatoryIf name="AbsenceType5">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="date" format="dd.MM.yyyy" name="HolidayEndDate5" label="Holiday end date:">
+        <mandatoryIf name="AbsenceType5">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" label="Holiday days" name="HolidayDays5">
+        <mandatoryIf name="AbsenceType5">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element type="text" label="Holiday days without CS (contract schedule)" name="HolidayDaysWithoutCS5">
+        <mandatoryIf name="AbsenceType5">Holiday,Sick leave,Parental leave 80%,Parental leave 100%</mandatoryIf>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      
+      <element name="UBOne" label="UB1" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+        <element name="UBTwo" label="UB2" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="UBThree" label="UB3" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentNights" label="50% Nights" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentNights" label="100% Nights" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentOvertime" label="50% Overtime" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentOvertime" label="100% Overtime" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="EveningAllowance" label="Evening Allowance" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="WeekendAllowance" label="Weekend Allowance" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="CrossCharge" label="Cross-charge?" type="select">
+        &data_common_noyes;
+      </element>
+      <element name="WorkedCompany" label="Company" type="search-select" source="database"></element>
+      <element name="WorkedBusinessUnit" label="Business Unit" type="search-select" source="database"></element>
+      <element name="WorkedFunction" label="Function" type="search-select" soure="database"></element>
+      <element name="WorkedDepartment" label="Department" type="search-select" source="database"></element>
+      <element name="WorkedCostCentre" label="Cost Centre" type="search-select">
+        &data_global_costcentre;
+      </element>
+    
+  
+    <element name="UBOne2" label="UB1" type="text">
+      <regex inherit="unsignednum" pattern="" message=""></regex>
+    </element>
+      <element name="UBTwo2" label="UB2" type="text">
+      <regex inherit="unsignednum" pattern="" message=""></regex>
+    </element>
+      <element name="UBThree2" label="UB3" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentNights2" label="50% Nights" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentNights2" label="100% Nights" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentOvertime2" label="50% Overtime" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentOvertime2" label="100% Overtime" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="EveningAllowance2" label="Evening Allowance" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="WeekendAllowance2" label="Weekend Allowance" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="CrossCharge2" label="Cross-charge?" type="select">
+        &data_common_noyes;
+      </element>
+      <element name="WorkedCompany2" label="Company" type="search-select" source="database"></element>
+      <element name="WorkedBusinessUnit2" label="Business Unit" type="search-select" source="database"></element>
+      <element name="WorkedFunction2" label="Function" type="search-select" soure="database"></element>
+      <element name="WorkedDepartment2" label="Department" type="search-select" source="database"></element>
+      <element name="WorkedCostCentre2" label="Cost Centre" type="search-select">
+        &data_global_costcentre;
+      </element>
+    
+  <element name="UBOne3" label="UB1" type="text">
+      <regex inherit="unsignednum" pattern="" message=""></regex>
+    </element>
+      <element name="UBTwo3" label="UB2" type="text">
+      <regex inherit="unsignednum" pattern="" message=""></regex>
+    </element>
+      <element name="UBThree3" label="UB3" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentNights3" label="50% Nights" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentNights3" label="100% Nights" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentOvertime3" label="50% Overtime" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentOvertime3" label="100% Overtime" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="EveningAllowance3" label="Evening Allowance" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="WeekendAllowance3" label="Weekend Allowance" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="CrossCharge3" label="Cross-charge?" type="select">
+        &data_common_noyes;
+      </element>
+      <element name="WorkedCompany3" label="Company" type="search-select" source="database"></element>
+      <element name="WorkedBusinessUnit3" label="Business Unit" type="search-select" source="database"></element>
+      <element name="WorkedFunction3" label="Function" type="search-select" soure="database"></element>
+      <element name="WorkedDepartment3" label="Department" type="search-select" source="database"></element>
+      <element name="WorkedCostCentre3" label="Cost Centre" type="search-select">
+        &data_global_costcentre;
+      </element>
+    
+  <element name="UBOne4" label="UB1" type="text">
+      <regex inherit="unsignednum" pattern="" message=""></regex>
+    </element>
+      <element name="UBTwo4" label="UB2" type="text">
+      <regex inherit="unsignednum" pattern="" message=""></regex>
+    </element>
+      <element name="UBThree4" label="UB3" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentNights4" label="50% Nights" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentNights4" label="100% Nights" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentOvertime4" label="50% Overtime" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentOvertime4" label="100% Overtime" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="EveningAllowance4" label="Evening Allowance" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="WeekendAllowance4" label="Weekend Allowance" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="CrossCharge4" label="Cross-charge?" type="select">
+        &data_common_noyes;
+      </element>
+      <element name="WorkedCompany4" label="Company" type="search-select" source="database"></element>
+      <element name="WorkedBusinessUnit4" label="Business Unit" type="search-select" source="database"></element>
+      <element name="WorkedFunction4" label="Function" type="search-select" soure="database"></element>
+      <element name="WorkedDepartment4" label="Department" type="search-select" source="database"></element>
+      <element name="WorkedCostCentre4" label="Cost Centre" type="search-select">
+        &data_global_costcentre;
+      </element>
+    
+  <element name="UBOne5" label="UB1" type="text">
+      <regex inherit="unsignednum" pattern="" message=""></regex>
+    </element>
+      <element name="UBTwo5" label="UB2" type="text">
+      <regex inherit="unsignednum" pattern="" message=""></regex>
+    </element>
+      <element name="UBThree5" label="UB3" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentNights5" label="50% Nights" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentNights5" label="100% Nights" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="50PercentOvertime5" label="50% Overtime" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="100PercentOvertime5" label="100% Overtime" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="EveningAllowance5" label="Evening Allowance" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="WeekendAllowance5" label="Weekend Allowance" type="text">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="CrossCharge5" label="Cross-charge?" type="select">
+        &data_common_noyes;
+      </element>
+      <element name="WorkedCompany5" label="Company" type="search-select" source="database"></element>
+      <element name="WorkedBusinessUnit5" label="Business Unit" type="search-select" source="database"></element>
+      <element name="WorkedFunction5" label="Function" type="search-select" soure="database"></element>
+      <element name="WorkedDepartment5" label="Department" type="search-select" source="database"></element>
+      <element name="WorkedCostCentre5" label="Cost Centre" type="search-select">
+        &data_global_costcentre;
+      </element>
+    </tab>
+  </fields>
+</form>

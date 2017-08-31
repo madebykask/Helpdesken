@@ -1,0 +1,114 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    var url = Url.CurrentController() + "typeahead";
+}
+
+@using (Html.BeginForm("edit", "hiring", new { id = Model.Contract.Id }, FormMethod.Post, new { area = "Norway", novalidate = "novalidate" }))
+{   
+    <span style="display: none;" id="narrowDownInit" url="@url"></span>
+    @Html.Partial("_GlobalNavRev", Model)
+    <div class="container containeralignright">
+        @Html.Partial("_FormInfo", Model)
+        @Html.Partial("_ErrorMessage", Model)
+        <ul class="nav nav-tabs">
+            @if(Model.VisibleTab("#servicerequestdetails"))
+            {
+                <li class="active @(Model.TabHasError("#servicerequestdetails") ? "error" : "")">
+                    <a href="#servicerequestdetails">@Model.Translate("Service Request Details")</a></li>
+            }
+            @if(Model.VisibleTab("#OrganisationalAssignment"))
+            {
+                <li class="@(Model.TabHasError("#OrganisationalAssignment") ? "error" : "")">
+                    <a href="#OrganisationalAssignment">@Model.Translate("Organisational Assignment")</a></li>
+            }
+            @if(Model.VisibleTab("#payment"))
+            {
+                <li class="@(Model.TabHasError("#payment") ? "error" : "")">
+                    <a href="#payment">@Model.Translate("Payment Information")</a></li>
+            }
+            @if(Model.VisibleTab("#personal"))
+            {
+                <li class="@(Model.TabHasError("#personal") ? "error" : "")">
+                    <a href="#personal">@Model.Translate("Personal Information")</a></li>
+            }
+            @if(Model.VisibleTab("#documents"))
+            {
+                <li class="@(Model.TabHasError("#documents") ? "error" : "")">
+                    <a href="#documents">@Model.Translate("Documents")</a></li>
+            }
+            @if(Model.VisibleTab("#globalview"))
+            {
+                <li class="@(Model.TabHasError("#globalview") ? "error" : "")">
+                    <a href="#globalview" data-url="@Url.Action("GetGlobalViewFields", new { caseId = Model.Contract.Id, formGuid = Model.FormGuid })">@Model.Translate("Global View")</a></li>
+            }
+            @if(Model.VisibleTab("#SSCUseOnly"))
+            {
+                <li class="@(Model.TabHasError("#SSCUseOnly") ? "error" : "")">
+                    <a href="#SSCUseOnly">@Model.Translate("SSC Use Only")</a></li>
+            }
+            @if(Model.VisibleTab("#attachments"))
+            {
+                <li class="pull-right">
+                    <a href="#attachments"><i class="icon-file icon-white"></i>&nbsp;@Model.Translate("Attachments")&nbsp;(<b id="attachmentCounter">@(Model.Contract.CaseFiles != null ? Model.Contract.CaseFiles.Count() : 0)</b>)</a>
+                </li>
+            }
+        </ul>
+        <div class="content">
+            <div class="row-fluid">
+                <div class="tab-content overflow-visible">
+                    @if(Model.VisibleTab("#servicerequestdetails"))
+                    {
+                        @Html.Partial("_TabServiceRequestDetails", Model)
+                    }
+                    @if(Model.VisibleTab("#OrganisationalAssignment"))
+                    {
+                        @Html.Partial("_TabOrganisationalAssignment", Model)
+                    }
+                    @if(Model.VisibleTab("#payment"))
+                    {
+                        @Html.Partial("_TabPayment", Model)
+                    }
+                    @if(Model.VisibleTab("#personal"))
+                    {
+                        @Html.Partial("_TabPersonal", Model)
+                    }
+                    @if(Model.VisibleTab("#documents"))
+                    {
+                        @Html.Partial("_TabDocuments", Model)
+                    }
+                    @if(Model.VisibleTab("#globalview"))
+                    {
+                        @Html.Partial("_TabGlobalView", Model)
+                    }
+                    @if(Model.VisibleTab("#SSCUseOnly"))
+                    {
+                        @Html.Partial("_TabSsc", Model)
+                    }
+                    @if(Model.VisibleTab("#attachments"))
+                    {
+                        @Html.Partial("_GlobalAttachments", Model)
+                    }
+
+                    @Html.Partial("_TabHiringJS", Model)
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" /> 
+}
+<script>
+    function changeBusinessUnitCallback() {
+        narrowingWithXML('/Narrowing/ND_BusinessUnit_ReportsToLineManager.xml', '/Data/Data_Global_ReportsToLineManager.xml', $('#BusinessUnit'), $('#ReportsToLineManager'));
+        narrowingWithXML('/Narrowing/ND_BusinessUnit_LineManagersJobTitle.xml', '/Data/Data_Global_LineManagersJobTitle.xml', $('#BusinessUnit'), $('#LineManagersJobTitle'));
+    }
+
+    function changeFunctionsCallback() {
+       narrowingWithXML2Base('/Narrowing/ND_Function_PositionTitle.xml', '/Data/Data_Global_PositionTitle.xml', $('#BusinessUnit'), $('#ServiceArea'), $('#PositionTitle'));
+       narrowingWithXML2Base('/Narrowing/ND_Function_JobTitle.xml', '/Data/Data_Global_JobTitle.xml', $('#BusinessUnit'), $('#ServiceArea'), $('#JobTitle'));
+       narrowingWithXML('/Narrowing/ND_Function_PsGroup.xml', '/Data/Data_Common_PSGroup.xml', $('#ServiceArea'), $('#PSGroup'));
+    }
+</script>
+@Html.Partial("_Scripts", Model)

@@ -1,0 +1,147 @@
+﻿@using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Common.Enums.Cases
+@model DH.Helpdesk.Web.Areas.Admin.Models.CustomerInputViewModel
+
+<div id="case_header_settings_popup" role="dialog" class="modal fade" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h5>@Translation.GetCoreTextTranslation("Special inställningar för sektionen") <span id="modal_header"></span></h5>
+            </div>
+            <div class="modal-body-left overflow-visible">
+                <div>
+                    <table class="tableform">
+                        <tr>
+                            <td>
+                                <span>@Translation.GetCoreTextTranslation("Vid nytt case")</span>
+                            </td>
+                            <td>
+                                <select id="isNewCollapsed">
+                                    <option value="0" selected="selected">@Translation.GetCoreTextTranslation("Öppen")</option>
+                                    <option value="1">@Translation.GetCoreTextTranslation("Stängt")</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span>@Translation.GetCoreTextTranslation("Vi ändring av case")</span>
+                            </td>
+                            <td>
+                                <select id="isEditCollapsed">
+                                    <option value="0" selected="selected">@Translation.GetCoreTextTranslation("Öppen")</option>
+                                    <option value="1">@Translation.GetCoreTextTranslation("Stängt")</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <td>
+                                <span>@Translation.GetCoreTextTranslation("Visa fält i rubrik")</span>
+                            </td>
+                            <td>
+                                <div id="sectionDiv@((int)CaseSectionType.Initiator)" class="hidden-desktop" style="display: inline-block">
+                                    <select id="sectionDrop@((int)CaseSectionType.Initiator)" class="header-chosen" multiple="multiple">
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ReportedBy.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), "Användar ID")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), "Anmälare")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), "E-post")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), "Telefon")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), "Mobil")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Region_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), "Område")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Department_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), "Avdelning")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.OU_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), "Enhet")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.CostCentre.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.CostCentre.ToString(), "Kostnadsställe")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Place.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Place.ToString(), "Placering")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.UserCode.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.UserCode.ToString(), "Ansvarskod")</option>
+                                    </select>
+                                </div>
+                                <div id="sectionDiv@((int)CaseSectionType.Regarding)" class="hidden-desktop" style="display: inline-block">
+                                    <select id="sectionDrop@((int)CaseSectionType.Regarding)" class="header-chosen" multiple="multiple">
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString(), "Användar ID")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString(), "Anmälare")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString(), "E-post")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString(), "Telefon")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString(), "Mobil")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString(), "Område")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString(), "Avdelning")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString(), "Enhet")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString(), "Kostnadsställe")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString(), "Placering")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString(), "Ansvarskod")</option>
+                                    </select>
+                                </div>
+                                <div id="sectionDiv@((int)CaseSectionType.ComputerInfo)" class="hidden-desktop" style="display: inline-block">
+                                    <select id="sectionDrop@((int)CaseSectionType.ComputerInfo)" class="header-chosen" multiple="multiple">
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), "PC Nummer")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), "Datortyp")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), "Placering")</option>
+                                    </select>
+                                </div>
+                                <div id="sectionDiv@((int)CaseSectionType.CaseInfo)" class="hidden-desktop" style="display: inline-block">
+                                    <select id="sectionDrop@((int)CaseSectionType.CaseInfo)" class="header-chosen" multiple="multiple">
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.CaseNumber.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), "Ärende")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.RegTime.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.RegTime.ToString(), "Registreringsdatum")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ChangeTime.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.ChangeTime.ToString(), "Ändringsdatum")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.User_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.User_Id.ToString(), "Registrerad av")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(), "Källa")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), "Ärendetyp")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), "Produktområde")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.System_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.System_Id.ToString(), "System")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), "Brådskandegrad")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Impact_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), "Påverkan")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Category_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), "Kategori")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), "Leverantör")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), "Fakturanummer")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), "Referensnummer")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Caption.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Caption.ToString(), "Rubrik")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Description.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Description.ToString(), "Beskrivning")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), "Övrigt")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), "Överenskommet datum")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Available.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Available.ToString(), "Anträffbar")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Cost.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Cost.ToString(), "Kostnad")</option>
+                                    </select>
+                                </div>
+                                <div id="sectionDiv@((int)CaseSectionType.CaseManagement)" class="hidden-desktop" style="display: inline-block">
+                                    <select id="sectionDrop@((int)CaseSectionType.CaseManagement)" class="header-chosen" multiple="multiple">
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), "Driftgrupp")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), "Ansvarig")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), "Handläggare")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), "Prioritet")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Status_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), "Status")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), "Understatus")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Project.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Project.ToString(), "Projekt")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Problem.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Problem.ToString(), "ITIL Problem")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.CausingPart.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.CausingPart.ToString(), "Rotorsak")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Change.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.Change.ToString(), "Ändring")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.PlanDate.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), "Planerad åtgärdsdatum")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.WatchDate.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), "Bevakningsdatum")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(), "Verifierad beskrivning")</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.SolutionRate.ToString())">@Model.CaseFieldSettingWithLangauges.getDefaultLabel(GlobalEnums.TranslationCaseFields.SolutionRate.ToString(), "Lösningsgrad")</option>
+                                    </select>
+                                </div>
+                                <div id="sectionDiv@((int)CaseSectionType.Communication)" class="hidden-desktop" style="display: inline-block">
+                                    <select id="sectionDrop@((int)CaseSectionType.Communication)" class="header-chosen" multiple="multiple">
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())">@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.FinishingDate.ToString())">@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.FinishingDate.ToString())</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ClosingReason.ToString())">@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.ClosingReason.ToString())</option>
+                                    </select>
+                                </div>
+                                <div id="sectionDiv@((int) CaseSectionType.Status)" class="hidden-desktop" style="display: inline-block">
+                                    <select id="sectionDrop@((int) CaseSectionType.Status)" class="header-chosen" multiple="multiple">
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())">@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.FinishingDate.ToString())">@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.FinishingDate.ToString())</option>
+                                        <option value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ClosingReason.ToString())">@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.ClosingReason.ToString())</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer-right overflow-visible">
+                <button type="button" id="btnSaveDlg" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.GetCoreTextTranslation("Spara")</button>
+                <button type="button" id="btnCloseDlg" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.GetCoreTextTranslation("Avbryt")</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@functions{
+    public string GetContract(string absenceNr)
+    {
+
+        string absenceType = Model.GetDocumentAnswer("AbsenceType" + absenceNr).Trim().ToLower();
+
+        switch (absenceType)
+        {
+            case "maternity leave":
+                return "Maternity";
+            case "adoption leave":
+                return "Adoption";
+            case "career break - start":
+                return "CareerBreak";
+            default:
+                return "";
+        }
+    }
+}
+<div class="tab-pane" id="documents">
+    <div class="span12">
+        <table class="table-striped">
+            <thead>
+                <tr>
+                    <th>@Model.Translate("Document")
+                    </th>
+                    <th>@Model.Translate("Type")
+                    </th>
+                    <th>&nbsp;
+                    </th>
+                    <th>&nbsp;
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            @*Temp, do a loop instead /TAn*@
+            @if (!string.IsNullOrEmpty(GetContract("")) | !string.IsNullOrEmpty(GetContract("2")) | !string.IsNullOrEmpty(GetContract("3")) | !string.IsNullOrEmpty(GetContract("4")) | !string.IsNullOrEmpty(GetContract("5")))
+            {
+                for (int i = 1; i <= int.Parse(Model.GetAnswer("AbsencesMulti")); i++)
+                {
+                    string absenceNr = "";
+
+                    if (i > 1)
+                    {
+                        absenceNr = i.ToString();
+                    }
+
+
+                    if (!string.IsNullOrEmpty(GetContract(absenceNr)))
+                    {
+
+                        if (!string.IsNullOrEmpty(Model.GetAnswer("AbsenceType" + absenceNr)))
+                        {
+                        <tr>
+                            <td>@Model.GetAnswer("AbsenceType" + absenceNr)</td>
+                            <td>pdf</td>
+                            <td>&nbsp;</td>
+                            <td>
+                                <a href="@Url.Action("print", "Absences", new
+                                {
+                                    id = GetContract(absenceNr),
+                                    caseId = Model.Contract.Id,
+                                    path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
+                                    userId = FormLibSessions.User.UserId,
+                                    absenceNr = i
+                                })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+                            </td>
+                        </tr>
+                        }
+
+                    }
+                }
+                
+            }
+            else
+            {
+                <tr><td colspan="4"><div class="alert alert-info"><strong><i class="icon-info-sign"></i>&nbsp;@Model.Translate("A document can not be created based on current selections")</strong></div></td></tr>
+            }
+
+            @Html.Partial("_StaticDocuments", Model)
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -27,6 +27,9 @@
     using DH.Helpdesk.Dal.EntityConfigurations.WorkstationModules;
     using DH.Helpdesk.Dal.EntityConfigurations.ADFS;
     using DH.Helpdesk.Dal.NewInfrastructure;
+    using DH.Helpdesk.Dal.EntityConfigurations.CaseDocument;
+
+
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Accounts;
     using DH.Helpdesk.Domain.Cases;
@@ -45,12 +48,14 @@
     using DH.Helpdesk.Domain.Users;
     using DH.Helpdesk.Domain.WorkstationModules;
     using DH.Helpdesk.Domain.ADFS;
+    using DH.Helpdesk.Domain.ExtendedCaseEntity;
 
     using OperatingSystemConfiguration = DH.Helpdesk.Dal.EntityConfigurations.OperatingSystemConfiguration;
     using DH.Helpdesk.Domain.BusinessRules;
     using DH.Helpdesk.Dal.EntityConfigurations.BusinessRule;
     using DH.Helpdesk.Domain.Orders;
     using Domain.MetaDataEntity;
+    using EntityConfigurations.ExtendedCaseEntity;
 
     public class HelpdeskDbContext : DbContext, IDbContext
     {
@@ -105,6 +110,12 @@
 
         public DbSet<CaseFieldSetting> CaseFieldSettings { get; set; }
 
+        public DbSet<CaseSection> CaseSections { get; set; }
+
+        public DbSet<CaseSectionLanguage> CaseSectionLanguages { get; set; }
+
+        public DbSet<CaseSectionField> CaseSectionFields { get; set; }
+
         public DbSet<CaseFile> CaseFiles { get; set; }
 
         public DbSet<CaseFilterFavoriteEntity> CaseFilterFavorite { get; set; }
@@ -131,7 +142,11 @@
 
         public DbSet<CaseSolution> CaseSolutions { get; set; }
 
+        public DbSet<CaseSolutionConditionEntity> CaseSolutionsConditions { get; set; }
+
         public DbSet<CaseType> CaseTypes { get; set; }
+
+        public DbSet<CaseTypeProductArea> CaseTypeProductAreas { get; set; }
 
         public DbSet<Case> Cases { get; set; }
 
@@ -328,6 +343,8 @@
         public DbSet<LogicalDrive> LogicalDrives { get; set; }
 
         public DbSet<LogFile> LogFiles { get; set; }
+
+        public DbSet<LogFileExisting> LogFilesExisting { get; set; }
 
         public DbSet<LogProgramEntity> LogPrograms { get; set; }
 
@@ -557,11 +574,36 @@
 
         public DbSet<CaseExtraFollower> CaseExtraFollowers { get; set; }
 
+        public DbSet<CaseSolutionConditionPropertyEntity> CaseSolutionConditionProperties { get; set; }
+
+        public DbSet<ExtendedCaseFormEntity> ExtendedCaseForms { get; set; }
+
+        public DbSet<ExtendedCaseDataEntity> ExtendedCaseDatas { get; set; }
+
+        public DbSet<ExtendedCaseValueEntity> ExtendedCaseValues { get; set; }
+
+        public DbSet<Case_ExtendedCaseEntity> Case_ExtendedCases { get; set; }
+
+        public DbSet<CaseDocumentEntity> CaseDocuments { get; set; }
+
+        public DbSet<CaseDocumentConditionEntity> CaseDocumentConditions { get; set; }
+        public DbSet<CaseDocumentParagraphEntity> CaseDocumentParagraphs { get; set; }
+
+        public DbSet<CaseDocument_CaseDocumentParagraphEntity> CaseDocument_CaseDocumentParagraphs { get; set; }
+        public DbSet<CaseDocumentTextEntity> CaseDocumentTexts { get; set; }
+
+        public DbSet<CaseDocumentParagraphConditionEntity> CaseDocumentParagraphConditions { get; set; }
+        public DbSet<CaseDocumentTextConditionEntity> CaseDocumentTextConditions { get; set; }
+        public DbSet<CaseDocumentTemplateEntity> CaseDocumentTemplates { get; set; }
+
+        public DbSet<CaseDocumentTextIdentifierEntity> CaseDocumentTextIdentifiers { get; set; }
+        public DbSet<CaseDocumentTextConditionIdentifierEntity> CaseDocumentTextConditionIdentifiers { get; set; }
+
         #endregion
 
-		#region Public Methods and Operators
+        #region Public Methods and Operators
 
-		public virtual void Commit()
+        public virtual void Commit()
         {
             try
             {
@@ -628,6 +670,9 @@
             modelBuilder.Configurations.Add(new CaseStatisticConfiguration());
             modelBuilder.Configurations.Add(new CaseFollowUpConfiguration());
             modelBuilder.Configurations.Add(new CaseExtraFollowerConfiguration());
+            modelBuilder.Configurations.Add(new CaseSectionsConfiguration());
+            modelBuilder.Configurations.Add(new CaseSectionsLanguageConfiguration());
+            modelBuilder.Configurations.Add(new CaseSectionFieldConfiguration());
 
             modelBuilder.Configurations.Add(new CaseInvoiceRowConfiguration());
             modelBuilder.Configurations.Add(new CaseIsAboutConfiguration());
@@ -638,6 +683,7 @@
             modelBuilder.Configurations.Add(new CaseSolutionConfiguration());
             modelBuilder.Configurations.Add(new CaseSolutionScheduleConfiguration());
             modelBuilder.Configurations.Add(new CaseTypeConfiguration());
+            modelBuilder.Configurations.Add(new CaseTypeProductAreaConfiguration());
             modelBuilder.Configurations.Add(new CaseSolutionSettingConfiguration());
             modelBuilder.Configurations.Add(new CategoryConfiguration());
             modelBuilder.Configurations.Add(new ChangeConfiguration());
@@ -704,6 +750,7 @@
             modelBuilder.Configurations.Add(new LinkGroupConfiguration());            
             modelBuilder.Configurations.Add(new LogConfiguration());
             modelBuilder.Configurations.Add(new LogFileConfiguration());
+            modelBuilder.Configurations.Add(new LogFileExistingConfiguration());
             modelBuilder.Configurations.Add(new LogProgramConfiguration());
             modelBuilder.Configurations.Add(new Mail2TicketConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateConfiguration());
@@ -834,8 +881,23 @@
 			modelBuilder.Configurations.Add(new InvoiceRowConfiguration());
 			modelBuilder.Configurations.Add(new InvoiceHeaderConfiguration());
 
-            //Workflow Step - Condition
             modelBuilder.Configurations.Add(new CaseSolutionConditionConfiguration());
+            modelBuilder.Configurations.Add(new ExtendedCaseFormConfiguration());
+            modelBuilder.Configurations.Add(new CaseSolutionConditionPropertyConfiguration());
+            modelBuilder.Configurations.Add(new ExtendedCaseDataConfiguration());
+            modelBuilder.Configurations.Add(new ExtendedCaseValueConfiguration());
+            modelBuilder.Configurations.Add(new Case_ExtendedCaseDataConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentConditionConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentParagraphConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocument_CaseDocumentParagraphConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentTextConfiguration());
+
+            modelBuilder.Configurations.Add(new CaseDocumentParagraphConditionConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentTextConditionConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentTemplateConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentTextIdentifierConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentTextConditionIdentifierConfiguration());
 
             #endregion
 

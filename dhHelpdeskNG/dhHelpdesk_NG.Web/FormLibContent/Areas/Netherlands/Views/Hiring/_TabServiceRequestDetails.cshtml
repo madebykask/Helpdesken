@@ -1,0 +1,162 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane active" id="servicerequestdetails">
+    <div class="span6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Details")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("NewToIKEA")</td>
+                    <td>@Model.Element("NewToIKEA")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ContractStartDate")</td>
+                    <td>@Model.Element("ContractStartDate")
+
+                        <div id="notice_HiringDate" style="display: none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Hiring date?")
+                        </div>
+                        @*   <div id="notice_HiringDateWrong" style="display:none;" class="notice">
+                            @Model.Translate("The date you've entered doesn't start on the 1st or the 15th of a month.")
+                        </div>*@
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("ServiceRequestPriority")</td>
+                    <td>@Model.Element("ServiceRequestPriority")</td>
+                </tr>
+                @if(!FormLibUtils.IsSelfService())
+                {
+                    <tr>
+                        <td class="tdstrong">@Model.Translate("SLA")</td>
+                        <td>
+                            @if(Model.Contract.CaseNumber != null)
+                            {
+                                @Model.Translate(Model.Contract.PriorityName);
+                            }
+                            else
+                            {
+                                if(Model.Form != null)
+                                {
+                                    @Model.Translate(Model.Form.PriorityName);
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td class="tdstrong">@Model.Label("Co-WorkerID")</td>
+                    <td>@Model.Element("Co-WorkerID", false)</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("GlobalHRID")</td>
+                    <td>@Model.Element("GlobalHRID")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Title")</td>
+                    <td>@Model.Element("Title")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("FirstName")</td>
+                    <td>@Model.Element("FirstName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Prefixes")</td>
+                    <td>@Model.Element("Prefixes")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("LastName")</td>
+                    <td>@Model.Element("LastName")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Initials")</td>
+                    <td>@Model.Element("Initials")</td>
+                </tr>
+              @*  <tr>
+                    <td class="tdstrong">@Model.Label("PreferedName")</td>
+                    <td>@Model.Element("PreferedName")</td>
+                </tr>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("DateOfBirth")</td>
+                    <td>@Model.Element("DateOfBirth")</td>
+                </tr>
+
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Permanent Address")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine1")</td>
+                    <td>@Model.Element("PermanentAddressLine1")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine2")</td>
+                    <td>@Model.Element("PermanentAddressLine2")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentAddressLine3")</td>
+                    <td>@Model.Element("PermanentAddressLine3")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
+                    <td>@Model.Element("PermanentPostalCode")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentCity")</td>
+                    <td>@Model.Element("PermanentCity")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("PermanentCountry")</td>
+                    <td>@Model.Element("PermanentCountry")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="span6">
+
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="tdstrong" colspan="2">
+                        <h4>@Model.Translate("Country Specifics")</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("MaritalStatus")</td>
+                    <td>@Model.Element("MaritalStatus")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Nationality")</td>
+                    <td>@Model.Element("Nationality")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BSNCSN")</td>
+                    <td>@Model.Element("BSNCSN")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("Birthplace")</td>
+                    <td>@Model.Element("Birthplace")</td>
+                </tr>
+                @*        <tr>
+                    <td class="tdstrong">@Model.Label("CountryOfBirth")</td>
+                    <td>@Model.Element("CountryOfBirth")</td>
+                </tr>   *@
+                @Html.Partial("_InternalLogNoteV2", Model)
+            </tbody>
+        </table>
+    </div>
+
+    <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
+    <input type="hidden" id="AllCoWorker" value="1" />
+    <input type="hidden" id="formGuid" value="@Model.FormGuid" />
+</div>
+
+@*Scripts Moved to _TabHiringJS*@

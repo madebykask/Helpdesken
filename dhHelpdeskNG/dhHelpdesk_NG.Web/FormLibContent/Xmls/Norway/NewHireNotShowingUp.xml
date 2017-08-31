@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/NewHireNotShowingUpState.xml">
+  <!ENTITY dat_ServiceRequestPriority SYSTEM "Data/Data_Common_ServiceRequestPriority.xml">
+  <!ENTITY dat_YesNo SYSTEM "Data/Data_Common_YesNo.xml">
+]>
+
+<form id="0" guid="8306539C-FA66-49FB-8195-C8F25838238C" customerId="0">
+  &languages;
+  &regexs;
+  &state;
+
+  <fields>
+
+    <!--Tab ServiceRequestDetails-->
+    <tab name="#ServiceRequestDetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" casefield="reportedby" type="text" label="Co-Worker Globalview ID" mandatory="1">
+        <regex inherit="employeeno" pattern="" message=""></regex>
+      </element>
+      <element name="FirstName" casefield="persons_name" type="text" label="Co-Worker First Name" mandatory="1"></element>
+      <element name="LastName" casefield="persons_phone" type="text" label="Co-Worker Last Name" mandatory="1"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
+        <regex inherit="email" pattern="" message=""></regex>
+      </element>
+      <element name="IKEANetworkID" type="text" label="IKEA Network ID"></element>
+      <element name="Company" type="text" casefield="region_id" label="Company" mandatory="1"></element>
+      <element name="BusinessUnit" casefield="department_id" type="text" label="Business Unit" mandatory="1"></element>
+      <element name="ServiceArea" type="text" label="Function" mandatory="1"></element>
+      <element name="Department" type="text" label="Department" casefield="ou_id" mandatory="1"></element>
+      <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" default="No" mandatory="1">
+        &dat_YesNo;
+      </element>
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
+        &dat_ServiceRequestPriority;
+      </element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+    </tab>
+
+  </fields>
+</form>

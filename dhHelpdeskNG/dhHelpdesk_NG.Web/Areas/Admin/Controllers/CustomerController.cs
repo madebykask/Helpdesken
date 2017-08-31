@@ -184,6 +184,7 @@
                 newCustomerCaseFieldSettings.Name = cfs.Name;
                 newCustomerCaseFieldSettings.ShowOnStartPage = cfs.ShowOnStartPage;
                 newCustomerCaseFieldSettings.Required = cfs.Required;
+                newCustomerCaseFieldSettings.RequiredIfReopened = cfs.RequiredIfReopened;
                 newCustomerCaseFieldSettings.ShowExternal = cfs.ShowExternal;
                 newCustomerCaseFieldSettings.EMailIdentifier = cfs.EMailIdentifier;
                 newCustomerCaseFieldSettings.ChangedDate = DateTime.UtcNow;
@@ -879,7 +880,9 @@
                 FileIndexingCatalogName = customerToCopySettings.FileIndexingCatalogName,
 				BatchEmail = customerToCopySettings.BatchEmail,
                 BulletinBoardWGRestriction = customerToCopySettings.BulletinBoardWGRestriction,
-                CalendarWGRestriction = customerToCopySettings.CalendarWGRestriction
+                CalendarWGRestriction = customerToCopySettings.CalendarWGRestriction,
+                ModuleExtendedCase = customerToCopySettings.ModuleExtendedCase,
+                AttachmentPlacement = customerToCopySettings.AttachmentPlacement,
             };
 
             //Get CaseSettings to copy
@@ -911,11 +914,13 @@
                 newCustomerCaseFieldSettings.Name = cfs.Name;
                 newCustomerCaseFieldSettings.ShowOnStartPage = cfs.ShowOnStartPage;
                 newCustomerCaseFieldSettings.Required = cfs.Required;
+                newCustomerCaseFieldSettings.RequiredIfReopened = cfs.RequiredIfReopened;
                 newCustomerCaseFieldSettings.ShowExternal = cfs.ShowExternal;
                 newCustomerCaseFieldSettings.FieldSize = cfs.FieldSize;
                 newCustomerCaseFieldSettings.ListEdit = cfs.ListEdit;
                 newCustomerCaseFieldSettings.EMailIdentifier = cfs.EMailIdentifier;
-                newCustomerCaseFieldSettings.ChangedDate = curTime; 
+                newCustomerCaseFieldSettings.ChangedDate = curTime;
+                newCustomerCaseFieldSettings.CaseFieldSettingsGUID = Guid.NewGuid();
                 
                 this._customerService.SaveCaseFieldSettingsForCustomerCopy(newCustomerToSave.Id, newCustomerToSave.Language_Id, newCustomerCaseFieldSettings, out errors);
             }
@@ -1111,7 +1116,7 @@
                 newCustomerProductArea.Parent_ProductArea_Id = p.Parent_ProductArea_Id;
                 newCustomerProductArea.IsActive = p.IsActive;
 
-                this._productAreaService.SaveProductArea(newCustomerProductArea, null, out errors);
+                this._productAreaService.SaveProductArea(newCustomerProductArea, null, 0, out errors);
             }
             
             //Get StateSecondary to copy

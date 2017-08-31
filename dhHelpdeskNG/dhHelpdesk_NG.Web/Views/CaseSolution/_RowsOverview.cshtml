@@ -5,22 +5,54 @@
 @{
     var searchText = (SessionFacade.CurrentCaseSolutionSearch != null &&
                      SessionFacade.CurrentCaseSolutionSearch.SearchCss != null) ? SessionFacade.CurrentCaseSolutionSearch.SearchCss : string.Empty;
-    var _asc = SessionFacade.CurrentCaseSolutionSearch.Ascending;    
+    var _asc = SessionFacade.CurrentCaseSolutionSearch.Ascending;
 }
 
 @Scripts.Render("~/bundles/casetemplates/index")
+
 
 <div id="caseTemplateRowsArea">
     <div>
         <table class="tableform">
             <tr>
-                <td style="width:100px">
+                <td style="width:200px">
+
                     @Translation.GetCoreTextTranslation("Sök")
+
                 </td>
                 <td>
-                    <input type="text" id="caseSolutionSearch" maxlength="50" style="width: 285px;" value="@searchText"/>
-                    <input type="button" id="btnCaseSolutionSearch" class="btn" value="@Translation.GetCoreTextTranslation("Sök")"/>
+                    <input type="text" id="caseSolutionSearch" maxlength="50" style="width: 285px;" value="@searchText" />
+                    <input type="button" id="btnCaseSolutionSearch" class="btn" value="@Translation.GetCoreTextTranslation("Sök")" />
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        <i id="icoImg" class="@Model.FirstOrDefault().ImageClass" ; style="cursor: pointer;" onclick="showDiv()"></i>
+                    }
+                    else
+                    {
+                        <i id="icoImg" class="icon-plus-sign" ; style="cursor: pointer;" onclick="showDiv()"></i>
+                    }
+                    @*class="icon-plus-sign"*@
                 </td>
+            </tr>
+            <tr>
+                <td style="width:200px">
+                    <span>@Translation.Get("Visa endast aktiva")</span>
+                </td>
+                <td>
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        <input type="checkbox" onclick="test(this)" id="chkActive" @(Model.FirstOrDefault().IsShowOnlyActive ? "checked" : string.Empty)>
+                    }
+                    else
+                    {
+                        <input type="checkbox" onclick="test(this)" id="chkActive" false : string.Empty)>
+                    }
+                    @* <input type="checkbox" onclick="test(this)" id="chkActive">*@
+
+                </td>
+
+
+
             </tr>
         </table>
     </div>
@@ -28,15 +60,23 @@
         <thead>
             <tr>
                 <th class="sortable" data-sort="@CaseSolutionIndexColumns.Name" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
-                    @Translation.GetCoreTextTranslation("Namn")                    
+                    @Translation.GetCoreTextTranslation("Namn")
                     <i class="@CaseSolutionIndexColumns.Name.SetCaseSolutionSortIcon()"></i>
                 </th>
                 <th class="sortable" data-sort="@CaseSolutionIndexColumns.Category" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 12%">
-                    @Translation.GetCoreTextTranslation("Kategori")                    
-                    <i class="@CaseSolutionIndexColumns.Category.SetCaseSolutionSortIcon()"></i>                    
+                    @Translation.GetCoreTextTranslation("Kategori")
+                    <i class="@CaseSolutionIndexColumns.Category.SetCaseSolutionSortIcon()"></i>
                 </th>
                 <th class="sortable" data-sort="@CaseSolutionIndexColumns.Caption" data-asc="@_asc" style="cursor: pointer; width: 15%">
-                    @Translation.GetCoreTextTranslation("Rubrik")                    
+                    @Translation.GetCoreTextTranslation("Beskrivning")
+                    <i class="@CaseSolutionIndexColumns.Caption.SetCaseSolutionSortIcon()"></i>
+                </th>
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.ConnectedToButton" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
+                    @Translation.GetCoreTextTranslation("Kopplat till")
+                    <i class="@CaseSolutionIndexColumns.ConnectedToButton.SetCaseSolutionSortIcon()"></i>
+                </th>
+                <th class="sortable" data-sort="@CaseSolutionIndexColumns.Caption" data-asc="@_asc" style="cursor: pointer; width: 15%">
+                    @Translation.GetCoreTextTranslation("Rubrik")
                     <i class="@CaseSolutionIndexColumns.Caption.SetCaseSolutionSortIcon()"></i>
                 </th>
                 <th class="sortable" data-sort="@CaseSolutionIndexColumns.Administrator" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 10%">
@@ -46,10 +86,6 @@
                 <th class="sortable" data-sort="@CaseSolutionIndexColumns.Priority" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
                     @Translation.GetCoreTextTranslation("Prioritet")
                     <i class="@CaseSolutionIndexColumns.Priority.SetCaseSolutionSortIcon()"></i>
-                </th>
-                <th class="sortable" data-sort="@CaseSolutionIndexColumns.ConnectedToButton" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 15%">
-                    @Translation.GetCoreTextTranslation("Kopplat till")
-                    <i class="@CaseSolutionIndexColumns.ConnectedToButton.SetCaseSolutionSortIcon()"></i>
                 </th>
                 <th class="sortable" data-sort="@CaseSolutionIndexColumns.Status" data-asc="@_asc" style="cursor: pointer; cursor: hand; width: 8%">
                     @Translation.GetCoreTextTranslation("Aktiv")
@@ -73,6 +109,12 @@
                         <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CategoryName)</a>
                     </td>
                     <td>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CaseSolutionDescription)</a>
+                    </td>
+                    <td>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })"> @item.ConnectedToButton</a>
+                    </td>
+                    <td>
                         <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CaseCaption)</a>
                     </td>
                     <td>
@@ -82,16 +124,81 @@
                         <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.PriorityName)</a>
                     </td>
                     <td>
-                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })"> @item.ConnectedToButton</a>
-                    </td>
-                     <td>
                         <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })"> @item.IsActive.BoolToYesNo()</a>
-                    </td>      
+                    </td>
                     <td>
                         <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.SortOrder)</a>
-                    </td>              
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+<script type="text/javascript">
+
+    function test(t) {
+
+        var searchText = document.getElementById('caseSolutionSearch').value;
+        var categoryIds = document.getElementById('caseSolFilterCategory').value;
+        var subStatusIds = document.getElementById('caseSolFilterSubstatus').value;
+        var WgroupIds = document.getElementById('caseSolFilterWGroup').value;
+        var PriorityIds = document.getElementById('caseSolFilterPriority').value;
+        var StatusIds = document.getElementById('caseSolFilterStatus').value;
+        var ProductAreaIds = document.getElementById('caseSolFilterProductArea').value;
+        var UserWGroupIds = document.getElementById('caseSolFilterUserWGroup').value;
+        var TemplateProductAreaIds = document.getElementById('caseSolFilterCaseTemplateProductArea').value;
+        var ApplicationIds = document.getElementById('caseSolFilterApplication').value;
+        var Actives = document.getElementById('chkActive').checked;
+        var Img = document.getElementById('icoImg');
+        // alert(Img.className);
+        $.ajax({
+
+            url: '/CaseSolution/Search',
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                searchText: searchText,
+                categoryIds: categoryIds,
+                subStatusIds: subStatusIds,
+                WgroupIds: WgroupIds,
+                PriorityIds: PriorityIds,
+                StatusIds: StatusIds,
+                ProductAreaIds: ProductAreaIds,
+                UserWGroupIds: UserWGroupIds,
+                TemplateProductAreaIds: TemplateProductAreaIds,
+                ApplicationIds: ApplicationIds,
+                Actives: Actives.toString(),
+                ImgClass: Img.className
+
+            }),
+            success: function (filteredModel) {
+                $(caseSolutionRowsArea).html(filteredModel);
+                $(edtSearch).focus();
+                $(edtSearch).val(searchText);
+                $(edtSearch).select();
+            }
+        });
+
+    }
+
+    function showDiv() {
+        // alert();
+
+        var x = document.getElementById('searchDiv');
+        if (x.style.display === 'none') {
+            x.style.display = 'block';
+
+            document.getElementById("icoImg").classList.remove('icon-plus-sign');
+            document.getElementById("icoImg").classList.add('icon-minus-sign');
+
+        } else {
+            x.style.display = 'none';
+
+            document.getElementById("icoImg").classList.remove('icon-minus-sign');
+            document.getElementById("icoImg").classList.add('icon-plus-sign');
+        }
+    }
+
+</script>
+

@@ -12,7 +12,7 @@
                 {
                     foreach (var step in Model)
                     {
-                        <option value="@step.CaseTemplateId">@Translation.GetMasterDataTranslation(step.Name)</option>
+                        <option data-next-step="@step.NextStep" value="@step.CaseTemplateId">@Translation.GetMasterDataTranslation(step.Name)</option>
                     }
                 }
             </select>

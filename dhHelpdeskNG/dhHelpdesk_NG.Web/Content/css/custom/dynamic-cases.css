@@ -1,6 +1,8 @@
-﻿.tab-content {
+﻿
+/*
+.tab-content {
     overflow: hidden !important;
-}
+}*/
 
 #dh-form-area.tab-pane-border {
     padding: 0px !important;

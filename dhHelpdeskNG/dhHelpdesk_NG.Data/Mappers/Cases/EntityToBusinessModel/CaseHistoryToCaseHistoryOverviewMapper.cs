@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Accounts;
+using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.Changes.Output;

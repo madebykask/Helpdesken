@@ -51,6 +51,7 @@ namespace DH.Helpdesk.BusinessData.Models.Problem.Output
         /// </summary>
         public DateTime? FinishingDate { get; set; }
 
+        public DateTime CreatedDate { get; set; }
         /// <summary>
         /// Gets or sets the responsible user id.
         /// </summary>

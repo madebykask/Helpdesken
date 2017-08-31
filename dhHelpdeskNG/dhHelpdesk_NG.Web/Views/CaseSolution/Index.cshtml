@@ -32,8 +32,10 @@
         }
     }
     var searchCategories = (SessionFacade.CurrentCaseSolutionSearch != null &&
-                     SessionFacade.CurrentCaseSolutionSearch.CategoryIds != null && SessionFacade.CurrentCaseSolutionSearch.CategoryIds.Any()) 
+                     SessionFacade.CurrentCaseSolutionSearch.CategoryIds != null && SessionFacade.CurrentCaseSolutionSearch.CategoryIds.Any())
                      ? SessionFacade.CurrentCaseSolutionSearch.CategoryIds : null;
+
+
 }
 
 @*@Scripts.Render("~/bundles/casetemplates/index")*@
@@ -58,9 +60,126 @@
 
         <div class="tab-content">
             <div class="tab-pane tab-pane-border @menu1TabClass" id="fragment-1">
+                <div id="searchDiv" style="display: none;">
+                    <table class="tableform">
+
+                        <tr>
+                            <td style="width:200px">
+                                @Translation.GetCoreTextTranslation("Ärende - Understatus")
+                            </td>
+                            <td>
+                                <select id="caseSolFilterSubstatus" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
+                                    @foreach (var e in Model.CaseSolutionSubStatus)
+                                    {
+                                        <option value="@e.StateSecondaryGUID">@e.Name</option>
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="width:100px">
+                                @Translation.GetCoreTextTranslation("Ärende - Driftgrupp")
+                            </td>
+                            <td>
+                                <select id="caseSolFilterWGroup" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
+                                    @foreach (var e in Model.CaseSolutionWGroup)
+                                    {
+                                        <option value="@e.WorkingGroupGUID">@e.WorkingGroupName</option>
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="width:100px">
+                                @Translation.GetCoreTextTranslation("Ärende - Prioritet")
+                            </td>
+                            <td>
+                                <select id="caseSolFilterPriority" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
+                                    @foreach (var e in Model.CaseSolutionPriorities)
+                                    {
+                                        <option value="@e.PriorityGUID">@e.Name</option>
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="width:100px">
+                                @Translation.GetCoreTextTranslation("Ärende - Status")
+                            </td>
+                            <td>
+                                <select id="caseSolFilterStatus" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
+                                    @foreach (var e in Model.CaseSolutionStatuses)
+                                    {
+                                        <option value="@e.StatusGUID">@e.Name</option>
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="width:100px">
+                                @Translation.GetCoreTextTranslation("Ärende - Produktområde")
+                            </td>
+                            <td>
+                                <select id="caseSolFilterProductArea" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
+                                    @foreach (var e in Model.CaseSolutionProductArea)
+                                    {
+                                        <option value="@e.ProductAreaGUID">@e.Name</option>
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="width:100px">
+                                @Translation.GetCoreTextTranslation("Användare - Driftgrupp")
+                            </td>
+                            <td>
+                                <select id="caseSolFilterUserWGroup" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
+                                    @foreach (var e in Model.CaseSolutionUserWGroup)
+                                    {
+                                        <option value="@e.WorkingGroupGUID">@e.WorkingGroupName</option>
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="width:100px">
+                                @Translation.GetCoreTextTranslation("Ärendemall - Produktområde")
+                            </td>
+                            <td>
+                                <select id="caseSolFilterCaseTemplateProductArea" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
+                                    @foreach (var e in Model.CaseSolutionCTemplateProductArea)
+                                    {
+                                        <option value="@e.ProductAreaGUID">@e.Name</option>
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="width:100px">
+                                @Translation.GetCoreTextTranslation("Applikation")
+                            </td>
+                            <td>
+                                <select id="caseSolFilterApplication" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
+                                    @foreach (var e in Model.CaseSolutionApplication)
+                                    {
+                                        <option value="@e.Id">@e.Name</option>
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
                 <table class="tableform">
+
                     <tr>
-                        <td style="width:100px">
+                        <td style="width:200px">
                             @Translation.GetCoreTextTranslation("Kategori")
                         </td>
                         <td>
@@ -73,7 +192,11 @@
                         </td>
                     </tr>
                 </table>
+
+                
                 @Html.Partial("_RowsOverview", Model.Rows)
+                
+
             </div>
             <div class="tab-pane tab-pane-border @menu2TabClass" id="fragment-2">
                 <table class="table table-striped table-bordered table-hover" id="tblCaseSolutionCategory">

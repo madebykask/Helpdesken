@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<predefined>
+  <name>AllowancetypesUnits</name>
+  <dependent>
+    <selected>Car Allowance</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Cash Adjustment</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Commission</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Competance Pay</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Electricity Home Workers</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>First Aid Allowance</selected>
+    <show>15.00</show>
+  </dependent>
+  <dependent>
+    <selected>Fork Lift Truck Allowance</selected>
+    <show>0.92</show>
+  </dependent>
+  <dependent>
+    <selected>Hourly ACE</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Hourly AHP</selected>
+    <show>0.27</show>
+  </dependent>
+  <dependent>
+    <selected>Hourly Day</selected>
+    <show>0.75</show>
+  </dependent>
+  <dependent>
+    <selected>Housing Allowance</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>IKEA1 Skills</selected>
+    <show>0.98</show>
+  </dependent>
+  <dependent>
+    <selected>IKEA2 Skills</selected>
+    <show>1.48</show>
+  </dependent>
+  <dependent>
+    <selected>Kitchen Skills</selected>
+    <show>1.48</show>
+  </dependent>
+  <dependent>
+    <selected>Loaders</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Manual Hand</selected>
+    <show>0.36</show>
+  </dependent>
+  <dependent>
+    <selected>MHS/H&amp;S</selected>
+    <show>1.35</show>
+  </dependent>
+  <dependent>
+    <selected>Mortgage Subsidy</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Night Shift</selected>
+    <show>2.03</show>
+  </dependent>
+  <dependent>
+    <selected>NTG Double Housing</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>NTG Housing Costs</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>NTG Relocation Allow</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>NTG Rent Allowance</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Pallet Resue</selected>
+    <show>0.17</show>
+  </dependent>
+  <dependent>
+    <selected>Relocation Allowance</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Rent Allowance</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Responsibility Allowance</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Salary Day Ann Allow</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Salary Day Shift</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Secondment</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Shunter Allow</selected>
+    <show>0.36</show>
+  </dependent>
+  <dependent>
+    <selected>Stand By Allowance</selected>
+    <show></show>
+  </dependent>
+  <dependent>
+    <selected>Night Shift (Distribution Only)</selected>
+    <show>1.84</show>
+  </dependent>
+</predefined>

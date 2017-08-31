@@ -1,0 +1,65 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane active" id="selection">
+    <div class="row-fluid">
+        <div class="span12">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td class="tdstrong" style="width: 100px;">@Model.Translate("Initiator")</td>
+                        <td style="width: 1500px;">
+                            <input type="text" value="@Model.Contract.Initiator" readonly="readonly"/></td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("Company")</td>
+                        <td>
+                            @Model.Element("Company")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("Unit")</td>
+                        <td>
+                            @Model.Element("Unit")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("EmployeeNumber")</td>
+                        <td>
+                            @Model.Element("EmployeeNumber")
+                            <label class="typeahead-notice error">@Model.Translate("An earlier case (#) was found for this employee no.")</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("Prefix")</td>
+                        <td>
+                            @Model.Element("Prefix")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("EmployeeLastName")</td>
+                        <td>
+                            @Model.Element("EmployeeLastName")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdstrong">@Model.Label("EmployeeFirstName")</td>
+                        <td>
+                            @Model.Element("EmployeeFirstName")
+                        </td>
+                    </tr>
+                    @Html.Partial("_Attachments", Model)
+                    <tr>
+                        <td class="tdstrong" style="vertical-align: top;">@Model.Label("DataChangeSelection")</td>
+                        <td class="multicheck">
+                            @Model.Element("DataChangeSelection")
+                        </td>
+                    </tr>
+                    @Html.Partial("_InternalLogNote", Model)
+                    <input type="hidden" id="CustomerId" value="@Model.CustomerId" />
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

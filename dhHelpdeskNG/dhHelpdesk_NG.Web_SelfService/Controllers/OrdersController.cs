@@ -127,7 +127,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                                     filters.SortField,
                                     SessionFacade.CurrentLocalUser.Id);
 
-            var response = _ordersService.Search(parameters, SessionFacade.CurrentLocalUser.Id);
+            var response = _ordersService.Search(parameters, SessionFacade.CurrentLocalUser.Id, true);
             var ordersModel = _ordersModelFactory.Create(response, filters.SortField, filters.OrderTypeId == null);
 
             return PartialView(ordersModel);

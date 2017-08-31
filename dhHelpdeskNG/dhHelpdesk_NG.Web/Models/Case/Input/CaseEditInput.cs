@@ -11,6 +11,11 @@ namespace DH.Helpdesk.Web.Models.Case.Input
 
     public class CaseEditInput
     {
+        public CaseEditInput()
+        {
+            //ActiveTab = "case-tab";
+        }
+
         [Obsolete("Move used case properties into this model")]
         public Case case_ { get; set; }
 
@@ -25,6 +30,13 @@ namespace DH.Helpdesk.Web.Models.Case.Input
         public int? Performer_Id { get; set; }
 
         public int? CaseSolution_Id { get; set; }
+
+		/// <summary>
+		/// Saves information regarding current case template
+		/// </summary>
+		public int? CurrentCaseSolution_Id { get; set;  }
+
+        public string ActiveTab { get; set; }
         public CaseLog caseLog { get; set; }
 
         public CaseMailSetting caseMailSetting { get; set; }        
@@ -34,7 +46,12 @@ namespace DH.Helpdesk.Web.Models.Case.Input
         public int? customerRegistrationSourceId { get; set; }
 
         public int? MovedFromCustomerId { get; set; }
-        
+
+        public bool ContainsExtendedCase { get; set; }
+        public Guid ExtendedCaseGuid { get; set; }
+
+        public IList<ExtendedCaseFormModel> ExtendedCases { get; set; }
+
         public CaseLockModel caseLock { get; set; }
 
         public int? ParentId { get; set; }
@@ -44,11 +61,16 @@ namespace DH.Helpdesk.Web.Models.Case.Input
             return ParentId.HasValue && ParentId != 0;
         }
 
+		public bool IndependentChild { get; set; }
+
 		public List<ExternalInvoiceModel> ExternalInvoices { get; set; }
 
         public string FollowerUsers { get; set; }
 
         public IList<CaseFieldSetting> caseFieldSettings { get; set; }
+
+
+		public int? SplitToCaseSolution_Id { get; set; }
 
     }
 }

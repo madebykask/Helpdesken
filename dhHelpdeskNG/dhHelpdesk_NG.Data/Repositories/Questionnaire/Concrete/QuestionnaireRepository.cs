@@ -36,7 +36,8 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
                 QuestionnaireDescription = questionnaire.Description ?? string.Empty,
                 Customer_Id = questionnaire.CustomerId,
                 CreatedDate = questionnaire.CreatedDate,
-				Identifier = questionnaire.Identifier
+				Identifier = questionnaire.Identifier,
+				ExcludeAdministrators = questionnaire.ExcludeAdministrators
             };
             this.DbContext.Questionnaires.Add(questionnaireEntity);
             this.InitializeAfterCommit(questionnaire, questionnaireEntity);
@@ -89,7 +90,8 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
                             Description = q.QuestionnaireDescription,
 							Identifier = q.Identifier,
                             languageId = LanguageIds.Swedish,
-                            CreateDate = q.CreatedDate
+                            CreateDate = q.CreatedDate,
+                            q.ExcludeAdministrators
                         }).FirstOrDefault();
 			// If Language = Swedish or there is no Questionnaire for this language_Id
 	        if (questionnaire != null)
@@ -100,6 +102,7 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
 				        questionnaire.languageId, questionnaire.CreateDate);
 		        }
 		        ret.Identifier = questionnaire.Identifier;
+		        ret.ExcludeAdministrators = questionnaire.ExcludeAdministrators;
 	        }
 
 	        return ret;
@@ -148,6 +151,7 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
 
             questionnaireEntity.QuestionnaireName = questionnaire.Name;
 			questionnaireEntity.Identifier = questionnaire.Identifier;
+			questionnaireEntity.ExcludeAdministrators = questionnaire.ExcludeAdministrators;
 			questionnaireEntity.QuestionnaireDescription = questionnaire.Description ?? string.Empty;
             questionnaireEntity.ChangedDate = questionnaire.ChangedDate;
         }
@@ -161,6 +165,7 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
 			if (questionnaireEntity != null)
 			{
 				questionnaireEntity.Identifier = questionnaire.Identifier;
+				questionnaireEntity.ExcludeAdministrators = questionnaire.ExcludeAdministrators;
 			}
 
 			var questionnaireLanguageEntity =

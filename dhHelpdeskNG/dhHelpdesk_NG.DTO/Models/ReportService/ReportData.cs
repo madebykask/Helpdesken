@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 namespace DH.Helpdesk.BusinessData.Models.ReportService
 {
@@ -12,16 +11,16 @@ namespace DH.Helpdesk.BusinessData.Models.ReportService
         }
 
         public void AddDataSet(string dataSetName, DataTable dataSet)
-        {            
+        {
             this.DataSets.Add(new ReportDataSet(dataSetName, dataSet));
         }
 
         public void AddDataSets(IList<ReportDataSet> dataSets)
-        {            
+        {
             this.DataSets.AddRange(dataSets);
         }
 
-        public string ReportName { get; private set; } 
+        public string ReportName { get; private set; }
 
         public List<ReportDataSet> DataSets { get; private set; }
     }
@@ -33,10 +32,10 @@ namespace DH.Helpdesk.BusinessData.Models.ReportService
             this.DataSetName = dataSetName;
             this.DataSet = dataSet;
         }
-        
+
         public string DataSetName { get; private set; }
 
         public DataTable DataSet { get; private set; }
     }
-   
+
 }

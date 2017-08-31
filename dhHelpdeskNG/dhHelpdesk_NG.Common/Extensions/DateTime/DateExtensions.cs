@@ -9,6 +9,7 @@
 
 namespace DH.Helpdesk.Common.Extensions.DateTime
 {
+    using Constants;
     using System;
     using System.Threading;
 
@@ -71,6 +72,21 @@ namespace DH.Helpdesk.Common.Extensions.DateTime
         public static DateTime RoundTick(this DateTime dt)
         {
             return new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second, dt.Kind);
+        }
+
+        public static bool IsValueChanged(this DateTime value)
+        {
+            return (value != NotChangedValue.DATETIME);
+        }
+
+        public static bool IsValueChanged(this DateTime? value)
+        {
+            return (value != NotChangedValue.NULLABLE_DATETIME);
+        }
+
+        public static DateTime? IfNullThenElse(this DateTime? value, DateTime? elseValue)
+        {
+            return value?? elseValue;
         }
     }
 }

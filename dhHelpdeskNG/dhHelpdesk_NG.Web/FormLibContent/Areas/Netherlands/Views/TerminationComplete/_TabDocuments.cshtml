@@ -1,0 +1,68 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@functions{
+    public string GetContract()
+    {
+
+        //no document shall be produced if Termination Type TR1 = Other and Termination Reason TR.CS.1.1 = Mutual cancelation agreement
+        if (Model.GetAnswer("BasicTerminationType").ToLower().Trim() == "Other".ToLower() && Model.GetAnswer("TerminationReason").ToLower().Trim() == "Mutual cancelation agreement".ToLower())
+        {
+            return "";
+        }
+        
+        if (Model.GetAnswer("BusinessUnit").ToLower().Trim() == "")
+        {
+            return "";
+        }
+
+        if (Model.GetAnswer("Company").ToLower().Trim() == "IKEA B.V.".ToLower())
+        {
+            return "Termination";
+        }
+
+        return "";
+    }
+}
+<div class="tab-pane" id="documents">
+    <div class="span12">
+        @if (!string.IsNullOrEmpty(GetContract()))
+        {
+            <table class="table-striped">
+                <thead>
+                    <tr>
+                        <th>@Model.Translate("Document")
+                        </th>
+                        <th>@Model.Translate("Type")
+                        </th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.Translate("Contract")</td>
+                        <td>pdf</td>
+                        <td>&nbsp;</td>
+                        <td>
+                            <a href="@Url.Action("print", "TerminationComplete", new
+                {
+                    id = GetContract(),
+                    caseId = Model.Contract.Id,
+                    path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
+                    userId = FormLibSessions.User.UserId
+                })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@Model.Translate("Print")</a>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-info"><strong><i class="icon-info-sign"></i>&nbsp;@Model.Translate("A document can not be created based on current selections")</strong></div>
+        }
+
+    </div>
+</div>

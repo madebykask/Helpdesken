@@ -6,7 +6,9 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Models.Case;
     using CaseRules;
+    using DH.Helpdesk.Domain.Cases;
 
+    
     public class CaseSolutionInputViewModel
     {
         public CaseSolutionInputViewModel()
@@ -81,6 +83,27 @@
 
         public IList<SelectListItem> ActionList { get; set; }
      
-        public CaseRuleModel RuleModel { get; set; }    
-    }
+        public CaseRuleModel RuleModel { get; set; }
+
+        public Setting CustomerSetting { get; set; }
+
+        //public IList<SelectListItem> TabList { get; set; }
+        public string DefaultTab { get; set; }
+        public string ValidateOnChange { get; set; }
+        public int? NextStepState { get; set; }
+
+        public string SelectedCaseSecondaries { get; set; }
+
+        public List<SelectListItem> CaseSolutionFieldSettings { get; set; }
+
+        /// <summary>
+        /// ///////
+        /// </summary>
+        public List<CaseSolutionSettingsField> CSSettingsField { get; set; }
+
+        public List<CaseSolutionSettingsField> CSSelectedSettingsField { get; set; }
+		public IList<CaseSolution> SplitToCaseSolutions { get; internal set; }
+
+        public bool isCopy { get; set; }
+	}
 }

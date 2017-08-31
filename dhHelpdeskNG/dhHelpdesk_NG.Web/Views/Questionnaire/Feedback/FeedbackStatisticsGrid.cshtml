@@ -8,11 +8,19 @@
 <div class="tab-content">
     <div class="tab-pane tab-pane-border active" id="fragment-1">
         <div class="container">
+            <div class="ico-right">
+                @foreach (var email in Model.Emails)
+                {
+                    @email
+                    <br />
+                }
+            </div>
             <h3 style="color: gray">@Model.QuestionnaireOverview.Name</h3>
             <div class="row">
                 <div class="span12">
                     @Model.QuestionnaireOverview.Description
                 </div>
+
             </div>
         </div>
     </div>

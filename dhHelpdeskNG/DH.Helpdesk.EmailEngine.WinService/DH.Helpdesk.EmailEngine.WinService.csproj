@@ -60,7 +60,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EmailProcessor.cs" />
+    <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="MainService.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -78,7 +80,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="InstallService.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
+    <None Include="UninstallService.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainService.resx">
@@ -89,6 +97,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DH.Helpdesk.EmailEngine.Library\DH.Helpdesk.EmailEngine.Library.csproj">
+      <Project>{F7A2888F-75A6-4C84-902F-1A201CC56EC9}</Project>
+      <Name>DH.Helpdesk.EmailEngine.Library</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dhHelpdesk_NG.Data\DH.Helpdesk.Dal.csproj">
       <Project>{a8f6b7b8-8055-4bb7-82c4-85004f52e6ef}</Project>
       <Name>DH.Helpdesk.Dal</Name>

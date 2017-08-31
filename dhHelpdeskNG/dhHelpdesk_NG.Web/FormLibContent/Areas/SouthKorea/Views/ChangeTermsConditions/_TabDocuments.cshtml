@@ -1,0 +1,226 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using System.Collections;
+
+@{
+    ArrayList contracts = GetContract();
+    
+    //Get Allowances
+    if (!string.IsNullOrEmpty(GetAllowance("")))
+    {
+        contracts.Add(GetAllowance(""));
+    }
+    if (!string.IsNullOrEmpty(GetAllowance(2.ToString())))
+    {
+        contracts.Add(GetAllowance(2.ToString()));
+    }
+    if (!string.IsNullOrEmpty(GetAllowance(3.ToString())))
+    {
+        contracts.Add(GetAllowance(3.ToString()));
+    }
+    if (!string.IsNullOrEmpty(GetAllowance(4.ToString())))
+    {
+        contracts.Add(GetAllowance(4.ToString()));
+    }
+    if (!string.IsNullOrEmpty(GetAllowance(5.ToString())))
+    {
+        contracts.Add(GetAllowance(5.ToString()));
+    }
+}
+
+@functions{
+    public ArrayList GetContract()
+    {
+        ArrayList contracts = new ArrayList();
+
+        switch (Model.GetAnswer(FormLibConstants.FormField.ChangeType).ToLower())
+        {
+            case "only pay change":
+            case "only change work hours":
+            case "position change":
+            case "lateral move":
+            case "demotion":
+            case "re-organisation":
+            case "full time to part time":
+            case "part time to full time":
+            case "end short term assignment":
+            case "promotion":
+                contracts.Add("ChangesOfPayHourPosition");
+                break;
+
+        }
+
+        if (Model.GetAnswer(FormLibConstants.FormField.ChangeType).ToLower() == "Secondment".ToLower())
+        {
+            contracts.Add("Secondment");
+        }
+        if (Model.GetAnswer(FormLibConstants.FormField.ChangeType).ToLower() == "Career Break End".ToLower())
+        {
+            contracts.Add("CareerBreakEnd");
+        }
+        if (Model.GetAnswer(FormLibConstants.FormField.ChangeType).ToLower() == "Renewal of Temp Contract".ToLower())
+        {
+            contracts.Add("RenewTempContract");
+        }
+        if (Model.GetAnswer(FormLibConstants.FormField.ChangeType).ToLower() == "Temporary Contract to Permanent".ToLower())
+        {
+            contracts.Add("TemporaryToPermanent");
+        }
+
+        if (Model.GetAnswer(FormLibConstants.FormField.ChangeType).ToLower() == "Promotion".ToLower() && (Model.GetAnswer(FormLibConstants.FormField.BenefitLevel).ToLower() == "Level 1".ToLower() || Model.GetAnswer(FormLibConstants.FormField.BenefitLevel).ToLower() == "Level 2".ToLower()))
+        {
+            contracts.Add("TCManagerLevel1And2");
+        }
+
+        if (Model.GetAnswer("ContractType").ToLower() == "Annualised".ToLower())
+        {
+            contracts.Add("Annualised");
+        }
+        if (Model.GetAnswer("ContractType").ToLower() == "Compressed".ToLower())
+        {
+            contracts.Add("Compressed");
+        }
+        if (Model.GetAnswer("ContractType").ToLower() == "Term Time".ToLower())
+        {
+            contracts.Add("TermTime");
+        }
+     
+        switch (Model.GetAnswer(FormLibConstants.FormField.PayScaleGroup).ToUpper())  // based on Conditions from ContractTemplate and PayScaleGroup Drop-down options /Mats J.
+        {
+            case "ADVANCD2":
+            case "ADVANCD3":
+            case "ADVANCD4":
+            case "ADVANCP":
+            case "ADVANCED":
+            case "ADVANCED HIGH":
+            case "FOUNDN1":
+            case "FOUNDN2":
+            case "FOUNDN3":
+            case "FOUNDN4":
+            case "FOUNDP":
+            case "FOUNDN":
+            case "FOUNDN HIGH":
+            case "FOUNDFLT1":
+            case "FOUNDFLT2":
+            case "FOUNDFLT3":
+            case "FOUNDFLT4":
+            case "FOUNDFLP":
+            case "FOUNDFLT":
+            case "FOUNDFLT HIGH":
+                contracts.Add("LevelAchieved");
+                break;
+        
+        }
+
+
+        //if (string.IsNullOrEmpty(Model.GetAnswer("EmploymentCategory")))
+        //{
+        //    return "";
+        //}                                                                                                                                                                                                                           
+
+        return contracts;
+
+    }
+
+    public string GetAllowance(string allowanceNr)
+    {
+        string allowanceType = Model.GetDocumentAnswer("AllowancesType" + allowanceNr).Trim().ToLower();
+
+
+        switch (allowanceType)
+        {
+            case "150c - hourly flt skills (fork lift truck allowance)":
+                return "Allowances" + " " + allowanceNr;
+            case "150c - hourly flt skills (fork lift truck allowance milton keynes)":
+                return "Allowances" + " " + allowanceNr;
+            case "100f - salary flt skills":
+                return "Allowances" + " " + allowanceNr;
+            case "350f - adj-salary flt skills":
+                return "Allowances" + " " + allowanceNr;
+            case "150d - hourly kitchen skills":
+                return "Allowances" + " " + allowanceNr;
+            case "150d - hourly kitchen skills london":
+                return "Allowances" + " " + allowanceNr;
+            case "150d - hourly kitchen skills edinburgh":
+                return "Allowances" + " " + allowanceNr;
+            case "100g - salary kitchen skills":
+                return "Allowances" + " " + allowanceNr;
+            case "150j - hourly first aid":
+                return "Allowances" + " " + allowanceNr;
+            case "300d - first aid allowance":
+                return "Allowances" + " " + allowanceNr;
+            default:
+                return "";
+        }
+
+    }
+
+    public string PrintText()
+    {
+        return Model.Translate("Print");
+    }
+}
+
+<div class="tab-pane" id="documents">
+    <div class="span12">
+        
+        @if (contracts.Count > 0)
+        {
+            <table class="table-striped">
+                <thead>
+                    <tr>
+                        <th>@Model.Translate("Document")
+                        </th>
+                        <th>@Model.Translate("Type")
+                        </th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    @for (int i = 0; i < contracts.Count; i++)
+                    {
+                        //TODO: Solve this beautiful
+                        string[] contractAr = contracts[i].ToString().Split(' ');
+                        if(contractAr.Length > 0)
+                        {
+                            string allowanceNr = "";
+                            if (contractAr.Length > 1)
+                            {
+                                allowanceNr = contractAr[1];
+                            }
+                            <tr>
+                                <td>@Model.Translate("Contract") &nbsp; @contracts[i].ToString() </td>
+                                <td>pdf</td>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <a href="@Url.Action("print", "ChangeTermsConditions", new
+                                    {
+                                        id = contractAr[0],
+                                        caseId = Model.Contract.Id,
+                                        path = Path.Combine(Path.GetDirectoryName(Model.FormXmlPath), Path.GetFileNameWithoutExtension(Model.FormXmlPath)),
+                                        userId = FormLibSessions.User.UserId,
+                                        allowanceNr = allowanceNr
+                                    })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@PrintText()</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+
+            </table> }
+        else
+        {
+            <div class="alert alert-info"><strong><i class="icon-info-sign"></i>&nbsp;@Model.Translate("A document can not be created based on current selections")</strong></div>
+        }
+
+        @Html.Partial("_StaticDocuments", Model)
+    </div>
+</div>
+
+
+
+
+

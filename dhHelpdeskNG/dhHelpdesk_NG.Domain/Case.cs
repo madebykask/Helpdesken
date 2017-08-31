@@ -3,7 +3,7 @@
     using DH.Helpdesk.Domain.Cases;
     using DH.Helpdesk.Domain.Interfaces;
     using DH.Helpdesk.Domain.Problems;
-
+    using ExtendedCaseEntity;
     using global::System;
     using global::System.Collections.Generic;
 
@@ -12,7 +12,8 @@
 	    public Case()
 	    {
 		    InvoiceRows = new List<InvoiceRow>();
-	    }
+            //CaseExtendedCaseDatas = new ICollection<Case_ExtendedCaseEntity>();
+        }
 
 		public Guid CaseGUID { get; set; }
         public String ReportedBy { get; set; }
@@ -70,11 +71,13 @@
         public int? LockCaseToWorkingGroup_Id { get; set; }
         public int? WorkingGroup_Id { get; set; }
         public int? CaseSolution_Id { get; set; }
+		public int? CurrentCaseSolution_Id { get; set; }
 
-        /// <summary>
-        /// In UTC
-        /// </summary>
-        public DateTime? FinishingDate { get; set; }
+
+		/// <summary>
+		/// In UTC
+		/// </summary>
+		public DateTime? FinishingDate { get; set; }
         public String FinishingDescription { get; set; }
         public DateTime? FollowUpDate { get; set; }
         public int RegistrationSource { get; set; }
@@ -161,6 +164,10 @@
         public virtual ICollection<Mail2Ticket> Mail2Tickets { get; set; }
 
         public virtual CaseSolution CaseSolution { get; set; }
+
+		public virtual CaseSolution CurrentCaseSolution { get; set; }
+
+		public virtual ICollection<Case_ExtendedCaseEntity> CaseExtendedCaseDatas { get; set; }
 
         public bool IsClosed()
         {

@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using DH.Helpdesk.BusinessData.Enums.MailTemplates;
 using DH.Helpdesk.BusinessData.Models.Feedback;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.Cases;
 
@@ -17,8 +18,8 @@ namespace DH.Helpdesk.Services.Services.Feedback
         private readonly ICircularService _circularService;
 
         private const string MainTemplate = @"<BR>{question}<BR><table><tbody><tr>{optionTemplate}</tr></tbody></table>";
-//        private const string OptionTemplate = @"<td ><a href='{baseurl}feedback/answer?guid={guid}&optionValue={value}&languageId={languageid}' style='padding: 0px 10px'><img src = '{baseurl}Content/img/{iconId}' style='width: 27px; height: 27px' alt={icontext}></a></td>";
         private const string OptionTemplate = @"<td ><a href='{baseurl}FeedbackAnswer/Answer?guid={guid}&optionId={id}&languageId={languageid}&customerId={customerId}' style='padding: 0px 10px'><img src = '{baseurl}Content/img/{iconId}' style='width: 27px; height: 27px' alt={icontext}></a></td>";
+        private const string OptionTemplateLoaded = @"<td ><a href='{baseurl}FeedbackAnswer/Answer?guid={guid}&optionId={id}&languageId={languageid}&customerId={customerId}' style='padding: 0px 10px'><img src = '{baseurl}FeedbackAnswer/GetFeedbackImg/{id}' style='width: 27px; height: 27px' alt={icontext}></a></td>";
 
         private class Templates
         {
@@ -85,7 +86,8 @@ namespace DH.Helpdesk.Services.Services.Feedback
                 FieldType = FieldTypes.String,
                 Key = $"[{FeedbackTemplate.FeedbackIdentifierPredicate}{feedback.Info.Identifier}]",
                 FeedbackId = feedback.Info.Id,
-                StringValue = string.Empty
+                StringValue = string.Empty,
+                ExcludeAdministrators = feedback.Info.ExcludeAdministrators
             };
 
             var dbCircular = _circularService.GetSingleOrDefaultByQuestionnaireId(feedback.Info.Id);
@@ -125,15 +127,29 @@ namespace DH.Helpdesk.Services.Services.Feedback
             var optionsTemplate = new StringBuilder();
             foreach (var option in feedback.Options.OrderBy(o => o.Position))
             {
-                var optionTemplate = OptionTemplate
-                    .Replace(Templates.IconId, option.IconId)
-                    .Replace(Templates.BaseUrl, absoluterUrl)
-                    .Replace(Templates.OptionId, option.Id.ToString())
-                    .Replace(Templates.LanguageId, languageId.ToString())
-                    .Replace(Templates.IconText, option.Text)
-                    .Replace(Templates.Guid, guid.ToString())
-                    .Replace(Templates.CustomerId, customerId.ToString());
-                optionsTemplate.Append(optionTemplate);
+                if (!string.IsNullOrEmpty(option.IconSrc))
+                {
+                    var optionTemplate = OptionTemplateLoaded
+                        .Replace(Templates.BaseUrl, absoluterUrl)
+                        .Replace(Templates.OptionId, option.Id.ToString())
+                        .Replace(Templates.LanguageId, languageId.ToString())
+                        .Replace(Templates.IconText, option.Text)
+                        .Replace(Templates.Guid, guid.ToString())
+                        .Replace(Templates.CustomerId, customerId.ToString());
+                    optionsTemplate.Append(optionTemplate);
+                }
+                else
+                {
+                    var optionTemplate = OptionTemplate
+                        .Replace(Templates.IconId, option.IconId)
+                        .Replace(Templates.BaseUrl, absoluterUrl)
+                        .Replace(Templates.OptionId, option.Id.ToString())
+                        .Replace(Templates.LanguageId, languageId.ToString())
+                        .Replace(Templates.IconText, option.Text)
+                        .Replace(Templates.Guid, guid.ToString())
+                        .Replace(Templates.CustomerId, customerId.ToString());
+                    optionsTemplate.Append(optionTemplate);
+                }
             }
 
             template.Replace(Templates.Option, optionsTemplate.ToString());

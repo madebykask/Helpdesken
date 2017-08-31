@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/PersonalInformationState.xml">
+
+
+  <!--COMMON DATA-->
+  <!ENTITY pre_country SYSTEM "Data/Data_Common_Country.xml">
+  <!ENTITY data_common_noyes SYSTEM "Data/Data_Common_NoYes.xml">
+  <!ENTITY data_common_servicerequestpriority SYSTEM "Data/Data_Common_ServiceRequestPriority.xml">
+  <!ENTITY data_common_gender SYSTEM "Data/Data_Common_Gender.xml">
+  <!ENTITY data_common_nationality SYSTEM "Data/Data_Common_Nationality.xml">
+  <!ENTITY data_common_noyes SYSTEM "Data/Data_Common_NoYes.xml">
+  <!ENTITY data_common_yesno SYSTEM "Data/Data_Common_YesNo.xml">
+
+  <!--PROCESS SPECIFIC DATA-->
+  <!ENTITY data_personalinformation_maritalstatus SYSTEM "Data/PersonalInformation/Data_PersonalInformation_MaritalStatus.xml">
+  <!ENTITY data_hiring_familymember SYSTEM "Data/Hiring/Data_Hiring_FamilyMember.xml">
+  <!ENTITY data_hiring_taxinformation SYSTEM "Data/Hiring/Data_Hiring_TaxInformation.xml">
+  <!ENTITY data_personalinformation_voluntarytaxdeduction SYSTEM "Data/PersonalInformation/Data_PersonalInformation_VoluntaryTaxDeductions.xml">
+  <!ENTITY data_hiring_languageIT0002 SYSTEM "Data/Hiring/Data_Hiring_LanguageIT0002.xml">
+  <!ENTITY data_hiring_documenttype1 SYSTEM "Data/Hiring/Data_Hiring_DocumentType1.xml">
+  <!ENTITY data_hiring_dependantfamilymember SYSTEM "Data/Hiring/Data_Hiring_DependantFamilyMember.xml">
+  <!ENTITY data_hiring_documenttype2 SYSTEM "Data/Hiring/Data_Hiring_DocumentType2.xml">
+
+  
+  ]>
+
+  <form id="0" guid="C8D2C4F9-9B8B-484C-9472-9F9122951892" customerId="0">
+  &languages;
+  &regexs;
+  &state;
+  <fields>
+    <!--Tab Service Request Details-->
+    <tab name="#ServiceRequestDetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" type="text" label="Co-worker Globalview ID" casefield="reportedby" mandatory="1" HCMData="1" SortOrder="1">
+        <regex inherit="employeeno" message="" pattern=""></regex>
+      </element>
+      <element name="FirstName" type="text" label="Co-worker First Name" mandatory="1" casefield="persons_name" HCMData="1" SortOrder="2"></element>
+      <element name="LastName" type="text" label="Co-worker Last name" mandatory="1" casefield="persons_phone" HCMData="1" SortOrder="3"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address" mandatory="1" HCMData="1" SortOrder="4">
+        <regex inherit="email" message="" pattern=""></regex>
+      </element>
+      <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1" HCMData="1" SortOrder="5"></element>
+      <element name="Company" type="text" label="Company" mandatory="1" casefield="region_id" HCMData="1" SortOrder="5"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1" casefield="department_id" HCMData="1" SortOrder="6"></element>
+      <element name="ServiceArea" type="text" label="Function" mandatory="1" HCMData="1" SortOrder="7"></element>
+      <element name="Department" type="text" label="Department" mandatory="1" casefield="ou_id" HCMData="1" SortOrder="8"></element>
+      <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" mandatory="1" default="No" HCMData="1" SortOrder="9">
+         &data_common_noyes;
+      </element>
+      <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy" HCMData="1" SortOrder="10">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="ChangeValidTo" type="date" label="Change Valid to:" mandatory="1" default="31.12.9999" format="dd.MM.yyyy" HCMData="1" SortOrder="11">
+        <regex inherit="date" pattern="" message=""></regex>
+        <!--<laterThanOrEqual name="ChangeValidFrom" message="This date cannot be earlier than Change valid from date."></laterThanOrEqual>-->
+      </element>
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard" HCMData="1" SortOrder="12">
+        &data_common_servicerequestpriority;
+      </element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+    </tab>
+    <!--Personal Information Tab-->
+    <tab name="#Personal" label="Personal Information">
+      <!--Personal data Change-->
+      <element type="text" name="NewFirstName" label="First Name" formfieldidentifier="P0002.VORNA" casefield="persons_name" HCMData="1" SortOrder="12"></element>
+      <element type="text" name="NewMiddleName" label="Middle Name" formfieldidentifier="P0002.MIDNM" HCMData="1" SortOrder="13"></element>
+      <element type="text" name="NewLastName" label="Last Name" formfieldidentifier="P0002.NACHN" casefield="persons_phone" HCMData="1" SortOrder="14"></element>
+      <element type="select" name="Gender" label="Gender" HCMData="1" SortOrder="15">
+        &data_common_gender;
+      </element>
+      <element type="select" name="MaritalStatus" label="Marital Status" default="Unknown" HCMData="1" SortOrder="16">
+        &data_personalinformation_maritalstatus;
+      </element>
+      <element type="text" name="PersonalIDNumber" label="Personal ID number" HCMData="1" SortOrder="17">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="PersNO" pattern="" message="Wrong format (11 digits)"></regex>
+      </element>
+      <!--Contact details-->
+      <element type="text" name="TelephoneNumber" label="Telephone Number" formfieldidentifier="P0006.TELNR:1" HCMData="1" SortOrder="18">
+        <regex inherit="telNum" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="TelephoneNumber2" label="Telephone Number (if more than one)" HCMData="1" SortOrder="19">
+        <regex inherit="telNum" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="PrivateEMailAddress" label="Private e-mail address" formfieldidentifier="P0105.USRID_LONG:0030" HCMData="1" SortOrder="20">
+        <regex inherit="email" pattern="" message=""></regex>
+      </element>
+      <!--Permanent address-->
+      <element type="text" name="PermanentAddressLine1" label="Address line 1" formfieldidentifier="P0006.STRAS:1" HCMData="1" SortOrder="21"></element>
+      <element type="text" name="PermanentAddressLine2" label="Address line 2" formfieldidentifier="P0006.HSNMR:1" HCMData="1" SortOrder="22"></element>
+      <element type="text" name="PermanentPostalCode" label="Postal Code" formfieldidentifier="P0006.PSTLZ:1" HCMData="1" SortOrder="23">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="postcode" pattern="" message=""></regex>
+        <validateIf name="PermanentCountry">Norway</validateIf>
+      </element>
+      <element type="text" name="PermanentCity" label="City" cssclass="upper-case" formfieldidentifier="P0006.ORT01:1" HCMData="1" SortOrder="24"></element>
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="PermanentCountry" label="Country" default="Norway" formfieldidentifier="P0006.LAND1:1" HCMData="1" SortOrder="25"></element>
+      <element type="text" name="EmergencyAddressLine1" label="Address line 1" formfieldidentifier="P0006.STRAS:4" HCMData="1" SortOrder="26"></element>
+      <element type="text" name="EmergencyAddressLine2" label="Address line 2" formfieldidentifier="P0006.HSNMR:4" HCMData="1" SortOrder="27"></element>
+      <element type="text" name="EmergencyPostalCode" label="Postal Code" formfieldidentifier="P0006.PSTLZ:4" HCMData="1" SortOrder="28">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="postcode" message="" pattern=""></regex>
+        <validateIf name="EmergencyCountry">Norway</validateIf>
+      </element>
+      <element type="text" name="EmergencyCity" label="City" cssclass="upper-case" formfieldidentifier="P0006.ORT01:4" HCMData="1" SortOrder="29"></element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="EmergencyCountry" label="Country" default="Norway" formfieldidentifier="P0006.LAND1:4" HCMData="1" SortOrder="30">
+      </element>
+      <element type="text" name="EmergencyContactRelationship" label="Emergency contact name (relationship)" formfieldidentifier="P0006.NAME2:4" HCMData="1" SortOrder="31"></element>
+      <element type="text" name="EmergencyContactNumber" label="Emergency contact telephone number" formfieldidentifier="P0006.TELNR:4" HCMData="1" SortOrder="32"></element>
+      <element type="text" name="OtherTelephoneNumber" label="Other telephone number" HCMData="1" SortOrder="33"></element>
+
+
+      <!--Family Member/Dependents-->
+      <element type="hidden" name="FamilyMembers" default="1"></element>
+      <element type="select" name="FamilyMember" label="Family Member" HCMData="1" SortOrder="34">
+        &data_hiring_familymember;
+      </element>
+      <element type="text" name="FamilyMemberLastName" label="Last Name" HCMData="1" SortOrder="35"></element>
+      <element type="text" name="FamilyMemberFirstName" label="First Name" HCMData="1" SortOrder="36"></element>
+      <element type="select" name="FamilyMemberGender" label="Gender" HCMData="1" SortOrder="37">
+        &data_common_gender;
+      </element>
+      <element type="date" name="FamilyMemberDateOfBirth" label="Date of Birth" format="dd.MM.yyyy" HCMData="1" SortOrder="38">
+        <mandatoryIf name="FamilyMember">Child</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="search-select" source="1" name="FamilyMemberNationality" label="Nationality" default="Norwegian" HCMData="1" SortOrder="39">
+        &data_common_nationality;
+      </element>
+      <element type="select" name="TheOnlyChildCarer" label="The only child carer?" HCMData="1" SortOrder="40">
+        &data_common_noyes;
+        <mandatoryIf name="FamilyMember">Child</mandatoryIf>
+      </element>
+      
+      <element type="select" name="FamilyMember2" label="Family Member" HCMData="1" SortOrder="41">
+        &data_hiring_familymember;
+      </element>
+      <element type="text" name="FamilyMemberLastName2" label="Last Name" HCMData="1" SortOrder="42"></element>
+      <element type="text" name="FamilyMemberFirstName2" label="First Name" HCMData="1" SortOrder="43"></element>
+      <element type="select" name="FamilyMemberGender2" label="Gender" HCMData="1" SortOrder="44">
+        &data_common_gender;
+      </element>
+      <element type="date" name="FamilyMemberDateOfBirth2" label="Date of Birth" format="dd.MM.yyyy" HCMData="1" SortOrder="45">
+        <mandatoryIf name="FamilyMember2">Child</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="search-select" source="1" name="FamilyMemberNationality2" label="Nationality" default="Norwegian" HCMData="1" SortOrder="46">
+        &data_common_nationality;
+      </element>
+      <element type="select" name="TheOnlyChildCarer2" label="The only child carer?" HCMData="1" SortOrder="47">
+        &data_common_noyes;
+        <mandatoryIf name="FamilyMember2">Child</mandatoryIf>
+      </element>
+      
+      <element type="select" name="FamilyMember3" label="Family Member" HCMData="1" SortOrder="48">
+        &data_hiring_familymember;
+      </element>
+      <element type="text" name="FamilyMemberLastName3" label="Last Name" HCMData="1" SortOrder="49"></element>
+      <element type="text" name="FamilyMemberFirstName3" label="First Name" HCMData="1" SortOrder="50"></element>
+      <element type="select" name="FamilyMemberGender3" label="Gender" HCMData="1" SortOrder="51">
+        &data_common_gender;
+      </element>
+      <element type="date" name="FamilyMemberDateOfBirth3" label="Date of Birth" format="dd.MM.yyyy" HCMData="1" SortOrder="52">
+        <mandatoryIf name="FamilyMember3">Child</mandatoryIf>
+         <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="search-select" source="1" name="FamilyMemberNationality3" label="Nationality" default="Norwegian" HCMData="1" SortOrder="53">
+        &data_common_nationality;
+      </element>
+      <element type="select" name="TheOnlyChildCarer3" label="The only child carer?" HCMData="1" SortOrder="54">
+        &data_common_noyes;
+        <mandatoryIf name="FamilyMember3">Child</mandatoryIf>
+      </element>
+
+      <element type="select" name="FamilyMember4" label="Family Member" HCMData="1" SortOrder="55">
+        &data_hiring_familymember;
+      </element>
+      <element type="text" name="FamilyMemberLastName4" label="Last Name" HCMData="1" SortOrder="56"></element>
+      <element type="text" name="FamilyMemberFirstName4" label="First Name" HCMData="1" SortOrder="57"></element>
+      <element type="select" name="FamilyMemberGender4" label="Gender" HCMData="1" SortOrder="58">
+        &data_common_gender;
+      </element>
+      <element type="date" name="FamilyMemberDateOfBirth4" label="Date of Birth" format="dd.MM.yyyy" HCMData="1" SortOrder="59">
+        <mandatoryIf name="FamilyMember4">Child</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="search-select" source="1" name="FamilyMemberNationality4" label="Nationality" default="Norwegian" HCMData="1" SortOrder="60">
+        &data_common_nationality;
+      </element>
+      <element type="select" name="TheOnlyChildCarer4" label="The only child carer?" HCMData="1" SortOrder="61">
+        &data_common_noyes;
+        <mandatoryIf name="FamilyMember4">Child</mandatoryIf>
+      </element>
+      
+      <element type="select" name="FamilyMember5" label="Family Member" HCMData="1" SortOrder="62">
+         &data_hiring_familymember;
+      </element>
+      <element type="text" name="FamilyMemberLastName5" label="Last Name" HCMData="1" SortOrder="63"></element>
+      <element type="text" name="FamilyMemberFirstName5" label="First Name" HCMData="1" SortOrder="64"></element>
+      <element type="select" name="FamilyMemberGender5" label="Gender" HCMData="1" SortOrder="65">
+        &data_common_gender;
+      </element>
+      <element type="date" name="FamilyMemberDateOfBirth5" label="Date of Birth" format="dd.MM.yyyy" HCMData="1" SortOrder="66">
+        <mandatoryIf name="FamilyMember5">Child</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="search-select" source="1" name="FamilyMemberNationality5" label="Nationality" default="Norwegian" HCMData="1" SortOrder="67">
+        &data_common_nationality;
+      </element>
+      <element type="select" name="TheOnlyChildCarer5" label="The only child carer?" HCMData="1" SortOrder="68">
+        &data_common_noyes;
+        <mandatoryIf name="FamilyMember5">Child</mandatoryIf>
+      </element>
+      <!--Global mobility Employee Documents-->
+      <element type="hidden" name="EmployeeDocuments"> </element>
+      <element type="select" name="EmployeeDocumentType" label="Document Type" HCMData="1" SortOrder="69">
+        &data_hiring_documenttype1;
+      </element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry" label="Country" default="Norway" HCMData="1" SortOrder="70">
+      </element>
+      <element type="text" name="EmployeeDocumentNo" label="Document No." HCMData="1" SortOrder="71"></element>
+      <element type="date" name="EmployeeDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy" HCMData="1" SortOrder="72">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="EmployeeDocumentIssuePlace" label="Issue Place" HCMData="1" SortOrder="73"></element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place (Country)" default="Norway" HCMData="1" SortOrder="74">
+      </element>
+      <element type="select" name="EmployeeDocumentType2" label="Document Type" HCMData="1" SortOrder="75">
+        &data_hiring_documenttype1;
+      </element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry2" label="Country" default="Norway" HCMData="1" SortOrder="76">
+      </element>
+      <element type="text" name="EmployeeDocumentNo2" label="Document No." HCMData="1" SortOrder="77"></element>
+      <element type="date" name="EmployeeDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy" HCMData="1" SortOrder="78">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="EmployeeDocumentIssuePlace2" label="Issue Place" HCMData="1" SortOrder="79"></element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place (Country)" default="Norway" HCMData="1" SortOrder="80">
+      </element>
+      
+      <element type="select" name="EmployeeDocumentType3" label="Document Type" HCMData="1" SortOrder="81">
+        &data_hiring_documenttype1;
+      </element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry3" label="Country" default="Norway" HCMData="1" SortOrder="82">
+      </element>
+      <element type="text" name="EmployeeDocumentNo3" label="Document No." HCMData="1" SortOrder="83"></element>
+      <element type="date" name="EmployeeDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy" HCMData="1" SortOrder="84">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="EmployeeDocumentIssuePlace3" label="Issue Place" HCMData="1" SortOrder="85"></element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place (Country)" default="Norway" HCMData="1" SortOrder="86">
+      </element>
+
+      <element type="select" name="EmployeeDocumentType4" label="Document Type" HCMData="1" SortOrder="87">
+        &data_hiring_documenttype1;
+      </element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry4" label="Country" default="Norway" HCMData="1" SortOrder="88">
+      </element>
+      <element type="text" name="EmployeeDocumentNo4" label="Document No." HCMData="1" SortOrder="89"></element>
+      <element type="date" name="EmployeeDocumentIssueDate4" label="Issue Date" format="dd.MM.yyyy" HCMData="1" SortOrder="90">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="EmployeeDocumentIssuePlace4" label="Issue Place" HCMData="1" SortOrder="91"></element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry4" label="Issue Place (Country)" default="Norway" HCMData="1" SortOrder="92">
+      </element>
+
+      <element type="select" name="EmployeeDocumentType5" label="Document Type" HCMData="1" SortOrder="93">
+        &data_hiring_documenttype1;
+      </element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry5" label="Country" default="Norway" HCMData="1" SortOrder="94">
+      </element>
+      <element type="text" name="EmployeeDocumentNo5" label="Document No." HCMData="1" SortOrder="95"></element>
+      <element type="date" name="EmployeeDocumentIssueDate5" label="Issue Date" format="dd.MM.yyyy" HCMData="1" SortOrder="96">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="EmployeeDocumentIssuePlace5" label="Issue Place" HCMData="1" SortOrder="97"></element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry5" label="Issue Place (Country)" default="Norway" HCMData="1" SortOrder="98">
+      </element>
+
+
+      <!--Global mobility Dependants-->
+      <element type="hidden" name="DependantFamilyMembers"></element>
+      <element type="select" name="DependantFamilyMember" label="Dependant Family Member" HCMData="1" SortOrder="99">
+        &data_hiring_dependantfamilymember;
+      </element>
+      <element type="select" name="Accompanying" label="Accompanying" HCMData="1" SortOrder="100">
+        <mandatoryIfNotEmpty name="DependantFamilyMember"></mandatoryIfNotEmpty>
+        &data_common_yesno;
+      </element>
+      <element type="text" name="DependantsLastName" label="Dependant&apos;s Last Name" HCMData="1" SortOrder="101"></element>
+      <element type="text" name="DependantsFirstName" label="Dependant&apos;s First Name" HCMData="1" SortOrder="102"></element>
+      <element type="date" name="DependantsDateOfBirth" label="Dependant&apos;s Date of birth" format="dd.MM.yyyy" HCMData="1" SortOrder="103">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="select" name="DependantFamilyMember2" label="Dependant Family Member" HCMData="1" SortOrder="104">
+        &data_hiring_dependantfamilymember;
+      </element>
+      <element type="select" name="Accompanying2" label="Accompanying" HCMData="1" SortOrder="105"> 
+        <mandatoryIfNotEmpty name="DependantFamilyMember2"></mandatoryIfNotEmpty>
+        &data_common_yesno;
+      </element>
+      <element type="text" name="DependantsLastName2" label="Dependant&apos;s Last Name" HCMData="1" SortOrder="106"></element>
+      <element type="text" name="DependantsFirstName2" label="Dependant&apos;s First Name" HCMData="1" SortOrder="107"></element>
+      <element type="date" name="DependantsDateOfBirth2" label="Dependant&apos;s Date of birth" format="dd.MM.yyyy" HCMData="1" SortOrder="108">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+    
+      <element type="select" name="DependantFamilyMember3" label="Dependant Family Member" HCMData="1" SortOrder="109">
+        &data_hiring_dependantfamilymember;
+      </element>
+      <element type="select" name="Accompanying3" label="Accompanying" HCMData="1" SortOrder="110">
+        <mandatoryIfNotEmpty name="DependantFamilyMember3"></mandatoryIfNotEmpty>
+        &data_common_yesno;
+      </element>
+      <element type="text" name="DependantsLastName3" label="Dependant&apos;s Last Name" HCMData="1" SortOrder="111"></element>
+      <element type="text" name="DependantsFirstName3" label="Dependant&apos;s First Name" HCMData="1" SortOrder="112"></element>
+      <element type="date" name="DependantsDateOfBirth3" label="Dependant&apos;s Date of birth" format="dd.MM.yyyy" HCMData="1" SortOrder="113">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="select" name="DependantFamilyMember4" label="Dependant Family Member" HCMData="1" SortOrder="114">
+        &data_hiring_dependantfamilymember;
+      </element>
+      <element type="select" name="Accompanying4" label="Accompanying" HCMData="1" SortOrder="115">
+        <mandatoryIfNotEmpty name="DependantFamilyMember4"></mandatoryIfNotEmpty>
+        &data_common_yesno;
+      </element>
+      <element type="text" name="DependantsLastName4" label="Dependant&apos;s Last Name" HCMData="1" SortOrder="116"></element>
+      <element type="text" name="DependantsFirstName4" label="Dependant&apos;s First Name" HCMData="1" SortOrder="117"></element>
+      <element type="date" name="DependantsDateOfBirth4" label="Dependant&apos;s Date of birth" format="dd.MM.yyyy" HCMData="1" SortOrder="118">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+      <element type="select" name="DependantFamilyMember5" label="Dependant Family Member" HCMData="1" SortOrder="119">
+        &data_hiring_dependantfamilymember;
+      </element>
+      <element type="select" name="Accompanying5" label="Accompanying" HCMData="1" SortOrder="120">
+        <mandatoryIfNotEmpty name="DependantFamilyMember5"></mandatoryIfNotEmpty>
+        &data_common_yesno;
+      </element>
+      <element type="text" name="DependantsLastName5" label="Dependant&apos;s Last Name" HCMData="1" SortOrder="121"></element>
+      <element type="text" name="DependantsFirstName5" label="Dependant&apos;s First Name" HCMData="1" SortOrder="122"></element>
+      <element type="date" name="DependantsDateOfBirth5" label="Dependant&apos;s Date of birth" format="dd.MM.yyyy" HCMData="1" SortOrder="123">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+
+
+      <!--Global Mobility Dependants Documents-->
+      <element type="hidden" name="DependantsDocuments"></element>
+      <element type="select" name="DependantsDocumentType" label="Document Type" HCMData="1" SortOrder="124">
+        &data_hiring_documenttype2;
+      </element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry" label="Country" default="Norway" HCMData="1" SortOrder="125">
+      </element>
+      <element type="text" name="DependantsDocumentNo" label="Document No" HCMData="1" SortOrder="126"></element>
+      <element type="date" name="DependantsDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy" HCMData="1" SortOrder="127">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="DependantsDocumentIssuePlace" label="Issue Place" HCMData="1" SortOrder="128"></element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="Norway" HCMData="1" SortOrder="129">
+      </element>
+      <element type="select" name="DependantsDocumentType2" label="Document Type" HCMData="1" SortOrder="130">
+        &data_hiring_documenttype2;
+      </element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry2" label="Country" default="Norway" HCMData="1" SortOrder="131">
+      </element>
+      <element type="text" name="DependantsDocumentNo2" label="Document No" HCMData="1" SortOrder="132"></element>
+      <element type="date" name="DependantsDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy" HCMData="1" SortOrder="133">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="DependantsDocumentIssuePlace2" label="Issue Place" HCMData="1" SortOrder="134"></element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="Norway" HCMData="1" SortOrder="135">
+      </element>
+
+      <element type="select" name="DependantsDocumentType3" label="Document Type" HCMData="1" SortOrder="136">
+        &data_hiring_documenttype2;
+      </element>
+    <element  type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry3" label="Country" default="Norway" HCMData="1" SortOrder="137">
+      </element>
+      <element type="text" name="DependantsDocumentNo3" label="Document No" HCMData="1" SortOrder="138"></element>
+      <element type="date" name="DependantsDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy" HCMData="1" SortOrder="139">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="DependantsDocumentIssuePlace3" label="Issue Place" HCMData="1" SortOrder="140"></element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="Norway" HCMData="1" SortOrder="141">
+      </element>
+
+      <element type="select" name="DependantsDocumentType4" label="Document Type" HCMData="1" SortOrder="142">
+        &data_hiring_documenttype2;
+      </element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry4" label="Country" default="Norway" HCMData="1" SortOrder="143">
+      </element>
+      <element type="text" name="DependantsDocumentNo4" label="Document No" HCMData="1" SortOrder="144"></element>
+      <element type="date" name="DependantsDocumentIssueDate4" label="Issue Date" format="dd.MM.yyyy" HCMData="1" SortOrder="145">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="DependantsDocumentIssuePlace4" label="Issue Place" HCMData="1" SortOrder="146"></element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry4" label="Issue Place Country" default="Norway" HCMData="1" SortOrder="147">
+      </element>
+
+      <element type="select" name="DependantsDocumentType5" label="Document Type" HCMData="1" SortOrder="148">
+        &data_hiring_documenttype2;
+      </element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry5" label="Country" default="Norway" HCMData="1" SortOrder="149">
+      </element>
+      <element type="text" name="DependantsDocumentNo5" label="Document No" HCMData="1" SortOrder="150"></element>
+      <element type="date" name="DependantsDocumentIssueDate5" label="Issue Date" format="dd.MM.yyyy" HCMData="1" SortOrder="151">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="DependantsDocumentIssuePlace5" label="Issue Place" HCMData="1" SortOrder="152"></element>
+      <element  type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry5" label="Issue Place Country" default="Norway" HCMData="1" SortOrder="153">
+      </element>
+
+      <!--Bank Account Details-->
+      <element type="text" name="Payee" label="Payee" HCMData="1" SortOrder="154"></element>
+      <element type="hidden" name="BankKey" label="Bank Key" default="9999" HCMData="1" SortOrder="155"></element>
+      <element type="text" name="AccountNumber" label="Account Number" HCMData="1" SortOrder="156">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+        <regex inherit="PersNO" pattern="" message=""></regex>
+      </element>
+      <!--FISCAL DATA and SOCIAL INSURANCE -->
+      <element type="select" name="TaxInformation" label="Tax information" default="Main employer" HCMData="1" SortOrder="157">
+        &data_hiring_taxinformation;
+      </element>
+      <element type="select" name="VoluntaryTaxDeduction" label="Voluntary Tax Deduction" HCMData="1" SortOrder="158">
+        &data_personalinformation_voluntarytaxdeduction;
+      </element>
+      <element type="text" name="TotalAmount" label="Total Amount" HCMData="1" SortOrder="159">
+        <mandatoryIf name="VoluntaryTaxDeduction">Start deduction,Change deduction</mandatoryIf>
+        <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+      </element>
+
+      <!--Nationality / Language-->
+      <element type="search-select" source="1" name="Nationality" label="Nationality" HCMData="1" SortOrder="160">
+        &data_common_nationality;
+      </element>
+      <element type="search-select" name="Language" label="Language" default="Norwegian" HCMData="1" SortOrder="161">
+        &data_hiring_languageIT0002;
+      </element>
+      
+      <!--Country Specifics-->
+      <element type="date" name="Residencedate" label="Residence/Work permit expiry date" format="dd.MM.yyyy" HCMData="1" SortOrder="162">
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="ReducedHoliday" label="Reduced Holiday deduction / Ferietrekk" helptext="Please enter the  number of vacation days the Co-worker requests to be deducted for the current year" HCMData="1" SortOrder="163">
+        <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
+        <regex inherit="numBelow25" pattern="" message=""></regex>
+      </element>
+      <element type="select" name="FullDecemberTax" label="Full December tax" HCMData="1" SortOrder="164">
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+        </options>
+      </element>      
+    </tab>    
+  </fields>
+</form>

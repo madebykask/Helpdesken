@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+  <options>
+    <option value=""></option>
+    <option value="Rental cost deduction">Rental cost deduction</option>
+    <option value="TE advanced deduction">TE advanced deduction</option>
+    <option value="Maintenance cost">Maintenance cost</option>
+    <option value="Utility cost">Utility cost</option>
+    <option value="Other Deductions">Other Deductions</option>
+  </options> 

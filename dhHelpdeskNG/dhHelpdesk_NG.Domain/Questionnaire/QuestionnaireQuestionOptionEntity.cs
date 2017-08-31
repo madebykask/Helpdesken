@@ -29,6 +29,8 @@
 
         public int QuestionnaireQuestionOptionPos { get; set; }
 
+        public byte[] IconSrc { get; set; }
+
         public virtual ICollection<QuestionnaireQuestionResultEntity> QuestionnaireQuestionResultEntities { get; set; }
  
         public virtual ICollection<QuestionnaireQuesOpLangEntity> QuestionnaireQuesOpLangEntities { get; set; } 

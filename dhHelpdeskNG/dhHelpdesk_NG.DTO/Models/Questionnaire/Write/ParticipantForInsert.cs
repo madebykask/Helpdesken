@@ -13,7 +13,7 @@
             this.IsAnonym = isAnonymm;
             this.CreatedDate = createdDate;
             this.Answers = answers;
-            this.IsFeedback = IsFeedback;
+            this.IsFeedback = isFeedback;
         }
 
         public bool IsAnonym { get; private set; }

@@ -1,0 +1,75 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    ViewBag.Title = Model.Translate("Poland") + " - " + Model.Translate("Hiring");
+}
+
+@section Validation {
+
+    @Html.Partial("_Validate", Model)
+
+}
+
+@section Script {
+
+    <script>
+
+        $(document).on('click', '#btnHomeAddress, #btnMailingAddress, #btnEmergencyAddress, #btnTaxAddress', function (e) {
+            e.preventDefault();
+
+            var street = $('#Street');
+            var streetNumber = $('#StreetNumber');
+            var apartment = $('#HouseNumber');
+            var city = $('#City');
+            var postCode = $('#PostCode');
+            var region = $('#Region');
+            var district = $('#District');
+            var community = $('#Community');
+            var country = $('#CountryCode');
+
+            var prefix = $(this).attr('data-prefix');
+
+            $('#' + prefix + 'Street:enabled').val(street.val());
+            $('#' + prefix + 'StreetNumber:enabled').val(streetNumber.val());
+            $('#' + prefix + 'HouseNumber:enabled').val(apartment.val());
+            $('#' + prefix + 'City:enabled').val(city.val());
+            $('#' + prefix + 'PostCode:enabled').val(postCode.val());
+            $('#' + prefix + 'Region:enabled').val(region.val());
+            $('#' + prefix + 'District:enabled').val(district.val());
+            $('#' + prefix + 'Community:enabled').val(community.val());
+            $('#' + prefix + 'CountryCode:enabled').val(country.val());
+
+        });
+
+        $(document).on('change', '#Extent', function (e) {
+            e.preventDefault();
+            if ($(this).val() === 'Full time')
+                $('#Workload').val('100');
+        });
+
+        validate.run($('#actionState').val());
+
+        $(document).on('change', '#actionState', function (e) {
+            var val = $(this).val();
+            validate.run(val);
+        });
+
+        var unitWorkTimeSystemArr = ["O188", "O203", "O204", "O205", "O294", "O306", "O307", "O329"];
+
+        if ($('#WorkingTimeSchedule').val() === '') {
+            $('#WorkingTimeSchedule').val('basic');
+            for (var i = 0; i < unitWorkTimeSystemArr.length; i++) {
+                if (unitWorkTimeSystemArr[i] === $('#Unit').val()) {
+                    $('#WorkingTimeSchedule').val('equivalent');
+                    break;
+                }
+            }
+        }
+
+    </script>
+
+}
+
+@Html.Partial("_Edit", Model)

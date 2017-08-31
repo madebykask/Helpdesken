@@ -1,4 +1,4 @@
-﻿
+﻿use dhHelpdesk_IKEA_BSCHR
 
 UPDATE tblTextTranslation Set TextTranslation = 'Cases on hold' WHERE Text_Id=6 AND Language_Id=2;
 GO
@@ -5801,17 +5801,6 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = 'Default when cases are registered by e-mail' WHERE Text_Id=854 AND Language_Id=2;
 GO
 
-Declare @Id int = 1811
-Declare @LanguageId int = 2
-If not exists (select * from tbltext where id = @Id)
-begin
-	insert into tbltext (id, TextString) VALUES (@Id, '-- Välj --')
-end
-If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
-begin
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, '-- Select --')
-end
-GO
 
 Declare @Id int = 1812
 Declare @LanguageId int = 2
@@ -5856,6 +5845,332 @@ If not exists (select * from tbltext where id = 1816)
 GO
 If not exists (select * from tblTextTranslation where text_id = 1816 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1816, 2, 'Short description')
+GO
+
+If not exists (select * from tbltext where id = 1817)
+	insert into tbltext (id, TextString) VALUES (1817, 'Exkludera handläggare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1817 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1817, 2, 'Exclude administrators')
+GO
+
+If not exists (select * from tbltext where id = 1818)
+	insert into tbltext (id, TextString) VALUES (1818, 'e-postadresser från urval')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1818 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1818, 2, 'e-mail addresses from selection')
+GO
+
+Declare @Id int = 1819
+Declare @LanguageId int = 2
+If not exists (select * from tbltext where id = @Id)
+begin
+	insert into tbltext (id, TextString) VALUES (@Id, 'Bilagor')
+end
+If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, 'Attachments')
+end
+GO
+
+Declare @Id int = 1820
+Declare @LanguageId int = 2
+If not exists (select * from tbltext where id = @Id)
+begin
+	insert into tbltext (id, TextString) VALUES (@Id, 'Visa på Case tab')
+end
+If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, 'Show on Case-tab')
+end
+GO
+
+Declare @Id int = 1821
+Declare @LanguageId int = 2
+If not exists (select * from tbltext where id = @Id)
+begin
+	insert into tbltext (id, TextString) VALUES (@Id, 'Visa på Bilagor tab')
+end
+If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, 'Show on Attachment-tab')
+end
+GO
+
+If not exists (select * from tbltext where id = 1822)
+	insert into tbltext (id, TextString) VALUES (1822, 'Visa Skapa ett ärende i toppmenyn')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1822 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1822, 2, 'Show Initiate a Case in top menu')
+GO
+
+If not exists (select * from tbltext where id = 1823)
+	insert into tbltext (id, TextString) VALUES (1823, 'Visa Ärenden i toppmenyn')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1823 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1823, 2, 'Show Cases in top menu')
+GO
+
+UPDATE tblText Set TextString = 'Mina ärenden visar' WHERE Id=1783;
+GO
+
+If not exists (select * from tbltext where id = 1824)
+	insert into tbltext (id, TextString) VALUES (1824, 'Ärende - Understatus')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1824 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1824, 2, 'Case - Sub status')
+GO
+
+If not exists (select * from tbltext where id = 1825)
+	insert into tbltext (id, TextString) VALUES (1825, 'Ärende - Driftgrupp')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1825 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1825, 2, 'Case - Working group')
+GO
+
+If not exists (select * from tbltext where id = 1826)
+	insert into tbltext (id, TextString) VALUES (1826, 'Ärende - Prioritet')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1826 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1826, 2, 'Case - Priority')
+GO
+
+If not exists (select * from tbltext where id = 1827)
+	insert into tbltext (id, TextString) VALUES (1827, 'Ärende - Status')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1827 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1827, 2, 'Case - Status')
+GO
+
+If not exists (select * from tbltext where id = 1828)
+	insert into tbltext (id, TextString) VALUES (1828, 'Ärende - Produktområde')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1828 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1828, 2, 'Case - Product area')
+GO
+
+If not exists (select * from tbltext where id = 1829)
+	insert into tbltext (id, TextString) VALUES (1829, 'Användare - Driftgrupp')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1829 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1829, 2, 'User - Working group')
+GO
+
+If not exists (select * from tbltext where id = 1830)
+	insert into tbltext (id, TextString) VALUES (1830, 'Gruppera ärendemallar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1830 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1830, 2, 'Group case templates')
+GO
+
+Declare @Id int = 1831
+Declare @LanguageId int = 2
+If not exists (select * from tbltext where id = @Id)
+begin
+	insert into tbltext (id, TextString) VALUES (@Id, '-- Välj --')
+end
+If not exists (select * from tblTextTranslation where text_id = @Id and Language_Id = @LanguageId)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(@Id, @LanguageId, '-- Select --')
+end
+GO
+
+If not exists (select * from tbltext where id = 1832)
+	insert into tbltext (id, TextString) VALUES (1832, 'Ärendemall - Produktområde')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1832 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1832, 2, 'Case template - Product area')
+GO
+
+If not exists (select * from tbltext where id = 1833)
+	insert into tbltext (id, TextString) VALUES (1833, 'Detta arbetsflöde kommer endast visas om alla villkor är uppfyllda i ärendet. Det kan finnas mer än ett värde för varje fält, ett av värdena för fältet måste vara uppfyllt.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1833 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1833, 2, 'This workflow step will only be shown if all added conditions are fulfilled for the case. There can be more than one value for each field, one of the values for that field must be fulfilled.')
+GO
+
+If not exists (select * from tbltext where id = 1834)
+	insert into tbltext (id, TextString) VALUES (1834, 'Ärendesektion')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1834 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1834, 2, 'Case section')
+GO
+
+If not exists (select * from tbltext where id = 1835)
+	insert into tbltext (id, TextString) VALUES (1835, 'Kollapsade')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1835 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1835, 2, 'Collapsed')
+GO
+
+If not exists (select * from tbltext where id = 1836)
+	insert into tbltext (id, TextString) VALUES (1836, 'Sektion')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1836 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1836, 2, 'Section')
+GO
+
+If not exists (select * from tbltext where id = 1837)
+	insert into tbltext (id, TextString) VALUES (1837, 'Öppen')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1837 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1837, 2, 'Expanded')
+GO
+
+If not exists (select * from tbltext where id = 1838)
+	insert into tbltext (id, TextString) VALUES (1838, 'Hopfälld')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1838 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1838, 2, 'Collapsed')
+GO
+
+If not exists (select * from tbltext where id = 1839)
+	insert into tbltext (id, TextString) VALUES (1839, 'På')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1839 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1839, 2, 'On')
+GO
+
+
+If not exists (select * from tbltext where id = 1840)
+begin
+	insert into tbltext (id, TextString) VALUES (1840, 'Kopplat ärende')
+end
+else
+begin
+	update tbltext set TextString = 'Kopplat ärende' where id = 1840
+end	
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1840 and Language_Id = 2)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1840, 2, 'Connected case')
+end
+else
+begin
+	update tblTextTranslation set TextTranslation = 'Connected case' where Text_Id = 1840 and Language_Id = 2
+end
+GO
+
+
+If not exists (select * from tbltext where id = 1841)
+begin
+	insert into tbltext (id, TextString) VALUES (1841, 'Ärendemall för underärende')
+end
+else
+begin
+	update tbltext set TextString = 'Ärendemall för underärende' where id = 1841
+end	
+GO
+If not exists (select * from tblTextTranslation where text_id = 1841 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1841, 2, 'Case template for child case')
+GO
+
+
+If not exists (select * from tbltext where id = 1842)
+	insert into tbltext (id, TextString) VALUES (1842, 'Obligatorisk vid aktivering')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1842 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1842, 2, 'Mandatory on reopen')
+GO
+
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to invoice article' where Text_Id = 1724 and Language_Id = 2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'Show Customer specific page' where Text_Id = 1395 and Language_Id = 2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'Group Case templates' where Text_Id = 1830 and Language_Id = 2;
+GO
+
+update tbltext set TextString = 'Visa Kundspecifik sida' where id = 1395
+GO
+
+update tbltext set TextString = 'Gruppera Ärendemallar' where id = 1830
+GO
+
+
+If not exists (select * from tbltext where id = 1843)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1843, 'Ja', 1)
+end
+else
+begin
+	update tbltext set TextString = 'Ja' where id = 1843
+end	
+GO
+If not exists (select * from tblTextTranslation where text_id = 1843 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1843, 2, 'Yes')
+GO
+
+If not exists (select * from tbltext where id = 1844)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1844, 'Nej', 1)
+end
+else
+begin
+	update tbltext set TextString = 'Nej' where id = 1844
+end	
+GO
+If not exists (select * from tblTextTranslation where text_id = 1844 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1844, 2, 'No')
+GO
+
+If not exists (select * from tbltext where id = 1845)
+	insert into tbltext (id, TextString) VALUES (1845, 'Helpdesk meny')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1845 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1845, 2, 'Helpdesk menu')
+GO
+
+If not exists (select * from tbltext where id = 1846)
+	insert into tbltext (id, TextString) VALUES (1846, 'Genväg')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1846 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1846, 2, 'Shortcut')
+GO
+
+If not exists (select * from tbltext where id = 1847)
+	insert into tbltext (id, TextString) VALUES (1847, 'Visa genväg för Nytt ärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1847 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1847, 2, 'Show shortcut for New case')
+GO
+
+If not exists (select * from tbltext where id = 1848)
+	insert into tbltext (id, TextString) VALUES (1848, 'Special inställningar för sektionen')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1848 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1848, 2, 'Special settings for section')
+GO
+
+If not exists (select * from tbltext where id = 1849)
+	insert into tbltext (id, TextString) VALUES (1849, 'Vid nytt case')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1849 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1849, 2, 'On new case')
+GO
+
+If not exists (select * from tbltext where id = 1850)
+	insert into tbltext (id, TextString) VALUES (1850, 'Vi ändring av case')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1850 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1850, 2, 'On edit of case')
+GO
+
+If not exists (select * from tbltext where id = 1851)
+	insert into tbltext (id, TextString) VALUES (1851, 'Visa fält i rubrik')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1851 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1851, 2, 'Show fields in subject')
+GO
+
+If not exists (select * from tbltext where id = 1852)
+	insert into tbltext (id, TextString) VALUES (1852, 'Visa endast för')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1852 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1852, 2, 'Only show for')
 GO
 
 -- *** Run this last when put translation script above this line **--

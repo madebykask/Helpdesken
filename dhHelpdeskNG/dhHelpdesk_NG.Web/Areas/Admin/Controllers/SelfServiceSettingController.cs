@@ -58,7 +58,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Value = x.Id.ToString()
             }).ToList();
 
-            var allCaseTypes = _caseTypeService.GetCaseTypes(customerId, true);
+            var allCaseTypes = _caseTypeService.GetCaseTypesForSetting(customerId, true);
             var availableCaseTypes = allCaseTypes.Where(c => c.ShowOnExtPageCases == 0).Select(x => new SelectListItem
             {
                 Text = x.Name,
@@ -71,7 +71,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Value = x.Id.ToString()
             }).ToList();
 
-            var allProductAreas = _productAreaService.GetTopProductAreas(customerId);
+            var allProductAreas = _productAreaService.GetProductAreasForSetting(customerId, true);
             var availableProductAreas = allProductAreas.Where(p => p.ShowOnExtPageCases == 0).Select(x => new SelectListItem
             {
                 Text = x.Name,
@@ -129,6 +129,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             customerToSave.MyCasesInitiator = vmodel.Customer.MyCasesInitiator;
             customerToSave.MyCasesRegarding = vmodel.Customer.MyCasesRegarding;
             customerToSave.MyCasesRegistrator = vmodel.Customer.MyCasesRegistrator;
+            customerToSave.ShowCasesOnExternalPage = vmodel.Customer.ShowCasesOnExternalPage;
+            customerToSave.ShowCaseOnExternalPage = vmodel.Customer.ShowCaseOnExternalPage;
+            customerToSave.GroupCaseTemplates = vmodel.Customer.GroupCaseTemplates;
 
             if (customerToSave == null)
                 throw new Exception("No customer found...");
@@ -149,7 +152,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 _documentService.SaveDocumentCategory(cat, out errors);
             }
 
-            var allCaseTypes = _caseTypeService.GetCaseTypes(id);
+            var allCaseTypes = _caseTypeService.GetCaseTypesForSetting(id, true);
 
             foreach (var type in allCaseTypes)
             {
@@ -161,7 +164,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 _caseTypeService.SaveCaseType(type, out errors);
             }
 
-            var allProductAreas = _productAreaService.GetTopProductAreas(id);
+            var allProductAreas = _productAreaService.GetProductAreasForSetting(id, true);
 
             List<int> prodareawgs = new List<int>();
             int[] wgs = null;
@@ -180,7 +183,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     wgs = prodareawgs.ToArray();
                 }
 
-                _productAreaService.SaveProductArea(prod, wgs, out errors);
+                _productAreaService.SaveProductArea(prod, wgs, 0, out errors);
             }
 
 

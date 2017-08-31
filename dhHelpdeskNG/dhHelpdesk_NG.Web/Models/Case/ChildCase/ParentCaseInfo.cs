@@ -9,6 +9,8 @@
 
         public decimal CaseNumber;
 
+		public bool IsChildIndependent;
+
         public string Administrator;
 
         public bool IsCaseClosed;

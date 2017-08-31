@@ -1,0 +1,228 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<div class="tab-pane" id="Basic">
+    <div class="span6">
+        <table class="table">
+            <tbody>       
+            <tr>
+                <td class="tdstrong">@Model.Label("BasicTerminationType")</td>
+                <td>
+                    @Model.Element("BasicTerminationType")
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("LastDayOfEmployment")</td>
+                <td>
+                    @Model.Element("LastDayOfEmployment")
+                    <div id="notice_HiringDate" style="display:none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past.")
+                        <br />
+                                @Model.Translate("Are you sure you want to backdate Last Day of Employment date?")
+                        </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdstrong">@Model.Label("LastDayWorked")</td>
+                <td>
+                    @Model.Element("LastDayWorked")
+                                        <div id="notice_LastDayWorked" style="display:none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Last Day Worked?")
+                        </div>
+                </td>
+            </tr>         
+
+            <tr>
+                <td class="tdstrong" colspan="2">
+                    <h4>@Model.Translate("CDS")</h4>
+                </td>                
+            </tr>  
+            <tr>
+                <td class="tdstrong">@Model.Label("LockCDSAccountFrom")</td>
+                <td>
+                    @Model.Element("LockCDSAccountFrom")</td>
+            </tr>         
+
+
+                </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function selectIndexChangeTerminationType() {
+        if (document.getElementById('CompleteTerminationType'))
+        {
+            document.getElementById('CompleteTerminationType').value = document.getElementById('BasicTerminationType').value;
+
+
+            path = '';
+            var path = window.location.protocol + '//';
+            path = path + window.location.host + '/';
+
+
+            //path = site.baseUrl + '/FormLibContent/Xmls/Ireland/Templates/predefined_linemanager_jobtitle_outs.xml'
+            path = site.baseUrl + '/FormLibContent/Xmls/UnitedKingdom/Templates/predefined_TerminationReason.xml'
+
+            $.ajax({
+                type: "GET",
+                url: path,
+                dataType: "xml",
+                success: setTerminationReason,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                    alert(textStatus);
+                    alert(errorThrown);
+                }
+
+            });
+        }
+    }
+
+    function setTerminationReason(xml) {
+
+
+        var show = ''
+
+        var dep = '';
+        if (document.getElementById('CompleteTerminationType')) {
+            dep = document.getElementById('CompleteTerminationType').value;
+        }
+        var temp = '';
+
+        $(xml).find('dependent').each(function () {
+
+
+            var $sel = $(this);
+
+            show = '';
+
+
+            var department = $sel.find('selected').text();
+
+            show = $sel.find('show').text();
+
+            if (department.toString().trim() == dep.toString().trim()) {
+
+                if (show != '') {
+
+                    var optionsarray = show.split(',');
+                    var seloption = "";
+
+                    $('#TerminationReason')
+                        .find('option')
+                        .remove();
+
+
+
+                    seloption = '<option value="' + temp + '">' + temp + '</option>';
+
+                    $.each(optionsarray, function (i) {
+                        seloption += '<option value="' + optionsarray[i] + '">' + optionsarray[i] + '</option>';
+                    });
+                    $('#TerminationReason').append(seloption);
+
+
+
+
+                    return;
+                }
+
+
+            }
+        });
+
+    }
+
+
+
+    document.getElementById('BasicTerminationType').onchange = selectIndexChangeTerminationType;
+
+    $('#BasicTerminationType').change(function () {
+        disableOneIKEABonus();
+    });
+
+
+    var noticeHiringDate = $('#notice_HiringDate');
+    var noticeHiringDateWrong = $('#notice_HiringDateWrong');
+
+    $('#LastDayOfEmployment').change(function () {
+      
+        var startDate = $('#LastDayOfEmployment').val();
+        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+        var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        noticeHiringDate.hide();
+        noticeHiringDateWrong.hide();
+        
+        if (dstartDate.valueOf() < now.valueOf()) {
+            noticeHiringDate.show();
+            $('#notice_LastDayWorked').show();
+        }
+                
+        $('#LockCDSAccountFrom').val(startDate);
+        $('#LastDayWorked').val(startDate);
+        $('#TerminationPaymentDate').val(startDate);
+        $('#TerminationPaymentDate2').val(startDate);
+        $('#TerminationPaymentDate3').val(startDate)
+        $('#TerminationPaymentDate4').val(startDate)
+        $('#TerminationPaymentDate5').val(startDate)
+
+        $('#DeductionDate').val(startDate);
+        $('#DeductionDate2').val(startDate);
+        $('#DeductionDate3').val(startDate);
+        $('#DeductionDate4').val(startDate);
+        $('#DeductionDate5').val(startDate);
+    });
+
+
+    var LastDayWorked = $('#notice_LastDayWorked');
+    var dateDatePicker = $('#date_LastDayWorked');
+    if (LastDayWorked.length > 0 ) {
+        var startDate = new Date();
+        startDate.setHours(0, 0, 0, 0);
+
+        dateDatePicker.not(".disabled").datepicker()
+            .on('changeDate', function (e) {
+                if (e.date.valueOf() < startDate.valueOf()) {
+
+                    LastDayWorked.show();
+                } else {
+
+                    LastDayWorked.hide();
+                }
+            });
+    }
+
+
+    var LastDayOfEmployment = $('#date_LastDayOfEmployment');
+    LastDayOfEmployment.not(".disabled").datepicker()
+            .on('changeDate', function (e) {
+                var LastDate = $('#LastDayOfEmployment').val();
+                document.getElementById('LastDayWorked').value = LastDate;
+            });
+
+
+
+    
+
+    function selectIndexChangeProbationPeriod() {
+        var probitionEndDate = document.getElementById('ProbationEndDate');
+        if ((this.options[this.selectedIndex].value == 'Not Applicable') || (this.options[this.selectedIndex].value == 'No')) {
+            probitionEndDate.disabled = true;
+        } else {
+            probitionEndDate.disabled = false;
+            var validFrom = document.getElementById('ChangeValidFrom');
+            var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+            var date = APIGlobal.DateTime.parseDate(validFrom.value, format);
+            date.setMonth(date.getMonth() + 2);
+
+            probitionEndDate.value = APIGlobal.DateTime.formatDate(date, format);
+        }
+    }
+
+
+
+</script>

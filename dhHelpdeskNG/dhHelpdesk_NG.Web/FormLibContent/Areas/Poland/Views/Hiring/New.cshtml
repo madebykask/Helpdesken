@@ -1,0 +1,42 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+@{
+    ViewBag.Title = Model.Translate("Poland") + " - " + Model.Translate("Hiring");
+    var url = Url.CurrentController() + "typeahead";
+}
+
+@section Script {
+    <script>
+
+        $(function () {
+            validate.run(10);
+        });
+
+    </script>
+
+    @Html.Partial("_Validate", Model)
+}
+
+@using(Html.BeginForm("new", "hiring", FormMethod.Post, new { area = "poland", novalidate = "novalidate" }))
+{
+    <span style="display: none;" id="narrowDownInit" url="@url"></span>
+    @Html.Partial("_Navigation", Model)
+    <div class="container containeralignright">
+        @Html.Partial("_CurrentUser")
+        @Html.Partial("_ErrorMessage", Model)
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#contract">@Model.Translate("Basic Data")</a></li>
+        </ul>
+        <div class="content">
+            <div class="row-fluid">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="contract">
+                        @Html.Partial("_TabContract", Model)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

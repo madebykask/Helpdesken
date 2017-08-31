@@ -1,0 +1,73 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+
+<!-- Bank Account Details -->
+<tr>
+    <td class="tdstrong" colspan="2">
+        <h4>@Model.Translate("Bank Account Details")</h4>
+    </td>
+</tr>
+@*<tr>
+                    <td class="tdstrong">@Model.Label("BankType")</td>
+                    <td>@Model.Element("BankType")</td>
+                </tr>*@
+<tr>
+    <td class="tdstrong">@Model.Label("Payee")</td>
+    <td>@Model.Element("Payee")</td>
+</tr>
+@*<tr>
+                    <td class="tdstrong">@Model.Label("BankCountry")</td>
+                    <td>@Model.Element("BankCountry")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("BankKey")</td>
+                    <td>@Model.Element("BankKey")</td>
+                </tr>
+                <tr>
+                    <td class="tdstrong">@Model.Label("AccountNumber")</td>
+                    <td>@Model.Element("AccountNumber")</td>
+                </tr>*@
+<tr>
+    <td class="tdstrong">@Model.Label("BankCountry")</td>
+    <td>@Model.Element("BankCountry")</td>
+</tr>
+<tr>
+    <td class="tdstrong">@Model.Label("IBAN")</td>
+    <td>@Model.Element("IBAN")</td>
+</tr>
+
+<tr>
+    <td class="tdstrong">@Model.Label("PaymentCurrency")</td>
+    <td>@Model.Element("PaymentCurrency")</td>
+</tr>
+<tr>
+    <td class="tdstrong" colspan="2">
+        <h4>@Model.Translate("Second Bank Account Details")</h4>
+    </td>
+</tr>
+<tr>
+    <td class="tdstrong">@Model.Label("Payee2")</td>
+    <td>@Model.Element("Payee2")</td>
+</tr>
+<tr>
+    <td class="tdstrong">@Model.Label("BankCountry2")</td>
+    <td>@Model.Element("BankCountry2")</td>
+</tr>
+<tr>
+    <td class="tdstrong">@Model.Label("IBAN2")</td>
+    <td>@Model.Element("IBAN2")</td>
+</tr>
+<tr>
+    <td class="tdstrong">@Model.Label("PaymentCurrency2")</td>
+    <td>@Model.Element("PaymentCurrency2")</td>
+</tr>
+<tr>
+    <td class="tdstrong">@Model.Label("OtherBankPercentageOrAmount")</td>
+    <td>@Model.Element("OtherBankPercentageOrAmount")</td>
+</tr>
+@*<tr id="addBankAccountTrr">
+    <td colspan="2">
+        @Model.Element("BankAccounts")
+        <a id="addBank" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Bank")</a></td>
+</tr>*@

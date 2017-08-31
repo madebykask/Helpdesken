@@ -24,15 +24,46 @@
                 var i = 0;
                 foreach (var filename in Model.Files)
                 {
-                    <tr data-field="caseLogFile" data-field-id="@Model.Id" data-field-name="@filename">
+                    <tr data-field="caseLogFile" data-field-id="@Model.Id" data-field-name="@filename.Name">
                         <td>
+                            <input type="hidden" id="logfile_id" value="@filename.Id" />
                             @if (Model.VirtualDirectory)
                             {
-                                <a target="_blank" href="@Html.Action("LogFileLinkVD","Files", new RouteValueDictionary { { "id", Model.Id }, { "fileName", filename } })"><i class="icon-file"></i> @filename</a>
+                                if (filename.IsExistCaseFile && filename.ObjId.HasValue)
+                                {
+                                    <a target="_blank" class="isExisted" href="@Html.Action("CaseFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", filename.ObjId}, {"fileName", filename.Name}})"><i class="icon- attachedFile"></i>@filename.Name</a>
+                                }
+                                else
+                                {
+                                    if (filename.IsExistLogFile && filename.ObjId.HasValue)
+                                    {
+                                        <a target="_blank" class="isExisted" href="@Html.Action("LogFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", filename.ObjId}, {"fileName", filename.Name}})"><i class="icon- attachedFile"></i> @filename.Name</a>
+                                    }
+                                    else
+                                    {
+                                        <a target="_blank" href="@Html.Action("LogFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", Model.Id}, {"fileName", filename.Name}})"><i class="icon-file"></i> @filename.Name</a>
+                                    }
+                                }
                             }
                             else
                             {
-                                <a href="@Url.Action("DownloadLogFile", new RouteValueDictionary { { "id", Model.Id }, { "fileName", filename } })"><i class="icon-file"></i> @filename</a>
+                                if (filename.IsExistCaseFile && filename.ObjId.HasValue)
+                                {
+                                    <a target="_blank" class="isExisted" href="@Html.Action("CaseFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", filename.ObjId}, {"fileName", filename.Name}})">
+                                        <i class="icon- attachedFile"></i>@filename.Name
+                                    </a>
+                                }
+                                else
+                                {
+                                    if (filename.IsExistLogFile && filename.ObjId.HasValue)
+                                    {
+                                        <a target="_blank" class="isExisted" href="@Html.Action("LogFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", filename.ObjId}, {"fileName", filename.Name}})"><i class="icon- attachedFile"></i> @filename.Name</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("DownloadLogFile", new RouteValueDictionary {{"id", Model.Id}, {"fileName", filename.Name}})"><i class="icon-file"></i> @filename.Name</a>
+                                    }
+                                }
                             }
                         </td>
                         <td>

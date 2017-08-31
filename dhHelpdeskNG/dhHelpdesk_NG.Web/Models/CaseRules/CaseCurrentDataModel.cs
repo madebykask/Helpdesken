@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace DH.Helpdesk.Web.Models.CaseRules
 {
@@ -8,7 +10,12 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         #region Initiator      
 
-        public string ReportedBy { get; set; }        
+        public int Id { get; set; }
+
+        public decimal CaseNumber { get; set; }
+
+
+        public string ReportedBy { get; set; }
 
         public string PersonsName { get; set; }
 
@@ -162,5 +169,67 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         #endregion    
 
+    }
+
+    public sealed class CaseCurrentDataModelJS : CaseCurrentDataModel
+    {
+        public CaseCurrentDataModelJS()
+        {
+        }
+
+        public string DateFormat { get; set; }
+
+        public string PlanDateJS { get; set; }
+
+        public string WatchDateJS { get; set; }
+
+        public string StatusName { get; set; }
+
+        public string SubStateName { get; set; }
+
+        public string PriorityName { get; set; }
+
+        public string WorkingGroupName { get; set; }
+
+        public string CaseTypeName { get; set; }
+
+        public string ProductAreaName { get; set; }
+
+        public string RegionName { get; set; }
+
+        public string DepartmentName { get; set; }
+
+        public string OUName { get; set; }
+    }
+
+    public sealed class LogJS
+    {
+        public int Id { get; set; }
+
+        public string LogDate { get; set; }
+
+        public string Text_External { get; set; }
+
+        public string Text_Internal { get; set; }
+
+        public string FinishingDescription { get; set; }
+
+        public string FinishingDate { get; set; }
+
+        public int? FinishingCause_Id { get; set; }
+
+        public string UserId { get; set; }
+    }
+
+    public sealed class FileJS
+    {
+        public int Id { get; set; }
+
+        public string FileName { get; set; }
+
+        public string CreateDate { get; set; }
+
+        public string UserId { get; set; }
+        
     }
 }

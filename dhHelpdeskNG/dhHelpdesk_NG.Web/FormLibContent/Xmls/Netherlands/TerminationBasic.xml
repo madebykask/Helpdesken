@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE form [
+  <!ENTITY languages SYSTEM "Templates/Languages.xml">
+  <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
+  <!ENTITY state SYSTEM "Templates/TerminationBasicState.xml">
+  <!ENTITY data_country SYSTEM "Data/Data_Country.xml">
+]>
+
+<form id="58" guid="55A15759-7AB0-4081-A304-C43DBA784AB4" customerId="29">
+  &languages;
+  &regexs;
+  &state;
+  <fields>
+    <tab name="#ServiceRequestDetails" label="Service Request Details">
+      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1" casefield="reportedby" HcmData="1" SortOrder="1" ParentGVFields="0">
+        <regex inherit="employeeno" message="" pattern=""></regex>
+      </element>
+      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1" casefield="persons_name" HcmData="1" SortOrder="2" ParentGVFields="0"></element>
+      <element name="LastName" type="text" label="Co-Worker Last name" mandatory="1" casefield="persons_phone" HcmData="1" SortOrder="3" ParentGVFields="0"></element>
+      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
+        <regex inherit="email" message="" pattern=""></regex>
+      </element>
+      <element name="IKEANetworkID" type="text"  label="IKEA Network ID"></element>
+      <element name="Company" type="text" label="Company" mandatory="1" casefield="region_id"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1" casefield="department_id" HcmData="1" SortOrder="4" ParentGVFields="0"></element>
+      <element name="ServiceArea" type="text" label="Function"></element>
+      <element name="Department" type="text" label="Department" casefield="ou_id" HcmData="1" SortOrder="5" ParentGVFields="0"></element>
+      <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" mandatory="1">
+        <options>
+          <option value ="No">No</option>
+          <option value ="Yes">Yes</option>
+        </options>
+      </element>
+      <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard" casefield="status_id">
+        <options>
+          <option value=""></option>
+          <option value ="Urgent">Urgent</option>
+          <option value ="Standard">Standard</option>
+        </options>
+      </element>
+
+      <element type="text" name="PermanentAddressLine1" label="Address line 1" formfieldidentifier="E1P0006.STRAS:1" HcmData="1" SortOrder="7" ParentGVFields="0"></element>
+      <element type="text" name="PermanentAddressLine2" label="Address line 2" formfieldidentifier="E1P0006.HSNMR:1" HcmData="1" SortOrder="8" ParentGVFields="0"></element>
+      <element type="text" name="PermanentAddressLine3" label="Address line 3" formfieldidentifier="E1P0006.POSTA:1" HcmData="1" SortOrder="9" ParentGVFields="0"></element>
+      <element type="text" name="PermanentPostalCode" label="Postal code" formfieldidentifier="E1P0006.PSTLZ:1" HcmData="1" SortOrder="10" ParentGVFields="0">
+        <validateIf name="PermanentCountry">Netherlands</validateIf>
+        <regex inherit="postcode" pattern="" message=""></regex>
+      </element>
+      <element type="text" name="PermanentCity" label="City" formfieldidentifier="E1P0006.ORT01:1" HcmData="1" SortOrder="11" ParentGVFields="0"></element>
+      <element name="PermanentCountry" label="Country" type="search-select" default="Netherlands" formfieldidentifier="E1P0006.LAND1:1">
+        &data_country;
+      </element>
+      <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
+    </tab>
+    <!--Basic Termination Details-->
+    <tab name="#Complete" label="Complete">
+      <element name="TerminationPaymentMethod" type="select" label="Termination Payment Method" default="By Payroll" mandatory="1" HcmData="1" SortOrder="6" ParentGVFields="0">
+        <options>
+          <option value ="By Payroll">By Payroll</option>
+          <option value ="By Off cycle">By Off cycle</option>
+          <option value ="By Manual Payment">By Manual Payment</option>
+        </options>
+      </element>
+    </tab>
+  </fields>
+
+</form>
+

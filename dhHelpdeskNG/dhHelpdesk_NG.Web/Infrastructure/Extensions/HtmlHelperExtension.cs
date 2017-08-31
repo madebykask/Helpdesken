@@ -192,6 +192,11 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 return new MvcHtmlString(string.Empty);
         }
 
+        public static string ProductAreaDropdownString(IList<ProductArea> pal, bool isTakeOnlyActive = true)
+        {
+            return pal != null ? BuildProcuctAreaDropdownButtonString(pal, isTakeOnlyActive) : string.Empty;
+        }
+
         public static MvcHtmlString CategoryDropdownButtonString(this HtmlHelper helper, IList<Category> cats, bool isTakeOnlyActive = true)
         {
             if (cats != null)
@@ -1058,18 +1063,20 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
 
             return new MvcHtmlString(res.ToString());
         }
-        
+
         private static MvcHtmlString BuildFinishingCauseDropdownButton(IList<FinishingCause> causes, bool isTakeOnlyActive = true)
         {
             StringBuilder sb = new StringBuilder();
 
             foreach (FinishingCause f in causes)
             {
-                if (!isTakeOnlyActive || (isTakeOnlyActive && f.IsActive == 1))
+                if (!isTakeOnlyActive || (isTakeOnlyActive && f.IsActive != 0))
                 {
                     bool hasChild = false;
                     if (f.SubFinishingCauses != null)
-                        if (f.SubFinishingCauses.Count > 0)
+                        if (f.SubFinishingCauses.Count > 0 && 
+                            (!isTakeOnlyActive || (isTakeOnlyActive && 
+                                                   f.SubFinishingCauses.Any(sc=> sc.IsActive != 0))))
                             hasChild = true;
 
                     var cls = f.IsActive == 1 ? string.Empty : "inactive";
@@ -1145,6 +1152,15 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             bool isTakeOnlyActive = true,
             Dictionary<int, bool> userGroupDictionary = null)
         {
+            var pas = BuildProcuctAreaDropdownButtonString(pal, isTakeOnlyActive, userGroupDictionary);
+            return new MvcHtmlString(pas);
+        }
+
+        private static string BuildProcuctAreaDropdownButtonString(
+            IList<ProductArea> pal,
+            bool isTakeOnlyActive = true,
+            Dictionary<int, bool> userGroupDictionary = null)
+        {
             string htmlOutput = string.Empty;
             var user = SessionFacade.CurrentUser;
 
@@ -1174,7 +1190,7 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     }
 
                     childList = childs.ToList();
-                }                
+                }
 
                 var cls = pa.IsActive == 1 ? string.Empty : "inactive";
                 if (childList != null && childList.Count > 0)
@@ -1191,18 +1207,17 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                         "<a href='#' value=\"{0}\">{1}</a>",
                         pa.Id,
                         Translation.GetMasterDataTranslation(pa.Name));
-                
+
                 if (childList != null && childList.Count > 0)
                 {
-                    htmlOutput += string.Format("<ul class='dropdown-menu' id=\"subDropDownMenu_{0}\" >", pa.Id);                    
-                    htmlOutput += BuildProcuctAreaDropdownButton(childList.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive, userGroupDictionary);
+                    htmlOutput += string.Format("<ul class='dropdown-menu' id=\"subDropDownMenu_{0}\" >", pa.Id);
+                    htmlOutput += BuildProcuctAreaDropdownButtonString(childList.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive, userGroupDictionary);
                     htmlOutput += "</ul>";
                 }
 
                 htmlOutput += "</li>";
             }
-
-            return new MvcHtmlString(htmlOutput);
+            return htmlOutput;
         }
 
         private static MvcHtmlString BuildCategoryDropdownButton(

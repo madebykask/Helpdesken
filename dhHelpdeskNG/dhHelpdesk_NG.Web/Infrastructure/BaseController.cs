@@ -1,4 +1,6 @@
 ﻿using DH.Helpdesk.Web.Infrastructure.Cache;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace DH.Helpdesk.Web.Infrastructure
 {
@@ -13,6 +15,8 @@ namespace DH.Helpdesk.Web.Infrastructure
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure.Attributes;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
+    //using DH.Helpdesk.Web.Infrastructure.StringExtensions;
+    
     using DH.Helpdesk.Web.Models;
     using System.Configuration;
     using System.Security.Claims;
@@ -271,6 +275,19 @@ namespace DH.Helpdesk.Web.Infrastructure
                 //_cache.GetTextTranslations();
                 //_cache.GetCaseTranslations();
             }
+        }
+
+        /// <summary>
+        /// Uses Json.net for serialization json
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        protected ActionResult JsonDefault(object data, JsonSerializerSettings settings = null)
+        {
+            return data.ToJsonResult(settings ?? new JsonSerializerSettings
+            {
+                //ContractResolver = new CamelCasePropertyNamesContractResolver()
+            });
         }
 
         #endregion

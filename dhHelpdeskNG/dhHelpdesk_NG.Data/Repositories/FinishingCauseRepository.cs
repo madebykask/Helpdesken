@@ -69,7 +69,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var cause = new FinishingCauseOverview { Id = parentCategory.Id, Name = parentCategory.Name };
 
-            var subCauseEntities = allCategories.Where(c => c.Parent_FinishingCause_Id == parentCategory.Id).ToList();
+            var subCauseEntities = allCategories.Where(c => c.Parent_FinishingCause_Id == parentCategory.Id).OrderBy(c => c.Name).ToList();
             if (subCauseEntities.Any())
             {
                 var subCauses =
