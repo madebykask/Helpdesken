@@ -21,12 +21,14 @@
         var reportGeneratorFields = "#reportGeneratorFields";
         var caseCloseFrom = "#ReportFilter_CaseClosingDate_FromDate";
         var caseCloseTo = "#ReportFilter_CaseClosingDate_ToDate";
+        var reportCategoryDropdown = "#lstfilterReportCategory";
 
         /*specify all extra parameters element*/
         var $extraParameters = $("#reportCategoryParam");
 
         window.dhHelpdesk = window.dhHelpdesk || {};
         window.dhHelpdesk.reports = window.dhHelpdesk.reports || {};
+        
 
         var getFilters = function () {
             var filters = {
@@ -253,6 +255,7 @@
             var caseType = "";
             var productArea = "";
             var status = "";
+            var reportCategory = "";
 
             customer = currentCustomerId;
 
@@ -278,6 +281,8 @@
 
             status = $(statusList + " option:selected").val();
 
+            reportCategory = $(reportCategoryDropdown + " option:selected").val();
+
             var regDateFrom = $(caseCreateFrom).val();
             var regDateTo = $(caseCreateTo).val();
 
@@ -298,6 +303,7 @@
                     'filter.RegisterTo': regDateTo,
                     'filter.CloseFrom': closeDateFrom,
                     'filter.CloseTo': closeDateTo,
+                    'filter.ReportCategory': reportCategory,
                     curTime: new Date().getTime()
                 },
                 function (reportPresentation) {
@@ -358,8 +364,8 @@
                 $btnSaveAsFilter.show();
                 $("#btnDeleteFavorite").hide();
             }
-
-            dhHelpdesk.reports.showExtraParameters($(reportList).find("option:selected").data('data-identity'));
+            
+            dhHelpdesk.reports.showExtraParameters($(reportList + " option:selected").attr("data-identity"));
         };
 
         dhHelpdesk.reports.deleteFavorite = function () {
@@ -469,17 +475,22 @@
         }
 
         dhHelpdesk.reports.showExtraParameters = function (reportName) {
-            $($extraParameters).css("display","none");
+            $($extraParameters).hide();
 
             switch (reportName) {
                 case "NumberOfCases":
-                    $("#lstfilterReportCategory").css("display", "block");
+                    $("#reportCategoryParam").show();
                     break;
 
                 default:
                     break;
             }
         }
+
+        //$("#btnShowReport").click(function (e) {
+        //    e.preventDefault();
+        //    dhHelpdesk.reports.onOtherShow();
+        //});
 
         dhHelpdesk.reports.init = function () {
 

@@ -174,19 +174,193 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                     ret.Add(
                           new Tuple<string, string, int>(
                             "VariabelAxel",
-                            "Select COUNT(CaseType) AS Volume, CaseType, ProductArea,"+
-                                   "[Registration Year], [Registration Date], [Source], [Working group]," +
-                                   "[Sub State] AS SubStatus, [Registration Hour], Department, [Priority]," + 
-                                   "[Closing Date], [Registration Weekday], [Registration Month] " +
-                            "From vwCaseStatistics " +
-                            //_whereClause + " AND (tblCase.Deleted = 0) " +
-                            "Where[Registration Year] IN(2017) AND[Registration Month] IN(1, 2, 3, 4, 5, 6, 7, 8)" +
-                            "Group by CaseType, ProductArea, [Registration Year]," +
-                                     "[Registration Date], [Source], [Working group]," +
-                                     "[Sub State], [Registration Hour], Department, [Priority]," +
-                                     "[Closing Date], [Registration Weekday], [Registration Month]" ,
-                            (int)QueryType.SQLQUERY)
-                            );
+                            "SELECT 1 " +
+                               "AS " +
+                               "Quantity, " +
+                               "dbo.tblcustomer.NAME " +
+                               "AS Customer, " +
+                               "dbo.tblcase.casenumber, " +
+                               "CONVERT(VARCHAR, dbo.tblcase.casenumber) " +
+                               "+ ' ' + dbo.tblcase.caption " +
+                               "AS[Case], " +
+                               "CONVERT(NVARCHAR(10), dbo.tblcase.regtime, 121) " +
+                               "AS[Registration Date], " +
+                               "Datepart(yy, dbo.tblcase.regtime) " +
+                               "AS[Registration Year], " +
+                               "Datepart(mm, dbo.tblcase.regtime) " +
+                               "AS[Registration Month], " +
+                               "Datepart(dd, dbo.tblcase.regtime) " +
+                               "AS[Registration Day], " +
+                               "'FY ' + CASE WHEN Datepart(mm, dbo.tblcase.regtime) > 8 THEN Substring(" +
+                               "CONVERT(" +
+                               "NVARCHAR(4), Dateadd(yy, 1, dbo.tblcase.regtime), 121), 3, 2) ELSE " +
+                               "Substring(" +
+                               "CONVERT(NVARCHAR(4), dbo.tblcase.regtime, 121), 3, 2) END " +
+                               "AS[Financial Year], " +
+                               "dbo.tblusers.firstname + N' ' " +
+                               "+ dbo.tblusers.surname " +
+                               "AS[Registrated By], " +
+                               "dbo.tblcase.caption " +
+                               "AS Subject, " +
+                               "CONVERT(NVARCHAR(10), dbo.tblcase.finishingdate, 121) " +
+                               "AS[Closing Date], " +
+                               "CASE Isnull(tblcase.finishingdate, 0) " +
+                               "  WHEN 0 THEN 'On Going' " +
+                               "  ELSE 'Closed' " +
+                               "END " +
+                               "AS[Case Status], " +
+                               "dbo.tblregion.region, " +
+                               "dbo.tbldepartment.department, " +
+                               "Isnull(dbo.tblou.ou, '') " +
+                               "AS[Org unit], " +
+                               "[dbo].[Gethierarchy](tblcase.casetype_id, 'tblCaseType') " +
+                               "AS CaseType, " +
+                               "[dbo].[Gethierarchy](tblcase.productarea_id, 'tblProductArea') " +
+                               "AS ProductArea, " +
+                               "Isnull(dbo.tblregistrationsourcecustomer.sourcename, '') " +
+                               "AS Source, " +
+                               "dbo.tblworkinggroup.workinggroup " +
+                               "AS[Working group], " +
+                               "dbo.tblpriority.priorityname " +
+                               "AS Priority, " +
+                               "dbo.tblstatus.statusname " +
+                               "AS Status, " +
+                               "dbo.tblstatesecondary.statesecondary " +
+                               "AS[SubStatus], " +
+                               "CASE Datepart(dw, dbo.tblcase.regtime) " +
+                               "  WHEN 2 THEN 'Måndag' " +
+                               "  WHEN 3 THEN 'Tisdag' " +
+                               "  WHEN 4 THEN 'Onsdag' " +
+                               "  WHEN 5 THEN 'Torsdag' " +
+                               "  WHEN 6 THEN 'Fredag' " +
+                               "  WHEN 7 THEN 'Lördag' " +
+                               "  ELSE 'Söndag' " +
+                               "END " +
+                               "AS[Registration Weekday], " +
+                               "Datepart(hh, dbo.tblcase.regtime) " +
+                               "AS[Registration Hour], " +
+                               "CASE Datepart(m, tblcase.regtime) WHEN 1 THEN 'Januari ' WHEN 2 THEN " +
+                               "'Februari ' " +
+                               "WHEN 3 THEN 'Mars ' WHEN 4 THEN 'April ' WHEN 5 THEN 'Maj ' WHEN 6 THEN " +
+                               "'Juni ' " +
+                               "WHEN 7 THEN 'Juli ' WHEN 8 THEN 'Augusti ' WHEN 9 THEN 'September ' WHEN " +
+                               "10 THEN " +
+                               "'Oktober ' WHEN 11 THEN 'November ' ELSE 'December ' END " +
+                               "+ CONVERT(VARCHAR(4), Datepart(yyyy, dbo.tblcase.regtime)) " +
+                               "AS Period, " +
+                               "CONVERT(VARCHAR(4), Datepart(yyyy, dbo.tblcase.regtime)) " +
+                               "+ '-' + CASE WHEN CONVERT(VARCHAR(2), Datepart(mm, dbo.tblcase.regtime)) " +
+                               "< 10 " +
+                               "THEN '0' + CONVERT(VARCHAR(2), Datepart(mm, dbo.tblcase.regtime)) ELSE " +
+                               "CONVERT(" +
+                               "VARCHAR(2), Datepart(mm, dbo.tblcase.regtime)) END " +
+                               "AS YearMonth, " +
+                               "(SELECT CASE " +
+                               "          WHEN Max(id) IS NOT NULL THEN 'Ja' " +
+                               "          ELSE 'Nej' " +
+                               "        END AS Expr1 " +
+                               " FROM   dbo.tblcasehistory " +
+                               " WHERE(case_id = dbo.tblcase.id) " +
+                               "        AND(statesecondary_id IS NOT NULL)) " +
+                               "AS OnHold, " +
+                               "CASE " +
+                               "  WHEN tblcase.watchdate IS NULL THEN " +
+                               "    CASE " +
+                               "      WHEN tblcase.leadtime / 60 > tblpriority.solutiontime " +
+                               "           AND tblpriority.solutiontime > 0 THEN 'Nej' " +
+                               "      ELSE 'Ja' " +
+                               "    END " +
+                               "  ELSE " +
+                               "    CASE " +
+                               "      WHEN tblcase.leadtime > 0 THEN 'Nej' " +
+                               "      ELSE 'Ja' " +
+                               "    END " +
+                               "END " +
+                               "AS InTime, " +
+                               "CASE " +
+                               "  WHEN tblcase.watchdate IS NULL THEN " +
+                               "    CASE " +
+                               "      WHEN tblcase.leadtime / 60 > tblpriority.solutiontime " +
+                               "           AND tblpriority.solutiontime > 0 THEN 'Nej' " +
+                               "      ELSE 'Ja' " +
+                               "    END " +
+                               "  ELSE " +
+                               "    CASE " +
+                               "      WHEN CONVERT(VARCHAR(10), tblcase.watchdate, 121) < " +
+                               "           CONVERT(VARCHAR(10), tblcase.finishingdate, 121) THEN 'Nej' " +
+                               "      ELSE 'Ja' " +
+                               "    END " +
+                               "END " +
+                               "AS InTime2, " +
+                               "CASE " +
+                               "  WHEN tblcase.watchdate IS NULL THEN " +
+                               "    CASE " +
+                               "      WHEN tblcase.leadtime > (tblpriority.solutiontime * 60) " +
+                               "           AND tblpriority.solutiontime > 0 THEN 'Nej' " +
+                               "      ELSE 'Ja' " +
+                               "    END " +
+                               "  ELSE " +
+                               "    CASE " +
+                               "      WHEN CONVERT(VARCHAR(10), tblcase.watchdate, 121) < " +
+                               "           CONVERT(VARCHAR(10), tblcase.finishingdate, 121) THEN 'Nej' " +
+                               "      ELSE 'Ja' " +
+                               "    END " +
+                               "END " +
+                               "AS InTime3, " +
+                               "Isnull(tblUsers2.firstname, '') + ' ' " +
+                               "+ Isnull(tblUsers2.surname, '') " +
+                               "AS Administrator, " +
+                               "[dbo].[Gethierarchy]((SELECT TOP(1) dbo.tblfinishingcause.id " +
+                               "                      FROM   dbo.tbllog " +
+                               "                             INNER JOIN dbo.tblfinishingcause " +
+                               "                                     ON dbo.tbllog.finishingtype = " +
+                               "                                        dbo.tblfinishingcause.id " +
+                               "                      WHERE(dbo.tblcase.id = dbo.tbllog.case_id) " +
+                               "                      ORDER  BY dbo.tbllog.id DESC), 'tblFinishingCause') " +
+                               "AS " +
+                               "ClosingReason, " +
+                               "dbo.tblcase.watchdate, " +
+                               "dbo.tblcase.leadtime, " +
+                               "CASE " +
+                               "  WHEN tblcasestatistics.wassolvedintime IS NOT NULL THEN " +
+                               "    CASE " +
+                               "      WHEN tblcasestatistics.wassolvedintime = 1 THEN 'Ja' " +
+                               "      ELSE 'Nej' " +
+                               "    END " +
+                               "END " +
+                               "AS SolvedInTime " +
+                        "FROM dbo.tblcase " +
+                             "INNER JOIN dbo.tblcustomer " +
+                             "        ON dbo.tblcase.customer_id = dbo.tblcustomer.id " +
+                             "  LEFT OUTER JOIN dbo.tblcasestatistics " +
+                             "               ON dbo.tblcase.id = dbo.tblcasestatistics.case_id " +
+                             "  LEFT OUTER JOIN dbo.tblusers " +
+                             "               ON dbo.tblcase.user_id = dbo.tblusers.id " +
+                             "  LEFT OUTER JOIN dbo.tblstatesecondary " +
+                             "               ON dbo.tblcase.statesecondary_id = dbo.tblstatesecondary.id " +
+                             "  LEFT OUTER JOIN dbo.tblstatus " +
+                             "               ON dbo.tblcase.status_id = dbo.tblstatus.id " +
+                             "  LEFT OUTER JOIN dbo.tblworkinggroup " +
+                             "               ON dbo.tblcase.workinggroup_id = dbo.tblworkinggroup.id " +
+                             "  LEFT OUTER JOIN dbo.tblpriority " +
+                             "               ON dbo.tblcase.priority_id = dbo.tblpriority.id " +
+                             "  LEFT OUTER JOIN dbo.tblregion " +
+                             "               ON dbo.tblcase.region_id = dbo.tblregion.id " +
+                             "  LEFT OUTER JOIN dbo.tbldepartment " +
+                             "               ON dbo.tblcase.department_id = dbo.tbldepartment.id " +
+                             "  LEFT OUTER JOIN dbo.tblcasetype " +
+                             "               ON dbo.tblcase.casetype_id = dbo.tblcasetype.id " +
+                             "  LEFT OUTER JOIN dbo.tblusers AS tblUsers2 " +
+                             "               ON dbo.tblcase.performer_user_id = tblUsers2.id " +
+                             "  LEFT OUTER JOIN dbo.tblregistrationsourcecustomer " +
+                             "               ON dbo.tblcase.registrationsourcecustomer_id = " +
+                             "                  dbo.tblregistrationsourcecustomer.id " +
+                             "  LEFT OUTER JOIN dbo.tblou " +
+                             "               ON dbo.tblcase.ou_id = dbo.tblou.id " +
+                             _whereClause +
+                        "ORDER BY dbo.tblcase.casenumber ",
+                            (int)QueryType.SQLQUERY) 
+                            ); 
                     break;
 
                 case "CaseDetailsList":

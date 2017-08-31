@@ -62,6 +62,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
         private readonly Dictionary<string, string> _reportTypeNames;
 
+        private readonly CustomSelectList _reportCategories;
+
         public ReportController(
             IMasterDataService masterDataService,
             ISettingService customerSettingService,
@@ -82,7 +84,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             this.reportGeneratorModelFactory = reportGeneratorModelFactory;
             this._customerSettingService = customerSettingService;
             this._ReportServiceService = reportServiceService;
-            this._reportTypeNames = new Dictionary<string, string>
+            _reportTypeNames = new Dictionary<string, string>
             {
                 {"-1", "CasesPerCasetype"},
                 {"-2", "CasesPerDate"},
@@ -91,7 +93,23 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 {"-5", "CasesPerAdministrator"},
                 {"-6", "CasesPerDepartment"},
                 {"-7", "NumberOfCases"}
-        };
+            };
+
+            _reportCategories = new CustomSelectList();
+            _reportCategories.Items.AddItem("1", "Case Type");
+            _reportCategories.Items.AddItem("8", "Working Group");
+            _reportCategories.Items.AddItem("9", "SubStatus");
+            _reportCategories.Items.AddItem("10", "Department");
+            _reportCategories.Items.AddItem("11", "Priority");
+            _reportCategories.Items.AddItem("13", "Product Area");
+            _reportCategories.Items.AddItem("12", "Closing Date");
+            _reportCategories.Items.AddItem("7", "Source");
+            _reportCategories.Items.AddItem("5", "Registration Date");
+            _reportCategories.Items.AddItem("2", "Registration Year");
+            _reportCategories.Items.AddItem("4", "Registration Month");
+            _reportCategories.Items.AddItem("3", "Registration Weekday");
+            _reportCategories.Items.AddItem("6", "Registration Hour");           
+
         }
 
         [HttpGet]
@@ -655,7 +673,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 ProductAreas = reportFilter.ProductAreas,
                 Status = GetCaseStateFilter(),
                 UserNameOrientation = customerSettings != null ? customerSettings.IsUserFirstLastNameRepresentation : 1,
-                ReportCategory = GetReportCategoryList()
+                ReportCategory = _reportCategories
             };
 
             if (lastState != null)
@@ -697,26 +715,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
             return ret;
         }
-
-        private CustomSelectList GetReportCategoryList()
-        {            
-            var ret = new CustomSelectList();
-            ret.Items.AddItem("Case Type", "Case Type");
-            ret.Items.AddItem("Working Group", "Working Group");
-            ret.Items.AddItem("SubStatus", "SubStatus");
-            ret.Items.AddItem("Department", "Department");
-            ret.Items.AddItem("Priority", "Priority");
-            ret.Items.AddItem("Product Area", "Product Area");
-            ret.Items.AddItem("Closing Date", "Closing Date");
-            ret.Items.AddItem("Source", "Source");
-            ret.Items.AddItem("Registration Date", "Registration Date");
-            ret.Items.AddItem("Registration Year", "Registration Year");
-            ret.Items.AddItem("Registration Month", "Registration Month");
-            ret.Items.AddItem("Registration Weekday", "Registration Weekday");
-            ret.Items.AddItem("Registration Hour", "Registration Hour");            
-
-            return ret;
-        }
+    
         private List<SavedReportFavoriteItemModel> GetSavedReportFilters(int custometId, int userId)
         {
 			var favorites = this.reportService.GetCustomerReportFavoriteList(custometId, userId);
@@ -754,9 +753,10 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
                 /*Temp solution*/
                 if (reportName == "NumberOfCases")
-                {
-                    var reportCategory = reportSelectedFilter.SelectedReportCategory.GetSelectedStr();
-                    var categoryParam = new ReportParameter("Category", reportCategory, false);
+                {                    
+                    var selectedReportCategory = reportSelectedFilter.SelectedReportCategory.GetFirstOrDefaultSelected();                    
+                    var itemId = selectedReportCategory != null?selectedReportCategory.Value.ToString() : "1";                  
+                    var categoryParam = new ReportParameter("Category", itemId, false);
                     var paramList = new List<ReportParameter>();
                     paramList.Add(categoryParam);
                     reportViewer.LocalReport.SetParameters(paramList);

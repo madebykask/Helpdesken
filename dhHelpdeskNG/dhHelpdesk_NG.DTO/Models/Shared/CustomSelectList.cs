@@ -75,7 +75,7 @@
     {
         public SelectedItems()
         {            
-        }
+        }        
 
         public SelectedItems(List<int> listSelectedItems)
         {
@@ -121,6 +121,11 @@
         public string GetSelectedStr()
         {
             return string.Join(",", this.ToArray());            
+        }
+
+        public int? GetFirstOrDefaultSelected()
+        {
+            return this.FirstOrDefault();
         }
 
         public string GetSelectedStrOrNull()

@@ -1,23 +1,24 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.ReportService
 {        
     using DH.Helpdesk.BusinessData.Models.Shared;
-using System.Collections.Generic;    
+    using System.Collections.Generic;    
     
     public class ReportSelectedFilter
     {
         public ReportSelectedFilter()
         {
-            this.CaseCreationDate = new DateToDate();
-            this.SelectedCustomers = new SelectedItems();
-            this.SeletcedDepartments = new SelectedItems();
-            this.SeletcedOUs = new SelectedItems();
-            this.SelectedWorkingGroups = new SelectedItems();
-            this.SelectedAdministrator = new SelectedItems();
-            this.SelectedCaseTypes = new SelectedItems();
-            this.SelectedProductAreas = new SelectedItems();
-            this.SelectedCaseStatus = new SelectedItems();
-            this.GeneralParameter = new List<GeneralParameter>();
-            this.CaseClosingDate = new DateToDate();
+            CaseCreationDate = new DateToDate();
+            SelectedCustomers = new SelectedItems();
+            SeletcedDepartments = new SelectedItems();
+            SeletcedOUs = new SelectedItems();
+            SelectedWorkingGroups = new SelectedItems();
+            SelectedAdministrator = new SelectedItems();
+            SelectedCaseTypes = new SelectedItems();
+            SelectedProductAreas = new SelectedItems();
+            SelectedCaseStatus = new SelectedItems();
+            GeneralParameter = new List<GeneralParameter>();
+            SelectedReportCategory = new SelectedItems();
+            CaseClosingDate = new DateToDate();
         }
 
         public int CaseId { get; set; }

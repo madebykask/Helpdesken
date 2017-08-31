@@ -64,20 +64,22 @@ Parameters!Category.Label="Product Area", Fields!ProductArea.Value
         <ChartSeriesHierarchy>
           <ChartMembers>
             <ChartMember>
-              <Label>Volume</Label>
+              <Label>Quantity</Label>
             </ChartMember>
           </ChartMembers>
         </ChartSeriesHierarchy>
         <ChartData>
           <ChartSeriesCollection>
-            <ChartSeries Name="Volume">
+            <ChartSeries Name="Quantity">
               <ChartDataPoints>
                 <ChartDataPoint>
                   <ChartDataPointValues>
-                    <Y>=Sum(Fields!Volume.Value)</Y>
+                    <Y>=Sum(Fields!Quantity.Value)</Y>
                   </ChartDataPointValues>
                   <ChartDataLabel>
                     <Style />
+                    <UseValueAsLabel>true</UseValueAsLabel>
+                    <Visible>true</Visible>
                   </ChartDataLabel>
                   <Style />
                   <ChartMarker>
@@ -355,36 +357,6 @@ Parameters!Category.Label="Product Area", "ProductArea"
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
-      <Textbox Name="Textbox5">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=Sum(Fields!Volume.Value, "VariabelAxel")</Value>
-                <Style />
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>0.31722cm</Top>
-        <Left>16.32571cm</Left>
-        <Height>0.6cm</Height>
-        <Width>2.5cm</Width>
-        <ZIndex>2</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
       <Textbox Name="Textbox1">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
@@ -421,6 +393,36 @@ Parameters!Category.Label="Product Area", "Product Area"
         <Left>1.87537cm</Left>
         <Height>0.6cm</Height>
         <Width>12.19729cm</Width>
+        <ZIndex>2</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox2">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Sum(Fields!Quantity.Value, "VariabelAxel")</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox2</rd:DefaultName>
+        <Top>0.31722cm</Top>
+        <Left>16.32572cm</Left>
+        <Height>0.6cm</Height>
+        <Width>1.46813cm</Width>
         <ZIndex>3</ZIndex>
         <Style>
           <Border>
@@ -458,54 +460,114 @@ Parameters!Category.Label="Product Area", "Product Area"
   <DataSets>
     <DataSet Name="VariabelAxel">
       <Query>
-        <DataSourceName>DataSource1</DataSourceName>        
-        <CommandText>Select 
-COUNT(CaseType) AS Volume
-,CaseType
-,ProductArea
-,[Registration Year]
-,[Registration Date]
-,[Source]
-,[Working group]
-,[Sub State] AS SubStatus
-,[Registration Hour]
-,Department
-,[Priority]
-,[Closing Date]
---,ClosingWeek- saknas i vyn!
---,ClosingMonth- saknas i vyn!
-,[Registration Weekday]
-,[Registration Month]
-
-From vwCaseStatistics
-where [Registration Year] IN (@Year) AND [Registration Month] IN (@Month)
-group by CaseType
-, ProductArea
- ,[Registration Year]
-,[Registration Date]
-,[Source]
-,[Working group]
-,[Sub State]
-,[Registration Hour]
-,Department
-,[Priority]
-,[Closing Date]
---,ClosingWeek- saknas i vyn!
---,ClosingMonth- saknas i vyn!
-,[Registration Weekday]
-,[Registration Month]</CommandText>
+        <DataSourceName>DataSource1</DataSourceName>
+        <CommandText>
+SELECT  
+								1 AS Quantity
+								  ,dbo.tblCustomer.Name AS Customer, 
+						dbo.tblCase.Casenumber, 
+						CONVERT(varchar, dbo.tblCase.Casenumber) + ' ' + dbo.tblCase.Caption AS [Case], 
+						 CONVERT(nvarchar(10), dbo.tblCase.RegTime, 121) AS [Registration Date], 
+						 DATEPART(yy, dbo.tblCase.RegTime) 
+                         AS [Registration Year], 
+						 DATEPART(mm, dbo.tblCase.RegTime) AS [Registration Month], 
+						 DATEPART(dd, dbo.tblCase.RegTime) AS [Registration Day], 
+                         'FY ' + CASE WHEN DATEPART(mm, dbo.tblCase.RegTime) &gt; 8 THEN SUBSTRING(CONVERT(nvarchar(4), DATEADD(yy, 1, dbo.tblCase.RegTime), 121), 3, 2) 
+                         ELSE SUBSTRING(CONVERT(nvarchar(4), dbo.tblCase.RegTime, 121), 3, 2) END AS [Financial Year], 
+                         dbo.tblUsers.FirstName + N' ' + dbo.tblUsers.SurName AS [Registrated By], 
+						 
+						-- dbo.tblCaseType.CaseType, dbo.tblCaseType.CaseType AS CaseTypeUser, 
+                         
+						 dbo.tblCase.Caption AS Subject, CONVERT(nvarchar(10), dbo.tblCase.FinishingDate, 121) AS [Closing Date], 
+						 CASE isnull(tblcase.FinishingDate, 0) 
+                         WHEN 0 THEN 'On Going' ELSE 'Closed' END AS [Case Status], 
+						 dbo.tblRegion.Region, dbo.tblDepartment.Department, 
+						 ISNULL(dbo.tblOU.OU, '') AS [Org unit], 
+                         
+						 [dbo].[GetHierarchy]
+						 (tblCase.CaseType_id,'tblCaseType') AS CaseType,
+	
+						 
+						  [dbo].[GetHierarchy]
+						 (tblCase.ProductArea_id,'tblProductArea') AS ProductArea,
+						  ISNULL(dbo.tblRegistrationSourceCustomer.SourceName, '') AS Source, 
+                         dbo.tblWorkingGroup.WorkingGroup AS [Working group], 
+						 dbo.tblPriority.PriorityName AS Priority, 
+						 dbo.tblStatus.StatusName AS Status, 
+                         dbo.tblStateSecondary.StateSecondary AS [SubStatus], 
+						 CASE DATEPART(dw, dbo.tblCase.RegTime) 
+                         WHEN 2 THEN 'Måndag' WHEN 3 THEN 'Tisdag' WHEN 4 THEN 'Onsdag' WHEN 5 THEN 'Torsdag' WHEN 6 THEN 'Fredag' WHEN 7 THEN 'Lördag' ELSE 'Söndag' END
+                          AS [Registration Weekday], 
+						  DATEPART(hh, dbo.tblCase.RegTime) AS [Registration Hour], 
+						  CASE DatePart(m, tblCase.regtime) 
+                         WHEN 1 THEN 'Januari ' WHEN 2 THEN 'Februari ' WHEN 3 THEN 'Mars ' WHEN 4 THEN 'April ' WHEN 5 THEN 'Maj ' WHEN 6 THEN 'Juni ' WHEN 7 THEN 'Juli ' WHEN
+                          8 THEN 'Augusti ' WHEN 9 THEN 'September ' WHEN 10 THEN 'Oktober ' WHEN 11 THEN 'November ' ELSE 'December ' END + CONVERT(varchar(4), 
+                         DATEPART(yyyy, dbo.tblCase.RegTime)) AS Period, 
+						 CONVERT(varchar(4), DATEPART(yyyy, dbo.tblCase.RegTime)) + '-' + CASE WHEN CONVERT(varchar(2), 
+                         DATEPART(mm, dbo.tblCase.RegTime)) &lt; 10 THEN '0' + CONVERT(varchar(2), DATEPART(mm, dbo.tblCase.RegTime)) ELSE CONVERT(varchar(2), DATEPART(mm, 
+                         dbo.tblCase.RegTime)) END AS YearMonth,
+                             (SELECT        CASE WHEN MAX(id) IS NOT NULL THEN 'Ja' ELSE 'Nej' END AS Expr1
+                               FROM            dbo.tblCaseHistory
+                               WHERE        (Case_Id = dbo.tblCase.Id) AND (StateSecondary_Id IS NOT NULL)) AS OnHold, CASE WHEN tblCase.Watchdate IS NULL 
+                         THEN CASE WHEN tblCase.LeadTime / 60 &gt; tblPriority.SolutionTime AND 
+                         tblPriority.SolutionTime &gt; 0 THEN 'Nej' ELSE 'Ja' END ELSE CASE WHEN tblCase.LeadTime &gt; 0 THEN 'Nej' ELSE 'Ja' END END AS InTime, 
+                         CASE WHEN tblCase.Watchdate IS NULL THEN CASE WHEN tblCase.LeadTime / 60 &gt; tblPriority.SolutionTime AND 
+                         tblPriority.SolutionTime &gt; 0 THEN 'Nej' ELSE 'Ja' END ELSE CASE WHEN CONVERT(varchar(10), tblCase.WatchDate, 121) &lt; CONVERT(varchar(10), 
+                         tblCase.FinishingDate, 121) THEN 'Nej' ELSE 'Ja' END END AS InTime2, CASE WHEN tblCase.Watchdate IS NULL 
+                         THEN CASE WHEN tblCase.LeadTime &gt; (tblPriority.SolutionTime * 60) AND 
+                         tblPriority.SolutionTime &gt; 0 THEN 'Nej' ELSE 'Ja' END ELSE CASE WHEN CONVERT(varchar(10), tblCase.WatchDate, 121) &lt; CONVERT(varchar(10), 
+                         tblCase.FinishingDate, 121) THEN 'Nej' ELSE 'Ja' END END AS InTime3, ISNULL(tblUsers2.FirstName, '') + ' ' + ISNULL(tblUsers2.SurName, '') AS Administrator,
+                             
+							[dbo].[GetHierarchy]( 
+							 (SELECT        TOP (1) dbo.tblFinishingCause.Id
+                               FROM            dbo.tblLog INNER JOIN
+                                                         dbo.tblFinishingCause ON dbo.tblLog.FinishingType = dbo.tblFinishingCause.Id
+                               WHERE        (dbo.tblCase.Id = dbo.tblLog.Case_Id)
+                               ORDER BY dbo.tblLog.Id DESC), 'tblFinishingCause') AS ClosingReason, 
+							   dbo.tblCase.WatchDate, 
+							   dbo.tblCase.LeadTime, 
+							   CASE WHEN tblCaseStatistics.WasSolvedInTime IS NOT NULL
+                          THEN CASE WHEN tblCaseStatistics.WasSolvedInTime = 1 THEN 'Ja' ELSE 'Nej' END END AS SolvedInTime 
+		
+FROM            dbo.tblCase INNER JOIN
+                         dbo.tblCustomer ON dbo.tblCase.Customer_Id = dbo.tblCustomer.Id LEFT OUTER JOIN
+                         dbo.tblCaseStatistics ON dbo.tblCase.Id = dbo.tblCaseStatistics.Case_Id LEFT OUTER JOIN
+                         dbo.tblUsers ON dbo.tblCase.User_Id = dbo.tblUsers.Id LEFT OUTER JOIN
+                         dbo.tblStateSecondary ON dbo.tblCase.StateSecondary_Id = dbo.tblStateSecondary.Id LEFT OUTER JOIN
+                         dbo.tblStatus ON dbo.tblCase.Status_Id = dbo.tblStatus.Id LEFT OUTER JOIN
+                         dbo.tblWorkingGroup ON dbo.tblCase.WorkingGroup_Id = dbo.tblWorkingGroup.Id LEFT OUTER JOIN
+                         dbo.tblPriority ON dbo.tblCase.Priority_Id = dbo.tblPriority.Id LEFT OUTER JOIN
+                         dbo.tblRegion ON dbo.tblCase.Region_Id = dbo.tblRegion.Id LEFT OUTER JOIN
+                         dbo.tblDepartment ON dbo.tblCase.Department_Id = dbo.tblDepartment.Id LEFT OUTER JOIN
+                         dbo.tblCaseType ON dbo.tblCase.CaseType_Id = dbo.tblCaseType.Id LEFT OUTER JOIN
+						 dbo.tblUsers AS tblUsers2 ON dbo.tblCase.Performer_User_Id = tblUsers2.Id LEFT OUTER JOIN
+                         dbo.tblRegistrationSourceCustomer ON dbo.tblCase.RegistrationSourceCustomer_Id = dbo.tblRegistrationSourceCustomer.Id LEFT OUTER JOIN
+                         dbo.tblOU ON dbo.tblCase.OU_Id = dbo.tblOU.Id
+ORDER BY dbo.tblCase.Casenumber</CommandText>
       </Query>
       <Fields>
-        <Field Name="Volume">
-          <DataField>Volume</DataField>
+        <Field Name="Customer">
+          <DataField>Customer</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Quantity">
+          <DataField>Quantity</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="CaseType">
           <DataField>CaseType</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="Casenumber">
+          <DataField>Casenumber</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
         <Field Name="Registration_Date">
           <DataField>Registration Date</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Case">
+          <DataField>Case</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="ProductArea">
@@ -520,17 +582,29 @@ group by CaseType
           <DataField>Source</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="Registration_Day">
+          <DataField>Registration Day</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
         <Field Name="Working_group">
           <DataField>Working group</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="SubStatus">
-          <DataField>SubStatus</DataField>
+        <Field Name="Financial_Year">
+          <DataField>Financial Year</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Registrated_By">
+          <DataField>Registrated By</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Registration_Hour">
           <DataField>Registration Hour</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Subject">
+          <DataField>Subject</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Department">
           <DataField>Department</DataField>
@@ -544,6 +618,14 @@ group by CaseType
           <DataField>Closing Date</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="Case_Status">
+          <DataField>Case Status</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Region">
+          <DataField>Region</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="Registration_Weekday">
           <DataField>Registration Weekday</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -552,15 +634,71 @@ group by CaseType
           <DataField>Registration Month</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
+        <Field Name="SubStatus">
+          <DataField>SubStatus</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Org_unit">
+          <DataField>Org unit</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Status">
+          <DataField>Status</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Period">
+          <DataField>Period</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="YearMonth">
+          <DataField>YearMonth</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="OnHold">
+          <DataField>OnHold</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="InTime">
+          <DataField>InTime</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="InTime2">
+          <DataField>InTime2</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="InTime3">
+          <DataField>InTime3</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Administrator">
+          <DataField>Administrator</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ClosingReason">
+          <DataField>ClosingReason</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="WatchDate">
+          <DataField>WatchDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="LeadTime">
+          <DataField>LeadTime</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="SolvedInTime">
+          <DataField>SolvedInTime</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
-    </DataSet>  
+    </DataSet>
   </DataSets>
-  <ReportParameters>       
+  <ReportParameters>
     <ReportParameter Name="Category">
       <DataType>String</DataType>
       <DefaultValue>
         <Values>
-          <Value>2</Value>
+          <Value>1</Value>
         </Values>
       </DefaultValue>
       <Prompt>Choose Category</Prompt>
@@ -569,6 +707,30 @@ group by CaseType
           <ParameterValue>
             <Value>1</Value>
             <Label>Case Type</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>7</Value>
+            <Label>Source</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>8</Value>
+            <Label>Working Group</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>9</Value>
+            <Label>SubStatus</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>10</Value>
+            <Label>Department</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>13</Value>
+            <Label>Product Area</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>11</Value>
+            <Label>Priority</Label>
           </ParameterValue>
           <ParameterValue>
             <Value>2</Value>
@@ -591,32 +753,8 @@ group by CaseType
             <Label>Registration Hour</Label>
           </ParameterValue>
           <ParameterValue>
-            <Value>7</Value>
-            <Label>Source</Label>
-          </ParameterValue>
-          <ParameterValue>
-            <Value>8</Value>
-            <Label>Working Group</Label>
-          </ParameterValue>
-          <ParameterValue>
-            <Value>9</Value>
-            <Label>SubStatus</Label>
-          </ParameterValue>
-          <ParameterValue>
-            <Value>10</Value>
-            <Label>Department</Label>
-          </ParameterValue>
-          <ParameterValue>
-            <Value>11</Value>
-            <Label>Priority</Label>
-          </ParameterValue>
-          <ParameterValue>
             <Value>12</Value>
             <Label>Closing Date</Label>
-          </ParameterValue>
-          <ParameterValue>
-            <Value>13</Value>
-            <Label>Product Area</Label>
           </ParameterValue>
         </ParameterValues>
       </ValidValues>

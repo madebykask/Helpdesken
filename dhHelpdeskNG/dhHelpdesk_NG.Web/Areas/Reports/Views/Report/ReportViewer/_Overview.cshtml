@@ -34,7 +34,7 @@
                                     @foreach (var r in Model.ReportList.Items)
                                     {
                                         var reportId = int.Parse(r.Id);                
-                                        <option value="@r.Id" data-id="@r.Id" @reportId.IdIsSelected(selectedItems)>
+                                        <option value="@r.Id" data-id="@r.Id" @reportId.IdIsSelected(selectedItems) data-identity="@r.Value">
                                             @r.Value
                                         </option>
                                     }
@@ -166,12 +166,12 @@
                                     @Translation.Get("Report Category", Enums.TranslationSource.CaseTranslation, Model.CustomerId)
                                 </td>
                                 <td>
-                                    <select id="lstfilterReportCategory" name="lstfilterCategory" data-field="reportcategories" class="report-chosen-single-select" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)"  >
+                                    <select id="lstfilterReportCategory" name="lstfilterCategory" data-field="reportcategories" style="width: 300px;" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)"  >
                                         @foreach (var r in Model.ReportFilter.ReportCategory.Items)
                                         {
                                             int curId = 0;
                                             int.TryParse(r.Id, out curId);                                            
-                                            <option value="@r.Id" @(r.IsActive?"":"class='DisabledChosen'") data-identity="@r.Value">
+                                            <option value="@r.Id" @(r.IsActive?"":"class='DisabledChosen'") >
                                                 @r.Value
                                             </option>                                            
                                         }
