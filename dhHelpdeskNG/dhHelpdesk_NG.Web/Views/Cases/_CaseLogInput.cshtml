@@ -47,9 +47,52 @@
                             <li><input type="button" id="btnCaseCharge" class="btn" style="@Model.ShowInvoiceFields.displayHtml()" value="@Translation.GetCoreTextTranslation("Debitering")" /></li>}
                         if (Model.CustomerSettings.ModuleFaq == true && Model.customerUserSetting.User.FAQPermission == 1)
                         {
-                            <li><a href="#" id="AddFAQ" class="btn">@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)</a></li>
-                            @*			            <li class="secspace"></li>*@
+                            <li><a href="#" id="AddFAQ" class="btn">@Translation.GetCoreTextTranslation("Ny FAQ")</a></li>
+                            <li class="secspace"></li>
                         }
+                        if (Model.CaseLog.Id == 0)
+                        {
+                            if (Model.standardTexts != null)
+                            {
+                                if (Model.standardTexts.Any())
+                                {
+                                    <li>
+                                        <div class="btn-group" id="standardtextDropdownMenu">
+                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                @Translation.GetCoreTextTranslation("Standardtext")&nbsp;<span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu case-standardText-keep-open" role="menu">
+                                                <li>
+                                                    <div id="standardTextAccordion" class="case-div-standardtext-accordion">
+                                                        @foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
+                                                        {
+                                                            <h3>
+                                                                <div id="stHeader_@e.Id" class="case-standardtext-space standardtext-header">@Html.Raw(e.StandardTextName)</div>
+                                                            </h3>
+                                                            <div class="case-div-standardtext case-standardtext-space"><span id="stText_@e.Id">@Html.Raw(e.Text)</span></div>
+                                                        }
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="secspace"></li>
+                                }
+                            }
+                        }
+                        <li>
+                            <div class="checkbox">
+                                @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                {
+                                    @Html.CheckBoxFor(model => model.CaseLog.HighPriority, new { @disabled = true })
+                                }
+                                else
+                                {
+                                    @Html.CheckBoxFor(model => model.CaseLog.HighPriority)
+                                }
+                                <span class="lbl">@Translation.GetCoreTextTranslation("Hög prioritet") </span>
+                            </div>
+                        </li>
                     }
                 </ul>
             </div>
@@ -72,55 +115,6 @@
                         <th class="span5"></th>
                     </tr>
                 </thead>
-                <tr>
-                    <td></td>
-                    @if (!hasReadonlyLog)
-                    {
-                        <td>
-                            @if (Model.CaseLog.Id == 0)
-                            {
-                                if (Model.standardTexts != null)
-                                {
-                                    if (Model.standardTexts.Any())
-                                    {
-                                        <div class="btn-group" id="standardtextDropdownMenu">
-                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                                @Translation.GetCoreTextTranslation("Standardtext")&nbsp;<span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu case-standardText-keep-open" role="menu">
-                                                <li>
-                                                    <div id="standardTextAccordion" class="case-div-standardtext-accordion">
-                                                        @foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
-                                                        {
-                                                            <h3>
-                                                                <div id="stHeader_@e.Id" class="case-standardtext-space standardtext-header">@Html.Raw(e.StandardTextName)</div>
-                                                            </h3>
-                                                            <div class="case-div-standardtext case-standardtext-space"><span id="stText_@e.Id">@Html.Raw(e.Text)</span></div>
-                                                        }
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    }
-                                }
-                            }
-                        </td>
-                        <td>
-                            <div class="checkbox commun">
-                                @if (Model.EditMode == Enums.AccessMode.ReadOnly)
-                {
-                                    @Html.CheckBoxFor(model => model.CaseLog.HighPriority, new { @disabled = true })
-                                }
-                                else
-                                {
-                                    @Html.CheckBoxFor(model => model.CaseLog.HighPriority)
-                                }
-                                <span class="lbl">@Translation.Get("Hög prioritet", SessionFacade.CurrentCaseLanguageId) </span>
-                            </div>
-
-                        </td>
-                    }
-                </tr>
                 <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote)">
                     <td>
                         @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_External, "Extern notering")
