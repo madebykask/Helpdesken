@@ -995,11 +995,15 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             foreach (CaseType caseType in caseTypes)
             {
                 var isInactive = caseType.IsActive != 1 || isParentInactive;
+                var admin = string.Empty;
+                if (caseType.Administrator != null)
+                    admin = string.Format("{0} {1}", caseType.Administrator.FirstName, caseType.Administrator.SurName);
                 //htmlOutput += "<tr>";
                 htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + caseType.Name + "</a></td>";
                 htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "'>" + caseType.IsDefault.TranslateBit() + "</a></td>";
                 htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "'>" + caseType.RequireApproving.TranslateBit() + "</a></td>";
+                htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "'>" + admin + "</a></td>";
                 htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "'>" + caseType.IsActive.TranslateBit() + "</a></td>";
                 htmlOutput += "</tr>";
 
@@ -1409,10 +1413,10 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 var isInactive = productArea.IsActive != 1 || isParentInactive;
                 htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + productArea.Name + "</a></td>";
-                htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "'>" + productArea.IsActive.TranslateBit() + "</a></td>";
                 htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "'>" + wgName + "</a></td>";
                 htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "'>" + prioName + "</a></td>";
                 htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "'>" + caseTypeName + "</a></td>";
+                htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "'>" + productArea.IsActive.TranslateBit() + "</a></td>";
                 htmlOutput += "</tr>";
 
                 if (productArea.SubProductAreas != null)

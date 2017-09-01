@@ -5,24 +5,24 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+            <li class="active"><a href="#fragment-1">@Translation.GetCoreTextTranslation("Ärendetyp") - @Model.Customer.Name</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
                     @if (TempData["Error"] != null)
                     {
-                        <div class="alert alert-error">@Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
-                            @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+                        <div class="alert alert-error">@Translation.GetCoreTextTranslation("Ärendetyp")
+                            @Translation.GetCoreTextTranslation("som används går inte att ta bort")
                         </div>    
                     }
-                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                    <h4>@Translation.GetCoreTextTranslation("Allmänt")</h4>
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Ärendetyp")
                                     </td>
                                     <td class="span9">
                                         @Html.TextBoxFor(model => model.CaseType.Name, new { maxlength = "50" })
@@ -30,12 +30,12 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Standard")
                                     </td>
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="casetype.IsDefault" @(Model.CaseType.IsDefault == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="casetype.IsDefault" value="0" />
-                                        &nbsp;@Translation.Get("Använd ärendetypen som standard vid ärenderegistrering", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.GetCoreTextTranslation("Använd ärendetypen som standard vid ärenderegistrering")
                                         </label>
                                     </td>
                                 </tr>
@@ -46,27 +46,27 @@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="casetype.IsEMailDefault" @(Model.CaseType.IsEMailDefault == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="casetype.IsEMailDefault" value="0" />
-                                        &nbsp;@Translation.Get("Standard vid ärenderegistrering via e-post", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.GetCoreTextTranslation("Standard vid ärenderegistrering via e-post")
                                         </label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Godkännande", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Godkännande")
                                     </td>
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="casetype.RequireApproving" @(Model.CaseType.RequireApproving == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="casetype.RequireApproving" value="0" />
-                                        &nbsp;@Translation.Get("Ärenden med aktuell ärendetyp kräver godkännande", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.GetCoreTextTranslation("Ärenden med aktuell ärendetyp kräver godkännande")
                                         </label>
-                                        @Translation.Get("Godkänn ärenden automatiskt efter", Enums.TranslationSource.TextTranslation)&nbsp;
+                                        @Translation.GetCoreTextTranslation("Godkänn ärenden automatiskt efter")&nbsp;
                                         @Html.TextBoxFor(model => model.CaseType.AutomaticApproveTime, new { style = "display: inline; width: 30px; text-align: right; margin-left:0;", maxlength = "3" })
-                                        &nbsp;@Translation.Get("timmar", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.GetCoreTextTranslation("timmar")
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Handläggare")
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(model => model.CaseType.User_Id, Model.SystemOwners, "")
@@ -76,7 +76,7 @@
                                     <td>
                                         @*@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)*@
                                         @*#57738*@
-                                        @Translation.Get("Visa i lista", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Visa i lista")
                                     </td>
                                     <td>
                                         @*<label class="checkbox">
@@ -87,12 +87,12 @@
                                         <label class="checkbox">
                                             <input type="checkbox" name="casetype.Selectable" @(Model.CaseType.Selectable == 1 ? "checked=checked" : "") value="1" />
                                             <input type="hidden" name="casetype.Selectable" value="0" />
-                                            &nbsp;@Translation.Get("Helpdesk", Enums.TranslationSource.TextTranslation)
+                                            &nbsp;@Translation.GetCoreTextTranslation("Helpdesk")
                                         </label>
                                         <label class="checkbox">
                                             <input type="checkbox" name="casetype.ShowOnExternalPage" @(Model.CaseType.ShowOnExternalPage == 1 ? "checked=checked" : "") value="1" />
                                             <input type="hidden" name="casetype.ShowOnExternalPage" value="0" />
-                                            &nbsp;@Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)
+                                            &nbsp;@Translation.GetCoreTextTranslation("Självservice")
                                         </label>         
                                     </td>
                                 </tr>
@@ -110,12 +110,12 @@
                                 </tr>*@
                                 <tr>
                                     <td>
-                                        @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Aktiv")
                                     </td>
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="casetype.IsActive" @(Model.CaseType.IsActive == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="casetype.IsActive" value="0" />
-                                        &nbsp;@Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.GetCoreTextTranslation("Aktiv")
                                         </label>
                                     </td>
                                 </tr>
@@ -133,21 +133,24 @@
                 @if (Model.CaseType.SubCaseTypes != null && Model.CaseType.SubCaseTypes.Any())
                 {
                     <div class="container">
-                        <h4>@Translation.Get("Ärendetyper", Enums.TranslationSource.TextTranslation)</h4>
+                        <h4>@Translation.GetCoreTextTranslation("Ärendetyper")</h4>
                         <table class="table table-striped table-bordered table-hover" id="tblSubCaseType">
                             <thead>
                                 <tr>
                                     <th>
-                                        @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Ärendetyp")
                                     </th>
                                     <th>
-                                        @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Standard")
                                     </th>
                                     <th>
-                                        @Translation.Get("Kräver godkännande", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Kräver godkännande")
                                     </th>
                                     <th>
-                                        @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Handläggare")
+                                    </th>
+                                    <th>
+                                        @Translation.GetCoreTextTranslation("Aktiv")
                                     </th>
                                 </tr>
                             </thead>
