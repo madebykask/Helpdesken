@@ -6153,7 +6153,7 @@ If not exists (select * from tblTextTranslation where text_id = 1849 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1850)
-	insert into tbltext (id, TextString) VALUES (1850, 'Vi ändring av case')
+	insert into tbltext (id, TextString) VALUES (1850, 'Vid ändring av case')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1850 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1850, 2, 'On edit of case')
@@ -6183,7 +6183,7 @@ GO
 UPDATE tbltext set TextString = 'Vid nytt ärende' where id = 1849
 GO
 
-UPDATE tbltext set TextString = 'Vi ändring av ärende' where id = 1850
+UPDATE tbltext set TextString = 'Vid ändring av ärende' where id = 1850
 GO
 
 -- *** Run this last when put translation script above this line **--

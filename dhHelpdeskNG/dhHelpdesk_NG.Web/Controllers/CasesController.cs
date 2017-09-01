@@ -5571,14 +5571,17 @@ namespace DH.Helpdesk.Web.Controllers
             if (m.case_.Category_Id.HasValue)
             {
                 var c = this._categoryService.GetCategory(m.case_.Category_Id.GetValueOrDefault(), customerId);
-                if (caseTemplateButtons != null)
+                if (c != null)
                 {
-                    var names =
-                        this._categoryService.GetParentPath(c.Id, customerId).Select(name => Translation.GetMasterDataTranslation(name));
-                    m.ParantPath_Category = string.Join(" - ", names);
-                    if (c.SubCategories != null && c.SubCategories.Where(s => s.IsActive != 0).ToList().Count > 0)
+                    if (caseTemplateButtons != null)
                     {
-                        m.CategoryHasChild = 1;
+                        var names =
+                            this._categoryService.GetParentPath(c.Id, customerId).Select(name => Translation.GetMasterDataTranslation(name));
+                        m.ParantPath_Category = string.Join(" - ", names);
+                        if (c.SubCategories != null && c.SubCategories.Where(s => s.IsActive != 0).ToList().Count > 0)
+                        {
+                            m.CategoryHasChild = 1;
+                        }
                     }
                 }
             }
