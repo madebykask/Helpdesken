@@ -6173,5 +6173,18 @@ If not exists (select * from tblTextTranslation where text_id = 1852 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1852, 2, 'Only show for')
 GO
 
+If not exists (select * from tbltext where id = 1853)
+	insert into tbltext (id, TextString) VALUES (1853, 'Stängd')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1853 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1853, 2, 'Closed')
+GO
+
+UPDATE tbltext set TextString = 'Vid nytt ärende' where id = 1849
+GO
+
+UPDATE tbltext set TextString = 'Vi ändring av ärende' where id = 1850
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
