@@ -1400,10 +1400,19 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
 
             foreach (ProductArea productArea in productAreaToDisplay)
             {
+                var wgName = productArea.WorkingGroup !=null ? productArea.WorkingGroup.WorkingGroupName : string.Empty;
+                var prioName = productArea.Priority != null ? productArea.Priority.Name : string.Empty;
+                var caseType = productArea.CaseTypeProductAreas.FirstOrDefault();
+                var caseTypeName = string.Empty;
+                if (caseType != null)
+                    caseTypeName = caseType.CaseType.Name;
                 var isInactive = productArea.IsActive != 1 || isParentInactive;
                 htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + productArea.Name + "</a></td>";
                 htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "'>" + productArea.IsActive.TranslateBit() + "</a></td>";
+                htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "'>" + wgName + "</a></td>";
+                htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "'>" + prioName + "</a></td>";
+                htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "'>" + caseTypeName + "</a></td>";
                 htmlOutput += "</tr>";
 
                 if (productArea.SubProductAreas != null)

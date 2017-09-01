@@ -195,16 +195,25 @@
                 </div>
                 @if (Model.ProductArea.SubProductAreas != null && Model.ProductArea.SubProductAreas.Any())
                 {
-                    <h4>@Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)</h4>
+                    <h4>@Translation.GetCoreTextTranslation("Produktområde")</h4>
                     <div class="container">
                         <table class="table table-striped table-bordered table-hover" id="tblSubProductAreas">
                             <thead>
                                 <tr>
                                     <th>
-                                        @Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Produktområde")
                                     </th>
                                     <th>
-                                        @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Aktiv")
+                                    </th>
+                                    <th>
+                                        @Translation.GetCoreTextTranslation("Driftgrupp")
+                                    </th>
+                                    <th>
+                                        @Translation.GetCoreTextTranslation("Prioritet")
+                                    </th>
+                                    <th>
+                                        @Translation.GetCoreTextTranslation("Ärendetyp")
                                     </th>
                                 </tr>
                             </thead>
