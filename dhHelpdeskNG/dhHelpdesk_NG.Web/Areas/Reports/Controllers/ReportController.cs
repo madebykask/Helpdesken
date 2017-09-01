@@ -92,7 +92,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 {"-4", "CasesPerWorkingGroup"},
                 {"-5", "CasesPerAdministrator"},
                 {"-6", "CasesPerDepartment"},
-                {"-7", "NumberOfCases"}
+                {"-7", "NumberOfCases"},
+                {"-8", "AvgResolutionTime" }
             };
 
             _reportCategories = new CustomSelectList();
@@ -702,7 +703,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             ret.Items.AddItem("-4", "CasesPerWorkingGroup");
             ret.Items.AddItem("-5", "CasesPerAdministrator");
             ret.Items.AddItem("-6", "CasesPerDepartment");
-            ret.Items.AddItem("-7", "NumberOfCases");            
+            ret.Items.AddItem("-7", "NumberOfCases");
+            ret.Items.AddItem("-8", "AvgResolutionTime");
 
             foreach (var customReport in reports)
             {

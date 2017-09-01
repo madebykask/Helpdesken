@@ -21,7 +21,7 @@
                 <input type="button" id="excelReport" class="btn" style="display: none" disabled="true" data-excel="true" value="@Translation.Get("Export to Excel")"/>
             </li>
             <li>
-                <a id="btnShowReport" class="btn">@Translation.Get("Visa")</a>
+                <a id="btnShowReport" class="btn">@Translation.Get("Visa")</a>                
             </li>
             <li>
                 <a id="btnSaveFilter" class="btn" style="display: none">@Translation.Get("Spara")</a>
@@ -54,9 +54,6 @@
 </div>
 
 @Scripts.Render("~/bundles/report")
-
-<script type="text/javascript" src="@Url.Content("~/Areas/Reports/Content/js/reportViewer.logic.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/Areas/Reports/Content/js/reports.js")"></script>
 
 <script type="text/javascript">
     var scope;

@@ -486,12 +486,7 @@
                     break;
             }
         }
-
-        //$("#btnShowReport").click(function (e) {
-        //    e.preventDefault();
-        //    dhHelpdesk.reports.onOtherShow();
-        //});
-
+      
         dhHelpdesk.reports.init = function () {
 
             var showReportButton = $("#btnShowReport");

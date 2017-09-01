@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <Body>
+    <ReportItems>
+      <Tablix Name="Tablix2">
+        <TablixBody>
+          <TablixColumns>
+            <TablixColumn>
+              <Width>6.38938cm</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>4.56375cm</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>2.5cm</Width>
+            </TablixColumn>
+          </TablixColumns>
+          <TablixRows>
+            <TablixRow>
+              <Height>1.04979cm</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox7">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Case Type</Value>
+                              <Style>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox7</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <BackgroundColor>CornflowerBlue</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox9">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Average ResolutionTime </Value>
+                              <Style>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>in hours</Value>
+                              <Style>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox9</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <BackgroundColor>CornflowerBlue</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox11">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>No of cases</Value>
+                              <Style>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox11</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <BackgroundColor>CornflowerBlue</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
+            <TablixRow>
+              <Height>0.6cm</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="CaseType">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!CaseType.Value</Value>
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>CaseType</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="LeadTime">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Left(Fields!LeadTime.Value/Fields!Volume.Value, 4)</Value>
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>LeadTime</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Volume">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=SUM(Fields!Volume.Value)</Value>
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Volume</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
+          </TablixRows>
+        </TablixBody>
+        <TablixColumnHierarchy>
+          <TablixMembers>
+            <TablixMember />
+            <TablixMember />
+            <TablixMember />
+          </TablixMembers>
+        </TablixColumnHierarchy>
+        <TablixRowHierarchy>
+          <TablixMembers>
+            <TablixMember>
+              <KeepWithGroup>After</KeepWithGroup>
+            </TablixMember>
+            <TablixMember>
+              <Group Name="Details" />
+            </TablixMember>
+          </TablixMembers>
+        </TablixRowHierarchy>
+        <DataSetName>ResolutionTime</DataSetName>
+        <Top>1.09389cm</Top>
+        <Height>1.64979cm</Height>
+        <Width>13.45313cm</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Tablix>
+      <Textbox Name="Textbox13">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Average Resolution Time per Closed Case and Case Type </Value>
+                <Style>
+                  <FontSize>14pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox13</rd:DefaultName>
+        <Height>0.9175cm</Height>
+        <Width>13.45313cm</Width>
+        <ZIndex>1</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+    </ReportItems>
+    <Height>3.39583in</Height>
+    <Style />
+  </Body>
+  <Width>5.29651in</Width>
+  <Page>
+    <PageHeight>29.7cm</PageHeight>
+    <PageWidth>21cm</PageWidth>
+    <LeftMargin>2cm</LeftMargin>
+    <RightMargin>2cm</RightMargin>
+    <TopMargin>2cm</TopMargin>
+    <BottomMargin>2cm</BottomMargin>
+    <ColumnSpacing>0.13cm</ColumnSpacing>
+    <Style />
+  </Page>
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource1">
+      <DataSourceReference>Helpdesk</DataSourceReference>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>a9f56d2f-54f8-4aaf-b3f0-0cb3a8bc1353</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="ResolutionTime">
+      <Query>
+        <DataSourceName>DataSource1</DataSourceName>
+        <CommandText>Select COUNT(CaseType) AS Volume, CaseType, SUM(LeadTime)/60 AS LeadTime
+
+FROM(
+
+SELECT        TOP (100) PERCENT dbo.tblCustomer.Name AS Customer, dbo.tblCase.Casenumber, CONVERT(varchar, dbo.tblCase.Casenumber) 
+                         + ' ' + dbo.tblCase.Caption AS [Case], CONVERT(nvarchar(10), dbo.tblCase.RegTime, 121) AS [Registration Date], DATEPART(yy, dbo.tblCase.RegTime) 
+                         AS [Registration Year], DATEPART(mm, dbo.tblCase.RegTime) AS [Registration Month], DATEPART(dd, dbo.tblCase.RegTime) AS [Registration Day], 
+                         'FY ' + CASE WHEN DATEPART(mm, dbo.tblCase.RegTime) &gt; 8 THEN SUBSTRING(CONVERT(nvarchar(4), DATEADD(yy, 1, dbo.tblCase.RegTime), 121), 3, 2) 
+                         ELSE SUBSTRING(CONVERT(nvarchar(4), dbo.tblCase.RegTime, 121), 3, 2) END AS [Financial Year], 
+                         dbo.tblUsers.FirstName + N' ' + dbo.tblUsers.SurName AS [Registrated By], 
+						 
+						-- dbo.tblCaseType.CaseType, dbo.tblCaseType.CaseType AS CaseTypeUser, 
+                         
+						 dbo.tblCase.Caption AS Subject, CONVERT(nvarchar(10), dbo.tblCase.FinishingDate, 121) AS [Closing Date], CASE isnull(tblcase.FinishingDate, 0) 
+                         WHEN 0 THEN 'On Going' ELSE 'Closed' END AS [Case Status], dbo.tblRegion.Region, dbo.tblDepartment.Department, ISNULL(dbo.tblOU.OU, '') AS [Org unit], 
+                         
+						 [dbo].[GetHierarchy]
+						 (tblCase.CaseType_id,'tblCaseType') AS CaseType,
+	
+						 
+						  [dbo].[GetHierarchy]
+						 (tblCase.ProductArea_id,'tblProductArea') AS ProductArea,
+						 
+	
+						 
+						 
+						 
+						  ISNULL(dbo.tblRegistrationSourceCustomer.SourceName, '') AS Source, 
+                         dbo.tblWorkingGroup.WorkingGroup AS [Working group], dbo.tblPriority.PriorityName AS Priority, dbo.tblStatus.StatusName AS Status, 
+                         dbo.tblStateSecondary.StateSecondary AS [Sub State], CASE DATEPART(dw, dbo.tblCase.RegTime) 
+                         WHEN 2 THEN 'Måndag' WHEN 3 THEN 'Tisdag' WHEN 4 THEN 'Onsdag' WHEN 5 THEN 'Torsdag' WHEN 6 THEN 'Fredag' WHEN 7 THEN 'Lördag' ELSE 'Söndag' END
+                          AS [Registration Weekday], DATEPART(hh, dbo.tblCase.RegTime) AS [Registration Hour], CASE DatePart(m, tblCase.regtime) 
+                         WHEN 1 THEN 'Januari ' WHEN 2 THEN 'Februari ' WHEN 3 THEN 'Mars ' WHEN 4 THEN 'April ' WHEN 5 THEN 'Maj ' WHEN 6 THEN 'Juni ' WHEN 7 THEN 'Juli ' WHEN
+                          8 THEN 'Augusti ' WHEN 9 THEN 'September ' WHEN 10 THEN 'Oktober ' WHEN 11 THEN 'November ' ELSE 'December ' END + CONVERT(varchar(4), 
+                         DATEPART(yyyy, dbo.tblCase.RegTime)) AS Period, CONVERT(varchar(4), DATEPART(yyyy, dbo.tblCase.RegTime)) + '-' + CASE WHEN CONVERT(varchar(2), 
+                         DATEPART(mm, dbo.tblCase.RegTime)) &lt; 10 THEN '0' + CONVERT(varchar(2), DATEPART(mm, dbo.tblCase.RegTime)) ELSE CONVERT(varchar(2), DATEPART(mm, 
+                         dbo.tblCase.RegTime)) END AS YearMonth,
+                             (SELECT        CASE WHEN MAX(id) IS NOT NULL THEN 'Ja' ELSE 'Nej' END AS Expr1
+                               FROM            dbo.tblCaseHistory
+                               WHERE        (Case_Id = dbo.tblCase.Id) AND (StateSecondary_Id IS NOT NULL)) AS OnHold, CASE WHEN tblCase.Watchdate IS NULL 
+                         THEN CASE WHEN tblCase.LeadTime / 60 &gt; tblPriority.SolutionTime AND 
+                         tblPriority.SolutionTime &gt; 0 THEN 'Nej' ELSE 'Ja' END ELSE CASE WHEN tblCase.LeadTime &gt; 0 THEN 'Nej' ELSE 'Ja' END END AS InTime, 
+                         CASE WHEN tblCase.Watchdate IS NULL THEN CASE WHEN tblCase.LeadTime / 60 &gt; tblPriority.SolutionTime AND 
+                         tblPriority.SolutionTime &gt; 0 THEN 'Nej' ELSE 'Ja' END ELSE CASE WHEN CONVERT(varchar(10), tblCase.WatchDate, 121) &lt; CONVERT(varchar(10), 
+                         tblCase.FinishingDate, 121) THEN 'Nej' ELSE 'Ja' END END AS InTime2, CASE WHEN tblCase.Watchdate IS NULL 
+                         THEN CASE WHEN tblCase.LeadTime &gt; (tblPriority.SolutionTime * 60) AND 
+                         tblPriority.SolutionTime &gt; 0 THEN 'Nej' ELSE 'Ja' END ELSE CASE WHEN CONVERT(varchar(10), tblCase.WatchDate, 121) &lt; CONVERT(varchar(10), 
+                         tblCase.FinishingDate, 121) THEN 'Nej' ELSE 'Ja' END END AS InTime3, ISNULL(tblUsers2.FirstName, '') + ' ' + ISNULL(tblUsers2.SurName, '') AS Administrator,
+                             
+							[dbo].[GetHierarchy]( 
+							 (SELECT        TOP (1) dbo.tblFinishingCause.Id
+                               FROM            dbo.tblLog INNER JOIN
+                                                         dbo.tblFinishingCause ON dbo.tblLog.FinishingType = dbo.tblFinishingCause.Id
+                               WHERE        (dbo.tblCase.Id = dbo.tblLog.Case_Id)
+                               ORDER BY dbo.tblLog.Id DESC), 'tblFinishingCause')
+							   AS ClosingReason, dbo.tblCase.WatchDate, dbo.tblCase.LeadTime, CASE WHEN tblCaseStatistics.WasSolvedInTime IS NOT NULL
+                          THEN CASE WHEN tblCaseStatistics.WasSolvedInTime = 1 THEN 'Ja' ELSE 'Nej' END END AS SolvedInTime
+FROM            dbo.tblCase INNER JOIN
+                         dbo.tblCustomer ON dbo.tblCase.Customer_Id = dbo.tblCustomer.Id LEFT OUTER JOIN
+                         dbo.tblCaseStatistics ON dbo.tblCase.Id = dbo.tblCaseStatistics.Case_Id LEFT OUTER JOIN
+                         dbo.tblUsers ON dbo.tblCase.User_Id = dbo.tblUsers.Id LEFT OUTER JOIN
+                         dbo.tblStateSecondary ON dbo.tblCase.StateSecondary_Id = dbo.tblStateSecondary.Id LEFT OUTER JOIN
+                         dbo.tblStatus ON dbo.tblCase.Status_Id = dbo.tblStatus.Id LEFT OUTER JOIN
+                         dbo.tblWorkingGroup ON dbo.tblCase.WorkingGroup_Id = dbo.tblWorkingGroup.Id LEFT OUTER JOIN
+                         dbo.tblPriority ON dbo.tblCase.Priority_Id = dbo.tblPriority.Id LEFT OUTER JOIN
+                         dbo.tblRegion ON dbo.tblCase.Region_Id = dbo.tblRegion.Id LEFT OUTER JOIN
+                         dbo.tblDepartment ON dbo.tblCase.Department_Id = dbo.tblDepartment.Id LEFT OUTER JOIN
+                         dbo.tblCaseType ON dbo.tblCase.CaseType_Id = dbo.tblCaseType.Id LEFT OUTER JOIN
+
+                         
+						 
+						 dbo.tblUsers AS tblUsers2 ON dbo.tblCase.Performer_User_Id = tblUsers2.Id LEFT OUTER JOIN
+                         dbo.tblRegistrationSourceCustomer ON dbo.tblCase.RegistrationSourceCustomer_Id = dbo.tblRegistrationSourceCustomer.Id LEFT OUTER JOIN
+                         dbo.tblOU ON dbo.tblCase.OU_Id = dbo.tblOU.Id
+
+) AS TimeData
+
+where [Case Status] = 'Closed'
+
+
+GROUP BY CaseType</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Volume">
+          <DataField>Volume</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CaseType">
+          <DataField>CaseType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="LeadTime">
+          <DataField>LeadTime</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>60661b8b-9edf-417e-ac80-77cbab9d1920</rd:ReportID>
+</Report>
