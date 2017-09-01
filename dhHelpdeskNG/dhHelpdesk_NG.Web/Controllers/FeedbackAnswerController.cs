@@ -50,7 +50,12 @@ namespace DH.Helpdesk.Web.Controllers
         [AllowAnonymous]
         public ActionResult ThankYou(int customerId, int languageId, bool isShowNote = false, string noteLabel = null, int questionId = 0)
         {
-            var html = _infoService.GetInfoText(4, customerId, languageId).Name;
+            var infoText = _infoService.GetInfoText(4, customerId, languageId);
+            var html = string.Empty;
+            if (infoText != null)
+            {
+                html = infoText.Name;
+            }
             var model = new FeedbackThankYouModel
             {
                 Html = html,
