@@ -48,41 +48,58 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var allCategories = _documentService.GetDocumentCategories(customerId);
             var availableCats = allCategories.Where(c=> c.ShowOnExternalPage == false).Select(x => new SelectListItem
                 {
-                    Text = x.Name,
+                    Text =  x.Name,
                     Value = x.Id.ToString()
-                }).ToList();
+                })
+				.OrderBy(o => o.Text)
+				.ToList();
 
-            var selectedCats = allCategories.Where(c => c.ShowOnExternalPage).Select(x => new SelectListItem
-            {
-                Text = x.Name,
-                Value = x.Id.ToString()
-            }).ToList();
+            var selectedCats = allCategories.Where(c => c.ShowOnExternalPage).Select(x => 
+				new SelectListItem
+				{
+					Text = x.Name,
+					Value = x.Id.ToString()
+				})
+				.OrderBy(o => o.Text)
+				.ToList();
 
             var allCaseTypes = _caseTypeService.GetCaseTypesForSetting(customerId, true);
-            var availableCaseTypes = allCaseTypes.Where(c => c.ShowOnExtPageCases == 0).Select(x => new SelectListItem
-            {
-                Text = x.Name,
-                Value = x.Id.ToString()
-            }).ToList();
+            var availableCaseTypes = allCaseTypes.Where(c => c.ShowOnExtPageCases == 0).Select(x => 
+				new SelectListItem
+				{
+					Text = x.ParentCaseType == null ? x.Name : x.ParentCaseType.Name + " - " + x.Name,
+					Value = x.Id.ToString()
+				})
+				.OrderBy(o => o.Text)
+				.ToList();
 
-            var selectedCaseTypes = allCaseTypes.Where(c => c.ShowOnExtPageCases == 1).Select(x => new SelectListItem
-            {
-                Text = x.Name,
-                Value = x.Id.ToString()
-            }).ToList();
+            var selectedCaseTypes = allCaseTypes.Where(c => c.ShowOnExtPageCases == 1).Select(x => 
+				new SelectListItem
+				{
+					Text = x.ParentCaseType == null ? x.Name : x.ParentCaseType.Name + " - " + x.Name,
+					Value = x.Id.ToString()
+				})
+				.OrderBy(o => o.Text)
+				.ToList();
 
             var allProductAreas = _productAreaService.GetProductAreasForSetting(customerId, true);
-            var availableProductAreas = allProductAreas.Where(p => p.ShowOnExtPageCases == 0).Select(x => new SelectListItem
-            {
-                Text = x.Name,
-                Value = x.Id.ToString()
-            }).ToList();
+            var availableProductAreas = allProductAreas.Where(p => p.ShowOnExtPageCases == 0).Select(x => 
+				new SelectListItem
+				{
+					Text = x.ParentProductArea == null ? x.Name : x.ParentProductArea.Name + " - " + x.Name,
+					Value = x.Id.ToString()
+				})
+				.OrderBy(o => o.Text)
+				.ToList();
 
-            var selectedProductAreas = allProductAreas.Where(p => p.ShowOnExtPageCases == 1).Select(x => new SelectListItem
-            {
-                Text = x.Name,
-                Value = x.Id.ToString()
-            }).ToList();
+            var selectedProductAreas = allProductAreas.Where(p => p.ShowOnExtPageCases == 1).Select(x => 
+				new SelectListItem
+				{
+					Text = x.ParentProductArea == null ? x.Name : x.ParentProductArea.Name + " - " + x.Name,
+					Value = x.Id.ToString()
+				})
+				.OrderBy(o => o.Text)
+				.ToList();
 
             var selectedNum = 0;
             if (customer.ShowFAQOnExternalStartPage.HasValue)
