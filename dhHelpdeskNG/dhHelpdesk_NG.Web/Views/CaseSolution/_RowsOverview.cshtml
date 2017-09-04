@@ -41,11 +41,11 @@
                 <td>
                     @if (Model != null && Model.Count() > 0)
                     {
-                        <input type="checkbox" onclick="test(this)" id="chkActive" @(Model.FirstOrDefault().IsShowOnlyActive ? "checked" : string.Empty)>
+                        <input type="checkbox" class="switchcheckbox" id="chkActive" @(Model.FirstOrDefault().IsShowOnlyActive ? "checked" : string.Empty)>
                     }
                     else
                     {
-                        <input type="checkbox" onclick="test(this)" id="chkActive" false : string.Empty)>
+                        <input type="checkbox" class="switchcheckbox" id="chkActive">
                     }
                     @* <input type="checkbox" onclick="test(this)" id="chkActive">*@
 
@@ -137,6 +137,10 @@
 
 <script type="text/javascript">
 
+    $("#chkActive").on('switchChange.bootstrapSwitch', function () {
+        test();
+    });
+
     function test(t) {
 
         var searchText = document.getElementById('caseSolutionSearch').value;
@@ -174,6 +178,10 @@
             }),
             success: function (filteredModel) {
                 $(caseSolutionRowsArea).html(filteredModel);
+                $("#chkActive").bootstrapSwitch("onColor", "success");
+                $("#chkActive").bootstrapSwitch("size", "small");
+                $("#chkActive").bootstrapSwitch("onText", '@Translation.GetForJS("Ja")');
+                $("#chkActive").bootstrapSwitch("offText", '@Translation.GetForJS("Nej")');
                 $(edtSearch).focus();
                 $(edtSearch).val(searchText);
                 $(edtSearch).select();
