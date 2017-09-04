@@ -6186,5 +6186,14 @@ GO
 UPDATE tbltext set TextString = 'Vid ändring av ärende' where id = 1850
 GO
 
+
+
+If not exists (select * from tbltext where id = 1854)
+	insert into tbltext (id, TextString) VALUES (1854, 'Gruppera')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1854 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1854, 2, 'Group by')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

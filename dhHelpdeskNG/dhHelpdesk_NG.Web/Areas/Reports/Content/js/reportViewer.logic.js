@@ -475,14 +475,16 @@
         }
 
         dhHelpdesk.reports.showExtraParameters = function (reportName) {
-            $($extraParameters).hide();
-
+  
             switch (reportName) {
                 case "NumberOfCases":
-                    $("#reportCategoryParam").show();
+                    $("#lstfilterReportCategory").show()
+                    $("#lstfilterReportCategory_repl").hide();
                     break;
 
                 default:
+                    $("#lstfilterReportCategory").hide()
+                    $("#lstfilterReportCategory_repl").show();
                     break;
             }
         }
