@@ -1456,13 +1456,13 @@ namespace DH.Helpdesk.Services.Services
 
                 if (newCase.Priority != null)
                 {
-                    if (!string.IsNullOrWhiteSpace(newCase.Priority.EMailList))
+                    if (!string.IsNullOrWhiteSpace(newCase.Priority.EMailList) && log != null && !string.IsNullOrEmpty(log.TextExternal))
                     {
                         SendPriorityMailSpecial(newCase, log, cms, files, helpdeskMailFromAdress, caseHistoryId, caseId, customerSetting, smtpInfo, userTimeZone);
                     }
                     else
                     {
-                        if (newCase.Priority != null && log != null && (!string.IsNullOrEmpty(log.TextExternal) || !string.IsNullOrEmpty(log.TextInternal)))
+                        if (log != null && (!string.IsNullOrEmpty(log.TextExternal) || !string.IsNullOrEmpty(log.TextInternal)))
                         {
                             var caseHis = _caseHistoryRepository.GetCloneOfPenultimate(caseId);
                             if (caseHis != null && caseHis.Priority_Id.HasValue)
