@@ -1393,6 +1393,18 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             return new MvcHtmlString(htmlOutput);
         }
 
+        private static string getCaseTypeParentPath(this CaseType o, string separator = " - ")
+        {
+            string ret = string.Empty;
+
+            if (o.ParentCaseType == null)
+                ret += o.Name;
+            else
+                ret += getCaseTypeParentPath(o.ParentCaseType, separator) + separator + o.Name;
+
+            return ret;
+        }
+
         private static MvcHtmlString BuildProductAreaTreeRow(
             IList<ProductArea> productAreas,
             int iteration,
@@ -1409,7 +1421,8 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 var caseType = productArea.CaseTypeProductAreas.FirstOrDefault();
                 var caseTypeName = string.Empty;
                 if (caseType != null)
-                    caseTypeName = caseType.CaseType.Name;
+                    caseTypeName = getCaseTypeParentPath(caseType.CaseType);
+
                 var isInactive = productArea.IsActive != 1 || isParentInactive;
                 htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + productArea.Name + "</a></td>";
