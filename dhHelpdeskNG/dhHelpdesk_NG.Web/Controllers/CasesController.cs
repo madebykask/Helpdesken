@@ -5614,6 +5614,12 @@ namespace DH.Helpdesk.Web.Controllers
                     //else
                     //    m.CaseLog.SendMailAboutCaseToNotifier = true;
                 }
+
+                if (m.CaseLog != null)
+                {
+                    if (m.CaseLog.TextExternal != null)
+                        m.CaseLog.SendMailAboutCaseToNotifier = true;
+                }
             }
             
             if (isCreateNewCase)
