@@ -167,8 +167,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     if (string.Compare(c.Name, valueToFind.getCaseFieldName(), true) == 0)
                     {
-                        if ((c.Required == 1 || (isCaseReopend && c.RequiredIfReopened == 1)) && c.ShowOnStartPage == 1)
-                            ret = 1;   
+						if (isCaseReopend && c.RequiredIfReopened == 1 && c.ShowOnStartPage == 1)
+						{
+							ret = 2;
+						}
+						else if ((c.Required == 1 || (isCaseReopend && c.RequiredIfReopened == 1)) && c.ShowOnStartPage == 1)
+						{
+							ret = 1;
+						}
                         break;
                     }
                 }
