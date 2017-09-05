@@ -162,7 +162,7 @@
 
                             <tr id="reportCategoryParam" style="display:normal;">
                                 <td>
-                                    @Translation.Get("Gruppera", Enums.TranslationSource.CaseTranslation, Model.CustomerId)
+                                    @Translation.GetCoreTextTranslation("Gruppera")
                                 </td>
                                 <td>
                                     <select id="lstfilterReportCategory" name="lstfilterCategory" data-field="reportcategories" style="width: 300px;" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" @(Model.ReportFilter.ReportCategory == null ? " visible: none" : "") >
