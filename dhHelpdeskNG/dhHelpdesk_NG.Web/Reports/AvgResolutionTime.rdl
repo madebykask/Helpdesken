@@ -303,8 +303,10 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Globals!ExecutionTime</Value>
-                  <Style />
+                  <Value>=Now()</Value>
+                  <Style>
+                    <Format>yyyy-MM-dd</Format>
+                  </Style>
                 </TextRun>
               </TextRuns>
               <Style>

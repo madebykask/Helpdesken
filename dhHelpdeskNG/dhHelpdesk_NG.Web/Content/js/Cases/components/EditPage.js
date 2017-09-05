@@ -1356,7 +1356,7 @@ EditPage.prototype.init = function (p) {
             {
                 caseId: p.currentCaseId,
                 caseNumber: p.currentCaseNumber,
-                curTime: new Date.now()
+                curTime: Date.now()
             },                
 
             function (_reportPresentation) {
