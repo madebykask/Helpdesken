@@ -151,7 +151,8 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 Ascending = true,
                 SearchCss = string.Empty,
-                SortBy = CaseSolutionIndexColumns.Name
+                SortBy = CaseSolutionIndexColumns.Name,
+                OnlyActive = true
             };
 
             if (SessionFacade.CurrentCaseSolutionSearch != null)
