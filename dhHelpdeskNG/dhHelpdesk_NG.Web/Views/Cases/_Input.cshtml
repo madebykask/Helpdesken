@@ -466,43 +466,45 @@
                                                     }
                                                 </td>
                                                 <td style="@Model.GetFieldStyle(CaseSolutionFields.Email)">
-                                                    <label class="checkbox">
-                                                        @if (!Model.IsReadOnly(CaseSolutionFields.Email))
-                                                        {
-                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier)
-                                                        }
-                                                        else
-                                                        {
-                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled" })
-                                                        }
-                                                        @Translation.Get("Skicka mail till anmälaren", SessionFacade.CurrentLanguageId)
-                                                    </label>
-
-                                                    @if (Model.Languages != null && Model.Languages.Count() > 1 && Model.case_.Id == 0)
-                                                    {
-                                                        <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
-                                                            @foreach (var e in Model.Languages)
-                                                            {
-                                                                <option value="@e.Id" @e.Id.IdIsSelected(SessionFacade.CurrentLanguageId.ToString())>@Translation.Get(e.Name, SessionFacade.CurrentLanguageId)</option>
-                                                            }
-                                                        </select>
-                                                    }
-                                                    else
-                                                    {
-                                                        if (Model.Languages != null && Model.Languages.Count() > 1 && !Model.IsReadOnly(CaseSolutionFields.Email))
-                                                        {
-                                                            <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
-                                                                @foreach (var e in Model.Languages)
+                                                    <div>                                                        
+                                                            @*<label class="checkbox">*@
+                                                                @if (!Model.IsReadOnly(CaseSolutionFields.Email))
                                                                 {
-                                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString())>@Translation.Get(e.Name, SessionFacade.CurrentLanguageId)</option>
+                                                                    @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier)
                                                                 }
-                                                            </select>
-                                                        }
-                                                        else
-                                                        {
-                                                            @Html.HiddenFor(m => Model.case_.RegLanguage_Id);
-                                                        }
-                                                    }
+                                                                else
+                                                                {
+                                                                    @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled" })
+                                                                }
+                                                                @Translation.Get("Skicka mail till anmälaren", SessionFacade.CurrentLanguageId)
+                                                            @*</label>*@
+
+                                                            @if (Model.Languages != null && Model.Languages.Count() > 1 && Model.case_.Id == 0)
+                                                            {
+                                                                <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
+                                                                    @foreach (var e in Model.Languages)
+                                                                    {
+                                                                        <option value="@e.Id" @e.Id.IdIsSelected(SessionFacade.CurrentLanguageId.ToString())>@Translation.Get(e.Name, SessionFacade.CurrentLanguageId)</option>
+                                                                    }
+                                                                </select>
+                                                            }
+                                                            else
+                                                            {
+                                                                if (Model.Languages != null && Model.Languages.Count() > 1 && !Model.IsReadOnly(CaseSolutionFields.Email))
+                                                                {
+                                                                    <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
+                                                                        @foreach (var e in Model.Languages)
+                                                                        {
+                                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString())>@Translation.Get(e.Name, SessionFacade.CurrentLanguageId)</option>
+                                                                        }
+                                                                    </select>
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.HiddenFor(m => Model.case_.RegLanguage_Id);
+                                                                }
+                                                            }                                                        
+                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_Phone, CaseSolutionFields.PersonsPhone)">
