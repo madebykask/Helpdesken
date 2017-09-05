@@ -317,7 +317,7 @@ Parameters!Category.Label="Product Area", "ProductArea"
         <DataSetName>VariabelAxel</DataSetName>
         <Top>1.09361cm</Top>
         <Height>12.28287cm</Height>
-        <Width>26.25896cm</Width>
+        <Width>24.98896cm</Width>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -435,13 +435,15 @@ Parameters!Category.Label="Product Area", "Product Area"
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>6.59178in</Height>
+    <Height>16.9cm</Height>
     <Style />
   </Body>
-  <Width>10.33817in</Width>
+  <Width>25.5975cm</Width>
   <Page>
-    <PageHeight>29.7cm</PageHeight>
-    <PageWidth>21cm</PageWidth>
+    <PageHeight>21cm</PageHeight>
+    <PageWidth>29.7cm</PageWidth>
+    <InteractiveHeight>16.9cm</InteractiveHeight>
+    <InteractiveWidth>25.6cm</InteractiveWidth>
     <LeftMargin>2cm</LeftMargin>
     <RightMargin>2cm</RightMargin>
     <TopMargin>2cm</TopMargin>
