@@ -733,8 +733,8 @@ END
 -- Create condition B for Commence B, has no additional clause
 DECLARE @dcSalTcTermsComBCondBGuid UNIQUEIDENTIFIER = '61A33E7A-7A8E-424E-9F0A-3A8105A41B41',
 	@dcSalTcTermsComBCondBPropertyName NVARCHAR(MAX) = 'extendedcase_AdditionalClause',
-	@dcSalTcTermsComBCondBOperator NVARCHAR(MAX) = 'Equal',
-	@dcSalTcTermsComBCondBValues NVARCHAR(MAX) = 'None',
+	@dcSalTcTermsComBCondBOperator NVARCHAR(MAX) = 'IsEmpty',
+	@dcSalTcTermsComBCondBValues NVARCHAR(MAX) = '',
 	@dcSalTcTermsComBCondBDescription NVARCHAR(MAX) = 'Has no additional clause',
 	@dcSalTcTermsComBCondBStatus INT = 1
 
