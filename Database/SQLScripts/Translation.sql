@@ -6197,5 +6197,8 @@ GO
 
 UPDATE tblText Set TextString = 'E-postadress redan tillagd.' WHERE Id=1712;
 
+UPDATE tblText Set TextString = 'Visa på Ärende tab' WHERE Id=1820;
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
