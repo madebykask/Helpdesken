@@ -47,8 +47,8 @@ DECLARE @dcHiringGuid UNIQUEIDENTIFIER = '33216A30-3CE1-40CE-8C15-40D2F364B547',
 	@retSalHiringGuid UNIQUEIDENTIFIER = 'E11C26B9-C538-4BBB-AB9E-DB2D49D49CD4', -- Retail Salaried (Hiring)
 	@retSalTcGuid UNIQUEIDENTIFIER = 'EA1D92DF-AF56-4D3E-BA70-C45E4C3C30DA' -- Retail Salaried (T&C)
 
-
-	DECLARE @master_tblCaseDocument TABLE
+/* TODO: This is done in first script, combine these into one
+DECLARE @master_tblCaseDocument TABLE
 (
 	[CaseDocumentGUID] UNIQUEIDENTIFIER,
 	[Name] NVARCHAR(MAX),
@@ -119,6 +119,8 @@ INSERT INTO tblCaseDocument([CaseDocumentGUID],	[Name], [Description], [Customer
 SELECT M.[CaseDocumentGUID], M.[Name], M.[Description], M.[Customer_Id], M.[FileType], M.[SortOrder], M.[Status], @now, @userID, M.[CaseDocumentTemplate_Id], M.[Version], @now, @userID FROM @master_tblCaseDocument M
 LEFT JOIN tblCaseDocument CD ON CD.CaseDocumentGUID = M.CaseDocumentGUID
 WHERE CD.Id IS NULL
+
+*/
 
 ---- GET IDs for forms
 DECLARE @dcHiringID INT = (SELECT ID FROM tblCaseDocument CD WHERE CD.CaseDocumentGUID = @dcHiringGuid), -- DC EA (Hiring)
