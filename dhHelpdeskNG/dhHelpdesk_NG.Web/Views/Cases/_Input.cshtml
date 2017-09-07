@@ -10,6 +10,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @using DH.Helpdesk.Common.Constants;
+@using DH.Helpdesk.Common.Enums
 
 <script type="text/javascript">    
 
@@ -2161,11 +2162,17 @@
                                 <div class="displaytr" class="container">
                                     <ul class="nav nav-tabs" id="logandhistorytabs">
                                         <li class="active"><a href="#logtab">@Translation.Get("Ärendelogg", SessionFacade.CurrentLanguageId)</a></li>
-                                        <li><a href="#historytab">@Translation.Get("Historik", SessionFacade.CurrentLanguageId)</a></li>
+                                        @if (SessionFacade.CurrentUser.UserGroupId > UserGroups.User)
+                                        {
+                                            <li><a href="#historytab">@Translation.Get("Historik", SessionFacade.CurrentLanguageId)</a></li>
+                                        }
                                     </ul>
                                     <div class="tab-content">
                                         @Html.Partial("_CaseLog", Model)
-                                        @Html.Partial("_CaseHistory", Model)
+                                        @if (SessionFacade.CurrentUser.UserGroupId > UserGroups.User)
+                                        {
+                                            @Html.Partial("_CaseHistory", Model)
+                                        }
                                     </div>
                                 </div>
                             }
