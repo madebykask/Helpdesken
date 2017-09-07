@@ -3,12 +3,24 @@
 
 BEGIN TRAN
 
+-- ########################################## Pre-debug
+
+SELECT CD.CaseDocumentGUID, CD.Name, CDP.CaseDocumentParagraphGUID, CDP.Name CDPName, CDT.CaseDocumentTextGUID, CDT.Name CDTName, CDTC.CaseDocumentTextConditionGUID, CDTC.Description, CDTC.Property_Name, CDTC.Operator, CDTC.[Values]  FROM tblCaseDocument CD
+LEFT JOIN tblCaseDocument_CaseDocumentParagraph CDCDP ON CDCDP.CaseDocument_Id = CD.ID
+LEFT JOIN tblCaseDocumentParagraph CDP ON CDCDP.CaseDocumentParagraph_Id = CDP.ID
+LEFT JOIN tblCaseDocumentText CDT ON CDT.CaseDocumentParagraph_Id = CDP.ID
+LEFT JOIN tblCaseDocumentTextCondition CDTC ON CDTC.CaseDocumentText_Id = CDT.ID
+
+
+SELECT CD.CaseDocumentGUID, CD.Name, CDC.Description, CDC.Property_Name,  CDC.[Values] FROM tblCaseDocument CD
+LEFT JOIN tblCaseDocumentCondition CDC ON CDC.CaseDocument_Id = CD.ID
+
 -- ########################################## Basic properties of script
 
 DECLARE @userID INT = 1,
 	@now DATETIME = GETDATE(),
-	@caseTemplateID INT = 1
-	--@customerID INT = 43
+	@caseTemplateID INT = 1,
+	@customerID INT = 43
 
 -- ########################################## General variables (used for paragraph creation)
 
@@ -36,77 +48,77 @@ DECLARE @dcHiringGuid UNIQUEIDENTIFIER = '33216A30-3CE1-40CE-8C15-40D2F364B547',
 	@retSalTcGuid UNIQUEIDENTIFIER = 'EA1D92DF-AF56-4D3E-BA70-C45E4C3C30DA' -- Retail Salaried (T&C)
 
 
---	DECLARE @master_tblCaseDocument TABLE
---(
---	[CaseDocumentGUID] UNIQUEIDENTIFIER,
---	[Name] NVARCHAR(MAX),
---	[Description] NVARCHAR(MAX),
---	[Customer_Id] INT,
---	[FileType] NVARCHAR(MAX),
---	[SortOrder] INT,
---	[Status] INT,
---	[CaseDocumentTemplate_Id] INT,
---	[Version] INT
---)
+	DECLARE @master_tblCaseDocument TABLE
+(
+	[CaseDocumentGUID] UNIQUEIDENTIFIER,
+	[Name] NVARCHAR(MAX),
+	[Description] NVARCHAR(MAX),
+	[Customer_Id] INT,
+	[FileType] NVARCHAR(MAX),
+	[SortOrder] INT,
+	[Status] INT,
+	[CaseDocumentTemplate_Id] INT,
+	[Version] INT
+)
 
 
---SET NOCOUNT ON
+SET NOCOUNT ON
 
---INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
---VALUES(@retHiringGuid, 'Retail EA (Hiring)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
+INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
+VALUES(@retHiringGuid, 'Retail EA (Hiring)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
 
---INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
---VALUES(@retSalHiringGuid, 'Retail Salaried (Hiring)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
+INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
+VALUES(@retSalHiringGuid, 'Retail Salaried (Hiring)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
 
---INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
---VALUES(@dcHiringGuid, 'DC EA (Hiring)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
+INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
+VALUES(@dcHiringGuid, 'DC EA (Hiring)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
 
---INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
---VALUES(@dcSalHiringGuid, 'DC Salaried (Hiring)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
+INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
+VALUES(@dcSalHiringGuid, 'DC Salaried (Hiring)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
 
---INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
---VALUES(@retTcGuid, 'Retail EA (T&C)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
+INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
+VALUES(@retTcGuid, 'Retail EA (T&C)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
 
---INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
---VALUES(@retSalTcGuid, 'Retail Salaried (T&C)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
+INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
+VALUES(@retSalTcGuid, 'Retail Salaried (T&C)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
 
---INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
---VALUES(@dcTcGuid, 'DC EA (T&C)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
+INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
+VALUES(@dcTcGuid, 'DC EA (T&C)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
 
---INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
---VALUES(@dcSalTcGuid, 'DC Salaried (T&C)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
-
-
-
---SET NOCOUNT OFF
-
----- UPDATE Existing value
---PRINT 'UPDATE changed values in tblCaseDocument'
---UPDATE CD SET CD.[Name] = M.[Name], 
---	CD.[Description] = M.[Description],
---	CD.Customer_Id = M.Customer_Id,
---	CD.FileType = M.FileType,
---	CD.SortOrder = M.SortOrder,
---	CD.[Status] = M.[Status],
---	CD.ChangedDate = @now,
---	CD.ChangedByUser_Id = @userID
---FROM tblCaseDocument CD
---JOIN @master_tblCaseDocument M ON CD.[CaseDocumentGUID] = M.CaseDocumentGUID
---WHERE CD.[Name] <> M.[Name] OR
---	CD.[Description]  <> M.[Description] OR
---	CD.Customer_Id <> M.Customer_Id OR
---	CD.FileType <> M.FileType OR
---	CD.SortOrder <> M.SortOrder OR
---	CD.[Status] <> M.[Status]
+INSERT INTO @master_tblCaseDocument(CaseDocumentGUID, [Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], CaseDocumentTemplate_Id, [Version])
+VALUES(@dcSalTcGuid, 'DC Salaried (T&C)', '', @customerID, 'pdf', 0, 1, @caseTemplateID, 0)
 
 
 
----- INSERT new values
---PRINT 'INSERT new values in tblCaseDocument'
---INSERT INTO tblCaseDocument([CaseDocumentGUID],	[Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], [CreatedDate], [CreatedByUser_Id], [CaseDocumentTemplate_Id], [Version], ChangedDate, ChangedByUser_Id)
---SELECT M.[CaseDocumentGUID], M.[Name], M.[Description], M.[Customer_Id], M.[FileType], M.[SortOrder], M.[Status], @now, @userID, M.[CaseDocumentTemplate_Id], M.[Version], @now, @userID FROM @master_tblCaseDocument M
---LEFT JOIN tblCaseDocument CD ON CD.CaseDocumentGUID = M.CaseDocumentGUID
---WHERE CD.Id IS NULL
+SET NOCOUNT OFF
+
+-- UPDATE Existing value
+PRINT 'UPDATE changed values in tblCaseDocument'
+UPDATE CD SET CD.[Name] = M.[Name], 
+	CD.[Description] = M.[Description],
+	CD.Customer_Id = M.Customer_Id,
+	CD.FileType = M.FileType,
+	CD.SortOrder = M.SortOrder,
+	CD.[Status] = M.[Status],
+	CD.ChangedDate = @now,
+	CD.ChangedByUser_Id = @userID
+FROM tblCaseDocument CD
+JOIN @master_tblCaseDocument M ON CD.[CaseDocumentGUID] = M.CaseDocumentGUID
+WHERE CD.[Name] <> M.[Name] OR
+	CD.[Description]  <> M.[Description] OR
+	CD.Customer_Id <> M.Customer_Id OR
+	CD.FileType <> M.FileType OR
+	CD.SortOrder <> M.SortOrder OR
+	CD.[Status] <> M.[Status]
+
+
+
+-- INSERT new values
+PRINT 'INSERT new values in tblCaseDocument'
+INSERT INTO tblCaseDocument([CaseDocumentGUID],	[Name], [Description], [Customer_Id], [FileType], [SortOrder], [Status], [CreatedDate], [CreatedByUser_Id], [CaseDocumentTemplate_Id], [Version], ChangedDate, ChangedByUser_Id)
+SELECT M.[CaseDocumentGUID], M.[Name], M.[Description], M.[Customer_Id], M.[FileType], M.[SortOrder], M.[Status], @now, @userID, M.[CaseDocumentTemplate_Id], M.[Version], @now, @userID FROM @master_tblCaseDocument M
+LEFT JOIN tblCaseDocument CD ON CD.CaseDocumentGUID = M.CaseDocumentGUID
+WHERE CD.Id IS NULL
 
 ---- GET IDs for forms
 DECLARE @dcHiringID INT = (SELECT ID FROM tblCaseDocument CD WHERE CD.CaseDocumentGUID = @dcHiringGuid), -- DC EA (Hiring)
@@ -502,11 +514,20 @@ begin
 end /* Paragraph - FOOTER with Initials*/
 
 
+SELECT CD.CaseDocumentGUID, CD.Name, CDP.CaseDocumentParagraphGUID, CDP.Name CDPName, CDT.CaseDocumentTextGUID, CDT.Name CDTName, CDTC.CaseDocumentTextConditionGUID, CDTC.Description, CDTC.Property_Name, CDTC.Operator, CDTC.[Values]  FROM tblCaseDocument CD
+LEFT JOIN tblCaseDocument_CaseDocumentParagraph CDCDP ON CDCDP.CaseDocument_Id = CD.ID
+LEFT JOIN tblCaseDocumentParagraph CDP ON CDCDP.CaseDocumentParagraph_Id = CDP.ID
+LEFT JOIN tblCaseDocumentText CDT ON CDT.CaseDocumentParagraph_Id = CDP.ID
+LEFT JOIN tblCaseDocumentTextCondition CDTC ON CDTC.CaseDocumentText_Id = CDT.ID
 
 
---PRINT 'ROLLBACK'
---ROLLBACK
+SELECT CD.CaseDocumentGUID, CD.Name, CDC.Description, CDC.Property_Name,  CDC.[Values] FROM tblCaseDocument CD
+LEFT JOIN tblCaseDocumentCondition CDC ON CDC.CaseDocument_Id = CD.ID
 
 
-PRINT 'COMMIT'
-COMMIT
+PRINT 'ROLLBACK'
+ROLLBACK
+
+
+--PRINT 'COMMIT'
+--COMMIT
