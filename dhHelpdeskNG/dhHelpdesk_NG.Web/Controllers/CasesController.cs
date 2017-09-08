@@ -2068,7 +2068,7 @@ namespace DH.Helpdesk.Web.Controllers
                         result.Add(subProductArea.Id);
                         if (subProductArea.SubProductAreas != null && subProductArea.SubProductAreas.Any())
                         {
-                            GetSubProductAreasIds(subProductArea);
+                            result.AddRange(GetSubProductAreasIds(subProductArea));
                         }
                     }
                 }
