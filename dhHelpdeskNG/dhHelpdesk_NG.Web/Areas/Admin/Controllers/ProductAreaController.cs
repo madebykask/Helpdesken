@@ -72,7 +72,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult New(ProductArea productArea, int[] wgSelected, int caseType_Id)
+        public ActionResult New(ProductArea productArea, int[] wgSelected, int? caseType_Id)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._productAreaService.SaveProductArea(productArea, wgSelected, caseType_Id, out errors);
@@ -100,7 +100,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, ProductArea productArea, int[] wgSelected, int caseType_Id)
+        public ActionResult Edit(int id, ProductArea productArea, int[] wgSelected, int? caseType_Id)
         {
             var productAreaToSave = this._productAreaService.GetProductArea(id);
 
@@ -112,32 +112,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             productAreaToSave.MailID = productArea.MailID;
             productAreaToSave.IsActive = productArea.IsActive;
             productAreaToSave.ShowOnExternalPage = productArea.ShowOnExternalPage;
-            if (caseType_Id > 0)
-            {
-                if (productAreaToSave.CaseTypeProductAreas != null)
-                {
-                    productAreaToSave.CaseTypeProductAreas.Clear();
-                    productAreaToSave.CaseTypeProductAreas.Add(new CaseTypeProductArea
-                    {
-                        CaseType_Id = caseType_Id
-                    });
-                }
-                else
-                {
-                    productAreaToSave.CaseTypeProductAreas = new List<CaseTypeProductArea>
-                    {
-                        new CaseTypeProductArea
-                        {
-                            CaseType_Id = caseType_Id
-                        }
-                    };
-                }
-            }
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._productAreaService.SaveProductArea(productAreaToSave, wgSelected, caseType_Id, out errors);
 
-            
- 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "productarea", new { customerid = productAreaToSave.Customer_Id });
 

@@ -45,7 +45,7 @@
 
         IList<ProductArea> GetChildrenInRow(IList<ProductArea> productAreas, bool isTakeOnlyActive = false);
 
-        void SaveProductArea(ProductAreaEntity productArea, int[] wg, int caseTypeId, out IDictionary<string, string> errors);
+        void SaveProductArea(ProductAreaEntity productArea, int[] wg, int? caseTypeId, out IDictionary<string, string> errors);
 
         void Commit();
 
@@ -377,7 +377,7 @@
         //    return ret;
         //}
 
-        public void SaveProductArea(ProductAreaEntity productArea, int[] wg, int caseTypeId, out IDictionary<string, string> errors)
+        public void SaveProductArea(ProductAreaEntity productArea, int[] wg, int? caseTypeId, out IDictionary<string, string> errors)
         {
             if (productArea == null)
                 throw new ArgumentNullException("productarea");
@@ -401,14 +401,14 @@
                 }
             }
 
-            if (caseTypeId > 0)
+            if (caseTypeId.HasValue && caseTypeId > 0)
             {
                 if (productArea.CaseTypeProductAreas != null)
                 {
                     productArea.CaseTypeProductAreas.Clear();
                     productArea.CaseTypeProductAreas.Add(new CaseTypeProductArea
                     {
-                        CaseType_Id = caseTypeId
+                        CaseType_Id = caseTypeId.Value
                     });
                 }
                 else
@@ -417,9 +417,16 @@
                     {
                         new CaseTypeProductArea
                         {
-                            CaseType_Id = caseTypeId
+                            CaseType_Id = caseTypeId.Value
                         }
                     };
+                }
+            }
+            else
+            {
+                if (productArea.CaseTypeProductAreas != null)
+                {
+                    productArea.CaseTypeProductAreas.Clear();
                 }
             }
 
