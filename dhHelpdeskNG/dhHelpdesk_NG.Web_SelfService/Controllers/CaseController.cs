@@ -1224,6 +1224,54 @@
             return View("_AddCommentPopup");
         }
 
+        [HttpPost]
+        public JsonResult GetProductAreaByCaseType(int? caseTypeId)
+        {
+            if (caseTypeId.HasValue)
+            {
+                var ctProductAreas = _caseTypeService.GetCaseType(caseTypeId.Value).CaseTypeProductAreas.Select(x => x.ProductArea).ToList();
+                if (ctProductAreas.Any())
+                {
+                    var paIds = ctProductAreas.Select(x => x.Id).ToList();
+                    foreach (var ctProductArea in ctProductAreas)
+                    {
+                        paIds.AddRange(GetSubProductAreasIds(ctProductArea));
+                    }
+                    var drString = HtmlHelperExtension.ProductAreaDropdownString(ctProductAreas);
+                    return Json(new { success = true, data = drString, paIds });
+                }
+            }
+            var pa = _productAreaService.GetTopProductAreas(SessionFacade.CurrentCustomer.Id)
+                    .OrderBy(p => Translation.Get(p.Name)).ToList();
+            var praIds = pa.Select(x => x.Id).ToList();
+            foreach (var ctProductArea in pa)
+            {
+                praIds.AddRange(GetSubProductAreasIds(ctProductArea));
+            }
+            var dropString = HtmlHelperExtension.ProductAreaDropdownString(pa);
+            return Json(new { success = true, data = dropString, praIds });
+        }
+
+        private IEnumerable<int> GetSubProductAreasIds(ProductArea ctProductArea)
+        {
+            var result = new List<int>();
+            if (ctProductArea.SubProductAreas != null && ctProductArea.SubProductAreas.Any())
+            {
+                foreach (var subProductArea in ctProductArea.SubProductAreas)
+                {
+                    if (subProductArea.IsActive == 1)
+                    {
+                        result.Add(subProductArea.Id);
+                        if (subProductArea.SubProductAreas != null && subProductArea.SubProductAreas.Any())
+                        {
+                            GetSubProductAreasIds(subProductArea);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
 
         private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
         {

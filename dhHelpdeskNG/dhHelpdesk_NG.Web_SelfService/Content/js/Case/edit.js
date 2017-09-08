@@ -711,13 +711,14 @@
             return options;
         } 
 
-        $('#divProductArea ul.dropdown-menu li a').click(function (e) {
-            e.preventDefault();
-            var val = $(this).attr('value');
-            $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
-            var ee = document.getElementById("NewCase_ProductArea_Id");
-            ee.setAttribute('value', val);
-        });
+        bindProductAreasEvents();
+//        $('#divProductArea ul.dropdown-menu li a').click(function (e) {
+//            e.preventDefault();
+//            var val = $(this).attr('value');
+//            $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
+//            var ee = document.getElementById("NewCase_ProductArea_Id");
+//            ee.setAttribute('value', val);
+//        });
 
         $('#divCategory ul.dropdown-menu li a').click(function (e) {
             e.preventDefault();
@@ -1008,6 +1009,16 @@
             $target.modal('show');            
             globalClipboard.init.call(globalClipboard, $(e.target).attr('data-src'));
         });
+
+        function bindProductAreasEvents() {
+            $('#divProductArea ul.dropdown-menu li a').click(function (e) {
+                e.preventDefault();
+                var val = $(this).attr('value');
+                $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
+                var ee = document.getElementById("NewCase_ProductArea_Id");
+                ee.setAttribute('value', val);
+            });
+        }
        
         Application.prototype.init = function () {
             var self = this;
@@ -1032,6 +1043,20 @@
             });
 
             self.$caseTypeControl.change(function () {
+                $.post('/Case/GetProductAreaByCaseType/', { caseTypeId: $(this).val() }, function (result) {
+                    if (result.success) {
+                        $('#divProductArea > ul.dropdown-menu')
+                            .html("<li><a href='#'>--</a></li>" + result.data);
+                        var paId = parseInt($("#NewCase_ProductArea_Id").val());
+                        if (result.paIds && result.paIds.indexOf(paId) < 0) {
+                            var emptyElement = $('#divProductArea > ul.dropdown-menu').children().first();
+                            $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(emptyElement));
+                            $("#NewCase_ProductArea_Id").val("").trigger('change');
+                        }
+                        bindProductAreasEvents();
+                    }
+                }, 'json');
+
                 self.checkCaseTypeRelationRules($(this));
             });
 
