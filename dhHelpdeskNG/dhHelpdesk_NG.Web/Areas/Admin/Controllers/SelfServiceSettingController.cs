@@ -58,30 +58,34 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Value = x.Id.ToString()
             }).ToList();
 
-            var allCaseTypes = _caseTypeService.GetCaseTypesForSetting(customerId, true);
+            var allCaseTypes = _caseTypeService.GetCaseTypesForSetting(customerId);
             var availableCaseTypes = allCaseTypes.Where(c => c.ShowOnExtPageCases == 0).Select(x => new SelectListItem
             {
                 Text = x.Name,
-                Value = x.Id.ToString()
+                Value = x.Id.ToString(),
+                Disabled = x.IsActive == 0
             }).ToList();
 
             var selectedCaseTypes = allCaseTypes.Where(c => c.ShowOnExtPageCases == 1).Select(x => new SelectListItem
             {
                 Text = x.Name,
-                Value = x.Id.ToString()
+                Value = x.Id.ToString(),
+                Disabled = x.IsActive == 0
             }).ToList();
 
-            var allProductAreas = _productAreaService.GetProductAreasForSetting(customerId, true);
+            var allProductAreas = _productAreaService.GetProductAreasForSetting(customerId, false);
             var availableProductAreas = allProductAreas.Where(p => p.ShowOnExtPageCases == 0).Select(x => new SelectListItem
             {
                 Text = x.Name,
-                Value = x.Id.ToString()
+                Value = x.Id.ToString(),
+                Disabled = x.IsActive == 0
             }).ToList();
 
             var selectedProductAreas = allProductAreas.Where(p => p.ShowOnExtPageCases == 1).Select(x => new SelectListItem
             {
                 Text = x.Name,
-                Value = x.Id.ToString()
+                Value = x.Id.ToString(),
+                Disabled = x.IsActive == 0
             }).ToList();
 
             var selectedNum = 0;
@@ -152,7 +156,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 _documentService.SaveDocumentCategory(cat, out errors);
             }
 
-            var allCaseTypes = _caseTypeService.GetCaseTypesForSetting(id, true);
+            var allCaseTypes = _caseTypeService.GetCaseTypesForSetting(id);
 
             foreach (var type in allCaseTypes)
             {
@@ -164,7 +168,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 _caseTypeService.SaveCaseType(type, out errors);
             }
 
-            var allProductAreas = _productAreaService.GetProductAreasForSetting(id, true);
+            var allProductAreas = _productAreaService.GetProductAreasForSetting(id, false);
 
             List<int> prodareawgs = new List<int>();
             int[] wgs = null;

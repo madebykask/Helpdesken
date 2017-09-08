@@ -226,14 +226,38 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                @Html.ListBox("AvailableCaseTypes", Model.AvailableCaseTypes, new { style = "width: 280px; height: 120px" })
+                                                <select id="AvailableCaseTypes" multiple="multiple" name="AvailableCaseTypes" style="width: 350px; height: 120px">
+                                                    @foreach (var op in Model.AvailableCaseTypes)
+                                                    {
+                                                        if (!op.Disabled)
+                                                        {
+                                                            <option value="@op.Value">@op.Text</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@op.Value" style="color: lightgray;">@op.Text</option>
+                                                        }
+                                                    }
+                                                </select>
                                             </td>
                                             <td style="vertical-align:middle">
                                                 <input type="button" value="&lt;" class="btn" id="removeCaseType" />
                                                 <input type="button" value="&gt;" class="btn" id="addCaseType" />
                                             </td>
                                             <td>
-                                                @Html.ListBox("SelectedCaseTypes", Model.SelectedCaseTypes, new { style = "width: 280px; height: 120px" })
+                                                <select id="SelectedCaseTypes" multiple="multiple" name="SelectedCaseTypes" style="width: 350px; height: 120px">
+                                                    @foreach (var op in Model.SelectedCaseTypes)
+                                                    {
+                                                        if (!op.Disabled)
+                                                        {
+                                                            <option value="@op.Value">@op.Text</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@op.Value" style="color: lightgray;">@op.Text</option>
+                                                        }
+                                                    }
+                                                </select>
                                             </td>
                                         </tr>
                                     </table>
@@ -252,14 +276,38 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                @Html.ListBox("AvailableProductAreas", Model.AvailableProductAreas, new { style = "width: 280px; height: 120px" })
+                                                <select id="AvailableProductAreas" multiple="multiple" name="AvailableProductAreas" style="width: 350px; height: 120px">
+                                                    @foreach (var op in Model.AvailableProductAreas)
+                                                    {
+                                                        if (!op.Disabled)
+                                                        {
+                                                            <option value="@op.Value">@op.Text</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@op.Value" style="color: lightgray;">@op.Text</option>
+                                                        }
+                                                    }
+                                                </select>
                                             </td>
                                             <td style="vertical-align:middle">
                                                 <input type="button" value="&lt;" class="btn" id="removeProductArea" />
                                                 <input type="button" value="&gt;" class="btn" id="addProductArea" />
                                             </td>
                                             <td>
-                                                @Html.ListBox("SelectedProductAreas", Model.SelectedProductAreas, new { style = "width: 280px; height: 120px" })
+                                                <select id="SelectedProductAreas" multiple="multiple" name="SelectedProductAreas" style="width: 350px; height: 120px">
+                                                    @foreach (var op in Model.SelectedProductAreas)
+                                                    {
+                                                        if (!op.Disabled)
+                                                        {
+                                                            <option value="@op.Value">@op.Text</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@op.Value" style="color: lightgray;">@op.Text</option>
+                                                        }
+                                                    }
+                                                </select>
                                             </td>
                                         </tr>
                                     </table>
