@@ -45,6 +45,10 @@ BEGIN
 END
 
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'TableFieldStatus' and sysobjects.name = N'tblCaseSolutionConditionProperties')
+   ALTER TABLE tblCaseSolutionConditionProperties ADD TableFieldStatus nvarchar(100) NULL
+GO
+
 	TRUNCATE TABLE [dbo].[tblCaseSolutionConditionProperties]
 
 	declare @sortOrder int = 0
@@ -56,6 +60,7 @@ END
            ,[TableFieldId]
            ,[TableFieldName]
            ,[TableFieldGuid]
+		   ,[TableFieldStatus]
 		   ,[SortOrder])
      VALUES
            ('case_StateSecondary.StateSecondaryGUID',
@@ -64,6 +69,7 @@ END
 			'Id',
 			'StateSecondary',
 			'StateSecondaryGUID',
+			'Status',
 			@sortOrder)
 
 	set @sortOrder = @sortOrder+1
@@ -74,6 +80,7 @@ END
            ,[TableFieldId]
            ,[TableFieldName]
            ,[TableFieldGuid]
+		   ,[TableFieldStatus]
 		   ,[SortOrder])
      VALUES
            ('case_WorkingGroup.WorkingGroupGUID',
@@ -82,6 +89,7 @@ END
 			'Id',
 			'WorkingGroup',
 			'WorkingGroupGUID',
+			'Status',
 			@sortOrder)
 
 	set @sortOrder = @sortOrder+1
@@ -92,6 +100,7 @@ END
            ,[TableFieldId]
            ,[TableFieldName]
            ,[TableFieldGuid]
+		   ,[TableFieldStatus]
 		   ,[SortOrder])
      VALUES
            ('case_Priority.PriorityGUID',
@@ -100,6 +109,7 @@ END
 			'Id',
 			'PriorityName',
 			'PriorityGUID',
+			'Status',
 			@sortOrder)
 
 	set @sortOrder = @sortOrder+1
@@ -110,6 +120,7 @@ END
            ,[TableFieldId]
            ,[TableFieldName]
            ,[TableFieldGuid]
+		   ,[TableFieldStatus]
 		   ,[SortOrder])
 		   
      VALUES
@@ -118,8 +129,9 @@ END
 			'tblStatus',
 			'Id',
 			'StatusName',
-			'StatusGUID'
-			,@sortOrder)
+			'StatusGUID',
+			'Status',
+			@sortOrder)
 
 	set @sortOrder = @sortOrder+1
 	INSERT INTO [dbo].[tblCaseSolutionConditionProperties]
@@ -129,6 +141,7 @@ END
            ,[TableFieldId]
            ,[TableFieldName]
            ,[TableFieldGuid]
+		   ,[TableFieldStatus]
 		   ,[SortOrder]
 		   ,[TableParentId])
      VALUES
@@ -137,8 +150,9 @@ END
 			'tblProductArea',
 			'Id',
 			'ProductArea',
-			'ProductAreaGUID'
-			,@sortOrder
+			'ProductAreaGUID',
+			'Status',
+			@sortOrder
 			,'Parent_ProductArea_Id')
 
 	set @sortOrder = @sortOrder+1
@@ -167,6 +181,7 @@ END
            ,[TableFieldId]
            ,[TableFieldName]
            ,[TableFieldGuid]
+		   ,[TableFieldStatus]
 		   ,[SortOrder])
      VALUES
            ('user_WorkingGroup.WorkingGroupGUID',
@@ -174,8 +189,9 @@ END
 			'tblWorkingGroup',
 			'Id',
 			'WorkingGroup',
-			'WorkingGroupGUID'
-			,@sortOrder
+			'WorkingGroupGUID',
+			'Status',
+			@sortOrder
 			)
 
 	set @sortOrder = @sortOrder+1
@@ -186,6 +202,7 @@ END
            ,[TableFieldId]
            ,[TableFieldName]
            ,[TableFieldGuid]
+		   ,[TableFieldStatus]
 		   ,[SortOrder]
 		   ,[TableParentId])
      VALUES
@@ -195,6 +212,7 @@ END
 			'Id',
 			'ProductArea',
 			'ProductAreaGUID',
+			'Status',
 			@sortOrder,
 			'Parent_ProductArea_Id')
 

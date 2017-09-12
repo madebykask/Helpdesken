@@ -2659,7 +2659,7 @@ namespace DH.Helpdesk.Web.Controllers
                 k.Name = Translation.Get(k.Name, Enums.TranslationSource.TextTranslation);
             }
 
-            IList<WorkingGroupEntity> w = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId);
+            IList<WorkingGroupEntity> w = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false);
             w = w.OrderBy(x => x.WorkingGroupName).ToList();
             foreach (var k in w)
             {
@@ -2673,7 +2673,7 @@ namespace DH.Helpdesk.Web.Controllers
                 k.Name = Translation.Get(k.Name, Enums.TranslationSource.TextTranslation);
             }
 
-            IList<StateSecondary> ss = this._stateSecondaryService.GetActiveStateSecondaries(customerId);
+            IList<StateSecondary> ss = this._stateSecondaryService.GetStateSecondaries(customerId);
             ss = ss.OrderBy(x => x.Name).ToList();
             foreach (var k in ss)
             {

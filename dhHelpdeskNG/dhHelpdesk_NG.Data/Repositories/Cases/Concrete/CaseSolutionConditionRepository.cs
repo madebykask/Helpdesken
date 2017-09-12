@@ -80,6 +80,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             sqlExt += "[TableFieldName] AS[TableFieldName],  ";
             sqlExt += "[TableFieldGuid] AS[TableFieldGuid], ";
             sqlExt += "[TableParentId] AS[TableParentId], ";
+            sqlExt += "[TableFieldStatus] AS[TableFieldStatus], ";
             sqlExt += "[tblCaseSolutionConditionProperties].SortOrder AS SortOrder ";
             sqlExt += "FROM[dbo].[tblCaseSolutionCondition] ";
             sqlExt += "INNER JOIN[dbo].[tblCaseSolutionConditionProperties] ";
@@ -99,6 +100,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             sqlExt += "TableFieldName,  ";
             sqlExt += "TableFieldGuid, ";
             sqlExt += "TableParentId, ";
+            sqlExt += "TableFieldStatus, ";
             sqlExt += " [tblCaseSolutionConditionProperties].SortOrder AS SortOrder ";
             sqlExt += "FROM dbo.tblCaseSolutionConditionProperties ";
             sqlExt += "WHERE tblCaseSolutionConditionProperties.Id NOT IN(SELECT ";
@@ -168,6 +170,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 string tablefieldname = rowExt["TableFieldName"].ToString();
                 string tablefieldguid = rowExt["TableFieldGuid"].ToString();
                 string tableParentId = rowExt["TableParentId"].ToString();
+                string tableFieldStatus = rowExt["TableFieldStatus"].ToString();
 
                 string selvals = string.Empty;
                 foreach (var it in c.SelectedValues)
@@ -242,7 +245,15 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         sql += "isnull(dbo.GetHierarchy(" + tablefieldid + ", '" + tablename + "'), '') AS Name, ";
                     }
                     sql += "" + tablefieldguid + " AS Guid, ";
-                    sql += "cast(0 as bit) AS [Selected] ";
+                    sql += "cast(0 as bit) AS [Selected], ";
+                    if (!string.IsNullOrEmpty(tableFieldStatus))
+                    {
+                        sql += "cast([" + tableFieldStatus + "] as bit) AS Status ";
+                    }
+                    else
+                    {
+                        sql += "cast(1 as bit) AS Status ";
+                    }
                     sql += "FROM " + tablename + " ";
                     sql += "AS [Extent1] WHERE (Customer_Id is null or Customer_Id= " + customerid + ")"; //
                     sql += " ORDER BY Name";
@@ -282,7 +293,8 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                           {
                               Text = x[1].ToString(),
                               Value = x[2].ToString(),
-                              Selected = Convert.ToBoolean(x[3].ToString())
+                              Selected = Convert.ToBoolean(x[3].ToString()),
+                              Disabled = !Convert.ToBoolean(x[4].ToString())
                           }).ToList();
 
 
