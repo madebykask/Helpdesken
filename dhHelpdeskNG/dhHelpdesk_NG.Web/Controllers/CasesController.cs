@@ -4796,10 +4796,10 @@ namespace DH.Helpdesk.Web.Controllers
             string activeTab = "")
         {
             var m = new CaseInputViewModel();
-            SessionFacade.IsCaseDataChanged = false;
-
+            SessionFacade.IsCaseDataChanged = false;            
             m.BackUrl = backUrl;
             m.CanGetRelatedCases = SessionFacade.CurrentUser.IsAdministrator();
+            m.CurrentUserRole = SessionFacade.CurrentUser.UserGroupId;
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
             var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
@@ -6066,9 +6066,9 @@ namespace DH.Helpdesk.Web.Controllers
                      caseLock.UserId == userId &&
                      caseLock.BrowserSession == Session.SessionID))
                 {
-                    // Unlock case because user has leaved the Case in anormal way (Close browser/reset computer)
-                    // Unlock case because current user was opened this case last time and recently
-                    this._caseLockService.UnlockCaseByCaseId(caseId);
+                    // Unlock case because user left the Case in anormal way (Close browser/reset computer)
+                    // Unlock case because it was open by current user last time / recently
+                    _caseLockService.UnlockCaseByCaseId(caseId);
                     caseIsLocked = false;
                 }
             }
