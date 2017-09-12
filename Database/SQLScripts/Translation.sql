@@ -6180,5 +6180,8 @@ If not exists (select * from tblTextTranslation where text_id = 1855 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1855, 2, 'Conditions')
 GO
 
+UPDATE tblTextTranslation Set TextTranslation = 'Open' WHERE Text_Id=1837 AND Language_Id=2;
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
