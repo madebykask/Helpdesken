@@ -24,7 +24,7 @@ namespace DH.Helpdesk.Dal.Repositories
         }
 
         public List<EmailLog> GetEmailLogsByCaseHistoryId(int caseHistoryId)
-        {
+        {            
             return (from l in this.DataContext.EmailLogs                    
                     where l.CaseHistory_Id == caseHistoryId
                     select l).ToList(); 
@@ -37,6 +37,22 @@ namespace DH.Helpdesk.Dal.Repositories
                     where l.EmailLogGUID == Id
                     select l).FirstOrDefault();
 
+        }        
+    }
+
+    public class EmailLogAttemptRepository : RepositoryBase<EmailLogAttempt>, IEmailLogAttemptRepository
+    {
+        public EmailLogAttemptRepository(IDatabaseFactory databaseFactory)
+            : base(databaseFactory)
+        {
+
         }
+
+        public void DeleteLogAttempts(int logId)
+        {
+            Delete(la => la.EmailLog_Id == logId);
+            Commit();
+        }
+       
     }
 }

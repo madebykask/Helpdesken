@@ -235,6 +235,9 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ITextTypeRepository>().To<TextTypeRepository>();
             kernel.Bind<IExtendedCaseValueRepository>().To<ExtendedCaseValueRepository>();
             kernel.Bind<IApplicationRepository>().To<ApplicationRepository>();
+            kernel.Bind<IEmailLogAttemptRepository>().To<IEmailLogAttemptRepository>();
+
+
 
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            

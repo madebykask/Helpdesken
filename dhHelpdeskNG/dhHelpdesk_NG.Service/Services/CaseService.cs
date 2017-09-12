@@ -175,6 +175,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly UserRepository _userRepository;
         private readonly IMailTemplateService _mailTemplateService;
         private readonly IEmailLogRepository _emailLogRepository;
+        private readonly IEmailLogAttemptRepository _emailLogAttemptRepository;
         private readonly IEmailService _emailService;
         private readonly ISettingService _settingService;
         private readonly IFilesStorage _filesStorage;
@@ -223,6 +224,7 @@ namespace DH.Helpdesk.Services.Services
             IWorkingGroupService workingGroupService,
             IMailTemplateService mailTemplateService,
             IEmailLogRepository emailLogRepository,
+            IEmailLogAttemptRepository emailLogAttemptRepository,
             IEmailService emailService,
             ISettingService settingService,
             IFilesStorage filesStorage,
@@ -267,6 +269,7 @@ namespace DH.Helpdesk.Services.Services
             this._caseHistoryRepository = caseHistoryRepository;
             this._mailTemplateService = mailTemplateService;
             this._emailLogRepository = emailLogRepository;
+            this._emailLogAttemptRepository = emailLogAttemptRepository;
             this._emailService = emailService;
             this._settingService = settingService;
             this._caseFileRepository = caseFileRepository;
@@ -432,6 +435,9 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (var l in elogs)
                 {
+                    if (l.EmailLogAttempts.Any())
+                        _emailLogAttemptRepository.DeleteLogAttempts(l.Id);
+
                     this._emailLogRepository.Delete(l);
                 }
                 this._emailLogRepository.Commit();
