@@ -172,42 +172,39 @@
                     <td>
                         <div class="checkbox">
                             <div>
-                                <a href="#case_internal_log_to_btn" role="button" class="btn case-usersearch-btn" data-src="case" data-toggle="modal">@btnToLabel</a>
                                 @Html.HiddenFor(model => model.CaseLog.EmailRecepientsInternalLogTo, new { id = "caseLog_EmailRecepientsInternalLogTo", @readonly = "true" })
 
-                                @*@if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote) && !readonlyMode)
-                                {*@
-
+                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote) && !readonlyMode)
+                                {
+                                    <a href="#case_internal_log_to_btn" role="button" class="btn case-usersearch-btn" data-src="case" data-toggle="modal">@btnToLabel</a>
                                     <div id="fake_CaseLog_EmailRecepientsInternalLogTo" contenteditable="true" style="z-index: 2" class="case-send-emails-div case-usersearch-textarea @Model.getSearchEmailClass(CaseSectionType.Communication)"></div>
-                                @*}
+                                }
                                 else
                                 {
-                                    <div id="fake_CaseLog_EmailRecepientsInternalLogTo" contenteditable="false" style="z-index: 2" class="case-send-emails-div case-usersearch-textarea @Model.getSearchEmailClass(CaseSectionType.Communication)"></div>
-                                }*@
-
+                                    <a href="#" role="button" class="btn case-usersearch-btn disabled" data-src="case" data-toggle="modal">@btnToLabel</a>
+                                    <div id="fake_CaseLog_EmailRecepientsInternalLogTo" contenteditable="false" style="z-index: 2; background-color:#eeeeee;" class="case-send-emails-div case-usersearch-textarea @Model.getSearchEmailClass(CaseSectionType.Communication) disabled"></div>
+                                }
                             </div>
                             <div>
-                                <a href="#case_internal_log_cc_btn" role="button" class="btn case-usersearch-btn" data-src="case" data-toggle="modal">@Translation.GetForJS("Kopia")</a>
-
-
                                 @Html.HiddenFor(model => model.CaseLog.EmailRecepientsInternalLogCc, new { id = "caseLog_EmailRecepientsInternalLogCc", @readonly = "true" })
-
-                                @*@if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote) && !readonlyMode)
-                                {*@
-                                    <div id="fake_CaseLog_EmailRecepientsInternalLogCc" contenteditable="true" style="z-index: 1" class="case-send-emails-div case-usersearch-textarea @Model.getSearchEmailClass(CaseSectionType.Communication)"></div>
-                                @*}
+                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote) && !readonlyMode)
+                                {
+                                    <a href="#case_internal_log_cc_btn" role="button" class="btn case-usersearch-btn" data-src="case" data-toggle="modal">@Translation.GetForJS("Kopia")</a>
+                                    <div id="fake_CaseLog_EmailRecepientsInternalLogCc" contenteditable="true" style="z-index: 1;" class="case-send-emails-div case-usersearch-textarea @Model.getSearchEmailClass(CaseSectionType.Communication)"></div>
+                                }
                                 else
                                 {
-                                    <div id="fake_CaseLog_EmailRecepientsInternalLogCc" contenteditable="false" style="z-index: 1" class="case-send-emails-div case-usersearch-textarea @Model.getSearchEmailClass(CaseSectionType.Communication)"></div>
-                                }*@
+                                    <a href="#" role="button" class="btn case-usersearch-btn disabled" data-src="case" data-toggle="modal">@Translation.GetForJS("Kopia")</a>
+                                    <div id="fake_CaseLog_EmailRecepientsInternalLogCc" contenteditable="false" style="z-index: 1; background-color:#eeeeee;" class="case-send-emails-div case-usersearch-textarea @Model.getSearchEmailClass(CaseSectionType.Communication)" ></div>
+                                }
                             </div>
 
                             @if (Model.templateistrue != 1 && !readonlyMode)
-            {
-                if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
-                {
-                    if (Model.IsItParentCase() || Model.IsItChildCase())
-                    {
+                            {
+                                if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
+                                {
+                                    if (Model.IsItParentCase() || Model.IsItChildCase())
+                                    {
                                         <br />@Html.CheckBox("CaseLog.SendLogToParentChildLog")
                                         if (Model.IsItParentCase())
                                         {
