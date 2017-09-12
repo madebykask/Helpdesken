@@ -21,9 +21,20 @@
     $("input:text:visible:first").focus();
 
     function submitForm() {
- 
-        for (var i = 0; i < document.getElementById("WgSelected").length; i++) {
-            document.getElementById("WgSelected")[i].selected = true;
+        
+        var checkbox_val = document.getElementById("chkPermission").checked;
+
+        if (checkbox_val == false) {
+
+            for (var i = 0; i < document.getElementById("WgSelected").length; i++) {
+                document.getElementById("WgSelected")[i].selected = false;
+            }
+        }
+        else {
+
+            for (var i = 0; i < document.getElementById("WgSelected").length; i++) {
+                document.getElementById("WgSelected")[i].selected = true;
+            }
         }
 
         $("#target").submit();
