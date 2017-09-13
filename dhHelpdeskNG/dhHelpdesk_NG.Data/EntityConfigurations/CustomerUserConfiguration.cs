@@ -24,7 +24,7 @@
             this.Property(x => x.CasePerformerFilter).IsRequired().HasMaxLength(50);
             this.Property(x => x.CaseProductAreaFilter).IsOptional().HasMaxLength(50);
             this.Property(x => x.CaseRegionFilter).IsOptional().HasMaxLength(50);
-            this.Property(x => x.CaseDepartmentFilter).IsOptional().HasMaxLength(50);
+            this.Property(x => x.CaseDepartmentFilter).IsOptional().HasMaxLength(100);
             this.Property(x => x.CaseStateSecondaryFilter).IsOptional().HasMaxLength(50);
             this.Property(x => x.CaseUserFilter).IsOptional().HasMaxLength(50);
             this.Property(x => x.CaseWorkingGroupFilter).IsOptional().HasMaxLength(50);
