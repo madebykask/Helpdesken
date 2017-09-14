@@ -6183,5 +6183,12 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = 'Open' WHERE Text_Id=1837 AND Language_Id=2;
 GO
 
+If not exists (select * from tbltext where id = 1856)
+	insert into tbltext (id, TextString) VALUES (1856, 'Medelvärde')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1856 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1856, 2, 'Mean value')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
