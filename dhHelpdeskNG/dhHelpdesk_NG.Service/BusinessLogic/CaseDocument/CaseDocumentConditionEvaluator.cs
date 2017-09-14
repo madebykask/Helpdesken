@@ -30,14 +30,33 @@ namespace DH.Helpdesk.Services.BusinessLogic.CaseDocument
 			{
 				case CaseDocumentConditionOperator.Equal:
 					{
-						result = value.Length > 0 && conditionValues.ToLower() == value.ToLower();
-						break;
-					}
+
+                        if (string.IsNullOrEmpty(value))
+                        {
+                            result = false;
+                        }
+                        else
+                        {
+                            ValueCompare compareResult = DoValueCompare(value.ToLower(), conditionOperator, conditionValues.ToLower());
+                            result = compareResult == ValueCompare.Equal;
+                        }
+                        break;
+                    }
 				case CaseDocumentConditionOperator.EqualOrEmpty:
 					{
-						result = string.IsNullOrEmpty(value) || conditionValues.ToLower() == value.ToLower();
-						break;
-					}
+                        //if empty
+                        if (string.IsNullOrEmpty(value))
+                        {
+                            result = true;
+                        }
+                        //check if it is equal
+                        else
+                        {
+                            ValueCompare compareResult = DoValueCompare(value.ToLower(), conditionOperator, conditionValues.ToLower());
+                            result = compareResult == ValueCompare.Equal;
+                        }
+                        break;
+                    }
 				case CaseDocumentConditionOperator.NotEqual:
 					{
 						result = value.Length > 0 && conditionValues.ToLower() != value.ToLower();
@@ -150,15 +169,21 @@ namespace DH.Helpdesk.Services.BusinessLogic.CaseDocument
 
 		protected IComparable TryParse(string value)
 		{
-			// TODO: Add support for other types and refactor
-			int compInt;
+            // TODO: Add support for other types and refactor
+            float compFloat;
+            if (float.TryParse(value.Replace(".", ","), out compFloat))
+                return compFloat;
+            int compInt;
 			if (int.TryParse(value, out compInt))
 				return compInt;
-			DateTime compDate;
+            DateTime compDate;
 			if (DateTime.TryParse(value, out compDate))
 				return compDate;
+            if (value is string)
+                return value;
 
-			return null;
+            //For now, this will not happen since the value is a string.
+            return null;
 
 		}
 	}
