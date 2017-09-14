@@ -5681,24 +5681,37 @@ namespace DH.Helpdesk.Web.Controllers
             try
             {
                 string extendedCasePath = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
-
            
                 if (!string.IsNullOrEmpty(extendedCasePath))
                 {
-                    //Take the highest workinggroupId with "Admin" access (UserRole)
-                    var userWorkingGroup = this._workingGroupService.GetWorkingGroupsAdmin(customerId, SessionFacade.CurrentUser.Id).OrderByDescending(x => x.WorkingGroupId).FirstOrDefault();
+                    int userRole = 0;
 
-                    int userWorkingGroupId = 0;
-
-                    if (userWorkingGroup != null)
+                    //#58691
+                    //If user is Admin - send in another Number 
+                    //3 = Kundadministratör
+                    //4 = Administratör
+                    if (SessionFacade.CurrentUser.UserGroupId >= 3)
                     {
-                        userWorkingGroupId = userWorkingGroup.WorkingGroupId;
+                        userRole = 99;
+
+                    }
+                    else
+                    {
+                        //Take the highest workinggroupId with "Admin" access (UserRole)
+                        var userWorkingGroup = this._workingGroupService.GetWorkingGroupsAdmin(customerId, SessionFacade.CurrentUser.Id).OrderByDescending(x => x.WorkingGroupId).FirstOrDefault();
+
+                        int userWorkingGroupId = 0;
+
+                        if (userWorkingGroup != null)
+                        {
+                            userWorkingGroupId = userWorkingGroup.WorkingGroupId;
+                        }
+                        userRole = userWorkingGroupId;
                     }
 
-                    //TODO: If user is Admin - send in another Number 
                     //CHECK HOW TO HANDLE WHEN FROM EMAIL
                     //At the moment we are only fetching 1 extended case since it is only programmed that way in editPage.js
-                    m.ExtendedCases = _caseService.GetExtendedCaseForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.UserGUID.ToString(), (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0), (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0), extendedCasePath, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserId, ApplicationType.Helpdesk, userWorkingGroupId);
+                    m.ExtendedCases = _caseService.GetExtendedCaseForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.UserGUID.ToString(), (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0), (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0), extendedCasePath, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserId, ApplicationType.Helpdesk, userRole);
                     m.ContainsExtendedCase = m.ExtendedCases != null && m.ExtendedCases.Any();
 
                     //for hidden
