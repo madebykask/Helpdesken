@@ -257,6 +257,10 @@ EditPage.prototype.loadExtendedCase = function () {
     var formParameters = $_ex_Container.contentWindow.getFormParameters();
     formParameters.languageId = self.Current_EC_LanguageId;
     formParameters.extendedCaseGuid = self.Current_EC_Guid;
+
+    var isLockedValue = window.parameters.isCaseLocked || '';
+    formParameters.isCaseLocked = isLockedValue.toLowerCase() === 'true'; //important to pass boolean type value
+
     var fieldValues = self.Case_Field_Init_Values;
 
     $_ex_Container.contentWindow.setInitialData({step:0, isNextValidation: false});
