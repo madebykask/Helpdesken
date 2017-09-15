@@ -162,8 +162,11 @@ namespace DH.Helpdesk.Web.Controllers
 			if (questionnaires.Any())
 	        {
 		        model.Questionnaires = questionnaires.Select(q => new QuestionnaireOverviewModel(q.Id, q.Name, q.Description)).OrderBy(x => x.Name).ToList();
-		        model.Feedbacks = feedbacks.Select(q => new FeedbackOverviewModel(q.Id, q.Name, q.Description)).OrderBy(x => x.Name).ToList();
 			}
+            if (feedbacks.Any())
+            {
+                model.Feedbacks = feedbacks.Select(q => new FeedbackOverviewModel(q.Id, q.Name, q.Description)).OrderBy(x => x.Name).ToList();
+            }
 
             return View(model);
         }
