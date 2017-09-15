@@ -30,16 +30,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.CaseDocument
 			{
 				case CaseDocumentConditionOperator.Equal:
 					{
-
-                        if (string.IsNullOrEmpty(value))
-                        {
-                            result = false;
-                        }
-                        else
-                        {
-                            ValueCompare compareResult = DoValueCompare(value.ToLower(), conditionOperator, conditionValues.ToLower());
-                            result = compareResult == ValueCompare.Equal;
-                        }
+                        ValueCompare compareResult = DoValueCompare(value.ToLower(), conditionOperator, conditionValues.ToLower());
+                        result = compareResult == ValueCompare.Equal;
                         break;
                     }
 				case CaseDocumentConditionOperator.EqualOrEmpty:
@@ -59,7 +51,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.CaseDocument
                     }
 				case CaseDocumentConditionOperator.NotEqual:
 					{
-						result = value.Length > 0 && conditionValues.ToLower() != value.ToLower();
+						ValueCompare compareResult = DoValueCompare(value.ToLower(), conditionOperator, conditionValues.ToLower());
+						result = compareResult != ValueCompare.Equal;
 						break;
 					}
 				case CaseDocumentConditionOperator.HasValue:
@@ -182,9 +175,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.CaseDocument
             if (value is string)
                 return value;
 
-            //For now, this will not happen since the value is a string.
-            return null;
-
+			throw new NotImplementedException("Type not implemented");
 		}
 	}
 }
