@@ -148,6 +148,10 @@
         $("#chkActive").bootstrapSwitch("offText", '@Translation.GetForJS("Nej")');
     });
 
+    $("#chkActive").on('switchChange.bootstrapSwitch', function () {
+        test();
+    });
+
     function test(t) {
 
         var searchText = document.getElementById('caseSolutionSearch').value;
@@ -185,6 +189,10 @@
             }),
             success: function (filteredModel) {
                 $(caseSolutionRowsArea).html(filteredModel);
+                $("#chkActive").bootstrapSwitch("onColor", "success");
+                $("#chkActive").bootstrapSwitch("size", "small");
+                $("#chkActive").bootstrapSwitch("onText", '@Translation.GetForJS("Ja")');
+                $("#chkActive").bootstrapSwitch("offText", '@Translation.GetForJS("Nej")');
                 $(edtSearch).focus();
                 $(edtSearch).val(searchText);
                 $(edtSearch).select();

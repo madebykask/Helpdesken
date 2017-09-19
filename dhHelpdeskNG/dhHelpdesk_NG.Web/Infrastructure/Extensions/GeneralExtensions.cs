@@ -152,10 +152,10 @@
             var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
             bool isLocalVisibility = (fieldSetting != null) && fieldSetting.CaseSolutionMode != CaseSolutionModes.Hide;
             
-            if(model.DynamicCase != null && model.caseFieldSettings.IsFieldLocked(caseFieldName))
+            if(model.DynamicCase != null && (!model.CurrentUserRole.IsCustomerOrSystemAdminRole() && model.caseFieldSettings.IsFieldLocked(caseFieldName)))
                 return true;
 
-            if (model.ExtendedCases != null && model.ExtendedCases.Count > 0 && model.caseFieldSettings.IsFieldLocked(caseFieldName))
+            if (model.ExtendedCases != null && model.ExtendedCases.Count > 0 && (!model.CurrentUserRole.IsCustomerOrSystemAdminRole() && model.caseFieldSettings.IsFieldLocked(caseFieldName) ))
                 return true;
 
             if (!isGlobalVisibility || !isLocalVisibility)

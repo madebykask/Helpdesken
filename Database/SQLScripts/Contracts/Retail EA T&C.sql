@@ -216,7 +216,7 @@ DECLARE @retTcEmployGreetingTextACondAGuid UNIQUEIDENTIFIER = '1cce66c3-03eb-47b
 	@retTcEmployGreetingTextACondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
 	@retTcEmployGreetingTextACondAOperator NVARCHAR(MAX) = 'IsEmpty',
 	@retTcEmployGreetingTextACondAValues NVARCHAR(MAX) = '',
-	@retTcEmployGreetingTextACondADescription NVARCHAR(MAX) = 'CHange valid to has no end date',
+	@retTcEmployGreetingTextACondADescription NVARCHAR(MAX) = 'Change valid to has no end date',
 	@retTcEmployGreetingTextACondAStatus INT = 1
 IF NOT EXISTS (SELECT * FROM tblCaseDocumentTextCondition CDC WHERE CDC.CaseDocumentTextConditionGUID = @retTcEmployGreetingTextACondAGuid)
 BEGIN
@@ -296,7 +296,7 @@ END
 DECLARE @retTcEmployGreetingTextBID INT = (SELECT ID FROM tblCaseDocumentText CDT WHERE CDT.CaseDocumentTextGUID = @retTcEmployGreetingTextBGuid)
 
 -- Create condition for Text B, Part time
-DECLARE @retTcEmployGreetingTextBCondAGuid UNIQUEIDENTIFIER = '518c7cbc-1a47-47cd-bf27-816f8b31c45e',
+DECLARE @retTcEmployGreetingTextBCondAGuid UNIQUEIDENTIFIER = '2EF57F1A-0D53-4591-AA8A-6BA0D46EF974',
 	@retTcEmployGreetingTextBCondAPropertyName NVARCHAR(MAX) = 'extendedcase_ChangeValidTo',
 	@retTcEmployGreetingTextBCondAOperator NVARCHAR(MAX) = 'HasValue',
 	@retTcEmployGreetingTextBCondAValues NVARCHAR(MAX) = '',

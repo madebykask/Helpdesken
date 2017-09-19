@@ -84,6 +84,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             this.reportGeneratorModelFactory = reportGeneratorModelFactory;
             this._customerSettingService = customerSettingService;
             this._ReportServiceService = reportServiceService;
+
             _reportTypeNames = new Dictionary<string, string>
             {
                 {"-1", "CasesPerCasetype"},
@@ -92,23 +93,30 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 {"-4", "CasesPerWorkingGroup"},
                 {"-5", "CasesPerAdministrator"},
                 {"-6", "CasesPerDepartment"},
-                {"-7", "NumberOfCases"}
+                {"-7", "NumberOfCases"},
+                {"-8", "AvgResolutionTime" }
             };
 
             _reportCategories = new CustomSelectList();
-            _reportCategories.Items.AddItem("1", "Case Type");
-            _reportCategories.Items.AddItem("8", "Working Group");
-            _reportCategories.Items.AddItem("9", "SubStatus");
-            _reportCategories.Items.AddItem("10", "Department");
-            _reportCategories.Items.AddItem("11", "Priority");
-            _reportCategories.Items.AddItem("13", "Product Area");
-            _reportCategories.Items.AddItem("12", "Closing Date");
-            _reportCategories.Items.AddItem("7", "Source");
-            _reportCategories.Items.AddItem("5", "Registration Date");
-            _reportCategories.Items.AddItem("2", "Registration Year");
-            _reportCategories.Items.AddItem("4", "Registration Month");
-            _reportCategories.Items.AddItem("3", "Registration Weekday");
-            _reportCategories.Items.AddItem("6", "Registration Hour");           
+
+			var reportCategories = new List<ListItem>()
+			{
+				new ListItem("1", "Case Type", false),
+				new ListItem("8", "Working Group", false),
+				new ListItem("9", "SubStatus", false),
+				new ListItem("10", "Department", false),
+				new ListItem("11", "Priority", false),
+				new ListItem("13", "Product Area", false),
+				new ListItem("12", "Closing Date", false),
+				new ListItem("7", "Source", false),
+				new ListItem("5", "Registration Date", false),
+				new ListItem("2", "Registration Year", false),
+				new ListItem("4", "Registration Month", false),
+				new ListItem("3", "Registration Weekday", false),
+				new ListItem("6", "Registration Hour", false)
+			};
+
+			_reportCategories.Items.AddItems(reportCategories.OrderBy(o => o.Value).ToList());
 
         }
 
@@ -696,15 +704,35 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             /* TODO: It must change some how find the files from "Reports" path */
             var newWord = Translation.GetCoreTextTranslation("Ny");
             var ret = new CustomSelectList();
-            ret.Items.AddItem("-1", "CasesPerCasetype");
-            ret.Items.AddItem("-2", "CasesPerDate");
-            ret.Items.AddItem("-3", "CasesPerSource");
-            ret.Items.AddItem("-4", "CasesPerWorkingGroup");
-            ret.Items.AddItem("-5", "CasesPerAdministrator");
-            ret.Items.AddItem("-6", "CasesPerDepartment");
-            ret.Items.AddItem("-7", "NumberOfCases");            
 
-            foreach (var customReport in reports)
+			var oldReports = new List<KeyValuePair<string, string>>()
+			{
+				new KeyValuePair<string, string>("-1", "CasesPerCasetype"),
+				new KeyValuePair<string, string>("-2", "CasesPerDate"),
+				new KeyValuePair<string, string>("-3", "CasesPerSource"),
+				new KeyValuePair<string, string>("-4", "CasesPerWorkingGroup"),
+				new KeyValuePair<string, string>("-5", "CasesPerAdministrator"),
+				new KeyValuePair<string, string>("-6", "CasesPerDepartment")
+			};
+
+			var newReports = new List<KeyValuePair<string, string>>()
+			{
+				new KeyValuePair<string, string>("-7", "NumberOfCases"),
+				new KeyValuePair<string, string>("-8", "AvgResolutionTime")
+			};
+
+			// List new report first (order by name) then old reports (order by name)
+			var listItems = newReports
+				.OrderBy(o => o.Value)
+				.Concat(
+					oldReports.OrderBy(o => o.Value)
+				)
+				.Select(o => new ListItem(o.Key, o.Value, false))
+				.ToList();
+
+			ret.Items.AddItems(listItems);
+
+            foreach (var customReport in reports.OrderBy(o => o.Text))
             {
                 ret.Items.AddItem(customReport.Value, customReport.Text);
             }

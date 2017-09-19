@@ -1,4 +1,4 @@
-﻿use dhHelpdesk_IKEA_BSCHR
+﻿
 
 UPDATE tblTextTranslation Set TextTranslation = 'Cases on hold' WHERE Text_Id=6 AND Language_Id=2;
 GO
@@ -6153,7 +6153,7 @@ If not exists (select * from tblTextTranslation where text_id = 1849 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1850)
-	insert into tbltext (id, TextString) VALUES (1850, 'Vi ändring av case')
+	insert into tbltext (id, TextString) VALUES (1850, 'Vid ändring av case')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1850 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1850, 2, 'On edit of case')
@@ -6171,6 +6171,33 @@ If not exists (select * from tbltext where id = 1852)
 GO
 If not exists (select * from tblTextTranslation where text_id = 1852 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1852, 2, 'Only show for')
+GO
+
+If not exists (select * from tbltext where id = 1853)
+	insert into tbltext (id, TextString) VALUES (1853, 'Stängd')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1853 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1853, 2, 'Closed')
+GO
+
+UPDATE tbltext set TextString = 'Vid nytt ärende' where id = 1849
+GO
+
+UPDATE tbltext set TextString = 'Vid ändring av ärende' where id = 1850
+GO
+
+
+
+If not exists (select * from tbltext where id = 1854)
+	insert into tbltext (id, TextString) VALUES (1854, 'Gruppera')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1854 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1854, 2, 'Group by')
+GO
+
+UPDATE tblText Set TextString = 'E-postadress redan tillagd.' WHERE Id=1712;
+
+UPDATE tblText Set TextString = 'Visa på Ärende tab' WHERE Id=1820;
 GO
 
 If not exists (select * from tbltext where id = 1855)

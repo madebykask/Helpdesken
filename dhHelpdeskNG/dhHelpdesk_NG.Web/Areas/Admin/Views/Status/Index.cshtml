@@ -17,37 +17,58 @@
 <div class="content status admin">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Status", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+            <li class="active"><a href="#fragment-1">@Translation.GetCoreTextTranslation("Status") - @Model.Customer.Name</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
-                <span>@Translation.Get("Visa endast aktiva")</span>
+                <span>@Translation.GetCoreTextTranslation("Visa endast aktiva")</span>
                 <input type="checkbox" class="switchcheckbox showonly-active" @(Model.IsShowOnlyActive ? "checked" : string.Empty)>
                 <table class="table table-striped table-bordered table-hover" id="tblstatus">
                     <thead>
                         <tr>
                             <th>
-                                @Translation.Get("Status", Enums.TranslationSource.TextTranslation)
+                                @Translation.GetCoreTextTranslation("Status")
                             </th>
                             <th>
-                                @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
+                                @Translation.GetCoreTextTranslation("Standard")
                             </th>
                             <th>
-                                @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                @Translation.GetCoreTextTranslation("Driftgrupp")
+                            </th>
+                            <th>
+                                @Translation.GetCoreTextTranslation("Understatus")
+                            </th>
+                            <th>
+                                @Translation.GetCoreTextTranslation("Aktiv")
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model.Statuses)
                         {
-                            var isInactive = item.IsActive == 0; 
-                            
+                            var isInactive = item.IsActive == 0;
+                            var wgName = string.Empty;
+                            var substatusName = string.Empty;
+                            if (item.WorkingGroup != null)
+                            {
+                                wgName = item.WorkingGroup.WorkingGroupName;
+                            }
+                            if (item.StateSecondary != null)
+                            {
+                                substatusName = item.StateSecondary.Name;
+                            }
                             <tr class="@(isInactive?"inactive":"")">
                                 <td>
                                     <a href="@Url.Action("edit", "status", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
                                 </td>
                                 <td>
-                                    <a href="@Url.Action("edit", "status", new { area = "admin", id = item.Id })">@Translation.Get(item.IsDefault.TranslateBit(), Enums.TranslationSource.TextTranslation)</a>
+                                    <a href="@Url.Action("edit", "status", new {area = "admin", id = item.Id})">@Translation.Get(item.IsDefault.TranslateBit(), Enums.TranslationSource.TextTranslation)</a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("edit", "status", new {area = "admin", id = item.Id})">@wgName</a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("edit", "status", new { area = "admin", id = item.Id })">@substatusName</a>
                                 </td>
                                 <td>
                                     <a href="@Url.Action("edit", "status", new { area = "admin", id = item.Id })">@Translation.Get(item.IsActive.TranslateBit(), Enums.TranslationSource.TextTranslation)</a>

@@ -160,6 +160,17 @@ namespace DH.Helpdesk.Services.Services
             setting.SMSEMailDomainUserName = setting.SMSEMailDomainUserName ?? string.Empty;
             setting.XMLFileFolder = setting.XMLFileFolder ?? string.Empty;
 
+            if (setting.QuickNewCaseLinkText == null)
+                setting.QuickNewCaseLinkText = "+";
+            else
+                setting.QuickNewCaseLinkText = setting.QuickNewCaseLinkText;
+
+            if (setting.QuickNewCaseLinkUrl == null)
+                setting.QuickNewCaseLinkUrl = "/cases/new";
+            else
+                setting.QuickNewCaseLinkUrl = setting.QuickNewCaseLinkUrl;
+
+
             if (setting.Id == 0)
             {
                 this.settingRepository.Add(setting);

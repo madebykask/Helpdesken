@@ -9,8 +9,8 @@
 
     var GlobalSetting = model != null ? model.GlobalSettings.Where(x => x.ApplicationName != null).FirstOrDefault() : null;
 
-    var text = model.CustomerSetting.QuickNewCaseLinkText;
-    var url = model.CustomerSetting.QuickNewCaseLinkUrl;
+    var text = model != null ? model.CustomerSetting.QuickNewCaseLinkText : string.Empty;
+    var url = model != null ? model.CustomerSetting.QuickNewCaseLinkUrl : string.Empty;
 }
 <head>
     <meta content="html/text; charset=utf-8" />

@@ -110,6 +110,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             }
             return ret;
         }
-             
+
+        public static bool IsCustomerOrSystemAdminRole(this int roleId)
+        {
+            return (roleId >= (int)BusinessData.Enums.Admin.Users.UserGroup.CustomerAdministrator);
+            
+        }
     }
 }

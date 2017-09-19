@@ -701,9 +701,13 @@ function CaseInitForm() {
     });
 
     $('#case__CaseType_Id').change(function () {
-        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeCaseType/', '#Performer_Id');
+        var caseTypeId = $(this).val();
+        SelectValueInOtherDropdownOnChange(caseTypeId, '/Cases/ChangeCaseType/', '#Performer_Id');        
+        resetProductareaByCaseType(caseTypeId);
+    });
 
-        $.post('/Cases/GetProductAreaByCaseType/', { caseTypeId: $(this).val() }, function (result) {
+    function resetProductareaByCaseType(_caseTypeId){
+        $.post('/Cases/GetProductAreaByCaseType/', { caseTypeId: _caseTypeId, myTime: Date.now() }, function (result) {
             if (result.success) {
                 $('#divProductArea.DynamicDropDown > ul.dropdown-menu')
                     .html("<li><a href='#'>--</a></li>" + result.data);
@@ -716,35 +720,39 @@ function CaseInitForm() {
                 bindProductAreasEvents();
             }
         }, 'json');
-    });
+    }
 
     function bindProductAreasEvents() {
         $('#divProductArea ul.dropdown-menu li a').click(function (e) {
-                        e.preventDefault();
-                        var me = this;
-                        var val = $(me).attr('value');
-                        var curCaseId = $('#case__Id').val();
-                        var caseInvoiceIsActive =
-                            $('#CustomerSettings_ModuleCaseInvoice').val().toLowerCase() == 'true';
-                        /* When invoice is active, user can not change the product area while */
-                        if (caseInvoiceIsActive) {
-                            $.get('/CaseInvoice/IsThereNotSentOrder/',
-                                { caseId: curCaseId, myTime: Date.now },
-                                function (res) {
-                                    if (res != null && res) {
-                                        var mes = window.parameters.productAreaChangeMessage || '';
-                                        ShowToastMessage(mes, 'warning', false);
-                                    } else {
-                                        $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(me));
-                                        $("#case__ProductArea_Id").val(val).trigger('change');
-                                    }
-                                });
-                        } else {
-                            $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(me));
-                            $("#case__ProductArea_Id").val(val).trigger('change');
-                        }
+            e.preventDefault();
+            onProductAreaChanged(this);
+        });
+    }
+    
+    function onProductAreaChanged(sender) {        
+        var me = sender;
+        var val = $(me).attr('value');
+        var curCaseId = $('#case__Id').val();
+        var caseInvoiceModule = $('#CustomerSettings_ModuleCaseInvoice').val();
+        var caseInvoiceIsActive = (caseInvoiceModule != undefined && caseInvoiceModule.toLowerCase() == 'true');
 
-                    });
+        /* When invoice is active, user can not change the product area while */
+        if (caseInvoiceIsActive) {
+            $.get('/CaseInvoice/IsThereNotSentOrder/',
+                { caseId: curCaseId, myTime: Date.now },
+                function (res) {
+                    if (res != null && res) {
+                        var mes = window.parameters.productAreaChangeMessage || '';
+                        ShowToastMessage(mes, 'warning', false);
+                    } else {
+                        $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(me));
+                        $("#case__ProductArea_Id").val(val).trigger('change');
+                    }
+                });
+        } else {
+            $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(me));
+            $("#case__ProductArea_Id").val(val).trigger('change');
+        }
     }
 
     $('#case__Priority_Id').change(function () {
@@ -991,6 +999,8 @@ function CaseInitForm() {
     });
 
     bindProductAreasEvents();
+
+    resetProductareaByCaseType($('#case__CaseType_Id').val());
 
     $('#divCategory ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();

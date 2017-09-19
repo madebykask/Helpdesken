@@ -300,6 +300,8 @@ namespace DH.Helpdesk.Web.Models.Case
         public Guid ExtendedCaseGuid { get; set; }
 		public bool IndependentChild { get; internal set; }
 		public CaseSolution CurrentCaseSolution { get; internal set; }
+
+        public int CurrentUserRole { get; set; }
 	}
 
     public class CaseIndexViewModel

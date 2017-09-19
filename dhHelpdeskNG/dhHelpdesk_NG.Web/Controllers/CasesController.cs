@@ -2068,7 +2068,7 @@ namespace DH.Helpdesk.Web.Controllers
                         result.Add(subProductArea.Id);
                         if (subProductArea.SubProductAreas != null && subProductArea.SubProductAreas.Any())
                         {
-                            GetSubProductAreasIds(subProductArea);
+                            result.AddRange(GetSubProductAreasIds(subProductArea));
                         }
                     }
                 }
@@ -4796,10 +4796,10 @@ namespace DH.Helpdesk.Web.Controllers
             string activeTab = "")
         {
             var m = new CaseInputViewModel();
-            SessionFacade.IsCaseDataChanged = false;
-
+            SessionFacade.IsCaseDataChanged = false;            
             m.BackUrl = backUrl;
             m.CanGetRelatedCases = SessionFacade.CurrentUser.IsAdministrator();
+            m.CurrentUserRole = SessionFacade.CurrentUser.UserGroupId;
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
             var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
@@ -5571,14 +5571,17 @@ namespace DH.Helpdesk.Web.Controllers
             if (m.case_.Category_Id.HasValue)
             {
                 var c = this._categoryService.GetCategory(m.case_.Category_Id.GetValueOrDefault(), customerId);
-                if (caseTemplateButtons != null)
+                if (c != null)
                 {
-                    var names =
-                        this._categoryService.GetParentPath(c.Id, customerId).Select(name => Translation.GetMasterDataTranslation(name));
-                    m.ParantPath_Category = string.Join(" - ", names);
-                    if (c.SubCategories != null && c.SubCategories.Where(s => s.IsActive != 0).ToList().Count > 0)
+                    if (caseTemplateButtons != null)
                     {
-                        m.CategoryHasChild = 1;
+                        var names =
+                            this._categoryService.GetParentPath(c.Id, customerId).Select(name => Translation.GetMasterDataTranslation(name));
+                        m.ParantPath_Category = string.Join(" - ", names);
+                        if (c.SubCategories != null && c.SubCategories.Where(s => s.IsActive != 0).ToList().Count > 0)
+                        {
+                            m.CategoryHasChild = 1;
+                        }
                     }
                 }
             }
@@ -5605,9 +5608,16 @@ namespace DH.Helpdesk.Web.Controllers
                 if (m.case_.StateSecondary != null)
                 {
                     m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1;
-                    if (m.case_.StateSecondary.NoMailToNotifier == 1)
-                        m.CaseLog.SendMailAboutCaseToNotifier = false;
-                    else
+                    m.CaseLog.SendMailAboutCaseToNotifier = false;
+                    //if (m.case_.StateSecondary.NoMailToNotifier == 1)
+                    //    m.CaseLog.SendMailAboutCaseToNotifier = false;
+                    //else
+                    //    m.CaseLog.SendMailAboutCaseToNotifier = true;
+                }
+
+                if (m.CaseLog != null)
+                {
+                    if (m.CaseLog.TextExternal != null)
                         m.CaseLog.SendMailAboutCaseToNotifier = true;
                 }
             }
@@ -6069,9 +6079,9 @@ namespace DH.Helpdesk.Web.Controllers
                      caseLock.UserId == userId &&
                      caseLock.BrowserSession == Session.SessionID))
                 {
-                    // Unlock case because user has leaved the Case in anormal way (Close browser/reset computer)
-                    // Unlock case because current user was opened this case last time and recently
-                    this._caseLockService.UnlockCaseByCaseId(caseId);
+                    // Unlock case because user left the Case in anormal way (Close browser/reset computer)
+                    // Unlock case because it was open by current user last time / recently
+                    _caseLockService.UnlockCaseByCaseId(caseId);
                     caseIsLocked = false;
                 }
             }

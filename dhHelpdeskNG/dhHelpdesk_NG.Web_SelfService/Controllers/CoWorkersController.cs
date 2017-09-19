@@ -40,43 +40,52 @@ namespace DH.Helpdesk.SelfService.Controllers
             var allCoWorkers = new List<CoWorker>();
 
             if (curIdentity != null && curIdentity.EmployeeNumber != "")
-            {
-                var _amAPIService = new AMAPIService();
-                var employee = AsyncHelpers.RunSync<APIEmployee>(() => _amAPIService.GetEmployeeFor(curIdentity.EmployeeNumber));
-                if (employee.IsManager)
+            {                
+                try
                 {
-                    foreach (var cw in employee.Subordinates)
+                    var _amAPIService = new AMAPIService();
+                    var employee = AsyncHelpers.RunSync<APIEmployee>(() => _amAPIService.GetEmployeeFor(curIdentity.EmployeeNumber));
+                    if (employee.IsManager)
                     {
-                        var emailAddress = "";
-                        if (cw.ExtraInfo.ContainsKey("Email"))
+                        foreach (var cw in employee.Subordinates)
                         {
-                            var mail = cw.ExtraInfo["Email"];
-                            if (mail.ContainsKey("comm"))
+                            var emailAddress = "";
+                            if (cw.ExtraInfo.ContainsKey("Email"))
                             {
-                                emailAddress = mail["comm"];
+                                var mail = cw.ExtraInfo["Email"];
+                                if (mail.ContainsKey("comm"))
+                                {
+                                    emailAddress = mail["comm"];
+                                }
                             }
+                            var cwr = new CoWorker
+                            {
+                                EmployeeNumber = cw.EmployeeNumber,
+                                FirstName = cw.FirstName,
+                                LastName = cw.LastName,
+                                JobTitle = cw.JobName,
+                                JobKey = cw.JobCode,
+                                Email = emailAddress
+                            };
+                            allCoWorkers.Add(cwr);
                         }
-                        var cwr = new CoWorker
-                        {
-                            EmployeeNumber = cw.EmployeeNumber,
-                            FirstName = cw.FirstName,
-                            LastName = cw.LastName,
-                            JobTitle = cw.JobName,
-                            JobKey = cw.JobCode,
-                            Email = emailAddress
-                        };
-                        allCoWorkers.Add(cwr);
-                    }
 
-                    SessionFacade.CurrentCoWorkers = employee.Subordinates;
-                    SessionFacade.UserHasAccess = true;                                                        
+                        SessionFacade.CurrentCoWorkers = employee.Subordinates;
+                        SessionFacade.UserHasAccess = true;
+                    }
+                    else
+                    {
+                        SessionFacade.UserHasAccess = false;
+                        ErrorGenerator.MakeError("You don't have access to the portal.", 401);
+                        return RedirectToAction("Index", "Error");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
                     SessionFacade.UserHasAccess = false;
-                    ErrorGenerator.MakeError("You don't have access to the portal.", 401);
-                    return RedirectToAction("Index", "Error");                                                                  
-                }
+                    ErrorGenerator.MakeError("Portal is not accessible. \n " + ex.Message , 402);
+                    return RedirectToAction("Index", "Error");
+                }                                
             }
             
             model.CoWorkers = allCoWorkers;

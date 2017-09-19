@@ -139,7 +139,7 @@
                                                 var langNameId = "langItem" + lang.Id;
                                                 <li>
                                                                                                         
-                                                        <a id="@langNameId" class="langItem" href="#" onclick="ChangeCaseLanguageTo(@lang.Id,true);"> @Translation.Get(lang.Name) 
+                                                        <a id="@langNameId" class="langItem" href="#" onclick="ChangeCaseLanguageTo(@lang.Id,true);"> @Translation.GetCoreTextTranslation(lang.Name) 
                                                             @if (lang.Id == curLanguage) 
                                                             {
                                                               <i class='icon-ok'></i>

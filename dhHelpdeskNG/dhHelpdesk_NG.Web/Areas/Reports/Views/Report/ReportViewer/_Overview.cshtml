@@ -159,26 +159,31 @@
             <div class="span6">
                 <div class="span6">
                     <table class="tableform">
-                        @if (Model.ReportFilter.ReportCategory != null)
-                        {
+
                             <tr id="reportCategoryParam" style="display:normal;">
                                 <td>
-                                    @Translation.Get("Report Category", Enums.TranslationSource.CaseTranslation, Model.CustomerId)
+                                    @Translation.GetCoreTextTranslation("Gruppera")
                                 </td>
                                 <td>
-                                    <select id="lstfilterReportCategory" name="lstfilterCategory" data-field="reportcategories" style="width: 300px;" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)"  >
-                                        @foreach (var r in Model.ReportFilter.ReportCategory.Items)
+                                    <select id="lstfilterReportCategory" name="lstfilterCategory" data-field="reportcategories" style="width: 300px;" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" @(Model.ReportFilter.ReportCategory == null ? " visible: none" : "") >
+                                        @if (Model.ReportFilter.ReportCategory != null)
                                         {
-                                            int curId = 0;
-                                            int.TryParse(r.Id, out curId);                                            
-                                            <option value="@r.Id" @(r.IsActive?"":"class='DisabledChosen'") >
-                                                @r.Value
-                                            </option>                                            
+                                            foreach (var r in Model.ReportFilter.ReportCategory.Items)
+                                            {
+                                                int curId = 0;
+                                                int.TryParse(r.Id, out curId);
+                                                <option value="@r.Id" @(r.IsActive ? "" : "class='DisabledChosen'") >
+                                                    @r.Value
+                                                </option>
+                                             }
                                         }
                                     </select>
+                                    <select id="lstfilterReportCategory_repl" style="width: 300px;" @(Model.ReportFilter.ReportCategory == null ? "" : "visible: none") disabled>
+                                    </select>
+
                                 </td>
                             </tr>
-                        }
+                        
 
                         @if (Model.ReportFilter.Departments != null)
                         {

@@ -87,9 +87,9 @@ namespace DH.Helpdesk.Services.Services
 
 				if (field == null)
 				{
-					var name = displayName.Replace("<", "").Replace(">", "").Replace("[", "").Replace("]", "");
+					var name = displayName.Replace("<", "[").Replace(">", "]");
 
-					failedMappings.Add(new KeyValuePair<string, string>(displayName, $"Could not find property {fieldId} with display name [{name}]"));
+					failedMappings.Add(new KeyValuePair<string, string>(displayName, $"Could not find property {fieldId} with display name {name}"));
 					return name;
 				}
 
@@ -101,9 +101,9 @@ namespace DH.Helpdesk.Services.Services
 					value = field.Value;
 					if (string.IsNullOrEmpty(value))
 					{
-						var name = displayName.Replace("<", "").Replace(">", "").Replace("[", "").Replace("]", "");
+						var name = displayName.Replace("<", "[").Replace(">", "]");
 
-						failedMappings.Add(new KeyValuePair<string, string>(displayName, $"Value and secondary value was NULL or empty for property {fieldId} with display name [{name}]"));
+						failedMappings.Add(new KeyValuePair<string, string>(displayName, $"Value and secondary value was NULL or empty for property {displayName} with display name [{name}]"));
 						return name;
 					}	
 				}

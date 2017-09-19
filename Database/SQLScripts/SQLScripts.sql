@@ -1243,5 +1243,13 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
    ALTER TABLE tblSettings ADD QuickNewCaseLinkUrl nvarchar(255) NOT NULL Default(N'/cases/new')
 GO
 
+Update tblCaseType set ShowOnExtPageCases = 0 where ShowOnExternalPage = 0
+
+Update tblProductArea set ShowOnExtPageCases = 0 where ShowOnExternalPage = 0
+
+Update tblCaseType set ShowOnExtPageCases = 1 where ShowOnExternalPage = 1
+
+Update tblProductArea set ShowOnExtPageCases = 1 where ShowOnExternalPage = 1
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.33'

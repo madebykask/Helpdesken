@@ -289,6 +289,8 @@
             this.Bind<ICaseDocumentTextConditionRepository>().To<CaseDocumentTextConditionRepository>();
             this.Bind<ICaseDocumentTextIdentifierRepository>().To<CaseDocumentTextIdentifierRepository>();
             this.Bind<ICaseDocumentTextConditionIdentifierRepository>().To<CaseDocumentTextConditionIdentifierRepository>();
+            this.Bind<IEmailLogAttemptRepository>().To<EmailLogAttemptRepository>();
+
         }
 
         #endregion

@@ -32,6 +32,11 @@
                 .HasForeignKey(x => x.WorkingGroup_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.Priority)
+                .WithMany()
+                .HasForeignKey(x => x.Priority_Id)
+                .WillCascadeOnDelete(false);
+
             this.HasMany(x => x.WorkingGroups)
                 .WithMany()
                 .Map(m =>

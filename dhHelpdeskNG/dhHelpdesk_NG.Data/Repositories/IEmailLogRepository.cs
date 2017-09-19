@@ -14,4 +14,9 @@ namespace DH.Helpdesk.Dal.Repositories
         EmailLog GetEmailLogsByGuid(Guid Id);
         
     }
+
+    public interface IEmailLogAttemptRepository : IRepository<EmailLogAttempt>
+    {
+        void DeleteLogAttempts(int logId);        
+    }
 }

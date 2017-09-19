@@ -995,11 +995,15 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             foreach (CaseType caseType in caseTypes)
             {
                 var isInactive = caseType.IsActive != 1 || isParentInactive;
+                var admin = string.Empty;
+                if (caseType.Administrator != null)
+                    admin = string.Format("{0} {1}", caseType.Administrator.FirstName, caseType.Administrator.SurName);
                 //htmlOutput += "<tr>";
                 htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + caseType.Name + "</a></td>";
                 htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "'>" + caseType.IsDefault.TranslateBit() + "</a></td>";
                 htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "'>" + caseType.RequireApproving.TranslateBit() + "</a></td>";
+                htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "'>" + admin + "</a></td>";
                 htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "'>" + caseType.IsActive.TranslateBit() + "</a></td>";
                 htmlOutput += "</tr>";
 
@@ -1389,6 +1393,18 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             return new MvcHtmlString(htmlOutput);
         }
 
+        private static string getCaseTypeParentPath(this CaseType o, string separator = " - ")
+        {
+            string ret = string.Empty;
+
+            if (o.ParentCaseType == null)
+                ret += o.Name;
+            else
+                ret += getCaseTypeParentPath(o.ParentCaseType, separator) + separator + o.Name;
+
+            return ret;
+        }
+
         private static MvcHtmlString BuildProductAreaTreeRow(
             IList<ProductArea> productAreas,
             int iteration,
@@ -1400,9 +1416,19 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
 
             foreach (ProductArea productArea in productAreaToDisplay)
             {
+                var wgName = productArea.WorkingGroup !=null ? productArea.WorkingGroup.WorkingGroupName : string.Empty;
+                var prioName = productArea.Priority != null ? productArea.Priority.Name : string.Empty;
+                var caseType = productArea.CaseTypeProductAreas.FirstOrDefault();
+                var caseTypeName = string.Empty;
+                if (caseType != null)
+                    caseTypeName = getCaseTypeParentPath(caseType.CaseType);
+
                 var isInactive = productArea.IsActive != 1 || isParentInactive;
                 htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + productArea.Name + "</a></td>";
+                htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "'>" + wgName + "</a></td>";
+                htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "'>" + prioName + "</a></td>";
+                htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "'>" + caseTypeName + "</a></td>";
                 htmlOutput += "<td><a href='/admin/productarea/edit/" + productArea.Id + "'>" + productArea.IsActive.TranslateBit() + "</a></td>";
                 htmlOutput += "</tr>";
 

@@ -131,7 +131,10 @@
             frameDoc.document.close();
             setTimeout(function () {
                 window.frames["printFrame"].focus();
-                window.frames["printFrame"].print();
+                // IE11 and Firefox fix
+                if (!frameDoc.document.execCommand('print', false, null)) {
+                    window.frames["printFrame"].print();
+                }
                 printFrame.remove();
             }, 500);
         });
