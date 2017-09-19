@@ -2286,7 +2286,12 @@
         $('#CaseSolution_Text_Internal').resizable();
 
         $('#SaveCaseSolution').on('click', function () {
+            var t = $('#target').valid();
 
+            if (t == true){
+                $('.secnav li a').addClass("disabled");
+                $('.secnav li a').css("pointer-events", "none");
+            };
 
             $('#target').submit();
         })
