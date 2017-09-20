@@ -435,6 +435,9 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
         }
         $('#' + _caseFields.DepartmentId).val(_department_id.Value);
         $('#' + _caseFields.DepartmentName).val(_department_id.SecondaryValue);
+
+
+
     }
     
     if (_ou_id_1 != undefined) {
@@ -467,6 +470,10 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
         $('#' + _caseFields.PriorityId).val(_priority_id.Value);
         $('#' + _caseFields.PriorityName).val(_priority_id.SecondaryValue);
     }
+
+    if (_department_id != undefined && _priority_id != undefined) {
+        $('#' + _caseFields.DepartmentId).trigger('change');
+    };
 
     if (_productarea_id != undefined) {
         self.setValueToBtnGroup('#divProductArea', "#divBreadcrumbs_ProductArea", '#' + _caseFields.ProductAreaId, _productarea_id.Value)

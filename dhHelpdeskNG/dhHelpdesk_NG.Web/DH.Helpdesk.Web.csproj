@@ -1025,6 +1025,10 @@
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
     <Content Include="Content\js\Contract\contractIndex.js" />
     <Content Include="Content\js\Contract\edit.js" />
+    <Content Include="Content\js\DynamicCase\ie8.polyfils.min.js" />
+    <Content Include="Content\js\DynamicCase\iframeResizer.contentWindow.js" />
+    <Content Include="Content\js\DynamicCase\iframeResizer.contentWindow.min.js" />
+    <Content Include="Content\js\DynamicCase\index.js" />
     <Content Include="Content\js\Feedback\feedback.edit.js" />
     <Content Include="Content\js\Feedback\feedbackStatisticsCases.js" />
     <Content Include="Content\js\Inventory\inventory.search.js" />
@@ -3243,6 +3247,9 @@
     <Content Include="Areas\Invoices\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\QuickLink\_QuickLinksRows.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\_HeaderDialog.cshtml" />
+    <Content Include="Content\js\DynamicCase\ie8.polyfils.map" />
+    <Content Include="Content\js\DynamicCase\iframeResizer.contentWindow.map" />
+    <Content Include="Content\js\DynamicCase\iframeResizer.map" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />
