@@ -62,8 +62,15 @@ function LogInitForm() {
                 $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', true);
             }
             else {
-                $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
-                $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', false);
+                if ($('#CaseLog_TextExternal').val() == '') {
+                    $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
+                    $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', false);
+                } else {
+
+                    $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', true);
+                    $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', false);
+                }
+                
             }
             // set workinggroup id
             var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
