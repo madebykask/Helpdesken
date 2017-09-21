@@ -1,4 +1,5 @@
 ﻿
+
 --update DB from 5.3.32 to 5.3.33 version
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ExcludeAdministrators' and sysobjects.name = N'tblQuestionnaire')
 	ALTER TABLE [dbo].[tblQuestionnaire] ADD [ExcludeAdministrators] bit not null DEFAULT(0)
@@ -1232,6 +1233,18 @@ Update tblProductArea set ShowOnExtPageCases = 0 where ShowOnExternalPage = 0
 Update tblCaseType set ShowOnExtPageCases = 1 where ShowOnExternalPage = 1
 
 Update tblProductArea set ShowOnExtPageCases = 1 where ShowOnExternalPage = 1
+
+
+-- CREATE NONClustered Index for tblEntityRelationship.ParentItem_Guid
+if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblEntityRelationship_ParentItemGuid')
+	DROP INDEX [IX_tblEntityRelationship_ParentItemGuid] ON [dbo].[tblEntityRelationship]
+GO
+CREATE NONCLUSTERED INDEX [IX_tblEntityRelationship_ParentItemGuid] ON [dbo].[tblEntityRelationship]
+(
+	[ParentItem_Guid] ASC
+) ON [PRIMARY]
+GO
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.33'
