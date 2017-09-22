@@ -133,6 +133,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             customerToSave.MyCasesInitiator = vmodel.Customer.MyCasesInitiator;
             customerToSave.MyCasesRegarding = vmodel.Customer.MyCasesRegarding;
             customerToSave.MyCasesRegistrator = vmodel.Customer.MyCasesRegistrator;
+            customerToSave.MyCasesUserGroup = vmodel.Customer.MyCasesUserGroup;
+            customerToSave.RestrictUserToGroupOnExternalPage = vmodel.Customer.RestrictUserToGroupOnExternalPage;
+            customerToSave.FetchDataFromApiOnExternalPage = vmodel.Customer.FetchDataFromApiOnExternalPage;
             customerToSave.ShowCasesOnExternalPage = vmodel.Customer.ShowCasesOnExternalPage;
             customerToSave.ShowCaseOnExternalPage = vmodel.Customer.ShowCaseOnExternalPage;
             customerToSave.GroupCaseTemplates = vmodel.Customer.GroupCaseTemplates;

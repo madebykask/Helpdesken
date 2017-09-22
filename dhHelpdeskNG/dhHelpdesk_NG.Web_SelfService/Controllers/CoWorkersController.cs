@@ -33,8 +33,14 @@ namespace DH.Helpdesk.SelfService.Controllers
 
         public ActionResult Index(int customerId)
         {
-            var model = new CoWorkersModel();            
-            
+            if (!SessionFacade.CurrentCustomer.FetchDataFromApiOnExternalPage)
+            {
+                SessionFacade.UserHasAccess = false;
+                ErrorGenerator.MakeError("You don't have access to the portal.", 401);
+                return RedirectToAction("Index", "Error");
+            }
+
+            var model = new CoWorkersModel();                        
             var curIdentity = SessionFacade.CurrentUserIdentity;
 
             var allCoWorkers = new List<CoWorker>();
@@ -70,7 +76,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                             allCoWorkers.Add(cwr);
                         }
 
-                        SessionFacade.CurrentCoWorkers = employee.Subordinates;
+                        //SessionFacade.CurrentCoWorkers = employee.Subordinates;
                         SessionFacade.UserHasAccess = true;
                     }
                     else

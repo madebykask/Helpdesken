@@ -26,6 +26,26 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    <h4>@Translation.Get("Självservice – Restriction", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="formContainer">
+                        <table class="tableform">
+                            <tr>
+                                <td class="span3">
+                                    @Translation.Get("Visa i menyn", Enums.TranslationSource.TextTranslation)
+                                </td>
+                                <td>
+                                    @Html.CheckBoxFor(m => m.Customer.RestrictUserToGroupOnExternalPage) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Restrict user to access to group")
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    @Html.CheckBoxFor(m => m.Customer.FetchDataFromApiOnExternalPage) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Fetch data from Api")                                    
+                                </td>
+                            </tr>                           
+                        </table>
+                    </div>
+
                     <h4>@Translation.Get("Självservice – Meny", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="formContainer">
                         <table class="tableform">
@@ -211,6 +231,12 @@
                                 <td></td>
                                 <td>
                                     @Html.CheckBoxFor(m => m.Customer.MyCasesRegarding) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Angående")
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    @Html.CheckBoxFor(m => Model.Customer.MyCasesUserGroup) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("User Group")
                                 </td>
                             </tr>
                             <tr id="caseTypes">

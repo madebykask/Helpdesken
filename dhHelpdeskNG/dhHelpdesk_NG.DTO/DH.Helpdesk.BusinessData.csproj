@@ -182,6 +182,7 @@
     <Compile Include="Models\CaseDocument\CaseDocumentConditionModel.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentParagraphType.cs" />
     <Compile Include="Models\CaseType\CaseTypeItem.cs" />
+    <Compile Include="Models\Case\CaseOverviewCriteriaModel.cs" />
     <Compile Include="Models\Case\AuxCaseModel.cs" />
     <Compile Include="Models\Case\CaseModel.cs" />
     <Compile Include="Models\Case\CaseFileDate.cs" />

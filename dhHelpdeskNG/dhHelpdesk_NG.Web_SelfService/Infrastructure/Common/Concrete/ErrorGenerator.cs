@@ -1,10 +1,4 @@
-﻿using DH.Helpdesk.Services.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
+﻿namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
 {            
     using DH.Helpdesk.BusinessData.Models.Error;
 
@@ -15,6 +9,11 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
             var err = new ErrorModel((code!=null? code.Value:0), message);
             SessionFacade.LastError = err;
             return err;            
+        }
+
+        public static void MakeError(ErrorModel errModel)
+        {            
+            SessionFacade.LastError = errModel;            
         }
     }
 }

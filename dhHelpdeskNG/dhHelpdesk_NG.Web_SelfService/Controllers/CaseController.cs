@@ -32,6 +32,9 @@
     using Common.Extensions.Integer;
     using Common.Extensions.String;
     using Common.Extensions.DateTime;
+    using WebServices;
+    using WebServices.Common;
+    using Common.Classes.ServiceAPI.AMAPI.Output;
 
     public class CaseController : BaseController
     {
@@ -1468,6 +1471,11 @@
                         ProgressId = progressId
                     };
 
+            if (SessionFacade.CurrentCustomer == null)
+            {
+                throw new Exception("Session expired! Please reload the page and try again.");                
+            }
+                
             var srm = new CaseSearchResultModel();
             var sm = new CaseSearchModel();
             var cs = new CaseSearchFilter();
@@ -1481,11 +1489,19 @@
             cs.ReportedBy = "";
             var caseListType = string.Empty;
             var currentApplicationType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
-
             var caseListCondition = ConfigurationManager.AppSettings[AppSettingsKey.CaseList].ToString().ToLower().Split(',');
 
+            //var criteria = new CaseOverviewCriteriaModel()
+            //{
+            //    MyCasesRegistrator = SessionFacade.CurrentCustomer.MyCasesRegistrator,
+            //    MyCasesInitiator = SessionFacade.CurrentCustomer.MyCasesInitiator,
+            //    MyCasesFollower = SessionFacade.CurrentCustomer.MyCasesFollower,
+            //    MyCasesRegarding = SessionFacade.CurrentCustomer.MyCasesRegarding,
+            //    MyCasesUserGroup = SessionFacade.CurrentCustomer.MyCasesUserGroup
+            //};
+            
             if (currentApplicationType == ApplicationTypes.LineManager)
-            {                
+            {
                 if (caseListCondition.Contains(CaseListTypes.ManagerCases))
                 {
                     caseListType = CaseListTypes.ManagerCases;
@@ -1495,13 +1511,28 @@
 
                 if (caseListCondition.Contains(CaseListTypes.CoWorkerCases))
                 {
+                    if (SessionFacade.CurrentCoWorkers == null)
+                    {
+                        /* Temp solution until we involve all SelfService Settings */
+                        if (SessionFacade.CurrentCustomer.FetchDataFromApiOnExternalPage)
+                        {
+                            var _amAPIService = new AMAPIService();
+                            var employee = AsyncHelpers.RunSync<APIEmployee>(() => _amAPIService.GetEmployeeFor(SessionFacade.CurrentUserIdentity.EmployeeNumber));
+                            if (employee != null)
+                                SessionFacade.CurrentCoWorkers = employee.Subordinates;
+                        }
+                        else
+                        {
+                            /*Fetch from MetaData*/
+                        }
+                    }
                     cs.RegUserId = curUser;
 
                     if (caseListType == CaseListTypes.ManagerCases)
                         caseListType = CaseListTypes.ManagerCoWorkerCases;
                     else
                         caseListType = CaseListTypes.CoWorkerCases;
-                    
+
                     var employees = SessionFacade.CurrentCoWorkers;
                     if (employees != null)
                     {
@@ -1520,9 +1551,9 @@
                 }
 
                 cs.CaseListType = caseListType;
-            } 
+            }
             else// Self Service 
-            {                
+            {
                 if (caseListCondition.Contains(CaseListTypes.ManagerCases))
                 {
                     caseListType = CaseListTypes.ManagerCases;
@@ -1540,7 +1571,7 @@
 
                 cs.RegUserId = curUser;
                 cs.CaseListType = caseListType;
-            }            
+            }
 
             search.SortBy = sortBy;
             search.Ascending = ascending;
@@ -1548,7 +1579,7 @@
             sm.Search = search;
             sm.caseSearchFilter = cs;
 
-            // 1: User in Customer Setting
+            // 1: User in Customer Setting            
             srm.CaseSettings = _caseSettingService.GetCaseSettingsByUserGroup(cusId, 1);
 
             if (caseListType == string.Empty && currentApplicationType == ApplicationTypes.LineManager)
