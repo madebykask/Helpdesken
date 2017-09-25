@@ -706,8 +706,8 @@ function CaseInitForm() {
         resetProductareaByCaseType(caseTypeId);
     });
 
-    function resetProductareaByCaseType(_caseTypeId){
-        $.post('/Cases/GetProductAreaByCaseType/', { caseTypeId: _caseTypeId, myTime: Date.now() }, function (result) {
+    function resetProductareaByCaseType(_caseTypeId) {
+        $.post('/Cases/GetProductAreaByCaseType/', { caseTypeId: _caseTypeId, customerid: publicCustomerId, myTime: Date.now() }, function (result) {
             if (result.success) {
                 $('#divProductArea.DynamicDropDown > ul.dropdown-menu')
                     .html("<li><a href='#'>--</a></li>" + result.data);
