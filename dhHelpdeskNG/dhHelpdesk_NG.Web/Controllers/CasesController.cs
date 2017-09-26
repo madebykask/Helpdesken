@@ -2027,9 +2027,9 @@ namespace DH.Helpdesk.Web.Controllers
             });
         }
 
-        public JsonResult GetProductAreaByCaseType(int? caseTypeId)
+        public JsonResult GetProductAreaByCaseType(int? caseTypeId, int customerId)
         {
-            var pa = _productAreaService.GetTopProductAreasForUserOnCase(SessionFacade.CurrentCustomer.Id, null, SessionFacade.CurrentUser)
+            var pa = _productAreaService.GetTopProductAreasForUserOnCase(customerId, null, SessionFacade.CurrentUser)
                     .OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
             if (caseTypeId.HasValue)
             {
