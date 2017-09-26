@@ -294,7 +294,7 @@
         private UserIdentity TrySSOLogin(System.Security.Principal.IPrincipal user, out ErrorModel lastError)
         {
             lastError = null;
-            UserIdentity userIdentity = null;
+            var userIdentity = new UserIdentity();
 
             ClaimsPrincipal principal = user as ClaimsPrincipal;
             if (principal != null)
