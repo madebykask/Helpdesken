@@ -74,6 +74,7 @@
         private readonly IPriorityService _priorityService;
         private readonly IExtendedCaseService _extendedCaseService;
         private readonly IUniversalCaseService _universalCaseService;
+        private readonly IWatchDateCalendarService _watchDateCalendarService;
 
 
         private const string ParentPathDefaultValue = "--";
@@ -121,7 +122,8 @@
             IRegistrationSourceCustomerService registrationSourceCustomerService,
             IPriorityService priorityService,
             IExtendedCaseService extendedCaseService,
-            IUniversalCaseService universalCaseService)
+            IUniversalCaseService universalCaseService,
+            IWatchDateCalendarService watchDateCalendarService)
             : base(masterDataService, caseSolutionService)
         {
             _masterDataService = masterDataService;
@@ -162,6 +164,7 @@
             _priorityService = priorityService;
             _extendedCaseService = extendedCaseService;
             _universalCaseService = universalCaseService;
+            _watchDateCalendarService = watchDateCalendarService;
         }
 
 
@@ -1315,6 +1318,20 @@
                 if (productArea != null && productArea.WorkingGroup_Id.HasValue)
                 {
                     newCase.WorkingGroup_Id = productArea.WorkingGroup_Id;
+                }
+            }
+
+            if (newCase.Department_Id.HasValue && newCase.Priority_Id.HasValue)
+            {
+                var dept = this._departmentService.GetDepartment(newCase.Department_Id.Value);
+                var priority = this._priorityService.GetPriorities(newCase.Customer_Id).Where(it => it.Id == newCase.Priority_Id && it.IsActive == 1).FirstOrDefault();
+
+                if (dept != null && dept.WatchDateCalendar_Id.HasValue && priority != null && priority.SolutionTime == 0)
+                {
+                    newCase.WatchDate =
+                    this._watchDateCalendarService.GetClosestDateTo(
+                            dept.WatchDateCalendar_Id.Value,
+                            DateTime.UtcNow);
                 }
             }
 

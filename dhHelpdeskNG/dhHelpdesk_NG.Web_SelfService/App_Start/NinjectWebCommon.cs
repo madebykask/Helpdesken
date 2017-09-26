@@ -236,7 +236,8 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IExtendedCaseValueRepository>().To<ExtendedCaseValueRepository>();
             kernel.Bind<IApplicationRepository>().To<ApplicationRepository>();
             kernel.Bind<IEmailLogAttemptRepository>().To<EmailLogAttemptRepository>();
-
+            kernel.Bind<IWatchDateCalendarValueRepository>().To<WatchDateCalendarValueRepository>();
+            kernel.Bind<IWatchDateCalendarRepository>().To<WatchDateCalendarRepository>();
 
 
             // Service             
@@ -303,10 +304,11 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ICaseSolutionConditionService>().To<CaseSolutionConditionService>();
             kernel.Bind<IUniversalCaseService>().To<UniversalCaseService>();
             kernel.Bind<IExtendedCaseService>().To<ExtendedCaseService>();
-            kernel.Bind<ITextTranslationService>().To<TextTranslationService>();			
+            kernel.Bind<ITextTranslationService>().To<TextTranslationService>();
+            kernel.Bind<IWatchDateCalendarService>().To<WatchDateCalendarService>();
 
-			// Cache
-			kernel.Bind<ICacheProvider>().To<CacheProvider>();
+            // Cache
+            kernel.Bind<ICacheProvider>().To<CacheProvider>();
 
 
             // FormLib
