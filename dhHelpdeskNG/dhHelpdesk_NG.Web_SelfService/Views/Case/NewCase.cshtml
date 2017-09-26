@@ -920,7 +920,7 @@
 
     var $mainForm = $("#newCaseForm");
     var $elmProductArea = $("#NewCase_ProductArea_Id");
-    var requiredText = '@Translation.Get("must be specified", Enums.TranslationSource.TextTranslation)';
+    var requiredText = '@Translation.GetForJS("must be specified", Enums.TranslationSource.TextTranslation)';
     var productAreaErrMessage ='@Html.Raw(Translation.GetForJS("The case could not be saved because the lowest possible level on the field") + " [" +
                    Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID) + "] " +
                    Translation.Get("has not been selected. Please check the case."))';
