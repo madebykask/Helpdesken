@@ -203,7 +203,15 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         sql += "isnull(dbo.GetHierarchy(" + tablefieldid + ", '" + tablename + "'), '') AS Name, ";
                     }
                     sql += "" + tablefieldguid + " AS Guid, ";
-                    sql += "cast(0 as bit) AS [Selected] ";
+                    sql += "cast(0 as bit) AS [Selected], ";
+                    if (!string.IsNullOrEmpty(tableFieldStatus))
+                    {
+                        sql += "cast([" + tableFieldStatus + "] as bit) AS Status ";
+                    }
+                    else
+                    {
+                        sql += "cast(1 as bit) AS Status ";
+                    }
                     sql += "FROM " + tablename + " ";
                     sql += "AS [Extent1] ";
                     sql += "WHERE  NOT((LOWER( CAST( [Extent1]. " + tablefieldguid + " AS nvarchar(max)))  ";
@@ -224,7 +232,15 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         sql += "isnull(dbo.GetHierarchy(" + tablefieldid + ", '" + tablename + "'), '') AS Name, ";
                     }
                     sql += "" + tablefieldguid + " AS Guid, ";
-                    sql += "cast(1 as bit) AS [Selected] ";
+                    sql += "cast(1 as bit) AS [Selected], ";
+                    if (!string.IsNullOrEmpty(tableFieldStatus))
+                    {
+                        sql += "cast([" + tableFieldStatus + "] as bit) AS Status ";
+                    }
+                    else
+                    {
+                        sql += "cast(1 as bit) AS Status ";
+                    }
                     sql += "FROM " + tablename + " ";
                     sql += "AS[Extent1] ";
                     sql += "WHERE(LOWER( CAST( [Extent1]." + tablefieldguid + " AS nvarchar(max))) ";
