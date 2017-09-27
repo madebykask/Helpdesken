@@ -17,6 +17,9 @@
             entity.Identifier = businessModel.Identifier;
             entity.PropertyName = businessModel.PropertyName;
             entity.DisplayName = businessModel.DisplayName;
+            entity.DisplayFormat = businessModel.DisplayFormat;
+            entity.DataFormat = businessModel.DataFormat;
+            entity.DataType = businessModel.DataType;
         }
     }
 }

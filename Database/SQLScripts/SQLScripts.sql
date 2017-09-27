@@ -1245,6 +1245,25 @@ CREATE NONCLUSTERED INDEX [IX_tblEntityRelationship_ParentItemGuid] ON [dbo].[tb
 ) ON [PRIMARY]
 GO
 
+-- Add more columns to table 
+-- #58972
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DataType' and sysobjects.name = N'tblCaseDocumentTextIdentifier')
+begin
+	ALTER TABLE [dbo].[tblCaseDocumentTextIdentifier] ADD [DataType] [nvarchar](50) NULL 
+end
+
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DataFormat' and sysobjects.name = N'tblCaseDocumentTextIdentifier')
+begin
+	ALTER TABLE [dbo].[tblCaseDocumentTextIdentifier] ADD [DataFormat] [nvarchar](50) NULL 
+end
+
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DisplayFormat' and sysobjects.name = N'tblCaseDocumentTextIdentifier')
+begin
+	ALTER TABLE [dbo].[tblCaseDocumentTextIdentifier] ADD [DisplayFormat] [nvarchar](50) NULL 
+end
+
+GO
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.33'

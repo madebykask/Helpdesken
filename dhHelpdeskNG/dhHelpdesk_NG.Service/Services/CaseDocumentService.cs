@@ -164,13 +164,43 @@ namespace DH.Helpdesk.Services.Services
             return value;
         }
 
+        private string ConvertToDisplayFormat(string value, string dataType, string dataFormat, string displayFormat)
+        {
+            //TODO: Add support for more datatypes
+            //only do if there is a value, datatype and displayformat
+            if (value.IsNotNullOrEmpty()  && dataType.IsNotNullOrEmpty()  && displayFormat.IsNotNullOrEmpty())
+
+            {
+                //for this to be done, we need dataFormat
+                if (dataType == "Date" && dataFormat.IsNotNullOrEmpty())
+                {
+                    if (CheckDate(value))
+                    {
+                            // base conversion on format from database
+                            DateTime convertedDate = DateTime.ParseExact(value, dataFormat, null);
+                            value = convertedDate.ToString(displayFormat, CultureInfo.InvariantCulture);
+                    }
+                }
+
+                if (dataType == "Decimal")
+                {
+                    decimal outDecimal;
+                    if (decimal.TryParse(value.Replace(".", ","), out outDecimal))
+                    {
+                        value = outDecimal.ToString(displayFormat, CultureInfo.InvariantCulture);
+                    }
+                }
+            }
+
+            return value;
+        }
+
         private Dictionary<string, string> GetCaseValueDictionary(int id, int caseId, List<KeyValuePair<string, string>> failedMappings)
         {
       
             var _case = _caseService.GetCaseById(caseId);
 
             //Get Identifiers for Case and for ExtendedCase that is connected
-
             int extendedCaseFormId = 0;
             if (_case.CaseExtendedCaseDatas != null)
             {
@@ -190,20 +220,25 @@ namespace DH.Helpdesk.Services.Services
 
                 if (item.ExtendedCaseFormId == 0)
                 {
-
                     #region  Case or Date
                     if (item.PropertyName.ToLower().Contains("case"))
-                    { 
-                        dictionary.Add(item.Identifier, GetCaseValue(_case, propertyName, displayName, failedMappings));
+                    {
+                        var value = GetCaseValue(_case, propertyName, displayName, failedMappings);
+                        value = ConvertToDisplayFormat(value, item.DataType, item.DataFormat, item.DisplayFormat);
+                        dictionary.Add(item.Identifier, value);
                     }
                     else if (item.PropertyName == "Date.NowLong")
                     {
-                        dictionary.Add(item.Identifier, DateTime.Now.ToString(DateLongFormat, CultureInfo.InvariantCulture));
+                        //Get from DB, fallback constant DateLongFormat
+                        string displayFormat = (string.IsNullOrEmpty(item.DisplayFormat) ? DateLongFormat : item.DisplayFormat);
+                        dictionary.Add(item.Identifier, DateTime.Now.ToString(displayFormat, CultureInfo.InvariantCulture));
                     }
 
                     else if (item.PropertyName == "Date.NowShort")
                     {
-                        dictionary.Add(item.Identifier, DateTime.Now.ToString(DateShortFormat, CultureInfo.InvariantCulture));
+                        //Get from DB, fallback constant DateShortFormat
+                        string displayFormat = (string.IsNullOrEmpty(item.DisplayFormat) ? DateShortFormat : item.DisplayFormat);
+                        dictionary.Add(item.Identifier, DateTime.Now.ToString(displayFormat, CultureInfo.InvariantCulture));
                     }
 
                     #endregion
@@ -215,7 +250,11 @@ namespace DH.Helpdesk.Services.Services
 
                     if (_case.CaseExtendedCaseDatas != null)
                     {
-                        dictionary.Add(item.Identifier, GetExtendedCaseValue(_case, propertyName, displayName, failedMappings));
+
+                        var value = GetExtendedCaseValue(_case, propertyName, displayName, failedMappings);
+                        value = ConvertToDisplayFormat(value, item.DataType, item.DataFormat, item.DisplayFormat);
+
+                        dictionary.Add(item.Identifier, value);
                     }
 
                     #endregion
