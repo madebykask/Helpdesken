@@ -388,6 +388,8 @@
                 model.NewCase.Cost = caseTemplate.Cost;
                 model.NewCase.OtherCost = caseTemplate.OtherCost;
                 model.NewCase.Currency = caseTemplate.Currency;
+                model.NewCase.Change_Id = caseTemplate.Change_Id;
+                model.NewCase.FinishingDescription = caseTemplate.FinishingDescription;
 
                 //Hidden fields
                 model.NewCase.Performer_User_Id = caseTemplate.PerformerUser_Id;
