@@ -11,10 +11,7 @@
     using System.Security.Claims;
     using DH.Helpdesk.BusinessData.Models.ADFS.Input;
     using System.Configuration;
-    using DH.Helpdesk.SelfService.WebServices;
-    using DH.Helpdesk.SelfService.WebServices.Common;
     using System.Collections.Generic;
-    using DH.Helpdesk.Common.Classes.ServiceAPI.AMAPI.Output;
     using DH.Helpdesk.BusinessData.Models.Language.Output;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Enums;
@@ -23,6 +20,8 @@
     using DH.Helpdesk.Common.Extensions.String;
     using BusinessData.Models.Error;
     using System.Web;
+    using BusinessData.Models.Employee;
+    using Helpers;
 
     public class BaseController : Controller
     {
@@ -59,8 +58,8 @@
 
             SetLanguage(filterContext);
 
-            var appType = GetAppSetting(AppSettingsKey.CurrentApplicationType);
-            var loginMode = GetAppSetting(AppSettingsKey.LoginMode);
+            var appType = AppConfigHelper.GetAppSetting(AppSettingsKey.CurrentApplicationType);
+            var loginMode = AppConfigHelper.GetAppSetting(AppSettingsKey.LoginMode);
 
             if (SessionFacade.CurrentUserIdentity == null)
             {                
@@ -281,15 +280,7 @@
             }
             SessionFacade.CurrentLocalUser = null;
         }
-
-        private string GetAppSetting(string name)
-        {
-            if (ConfigurationManager.AppSettings.AllKeys.Contains(AppSettingsKey.CurrentApplicationType, 
-                                                                  StringComparer.CurrentCultureIgnoreCase))
-                return ConfigurationManager.AppSettings[name].ToString().CleanSpaceAndLowStr();
-
-            return null; 
-        }
+        
 
         private UserIdentity TrySSOLogin(System.Security.Principal.IPrincipal user, out ErrorModel lastError)
         {
@@ -302,13 +293,13 @@
                 string claimData = "";
                 bool isFirst = true;
                 
-                var claimDomain = GetAppSetting(Enums.FederationServiceKeys.ClaimDomain);
-                var claimUserId = GetAppSetting(Enums.FederationServiceKeys.ClaimUserId);
-                var claimEmployeeNumber = GetAppSetting(Enums.FederationServiceKeys.ClaimEmployeeNumber);
-                var claimFirstName = GetAppSetting(Enums.FederationServiceKeys.ClaimFirstName);
-                var claimLastName = GetAppSetting(Enums.FederationServiceKeys.ClaimLastName);
-                var claimEmail = GetAppSetting(Enums.FederationServiceKeys.ClaimEmail);
-                var claimPhone = GetAppSetting(Enums.FederationServiceKeys.ClaimPhone);
+                var claimDomain = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimDomain);
+                var claimUserId = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimUserId);
+                var claimEmployeeNumber = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimEmployeeNumber);
+                var claimFirstName = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimFirstName);
+                var claimLastName = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimLastName);
+                var claimEmail = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimEmail);
+                var claimPhone = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimPhone);
 
                 foreach (Claim claim in principal.Claims)
                 {
@@ -350,11 +341,11 @@
                     }
                 }
 
-                var defaultUserId = GetAppSetting(AppSettingsKey.DefaultUserId);
+                var defaultUserId = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultUserId);
                 if (!string.IsNullOrEmpty(defaultUserId))
                     userIdentity.UserId = defaultUserId;
 
-                var defaultEmployeeNumber = GetAppSetting(AppSettingsKey.DefaultEmployeeNumber);
+                var defaultEmployeeNumber = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultEmployeeNumber);
                 if (!string.IsNullOrEmpty(defaultEmployeeNumber))
                     userIdentity.EmployeeNumber = defaultEmployeeNumber;
 
@@ -367,7 +358,7 @@
                     CreatedDate = DateTime.Now
                 };
 
-                if (GetAppSetting(AppSettingsKey.SSOLog) == BooleanString.TRUE &&
+                if (AppConfigHelper.GetAppSetting(AppSettingsKey.SSOLog) == BooleanString.TRUE &&
                     string.IsNullOrEmpty(SessionFacade.CurrentSystemUser))
                     _masterDataService.SaveSSOLog(ssoLog);
 
@@ -391,11 +382,11 @@
             string fullName = user.Name;
             string userId = fullName.GetUserFromAdPath();
 
-            var defaultUserId = GetAppSetting(AppSettingsKey.DefaultUserId);
+            var defaultUserId = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultUserId);
             if (!string.IsNullOrEmpty(defaultUserId))
                 userId = defaultUserId;
 
-            var defaultEmployeeNumber = GetAppSetting(AppSettingsKey.DefaultEmployeeNumber);
+            var defaultEmployeeNumber = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultEmployeeNumber);
             if (!string.IsNullOrEmpty(defaultEmployeeNumber))
                 employeeNum = defaultEmployeeNumber;
             
@@ -418,14 +409,15 @@
         private void SetUserRestriction(int customerId, out ErrorModel lastError)
         {
             lastError = null;
+            var employeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
             /* needs to investigate if this is necessary*/
             if (SessionFacade.CurrentCustomer != null && SessionFacade.CurrentUserIdentity != null &&
-                !string.IsNullOrEmpty(SessionFacade.CurrentUserIdentity.EmployeeNumber))
+                !string.IsNullOrEmpty(employeeNumber))
             {
                 var config = (ECT.FormLib.Configurable.AccessManagment)ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
                 var country = config.Countries.Where(x => x.HelpdeskCustomerId == SessionFacade.CurrentCustomer.Id.ToString()).FirstOrDefault();
 
-                if (country == null || (country != null && !SessionFacade.CurrentUserIdentity.EmployeeNumber.StartsWith(country.EmployeePrefix)))
+                if (country == null || (country != null && !employeeNumber.StartsWith(country.EmployeePrefix)))
                 {
                     SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
                     lastError = new ErrorModel(103, "You don't have access to the portal. (User is not manager for country)");                                        
@@ -436,26 +428,17 @@
             if (SessionFacade.CurrentCoWorkers == null || 
                 (SessionFacade.CurrentCoWorkers != null && SessionFacade.CurrentCoWorkers.Count == 0))
             {
-                if (string.IsNullOrEmpty(SessionFacade.CurrentUserIdentity.EmployeeNumber))
+                if (string.IsNullOrEmpty(employeeNumber))
                 {
                     lastError = new ErrorModel(104, "You don't have access to the portal. (Employee Number is not specified)");                                        
                     return;
                 }
                
-                var employee = new APIEmployee();
                 var useApi = SessionFacade.CurrentCustomer.FetchDataFromApiOnExternalPage;
-
-                if (useApi)
-                {
-                    var _amAPIService = new AMAPIService();
-                    employee = AsyncHelpers.RunSync<APIEmployee>(() => _amAPIService.GetEmployeeFor(SessionFacade.CurrentUserIdentity.EmployeeNumber));
-                }
-                else
-                {
-                    /*Fetch from MetaData*/
-                }
-
-                if (employee.IsManager)
+                var apiCredential = AppConfigHelper.GetAmApiInfo();
+                var employee = _masterDataService.GetEmployee(customerId, employeeNumber, useApi, apiCredential);
+                
+                if (employee != null && employee.IsManager)
                 {
                     SessionFacade.CurrentCoWorkers = employee.Subordinates;
                 }

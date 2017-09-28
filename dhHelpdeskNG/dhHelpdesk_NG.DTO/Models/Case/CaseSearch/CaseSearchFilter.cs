@@ -99,6 +99,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public int? CurrentCaseId { get; set; }
 
+        public CaseOverviewCriteriaModel CaseOverviewCriteria { get; set; }
+
 
         public CaseSearchFilter Copy(CaseSearchFilter o)
         {
@@ -152,6 +154,21 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.PageInfo = o.PageInfo;
             r.IsConnectToParent = o.IsConnectToParent;
             r.CurrentCaseId = o.CurrentCaseId;
+
+            if (CaseOverviewCriteria != null)
+            {
+                r.CaseOverviewCriteria = new CaseOverviewCriteriaModel
+                {
+                    MyCasesFollower = o.CaseOverviewCriteria.MyCasesFollower,
+                    MyCasesInitiator = o.CaseOverviewCriteria.MyCasesInitiator,
+                    MyCasesRegarding = o.CaseOverviewCriteria.MyCasesRegarding,
+                    MyCasesRegistrator = o.CaseOverviewCriteria.MyCasesRegistrator,
+                    MyCasesUserGroup = o.CaseOverviewCriteria.MyCasesUserGroup,
+                    UserId = o.CaseOverviewCriteria.UserId,
+                    UserEmployeeNumber = o.CaseOverviewCriteria.UserEmployeeNumber,
+                    GroupMember = o.CaseOverviewCriteria.GroupMember
+                };
+            }
 
             return r;
         }

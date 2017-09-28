@@ -9,14 +9,13 @@ namespace DH.Helpdesk.SelfService.Infrastructure
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Domain.Computers;    
+    using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.SelfService.Models;
     using DH.Helpdesk.Common.Types;
-    using DH.Helpdesk.BusinessData.Models.CoWorkers;
-    using DH.Helpdesk.Common.Classes.ServiceAPI.AMAPI.Output;
     using DH.Helpdesk.BusinessData.Models.Language.Output;
-    using DH.Helpdesk.BusinessData.Models.Error;    
-    
+    using DH.Helpdesk.BusinessData.Models.Error;
+    using BusinessData.Models.Employee;
+
     public static class SessionFacade
     {
         private const string _CURRENT_USER = "CURRENT_USER";

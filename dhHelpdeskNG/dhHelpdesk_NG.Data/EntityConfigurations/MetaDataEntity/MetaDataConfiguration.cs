@@ -2,9 +2,9 @@
 {    
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.ModelConfiguration;
-    using Domain.MetaDataEntity;
+    using Domain.MetaData;
 
-    internal sealed class MetaDataConfiguration : EntityTypeConfiguration<MetaData>
+    internal sealed class MetaDataConfiguration : EntityTypeConfiguration<MetaDataEntity>
     {
         #region Constructors and Destructors
 
@@ -16,12 +16,11 @@
             Property(e => e.MetaDataGuid).IsRequired();
             Property(e => e.EntityInfo_Guid).IsRequired();
             Property(e => e.MetaDataCode).IsRequired().HasMaxLength(100);
-            Property(e => e.MetaDataText).IsRequired().HasMaxLength(250);
-            Property(e => e.MetaDataDescription).IsOptional().HasMaxLength(3000);
-            Property(e => e.ExtenalId).IsOptional();
+            Property(e => e.MetaDataText).IsRequired().HasMaxLength(3500);
+            Property(e => e.ExternalId).IsOptional();
             Property(e => e.Status).IsRequired();
             Property(e => e.CreatedDate).IsRequired();
-            Property(e => e.ChangedDate).IsRequired();
+            Property(e => e.ChangedDate).IsOptional();
             Property(e => e.SynchronizedDate).IsOptional();
 
             ToTable("tblMetaData");

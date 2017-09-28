@@ -54,8 +54,8 @@
     using DH.Helpdesk.Domain.BusinessRules;
     using DH.Helpdesk.Dal.EntityConfigurations.BusinessRule;
     using DH.Helpdesk.Domain.Orders;
-    using Domain.MetaDataEntity;
     using EntityConfigurations.ExtendedCaseEntity;
+    using Domain.MetaData;
 
     public class HelpdeskDbContext : DbContext, IDbContext
     {
@@ -362,7 +362,7 @@
 
         public DbSet<Manufacturer> Manufacturers { get; set; }
 
-        public DbSet<MetaData> MetaDatas { get; set; }
+        public DbSet<MetaDataEntity> MetaDatas { get; set; }
 
         public DbSet<ModuleEntity> Modules { get; set; }
 
@@ -728,6 +728,8 @@
             modelBuilder.Configurations.Add(new EmailLogConfiguration());
             modelBuilder.Configurations.Add(new EmailLogAttemptConfiguration());
             modelBuilder.Configurations.Add(new EmploymentTypeConfiguration());
+            modelBuilder.Configurations.Add(new EntityInfoConfiguration());
+            modelBuilder.Configurations.Add(new EntityRelationshipConfiguration());
             modelBuilder.Configurations.Add(new FaqCategoryConfiguration());
             modelBuilder.Configurations.Add(new FaqConfiguration());
             modelBuilder.Configurations.Add(new FaqFileConfiguration());
@@ -756,6 +758,7 @@
             modelBuilder.Configurations.Add(new MailTemplateConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateIdentifierConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateLanguageConfiguration());
+            modelBuilder.Configurations.Add(new MetaDataConfiguration());
             modelBuilder.Configurations.Add(new OperationLogConfiguration());
             modelBuilder.Configurations.Add(new OperationLogEmailLogConfiguration());
             modelBuilder.Configurations.Add(new OperationLogCategoryConfiguration());

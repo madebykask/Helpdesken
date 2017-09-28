@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Case
+﻿using System.Collections.Generic;
+
+namespace DH.Helpdesk.BusinessData.Models.Case
 {
     public class CaseOverviewCriteriaModel
     {
@@ -13,5 +15,8 @@
         public bool MyCasesRegarding { get; set; }
         public bool MyCasesUserGroup { get; set; }
 
+        public string UserId { get; set; }
+        public string UserEmployeeNumber { get; set; }
+        public List<string> GroupMember { get; set; } 
     }
 }

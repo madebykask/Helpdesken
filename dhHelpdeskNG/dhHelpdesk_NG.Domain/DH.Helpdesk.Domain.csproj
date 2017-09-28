@@ -170,9 +170,9 @@
     <Compile Include="FormUrl.cs" />
     <Compile Include="FileViewLogEntity.cs" />
     <Compile Include="Grid\GridSettingsEntity.cs" />
-    <Compile Include="MetaDataEntity\EntityInfo.cs" />
-    <Compile Include="MetaDataEntity\MetaData.cs" />
-    <Compile Include="MetaDataEntity\EntityRelationship.cs" />
+    <Compile Include="MetaData\EntityInfo.cs" />
+    <Compile Include="MetaData\MetaData.cs" />
+    <Compile Include="MetaData\EntityRelationship.cs" />
     <Compile Include="OrderFieldType.cs" />
     <Compile Include="Orders\EMailTypes.cs" />
     <Compile Include="Orders\OrderFieldTypes.cs" />

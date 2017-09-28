@@ -549,6 +549,10 @@
     <Compile Include="Repositories\Changes\IChangeFileRepository.cs" />
     <Compile Include="Repositories\Invoice\InvoiceRepository.cs" />
     <Compile Include="Repositories\IOrderEmailLogRepository.cs" />
+    <Compile Include="Repositories\MetaData\Concrete\EntityInfoRepository.cs" />
+    <Compile Include="Repositories\MetaData\IEntityInfoRepository.cs" />
+    <Compile Include="Repositories\MetaData\Concrete\MetaDataRepository.cs" />
+    <Compile Include="Repositories\MetaData\IMetaDataRepository.cs" />
     <Compile Include="Repositories\OrderEmailLogRepository.cs" />
     <Compile Include="Repositories\Mail2TicketRepository.cs" />
     <Compile Include="Repositories\DataLog\DataLogRepository.cs" />

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DH.Helpdesk.Domain.MetaDataEntity
+namespace DH.Helpdesk.Domain.MetaData
 {
     public class EntityInfo: Entity
     {        

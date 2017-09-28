@@ -2,7 +2,7 @@
 {    
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.ModelConfiguration;
-    using Domain.MetaDataEntity;
+    using Domain.MetaData;
 
     internal sealed class EntityInfoConfiguration : EntityTypeConfiguration<EntityInfo>
     {

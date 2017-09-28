@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 
-namespace DH.Helpdesk.SelfService.WebServices.Common
-{    
+namespace DH.Helpdesk.Services.Helpers
+{
     public static class AsyncHelpers
     {
         /// <summary>
@@ -133,5 +131,3 @@ namespace DH.Helpdesk.SelfService.WebServices.Common
         }
     }
 }
-
-

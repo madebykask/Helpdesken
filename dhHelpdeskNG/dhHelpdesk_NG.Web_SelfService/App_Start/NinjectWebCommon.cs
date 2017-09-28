@@ -10,7 +10,6 @@ namespace DH.Helpdesk.SelfService
     using System.Web;
 
     using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.ActionSetting;
     using DH.Helpdesk.Dal.Repositories.ActionSetting.Concrete;
@@ -29,11 +28,7 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete;
     using DH.Helpdesk.Dal.Repositories.ADFS;
     using DH.Helpdesk.Dal.Repositories.ADFS.Concrete;
-    using DH.Helpdesk.SelfService.Infrastructure.WorkContext;
-    using DH.Helpdesk.SelfService.Infrastructure.WorkContext.Concrete;
     using DH.Helpdesk.SelfService.NinjectModules.Modules;
-    using DH.Helpdesk.SelfService.NinjectModules.Modules;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Services.Infrastructure.Concrete;
     using DH.Helpdesk.Services.Services;
@@ -49,8 +44,7 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.SelfService.Infrastructure.Tools.Concrete;
     using DH.Helpdesk.Dal.Repositories.Problem.Concrete;
     using DH.Helpdesk.Dal.Repositories.Invoice;
-    using DH.Helpdesk.Dal.Repositories.Invoice.Concrete;
-    using DH.Helpdesk.SelfService.WebServices;
+    using DH.Helpdesk.Dal.Repositories.Invoice.Concrete;    
     using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
     using DH.Helpdesk.Dal.Repositories.BusinessRules;
@@ -61,6 +55,11 @@ namespace DH.Helpdesk.SelfService
     using Dal.Repositories.Questionnaire.Concrete;
     using Services.Services.ExtendedCase;
     using Services.Services.UniversalCase;
+    using Dal.Repositories.MetaData;
+    using Dal.Repositories.MetaData.Concrete;
+    using Services.Services.EmployeeService;
+    using Services.Services.EmployeeService.Concrete;
+    using Services.Services.WebApi;
 
     public static class NinjectWebCommon 
     {
@@ -238,6 +237,8 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IEmailLogAttemptRepository>().To<EmailLogAttemptRepository>();
             kernel.Bind<IWatchDateCalendarValueRepository>().To<WatchDateCalendarValueRepository>();
             kernel.Bind<IWatchDateCalendarRepository>().To<WatchDateCalendarRepository>();
+            kernel.Bind<IMetaDataRepository>().To<MetaDataRepository>();
+            kernel.Bind<IEntityInfoRepository>().To<EntityInfoRepository>();
 
 
             // Service             
@@ -279,8 +280,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IStateSecondaryService>().To<StateSecondaryService>();
             kernel.Bind<ICaseSolutionService>().To<CaseSolutionService>();
             kernel.Bind<IActionSettingService>().To<ActionSettingService>();
-            kernel.Bind<IInvoiceArticleService>().To<InvoiceArticleService>();            
-            kernel.Bind<IAMAPIService>().To<AMAPIService>();
+            kernel.Bind<IInvoiceArticleService>().To<InvoiceArticleService>();                        
             kernel.Bind<IBulletinBoardService>().To<BulletinBoardService>();
             kernel.Bind<ICaseSolutionSettingService>().To<CaseSolutionSettingService>();
             kernel.Bind<IDocumentService>().To<DocumentService>();
@@ -306,6 +306,9 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IExtendedCaseService>().To<ExtendedCaseService>();
             kernel.Bind<ITextTranslationService>().To<TextTranslationService>();
             kernel.Bind<IWatchDateCalendarService>().To<WatchDateCalendarService>();
+            kernel.Bind<IMetaDataService>().To<MetaDataService>();
+            kernel.Bind<IEmployeeService>().To<EmployeeService>();
+            kernel.Bind<IWebApiService>().To<WebApiService>();
 
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();

@@ -380,5 +380,33 @@ namespace DH.Helpdesk.Common.Extensions.String
             return value.Replace("\r", "").Replace("\n", "").Replace(" *", "").Trim();
         }
 
+        public static string AddWithSeparator(this string self, List<string> values, bool enclosedWithQuote = false, string separator = ",")
+        {
+            var ret = string.Empty;
+            foreach(var val in values)
+                ret = ret.AddWithSeparator(val, enclosedWithQuote, separator);
+
+            return ret;
+        }
+
+        public static string AddWithSeparator(this string self, string value, bool enclosedWithQuote = false, string separator = ",")
+        {
+            if (string.IsNullOrEmpty(self) || string.IsNullOrWhiteSpace(self))
+                return enclosedWithQuote? $"'{value.SafeEncloseQuote()}'" : value;
+
+            if (enclosedWithQuote)
+                return $"{self}{separator}'{value.SafeEncloseQuote()}'";
+            else
+                return $"{self}{separator}{value}";
+        }
+
+        public static string SafeEncloseQuote(this string self)
+        {
+            if (string.IsNullOrEmpty(self) || string.IsNullOrWhiteSpace(self))
+                return string.Empty;
+
+            return self.Replace("'", "''");
+        }
+
     }
 }

@@ -120,7 +120,6 @@
     <Compile Include="Logger\IStartUpTask.cs" />
     <Compile Include="Logger\Log4NetLoggerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Classes\ServiceAPI\AMAPI\Output\Employee.cs" />
     <Compile Include="Tools\PassWordHelper.cs" />
     <Compile Include="Tools\DatesHelper.cs" />
     <Compile Include="Tools\EmailHelper.cs" />
