@@ -43,6 +43,8 @@
     using DH.Helpdesk.Dal.Repositories.WorkstationModules;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete;
     using Ninject.Modules;
+    using Dal.Repositories.MetaData;
+    using Dal.Repositories.MetaData.Concrete;
 
     public sealed class RepositoriesModule : NinjectModule
     {
@@ -290,6 +292,8 @@
             this.Bind<ICaseDocumentTextIdentifierRepository>().To<CaseDocumentTextIdentifierRepository>();
             this.Bind<ICaseDocumentTextConditionIdentifierRepository>().To<CaseDocumentTextConditionIdentifierRepository>();
             this.Bind<IEmailLogAttemptRepository>().To<EmailLogAttemptRepository>();
+            this.Bind<IMetaDataRepository>().To<MetaDataRepository>();
+            this.Bind<IEntityInfoRepository>().To<EntityInfoRepository>();
 
         }
 

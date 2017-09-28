@@ -19,9 +19,10 @@ namespace DH.Helpdesk.Services.Services.WebApi
             _apiInfo = apiInfo;
         }
 
-        public Task<EmployeeModel> GetEmployeeFor(string employeeNumber)
+        public async Task<EmployeeModel> GetEmployeeFor(string employeeNumber)
         {
-            throw new NotImplementedException();
+            var res = await WS_GetEmployeesFor(employeeNumber);
+            return res;
         }
 
         public async Task<bool> IsEmployeeManager(string employeeNumber)

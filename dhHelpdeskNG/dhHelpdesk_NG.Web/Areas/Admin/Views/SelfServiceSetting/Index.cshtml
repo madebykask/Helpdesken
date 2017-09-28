@@ -34,7 +34,7 @@
                                     @Translation.Get("Resources", Enums.TranslationSource.TextTranslation)
                                 </td>
                                 <td>
-                                    @Html.CheckBoxFor(m => m.Customer.RestrictUserToGroupOnExternalPage) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Restrict user to access to group")
+                                    @Html.CheckBoxFor(m => m.Customer.RestrictUserToGroupOnExternalPage) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Allow only managers to login")
                                 </td>
                             </tr>
                             <tr>
@@ -212,16 +212,16 @@
                                     @Translation.GetCoreTextTranslation("Mina ärenden visar")
                                 </td>
                                 <td>
-                                    @Html.CheckBoxFor(m => m.Customer.MyCasesInitiator) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Anmälare")
+                                    @Html.CheckBoxFor(m => m.Customer.MyCasesRegistrator) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Registrerare")                                   
                                 </td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <td>
-                                    @Html.CheckBoxFor(m => m.Customer.MyCasesRegistrator) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Registrerare")
+                                    @Html.CheckBoxFor(m => m.Customer.MyCasesInitiator) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Anmälare")
                                 </td>
                             </tr>
-                            <tr>
+                            @*<tr>
                                 <td></td>
                                 <td>
                                     @Html.CheckBoxFor(m => m.Customer.MyCasesFollower) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Följare")
@@ -232,20 +232,22 @@
                                 <td>
                                     @Html.CheckBoxFor(m => m.Customer.MyCasesRegarding) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Angående")
                                 </td>
-                            </tr>
+                            </tr>*@
                             <tr>
                                 <td></td>
                                 <td>
-                                    @Html.CheckBoxFor(m => Model.Customer.MyCasesUserGroup) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("User Group")
+                                    @Html.CheckBoxFor(m => Model.Customer.MyCasesUserGroup) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("User Group")                                    
                                 </td>
                             </tr>
                             <tr id="caseTypes">
-                                <td class="span3">
+                                <td class="span3"> 
+                                    <br />                                   
                                     @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
                                 </td>
                                 <td>
                                     <table>
                                         <tr>
+                                            <br />
                                             <td>@Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)</td>
                                             <td></td>
                                             <td>@Translation.Get("Valda", Enums.TranslationSource.TextTranslation)</td>
