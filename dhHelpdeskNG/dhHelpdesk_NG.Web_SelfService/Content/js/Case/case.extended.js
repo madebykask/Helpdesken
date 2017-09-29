@@ -383,7 +383,7 @@ ExtendedCasePage.prototype.syncCaseFromExCaseIfExists = function () {
     }
 
     if (_department_id != undefined && _priority_id != undefined) {
-        $('#' + _caseFields.DepartmentId).trigger('change');
+        $('#' + _caseFields.PriorityId).trigger('change');
     };
 }
 
