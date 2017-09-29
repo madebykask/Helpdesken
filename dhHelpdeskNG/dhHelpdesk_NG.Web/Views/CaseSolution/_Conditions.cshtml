@@ -36,16 +36,22 @@
                             @Translation.GetCoreTextTranslation(cs.Text)
                         </td>
                         <td>
-                            <select tag="lst" class="chosen-select" id="'lst' + @cs.PropertyName" multiple="multiple" name="'lst_' + @cs.PropertyName" style="display: none;">
+                        
+
+
+                            <select tag="lst" class="chosen-select" id=lst_@cs.PropertyName multiple="multiple" name=lst_@cs.PropertyName style="display: none;">
                                 @foreach (var op in cs.SelectList)
                                 {
                                     if (!op.Disabled)
                                     {
-                                        <option value="@op.Value">@op.Text</option>
+                                        <option value="@op.Value" @(op.Selected ? "selected" : "")> @op.Text</option>
+
+                                 
+
                                     }
                                     else
                                     {
-                                        <option value="@op.Value" class="DisabledChosen">@op.Text</option>
+                                        <option value="@op.Value" @(op.Selected ? "selected" : "") class="DisabledChosen">@op.Text</option>
                                     }
                                 }
                             </select>

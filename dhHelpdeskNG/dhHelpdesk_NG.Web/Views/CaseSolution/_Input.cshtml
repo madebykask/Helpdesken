@@ -2391,20 +2391,25 @@
         for (i = 0; i < descendents.length; ++i) {
 
             e = descendents[i];
+
+           
             if (e.id.toString().substring(0,3)=='lst')
             {
+
                 name=e.id.replace('lst','');
+                
+                //alert(name);
 
                 if (name!='AddFieldSettings' && name!='AddFieldSettings_chosen')
                 {
                     var pos=0;
                     pos=name.indexOf('chosen');
-
+                    
                     if (pos<0)
                     {
 
                         value = $(e).val();
-
+                        
                         if (final=='')
                         {
                             final=name + ':' + value;
@@ -2417,9 +2422,10 @@
                 }
             }
         }
+
         var h=document.getElementById('selectedValues');
         h.value=final;
-
+       // alert(h.value);
     }
 
     //function DropDownChange(v)

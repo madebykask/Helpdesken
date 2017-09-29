@@ -91,7 +91,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             sqlExt += "1, ";
             sqlExt += "" + casesolutionid + " AS[CaseSolution_Id], ";
             sqlExt += "CaseSolutionConditionProperty,  ";
-            sqlExt += "tblCaseSolutionConditionProperties.Id, 	 ";
+            sqlExt += "tblCaseSolutionConditionProperties.Id, ";
             sqlExt += "tblCaseSolutionConditionProperties.Text,  ";
             sqlExt += "'' AS[CaseSolutionConditionGUID], ";
             sqlExt += "'' AS[Values], ";
