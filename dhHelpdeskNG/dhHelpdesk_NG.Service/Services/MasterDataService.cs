@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 namespace DH.Helpdesk.Services.Services
 {
@@ -9,9 +9,11 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.BusinessData.Models.ADFS.Input;
     using DH.Helpdesk.Dal.Repositories.ADFS;
-    using System;
     using BusinessData.Models.Notifiers;
     using Dal.Repositories.Notifiers;
+    using EmployeeService;
+    using BusinessData.Models.Employee;
+    using BusinessData.Models.WebApi;
 
     public interface IMasterDataService
     {
@@ -36,6 +38,8 @@ namespace DH.Helpdesk.Services.Services
         string GetFilePath(int customerId);
         string GetVirtualDirectoryPath(int customerId);
         Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true);
+        EmployeeModel GetEmployee(int customerId, string employeeNumber, bool useApi = false, WebApiCredentialModel credentialModel = null);
+        
     }
 
     public class MasterDataService : IMasterDataService
@@ -51,6 +55,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IGlobalSettingRepository _globalSettingRepository;
         private readonly INotifierRepository _computerUserRepository;
         private readonly ICustomerUserRepository _customerUserRepository;
+        private readonly IEmployeeService _employeeService;
 
         public MasterDataService(
             ICustomerRepository customerRepository,
@@ -63,7 +68,8 @@ namespace DH.Helpdesk.Services.Services
             IGlobalSettingRepository globalSettingRepository,
             IADFSRepository adfsRepository,
             INotifierRepository computerUserRepository,
-            ICustomerUserRepository customerUserRepository)
+            ICustomerUserRepository customerUserRepository,
+            IEmployeeService employeeService)
         {
             this._customerRepository = customerRepository;
             this._languageRepository = languageRepository;
@@ -76,6 +82,7 @@ namespace DH.Helpdesk.Services.Services
             this._globalSettingRepository = globalSettingRepository;
             _computerUserRepository = computerUserRepository;
             _customerUserRepository = customerUserRepository;
+            _employeeService = employeeService;
         }
 
         public IList<Customer> GetCustomers(int userId)
@@ -214,6 +221,11 @@ namespace DH.Helpdesk.Services.Services
             }
 
             return virtualDirectoryPath ?? string.Empty;
+        }
+
+        public EmployeeModel GetEmployee(int customerId, string employeeNumber, bool useApi = false, WebApiCredentialModel credentialModel = null)
+        {            
+            return _employeeService.GetEmployee(customerId, employeeNumber, useApi, credentialModel);
         }
     }
 }

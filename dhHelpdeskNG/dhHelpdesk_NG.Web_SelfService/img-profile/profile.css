@@ -29,7 +29,8 @@ img
 }
 
 .navbar-default {
-  background-color: #0067b2;
+  /*background-color: #0067b2;*/
+  background-color: #49AD33;  
   border-color: #e7e7e7;
   margin-left:-20px;
 }
@@ -114,11 +115,13 @@ img
 }
 
 .blue {
-  background-color:#0067b2 !important;
+  background-color:#49AD33 !important;
+  /*background-color:#0067b2 !important;*/
 }
 
 .blue:hover, .blue:active, .blue:focus {
-  background-color:#ffdf01 !important;
+  /*background-color:#ffdf01 !important;*/
+  background-color:#FF9F37 !important;
 }
 
 .green {
@@ -194,8 +197,8 @@ img
 }
 .panel-default > .panel-heading {
   color: #fff;
-  background-color: #0067b2;
-  border-color: #0067b2;
+  background-color: #49AD33;
+  border-color: #49AD33;
 }
 
 .panel-default > .panel-heading.heading-color {
@@ -207,7 +210,7 @@ img
   line-height:normal;
   font-size:18px;
   margin:0;
-  color:#0067b2;
+  color:#49AD33;
 }
 
 
@@ -285,8 +288,8 @@ img
 
 .btn-dhblue {
   color: #fff;
-  background-color: #0067b2;
-  border-color: #0067b2;
+  background-color: #49AD33;
+  border-color: #49AD33;
 }
 .btn-dhblue:hover,
 .btn-dhblue:focus,
@@ -317,8 +320,8 @@ img
   color:#FFF;
   z-index:2000;
   height:100%;
-  border:1px solid #0067b2;
-  background-color:#0067b2;
+  border:1px solid #49AD33;
+  background-color:#49AD33;
 }
 .mapText {
   color:#fff;
@@ -335,7 +338,7 @@ img
 .siteCom .mapButton {
   display:block;
   color:#fff;
- background-color:#0067b2;
+ background-color:#49AD33;
   
   padding:8px 5px 5px 5px;
   height:32px;

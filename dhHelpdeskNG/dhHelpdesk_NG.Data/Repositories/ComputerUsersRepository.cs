@@ -2,11 +2,11 @@ namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
     using System.Linq;
-
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Computers;
+    using BusinessData.Models.Employee;
 
     public class ComputerUsersRepository : Repository<ComputerUser>, IComputerUsersRepository
     {
@@ -65,6 +65,17 @@ namespace DH.Helpdesk.Dal.Repositories
             return result;
         }
 
+        public IList<SubordinateResponseItem> GetEmployeesByUserId(int customerId, IList<string> userIds)
+        {            
+            var ret = DbSet.Where(cu => cu.Customer_Id == customerId && userIds.Contains(cu.UserId))
+                                .Select(cu=> new SubordinateResponseItem() {
+                                    EmployeeNumber = cu.UserId,
+                                    FirstName = cu.FirstName,
+                                    LastName = cu.SurName                                    
+                                }).ToList();            
+            return ret;
+        }
+
         private static List<ComputerUserOverview> GetConnectedToComputerOverviews(IQueryable<ComputerUser> queryable)
         {
             var anonymus =
@@ -98,5 +109,6 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.UnitName)).ToList();
             return models;
         }
+
     }
 }

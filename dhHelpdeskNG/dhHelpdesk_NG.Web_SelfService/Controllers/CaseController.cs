@@ -32,6 +32,7 @@
     using Common.Extensions.Integer;
     using Common.Extensions.String;
     using Common.Extensions.DateTime;
+    using Infrastructure.Helpers;
 
     public class CaseController : BaseController
     {
@@ -200,66 +201,10 @@
                     return RedirectToAction("Index", "Error");
                 }
 
-                bool userHasAccessToCase = false;
-                var currentApplicationType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
-                var curUserId = SessionFacade.CurrentUserIdentity.UserId;
-                var caseListCondition = ConfigurationManager.AppSettings[AppSettingsKey.CaseList].ToString().ToLower().Split(',');
-
-                if (currentApplicationType == ApplicationTypes.LineManager)
+                if (!UserHasAccessToCase(currentCase))
                 {
-                    var coWorkers = SessionFacade.CurrentCoWorkers != null ?
-                                        SessionFacade.CurrentCoWorkers.Select(c => c.EmployeeNumber).ToList() : 
-                                        new List<string>();
-                                        
-                    if (caseListCondition.Contains(CaseListTypes.ManagerCases))
-                    {
-                        if (caseListCondition.Contains(CaseListTypes.CoWorkerCases))
-                        {
-                            if ((!string.IsNullOrEmpty(currentCase.RegUserId) && currentCase.RegUserId.ToLower() == curUserId.ToLower()) 
-                                || coWorkers.Contains(currentCase.ReportedBy))
-                                userHasAccessToCase = true;               
-                        }
-                        else
-                        {
-                            if ((!string.IsNullOrEmpty(currentCase.RegUserId) && currentCase.RegUserId.ToLower() == curUserId.ToLower())
-                                || currentCase.ReportedBy == SessionFacade.CurrentUserIdentity.EmployeeNumber)
-                                userHasAccessToCase = true;                                                                       
-                        }                        
-                    }
-                    else
-                    if (caseListCondition.Contains(CaseListTypes.CoWorkerCases))
-                    {
-                        if (coWorkers.Contains(currentCase.ReportedBy) || 
-                            (string.IsNullOrEmpty(currentCase.ReportedBy) && 
-                            (!string.IsNullOrEmpty(currentCase.RegUserId) && currentCase.RegUserId.ToLower() == curUserId.ToLower())))
-                            userHasAccessToCase = true;                        
-                    }                                    
-                }
-                else
-                {                                        
-                    if (caseListCondition.Contains(CaseListTypes.ManagerCases))
-                    {                        
-                        if (!string.IsNullOrEmpty(currentCase.ReportedBy) && 
-                            currentCase.ReportedBy.ToLower() == curUserId.ToLower())
-                        { 
-                                userHasAccessToCase = true;
-                        }
-                    }
-
-                    if ((!string.IsNullOrEmpty(currentCase.RegUserId) && currentCase.RegUserId.ToLower() == curUserId.ToLower()))
-                        userHasAccessToCase = true;   
-                }
-
-                //Hide this to next release #57742
-                if (currentCase.CaseType.ShowOnExtPageCases == 0 || currentCase.ProductArea?.ShowOnExtPageCases == 0)
-                {
-                    userHasAccessToCase = false;
-                }
-
-                if (!userHasAccessToCase)
-                {
-                        ErrorGenerator.MakeError("Case not found among your cases!");
-                        return RedirectToAction("Index", "Error");
+                    ErrorGenerator.MakeError("Case not found among your cases!");
+                    return RedirectToAction("Index", "Error");
                 }                
             }
 
@@ -600,12 +545,18 @@
             if (caseTemplateId.HasValue)
                 caseTemplate = _caseSolutionService.GetCaseSolution(caseTemplateId.Value);
 
-            if (caseId.HasValue)
-                caseModel = _universalCaseService.GetCase(caseId.Value);
-
+            if (caseId.HasValue)            
+                caseModel = _universalCaseService.GetCase(caseId.Value);               
+            
             if (caseModel == null && caseTemplate == null)
             {
                 ErrorGenerator.MakeError("Template or Case must be specified!", 211);
+                return RedirectToAction("Index", "Error");
+            }
+            
+            if (caseId.HasValue && !UserHasAccessToCase(caseModel))
+            {
+                ErrorGenerator.MakeError("Case not found among your cases!");
                 return RedirectToAction("Index", "Error");
             }
 
@@ -1224,6 +1175,112 @@
             return View("_AddCommentPopup");
         }
 
+        private bool UserHasAccessToCase(Case currentCase)
+        {            
+            var curUser = SessionFacade.CurrentUserIdentity.UserId;
+            var userEmployeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
+
+            //Hide this to next release #57742
+            if (currentCase.CaseType.ShowOnExtPageCases == 0 || currentCase.ProductArea?.ShowOnExtPageCases == 0)            
+                return false;
+
+            var criteria = GetCaseOverviewCriteria();
+
+            /*User creator*/
+            if (criteria.MyCasesRegistrator && !string.IsNullOrEmpty(criteria.UserId) && !string.IsNullOrEmpty(currentCase.RegUserId))
+            {
+                if (currentCase.RegUserId.Equals(criteria.UserId, StringComparison.CurrentCultureIgnoreCase))
+                    return true;
+            }
+
+            /*User initiator*/
+            if (criteria.MyCasesInitiator && !string.IsNullOrEmpty(currentCase.ReportedBy) &&
+                (!string.IsNullOrEmpty(criteria.UserId) || !string.IsNullOrEmpty(criteria.UserEmployeeNumber)))
+            {
+                if (!string.IsNullOrEmpty(criteria.UserId) &&
+                    currentCase.ReportedBy.Equals(criteria.UserId, StringComparison.CurrentCultureIgnoreCase))
+                    return true;
+
+                if (!string.IsNullOrEmpty(criteria.UserEmployeeNumber) &&
+                    currentCase.ReportedBy.Equals(criteria.UserEmployeeNumber, StringComparison.CurrentCultureIgnoreCase))
+                    return true;
+            }
+
+            /*User Group*/
+            if (criteria.MyCasesUserGroup)
+            {
+                if (criteria.GroupMember != null && criteria.GroupMember.Any())
+                {
+                    if ((string.IsNullOrEmpty(currentCase.ReportedBy) && !(currentCase.RegUserId == null) &&
+                        currentCase.RegUserId.Equals(criteria.UserId, StringComparison.CurrentCultureIgnoreCase)) ||
+                        criteria.GroupMember.Where(m => m.Equals(currentCase.ReportedBy, StringComparison.CurrentCultureIgnoreCase)).Any())
+                        return true;
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(currentCase.ReportedBy) && !(currentCase.RegUserId == null) &&
+                        currentCase.RegUserId.Equals(criteria.UserId, StringComparison.CurrentCultureIgnoreCase))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool UserHasAccessToCase(CaseModel currentCase)
+        {
+            var curUser = SessionFacade.CurrentUserIdentity.UserId;
+            var userEmployeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
+
+            //Hide this to next release #57742
+            var caseType = _caseTypeService.GetCaseType(currentCase.CaseType_Id);
+            var productArea = currentCase.ProductArea_Id.HasValue? _productAreaService.GetProductArea(currentCase.ProductArea_Id.Value) : null;
+
+            if (caseType.ShowOnExtPageCases == 0 || productArea?.ShowOnExtPageCases == 0)
+                return false;
+
+            var criteria = GetCaseOverviewCriteria();
+
+            /*User creator*/
+            if (criteria.MyCasesRegistrator && !string.IsNullOrEmpty(criteria.UserId) && !string.IsNullOrEmpty(currentCase.RegUserId))
+            {
+                if (currentCase.RegUserId.Equals(criteria.UserId, StringComparison.CurrentCultureIgnoreCase))
+                    return true;
+            }
+
+            /*User initiator*/
+            if (criteria.MyCasesInitiator && !string.IsNullOrEmpty(currentCase.ReportedBy) &&
+                (!string.IsNullOrEmpty(criteria.UserId) || !string.IsNullOrEmpty(criteria.UserEmployeeNumber)))
+            {
+                if (!string.IsNullOrEmpty(criteria.UserId) &&
+                    currentCase.ReportedBy.Equals(criteria.UserId, StringComparison.CurrentCultureIgnoreCase))
+                    return true;
+
+                if (!string.IsNullOrEmpty(criteria.UserEmployeeNumber) &&
+                    currentCase.ReportedBy.Equals(criteria.UserEmployeeNumber, StringComparison.CurrentCultureIgnoreCase))
+                    return true;
+            }
+
+            /*User Group*/
+            if (criteria.MyCasesUserGroup)
+            {
+                if (criteria.GroupMember != null && criteria.GroupMember.Any())
+                {
+                    if ((string.IsNullOrEmpty(currentCase.ReportedBy) && !(currentCase.RegUserId == null) &&
+                        currentCase.RegUserId.Equals(criteria.UserId, StringComparison.CurrentCultureIgnoreCase)) ||
+                        criteria.GroupMember.Where(m => m.Equals(currentCase.ReportedBy, StringComparison.CurrentCultureIgnoreCase)).Any())
+                        return true;
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(currentCase.ReportedBy) && !(currentCase.RegUserId == null) &&
+                        currentCase.RegUserId.Equals(criteria.UserId, StringComparison.CurrentCultureIgnoreCase))
+                        return true;
+                }
+            }
+
+            return false;
+        }
 
         private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
         {
@@ -1420,6 +1477,11 @@
                         ProgressId = progressId
                     };
 
+            if (SessionFacade.CurrentCustomer == null)
+            {
+                throw new Exception("Session expired! Please reload the page and try again.");                
+            }
+                
             var srm = new CaseSearchResultModel();
             var sm = new CaseSearchModel();
             var cs = new CaseSearchFilter();
@@ -1430,113 +1492,50 @@
             cs.CustomerId = cusId;
             cs.FreeTextSearch = pharasSearch;
             cs.CaseProgress = progressId;
-            cs.ReportedBy = "";
-            var caseListType = string.Empty;
-            var currentApplicationType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
-
-            var caseListCondition = ConfigurationManager.AppSettings[AppSettingsKey.CaseList].ToString().ToLower().Split(',');
-
-            if (currentApplicationType == ApplicationTypes.LineManager)
-            {                
-                if (caseListCondition.Contains(CaseListTypes.ManagerCases))
-                {
-                    caseListType = CaseListTypes.ManagerCases;
-                    cs.RegUserId = curUser;
-                    cs.ReportedBy = string.Format("'{0}'", SessionFacade.CurrentUserIdentity.EmployeeNumber);
-                }
-
-                if (caseListCondition.Contains(CaseListTypes.CoWorkerCases))
-                {
-                    cs.RegUserId = curUser;
-
-                    if (caseListType == CaseListTypes.ManagerCases)
-                        caseListType = CaseListTypes.ManagerCoWorkerCases;
-                    else
-                        caseListType = CaseListTypes.CoWorkerCases;
-                    
-                    var employees = SessionFacade.CurrentCoWorkers;
-                    if (employees != null)
-                    {
-                        foreach (var emp in employees)
-                        {
-                            if (!string.IsNullOrEmpty(emp.EmployeeNumber))
-                            {
-                                if (string.IsNullOrEmpty(cs.ReportedBy))
-                                    cs.ReportedBy = string.Format("'{0}'", emp.EmployeeNumber);
-                                else
-                                    cs.ReportedBy = string.Format("{0},'{1}'", cs.ReportedBy, emp.EmployeeNumber);
-                            }
-                        }
-                    }
-
-                }
-
-                cs.CaseListType = caseListType;
-            } 
-            else// Self Service 
-            {                
-                if (caseListCondition.Contains(CaseListTypes.ManagerCases))
-                {
-                    caseListType = CaseListTypes.ManagerCases;
-                    cs.ReportedBy = string.Format("'{0}'", curUser);
-                }
-
-                /* CoWorker is not defined in SelfService Mode */
-                if (caseListCondition.Contains(CaseListTypes.CoWorkerCases))
-                {
-                    caseListType = CaseListTypes.UserCases;
-                }
-
-                if (caseListCondition.Contains(CaseListTypes.UserCases) || !caseListCondition.Any())
-                    caseListType = CaseListTypes.UserCases;
-
-                cs.RegUserId = curUser;
-                cs.CaseListType = caseListType;
-            }            
-
+            cs.ReportedBy = "";            
+            var currentApplicationType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();                        
+            
+            cs.RegUserId = curUser;                       
+            cs.CaseOverviewCriteria = GetCaseOverviewCriteria();
+           
             search.SortBy = sortBy;
             search.Ascending = ascending;
 
             sm.Search = search;
             sm.caseSearchFilter = cs;
-
-            // 1: User in Customer Setting
+            
+            // 1: User in Customer Setting            
             srm.CaseSettings = _caseSettingService.GetCaseSettingsByUserGroup(cusId, 1);
+            
+            var workTimeCalc = TimeZoneInfo.Local;
+            var showRemainingTime = false;
+            CaseRemainingTimeData remainingTimeData;
+            CaseAggregateData aggregateData;
+            var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(cusId).ToArray();
+            srm.Cases = _caseSearchService.Search(
+                sm.caseSearchFilter,
+                srm.CaseSettings,
+                caseFieldSettings,
+                -1,
+                curUser,
+                1,
+                1,
+                1,
+                search,
+                SessionFacade.CurrentCustomer.WorkingDayStart,
+                SessionFacade.CurrentCustomer.WorkingDayEnd,
+                workTimeCalc,
+                currentApplicationType,
+                showRemainingTime,
+                out remainingTimeData,
+                out aggregateData).Items.ToList(); // Take(maxRecords)
 
-            if (caseListType == string.Empty && currentApplicationType == ApplicationTypes.LineManager)
-                srm.Cases = null;
-            else
+            if (currentApplicationType == ApplicationTypes.LineManager)
             {
-                var workTimeCalc = TimeZoneInfo.Local;
-                var showRemainingTime = false;
-                CaseRemainingTimeData remainingTimeData;
-                CaseAggregateData aggregateData;
-                var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(cusId).ToArray();
-                srm.Cases = _caseSearchService.Search(
-                    sm.caseSearchFilter,
-                    srm.CaseSettings,
-                    caseFieldSettings,
-                    -1,
-                    curUser,
-                    1,
-                    1,
-                    1,
-                    search,
-                    SessionFacade.CurrentCustomer.WorkingDayStart,
-                    SessionFacade.CurrentCustomer.WorkingDayEnd,
-                    workTimeCalc,
-                    currentApplicationType,
-                    showRemainingTime,
-                    out remainingTimeData,
-                    out aggregateData).Items.ToList(); // Take(maxRecords)
-
-                if (currentApplicationType == ApplicationTypes.LineManager)
-                {
-                    var dynamicCases = _caseService.GetAllDynamicCases();
-                    model.DynamicCases = dynamicCases;
-                }
-
+                var dynamicCases = _caseService.GetAllDynamicCases();
+                model.DynamicCases = dynamicCases;
             }
+            
             srm.Cases = CaseSearchTranslate(srm.Cases, cusId);
             model.CaseSearchResult = srm;
 
@@ -2043,5 +2042,51 @@
             return null;
 
         }                  
+
+        private CaseOverviewCriteriaModel GetCaseOverviewCriteria()
+        {
+            var curUser = SessionFacade.CurrentUserIdentity.UserId;
+            var userEmployeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
+            
+            var criteria = new CaseOverviewCriteriaModel()
+             {
+                 MyCasesRegistrator = SessionFacade.CurrentCustomer.MyCasesRegistrator,
+                 MyCasesInitiator = SessionFacade.CurrentCustomer.MyCasesInitiator,
+                 MyCasesFollower = SessionFacade.CurrentCustomer.MyCasesFollower,
+                 MyCasesRegarding = SessionFacade.CurrentCustomer.MyCasesRegarding,
+                 MyCasesUserGroup = SessionFacade.CurrentCustomer.MyCasesUserGroup,
+                 UserId = curUser,
+                 UserEmployeeNumber = userEmployeeNumber,
+                 GroupMember = new List<string>()
+             };
+
+            if (criteria.MyCasesUserGroup)
+            {
+                var employees = SessionFacade.CurrentCoWorkers;
+                if (employees == null)
+                {
+                    try
+                    {
+                        var useApi = SessionFacade.CurrentCustomer.FetchDataFromApiOnExternalPage;
+                        var customerId = SessionFacade.CurrentCustomer.Id;
+                        var apiCredential = AppConfigHelper.GetAmApiInfo();
+                        var employee = _masterDataService.GetEmployee(customerId, userEmployeeNumber, useApi, apiCredential);
+
+                        if (employee != null)
+                        {
+                            SessionFacade.CurrentCoWorkers = employee.Subordinates;
+                            employees = employee.Subordinates;
+                        }
+                    }
+                    catch { }
+                }
+
+                if (employees != null)
+                    criteria.GroupMember.AddRange(employees.Where(e => !string.IsNullOrEmpty(e.EmployeeNumber))
+                                                           .Select(e => e.EmployeeNumber).ToList());
+            }
+
+            return criteria;
+        }
     }
 }

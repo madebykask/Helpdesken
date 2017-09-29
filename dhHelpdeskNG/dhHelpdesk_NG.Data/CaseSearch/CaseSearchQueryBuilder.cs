@@ -10,6 +10,7 @@ using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Domain;
+using DH.Helpdesk.Common.Extensions.String;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -660,35 +661,55 @@ namespace DH.Helpdesk.Dal.Repositories
             //Hide this for next release #57742
             sb.Append(" and (tblCase.ProductArea_Id Is Null or tblCase.ProductArea_Id in (select id from tblProductArea where ShowOnExtPageCases <> 0))");
 
+            
+            var criteria = f.CaseOverviewCriteria;
+            var criteriaCondition = string.Empty;
 
-            if (f.ReportedBy.Trim() == string.Empty)
-                f.ReportedBy = "''";
-            switch (f.CaseListType.ToLower())
+            if (criteria.MyCasesRegistrator && !string.IsNullOrEmpty(criteria.UserId))
             {
-
-                case CaseListTypes.UserCases:
-                    sb.Append(" and (tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "')");
-                    break;
-
-                //Manager Cases Only
-                case CaseListTypes.ManagerCases:
-                    sb.Append(" and (tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "' or tblCase.[ReportedBy] = " + f.ReportedBy.SafeForSqlInjectForInOperator() + ")");
-                    break;
-
-                //CoWorkers Cases Only
-                case CaseListTypes.CoWorkerCases:
-                    if (string.IsNullOrEmpty(f.ReportedBy.Replace(" ", "").Replace("'", "")))                        
-                        sb.Append(" and (tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "' and (tblCase.[ReportedBy] is null or tblCase.[ReportedBy] = ''))");
-                    else
-                        sb.Append(" and (((tblCase.[ReportedBy] is null or tblCase.[ReportedBy] = '') and tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "') or tblCase.[ReportedBy] in (" + f.ReportedBy.SafeForSqlInjectForInOperator() + "))");                        
-                    break;
-
-                //Manager & Coworkers Cases
-                case CaseListTypes.ManagerCoWorkerCases:
-                    sb.Append(" and (tblCase.[RegUserId] = '" + userUserId.SafeForSqlInject() + "' or tblCase.[ReportedBy] in (" + f.ReportedBy.SafeForSqlInjectForInOperator() + "))");
-                    break;
-
+                var con = $"tblCase.[RegUserId] = '{criteria.UserId.SafeForSqlInject()}'";
+                criteriaCondition = criteriaCondition.AddWithSeparator($"({con})", false, " or ");
             }
+
+            if (criteria.MyCasesInitiator && (!string.IsNullOrEmpty(criteria.UserId) || !string.IsNullOrEmpty(criteria.UserEmployeeNumber)))
+            {
+                var con = string.Empty;
+
+                if (!string.IsNullOrEmpty(criteria.UserId))
+                    con = $"tblCase.[ReportedBy] = '{criteria.UserId.SafeForSqlInject()}'";
+
+                if (!string.IsNullOrEmpty(criteria.UserEmployeeNumber))
+                    con = con.AddWithSeparator($"tblCase.[ReportedBy] = '{criteria.UserEmployeeNumber.SafeForSqlInject()}'", false, " or ");
+
+                criteriaCondition = criteriaCondition.AddWithSeparator($"({con})", false, " or ");
+            }
+
+            if (criteria.MyCasesUserGroup)
+            {
+                var con = string.Empty;
+                if (criteria.GroupMember != null && criteria.GroupMember.Any())
+                {
+                    var memberStream = string.Empty;
+                    memberStream = memberStream.AddWithSeparator(criteria.GroupMember, true);
+                    con = $"((tblCase.[ReportedBy] is null or tblCase.[ReportedBy] = '') And tblCase.[RegUserId] = '{criteria.UserId.SafeForSqlInject()}')" +
+                              $" Or tblCase.[ReportedBy] in ({memberStream.SafeForSqlInjectForInOperator()})";                    
+                }
+                else
+                {
+                    con = $"tblCase.[RegUserId] = '{ criteria.UserId.SafeForSqlInject()}' And (tblCase.[ReportedBy] is null or tblCase.[ReportedBy] = '')";
+                }                    
+
+                criteriaCondition = criteriaCondition.AddWithSeparator($"({con})", false, " or ");
+            } 
+            
+            if (!string.IsNullOrEmpty(criteriaCondition))
+                sb.Append($" AND ({criteriaCondition})");
+
+            /*If there is no selected option, no one show*/
+            if (!criteria.MyCasesRegistrator && 
+                !criteria.MyCasesInitiator && 
+                !criteria.MyCasesUserGroup)
+                sb.Append(" AND ( 1=2 )");
 
             // arende progress - iShow i gammal helpdesk
             var caseProgressConditions = BuildCaseProgressConditions(f, userId);

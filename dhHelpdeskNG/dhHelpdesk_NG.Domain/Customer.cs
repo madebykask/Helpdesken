@@ -59,6 +59,9 @@
         public bool MyCasesRegistrator { get; set; } = true;
         public bool MyCasesFollower { get; set; }
         public bool MyCasesRegarding { get; set; }
+        public bool MyCasesUserGroup { get; set; }        
+        public bool FetchDataFromApiOnExternalPage { get; set; }
+        public bool RestrictUserToGroupOnExternalPage { get; set; }
         public int GroupCaseTemplates { get; set; }
 
         public virtual Language Language { get; set; }

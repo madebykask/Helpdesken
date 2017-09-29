@@ -28,5 +28,10 @@
 
         public static readonly string EncryptionKey = "encryptionkey";
 
+        public static readonly string AmApiUri = "AM_Api_UriPath";
+        public static readonly string AmApiUserName = "AM_Api_UserName";
+        public static readonly string AmApiPassword = "AM_Api_Password";
+
+        
     }
 }

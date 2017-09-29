@@ -94,6 +94,9 @@
             this.Property(x => x.MyCasesInitiator).IsRequired();
             this.Property(x => x.MyCasesRegarding).IsRequired();
             this.Property(x => x.MyCasesRegistrator).IsRequired();
+            this.Property(x => x.MyCasesUserGroup).IsRequired();
+            this.Property(x => x.RestrictUserToGroupOnExternalPage).IsRequired();
+            this.Property(x => x.FetchDataFromApiOnExternalPage).IsRequired();
             this.Property(x => x.ShowCasesOnExternalPage).IsRequired();
             this.Property(x => x.GroupCaseTemplates).IsRequired();
 

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DH.Helpdesk.Domain.MetaDataEntity
+namespace DH.Helpdesk.Domain.MetaData
 {
-    public class MetaData: Entity
+    public class MetaDataEntity: Entity
     {
         public int Customer_Id { get; set; }
 
@@ -14,17 +14,15 @@ namespace DH.Helpdesk.Domain.MetaDataEntity
 
         public string MetaDataText { get; set; }
 
-        public string MetaDataDescription { get; set; }
-
-        public int? ExtenalId { get; set; }
+        public int? ExternalId { get; set; }
 
         public int Status { get; set; }
 
         public DateTime CreatedDate { get; set; }
 
-        public DateTime ChangedDate  { get; set; }
+        public DateTime? ChangedDate  { get; set; }
 
-        public DateTime SynchronizedDate  { get; set; }
+        public DateTime? SynchronizedDate  { get; set; }
 
     }
 }

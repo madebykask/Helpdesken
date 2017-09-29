@@ -294,6 +294,7 @@
     <Compile Include="Infrastructure\Extensions\RequestExtension.cs" />
     <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
     <Compile Include="Infrastructure\Filters\Notifiers\NotifierFilters.cs" />
+    <Compile Include="Infrastructure\Helpers\AppConfigHelper.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\ConditionalValidationAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedDisplayAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedIntegerAttribute.cs" />
@@ -397,9 +398,6 @@
     <Compile Include="Models\SelfService\SelfServiceModel.cs" />
     <Compile Include="Models\Shared\SendToDialogModel.cs" />
     <Compile Include="Models\Start\StartPageModel.cs" />
-    <Compile Include="WebServices\Common\AsyncHelper.cs" />
-    <Compile Include="WebServices\Concrete\AMAPIService.cs" />
-    <Compile Include="WebServices\IAMAPIService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\bootstrap-datepicker.css" />
