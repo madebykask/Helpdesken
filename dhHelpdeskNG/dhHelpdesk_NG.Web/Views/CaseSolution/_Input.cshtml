@@ -190,7 +190,7 @@
                                                     <td>
                                                         <select id="savaAndClose" name="CaseSolution.SaveAndClose" @(Model.CaseSolution.ShowInsideCase == 1 ? "" : "disabled='true'")>
                                                             @foreach (var action in Model.ActionList)
-                                                            {
+                                                            {   
                                                                 <option value="@action.Value" @(action.Selected ? "selected" : "")> @action.Text </option>}
 
                                                             @if (Model.CaseSolution.ShowInsideCase != 1)
