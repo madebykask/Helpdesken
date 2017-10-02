@@ -6217,5 +6217,12 @@ If not exists (select * from tblTextTranslation where text_id = 1856 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1856, 2, 'Average value')
 GO
 
+If not exists (select * from tbltext where id = 1857)
+	insert into tbltext (id, TextString) VALUES (1857, 'Bifogad fil är borttagen från ärendet')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1857 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1857, 2, 'The attached file is removed from the case')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

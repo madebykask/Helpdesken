@@ -64,6 +64,7 @@
         extendedCaseGuid: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().ExtendedCaseGuid.ToString() : "" )',
         extendedCaseLanguageId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().LanguageId.ToString() : "" )',
         extendedCasePath: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Path.ToString() : "" )',
+        fileExistError: '@Translation.GetForJS("Bifogad fil är borttagen från ärendet")',
 
         caseFieldIds:{
             CaseId: "case__Id",

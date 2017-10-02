@@ -57,5 +57,16 @@ $(function() {
                     }
                 });
                 return false;
-            });
+    });
+
+    $("a.isExisted").on("click", function (e) {
+        var url = $(this).attr("href");
+        var http = new XMLHttpRequest();
+        http.open("HEAD", url, false);
+        http.send();
+        if (http.status === 404) {
+            e.preventDefault();
+            ShowToastMessage(window.parameters.fileExistError, "error");
+        }
+    });
 });
