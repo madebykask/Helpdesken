@@ -202,7 +202,7 @@ namespace DH.Helpdesk.Services.Services
 
             //Get Identifiers for Case and for ExtendedCase that is connected
             int extendedCaseFormId = 0;
-            if (_case.CaseExtendedCaseDatas != null)
+            if (_case.CaseExtendedCaseDatas != null && _case.CaseExtendedCaseDatas.Count > 0)
             {
                 extendedCaseFormId = _case.CaseExtendedCaseDatas.First().ExtendedCaseData.ExtendedCaseFormId;
             }
@@ -248,7 +248,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     #region Extended Case
 
-                    if (_case.CaseExtendedCaseDatas != null)
+                    if (_case.CaseExtendedCaseDatas != null && _case.CaseExtendedCaseDatas.Count > 0)
                     {
 
                         var value = GetExtendedCaseValue(_case, propertyName, displayName, failedMappings);
@@ -498,7 +498,7 @@ namespace DH.Helpdesk.Services.Services
 
 
             int extendedCaseFormId = 0;
-            if (_case.CaseExtendedCaseDatas != null)
+            if (_case.CaseExtendedCaseDatas != null && _case.CaseExtendedCaseDatas.Count > 0)
             {
                 extendedCaseFormId = _case.CaseExtendedCaseDatas.First().ExtendedCaseData.ExtendedCaseFormId;
             }
