@@ -1278,6 +1278,29 @@ end
 
 GO
 
+--#59041
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowHeaderFromPageNr' and sysobjects.name = N'tblCaseDocumentTemplate')
+begin
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD [ShowHeaderFromPageNr] int NOT NULL Default(0)
+end
+
+GO
+
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowFooterFromPageNr' and sysobjects.name = N'tblCaseDocumentTemplate')
+begin
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD [ShowFooterFromPageNr] int NOT NULL Default(0)
+end
+
+GO
+
+--#59045, #59044, #5904, #59042
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Style' and sysobjects.name = N'tblCaseDocumentTemplate')
+begin
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD [Style] [nvarchar](max) NOT NULL Default('')
+end
+
+GO
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.33'

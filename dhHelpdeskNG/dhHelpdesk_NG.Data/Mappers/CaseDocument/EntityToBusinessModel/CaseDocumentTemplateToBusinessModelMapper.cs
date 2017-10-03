@@ -19,7 +19,11 @@
                 MarginRight = entity.MarginRight,
                 FooterHeight = entity.FooterHeight,
                 HeaderHeight = entity.HeaderHeight,
-            };
+
+                ShowFooterFromPageNr = entity.ShowFooterFromPageNr,
+                ShowHeaderFromPageNr = entity.ShowHeaderFromPageNr,
+                Style = entity.Style
+        };
         }
     }
 }

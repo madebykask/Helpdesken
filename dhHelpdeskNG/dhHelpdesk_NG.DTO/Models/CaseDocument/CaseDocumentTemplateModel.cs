@@ -19,5 +19,8 @@ namespace DH.Helpdesk.BusinessData.Models.CaseDocument
         public int MarginRight { get; set; }
         public int FooterHeight { get; set; }
         public int HeaderHeight { get; set; }
+        public int ShowFooterFromPageNr { get; set; }
+        public int ShowHeaderFromPageNr { get; set; }
+        public string Style { get; set; }
     }
 }
