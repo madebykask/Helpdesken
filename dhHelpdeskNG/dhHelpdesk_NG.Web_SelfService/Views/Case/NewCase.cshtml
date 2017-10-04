@@ -1,6 +1,7 @@
 ﻿@using System.Web.Script.Serialization
 @using DH.Helpdesk.BusinessData.OldComponents
 @using System.Web.Optimization
+@using DH.Helpdesk.Common.Constants
 
 @model DH.Helpdesk.SelfService.Models.Case.NewCaseModel
 @{
@@ -14,6 +15,9 @@
     window.fieldSettings = @Html.Raw(jsSerializer.Serialize(Model.JsFieldSettings));
     window.productAreaChildren = @Html.Raw(jsSerializer.Serialize(Model.ProductAreaChildren));
     window.caseTypeRelatedFields = @Html.Raw(jsSerializer.Serialize(Model.CaseTypeRelatedFields));
+    window.priorityRelatedFields = @Html.Raw(jsSerializer.Serialize(Model.PriorityRelatedFields));
+    window.caseTypeRelatedFieldName = "@RelatedFieldDbName.Impact";
+    window.priorityRelatedFieldName = "@RelatedFieldDbName.Available";
 
     window.appParameters = {
         uploadCaseFileUrl: '@Url.Action("NewCaseUploadFile")',
@@ -747,13 +751,40 @@
         
         @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Available.ToString()))
         {
-            <div class="form-group row @GlobalEnums.TranslationCaseFields.Available.ToString()">
+            <div id="relatedFieldBlock-@GlobalEnums.TranslationCaseFields.Available.ToString()" class="form-group row @GlobalEnums.TranslationCaseFields.Available.ToString()">
                 <label class="col-md-3">
                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Available)
+                    @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Available.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
+                    {
+                        <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Available.ToString()" class="mandatorystar">*</span>
+                    }
+                    else
+                    {
+                        <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Available.ToString()" class="mandatorystar" style="display: none">*</span>
+                    }
                 </label>
                 <div class="col-md-9">
                     @Html.TextBoxFor(m => Model.NewCase.Available, new {@class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Available.ToString()})
                     @*@Translation.Get("Initiator is available during the following times", Enums.TranslationSource.TextTranslation)*@
+                </div>
+            </div>
+        }
+        else
+        {
+            <div id="relatedFieldBlock-@GlobalEnums.TranslationCaseFields.Available.ToString()" class="form-group row @GlobalEnums.TranslationCaseFields.Available.ToString()" style="display:none">
+                <label class="col-md-3">
+                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Available)
+                    @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Available.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
+                    {
+                        <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Available.ToString()" class="mandatorystar">*</span>
+                    }
+                    else
+                    {
+                        <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Available.ToString()" class="mandatorystar" style="display: none">*</span>
+                    }
+                </label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(m => Model.NewCase.Available, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Available.ToString(), id = "NewCase_Available", name = "NewCase.Available" })
                 </div>
             </div>
         }

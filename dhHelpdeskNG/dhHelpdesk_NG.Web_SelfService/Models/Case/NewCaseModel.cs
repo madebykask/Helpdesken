@@ -58,6 +58,7 @@
             CaseFieldSettings = caseFieldSettings;
             JsApplicationOptions = jsApplicationOptions;
             CaseTypeRelatedFields = new List<KeyValuePair<int, string>>();
+            PriorityRelatedFields = new List<KeyValuePair<int, string>>();
             CaseFieldSettingWithLangauges = caseFieldSettingWithLangauges;
         }
 
@@ -123,6 +124,8 @@
         public SendToDialogModel SendToDialogModel { get; set; }
 
         public List<KeyValuePair<int,string>> CaseTypeRelatedFields { get; set; }
+
+        public List<KeyValuePair<int,string>> PriorityRelatedFields { get; set; }
 
         public string Information { get; set; }
     }

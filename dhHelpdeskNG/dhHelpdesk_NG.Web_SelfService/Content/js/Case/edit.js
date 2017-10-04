@@ -7,6 +7,7 @@
 
         var fieldSettings = window.fieldSettings || {};
         var caseTypeRelatedFields = window.caseTypeRelatedFields || {};
+        var priorityRelatedFields = window.priorityRelatedFields || {};
         
         var uploadCaseFileUrl = window.appParameters.uploadCaseFileUrl;
         var caseFileKey = window.appParameters.caseFileKey;
@@ -26,7 +27,9 @@
         var attrApplyClass = "hasAttribute";
         var attrFieldNameHolder = "standardName";
         var relatedFieldBlockPrefix = "#relatedFieldBlock-";
-        var mandatorySignPrefix = "#mandatory_sign_";                
+        var mandatorySignPrefix = "#mandatory_sign_";
+        var caseTypeRelationName = "casetype";
+        var priorityRelationName = "priority";
         
         Application.prototype.applyFieldAttributes = function () {
             if (fieldSettings == undefined || fieldSettings == null || fieldSettings.length <= 0)
@@ -54,25 +57,35 @@
             return false;
         }
 
-        Application.prototype.checkCaseTypeRelationRules = function ($caseType) {
-            if ($caseType == undefined || $caseType == null)
+        Application.prototype.checkRelationRules = function ($element, fields, relationType) {
+            if ($element == undefined || $element == null)
                 return;
 
-            var caseTypeId = $caseType.val();
-            var relatedField = getCaseTypeRelatedField(caseTypeId);
+            var elementId = $element.val();
+            var relatedField = getRelatedField(elementId, fields);
 
             if (relatedField == undefined || relatedField == null || relatedField == '') {
-                removeCaseTypeRule('Impact_Id', '#NewCase_Impact_Id');
-                removeCaseTypeRule('Urgency_Id', '#NewCase_Urgency_Id');
+                switch (relationType.toLowerCase()) {
+                    case caseTypeRelationName:
+                        removeRelationRule('Impact_Id', '#NewCase_Impact_Id');
+                        removeRelationRule('Urgency_Id', '#NewCase_Urgency_Id');
+                        break;
+                    case priorityRelationName:
+                        removeRelationRule('Available', '#NewCase_Available');
+                        break;
+                }
                 return;
             }
                 
             switch (relatedField.toLowerCase()) {
-                case 'impact':
-                    addCaseTypeRule('Impact_Id', '#NewCase_Impact_Id');
-                    addCaseTypeRule('Urgency_Id', '#NewCase_Urgency_Id');
+                case window.caseTypeRelatedFieldName:
+                    addRelationRule('Impact_Id', '#NewCase_Impact_Id');
+                    addRelationRule('Urgency_Id', '#NewCase_Urgency_Id');
                     break;
-            }          
+                case window.priorityRelatedFieldName:
+                    addRelationRule('Available', '#NewCase_Available');
+                    break;
+            }
         }
 
 
@@ -167,13 +180,13 @@
                 return true;
 
             return false;
-        }       
+        }
 
-        var addCaseTypeRule = function (standardFieldName, elementId) {
-            var impactSetting = getFieldSetting(standardFieldName);
-            if (impactSetting == null || (impactSetting != null && !impactSetting.IsVisible)) {
-                var $elmToShow = $(relatedFieldBlockPrefix + standardFieldName);                
-                $(elementId).val('').change();             
+        var addRelationRule = function (standardFieldName, elementId) {
+            var setting = getFieldSetting(standardFieldName);
+            if (setting == null || (setting != null && !setting.IsVisible)) {
+                var $elmToShow = $(relatedFieldBlockPrefix + standardFieldName);
+                $(elementId).val('').change();
                 showElement($elmToShow);
             }
 
@@ -184,22 +197,20 @@
             $(elementId).rules("add", {
                 required: true
             });
-            
         }
 
-        var removeCaseTypeRule = function (standardFieldName, elementId) {
-            var impactSetting = getFieldSetting(standardFieldName);
-            if (impactSetting == null || (impactSetting != null && !impactSetting.IsVisible)) {
+        var removeRelationRule = function (standardFieldName, elementId) {
+            var setting = getFieldSetting(standardFieldName);
+            if (setting == null || (setting != null && !setting.IsVisible)) {
                 var $elmToHide = $(relatedFieldBlockPrefix + standardFieldName);
                 $(elementId).val('').change();
                 hideElement($elmToHide);
             }
-
-            if (impactSetting == null ||  (impactSetting != null && !impactSetting.IsRequired)) {
-                $(elementId).removeAttr('required');                
+            if (setting == null || (setting != null && !setting.IsRequired)) {
+                $(elementId).removeAttr('required');
                 $(elementId).rules("remove");
                 var $mandatorySign = $(mandatorySignPrefix + standardFieldName);
-                hideElement($mandatorySign);                
+                hideElement($mandatorySign);
             }
         }
 
@@ -216,15 +227,14 @@
             return null;
         }
 
-        var getCaseTypeRelatedField = function (caseTypeId) {
-            if (caseTypeRelatedFields == undefined || caseTypeRelatedFields == null || caseTypeRelatedFields.length <= 0 || caseTypeId == undefined || caseTypeId == null)
+        var getRelatedField = function (fieldId, fields) {
+            if (fields == undefined || fields == null || fields.length <= 0 || fieldId == undefined || fieldId == null)
                 return "";
             
-            for (var ct = 0; ct < caseTypeRelatedFields.length; ct++) {
-                if (caseTypeRelatedFields[ct].Key == caseTypeId)
-                    return caseTypeRelatedFields[ct].Value;
+            for (var ct = 0; ct < fields.length; ct++) {
+                if (fields[ct].Key == fieldId)
+                    return fields[ct].Value;
             }
-
             return "";
         }
 
@@ -1027,6 +1037,7 @@
             self.$departmentControl = $('#NewCase_Department_Id');
             self.$orgUnitControl = $('#NewCase_Ou_Id');
             self.$caseTypeControl = $(document.getElementById("NewCase.CaseType_Id"));
+            self.$priorityControl = $(document.getElementById("NewCase_Priority_Id"));
 
             $('#NewCase_ReportedBy').typeahead(Application.prototype._GetComputerUserSearchOptions());
             $('#NewCase_InventoryNumber').typeahead(Application.prototype._GetComputerSearchOptions());
@@ -1057,11 +1068,16 @@
                     }
                 }, 'json');
 
-                self.checkCaseTypeRelationRules($(this));
+                self.checkRelationRules($(this), caseTypeRelatedFields, caseTypeRelationName);
+            });
+
+            self.$priorityControl.change(function () {
+                self.checkRelationRules($(this), priorityRelatedFields, priorityRelationName);
             });
 
             self.applyFieldAttributes();
-            self.$caseTypeControl.change();            
+            self.$caseTypeControl.change();
+            self.$priorityControl.change();
         };
     })($);
     
