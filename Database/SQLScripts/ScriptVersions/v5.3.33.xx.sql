@@ -1251,5 +1251,72 @@ Update tblCaseType set ShowOnExtPageCases = 1 where ShowOnExternalPage = 1
 
 Update tblProductArea set ShowOnExtPageCases = 1 where ShowOnExternalPage = 1
 
+
+if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblEntityRelationship_ParentItemGuid')
+	DROP INDEX [IX_tblEntityRelationship_ParentItemGuid] ON [dbo].[tblEntityRelationship]
+GO
+CREATE NONCLUSTERED INDEX [IX_tblEntityRelationship_ParentItemGuid] ON [dbo].[tblEntityRelationship]
+(
+	[ParentItem_Guid] ASC
+) ON [PRIMARY]
+GO
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'FetchDataFromApiOnExternalPage' and sysobjects.name = N'tblCustomer')
+   ALTER TABLE tblCustomer ADD FetchDataFromApiOnExternalPage  bit Not null default (0)
+GO	
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'RestrictUserToGroupOnExternalPage' and sysobjects.name = N'tblCustomer')
+   ALTER TABLE tblCustomer ADD RestrictUserToGroupOnExternalPage  bit Not null default (0)
+GO	
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'MyCasesUserGroup' and sysobjects.name = N'tblCustomer')
+   ALTER TABLE tblCustomer ADD MyCasesUserGroup  bit Not null default (0)
+GO	
+
+-- Add more columns to table 
+-- #58972
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DataType' and sysobjects.name = N'tblCaseDocumentTextIdentifier')
+begin
+	ALTER TABLE [dbo].[tblCaseDocumentTextIdentifier] ADD [DataType] [nvarchar](50) NULL 
+end
+
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DataFormat' and sysobjects.name = N'tblCaseDocumentTextIdentifier')
+begin
+	ALTER TABLE [dbo].[tblCaseDocumentTextIdentifier] ADD [DataFormat] [nvarchar](50) NULL 
+end
+
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'DisplayFormat' and sysobjects.name = N'tblCaseDocumentTextIdentifier')
+begin
+	ALTER TABLE [dbo].[tblCaseDocumentTextIdentifier] ADD [DisplayFormat] [nvarchar](50) NULL 
+end
+
+GO
+
+--#59041
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowHeaderFromPageNr' and sysobjects.name = N'tblCaseDocumentTemplate')
+begin
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD [ShowHeaderFromPageNr] int NOT NULL Default(0)
+end
+
+GO
+
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowFooterFromPageNr' and sysobjects.name = N'tblCaseDocumentTemplate')
+begin
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD [ShowFooterFromPageNr] int NOT NULL Default(0)
+end
+
+GO
+
+--#59045, #59044, #5904, #59042
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Style' and sysobjects.name = N'tblCaseDocumentTemplate')
+begin
+	ALTER TABLE [dbo].[tblCaseDocumentTemplate] ADD [Style] [nvarchar](max) NOT NULL Default('')
+end
+
+GO
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.33'
