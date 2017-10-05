@@ -10,7 +10,7 @@
     @(Model.CaseDocumentTemplate != null ? Model.CaseDocumentTemplate.Style.ToHtmlString() : new HtmlString(""))
 </head>
 <body>
-    <div class="default-page">
+    <div class="page-holder">
         @if (Model.CaseDocumentParagraphs != null)
         {
             foreach (var item in Model.CaseDocumentParagraphs.OrderBy(x => x.SortOrder))
@@ -21,7 +21,7 @@
                     //Check ParagraphType
                     if (item.CaseDocumentParagraph.ParagraphType == (int)CaseDocumentParagraphType.Text)
                     {
-                        <p style="text-align: justify;">
+                        <p>
                             @foreach (var paragraphText in item.CaseDocumentParagraph.CaseDocumentTexts.OrderBy(x => x.SortOrder))
                             {
                                 if (!string.IsNullOrEmpty(paragraphText.Text))
@@ -41,10 +41,10 @@
                                 //Dont list empty
                                 if (!string.IsNullOrEmpty(paragraphText.Text))
                                 {
-                                    <tr style="page-break-inside: avoid">
-                                        <td style="padding-right:10px;margin-right:10px; text-align:unset;"><strong>@nr.</strong></td>
-                                        <td style="padding-right:10px;margin-right:10px; text-align:unset; width: 130px; "><strong>@paragraphText.Headline.ToHtmlString()</strong></td>
-                                        <td style="text-align: justify;">@paragraphText.Text.ToHtmlString()</td>
+                                    <tr>
+                                        <td class="table-numeric-first-column">@nr.</td>
+                                        <td class="table-numeric-second-column">@paragraphText.Headline.ToHtmlString()</td>
+                                        <td class="table-numeric-third-column">@paragraphText.Text.ToHtmlString()</td>
                                     </tr>
                                     nr = nr + 1;
                                 }
@@ -54,28 +54,35 @@
                     }
                     if (item.CaseDocumentParagraph.ParagraphType == (int)CaseDocumentParagraphType.Logo)
                     {
-                        <img src="~/img-profile/IKEA_logo_RGB_2.jpg" style="width:200px;" />
-                    }
 
-                    if (item.CaseDocumentParagraph.ParagraphType == (int)CaseDocumentParagraphType.TableTwoColumns)
-                    {
-                        <table class="table-full-width table-two-colums">
-                            @foreach (var paragraphText in item.CaseDocumentParagraph.CaseDocumentTexts.OrderBy(x => x.SortOrder))
+                        <table class="table-full-width ">
+                            <tr>
+                                <td class="logo-holder"><img src="~/img-profile/IKEA_logo_RGB_2.jpg" class="logo" /></td>
+                            </tr>
+                            </table>
+
+                            
+                            }
+
+                            if (item.CaseDocumentParagraph.ParagraphType == (int)CaseDocumentParagraphType.TableTwoColumns)
+                            {
+                            <table class="table-full-width table-two-colums">
+                                @foreach (var paragraphText in item.CaseDocumentParagraph.CaseDocumentTexts.OrderBy(x => x.SortOrder))
                             {
                                 //Dont list empty
                                 if (!string.IsNullOrEmpty(paragraphText.Text))
                                 {
-                                    <tr style="page-break-inside: avoid">
-                                        <td style="padding-right:10px;margin-right:10px;">APA@paragraphText.Headline.ToHtmlString()</td>
-                                        <td>@paragraphText.Text.ToHtmlString()</td>
-                                    </tr>
+                                        <tr>
+                                            <td class="table-two-colums-first-column">APA@paragraphText.Headline.ToHtmlString()</td>
+                                            <td class="table-two-colums-second-column">@paragraphText.Text.ToHtmlString()</td>
+                                        </tr>
+                                    }
                                 }
+                            </table>
                             }
-                        </table>
-                    }
-                }
-            }
-        }
-    </div>
+                            }
+                            }
+                            }
+</div>
 </body>
 </html>
