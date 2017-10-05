@@ -13,7 +13,10 @@
                 ExtendedCaseFormId = entity.ExtendedCaseFormId,
                 Identifier = entity.Identifier,
                 PropertyName = entity.PropertyName,
-                DisplayName = entity.DisplayName
+                DisplayName = entity.DisplayName,
+                DisplayFormat = entity.DisplayFormat,
+                DataType = entity.DataType,
+                DataFormat = entity.DataFormat
             };
         }
     }

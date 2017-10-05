@@ -381,6 +381,10 @@ ExtendedCasePage.prototype.syncCaseFromExCaseIfExists = function () {
         var _date = self.parseDate(_watchdate.Value);
         $('#' + _caseFields.WatchDate).val(_date);        
     }
+
+    if (_department_id != undefined && _priority_id != undefined) {
+        $('#' + _caseFields.PriorityId).trigger('change');
+    };
 }
 
 ExtendedCasePage.prototype.setCaseStatus = function (status) {

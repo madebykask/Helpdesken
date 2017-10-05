@@ -1208,6 +1208,7 @@
             return Json(new { success = true, data = dropString, praIds });
         }
 
+
         private bool UserHasAccessToCase(Case currentCase)
         {            
             var curUser = SessionFacade.CurrentUserIdentity.UserId;
@@ -1387,8 +1388,8 @@
                 {
                     newCase.WatchDate =
                     this._watchDateCalendarService.GetClosestDateTo(
-                            dept.WatchDateCalendar_Id.Value,
-                            DateTime.UtcNow);
+                    dept.WatchDateCalendar_Id.Value,
+                    DateTime.UtcNow);
                 }
             }
 
@@ -2158,5 +2159,7 @@
 
             return criteria;
         }
+
+       
     }
 }

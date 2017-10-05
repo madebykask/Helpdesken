@@ -22,6 +22,9 @@
             entity.MarginRight = businessModel.MarginRight;
             entity.FooterHeight = businessModel.FooterHeight;
             entity.HeaderHeight = businessModel.HeaderHeight;
+            entity.ShowFooterFromPageNr = businessModel.ShowFooterFromPageNr;
+            entity.ShowHeaderFromPageNr = businessModel.ShowHeaderFromPageNr;
+            entity.Style = businessModel.Style;
         }
     }
 }

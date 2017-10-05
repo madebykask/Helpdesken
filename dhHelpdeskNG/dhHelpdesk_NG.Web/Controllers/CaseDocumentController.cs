@@ -11,7 +11,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
-   
+    using Infrastructure.Attributes;
 
     public class CaseDocumentController : BaseController
     {
@@ -30,22 +30,24 @@ namespace DH.Helpdesk.Web.Controllers
 
         #endregion
 
+        private CaseDocumentModel _model;
 
         public  byte[] GeneratePdf(CaseDocumentModel model, string baseUrl, string footerText, string draftText, string headerText)
         {
             // Create the PDF document where to add the HTML documents
             Winnovative.Document pdfDocument = new Winnovative.Document();
-            HtmlToPdfConverter htmlToPdfConverter = new HtmlToPdfConverter();
+            //HtmlToPdfConverter htmlToPdfConverter = new HtmlToPdfConverter();
 
             //TODO: move this to Database
             pdfDocument.LicenseKey = "xUtbSltKWkpbW0RaSllbRFtYRFNTU1M=";
+
+            HtmlToPdfElement contractHtml = null;
 
             byte[] outPdfBuffer;
 
             try
             {
                 Winnovative.PdfPage contractPdfPage = null;
-                //WinnovativePointF contractHtmlLocation = Point.Empty;
 
                 contractPdfPage = pdfDocument.AddPage();
                 contractPdfPage.Margins.Left = model.CaseDocumentTemplate.MarginLeft;
@@ -53,40 +55,23 @@ namespace DH.Helpdesk.Web.Controllers
                 contractPdfPage.Margins.Top = model.CaseDocumentTemplate.MarginTop;
                 contractPdfPage.Margins.Bottom = model.CaseDocumentTemplate.MarginBottom;
 
-                // contractHtmlLocation = PointF.Empty;
-                var contractHtmlToConvert = RenderRazorViewToString("~/Views/Shared/_CaseDocumentPrint.cshtml", model, false);
-
-                // Create the contract HTML to PDF element
-                HtmlToPdfElement contractHtml = new HtmlToPdfElement(0, 0, contractHtmlToConvert, baseUrl);
-                contractHtml.FitWidth = false;
-                //TODO: Move this to Database
-                contractHtml.HtmlViewerWidth = 793;
-                // Optionally set a delay before conversion to allow asynchonous scripts to finish
-                contractHtml.ConversionDelay = 0;
-
-                // Add the HTML to PDF document
-                contractPdfPage.AddElement(contractHtml);
-
+                _model = model;
+                
                 if (!string.IsNullOrEmpty(footerText))
-                { 
-                    //// Enable footer in the generated PDF document
-                    htmlToPdfConverter.PdfDocumentOptions.ShowFooter = true;
-                    
+                {
                     pdfDocument.AddFooterTemplate(model.CaseDocumentTemplate.FooterHeight);
                     AddFooter(model, pdfDocument, baseUrl, footerText);
                 }
 
                 if (!string.IsNullOrEmpty(headerText))
                 {
-                    //// Enable header in the generated PDF document
-                    htmlToPdfConverter.PdfDocumentOptions.ShowHeader = true;
 
                     pdfDocument.AddHeaderTemplate(model.CaseDocumentTemplate.HeaderHeight);
                     AddHeader(model, pdfDocument, baseUrl, headerText);
                 }
 
                 if (!string.IsNullOrEmpty(draftText))
-                { 
+                {
                     // Get the stamp width and height
                     float stampWidth = pdfDocument.Pages[0].ClientRectangle.Width; // float.Parse("600");
                     float stampHeight = float.Parse("600");
@@ -101,24 +86,38 @@ namespace DH.Helpdesk.Web.Controllers
                     // Create the stamp template to be repeated in each PDF page
                     Winnovative.Template stampTemplate = pdfDocument.AddTemplate(stampRectangle);
 
-                    var stamp = draftText; 
+                    var stamp = draftText;
 
                     // Create the HTML element to add in stamp template
                     HtmlToPdfElement stampHtmlElement = new HtmlToPdfElement(0, 0, stamp, baseUrl);
 
                     stampHtmlElement.Rotate(-20);
-                    
+
                     // Set the HTML viewer width for the HTML added in stamp
                     stampHtmlElement.HtmlViewerWidth = 793;
                     // Fit the HTML content in stamp template
                     stampHtmlElement.FitWidth = true;
                     stampHtmlElement.FitHeight = true;
 
-                     // Add HTML to stamp template
-                     stampTemplate.AddElement(stampHtmlElement);
+                    // Add HTML to stamp template
+                    stampTemplate.AddElement(stampHtmlElement);
                 }
 
+                var contractHtmlToConvert = RenderRazorViewToString("~/Views/Shared/_CaseDocumentPrint.cshtml", model, false);
 
+                // Create the contract HTML to PDF element
+                contractHtml = new HtmlToPdfElement(0, 0, contractHtmlToConvert, baseUrl);
+                contractHtml.FitWidth = false;
+                //TODO: Move this to Database
+                contractHtml.HtmlViewerWidth = 793;
+                // Optionally set a delay before conversion to allow asynchonous scripts to finish
+                contractHtml.ConversionDelay = 0;
+
+                // Install a handler where to change the header and footer in pages generated by the HTML to PDF element
+                contractHtml.PrepareRenderPdfPageEvent += new PrepareRenderPdfPageDelegate(htmlToPdfElement_PrepareRenderPdfPageEvent);
+
+                // Add the HTML to PDF document
+                contractPdfPage.AddElement(contractHtml);
                 pdfDocument.CompressionLevel = PdfCompressionLevel.NoCompression;
 
                 // Save the PDF document in a memory buffer
@@ -142,11 +141,40 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 // Close the PDF document
                 pdfDocument.Close();
+
+                // uninstall handler
+                contractHtml.PrepareRenderPdfPageEvent -= new PrepareRenderPdfPageDelegate(htmlToPdfElement_PrepareRenderPdfPageEvent);
             }
 
             return outPdfBuffer;
         }
 
+        /// <summary>
+        /// The handler for HtmlToPdfElement.PrepareRenderPdfPageEvent event where you can set the visibility of header and footer
+        /// in each page or you can add a custom header or footer in a page
+        /// </summary>
+        /// <param name="eventParams">The event parameter containin the PDF page to customize before rendering</param>
+        void htmlToPdfElement_PrepareRenderPdfPageEvent(PrepareRenderPdfPageParams eventParams)
+        {
+            // The PDF page being rendered
+            PdfPage pdfPage = eventParams.Page;
+
+            if (eventParams.PageNumber <= _model.CaseDocumentTemplate.ShowFooterFromPageNr) 
+            {
+                // The default document footer will be replaced in this page
+                pdfPage.AddFooterTemplate(_model.CaseDocumentTemplate.FooterHeight);
+                // Draw the page header elements
+                DrawEmptyPageFooter(pdfPage.Footer);
+            }
+
+            if (eventParams.PageNumber <= _model.CaseDocumentTemplate.ShowHeaderFromPageNr)
+            {
+                // The default document header will be replaced in this page
+                pdfPage.AddHeaderTemplate(_model.CaseDocumentTemplate.HeaderHeight);
+                // Draw the page header elements
+                DrawEmptyPageFooter(pdfPage.Header);
+            }
+        }
 
         private void AddHeader(CaseDocumentModel model, Winnovative.Document pdfDocument, string baseURL, string headerText)
         {
@@ -167,28 +195,56 @@ namespace DH.Helpdesk.Web.Controllers
         private void AddFooter(CaseDocumentModel model, Winnovative.Document pdfDocument, string baseURL, string footerText)
         {
             var footerHtml = footerText;
+            // Set the HTML element to fit the container height
 
             // Create the HTML element to add in stamp template
-            var y = pdfDocument.Pages[0].Margins.Bottom - model.CaseDocumentTemplate.FooterHeight;
-            HtmlToPdfVariableElement footerHtmlElement = new HtmlToPdfVariableElement(0, 0, footerHtml, baseURL);
+            //var y = pdfDocument.Pages[0].Margins.Bottom;
+            // y = pdfDocument.Pages[0].PageSize.Height - pdfDocument.Pages[0].Margins.Bottom;
+            HtmlToPdfVariableElement footerHtmlElement = new HtmlToPdfVariableElement(footerHtml, baseURL);
 
             footerHtmlElement.WebFontsEnabled = true;
             
-            //footerHtmlElement.FitWidth = true;
-          // footerHtmlElement.FitHeight = true;
+
             PdfConverter pdfConverter = new PdfConverter();
+            
             pdfConverter.PdfFooterOptions.AddElement(footerHtmlElement);
+            
 
             // Add variable HTML element with page numbering to footer
             pdfDocument.Footer.AddElement(footerHtmlElement);
         }
 
-        public ActionResult CaseDocumentGet(Guid caseDocumentGUID, int caseId)
+        /// <summary>
+        /// Draw an empty page footer elements
+        /// </summary>
+        private void DrawEmptyPageFooter(Template footerTemplate)
+        {
+            // Create a HTML element to be added in footer
+            HtmlToPdfElement html = new HtmlToPdfElement("","");
+
+            // Add HTML element to footer
+            footerTemplate.AddElement(html);
+        }
+
+        /// <summary>
+        /// Draw an empty page footer elements
+        /// </summary>
+        private void DrawEmptyPageHeader(Template headerTemplate)
+        {
+            // Create a HTML element to be added in footer
+            HtmlToPdfElement html = new HtmlToPdfElement("", "");
+
+            // Add HTML element to header
+            headerTemplate.AddElement(html);
+        }
+
+         [UserCasePermissions]
+        public ActionResult CaseDocumentGet(Guid caseDocumentGUID, int id)
         {
 
             //TODO: Check if user have access to this case?
             string footerText = "";
-            CaseDocumentModel m = _caseDocumentService.GetCaseDocument(caseDocumentGUID, caseId);
+            CaseDocumentModel m = _caseDocumentService.GetCaseDocument(caseDocumentGUID, id);
             try
             {
                 footerText = m.CaseDocumentParagraphs.Where(x => x.CaseDocumentParagraph.ParagraphType == 5).FirstOrDefault().CaseDocumentParagraph.CaseDocumentTexts.FirstOrDefault().Text;

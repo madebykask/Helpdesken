@@ -238,6 +238,8 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IWatchDateCalendarValueRepository>().To<WatchDateCalendarValueRepository>();
             kernel.Bind<IWatchDateCalendarRepository>().To<WatchDateCalendarRepository>();
             kernel.Bind<IMetaDataRepository>().To<MetaDataRepository>();
+            kernel.Bind<IMetaDataRepository>().To<MetaDataRepository>();
+            kernel.Bind<IEntityInfoRepository>().To<EntityInfoRepository>();
             kernel.Bind<IEntityInfoRepository>().To<EntityInfoRepository>();
 
 
@@ -308,6 +310,9 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IWatchDateCalendarService>().To<WatchDateCalendarService>();
             kernel.Bind<IMetaDataService>().To<MetaDataService>();
             kernel.Bind<IEmployeeService>().To<EmployeeService>();
+            kernel.Bind<IMetaDataService>().To<MetaDataService>();
+            kernel.Bind<IEmployeeService>().To<EmployeeService>();
+            kernel.Bind<IWebApiService>().To<WebApiService>();
             kernel.Bind<IWebApiService>().To<WebApiService>();
 
             // Cache

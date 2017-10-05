@@ -380,6 +380,19 @@ namespace DH.Helpdesk.Common.Extensions.String
             return value.Replace("\r", "").Replace("\n", "").Replace(" *", "").Trim();
         }
 
+        /// <summary>
+        /// Check if this string is NOT null or empty
+        /// </summary>
+        public static bool IsNotNullOrEmpty(this string value)
+        {
+            if (!string.IsNullOrEmpty(value))
+            { 
+                return true;
+            }
+
+            return false;
+        }
+
         public static string AddWithSeparator(this string self, List<string> values, bool enclosedWithQuote = false, string separator = ",")
         {
             var ret = string.Empty;

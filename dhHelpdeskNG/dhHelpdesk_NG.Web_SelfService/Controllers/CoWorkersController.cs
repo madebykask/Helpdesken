@@ -6,8 +6,9 @@ using System.Web.Mvc;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
+    using BusinessData.Models.Employee;
     using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
-    using DH.Helpdesk.SelfService.Models.CoWorkers;    
+    using DH.Helpdesk.SelfService.Models.CoWorkers;
     using Infrastructure.Helpers;
 
     public class CoWorkersController : BaseController
@@ -44,17 +45,23 @@ namespace DH.Helpdesk.SelfService.Controllers
             {              
                 try
                 {
-                    var useApi = SessionFacade.CurrentCustomer.FetchDataFromApiOnExternalPage;
-                    var apiCredential = AppConfigHelper.GetAmApiInfo();
-                    var employee = _masterDataService.GetEmployee(customerId, curIdentity.EmployeeNumber, useApi, apiCredential);
+                    /*This is IKEA specific condition*/
+                    if (!UserBelongedToCurrentCustomer(curIdentity.EmployeeNumber))
+                        SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
+                    else
+                    {
+                        var useApi = SessionFacade.CurrentCustomer.FetchDataFromApiOnExternalPage;
+                        var apiCredential = AppConfigHelper.GetAmApiInfo();
+                        var employee = _masterDataService.GetEmployee(customerId, curIdentity.EmployeeNumber, useApi, apiCredential);
 
-                    if (employee != null)
-                        SessionFacade.CurrentCoWorkers = employee.Subordinates;
+                        if (employee != null)                        
+                            SessionFacade.CurrentCoWorkers = employee.Subordinates;                        
+                    }
                 }
                 catch (Exception ex)
                 {
                     SessionFacade.UserHasAccess = false;
-                    ErrorGenerator.MakeError("Error in access to Employees data. \n " + ex.Message, 402);
+                    ErrorGenerator.MakeError("Error in access to members data. \n " + ex.Message, 402);
                     return RedirectToAction("Index", "Error");
                 }               
             }
@@ -89,7 +96,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             else
             {
                 SessionFacade.UserHasAccess = false;
-                ErrorGenerator.MakeError("You don't have access to this page.", 401);
+                ErrorGenerator.MakeError("No information found about your member(s).", 401);
                 return RedirectToAction("Index", "Error");
             }
 

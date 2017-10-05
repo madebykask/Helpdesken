@@ -24,7 +24,9 @@
             Property(e => e.HeaderHeight).IsRequired();
             Property(e => e.FooterHeight).IsRequired();
 
-
+            Property(e => e.ShowFooterFromPageNr).IsRequired();
+            Property(e => e.ShowHeaderFromPageNr).IsRequired();
+            Property(e => e.Style).IsRequired();
 
             ToTable("tblCaseDocumentTemplate");
         }

@@ -171,9 +171,12 @@
                         </ul>
                     }
                 </div>
-                @if (!hideMenu && ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().ToLower() != LoginMode.Anonymous)
+                @if (!hideMenu)
                 {
-                    <span class="toplogout-space"> | </span> <a href="#">  @Translation.Get("User", Enums.TranslationSource.TextTranslation): @SessionFacade.CurrentSystemUser</a>
+                    <span class="toplogout-space"> | </span> 
+                    <a href="#" title="Employee number: @SessionFacade.CurrentUserIdentity.EmployeeNumber">  
+                        @Translation.Get("User", Enums.TranslationSource.TextTranslation): @SessionFacade.CurrentSystemUser
+                    </a>
                 }
             </div>
         </div>

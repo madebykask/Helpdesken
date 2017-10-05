@@ -103,6 +103,8 @@
 
             if (userOrCustomerChanged)
             {
+                SessionFacade.CurrentCoWorkers = null;
+
                 // load user info according database info (tblComputerUser)
                 LoadUserInfo();
 
@@ -410,19 +412,12 @@
         {
             lastError = null;
             var employeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
-            /* needs to investigate if this is necessary*/
-            if (SessionFacade.CurrentCustomer != null && SessionFacade.CurrentUserIdentity != null &&
-                !string.IsNullOrEmpty(employeeNumber))
+            
+            if (!UserBelongedToCurrentCustomer(employeeNumber))
             {
-                var config = (ECT.FormLib.Configurable.AccessManagment)ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
-                var country = config.Countries.Where(x => x.HelpdeskCustomerId == SessionFacade.CurrentCustomer.Id.ToString()).FirstOrDefault();
-
-                if (country == null || (country != null && !employeeNumber.StartsWith(country.EmployeePrefix)))
-                {
-                    SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
-                    lastError = new ErrorModel(103, "You don't have access to the portal. (User is not manager for country)");                                        
-                    return;
-                }
+                SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
+                lastError = new ErrorModel(103, "You don't have access to the portal. (User is not manager for country)");                                        
+                return;
             }
 
             if (SessionFacade.CurrentCoWorkers == null || 
@@ -471,6 +466,26 @@
 
             return Redirect(currentUrl);
         }       
+
+        protected bool UserBelongedToCurrentCustomer(string employeeNumber)
+        {
+            /*This is IKEA specific condition*/
+            if (SessionFacade.CurrentCustomer != null && SessionFacade.CurrentUserIdentity != null &&
+                !string.IsNullOrEmpty(employeeNumber))
+            {
+                var config = (ECT.FormLib.Configurable.AccessManagment)ConfigurationManager.GetSection("formLibConfigurable/accessManagment");
+                var country = config.Countries.Where(x => x.HelpdeskCustomerId == SessionFacade.CurrentCustomer.Id.ToString()).FirstOrDefault();
+
+                if (country == null || (country != null && !employeeNumber.StartsWith(country.EmployeePrefix)))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
 
         private List<LanguageOverview> GetActiveLanguages()
         {

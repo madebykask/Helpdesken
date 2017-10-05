@@ -18,6 +18,10 @@
             Property(e => e.PropertyName).IsRequired();
             Property(e => e.DisplayName).IsOptional();
 
+            Property(e => e.DisplayFormat).IsOptional();
+            Property(e => e.DataType).IsOptional();
+            Property(e => e.DataFormat).IsOptional();
+
             ToTable("tblCaseDocumentTextIdentifier");
         }
 

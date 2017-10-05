@@ -1,5 +1,4 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Shared.Input;
-using System;
 
 namespace DH.Helpdesk.BusinessData.Models.CaseDocument
 {
@@ -14,5 +13,8 @@ namespace DH.Helpdesk.BusinessData.Models.CaseDocument
         public string Identifier { get; set; }
         public string PropertyName { get; set; }
         public string DisplayName { get; set; }
+        public string DisplayFormat { get; set; }
+        public string DataFormat { get; set; }
+        public string DataType { get; set; }
     }
 }

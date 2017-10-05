@@ -18,6 +18,10 @@ namespace DH.Helpdesk.Services.BusinessLogic.CaseDocument
 
 		public bool EvaluateCondition(string value, string conditionOperator, string conditionValues)
 		{
+			// Ensure never null when comparing values, null is the same as empty
+			value = value ?? "";
+			conditionValues = conditionValues ?? "";
+
 			CaseDocumentConditionOperator conditionOp;
 			if (!Enum.TryParse<CaseDocumentConditionOperator>(conditionOperator, out conditionOp))
 			{
