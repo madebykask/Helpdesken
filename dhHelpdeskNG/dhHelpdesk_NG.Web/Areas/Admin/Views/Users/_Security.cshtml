@@ -1,4 +1,5 @@
-﻿@model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
+﻿@using DH.Helpdesk.Common.Enums
+@model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
 <div class="container" data-user="security">
     <table class="tableform">
         <tr>
@@ -321,12 +322,44 @@
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet till fakturering artikel", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
+    <tr>
+        <td>
+            @Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)
+        </td>
+        <td>
+            @Html.DropDownListFor(model => model.UserRights, Model.UserRoles, "", new {})
+        </td>
+    </tr>
         <tr>
             <td>
-                @Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)
+                @Translation.GetCoreTextTranslation("Lås upp ärende")
+                <input type="hidden" name="User.CaseUnlockUGPermissions" id="cuUgPermis" value="@string.Join(",", Model.CaseUnlockUgPermissions)" />
             </td>
             <td>
-                @Html.DropDownListFor(model => model.UserRights, Model.UserRoles, "", new {})
+                <input data-field="userPermission" type="checkbox" name="Admin1" id="Admin1" @(Model.CaseUnlockUgPermissions.Contains(UserGroups.User.ToString("D")) ? "checked=checked" : "") value="1" />
+                &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användare")
+            </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td>
+                <input data-field="adminPermission" type="checkbox" name="Admin2" id="Admin2" @(Model.CaseUnlockUgPermissions.Contains(UserGroups.Administrator.ToString("D")) ? "checked=checked" : "") value="1" />
+                &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Handläggare")
+            </td>
+        </tr>
+    <tr>
+        <td></td>
+        <td>
+            <input data-field="customerAdminPermission" type="checkbox" name="Admin3" id="Admin3" @(Model.CaseUnlockUgPermissions.Contains(UserGroups.CustomerAdministrator.ToString("D")) ? "checked=checked" : "") value="1"/>
+            &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Kundadministratör")
+        </td>
+    </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input data-field="sysAdminPermission" type="checkbox" name="Admin4" id="Admin4" @(Model.CaseUnlockUgPermissions.Contains(UserGroups.SystemAdministrator.ToString("D")) ? "checked=checked" : "") value="1" />
+                &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Administratör")
             </td>
         </tr>
     </table>
@@ -345,5 +378,34 @@
             $("#hidOrderP1").val(0);
         }
     });
+
+    $('#Admin1').change(function () {
+        applyCaseUnlockValue($("#Admin1"), @UserGroups.User.ToString("D"));
+    });
+    $('#Admin2').change(function () {
+        applyCaseUnlockValue($("#Admin2"), @UserGroups.Administrator.ToString("D"));
+    });
+    $('#Admin3').change(function () {
+        applyCaseUnlockValue($("#Admin3"), @UserGroups.CustomerAdministrator.ToString("D"));
+    });
+    $('#Admin4').change(function () {
+        applyCaseUnlockValue($("#Admin4"), @UserGroups.SystemAdministrator.ToString("D"));
+    });
+
+    var applyCaseUnlockValue = function (element, value) {
+        var curPermVal = $("#cuUgPermis").val();
+        var currPerm = [];
+        if (curPermVal !== "")
+            currPerm = curPermVal.split(",");
+        if (element.is(":checked")) {
+            currPerm.push(value);
+            $("#cuUgPermis").val(currPerm.join(","));
+        } else {
+            currPerm = $.grep(currPerm, function(val) {
+                return val != value;
+            });
+            $("#cuUgPermis").val(currPerm.join(","));
+        }
+    }
 
 </script>

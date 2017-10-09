@@ -56,7 +56,6 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.CustomerId = customerId;
             this.LanguageId = languageId;
             this.UserGroupId = userGroupId;
-            this.FollowUpPermission = followUpPermission;
             this.RestrictedCasePermission = restrictedCasePermission;
             this.ShowNotAssignedWorkingGroups = showNotAssignedWorkingGroups;
             this.CreateCasePermission = createCasePermission;

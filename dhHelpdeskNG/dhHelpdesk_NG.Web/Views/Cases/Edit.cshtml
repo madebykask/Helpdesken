@@ -1,5 +1,4 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
-@using System.Web.Optimization
 @using DH.Helpdesk.Web
 
 <div id="caseContainer">
@@ -158,6 +157,16 @@
                 }
             });
         };
+            function UnLockCaseById(caseId, url) {
+                $.post('@Url.Content("~/Cases/UnLockCaseByCaseId/")', { caseId: caseId }, function (data) {
+                    if (data != "Success") {
+                        ShowToastMessage('@Translation.GetForJS("Ett fel inträffade när ärendet skulle låsas upp automatiskt. Var vänlig kontakta systemadministratören.")', "Error");
+                    }
+                    if (url) {
+                        redirectToUrl(url);
+                    }
+                });
+            };
 
         //HIDE SHOW
         $(".hidebtn").on("click", function (e) {
@@ -272,14 +281,15 @@
                             <li class="secspace"></li>
                             if (SessionFacade.CurrentUser.DeleteCasePermission == 1)
                             {
-                                <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "DeleteCase",                                    
+                                <li>
+                                    @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "DeleteCase",
                                     new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new
                                     {
                                         @class = "btn caseDeleteDialog",
                                         id = "case-action-delete",
-                                    deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill radera detta ärende") + '?'
+                                        deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill radera detta ärende") + '?'
                                     })
-                                </li>
+                            </li>
                             }
                         }
                         @if (string.IsNullOrEmpty(Model.BackUrl))
@@ -288,7 +298,7 @@
                         }
                         else
                         {
-                            <li><a id="case-action-close" class = "btn" href="@Model.BackUrl">@Translation.GetCoreTextTranslation("Stäng")</a></li>
+                            <li><a id="case-action-close" class="btn" href="@Model.BackUrl">@Translation.GetCoreTextTranslation("Stäng")</a></li>
                         }
 
                         @if (Model.EditMode == Enums.AccessMode.FullAccess)
@@ -296,7 +306,7 @@
                             <li>
                                 <div id="divActionMenu" class="btn-group">
                                     <button class="btn dropdown-toggle" data-toggle="dropdown" id="btnActionMenu">
-                                @Translation.GetCoreTextTranslation("Åtgärder")
+                                        @Translation.GetCoreTextTranslation("Åtgärder")
                                         <span class="caret">&nbsp;</span>
                                     </button>
                                     <ul class="dropdown-menu">
@@ -307,11 +317,11 @@
                                         </li>
                                         @if (!Model.IsItChildCase() && SessionFacade.CurrentUser.CreateSubCasePermission == 1)
                                         {
-                                            <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Skapa underärende"), "NewChildCase", new {parentCaseId = Model.case_.Id})</li>
+                                            <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Skapa underärende"), "NewChildCase", new { parentCaseId = Model.case_.Id })</li>
                                             if (!Model.IsItParentCase())
                                             {
-                                                 <li><a data-toggle="modal" id="case_connect_to_parent_btn" href="#">@Translation.GetCoreTextTranslation("Koppla till huvudärende")</a></li>
-                                                 @Html.HiddenFor(m => m.case_.Id, new {@id = "connect_to_parent_childId"})
+                                                <li><a data-toggle="modal" id="case_connect_to_parent_btn" href="#">@Translation.GetCoreTextTranslation("Koppla till huvudärende")</a></li>
+                                                @Html.HiddenFor(m => m.case_.Id, new { @id = "connect_to_parent_childId" })
                                             }
                                         }
                                         @if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue && (!Model.IsItChildCase() || (Model.IsItChildCase() && !Model.ParentCaseInfo.IsCaseClosed)))
@@ -334,11 +344,11 @@
                                         {
                                             if (Model.IsFollowUp)
                                             {
-                                                <li><a href="/cases/followupRemove/@Model.case_.Id" >@Translation.GetCoreTextTranslation("Ta bort uppföljning")</a></li>
+                                                <li><a href="/cases/followupRemove/@Model.case_.Id">@Translation.GetCoreTextTranslation("Ta bort uppföljning")</a></li>
                                             }
                                             else
                                             {
-                                                <li><a href="/cases/followup/@Model.case_.Id" >@Translation.GetCoreTextTranslation("Följ upp")</a></li>
+                                                <li><a href="/cases/followup/@Model.case_.Id">@Translation.GetCoreTextTranslation("Följ upp")</a></li>
                                             }
                                         }
 
@@ -347,7 +357,7 @@
                                             var curLanguage = (Model.case_.Id == 0 ? SessionFacade.CurrentLanguageId : Model.case_.RegLanguage_Id);
                                             <li class="dropdown-submenu">
                                                 <a href="#">
-                                            @Translation.GetCoreTextTranslation("Språk för E-mail")
+                                                    @Translation.GetCoreTextTranslation("Språk för E-mail")
                                                 </a>
                                                 <ul class="dropdown-menu">
                                                     @foreach (var lang in Model.Languages.Where(l => l.IsActive != 0).ToList())
@@ -355,13 +365,14 @@
                                                         var langNameId = "langItem" + lang.Id;
                                                         <li>
 
-                                                    <a id="@langNameId" class="langItem" href="#" onclick="ChangeCaseLanguageTo(@lang.Id,true);">@Translation.GetCoreTextTranslation(lang.Name)
-                                                                @if (lang.Id == curLanguage)
-                                                                {
-                                                                    <i class='icon-ok'></i>
-                                                                }
-                                                            </a>
-                                                        </li>
+                                                            <a id="@langNameId" class="langItem" href="#" onclick="ChangeCaseLanguageTo(@lang.Id,true);">
+                                                                @Translation.GetCoreTextTranslation(lang.Name)
+                                                            @if (lang.Id == curLanguage)
+                                                            {
+                                                                <i class='icon-ok'></i>
+                                                            }
+                                                        </a>
+                                                    </li>
                                                     }
                                                 </ul>
                                             </li>
@@ -377,7 +388,7 @@
                         }
                         else
                         {
-                            if (Model.EditMode != Enums.AccessMode.FullAccess && SessionFacade.CurrentUser.FollowUpPermission == 1)
+                            if (Model.CaseUnlockAccess || SessionFacade.CurrentUser.FollowUpPermission == 1)
                             {
                                 <li>
                                     <div id="divActionMenu" class="btn-group">
@@ -386,19 +397,29 @@
                                             <span class="caret">&nbsp;</span>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            @if (Model.IsFollowUp)
+                                            @if (SessionFacade.CurrentUser.FollowUpPermission == 1)
                                             {
-                                                <li><a href="/cases/followupRemove/@Model.case_.Id">@Translation.GetCoreTextTranslation("Ta bort uppföljning")</a></li>
+                                                if (Model.IsFollowUp)
+                                                {
+                                                    <li><a href="/cases/followupRemove/@Model.case_.Id">@Translation.GetCoreTextTranslation("Ta bort uppföljning")</a></li>
+                                                }
+                                                else
+                                                {
+                                                    <li><a href="/cases/followup/@Model.case_.Id">@Translation.GetCoreTextTranslation("Följ upp")</a></li>
+                                                }
+
                                             }
-                                            else
+                                            @if (Model.CaseUnlockAccess)
                                             {
-                                                <li><a href="/cases/followup/@Model.case_.Id">@Translation.GetCoreTextTranslation("Följ upp")</a></li>
+                                                if (Model.CaseLock != null && Model.CaseLock.IsLocked)
+                                                {
+                                                    <li><a onclick="UnLockCaseById('@Model.case_.Id', '@Url.Action("Edit", new { id = Model.case_.Id })')">@Translation.GetCoreTextTranslation("Lås upp")</a></li>
+                                                }
                                             }
                                         </ul>
                                     </div>
                                 </li>
                             }
-
                             if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue
                                 && (!Model.IsItChildCase() || (Model.IsItChildCase() && !Model.ParentCaseInfo.IsCaseClosed)))
                             {

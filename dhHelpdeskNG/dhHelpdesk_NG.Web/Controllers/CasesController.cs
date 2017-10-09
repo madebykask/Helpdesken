@@ -1008,6 +1008,12 @@ namespace DH.Helpdesk.Web.Controllers
             return Json("Success");
         }
 
+        public JsonResult UnLockCaseByCaseId(int caseId)
+        {
+            this._caseLockService.UnlockCaseByCaseId(caseId);
+            return Json("Success");
+        }
+
         public JsonResult IsCaseAvailable(int caseId, DateTime caseChangedTime, string lockGuid)
         {
             var caseLock = this._caseLockService.GetCaseLockByCaseId(caseId);
@@ -4838,6 +4844,9 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var isFlwup = _caseFollowUpService.IsCaseFollowUp(SessionFacade.CurrentUser.Id, caseId);
                 m.IsFollowUp = isFlwup;
+
+                var caseUnlockAccess = _caseLockService.GetCaseUnlockUgPermissions(SessionFacade.CurrentUser.Id);
+                m.CaseUnlockAccess = caseUnlockAccess;
 
                 var editMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
                 if (m.case_.Unread != 0 && updateState && editMode == Enums.AccessMode.FullAccess)

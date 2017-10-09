@@ -157,6 +157,8 @@
 
             this.Property(x => x.UserGUID).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
+            this.Property(x => x.CaseUnlockUGPermissions).HasMaxLength(20);
+
             this.ToTable("tblUsers");
         }
     }

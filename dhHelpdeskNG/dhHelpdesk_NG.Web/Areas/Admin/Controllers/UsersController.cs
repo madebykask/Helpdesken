@@ -1113,6 +1113,11 @@
                 model.CustomerComplexPassword = userCustomerSetting.ComplexPassword;
             }
 
+            if (!string.IsNullOrEmpty(user.CaseUnlockUGPermissions))
+            {
+                model.CaseUnlockUgPermissions = user.CaseUnlockUGPermissions;
+            }
+
             #endregion
 
             return model;

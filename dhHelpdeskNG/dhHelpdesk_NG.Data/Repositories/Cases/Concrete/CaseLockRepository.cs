@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using DH.Helpdesk.Common.Constants;
 
 namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 {
@@ -180,6 +181,16 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 this.Delete(entity);
                 this.Commit();
             }
+        }
+
+        public bool GetCaseUnlockUgPermissions(int userId)
+        {
+            var user = DataContext.Users.SingleOrDefault(x => x.Id == userId);
+            if (user != null)
+            {
+                return user.CaseUnlockUGPermissions.Split(BRConstItem.Value_Separator).Select(int.Parse).Contains(user.UserGroup_Id);
+            }
+            return false;
         }
 
         public List<LockedCaseOverview> GetLockedCases(int? customerId)

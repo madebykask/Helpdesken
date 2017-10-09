@@ -6224,5 +6224,12 @@ If not exists (select * from tblTextTranslation where text_id = 1857 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1857, 2, 'The attached file is removed from the case')
 GO
 
+If not exists (select * from tbltext where id = 1858)
+	insert into tbltext (id, TextString) VALUES (1858, 'Lås upp ärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1858 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1858, 2, 'Unlock cases')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
