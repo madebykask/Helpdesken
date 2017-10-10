@@ -172,7 +172,7 @@
                                     if (result && result.success) {
                                         selectedOptionImg.attr('src', e.target.result);
                                         selectedOptionImg.width(24);
-                                        selectedOptionImg.height(22);
+                                        selectedOptionImg.height(24);
                                         hiddenImgElement.val(e.target.result);
                                     }
                                 }
@@ -180,7 +180,7 @@
                         } else {
                             selectedOptionImg.attr('src', e.target.result);
                             selectedOptionImg.width(24);
-                            selectedOptionImg.height(22);
+                            selectedOptionImg.height(24);
                             hiddenImgElement.val(e.target.result);
                         }
                     }
@@ -196,7 +196,7 @@
                     var img = $(this).parent().find(".loaded-image");
                     img.attr('src', src);
                     img.width(24);
-                    img.height(22);
+                    img.height(24);
                 }
             });
         });

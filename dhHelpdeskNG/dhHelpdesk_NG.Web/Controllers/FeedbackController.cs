@@ -666,6 +666,56 @@ namespace DH.Helpdesk.Web.Controllers
                 },
                 new SelectListItem
                 {
+                    Value = "ic_0_black_24dp_1x.png",
+                    Text = "0"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_1_black_24dp_1x.png",
+                    Text = "1"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_2_black_24dp_1x.png",
+                    Text = "2"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_3_black_24dp_1x.png",
+                    Text = "3"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_4_black_24dp_1x.png",
+                    Text = "4"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_5_black_24dp_1x.png",
+                    Text = "5"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_6_black_24dp_1x.png",
+                    Text = "6"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_7_black_24dp_1x.png",
+                    Text = "7"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_8_black_24dp_1x.png",
+                    Text = "8"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_9_black_24dp_1x.png",
+                    Text = "9"
+                },
+                new SelectListItem
+                {
                     Text = Translation.GetCoreTextTranslation("Lägg till"),
                     Value = FeedBack.IconId
                 }
