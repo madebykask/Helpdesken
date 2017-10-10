@@ -14,7 +14,6 @@
             Property(e => e.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             Property(e => e.Name).IsOptional().HasMaxLength(50);
-            Property(e => e.PageNumbersUse).IsRequired();
             Property(e => e.CaseDocumentTemplateGUID).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
             Property(e => e.MarginTop).IsRequired();
@@ -27,6 +26,14 @@
             Property(e => e.ShowFooterFromPageNr).IsRequired();
             Property(e => e.ShowHeaderFromPageNr).IsRequired();
             Property(e => e.Style).IsRequired();
+
+            Property(e => e.ShowAlternativeHeaderOnFirstPage).IsRequired();
+            Property(e => e.ShowAlternativeFooterOnFirstPage).IsRequired();
+
+            Property(e => e.DraftHeight).IsRequired();
+            Property(e => e.DraftYLocation).IsRequired();
+            Property(e => e.DraftRotateAngle).IsRequired();
+            Property(e => e.HtmlViewerWidth).IsRequired();
 
             ToTable("tblCaseDocumentTemplate");
         }
