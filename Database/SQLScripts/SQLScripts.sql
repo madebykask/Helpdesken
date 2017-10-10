@@ -1,5 +1,4 @@
-﻿use [hd-ikeahr-dev]
-
+﻿
 --update DB from 5.3.33 to 5.3.34 version
 
 --UPDATE tblCustomerUser field length
