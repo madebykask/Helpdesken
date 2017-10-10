@@ -1,5 +1,4 @@
-﻿use [hd-ikeahr-dev]
-
+﻿
 
 --update DB from 5.3.32 to 5.3.33 version
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ExcludeAdministrators' and sysobjects.name = N'tblQuestionnaire')
