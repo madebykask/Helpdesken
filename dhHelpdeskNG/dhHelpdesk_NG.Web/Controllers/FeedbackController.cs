@@ -47,11 +47,13 @@ namespace DH.Helpdesk.Web.Controllers
 		private readonly ICaseSearchService _caseSearchService;
 		private readonly ICaseFieldSettingService _caseFieldSettingService;
 		private readonly ICaseSettingsService _caseSettingService;
+		private readonly IDepartmentService _departmentService;
 
 		public FeedbackController(IMasterDataService masterDataService, IQestionnaireQuestionOptionService questionnaireQuestionOptionService,
 			IQestionnaireQuestionService questionnaireQuestionService, IFeedbackService feedbackService, ICircularService circularService,
 			IInfoService infoService, GridSettingsService gridSettingsService, ICaseLockService caseLockService, ISettingService settingService,
-            IGlobalSettingService globalSettingService, ICaseSearchService caseSearchService, ICaseFieldSettingService caseFieldSettingService, ICaseSettingsService caseSettingService) 
+            IGlobalSettingService globalSettingService, ICaseSearchService caseSearchService, ICaseFieldSettingService caseFieldSettingService, ICaseSettingsService caseSettingService,
+            IDepartmentService departmentService) 
 			: base(masterDataService)
 		{
 			_questionnaireQuestionOptionService = questionnaireQuestionOptionService;
@@ -66,6 +68,7 @@ namespace DH.Helpdesk.Web.Controllers
             _caseSearchService = caseSearchService;
             _caseFieldSettingService = caseFieldSettingService;
             _caseSettingService = caseSettingService;
+            _departmentService = departmentService;
 		}
 
 		public ActionResult NewFeedback(EditFeedbackParams parameters)
@@ -334,7 +337,16 @@ namespace DH.Helpdesk.Web.Controllers
 	        var results = this._circularService.GetResult(circularId);
 	        var feedbackOverview = this._circularService.GetQuestionnaire(feedbackId, OperationContext);
             var jsonCaseIndexViewModel = GetJsonCaseIndexViewModel();
+
+	        var departmentIds = results.SelectMany(x => x.DepartmentIds).Distinct().ToArray();
+	        var departments = _departmentService.GetDepartmentsByIds(departmentIds).OrderBy(x => x.DepartmentName).Select(x => new SelectListItem
+	        {
+	            Value = x.Id.ToString(),
+                Text = x.DepartmentName
+	        }).ToList();
+
             var viewModel = new FeedbackStatisticsViewModel(feedbackId, feedbackOverview, results, new StatisticsFilter(), jsonCaseIndexViewModel);
+	        viewModel.Departments = departments;
 
             return this.View("Statistics", viewModel);
 	    }
@@ -353,7 +365,8 @@ namespace DH.Helpdesk.Web.Controllers
             var results = this._circularService.GetResults(
                 circularId,
                 statisticsFilter.CircularCreatedDate.DateFrom,
-                statisticsFilter.CircularCreatedDate.DateTo.GetEndOfDay());
+                statisticsFilter.CircularCreatedDate.DateTo.GetEndOfDay(),
+                statisticsFilter.Departments);
             var jsonCaseIndexViewModel = GetJsonCaseIndexViewModel();
             var viewModel = new FeedbackStatisticsViewModel(questionnaireId, questionnaire, results, new StatisticsFilter(), jsonCaseIndexViewModel);
             var random = new Random();

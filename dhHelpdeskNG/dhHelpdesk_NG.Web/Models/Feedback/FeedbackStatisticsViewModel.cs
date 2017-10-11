@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
 using DH.Helpdesk.Services.Response.Questionnaire;
 using DH.Helpdesk.Web.Models.Case;
@@ -21,6 +22,7 @@ namespace DH.Helpdesk.Web.Models.Feedback
 			this.StatisticsFilter = statisticsFilter;
 			this.FeedbackStatisticsCases = caseIndexViewModel;
             Emails = new List<string>();
+            Departments = new List<SelectListItem>();
 		}
 
 		public StatisticsFilter StatisticsFilter { get; set; }
@@ -28,5 +30,7 @@ namespace DH.Helpdesk.Web.Models.Feedback
         public JsonCaseIndexViewModel FeedbackStatisticsCases { get; set; }
 
 	    public List<string> Emails { get; set; }
+
+	    public List<SelectListItem> Departments { get; set; }
     }
 }

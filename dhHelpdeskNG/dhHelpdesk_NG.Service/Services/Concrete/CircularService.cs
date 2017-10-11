@@ -464,7 +464,7 @@
             }
         }
 
-        public List<OptionResult> GetResults(int circularId, DateTime? from, DateTime? to)
+        public List<OptionResult> GetResults(int circularId, DateTime? from, DateTime? to, List<int> departmentIds)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
@@ -474,6 +474,7 @@
                         .GetCircularQuestionnaireQuestionResultEntities(circularId)
                         .GetQuestionResultDateFrom(from)
                         .GetQuestionResultDateTo(to)
+                        .GetQuestionResultDepartment(departmentIds)
                         .MapToOptionResults();
 
                 return overviews;

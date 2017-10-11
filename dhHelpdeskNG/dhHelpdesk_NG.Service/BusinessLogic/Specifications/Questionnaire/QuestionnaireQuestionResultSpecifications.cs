@@ -89,5 +89,19 @@
 
             return query;
         }
+        public static IQueryable<QuestionnaireQuestionResultEntity> GetQuestionResultDepartment(
+            this IQueryable<QuestionnaireQuestionResultEntity> query,
+            List<int> departments)
+        {
+            if (!departments.Any())
+            {
+                return query;
+            }
+
+            query = query.Where(x => x.QuestionnaireResult.QuestionnaireCircularPart.Case.Department_Id.HasValue 
+            && departments.Contains(x.QuestionnaireResult.QuestionnaireCircularPart.Case.Department_Id.Value));
+
+            return query;
+        }
     }
 }

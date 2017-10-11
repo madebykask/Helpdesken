@@ -34,7 +34,7 @@ namespace DH.Helpdesk.Services.Services
 
         List<OptionResult> GetResults(List<int> circularIds, DateTime? from, DateTime? to);
 
-        List<OptionResult> GetResults(int circularId, DateTime? from, DateTime? to);
+        List<OptionResult> GetResults(int circularId, DateTime? from, DateTime? to, List<int> departmentIds);
 
         List<AvailableCase> GetAvailableCases(
             int customerId,
