@@ -2452,10 +2452,12 @@ namespace DH.Helpdesk.Web.Controllers
             return Json("Success");
         }
 
-        public PartialViewResult ShowCasePrintPreview(int caseId, int caseNumber)
+        public PartialViewResult ShowCasePrintPreview(int caseId, int caseNumber, bool popupShow = false, bool showPrintButton = true)
         {
             var model = GetCaseReportViewerData("CaseDetailsList", caseId, caseNumber);
             model.CanShow = true;
+            model.PopupShow = popupShow;
+            model.ShowPrintButton= showPrintButton;
             return PartialView("_CasePrint", model);
         }
 

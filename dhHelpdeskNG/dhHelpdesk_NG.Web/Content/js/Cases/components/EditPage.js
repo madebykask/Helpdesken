@@ -1530,7 +1530,7 @@ EditPage.prototype.init = function (p) {
             var stepId = parseInt($('#steps').val()) || 0;
 
             if (stepId > 0) {
-                isValid = self.isExtendedCaseValid(false, true, 29);
+                isValid = self.isExtendedCaseValid(false, true);
             }
             else {
                 isValid = self.isExtendedCaseValid(false, false);

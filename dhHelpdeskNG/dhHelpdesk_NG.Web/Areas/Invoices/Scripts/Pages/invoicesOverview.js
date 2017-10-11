@@ -64,16 +64,26 @@ InvoicesOverview.prototype = {
                             var tr = $(this).closest("tr");
                             self._toggleChild(tr);
                         });
+                        $(row).on("click", "td.infoShower", function () {
+                            showCaseInfo(data.CaseId, data.CaseNumber);
+                        });
                     }
                 },
                 rowId: "CaseId",
-                columns: [
+                columns: [                
                     {
                         "className": "expand-col",
                         "sortable": false,
-                        "defaultContent": "<i class='icon-plus-sign'></i>"
+                        "defaultContent": "<i class='icon-plus-sign' style='cursor: pointer;'></i>"
                     },
-                    { "data": "CaseNumber" },
+                    {
+                        "className": "infoShower",
+                        "sortable": false,
+                        "defaultContent": "<i class='icon-list-alt icon-4x ' style='cursor: pointer;' </i> "                         
+                    },
+                    {
+                       "data": "CaseNumber"                    
+                    },
                     { "data": "Caption" },
                     { "data": "Category" },
                     {
@@ -134,22 +144,22 @@ InvoicesOverview.prototype = {
                     //{ "defaultContent": "", "sortable": false },
                     {
                         "data": "",
-                        "className": "align-center",
+                        "className": "align-center invoiceCol",
                         "render": function (data, type, row) {
-                            return !self._isSectionReadOnly(row) ? "<input type='checkbox' id='cbInvoiceChildren'>" : "";
+                            return !self._isSectionReadOnly(row) ? "<input type='checkbox' id='cbInvoiceChildren' data-accessId='invoiceParentCol-" + row.CaseId + "'>" : "";
                         },
                         "sortable": false
                     },
                     {
                         "data": "",
-                        "className": "align-center",
+                        "className": "align-center notInvoiceCol",
                         "render": function (data, type, row) {
-                            return !self._isSectionReadOnly(row) ? "<input type='checkbox' id='cbNotInvoiceChildren'>" : "";
+                            return !self._isSectionReadOnly(row) ? "<input type='checkbox' id='cbNotInvoiceChildren' data-accessId='notInvoiceParentCol-" + row.CaseId + "'>" : "";
                         },
                         "sortable": false
                     }
-                ],
-                order: [[1, "asc"]],
+                ],               
+                order: [[2, "asc"]],
                 "bPaginate": false,
                 //"bAutoWidth": false,
                 //"lengthMenu": [appSettings.gridSettings.pageSizeList, appSettings.gridSettings.pageSizeList],
@@ -202,7 +212,33 @@ InvoicesOverview.prototype = {
         $('#invoiceGrid tbody').on('click', 'tr #btnInvoiceChargedChildren', function (e) {
             self._selectChildActionsByCharge($(this).closest("tr"));
             return false;
-        });
+        });      
+        
+        function showCaseInfo(_caseId, _caseNumber) {
+            $.get(self.options.showCaseInfoUrl,
+              {
+                  caseId: _caseId,
+                  caseNumber: _caseNumber,
+                  popupShow: true,
+                  showPrintButton: false,
+                  curTime: Date.now()
+              },
+
+              function (_reportPresentation) {
+                  $('#CasePrintArea').html(_reportPresentation);
+
+                  $('#PrintCaseDialog').draggable({
+                      handle: ".modal-header"
+                  });
+              
+                  $('#PrintCaseDialog').modal({
+                      "backdrop": "static",
+                      "keyboard": true,
+                      "show": true
+                  });            
+              });
+        }       
+
     },
 
     _getAmount: function (data) {
@@ -380,6 +416,7 @@ InvoicesOverview.prototype = {
             var rowString =
             "<tr class='expanded-row' data-parentrowid='" + data.CaseId + "' data-loginvoice='" + data.LogInvoices[i].Id + "'>" +
             "<td></td>" +
+            "<td></td>" +
 		    "<td></td>" +
 		    "<td>" + $("<span/>").text(data.LogInvoices[i].Text).html() + "</td>" +
 		    "<td></td>" +
@@ -393,8 +430,8 @@ InvoicesOverview.prototype = {
 		    "<td></td>" +
 		    "<td class='align-center'>" + self._getChargeBox(true, data.LogInvoices[i].Charge) + "</td>" +
 		    //"<td>" + self._getStatusText(data.LogInvoices[i].InvoiceRow.Status) + "</td>" +
-		    "<td class='align-center'>" + self._getInvoiceActionBox(isRowReadOnly, data.LogInvoices[i].InvoiceRow.Status, data.LogInvoices[i].InvoiceAction) + "</td>" +
-		    "<td class='align-center'>" + self._getNotInvoiceActionBox(isRowReadOnly, data.LogInvoices[i].InvoiceRow.Status, data.LogInvoices[i].InvoiceAction) + "</td>" +
+		    "<td class='align-center'>" + self._getInvoiceActionBox(data.CaseId, isRowReadOnly, data.LogInvoices[i].InvoiceRow.Status, data.LogInvoices[i].InvoiceAction) + "</td>" +
+		    "<td class='align-center'>" + self._getNotInvoiceActionBox(data.CaseId, isRowReadOnly, data.LogInvoices[i].InvoiceRow.Status, data.LogInvoices[i].InvoiceAction) + "</td>" +
             "</tr>";
             var row = $(rowString);
             res.push(row[0]);
@@ -409,6 +446,7 @@ InvoicesOverview.prototype = {
             "<tr class='expanded-row' data-parentrowid='" + data.CaseId + "' data-externalinvoice='" + data.ExternalInvoices[i].Id + "'>" +
             "<td></td>" +
 		    "<td></td>" +
+		    "<td></td>" +
 		    "<td>" + $("<span/>").text(data.ExternalInvoices[i].Name).html() + "</td>" +
 		    "<td></td>" +
 		    "<td></td>" +
@@ -421,8 +459,8 @@ InvoicesOverview.prototype = {
 		    "<td class='align-right'>" + (isRowReadOnly ? self._formatNumber(data.ExternalInvoices[i].Amount, 2, 3, " ", ",") : self._getTextBox(data.ExternalInvoices[i].Amount, "txtExternalAmount")) + "</td>" +
 		    "<td class='align-center'>" + self._getChargeBox(true, data.ExternalInvoices[i].Charge) + "</td>" +
 		    //"<td>" + self._getStatusText(data.ExternalInvoices[i].InvoiceRow.Status) + "</td>" +
-		    "<td class='align-center'>" + self._getInvoiceActionBox(isRowReadOnly, data.ExternalInvoices[i].InvoiceRow.Status, data.ExternalInvoices[i].InvoiceAction) + "</td>" +
-		    "<td class='align-center'>" + self._getNotInvoiceActionBox(isRowReadOnly, data.ExternalInvoices[i].InvoiceRow.Status, data.ExternalInvoices[i].InvoiceAction) + "</td>" +
+		    "<td class='align-center'>" + self._getInvoiceActionBox(data.CaseId, isRowReadOnly, data.ExternalInvoices[i].InvoiceRow.Status, data.ExternalInvoices[i].InvoiceAction) + "</td>" +
+		    "<td class='align-center'>" + self._getNotInvoiceActionBox(data.CaseId, isRowReadOnly, data.ExternalInvoices[i].InvoiceRow.Status, data.ExternalInvoices[i].InvoiceAction) + "</td>" +
             "</tr>";
             row = $(rowString);
             res.push(row[0]);
@@ -505,22 +543,22 @@ InvoicesOverview.prototype = {
         return res;
     },
 
-    _getInvoiceActionBox: function (isRowReadOnly, status, val) {
+    _getInvoiceActionBox: function (groupId, isRowReadOnly, status, val) {
         "use strict";
         var self = this;
 
-        var res = "<input type='checkbox' id='cbInvoice' name='cbInvoice' {1} {2}>"
+        var res = "<input type='checkbox' data-InvoiceGroupId='"+ groupId +"' id='cbInvoice' name='cbInvoice' {1} {2}>"
             .replace(/\{1\}/g, ((status && status === 2) || (val && val === 2)) ? "checked" : "")
             .replace(/\{2\}/g, isRowReadOnly ? "disabled" : "");
 
         return res;
     },
 
-    _getNotInvoiceActionBox: function (isRowReadOnly, status, val) {
+    _getNotInvoiceActionBox: function (groupId, isRowReadOnly, status, val) {
         "use strict";
         var self = this;
 
-        var res = "<input type='checkbox' id='cbNotInvoice' name='cbNotInvoice' {1} {2}>"
+        var res = "<input type='checkbox'  data-NotInvoiceGroupId='" + groupId + "' id='cbNotInvoice' name='cbNotInvoice' {1} {2}>"
             .replace(/\{1\}/g, ((status && status === 3) || (val && val === 3)) ? "checked" : "")
             .replace(/\{2\}/g, isRowReadOnly ? "disabled" : "");
 
@@ -697,10 +735,10 @@ InvoicesOverview.prototype = {
     _selectActionUi: function (row, action) {
         "use strict";
         var self = this;
-
+                
         switch (action) {
             case 2:
-                $("#cbInvoice", row).attr("checked", "checked");
+                $("#cbInvoice", row).attr("checked", "checked");                
                 $("#cbNotInvoice", row).removeAttr("checked");
                 break;
             case 3:
@@ -730,6 +768,10 @@ InvoicesOverview.prototype = {
         }
 
         self._selectActionUi(row, action);
+
+        var data = parent.data();
+        self._setOverallCheckBoxes(data.CaseId);        
+
     },
 
     _selectChildActions: function (tr, action) {
@@ -753,7 +795,24 @@ InvoicesOverview.prototype = {
             for (var i = 0; i < childRows.length; i++) {
                 self._selectActionUi(childRows[i], action);
             }
+            self._setOverallCheckBoxes(data.CaseId);
+        } else {
+                        
+            if (action == 2)
+            {
+                var parentNotInvoiceCheckbox = $(document).find("[data-accessId='notInvoiceParentCol-" + data.CaseId + "']")[0];
+                parentNotInvoiceCheckbox.indeterminate = false;
+                $(parentNotInvoiceCheckbox).removeAttr("checked");                
+            }
+
+            if (action == 3) {
+                var parentInvoiceCheckbox = $(document).find("[data-accessId='invoiceParentCol-" + data.CaseId + "']")[0];
+                parentInvoiceCheckbox.indeterminate = false;                
+                $(parentInvoiceCheckbox).removeAttr("checked");
+            }
         }
+
+        
     },
 
     _selectChildActionsByCharge: function (tr) {
@@ -762,18 +821,25 @@ InvoicesOverview.prototype = {
 
         var parent = self.table.row(tr);
         var data = parent.data();
-
+        var overallInvoice = false;
+        var overallNoInvoice = false;
         for (var i = 0; i < data.LogInvoices.length; i++) {
             if (!self._isInvoiceValueReadOnly(data.LogInvoices[i].InvoiceRow.Status)) {
                 var action = data.LogInvoices[i].Charge ? 2 : 3;
                 self._selectActionData(parent, data.LogInvoices[i].Id, data.LogInvoices, action);
                 if (parent.child.isShown()) {
                     var childRow = self._getTrForLogInvoice(data.LogInvoices[i].Id);
-                    self._selectActionUi(childRow, action);
+                    self._selectActionUi(childRow, action);                    
                 }
-            }
-            
+                if (action == 2) {
+                    overallInvoice = true;
+                }
+                if (action == 3) {
+                    overallNoInvoice = true;
+                }
+            }            
         }
+
         for (i = 0; i < data.ExternalInvoices.length; i++) {
             if (!self._isInvoiceValueReadOnly(data.ExternalInvoices[i].InvoiceRow.Status)) {
                 var action = data.ExternalInvoices[i].Charge ? 2 : 3;
@@ -782,6 +848,65 @@ InvoicesOverview.prototype = {
                     var childRow = self._getTrForExternalInvoice(data.ExternalInvoices[i].Id);
                     self._selectActionUi(childRow, action);
                 }
+                if (action == 2) {
+                    overallInvoice = true;
+                }
+                if (action == 3) {
+                    overallNoInvoice = true;
+                }
+            }
+        }
+
+        self._setOverallCheckBoxes(data.CaseId, overallInvoice, overallNoInvoice);
+        
+    },
+
+    _setOverallCheckBoxes: function (groupId, _overallInvoice, _overallNoInvoice) {
+        "use strict";
+        var self = this;
+       
+        var overallInvoice = false;
+        var overallNoInvoice = false;
+
+        if (_overallInvoice == undefined) {
+            $(document).find("[data-InvoiceGroupId='" + groupId + "']").each(function () {
+                if ($(this).is(":checked")) {
+                    overallInvoice = true;
+                    return;
+                }
+            });
+        } else {
+            overallInvoice = _overallInvoice;
+        }
+        if (_overallNoInvoice == undefined) {
+            $(document).find("[data-NotInvoiceGroupId='" + groupId + "']").each(function () {
+                if ($(this).is(":checked")) {
+                    overallNoInvoice = true;
+                    return;
+                }
+            });
+        } else {
+            overallNoInvoice = _overallNoInvoice;
+        }
+
+        var parentInvoiceCheckbox = $(document).find("[data-accessId='invoiceParentCol-" + groupId + "']")[0];
+        var parentNotInvoiceCheckbox = $(document).find("[data-accessId='notInvoiceParentCol-" + groupId + "']")[0];
+        if (parentInvoiceCheckbox != undefined && parentNotInvoiceCheckbox != undefined) {
+            parentInvoiceCheckbox.indeterminate = false;
+            parentNotInvoiceCheckbox.indeterminate = false;
+            $(parentNotInvoiceCheckbox).removeAttr("checked");
+            $(parentInvoiceCheckbox).removeAttr("checked");
+            if (overallInvoice && overallNoInvoice) {
+                parentInvoiceCheckbox.indeterminate = true;
+                parentNotInvoiceCheckbox.indeterminate = true;
+            }
+            else if (overallInvoice) {
+                $(parentInvoiceCheckbox).attr("checked", "checked");
+                $(parentNotInvoiceCheckbox).removeAttr("checked");
+            }
+            else if (overallNoInvoice) {
+                $(parentNotInvoiceCheckbox).attr("checked", "checked");
+                $(parentInvoiceCheckbox).removeAttr("checked");
             }
         }
     },
@@ -814,5 +939,6 @@ InvoicesOverview.prototype = {
         }
 
         return isSectionReadOnly;
-    }
+    },
+    
 }

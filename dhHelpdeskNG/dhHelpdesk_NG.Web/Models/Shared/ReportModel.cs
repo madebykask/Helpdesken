@@ -7,15 +7,22 @@ namespace DH.Helpdesk.Web.Models.Shared
         #region Constructors and Destructors       
 
         public ReportModel()
-        {            
+        {
+            PopupShow = false;
         }
 
         public ReportModel(bool canShow)
         {
             CanShow = canShow;
+            PopupShow = false;            
         }
 
         public bool CanShow { get; set; }
+
+        public bool PopupShow { get; set; }
+
+        public bool ShowPrintButton { get; set; }
+
 
         #endregion
 

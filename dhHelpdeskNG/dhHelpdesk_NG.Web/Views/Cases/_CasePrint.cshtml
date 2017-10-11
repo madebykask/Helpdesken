@@ -16,15 +16,22 @@
         var tempNewLine = "{{NEWLINE}}";
         <div id="PrintCaseDialog" class="modal modalprintA4P fade " style="display:none">
             <div class="modal-dialog">            
-                <div class="modal-header" style="cursor: move;">
+                <div class="modal-header" style="cursor: move; background-color:#e5e5e5;">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>                    
                     <h5> 
-                        <span  id="headerCaption"> @Translation.Get("Ärende") @Translation.Get("skriv ut") </span>                         
-                        <button style="float:right;margin-right:20px;" type="button" class="btn sendToPrinter" >@Translation.Get("skriv ut")</button>
-                    </h5>                                        
+                        @if (Model.ShowPrintButton)
+                        {
+                            <span  id="headerCaption"> @Translation.Get("Ärende") @Translation.Get("skriv ut") </span>
+                            <button style="float:right;margin-right:20px;" type="button" class="btn sendToPrinter" >@Translation.Get("skriv ut")</button>
+                        }
+                        else
+                        {
+                            <span id="headerCaption"> @Translation.Get("Ärende") @Translation.Get("info") </span>
+                        }
+                    </h5>
                 </div>
 
-                <div id="caseReportContainer" class="modal-body" style="align-content:center">
+                <div id="caseReportContainer" class="modal-body" style="align-content:center; ">
                     @*Enable it if you need to show Report Service Report (Need to change the controller as well)*@
                     @*@Html.ReportViewer(Model.Report)*@
                                                                               
@@ -106,7 +113,7 @@
     }
 </div>
 
-<script type="text/javascript">    
+<script type="text/javascript">
     $(function () {
         $(".btn.sendToPrinter").click(function () {
             var contents = $("#caseReportContainer").html();
@@ -119,10 +126,10 @@
             //new HTML document.
             frameDoc.document.write('<html><head>');
             frameDoc.document.write('</head><body>');
-            //CSS files.     
+            //CSS files.
             var css1 = '@Url.Content("~/Content/css/bootstrap.css")';
             var css2 = '@Url.Content("~/Content/css/print.css")';
-            
+
             frameDoc.document.write("<link rel='stylesheet' type='text/css' href='"+ css1 + "'>");
             frameDoc.document.write("<link rel='stylesheet' type='text/css' href='" + css2 + "'>");
             //contents:
@@ -141,5 +148,9 @@
     });
 
     /*directly print after load*/
-    $(".btn.sendToPrinter").click();
+    var _isPopup = '@Model.PopupShow';
+    if (_isPopup == 'False') {
+        $(".btn.sendToPrinter").click();
+    };
+
 </script>
