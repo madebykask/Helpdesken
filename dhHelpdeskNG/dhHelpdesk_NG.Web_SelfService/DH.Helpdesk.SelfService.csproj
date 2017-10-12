@@ -759,6 +759,7 @@
     <Content Include="Views\Orders\DisplayTemplates\Fields\DecimalLabel.cshtml" />
     <Content Include="Views\Orders\EditorTemplates\Fields\MultiText.cshtml" />
     <Content Include="Views\Case\ExtendedCase.cshtml" />
+    <Content Include="Views\Shared\_Communication.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">

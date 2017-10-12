@@ -237,10 +237,9 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IEmailLogAttemptRepository>().To<EmailLogAttemptRepository>();
             kernel.Bind<IWatchDateCalendarValueRepository>().To<WatchDateCalendarValueRepository>();
             kernel.Bind<IWatchDateCalendarRepository>().To<WatchDateCalendarRepository>();
-            kernel.Bind<IMetaDataRepository>().To<MetaDataRepository>();
-            kernel.Bind<IMetaDataRepository>().To<MetaDataRepository>();
+            kernel.Bind<IMetaDataRepository>().To<MetaDataRepository>();            
             kernel.Bind<IEntityInfoRepository>().To<EntityInfoRepository>();
-            kernel.Bind<IEntityInfoRepository>().To<EntityInfoRepository>();
+            
 
 
             // Service             
@@ -307,13 +306,10 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IUniversalCaseService>().To<UniversalCaseService>();
             kernel.Bind<IExtendedCaseService>().To<ExtendedCaseService>();
             kernel.Bind<ITextTranslationService>().To<TextTranslationService>();
-            kernel.Bind<IWatchDateCalendarService>().To<WatchDateCalendarService>();
-            kernel.Bind<IMetaDataService>().To<MetaDataService>();
+            kernel.Bind<IWatchDateCalendarService>().To<WatchDateCalendarService>();            
             kernel.Bind<IEmployeeService>().To<EmployeeService>();
-            kernel.Bind<IMetaDataService>().To<MetaDataService>();
-            kernel.Bind<IEmployeeService>().To<EmployeeService>();
-            kernel.Bind<IWebApiService>().To<WebApiService>();
-            kernel.Bind<IWebApiService>().To<WebApiService>();
+            kernel.Bind<IMetaDataService>().To<MetaDataService>();            
+            kernel.Bind<IWebApiService>().To<WebApiService>();            
 
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();

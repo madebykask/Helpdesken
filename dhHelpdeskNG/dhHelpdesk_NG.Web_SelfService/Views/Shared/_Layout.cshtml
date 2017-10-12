@@ -105,44 +105,7 @@
     @if (currentCaseId != null && appType == ApplicationTypes.LineManager)
     {
         <div class="siteCom">
-            <div class="mapButtonclose mapButton"><span class="glyphicon glyphicon-remove"></span></div>
-            <div class="mapButtonside mapButton">
-                @if ((pCaseLogs != null) && (pCaseLogs.CaseLogs != null) && (pCaseLogs.CaseLogs.Count > 0))
-                {
-                    var lastMessage = pCaseLogs.CaseLogs.Where(l => !string.IsNullOrEmpty(l.Text_Internal.Trim())).OrderBy(l => l.RegTime).LastOrDefault();
-                    if (lastMessage != null && string.IsNullOrEmpty(lastMessage.RegUser))
-                    {
-                        <div class="mapText" title="@Translation.Get("Communicate", Enums.TranslationSource.TextTranslation)"><span class="glyphicon glyphicon-comment"></span><span class="glyphicon glyphicon-certificate newcom"></span></div>
-                    }
-                    else
-                    {
-                        <div class="mapText" title="@Translation.Get("Communicate", Enums.TranslationSource.TextTranslation)"><span class="glyphicon glyphicon-comment"></span></div>
-                    }
-                }
-                else
-                {
-                    <div class="mapText" title="@Translation.Get("Communicate", Enums.TranslationSource.TextTranslation)"><span class="glyphicon glyphicon-comment"></span></div>
-                }
-            </div>
-            <div class="theMap">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label>
-                                @Translation.Get("Add comment", Enums.TranslationSource.TextTranslation):
-                            </label>
-                            <div>
-                                <textarea id="myNote" style="width:450px; height:100px;"></textarea>
-                            </div>
-                            <button class="btn btn-success" onclick=" SaveExternalMessage() ">@Translation.Get("Send", Enums.TranslationSource.TextTranslation)</button>
-                            <hr />
-                        </div>
-                    </div>
-                </div>
-                <div id="CaseLogPartial" class="com-list">
-                    @Html.Partial("_CaseLogNote", pCaseLogs)
-                </div>
-            </div>
+           @Html.Partial("_Communication", pCaseLogs)
         </div>
     }
     <!-- END COMMUNICATE DIV--->    
@@ -213,7 +176,7 @@
                         {
                             <li class="blue">
                                 <a href="@Url.Action("Index", "Start", new { customerId = pCustomerId, area = "" })">
-                                    <i class="fa fa-home mnu-fa"></i><br />                                    
+                                    <i class="fa fa-home mnu-fa"></i><br />
                                     @Translation.Get("Start", Enums.TranslationSource.TextTranslation)
                                 </a>
                             </li>
@@ -237,18 +200,19 @@
                                         <ul class="dropdown-menu">
                                             @if (pCaseTemplates != null)
                                             {
+
                                                 foreach (var c in pCaseTemplates)
-                                            {                                                
+                                                {
                                                     <li>
-                                                    @if (c.ExtendedCaseForms.Any())
-                                                    {
-                                                        <a href="@Url.Action("ExtendedCase", "case", new { caseTemplateId = c.Id, area = "" })">
-                                                            <span class="glyphicon glyphicon-plus"></span>@c.Name
-                                                            <br />
-                                                            <span class="small">@c.ShortDescription</span>
-                                                        </a>
-                                                    }
-                                                    else if (string.IsNullOrEmpty(c.TemplatePath))
+                                                        @if (c.ExtendedCaseForms.Any())
+                                                        {
+                                                            <a href="@Url.Action("ExtendedCase", "case", new { caseTemplateId = c.Id, area = "" })">
+                                                                <span class="glyphicon glyphicon-plus"></span>@c.Name
+                                                                <br />
+                                                                <span class="small">@c.ShortDescription</span>
+                                                            </a>
+                                                        }
+                                                        else if (string.IsNullOrEmpty(c.TemplatePath))
                                                         {
                                                             <a href="@Url.Action("NewCase", "case", new { customerId = pCustomerId, caseTemplateId = c.Id, area = "" })">
                                                                 <span class="glyphicon glyphicon-plus"></span>@c.Name
@@ -270,6 +234,7 @@
                                                 }
                                             }
                                         </ul>
+
                                     </li>
                                 }
                             }
@@ -291,6 +256,7 @@
                                     <ul class="dropdown-menu">
                                         @if (pCaseTemplates != null)
                                         {
+
                                             foreach (var c in pCaseTemplates)
                                             {
                                                 <li>
@@ -303,7 +269,7 @@
                                                         </a>
                                                     }
                                                     else
-                                                    if (string.IsNullOrEmpty(c.TemplatePath))
+                                                        if (string.IsNullOrEmpty(c.TemplatePath))
                                                     {
                                                         <a href="@Url.Action("NewCase", "case", new { customerId = pCustomerId, caseTemplateId = c.Id, area = "" })">
                                                             <span class="glyphicon glyphicon-plus"></span>&nbsp;@Translation.Get(c.Name, Enums.TranslationSource.TextTranslation)
@@ -505,7 +471,35 @@
                             }
                         }
                     }
+
+                    @*<li class="dropdown blue">
+                        <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
+                            <i class="fa fa-edit mnu-fa"></i><br />
+                            @Translation.Get("My Test", Enums.TranslationSource.TextTranslation)
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-submenu">
+                                <a href="#" class="categoy">                                    
+                                    Group 1                                    
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="#" class="categoy">
+                                            Sub 1
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="categoy">
+                                            Sub 2
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>*@                    
+
                 </ul>
+
             </div>
         </div>
     </div>
