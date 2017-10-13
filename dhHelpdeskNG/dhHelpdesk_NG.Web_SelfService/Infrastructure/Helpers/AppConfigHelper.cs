@@ -13,8 +13,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Helpers
 
         public static string GetAppSetting(string name)
         {
-            if (ConfigurationManager.AppSettings.AllKeys.Contains(AppSettingsKey.CurrentApplicationType,
-                                                                  StringComparer.CurrentCultureIgnoreCase))
+            if (ConfigurationManager.AppSettings.AllKeys.Contains(name))
                 return ConfigurationManager.AppSettings[name].ToString().CleanSpaceAndLowStr();
 
             return null;

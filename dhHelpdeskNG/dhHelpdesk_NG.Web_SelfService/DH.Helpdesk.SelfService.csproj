@@ -334,6 +334,7 @@
     <Compile Include="Infrastructure\Translation.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\UserContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\WorkContext.cs" />
+    <Compile Include="Models\CaseTemplate\CaseTemplateTreeViewModel.cs" />
     <Compile Include="Models\Case\CaseFieldSettingJSModel.cs" />
     <Compile Include="Models\Case\CaseOverviewModel.cs" />
     <Compile Include="Models\Case\CaseLogModel.cs" />
@@ -396,6 +397,7 @@
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\SelfService\SelfServiceConfigurationModel.cs" />
     <Compile Include="Models\SelfService\SelfServiceModel.cs" />
+    <Compile Include="Models\Shared\LayoutViewModel.cs" />
     <Compile Include="Models\Shared\SendToDialogModel.cs" />
     <Compile Include="Models\Start\StartPageModel.cs" />
   </ItemGroup>
@@ -760,6 +762,14 @@
     <Content Include="Views\Orders\EditorTemplates\Fields\MultiText.cshtml" />
     <Content Include="Views\Case\ExtendedCase.cshtml" />
     <Content Include="Views\Shared\_Communication.cshtml" />
+    <Content Include="Views\Shared\_LogoItems.cshtml" />
+    <Content Include="Views\Shared\MainMenuItems\_CaseTemplatesMenu.cshtml" />
+    <Content Include="Views\Shared\MainMenuItems\_CaseListMenu.cshtml" />
+    <Content Include="Views\Shared\MainMenuItems\_OrderMenu.cshtml" />
+    <Content Include="Views\Shared\MainMenuItems\_DocumentMenu.cshtml" />
+    <Content Include="Views\Shared\MainMenuItems\_FAQMenu.cshtml" />
+    <Content Include="Views\Shared\MainMenuItems\_UserGroupMenu.cshtml" />
+    <Content Include="Views\Shared\MainMenuItems\_HelpAboutMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">

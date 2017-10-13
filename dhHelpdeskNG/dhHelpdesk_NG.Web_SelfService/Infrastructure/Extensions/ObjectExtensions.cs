@@ -325,9 +325,13 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
 
         private static bool IsJsFieldVisible(this NewCaseModel model, string value)
         {
+            if (model.JsFieldSettings == null)
+                return true;
+
             var fs = model.JsFieldSettings.FirstOrDefault(f => f.FieldName.Equals(value));
             if (fs != null)
                 return fs.IsVisible;
+
             return true;
         }
     }
