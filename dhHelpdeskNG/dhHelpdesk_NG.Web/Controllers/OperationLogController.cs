@@ -343,7 +343,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             foreach (var wg in workingGroups)
             {                
-                if (!wgsSelected.Contains(wg))
+                if (!wgsSelected.Select(w => w.Id).Contains(wg.Id))
                     wgsAvailable.Add(wg);
             }
 
