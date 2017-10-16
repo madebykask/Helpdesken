@@ -1388,6 +1388,9 @@ begin
 	ALTER TABLE [dbo].[tblCaseDocumentTemplate] DROP COLUMN [PageNumbersUse] 
 end
 
+-- set MetaDataText to max size (AM issue)
+ALTER TABLE [dbo].[tblMetaData]
+ALTER COLUMN MetaDataText nvarchar(MAX) NOT NULL
 
 GO
 
