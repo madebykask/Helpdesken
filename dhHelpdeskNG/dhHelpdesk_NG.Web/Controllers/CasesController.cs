@@ -6984,6 +6984,17 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CurrentAdvancedSearch = sm;
             #endregion
 
+            var isExtendedSearch = frm.IsFormValueTrue(CaseFilterFields.IsExtendedSearch);
+            var availableDepIds = new List<int> { 0 };
+            var availableWgIds = new List<int> { 0 };
+            var availableCustomerIds = new List<int> { 0 };
+            if (isExtendedSearch)
+            {
+                availableDepIds.AddRange(_departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id).Select(x => x.Id).ToList());
+                availableWgIds.AddRange(_workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id).Select(x => x.Id).ToList());
+                availableCustomerIds.AddRange(_customerUserService.GetCustomerUsersForUser(SessionFacade.CurrentUser.Id).Select(x => x.Customer_Id).ToList());
+            }
+
             var data = new List<Dictionary<string, object>>();
             var customerSettings = this._settingService.GetCustomerSetting(f.CustomerId);
             var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1, userTimeZone);
@@ -7003,6 +7014,19 @@ namespace DH.Helpdesk.Web.Controllers
                                     { "isUrgent", searchRow.IsUrgent },
                                     { "isClosed", searchRow.IsClosed},
                                 };
+                if (isExtendedSearch)
+                {
+                    if (availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
+                        && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId)
+                        && availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
+                    {
+                        jsRow.Add("ExtendedAvailable", true);
+                    }
+                    else
+                    {
+                        jsRow.Add("ExtendedAvailable", false);
+                    }
+                }
                 foreach (var col in gridSettings.columnDefs)
                 {
                     var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);

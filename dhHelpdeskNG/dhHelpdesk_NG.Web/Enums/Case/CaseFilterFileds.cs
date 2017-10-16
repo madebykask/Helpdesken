@@ -40,6 +40,7 @@
 		public const string PageSize = "length";
 
         public const string IsConnectToParent = "IsConnectToParent";
+        public const string IsExtendedSearch = "extendedSearchEnabled";
         public const string CurrentCaseId = "currentCaseId";
 
 

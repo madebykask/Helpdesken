@@ -39,5 +39,10 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
    ALTER TABLE [tblUsers] ADD [CaseUnlockUGPermissions] nvarchar(20) null CONSTRAINT DF_tblUsers_CaseUnlockUGPermissions DEFAULT('2,3,4') WITH VALUES
 GO	
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'CustomerInExtendedSearch' and sysobjects.name = N'tblSettings')
+   ALTER TABLE [tblSettings] ADD [CustomerInExtendedSearch] int NOT NULL DEFAULT(0)
+GO	
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.34'

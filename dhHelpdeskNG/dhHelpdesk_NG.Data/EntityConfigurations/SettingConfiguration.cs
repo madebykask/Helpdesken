@@ -32,6 +32,7 @@
             this.Property(x => x.ComputerDepartmentSource).IsRequired();
             this.Property(x => x.ComputerLog).IsRequired();
             this.Property(x => x.ComputerUserInfoListLocation).IsRequired();
+            this.Property(x => x.CustomerInExtendedSearch).IsRequired();
             this.Property(x => x.ComputerUserLog).IsRequired();
             this.Property(x => x.CreateCaseFromOrder).IsRequired();
             this.Property(x => x.Customer_Id).IsRequired();

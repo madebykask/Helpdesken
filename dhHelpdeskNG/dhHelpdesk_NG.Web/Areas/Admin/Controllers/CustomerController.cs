@@ -863,6 +863,7 @@
                 DBType = customerToCopySettings.DBType,
                 ComputerUserInfoListLocation = customerToCopySettings.ComputerUserInfoListLocation,
                 ComputerUserLog = customerToCopySettings.ComputerUserLog,
+                CustomerInExtendedSearch = customerToCopySettings.CustomerInExtendedSearch,
                 StateSecondaryFilterFormat = customerToCopySettings.StateSecondaryFilterFormat,
                 CreateCaseFromOrder = customerToCopySettings.CreateCaseFromOrder,
                 LeadTimeFromProductAreaSetDate = customerToCopySettings.LeadTimeFromProductAreaSetDate,

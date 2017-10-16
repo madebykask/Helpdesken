@@ -462,31 +462,41 @@
                     </div>
                 </div>
 
-                <h4>@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)</h4>
+                <h4>@Translation.GetCoreTextTranslation("Ärende")</h4>
                 <div class="container">
                     <div class="row">
                         <div class="span12">
                             <table id="customerOrder">
                                 <tr>
                                     <td>
-                                        @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Visa begränsat sök resultat")
                                     </td>
                                     <td>
-                                        <input type="checkbox" name="setting.ComputerUserSearchRestriction" @(Model.Setting.ComputerUserSearchRestriction == 1 ? "checked=checked" : "") value="1" />
-                                        <input type="hidden" name="setting.ComputerUserSearchRestriction" value="0" />
-                                        @Translation.Get("begränsa sök per avdelning", Enums.TranslationSource.TextTranslation)
+                                        <input type="checkbox" name="setting.CustomerInExtendedSearch" @(Model.Setting.CustomerInExtendedSearch == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="setting.CustomerInExtendedSearch" value="0" />
+                                        @Translation.GetCoreTextTranslation("Inkludera kund i Utökad sökning")
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Anmälare")
                                     </td>
                                     <td>
-                                        <input type="radio" name="Setting.DontConnectUserToWorkingGroup" @(Model.Setting.DontConnectUserToWorkingGroup == 1 ? "checked='checked'" : "") id="Customer_Setting_DontConnectUserToWorkingGroup1" value="1" />
-                                        @Translation.Get("visa alla handläggare oavsett vald driftgrupp", Enums.TranslationSource.TextTranslation)
-                                        <br />
-                                        <input type="radio" name="Setting.DontConnectUserToWorkingGroup" @(Model.Setting.DontConnectUserToWorkingGroup == 0 ? "checked='checked'" : "") id="Customer_Setting_DontConnectUserToWorkingGroup2" value="0" />
-                                        @Translation.Get("visa endast handläggare i vald driftgrupp", Enums.TranslationSource.TextTranslation)
+                                        <input type="checkbox" name="setting.ComputerUserSearchRestriction" @(Model.Setting.ComputerUserSearchRestriction == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="setting.ComputerUserSearchRestriction" value="0"/>
+                                        @Translation.GetCoreTextTranslation("begränsa sök per avdelning")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Handläggare")
+                                    </td>
+                                    <td>
+                                        <input type="radio" name="Setting.DontConnectUserToWorkingGroup" @(Model.Setting.DontConnectUserToWorkingGroup == 1 ? "checked='checked'" : "") id="Customer_Setting_DontConnectUserToWorkingGroup1" value="1"/>
+                                        @Translation.GetCoreTextTranslation("visa alla handläggare oavsett vald driftgrupp")
+                                        <br/>
+                                        <input type="radio" name="Setting.DontConnectUserToWorkingGroup" @(Model.Setting.DontConnectUserToWorkingGroup == 0 ? "checked='checked'" : "") id="Customer_Setting_DontConnectUserToWorkingGroup2" value="0"/>
+                                        @Translation.GetCoreTextTranslation("visa endast handläggare i vald driftgrupp")
                                     </td>
                                 </tr>
                                 <tr>
@@ -499,8 +509,8 @@
                                         <label> @Translation.Get("Avslutsdatum", Enums.TranslationSource.TextTranslation) </label>
                                     </td>
                                     <td>
-                                        <input type="checkbox" name="setting.DisableCaseEndDate" @(Model.Setting.DisableCaseEndDate == 1 ? "checked=checked" : "") value="1" />
-                                        <input type="hidden" name="setting.DisableCaseEndDate" value="0" />
+                                        <input type="checkbox" name="setting.DisableCaseEndDate" @(Model.Setting.DisableCaseEndDate == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="setting.DisableCaseEndDate" value="0"/>
                                         <span>
                                             @Translation.Get("Avslutsdatum sätt automatiskt till det datum då ärendet stängs (användaren kan inte ändra det)", Enums.TranslationSource.TextTranslation)
                                         </span>
@@ -511,8 +521,8 @@
                                         <label> @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) </label>
                                     </td>
                                     <td>
-                                        <input type="checkbox" name="setting.PreventToSaveCaseWithInactiveValue" @(Model.Setting.PreventToSaveCaseWithInactiveValue == 1 ? "checked=checked" : "") value="1" />
-                                        <input type="hidden" name="setting.PreventToSaveCaseWithInactiveValue" value="0" />
+                                        <input type="checkbox" name="setting.PreventToSaveCaseWithInactiveValue" @(Model.Setting.PreventToSaveCaseWithInactiveValue == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="setting.PreventToSaveCaseWithInactiveValue" value="0"/>
                                         <span>
                                             @Translation.Get("Tillåt inte att spara ärenden med inaktiva värden.", Enums.TranslationSource.TextTranslation)
                                         </span>
@@ -523,8 +533,8 @@
                                         <label>@Translation.GetCoreTextTranslation("Administratör")</label>
                                     </td>
                                     <td>
-                                        <input type="checkbox" name="setting.SetUserToAdministrator" @(Model.Setting.SetUserToAdministrator == 1 ? "checked=checked" : "") value="1" />
-                                        <input type="hidden" name="setting.SetUserToAdministrator" value="0" />
+                                        <input type="checkbox" name="setting.SetUserToAdministrator" @(Model.Setting.SetUserToAdministrator == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="setting.SetUserToAdministrator" value="0"/>
                                         <span>
                                             @Translation.GetCoreTextTranslation("Användaren sätts som administratör vid skapa ärende")
                                         </span>
@@ -535,10 +545,10 @@
                                         @Translation.Get("Bilagor", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        <input type="radio" name="Setting.AttachmentPlacement" @(Model.Setting.AttachmentPlacement == 0 ? "checked='checked'" : "") id="Customer_Setting_AttachmentPlacement0" value="0" />
+                                        <input type="radio" name="Setting.AttachmentPlacement" @(Model.Setting.AttachmentPlacement == 0 ? "checked='checked'" : "") id="Customer_Setting_AttachmentPlacement0" value="0"/>
                                         @Translation.Get("Visa på Ärende tab", Enums.TranslationSource.TextTranslation)
-                                        <br />
-                                        <input type="radio" name="Setting.AttachmentPlacement" @(Model.Setting.AttachmentPlacement == 1 ? "checked='checked'" : "") id="Customer_Setting_AttachmentPlacement1" value="1" />
+                                        <br/>
+                                        <input type="radio" name="Setting.AttachmentPlacement" @(Model.Setting.AttachmentPlacement == 1 ? "checked='checked'" : "") id="Customer_Setting_AttachmentPlacement1" value="1"/>
                                         @Translation.Get("Visa på Bilagor tab", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>

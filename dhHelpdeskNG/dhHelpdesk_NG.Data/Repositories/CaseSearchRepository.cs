@@ -338,6 +338,12 @@ namespace DH.Helpdesk.Dal.Repositories
                         row.IsUnread = dr.SafeGetInteger("Status") == 1;
                         row.IsUrgent = timeLeft.HasValue && timeLeft < 0;
                         row.IsClosed = caseFinishingDate.HasValue;
+                        row.ExtendedSearchInfo = new ExtendedSearchInfo
+                        {
+                            CustomerId = dr.SafeGetInteger("CaseCustomerId"),
+                            DepartmentId = dr.SafeGetInteger("Department_Id"),
+                            WorkingGroupId = dr.SafeGetInteger("CaseWorkingGroupId"),
+                        };
 
                         if (!row.Ignored)
                         {

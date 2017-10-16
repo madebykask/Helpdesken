@@ -265,6 +265,8 @@ namespace DH.Helpdesk.Dal.Repositories
             columns.Add("tblCase.CaseNumber");
             columns.Add("tblCase.Place");
             columns.Add("tblCustomer.Name as Customer_Id");
+            columns.Add("tblCase.Customer_Id as CaseCustomerId");
+            columns.Add("tblCase.WorkingGroup_Id as CaseWorkingGroupId");
             columns.Add("tblRegion.Region as Region_Id");
             columns.Add("tblOU.OU as OU_Id");
             columns.Add("tblCase.UserCode");

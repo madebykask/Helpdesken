@@ -6231,5 +6231,26 @@ If not exists (select * from tblTextTranslation where text_id = 1858 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1858, 2, 'Unlock cases')
 GO
 
+If not exists (select * from tbltext where id = 1859)
+	insert into tbltext (id, TextString) VALUES (1859, 'Visa begränsat sök resultat')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1859 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1859, 2, 'Show limited search result')
+GO
+
+If not exists (select * from tbltext where id = 1860)
+	insert into tbltext (id, TextString) VALUES (1860, 'Inkludera kund i Utökad sökning')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1860 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1860, 2, 'Include customer in Extended search')
+GO
+
+If not exists (select * from tbltext where id = 1861)
+	insert into tbltext (id, TextString) VALUES (1861, 'Utökad sökning')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1861 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1861, 2, 'Extended search')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
