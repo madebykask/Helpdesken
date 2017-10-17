@@ -607,6 +607,7 @@
     <Content Include="Content\img\ic_0_black_24dp_2x.png" />
     <Content Include="Content\img\ic_1_black_24dp_1x.png" />
     <Content Include="Content\img\ic_1_black_24dp_2x.png" />
+    <Content Include="Content\img\ic_2_black_24dp_1x.png" />
     <Content Include="Content\img\ic_2_black_24dp_2x.png" />
     <Content Include="Content\img\ic_3_black_24dp_1x.png" />
     <Content Include="Content\img\ic_3_black_24dp_2x.png" />
