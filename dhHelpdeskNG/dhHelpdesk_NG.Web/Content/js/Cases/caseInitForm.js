@@ -1183,7 +1183,9 @@ function CaseInitForm() {
         //default paste action
         this.paste_auto = function (e) {
             pasteMode = '';
-            pasteCatcher.innerHTML = '';
+            if (pasteCatcher) {
+                pasteCatcher.innerHTML = '';
+            }
             var clipboardData = (e.clipboardData || e.originalEvent.clipboardData);
             if (clipboardData) {
                 var items = clipboardData.items;
