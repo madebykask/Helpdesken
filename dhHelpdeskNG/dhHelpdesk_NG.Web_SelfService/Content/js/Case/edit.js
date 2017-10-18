@@ -308,12 +308,6 @@
             var me = this;
             me.$departmentControl.val('').find('option').remove();
             me.$departmentControl.append('<option value="">&nbsp;</option>');
-            
-            if (me.isElementReadonly(me.$departmentControl)) {
-                me.$orgUnitControl.val('').find('option').remove();
-                me.$orgUnitControl.append('<option value="">&nbsp;</option>');
-                return;
-            }
 
             $.get(departmentsUrl, {
                 'id': regionId,
@@ -342,10 +336,6 @@
             var me = this;
             me.$orgUnitControl.val('').find('option').remove();
             me.$orgUnitControl.append('<option value="">&nbsp;</option>');
-
-            if (me.isElementReadonly(me.$orgUnitControl)) {
-                return;
-            }
 
             $.get(OUsUrl, {
                 'id': departmentId,
@@ -624,6 +614,7 @@
                     $('#NewCase_UserCode').val(item.usercode);
                     $('#NewCase_Region_Id').val(item.regionid);
                     $('#NewCase_CostCentre').val(item.costcentre);
+                    $('#NewCase_Department_Id').val(item.departmentid);
                     
                     me.setOrganizationData(item.regionid, item.departmentid, item.ouid);
 
