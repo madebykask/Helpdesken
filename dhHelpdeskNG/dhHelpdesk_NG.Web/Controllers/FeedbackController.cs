@@ -338,8 +338,7 @@ namespace DH.Helpdesk.Web.Controllers
 	        var feedbackOverview = this._circularService.GetQuestionnaire(feedbackId, OperationContext);
             var jsonCaseIndexViewModel = GetJsonCaseIndexViewModel();
 
-	        var departmentIds = results.SelectMany(x => x.DepartmentIds).Distinct().ToArray();
-	        var departments = _departmentService.GetDepartmentsByIds(departmentIds).OrderBy(x => x.DepartmentName).Select(x => new SelectListItem
+	        var departments = _departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.DepartmentName).Select(x => new SelectListItem
 	        {
 	            Value = x.Id.ToString(),
                 Text = x.DepartmentName

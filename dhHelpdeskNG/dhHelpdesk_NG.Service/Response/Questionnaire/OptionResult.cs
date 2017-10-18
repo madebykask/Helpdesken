@@ -14,7 +14,6 @@ namespace DH.Helpdesk.Services.Response.Questionnaire
             this.CaseIds = caseIds;
             this.Notes = notes?.ToList() ?? new List<OptionNote>();
             this.Emails = emails?.ToList() ?? new List<string>();
-            this.DepartmentIds = departmentIds?.ToList() ?? new List<int>();
         }
 
         [IsId]
@@ -27,6 +26,5 @@ namespace DH.Helpdesk.Services.Response.Questionnaire
         public List<OptionNote> Notes { get; set; }
 
         public List<string> Emails { get; set; }
-        public List<int> DepartmentIds { get; set; }
     }
 }
