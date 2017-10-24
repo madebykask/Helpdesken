@@ -45,7 +45,7 @@ namespace DH.Helpdesk.Services.Services.WebApi
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var response = await client.GetAsync(String.Format("api/manager/{0}/$all", employeeNum));
+                var response = await client.GetAsync(string.Format("api/managerEx/{0}", employeeNum));
                 if (response.IsSuccessStatusCode)
                 {
                     var res1 = await response.Content.ReadAsStringAsync();
@@ -69,7 +69,7 @@ namespace DH.Helpdesk.Services.Services.WebApi
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var response = await client.GetAsync(String.Format("api/ismanager/{0}", employeeNumber));
+                var response = await client.GetAsync(string.Format("api/ismanager/{0}", employeeNumber));
                 if (response.IsSuccessStatusCode)
                 {
                     var res = await response.Content.ReadAsAsync<bool>();
