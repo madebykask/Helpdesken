@@ -77,9 +77,9 @@
             this._caseLockRepository.DeleteCaseLockByCaseId(caseId);
         }
 
-        public bool GetCaseUnlockUgPermissions(int userId)
+        public bool GetCaseUnlockPermission(int userId)
         {
-            return _caseLockRepository.GetCaseUnlockUgPermissions(userId);
+            return _caseLockRepository.GetCaseUnlockPermission(userId);
         }
     }
 }

@@ -34,10 +34,21 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
    ALTER TABLE tblCustomer ADD MyCasesUserGroup  bit Not null default (0)
 GO	
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
                where syscolumns.name = N'CaseUnlockUGPermissions' and sysobjects.name = N'tblUsers')
-   ALTER TABLE [tblUsers] ADD [CaseUnlockUGPermissions] nvarchar(20) null CONSTRAINT DF_tblUsers_CaseUnlockUGPermissions DEFAULT('2,3,4') WITH VALUES
-GO	
+	BEGIN
+		ALTER TABLE [tblUsers] DROP CONSTRAINT [DF_tblUsers_CaseUnlockUGPermissions]
+		ALTER TABLE [tblUsers] DROP COLUMN [CaseUnlockUGPermissions]
+	END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'CaseUnlockPermission' and sysobjects.name = N'tblUsers')
+	BEGIN
+		ALTER TABLE [tblUsers] ADD [CaseUnlockPermission] bit NOT NULL DEFAULT(0)
+		EXEC('UPDATE [tblUsers] SET [CaseUnlockPermission] = 1 WHERE [UserGroup_Id] > 1')
+	END
+GO
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
                where syscolumns.name = N'CustomerInExtendedSearch' and sysobjects.name = N'tblSettings')

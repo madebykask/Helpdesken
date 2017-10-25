@@ -135,10 +135,7 @@
         public int CopyUserid { get; set; }
         public List<SelectListItem> CaseInfoMailList { get; set; }
 
-        public UserInputViewModel()
-        {
-            CaseUnlockUgPermissions = string.Empty;
-        }
+        public UserInputViewModel() { }
 
         public string SelectedTimeZone { get; set; }
 
@@ -146,8 +143,6 @@
 
         public int UserCustomerMinPassWordLength { get; set; }
         public int CustomerComplexPassword { get; set; }
-
-        public string CaseUnlockUgPermissions { get; set; }
     }
 
     public class UserSaveViewModel

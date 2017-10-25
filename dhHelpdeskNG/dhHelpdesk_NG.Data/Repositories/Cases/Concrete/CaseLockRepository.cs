@@ -183,12 +183,12 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             }
         }
 
-        public bool GetCaseUnlockUgPermissions(int userId)
+        public bool GetCaseUnlockPermission(int userId)
         {
             var user = DataContext.Users.SingleOrDefault(x => x.Id == userId);
             if (user != null)
             {
-                return user.CaseUnlockUGPermissions.Split(BRConstItem.Value_Separator).Select(int.Parse).Contains(user.UserGroup_Id);
+                return user.CaseUnlockPermission;
             }
             return false;
         }

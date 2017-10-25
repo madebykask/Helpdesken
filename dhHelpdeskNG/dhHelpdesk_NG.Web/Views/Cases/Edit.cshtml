@@ -413,7 +413,7 @@
                                             {
                                                 if (Model.CaseLock != null && Model.CaseLock.IsLocked)
                                                 {
-                                                    <li><a onclick="UnLockCaseById('@Model.case_.Id', '@Url.Action("Edit", new { id = Model.case_.Id })')">@Translation.GetCoreTextTranslation("Lås upp")</a></li>
+                                                    <li><a href="#" onclick="UnLockCaseById('@Model.case_.Id', '@Url.Action("Edit", new { id = Model.case_.Id })')">@Translation.GetCoreTextTranslation("Lås upp")</a></li>
                                                 }
                                             }
                                         </ul>

@@ -33,6 +33,6 @@
         void UnlockCaseByGUID(Guid lockGUID);
 
         void DeleteCaseLockByCaseId(int caseId);
-        bool GetCaseUnlockUgPermissions(int userId);
+        bool GetCaseUnlockPermission(int userId);
     }
 }
