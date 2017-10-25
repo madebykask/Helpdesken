@@ -98,6 +98,10 @@
         <add assembly="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35"/>
       </assemblies>
     </compilation>
+    
+    <!-- Session time out is set to 4hrs -->
+    <sessionState timeout="240" />
+    
     <!--Commented by Identity and Access VS Package-->
     <identity impersonate="true"/>
     <authentication mode="Windows"/>
@@ -111,7 +115,7 @@
         <add namespace="System.Web.Routing"/>
         <add namespace="System.Web.WebPages"/>
       </namespaces>
-    </pages>
+    </pages>    
   </system.web>
   <system.webServer>
     <validation validateIntegratedModeConfiguration="false"/>
