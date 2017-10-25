@@ -67,6 +67,10 @@
     <!--<add key="AM_Api_UriPath"  value="http://ptam-portal.ikeadt.com/" />-->
     <add key="AM_Api_UserName" value="OperatorTest1"/>
     <add key="AM_Api_Password" value="asd123!"/>
+    <!--  Security Token settings -->
+    <add key="SSO.TokenLifeTime" value="240" />
+    <add key="SSO.EnableSlidingExpiration" value="true" />
+    
   </appSettings>
   <!--
     For a description of web.config changes for .NET 4.5 see http://go.microsoft.com/fwlink/?LinkId=235367.

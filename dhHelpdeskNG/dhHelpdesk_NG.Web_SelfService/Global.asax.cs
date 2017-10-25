@@ -1,4 +1,9 @@
-﻿namespace DH.Helpdesk.SelfService
+﻿using System;
+using System.Diagnostics;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.SelfService.Infrastructure.Helpers;
+
+namespace DH.Helpdesk.SelfService
 {
     using DH.Helpdesk.SelfService;
     using System.Web.Mvc;
@@ -41,6 +46,8 @@
             RegisterRoutes(RouteTable.Routes);
 
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            IdentityConfiguration.Configure();
         }
     }
 }
