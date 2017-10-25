@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.SelfService.Infrastructure
+﻿using System.IdentityModel.Services;
+using DH.Helpdesk.SelfService.Infrastructure.Configuration;
+using DH.Helpdesk.Services.Infrastructure;
+
+namespace DH.Helpdesk.SelfService.Infrastructure
 {
     using System;
     using System.IO;
@@ -46,7 +50,18 @@
             var lastError = new ErrorModel(string.Empty);
             userOrCustomerChanged = false;
 
+            var appType = AppConfigHelper.GetAppSetting(AppSettingsKey.CurrentApplicationType);
+            var loginMode = AppConfigHelper.GetAppSetting(AppSettingsKey.LoginMode);
+            var isSsoMode = loginMode.Equals(LoginMode.SSO, StringComparison.OrdinalIgnoreCase);
+            var federatedAuthenticationSettings = new FederatedAuthenticationSettings();
+
             var res = SetCustomer(filterContext, out lastError);
+            
+            if (!res && isSsoMode && federatedAuthenticationSettings.LogoutCustomerOnSessionExpire)
+            {
+                ManualDependencyResolver.Get<IFederatedAuthenticationService>().SignOut();
+            }
+
             if (!res && lastError != null)
             {
                 SessionFacade.UserHasAccess = false;
@@ -57,9 +72,6 @@
             customerId = SessionFacade.CurrentCustomerID;
 
             SetLanguage(filterContext);
-
-            var appType = AppConfigHelper.GetAppSetting(AppSettingsKey.CurrentApplicationType);
-            var loginMode = AppConfigHelper.GetAppSetting(AppSettingsKey.LoginMode);
 
             if (SessionFacade.CurrentUserIdentity == null)
             {                

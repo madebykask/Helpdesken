@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.SelfService.Infrastructure.Helpers;
 
@@ -47,7 +46,11 @@ namespace DH.Helpdesk.SelfService
 
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            IdentityConfiguration.Configure();
+            var loginMode = AppConfigHelper.GetAppSetting(AppSettingsKey.LoginMode);
+            if (loginMode.Equals(LoginMode.SSO, StringComparison.OrdinalIgnoreCase))
+            {
+                FederatedAuthenticationConfiguration.Configure();
+            }
         }
     }
 }
