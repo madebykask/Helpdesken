@@ -556,7 +556,27 @@
                         </div>
                     </div>
                 </div>
-
+                <h4>@Translation.GetCoreTextTranslation("M2Ticket")</h4>
+                <div class="container">
+                    <div class="row">
+                        <div class="span10">
+                            <table id="">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("E-post mall Nytt ärende skickas till", Enums.TranslationSource.TextTranslation)&nbsp;
+                                    </td>
+                                    <td>
+                                        <input type="radio" name="Setting.M2TNewCaseMailTo" @(Model.Setting.M2TNewCaseMailTo == 0 ? "checked='checked'" : "") id="Customer_Setting_M2TNewCaseMailTo0" value="0" />
+                                        @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)
+                                        <br />
+                                        <input type="radio" name="Setting.M2TNewCaseMailTo" @(Model.Setting.M2TNewCaseMailTo == 1 ? "checked='checked'" : "") id="Customer_Setting_M2TNewCaseMailTo1" value="1" />
+                                        @Translation.Get("Avsändare", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
                 <h4>@Translation.Get("Helpdesk meny", Enums.TranslationSource.TextTranslation)</h4>
                 <div class="container">
                     <div class="row">

@@ -142,6 +142,7 @@
             this.Property(x => x.CalendarWGRestriction).IsRequired();
             this.Property(x => x.ModuleExtendedCase).IsRequired();
             this.Property(x => x.AttachmentPlacement).IsRequired();
+            this.Property(x => x.M2TNewCaseMailTo).IsRequired();
 
             this.ToTable("tblsettings");
         }

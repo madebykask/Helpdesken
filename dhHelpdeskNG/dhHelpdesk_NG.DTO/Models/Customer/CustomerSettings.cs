@@ -166,7 +166,7 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
         /// Gets or sets a value indicating where attatchements should be shown.
         /// </summary>
         public int AttachmentPlacement { get; set; }
-
+        public int M2TNewCaseMailTo { get; set; }
 
         /// <summary>
         /// The is module on.

@@ -135,6 +135,7 @@ namespace DH.Helpdesk.Domain
         public int CalendarWGRestriction { get; set; }
         public int ModuleExtendedCase { get; set; }
         public int AttachmentPlacement { get; set; }
+        public int M2TNewCaseMailTo { get; set; }
 
         public virtual OrderState CloseOrderState { get; set; }
         /// <summary>

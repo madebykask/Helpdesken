@@ -6252,5 +6252,19 @@ If not exists (select * from tblTextTranslation where text_id = 1861 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1861, 2, 'Extended search')
 GO
 
+If not exists (select * from tbltext where id = 1862)
+	insert into tbltext (id, TextString) VALUES (1862, 'Avsändare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1862 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1862, 2, 'Mail sender')
+GO
+
+If not exists (select * from tbltext where id = 1863)
+	insert into tbltext (id, TextString) VALUES (1863, 'E-post mall Nytt ärende skickas till')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1863 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1863, 2, 'E-mail template New Case sends to')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
