@@ -71,6 +71,14 @@ namespace DH.Helpdesk.Dal.Repositories
                             SurName = caseHistory.UserPerformer.SurName
                           
                         } : null,
+                    UserResponsible = caseHistory.CaseResponsibleUser_Id != null ?
+                        new UserMapperData
+                        {
+                            Id = caseHistory.UserResponsible.Id,
+                            FirstName = caseHistory.UserResponsible.FirstName,
+                            SurName = caseHistory.UserResponsible.SurName
+
+                        } : null,
                     Priority = caseHistory.Priority,
                     WorkingGroup = caseHistory.WorkingGroup,
                     StateSecondary = caseHistory.StateSecondary,

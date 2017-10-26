@@ -60,7 +60,12 @@
             this.HasOptional(x => x.UserPerformer)
                             .WithMany()
                             .HasForeignKey(x => x.Performer_User_Id)
-                            .WillCascadeOnDelete(false);            
+                            .WillCascadeOnDelete(false);
+
+            this.HasOptional(x => x.UserResponsible)
+                            .WithMany()
+                            .HasForeignKey(x => x.CaseResponsibleUser_Id)
+                            .WillCascadeOnDelete(false);
 
             this.HasOptional(x => x.WorkingGroup)
                             .WithMany()
