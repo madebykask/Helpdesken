@@ -917,10 +917,10 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var data = new List<Dictionary<string, object>>();
             var ids = caseSearchResults.Select(o => o.Id).ToArray();
-
-            var casesLocks = _caseLockService.GetCasesLocks(ids);
             var globalSettings = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
+            var casesLocks = _caseLockService.GetLockedCasesToOverView(ids, globalSettings, this._defaultCaseLockBufferTime);
+        
             foreach (var searchRow in caseSearchResults)
             {
                 var caseId = searchRow.Id;
@@ -935,14 +935,14 @@ namespace DH.Helpdesk.Web.Controllers
                     {"isClosed", searchRow.IsUrgent}
                 };
 
-                var caseLock = casesLocks.ContainsKey(caseId) ? casesLocks[caseId] : null;
+                var caseLock = casesLocks.Where(x => x.CaseId == caseId).FirstOrDefault();
 
-                var caseLockModel = GetCaseLockModel(caseLock, searchRow.Id, SessionFacade.CurrentUser.Id, globalSettings, false);
-                if (caseLockModel.IsLocked)
+                //this specific case is locked
+                if (caseLock != null)
                 {
-                    jsRow.Add("isCaseLocked", caseLockModel.IsLocked);
-                    jsRow.Add("caseLockedIconTitle", $"{caseLockModel.User.FirstName} {caseLockModel.User.SurName} ({caseLockModel.User.UserID})");
-                    jsRow.Add("caseLockedIconUrl", $"/Content/icons/{CaseIcon.Locked.CaseIconSrc()}");
+                        jsRow.Add("isCaseLocked", true);
+                        jsRow.Add("caseLockedIconTitle", $"{caseLock.User.FirstName} {caseLock.User.LastName} ({caseLock.User.UserId})");
+                        jsRow.Add("caseLockedIconUrl", $"/Content/icons/{CaseIcon.Locked.CaseIconSrc()}");
                 }
 
                 foreach (var col in gridSettings.columnDefs)
@@ -1036,6 +1036,9 @@ namespace DH.Helpdesk.Web.Controllers
             else
                 return Json(false);
         }
+
+
+   
 
         public JsonResult ReExtendCaseLock(string lockGuid, int extendValue)
         {
@@ -6116,6 +6119,42 @@ namespace DH.Helpdesk.Web.Controllers
 
             return caseLockModel;
         }
+
+        private CaseLockModel GetCaseLockOverviewModel(ICaseLockOverview caseLock, int caseId, GlobalSetting globalSettings)
+        {
+            CaseLockModel caseLockModel = null;
+
+            var caseIsLocked = true;
+            var extendedSec = (globalSettings != null && globalSettings.CaseLockExtendTime > 0 ? globalSettings.CaseLockExtendTime : this._defaultExtendCaseLockTime);
+            var timerInterval = (globalSettings != null ? globalSettings.CaseLockTimer : 0);
+            var bufferTime = (globalSettings != null && globalSettings.CaseLockBufferTime > 0 ? globalSettings.CaseLockBufferTime : this._defaultCaseLockBufferTime);
+            var caseLockGUID = string.Empty;
+            var nowTime = DateTime.Now;
+
+            if (caseLock == null)
+            {
+                // Case is not locked 
+                caseIsLocked = false;
+            }
+            else
+            {
+                //Check if case is still locked
+                var caseLockExtendedTime = caseLock.ExtendedTime.AddSeconds(bufferTime);
+                if (caseLockExtendedTime >= nowTime)
+                { 
+                    caseIsLocked = true;
+                }
+                 else
+                {
+                    caseIsLocked = false;
+                }
+            }
+
+            caseLockModel = caseLock.MapToViewModel(caseIsLocked, extendedSec, timerInterval);
+
+            return caseLockModel;
+        }
+
 
         private CaseStatisticsViewModel GetCaseStatisticsModel(CaseAggregateData aggregateData, int caseCount,
                                                                string expandedGroup, List<string> fields)

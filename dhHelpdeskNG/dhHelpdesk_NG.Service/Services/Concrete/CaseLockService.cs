@@ -1,4 +1,5 @@
-﻿namespace DH.Helpdesk.Services.Services.Concrete
+﻿
+namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -6,8 +7,9 @@
     using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
     using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Domain;
+    using System.Linq;
 
-    
+
     public sealed class CaseLockService : ICaseLockService
     {
         private readonly ICaseLockRepository _caseLockRepository;
@@ -45,6 +47,14 @@
         public IDictionary<int, ICaseLockOverview> GetCasesLocks(int[] caseIds)
         {
             return _caseLockRepository.GetCasesLock(caseIds);
+        }
+
+       public IQueryable<ICaseLockOverview> GetLockedCasesToOverView(int[] caseIds, GlobalSetting globalSettings, int defaultCaseLockBufferTime)
+        {
+            var bufferTime = (globalSettings != null && globalSettings.CaseLockBufferTime > 0 ? globalSettings.CaseLockBufferTime : defaultCaseLockBufferTime);
+            var caseLocks = _caseLockRepository.GetLockedCases(caseIds, bufferTime);
+            
+            return caseLocks;
         }
 
         public void CaseLockCleanUp()
