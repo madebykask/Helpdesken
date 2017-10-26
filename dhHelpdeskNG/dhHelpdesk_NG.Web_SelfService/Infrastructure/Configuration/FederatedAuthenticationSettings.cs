@@ -3,13 +3,31 @@ using DH.Helpdesk.SelfService.Infrastructure.Helpers;
 
 namespace DH.Helpdesk.SelfService.Infrastructure.Configuration
 {
-    public class FederatedAuthenticationSettings
+    public interface IFederatedAuthenticationSettings
+    {
+        int SecurityTokenDuration { get; }
+        int SecurityTokenMaxDuration { get; }
+        bool EnableSlidingExpiration { get; }
+        bool HandleSecurityTokenExceptions { get; }
+        bool LogoutCustomerOnSessionExpire { get; }
+    }
+
+    public class FederatedAuthenticationSettings : IFederatedAuthenticationSettings
     {
         public int SecurityTokenDuration
         {
             get
             {
                 var val = AppConfigHelper.GetInt32(AppSettingsKey.TokenLifeTime);
+                return val ?? 0;
+            }
+        }
+
+        public int SecurityTokenMaxDuration
+        {
+            get
+            {
+                var val = AppConfigHelper.GetInt32(AppSettingsKey.TokenMaxLifeTime);
                 return val ?? 0;
             }
         }

@@ -12,17 +12,12 @@ namespace DH.Helpdesk.SelfService
         public static void Configure()
         {
             var federatedAuthenticationService = ManualDependencyResolver.Get<IFederatedAuthenticationService>();
+            var configuration = ManualDependencyResolver.Get<IFederatedAuthenticationSettings>();
 
-            var configuration = new FederatedAuthenticationSettings();
             var duration = configuration.SecurityTokenDuration;
             if (duration > 0)
             {
                 federatedAuthenticationService.SetDefaultSessionDuration(duration);
-            }
-
-            if (configuration.EnableSlidingExpiration)
-            {
-                federatedAuthenticationService.EnableSlidingSessionExpirations();
             }
 
             if (configuration.HandleSecurityTokenExceptions)
@@ -37,7 +32,7 @@ namespace DH.Helpdesk.SelfService
             ErrorGenerator.MakeError(errorMsg);
             
             //since there's no logger in the project - log error with the trace.
-            Trace.Write(errorMsg, "Error");
+            Trace.TraceError(errorMsg);
         }
     }
 }

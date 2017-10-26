@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IdentityModel.Services;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.SelfService.Infrastructure;
+using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.SelfService.Infrastructure.Helpers;
+using DH.Helpdesk.Services.Infrastructure;
 
 namespace DH.Helpdesk.SelfService
 {
-    using DH.Helpdesk.SelfService;
     using System.Web.Mvc;
     using System.Web.Optimization;
     using System.Web.Routing;
@@ -52,5 +56,39 @@ namespace DH.Helpdesk.SelfService
                 FederatedAuthenticationConfiguration.Configure();
             }
         }
+
+        #region SSO token lifetime handling
+
+        protected void SessionAuthenticationModule_SessionSecurityTokenReceived(object sender, SessionSecurityTokenReceivedEventArgs args)
+        {
+            var token = args.SessionToken;
+            Trace.WriteLine($"SessionAuthenticationModule_SessionSecurityTokenReceived called: {token.ValidFrom} - {token.ValidTo}");
+
+            var configuration = ManualDependencyResolver.Get<IFederatedAuthenticationSettings>();
+            var federationAuthenticationService = ManualDependencyResolver.Get<IFederatedAuthenticationService>();
+
+            //check if token has expired:
+            if (token.ValidTo < DateTime.UtcNow)
+            {
+                Trace.WriteLine($"Security token lifetime has been expired: ValidTo: {token.ValidTo}, UtcNow: {DateTime.UtcNow}. Siging out.");
+                federationAuthenticationService.SignOut(Request.Url);
+                return;
+            }
+
+            if (configuration.EnableSlidingExpiration)
+            {
+                var sam = (SessionAuthenticationModule) sender;
+                var refreshedToken = 
+                    federationAuthenticationService.RefreshSecurityTokenLifeTime(sam, args.SessionToken, configuration.SecurityTokenMaxDuration);
+
+                if (refreshedToken != null)
+                {
+                    args.SessionToken = refreshedToken;
+                    args.ReissueCookie = true;
+                }
+            }
+        }
+
+        #endregion
     }
 }

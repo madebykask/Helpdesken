@@ -1,5 +1,6 @@
 using DH.Helpdesk.SelfService;
 using DH.Helpdesk.SelfService.Infrastructure;
+using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.Services.Services.Feedback;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
@@ -113,7 +114,8 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IUserTemporaryFilesStorageFactory>().To<UserTemporaryFilesStorageFactory>().InRequestScope();
             kernel.Bind<IDatabaseFactory>().To<DatabaseFactory>().InRequestScope();
             kernel.Bind<IEmailSendingSettingsProvider>().To<EmailSendingSettingsProvider>().InRequestScope();
-            
+
+            kernel.Bind<IFederatedAuthenticationSettings>().To<FederatedAuthenticationSettings>();
             kernel.Bind<IFederatedAuthenticationService>().To<FederatedAuthenticationService>().InSingletonScope();
 
             // Repositories

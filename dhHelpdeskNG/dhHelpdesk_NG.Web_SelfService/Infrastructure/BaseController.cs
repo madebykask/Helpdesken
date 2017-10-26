@@ -59,7 +59,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             
             if (!res && isSsoMode && federatedAuthenticationSettings.LogoutCustomerOnSessionExpire)
             {
-                ManualDependencyResolver.Get<IFederatedAuthenticationService>().SignOut();
+                ManualDependencyResolver.Get<IFederatedAuthenticationService>().SignOut(Request.Url);
             }
 
             if (!res && lastError != null)
