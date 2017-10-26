@@ -1,4 +1,6 @@
 using DH.Helpdesk.SelfService;
+using DH.Helpdesk.SelfService.Infrastructure;
+using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.Services.Services.Feedback;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
@@ -113,6 +115,8 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IDatabaseFactory>().To<DatabaseFactory>().InRequestScope();
             kernel.Bind<IEmailSendingSettingsProvider>().To<EmailSendingSettingsProvider>().InRequestScope();
 
+            kernel.Bind<IFederatedAuthenticationSettings>().To<FederatedAuthenticationSettings>();
+            kernel.Bind<IFederatedAuthenticationService>().To<FederatedAuthenticationService>().InSingletonScope();
 
             // Repositories
             kernel.Bind<ICircularRepository>().To<CircularRepository>();
@@ -256,8 +260,8 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IProductAreaService>().To<ProductAreaService>();   
             kernel.Bind<IMailTemplateService>().To<MailTemplateService>();
             kernel.Bind<IEmailService>().To<EmailService>();
-			kernel.Bind<IFeedbackTemplateService>().To<FeedbackTemplateService>();
-			kernel.Bind<ICaseSettingsService>().To<CaseSettingsService>();
+            kernel.Bind<IFeedbackTemplateService>().To<FeedbackTemplateService>();
+            kernel.Bind<ICaseSettingsService>().To<CaseSettingsService>();
             kernel.Bind<IInfoService>().To<InfoService>();
             kernel.Bind<ICaseFileService>().To<CaseFileService>();
             kernel.Bind<ILogFileService>().To<LogFileService>();

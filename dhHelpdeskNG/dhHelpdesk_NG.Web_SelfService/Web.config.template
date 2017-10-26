@@ -67,6 +67,12 @@
     <!--<add key="AM_Api_UriPath"  value="http://ptam-portal.ikeadt.com/" />-->
     <add key="AM_Api_UserName" value="OperatorTest1"/>
     <add key="AM_Api_Password" value="asd123!"/>
+    <!--  SSO Security Token settings -->
+    <add key="SSO.TokenLifeTime" value="240" />
+    <add key="SSO.TokenMaxLifeTime" value="720" />
+    <add key="SSO.EnableSlidingExpiration" value="true" />
+    <add key="SSO.HandleSecurityTokenExceptions" value="true" />
+    <add key="SSO.LogoutCustomerOnSessionExpire" value="true" />        
   </appSettings>
   <!--
     For a description of web.config changes for .NET 4.5 see http://go.microsoft.com/fwlink/?LinkId=235367.
@@ -98,6 +104,10 @@
         <add assembly="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35"/>
       </assemblies>
     </compilation>
+    
+    <!-- Session time out is set to 4hrs -->
+    <sessionState timeout="240" />
+    
     <!--Commented by Identity and Access VS Package-->
     <identity impersonate="true"/>
     <authentication mode="Windows"/>
@@ -111,7 +121,7 @@
         <add namespace="System.Web.Routing"/>
         <add namespace="System.Web.WebPages"/>
       </namespaces>
-    </pages>
+    </pages>    
   </system.web>
   <system.webServer>
     <validation validateIntegratedModeConfiguration="false"/>

@@ -121,6 +121,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.identitymodel.services" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.1.0.0\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.IdentityModel.Tokens.ValidatingIssuerNameRegistry">
       <HintPath>..\packages\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.4.5.1\lib\net45\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.dll</HintPath>
     </Reference>
@@ -204,6 +210,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Thinktecture.IdentityModel, Version=3.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Thinktecture.IdentityModel.3.6.1\lib\net45\Thinktecture.IdentityModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WebActivator">
       <HintPath>..\packages\WebActivator.1.5\lib\net40\WebActivator.dll</HintPath>
     </Reference>
@@ -219,6 +229,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FederatedAuthenticationConfiguration.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\CommonModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\EmailModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\NotifiersModule.cs" />
@@ -268,6 +279,7 @@
     <Compile Include="Infrastructure\Common\Concrete\CommonFunctions.cs" />
     <Compile Include="Infrastructure\Common\Concrete\ErrorGenerator.cs" />
     <Compile Include="Infrastructure\Common\ICommonFunctions.cs" />
+    <Compile Include="Infrastructure\Configuration\FederatedAuthenticationSettings.cs" />
     <Compile Include="Infrastructure\Constants.cs" />
     <Compile Include="Infrastructure\Enums.cs" />
     <Compile Include="Infrastructure\Extensions\BooleanExtensions.cs" />
@@ -293,6 +305,7 @@
     <Compile Include="Infrastructure\Extensions\ObjectExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\RequestExtension.cs" />
     <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
+    <Compile Include="Infrastructure\FederatedAuthenticationService.cs" />
     <Compile Include="Infrastructure\Filters\Notifiers\NotifierFilters.cs" />
     <Compile Include="Infrastructure\Helpers\AppConfigHelper.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\ConditionalValidationAttribute.cs" />

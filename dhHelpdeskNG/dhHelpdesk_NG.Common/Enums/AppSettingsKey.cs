@@ -32,6 +32,10 @@
         public static readonly string AmApiUserName = "AM_Api_UserName";
         public static readonly string AmApiPassword = "AM_Api_Password";
 
-        
+        public const string TokenLifeTime = "SSO.TokenLifeTime";
+        public const string TokenMaxLifeTime = "SSO.TokenMaxLifeTime";
+        public const string EnableSlidingExpiration = "SSO.EnableSlidingExpiration";
+        public const string HandleSecurityTokenExceptions = "SSO.HandleSecurityTokenExceptions";
+        public const string LogoutCustomerOnSessionExpire = "SSO.LogoutCustomerOnSessionExpire";
     }
 }
