@@ -41,7 +41,7 @@ namespace DH.Helpdesk.SelfService
             // No need to load all view engines
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
-           
+
             ECT.FormLib.FormLibSetup.Setup();
             ECT.FormLib.FormLibSetup.SetupRoutes(RouteTable.Routes);
 
@@ -71,25 +71,6 @@ namespace DH.Helpdesk.SelfService
             if (token.ValidTo < DateTime.UtcNow)
             {
                 Trace.WriteLine($"Security token lifetime has been expired: ValidTo: {token.ValidTo}, UtcNow: {DateTime.UtcNow}. Siging out.");
-                federationAuthenticationService.SignOut(Request.Url);
-                return;
-            }
-
-            if (configuration.EnableSlidingExpiration)
-            {
-                var sam = (SessionAuthenticationModule) sender;
-                var refreshedToken = 
-                    federationAuthenticationService.RefreshSecurityTokenLifeTime(sam, args.SessionToken, configuration.SecurityTokenMaxDuration);
-
-                if (refreshedToken != null)
-                {
-                    args.SessionToken = refreshedToken;
-                    args.ReissueCookie = true;
-                }
-            }
-        }
-
-        #endregion
                 //FederatedAuthentication.WSFederationAuthenticationModule.SignOut();
 
                 //get redirect url after sign in. On Post we need to take original url from UrlReferrer
@@ -105,8 +86,8 @@ namespace DH.Helpdesk.SelfService
 
             if (configuration.EnableSlidingExpiration)
             {
-                var sam = (SessionAuthenticationModule) sender;
-                var refreshedToken = 
+                var sam = (SessionAuthenticationModule)sender;
+                var refreshedToken =
                     federationAuthenticationService.RefreshSecurityTokenLifeTime(sam, args.SessionToken, configuration.SecurityTokenMaxDuration);
 
                 if (refreshedToken != null)
