@@ -208,6 +208,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IProductAreaService _productAreaService;
         private readonly IExtendedCaseFormRepository _extendedCaseFormRepository;
         private readonly IExtendedCaseDataRepository _extendedCaseDataRepository;
+        private readonly ICaseFollowUpService _caseFollowUpService;
 
 
         public CaseService(
@@ -249,7 +250,8 @@ namespace DH.Helpdesk.Services.Services
             IFeedbackTemplateService feedbackTemplateService,
             IProductAreaService productAreaService,
             IExtendedCaseFormRepository extendedCaseFormRepository,
-            IExtendedCaseDataRepository extendedCaseDataRepository
+            IExtendedCaseDataRepository extendedCaseDataRepository,
+            ICaseFollowUpService caseFollowUpService
             )
 
         {
@@ -293,6 +295,7 @@ namespace DH.Helpdesk.Services.Services
             _productAreaService = productAreaService;
             this._extendedCaseFormRepository = extendedCaseFormRepository;
             this._extendedCaseDataRepository = extendedCaseDataRepository;
+            this._caseFollowUpService = caseFollowUpService;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -476,12 +479,17 @@ namespace DH.Helpdesk.Services.Services
 
             // delete Invoice
             this.invoiceArticleService.DeleteCaseInvoices(id);
+
+            //delete FollowUp
+            this._caseFollowUpService.DeleteFollowUp(id);
+
             var c = this._caseRepository.GetById(id);
             ret = c.CaseGUID;
             this._caseRepository.Delete(c);
             this._caseRepository.Commit();
 
 
+            
 
             return ret;
         }
