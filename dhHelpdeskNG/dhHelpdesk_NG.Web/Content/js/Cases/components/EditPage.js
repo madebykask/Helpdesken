@@ -35,6 +35,8 @@ EditPage.prototype.Current_EC_Guid = "";
 EditPage.prototype.Current_EC_LanguageId = "";
 EditPage.prototype.Current_EC_Path = "";
 
+EditPage.prototype.Contains_Eform = false; //DH+
+
 
 /*** Common Area ***/
 
@@ -1476,12 +1478,10 @@ EditPage.prototype.init = function (p) {
             if (ev.target.className == "extendedcase") {
                 self.$activeTabHolder.val('extendedcase-tab');
             }
-
-
         }
 
-        if (self.p.Contains_Eform) {
-            if (ev.target.className.indexOf("case") >= 0) {
+        if (self.p.containsEForm == 'True') {
+            if (ev.target.className == "case") {
                 if ($(".secnav").hasClass("hide")) {
                     $(".secnav").fadeIn(300, function () {
                         $(".secnav").removeClass("hide");

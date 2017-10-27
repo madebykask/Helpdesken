@@ -70,16 +70,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             {
                 var employees = SessionFacade.CurrentCoWorkers;
                 foreach (var cw in employees)
-                {
-                    var emailAddress = "";
-                    if (cw.ExtraInfo.ContainsKey("Email"))
-                    {
-                        var mail = cw.ExtraInfo["Email"];
-                        if (mail.ContainsKey("comm"))
-                        {
-                            emailAddress = mail["comm"];
-                        }
-                    }
+                {                    
                     var cwr = new CoWorker
                     {
                         EmployeeNumber = cw.EmployeeNumber,
@@ -87,7 +78,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                         LastName = cw.LastName,
                         JobTitle = cw.JobName,
                         JobKey = cw.JobCode,
-                        Email = emailAddress
+                        Email = cw.Email
                     };
                     allCoWorkers.Add(cwr);
                 }                
