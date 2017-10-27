@@ -14,6 +14,7 @@
 
             entity.Id = businessModel.Id;
             entity.Name = businessModel.Name;
+            entity.PageNumbersUse = businessModel.PageNumbersUse;
             entity.CaseDocumentTemplateGUID = businessModel.CaseDocumentTemplateGUID;
             entity.MarginTop = businessModel.MarginTop;
             entity.MarginBottom = businessModel.MarginBottom;
@@ -24,12 +25,6 @@
             entity.ShowFooterFromPageNr = businessModel.ShowFooterFromPageNr;
             entity.ShowHeaderFromPageNr = businessModel.ShowHeaderFromPageNr;
             entity.Style = businessModel.Style;
-            entity.ShowAlternativeHeaderOnFirstPage = businessModel.ShowAlternativeHeaderOnFirstPage;
-            entity.ShowAlternativeFooterOnFirstPage = businessModel.ShowAlternativeFooterOnFirstPage;
-            entity.DraftHeight = businessModel.DraftHeight;
-            entity.DraftYLocation = businessModel.DraftYLocation;
-            entity.DraftRotateAngle = businessModel.DraftRotateAngle;
-            entity.HtmlViewerWidth = businessModel.HtmlViewerWidth;
         }
     }
 }

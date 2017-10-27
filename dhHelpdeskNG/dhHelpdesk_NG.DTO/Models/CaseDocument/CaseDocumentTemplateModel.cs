@@ -11,22 +11,16 @@ namespace DH.Helpdesk.BusinessData.Models.CaseDocument
 
         public int Id { get; set; }
         public string Name { get; set; }
+        public bool PageNumbersUse { get; set; }
         public Guid CaseDocumentTemplateGUID { get; set; }
-        public double MarginTop { get; set; }
-        public double MarginBottom { get; set; }
-        public double MarginLeft { get; set; }
-        public double MarginRight { get; set; }
-        public double FooterHeight { get; set; }
-        public double HeaderHeight { get; set; }
+        public int MarginTop { get; set; }
+        public int MarginBottom { get; set; }
+        public int MarginLeft { get; set; }
+        public int MarginRight { get; set; }
+        public int FooterHeight { get; set; }
+        public int HeaderHeight { get; set; }
         public int ShowFooterFromPageNr { get; set; }
         public int ShowHeaderFromPageNr { get; set; }
         public string Style { get; set; }
-        public bool ShowAlternativeHeaderOnFirstPage { get; set; }
-        public bool ShowAlternativeFooterOnFirstPage { get; set; }
-        public double DraftHeight { get; set; }
-        public double DraftYLocation { get; set; }
-        public double DraftRotateAngle { get; set; }
-        public int HtmlViewerWidth { get; set; }
-
     }
 }

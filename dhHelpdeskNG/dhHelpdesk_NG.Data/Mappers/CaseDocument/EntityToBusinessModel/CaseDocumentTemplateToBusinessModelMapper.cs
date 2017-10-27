@@ -11,6 +11,7 @@
             {
                 Id = entity.Id,
                 Name = entity.Name,
+                PageNumbersUse = entity.PageNumbersUse,
                 CaseDocumentTemplateGUID = entity.CaseDocumentTemplateGUID,
                 MarginTop = entity.MarginTop,
                 MarginBottom = entity.MarginBottom,
@@ -18,16 +19,11 @@
                 MarginRight = entity.MarginRight,
                 FooterHeight = entity.FooterHeight,
                 HeaderHeight = entity.HeaderHeight,
+
                 ShowFooterFromPageNr = entity.ShowFooterFromPageNr,
                 ShowHeaderFromPageNr = entity.ShowHeaderFromPageNr,
-                Style = entity.Style,
-                ShowAlternativeHeaderOnFirstPage = entity.ShowAlternativeHeaderOnFirstPage,
-                ShowAlternativeFooterOnFirstPage = entity.ShowAlternativeFooterOnFirstPage,
-                DraftHeight = entity.DraftHeight,
-                DraftYLocation = entity.DraftYLocation,
-                DraftRotateAngle = entity.DraftRotateAngle,
-                HtmlViewerWidth = entity.HtmlViewerWidth,
-            };
+                Style = entity.Style
+        };
         }
     }
 }
