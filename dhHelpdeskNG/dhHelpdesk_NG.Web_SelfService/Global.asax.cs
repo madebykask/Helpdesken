@@ -71,7 +71,16 @@ namespace DH.Helpdesk.SelfService
             if (token.ValidTo < DateTime.UtcNow)
             {
                 Trace.WriteLine($"Security token lifetime has been expired: ValidTo: {token.ValidTo}, UtcNow: {DateTime.UtcNow}. Siging out.");
-                federationAuthenticationService.SignOut(Request.Url);
+                //FederatedAuthentication.WSFederationAuthenticationModule.SignOut();
+
+                //get redirect url after sign in. On Post we need to take original url from UrlReferrer
+                var returnUrl = Request.Url;
+                if (Request.HttpMethod == "POST" && Request.UrlReferrer != null)
+                {
+                    returnUrl = Request.UrlReferrer;
+                }
+
+                federationAuthenticationService.SignOut(returnUrl);
                 return;
             }
 
