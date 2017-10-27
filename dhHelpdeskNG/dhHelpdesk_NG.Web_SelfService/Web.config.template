@@ -72,7 +72,7 @@
     <add key="SSO.TokenMaxLifeTime" value="720" />
     <add key="SSO.EnableSlidingExpiration" value="true" />
     <add key="SSO.HandleSecurityTokenExceptions" value="true" />
-    <add key="SSO.LogoutCustomerOnSessionExpire" value="true" />        
+    <add key="SSO.LogoutCustomerOnSessionExpire" value="false" />        
   </appSettings>
   <!--
     For a description of web.config changes for .NET 4.5 see http://go.microsoft.com/fwlink/?LinkId=235367.
