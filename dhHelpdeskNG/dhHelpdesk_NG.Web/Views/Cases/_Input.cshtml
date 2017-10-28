@@ -12,7 +12,7 @@
 @using DH.Helpdesk.Common.Constants;
 @using DH.Helpdesk.Common.Enums
 
-<script type="text/javascript">    
+<script type="text/javascript">
 
     window.parameters = {
         isCaseLocked: '@Model.CaseLock.IsLocked',
@@ -98,7 +98,10 @@
             CaseLanguageId: "case__RegLanguage_Id",
             PersonsName: "case__PersonsName",
             PersonsPhone:  "case__PersonsPhone",
+            PersonsEmail:  "case__PersonsEmail",
+            PersonsCellphone:  "case__PersonsCellphone",
             PlanDate: "case__PlanDate",
+            Place: "case__Place",
             WatchDate: "case__WatchDate",
             log_InternalText: "CaseLog_TextInternal",
             CaseRelationType: "CaseRelationType"
@@ -122,6 +125,9 @@
             WatchDate:   '@(Model.case_.WatchDate !=null ? Model.case_.WatchDate.Value.ToString() : "" )',
             PriorityId: '@Model.case_.Priority_Id',
             CaseRelationType: '@Model.CaseRelationType()',
+            PersonsEmail: '@Model.case_.PersonsEmail',
+            PersonsCellphone: '@Model.case_.PersonsCellphone',
+            Place: '@Model.case_.Place'
         },
 
         casesScopeInitParameters: {
