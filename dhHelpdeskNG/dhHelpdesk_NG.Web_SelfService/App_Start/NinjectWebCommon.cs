@@ -243,7 +243,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IWatchDateCalendarRepository>().To<WatchDateCalendarRepository>();
             kernel.Bind<IMetaDataRepository>().To<MetaDataRepository>();            
             kernel.Bind<IEntityInfoRepository>().To<EntityInfoRepository>();
-            
+            kernel.Bind<ICaseFollowUpRepository>().To<CaseFollowUpRepository>();
 
 
             // Service             
@@ -313,7 +313,10 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IWatchDateCalendarService>().To<WatchDateCalendarService>();            
             kernel.Bind<IEmployeeService>().To<EmployeeService>();
             kernel.Bind<IMetaDataService>().To<MetaDataService>();            
-            kernel.Bind<IWebApiService>().To<WebApiService>();            
+            kernel.Bind<IWebApiService>().To<WebApiService>();
+
+            kernel.Bind<ICaseFollowUpService>().To<CaseFollowUpService>();
+
 
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
