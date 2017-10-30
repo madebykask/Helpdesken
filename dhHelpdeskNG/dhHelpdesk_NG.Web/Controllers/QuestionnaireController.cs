@@ -1,4 +1,6 @@
-﻿using DH.Helpdesk.BusinessData.Models.Questionnaire;
+﻿using DH.Helpdesk.BusinessData.Enums.MailTemplates;
+using DH.Helpdesk.BusinessData.Models.Questionnaire;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 
@@ -47,6 +49,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly ILanguageService _languageService;
 
+        private readonly IMailTemplateService _mailTemplateService;
+
         #endregion
 
         #region Constructors and Destructors
@@ -63,6 +67,7 @@ namespace DH.Helpdesk.Web.Controllers
             IWorkingGroupService workingGroupService,
             IMasterDataService masterDataService,
             ILanguageService languageService,
+            IMailTemplateService mailTemplateService,
             IInfoService infoService)
             : base(masterDataService)
         {
@@ -77,6 +82,7 @@ namespace DH.Helpdesk.Web.Controllers
             _workingGroupService = workingGroupService;
             _infoService = infoService;
             _languageService = languageService;
+            _mailTemplateService = mailTemplateService;
         }
 
         #endregion
@@ -553,7 +559,7 @@ namespace DH.Helpdesk.Web.Controllers
                 circular.ChangedDate,
                 circular.Status,
                 connecteCasesOverviews);
-
+            model.MailTemplateId = circular.MailTemplateId;
             model.CaseFilter = new CircularCaseFilter
             {
                 IsUniqueEmail = circular.CaseFilter.IsUniqueEmail,
@@ -596,17 +602,19 @@ namespace DH.Helpdesk.Web.Controllers
                 SelectedProcent = newCircular.CaseFilter.SelectedProcent
             };
 
+            var extraEmails = newCircular.ExtraEmails?.Split(BRConstItem.Email_Char_Separator).Where(x => !string.IsNullOrEmpty(x)).ToList();
             var circularId = newCircular.Id;
             if (newCircular.Id == 0)
             {
                 var circular = new CircularForInsert(newCircular.CircularName, newCircular.QuestionnaireId,
-                    CircularStateId.ReadyToSend, DateTime.Now, cases, caseFilter);
-
+                    CircularStateId.ReadyToSend, DateTime.Now, cases, caseFilter, extraEmails);
+                circular.MailTemplateId = newCircular.MailTemplateId;
                 circularId = _circularService.AddCircular(circular);
             }
             else
             {
-                var circular = new CircularForUpdate(newCircular.Id, newCircular.CircularName, DateTime.Now, cases, caseFilter);
+                var circular = new CircularForUpdate(newCircular.Id, newCircular.CircularName, DateTime.Now, cases, caseFilter, extraEmails);
+                circular.MailTemplateId = newCircular.MailTemplateId;
                 this._circularService.UpdateCircular(circular);
                 circularId = circular.Id;
             }
@@ -778,6 +786,19 @@ namespace DH.Helpdesk.Web.Controllers
 
             var selectedWg = new List<int>();
 
+            var extraEmails = _circularService.GetCircularExtraEmails(circularId);
+            var extraEmailsStr = extraEmails != null && extraEmails.Any()
+                ? string.Join(BRConstItem.Email_Separator, extraEmails) + BRConstItem.Email_Separator
+                : string.Empty;
+
+            var templates = new List<SelectListItem>{ new SelectListItem { Text = string.Empty } };
+            templates.AddRange(_mailTemplateService.GetMailTemplates(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId)
+                    .Where(x => x.IsStandard == 0).Select(x => new SelectListItem
+                    {
+                        Value = x.Id.ToString(),
+                        Text = x.Name
+                    }).ToList());
+
             var model = new CircularModel(
                 circularId,
                 questionnaireId,
@@ -793,7 +814,9 @@ namespace DH.Helpdesk.Web.Controllers
                 name,
                 changedDate,
                 status,
-                connectedCases);
+                connectedCases,
+                extraEmailsStr,
+                templates);
 
             var lst = new List<SelectListItem>();
             lst.Add(new SelectListItem { Text = "5", Value = "5" });

@@ -38,6 +38,10 @@
                 .WithRequired(s => s.QuestionnaireCircular)
                 .HasForeignKey(s => s.QuestionnaireCircularId);
 
+            this.HasMany(s => s.QuestionnaireCircularExtraEmailEntities)
+                .WithRequired(s => s.QuestionnaireCircular)
+                .HasForeignKey(s => s.QuestionnaireCircular_Id);
+
             this.Property(c => c.CircularName).IsRequired().HasMaxLength(50);
             this.Property(c => c.Status).IsRequired();
 
@@ -46,6 +50,7 @@
             this.Property(x => x.ChangedDate).IsRequired();
             this.Property(x => x.SelectedProcent).IsRequired();
             this.Property(x => x.IsUniqueEmail).IsRequired();
+            this.Property(c => c.MailTemplate_Id).IsOptional();
 
             this.ToTable("tblQuestionnaireCircular");
         }

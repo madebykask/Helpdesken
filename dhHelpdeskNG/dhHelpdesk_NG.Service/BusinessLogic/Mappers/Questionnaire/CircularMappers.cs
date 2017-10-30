@@ -92,6 +92,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Questionnaire
 				    SelectedProductAreas = anonymus.QuestionnaireCircularProductAreaEntities.Select(x => x.ProductAreaId).ToList(),
 				    SelectedWorkingGroups = anonymus.QuestionnaireCircularWorkingGroupEntities.Select(x => x.WorkingGroupId).ToList()
 			    });
+	        businessModel.MailTemplateId = anonymus.MailTemplate_Id;
 		    return businessModel;
 	    }
     }

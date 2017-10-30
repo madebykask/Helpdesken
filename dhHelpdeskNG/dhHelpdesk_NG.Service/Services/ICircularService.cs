@@ -62,5 +62,6 @@ namespace DH.Helpdesk.Services.Services
         void UpdateParticipantSendDate(Guid participantGuid, DateTime operationDate);
         int GetCircularIdByQuestionnaireId(int questionaireId);
         void SaveFeedbackNote(int questionId, string noteText);
+        List<string> GetCircularExtraEmails(int circularId);
     }
 }

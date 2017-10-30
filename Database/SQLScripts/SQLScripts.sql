@@ -152,5 +152,26 @@ ALTER TABLE [dbo].[tblMetaData]
 ALTER COLUMN MetaDataText nvarchar(MAX) NOT NULL
 
 GO
+
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblQuestionnaireCircularExtraEmails' AND xtype='U')
+BEGIN
+	CREATE TABLE [dbo].[tblQuestionnaireCircularExtraEmails](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[QuestionnaireCircular_Id] [int] NOT NULL,
+	[Email] [nvarchar](100) NOT NULL
+ CONSTRAINT [PK_tblQuestionnaireExtraEmail] PRIMARY KEY CLUSTERED (	[Id] ASC)
+ WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]) ON [PRIMARY]
+ 
+ALTER TABLE [dbo].[tblQuestionnaireCircularExtraEmails]  WITH NOCHECK ADD  CONSTRAINT [FK_tblQuestionnaireCircularExtraEmails_tblQuestionnaireCircular] FOREIGN KEY([QuestionnaireCircular_Id])
+REFERENCES [dbo].[tblQuestionnaireCircular] ([Id])
+
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'MailTemplate_Id' and sysobjects.name = N'tblQuestionnaireCircular')
+   ALTER TABLE [tblQuestionnaireCircular] ADD [MailTemplate_Id] int NULL
+GO	
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.34'

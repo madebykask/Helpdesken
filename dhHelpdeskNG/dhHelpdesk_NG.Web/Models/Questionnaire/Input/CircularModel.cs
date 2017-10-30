@@ -1,4 +1,6 @@
-﻿using DH.Helpdesk.Common.Enums;
+﻿using System.Linq;
+using DH.Helpdesk.Common.Constants;
+using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Services.DisplayValues.Questionnaire;
 
 namespace DH.Helpdesk.Web.Models.Questionnaire.Input
@@ -32,7 +34,9 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
             string circularName,
             DateTime? changedDate,
             CircularStates circularState,
-            List<ConnectedToCircularOverview> connectedCases)
+            List<ConnectedToCircularOverview> connectedCases,
+            string extraEmails,
+            List<SelectListItem> mailTemplates)
         {
             CaseFilter = new CircularCaseFilter();
             Id = id;
@@ -50,6 +54,8 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
             ChangedDate = changedDate;
             State = (CircularStatesDisplayValue) circularState;
             ConnectedCases = connectedCases;
+            ExtraEmails = extraEmails;
+            MailTemplates = mailTemplates;
         }
 
         //[IsId]
@@ -92,5 +98,11 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
         public List<ConnectedToCircularOverview> ConnectedCases { get; set; }
 
         public CircularCaseFilter CaseFilter { get; set; }
+
+        public string ExtraEmails { get; set; }
+
+        public IList<SelectListItem> MailTemplates { get; set; }
+
+        public int? MailTemplateId { get; set; }
     }
 }

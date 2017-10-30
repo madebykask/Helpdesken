@@ -181,6 +181,7 @@
     <Compile Include="EntityConfigurations\ParentChildCaseRelationConfiguration.cs" />
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireCircularCaseTypeConfiguration.cs" />
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireCircularDepartmentConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireCircularExtraEmailConfiguration.cs" />
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireCircularProductAreaConfiguration.cs" />
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireCircularWorkingGroupConfiguration.cs" />
     <Compile Include="EntityConfigurations\RegistrationSourceCustomerConfiguration.cs" />

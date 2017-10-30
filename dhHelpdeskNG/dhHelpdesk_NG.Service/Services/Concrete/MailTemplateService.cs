@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace DH.Helpdesk.Services.Services.Concrete
 {
     using DH.Helpdesk.BusinessData.Models;
@@ -48,6 +50,25 @@ namespace DH.Helpdesk.Services.Services.Concrete
                         mailId);
 
             return mailTemplate;            
+        }
+
+        public MailTemplate GetTemplateById(int id, OperationContext operationContext)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var templateLangaugeRepository = uof.GetRepository<MailTemplateLanguageEntity>();
+                var templateRepository = uof.GetRepository<MailTemplateEntity>();
+
+                MailTemplate mailTemplate =
+                    templateLangaugeRepository.GetAll()
+                        .ExtractMailTemplateById(
+                            templateRepository.GetAll(),
+                            operationContext.CustomerId,
+                            operationContext.LanguageId,
+                            id);
+
+                return mailTemplate;
+            }
         }
     }
 }

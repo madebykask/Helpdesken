@@ -450,6 +450,8 @@
 
         public DbSet<QuestionnaireCircularDepartmentEntity> QuestionnaireCircularDepartments { get; set; }
 
+        public DbSet<QuestionnaireCircularExtraEmailEntity> QuestionnaireCircularExtraEmails { get; set; }
+
         public DbSet<QuestionnaireCircularCaseTypeEntity> QuestionnaireCircularCaseTypes { get; set; }
 
         public DbSet<QuestionnaireCircularProductAreaEntity> QuestionnaireCircularProductAreas { get; set; }
@@ -843,6 +845,7 @@
             modelBuilder.Configurations.Add(new QuestionnaireCircularConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireCircularPartConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireCircularDepartmentConfiguration());
+            modelBuilder.Configurations.Add(new QuestionnaireCircularExtraEmailConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireCircularCaseTypeConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireCircularProductAreaConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireCircularWorkingGroupConfiguration());
