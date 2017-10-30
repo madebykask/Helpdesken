@@ -6267,10 +6267,24 @@ If not exists (select * from tblTextTranslation where text_id = 1863 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1864)
-	insert into tbltext (id, TextString) VALUES (1864, 'Extra')
+	insert into tbltext (id, TextString) VALUES (1864, 'Begränsning')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1864 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1864, 2, 'Extra')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1864, 2, 'Restriction')
+GO
+
+If not exists (select * from tbltext where id = 1865)
+	insert into tbltext (id, TextString) VALUES (1865, 'Tillåt endast chefer logga in')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1865 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1865, 2, 'Allow only managers to login')
+GO
+
+If not exists (select * from tbltext where id = 1866)
+	insert into tbltext (id, TextString) VALUES (1866, 'Hämta data från Api')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1866 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1866, 2, 'Fetch data from Api')
 GO
 
 -- *** Run this last when put translation script above this line **--
