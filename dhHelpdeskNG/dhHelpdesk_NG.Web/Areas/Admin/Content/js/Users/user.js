@@ -233,7 +233,8 @@ $(function () {
                            || type == permissions.copyCasePermission
                            || type == permissions.activateCasePermission
                            || type == permissions.closeCasePermission
-                           || type == permissions.reportPermission;
+                           || type == permissions.reportPermission
+                           || type == permissions.caseUnlockPermission;
                             permission.setHasPermission(isChecked);
                         }
 
