@@ -229,6 +229,7 @@ ExtendedCasePage.prototype.loadExtendedCase = function () {
                     persons_email: { Value: fieldValues.PersonsEmail },
                     persons_cellphone: { Value: fieldValues.PersonsCellphone},
                     place: { Value: fieldValues.Place },
+                    costcentre: { Value: fieldValues.CostCentre },
                 }
             });
         promise.then(function () { self.onExtendedCaseLoaded() });
@@ -332,7 +333,7 @@ ExtendedCasePage.prototype.syncCaseFromExCaseIfExists = function () {
     var _persons_email = fieldData.persons_email;
     var _persons_cellphone = fieldData.persons_cellphone;
     var _place = fieldData.place;
-    
+    var _costcentre = fieldData.costcentre;
 
     if (_reportedby != undefined)
         $('#' + _caseFields.ReportedBy).val(_reportedby.Value);
@@ -400,7 +401,10 @@ ExtendedCasePage.prototype.syncCaseFromExCaseIfExists = function () {
         $('#' +_caseFields.PersonsCellphone).val(_persons_cellphone.Value);
 
     if(_place != undefined)
-        $('#' +_caseFields.Place).val(_place.Value);
+        $('#' + _caseFields.Place).val(_place.Value);
+
+    if (_costcentre != undefined)
+        $('#' + _caseFields.CostCentre).val(_costcentre.Value);
 }
 
 ExtendedCasePage.prototype.setCaseStatus = function (status) {

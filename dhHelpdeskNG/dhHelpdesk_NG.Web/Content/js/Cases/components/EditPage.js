@@ -290,6 +290,7 @@ EditPage.prototype.loadExtendedCase = function () {
                     persons_email: { Value: fieldValues.PersonsEmail },
                     persons_cellphone: { Value: fieldValues.PersonsCellphone },
                     place: { Value: fieldValues.Place },
+                    costcentre: { Value: fieldValues.CostCentre },
                 }
             });
         pr.then(function () { self.onExtendedCaseLoaded() });
@@ -419,6 +420,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
     var _persons_email = fieldData.persons_email;
     var _persons_cellphone = fieldData.persons_cellphone;
     var _place = fieldData.place;
+    var _costcentre = fieldData.costcentre;
 
     if (_reportedby != undefined)
         $('#' + _caseFields.ReportedBy).val(_reportedby.Value);
@@ -524,6 +526,9 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
     if (_place != undefined)
         $('#' + _caseFields.Place).val(_place.Value);
 
+    if (_costcentre != undefined)
+        $('#' + _caseFields.CostCentre).val(_costcentre.Value);
+
 }
 
 EditPage.prototype.propagateLogNote = function () {
@@ -566,6 +571,7 @@ EditPage.prototype.refreshCasePage = function (updatedInfo) {
     $('#' + _caseFields.PersonsEmail).val(updatedInfo.PersonsEmail);
     $('#' + _caseFields.PersonsCellphone).val(updatedInfo.PersonsCellphone);
     $('#' + _caseFields.Place).val(updatedInfo.Place);
+    $('#' + _caseFields.CostCentre).val(updatedInfo.CostCentre);
 
     $('#' + _caseFields.PlanDate).datepicker({
         format: updatedInfo.DateFormat.toLowerCase(),

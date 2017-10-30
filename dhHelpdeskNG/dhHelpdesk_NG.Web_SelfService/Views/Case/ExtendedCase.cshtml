@@ -51,7 +51,8 @@
             FinishingDate: "CaseDataModel_FinishingDate",
             ClosingReasonId: "CaseDataModel_FinishingType_Id",
             SourceId: "CaseDataModel_RegistrationSourceCustomer_Id",
-            log_InternalText: "CaseDataModel_Text_Internal"
+            log_InternalText: "CaseDataModel_Text_Internal",
+            CostCentre: "CaseDataModel_CostCentre",
         },
 
         caseInitValues: {
@@ -74,6 +75,7 @@
             PersonsEmail: '@Model.CaseDataModel.PersonsEmail',
             PersonsCellphone: '@Model.CaseDataModel.PersonsCellphone',
             Place: '@Model.CaseDataModel.Place',
+            CostCentre: '@Model.CaseDataModel.CostCentre',
         },
 
         extendedCaseGuid: '@(Model.ExtendedCaseDataModel.ExtendedCaseGuid)',

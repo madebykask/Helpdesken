@@ -104,7 +104,8 @@
             Place: "case__Place",
             WatchDate: "case__WatchDate",
             log_InternalText: "CaseLog_TextInternal",
-            CaseRelationType: "CaseRelationType"
+            CaseRelationType: "CaseRelationType",
+            CostCentre:  "case__CostCentre",
         },
 
         caseInitValues: {
@@ -127,7 +128,8 @@
             CaseRelationType: '@Model.CaseRelationType()',
             PersonsEmail: '@Model.case_.PersonsEmail',
             PersonsCellphone: '@Model.case_.PersonsCellphone',
-            Place: '@Model.case_.Place'
+            Place: '@Model.case_.Place',
+            CostCentre: '@Model.case_.CostCentre'
         },
 
         casesScopeInitParameters: {
