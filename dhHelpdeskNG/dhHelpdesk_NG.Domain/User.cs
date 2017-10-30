@@ -97,7 +97,7 @@
         public DateTime PasswordChangedDate { get; set; }
         public DateTime RegTime { get; set; }
         public Guid UserGUID { get; set; }
-        public bool CaseUnlockPermission { get; set; }
+        public int CaseUnlockPermission { get; set; }
 
         /// <summary>
         /// Flag to display "Solution time" grid on case overview page

@@ -87,7 +87,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             this._caseLockRepository.DeleteCaseLockByCaseId(caseId);
         }
 
-        public bool GetCaseUnlockPermission(int userId)
+        public int GetCaseUnlockPermission(int userId)
         {
             return _caseLockRepository.GetCaseUnlockPermission(userId);
         }

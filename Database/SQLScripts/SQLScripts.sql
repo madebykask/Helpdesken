@@ -45,7 +45,7 @@ GO
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
                where syscolumns.name = N'CaseUnlockPermission' and sysobjects.name = N'tblUsers')
 	BEGIN
-		ALTER TABLE [tblUsers] ADD [CaseUnlockPermission] bit NOT NULL DEFAULT(0)
+		ALTER TABLE [tblUsers] ADD [CaseUnlockPermission] int NOT NULL DEFAULT(0)
 		EXEC('UPDATE [tblUsers] SET [CaseUnlockPermission] = 1 WHERE [UserGroup_Id] > 1')
 	END
 GO

@@ -86,7 +86,8 @@
                 UserWorkingGroups = overview.UserWorkingGroups,
                 StartPage = overview.StartPage,
                 DocumentPermission = overview.DocumentPermission,
-                InventoryPermission = overview.InventoryPermission
+                InventoryPermission = overview.InventoryPermission,
+                CaseUnlockPermission = overview.CaseUnlockPermission
             };
         }
 
@@ -120,6 +121,7 @@
                 user.SetPriorityPermission,
                 user.InvoicePermission,
                 user.DataSecurityPermission,
+                user.CaseUnlockPermission,
                 user.RefreshContent,
                 user.FirstName,
                 user.SurName,
