@@ -173,5 +173,15 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
    ALTER TABLE [tblQuestionnaireCircular] ADD [MailTemplate_Id] int NULL
 GO	
 
+if not exists(select * from sysobjects WHERE Name = N'FK_tblCategory_tblCategory')
+	ALTER TABLE [dbo].[tblCategory] ADD 
+		CONSTRAINT [FK_tblCategory_tblCategory] FOREIGN KEY 
+			(
+				[Parent_Category_Id]
+			) REFERENCES [dbo].[tblCategory] (
+				[Id]
+			)
+GO 
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.34'

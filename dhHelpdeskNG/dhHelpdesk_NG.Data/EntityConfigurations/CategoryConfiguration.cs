@@ -23,6 +23,7 @@
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.CategoryGUID).IsOptional();
+            this.Property(x => x.Parent_Category_Id).IsOptional();
 
             this.ToTable("tblcategory");
         }
