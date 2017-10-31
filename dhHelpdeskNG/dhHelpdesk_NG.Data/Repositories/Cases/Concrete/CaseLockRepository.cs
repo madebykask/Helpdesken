@@ -185,16 +185,6 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             }
         }
 
-        public int GetCaseUnlockPermission(int userId)
-        {
-            var user = DataContext.Users.SingleOrDefault(x => x.Id == userId);
-            if (user != null)
-            {
-                return user.CaseUnlockPermission;
-            }
-            return 0;
-        }
-
         public List<LockedCaseOverview> GetLockedCases(int? customerId)
         {
             var lockedCases = GetAlllockedCaseEntities();

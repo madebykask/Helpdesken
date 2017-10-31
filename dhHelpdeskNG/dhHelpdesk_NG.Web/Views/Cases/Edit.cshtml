@@ -388,7 +388,7 @@
                         }
                         else
                         {
-                            if (Model.CaseUnlockAccess == 1 || SessionFacade.CurrentUser.FollowUpPermission == 1)
+                            if (Model.CaseUnlockAccess || SessionFacade.CurrentUser.FollowUpPermission == 1)
                             {
                                 <li>
                                     <div id="divActionMenu" class="btn-group">
@@ -409,7 +409,7 @@
                                                 }
 
                                             }
-                                            @if (Model.CaseUnlockAccess == 1)
+                                            @if (Model.CaseUnlockAccess)
                                             {
                                                 if (Model.CaseLock != null && Model.CaseLock.IsLocked)
                                                 {

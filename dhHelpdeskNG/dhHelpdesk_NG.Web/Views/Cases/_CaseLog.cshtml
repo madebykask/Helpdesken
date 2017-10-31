@@ -30,7 +30,7 @@
                     <tbody>
                         @foreach (var r in Model.Logs)
                         {
-                            if (SessionFacade.CurrentUser.UserGroupId > UserGroups.User || !string.IsNullOrEmpty(r.TextExternal))
+                            if (Model.CaseInternalLogAccess || !string.IsNullOrEmpty(r.TextExternal))
                              {
                                  <tr id="@r.Id">
                                      <td style="max-width: 105px">
@@ -59,7 +59,7 @@
                                      @if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote).ToString() == String.Empty)
                                      {
                                          <td class="wordbreak" style="width: 25%; max-width: 300px">
-                                             @if (SessionFacade.CurrentUser.UserGroupId > UserGroups.User)
+                                             @if (Model.CaseInternalLogAccess)
                                              {
                                                  <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextInternal).ForHtmlView()</a>
                                              }
@@ -68,7 +68,7 @@
                                      else
                                      {
                                          <td class="wordbreak" style="width: 40%; max-width: 300px">
-                                             @if (SessionFacade.CurrentUser.UserGroupId > UserGroups.User)
+                                             @if (Model.CaseInternalLogAccess)
                                              {
                                                  <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextInternal).ForHtmlView()</a>
                                              }

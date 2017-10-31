@@ -2173,14 +2173,14 @@
                                 <div class="displaytr" class="container">
                                     <ul class="nav nav-tabs" id="logandhistorytabs">
                                         <li class="active"><a href="#logtab">@Translation.Get("Ärendelogg", SessionFacade.CurrentLanguageId)</a></li>
-                                        @if (SessionFacade.CurrentUser.UserGroupId > UserGroups.User)
+                                        @if (Model.CaseInternalLogAccess)
                                         {
                                             <li><a href="#historytab">@Translation.Get("Historik", SessionFacade.CurrentLanguageId)</a></li>
                                         }
                                     </ul>
                                     <div class="tab-content">
                                         @Html.Partial("_CaseLog", Model)
-                                        @if (SessionFacade.CurrentUser.UserGroupId > UserGroups.User)
+                                        @if (Model.CaseInternalLogAccess)
                                         {
                                             @Html.Partial("_CaseHistory", Model)
                                         }

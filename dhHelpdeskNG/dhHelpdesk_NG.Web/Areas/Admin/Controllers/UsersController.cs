@@ -292,7 +292,8 @@
                 StartPage = 1,
                 Customer_Id = 0,
                 UserGroup_Id = 4,
-                TimeZoneId = SessionFacade.CurrentUser.TimeZoneId ?? TimeZoneInfo.Local.Id
+                TimeZoneId = SessionFacade.CurrentUser.TimeZoneId ?? TimeZoneInfo.Local.Id,
+                CaseInternalLogPermission = 1
             });
 
 

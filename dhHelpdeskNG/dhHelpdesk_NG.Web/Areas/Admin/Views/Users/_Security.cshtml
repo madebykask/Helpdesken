@@ -152,10 +152,17 @@
         <tr>
             <td></td>
             <td>
-                <input data-field="caseUnlockPermission" type="checkbox" name="User.CaseUnlockPermission" @(Model.User.CaseUnlockPermission == 1 ? "checked=checked" : "") value="1" />
-                <input type="hidden" name="User.CaseUnlockPermission" value="0" />
-                @*@Html.CheckBoxFor(x => x.User.CaseUnlockPermission)*@
+                <input data-field="caseUnlockPermission" type="checkbox" name="User.CaseUnlockPermission" @(Model.User.CaseUnlockPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.CaseUnlockPermission" value="0"/>
                 &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren har rättighet till") @Translation.GetCoreTextTranslation("Lås upp ärende").ToLower()
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input data-field="caseInternalLogPermission" type="checkbox" name="User.CaseInternalLogPermission" @(Model.User.CaseInternalLogPermission == 1 ? "checked=checked" : "") value="1" />
+                <input type="hidden" name="User.CaseInternalLogPermission" value="0" />
+                &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren får se Intern notering")
             </td>
         </tr>
         <tr>

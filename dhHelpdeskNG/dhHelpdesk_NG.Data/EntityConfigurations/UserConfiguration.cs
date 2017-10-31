@@ -158,6 +158,7 @@
             this.Property(x => x.UserGUID).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
             this.Property(x => x.CaseUnlockPermission).IsRequired();
+            this.Property(x => x.CaseInternalLogPermission).IsRequired();
 
             this.ToTable("tblUsers");
         }

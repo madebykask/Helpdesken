@@ -285,7 +285,8 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public bool IsFollowUp { get; set; }
 
-        public int CaseUnlockAccess { get; set; }
+        public bool CaseUnlockAccess { get; set; }
+        public bool CaseInternalLogAccess { get; set; }
 
 		public List<ExternalInvoiceModel> ExternalInvoices { get; set; }
 

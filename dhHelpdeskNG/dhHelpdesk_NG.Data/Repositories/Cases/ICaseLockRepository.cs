@@ -33,7 +33,5 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
         void UnlockCaseByGUID(Guid lockGUID);
 
         void DeleteCaseLockByCaseId(int caseId);
-
-        int GetCaseUnlockPermission(int userId);
     }
 }

@@ -173,6 +173,14 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
    ALTER TABLE [tblQuestionnaireCircular] ADD [MailTemplate_Id] int NULL
 GO	
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'CaseInternalLogPermission' and sysobjects.name = N'tblUsers')
+	BEGIN
+		ALTER TABLE [tblUsers] ADD [CaseInternalLogPermission] int NOT NULL DEFAULT(0)
+		EXEC('UPDATE [tblUsers] SET [CaseInternalLogPermission] = 1')
+	END
+GO
+
 if not exists(select * from sysobjects WHERE Name = N'FK_tblCategory_tblCategory')
 	ALTER TABLE [dbo].[tblCategory] ADD 
 		CONSTRAINT [FK_tblCategory_tblCategory] FOREIGN KEY 

@@ -4850,7 +4850,8 @@ namespace DH.Helpdesk.Web.Controllers
                 var isFlwup = _caseFollowUpService.IsCaseFollowUp(SessionFacade.CurrentUser.Id, caseId);
                 m.IsFollowUp = isFlwup;
 
-                m.CaseUnlockAccess = _caseLockService.GetCaseUnlockPermission(SessionFacade.CurrentUser.Id);
+                m.CaseUnlockAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseUnlockPermission);
+                m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
 
                 var editMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
                 if (m.case_.Unread != 0 && updateState && editMode == Enums.AccessMode.FullAccess)
