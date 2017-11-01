@@ -362,7 +362,7 @@ namespace DH.Helpdesk.Web.Controllers
         #region ***Public Methods***
 
         #region --Advanced Search--
-        public ActionResult AdvancedSearch(bool? clearFilters = false, bool doSearchAtBegining = false)
+        public ActionResult AdvancedSearch(bool? clearFilters = false, bool doSearchAtBegining = false, bool isExtSearch = false)
         {
             if (SessionFacade.CurrentUser == null)
             {
@@ -417,6 +417,7 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseSearchFilterData.IsAboutEnabled = m.CaseSetting.ColumnSettingModel.CaseFieldSettings.GetIsAboutEnabled();
 
             m.DoSearchAtBegining = doSearchAtBegining;
+            m.IsExtSearch = isExtSearch;
             return this.View("AdvancedSearch/Index", m);
         }
 
@@ -7071,9 +7072,13 @@ namespace DH.Helpdesk.Web.Controllers
             var availableCustomerIds = new List<int> { 0 };
             if (isExtendedSearch)
             {
-                availableDepIds.AddRange(_departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id).Select(x => x.Id).ToList());
-                availableWgIds.AddRange(_workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id).Select(x => x.Id).ToList());
-                availableCustomerIds.AddRange(_customerUserService.GetCustomerUsersForUser(SessionFacade.CurrentUser.Id).Select(x => x.Customer_Id).ToList());
+                var user = _userService.GetUser(SessionFacade.CurrentUser.Id);
+                if (user != null)
+                {
+                    availableCustomerIds.AddRange(user.Cs.Select(x => x.Id));
+                    availableDepIds.AddRange(user.Departments.Select(x => x.Id));
+                    availableWgIds.AddRange(user.UserWorkingGroups.Select(x => x.WorkingGroup_Id));
+                }
             }
 
             var data = new List<Dictionary<string, object>>();

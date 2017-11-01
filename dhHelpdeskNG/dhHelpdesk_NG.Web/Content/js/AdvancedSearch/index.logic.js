@@ -57,11 +57,11 @@ var GRID_STATE = {
 
     SetSpecificConditionTab(false);
     
-    Page.prototype.init = function(gridInitSettings, doSearchAtBegining) {
+    Page.prototype.init = function(gridInitSettings, doSearchAtBegining, isExtSearch) {
         var me = this;        
         //// Bind elements
         customerTableId = 0;
-        me.$customerCaseArea = $('div.customer-cases-area');        
+        me.$customerCaseArea = $('div.customer-cases-area');
         me.$tableLoaderMsg = ' div.loading-msg';
         me.$tableNoDataMsg = ' div.no-data-msg';
         me.$tableErrorMsg = ' div.error-msg';
@@ -116,8 +116,11 @@ var GRID_STATE = {
         });
 
         if (doSearchAtBegining)
-            me.onSearchClick();                
-               
+            me.onSearchClick();
+
+        if (isExtSearch) {
+            me.onExtSearchLoading();
+        }
     };
         
     Page.prototype.setGridState = function(gridStateId) {
@@ -200,19 +203,19 @@ var GRID_STATE = {
                 {cellValue = null}
         }
 
+        var url = encodeURIComponent(strJoin('/Cases/AdvancedSearch?', 'doSearchAtBegining=true', "&isExtSearch=", isExtendedSearch));
         if (colSetting.isExpandable) {
             out = [strJoin('<td style="width:', colSetting.width, '">', '<div id="divExpand_' + uniqId + '" class="expandable_' + caseId + '" style="height: 15px; overflow: hidden;">', //max-width:500px;
                         '<i class="icon-plus-sign ico-right expandable_', caseId, '" data-uniqId="iIcon_', uniqId, '" id="btnExpander_', caseId, '" onclick="toggleRowExpanation(', caseId, ')"></i> ' +
                         '<a style="line-height:15px;" data-isbold="', isBold, '" data-uniqId="', uniqId, '" data-rowId="', caseId, '" class="exp" href="/Cases/Edit/', caseId, '?backUrl=',
-                        '/Cases/AdvancedSearch?', 'doSearchAtBegining=true', '">', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a>', '</div>', '</td>')];
+                        url, '">', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a>', '</div>', '</td>')];
             if (isExtendedSearch && !extendedAvailable) {
                 out = [strJoin('<td style="width:', colSetting.width, '">', '<div id="divExpand_' + uniqId + '" class="expandable_' + caseId + '" style="height: 15px; overflow: hidden;">', //max-width:500px;
                         '<i class="icon-plus-sign ico-right expandable_', caseId, '" data-uniqId="iIcon_', uniqId, '" id="btnExpander_', caseId, '" onclick="toggleRowExpanation(', caseId, ')"></i> ' +
                         '<a style="line-height:15px;" data-isbold="', isBold, '" data-uniqId="', uniqId, '" data-rowId="', caseId, '" class="exp" >', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a>', '</div>', '</td>')];
             }
         } else {
-            out = [strJoin('<td style="width:', colSetting.width, '"> <a style="line-height:15px;" href="/Cases/Edit/', caseId, '?backUrl=', '/Cases/AdvancedSearch?',
-                    'doSearchAtBegining=true', '">', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a></td>')];
+            out = [strJoin('<td style="width:', colSetting.width, '"> <a style="line-height:15px;" href="/Cases/Edit/', caseId, '?backUrl=', url, '">', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a></td>')];
             if (isExtendedSearch && !extendedAvailable) {
                 out = [strJoin('<td style="width:', colSetting.width, '"> <a style="line-height:15px;" >', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a></td>')];
             }
@@ -298,7 +301,8 @@ var GRID_STATE = {
             
         if (data && data.length > 0) {            
             $.each(data, function (idx, record) {
-                var firstCell = strJoin('<td style="width:2%"> <a href="/Cases/Edit/', record.case_id, '?backUrl=', '/Cases/AdvancedSearch?', 'doSearchAtBegining=true', '"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></a></td>');;
+                var url = encodeURIComponent(strJoin('/Cases/AdvancedSearch?', 'doSearchAtBegining=true', "&isExtSearch=", isExtendedSearch));
+                var firstCell = strJoin('<td style="width:2%"> <a href="/Cases/Edit/', record.case_id, '?backUrl=', url, '"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></a></td>');;
                 if (isExtendedSearch && !record.ExtendedAvailable) {
                     firstCell = strJoin('<td style="width:2%"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></td>');
                 }
@@ -333,7 +337,13 @@ var GRID_STATE = {
         //    TableData: currentCustomerTable
         //}
         //return tbl;
-    };         
+    };
+
+    Page.prototype.onExtSearchLoading = function () {
+        $("#extendedSearchEnabled").prop("checked", true);
+        isExtendedSearch = true;
+        SetSpecificConditionTab(true);
+    }
 
     Page.prototype.resetSearch = function () {
         var me = this;
@@ -380,8 +390,7 @@ var GRID_STATE = {
 
             me.fetchData([{ 'name': 'currentCustomerId', 'value': customers }]);
         }
-                
-    };    
+    };
 
     Page.prototype.onGetData = function (response) {
         var me = this;
@@ -614,7 +623,7 @@ var GRID_STATE = {
     window.app = new Page();
 
     $(document).ready(function() {
-        app.init.call(window.app, window.gridSettings, window.doSearchAtBegining);
+        app.init.call(window.app, window.gridSettings, window.doSearchAtBegining, window.isExtSearch);
         SetSearchThruFileState();
     });
 

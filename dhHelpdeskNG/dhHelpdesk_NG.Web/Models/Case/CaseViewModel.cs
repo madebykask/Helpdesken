@@ -356,6 +356,8 @@ namespace DH.Helpdesk.Web.Models.Case
     {
         public bool DoSearchAtBegining { get; set; }
 
+        public bool IsExtSearch { get; set; }
+
         public CaseSearchFilterData CaseSearchFilterData { get; set; }
 
         public AdvancedSearchSpecificFilterData SpecificSearchFilterData { get; set; }
