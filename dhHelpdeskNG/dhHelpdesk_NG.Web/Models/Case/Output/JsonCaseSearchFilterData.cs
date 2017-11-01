@@ -149,7 +149,7 @@
                 res.data.Add(new JsonCaseSearchFilterItem()
                 {
                     attrName = CaseFilterFields.CategoryNameAttribute,
-                    value = SaveExtractArray(defaultSearchFilter.SelectedCategory)
+                    value = defaultSearchFilter.CategoryId
                 });
             }
 

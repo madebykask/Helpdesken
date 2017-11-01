@@ -177,7 +177,7 @@
         public string CategoryPath { get; set; }
         public int CategoryId { get; set; }
         public IList<Category> Categories { get; set; }
-        public string SelectedCategory { get; set; }
+        //public string SelectedCategory { get; set; }
         public bool WorkingGroupCheck { get; set; }
         public IList<WorkingGroupEntity> WorkingGroups { get; set; }
         public string SelectedWorkingGroup { get; set; }
