@@ -16,9 +16,9 @@
             //this._customerService = customerService;
         }
         
-        public RedirectToRouteResult Index(int customerId=-1)
+        public RedirectToRouteResult Index(int customerId = -1)
         {     
-           return RedirectToAction("Index", "Start", new { customerId = customerId });                      
+           return RedirectToAction("Index", "Start", new { customerId });                      
         }
     }
 }

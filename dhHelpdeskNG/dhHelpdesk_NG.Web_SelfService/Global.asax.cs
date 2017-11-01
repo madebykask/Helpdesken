@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IdentityModel.Services;
+using System.Web;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.SelfService.Infrastructure;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
@@ -57,6 +58,49 @@ namespace DH.Helpdesk.SelfService
             }
         }
 
+        #region Session Timeout Handling
+
+        protected void Application_AcquireRequestState(object sender, EventArgs e)
+        {
+            const string SessionIdKey = "_sessionId";
+            var hasSessionRestarted = false;
+
+            var session = Context.Session;
+            if (session != null)
+            {
+                if (session.IsNewSession)
+                {
+                    var sessionIdInCookie = Request.Cookies[SessionIdKey]?.Value;
+                    var sessionIdState = session[SessionIdKey]?.ToString();
+                    
+                    if (!string.IsNullOrEmpty(sessionIdInCookie) && !sessionIdInCookie.Equals(sessionIdState, StringComparison.OrdinalIgnoreCase))
+                    {
+                        hasSessionRestarted = true;
+                    }
+                        
+                    //set new sessionId value to keep them in sync
+                    var sessionGuid = Guid.NewGuid();
+                    new HttpContextWrapper(Context).SetSessionCookie(SessionIdKey, sessionGuid.ToString());
+                    session[SessionIdKey] = sessionGuid.ToString();
+                }
+
+                var logoutOnSessionTimeout = ManualDependencyResolver.Get<IFederatedAuthenticationSettings>()?.LogoutCustomerOnSessionExpire ?? false;
+                if (logoutOnSessionTimeout && IsSsoMode())
+                {
+                    // signout if session/app has been restarted but user still authenticated!
+                    var isAuthenticated = Context.User?.Identity?.IsAuthenticated ?? false;
+                    if (hasSessionRestarted && isAuthenticated)
+                    {
+                        var fedAuthService = ManualDependencyResolver.Get<IFederatedAuthenticationService>();
+                        var returnUrl = BuildHomeUrl(Context);
+                        fedAuthService?.SignOut(returnUrl);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
         #region SSO token lifetime handling
 
         protected void SessionAuthenticationModule_SessionSecurityTokenReceived(object sender, SessionSecurityTokenReceivedEventArgs args)
@@ -74,13 +118,16 @@ namespace DH.Helpdesk.SelfService
                 //FederatedAuthentication.WSFederationAuthenticationModule.SignOut();
 
                 //get redirect url after sign in. On Post we need to take original url from UrlReferrer
-                var returnUrl = Request.Url;
-                if (Request.HttpMethod == "POST" && Request.UrlReferrer != null)
-                {
-                    returnUrl = Request.UrlReferrer;
-                }
+                //var returnUrl = Request.Url;
+                //if (Request.HttpMethod == "POST" && Request.UrlReferrer != null)
+                //{
+                //    returnUrl = Request.UrlReferrer;
+                //}
 
+
+                var returnUrl = BuildHomeUrl(Context);
                 federationAuthenticationService.SignOut(returnUrl);
+
                 return;
             }
 
@@ -96,6 +143,24 @@ namespace DH.Helpdesk.SelfService
                     args.ReissueCookie = true;
                 }
             }
+        }
+
+        #endregion
+
+        #region Helper Methods
+
+        private static string BuildHomeUrl(HttpContext ctx)
+        {
+            var httpContext = new HttpContextWrapper(ctx);
+            var customerId = httpContext.GetCustomerIdFromCookie();
+            var returnUrl = ctx.Request.BuildHomeUrl(customerId);
+            return returnUrl;
+        }
+
+        private static bool IsSsoMode()
+        {
+            var loginMode = AppConfigHelper.GetAppSetting(AppSettingsKey.LoginMode);
+            return LoginMode.SSO.Equals(loginMode, StringComparison.OrdinalIgnoreCase);
         }
 
         #endregion

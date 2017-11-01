@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using DH.Helpdesk.BusinessData.Models.ADFS.Input;
 using DH.Helpdesk.Common.Types;
+using DH.Helpdesk.SelfService.Infrastructure.Helpers;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
@@ -50,7 +52,6 @@ namespace DH.Helpdesk.SelfService.Controllers
         // GET: /Start/
 
         public  ActionResult Index(int customerId = -1)
-
         {
             var htmlData = _infoService.GetInfoText((int)InfoTextType.SelfServiceWelcome, SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
             var model = new StartPageModel(htmlData == null ? string.Empty : htmlData.Name);

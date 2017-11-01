@@ -321,6 +321,7 @@
     <Compile Include="Infrastructure\Permission.cs" />
     <Compile Include="Infrastructure\SessionFacade.cs" />
     <Compile Include="Infrastructure\Session\PageFilters.cs" />
+    <Compile Include="Infrastructure\Helpers\WebMethodsExtensions.cs" />
     <Compile Include="Infrastructure\StringModelBinding.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\DeletedFile.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\DeletedItem.cs" />

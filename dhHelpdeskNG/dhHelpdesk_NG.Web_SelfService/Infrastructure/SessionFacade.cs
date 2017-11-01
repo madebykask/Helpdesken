@@ -506,5 +506,16 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         {
             return _CUSTOM_VALUES + "." + key;
         }
+
+        public static void ClearSession()
+        {
+            var session = HttpContext.Current?.Session;
+            if (session != null)
+            {
+                session.Clear();
+                session.RemoveAll();
+                session.Abandon();
+            }
+        }
     }
 }

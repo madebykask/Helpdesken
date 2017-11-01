@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IdentityModel.Services;
 using System.IdentityModel.Tokens;
 using System.Web;
+using System.Web.Http.Routing;
 using Thinktecture.IdentityModel.Web;
 
 namespace DH.Helpdesk.SelfService.Infrastructure
@@ -12,7 +13,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         void SetDefaultSessionDuration(int durationInMinutes);
         SessionSecurityToken RefreshSecurityTokenLifeTime(SessionAuthenticationModule sam, SessionSecurityToken sessionToken, int maxTokenLifeTimeMin = 0);
         void HandleSecurityTokenExceptions(string redirectUrl, Action<SecurityTokenException> handleAction);
-        void SignOut(Uri currentUri);
+        void SignOut(string returnUrl);
     }
 
     public class FederatedAuthenticationService : IFederatedAuthenticationService
@@ -75,15 +76,17 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             PassiveModuleConfiguration.SuppressSecurityTokenExceptions("~/", handleAction);
         }
 
-        public void SignOut(Uri url)
+        public void SignOut(string returnUrl)
         {
+            SessionFacade.ClearSession();
+
             //var sam = FederatedAuthentication.SessionAuthenticationModule;
             //sam?.SignOut();
             
             //sign out with FAM
             //FederatedAuthentication.WSFederationAuthenticationModule.SignOut();
-
-            PerformPassiveSignOut(url.AbsoluteUri);
+            
+            PerformPassiveSignOut(returnUrl);
         }
 
         #region Helper Methods
