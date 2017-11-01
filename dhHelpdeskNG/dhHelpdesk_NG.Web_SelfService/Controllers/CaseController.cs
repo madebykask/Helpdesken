@@ -1369,15 +1369,20 @@
                 }
             }
 
-            // All values should be taken from the template, no rules 2017-09-29
-            //if (newCase.ProductArea_Id.HasValue)
-            //{
-            //    var productArea = _productAreaService.GetProductArea(newCase.ProductArea_Id.Value);                
-            //    if (productArea != null && productArea.WorkingGroup_Id.HasValue)
-            //    {
-            //        newCase.WorkingGroup_Id = productArea.WorkingGroup_Id;
-            //    }
-            //}
+            // All values should be taken from the template, no rules 2017-09-29, only if template workinggroup is null this rule will happend (Höganäs)(2017-11-01)
+            if (newCase.ProductArea_Id.HasValue)
+            {
+                var productArea = _productAreaService.GetProductArea(newCase.ProductArea_Id.Value);
+
+                if (!newCase.WorkingGroup_Id.HasValue)
+                {
+                    if (productArea != null && productArea.WorkingGroup_Id.HasValue)
+                    {
+                        newCase.WorkingGroup_Id = productArea.WorkingGroup_Id;
+                    }
+                }
+                
+            }
 
             if (newCase.Department_Id.HasValue && newCase.Priority_Id.HasValue)
             {
