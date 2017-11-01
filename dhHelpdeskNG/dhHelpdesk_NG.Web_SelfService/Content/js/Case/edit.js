@@ -21,6 +21,7 @@
         var saveNewCaseUrl = window.appParameters.saveNewCaseUrl;
         var departmentsUrl = window.appParameters.fetchDepartmentsUrl;
         var OUsUrl = window.appParameters.fetchOUUrl;
+        var setProductAreaByCaseTypeUrl = window.appParameters.setProductAreaByCaseTypeUrl;
 
         var customerId;
         var alreadyExistFileIds = [];
@@ -1045,7 +1046,7 @@
             });
 
             self.$caseTypeControl.change(function () {
-                $.post('/Case/GetProductAreaByCaseType/', { caseTypeId: $(this).val() }, function (result) {
+                $.post(setProductAreaByCaseTypeUrl, { caseTypeId: $(this).val() }, function (result) {
                     if (result.success) {
                         $('#divProductArea > ul.dropdown-menu')
                             .html("<li><a href='#'>--</a></li>" + result.data);
