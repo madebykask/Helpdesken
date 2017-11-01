@@ -6294,12 +6294,51 @@ If not exists (select * from tblTextTranslation where text_id = 1867 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1867, 2, 'Extra')
 GO
 
-If not exists (select * from tbltext where id = 1865)
-	insert into tbltext (id, TextString) VALUES (1865, 'Användaren får se Intern notering')
+If not exists (select * from tbltext where id = 1868)
+	insert into tbltext (id, TextString) VALUES (1868, 'Användaren får se Intern notering')
 GO
-If not exists (select * from tblTextTranslation where text_id = 1865 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1865, 2, 'User has permission to Internal log note')
+If not exists (select * from tblTextTranslation where text_id = 1868 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1868, 2, 'User has permission to Internal log note')
 GO
+
+If not exists (select * from tbltext where id = 1869)
+	insert into tbltext (id, TextString) VALUES (1869, 'Utökat ärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1869 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1869, 2, 'Extended case')
+GO
+
+If not exists (select * from tbltext where id = 1870)
+	insert into tbltext (id, TextString) VALUES (1870, 'Kopplat till utökat ärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1870 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1870, 2, 'Connected to Extended case')
+GO
+
+If not exists (select * from tbltext where id = 1871)
+	insert into tbltext (id, TextString) VALUES (1871, 'Aktiv tab')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1871 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1871, 2, 'Default tab')
+GO
+
+If not exists (select * from tbltext where id = 1872)
+	insert into tbltext (id, TextString) VALUES (1872, 'Ärende-tab')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1872 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1872, 2, 'Case-tab')
+GO
+
+If not exists (select * from tbltext where id = 1873)
+	insert into tbltext (id, TextString) VALUES (1873, 'Ärende-tab')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1873 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1873, 2, 'Välj den tab som ska vara aktiv när ett nytt ärende skapas utifrån den här ärendemallen')
+GO
+
+
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
+
