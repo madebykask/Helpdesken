@@ -1183,9 +1183,16 @@
         [HttpPost]
         public JsonResult GetProductAreaByCaseType(int? caseTypeId)
         {
+            var pa = _productAreaService.GetTopProductAreas(SessionFacade.CurrentCustomer.Id).ToList();
+
+            /*TODO: This part does not cover all states and needs to be fixed*/
             if (caseTypeId.HasValue)
             {
-                var ctProductAreas = _caseTypeService.GetCaseType(caseTypeId.Value).CaseTypeProductAreas.Select(x => x.ProductArea).ToList();
+                var ctProductAreas = _caseTypeService.GetCaseType(caseTypeId.Value).CaseTypeProductAreas.Select(x => x.ProductArea.GetParent()).ToList();
+                var paNoCaseType = pa.Where(x => x.CaseTypeProductAreas == null || !x.CaseTypeProductAreas.Any()).ToList();
+                ctProductAreas.AddRange(paNoCaseType.Where(p => !ctProductAreas.Select(c => c.Id).Contains(p.Id)));
+                ctProductAreas = ctProductAreas.OrderBy(p => Translation.Get(p.Name)).ToList();
+
                 if (ctProductAreas.Any())
                 {
                     var paIds = ctProductAreas.Select(x => x.Id).ToList();
@@ -1197,8 +1204,8 @@
                     return Json(new { success = true, data = drString, paIds });
                 }
             }
-            var pa = _productAreaService.GetTopProductAreas(SessionFacade.CurrentCustomer.Id)
-                    .OrderBy(p => Translation.Get(p.Name)).ToList();
+
+            pa = pa.OrderBy(p => Translation.Get(p.Name)).ToList();
             var praIds = pa.Select(x => x.Id).ToList();
             foreach (var ctProductArea in pa)
             {
@@ -1328,7 +1335,7 @@
                         result.Add(subProductArea.Id);
                         if (subProductArea.SubProductAreas != null && subProductArea.SubProductAreas.Any())
                         {
-                            GetSubProductAreasIds(subProductArea);
+                            result.AddRange(GetSubProductAreasIds(subProductArea));
                         }
                     }
                 }

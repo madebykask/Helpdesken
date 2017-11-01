@@ -334,5 +334,16 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
 
             return true;
         }
+
+        public static ProductArea GetParent(this ProductArea pa)
+        {
+            if (pa == null)
+                return null;
+
+            if (pa.ParentProductArea == null)
+                return pa;
+            else
+                return GetParent(pa.ParentProductArea);
+        }
     }
 }

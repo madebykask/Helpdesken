@@ -2038,13 +2038,15 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult GetProductAreaByCaseType(int? caseTypeId, int customerId)
         {
-            var pa = _productAreaService.GetTopProductAreasForUserOnCase(customerId, null, SessionFacade.CurrentUser)
-                    .OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
+            var pa = _productAreaService.GetTopProductAreasForUserOnCase(customerId, null, SessionFacade.CurrentUser).ToList();
+
+            /*TODO: This part does not cover all states and needs to be fixed*/
             if (caseTypeId.HasValue)
             {
-                var ctProductAreas = _caseTypeService.GetCaseType(caseTypeId.Value).CaseTypeProductAreas.Select(x => x.ProductArea).ToList();
+                var ctProductAreas = _caseTypeService.GetCaseType(caseTypeId.Value).CaseTypeProductAreas.Select(x => x.ProductArea.GetParent()).ToList();
                 var paNoCaseType = pa.Where(x => x.CaseTypeProductAreas == null || !x.CaseTypeProductAreas.Any()).ToList();
-                ctProductAreas.AddRange(paNoCaseType);
+                ctProductAreas.AddRange(paNoCaseType.Where(p=> !ctProductAreas.Select(c=> c.Id).Contains(p.Id)));                
+                ctProductAreas = ctProductAreas.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
                 if (ctProductAreas.Any())
                 {
                     var paIds = ctProductAreas.Select(x => x.Id).ToList();
@@ -2056,6 +2058,7 @@ namespace DH.Helpdesk.Web.Controllers
                     return Json(new { success = true, data = drString, paIds });
                 }
             }
+            pa = pa.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
             var praIds = pa.Select(x => x.Id).ToList();
             foreach (var ctProductArea in pa)
             {
