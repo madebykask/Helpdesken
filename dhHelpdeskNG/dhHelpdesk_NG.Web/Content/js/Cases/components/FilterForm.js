@@ -5,7 +5,7 @@ function FilterForm() {
 
 
 var controlsId = ['CaseInitiatorFilter', 'lstFilterRegion', 'lstfilterDepartment', 'lstfilterUser',
-        'hidFilterCaseTypeId', 'hidFilterProductAreaId', 'lstfilterCategory',
+        'hidFilterCaseTypeId', 'hidFilterProductAreaId', 'hidFilterCategoryId',
         'lstfilterWorkingGroup', 'lstfilterResponsible', 'lstfilterPerformer',
         'lstfilterPriority', 'lstfilterStatus', 'lstfilterStateSecondary',
         'hidFilterClosingReasonId',
@@ -614,6 +614,7 @@ FilterForm.prototype.initControlsMap = function() {
                 break;
             case 'hidFilterCaseTypeId':
             case 'hidFilterProductAreaId':
+            case 'hidFilterCategoryId':
             case 'hidFilterClosingReasonId':
                 $el = me.$el.find(searchEl).parent('.btn-group');
                 if (!window.is$ElEmpty($el)) {
@@ -675,6 +676,7 @@ FilterForm.prototype.getCurrentFilters = function () {
                 break;
             case 'hidFilterCaseTypeId':
             case 'hidFilterProductAreaId':
+            case 'hidFilterCategoryId':
             case 'hidFilterClosingReasonId':
                 $el = me.$el.find(searchEl);
                 if (!window.is$ElEmpty($el)) {

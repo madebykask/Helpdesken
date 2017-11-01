@@ -9,7 +9,7 @@
         public const string RegionNameAttribute = "lstFilterRegion";        
         public const string DepartmentNameAttribute = "lstfilterDepartment";        
         public const string RegisteredByNameAttribute = "lstfilterUser";                
-        public const string CategoryNameAttribute = "lstfilterCategory";
+        public const string CategoryNameAttribute = "hidFilterCategoryId";
         public const string WorkingGroupNameAttribute = "lstfilterWorkingGroup";
         public const string ResponsibleNameAttribute = "lstfilterResponsible";
         public const string PerformerNameAttribute = "lstfilterPerformer";
@@ -33,8 +33,9 @@
         public const string CaseTypeIdNameAttribute = "hidFilterCaseTypeId";
         public const string ClosingReasonNameAttribute = "hidFilterClosingReasonId";
         public const string ProductAreaIdNameAttribute = "hidFilterProductAreaId";
+        //public const string CategoryIdNameAttribute = "hidFilterCategoryId";
 
-		public const string OrderColumnNum = "order";
+        public const string OrderColumnNum = "order";
 		public const string OrderColumnDir = "dir";
 		public const string PageStart = "start";
 		public const string PageSize = "length";

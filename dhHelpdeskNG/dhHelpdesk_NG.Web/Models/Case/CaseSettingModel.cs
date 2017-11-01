@@ -173,6 +173,9 @@
         public int ProductAreaId { get; set; }
         public IList<ProductArea> ProductAreas { get; set; }
         public bool CategoryCheck { get; set; }
+
+        public string CategoryPath { get; set; }
+        public int CategoryId { get; set; }
         public IList<Category> Categories { get; set; }
         public string SelectedCategory { get; set; }
         public bool WorkingGroupCheck { get; set; }

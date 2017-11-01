@@ -2557,7 +2557,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             bool categoryCheck = frm.IsFormValueTrue("CategoryCheck");
             var category = (categoryCheck)
-                ? ((frm.ReturnFormValue("lstCategory") == string.Empty) ? "0" : frm.ReturnFormValue("lstCategory"))
+                ? ((frm.ReturnFormValue("CategoryId") == string.Empty) ? "0" : frm.ReturnFormValue("CategoryId"))
                 : string.Empty;
 
             var stateCheck = frm.IsFormValueTrue("StateCheck");
@@ -4355,7 +4355,14 @@ namespace DH.Helpdesk.Web.Controllers
 
             //kategori                        
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCategoryFilter))
-                fd.filterCategory = this._categoryService.GetActiveCategories(cusId);
+            {
+                //const bool isTakeOnlyActive = true;
+                fd.filterCategory = this._categoryService.GetActiveParentCategories(
+                    cusId).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
+            }
+
+
+            //fd.filterCategory = this._categoryService.GetActiveCategories(cusId);
             //prio
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CasePriorityFilter))
                 fd.filterPriority = this._priorityService.GetPriorities(cusId);
@@ -4699,6 +4706,22 @@ namespace DH.Helpdesk.Web.Controllers
                         f.ParantPath_ProductArea = string.Join(
                             " - ",
                             this._productAreaService.GetParentPath(p.Id, SessionFacade.CurrentCustomer.Id));
+                    }
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(f.Category))
+            {
+                if (f.Category != "0")
+                {
+                    var c =
+                        this._categoryService.GetCategory(
+                            f.Category.convertStringToInt(), SessionFacade.CurrentCustomer.Id);
+                    if (c != null)
+                    {
+                        f.ParantPath_Category = string.Join(
+                            " - ",
+                            this._categoryService.GetParentPath(c.Id, SessionFacade.CurrentCustomer.Id));
                     }
                 }
             }
@@ -6387,10 +6410,26 @@ namespace DH.Helpdesk.Web.Controllers
             ret.Priorities = priorities;
             ret.SelectedPriority = userCaseSettings.Priority;
 
-            var categories = _categoryService.GetActiveCategories(customerId).OrderBy(c => c.Name).ToList();
+            ret.Categories = this._categoryService.GetActiveParentCategories(
+                    customerId).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
+            ret.CategoryPath= "--";
+
+            int ca;
+            int.TryParse(userCaseSettings.Category, out ca);
+            ret.CategoryId = ca;
+
+            if (ca > 0)
+            {
+                var c = this._categoryService.GetCategory(ret.CategoryId, customerId);
+                if (c != null)
+                    ret.CategoryPath = string.Join(" - ", this._categoryService.GetParentPath(c.Id, customerId));
+            }
             ret.CategoryCheck = (userCaseSettings.Category != string.Empty);
-            ret.Categories = categories;
-            ret.SelectedCategory = userCaseSettings.Category;
+
+            //var categories = _categoryService.GetActiveCategories(customerId).OrderBy(c => c.Name).ToList();
+            //ret.CategoryCheck = (userCaseSettings.Category != string.Empty);
+            //ret.Categories = categories;
+            //ret.SelectedCategory = userCaseSettings.Category;
 
             var states = _statusService.GetStatuses(customerId).OrderBy(s => s.Name).ToList();
             ret.StateCheck = (userCaseSettings.State != string.Empty);

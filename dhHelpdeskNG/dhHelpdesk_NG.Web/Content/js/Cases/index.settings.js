@@ -92,6 +92,15 @@ $(document).ready(function () {
         $("#ProductAreaId").val(val);
     });
 
+    $('#divCategorySetting ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_CategorySetting").text(getBreadcrumbs(this));
+        $("#CategoryId").val(val);
+    });
+
+
+
     $('#divCaseTypeSetting ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');

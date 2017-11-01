@@ -114,7 +114,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.OrganizationUnit = o.OrganizationUnit;
             r.FreeTextSearch = o.FreeTextSearch;
             r.ParantPath_CaseType = o.ParantPath_CaseType;
-            r.ParantPath_ProductArea = o.ParantPath_ProductArea; 
+            r.ParantPath_ProductArea = o.ParantPath_ProductArea;
+            r.ParantPath_Category = o.ParantPath_Category; 
             r.Priority = o.Priority;
             r.ProductArea = o.ProductArea;
             r.Region = o.Region;
