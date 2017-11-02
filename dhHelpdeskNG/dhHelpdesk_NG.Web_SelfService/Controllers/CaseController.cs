@@ -1713,9 +1713,7 @@
             model.SendToDialogModel = new SendToDialogModel();            
 
             var _caseTypes = _caseTypeService.GetAllCaseTypes(customerId).Where(c => c.ShowOnExternalPage != 0).ToList();
-            var priorities = _priorityService.GetPriorities(customerId).ToList();
             model.CaseTypeRelatedFields = _caseTypes.Select(c => new KeyValuePair<int, string>(c.Id, c.RelatedField)).ToList();
-            model.PriorityRelatedFields = priorities.Select(c => new KeyValuePair<int, string>(c.Id, c.RelatedField)).ToList();
             return model;
         }
         
