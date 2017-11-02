@@ -25,15 +25,17 @@
                         required: true
                     },
                     "WorkingGroup.EMail": {
-                        required: false
+                        required: false,
+                        email: true
                     }
                 },
                 messages: {
                     "WorkingGroup.WorkingGroupName": {
-                        required: "@Translation.GetForJS("Du måste ange en driftgrupp", Enums.TranslationSource.TextTranslation)"
+                        required: "@Translation.GetForJS("Du måste ange en driftgrupp")"
                 },
                 "WorkingGroup.EMail": {
-                    requird: "@Translation.GetForJS("Du måste ange en e-postadress", Enums.TranslationSource.TextTranslation)"
+                    requird: "@Translation.GetForJS("Du måste ange en e-postadress")",
+                    email: "@Translation.GetForJS("E-postadress är inte giltig.")"
                 }
             },
             submitHandler: function (form) {

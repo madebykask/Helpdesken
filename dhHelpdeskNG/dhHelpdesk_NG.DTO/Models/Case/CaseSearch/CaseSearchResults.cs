@@ -17,7 +17,14 @@
         public IList<Field> Columns { get; set; }
         public bool Ignored { get; set; }
         public bool IsClosed { get; set; }
+        public ExtendedSearchInfo ExtendedSearchInfo { get; set; }
+    }
 
+    public class ExtendedSearchInfo
+    {
+        public int CustomerId { get; set; }
+        public int WorkingGroupId { get; set; }
+        public int DepartmentId { get; set; }
     }
 
     public class CaseAggregateData

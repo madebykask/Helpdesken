@@ -12,14 +12,24 @@
         {
 
             List<OptionResult> overviews =
-                query.Select(x => new Qrp { CaseId = x.QuestionnaireResult.QuestionnaireCircularPart.Case_Id, QuestionnaireQuestionOptionId = x.QuestionnaireQuestionOption_Id, OptionNote = new OptionNote
+                query.Select(x => new Qrp {
+                    CaseId = x.QuestionnaireResult.QuestionnaireCircularPart.Case_Id,
+                    QuestionnaireQuestionOptionId = x.QuestionnaireQuestionOption_Id,
+                    OptionNote = new OptionNote
                 {
                     NoteText = x.QuestionnaireQuestionNote,
                     CaseId = x.QuestionnaireResult.QuestionnaireCircularPart.Case.CaseNumber
                 },
                 InitiatorEmail = x.QuestionnaireResult.QuestionnaireCircularPart.Case.PersonsEmail } )
                 .GroupBy(x => x.QuestionnaireQuestionOptionId)
-                    .Select(x => new { OptionId = x.Key, Count = x.Count(), CaseIds = x.Select(r => r.CaseId), Notes = x.Select(r => r.OptionNote), Emails = x.Select(r => r.InitiatorEmail)})
+                    .Select(x => new
+                    {
+                        OptionId = x.Key,
+                        Count = x.Count(),
+                        CaseIds = x.Select(r => r.CaseId),
+                        Notes = x.Select(r => r.OptionNote),
+                        Emails = x.Select(r => r.InitiatorEmail)
+                    })
                     .ToList()
                     .Select(x => new OptionResult(x.OptionId, x.Count, x.CaseIds, x.Notes, x.Emails))
                     .ToList();

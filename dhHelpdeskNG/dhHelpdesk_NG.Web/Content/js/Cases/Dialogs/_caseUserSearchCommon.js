@@ -60,10 +60,12 @@ function isValidEmailAddress(emailAddress) {
 
 function getEmailsToRemove() {
     var selection = window.getSelection();
-        if ($(selection.anchorNode.parentNode).html() === "&nbsp;") {
+    var parentNode = $(selection.anchorNode.parentNode);
+    if (parentNode.html() === "&nbsp;") {
             return "&nbsp;";
         } else {
-            return selection.anchorNode.textContent;
+        return $(parentNode.text().split(";")).last()[0];
+//            return selection.anchorNode.textContent;
         }
 }
 

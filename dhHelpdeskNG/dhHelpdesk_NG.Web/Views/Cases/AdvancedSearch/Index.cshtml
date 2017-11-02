@@ -7,8 +7,9 @@
     var jsSerializer = new JavaScriptSerializer();            
 }
 <script type="text/javascript">
-    window.gridSettings = @Html.Raw(jsSerializer.Serialize(Model.GridSettings))
-    window.doSearchAtBegining = @Html.Raw(jsSerializer.Serialize(Model.DoSearchAtBegining))
+    window.gridSettings = @Html.Raw(jsSerializer.Serialize(Model.GridSettings));
+    window.doSearchAtBegining = @Html.Raw(jsSerializer.Serialize(Model.DoSearchAtBegining));
+    window.isExtSearch = @Html.Raw(jsSerializer.Serialize(Model.IsExtSearch));
     window.getSpecificFilterDataUrl = '@Url.Content("~/Cases/GetCustomerSpecificFilter")';
     //window.Params = {
     //    DefaultFocusObject: "#btnSearch"       

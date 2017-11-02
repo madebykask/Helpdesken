@@ -136,6 +136,17 @@
 </div>
 
 <script type="text/javascript">
+    
+    $("#chkActive").on('switchChange.bootstrapSwitch', function () {
+        test();
+    });
+
+    $(document).ready(function () {
+        $("#chkActive").bootstrapSwitch("onColor", "success");
+        $("#chkActive").bootstrapSwitch("size", "small");
+        $("#chkActive").bootstrapSwitch("onText", '@Translation.GetForJS("Ja")');
+        $("#chkActive").bootstrapSwitch("offText", '@Translation.GetForJS("Nej")');
+    });
 
     $("#chkActive").on('switchChange.bootstrapSwitch', function () {
         test();

@@ -1460,7 +1460,17 @@ namespace DH.Helpdesk.Web.Controllers
             foreach (string s in selectedSplit)
             {
                 string[] cap = s.Split(':');
-                string text = cap[0].ToString();
+                string text = string.Empty;
+                if (cap[0].ToString().Substring (0,1)=="_")
+                {
+                    int len = cap[0].ToString().Length;
+                    text = cap[0].ToString().Substring(1, (len-1));
+                }
+                else
+                {
+                    text = cap[0].ToString();
+                }
+                
                 string values = string.Empty;
                 if (cap.Count() > 1)
                 {
@@ -2643,10 +2653,10 @@ namespace DH.Helpdesk.Web.Controllers
             IList<Priority> p = this._priorityService.GetPriorities(customerId);
             p = p.OrderBy(x => x.Name).ToList();
 
-            
+
 
             IList<ProductArea> pa = this._productAreaService.GetWithHierarchy(customerId);
-            pa = pa.OrderBy(x => x.Name).ToList();            
+            pa = pa.OrderBy(x => x.Name).ToList();
             foreach (var k in pa)
             {
                 k.Name = Translation.Get(k.Name, Enums.TranslationSource.TextTranslation);
@@ -2659,7 +2669,7 @@ namespace DH.Helpdesk.Web.Controllers
                 k.Name = Translation.Get(k.Name, Enums.TranslationSource.TextTranslation);
             }
 
-            IList<WorkingGroupEntity> w = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId);
+            IList<WorkingGroupEntity> w = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false);
             w = w.OrderBy(x => x.WorkingGroupName).ToList();
             foreach (var k in w)
             {
@@ -2673,7 +2683,7 @@ namespace DH.Helpdesk.Web.Controllers
                 k.Name = Translation.Get(k.Name, Enums.TranslationSource.TextTranslation);
             }
 
-            IList<StateSecondary> ss = this._stateSecondaryService.GetActiveStateSecondaries(customerId);
+            IList<StateSecondary> ss = this._stateSecondaryService.GetStateSecondaries(customerId);
             ss = ss.OrderBy(x => x.Name).ToList();
             foreach (var k in ss)
             {
@@ -2735,9 +2745,12 @@ namespace DH.Helpdesk.Web.Controllers
             lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(caseSolution.Id, Convert.ToInt32(curCustomerId));
             foreach (var k in lFieldSettingSelected)
             {
-                foreach (var l in k.SelectList)
+                if (k.SelectList != null)
                 {
-                    l.Text = Translation.Get(l.Text, Enums.TranslationSource.TextTranslation);
+                    foreach (var l in k.SelectList)
+                    {
+                        l.Text = Translation.Get(l.Text, Enums.TranslationSource.TextTranslation);
+                    }
                 }
             }
 

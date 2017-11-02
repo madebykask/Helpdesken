@@ -72,6 +72,7 @@
         private readonly IPriorityService _priorityService;
         private readonly IExtendedCaseService _extendedCaseService;
         private readonly IUniversalCaseService _universalCaseService;
+        private readonly IWatchDateCalendarService _watchDateCalendarService;
 
 
         private const string ParentPathDefaultValue = "--";
@@ -119,7 +120,8 @@
             IRegistrationSourceCustomerService registrationSourceCustomerService,
             IPriorityService priorityService,
             IExtendedCaseService extendedCaseService,
-            IUniversalCaseService universalCaseService)
+            IUniversalCaseService universalCaseService,
+            IWatchDateCalendarService watchDateCalendarService)
             : base(masterDataService, caseSolutionService)
         {
             _masterDataService = masterDataService;
@@ -160,6 +162,7 @@
             _priorityService = priorityService;
             _extendedCaseService = extendedCaseService;
             _universalCaseService = universalCaseService;
+            _watchDateCalendarService = watchDateCalendarService;
         }
 
 
@@ -385,6 +388,8 @@
                 model.NewCase.Cost = caseTemplate.Cost;
                 model.NewCase.OtherCost = caseTemplate.OtherCost;
                 model.NewCase.Currency = caseTemplate.Currency;
+                model.NewCase.Change_Id = caseTemplate.Change_Id;
+                model.NewCase.FinishingDescription = caseTemplate.FinishingDescription;
 
                 //Hidden fields
                 model.NewCase.Performer_User_Id = caseTemplate.PerformerUser_Id;
@@ -1175,6 +1180,42 @@
             return View("_AddCommentPopup");
         }
 
+        [HttpPost]
+        public JsonResult GetProductAreaByCaseType(int? caseTypeId)
+        {
+            var pa = _productAreaService.GetTopProductAreas(SessionFacade.CurrentCustomer.Id).ToList();
+
+            /*TODO: This part does not cover all states and needs to be fixed*/
+            if (caseTypeId.HasValue)
+            {
+                var ctProductAreas = _caseTypeService.GetCaseType(caseTypeId.Value).CaseTypeProductAreas.Select(x => x.ProductArea.GetParent()).ToList();
+                var paNoCaseType = pa.Where(x => x.CaseTypeProductAreas == null || !x.CaseTypeProductAreas.Any()).ToList();
+                ctProductAreas.AddRange(paNoCaseType.Where(p => !ctProductAreas.Select(c => c.Id).Contains(p.Id)));
+                ctProductAreas = ctProductAreas.OrderBy(p => Translation.Get(p.Name)).ToList();
+
+                if (ctProductAreas.Any())
+                {
+                    var paIds = ctProductAreas.Select(x => x.Id).ToList();
+                    foreach (var ctProductArea in ctProductAreas)
+                    {
+                        paIds.AddRange(GetSubProductAreasIds(ctProductArea));
+                    }
+                    var drString = HtmlHelperExtension.ProductAreaDropdownString(ctProductAreas);
+                    return Json(new { success = true, data = drString, paIds });
+                }
+            }
+
+            pa = pa.OrderBy(p => Translation.Get(p.Name)).ToList();
+            var praIds = pa.Select(x => x.Id).ToList();
+            foreach (var ctProductArea in pa)
+            {
+                praIds.AddRange(GetSubProductAreasIds(ctProductArea));
+            }
+            var dropString = HtmlHelperExtension.ProductAreaDropdownString(pa);
+            return Json(new { success = true, data = dropString, praIds });
+        }
+
+
         private bool UserHasAccessToCase(Case currentCase)
         {            
             var curUser = SessionFacade.CurrentUserIdentity.UserId;
@@ -1282,6 +1323,26 @@
             return false;
         }
 
+        private IEnumerable<int> GetSubProductAreasIds(ProductArea ctProductArea)
+        {
+            var result = new List<int>();
+            if (ctProductArea.SubProductAreas != null && ctProductArea.SubProductAreas.Any())
+            {
+                foreach (var subProductArea in ctProductArea.SubProductAreas)
+                {
+                    if (subProductArea.IsActive == 1)
+                    {
+                        result.Add(subProductArea.Id);
+                        if (subProductArea.SubProductAreas != null && subProductArea.SubProductAreas.Any())
+                        {
+                            result.AddRange(GetSubProductAreasIds(subProductArea));
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
         private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
         {
             IDictionary<string, string> errors;
@@ -1315,12 +1376,32 @@
                 }
             }
 
+            // All values should be taken from the template, no rules 2017-09-29, only if template workinggroup is null this rule will happend (Höganäs)(2017-11-01)
             if (newCase.ProductArea_Id.HasValue)
             {
-                var productArea = _productAreaService.GetProductArea(newCase.ProductArea_Id.Value);                
-                if (productArea != null && productArea.WorkingGroup_Id.HasValue)
+                var productArea = _productAreaService.GetProductArea(newCase.ProductArea_Id.Value);
+
+                if (!newCase.WorkingGroup_Id.HasValue)
                 {
-                    newCase.WorkingGroup_Id = productArea.WorkingGroup_Id;
+                    if (productArea != null && productArea.WorkingGroup_Id.HasValue)
+                    {
+                        newCase.WorkingGroup_Id = productArea.WorkingGroup_Id;
+                    }
+                }
+                
+            }
+
+            if (newCase.Department_Id.HasValue && newCase.Priority_Id.HasValue)
+            {
+                var dept = this._departmentService.GetDepartment(newCase.Department_Id.Value);
+                var priority = this._priorityService.GetPriorities(newCase.Customer_Id).Where(it => it.Id == newCase.Priority_Id && it.IsActive == 1).FirstOrDefault();
+
+                if (dept != null && dept.WatchDateCalendar_Id.HasValue && priority != null && priority.SolutionTime == 0)
+                {
+                    newCase.WatchDate =
+                    this._watchDateCalendarService.GetClosestDateTo(
+                    dept.WatchDateCalendar_Id.Value,
+                    DateTime.UtcNow);
                 }
             }
 
@@ -1632,7 +1713,9 @@
             model.SendToDialogModel = new SendToDialogModel();            
 
             var _caseTypes = _caseTypeService.GetAllCaseTypes(customerId).Where(c => c.ShowOnExternalPage != 0).ToList();
+            var priorities = _priorityService.GetPriorities(customerId).ToList();
             model.CaseTypeRelatedFields = _caseTypes.Select(c => new KeyValuePair<int, string>(c.Id, c.RelatedField)).ToList();
+            model.PriorityRelatedFields = priorities.Select(c => new KeyValuePair<int, string>(c.Id, c.RelatedField)).ToList();
             return model;
         }
         
@@ -2088,5 +2171,7 @@
 
             return criteria;
         }
+
+       
     }
 }

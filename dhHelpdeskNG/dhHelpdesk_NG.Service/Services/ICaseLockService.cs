@@ -6,6 +6,7 @@
     using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Dal.Dal;
+    using System.Linq;
 
     public interface ICaseLockService
     {
@@ -21,6 +22,8 @@
         ICaseLockOverview GetCaseLockByCaseId(int caseId);
 
         IDictionary<int, ICaseLockOverview> GetCasesLocks(int[] caseIds);
+
+        IQueryable<ICaseLockOverview> GetLockedCasesToOverView(int[] caseIds, GlobalSetting globalSettings, int defaultCaseLockBufferTime);
 
         void CaseLockCleanUp();
 

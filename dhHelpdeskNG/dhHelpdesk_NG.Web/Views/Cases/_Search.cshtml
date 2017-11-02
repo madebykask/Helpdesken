@@ -161,7 +161,28 @@
                              </td>
                          </tr>                
                      }
-                     @if (Model.filterCategory != null)
+                    @if (Model.filterCategory != null)
+                    {
+                        <tr>
+                            <td>
+                                @Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
+                            </td>
+                            <td>
+                                <div id="divCategory" class="btn-group pull-left">
+                                    <div class="btn breadcrumbs">@Model.caseSearchFilter.ParantPath_Category</div>
+                                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                        @Html.CategoryDropdownButtonString(Model.filterCategory, true)
+                                    </ul>
+                                    <input type="hidden" class="hidden" value="@Model.caseSearchFilter.Category" id="hidFilterCategoryId" name="@CaseFilterFields.CategoryNameAttribute" />
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                     @*@if (Model.filterCategory != null)
                      {
                          <tr>
                              <td>                                
@@ -176,7 +197,7 @@
                                  </select>
                              </td>
                          </tr>                
-                     }
+                     }*@
                      @if (Model.filterWorkingGroup != null)
                      {
                          <tr>

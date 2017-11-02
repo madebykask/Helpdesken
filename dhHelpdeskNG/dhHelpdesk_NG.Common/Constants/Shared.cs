@@ -31,6 +31,10 @@
         public const string ImgId = "data:image/jpg;base64,";
     }
 
-
+    public static class RelatedFieldDbName
+    {
+        public const string Impact = "impact";
+        public const string Available = "available";
+    }
 
 }

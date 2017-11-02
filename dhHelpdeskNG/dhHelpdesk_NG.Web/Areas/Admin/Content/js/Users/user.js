@@ -68,7 +68,9 @@ $(function () {
         bulletinBoardPermission: 'bulletinBoardPermission',
         invoicePermission: 'invoicePermission',
         documentPermission: 'documentPermission',
-        inventoryPermission: 'inventoryPermission'
+        inventoryPermission: 'inventoryPermission',
+        caseUnlockPermission: 'caseUnlockPermission',
+        caseInternalLogPermission: 'caseInternalLogPermission'
     }
 
     dhHelpdesk.admin.users.object = function (spec, my) {
@@ -157,7 +159,8 @@ $(function () {
         var invoicePermissions = spec.invoicePermissions || [];
         var documentPermissions = spec.documentPermissions || [];
         var inventoryPermissions = spec.inventoryPermissions || [];
-
+        var caseUnlockPermissions = spec.caseUnlockPermissions || [];
+        var caseInternalLogPermissions = spec.caseInternalLogPermissions || [];
         /**
         * @param { fn } walk
         */
@@ -173,7 +176,9 @@ $(function () {
                             bulletinBoardPermissions,
                             invoicePermissions,
                             documentPermissions,
-                            inventoryPermissions];
+                            inventoryPermissions,
+                            caseUnlockPermissions,
+                            caseInternalLogPermissions];
 
             for (var i = 0; i < allPermissions.length; i++) {
                 var permissions = allPermissions[i];
@@ -225,13 +230,15 @@ $(function () {
                       
                         permission.setAccess(true);
                         if (setPermissions || !permission.getIsHasAccess()) {
-                            var isChecked = type == permissions.performerPermission
-                           || type == permissions.createCasePermission
-                           || type == permissions.createSubCasePermission
-                           || type == permissions.copyCasePermission
-                           || type == permissions.activateCasePermission
-                           || type == permissions.closeCasePermission
-                           || type == permissions.reportPermission;
+                            var isChecked = type == permissions.performerPermission ||
+                                type == permissions.createCasePermission ||
+                                type == permissions.createSubCasePermission ||
+                                type == permissions.copyCasePermission ||
+                                type == permissions.activateCasePermission ||
+                                type == permissions.closeCasePermission ||
+                                type == permissions.reportPermission ||
+                                type == permissions.caseUnlockPermission ||
+                                type == permissions.caseInternalLogPermission;
                             permission.setHasPermission(isChecked);
                         }
 
@@ -322,6 +329,13 @@ $(function () {
             return inventoryPermissions;
         }
 
+        var getCaseUnlockPermissions = function () {
+            return caseUnlockPermissions;
+        }
+        var getCaseInternalLogPermissions = function () {
+            return caseInternalLogPermissions;
+        }
+
         that.getUserGroup = getUserGroup;
         that.setUserGroup = setUserGroup;
         that.getCasePermissions = getCasePermissions;
@@ -335,6 +349,8 @@ $(function () {
         that.getInvoicePermissions = getInvoicePermissions;
         that.getDocumentPermissions = getDocumentPermissions;
         that.getInventoryPermissions = getInventoryPermissions;
+        that.getCaseUnlockPermissions = getCaseUnlockPermissions;
+        that.getCaseInternalLogPermissions = getCaseInternalLogPermissions;
 
         var uge = my.element.find('[data-field="userGroup"]');
         var onChangeUserGroup = function (setPermissions) {
@@ -531,6 +547,12 @@ $(function () {
         var inventoryPermissions = [];
         inventoryPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="inventoryPermission"]'), type: dhHelpdesk.admin.users.permissionType.inventoryPermission }));
 
+        var caseUnlockPermissions = [];
+        caseUnlockPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="caseUnlockPermission"]'), type: dhHelpdesk.admin.users.permissionType.caseUnlockPermission }));
+
+        var caseInternalLogPermissions = [];
+        caseInternalLogPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="caseInternalLogPermission"]'), type: dhHelpdesk.admin.users.permissionType.caseInternalLogPermission }));
+
         var security = dhHelpdesk.admin.users.security({
             element: $('[data-user="security"]'),
             casePermissions: casePermissions,
@@ -543,7 +565,9 @@ $(function () {
             bulletinBoardPermissions: bulletinBoardPermissions,
             invoicePermissions: invoicePermissions,
             documentPermissions: documentPermissions,
-            inventoryPermissions: inventoryPermissions
+            inventoryPermissions: inventoryPermissions,
+            caseUnlockPermissions: caseUnlockPermissions,
+            caseInternalLogPermissions: caseInternalLogPermissions
         });
 
         var wGs = [];

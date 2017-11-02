@@ -1499,19 +1499,22 @@ if exists (select * from syscolumns inner join sysobjects on sysobjects.id = sys
 begin
 		EXECUTE  sp_executesql  "update tblComputerType set ComputerTypeGUID = newid() where ComputerTypeGUID is null" 
 
-		if not exists(select *
+		if exists(select *
 					  from sys.all_columns c
 					  join sys.tables t on t.object_id = c.object_id
 					  join sys.schemas s on s.schema_id = t.schema_id
 					  join sys.default_constraints d on c.default_object_id = d.object_id
 					  where t.name = 'tblComputerType'
 					  and c.name = 'ComputerTypeGUID'
-					  and s.name = 'dbo'
-					  and d.name = 'DF_ComputerTypeGUID')
+					  and s.name = 'dbo')
+		begin
+			declare @tmpObject nvarchar(100)
+		end	
+		else
 		begin
 			Alter table tblComputerType
 			Add constraint DF_ComputerTypeGUID default (newid()) For ComputerTypeGUID		
-		end		
+		end	
 end
 else
 begin

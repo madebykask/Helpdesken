@@ -26,277 +26,324 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
-                    <h4>@Translation.Get("Självservice – Restriction", Enums.TranslationSource.TextTranslation)</h4>
-                    <div class="formContainer">
-                        <table class="tableform">
-                            <tr>
-                                <td class="span3">
-                                    @Translation.Get("Resources", Enums.TranslationSource.TextTranslation)
-                                </td>
-                                <td>
-                                    @Html.CheckBoxFor(m => m.Customer.RestrictUserToGroupOnExternalPage) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Allow only managers to login")
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    @Html.CheckBoxFor(m => m.Customer.FetchDataFromApiOnExternalPage) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Fetch data from Api")                                    
-                                </td>
-                            </tr>                           
-                        </table>
-                    </div>
-
-                    <h4>@Translation.Get("Självservice – Meny", Enums.TranslationSource.TextTranslation)</h4>
-                    <div class="formContainer">
-                        <table class="tableform">
-                            <tr>
-                                <td class="span3">
-                                    @Translation.Get("Visa i menyn", Enums.TranslationSource.TextTranslation)
-                                </td>
-                                <td>
-                                    <input type="checkbox" name="customer.ShowCaseOnExternalPage" @(Model.Customer.ShowCaseOnExternalPage == 1 ? "checked=checked" : "") value="1" />
-                                    <input type="hidden" name="customer.ShowCaseOnExternalPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa Skapa ett ärende i toppmenyn", Enums.TranslationSource.TextTranslation)
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <input type="checkbox" id="chkCases" name="customer.ShowCasesOnExternalPage" @(Model.Customer.ShowCasesOnExternalPage == 1 ? "checked=checked" : "") value="1" />
-                                    <input type="hidden" name="customer.ShowCasesOnExternalPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa Ärenden i toppmenyn", Enums.TranslationSource.TextTranslation)
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <input type="checkbox" name="customer.ShowFAQOnExternalPage" @(Model.Customer.ShowFAQOnExternalPage == 1 ? "checked=checked" : "") value="1" />
-                                    <input type="hidden" name="customer.ShowFAQOnExternalPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa FAQ i toppmenyn", Enums.TranslationSource.TextTranslation)
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <input type="checkbox" id="chkDoc" name="customer.ShowDocumentsOnExternalPage" @(Model.Customer.ShowDocumentsOnExternalPage == 1 ? "checked=checked" : "") value="1" />
-                                    <input type="hidden" name="customer.ShowDocumentsOnExternalPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa Dokument i toppmenyn", Enums.TranslationSource.TextTranslation)
-                                </td>
-                            </tr>
-                            <tr id="docCategories">
-                                <td></td>
-                                <td>
-                                    <table border="0">
-                                        <tr>
-                                            <td style="width:24px"></td>
-                                            <td>@Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation) @Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</td>
-                                            <td></td>
-                                            <td>@Translation.Get("Valda", Enums.TranslationSource.TextTranslation) @Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td>
-                                                @Html.ListBox("AvailableCategories", Model.AvailableCategories, new { style = "width: 280px; height: 120px" })
-                                            </td>
-                                            <td style="vertical-align:middle">
-                                                <input type="button" value="&lt;" class="btn" id="removeCat" />
-                                                <input type="button" value="&gt;" class="btn" id="addCat" />
-                                            </td>
-                                            <td>
-                                                @Html.ListBox("SelectedCategories", Model.SelectedCategories, new { style = "width: 280px; height: 120px" })
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>                                  
-                           @*For next release*@                       
-                            @*<tr style="height:40px">
-                                <td></td>
-                                <td>
-                                    <input type="checkbox" name="customer.ShowDashboardOnExternalPage" @(Model.Customer.ShowDashboardOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
-                                    <input type="hidden" name="customer.ShowDashboardOnExternalPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa Dashboard på självservice", Enums.TranslationSource.TextTranslation)
-                                </td>
-                            </tr>*@
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <input type="checkbox" name="customer.ShowHelpOnExternalPage" @(Model.Customer.ShowHelpOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
-                                    <input type="hidden" name="customer.ShowHelpOnExternalPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa Hjälp i toppmenyn", Enums.TranslationSource.TextTranslation)
-                                </td>
-                            </tr>                         
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <input type="checkbox" name="customer.ShowCoWorkersOnExternalPage" @(Model.Customer.ShowCoWorkersOnExternalPage == 1 ? "checked=checked" : "") value="1" />
-                                    <input type="hidden" name="customer.ShowCoWorkersOnExternalPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa Kundspecifik sida", Enums.TranslationSource.TextTranslation)
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <input type="checkbox" name="customer.GroupCaseTemplates" @(Model.Customer.GroupCaseTemplates == 1 ? "checked=checked" : "") value="1" />
-                                    <input type="hidden" name="customer.GroupCaseTemplates" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Gruppera Ärendemallar", Enums.TranslationSource.TextTranslation)
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                        <h4>@Translation.Get("Meny", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="formContainer">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Visa i menyn", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="customer.ShowCaseOnExternalPage" @(Model.Customer.ShowCaseOnExternalPage == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="customer.ShowCaseOnExternalPage" value="0" />
+                                        &nbsp; &nbsp; @Translation.Get("Visa Skapa ett ärende i toppmenyn", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <input type="checkbox" id="chkCases" name="customer.ShowCasesOnExternalPage" @(Model.Customer.ShowCasesOnExternalPage == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="customer.ShowCasesOnExternalPage" value="0" />
+                                        &nbsp; &nbsp; @Translation.Get("Visa Ärenden i toppmenyn", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <input type="checkbox" name="customer.ShowFAQOnExternalPage" @(Model.Customer.ShowFAQOnExternalPage == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="customer.ShowFAQOnExternalPage" value="0" />
+                                        &nbsp; &nbsp; @Translation.Get("Visa FAQ i toppmenyn", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <input type="checkbox" id="chkDoc" name="customer.ShowDocumentsOnExternalPage" @(Model.Customer.ShowDocumentsOnExternalPage == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="customer.ShowDocumentsOnExternalPage" value="0" />
+                                        &nbsp; &nbsp; @Translation.Get("Visa Dokument i toppmenyn", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr id="docCategories">
+                                    <td></td>
+                                    <td>
+                                        <table border="0">
+                                            <tr>
+                                                <td style="width:24px"></td>
+                                                <td>@Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation) @Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</td>
+                                                <td></td>
+                                                <td>@Translation.Get("Valda", Enums.TranslationSource.TextTranslation) @Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td>
+                                                    @Html.ListBox("AvailableCategories", Model.AvailableCategories, new { style = "width: 280px; height: 120px" })
+                                                </td>
+                                                <td style="vertical-align:middle">
+                                                    <input type="button" value="&lt;" class="btn" id="removeCat" />
+                                                    <input type="button" value="&gt;" class="btn" id="addCat" />
+                                                </td>
+                                                <td>
+                                                    @Html.ListBox("SelectedCategories", Model.SelectedCategories, new { style = "width: 280px; height: 120px" })
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                @*For next release*@
+                                @*<tr style="height:40px">
+                        <td></td>
+                        <td>
+                            <input type="checkbox" name="customer.ShowDashboardOnExternalPage" @(Model.Customer.ShowDashboardOnExternalPage == 1 ? "checked=checked" : "") value="1"/>
+                            <input type="hidden" name="customer.ShowDashboardOnExternalPage" value="0" />
+                            &nbsp; &nbsp; @Translation.Get("Visa Dashboard på självservice", Enums.TranslationSource.TextTranslation)
+                        </td>
+                    </tr>*@
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <input type="checkbox" name="customer.ShowHelpOnExternalPage" @(Model.Customer.ShowHelpOnExternalPage == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="customer.ShowHelpOnExternalPage" value="0" />
+                                        &nbsp; &nbsp; @Translation.Get("Visa Hjälp i toppmenyn", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <input type="checkbox" name="customer.ShowCoWorkersOnExternalPage" @(Model.Customer.ShowCoWorkersOnExternalPage == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="customer.ShowCoWorkersOnExternalPage" value="0" />
+                                        &nbsp; &nbsp; @Translation.Get("Visa Kundspecifik sida", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <input type="checkbox" name="customer.GroupCaseTemplates" @(Model.Customer.GroupCaseTemplates == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="customer.GroupCaseTemplates" value="0" />
+                                        &nbsp; &nbsp; @Translation.Get("Gruppera Ärendemallar", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
 
 
-                    <h4>@Translation.Get("Inställningar – Startsida", Enums.TranslationSource.TextTranslation)</h4>
-                    <div class="formContainer">
-                        <table class="tableform">
-                            <tr>
-                                <td class="span3">
-                                    @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
-                                </td>
-                                <td>
-                                    <input type="checkbox" name="customer.ShowBulletinBoardOnExtPage" @(Model.Customer.ShowBulletinBoardOnExtPage == 1 ? "checked=checked" : "") value="1" />
-                                    <input type="hidden" name="customer.ShowBulletinBoardOnExtPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa Anslagstavlan på startsidan", Enums.TranslationSource.TextTranslation)
-                                </td>
-                            </tr>  
-                            @*For next release*@ 
-                            @*<tr>
-                                <td></td>
-                                <td style="vertical-align:middle">
-                                    <input type="checkbox" id="chkFAQOnStartPage" name="customer.ShowFAQOnExternalStartPage" @(Model.Customer.ShowFAQOnExternalStartPage > 0 ? "checked=checked" : "") value="1"/>
-                                    <input type="hidden" name="customer.ShowFAQOnExternalStartPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Visa FAQ på självservice startsida", Enums.TranslationSource.TextTranslation)
-                                    
-                                    <span id="spNums"> 
-                                        &nbsp; &nbsp; @Translation.Get("Antal rader", Enums.TranslationSource.TextTranslation):     
-                                        @Html.DropDownListFor(m => Model.Customer.ShowFAQOnExternalStartPage, Model.StartPageFAQNums, new { style = "width: 70px;" })                                     
-                                    </span>                                                                                                         
-                                </td>
-                            </tr>*@                      
-                        </table>
-                    </div>
+                        <h4>@Translation.Get("Startsida", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="formContainer">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="customer.ShowBulletinBoardOnExtPage" @(Model.Customer.ShowBulletinBoardOnExtPage == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="customer.ShowBulletinBoardOnExtPage" value="0" />
+                                        &nbsp; &nbsp; @Translation.Get("Visa Anslagstavlan på startsidan", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                @*For next release*@
+                                @*<tr>
+                        <td></td>
+                        <td style="vertical-align:middle">
+                            <input type="checkbox" id="chkFAQOnStartPage" name="customer.ShowFAQOnExternalStartPage" @(Model.Customer.ShowFAQOnExternalStartPage > 0 ? "checked=checked" : "") value="1"/>
+                            <input type="hidden" name="customer.ShowFAQOnExternalStartPage" value="0" />
+                            &nbsp; &nbsp; @Translation.Get("Visa FAQ på självservice startsida", Enums.TranslationSource.TextTranslation)
 
-                    <h4>
-                        @Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation) - @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
-                    </h4>
-                    <div class="formContainer">
-                        <table class="tableform">
-                            <tr>
-                                <td  class="span3">
-                                    @Translation.Get("Loggpost", Enums.TranslationSource.TextTranslation)
-                                </td>
-                                <td>
-                                    <input type="checkbox" name="customer.UseInternalLogNoteOnExternalPage" @(Model.Customer.UseInternalLogNoteOnExternalPage == 1 ? "checked=checked" : "") value="1" />
-                                    <input type="hidden" name="customer.UseInternalLogNoteOnExternalPage" value="0" />
-                                    &nbsp; &nbsp; @Translation.Get("Intern loggpost i ärende", Enums.TranslationSource.TextTranslation)
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    @Translation.GetCoreTextTranslation("Möjligt att aktivera ärende inom")
-                                </td>
-                                <td>
-                                    @Html.TextBoxFor(m => m.CaseComplaintDays, new {style = "width: 40px;"})&nbsp;
-                                    @Translation.GetCoreTextTranslation("dagar")
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <h4 id="headCases">
-                        @Translation.GetCoreTextTranslation("Inställningar") - @Translation.GetCoreTextTranslation("Ärenden")
-                    </h4>
-                    <div class="formContainer" id="divCases">
-                        <table class="tableform">
-                            <tr>
-                                <td class="span3">
-                                    @Translation.GetCoreTextTranslation("Mina ärende visar")
-                                </td>
-                                <td>
-                                    @Html.CheckBoxFor(m => m.Customer.MyCasesRegistrator) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Registrerare")                                   
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    @Html.CheckBoxFor(m => m.Customer.MyCasesInitiator) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Anmälare")
-                                </td>
-                            </tr>
-                            @*<tr>
-                                <td></td>
-                                <td>
-                                    @Html.CheckBoxFor(m => m.Customer.MyCasesFollower) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Följare")
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    @Html.CheckBoxFor(m => m.Customer.MyCasesRegarding) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Angående")
-                                </td>
-                            </tr>*@
-                            <tr>
-                                <td></td>
-                                <td>
-                                    @Html.CheckBoxFor(m => Model.Customer.MyCasesUserGroup) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("User Group")                                    
-                                </td>
-                            </tr>
-                            <tr id="caseTypes">
-                                <td class="span3"> 
-                                    <br />                                   
-                                    @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
-                                </td>
-                                <td>
-                                    <table>
-                                        <tr>
-                                            <br />
-                                            <td>@Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)</td>
-                                            <td></td>
-                                            <td>@Translation.Get("Valda", Enums.TranslationSource.TextTranslation)</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.ListBox("AvailableCaseTypes", Model.AvailableCaseTypes, new { style = "width: 280px; height: 120px" })
-                                            </td>
-                                            <td style="vertical-align:middle">
-                                                <input type="button" value="&lt;" class="btn" id="removeCaseType" />
-                                                <input type="button" value="&gt;" class="btn" id="addCaseType" />
-                                            </td>
-                                            <td>
-                                                @Html.ListBox("SelectedCaseTypes", Model.SelectedCaseTypes, new { style = "width: 280px; height: 120px" })
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr id="productAreas">
-                                <td>
-                                    @Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)
-                                </td>
-                                <td>
-                                    <table>
-                                        <tr>
-                                            <td>@Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)</td>
-                                            <td></td>
-                                            <td>@Translation.Get("Valda", Enums.TranslationSource.TextTranslation)</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.ListBox("AvailableProductAreas", Model.AvailableProductAreas, new { style = "width: 280px; height: 120px" })
-                                            </td>
-                                            <td style="vertical-align:middle">
-                                                <input type="button" value="&lt;" class="btn" id="removeProductArea" />
-                                                <input type="button" value="&gt;" class="btn" id="addProductArea" />
-                                            </td>
-                                            <td>
-                                                @Html.ListBox("SelectedProductAreas", Model.SelectedProductAreas, new { style = "width: 280px; height: 120px" })
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>                                                    
-                        </table>
-                    </div>
+                            <span id="spNums">
+                                &nbsp; &nbsp; @Translation.Get("Antal rader", Enums.TranslationSource.TextTranslation):
+                                @Html.DropDownListFor(m => Model.Customer.ShowFAQOnExternalStartPage, Model.StartPageFAQNums, new { style = "width: 70px;" })
+                            </span>
+                        </td>
+                    </tr>*@
+                            </table>
+                        </div>
 
-                </div>
+                        <h4>
+                            @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
+                        </h4>
+                        <div class="formContainer">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Loggpost", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="customer.UseInternalLogNoteOnExternalPage" @(Model.Customer.UseInternalLogNoteOnExternalPage == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="customer.UseInternalLogNoteOnExternalPage" value="0" />
+                                        &nbsp; &nbsp; @Translation.Get("Intern loggpost i ärende", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Möjligt att aktivera ärende inom")
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.CaseComplaintDays, new { style = "width: 40px;" })&nbsp;
+                                        @Translation.GetCoreTextTranslation("dagar")
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <h4>@Translation.Get("Begränsning", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="formContainer">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                       
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => m.Customer.RestrictUserToGroupOnExternalPage) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Tillåt endast chefer logga in")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => m.Customer.FetchDataFromApiOnExternalPage) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Hämta data från Api")
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <h4 id="headCases">
+                            @Translation.GetCoreTextTranslation("Ärenden")
+                        </h4>
+                        <div class="formContainer" id="divCases">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.GetCoreTextTranslation("Mina ärenden visar")
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => m.Customer.MyCasesRegistrator) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Registrerare")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => m.Customer.MyCasesInitiator) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Anmälare")
+                                    </td>
+                                </tr>
+                                @*<tr>
+                        <td></td>
+                        <td>
+                            @Html.CheckBoxFor(m => m.Customer.MyCasesFollower) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Följare")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            @Html.CheckBoxFor(m => m.Customer.MyCasesRegarding) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Angående")
+                        </td>
+                    </tr>*@
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.Customer.MyCasesUserGroup) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Användargrupp")
+                                    </td>
+                                </tr>
+                                <tr id="caseTypes">
+                                    <td class="span3">
+                                        <br />
+                                        @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <br />
+                                                <td>@Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)</td>
+                                                <td></td>
+                                                <td>@Translation.Get("Valda", Enums.TranslationSource.TextTranslation)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <select id="AvailableCaseTypes" multiple="multiple" name="AvailableCaseTypes" style="width: 350px; height: 120px">
+                                                        @foreach (var op in Model.AvailableCaseTypes)
+                                                        {
+                                                            if (!op.Disabled)
+                                                            {
+                                                                <option value="@op.Value">@op.Text</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@op.Value" class="DisabledChosen">@op.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </td>
+                                                <td style="vertical-align:middle">
+                                                    <input type="button" value="&lt;" class="btn" id="removeCaseType" />
+                                                    <input type="button" value="&gt;" class="btn" id="addCaseType" />
+                                                </td>
+                                                <td>
+                                                    <select id="SelectedCaseTypes" multiple="multiple" name="SelectedCaseTypes" style="width: 350px; height: 120px">
+                                                        @foreach (var op in Model.SelectedCaseTypes)
+                                                        {
+                                                            if (!op.Disabled)
+                                                            {
+                                                                <option value="@op.Value">@op.Text</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@op.Value" class="DisabledChosen">@op.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr id="productAreas">
+                                    <td>
+                                        @Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>@Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)</td>
+                                                <td></td>
+                                                <td>@Translation.Get("Valda", Enums.TranslationSource.TextTranslation)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <select id="AvailableProductAreas" multiple="multiple" name="AvailableProductAreas" style="width: 350px; height: 120px">
+                                                        @foreach (var op in Model.AvailableProductAreas)
+                                                        {
+                                                            if (!op.Disabled)
+                                                            {
+                                                                <option value="@op.Value">@op.Text</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@op.Value" class="DisabledChosen">@op.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </td>
+                                                <td style="vertical-align:middle">
+                                                    <input type="button" value="&lt;" class="btn" id="removeProductArea" />
+                                                    <input type="button" value="&gt;" class="btn" id="addProductArea" />
+                                                </td>
+                                                <td>
+                                                    <select id="SelectedProductAreas" multiple="multiple" name="SelectedProductAreas" style="width: 350px; height: 120px">
+                                                        @foreach (var op in Model.SelectedProductAreas)
+                                                        {
+                                                            if (!op.Disabled)
+                                                            {
+                                                                <option value="@op.Value">@op.Text</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@op.Value" class="DisabledChosen">@op.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+</div>
             </div>
         </div>
     </div>

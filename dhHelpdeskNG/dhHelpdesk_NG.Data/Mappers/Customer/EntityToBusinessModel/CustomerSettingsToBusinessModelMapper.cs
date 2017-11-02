@@ -71,6 +71,7 @@ namespace DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
                            CalendarWGRestriction = entity.CalendarWGRestriction.ToBool(),
                            ModuleExtendedCase = entity.ModuleExtendedCase.ToBool(),
                            AttachmentPlacement = entity.AttachmentPlacement,
+                           M2TNewCaseMailTo = entity.M2TNewCaseMailTo,
 
             };
         }

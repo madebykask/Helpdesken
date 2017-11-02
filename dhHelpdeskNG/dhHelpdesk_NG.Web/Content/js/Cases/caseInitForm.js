@@ -706,8 +706,8 @@ function CaseInitForm() {
         resetProductareaByCaseType(caseTypeId);
     });
 
-    function resetProductareaByCaseType(_caseTypeId){
-        $.post('/Cases/GetProductAreaByCaseType/', { caseTypeId: _caseTypeId, customerid: publicCustomerId, myTime: Date.now() }, function (result) {
+    function resetProductareaByCaseType(_caseTypeId) {
+        $.post('/Cases/GetProductAreaByCaseType/', { caseTypeId: _caseTypeId, customerId: publicCustomerId, myTime: Date.now() }, function (result) {
             if (result.success) {
                 $('#divProductArea.DynamicDropDown > ul.dropdown-menu')
                     .html("<li><a href='#'>--</a></li>" + result.data);
@@ -766,6 +766,9 @@ function CaseInitForm() {
             if (data.ExternalLogText != null && data.ExternalLogText != "") {
                 $('#CaseLog_TextExternal').val(data.ExternalLogText);
                 $('#CaseLog_TextExternal').trigger("propertychange");
+            } else {
+                $('#CaseLog_TextExternal').val("");
+                $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
             }
         }, 'json');
     });
@@ -853,8 +856,14 @@ function CaseInitForm() {
                 $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', true);
             }
             else {
-                $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
-                $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', false);
+                if ($('#CaseLog_TextExternal').val() == '') {
+                    $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
+                    $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', false);
+                } else {
+
+                    $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', true);
+                    $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', false);
+                }
             }
             // set workinggroup id
             var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
@@ -1174,7 +1183,9 @@ function CaseInitForm() {
         //default paste action
         this.paste_auto = function (e) {
             pasteMode = '';
-            pasteCatcher.innerHTML = '';
+            if (pasteCatcher) {
+                pasteCatcher.innerHTML = '';
+            }
             var clipboardData = (e.clipboardData || e.originalEvent.clipboardData);
             if (clipboardData) {
                 var items = clipboardData.items;

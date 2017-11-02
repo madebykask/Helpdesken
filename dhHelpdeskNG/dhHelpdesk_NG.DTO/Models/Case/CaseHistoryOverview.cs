@@ -112,6 +112,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseHistory
         public CaseTypeOverview  CaseType { get; set; }
         public ProductAreaOverview ProductArea { get; set; }
         public UserBasicOvierview UserPerformer { get; set; }
+        public UserBasicOvierview UserResponsible { get; set; }
         public PriorityOverview Priority { get; set; }
         public WorkingGroupOverview WorkingGroup { get; set; }
 

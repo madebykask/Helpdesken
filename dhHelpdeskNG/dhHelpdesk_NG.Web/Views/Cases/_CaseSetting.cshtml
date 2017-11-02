@@ -177,6 +177,19 @@
                                         @Html.CheckBoxFor(m => Model.CategoryCheck, new { @class = "switchcheckbox" })
                                     </td>
                                     <td colspan="2">
+                                        <div id="divCategorySetting" class="btn-group">
+                                            <div class="btn" id="divBreadcrumbs_CategorySetting">@Model.CategoryPath</div>
+                                            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                                @Html.CategoryDropdownButtonString(Model.Categories, true)
+                                            </ul>
+                                            @Html.HiddenFor(model => model.CategoryId)
+                                        </div>
+                                    </td>
+                                    @*<td colspan="2">
                                         <select id="lstCategory" name="lstCategory" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                             @foreach (var e in Model.Categories)
                                             {
@@ -186,7 +199,7 @@
                                                 }
                                             }
                                         </select>
-                                    </td>
+                                    </td>*@
 
                                 </tr>
                             }

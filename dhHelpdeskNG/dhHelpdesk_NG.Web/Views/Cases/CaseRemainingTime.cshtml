@@ -39,6 +39,7 @@
             {
                 <th>@string.Format(">={0} {1}", Model.MaxDays, Translation.Get("d"))</th>                
             }
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -56,6 +57,7 @@
             {
                 <td>@GetLinkForNumberOfCases(Model.MoreThenMaxDays)</td>
             }
+            <td style="text-align:center !important;"><a href="#">@Translation.Get("Rensa")</a></td>
         </tr>
     </tbody>
 </table>

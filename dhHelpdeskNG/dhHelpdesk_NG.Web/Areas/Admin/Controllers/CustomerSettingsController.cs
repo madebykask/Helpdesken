@@ -123,7 +123,9 @@
             vmodel.Setting.SMTPUserName = setting.SMTPUserName;
             vmodel.Setting.IsSMTPSecured = setting.IsSMTPSecured;
             vmodel.Setting.BatchEmail = setting.BatchEmail;
-            
+            vmodel.Setting.InvoiceType = setting.InvoiceType;
+
+
             if (customerToSave == null)
                 throw new Exception("No customer found...");
 

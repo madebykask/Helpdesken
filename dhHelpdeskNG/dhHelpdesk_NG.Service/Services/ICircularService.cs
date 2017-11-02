@@ -34,7 +34,7 @@ namespace DH.Helpdesk.Services.Services
 
         List<OptionResult> GetResults(List<int> circularIds, DateTime? from, DateTime? to);
 
-        List<OptionResult> GetResults(int circularId, DateTime? from, DateTime? to);
+        List<OptionResult> GetResults(int circularId, DateTime? from, DateTime? to, List<int> departmentIds);
 
         List<AvailableCase> GetAvailableCases(
             int customerId,
@@ -62,5 +62,6 @@ namespace DH.Helpdesk.Services.Services
         void UpdateParticipantSendDate(Guid participantGuid, DateTime operationDate);
         int GetCircularIdByQuestionnaireId(int questionaireId);
         void SaveFeedbackNote(int questionId, string noteText);
+        List<string> GetCircularExtraEmails(int circularId);
     }
 }

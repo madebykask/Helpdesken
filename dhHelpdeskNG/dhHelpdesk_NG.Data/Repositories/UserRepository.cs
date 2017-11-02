@@ -491,6 +491,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.SetPriorityPermission,
                         x.InvoicePermission,
                         x.DataSecurityPermission,
+                        x.CaseUnlockPermission,
                         x.RefreshContent,
                         x.FirstName,
                         x.SurName,
@@ -501,10 +502,9 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.ShowSolutionTime.ToBool(),
                         x.ShowCaseStatistics.ToBool(),
                         x.TimeZoneId,
-                         x.UserGUID
-
+                        x.UserGUID,
+                        x.CaseInternalLogPermission
                         )).FirstOrDefault();
-            
 
             return ret;
         }
@@ -542,6 +542,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.SetPriorityPermission,
                         x.InvoicePermission,
                         x.DataSecurityPermission,
+                        x.CaseUnlockPermission,
                         x.RefreshContent,
                         x.FirstName,
                         x.SurName,
@@ -552,8 +553,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.ShowSolutionTime.ToBool(),
                         x.ShowCaseStatistics.ToBool(),
                         x.TimeZoneId,
-                         x.UserGUID
-
+                        x.UserGUID,
+                        x.CaseInternalLogPermission
                         )).SingleOrDefault();
             return u;
         }

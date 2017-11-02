@@ -1854,17 +1854,39 @@ if not exists(select * from sysobjects WHERE Name = N'tblComputerUserFS_tblLangu
 	end
 GO
 
+
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+           where syscolumns.name = N'FieldHelp' and sysobjects.name = N'tblComputerUserFieldSettings')
+   ALTER TABLE tblComputerUserFieldSettings ADD FieldHelp nvarchar(50) not NULL Default('')
+GO
+
 if not exists(select * from tblComputerUserFS_tblLanguage WHERE Language_Id=1)
+begin
+	if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'Label' and sysobjects.name = N'tblComputerUserFieldSettings')
 	begin
-		INSERT INTO tblComputerUserFS_tblLanguage(ComputerUserFieldSettings_Id, Language_Id, Label, FieldHelp)
-		SELECT Id, 1, Label, FieldHelp from tblComputerUserFieldSettings
+		if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+                   where syscolumns.name = N'FieldHelp' and sysobjects.name = N'tblComputerUserFieldSettings')
+		begin
+			exec sp_executesql N'INSERT INTO tblComputerUserFS_tblLanguage(ComputerUserFieldSettings_Id, Language_Id, Label, FieldHelp) 
+			                  SELECT Id, 1,Label,FieldHelp from tblComputerUserFieldSettings' 
+		end
 	end
+end
 
 if not exists(select * from tblComputerUserFS_tblLanguage WHERE Language_Id=2)
+begin
+	if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'Label' and sysobjects.name = N'tblComputerUserFieldSettings')
 	begin
-		INSERT INTO tblComputerUserFS_tblLanguage(ComputerUserFieldSettings_Id, Language_Id, Label, FieldHelp)
-		SELECT Id, 2, Label_ENG, FieldHelp from tblComputerUserFieldSettings
+		if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+                   where syscolumns.name = N'FieldHelp' and sysobjects.name = N'tblComputerUserFieldSettings')
+		begin			
+			exec sp_executesql  N'INSERT INTO tblComputerUserFS_tblLanguage(ComputerUserFieldSettings_Id, Language_Id, Label, FieldHelp) 
+			                  SELECT Id, 2, Label, FieldHelp from tblComputerUserFieldSettings' 
+		end
 	end
+end
 
 If not exists (select * from tblText where Id = 245)
 	insert into tblText (Id, Textstring) VALUES (245, 'Kalender helgdagar')
@@ -2426,8 +2448,31 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	end
 GO	
 
-ALTER TABLE tblDepartment ALTER COLUMN AccountancyAmount int
-GO
+declare @cmd1 nvarchar(1000)
+declare @defName nvarchar(100)
+
+set @cmd1 = 'ALTER TABLE dbo.tblDepartment drop constraint '
+
+select @defName = d.name
+ from sys.tables t
+  join    sys.default_constraints d
+   on d.parent_object_id = t.object_id
+  join    sys.columns c
+   on c.object_id = t.object_id
+    and c.column_id = d.parent_column_id
+ where t.name = 'tblDepartment'
+  and t.schema_id = schema_id('dbo')
+  and c.name = 'AccountancyAmount'
+
+set @cmd1 = @cmd1 + ' ' + @defName
+execute (@cmd1)
+
+
+ALTER TABLE tblDepartment ALTER COLUMN AccountancyAmount int not null 
+set @cmd1 = 'ALTER TABLE tblDepartment ADD CONSTRAINT ' + @defName + ' DEFAULT (0) FOR AccountancyAmount'
+execute (@cmd1)
+
+Go
 
 if not exists(select * from sysobjects WHERE Name = N'tblLinkGroup')
 	begin

@@ -22,6 +22,7 @@ namespace DH.Helpdesk.Domain
         public int ComplexPassword { get; set; }
         public int ComputerDepartmentSource { get; set; }
         public int ComputerLog { get; set; }
+        public int CustomerInExtendedSearch { get; set; }
         public int ComputerUserSearchRestriction { get; set; }
         public int ComputerUserInfoListLocation { get; set; }  //READ ONLY, DON'T CHANGE IT FROM PROJECT- ONLY IN DB IF NECESSARY!
         public int ComputerUserLog { get; set; }
@@ -134,6 +135,7 @@ namespace DH.Helpdesk.Domain
         public int CalendarWGRestriction { get; set; }
         public int ModuleExtendedCase { get; set; }
         public int AttachmentPlacement { get; set; }
+        public int M2TNewCaseMailTo { get; set; }
 
         public virtual OrderState CloseOrderState { get; set; }
         /// <summary>

@@ -9,5 +9,6 @@ namespace DH.Helpdesk.Services.Services
         MailTemplate GetTemplate(int mailId, OperationContext operationContext);
 
         MailTemplate GetTemplate(int mailId, int customerId, int languageId, IUnitOfWork uow);
+        MailTemplate GetTemplateById(int id, OperationContext operationContext);
     }
 }

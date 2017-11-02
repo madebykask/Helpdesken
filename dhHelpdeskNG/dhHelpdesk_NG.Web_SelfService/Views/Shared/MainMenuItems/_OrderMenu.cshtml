@@ -1,0 +1,13 @@
+﻿@model DH.Helpdesk.SelfService.Models.Shared.LayoutViewModel
+
+
+@if (SessionFacade.CurrentLocalUser != null && Model.OrderModuleIsEnabled && 
+    (SessionFacade.CurrentLocalUser.IsAdministrator() || Model.UserHasOrderTypes))
+{
+    <li class="blue">
+        <a href="@Url.Action("Index", "Orders", new { customerId = Model.CustomerId, area = "" })">
+            <i class="fa fa-archive mnu-fa"></i><br />
+            @Translation.Get("Orders", Enums.TranslationSource.TextTranslation)
+        </a>
+    </li>
+}

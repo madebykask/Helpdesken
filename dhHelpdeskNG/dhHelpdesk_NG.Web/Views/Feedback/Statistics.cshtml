@@ -41,6 +41,12 @@
                                     </div>
                                 </td>
                             </tr>
+                            <tr>
+                                <td class="span3">@Translation.GetCoreTextTranslation("Avdelning")</td>
+                                <td>
+                                    @Html.DropDownListFor(m => m.StatisticsFilter.Departments, Model.Departments, new { multiple = "multiple", @class="chosen-select", id= "Departments" })
+                                </td>
+                            </tr>
                         </table>
                     }
                 </div>

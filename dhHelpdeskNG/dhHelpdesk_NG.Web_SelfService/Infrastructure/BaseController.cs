@@ -57,10 +57,11 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
             var res = SetCustomer(filterContext, out lastError);
             
-            if (!res && isSsoMode && federatedAuthenticationSettings.LogoutCustomerOnSessionExpire)
-            {
-                ManualDependencyResolver.Get<IFederatedAuthenticationService>().SignOut(Request.Url);
-            }
+            //todo: move to OnSessionEnd
+            //if (!res && isSsoMode && federatedAuthenticationSettings.LogoutCustomerOnSessionExpire)
+            //{
+            //    ManualDependencyResolver.Get<IFederatedAuthenticationService>().SignOut(Request.Url.AbsolutePath);
+            //}
 
             if (!res && lastError != null)
             {
@@ -173,6 +174,10 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             
             SessionFacade.UserHasAccess = true;            
             SessionFacade.CurrentCustomerID = SessionFacade.CurrentCustomer.Id;
+            
+            //set customerId cookie
+            ControllerContext.HttpContext.SetCustomerIdCookie(SessionFacade.CurrentCustomer.Id);
+
             return true;
         }
 
@@ -180,14 +185,15 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         {
             var ret = -1;
             
-            var curUri = filterContext.HttpContext.Request.Url;
-            var passedCustomerId = HttpUtility.ParseQueryString(curUri.Query).Get("customerId");
+            var passedCustomerId = Request.QueryString["customerId"];
             
-            if (passedCustomerId != null && !string.IsNullOrEmpty(passedCustomerId))
+            if (!string.IsNullOrEmpty(passedCustomerId))
             {
                 int tempId = 0;
                 if (int.TryParse(passedCustomerId, out tempId))
+                {
                     ret = tempId;
+                }
                 else
                 {
                     ErrorGenerator.MakeError("Customer Id not valid!", 105);
@@ -211,18 +217,30 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     }
                 }
             }
-
-            if (sessionCustomerId <0 && ret < 0 && filterContext.HttpContext.Request.QueryString["customerId"] != null)
+            
+            //try to get customerId from query string
+            if (sessionCustomerId < 0 && ret < 0)
             {
-                int paramCustomerId;
-                if (int.TryParse(filterContext.HttpContext.Request.QueryString["customerId"], out paramCustomerId))
-                    ret = paramCustomerId;
-                else
+                var val = Request.QueryString["customerId"];
+
+                int paramCustomerId = -1;
+                int.TryParse(val, out paramCustomerId);
+                
+                // if failed from qs try to load from session cookie. Case - when was signed out from page without customerId in url
+                if (paramCustomerId <= 0)
+                {
+                    paramCustomerId = filterContext.HttpContext.GetCustomerIdFromCookie();
+                }
+
+                if (paramCustomerId <= 0)
                 {
                     ErrorGenerator.MakeError("Customer Id not valid!", 105);
                     filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                     return -1;
                 }
+
+                if (paramCustomerId > 0)
+                    ret = paramCustomerId;
             }
 
             return ret;
@@ -377,7 +395,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     _masterDataService.SaveSSOLog(ssoLog);
 
                 if (string.IsNullOrEmpty(userIdentity.UserId))
-                {                    
+                {     
                     lastError = new ErrorModel(107, "You don't have access to the portal. (User Id is not specified)");
                     return userIdentity;
                 }                

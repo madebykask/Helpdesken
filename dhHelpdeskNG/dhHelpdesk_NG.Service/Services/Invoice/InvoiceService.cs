@@ -170,17 +170,23 @@ namespace DH.Helpdesk.Services.Services.Invoice
 
 				_invoiceRowRepository.Add(dbInvoiceRow);
 			}
-
+            
 			var setting = _settingService.GetCustomerSetting(customerId);
+            if (setting.InvoiceType == 2)
+            {
+                var fileName = now.ToString("yyyyMMddHHmmss.eko");
+				dbInvoiceHeader.InvoiceFilename = fileName;
+            }
+
+            _invoiceHeaderRepository.Commit();            
+
 			if (setting.InvoiceType == 2)
 			{
-				var fileName = now.ToString("yyyyMMddHHmmss.eko");
 				var globalSetting = _globalSettingService.GetGlobalSettings().First();
-				CreateInvoiceFile(Path.Combine(globalSetting.InvoiceFileFolder, dbInvoiceHeader.InvoiceHeaderGUID.ToString()), fileCases, translations);
-				dbInvoiceHeader.InvoiceFilename = fileName;
-			}
-
-			_invoiceHeaderRepository.Commit();
+				CreateInvoiceFile(dbInvoiceHeader.Id, 
+                                  Path.Combine(globalSetting.InvoiceFileFolder, dbInvoiceHeader.InvoiceHeaderGUID.ToString()), 
+                                  fileCases, translations);
+			}			
 		}
 
 		public List<InvoiceFile> GetInvoiceHeaders(int customerId)
@@ -212,7 +218,7 @@ namespace DH.Helpdesk.Services.Services.Invoice
 			};
 		}
 
-		private void CreateInvoiceFile(string path, Dictionary<int, Tuple<List<Log>, List<CaseInvoiceRow>>> fileCases, List<string> translations)
+		private void CreateInvoiceFile(int invoiceHeader_Id, string path, Dictionary<int, Tuple<List<Log>, List<CaseInvoiceRow>>> fileCases, List<string> translations)
 		{
 			var sb = new StringBuilder();
 			foreach (var fileCase in fileCases)
@@ -231,8 +237,8 @@ namespace DH.Helpdesk.Services.Services.Invoice
 				             fileCase.Value.Item2
 					             .Where(x => x.Charge.ToBool()).Sum(x => x.InvoicePrice);
 
-				sb.AppendLine($"{caseInfo.CaseNumber}\t{translations[0]}\t{caseInfo.Department.DepartmentName}" +
-				              $"\t{caseInfo.Workinggroup.Code}\t{translations[1]}:{caseInfo.CaseNumber}, {caseInfo.Caption}" +
+				sb.AppendLine($"{caseInfo.CaseNumber}-{invoiceHeader_Id}\t{translations[0]}\t{caseInfo.Department.DepartmentName}" +
+                              $"\t{caseInfo.Workinggroup?.Code}\t{translations[1]}:{caseInfo.CaseNumber}, {caseInfo.Caption}" +
 				              $"{(String.IsNullOrWhiteSpace(externalInvoices) ? "" : $", {translations[2]}: " + externalInvoices)}" +
 				              $"{(referenceNumber == null ? "" : $", {translations[3]}: " + referenceNumber)}\t{translations[4]}\t{caseInfo.FinishingDate?.ToString("yyyy-MM-dd")}\t\t{amount}");
 

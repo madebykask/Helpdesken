@@ -1,0 +1,19 @@
+﻿@using DH.Helpdesk.Common.Enums;
+@model DH.Helpdesk.SelfService.Models.Shared.LayoutViewModel
+
+@if (Model.CurrentCustomer != null && Model.CurrentCustomer.ShowCasesOnExternalPage != 0)
+{
+    <li class="blue">
+        <a href="@Url.Action("UserCases", "case", new { customerId = Model.CustomerId, area = "" })">
+            <i class="fa fa-clock-o mnu-fa"></i><br />            
+            @if (Model.AppType == ApplicationTypes.LineManager)
+            {
+                @Translation.Get("Service Requests", Enums.TranslationSource.TextTranslation)
+            }
+            else
+            {
+                @Translation.Get("Cases", Enums.TranslationSource.TextTranslation)
+            }
+        </a>
+    </li>
+}

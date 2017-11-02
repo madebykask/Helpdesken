@@ -121,6 +121,7 @@
         public virtual ProductArea ProductArea { get; set; }
         public virtual ICollection<EmailLog> Emaillogs { get; set; }
         public virtual User UserPerformer { get; set; }
+        public virtual User UserResponsible { get; set; }
         public virtual Status Status { get; set; }
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
         public virtual RegistrationSourceCustomer RegistrationSourceCustomer { get; set; }

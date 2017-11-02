@@ -7,7 +7,7 @@ namespace DH.Helpdesk.Services.Response.Questionnaire
 
     public class OptionResult
     {
-        public OptionResult(int optionId, int count, IEnumerable<int> caseIds, IEnumerable<OptionNote> notes = null, IEnumerable<string> emails = null )
+        public OptionResult(int optionId, int count, IEnumerable<int> caseIds, IEnumerable<OptionNote> notes = null, IEnumerable<string> emails = null, IEnumerable<int> departmentIds = null)
         {
             this.OptionId = optionId;
             this.Count = count;

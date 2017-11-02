@@ -1,37 +1,13 @@
 ﻿@model DH.Helpdesk.Web.Models.CaseSolution.CaseSolutionInputViewModel
-@using System.Web.Optimization
-@using DH.Helpdesk.Common.Enums.CaseSolution
-@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
-@*<link href="/Content/css/chosen.css" rel="stylesheet" />
-
-    @{
-        Html.AddJavaScript("~/Content/js/chosen.jquery.js");
-    }*@
-
-
-@*<html>
-    <head>
-        <meta charset="utf-8" />
-
-        <link href="@Url.Content("~/Content/css/chosen.css")" rel="stylesheet" type="text/css" />
-        <script src="@Url.Content("~/Content/js/chosen.jquery.js")" type="text/javascript"></script>
-
-
-    </head>
-
-    <body>*@
-
-
-
-<h4>@Translation.Get("Villkor", Enums.TranslationSource.TextTranslation)</h4>
+<h4>@Translation.GetCoreTextTranslation("Villkor")</h4>
 
 <div class="row">
     <div class="span12">
         <table class="tableform" border="0">
             <tr style="width:100%">
                 <td style="width:100%">
-                    @Translation.Get("Detta arbetsflöde kommer endast visas om alla villkor är uppfyllda i ärendet. Det kan finnas mer än ett värde för varje fält, ett av värdena för fältet måste vara uppfyllt.", Enums.TranslationSource.TextTranslation)
+                    @Translation.GetCoreTextTranslation("Detta arbetsflöde kommer endast visas om alla villkor är uppfyllda i ärendet. Det kan finnas mer än ett värde för varje fält, ett av värdena för fältet måste vara uppfyllt.")
                 </td>
 
             </tr>
@@ -57,18 +33,33 @@
                     <tr>
                         @* var r= @Request.Url.AbsoluteUri.ToString();*@
                         <td style="width:200px">
-                            @Translation.Get(cs.Text, Enums.TranslationSource.TextTranslation)
+                            @Translation.GetCoreTextTranslation(cs.Text)
                         </td>
                         <td>
-                            @Html.DropDownList("lst_" + cs.PropertyName, cs.SelectList, new { id = "lst" + cs.PropertyName, multiple = "multiple", @Tag = "lst", @class = "chosen-select" })
+                        
+
+
+                            <select tag="lst" class="chosen-select" id=lst_@cs.PropertyName multiple="multiple" name=lst_@cs.PropertyName style="display: none;">
+                                @foreach (var op in cs.SelectList)
+                                {
+                                    if (!op.Disabled)
+                                    {
+                                        <option value="@op.Value" @(op.Selected ? "selected" : "")> @op.Text</option>
+
+                                 
+
+                                    }
+                                    else
+                                    {
+                                        <option value="@op.Value" @(op.Selected ? "selected" : "") class="DisabledChosen">@op.Text</option>
+                                    }
+                                }
+                            </select>
                             @* <input id="btn_@cs.PropertyName" class="btn btn-danger deleterow" onclick="RemoveCondition(this)" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />*@
                         </td>
-
                     </tr>
                 }
             }
         </table>
     </div>
 </div>
-@*</body>
-    </html>*@

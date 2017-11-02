@@ -1,0 +1,108 @@
+﻿@using DH.Helpdesk.Common.Enums;
+@using DH.Helpdesk.SelfService.Models.CaseTemplate
+@using System.Text
+
+@model DH.Helpdesk.SelfService.Models.Shared.LayoutViewModel
+
+@if (Model.CurrentCustomer != null && Model.CurrentCustomer.ShowCaseOnExternalPage != 0 && Model.CaseTemplatesGroups != null)
+{
+    var addSeparator = false;
+    <li class="dropdown blue">
+        <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
+            <i class="fa fa-edit mnu-fa"></i><br />
+            @if (Model.AppType == ApplicationTypes.LineManager)
+            {
+                @Translation.Get("Order New Service Request", Enums.TranslationSource.TextTranslation)
+            }
+            else
+            {
+                @Translation.Get("Initiate a case", Enums.TranslationSource.TextTranslation)
+            }
+        </a>
+
+        <ul class="dropdown-menu">
+            @if (Model.CaseTemplatesGroups != null)
+            {
+                foreach (var group in Model.CaseTemplatesGroups)
+                {
+                    if (!group.CategoryId.HasValue || (group.CategoryId.HasValue && group.CategoryId.Value == 0))
+                    {                        
+                        foreach (var template in group.Templates)
+                        {
+                            <li>
+                                @GetTemplateLink(template)
+                            </li>
+                            addSeparator = true;
+                        }
+                    }
+                    else
+                    {
+                        if (addSeparator)
+                        {
+                            <li class='divider'></li>
+                            addSeparator = false;
+                        }
+                        <li class="dropdown-submenu">
+                            <a href="#" class="categoy">
+                                @group.CategoryName
+                            </a>
+                            <ul class="dropdown-menu">
+                                @foreach (var template in group.Templates)
+                                {
+                                    <li>
+                                        @GetTemplateLink(template)
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                }
+            }
+        </ul>
+    </li>
+}
+
+@functions    {
+
+    private MvcHtmlString GetTemplateLink(CaseTemplateViewModel template)
+    {
+        var result = new StringBuilder();
+        var aTag = new TagBuilder("a");
+        var _href = string.Empty;
+
+        if (template.ContainsExtendedForm)
+        {
+            _href = Url.Action("ExtendedCase", "case", new { caseTemplateId = template.Id, area = "" });
+        }
+        else if (!string.IsNullOrEmpty(template.TemplatePath))
+        {
+            var tempPath = template.TemplatePath + "?language=[language]";
+            _href = Url.Content(tempPath.SetUrlParameters());
+        }
+        else
+        {
+            _href = Url.Action("NewCase", "case", new { customerId = Model.CustomerId, caseTemplateId = template.Id, area = "" });
+        }
+
+        aTag.MergeAttribute("href", _href);
+
+        var _span1 = new TagBuilder("span");
+        _span1.MergeAttribute("class", "glyphicon glyphicon-plus");
+        aTag.InnerHtml += _span1.ToString();
+
+        aTag.InnerHtml += "&nbsp; " + Translation.Get(template.Name, Enums.TranslationSource.TextTranslation);
+        aTag.InnerHtml += "<br /> ";
+
+        var _span2 = new TagBuilder("span");
+        _span2.MergeAttribute("class", "small");
+        _span2.SetInnerText(Translation.Get(template.ShortDescription, Enums.TranslationSource.TextTranslation));
+
+        aTag.InnerHtml += _span2.ToString();
+
+
+        result.Append(aTag);
+
+        return MvcHtmlString.Create(result.ToString());
+    }
+
+}

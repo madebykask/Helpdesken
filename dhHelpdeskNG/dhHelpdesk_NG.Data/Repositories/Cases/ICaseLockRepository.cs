@@ -6,6 +6,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Cases;
+    using System.Linq;
 
     public interface ICaseLockRepository : IRepository<CaseLockEntity>
     {
@@ -14,7 +15,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
         List<LockedCaseOverview> GetLockedCases(int? customerId, decimal caseNumber);
 
         List<LockedCaseOverview> GetLockedCases(int? customerId, string searchText);
-
+        IQueryable<ICaseLockOverview> GetLockedCases(int[] caseIds, int bufferTime);
         CaseLock GetCaseLockByGUID(Guid lockGUID);
 
         ICaseLockOverview GetCaseLockByCaseId(int caseId);
@@ -32,6 +33,5 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
         void UnlockCaseByGUID(Guid lockGUID);
 
         void DeleteCaseLockByCaseId(int caseId);
-
     }
 }

@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using DH.Helpdesk.Common.Constants;
 
 namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 {
@@ -87,6 +88,8 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
             return resultMap;
         }
+
+     
 
         public ICaseLockOverview GetCaseLockByCaseId(int caseId)
         {
@@ -217,6 +220,18 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                                                      l.LockEntity.User.UserID.ToLower().Contains(searchText)).ToList();
 
             return MapEntityToOverview(lockedCases);
+        }
+
+        public IQueryable<ICaseLockOverview> GetLockedCases(int[] caseIds, int bufferTime)
+        {
+            //Reason for adding logic here:
+            //System.Data.Entity is already defined here so that we can use DbFunctions.
+            var items =
+                Table.Where(l => caseIds.Contains(l.Case_Id) && DbFunctions.AddSeconds(l.ExtendedTime, bufferTime) > DateTime.Now)
+                     .Select(ProjectToCaseLockOverview())
+                     .OrderByDescending(x => x.ExtendedTime) //If there are several, it needs to be orded this way
+                    ;
+            return items;
         }
 
         private List<TempLockInfo> GetAlllockedCaseEntities()

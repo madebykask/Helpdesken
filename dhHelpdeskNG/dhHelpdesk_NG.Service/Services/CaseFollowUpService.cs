@@ -49,6 +49,15 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
+        public void DeleteFollowUp(int caseId)
+        {
+            var existFlwUp = _caseFollowUpRepository.GetCaseFollowUp(caseId);
+            if (existFlwUp != null)
+            {
+                _caseFollowUpRepository.DeleteCaseFollowUp(existFlwUp);
+            }
+        }
+
         public bool IsCaseFollowUp(int userId, int caseId)
         {
             var existFlwUp = _caseFollowUpRepository.GetCaseFollowUp(userId, caseId);
@@ -65,5 +74,7 @@ namespace DH.Helpdesk.Services.Services
         void AddUpdateFollowUp(int userId, int caseId);
         void RemoveFollowUp(int userId, int caseId);
         bool IsCaseFollowUp(int userId, int caseId);
+
+        void DeleteFollowUp(int caseId);
     }
 }

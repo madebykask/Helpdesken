@@ -20,25 +20,30 @@
 @section Scripts {
     <script type="text/javascript">
 
-        $(function () {
+        $(function() {
             var validator = $("#target").validate({
-                rules: {
-                    "WorkingGroup.WorkingGroupName": {
-                        required: true
+                    rules: {
+                        "WorkingGroup.WorkingGroupName": {
+                            required: true
+                        },
+                        "WorkingGroup.EMail": {
+                            email: true
+                        }
+                    },
+                    messages: {
+                        "WrokingGroup.WorkingGroupName": {
+                            required: "@Translation.GetForJS("Du måste ange en driftgrupp")"
+                        },
+                        "WorkingGroup.EMail": {
+                            email: "@Translation.GetForJS("E-postadress är inte giltig.")"
+                        }
+                    },
+                    submitHandler: function(form) {
+                        form.submit();
                     }
-                    
-                },
-                messages: {
-                    "WrokingGroup.WorkingGroupName": {
-                        required: "@Translation.GetForJS("Du måste ange en driftgrupp", Enums.TranslationSource.TextTranslation)"
-                }                
-            },
-            submitHandler: function (form) {
-                form.submit();
-            }
+                });
         });
-    });
 
 
-</script>
+    </script>
 }

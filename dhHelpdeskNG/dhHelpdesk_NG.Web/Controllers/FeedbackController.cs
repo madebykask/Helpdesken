@@ -47,11 +47,13 @@ namespace DH.Helpdesk.Web.Controllers
 		private readonly ICaseSearchService _caseSearchService;
 		private readonly ICaseFieldSettingService _caseFieldSettingService;
 		private readonly ICaseSettingsService _caseSettingService;
+		private readonly IDepartmentService _departmentService;
 
 		public FeedbackController(IMasterDataService masterDataService, IQestionnaireQuestionOptionService questionnaireQuestionOptionService,
 			IQestionnaireQuestionService questionnaireQuestionService, IFeedbackService feedbackService, ICircularService circularService,
 			IInfoService infoService, GridSettingsService gridSettingsService, ICaseLockService caseLockService, ISettingService settingService,
-            IGlobalSettingService globalSettingService, ICaseSearchService caseSearchService, ICaseFieldSettingService caseFieldSettingService, ICaseSettingsService caseSettingService) 
+            IGlobalSettingService globalSettingService, ICaseSearchService caseSearchService, ICaseFieldSettingService caseFieldSettingService, ICaseSettingsService caseSettingService,
+            IDepartmentService departmentService) 
 			: base(masterDataService)
 		{
 			_questionnaireQuestionOptionService = questionnaireQuestionOptionService;
@@ -66,6 +68,7 @@ namespace DH.Helpdesk.Web.Controllers
             _caseSearchService = caseSearchService;
             _caseFieldSettingService = caseFieldSettingService;
             _caseSettingService = caseSettingService;
+            _departmentService = departmentService;
 		}
 
 		public ActionResult NewFeedback(EditFeedbackParams parameters)
@@ -334,7 +337,15 @@ namespace DH.Helpdesk.Web.Controllers
 	        var results = this._circularService.GetResult(circularId);
 	        var feedbackOverview = this._circularService.GetQuestionnaire(feedbackId, OperationContext);
             var jsonCaseIndexViewModel = GetJsonCaseIndexViewModel();
+
+	        var departments = _departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.DepartmentName).Select(x => new SelectListItem
+	        {
+	            Value = x.Id.ToString(),
+                Text = x.DepartmentName
+	        }).ToList();
+
             var viewModel = new FeedbackStatisticsViewModel(feedbackId, feedbackOverview, results, new StatisticsFilter(), jsonCaseIndexViewModel);
+	        viewModel.Departments = departments;
 
             return this.View("Statistics", viewModel);
 	    }
@@ -353,7 +364,8 @@ namespace DH.Helpdesk.Web.Controllers
             var results = this._circularService.GetResults(
                 circularId,
                 statisticsFilter.CircularCreatedDate.DateFrom,
-                statisticsFilter.CircularCreatedDate.DateTo.GetEndOfDay());
+                statisticsFilter.CircularCreatedDate.DateTo.GetEndOfDay(),
+                statisticsFilter.Departments);
             var jsonCaseIndexViewModel = GetJsonCaseIndexViewModel();
             var viewModel = new FeedbackStatisticsViewModel(questionnaireId, questionnaire, results, new StatisticsFilter(), jsonCaseIndexViewModel);
             var random = new Random();
@@ -663,6 +675,56 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     Value = "ic_thumbs_down_black_24dp_1x.png",
                     Text = "Thumbs down"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_0_black_24dp_1x.png",
+                    Text = "0"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_1_black_24dp_1x.png",
+                    Text = "1"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_2_black_24dp_1x.png",
+                    Text = "2"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_3_black_24dp_1x.png",
+                    Text = "3"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_4_black_24dp_1x.png",
+                    Text = "4"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_5_black_24dp_1x.png",
+                    Text = "5"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_6_black_24dp_1x.png",
+                    Text = "6"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_7_black_24dp_1x.png",
+                    Text = "7"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_8_black_24dp_1x.png",
+                    Text = "8"
+                },
+                new SelectListItem
+                {
+                    Value = "ic_9_black_24dp_1x.png",
+                    Text = "9"
                 },
                 new SelectListItem
                 {

@@ -12,11 +12,14 @@ namespace DH.Helpdesk.Web.Models.Feedback
         public StatisticsFilter()
         {
             this.CircularCreatedDate = new DateRange();
+            this.Departments = new List<int>();
         }
 
         [NotNull]
         public DateRange CircularCreatedDate { get; set; }
 
         public int EmailsCount { get; set; }
+
+        public List<int> Departments { get; set; }
     }
 }

@@ -48,15 +48,17 @@
                     <ul class="nav dh-nav">
                         @if (model.CustomerSetting.ShowQuickNewCaseLink == 1)
                         {
-                            <li class="newcase">
+                            if (SessionFacade.CurrentUser.CreateCasePermission == 1)
+                            {
+                                <li class="newcase">
+                                    <a href=@url target="_blank">
+                                        <span>
+                                            @text
+                                        </span>
+                                    </a>
+                                </li>
+                            }
 
-
-                                <a href=@url target="_blank">
-                                    <span>
-                                        @text
-                                    </span>
-                                </a>
-                            </li>
                         }
                         <li class="orange">
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">

@@ -7,6 +7,7 @@
 
         var fieldSettings = window.fieldSettings || {};
         var caseTypeRelatedFields = window.caseTypeRelatedFields || {};
+        var priorityRelatedFields = window.priorityRelatedFields || {};
         
         var uploadCaseFileUrl = window.appParameters.uploadCaseFileUrl;
         var caseFileKey = window.appParameters.caseFileKey;
@@ -20,13 +21,16 @@
         var saveNewCaseUrl = window.appParameters.saveNewCaseUrl;
         var departmentsUrl = window.appParameters.fetchDepartmentsUrl;
         var OUsUrl = window.appParameters.fetchOUUrl;
+        var setProductAreaByCaseTypeUrl = window.appParameters.setProductAreaByCaseTypeUrl;
 
         var customerId;
         var alreadyExistFileIds = [];
         var attrApplyClass = "hasAttribute";
         var attrFieldNameHolder = "standardName";
         var relatedFieldBlockPrefix = "#relatedFieldBlock-";
-        var mandatorySignPrefix = "#mandatory_sign_";                
+        var mandatorySignPrefix = "#mandatory_sign_";
+        var caseTypeRelationName = "casetype";
+        var priorityRelationName = "priority";
         
         Application.prototype.applyFieldAttributes = function () {
             if (fieldSettings == undefined || fieldSettings == null || fieldSettings.length <= 0)
@@ -54,25 +58,35 @@
             return false;
         }
 
-        Application.prototype.checkCaseTypeRelationRules = function ($caseType) {
-            if ($caseType == undefined || $caseType == null)
+        Application.prototype.checkRelationRules = function ($element, fields, relationType) {
+            if ($element == undefined || $element == null)
                 return;
 
-            var caseTypeId = $caseType.val();
-            var relatedField = getCaseTypeRelatedField(caseTypeId);
+            var elementId = $element.val();
+            var relatedField = getRelatedField(elementId, fields);
 
             if (relatedField == undefined || relatedField == null || relatedField == '') {
-                removeCaseTypeRule('Impact_Id', '#NewCase_Impact_Id');
-                removeCaseTypeRule('Urgency_Id', '#NewCase_Urgency_Id');
+                switch (relationType.toLowerCase()) {
+                    case caseTypeRelationName:
+                        removeRelationRule('Impact_Id', '#NewCase_Impact_Id');
+                        removeRelationRule('Urgency_Id', '#NewCase_Urgency_Id');
+                        break;
+                    case priorityRelationName:
+                        removeRelationRule('Available', '#NewCase_Available');
+                        break;
+                }
                 return;
             }
                 
             switch (relatedField.toLowerCase()) {
-                case 'impact':
-                    addCaseTypeRule('Impact_Id', '#NewCase_Impact_Id');
-                    addCaseTypeRule('Urgency_Id', '#NewCase_Urgency_Id');
+                case window.caseTypeRelatedFieldName:
+                    addRelationRule('Impact_Id', '#NewCase_Impact_Id');
+                    addRelationRule('Urgency_Id', '#NewCase_Urgency_Id');
                     break;
-            }          
+                case window.priorityRelatedFieldName:
+                    addRelationRule('Available', '#NewCase_Available');
+                    break;
+            }
         }
 
 
@@ -167,13 +181,13 @@
                 return true;
 
             return false;
-        }       
+        }
 
-        var addCaseTypeRule = function (standardFieldName, elementId) {
-            var impactSetting = getFieldSetting(standardFieldName);
-            if (impactSetting == null || (impactSetting != null && !impactSetting.IsVisible)) {
-                var $elmToShow = $(relatedFieldBlockPrefix + standardFieldName);                
-                $(elementId).val('').change();             
+        var addRelationRule = function (standardFieldName, elementId) {
+            var setting = getFieldSetting(standardFieldName);
+            if (setting == null || (setting != null && !setting.IsVisible)) {
+                var $elmToShow = $(relatedFieldBlockPrefix + standardFieldName);
+                $(elementId).val('').change();
                 showElement($elmToShow);
             }
 
@@ -184,22 +198,20 @@
             $(elementId).rules("add", {
                 required: true
             });
-            
         }
 
-        var removeCaseTypeRule = function (standardFieldName, elementId) {
-            var impactSetting = getFieldSetting(standardFieldName);
-            if (impactSetting == null || (impactSetting != null && !impactSetting.IsVisible)) {
+        var removeRelationRule = function (standardFieldName, elementId) {
+            var setting = getFieldSetting(standardFieldName);
+            if (setting == null || (setting != null && !setting.IsVisible)) {
                 var $elmToHide = $(relatedFieldBlockPrefix + standardFieldName);
                 $(elementId).val('').change();
                 hideElement($elmToHide);
             }
-
-            if (impactSetting == null ||  (impactSetting != null && !impactSetting.IsRequired)) {
-                $(elementId).removeAttr('required');                
+            if (setting == null || (setting != null && !setting.IsRequired)) {
+                $(elementId).removeAttr('required');
                 $(elementId).rules("remove");
                 var $mandatorySign = $(mandatorySignPrefix + standardFieldName);
-                hideElement($mandatorySign);                
+                hideElement($mandatorySign);
             }
         }
 
@@ -216,15 +228,14 @@
             return null;
         }
 
-        var getCaseTypeRelatedField = function (caseTypeId) {
-            if (caseTypeRelatedFields == undefined || caseTypeRelatedFields == null || caseTypeRelatedFields.length <= 0 || caseTypeId == undefined || caseTypeId == null)
+        var getRelatedField = function (fieldId, fields) {
+            if (fields == undefined || fields == null || fields.length <= 0 || fieldId == undefined || fieldId == null)
                 return "";
             
-            for (var ct = 0; ct < caseTypeRelatedFields.length; ct++) {
-                if (caseTypeRelatedFields[ct].Key == caseTypeId)
-                    return caseTypeRelatedFields[ct].Value;
+            for (var ct = 0; ct < fields.length; ct++) {
+                if (fields[ct].Key == fieldId)
+                    return fields[ct].Value;
             }
-
             return "";
         }
 
@@ -298,12 +309,6 @@
             var me = this;
             me.$departmentControl.val('').find('option').remove();
             me.$departmentControl.append('<option value="">&nbsp;</option>');
-            
-            if (me.isElementReadonly(me.$departmentControl)) {
-                me.$orgUnitControl.val('').find('option').remove();
-                me.$orgUnitControl.append('<option value="">&nbsp;</option>');
-                return;
-            }
 
             $.get(departmentsUrl, {
                 'id': regionId,
@@ -332,10 +337,6 @@
             var me = this;
             me.$orgUnitControl.val('').find('option').remove();
             me.$orgUnitControl.append('<option value="">&nbsp;</option>');
-
-            if (me.isElementReadonly(me.$orgUnitControl)) {
-                return;
-            }
 
             $.get(OUsUrl, {
                 'id': departmentId,
@@ -614,6 +615,7 @@
                     $('#NewCase_UserCode').val(item.usercode);
                     $('#NewCase_Region_Id').val(item.regionid);
                     $('#NewCase_CostCentre').val(item.costcentre);
+                    $('#NewCase_Department_Id').val(item.departmentid);
                     
                     me.setOrganizationData(item.regionid, item.departmentid, item.ouid);
 
@@ -711,13 +713,14 @@
             return options;
         } 
 
-        $('#divProductArea ul.dropdown-menu li a').click(function (e) {
-            e.preventDefault();
-            var val = $(this).attr('value');
-            $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
-            var ee = document.getElementById("NewCase_ProductArea_Id");
-            ee.setAttribute('value', val);
-        });
+        bindProductAreasEvents();
+//        $('#divProductArea ul.dropdown-menu li a').click(function (e) {
+//            e.preventDefault();
+//            var val = $(this).attr('value');
+//            $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
+//            var ee = document.getElementById("NewCase_ProductArea_Id");
+//            ee.setAttribute('value', val);
+//        });
 
         $('#divCategory ul.dropdown-menu li a').click(function (e) {
             e.preventDefault();
@@ -1008,6 +1011,16 @@
             $target.modal('show');            
             globalClipboard.init.call(globalClipboard, $(e.target).attr('data-src'));
         });
+
+        function bindProductAreasEvents() {
+            $('#divProductArea ul.dropdown-menu li a').click(function (e) {
+                e.preventDefault();
+                var val = $(this).attr('value');
+                $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
+                var ee = document.getElementById("NewCase_ProductArea_Id");
+                ee.setAttribute('value', val);
+            });
+        }
        
         Application.prototype.init = function () {
             var self = this;
@@ -1016,6 +1029,7 @@
             self.$departmentControl = $('#NewCase_Department_Id');
             self.$orgUnitControl = $('#NewCase_Ou_Id');
             self.$caseTypeControl = $(document.getElementById("NewCase.CaseType_Id"));
+            self.$priorityControl = $(document.getElementById("NewCase_Priority_Id"));
 
             $('#NewCase_ReportedBy').typeahead(Application.prototype._GetComputerUserSearchOptions());
             $('#NewCase_InventoryNumber').typeahead(Application.prototype._GetComputerSearchOptions());
@@ -1032,11 +1046,30 @@
             });
 
             self.$caseTypeControl.change(function () {
-                self.checkCaseTypeRelationRules($(this));
+                $.post(setProductAreaByCaseTypeUrl, { caseTypeId: $(this).val() }, function (result) {
+                    if (result.success) {
+                        $('#divProductArea > ul.dropdown-menu')
+                            .html("<li><a href='#'>--</a></li>" + result.data);
+                        var paId = parseInt($("#NewCase_ProductArea_Id").val());
+                        if (result.paIds && result.paIds.indexOf(paId) < 0) {
+                            var emptyElement = $('#divProductArea > ul.dropdown-menu').children().first();
+                            $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(emptyElement));
+                            $("#NewCase_ProductArea_Id").val("").trigger('change');
+                        }
+                        bindProductAreasEvents();
+                    }
+                }, 'json');
+
+                self.checkRelationRules($(this), caseTypeRelatedFields, caseTypeRelationName);
+            });
+
+            self.$priorityControl.change(function () {
+                self.checkRelationRules($(this), priorityRelatedFields, priorityRelationName);
             });
 
             self.applyFieldAttributes();
-            self.$caseTypeControl.change();            
+            self.$caseTypeControl.change();
+            self.$priorityControl.change();
         };
     })($);
     

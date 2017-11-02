@@ -38,6 +38,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             int setPriorityPermission,
             int invoicePermission,
             int dataSecurityPermission,
+            int caseUnlockPermission,
             int refreshContent,
             string firstName,
             string surName,
@@ -48,7 +49,8 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             bool showSolutionTime,
             bool showCaseStatistics,
             string timeZoneId,
-            Guid? userGuid)
+            Guid? userGuid,
+            int caseInternalLogPermission)
         {
             this.StartPage = startPage;
             this.Id = id;
@@ -56,7 +58,6 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.CustomerId = customerId;
             this.LanguageId = languageId;
             this.UserGroupId = userGroupId;
-            this.FollowUpPermission = followUpPermission;
             this.RestrictedCasePermission = restrictedCasePermission;
             this.ShowNotAssignedWorkingGroups = showNotAssignedWorkingGroups;
             this.CreateCasePermission = createCasePermission;
@@ -79,6 +80,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.SetPriorityPermission = setPriorityPermission;
             this.InvoicePermission = invoicePermission;
             this.DataSecurityPermission = dataSecurityPermission;
+            this.CaseUnlockPermission = caseUnlockPermission;
             this.RefreshContent = refreshContent;
             this.FirstName = firstName;
             this.SurName = surName;
@@ -89,6 +91,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.ShowCaseStatistics = showCaseStatistics;
             this.TimeZoneId = timeZoneId;
             this.UserGUID = userGuid;
+            this.CaseInternalLogPermission = caseInternalLogPermission;
         }
 
         [IsId]
@@ -174,6 +177,10 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
         public string TimeZoneId { get; set; }
 
         public int InventoryPermission { get; set; }
+
+        public int CaseUnlockPermission { get; set; }
+
+        public int CaseInternalLogPermission { get; set; }
 
         public bool IsAdministrator()
         {

@@ -362,7 +362,7 @@ namespace DH.Helpdesk.Web.Controllers
         #region ***Public Methods***
 
         #region --Advanced Search--
-        public ActionResult AdvancedSearch(bool? clearFilters = false, bool doSearchAtBegining = false)
+        public ActionResult AdvancedSearch(bool? clearFilters = false, bool doSearchAtBegining = false, bool isExtSearch = false)
         {
             if (SessionFacade.CurrentUser == null)
             {
@@ -417,6 +417,7 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseSearchFilterData.IsAboutEnabled = m.CaseSetting.ColumnSettingModel.CaseFieldSettings.GetIsAboutEnabled();
 
             m.DoSearchAtBegining = doSearchAtBegining;
+            m.IsExtSearch = isExtSearch;
             return this.View("AdvancedSearch/Index", m);
         }
 
@@ -917,10 +918,10 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var data = new List<Dictionary<string, object>>();
             var ids = caseSearchResults.Select(o => o.Id).ToArray();
-
-            var casesLocks = _caseLockService.GetCasesLocks(ids);
             var globalSettings = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
+            var casesLocks = _caseLockService.GetLockedCasesToOverView(ids, globalSettings, this._defaultCaseLockBufferTime);
+        
             foreach (var searchRow in caseSearchResults)
             {
                 var caseId = searchRow.Id;
@@ -935,14 +936,14 @@ namespace DH.Helpdesk.Web.Controllers
                     {"isClosed", searchRow.IsUrgent}
                 };
 
-                var caseLock = casesLocks.ContainsKey(caseId) ? casesLocks[caseId] : null;
+                var caseLock = casesLocks.Where(x => x.CaseId == caseId).FirstOrDefault();
 
-                var caseLockModel = GetCaseLockModel(caseLock, searchRow.Id, SessionFacade.CurrentUser.Id, globalSettings, false);
-                if (caseLockModel.IsLocked)
+                //this specific case is locked
+                if (caseLock != null)
                 {
-                    jsRow.Add("isCaseLocked", caseLockModel.IsLocked);
-                    jsRow.Add("caseLockedIconTitle", $"{caseLockModel.User.FirstName} {caseLockModel.User.SurName} ({caseLockModel.User.UserID})");
-                    jsRow.Add("caseLockedIconUrl", $"/Content/icons/{CaseIcon.Locked.CaseIconSrc()}");
+                        jsRow.Add("isCaseLocked", true);
+                        jsRow.Add("caseLockedIconTitle", $"{caseLock.User.FirstName} {caseLock.User.LastName} ({caseLock.User.UserId})");
+                        jsRow.Add("caseLockedIconUrl", $"/Content/icons/{CaseIcon.Locked.CaseIconSrc()}");
                 }
 
                 foreach (var col in gridSettings.columnDefs)
@@ -1008,6 +1009,12 @@ namespace DH.Helpdesk.Web.Controllers
             return Json("Success");
         }
 
+        public JsonResult UnLockCaseByCaseId(int caseId)
+        {
+            this._caseLockService.UnlockCaseByCaseId(caseId);
+            return Json("Success");
+        }
+
         public JsonResult IsCaseAvailable(int caseId, DateTime caseChangedTime, string lockGuid)
         {
             var caseLock = this._caseLockService.GetCaseLockByCaseId(caseId);
@@ -1030,6 +1037,9 @@ namespace DH.Helpdesk.Web.Controllers
             else
                 return Json(false);
         }
+
+
+   
 
         public JsonResult ReExtendCaseLock(string lockGuid, int extendValue)
         {
@@ -2029,13 +2039,15 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult GetProductAreaByCaseType(int? caseTypeId, int customerId)
         {
-            var pa = _productAreaService.GetTopProductAreasForUserOnCase(customerId, null, SessionFacade.CurrentUser)
-                    .OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
+            var pa = _productAreaService.GetTopProductAreasForUserOnCase(customerId, null, SessionFacade.CurrentUser).ToList();
+
+            /*TODO: This part does not cover all states and needs to be fixed*/
             if (caseTypeId.HasValue)
             {
-                var ctProductAreas = _caseTypeService.GetCaseType(caseTypeId.Value).CaseTypeProductAreas.Select(x => x.ProductArea).ToList();
+                var ctProductAreas = _caseTypeService.GetCaseType(caseTypeId.Value).CaseTypeProductAreas.Select(x => x.ProductArea.GetParent()).ToList();
                 var paNoCaseType = pa.Where(x => x.CaseTypeProductAreas == null || !x.CaseTypeProductAreas.Any()).ToList();
-                ctProductAreas.AddRange(paNoCaseType);
+                ctProductAreas.AddRange(paNoCaseType.Where(p=> !ctProductAreas.Select(c=> c.Id).Contains(p.Id)));                
+                ctProductAreas = ctProductAreas.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
                 if (ctProductAreas.Any())
                 {
                     var paIds = ctProductAreas.Select(x => x.Id).ToList();
@@ -2047,6 +2059,7 @@ namespace DH.Helpdesk.Web.Controllers
                     return Json(new { success = true, data = drString, paIds });
                 }
             }
+            pa = pa.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
             var praIds = pa.Select(x => x.Id).ToList();
             foreach (var ctProductArea in pa)
             {
@@ -2446,10 +2459,12 @@ namespace DH.Helpdesk.Web.Controllers
             return Json("Success");
         }
 
-        public PartialViewResult ShowCasePrintPreview(int caseId, int caseNumber)
+        public PartialViewResult ShowCasePrintPreview(int caseId, int caseNumber, bool popupShow = false, bool showPrintButton = true)
         {
             var model = GetCaseReportViewerData("CaseDetailsList", caseId, caseNumber);
             model.CanShow = true;
+            model.PopupShow = popupShow;
+            model.ShowPrintButton= showPrintButton;
             return PartialView("_CasePrint", model);
         }
 
@@ -2546,7 +2561,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             bool categoryCheck = frm.IsFormValueTrue("CategoryCheck");
             var category = (categoryCheck)
-                ? ((frm.ReturnFormValue("lstCategory") == string.Empty) ? "0" : frm.ReturnFormValue("lstCategory"))
+                ? ((frm.ReturnFormValue("CategoryId") == string.Empty) ? "0" : frm.ReturnFormValue("CategoryId"))
                 : string.Empty;
 
             var stateCheck = frm.IsFormValueTrue("StateCheck");
@@ -4344,7 +4359,14 @@ namespace DH.Helpdesk.Web.Controllers
 
             //kategori                        
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCategoryFilter))
-                fd.filterCategory = this._categoryService.GetActiveCategories(cusId);
+            {
+                //const bool isTakeOnlyActive = true;
+                fd.filterCategory = this._categoryService.GetActiveParentCategories(
+                    cusId).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
+            }
+
+
+            //fd.filterCategory = this._categoryService.GetActiveCategories(cusId);
             //prio
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CasePriorityFilter))
                 fd.filterPriority = this._priorityService.GetPriorities(cusId);
@@ -4692,6 +4714,22 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
+            if (!string.IsNullOrWhiteSpace(f.Category))
+            {
+                if (f.Category != "0")
+                {
+                    var c =
+                        this._categoryService.GetCategory(
+                            f.Category.convertStringToInt(), SessionFacade.CurrentCustomer.Id);
+                    if (c != null)
+                    {
+                        f.ParantPath_Category = string.Join(
+                            " - ",
+                            this._categoryService.GetParentPath(c.Id, SessionFacade.CurrentCustomer.Id));
+                    }
+                }
+            }
+
             if (!string.IsNullOrWhiteSpace(f.CaseClosingReasonFilter))
             {
                 if (f.CaseClosingReasonFilter != "0")
@@ -4838,6 +4876,9 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var isFlwup = _caseFollowUpService.IsCaseFollowUp(SessionFacade.CurrentUser.Id, caseId);
                 m.IsFollowUp = isFlwup;
+
+                m.CaseUnlockAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseUnlockPermission);
+                m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
 
                 var editMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
                 if (m.case_.Unread != 0 && updateState && editMode == Enums.AccessMode.FullAccess)
@@ -6107,6 +6148,42 @@ namespace DH.Helpdesk.Web.Controllers
             return caseLockModel;
         }
 
+        private CaseLockModel GetCaseLockOverviewModel(ICaseLockOverview caseLock, int caseId, GlobalSetting globalSettings)
+        {
+            CaseLockModel caseLockModel = null;
+
+            var caseIsLocked = true;
+            var extendedSec = (globalSettings != null && globalSettings.CaseLockExtendTime > 0 ? globalSettings.CaseLockExtendTime : this._defaultExtendCaseLockTime);
+            var timerInterval = (globalSettings != null ? globalSettings.CaseLockTimer : 0);
+            var bufferTime = (globalSettings != null && globalSettings.CaseLockBufferTime > 0 ? globalSettings.CaseLockBufferTime : this._defaultCaseLockBufferTime);
+            var caseLockGUID = string.Empty;
+            var nowTime = DateTime.Now;
+
+            if (caseLock == null)
+            {
+                // Case is not locked 
+                caseIsLocked = false;
+            }
+            else
+            {
+                //Check if case is still locked
+                var caseLockExtendedTime = caseLock.ExtendedTime.AddSeconds(bufferTime);
+                if (caseLockExtendedTime >= nowTime)
+                { 
+                    caseIsLocked = true;
+                }
+                 else
+                {
+                    caseIsLocked = false;
+                }
+            }
+
+            caseLockModel = caseLock.MapToViewModel(caseIsLocked, extendedSec, timerInterval);
+
+            return caseLockModel;
+        }
+
+
         private CaseStatisticsViewModel GetCaseStatisticsModel(CaseAggregateData aggregateData, int caseCount,
                                                                string expandedGroup, List<string> fields)
         {
@@ -6337,10 +6414,26 @@ namespace DH.Helpdesk.Web.Controllers
             ret.Priorities = priorities;
             ret.SelectedPriority = userCaseSettings.Priority;
 
-            var categories = _categoryService.GetActiveCategories(customerId).OrderBy(c => c.Name).ToList();
+            ret.Categories = this._categoryService.GetActiveParentCategories(
+                    customerId).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
+            ret.CategoryPath= "--";
+
+            int ca;
+            int.TryParse(userCaseSettings.Category, out ca);
+            ret.CategoryId = ca;
+
+            if (ca > 0)
+            {
+                var c = this._categoryService.GetCategory(ret.CategoryId, customerId);
+                if (c != null)
+                    ret.CategoryPath = string.Join(" - ", this._categoryService.GetParentPath(c.Id, customerId));
+            }
             ret.CategoryCheck = (userCaseSettings.Category != string.Empty);
-            ret.Categories = categories;
-            ret.SelectedCategory = userCaseSettings.Category;
+
+            //var categories = _categoryService.GetActiveCategories(customerId).OrderBy(c => c.Name).ToList();
+            //ret.CategoryCheck = (userCaseSettings.Category != string.Empty);
+            //ret.Categories = categories;
+            //ret.SelectedCategory = userCaseSettings.Category;
 
             var states = _statusService.GetStatuses(customerId).OrderBy(s => s.Name).ToList();
             ret.StateCheck = (userCaseSettings.State != string.Empty);
@@ -6973,6 +7066,21 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CurrentAdvancedSearch = sm;
             #endregion
 
+            var isExtendedSearch = frm.IsFormValueTrue(CaseFilterFields.IsExtendedSearch);
+            var availableDepIds = new List<int> { 0 };
+            var availableWgIds = new List<int> { 0 };
+            var availableCustomerIds = new List<int> { 0 };
+            if (isExtendedSearch)
+            {
+                var user = _userService.GetUser(SessionFacade.CurrentUser.Id);
+                if (user != null)
+                {
+                    availableCustomerIds.AddRange(user.Cs.Select(x => x.Id));
+                    availableDepIds.AddRange(user.Departments.Select(x => x.Id));
+                    availableWgIds.AddRange(user.UserWorkingGroups.Select(x => x.WorkingGroup_Id));
+                }
+            }
+
             var data = new List<Dictionary<string, object>>();
             var customerSettings = this._settingService.GetCustomerSetting(f.CustomerId);
             var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1, userTimeZone);
@@ -6992,6 +7100,19 @@ namespace DH.Helpdesk.Web.Controllers
                                     { "isUrgent", searchRow.IsUrgent },
                                     { "isClosed", searchRow.IsClosed},
                                 };
+                if (isExtendedSearch)
+                {
+                    if (availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
+                        && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId)
+                        && availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
+                    {
+                        jsRow.Add("ExtendedAvailable", true);
+                    }
+                    else
+                    {
+                        jsRow.Add("ExtendedAvailable", false);
+                    }
+                }
                 foreach (var col in gridSettings.columnDefs)
                 {
                     var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);

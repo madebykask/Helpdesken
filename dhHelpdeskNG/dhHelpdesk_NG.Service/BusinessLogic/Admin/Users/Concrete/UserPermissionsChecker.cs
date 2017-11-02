@@ -142,6 +142,16 @@
                 permissions.Add(UserPermission.InvoicePermission);
             }
 
+            if (user.CaseUnlockPermission.ToBool())
+            {
+                permissions.Add(UserPermission.CaseUnlockPermission);
+            }
+
+            if (user.CaseInternalLogPermission.ToBool())
+            {
+                permissions.Add(UserPermission.CaseInternalLogPermission);
+            }
+
             return permissions;
         }
 

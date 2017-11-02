@@ -10,8 +10,9 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @using DH.Helpdesk.Common.Constants;
+@using DH.Helpdesk.Common.Enums
 
-<script type="text/javascript">    
+<script type="text/javascript">
 
     window.parameters = {
         isCaseLocked: '@Model.CaseLock.IsLocked',
@@ -63,6 +64,7 @@
         extendedCaseGuid: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().ExtendedCaseGuid.ToString() : "" )',
         extendedCaseLanguageId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().LanguageId.ToString() : "" )',
         extendedCasePath: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Path.ToString() : "" )',
+        fileExistError: '@Translation.GetForJS("Bifogad fil är borttagen från ärendet")',
 
         caseFieldIds:{
             CaseId: "case__Id",
@@ -96,10 +98,14 @@
             CaseLanguageId: "case__RegLanguage_Id",
             PersonsName: "case__PersonsName",
             PersonsPhone:  "case__PersonsPhone",
+            PersonsEmail:  "case__PersonsEmail",
+            PersonsCellphone:  "case__PersonsCellphone",
             PlanDate: "case__PlanDate",
+            Place: "case__Place",
             WatchDate: "case__WatchDate",
             log_InternalText: "CaseLog_TextInternal",
-            CaseRelationType: "CaseRelationType"
+            CaseRelationType: "CaseRelationType",
+            CostCentre:  "case__CostCentre",
         },
 
         caseInitValues: {
@@ -120,6 +126,10 @@
             WatchDate:   '@(Model.case_.WatchDate !=null ? Model.case_.WatchDate.Value.ToString() : "" )',
             PriorityId: '@Model.case_.Priority_Id',
             CaseRelationType: '@Model.CaseRelationType()',
+            PersonsEmail: '@Model.case_.PersonsEmail',
+            PersonsCellphone: '@Model.case_.PersonsCellphone',
+            Place: '@Model.case_.Place',
+            CostCentre: '@Model.case_.CostCentre'
         },
 
         casesScopeInitParameters: {
@@ -1814,7 +1824,7 @@
                                                     if (priority == null)
                                                     {
                                                         <input type="text" value="" readonly="true" id="priority_Name" />
-                                                        @Html.HiddenFor(m => Model.case_.Priority_Id, new { @class = "sla-value", data_sla = 0 })
+                                                        @Html.HiddenFor(m => Model.case_.Priority_Id, new { @class = "sla-value", data_sla = "" })
                                                     }
                                                     else
                                                     {
@@ -2163,11 +2173,17 @@
                                 <div class="displaytr" class="container">
                                     <ul class="nav nav-tabs" id="logandhistorytabs">
                                         <li class="active"><a href="#logtab">@Translation.Get("Ärendelogg", SessionFacade.CurrentLanguageId)</a></li>
-                                        <li><a href="#historytab">@Translation.Get("Historik", SessionFacade.CurrentLanguageId)</a></li>
+                                        @if (Model.CaseInternalLogAccess)
+                                        {
+                                            <li><a href="#historytab">@Translation.Get("Historik", SessionFacade.CurrentLanguageId)</a></li>
+                                        }
                                     </ul>
                                     <div class="tab-content">
                                         @Html.Partial("_CaseLog", Model)
-                                        @Html.Partial("_CaseHistory", Model)
+                                        @if (Model.CaseInternalLogAccess)
+                                        {
+                                            @Html.Partial("_CaseHistory", Model)
+                                        }
                                     </div>
                                 </div>
                             }

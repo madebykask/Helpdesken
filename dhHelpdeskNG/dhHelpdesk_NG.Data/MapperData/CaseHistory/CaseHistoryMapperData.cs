@@ -13,6 +13,7 @@ namespace DH.Helpdesk.Dal.MapperData.CaseHistory
         public CaseType CaseType { get; set; }
         public ProductArea ProductArea { get; set; }
         public UserMapperData UserPerformer { get; set; }
+        public UserMapperData UserResponsible { get; set; }
         public Priority Priority { get; set; }
         public WorkingGroupEntity WorkingGroup { get; set; }
         public StateSecondary StateSecondary { get; set; }

@@ -208,6 +208,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IProductAreaService _productAreaService;
         private readonly IExtendedCaseFormRepository _extendedCaseFormRepository;
         private readonly IExtendedCaseDataRepository _extendedCaseDataRepository;
+        private readonly ICaseFollowUpService _caseFollowUpService;
 
 
         public CaseService(
@@ -249,7 +250,8 @@ namespace DH.Helpdesk.Services.Services
             IFeedbackTemplateService feedbackTemplateService,
             IProductAreaService productAreaService,
             IExtendedCaseFormRepository extendedCaseFormRepository,
-            IExtendedCaseDataRepository extendedCaseDataRepository
+            IExtendedCaseDataRepository extendedCaseDataRepository,
+            ICaseFollowUpService caseFollowUpService
             )
 
         {
@@ -293,6 +295,7 @@ namespace DH.Helpdesk.Services.Services
             _productAreaService = productAreaService;
             this._extendedCaseFormRepository = extendedCaseFormRepository;
             this._extendedCaseDataRepository = extendedCaseDataRepository;
+            this._caseFollowUpService = caseFollowUpService;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -476,12 +479,17 @@ namespace DH.Helpdesk.Services.Services
 
             // delete Invoice
             this.invoiceArticleService.DeleteCaseInvoices(id);
+
+            //delete FollowUp
+            this._caseFollowUpService.DeleteFollowUp(id);
+
             var c = this._caseRepository.GetById(id);
             ret = c.CaseGUID;
             this._caseRepository.Delete(c);
             this._caseRepository.Commit();
 
 
+            
 
             return ret;
         }
@@ -693,7 +701,8 @@ namespace DH.Helpdesk.Services.Services
                                 caseTypeId = case_.CaseType_Id,
                                 registrationDate = case_.RegTime,
                                 closingDate = case_.FinishingDate,
-                                approvedDate = case_.ApprovedDate                                
+                                approvedDate = case_.ApprovedDate,
+                                priority = case_.Priority.Name
                             })
                         .GroupJoin(
                             allPerformers,
@@ -716,7 +725,8 @@ namespace DH.Helpdesk.Services.Services
                                 caseTypeId = t.tmpParentChild.caseTypeId,
                                 registrationDate = t.tmpParentChild.registrationDate,
                                 closingDate = t.tmpParentChild.closingDate,
-                                approvedDate = t.tmpParentChild.approvedDate
+                                approvedDate = t.tmpParentChild.approvedDate,
+                                priority = t.tmpParentChild.priority
                             })
                         .GroupJoin(
                             allSecStates,
@@ -736,6 +746,7 @@ namespace DH.Helpdesk.Services.Services
                                 performerFirstName = t.tmpParentChild.performerFirstName,
                                 performerLastName = t.tmpParentChild.performerLastName,
                                 subState = subState == null ? string.Empty : subState.Name,
+                                priority = t.tmpParentChild.priority,
                                 caseTypeId = t.tmpParentChild.caseTypeId,
                                 registrationDate = t.tmpParentChild.registrationDate,
                                 closingDate = t.tmpParentChild.closingDate,
@@ -759,6 +770,7 @@ namespace DH.Helpdesk.Services.Services
                                 performerFirstName = t.tmpParentChild.performerFirstName,
                                 performerLastName = t.tmpParentChild.performerLastName,
                                 subState = t.tmpParentChild.subState,
+                                priority = t.tmpParentChild.priority,
                                 caseType = caseType == null ? string.Empty : caseType.Name,
                                 IsApprovingRequired = caseType != null && caseType.RequireApproving == 1,
                                 registrationDate = t.tmpParentChild.registrationDate,
@@ -778,6 +790,7 @@ namespace DH.Helpdesk.Services.Services
                     },
                     CaseType = it.caseType,
                     SubStatus = it.subState,
+                    Priority = it.priority,
                     RegistrationDate = it.registrationDate,
                     ClosingDate = it.closingDate,
                     ApprovedDate = it.approvedDate,

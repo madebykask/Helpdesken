@@ -549,6 +549,27 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                     sb.Append("</tr>");
                 }
             }
+            // Responsible User
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.CaseResponsibleUser_Id != o.CaseResponsibleUser_Id)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    if (o.UserResponsible != null)
+                        sb.Append(o.UserResponsible.FirstName + " " + o.UserResponsible.SurName);
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.UserResponsible != null)
+                        sb.Append(cur.UserResponsible.FirstName + " " + cur.UserResponsible.SurName);
+                    else
+                        sb.Append(ey);
+                    sb.Append(tdCloseMarkup);
+                    sb.Append("</tr>");
+                }
+            }
             // Performer User
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()).ShowOnStartPage == 1)
             {

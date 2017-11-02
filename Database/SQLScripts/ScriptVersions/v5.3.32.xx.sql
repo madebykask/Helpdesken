@@ -492,16 +492,17 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 	begin
 		SET @addlng=1
 	end
+
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'LanguageId' and sysobjects.name = N'tblRegion')
 BEGIN
                       ALTER TABLE tblRegion 
                       ADD LanguageId int NULL
                       DEFAULT 0
 END                    
-	if @addlng=1
-		BEGIN
-			update tblRegion set languageid=0
-		END
+if (@addlng = 1)
+BEGIN
+	execute	('update tblRegion set languageid=0')
+END
 GO
 
 DECLARE @addlng bit = 0
@@ -518,10 +519,10 @@ BEGIN
            
 END
 
-		if @addlng=1
-			BEGIN
-				update tblDepartment set languageid=0
-			END
+if (@addlng=1)
+BEGIN
+	execute	('update tblDepartment set languageid=0')
+END
 GO
 
 DECLARE @addlng bit = 0
@@ -537,10 +538,10 @@ BEGIN
                       DEFAULT 0
                       
 END					
-		if @addlng=1
-			BEGIN
-				update tblComputerUsers set languageid=0
-			END
+if @addlng=1
+BEGIN
+    execute	('update tblComputerUsers set languageid=0')	
+END
 GO
 
 INSERT INTO [dbo].[tblComputerUserFieldSettings]

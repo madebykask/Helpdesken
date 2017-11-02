@@ -287,6 +287,10 @@ EditPage.prototype.loadExtendedCase = function () {
                     priority_id: { Value: fieldValues.PriorityId },
                     log_textinternal: { Value: '' },
                     case_relation_type: { Value: fieldValues.CaseRelationType },
+                    persons_email: { Value: fieldValues.PersonsEmail },
+                    persons_cellphone: { Value: fieldValues.PersonsCellphone },
+                    place: { Value: fieldValues.Place },
+                    costcentre: { Value: fieldValues.CostCentre },
                 }
             });
         pr.then(function () { self.onExtendedCaseLoaded() });
@@ -413,6 +417,10 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
     var _watchdate = fieldData.watchdate;
     var _log_textinternal = fieldData.log_textinternal;
     var _priority_id = fieldData.priority_id;
+    var _persons_email = fieldData.persons_email;
+    var _persons_cellphone = fieldData.persons_cellphone;
+    var _place = fieldData.place;
+    var _costcentre = fieldData.costcentre;
 
     if (_reportedby != undefined)
         $('#' + _caseFields.ReportedBy).val(_reportedby.Value);
@@ -437,9 +445,6 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
         }
         $('#' + _caseFields.DepartmentId).val(_department_id.Value);
         $('#' + _caseFields.DepartmentName).val(_department_id.SecondaryValue);
-
-
-
     }
     
     if (_ou_id_1 != undefined) {
@@ -461,7 +466,6 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
         $('#' + _caseFields.OUId).val(selectedOU_Id);
         $('#' + _caseFields.OUName).val(selectedOU_Name);
     }
-
 
     if (_region_id != undefined) {
         $('#' + _caseFields.RegionId).val(_region_id.Value);
@@ -512,6 +516,19 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
                 }).datepicker('setDate', _date);
         }
     }
+
+    if (_persons_email != undefined)
+        $('#' + _caseFields.PersonsEmail).val(_persons_email.Value);
+
+    if (_persons_cellphone != undefined)
+        $('#' + _caseFields.PersonsCellphone).val(_persons_cellphone.Value);
+
+    if (_place != undefined)
+        $('#' + _caseFields.Place).val(_place.Value);
+
+    if (_costcentre != undefined)
+        $('#' + _caseFields.CostCentre).val(_costcentre.Value);
+
 }
 
 EditPage.prototype.propagateLogNote = function () {
@@ -546,11 +563,15 @@ EditPage.prototype.refreshCasePage = function (updatedInfo) {
     $('#' + _caseFields.PersonsPhone).val(updatedInfo.PersonsPhone);
 
     $('#' + _caseFields.CaseTypeId).val(updatedInfo.CaseType_Id).change();
-
     $('#' + _caseFields.ProductAreaId).val(updatedInfo.ProductArea_Id).change();
     $('#' + _caseFields.WorkingGroupId).val(updatedInfo.WorkingGroup_Id).change();
     $('#' + _caseFields.WorkingGroupName).val(updatedInfo.WorkingGroupName);
     $('#' + _caseFields.PriorityId).val(updatedInfo.Priority_Id).change();
+
+    $('#' + _caseFields.PersonsEmail).val(updatedInfo.PersonsEmail);
+    $('#' + _caseFields.PersonsCellphone).val(updatedInfo.PersonsCellphone);
+    $('#' + _caseFields.Place).val(updatedInfo.Place);
+    $('#' + _caseFields.CostCentre).val(updatedInfo.CostCentre);
 
     $('#' + _caseFields.PlanDate).datepicker({
         format: updatedInfo.DateFormat.toLowerCase(),
@@ -1530,7 +1551,7 @@ EditPage.prototype.init = function (p) {
             var stepId = parseInt($('#steps').val()) || 0;
 
             if (stepId > 0) {
-                isValid = self.isExtendedCaseValid(false, true, 29);
+                isValid = self.isExtendedCaseValid(false, true);
             }
             else {
                 isValid = self.isExtendedCaseValid(false, false);

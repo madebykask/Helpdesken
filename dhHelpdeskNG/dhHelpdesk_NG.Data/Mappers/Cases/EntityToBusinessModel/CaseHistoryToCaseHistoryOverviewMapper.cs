@@ -162,6 +162,14 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
                     }
                     : null,
 
+                UserResponsible = data.UserResponsible != null
+                    ? new UserBasicOvierview
+                    {
+                        Id = data.UserResponsible.Id ?? 0,
+                        FirstName = data.UserResponsible.FirstName,
+                        SurName = data.UserResponsible.SurName
+                    }
+                    : null,
 
                 Priority = data.Priority != null
                     ? new PriorityOverview

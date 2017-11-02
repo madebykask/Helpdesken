@@ -170,6 +170,12 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
                 return new MvcHtmlString(string.Empty);
         }
 
+        private static MvcHtmlString BuildProcuctAreaDropdownButton(IList<ProductArea> pal)
+        {
+            var pas = BuildProcuctAreaDropdownButtonString(pal);
+            return new MvcHtmlString(pas);
+        }
+
         public static MvcHtmlString CategoryDropdownButtonString(this HtmlHelper helper, IList<Category> cats)
         {
             if (cats != null)
@@ -615,35 +621,36 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
             return new MvcHtmlString(sb.ToString());
         }
 
-        private static MvcHtmlString BuildProcuctAreaDropdownButton(IList<ProductArea> pal)
-        {
-            string htmlOutput = string.Empty;
+//        private static MvcHtmlString BuildProcuctAreaDropdownButton(IList<ProductArea> pal)
+//        {
+//            string htmlOutput = string.Empty;
+//
+//            foreach (ProductArea pa in pal)
+//            {
+//
+//                bool hasChild = false;
+//                if (pa.SubProductAreas != null)
+//                    if (pa.SubProductAreas.Where(s => s.IsActive != 0 && s.ShowOnExternalPage != 0).ToList().Count > 0)
+//                        hasChild = true;
+//
+//                if (hasChild)
+//                    htmlOutput += "<li class='dropdown-submenu'>";
+//                else
+//                    htmlOutput += "<li>";
+//
+//                htmlOutput += "<a href='#' value=" + pa.Id.ToString() + ">" + pa.Name + "</a>";
+//                if (hasChild)
+//                {
+//                    htmlOutput += "<ul class='dropdown-menu'>";
+//                    htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.Where(s => s.IsActive != 0 && s.ShowOnExternalPage != 0).ToList());
+//                    htmlOutput += "</ul>";
+//                }
+//                htmlOutput += "</li>";
+//            }
+//
+//            return new MvcHtmlString(htmlOutput);
+//        }
 
-            foreach (ProductArea pa in pal)
-            {
-
-                bool hasChild = false;
-                if (pa.SubProductAreas != null)
-                    if (pa.SubProductAreas.Where(s => s.IsActive != 0 && s.ShowOnExternalPage != 0).ToList().Count > 0)
-                        hasChild = true;
-
-                if (hasChild)
-                    htmlOutput += "<li class='dropdown-submenu'>";
-                else
-                    htmlOutput += "<li>";
-
-                htmlOutput += "<a href='#' value=" + pa.Id.ToString() + ">" + pa.Name + "</a>";
-                if (hasChild)
-                {
-                    htmlOutput += "<ul class='dropdown-menu'>";
-                    htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.Where(s => s.IsActive != 0 && s.ShowOnExternalPage != 0).ToList());
-                    htmlOutput += "</ul>";
-                }
-                htmlOutput += "</li>";
-            }
-
-            return new MvcHtmlString(htmlOutput);
-        }
         private static MvcHtmlString BuildCategoryDropdownButton(IList<Category> cats)
         {
             string htmlOutput = string.Empty;
@@ -831,6 +838,40 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
             return new MvcHtmlString(sb.ToString());
         }
 
+        public static string ProductAreaDropdownString(IList<ProductArea> pal, bool isTakeOnlyActive = true)
+        {
+            return pal != null ? BuildProcuctAreaDropdownButtonString(pal) : string.Empty;
+        }
+
+        private static string BuildProcuctAreaDropdownButtonString(IList<ProductArea> pal)
+        {
+            string htmlOutput = string.Empty;
+
+            foreach (ProductArea pa in pal)
+            {
+
+                bool hasChild = false;
+                if (pa.SubProductAreas != null)
+                    if (pa.SubProductAreas.Where(s => s.IsActive != 0 && s.ShowOnExternalPage != 0).ToList().Count > 0)
+                        hasChild = true;
+
+                if (hasChild)
+                    htmlOutput += "<li class='dropdown-submenu'>";
+                else
+                    htmlOutput += "<li>";
+
+                htmlOutput += "<a href='#' value=" + pa.Id.ToString() + ">" + pa.Name + "</a>";
+                if (hasChild)
+                {
+                    htmlOutput += "<ul class='dropdown-menu'>";
+                    htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.Where(s => s.IsActive != 0 && s.ShowOnExternalPage != 0).ToList());
+                    htmlOutput += "</ul>";
+                }
+                htmlOutput += "</li>";
+            }
+
+            return htmlOutput;
+        }
 
         #endregion
     }

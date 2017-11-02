@@ -863,6 +863,7 @@
                 DBType = customerToCopySettings.DBType,
                 ComputerUserInfoListLocation = customerToCopySettings.ComputerUserInfoListLocation,
                 ComputerUserLog = customerToCopySettings.ComputerUserLog,
+                CustomerInExtendedSearch = customerToCopySettings.CustomerInExtendedSearch,
                 StateSecondaryFilterFormat = customerToCopySettings.StateSecondaryFilterFormat,
                 CreateCaseFromOrder = customerToCopySettings.CreateCaseFromOrder,
                 LeadTimeFromProductAreaSetDate = customerToCopySettings.LeadTimeFromProductAreaSetDate,
@@ -883,6 +884,7 @@
                 CalendarWGRestriction = customerToCopySettings.CalendarWGRestriction,
                 ModuleExtendedCase = customerToCopySettings.ModuleExtendedCase,
                 AttachmentPlacement = customerToCopySettings.AttachmentPlacement,
+                M2TNewCaseMailTo = customerToCopySettings.M2TNewCaseMailTo,
             };
 
             //Get CaseSettings to copy

@@ -28,6 +28,8 @@
             ReportedBy: "CaseDataModel_ReportedBy",
             PersonsName: "CaseDataModel_PersonsName",
             PersonsPhone: "CaseDataModel_PersonsPhone",
+            PersonsEmail: "CaseDataModel_PersonsEmail",
+            PersonsCellphone: "CaseDataModel_PersonsCellphone",
             UserCode: "CaseDataModel_UserCode",
             RegionId: "CaseDataModel_Region_Id",
             DepartmentId: "CaseDataModel_Department_Id",
@@ -44,11 +46,13 @@
             SubStatusId: "CaseDataModel_StateSecondary_Id",
             CausingPartId: "CaseDataModel_CausingPartId",
             PlanDate: "CaseDataModel_PlanDate",
+            Place: "CaseDataModel_Place",
             WatchDate: "CaseDataModel_WatchDate",
             FinishingDate: "CaseDataModel_FinishingDate",
             ClosingReasonId: "CaseDataModel_FinishingType_Id",
             SourceId: "CaseDataModel_RegistrationSourceCustomer_Id",
-            log_InternalText: "CaseDataModel_Text_Internal"
+            log_InternalText: "CaseDataModel_Text_Internal",
+            CostCentre: "CaseDataModel_CostCentre",
         },
 
         caseInitValues: {
@@ -68,6 +72,10 @@
             PlanDate: '@(Model.CaseDataModel.PlanDate != null ? Model.CaseDataModel.PlanDate.Value.ToString() : "" )',
             WatchDate: '@(Model.CaseDataModel.WatchDate != null ? Model.CaseDataModel.WatchDate.Value.ToString() : "" )',
             PriorityId: '@Model.CaseDataModel.Priority_Id',
+            PersonsEmail: '@Model.CaseDataModel.PersonsEmail',
+            PersonsCellphone: '@Model.CaseDataModel.PersonsCellphone',
+            Place: '@Model.CaseDataModel.Place',
+            CostCentre: '@Model.CaseDataModel.CostCentre',
         },
 
         extendedCaseGuid: '@(Model.ExtendedCaseDataModel.ExtendedCaseGuid)',

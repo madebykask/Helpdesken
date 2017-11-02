@@ -33,5 +33,7 @@
         public DateTime ChangedDate { get; private set; }
 
         public CircularCaseFilter CaseFilter { get; set; }
+
+        public int? MailTemplateId { get; set; }
     }
 }

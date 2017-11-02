@@ -285,6 +285,9 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public bool IsFollowUp { get; set; }
 
+        public bool CaseUnlockAccess { get; set; }
+        public bool CaseInternalLogAccess { get; set; }
+
 		public List<ExternalInvoiceModel> ExternalInvoices { get; set; }
 
         public string FollowerUsers { get; set; }
@@ -352,6 +355,8 @@ namespace DH.Helpdesk.Web.Models.Case
     public class AdvancedSearchIndexViewModel
     {
         public bool DoSearchAtBegining { get; set; }
+
+        public bool IsExtSearch { get; set; }
 
         public CaseSearchFilterData CaseSearchFilterData { get; set; }
 

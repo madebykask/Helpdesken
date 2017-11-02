@@ -142,6 +142,8 @@
                 entity.FinishingDateTo = businessModel.CaseFilter.FinishingDateTo;
                 entity.SelectedProcent = businessModel.CaseFilter.SelectedProcent;
 
+                entity.MailTemplate_Id = businessModel.MailTemplateId;
+
                 foreach (var id in businessModel.RelatedCaseIds)
                 {
                     entity.QuestionnaireCircularPartEntities.Add(
@@ -172,6 +174,11 @@
                         new QuestionnaireCircularWorkingGroupEntity { WorkingGroupId = id });
                 }
 
+                foreach(var email in businessModel.ExtraEmails)
+                {
+                    entity.QuestionnaireCircularExtraEmailEntities.Add(new QuestionnaireCircularExtraEmailEntity { Email = email });
+                }
+
                 circularRepository.Add(entity);
 
                 uof.Save();
@@ -196,6 +203,8 @@
                 entity.FinishingDateFrom = businessModel.CaseFilter.FinishingDateFrom;
                 entity.FinishingDateTo = businessModel.CaseFilter.FinishingDateTo;
                 entity.SelectedProcent = businessModel.CaseFilter.SelectedProcent;
+
+                entity.MailTemplate_Id = businessModel.MailTemplateId;
 
 
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
@@ -254,6 +263,15 @@
                     }).ToList()
                     , (a, b) => a.WorkingGroupId == b.WorkingGroupId);
 
+                var circularExtraEmailRepository = uof.GetRepository<QuestionnaireCircularExtraEmailEntity>();
+                circularExtraEmailRepository.MergeList(x => x.QuestionnaireCircular_Id == businessModel.Id
+                    , businessModel.ExtraEmails.Select(y => new QuestionnaireCircularExtraEmailEntity
+                    {
+                        Email = y,
+                        QuestionnaireCircular_Id = businessModel.Id
+                    }).ToList()
+                    , (a, b) => a.Email.Equals(b.Email));
+
                 circularRepository.Update(
                 entity,
                 x => x.CreatedDate,
@@ -274,12 +292,14 @@
                 var circularCaseTypeRepository = uof.GetRepository<QuestionnaireCircularCaseTypeEntity>();
                 var circularProductAreaRepository = uof.GetRepository<QuestionnaireCircularProductAreaEntity>();
                 var circularWorkingGroupRepository = uof.GetRepository<QuestionnaireCircularWorkingGroupEntity>();
+                var circularExtraEmailRepository = uof.GetRepository<QuestionnaireCircularExtraEmailEntity>();
 
                 circularPartRepository.DeleteWhere(x => x.QuestionnaireCircular_Id == id);
                 circularDepartmentRepository.DeleteWhere(x => x.QuestionnaireCircularId == id);
                 circularCaseTypeRepository.DeleteWhere(x => x.QuestionnaireCircularId == id);
                 circularProductAreaRepository.DeleteWhere(x => x.QuestionnaireCircularId == id);
                 circularWorkingGroupRepository.DeleteWhere(x => x.QuestionnaireCircularId == id);
+                circularExtraEmailRepository.DeleteWhere(x => x.QuestionnaireCircular_Id == id);
                 circularRepository.DeleteById(id);
 
                 uof.Save();
@@ -295,6 +315,16 @@
                 circularPartRepository.DeleteWhere(x => x.QuestionnaireCircular_Id == cirularId && x.Case_Id == caseId);
 
                 uof.Save();
+            }
+        }
+
+        public List<string> GetCircularExtraEmails(int circularId)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularEmailsRepository = uof.GetRepository<QuestionnaireCircularExtraEmailEntity>();
+                var emails = circularEmailsRepository.GetAll().Where(x => x.QuestionnaireCircular_Id == circularId).Select(x => x.Email).ToList();
+                return emails;
             }
         }
 
@@ -366,34 +396,40 @@
         {
             this.SetStatus(circularId, CircularStates.Sent);
 
-            MailTemplate mailTemplate = this.mailTemplateService.GetTemplate(
-                (int)QuestionnaireTemplates.Questionnaire,
-                operationContext);
+            var circular = GetById(circularId);
+            var mailTemplate = circular?.MailTemplateId != null
+                ? mailTemplateService.GetTemplateById(circular.MailTemplateId.Value, operationContext)
+                : mailTemplateService.GetTemplate((int) QuestionnaireTemplates.Questionnaire, operationContext);
 
             List<BusinessLogic.MapperData.Participant> participants = this.GetAllParticipants(circularId);
+            var extraEmails = GetCircularExtraEmails(circularId).ToList();
 
             List<QuestionnaireMailItem> mails = this.GetMails(
                 actionAbsolutePath,
                 mailTemplate,
                 participants,
-                operationContext.CustomerId);
+                operationContext.CustomerId,
+                extraEmails);
 
             this.SendMails(mails, operationContext.DateAndTime, operationContext.CustomerId);
         }
 
         public void Remind(string actionAbsolutePath, int circularId, OperationContext operationContext)
         {
-            MailTemplate mailTemplate = this.mailTemplateService.GetTemplate(
-                (int)QuestionnaireTemplates.Reminder,
-                operationContext);
+            var circular = GetById(circularId);
+            var mailTemplate = circular?.MailTemplateId != null
+                ? mailTemplateService.GetTemplateById(circular.MailTemplateId.Value, operationContext)
+                : mailTemplateService.GetTemplate((int)QuestionnaireTemplates.Reminder, operationContext);
 
             List<BusinessLogic.MapperData.Participant> participants = this.GetNotAnsweredParticipants(circularId);
+            var extraEmails = GetCircularExtraEmails(circularId).ToList();
 
             List<QuestionnaireMailItem> mails = this.GetMails(
                 actionAbsolutePath,
                 mailTemplate,
                 participants,
-                operationContext.CustomerId);
+                operationContext.CustomerId,
+                extraEmails);
 
             this.SendMails(mails, operationContext.DateAndTime, operationContext.CustomerId);
         }
@@ -464,7 +500,7 @@
             }
         }
 
-        public List<OptionResult> GetResults(int circularId, DateTime? from, DateTime? to)
+        public List<OptionResult> GetResults(int circularId, DateTime? from, DateTime? to, List<int> departmentIds)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
@@ -474,6 +510,7 @@
                         .GetCircularQuestionnaireQuestionResultEntities(circularId)
                         .GetQuestionResultDateFrom(from)
                         .GetQuestionResultDateTo(to)
+                        .GetQuestionResultDepartment(departmentIds)
                         .MapToOptionResults();
 
                 return overviews;
@@ -649,7 +686,7 @@
         private static EmailMarkValues CreateMarkValues(
             string actionAbsolutePath,
             Guid guid,
-            decimal caseNumber,
+            string caseNumber,
             string caseCaption,
             string caseDescription)
         {
@@ -657,7 +694,7 @@
             path = string.Format("<a href=\"{0}\">{0}</a>", path);
 
             var markValues = new EmailMarkValues();
-            markValues.Add("[#1]", caseNumber.ToString());
+            markValues.Add("[#1]", caseNumber);
             markValues.Add("[#4]", caseCaption);
             markValues.Add("[#5]", caseDescription);
             markValues.Add("[#99]", path);
@@ -771,7 +808,8 @@
             string actionAbsolutePath,
             MailTemplate mailTemplate,
             List<BusinessLogic.MapperData.Participant> participants,
-            int customerId)
+            int customerId,
+            List<string> emails)
         {
             var mails = new List<QuestionnaireMailItem>();
 
@@ -787,11 +825,26 @@
                         CreateMarkValues(
                             actionAbsolutePath,
                             connectedCase.Guid,
-                            connectedCase.CaseNumber,
+                            connectedCase.CaseNumber.ToString(),
                             connectedCase.Caption,
                             connectedCase.CaseDescription)
                     let mail = this.mailTemplateFormatter.Format(mailTemplate, markValues)
                     select new QuestionnaireMailItem(connectedCase.Guid, mailFrom, connectedCase.Email, mail));
+
+                if (emails != null && emails.Any())
+                {
+                    mails.AddRange(
+                    from email in emails
+                    let markValues =
+                        CreateMarkValues(
+                            actionAbsolutePath,
+                            Guid.Empty,
+                            string.Empty,
+                            string.Empty,
+                            string.Empty)
+                    let mail = this.mailTemplateFormatter.Format(mailTemplate, markValues)
+                    select new QuestionnaireMailItem(Guid.Empty, mailFrom, email, mail));
+                }
             }
 
             return mails;

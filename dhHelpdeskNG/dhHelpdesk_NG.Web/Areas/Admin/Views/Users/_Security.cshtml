@@ -1,4 +1,5 @@
-﻿@model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
+﻿@using DH.Helpdesk.Common.Enums
+@model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
 <div class="container" data-user="security">
     <table class="tableform">
         <tr>
@@ -146,6 +147,22 @@
                 <input data-field="dataSecurityPermission" type="checkbox" name="User.DataSecurityPermission" @(Model.User.DataSecurityPermission == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.DataSecurityPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet till datasäkerhetsinformation", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input data-field="caseUnlockPermission" type="checkbox" name="User.CaseUnlockPermission" @(Model.User.CaseUnlockPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.CaseUnlockPermission" value="0"/>
+                &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren har rättighet till") @Translation.GetCoreTextTranslation("Lås upp ärende").ToLower()
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input data-field="caseInternalLogPermission" type="checkbox" name="User.CaseInternalLogPermission" @(Model.User.CaseInternalLogPermission == 1 ? "checked=checked" : "") value="1" />
+                <input type="hidden" name="User.CaseInternalLogPermission" value="0" />
+                &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren får se Intern notering")
             </td>
         </tr>
         <tr>
@@ -321,14 +338,23 @@
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet till fakturering artikel", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
-        <tr>
-            <td>
-                @Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)
-            </td>
-            <td>
-                @Html.DropDownListFor(model => model.UserRights, Model.UserRoles, "", new {})
-            </td>
-        </tr>
+    <tr>
+        <td>
+            @Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)
+        </td>
+        <td>
+            @Html.DropDownListFor(model => model.UserRights, Model.UserRoles, "", new {})
+        </td>
+    </tr>
+    @*<tr>
+        <td>
+            @Translation.GetCoreTextTranslation("Lås upp ärende")
+        </td>
+        <td>
+            @Html.CheckBoxFor(x => x.User.CaseUnlockPermission)
+            &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren har rättighet till") @Translation.GetCoreTextTranslation("Lås upp ärende").ToLower()
+        </td>
+    </tr>*@
     </table>
 </div>
 <script type="text/javascript">
@@ -345,5 +371,4 @@
             $("#hidOrderP1").val(0);
         }
     });
-
 </script>

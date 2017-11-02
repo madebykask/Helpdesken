@@ -923,6 +923,18 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return result.Any() ? " - " + string.Join(" - ", result) : string.Empty;
         }
 
+        public static ProductArea GetParent(this ProductArea pa)
+        {
+            if (pa == null)
+                return null;
+
+            if (pa.ParentProductArea == null)
+                return pa;
+            else
+                return GetParent(pa.ParentProductArea);
+        }
+
+        
         #region Private
 
         private static List<string> GetCaseFieldsValues(CaseInputViewModel model, IEnumerable<CaseFieldSetting> fields)

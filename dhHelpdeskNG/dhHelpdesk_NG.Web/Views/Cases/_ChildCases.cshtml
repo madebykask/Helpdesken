@@ -15,6 +15,7 @@
                 <th>@Translation.CaseString(OtherFields.Administrator)</th>
                 <th>@Translation.CaseString(OtherFields.SubState)</th>
                 <th>@Translation.CaseString(LogFields.FinishingDate)</th>
+                <th>@Translation.CaseString(OtherFields.Priority)</th>
                 <th>@Translation.GetCoreTextTranslation("Koppla från")</th>
             </tr>
         </thead>
@@ -31,6 +32,7 @@
                     <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@Html.FormatUserName(childCase.CasePerformer , Model.Formatter)</a></td>
                     <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@childCase.SubStatus</a></td>
                     <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@Html.FormaDate(childCase.ClosingDate, Model.Formatter)</a></td>
+                    <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@childCase.Priority</a></td>
                     <td><a title="@Translation.GetCoreTextTranslation("Koppla från moder")" href="@Url.Action("RemoveChild", new {childCase.Id, childCase.ParentId})">
                             <i class="icon-remove"></i>
                     </a></td>

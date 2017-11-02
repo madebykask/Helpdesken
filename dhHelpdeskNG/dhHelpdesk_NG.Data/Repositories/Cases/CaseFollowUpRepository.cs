@@ -12,8 +12,10 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 	{
 		void AddCaseFollowUp(CaseFollowUp newCaseFollowUp);
 		CaseFollowUp GetCaseFollowUp(int userId, int caseId);
-		void UpdateCaseFollowUp(CaseFollowUp existCase);
-	}
+        CaseFollowUp GetCaseFollowUp( int caseId);
+        void UpdateCaseFollowUp(CaseFollowUp existCase);
+        void DeleteCaseFollowUp(CaseFollowUp caseFollowup);
+    }
 
 	public class CaseFollowUpRepository : RepositoryBase<CaseFollowUp>, ICaseFollowUpRepository
 	{
@@ -32,10 +34,22 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 			return DataContext.CaseFollowUps.SingleOrDefault(x => x.User_Id == userId && x.Case_Id == caseId);
 		}
 
-		public void UpdateCaseFollowUp(CaseFollowUp existCase)
+        public CaseFollowUp GetCaseFollowUp(int caseId)
+        {
+            return DataContext.CaseFollowUps.SingleOrDefault(x =>  x.Case_Id == caseId);
+        }
+
+        public void UpdateCaseFollowUp(CaseFollowUp existCase)
 		{
 			Update(existCase);
 			Commit();
 		}
-	}
+
+        public void DeleteCaseFollowUp(CaseFollowUp caseFollowup)
+        {
+            Delete(caseFollowup);
+            Commit();
+        }
+
+    }
 }

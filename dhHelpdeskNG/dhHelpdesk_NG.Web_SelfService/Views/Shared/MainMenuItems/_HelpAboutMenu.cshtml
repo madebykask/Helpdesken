@@ -1,0 +1,24 @@
+﻿@model DH.Helpdesk.SelfService.Models.Shared.LayoutViewModel
+
+
+@if (Model.CurrentCustomer != null && Model.CurrentCustomer.ShowHelpOnExternalPage != 0)
+{
+    <li class="dropdown blue">
+        <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
+            <i class="fa fa-info-circle mnu-fa"></i><br />
+            @Translation.Get("Need Help?", Enums.TranslationSource.TextTranslation)
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="@Url.Action("Index", "Help", new { customerId = Model.CustomerId, area = "" })">
+                @Translation.Get("Help", Enums.TranslationSource.TextTranslation)
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("About", "Help", new { customerId = Model.CustomerId, area = "" })">
+                @Translation.Get("About", Enums.TranslationSource.TextTranslation)
+                </a>
+            </li>
+        </ul>
+    </li>
+}

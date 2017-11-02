@@ -1,0 +1,12 @@
+﻿@model DH.Helpdesk.SelfService.Models.Shared.LayoutViewModel
+
+
+@if (Model.CurrentCustomer != null && Model.CurrentCustomer.ShowFAQOnExternalPage != 0)
+{
+    <li class="blue">
+        <a href="@Url.Action("Index", "FAQ", new { customerId = Model.CustomerId, area = "" })">
+            <i class="fa fa-question-circle mnu-fa"></i><br />
+            @Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)
+        </a>
+    </li>    
+}

@@ -34,5 +34,7 @@ dhHelpdeskNG/.vs/config/applicationhost.config
 
 dhHelpdeskNG/dhHelpdesk_NG.Web/ExtendedCaseWebApi/
 dhHelpdeskNG/dhHelpdesk_NG.Web/ExtendedCase/
+dhHelpdeskNG/dhHelpdesk_NG.Web_SelfService/ExtendedCase/
+dhHelpdeskNG/dhHelpdesk_NG.Web_SelfService/ExtendedCaseWebApi/
 
 dhHelpdeskNG/.vs/

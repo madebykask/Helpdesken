@@ -179,6 +179,7 @@
     <Compile Include="ParentChildCaseRelation.cs" />
     <Compile Include="Questionnaire\QuestionnaireCircularCaseTypeEntity.cs" />
     <Compile Include="Questionnaire\QuestionnaireCircularDepartmentEntity.cs" />
+    <Compile Include="Questionnaire\QuestionnaireCircularExtraEmailEntity.cs" />
     <Compile Include="Questionnaire\QuestionnaireCircularProductAreaEntity.cs" />
     <Compile Include="Questionnaire\QuestionnaireCircularWorkingGroupEntity.cs" />
     <Compile Include="Questionnaire\QuestionnaireType.cs" />

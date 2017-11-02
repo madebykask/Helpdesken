@@ -12,6 +12,7 @@ namespace DH.Helpdesk.Domain
         public string TableFieldId { get; set; }
         public string TableFieldName { get; set; }
         public string TableFieldGuid { get; set; }
+        public string TableFieldStatus { get; set; }
         public int SortOrder { get; set; }
         public int Status { get; set; }
     }

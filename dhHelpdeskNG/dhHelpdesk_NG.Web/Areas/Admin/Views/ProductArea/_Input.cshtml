@@ -149,7 +149,7 @@
                                         @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td style="vertical-align:top" class="span9">
-                                        <input type="checkbox" name="chkPermission" id="chkPermission" onchange="showWorkingGroup()" @(Model.WgSelected.Count > 0 ? "checked=checked" : "") value="0"/> @Translation.Get("Begränsa rättighet att skapa ärenden till", Enums.TranslationSource.TextTranslation)
+                                        <input type="checkbox" name="chkPermission" id="chkPermission" onchange="showWorkingGroup()" @(Model.WgSelected.Count > 0 ? "checked=checked" : "") value="1"/> @Translation.Get("Begränsa rättighet att skapa ärenden till", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
                             </table>
@@ -159,7 +159,7 @@
                             @Html.HiddenFor(model => model.ProductArea.ShowOnExtPageCases)
                         </div>
                     </div>
-                    <div class="row" id="divWorkingGroup" @(Model.WgSelected.Count > 0 ? "display:block" : "")>
+                    <div class="row" id="divWorkingGroup" @(Model.WgSelected.Count > 0 ? "display:block" : "" ) >
                         <div class="span20">
                             <table class="tableform">
                                 <tr>
@@ -228,7 +228,7 @@
     </div>
 </div>
 <script type="text/javascript">
-    
+
     $('#divCaseType ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');
@@ -240,6 +240,12 @@
         //        tableOptions.sortable = false;
         //        tableOptions.pager = false;
         //$("#tblSubProductArea").fixheadertable(tableOptions);
+        if (document.getElementById("chkPermission").checked == true) {
+            document.getElementById("divWorkingGroup").style.display = ""
+        }
+        else {
+            document.getElementById("divWorkingGroup").style.display = "none"
+        }
 
         var validator = $("#target").validate({
             rules: {
@@ -264,6 +270,7 @@
         }
         else {
             document.getElementById("divWorkingGroup").style.display = "none"
+            document.getElementById("chkPermission").checked = false
         }
     }
 
@@ -289,11 +296,11 @@
         //    // Ta bort bild
         //    document.getElementById("WgAvailable").options[document.getElementById("WgAvailable").selectedIndex] = null
         //}
-        
+
         $("#WgAvailable option:selected").remove().appendTo("#WgSelected");
         $("#WgAvailable").get(0).selectedIndex = -1;
         $("#WgSelected").get(0).selectedIndex = -1;
-        return false;        
+        return false;
     });
 
     $("#removeWg").click(function () {

@@ -3,6 +3,7 @@
 @using DH.Helpdesk.BusinessData.OldComponents
 @using System.Web.Optimization
 @using DH.Helpdesk.BusinessData.Enums.Case
+@using DH.Helpdesk.Web.Enums
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 
 @if (Model != null)
@@ -58,7 +59,7 @@
                                         
                      <tr>
                         <td>                                
-                            @Translation.Get("Status")                                   
+                            @Translation.GetCoreTextTranslation("Status")                                   
                         </td>
                         <td>
                             <select id="lstfilterCaseProgress" name="lstfilterCaseProgress" style="width:300px">
@@ -74,21 +75,29 @@
                      {
                          <tr>
                              <td>                                
-                                 @Translation.Get("Visa")                                
+                                 @Translation.GetCoreTextTranslation("Visa")                                
                              </td>
                              <td>
-                                 <select id="lstfilterMaxRows" name="lstfilterMaxRows" style="width:70px" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" >
+                                 <select id="lstfilterMaxRows" name="lstfilterMaxRows" style="width:70px" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" >
                                      @foreach (var r in Model.CaseSearchFilterData.filterMaxRows)
                                      {
                                          var curId = int.Parse(r.Value);                                                                             
                                          <option value="@r.Value" @curId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.MaxRows)> @r.Name </option>                                                                               
                                      }
                                  </select>
-                                  @Translation.Get("poster i sökresultat/Kund")                                 
+                                  @Translation.GetCoreTextTranslation("poster i sökresultat/Kund")                                 
                              </td>
                          </tr>                                         
                      }                                                
-                      
+                     <tr>
+                         <td>
+                             @Translation.GetCoreTextTranslation("Utökad sökning")
+                         </td>
+                         <td>
+                             <input type="checkbox" name="@CaseFilterFields.IsExtendedSearch" id="@CaseFilterFields.IsExtendedSearch" value="true"/>
+                             @Html.HiddenFor(m => m.CaseSearchFilterData.customerSetting.CustomerInExtendedSearch, new {id="customerInExtendedSearch"})
+                         </td>
+                     </tr>
                  </table>
              </div>
 
@@ -96,7 +105,7 @@
                  <table class="tableform">                                         
                      <tr>
                         <td>                                
-                            @Translation.Get("Anmälare")
+                            @Translation.GetCoreTextTranslation("Anmälare")
                         </td>
                         <td>                            
 	                        <input type="text" id="CaseInitiatorFilter" value="@Model.CaseSearchFilterData.CaseInitiatorFilter" name="CaseInitiatorFilter" />
