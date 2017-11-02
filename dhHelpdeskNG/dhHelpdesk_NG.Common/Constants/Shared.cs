@@ -37,4 +37,10 @@
         public const string Available = "available";
     }
 
+    public static class SearchFilter
+    {
+        public const int RecordsOnPage = 500;
+    }
+
+
 }

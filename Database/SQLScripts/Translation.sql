@@ -6330,13 +6330,18 @@ If not exists (select * from tblTextTranslation where text_id = 1872 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1873)
-	insert into tbltext (id, TextString) VALUES (1873, 'Ärende-tab')
+	insert into tbltext (id, TextString) VALUES (1873, 'Välj den tab som ska vara aktiv när ett nytt ärende skapas utifrån den här ärendemallen')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1873 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1873, 2, 'Välj den tab som ska vara aktiv när ett nytt ärende skapas utifrån den här ärendemallen')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1873, 2, 'Choose the default tab that should be active when a case is created from this case template')
 GO
 
-
+If not exists (select * from tbltext where id = 1874)
+	insert into tbltext (id, TextString) VALUES (1874, '(Antal inventarier som visas är begränsade till {0})')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1874 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1874, 2, '(Number of records for inventory is limited to {0})')
+GO
 
 
 -- *** Run this last when put translation script above this line **--

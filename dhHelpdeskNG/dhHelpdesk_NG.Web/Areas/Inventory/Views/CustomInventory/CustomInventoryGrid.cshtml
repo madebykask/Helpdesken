@@ -1,8 +1,10 @@
 ﻿@using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Inventory.Models.InventoryGridModel
-@Translation.Get("Poster i sökresultat"): @Model.Inventories.Count
+@Translation.Get("Poster i sökresultat"): @Model.Inventories.Count   @(Model.Inventories.Count >= DH.Helpdesk.Common.Constants.SearchFilter.RecordsOnPage ? string.Format(Translation.GetMasterDataTranslation("(Antal inventarier som visas är begränsade till {0})"), DH.Helpdesk.Common.Constants.SearchFilter.RecordsOnPage.ToString()) : "")
 
+@if (Model.Inventories.Any())
+{
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
@@ -45,3 +47,4 @@
         }
     </tbody>
 </table>
+                    }
