@@ -1645,6 +1645,9 @@ namespace DH.Helpdesk.Web.Controllers
                         m.CaseLog.Id = 0;
                     }
 
+                    m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
+
+
                 }
             }
 

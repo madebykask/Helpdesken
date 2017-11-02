@@ -154,6 +154,9 @@
                     </td>
                 </tr>
 
+                @if (Model.CaseInternalLogAccess)
+                {
+
                 <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote)">
                     <td>
                         @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, "Intern notering")
@@ -220,6 +223,10 @@
                         </div>
                     </td>
                 </tr>
+
+                }
+               
+
                 @*@if (Model.templateistrue != 1)
                     {*@
                 @if (Model.CaseLog.Id == 0 && !Model.newLog)

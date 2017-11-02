@@ -70,12 +70,19 @@ function getEmailsToRemove() {
 }
 
 function getHtmlFromEmails(emails) {
+   
+    if (emails == undefined)
+    {
+        return [];
+    }
+    
     var arr = emails.split(";");
     var result = [];
     for (var i = 0; i < arr.length - 1; i++) {
         result.push("<span class='case-email-selected'>" + arr[i] + ";</span>");
     }
     if (result.length > 0) result.push("<span>&nbsp</span>");
+
     return result.join("");
 }
 
