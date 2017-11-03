@@ -3557,6 +3557,15 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
+            /* #58573 Check that user have access to write to InternalLogNote */
+            bool caseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
+
+            if (!caseInternalLogAccess)
+            {
+                m.caseLog.TextInternal = null;
+            }
+
+
             var orginalInternalLog = caseLog.TextInternal;
 
             if (caseLog.SendLogToParentChildLog.HasValue && caseLog.SendLogToParentChildLog.Value
