@@ -92,6 +92,10 @@
     <Reference Include="itextsharp">
       <HintPath>..\packages\iTextSharp.4.1.2\lib\itextsharp.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -308,6 +312,7 @@
     <Compile Include="Infrastructure\FederatedAuthenticationService.cs" />
     <Compile Include="Infrastructure\Filters\Notifiers\NotifierFilters.cs" />
     <Compile Include="Infrastructure\Helpers\AppConfigHelper.cs" />
+    <Compile Include="Infrastructure\Helpers\UrlsHelper.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\ConditionalValidationAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedDisplayAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedIntegerAttribute.cs" />
@@ -322,6 +327,7 @@
     <Compile Include="Infrastructure\SessionFacade.cs" />
     <Compile Include="Infrastructure\Session\PageFilters.cs" />
     <Compile Include="Infrastructure\Helpers\WebMethodsExtensions.cs" />
+    <Compile Include="Infrastructure\SsoLogger.cs" />
     <Compile Include="Infrastructure\StringModelBinding.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\DeletedFile.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\DeletedItem.cs" />
@@ -720,6 +726,7 @@
     <Content Include="Content\fonts\fontawesome-webfont.woff2" />
     <Content Include="Content\fonts\FontAwesome.otf" />
     <Content Include="Views\Case\_CaseAddFollowers.cshtml" />
+    <Content Include="log4net.config" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="img-profile\SelfService-StartPage.jpg" />
     <Content Include="Scripts\jquery-1.8.3.js" />
