@@ -4857,6 +4857,8 @@ namespace DH.Helpdesk.Web.Controllers
             var isCreateNewCase = caseId == 0;
             m.CaseLock = caseLocked;
 
+            m.CaseUnlockAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseUnlockPermission);
+
             m.MailTemplates = this._mailTemplateService.GetCustomMailTemplatesList(customerId).ToList();
 
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
@@ -4889,9 +4891,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var isFlwup = _caseFollowUpService.IsCaseFollowUp(SessionFacade.CurrentUser.Id, caseId);
                 m.IsFollowUp = isFlwup;
 
-                m.CaseUnlockAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseUnlockPermission);
-                m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
-
+    
                 var editMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
                 if (m.case_.Unread != 0 && updateState && editMode == Enums.AccessMode.FullAccess)
                     this._caseService.MarkAsRead(caseId);
@@ -4913,6 +4913,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.MapToFollowerUsers(caseFolowerUsers);
             }
 
+            m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
 
             var customerUserSetting = this._customerUserService.GetCustomerSettings(customerId, userId);
             if (customerUserSetting == null)
