@@ -57,6 +57,8 @@ namespace DH.Helpdesk.Dal.Repositories
         MyCase[] GetMyCases(int userId, int? count = null);
         IList<Case> GetProblemCases(int problemId);
         IList<int> GetCasesIdsByType(int caseTypeId);
+
+        List<Case> GetTop100CasesToTest();
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -467,5 +469,10 @@ namespace DH.Helpdesk.Dal.Repositories
             return langid;
         }
 
+
+        public List<Case> GetTop100CasesToTest()
+        {
+            return DataContext.Cases.Take(100).ToList();            
+        }
     }
 }

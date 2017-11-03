@@ -158,6 +158,8 @@ namespace DH.Helpdesk.Services.Services
         void DeleteChildCaseFromParent(int id, int parentId);
         bool AddParentCase(int id, int parentId, bool independent = false);
 		void SetIndependentChild(int caseID, bool independentChild);
+
+        IList<Case> GetTop100CasesForTest();
 	}
 
     public class CaseService : ICaseService
@@ -2052,6 +2054,11 @@ namespace DH.Helpdesk.Services.Services
                         break;
                 }
             }
+        }
+
+        public IList<Case> GetTop100CasesForTest()
+        {
+            return _caseRepository.GetTop100CasesToTest();
         }
 
         #region Private methods
