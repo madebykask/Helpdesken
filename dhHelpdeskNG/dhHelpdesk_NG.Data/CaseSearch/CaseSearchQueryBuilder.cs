@@ -855,7 +855,8 @@ namespace DH.Helpdesk.Dal.Repositories
                 return sb.ToString();
             }
 
-            sb.Append(" and (tblCustomerUser.[User_Id] = " + searchFilter.UserId + ")");
+            if (!searchFilter.IsExtendedSearch)
+                sb.Append(" and (tblCustomerUser.[User_Id] = " + searchFilter.UserId + ")");
 
             ////////////////////////////////////////////////////////////////////////////////////
             // anvandaren far bara se avdelningar som den har behorighet till

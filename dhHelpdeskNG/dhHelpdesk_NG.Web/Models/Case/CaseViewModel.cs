@@ -370,7 +370,9 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public CaseRemainingTimeViewModel RemainingTime { get; set; }
 
-        public List<ItemOverview> SelectedCustomers { get; set; }        
+        public List<ItemOverview> SelectedCustomers { get; set; }
+
+        public List<ItemOverview> ExtendIncludedCustomers { get; set; }
     }
 
     public class CaseSearchResultModel

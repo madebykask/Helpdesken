@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+
 namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Linq;
@@ -42,6 +44,8 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The <see cref="CustomerSettings"/>.
         /// </returns>
         CustomerSettings GetCustomerSettings(int customerId);
+
+        List<int> GetExtendedSearchIncludedCustomers();
     }
 
     /// <summary>
@@ -103,6 +107,11 @@ namespace DH.Helpdesk.Dal.Repositories
             return entities
                 .Select(this.toBusinessModelMapper.Map)
                 .FirstOrDefault();
+        }
+
+        public List<int> GetExtendedSearchIncludedCustomers()
+        {
+            return this.Table.Where(x => x.CustomerInExtendedSearch == 1).Select(x => x.Customer_Id).ToList();
         }
     }
 }

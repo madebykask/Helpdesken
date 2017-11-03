@@ -384,6 +384,10 @@ namespace DH.Helpdesk.Web.Controllers
             var availableCustomers = customers.Select(c => new ItemOverview(c.CustomerName, c.CustomerId.ToString())).OrderBy(c => c.Name).ToList();
 
             m.SelectedCustomers = availableCustomers;
+            
+            var extendIncludedCustomerIds = _settingService.GetExtendedSearchIncludedCustomers();
+            var extCustomers = _customerService.GetAllCustomers().Where(x => extendIncludedCustomerIds.Contains(x.Id)).Select(c => new ItemOverview(c.Name, c.Id.ToString())).OrderBy(c => c.Name).ToList();
+            m.ExtendIncludedCustomers = extCustomers;
 
             CaseSearchModel advancedSearchModel;
             if ((clearFilters != null && clearFilters.Value)
@@ -490,12 +494,23 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var customers = frm.ReturnFormValue("currentCustomerId").Split(',').Select(x => Int32.Parse(x)).ToList();
-
+            var isExtendedSearch = frm.IsFormValueTrue(CaseFilterFields.IsExtendedSearch);
+            if (isExtendedSearch)
+            {
+                var includedCustomers = _settingService.GetExtendedSearchIncludedCustomers();
+                foreach (var includedCustomer in includedCustomers)
+                {
+                    if (!customers.Contains(includedCustomer))
+                    {
+                        customers.Add(includedCustomer);
+                    }
+                }
+            }
             var res = new List<Tuple<List<Dictionary<string, object>>, GridSettingsModel>>();
 
             foreach (var customer in customers)
             {
-                res.Add(AdvancedSearchForCustomer(frm, customer));
+                res.Add(AdvancedSearchForCustomer(frm, customer, isExtendedSearch));
             }
 
             var totalCount = res.Sum(x => x.Item1.Count);
@@ -6900,7 +6915,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         #endregion
 
-        private Tuple<List<Dictionary<string, object>>, GridSettingsModel> AdvancedSearchForCustomer(FormCollection frm, int customerId)
+        private Tuple<List<Dictionary<string, object>>, GridSettingsModel> AdvancedSearchForCustomer(FormCollection frm, int customerId, bool isExtendedSearch = false)
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
@@ -6909,7 +6924,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var m = new CaseSearchResultModel();
 
-
+            f.IsExtendedSearch = isExtendedSearch;
             f.CustomerId = customerId;//int.Parse(frm.ReturnFormValue("currentCustomerId"));
             f.Customer = frm.ReturnFormValue("lstfilterCustomers");
             f.CaseProgress = frm.ReturnFormValue("lstFilterCaseProgress");
@@ -7078,8 +7093,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             SessionFacade.CurrentAdvancedSearch = sm;
             #endregion
-
-            var isExtendedSearch = frm.IsFormValueTrue(CaseFilterFields.IsExtendedSearch);
+            
             var availableDepIds = new List<int> { 0 };
             var availableWgIds = new List<int> { 0 };
             var availableCustomerIds = new List<int> { 0 };
