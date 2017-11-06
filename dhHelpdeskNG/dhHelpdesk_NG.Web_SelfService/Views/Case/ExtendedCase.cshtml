@@ -96,27 +96,34 @@
 
 <div class="jumbotron greybar">
     <div class="container-fluid">
-        <div class="col-lg-3 secnav">
-            <div class="col-lg-4" style="padding-left:0;">
+        <div class="col-lg-12 secnav">
+            <div class="col-lg-12" style="padding-left:0;">
                 <input id="btnSave" type="button" value='@Translation.Get("Save", Enums.TranslationSource.TextTranslation)' class="btn btn-default" />
             </div>
-            <div class="col-lg-4">
-                <div class="input-group">
-                    <select id="steps" name="steps" class="dropdown-group">
-                        <option value="0" class="form-control">@Translation.Get(Text.SelectStep)</option>
-                        @if (Model.WorkflowSteps != null && Model.WorkflowSteps.Any())
-                        {
-                            foreach (var step in Model.WorkflowSteps)
+            @if (Model.WorkflowSteps != null && Model.WorkflowSteps.Any())
+            {
+                <div class="col-lg-8">
+                    <div class="input-group">
+                        <select id="steps" name="steps" class="dropdown-group">
+                            <option value="0" class="form-control">@Translation.Get(Text.SelectStep)</option>
+                            @if (Model.WorkflowSteps != null && Model.WorkflowSteps.Any())
                             {
-                                <option data-next-step="@step.NextStep" value="@step.CaseTemplateId">@Translation.Get(step.Name)</option>
+                                foreach (var step in Model.WorkflowSteps)
+                                {
+                                    <option data-next-step="@step.NextStep" value="@step.CaseTemplateId">@Translation.Get(step.Name)</option>
+                                }
                             }
-                        }
-                    </select>
-                    <span class="input-group-btn">
-                        <input id="btnGo" type="button" class="btn btn-default go-button" value="@Translation.Get("Send")" />
-                    </span>
+                        </select>
+                        <span class="input-group-btn">
+                            <input id="btnGo" type="button" class="btn btn-default go-button" value="@Translation.Get("Send")" />
+                        </span>
+                    </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="col-lg-8"></div>
+            }
         </div>
     </div>
 </div>
