@@ -384,7 +384,7 @@ namespace DH.Helpdesk.Web.Controllers
             var availableCustomers = customers.Select(c => new ItemOverview(c.CustomerName, c.CustomerId.ToString())).OrderBy(c => c.Name).ToList();
 
             m.SelectedCustomers = availableCustomers;
-            
+
             var extendIncludedCustomerIds = _settingService.GetExtendedSearchIncludedCustomers();
             var extCustomers = _customerService.GetAllCustomers().Where(x => extendIncludedCustomerIds.Contains(x.Id)).Select(c => new ItemOverview(c.Name, c.Id.ToString())).OrderBy(c => c.Name).ToList();
             m.ExtendIncludedCustomers = extCustomers;
@@ -7094,7 +7094,7 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CurrentAdvancedSearch = sm;
             #endregion
             
-            var availableDepIds = new List<int> { 0 };
+            var limitedDepIds = new List<int> { 0 };
             var availableWgIds = new List<int> { 0 };
             var availableCustomerIds = new List<int> { 0 };
             if (isExtendedSearch)
@@ -7103,7 +7103,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (user != null)
                 {
                     availableCustomerIds.AddRange(user.Cs.Select(x => x.Id));
-                    availableDepIds.AddRange(user.Departments.Select(x => x.Id));
+                    limitedDepIds.AddRange(user.Departments.Select(x => x.Id));
                     availableWgIds.AddRange(user.UserWorkingGroups.Select(x => x.WorkingGroup_Id));
                 }
             }
@@ -7129,7 +7129,7 @@ namespace DH.Helpdesk.Web.Controllers
                                 };
                 if (isExtendedSearch)
                 {
-                    if (availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
+                    if (!limitedDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
                         && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId)
                         && availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
                     {
