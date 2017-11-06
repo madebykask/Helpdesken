@@ -7129,17 +7129,27 @@ namespace DH.Helpdesk.Web.Controllers
                                 };
                 if (isExtendedSearch)
                 {
-                    if (!limitedDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
-                        && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId)
-                        && availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
+                    var infoAvailableInExtended = false;
+                    if (SessionFacade.CurrentUser.UserGroupId == UserGroups.User ||
+                        SessionFacade.CurrentUser.UserGroupId == UserGroups.Administrator)
                     {
-                        jsRow.Add("ExtendedAvailable", true);
+                        if (!limitedDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
+                            && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId)
+                            && availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
+                        {
+                            infoAvailableInExtended = true;
+                        }
                     }
                     else
                     {
-                        jsRow.Add("ExtendedAvailable", false);
+                        if (availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
+                        {
+                            infoAvailableInExtended = true;
+                        }
                     }
+                    jsRow.Add("ExtendedAvailable", infoAvailableInExtended);
                 }
+
                 foreach (var col in gridSettings.columnDefs)
                 {
                     var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);
