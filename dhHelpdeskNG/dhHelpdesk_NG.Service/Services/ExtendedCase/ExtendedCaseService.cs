@@ -4,6 +4,8 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.ExtendedCase;
 using DH.Helpdesk.Dal.Repositories.Cases;
 using DH.Helpdesk.Domain.ExtendedCaseEntity;
+using DH.Helpdesk.Services.Enums;
+using OfficeOpenXml.Table.PivotTable;
 
 namespace DH.Helpdesk.Services.Services.ExtendedCase
 {
@@ -72,21 +74,33 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
             //TODO: After refactoring needs to be changed
             extendedCaseData.FormModel.CaseId = initData.CaseId;            
             extendedCaseData.FormModel.LanguageId = initData.LanguageId;
-            extendedCaseData.FormModel.Path = globalSetting.ExtendedCasePath.Replace("[ExtendedCaseFormId]", extendedCaseData.FormModel.Id.ToString());
+            extendedCaseData.FormModel.Path = ExpandExtendedCasePath(globalSetting.ExtendedCasePath, extendedCaseData.FormModel.Id, initData);
 
             return extendedCaseData;
         }
+        
+        private string ExpandExtendedCasePath(string path, int formModelId, InitExtendedForm initData)
+        {
+            var expandedPath =
+                path.Replace(ExtendedCasePathTokens.ExtendedCaseFormId, formModelId.ToString())
+                    .Replace(ExtendedCasePathTokens.CustomerId, initData.CustomerId.ToString())
+                    .Replace(ExtendedCasePathTokens.LanguageId, initData.LanguageId.ToString())
+                    .Replace(ExtendedCasePathTokens.UserRole, initData.UserRole)
+                    .Replace(ExtendedCasePathTokens.CaseStatus, initData.CaseStateSecondaryId.ToString());
 
-		public ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, string userID)
-		{
-			return _extendedCaseDataRepository.CopyExtendedCaseToCase(extendedCaseDataID, caseID, userID);
-		}
+            return expandedPath;
+        }
 
-		public ExtendedCaseDataModel GetExtendedCaseFromCase(int caseID)
-		{
-			return _extendedCaseDataRepository.GetExtendedCaseDataByCaseId(caseID);
-		}
-	}
+        public ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, string userID)
+        {
+            return _extendedCaseDataRepository.CopyExtendedCaseToCase(extendedCaseDataID, caseID, userID);
+        }
+
+        public ExtendedCaseDataModel GetExtendedCaseFromCase(int caseID)
+        {
+            return _extendedCaseDataRepository.GetExtendedCaseDataByCaseId(caseID);
+        }
+    }
 
 
 }

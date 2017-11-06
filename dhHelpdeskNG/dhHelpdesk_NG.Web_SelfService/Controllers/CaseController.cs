@@ -603,8 +603,23 @@
                 }
             }
 
-            var initData = new InitExtendedForm(customerId, languageId, SessionFacade.CurrentUserIdentity.UserId, caseTemplateId, caseId);
+            if (caseId == 0)
+            {
+                caseModel.Customer_Id = customerId;
+                caseModel = LoadTemplateToCase(caseModel, caseTemplate);
+            }
+
+            /*Get StateSecondaryId if existing*/
+            int caseStateSecondaryId = 0;
+            if (caseModel != null && caseModel.StateSecondary_Id.HasValue)
+            {
+                var ss = _stateSecondaryService.GetStateSecondary(caseModel.StateSecondary_Id.Value);
+                caseStateSecondaryId = ss?.StateSecondaryId ?? 0;
+            }
+
+            var initData = new InitExtendedForm(customerId, languageId, SessionFacade.CurrentUserIdentity.UserId, caseTemplateId, caseId, UserRoleType.LineManager, caseStateSecondaryId);
             var lastError = string.Empty;
+
             var extendedCaseDataModel = _extendedCaseService.GenerateExtendedFormModel(initData, out lastError);
             if (extendedCaseDataModel == null)
             {
@@ -620,14 +635,12 @@
                 LanguageId = initData.LanguageId,
                 ExtendedCaseDataModel = extendedCaseDataModel,
                 CurrentUser = SessionFacade.CurrentUserIdentity.EmployeeNumber,
-                UserRole = UserRoleType.LineManager
+                UserRole = initData.UserRole,
+                StateSecondaryId =  caseStateSecondaryId,
+                CaseOU = caseModel.OU_Id.HasValue ? _ouService.GetOU(caseModel.OU_Id.Value) : null,
+                WorkflowSteps = GetWorkflowStepModel(customerId, caseId ?? 0, caseTemplateId ?? 0).ToList(),
+                CaseDataModel = caseModel
             };
-
-            if (model.CaseId == 0)
-            {
-                caseModel.Customer_Id = customerId;
-                caseModel = LoadTemplateToCase(caseModel, caseTemplate);
-            }
 
             if (string.IsNullOrEmpty(model.ExtendedCaseDataModel.FormModel.Name))
             {
@@ -636,22 +649,6 @@
 
                 if (caseTemplate != null)
                     model.ExtendedCaseDataModel.FormModel.Name = caseTemplate.Name;
-            }
-
-            model.CaseDataModel = caseModel;
-            model.WorkflowSteps = GetWorkflowStepModel(customerId, caseId ?? 0, caseTemplateId ?? 0).ToList();
-
-            /*Get OU if is existing*/
-            if (model.CaseDataModel.OU_Id.HasValue)
-                model.CaseOU = _ouService.GetOU(model.CaseDataModel.OU_Id.Value);
-
-            /*Get StateSecondaryId if existing*/
-            model.StateSecondaryId = 0;
-            if (model.CaseDataModel.StateSecondary_Id.HasValue)
-            {
-                var ss = _stateSecondaryService.GetStateSecondary(model.CaseDataModel.StateSecondary_Id.Value);
-                if (ss != null)
-                    model.StateSecondaryId = ss.StateSecondaryId;
             }
                 
             if (!caseId.IsNew() && !model.CaseDataModel.FinishingDate.HasValue)

@@ -267,6 +267,7 @@
     <Compile Include="DisplayValues\StringDisplayValue.cs" />
     <Compile Include="DisplayValues\StringsDisplayValue.cs" />
     <Compile Include="DisplayValues\UserNameDisplayValue.cs" />
+    <Compile Include="Enums\ExtendedCasePathTokens.cs" />
     <Compile Include="Exceptions\BusinessLogicException.cs" />
     <Compile Include="Exceptions\ElementaryValidationRulesException.cs" />
     <Compile Include="Exceptions\MarksNotFoundException.cs" />
