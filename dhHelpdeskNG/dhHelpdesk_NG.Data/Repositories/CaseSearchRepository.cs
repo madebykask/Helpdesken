@@ -400,13 +400,13 @@ namespace DH.Helpdesk.Dal.Repositories
             CustomerUser customerUserSettings;
             var userDepartments = new List<Department>();
 
-            if (f.IsExtendedSearch)
+            customerUserSettings = _customerUserRepository.GetCustomerSettings(f.CustomerId, userId);
+            if (f.IsExtendedSearch && customerUserSettings == null)
             {
                 customerUserSettings = _customerUserRepository.GetCustomerSettingsByCustomer(f.CustomerId);
             }
-            else
+            if (!f.IsExtendedSearch)
             {
-                customerUserSettings = this._customerUserRepository.GetCustomerSettings(f.CustomerId, userId);
                 userDepartments = _departmentRepository.GetDepartmentsByUserPermissions(userId, f.CustomerId).ToList();
             }
 

@@ -1199,7 +1199,7 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             //LockCaseToWorkingGroup
-            if (searchCriteria.UserGroupId < 3 && searchCriteria.GlobalSetting.LockCaseToWorkingGroup == 1)
+            if (!searchFilter.IsExtendedSearch && searchCriteria.UserGroupId < 3 && searchCriteria.GlobalSetting.LockCaseToWorkingGroup == 1)
             {
                 sb.Append(" and (tblCase.WorkingGroup_Id in ");
                 sb.Append(" (");
