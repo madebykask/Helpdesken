@@ -6343,6 +6343,13 @@ If not exists (select * from tblTextTranslation where text_id = 1874 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1874, 2, '(Number of records for inventory is limited to {0})')
 GO
 
+If not exists (select * from tbltext where id = 1875)
+	insert into tbltext (id, TextString) VALUES (1875, 'Denna kategori kan inte aktiveras, eftersom huvudnivån är inaktiv')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1875 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1875, 2, 'This category can not be activated, because the main level is inactive')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 

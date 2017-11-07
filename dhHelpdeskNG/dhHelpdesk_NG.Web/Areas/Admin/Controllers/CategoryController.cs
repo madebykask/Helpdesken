@@ -86,19 +86,43 @@
         [HttpPost]
         public ActionResult Edit(Category category)
         {
-            if (this.ModelState.IsValid)
-            {
-                this._categoryService.UpdateCategory(category);
-                this._categoryService.Commit();
+            //if (this.ModelState.IsValid)
+            //{
+            //    this._categoryService.UpdateCategory(category);
+            //    this._categoryService.Commit();
 
-                return this.RedirectToAction("index", "category", new { customerId = category.Customer_Id});
+            //    return this.RedirectToAction("index", "category", new { customerId = category.Customer_Id});
               
-            }
+            //}
+            
+
+
+            var categoryToSave = this._categoryService.GetCategory(category.Id, category.Customer_Id);
+
+            categoryToSave.Name = category.Name;
+            categoryToSave.Description = category.Description;
+            categoryToSave.IsActive = category.IsActive;
+            //categoryToSave.ParentCategory = category.ParentCategory;
+            //categoryToSave.Parent_Category_Id = category.Parent_Category_Id;
+
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+            this._categoryService.SaveCategory(categoryToSave, out errors);
+
+            if (errors.Count == 0)
+                return this.RedirectToAction("index", "category", new { customerId = category.Customer_Id });
+
+
+
+
 
             var customer = this._customerService.GetCustomer(category.Customer_Id);
             
             var model = this.CreateInputViewModel(category, customer);
-
+            foreach (var error in errors)
+            {
+                ModelState.AddModelError(error.Key, Translation.Get(error.Value));
+            }
+            model.Category.IsActive = 0;
             return this.View(model);
         }
 
