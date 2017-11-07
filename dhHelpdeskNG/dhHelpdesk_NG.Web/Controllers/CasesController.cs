@@ -7094,7 +7094,7 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CurrentAdvancedSearch = sm;
             #endregion
             
-            var limitedDepIds = new List<int> { 0 };
+            var availableDepIds = new List<int> { 0 };
             var availableWgIds = new List<int> { 0 };
             var availableCustomerIds = new List<int> { 0 };
             if (isExtendedSearch)
@@ -7103,7 +7103,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (user != null)
                 {
                     availableCustomerIds.AddRange(user.Cs.Select(x => x.Id));
-                    limitedDepIds.AddRange(user.Departments.Select(x => x.Id));
+                    availableDepIds.AddRange(user.Departments.Select(x => x.Id));
                     availableWgIds.AddRange(user.UserWorkingGroups.Select(x => x.WorkingGroup_Id));
                 }
             }
@@ -7133,7 +7133,7 @@ namespace DH.Helpdesk.Web.Controllers
                     if (SessionFacade.CurrentUser.UserGroupId == UserGroups.User ||
                         SessionFacade.CurrentUser.UserGroupId == UserGroups.Administrator)
                     {
-                        if (!limitedDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
+                        if (availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
                             && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId)
                             && availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
                         {
