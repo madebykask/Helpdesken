@@ -29,7 +29,6 @@ namespace DH.Helpdesk.Dal.Repositories
         IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId = null);
 
         int GetDepartmentLanguage(int departmentId);
-        List<Department> GetDepartmentsByCustomer(int customerId);
     }
 
     public sealed class DepartmentRepository : RepositoryBase<Department>, IDepartmentRepository
@@ -103,18 +102,6 @@ namespace DH.Helpdesk.Dal.Repositories
         public int GetDepartmentLanguage(int departmentId)
         {
             return this.DataContext.Departments.Where(d => d.Id == departmentId).Select(d => d.LanguageId).FirstOrDefault();
-        }
-
-        public List<Department> GetDepartmentsByCustomer(int customerId)
-        {
-            var query = from d in Table
-                        from du in d.Users
-                        where d.Customer_Id == customerId && d.IsActive != 0
-                        select d;
-
-            query.IncludePath(d => d.Country);
-
-            return query.ToList();
         }
 
         public string GetDepartmentName(int departmentId)

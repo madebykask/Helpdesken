@@ -398,12 +398,11 @@ namespace DH.Helpdesk.Dal.Repositories
             var f = context.f;
             var userId = f.UserId;
             CustomerUser customerUserSettings;
-            List<Department> userDepartments;
+            var userDepartments = new List<Department>();
 
             if (f.IsExtendedSearch)
             {
                 customerUserSettings = _customerUserRepository.GetCustomerSettingsByCustomer(f.CustomerId);
-                userDepartments = _departmentRepository.GetDepartmentsByCustomer(f.CustomerId);
             }
             else
             {
