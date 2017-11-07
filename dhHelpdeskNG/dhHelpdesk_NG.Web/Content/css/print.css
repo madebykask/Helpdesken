@@ -1,15 +1,15 @@
 ﻿/************PRINT LAYOUT**********/
 .printheader {
-    font-size: 16px;
+    font-size: 10px;
     text-align:left;
-    margin-bottom:20px;
+    margin-bottom:19px;
 }
 .printcase {
-    font-size: 17px;
+    font-size: 11px;
 }
 
 .printcase td {
-    font-size: 17px;
+    font-size: 11px;
     text-align:left;    
     padding:5px;
 }
@@ -20,12 +20,12 @@
 
 .printcase .H {
     font-weight: bold;
-    font-size:20px;
+    font-size:19px;
 }
 
 .printcase .G {
     font-weight: bold;
-    font-size: 19px;
+    font-size: 13px;
     background-color:#ccc !important;
     -webkit-print-color-adjust: exact;
 }
@@ -35,17 +35,17 @@
 }
 
 .printcase .R {    
-    font-size: 17px;    
+    font-size: 11px;    
 }
 
 .printcase .L {    
-    font-size: 17px;    
+    font-size: 11px;    
 }
 
 .printcase .F {    
-    font-size: 17px;    
+    font-size: 11px;    
 }
 
 .printcase .S {    
-    font-size: 17px;    
+    font-size: 11px;    
 }
