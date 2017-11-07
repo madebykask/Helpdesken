@@ -7094,7 +7094,7 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CurrentAdvancedSearch = sm;
             #endregion
             
-            var availableDepIds = new List<int> { 0 };
+            var availableDepIds = new List<int> ();
             var availableWgIds = new List<int> { 0 };
             var availableCustomerIds = new List<int> { 0 };
             if (isExtendedSearch)
