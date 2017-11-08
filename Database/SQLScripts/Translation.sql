@@ -1,4 +1,4 @@
-﻿
+﻿use DH_Support
 
 UPDATE tblTextTranslation Set TextTranslation = 'Cases on hold' WHERE Text_Id=6 AND Language_Id=2;
 GO
@@ -6349,6 +6349,16 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1875 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1875, 2, 'This category can not be activated, because the main level is inactive')
 GO
+
+If not exists (select * from tbltext where id = 1876)
+	insert into tbltext (id, TextString) VALUES (1876, 'Antal svar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1876 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1876, 2, 'Number of answers')
+GO
+
+
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
