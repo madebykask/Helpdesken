@@ -210,7 +210,8 @@ $(function () {
                         var hasAccess = type == dhHelpdesk.admin.users.permissionType.createCasePermission ||
                                         type == dhHelpdesk.admin.users.permissionType.createSubCasePermission ||
                                         type == dhHelpdesk.admin.users.permissionType.closeCasePermission ||
-                                        type == dhHelpdesk.admin.users.permissionType.restrictedCasePermission;
+                                        type == dhHelpdesk.admin.users.permissionType.restrictedCasePermission ||
+                                        type == dhHelpdesk.admin.users.permissionType.caseInternalLogPermission;
                         permission.setAccess(hasAccess);
 
                         if (setPermissions || !permission.getIsHasAccess()) {

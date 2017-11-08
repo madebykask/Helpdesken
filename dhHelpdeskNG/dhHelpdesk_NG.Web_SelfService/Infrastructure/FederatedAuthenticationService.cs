@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IdentityModel.Services;
 using System.IdentityModel.Tokens;
-using System.Web;
-using System.Web.Http.Routing;
 using Thinktecture.IdentityModel.Web;
 
 namespace DH.Helpdesk.SelfService.Infrastructure
@@ -32,7 +29,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
         public SessionSecurityToken RefreshSecurityTokenLifeTime(SessionAuthenticationModule sam, SessionSecurityToken sessionToken, int maxTokenLifeTimeMin = 0)
         {
-            Trace.WriteLine($"SecurityToken current lifetime: {sessionToken.ValidFrom} - {sessionToken.ValidTo}");
+            SsoLogger.Debug($"SecurityToken current lifetime: {sessionToken.ValidFrom} - {sessionToken.ValidTo}");
 
             if (sessionToken.ValidTo.Subtract(sessionToken.ValidFrom) <= TimeSpan.Zero)
                 return null;
@@ -40,7 +37,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             //check token max life time value
             if (maxTokenLifeTimeMin > 0 && DateTime.UtcNow.Subtract(sessionToken.ValidFrom) > TimeSpan.FromMinutes(maxTokenLifeTimeMin)) 
             {
-                Trace.WriteLine($"SecurityToken: Max lifetime ({maxTokenLifeTimeMin}min) has been reached. Current lifetime: {sessionToken.ValidFrom} - {sessionToken.ValidTo}");
+                SsoLogger.Debug($"SecurityToken: Max lifetime ({maxTokenLifeTimeMin}min) has been reached. Current lifetime: {sessionToken.ValidFrom} - {sessionToken.ValidTo}");
                 return null;
             }
 
@@ -62,8 +59,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                           IsPersistent = sessionToken.IsPersistent,
                           IsReferenceMode = sessionToken.IsReferenceMode
                       };
-                
-                Trace.WriteLine($"SecurityToken lifetime updated: {sessionToken.ValidFrom} - {sessionToken.ValidTo}");
+
+                SsoLogger.Debug($"SecurityToken lifetime updated: {sessionToken.ValidFrom} - {sessionToken.ValidTo}");
             }
 
             return refreshedToken;
@@ -91,20 +88,33 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
         #region Helper Methods
 
-        private void PerformPassiveSignOut(string currentUrl = null)
+        private void PerformPassiveSignOut(string returnUrl = null)
         {
             var fam = FederatedAuthentication.WSFederationAuthenticationModule;
 
             FederatedAuthentication.SessionAuthenticationModule.CookieHandler.Delete();
             FederatedAuthentication.SessionAuthenticationModule.DeleteSessionTokenCookie();
+
+            //build sign out urls
             var signoutUrl = (WSFederationAuthenticationModule.GetFederationPassiveSignOutUrl(fam.Issuer, fam.Realm, null));
+            var signOutUri = new Uri(signoutUrl);
+            var returnUri = BuildSignOutReturnUri(returnUrl, fam.Realm);
 
-            // Check where to return, if not set ACS will use Reply address configured for the RP
-            var returnUrl = !string.IsNullOrEmpty(currentUrl) ? currentUrl : (!string.IsNullOrEmpty(fam.Reply) ? fam.Reply : null);
+            SsoLogger.Debug($"WSFedAuth Signout(). SignOutUrl: {signOutUri.OriginalString}, ReturnUrl: {returnUri.OriginalString}");
+            WSFederationAuthenticationModule.FederatedSignOut(signOutUri, returnUri);
+        }
 
-            //new Uri(authModule.Issuer)
-            var returnUri = string.IsNullOrEmpty(returnUrl) ? null : new Uri(returnUrl);
-            WSFederationAuthenticationModule.FederatedSignOut(new Uri(signoutUrl), returnUri);
+        private Uri BuildSignOutReturnUri(string returnUrl, string realmUrl)
+        {
+            var returnUri = string.IsNullOrEmpty(returnUrl) ? null : new Uri(returnUrl, System.UriKind.RelativeOrAbsolute);
+            if (returnUri != null && returnUri.IsAbsoluteUri)
+            {
+                //convert to relative
+                returnUri = returnUri.MakeRelativeUri(new Uri(realmUrl));
+            }
+            
+            var absoluteUri = returnUri != null ? new Uri($"{realmUrl.TrimEnd('/')}/{returnUri.OriginalString.TrimStart('/')}") : new Uri(realmUrl);
+            return absoluteUri;
         }
 
         #endregion

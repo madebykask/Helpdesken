@@ -70,6 +70,12 @@ namespace DH.Helpdesk.Services.Services
         /// The <see cref="CustomerSettings"/>.
         /// </returns>
         CustomerSettings GetCustomerSettings(int customerId);
+
+        /// <summary>
+        /// The get customer ids that included in advanced extended search
+        /// </summary>
+        /// <returns></returns>
+        List<int> GetExtendedSearchIncludedCustomers();
     }
 
     /// <summary>
@@ -258,6 +264,11 @@ namespace DH.Helpdesk.Services.Services
         public CustomerSettings GetCustomerSettings(int customerId)
         {
             return this.settingRepository.GetCustomerSettings(customerId);
+        }
+
+        public List<int> GetExtendedSearchIncludedCustomers()
+        {
+            return settingRepository.GetExtendedSearchIncludedCustomers();
         }
     }
 }

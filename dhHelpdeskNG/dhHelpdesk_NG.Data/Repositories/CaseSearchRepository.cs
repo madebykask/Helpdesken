@@ -397,10 +397,19 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var f = context.f;
             var userId = f.UserId;
+            CustomerUser customerUserSettings;
+            var userDepartments = new List<Department>();
 
-            var customerUserSettings = this._customerUserRepository.GetCustomerSettings(f.CustomerId, userId);
-            var userDepartments = _departmentRepository.GetDepartmentsByUserPermissions(userId, f.CustomerId).ToList();
-            
+            customerUserSettings = _customerUserRepository.GetCustomerSettings(f.CustomerId, userId);
+            if (f.IsExtendedSearch && customerUserSettings == null)
+            {
+                customerUserSettings = _customerUserRepository.GetCustomerSettingsByCustomer(f.CustomerId);
+            }
+            if (!f.IsExtendedSearch)
+            {
+                userDepartments = _departmentRepository.GetDepartmentsByUserPermissions(userId, f.CustomerId).ToList();
+            }
+
             var validateUserCaseSettings = new List<CaseSettings>();
             foreach (var us in context.userCaseSettings)
             {

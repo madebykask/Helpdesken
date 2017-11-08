@@ -6,8 +6,10 @@
 @using DH.Helpdesk.Web.Enums
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 
-@if (Model != null)
-{        
+@if (Model != null)     
+{   
+    
+
      <div class="container">         
          <div class="row">             
                          
@@ -22,9 +24,16 @@
                              <td>
                                  <select id="lstfilterCustomers" name="lstfilterCustomers" data-field="customers" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                      @foreach (var c in Model.CaseSearchFilterData.filterCustomers)
-                                     {                                            
-                                         int customerId = int.Parse(c.Value);                
-                                         <option value="@customerId" @customerId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.Customer)>@c.Name</option>                                          
+                                     {
+                                         int customerId = int.Parse(c.Value);
+                                         <option value="@customerId" @customerId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.Customer)>@c.Name</option>
+                                     }
+                                 </select>
+                                 <select id="lstIncludedCustomers" name="lstIncludedCustomers" data-field="customers" style="display: none">
+                                     @foreach (var c in Model.ExtendIncludedCustomers)
+                                     {
+                                         int customerId = int.Parse(c.Value);
+                                         <option value="@customerId" @customerId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.Customer)>@c.Name</option>
                                      }
                                  </select>
                              </td>
@@ -85,20 +94,23 @@
                                          <option value="@r.Value" @curId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.MaxRows)> @r.Name </option>                                                                               
                                      }
                                  </select>
-                                  @Translation.GetCoreTextTranslation("poster i sökresultat/Kund")                                 
+                                  @Translation.GetCoreTextTranslation("poster i sökresultat/Kund")
                              </td>
-                         </tr>                                         
-                     }                                                
-                     <tr>
+                         </tr>
+                     }
+                    
+                     @*Hide temporary this release - Stina*@
+                     @*<tr>
                          <td>
                              @Translation.GetCoreTextTranslation("Utökad sökning")
                          </td>
                          <td>
-                             <input type="checkbox" name="@CaseFilterFields.IsExtendedSearch" id="@CaseFilterFields.IsExtendedSearch" value="true"/>
-                             @Html.HiddenFor(m => m.CaseSearchFilterData.customerSetting.CustomerInExtendedSearch, new {id="customerInExtendedSearch"})
+                             <input type="checkbox" name="@CaseFilterFields.IsExtendedSearch" id="@CaseFilterFields.IsExtendedSearch" value="true"/>                             
                          </td>
-                     </tr>
+                     </tr>*@
                  </table>
+                 @*Hide temporary this release - Stina*@
+                 <input type="hidden" name="@CaseFilterFields.IsExtendedSearch" id="@CaseFilterFields.IsExtendedSearch" value="false" />
              </div>
 
               <div class="span6">

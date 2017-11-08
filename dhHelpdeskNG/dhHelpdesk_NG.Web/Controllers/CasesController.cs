@@ -385,6 +385,10 @@ namespace DH.Helpdesk.Web.Controllers
 
             m.SelectedCustomers = availableCustomers;
 
+            var extendIncludedCustomerIds = _settingService.GetExtendedSearchIncludedCustomers();
+            var extCustomers = _customerService.GetAllCustomers().Where(x => extendIncludedCustomerIds.Contains(x.Id)).Select(c => new ItemOverview(c.Name, c.Id.ToString())).OrderBy(c => c.Name).ToList();
+            m.ExtendIncludedCustomers = extCustomers;
+
             CaseSearchModel advancedSearchModel;
             if ((clearFilters != null && clearFilters.Value)
                 || SessionFacade.CurrentAdvancedSearch == null)
@@ -490,12 +494,23 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var customers = frm.ReturnFormValue("currentCustomerId").Split(',').Select(x => Int32.Parse(x)).ToList();
-
+            var isExtendedSearch = frm.IsFormValueTrue(CaseFilterFields.IsExtendedSearch);
+            if (isExtendedSearch)
+            {
+                var includedCustomers = _settingService.GetExtendedSearchIncludedCustomers();
+                foreach (var includedCustomer in includedCustomers)
+                {
+                    if (!customers.Contains(includedCustomer))
+                    {
+                        customers.Add(includedCustomer);
+                    }
+                }
+            }
             var res = new List<Tuple<List<Dictionary<string, object>>, GridSettingsModel>>();
 
             foreach (var customer in customers)
             {
-                res.Add(AdvancedSearchForCustomer(frm, customer));
+                res.Add(AdvancedSearchForCustomer(frm, customer, isExtendedSearch));
             }
 
             var totalCount = res.Sum(x => x.Item1.Count);
@@ -1644,6 +1659,9 @@ namespace DH.Helpdesk.Web.Controllers
                         m.CaseLog.OldLog_Id = m.CaseLog.Id;
                         m.CaseLog.Id = 0;
                     }
+
+                    m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
+
 
                 }
             }
@@ -3554,6 +3572,15 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
+            /* #58573 Check that user have access to write to InternalLogNote */
+            bool caseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
+
+            if (!caseInternalLogAccess)
+            {
+                m.caseLog.TextInternal = null;
+            }
+
+
             var orginalInternalLog = caseLog.TextInternal;
 
             if (caseLog.SendLogToParentChildLog.HasValue && caseLog.SendLogToParentChildLog.Value
@@ -4845,6 +4872,8 @@ namespace DH.Helpdesk.Web.Controllers
             var isCreateNewCase = caseId == 0;
             m.CaseLock = caseLocked;
 
+            m.CaseUnlockAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseUnlockPermission);
+
             m.MailTemplates = this._mailTemplateService.GetCustomMailTemplatesList(customerId).ToList();
 
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
@@ -4877,9 +4906,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var isFlwup = _caseFollowUpService.IsCaseFollowUp(SessionFacade.CurrentUser.Id, caseId);
                 m.IsFollowUp = isFlwup;
 
-                m.CaseUnlockAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseUnlockPermission);
-                m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
-
+    
                 var editMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
                 if (m.case_.Unread != 0 && updateState && editMode == Enums.AccessMode.FullAccess)
                     this._caseService.MarkAsRead(caseId);
@@ -4901,6 +4928,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.MapToFollowerUsers(caseFolowerUsers);
             }
 
+            m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
 
             var customerUserSetting = this._customerUserService.GetCustomerSettings(customerId, userId);
             if (customerUserSetting == null)
@@ -6887,7 +6915,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         #endregion
 
-        private Tuple<List<Dictionary<string, object>>, GridSettingsModel> AdvancedSearchForCustomer(FormCollection frm, int customerId)
+        private Tuple<List<Dictionary<string, object>>, GridSettingsModel> AdvancedSearchForCustomer(FormCollection frm, int customerId, bool isExtendedSearch = false)
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
@@ -6896,7 +6924,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var m = new CaseSearchResultModel();
 
-
+            f.IsExtendedSearch = isExtendedSearch;
             f.CustomerId = customerId;//int.Parse(frm.ReturnFormValue("currentCustomerId"));
             f.Customer = frm.ReturnFormValue("lstfilterCustomers");
             f.CaseProgress = frm.ReturnFormValue("lstFilterCaseProgress");
@@ -7065,9 +7093,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             SessionFacade.CurrentAdvancedSearch = sm;
             #endregion
-
-            var isExtendedSearch = frm.IsFormValueTrue(CaseFilterFields.IsExtendedSearch);
-            var availableDepIds = new List<int> { 0 };
+            
+            var availableDepIds = new List<int> ();
             var availableWgIds = new List<int> { 0 };
             var availableCustomerIds = new List<int> { 0 };
             if (isExtendedSearch)
@@ -7102,17 +7129,27 @@ namespace DH.Helpdesk.Web.Controllers
                                 };
                 if (isExtendedSearch)
                 {
-                    if (availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
-                        && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId)
-                        && availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
+                    var infoAvailableInExtended = false;
+                    if (SessionFacade.CurrentUser.UserGroupId == UserGroups.User ||
+                        SessionFacade.CurrentUser.UserGroupId == UserGroups.Administrator)
                     {
-                        jsRow.Add("ExtendedAvailable", true);
+                        if (availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
+                            && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId)
+                            && availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
+                        {
+                            infoAvailableInExtended = true;
+                        }
                     }
                     else
                     {
-                        jsRow.Add("ExtendedAvailable", false);
+                        if (availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
+                        {
+                            infoAvailableInExtended = true;
+                        }
                     }
+                    jsRow.Add("ExtendedAvailable", infoAvailableInExtended);
                 }
+
                 foreach (var col in gridSettings.columnDefs)
                 {
                     var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);

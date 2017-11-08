@@ -22,6 +22,10 @@ namespace DH.Helpdesk.Web
     using DH.Helpdesk.Web.Infrastructure.Logger;
 
     using Microsoft.Practices.ServiceLocation;
+    using System.Diagnostics;
+    using Infrastructure;
+    using Services.Services.Concrete;
+    using BusinessData.Models.LogProgram;
 
     public class MvcApplication : HttpApplication
     {
@@ -94,6 +98,120 @@ namespace DH.Helpdesk.Web
 		{
 			Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
 		}
+
+        protected void Application_AcquireRequestState(object sender, EventArgs e)
+        {
+            try
+            {
+                var session = HttpContext.Current.Session;
+
+                // Check can be null in some request (static)
+                if (session != null)
+                {
+                    var sessionStatus = session["SessionStatus"] as SessionStatus;
+
+                    var currentUser = SessionFacade.CurrentUser;
+                    var userID = currentUser != null ? currentUser.Id : (int?)null;
+
+                    // No user session status exist, create new one
+                    if (sessionStatus == null)
+                    {
+                        int responseTime = CheckResponseTime();
+                        sessionStatus = new SessionStatus
+                        {
+                            LastSessionStatusUpdate = DateTime.Now,
+                            Guid = Guid.NewGuid()
+                        };
+                        session["SessionStatus"] = sessionStatus;
+
+                        using (var p = Process.GetCurrentProcess())
+                        {
+                            // Start log for session
+                            Log(userID, responseTime, sessionStatus.Guid, p.WorkingSet64);
+                        }
+                    }
+                    else // A status session item does already exist
+                    {
+                        var now = DateTime.Now;
+
+                        // Check if is time to make update
+                        var expires = sessionStatus.LastSessionStatusUpdate.AddSeconds(SessionStatus.SessionRefreshTime);
+                        if (now >= expires)
+                        {
+                            // Updates sesstion status with current status information
+                            var responseTime = CheckResponseTime();
+                            sessionStatus.LastSessionStatusUpdate = now;
+
+                            using (var p = Process.GetCurrentProcess())
+                            {                                
+                                Log(userID, responseTime, sessionStatus.Guid, p.WorkingSet64);
+                            }
+
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Ignore all errors here
+            }
+        }
+
+        private void Log(int? userId, int responseTime, Guid guid, long memoryUsage)
+        {
+            try
+            {
+                var _logProgramService = ManualDependencyResolver.Get<ILogProgramService>();
+                var data = $"{{ \"Topic\": \"Top 100 tblCases\", \"ResponseTime\": {responseTime}, \"Memory\": {memoryUsage}, \"Guid\": \"{guid}\" }}";
+
+                var logProgramModel = new LogProgram
+                {
+                    CaseId = 0,
+                    CustomerId = SessionFacade.CurrentCustomer != null ? SessionFacade.CurrentCustomer.Id : 0,
+                    LogType = 99, // New Type for test purpose 
+                    LogText = data,
+                    New_Performer_user_Id = 0,
+                    Old_Performer_User_Id = "0",
+                    RegTime = DateTime.UtcNow,
+                    UserId = userId,
+                    ServerNameIP = $"{Environment.MachineName} ({Request.ServerVariables["LOCAL_ADDR"]})",
+                    NumberOfUsers = null
+                };
+
+                _logProgramService.UpdateUserLogin(logProgramModel);            
+            }   
+            catch (Exception ex)
+            {
+                
+            }    
+        }
+
+        protected int CheckResponseTime()
+        {            
+            var sw = new Stopwatch();
+
+            try
+            {
+                sw.Start();
+                var _caseService = ManualDependencyResolver.Get<ICaseService>();
+                _caseService.GetTop100CasesForTest();
+                sw.Stop();
+                return sw.Elapsed.Milliseconds;
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+        }
+
+        class SessionStatus
+        {
+            // Seconds between refreshes, suggestion each 30 minutes, add to some config
+            public const int SessionRefreshTime = 1800;
+            public DateTime LastSessionStatusUpdate { get; set; }
+            public Guid Guid { get; internal set; }
+        }
+
 
 #if !DEBUG
         protected void Application_Error(object sender, EventArgs e)
@@ -168,10 +286,10 @@ namespace DH.Helpdesk.Web
         }
 #endif
 
-		/// <summary>
-		/// The register binders.
-		/// </summary>
-		private static void RegisterBinders()
+        /// <summary>
+        /// The register binders.
+        /// </summary>
+        private static void RegisterBinders()
         {
             ModelBinders.Binders.Add(typeof(DateTime), new DateTimeBinder());
             ModelBinders.Binders.Add(typeof(DateTime?), new NullableDateTimeBinder());

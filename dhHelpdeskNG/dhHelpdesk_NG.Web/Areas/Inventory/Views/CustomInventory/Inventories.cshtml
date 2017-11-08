@@ -4,7 +4,7 @@
 {
     @Html.HiddenFor(m => m.Filter.SortField.Name, new { id = "sortFieldName" })
     @Html.HiddenFor(m => m.Filter.SortField.SortBy, new { id = "sortFieldBy" })
-    
+    @Html.HiddenFor(m => m.Filter.RecordsOnPage, new { id = "recordsOnPage", value = (Model.Filter != null ? Model.Filter.RecordsOnPage : DH.Helpdesk.Common.Constants.SearchFilter.RecordsOnPage) })
     <table class="tableform">
         @if (Model.Settings.DepartmentFieldSetting.IsShow)
         {

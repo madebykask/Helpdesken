@@ -97,6 +97,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public bool IsConnectToParent { get; set; }
 
+        public bool IsExtendedSearch { get; set; }
+
         public int? CurrentCaseId { get; set; }
 
         public CaseOverviewCriteriaModel CaseOverviewCriteria { get; set; }
@@ -155,6 +157,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.PageInfo = o.PageInfo;
             r.IsConnectToParent = o.IsConnectToParent;
             r.CurrentCaseId = o.CurrentCaseId;
+            r.IsExtendedSearch = o.IsExtendedSearch;
 
             if (CaseOverviewCriteria != null)
             {

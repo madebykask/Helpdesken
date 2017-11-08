@@ -33,7 +33,6 @@ var GRID_STATE = {
     var txtFreeTextSearch = $('#txtFreeTextSearch');
     var cellUniqueId = 0;
     var isExtendedSearch = false;
-    var isCustomerIncluded = $("#customerInExtendedSearch").val() === "1";
 
     function strJoin() {
         return Array.prototype.join.call(arguments, JOINER);
@@ -80,6 +79,13 @@ var GRID_STATE = {
                 customerName: $(this).text()
             });
 
+            allCustomers.push({
+                customerId: $(this).val(),
+                customerName: $(this).text()
+            });
+        });
+
+        $('#lstIncludedCustomers option').each(function () {
             allCustomers.push({
                 customerId: $(this).val(),
                 customerName: $(this).text()
@@ -680,14 +686,7 @@ var GRID_STATE = {
     $("#extendedSearchEnabled").on("change", function (evt, params) {
         isExtendedSearch = $(this).prop("checked");
         if (isExtendedSearch) {
-            $("#lstfilterCustomers.chosen-select").val("");
-            if (isCustomerIncluded) {
-                $("#lstfilterCustomers").prop("disabled", false).trigger("chosen:updated");
-            } else {
-                $("#lstfilterCustomers").prop("disabled", true).trigger("chosen:updated");
-            }
-        } else {
-            $("#lstfilterCustomers").prop("disabled", false).trigger("chosen:updated");
+            $("#lstfilterCustomers.chosen-select").val("").trigger("chosen:updated");
         }
         SetSpecificConditionTab(isExtendedSearch);
     });

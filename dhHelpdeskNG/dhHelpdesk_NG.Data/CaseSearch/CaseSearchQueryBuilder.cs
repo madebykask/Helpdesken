@@ -855,7 +855,8 @@ namespace DH.Helpdesk.Dal.Repositories
                 return sb.ToString();
             }
 
-            sb.Append(" and (tblCustomerUser.[User_Id] = " + searchFilter.UserId + ")");
+            if (!searchFilter.IsExtendedSearch)
+                sb.Append(" and (tblCustomerUser.[User_Id] = " + searchFilter.UserId + ")");
 
             ////////////////////////////////////////////////////////////////////////////////////
             // anvandaren far bara se avdelningar som den har behorighet till
@@ -1198,7 +1199,7 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             //LockCaseToWorkingGroup
-            if (searchCriteria.UserGroupId < 3 && searchCriteria.GlobalSetting.LockCaseToWorkingGroup == 1)
+            if (!searchFilter.IsExtendedSearch && searchCriteria.UserGroupId < 3 && searchCriteria.GlobalSetting.LockCaseToWorkingGroup == 1)
             {
                 sb.Append(" and (tblCase.WorkingGroup_Id in ");
                 sb.Append(" (");

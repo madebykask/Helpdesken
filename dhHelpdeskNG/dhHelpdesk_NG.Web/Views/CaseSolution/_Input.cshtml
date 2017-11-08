@@ -12,6 +12,7 @@
     var saveDropDownText = Html.Raw(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + " - " +
                                    Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation));
     var jsSerializer = new JavaScriptSerializer();
+    jsSerializer.MaxJsonLength = Int32.MaxValue;
 }
 
 <script type="text/javascript">

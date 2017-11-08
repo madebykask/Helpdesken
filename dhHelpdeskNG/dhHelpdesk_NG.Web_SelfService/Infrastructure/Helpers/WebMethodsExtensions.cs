@@ -7,29 +7,6 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Helpers
     {
         private const string CustomerIdCookieName = "_customerId";
 
-        #region BuildHomeUrl
-
-        public static string BuildHomeUrl(this HttpRequest request, int customerId)
-        {
-            var requestUrl = request.Url;
-            var url = ConvertRelativeUrlToAbsoluteUrl($"/Start/?customerId={customerId}", requestUrl);
-            return url;
-        }
-
-        private static string ConvertRelativeUrlToAbsoluteUrl(string relativeUrl, Uri requestUrl)
-        {
-            var port = requestUrl.Port == 80 ? "" : $":{requestUrl.Port}";
-                
-            var url = string.Format("{0}://{1}{2}/{3}",
-                      requestUrl.Scheme,
-                      requestUrl.Host,
-                      port,
-                      relativeUrl.TrimStart('/'));
-            return url;
-        }
-
-        #endregion
-
         public static void SetCustomerIdCookie(this HttpContextBase ctx, int customerId)
         {
             SetSessionCookie(ctx, CustomerIdCookieName, customerId.ToString());

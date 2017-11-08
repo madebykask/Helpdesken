@@ -139,6 +139,7 @@ using System;
         void UpdateUserSetting(UserCaseSetting newSetting);
         bool IsCustomerUser(int customerId, int userId);
         bool CheckUserCasePermissions(int userId, int caseId, Expression<Func<Case, bool>> casePermissionsFilter = null);
+        CustomerUser GetCustomerSettingsByCustomer(int customerId);
     }
 
     public class CustomerUserRepository : RepositoryBase<CustomerUser>, ICustomerUserRepository
@@ -302,7 +303,13 @@ using System;
                         
             return query.Any();
         }
-       
+
+        public CustomerUser GetCustomerSettingsByCustomer(int customerId)
+        {
+            return Table
+                    .Include(x => x.User)
+                    .Where(cu => cu.Customer_Id == customerId).FirstOrDefault();
+        }
     }
 
     #endregion
