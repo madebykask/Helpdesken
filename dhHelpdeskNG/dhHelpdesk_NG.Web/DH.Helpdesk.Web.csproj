@@ -3270,6 +3270,7 @@
     <Content Include="Content\js\DynamicCase\ie8.polyfils.map" />
     <Content Include="Content\js\DynamicCase\iframeResizer.contentWindow.map" />
     <Content Include="Content\js\DynamicCase\iframeResizer.map" />
+    <Content Include="Areas\Orders\Views\OrderFieldSettings\Modals\OrderFieldTypeModal.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />
