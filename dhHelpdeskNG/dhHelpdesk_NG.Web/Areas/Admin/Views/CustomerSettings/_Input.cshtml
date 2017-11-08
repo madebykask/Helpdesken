@@ -463,11 +463,15 @@
                 </div>
 
                 <h4>@Translation.GetCoreTextTranslation("Ärende")</h4>
+
+                @*Hide temporary this release - Stina*@
+                <input type="hidden" name="setting.CustomerInExtendedSearch" value="0" />
                 <div class="container">
                     <div class="row">
                         <div class="span12">
                             <table id="customerOrder">
-                                <tr>
+                                @*Hide temporary this release - Stina*@
+                                @*<tr>
                                     <td>
                                         @Translation.GetCoreTextTranslation("Visa begränsat sök resultat")
                                     </td>
@@ -476,7 +480,7 @@
                                         <input type="hidden" name="setting.CustomerInExtendedSearch" value="0" />
                                         @Translation.GetCoreTextTranslation("Inkludera kund i Utökad sökning")
                                     </td>
-                                </tr>
+                                </tr>*@
                                 <tr>
                                     <td>
                                         @Translation.GetCoreTextTranslation("Anmälare")
