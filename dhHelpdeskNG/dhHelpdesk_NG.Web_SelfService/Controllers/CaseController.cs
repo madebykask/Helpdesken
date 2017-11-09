@@ -565,15 +565,14 @@
                 return RedirectToAction("Index", "Error");
             }
 
-            var currentCustomer = default(Customer);
-            if (SessionFacade.CurrentCustomer != null)
-                currentCustomer = SessionFacade.CurrentCustomer;
-            else
+            if (SessionFacade.CurrentCustomer == null)
             {
-                var _cusId = caseModel != null && caseModel.Customer_Id > 0 ?
-                    caseModel.Customer_Id : (caseTemplate != null ? caseTemplate.Customer_Id : 0);
+                var cusId = caseModel != null && caseModel.Customer_Id > 0
+                    ? caseModel.Customer_Id
+                    : (caseTemplate?.Customer_Id ?? 0);
 
-                currentCustomer = _customerService.GetCustomer(_cusId);
+                var currentCustomer = _customerService.GetCustomer(cusId);
+                SessionFacade.CurrentCustomer = currentCustomer;
             }
 
             if (SessionFacade.CurrentCustomer == null)
@@ -603,7 +602,7 @@
                 }
             }
 
-            if (caseId == 0)
+            if (caseId.IsNew())
             {
                 caseModel.Customer_Id = customerId;
                 caseModel = LoadTemplateToCase(caseModel, caseTemplate);
