@@ -155,7 +155,7 @@
 </script>
 
 @Scripts.Render("~/bundles/cases/_input")
-<script type="text/javascript" src="@Url.Content("~/Content/js/Cases/components/EditPage.js")"></script>
+@*<script type="text/javascript" src="@Url.Content("~/Content/js/Cases/components/EditPage.js")"></script>*@
 @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseSolutionFields.AddFollowersBtn) && Model.caseFieldSettings.IsFieldVisible(GlobalEnums.TranslationCaseFields.AddFollowersBtn))
 {
     @Scripts.Render(BundleConfig.ScriptNames.CaseUserSearchCommon)
