@@ -42,6 +42,12 @@
         public virtual WatchDateCalendar WatchDateCalendar { get; set; }
 
         public int LanguageId { get; set; }
+
+        public bool ShowInvoiceTime { get; set; }
+        public bool ShowInvoiceOvertime { get; set; }
+        public bool ShowInvoiceMaterial { get; set; }
+        public bool ShowInvoicePrice { get; set; }
+
         public virtual Language Language { get; set; }
     }
 }

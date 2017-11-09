@@ -59,6 +59,10 @@
             this.Property(x => x.DepartmentGUID).IsOptional();
             this.Property(x => x.LanguageId).IsOptional();
             //this.Property(x => x.SynchronizedDate).IsOptional();
+            this.Property(x => x.ShowInvoiceTime).IsRequired();
+            this.Property(x => x.ShowInvoiceOvertime).IsRequired();
+            this.Property(x => x.ShowInvoiceMaterial).IsRequired();
+            this.Property(x => x.ShowInvoicePrice).IsRequired();
 
             this.ToTable("tbldepartment");
         }
