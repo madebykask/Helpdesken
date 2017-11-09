@@ -953,7 +953,7 @@ input[type=text].error, select.error, textarea.error, .btn-group.error .btn {
 }
 
 
-a.error, input[type=¨button].error .btn {
+a.error, input[type='button'].error .btn {
     border: 1px solid #ff0000;
     background-color: #ffeeee;
     color: #333333;
@@ -1058,7 +1058,7 @@ th, td, .table-bordered {
     border-left-color: #f1f1f1;
 }
 
-.table thead tr th:left-child {
+.table thead tr th:last-child {
     border-right-color: #f1f1f1;
 }
 
@@ -3005,16 +3005,6 @@ body.login {
     .css-treeview {
         -webkit-animation: webkit-adjacent-element-selector-bugfix infinite 1s;
     }
-
-    @-webkit-keyframes webkit-adjacent-element-selector-bugfix {
-        from {
-            padding: 0;
-        }
-
-        to {
-            padding: 0;
-        }
-    }
 }
 
 /***************************CONTENT**************************************************/
@@ -3094,31 +3084,7 @@ body.login {
     .case-invoice-container .ui-state-active, .case-invoice-container .ui-state-hover, .case-invoice-container .ui-state-focus {
         border: none !important;
     }
-/*.case-invoice-container .ui-state-focus, .case-invoice-container .ui-state-focus a, .case-invoice-container .ui-tabs-active, .case-invoice-container .ui-tabs-active a {
-    border: none !important;
-    background: none !important;
-    background-image:none !important;
-
-}
-.case-invoice-order-tab, .case-invoice-order-tab.ui-state-focus, .case-invoice-order-tab.ui-state-focus a, ui-tabs-anchor {
-    border: none !important;
-    background: #ff6600;
-
-}*/
-/*.case-invoice-order-tab.ui-corner-top.ui-tabs-active.ui-state-active.active.ui-state-focus, .case-invoice-order-tab.ui-corner-top.ui-tabs-active.ui-state-active.active.ui-state-focus a{
-    border:1px solid #ff6600 !important;
-    background:#fff !important;
-    text-decoration:none !important;
-}
-
-.case-invoice-order-tab.active, .case-invoice-order-tab.active a, .case-invoice-order-tab.active a:focus {
-    background: #ff6600 !important;
-    text-decoration:none !important;
-    border: none !important;
-    color: #212121/*{fcHover}*/; text-decoration: none; border: 1px solid #999999 /*{borderColorHover}*/; background: #dadada /*{bgColorHover}*/ url(images/ui-bg_glass_75_dadada_1x400.png) /*{bgImgUrlHover}*/ 50% /*{bgHoverXPos}*/ 50% /*{bgHoverYPos}*/ repeat-x /*{bgHoverRepeat}*/; font-weight: normal /*{fwDefault}*/; color: #212121 /*{fcHover}*/;
-}
-
-*/ .case-invoice-colextranarrow {
+.case-invoice-colextranarrow {
     width: 2%;
 }
 
