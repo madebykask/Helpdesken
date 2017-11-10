@@ -4452,7 +4452,6 @@ $(function () {
                 caseInvoiceOrderActionsTemplate,
                 caseInvoiceCaseFilesTemplate,
                 caseInvoiceOrderFilesTemplate) {
-
                 AllTranslations = translationList;
                 AllCaseFields = caseFieldTranslations;
                 //organizationData
