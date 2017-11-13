@@ -271,6 +271,18 @@
                 return ret;
             }
 
+            public static string getProductAreaParentPath(this ProductArea o, string separator = " - ")
+            {
+                string ret = string.Empty;
+
+                if (o.ParentProductArea == null)
+                    ret += o.Name;
+                else
+                    ret += getProductAreaParentPath(o.ParentProductArea, separator) + separator + o.Name;
+
+                return ret;
+            }
+
             public static string GetFinishingCauseParentPath(this FinishingCause fc, string separator = " - ")
             {
                 string ret = string.Empty;

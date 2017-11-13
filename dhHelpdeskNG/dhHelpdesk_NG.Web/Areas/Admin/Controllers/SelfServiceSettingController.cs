@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {    
@@ -61,14 +62,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var allCaseTypes = _caseTypeService.GetCaseTypesForSetting(customerId);
             var availableCaseTypes = allCaseTypes.Where(c => c.ShowOnExtPageCases == 0).Select(x => new SelectListItem
             {
-                Text = x.Name,
+                Text = x.getCaseTypeParentPath(),
                 Value = x.Id.ToString(),
                 Disabled = x.IsActive == 0
             }).ToList();
 
             var selectedCaseTypes = allCaseTypes.Where(c => c.ShowOnExtPageCases == 1).Select(x => new SelectListItem
             {
-                Text = x.Name,
+                Text = x.getCaseTypeParentPath(),
                 Value = x.Id.ToString(),
                 Disabled = x.IsActive == 0
             }).ToList();
@@ -76,14 +77,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var allProductAreas = _productAreaService.GetProductAreasForSetting(customerId, false);
             var availableProductAreas = allProductAreas.Where(p => p.ShowOnExtPageCases == 0).Select(x => new SelectListItem
             {
-                Text = x.Name,
+                Text = x.getProductAreaParentPath(),
                 Value = x.Id.ToString(),
                 Disabled = x.IsActive == 0
             }).ToList();
 
             var selectedProductAreas = allProductAreas.Where(p => p.ShowOnExtPageCases == 1).Select(x => new SelectListItem
             {
-                Text = x.Name,
+                Text = x.getProductAreaParentPath(),
                 Value = x.Id.ToString(),
                 Disabled = x.IsActive == 0
             }).ToList();
