@@ -7,8 +7,17 @@ namespace DH.Helpdesk.Domain
     using global::System;
     using global::System.Web.Mvc;
 
+    public enum SplitToCaseSolutionType
+    {
+        None,
+        ParentAndChilds,
+        NewDescendants,
+        SelfAndDescendandts,
+    }
+
     public class CaseSolution : Entity
     {
+
         public CaseSolution()
         {
             this.ExtendedCaseForms = new List<ExtendedCaseEntity.ExtendedCaseFormEntity>();
@@ -109,6 +118,7 @@ namespace DH.Helpdesk.Domain
         public string DefaultTab { get; set; }
         public string ValidateOnChange { get; set; }
         public int? NextStepState { get; set; }
+        public SplitToCaseSolutionType SplitToCaseSolutionType { get; set; }
 
         public int? SplitToCaseSolution_Id { get; set; }
 
@@ -131,8 +141,6 @@ namespace DH.Helpdesk.Domain
 
 	    public virtual CaseSolution SplitToCaseSolution { get; set; }
         public string CaseSolutionDescription { get; set; }
-
-
-
+        public virtual ICollection<CaseSolution> SplitToCaseSolutionTemplates { get; set; }
     }
 }

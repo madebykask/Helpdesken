@@ -33,6 +33,7 @@
     using Common.Extensions.String;
     using Common.Extensions.DateTime;
     using Infrastructure.Helpers;
+    using BusinessData.Models.Shared;
 
     public class CaseController : BaseController
     {
@@ -603,7 +604,7 @@
                 }
             }
 
-            if (caseId == 0)
+            if (caseId == null || caseId == 0)
             {
                 caseModel.Customer_Id = customerId;
                 caseModel = LoadTemplateToCase(caseModel, caseTemplate);
@@ -642,6 +643,7 @@
                 CaseDataModel = caseModel
             };
 
+
             if (string.IsNullOrEmpty(model.ExtendedCaseDataModel.FormModel.Name))
             {
                 if (caseTemplate == null)
@@ -670,12 +672,14 @@
                 model.CaseDataModel = ApplyNextWorkflowStepOnCase(model.CaseDataModel, model.SelectedWorkflowStep.Value);
             
             int caseId = -1;
-            var res = _universalCaseService.SaveCase(model.CaseDataModel, auxModel, out caseId);
+
+            //TODO: Refactor
+            model.CaseDataModel.ExtendedCaseData_Id = model.ExtendedCaseDataModel.Id;
+            model.CaseDataModel.ExtendedCaseForm_Id = model.ExtendedCaseDataModel.ExtendedCaseFormId;
+
+            var res = _universalCaseService.SaveCaseCheckSplit(model.CaseDataModel, auxModel, out caseId);
             if (res.IsSucceed && caseId != -1)
             {
-                if (isNewCase)
-                    _caseService.CreateExtendedCaseRelationship(caseId, model.ExtendedCaseDataModel.Id);
-
                 return RedirectToAction("UserCases", new { customerId = model.CustomerId });
             }
 

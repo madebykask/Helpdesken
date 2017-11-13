@@ -77,7 +77,9 @@ namespace DH.Helpdesk.Services.Services
         IList<ExtendedCaseFormModel> GetExtendedCaseForm(int? caseSolutionId, int customerId, int? caseId, int userLanguageId, string userGuid, int? caseStateSecondaryId, int? caseWorkingGroupId, string extendedCasePath, int? userId, string userName, ApplicationType applicationType, int userWorkingGroupId);
         ExtendedCaseDataEntity GetExtendedCaseData(Guid extendedCaseGuid);
 
-        void CreateExtendedCaseRelationship(int caseId, int extendedCaseDataId);
+        bool AddChildCase(int childCaseId, int parentCaseId, out IDictionary<string, string> errors);
+
+        void CreateExtendedCaseRelationship(int caseId, int extendedCaseDataId, int? extendedCaseFormId = null);
 
         int LookupLanguage(int custid, string notid, int regid, int depid, string notifierid);
 
@@ -345,7 +347,7 @@ namespace DH.Helpdesk.Services.Services
             return _extendedCaseDataRepository.GetExtendedCaseData(extendedCaseGuid);
         }
 
-        public void CreateExtendedCaseRelationship(int caseId, int extendedCaseDataId)
+        public void CreateExtendedCaseRelationship(int caseId, int extendedCaseDataId, int? extendedCaseFormId = null)
         {
             using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
@@ -353,7 +355,7 @@ namespace DH.Helpdesk.Services.Services
                 var relation = rep.Find(it => it.Case_Id == caseId && it.ExtendedCaseData_Id == extendedCaseDataId).FirstOrDefault();
                 if (relation == null)
                 {
-                    rep.Add(new Case_ExtendedCaseEntity() { Case_Id = caseId, ExtendedCaseData_Id = extendedCaseDataId });
+                    rep.Add(new Case_ExtendedCaseEntity() { Case_Id = caseId, ExtendedCaseData_Id = extendedCaseDataId, ExtendedCaseForm_Id = extendedCaseFormId });
                     uow.Save();
                 }                                
             }
@@ -2190,7 +2192,7 @@ namespace DH.Helpdesk.Services.Services
                 return true;
         }
 
-        private bool AddChildCase(int childCaseId, int parentCaseId, out IDictionary<string, string> errors)
+        public bool AddChildCase(int childCaseId, int parentCaseId, out IDictionary<string, string> errors)
         {
             errors = new Dictionary<string, string>();
             using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())

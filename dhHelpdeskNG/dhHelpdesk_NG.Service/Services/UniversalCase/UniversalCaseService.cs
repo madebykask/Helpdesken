@@ -7,11 +7,14 @@ using System.Linq;
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Domain;
-using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Services.Utils;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Common.Enums.BusinessRule;
 using static DH.Helpdesk.BusinessData.Models.Shared.ProcessResult;
+using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Common.Extensions.String;
+using DH.Helpdesk.Common.Extensions.DateTime;
+using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Services.Services.UniversalCase
 {
@@ -49,6 +52,8 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         private readonly IHolidayService _holidayService;
         private readonly ICaseService _caseService;
         private readonly ILogService _logService;
+        private readonly ICaseSolutionService _caseSolutionService;
+        private readonly IExtendedCaseService _extendedCaseService;
 
         public UniversalCaseService(ICaseRepository caseRepository,
                                     ICustomerService customerService,
@@ -61,7 +66,10 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                                     ISettingService settingService,
                                     IHolidayService holidayService,
                                     ICaseService caseService,
-                                    ILogService logService)
+                                    ILogService logService,
+                                    ICaseSolutionService caseSolutionService,
+                                    IExtendedCaseService extendedCaseService
+            )
         {
             _caseRepository = caseRepository;
             _customerService = customerService;
@@ -75,6 +83,8 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             _holidayService = holidayService;
             _caseService = caseService;
             _logService = logService;
+            _caseSolutionService = caseSolutionService;
+            _extendedCaseService = extendedCaseService;
         }
 
         public CaseModel GetCase(int id)
@@ -82,8 +92,10 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             return _caseRepository.GetCase(id);
         }
 
-        public ProcessResult SaveCase(CaseModel caseModel, AuxCaseModel auxModel, out int caseId)
+         public ProcessResult SaveCase(CaseModel caseModel, AuxCaseModel auxModel, out int caseId)
         {
+            var isNewCase = caseModel.Id == 0;
+
             var res = new ProcessResult("Save Case");
             caseId = -1;
 
@@ -102,8 +114,326 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                     }
                 }
             }
+
+            //connect extended case if new and extendedcasedataid is provided
+            if (res.IsSucceed && caseId != -1 && isNewCase && caseModel.ExtendedCaseData_Id.HasValue)
+            {
+                _caseService.CreateExtendedCaseRelationship(caseId, caseModel.ExtendedCaseData_Id.Value, caseModel.ExtendedCaseForm_Id.Value);
+            }
+
+
             return res;
         }
+
+
+        private CaseModel ApplyValuesFromCaseSolution(CaseModel model, int caseTemplateId)
+        {
+            if (model == null)
+                return null;
+
+            var caseTemplate = _caseSolutionService.GetCaseSolution(caseTemplateId);
+            if (caseTemplate == null)
+                return model;
+
+            if (caseTemplate.CaseType_Id != null)
+            {
+                model.CaseType_Id = caseTemplate.CaseType_Id.Value;
+            }
+
+            //Check if we should apply template
+            if (caseTemplate.OverWritePopUp == 1)
+            { 
+
+            model.CaseSolution_Id = caseTemplateId;
+            model.Customer_Id = caseTemplate.Customer_Id;
+            model.ReportedBy = caseTemplate.ReportedBy.IfNullThenElse(model.ReportedBy);
+            model.PersonsName = caseTemplate.PersonsName.IfNullThenElse(model.PersonsName);
+            model.PersonsEmail = caseTemplate.PersonsEmail.IfNullThenElse(model.PersonsEmail);
+            model.PersonsPhone = caseTemplate.PersonsPhone.IfNullThenElse(model.PersonsPhone);
+            model.PersonsCellphone = caseTemplate.PersonsCellPhone.IfNullThenElse(model.PersonsCellphone);
+            model.Region_Id = caseTemplate.Region_Id.IfNullThenElse(model.Region_Id);
+            model.Department_Id = caseTemplate.Department_Id.IfNullThenElse(model.Department_Id);
+            model.OU_Id = caseTemplate.OU_Id.IfNullThenElse(model.OU_Id);
+            model.Place = caseTemplate.Place.IfNullThenElse(model.Place);
+            model.UserCode = caseTemplate.UserCode.IfNullThenElse(model.UserCode);
+            model.CostCentre = caseTemplate.CostCentre.IfNullThenElse(model.CostCentre);
+
+            model.InventoryNumber = caseTemplate.InventoryNumber.IfNullThenElse(model.InventoryNumber);
+            model.InventoryType = caseTemplate.InventoryType.IfNullThenElse(model.InventoryType);
+            model.InventoryLocation = caseTemplate.InventoryLocation.IfNullThenElse(model.InventoryLocation);
+
+            model.ProductArea_Id = caseTemplate.ProductArea_Id.IfNullThenElse(model.ProductArea_Id);
+            model.System_Id = caseTemplate.System_Id.IfNullThenElse(model.System_Id);
+            model.Caption = caseTemplate.Caption.IfNullThenElse(model.Caption);
+            model.Description = caseTemplate.Description.IfNullThenElse(model.Description);
+            model.Priority_Id = caseTemplate.Priority_Id.IfNullThenElse(model.Priority_Id);
+            model.Project_Id = caseTemplate.Project_Id.IfNullThenElse(model.Project_Id);
+            model.Urgency_Id = caseTemplate.Urgency_Id.IfNullThenElse(model.Urgency_Id);
+            model.Impact_Id = caseTemplate.Impact_Id.IfNullThenElse(model.Impact_Id);
+            model.Category_Id = caseTemplate.Category_Id.IfNullThenElse(model.Category_Id);
+            model.Supplier_Id = caseTemplate.Supplier_Id.IfNullThenElse(model.Supplier_Id);
+
+            model.InvoiceNumber = caseTemplate.InvoiceNumber.IfNullThenElse(model.InvoiceNumber);
+            model.ReferenceNumber = caseTemplate.ReferenceNumber.IfNullThenElse(model.ReferenceNumber);
+            model.Miscellaneous = caseTemplate.Miscellaneous.IfNullThenElse(model.Miscellaneous);
+            model.ContactBeforeAction = caseTemplate.ContactBeforeAction;
+            model.SMS = caseTemplate.SMS;
+            model.AgreedDate = caseTemplate.AgreedDate.IfNullThenElse(model.AgreedDate);
+            model.Available = caseTemplate.Available.IfNullThenElse(model.Available);
+            model.Cost = caseTemplate.Cost;
+            model.OtherCost = caseTemplate.OtherCost;
+            model.Currency = caseTemplate.Currency.IfNullThenElse(model.Currency);
+
+            model.Performer_User_Id = caseTemplate.PerformerUser_Id.IfNullThenElse(model.Performer_User_Id);
+            model.CausingPartId = caseTemplate.CausingPartId.IfNullThenElse(model.CausingPartId);
+            model.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id.IfNullThenElse(model.WorkingGroup_Id);
+            model.Project_Id = caseTemplate.Project_Id.IfNullThenElse(model.Project_Id);
+            model.Problem_Id = caseTemplate.Problem_Id.IfNullThenElse(model.Problem_Id);
+            model.PlanDate = caseTemplate.PlanDate.IfNullThenElse(model.PlanDate);
+            model.WatchDate = caseTemplate.WatchDate.IfNullThenElse(model.WatchDate);
+
+            model.IsAbout_ReportedBy = caseTemplate.IsAbout_ReportedBy.IfNullThenElse(model.IsAbout_ReportedBy);
+            model.IsAbout_PersonsName = caseTemplate.IsAbout_PersonsName.IfNullThenElse(model.IsAbout_PersonsName);
+            model.IsAbout_PersonsEmail = caseTemplate.IsAbout_PersonsEmail.IfNullThenElse(model.IsAbout_PersonsEmail);
+            model.IsAbout_PersonsPhone = caseTemplate.IsAbout_PersonsPhone.IfNullThenElse(model.IsAbout_PersonsPhone);
+            model.IsAbout_PersonsCellPhone = caseTemplate.IsAbout_PersonsCellPhone.IfNullThenElse(model.IsAbout_PersonsCellPhone);
+            model.IsAbout_Region_Id = caseTemplate.IsAbout_Region_Id.IfNullThenElse(model.IsAbout_Region_Id);
+            model.IsAbout_Department_Id = caseTemplate.IsAbout_Department_Id.IfNullThenElse(model.IsAbout_Department_Id);
+            model.IsAbout_OU_Id = caseTemplate.IsAbout_OU_Id.IfNullThenElse(model.IsAbout_OU_Id);
+            model.IsAbout_CostCentre = caseTemplate.IsAbout_CostCentre.IfNullThenElse(model.IsAbout_CostCentre);
+            model.IsAbout_Place = caseTemplate.IsAbout_Place.IfNullThenElse(model.IsAbout_Place);
+            model.IsAbout_UserCode = caseTemplate.UserCode.IfNullThenElse(model.IsAbout_UserCode);
+
+            model.Status_Id = caseTemplate.Status_Id.IfNullThenElse(model.Status_Id);
+            model.StateSecondary_Id = caseTemplate.StateSecondary_Id.IfNullThenElse(model.StateSecondary_Id);
+            model.Verified = caseTemplate.Verified;
+            model.VerifiedDescription = caseTemplate.VerifiedDescription.IfNullThenElse(model.VerifiedDescription);
+            model.SolutionRate = caseTemplate.SolutionRate.IfNullThenElse(model.SolutionRate);
+
+            model.Text_External = caseTemplate.Text_External.IfNullThenElse(model.Text_External);
+            model.Text_Internal = caseTemplate.Text_Internal.IfNullThenElse(model.Text_Internal);
+            model.FinishingType_Id = caseTemplate.FinishingCause_Id.IfNullThenElse(model.FinishingType_Id);
+
+            if (caseTemplate.RegistrationSource.HasValue && caseTemplate.RegistrationSource.Value > 0)
+            {
+                model.RegistrationSourceCustomer_Id = caseTemplate.RegistrationSource.Value;
+            }
+
+            }
+
+            return model;
+        }
+
+        public ProcessResult SaveCaseCheckSplit(CaseModel caseModel, AuxCaseModel auxModel, out int caseId)
+        {
+            var isNewCase = caseModel.Id == 0;
+
+            ProcessResult res = new ProcessResult("Save Case Check Split");
+
+            if (caseModel.CaseSolution_Id.HasValue && isNewCase == true)
+            { 
+          
+                var caseSolution = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id.Value);
+
+                ////Split into "parent" and "child(s)"
+                if (caseSolution.SplitToCaseSolutionType == SplitToCaseSolutionType.ParentAndChilds)
+                {
+                    return res = SaveParentAndChilds(caseModel, auxModel, out caseId);
+                }
+
+                //Create indepent cases based on the "parent" case solution template
+                if (caseSolution.SplitToCaseSolutionType == SplitToCaseSolutionType.NewDescendants)
+                {
+                    return res = SaveNewDescendandts(caseModel, auxModel, out caseId);
+                }
+                //Create cases based on "parent", and "child" but independent
+                if (caseSolution.SplitToCaseSolutionType == SplitToCaseSolutionType.SelfAndDescendandts)
+                {
+                    return res = SaveNewSelfAndDescendandts(caseModel, auxModel, out caseId);
+                }
+            }
+
+           //do regular save
+            return res = SaveCase(caseModel, auxModel, out caseId);
+
+        }
+
+        private ProcessResult SaveNewDescendandts(CaseModel baseCaseModel, AuxCaseModel baseAuxModel, out int caseId)
+        {
+            ProcessResult res = new ProcessResult("SaveNew Descendants");
+            int baseCaseId = -1;
+
+            var baseCaseSolution = _caseSolutionService.GetCaseSolution(baseCaseModel.CaseSolution_Id.Value);
+
+            if (baseCaseSolution.SplitToCaseSolutionTemplates != null && baseCaseSolution.SplitToCaseSolutionTemplates.Any())
+            {
+                foreach (var item in baseCaseSolution.SplitToCaseSolutionTemplates.Where(x => x.Status > 0))
+                {
+                    var caseTemplate = _caseSolutionService.GetCaseSolution(item.Id);
+                    var formId = caseTemplate.ExtendedCaseForms.FirstOrDefault().Id;
+
+                    //First time
+                    if (baseCaseId == -1)
+                    {
+                        //apply values from case solution
+                        baseCaseModel = ApplyValuesFromCaseSolution(baseCaseModel, item.Id);
+                        
+                        //save "base"
+                        res = SaveCase(baseCaseModel, baseAuxModel, out baseCaseId);
+                    }
+                    else
+                    {
+                        int childCaseId = -1;
+                        //clone model
+                        CaseModel descendantCaseModel = baseCaseModel;
+
+                        //apply values from case solution
+                        descendantCaseModel = ApplyValuesFromCaseSolution(descendantCaseModel, item.Id);
+
+                        //todo: refactor
+                        descendantCaseModel.ExtendedCaseData_Id = null;
+                        descendantCaseModel.ExtendedCaseForm_Id = null;
+
+                        res = SaveCase(descendantCaseModel, baseAuxModel, out childCaseId);
+
+                        if (res.IsSucceed && childCaseId != -1)
+                        {
+                                //Todo: refactor
+                                var data = _extendedCaseService.GetExtendedCaseFromCase(baseCaseId);
+                                if (data != null)
+                                {
+                                    _extendedCaseService.CopyExtendedCaseToCase(data.Id, childCaseId, baseAuxModel.UserIdentityName, formId);
+                                }
+                        }
+                    }
+                }
+            }
+
+            caseId = baseCaseId;
+            return res;
+        }
+
+        private ProcessResult SaveNewSelfAndDescendandts(CaseModel baseCaseModel, AuxCaseModel baseAuxModel, out int caseId)
+        {
+            var isNewCase = baseCaseModel.Id == 0;
+            ProcessResult res = new ProcessResult("SaveNew SelfAndDescendandts");
+            int selfCaseId = -1;
+
+            var baseCaseSolution = _caseSolutionService.GetCaseSolution(baseCaseModel.CaseSolution_Id.Value);
+
+            //apply values from case solution
+            baseCaseModel = ApplyValuesFromCaseSolution(baseCaseModel, baseCaseSolution.Id);
+
+            //save "base"
+            res = SaveCase(baseCaseModel, baseAuxModel, out selfCaseId);
+
+            if (res.IsSucceed && selfCaseId != -1)
+            {
+                if (baseCaseSolution.SplitToCaseSolutionTemplates != null && baseCaseSolution.SplitToCaseSolutionTemplates.Any())
+                {
+                    foreach (var item in baseCaseSolution.SplitToCaseSolutionTemplates.Where(x => x.Status > 0))
+                    {
+                        var caseTemplate = _caseSolutionService.GetCaseSolution(item.Id);
+                        var formId = caseTemplate.ExtendedCaseForms.FirstOrDefault().Id;
+
+                        CaseModel childCaseModel = baseCaseModel;
+
+                        int childCaseId = -1;
+
+                        //apply values from case solution
+                        childCaseModel = ApplyValuesFromCaseSolution(childCaseModel, item.Id);
+
+                        //todo: refactor
+                        childCaseModel.ExtendedCaseData_Id = null;
+                        childCaseModel.ExtendedCaseForm_Id = null;
+
+                        res = SaveCase(childCaseModel, baseAuxModel, out childCaseId);
+
+                        if (res.IsSucceed && childCaseId != -1)
+                        {
+                            //Todo: refactor
+                            var data = _extendedCaseService.GetExtendedCaseFromCase(selfCaseId);
+                            if (data != null)
+                            {
+                                _extendedCaseService.CopyExtendedCaseToCase(data.Id, childCaseId, baseAuxModel.UserIdentityName, formId);
+                            }
+                        }
+                    }
+                }
+            }
+
+            caseId = selfCaseId;
+            return res;
+        }
+
+        private ProcessResult SaveParentAndChilds(CaseModel baseCaseModel, AuxCaseModel baseAuxModel, out int caseId)
+        {
+            IDictionary<string, string> errors; 
+
+            var isNewCase = baseCaseModel.Id == 0;
+            ProcessResult res = new ProcessResult("Save ParentAndChilds");
+            int selfCaseId = -1;
+
+            var baseCaseSolution = _caseSolutionService.GetCaseSolution(baseCaseModel.CaseSolution_Id.Value);
+
+            //apply values from case solution
+            baseCaseModel = ApplyValuesFromCaseSolution(baseCaseModel, baseCaseModel.CaseSolution_Id.Value);
+
+            //save base
+            res = SaveCase(baseCaseModel, baseAuxModel, out selfCaseId);
+
+            if (res.IsSucceed && selfCaseId != -1)
+            {
+
+                //check if there should be created child cases
+                if (baseCaseSolution.SplitToCaseSolutionTemplates != null && baseCaseSolution.SplitToCaseSolutionTemplates.Any())
+                {
+                    foreach (var item in baseCaseSolution.SplitToCaseSolutionTemplates.Where(x => x.Status > 0))
+                    {
+                        var caseTemplate = _caseSolutionService.GetCaseSolution(item.Id);
+                        var formId = caseTemplate.ExtendedCaseForms.FirstOrDefault().Id;
+
+                        //Duplicate
+                        CaseModel childCaseModel = baseCaseModel;
+
+
+                        int childCaseId = -1;
+
+                        //apply values from case solution
+                        childCaseModel = ApplyValuesFromCaseSolution(childCaseModel, item.Id);
+
+                        childCaseModel.ExtendedCaseData_Id = null;
+                        childCaseModel.ExtendedCaseForm_Id = null;
+
+                        res = SaveCase(childCaseModel, baseAuxModel, out childCaseId);
+
+                        if (res.IsSucceed && childCaseId != -1)
+                        {
+
+                            var data = _extendedCaseService.GetExtendedCaseFromCase(selfCaseId);
+                            if (data != null)
+                            {
+                                _extendedCaseService.CopyExtendedCaseToCase(data.Id, childCaseId, baseAuxModel.UserIdentityName, formId);
+                            }
+
+
+                            //TODO: om fel, visa det
+                            _caseService.AddChildCase(childCaseId, selfCaseId, out errors);
+
+                            if (errors.Count() == 0)
+                                _caseService.SetIndependentChild(childCaseId, true);
+
+                        }
+                    }
+                }
+            }
+
+
+
+            caseId = selfCaseId;
+            return res;
+        }
+
 
         public CaseTimeMetricsModel ClaculateCaseTimeMetrics(CaseModel caseModel, AuxCaseModel auxModel, CaseModel oldCase = null)
         {

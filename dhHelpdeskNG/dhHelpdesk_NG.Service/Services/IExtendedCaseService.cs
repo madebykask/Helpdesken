@@ -7,8 +7,10 @@
     {
         ExtendedCaseDataModel GenerateExtendedFormModel(InitExtendedForm initData, out string lastError);
 
-		ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, string userID);
+		ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, string userID, int? extendedCaseFormId = null);
 
-		ExtendedCaseDataModel GetExtendedCaseFromCase(int id);
+
+
+        ExtendedCaseDataModel GetExtendedCaseFromCase(int id);
 	}
 }

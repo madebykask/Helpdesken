@@ -174,6 +174,15 @@
             this.Property(x => x.CaseSolutionDescription).IsOptional();
             this.Property(x => x.ValidateOnChange).IsOptional().HasMaxLength(100);
             this.Property(x => x.NextStepState).IsOptional();
+            this.Property(x => x.SplitToCaseSolutionType).IsRequired();
+            
+
+            this.HasMany(cs => cs.SplitToCaseSolutionTemplates).WithMany().Map(m =>
+            {
+                m.MapLeftKey("CaseSolution_Id");
+                m.MapRightKey("SplitToCaseSolution_Id");
+                m.ToTable("tblCaseSolution_SplitToCaseSolution");
+            });
 
             this.ToTable("tblcasesolution");
         }

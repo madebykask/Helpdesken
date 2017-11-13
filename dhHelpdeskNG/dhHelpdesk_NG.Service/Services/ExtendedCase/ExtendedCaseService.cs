@@ -91,9 +91,9 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
             return expandedPath;
         }
 
-        public ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, string userID)
+        public ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, string userID, int? extendedCaseFormId = null)
         {
-            return _extendedCaseDataRepository.CopyExtendedCaseToCase(extendedCaseDataID, caseID, userID);
+            return _extendedCaseDataRepository.CopyExtendedCaseToCase(extendedCaseDataID, caseID, userID, extendedCaseFormId);
         }
 
         public ExtendedCaseDataModel GetExtendedCaseFromCase(int caseID)

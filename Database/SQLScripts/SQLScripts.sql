@@ -1,6 +1,37 @@
-﻿
---update DB from 5.3.34 to 5.3.35 version
+﻿--update DB from 5.3.34 to 5.3.35 version
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'SplitToCaseSolutionType' and sysobjects.name = N'tblCaseSolution')
+begin
+
+	ALTER TABLE [tblCaseSolution] ADD [SplitToCaseSolutionType] int NOT NULL DEFAULT(0)
+
+end
+   
+
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblCaseSolution_SplitToCaseSolution' AND xtype='U')
+BEGIN
+
+	SET ANSI_NULLS ON
+	SET QUOTED_IDENTIFIER ON
+
+	CREATE TABLE [dbo].[tblCaseSolution_SplitToCaseSolution](
+		[CaseSolution_Id] [int] NOT NULL,
+		[SplitToCaseSolution_Id] [int] NOT NULL,
+	 CONSTRAINT [PK_tblCaseSolutionAncestor_tblCaseSolutionDescendant] PRIMARY KEY CLUSTERED 
+	(
+		[CaseSolution_Id] ASC,
+		[SplitToCaseSolution_Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'ExtendedCaseForm_Id' and sysobjects.name = N'tblCase_ExtendedCaseData')
+begin
+
+	ALTER TABLE [tblCase_ExtendedCaseData] ADD [ExtendedCaseForm_Id] int 
+end
 
 
 IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 

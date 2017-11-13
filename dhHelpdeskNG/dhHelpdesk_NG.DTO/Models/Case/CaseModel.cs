@@ -1,7 +1,6 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Shared.Input;
 using System;
 
-
 namespace DH.Helpdesk.BusinessData.Models.Case
 {
     public class CaseModel: INewBusinessModel
@@ -231,7 +230,11 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         #region Etc
 
         public int? CaseSolution_Id { get; set; }
+        #endregion
 
+        #region ExtendedCase
+        public int? ExtendedCaseData_Id { get; set; }
+        public int? ExtendedCaseForm_Id { get; set; }
         #endregion
 
     }

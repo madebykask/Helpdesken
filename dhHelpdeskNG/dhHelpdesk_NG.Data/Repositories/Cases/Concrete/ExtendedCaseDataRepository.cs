@@ -70,7 +70,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             return _extendedCaseDataToBusinessModelMapper.Map(case_ExtendedCaseEntity.ExtendedCaseData);
         }
 
-        public ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, string userID)
+        public ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, string userID, int? extendedCaseFormId = null)
         {
             var copyFromExtendedCaseData = DataContext.ExtendedCaseDatas.Where(o => o.Id == extendedCaseDataID).FirstOrDefault();
 
@@ -81,7 +81,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             var newExtendedCaseData = new ExtendedCaseDataEntity
             {
                 ExtendedCaseGuid = Guid.NewGuid(),
-                ExtendedCaseFormId = copyFromExtendedCaseData.ExtendedCaseFormId,
+                ExtendedCaseFormId = (extendedCaseFormId.HasValue ? extendedCaseFormId.Value : copyFromExtendedCaseData.ExtendedCaseFormId),
                 CreatedOn = now,
                 CreatedBy = userID,
                 ExtendedCaseValues = new Collection<ExtendedCaseValueEntity>()
@@ -105,7 +105,8 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             var newCaseExtendedCase = new Case_ExtendedCaseEntity
             {
                 Case_Id = caseID,
-                ExtendedCaseData_Id = newExtendedCaseData.Id
+                ExtendedCaseData_Id = newExtendedCaseData.Id,
+                ExtendedCaseForm_Id = extendedCaseFormId
             };
 
             DataContext.Case_ExtendedCases.Add(newCaseExtendedCase);

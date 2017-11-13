@@ -97,32 +97,27 @@
 <div class="jumbotron greybar">
     <div class="container-fluid">
         <div class="col-lg-12 secnav">
-            <div class="col-lg-12" style="padding-left:0;">
-                <input id="btnSave" type="button" value='@Translation.Get("Save", Enums.TranslationSource.TextTranslation)' class="btn btn-default" />
-            </div>
+
+                <input id="btnSave" type="button" value='@Translation.Get("Save", Enums.TranslationSource.TextTranslation)' class="btn btn-default pull-left" style="margin-right:20px !important;" />
             @if (Model.WorkflowSteps != null && Model.WorkflowSteps.Any())
             {
-                <div class="col-lg-8">
-                    <div class="input-group">
-                        <select id="steps" name="steps" class="dropdown-group">
+                
+                    <div class="input-group" >
+                        <select id="steps" name="steps" class="dropdown-group pull-left">
                             <option value="0" class="form-control">@Translation.Get(Text.SelectStep)</option>
                             @if (Model.WorkflowSteps != null && Model.WorkflowSteps.Any())
                             {
                                 foreach (var step in Model.WorkflowSteps)
                                 {
-                                    <option data-next-step="@step.NextStep" value="@step.CaseTemplateId">@Translation.Get(step.Name)</option>
+                            <option data-next-step="@step.NextStep" value="@step.CaseTemplateId">@Translation.Get(step.Name)</option>
                                 }
                             }
                         </select>
-                        <span class="input-group-btn">
+                        <span class="input-group-btn pull-left">
                             <input id="btnGo" type="button" class="btn btn-default go-button" value="@Translation.Get("Send")" />
                         </span>
                     </div>
-                </div>
-            }
-            else
-            {
-                <div class="col-lg-8"></div>
+                
             }
         </div>
     </div>
@@ -277,9 +272,6 @@
     @Html.HiddenFor(model => model.SelectedWorkflowStep)
 
 }
-
-
-
 <div class="container-fluid dh-container">
     <ul class="nav nav-tabs" id="tabsArea">
         <li id="extendedcase-tab-@extendedFormId" class="active">
@@ -289,7 +281,6 @@
             </a>
         </li>
     </ul>
-
     <div class="content">
         <div id="fragment-1" class="tab-pane active">
             <div class="container-fluid dh-container">

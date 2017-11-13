@@ -10,5 +10,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         ProcessResult SaveCase(CaseModel caseModel, AuxCaseModel auxModel, out int caseId);
 
         CaseTimeMetricsModel ClaculateCaseTimeMetrics(CaseModel caseModel, AuxCaseModel auxModel, CaseModel oldCase = null);
+
+        ProcessResult SaveCaseCheckSplit(CaseModel parentCaseModel, AuxCaseModel parentAuxModel, out int caseId);
     }
 }
