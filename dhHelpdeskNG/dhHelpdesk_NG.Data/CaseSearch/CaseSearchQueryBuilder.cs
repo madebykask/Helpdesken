@@ -867,7 +867,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
             // finns kryssruta pa anvandaren att den bara far se sina egna arenden
             var restrictedCasePermission = searchCriteria.CustomerUserSettings.User.RestrictedCasePermission;
-            if (restrictedCasePermission == 1)
+            if (restrictedCasePermission == 1 && !searchFilter.IsExtendedSearch)
             {
                 if (searchCriteria.UserGroupId == 2)
                     sb.Append(" and (tblCase.Performer_User_Id = " + searchCriteria.UserId + " or tblcase.CaseResponsibleUser_Id = " + searchCriteria.UserId + ")");

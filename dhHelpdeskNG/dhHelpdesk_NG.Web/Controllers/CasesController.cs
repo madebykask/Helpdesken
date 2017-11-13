@@ -495,10 +495,13 @@ namespace DH.Helpdesk.Web.Controllers
 
             var customers = frm.ReturnFormValue("currentCustomerId").Split(',').Select(x => Int32.Parse(x)).ToList();
             var isExtendedSearch = frm.IsFormValueTrue(CaseFilterFields.IsExtendedSearch);
+            var res = new List<Tuple<List<Dictionary<string, object>>, GridSettingsModel>>();
+            var extendedCustomers = new List<int>();
+
             if (isExtendedSearch)
             {
-                var includedCustomers = _settingService.GetExtendedSearchIncludedCustomers();
-                foreach (var includedCustomer in includedCustomers)
+                extendedCustomers = _settingService.GetExtendedSearchIncludedCustomers();
+                foreach (var includedCustomer in extendedCustomers)
                 {
                     if (!customers.Contains(includedCustomer))
                     {
@@ -506,11 +509,11 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }
             }
-            var res = new List<Tuple<List<Dictionary<string, object>>, GridSettingsModel>>();
+            
 
             foreach (var customer in customers)
             {
-                res.Add(AdvancedSearchForCustomer(frm, customer, isExtendedSearch));
+                res.Add(AdvancedSearchForCustomer(frm, customer, isExtendedSearch, extendedCustomers));
             }
 
             var totalCount = res.Sum(x => x.Item1.Count);
@@ -6915,7 +6918,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         #endregion
 
-        private Tuple<List<Dictionary<string, object>>, GridSettingsModel> AdvancedSearchForCustomer(FormCollection frm, int customerId, bool isExtendedSearch = false)
+        private Tuple<List<Dictionary<string, object>>, GridSettingsModel> AdvancedSearchForCustomer(FormCollection frm, int customerId, bool isExtendedSearch = false, List<int> extendedCustomers = null)
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
@@ -7050,7 +7053,32 @@ namespace DH.Helpdesk.Web.Controllers
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
             var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
             f.MaxTextCharacters = 0;
-            m.cases = _caseSearchService.Search(
+
+            var normalSearchResultIds = new List<int>();
+            if (f.IsExtendedSearch)
+            {
+                if (!extendedCustomers.Contains(customerId))
+                {
+                    f.IsExtendedSearch = false;
+                    normalSearchResultIds = _caseSearchService.Search(
+                        f,
+                        m.caseSettings,
+                        caseFieldSettings,
+                        SessionFacade.CurrentUser.Id,
+                        SessionFacade.CurrentUser.UserId,
+                        SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
+                        SessionFacade.CurrentUser.UserGroupId,
+                        SessionFacade.CurrentUser.RestrictedCasePermission,
+                        sm.Search,
+                        0,
+                        0,
+                        userTimeZone,
+                        ApplicationTypes.Helpdesk
+                        ).Items.Select(x => x.Id).ToList();
+                    f.IsExtendedSearch = true;
+                }
+
+                m.cases = _caseSearchService.Search(
                 f,
                 m.caseSettings,
                 caseFieldSettings,
@@ -7065,6 +7093,25 @@ namespace DH.Helpdesk.Web.Controllers
                 userTimeZone,
                 ApplicationTypes.Helpdesk
                 ).Items.Take(maxRecords).ToList();
+            }
+            else
+            {
+                m.cases = _caseSearchService.Search(
+                f,
+                m.caseSettings,
+                caseFieldSettings,
+                SessionFacade.CurrentUser.Id,
+                SessionFacade.CurrentUser.UserId,
+                SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
+                SessionFacade.CurrentUser.UserGroupId,
+                SessionFacade.CurrentUser.RestrictedCasePermission,
+                sm.Search,
+                0,
+                0,
+                userTimeZone,
+                ApplicationTypes.Helpdesk
+                ).Items.Take(maxRecords).ToList();
+            }
 
             m.cases = this.TreeTranslate(m.cases, currentCustomerId);
             sm.Search.IdsForLastSearch = this.GetIdsFromSearchResult(m.cases);
@@ -7130,21 +7177,28 @@ namespace DH.Helpdesk.Web.Controllers
                 if (isExtendedSearch)
                 {
                     var infoAvailableInExtended = false;
-                    if (SessionFacade.CurrentUser.UserGroupId == UserGroups.User ||
-                        SessionFacade.CurrentUser.UserGroupId == UserGroups.Administrator)
+                    if (normalSearchResultIds.Contains(searchRow.Id))
                     {
-                        if (availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
-                            && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId)
-                            && availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
-                        {
-                            infoAvailableInExtended = true;
-                        }
+                        infoAvailableInExtended = true;
                     }
                     else
                     {
-                        if (availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
+                        if (SessionFacade.CurrentUser.UserGroupId == UserGroups.User ||
+                            SessionFacade.CurrentUser.UserGroupId == UserGroups.Administrator)
                         {
-                            infoAvailableInExtended = true;
+                            if (availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
+                                && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId)
+                                && availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
+                            {
+                                infoAvailableInExtended = true;
+                            }
+                        }
+                        else
+                        {
+                            if (availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
+                            {
+                                infoAvailableInExtended = true;
+                            }
                         }
                     }
                     jsRow.Add("ExtendedAvailable", infoAvailableInExtended);
