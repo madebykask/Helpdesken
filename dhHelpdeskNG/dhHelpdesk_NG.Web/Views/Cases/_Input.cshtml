@@ -31,6 +31,8 @@
         extendValue: '@Model.CaseLock.ExtendValue',
         timerInterval: '@Model.CaseLock.TimerInterval',
         departmentInvoiceMandatory: @Model.TimeRequired.ToJavaScriptBool(),
+        showInvoiceTime: @((Model.case_.Department != null && Model.case_.Department.ShowInvoiceTime).ToJavaScriptBool()),
+        showInvoiceOvertime: @((Model.case_.Department != null && Model.case_.Department.ShowInvoiceOvertime).ToJavaScriptBool()),
         invoicePreventsToCloseCaseMessage: '@Translation.GetForJS("Du kan inte avsluta ärendet eftersom det finns öppna order.")',
         caseLockChecker: '@Url.Content("~/Cases/IsCaseAvailable/")',
         caseLockExtender: '@Url.Content("~/Cases/ReExtendCaseLock/")',
@@ -2635,11 +2637,11 @@
                     require_from_group: {
                                     param: [1, ".time-field"],
                                     depends: function(element) {
-                                        var setting = _parameters.departmentInvoiceMandatory;
+                                        var setting = _parameters.departmentInvoiceMandatory && _parameters.showInvoiceTime;
                                         var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
-                                        || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";                                        
-                                        //return setting && logPopulated;
-                                        return false;
+                                        || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
+                                                                                
+                                        return setting && logPopulated;                                        
                                     }
                     }
                         },
@@ -2647,11 +2649,11 @@
                     require_from_group: {
                                     param: [1, ".time-field"],
                                     depends: function(element) {
-                                        var setting = _parameters.departmentInvoiceMandatory;
+                                        var setting = _parameters.departmentInvoiceMandatory && _parameters.showInvoiceTime;
                                         var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
                                         || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
-                                        //return setting && logPopulated;
-                                        return false;
+                                                                               
+                                        return setting && logPopulated;                                       
                                     }
                     }
                         },
@@ -2659,11 +2661,11 @@
                     require_from_group: {
                                     param: [1, ".time-field"],
                                     depends: function(element) {
-                                        var setting = _parameters.departmentInvoiceMandatory;
+                                        var setting = _parameters.departmentInvoiceMandatory && _parameters.showInvoiceOvertime;
                                         var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
                                         || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
-                                        //return setting && logPopulated;
-                                        return false;
+                                        
+                                        return setting && logPopulated;
                                     }
                     }
                         },
@@ -2671,13 +2673,13 @@
                     require_from_group: {
                                     param: [1, ".time-field"],
                                     depends: function(element) {
-                                        var setting = _parameters.departmentInvoiceMandatory;
+                                        var setting = _parameters.departmentInvoiceMandatory && _parameters.showInvoiceOvertime;
                                         var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
                                             || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
-                                        //return setting && logPopulated;
-                                        return false;                                        
+                                                                                
+                                        return setting && logPopulated;                                        
                                     }
-                    }
+                                }
                         }
                     }
         
