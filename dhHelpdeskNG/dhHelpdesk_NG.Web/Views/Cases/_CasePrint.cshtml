@@ -71,10 +71,10 @@
                                 if (!isFirstGroup)
                                 {
                                     <tr>
-                                        <td style="width:20%; margin-left:20px;line-height:30px;">                                    
+                                        <td style="width:20%; margin-left:20px;line-height:12px;">                                    
                                            <p> &nbsp; </p>
                                         </td>
-                                        <td style="width:20%;word-wrap: break-word;line-height:30px;">
+                                        <td style="width:20%;word-wrap: break-word;line-height:12px;">
                                             <p>&nbsp;</p> 
                                         </td>
                                     </tr>                                                                      
@@ -82,7 +82,7 @@
                                 isFirstGroup = false;
                             }
                             <tr>                                                             
-                                <td style="width:20%;word-wrap: break-word; margin-left:20px;" class="textbold @row.LineType">
+                                <td style="width:20%;word-wrap: break-word; margin-left:20px;line-height:10px;" class="textbold @row.LineType">
                                    <p> @row.FieldCaption </p>                                
                                 </td>                                                               
                                 
@@ -90,7 +90,7 @@
                                 {
                                     var filesStr = val.Replace(Environment.NewLine, tempNewLine).RemoveHTMLTags();
                                     var files = filesStr.Split(new string[] { tempNewLine }, StringSplitOptions.None);
-                                    <td style="width:80%;" class="@row.LineType">                                    
+                                    <td style="width:80%; line-height:10px;" class="@row.LineType">                                    
                                         @foreach (var file in files.Where(f => !string.IsNullOrEmpty(f)).ToList())
                                         {
                                              <p> <img src="@Url.Content("~/Content/icons/ico-doc-black.png")" > @file.ForHtmlView() </p>
@@ -99,7 +99,7 @@
                                 }
                                 else
                                 {                                    
-                                    <td style="width:80%; word-wrap: break-word;" class="@row.LineType">                                    
+                                    <td style="width:80%; word-wrap: break-word;line-height:10px;" class="@row.LineType">                                    
                                         <p> @val.Replace(Environment.NewLine, tempNewLine).RemoveHTMLTags().Replace(tempNewLine, Environment.NewLine).ForHtmlView()</p>
                                     </td>
                                 }
