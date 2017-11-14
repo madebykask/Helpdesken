@@ -6357,7 +6357,12 @@ If not exists (select * from tblTextTranslation where text_id = 1876 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1876, 2, 'Number of answers')
 GO
 
-
+If not exists (select * from tbltext where id = 1877)
+	insert into tbltext (id, TextString) VALUES (1877, 'Är du säker på att du vill ta bort aktuell FAQ')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1877 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1877, 2, '	Are you sure you want to delete this FAQ')
+GO
 
 
 -- *** Run this last when put translation script above this line **--
