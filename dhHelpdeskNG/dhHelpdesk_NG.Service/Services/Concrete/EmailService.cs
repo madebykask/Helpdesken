@@ -307,9 +307,14 @@ namespace DH.Helpdesk.Services.Services.Concrete
 			{
 				urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
 
-				foreach (var field in fields)
-					if (field.Key == "[#98]")
-						field.StringValue = urlSelfService;
+                if (fields != null)
+                {
+
+                    foreach (var field in fields)
+					    if (field.Key == "[#98]")
+					        field.StringValue = urlSelfService;
+                }
+				
 			}
 
 			if (body.Contains("[/#99]"))
@@ -341,9 +346,14 @@ namespace DH.Helpdesk.Services.Services.Concrete
 			{
 				urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
 
-				foreach (var field in fields)
-					if (field.Key == "[#99]")
-						field.StringValue = urlHelpdesk;
+                if (fields != null)
+                {
+
+                    foreach (var field in fields)
+					    if (field.Key == "[#99]")
+						    field.StringValue = urlHelpdesk;
+                }
+				
 			}
 
 			msg.Subject = AddInformationToMailBodyAndSubject(subject, fields);
