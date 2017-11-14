@@ -201,6 +201,38 @@
                                     </tr>
                                     <tr>
                                         <td></td>
+                                        <td>
+                                            @Html.CheckBoxFor(m => Model.Department.ShowInvoiceTime)
+                                            &nbsp; @Translation.Get("Visa tid", Enums.TranslationSource.TextTranslation)                                            
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            @Html.CheckBoxFor(m => Model.Department.ShowInvoiceOvertime)
+                                            &nbsp; @Translation.Get("Visa övertid", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            @Html.CheckBoxFor(m => Model.Department.ShowInvoiceMaterial)
+                                            &nbsp; @Translation.Get("Visa Material", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            @Html.CheckBoxFor(m => Model.Department.ShowInvoicePrice)
+                                            &nbsp; @Translation.Get("Visa Pris", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
                                         <td>&nbsp;</td>
                                     </tr>
                                     <tr>

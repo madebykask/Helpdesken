@@ -230,40 +230,55 @@
 		{
 			<table id="tblCaseChargeSummary" style="@Model.ShowInvoiceFields.displayHtml()">
 				<tbody>
-					<tr>
-						<td>
-							@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Arbete"):
-						</td>
-						<td id="totalWorkingTime">
-							@(Model.Logs.Sum(x => x.WorkingTime) / 60)@Translation.GetCoreTextTranslation("Tim")
-							@(Model.Logs.Sum(x => x.WorkingTime) % 60)@Translation.GetCoreTextTranslation("Min")
-						</td>
-					</tr>
-					<tr>
-						<td>
-							@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Övertid"):
-						</td>
-						<td id="totalOvertime">
-							@(Model.Logs.Sum(x => x.OverTime) / 60)@Translation.GetCoreTextTranslation("Tim")
-							@(Model.Logs.Sum(x => x.OverTime) % 60)@Translation.GetCoreTextTranslation("Min")
-						</td>
-					</tr>
-					<tr>
-						<td>
-							@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Material"):
-						</td>
-						<td id="totalMaterial">
-							@Model.Logs.Sum(x => x.Price).ToString("0.00")
-						</td>
-					</tr>
-					<tr>
-						<td>
-							@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Pris"):
-						</td>
-						<td id="totalPrice">
-							@Model.Logs.Sum(x => x.EquipmentPrice).ToString("0.00")
-						</td>
-					</tr>
+                    @if (Model.case_.Department != null)
+                    {
+                        if (Model.case_.Department.ShowInvoiceTime)
+                        {
+					        <tr>
+						        <td>
+							        @Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Arbete"):
+						        </td>
+						        <td id="totalWorkingTime">
+							        @(Model.Logs.Sum(x => x.WorkingTime) / 60)@Translation.GetCoreTextTranslation("Tim")
+							        @(Model.Logs.Sum(x => x.WorkingTime) % 60)@Translation.GetCoreTextTranslation("Min")
+						        </td>
+					        </tr>
+                        }
+                        if (Model.case_.Department.ShowInvoiceOvertime)
+                        {
+					        <tr>
+						        <td>
+							        @Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Övertid"):
+						        </td>
+						        <td id="totalOvertime">
+							        @(Model.Logs.Sum(x => x.OverTime) / 60)@Translation.GetCoreTextTranslation("Tim")
+							        @(Model.Logs.Sum(x => x.OverTime) % 60)@Translation.GetCoreTextTranslation("Min")
+						        </td>
+					        </tr>
+                        }
+                        if (Model.case_.Department.ShowInvoiceMaterial)
+                        {
+					        <tr>
+						        <td>
+							        @Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Material"):
+						        </td>
+						        <td id="totalMaterial">
+							        @Model.Logs.Sum(x => x.Price).ToString("0.00")
+						        </td>
+					        </tr>
+                        }
+                        if (Model.case_.Department.ShowInvoicePrice)
+                        {
+					        <tr>
+						        <td>
+							        @Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Pris"):
+						        </td>
+						        <td id="totalPrice">
+							        @Model.Logs.Sum(x => x.EquipmentPrice).ToString("0.00")
+						        </td>
+					        </tr>
+                        }
+                    }
 					<tr id="totalExternalAmountRow" style="@Model.ShowExternalInvoiceFields.displayHtml()">
 						<td>
 							@Translation.GetCoreTextTranslation("Total") @Translation.GetCoreTextTranslation("Fakturor"):

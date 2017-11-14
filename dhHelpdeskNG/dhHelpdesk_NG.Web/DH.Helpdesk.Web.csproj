@@ -33,7 +33,7 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <IISExpressSSLPort>44302</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />

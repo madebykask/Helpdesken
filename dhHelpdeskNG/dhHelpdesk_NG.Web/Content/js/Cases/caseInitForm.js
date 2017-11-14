@@ -660,8 +660,11 @@ function CaseInitForm() {
     function showInvoice(departmentId) {
         var invoiceSelector = "#divInvoice, #btnCaseCharge, #tblCaseChargeSummary";
         var externalInvoiceSelector = "#divExternalInvoice, #totalExternalAmountRow, #externalInvoiceGrid";
+        var invoiceFields = "#invoiceField-Time, #invoiceField-Overtime, #invoiceField-Material, #invoiceField-Price";
+
         $(invoiceSelector).hide();
         $(externalInvoiceSelector).hide();
+        $(invoiceFields).hide();
         $.get("/Cases/GetDepartmentInvoiceParameters/", { departmentId: departmentId }, function (data) {
             if (data) {
                 _parameters.departmentInvoiceMandatory = data.ChargeMandatory;
@@ -670,6 +673,18 @@ function CaseInitForm() {
                 }
                 if (data.ShowInvoice) {
                     $(externalInvoiceSelector).show();
+                }
+                if (data.ShowInvoiceTime) {
+                    $('#invoiceField-Time').show();
+                }
+                if (data.ShowInvoiceOvertime) {
+                    $('#invoiceField-Overtime').show();
+                }
+                if (data.ShowInvoiceMaterial) {
+                    $('#invoiceField-Material').show();
+                }
+                if (data.ShowInvoicePrice) {
+                    $('#invoiceField-Price').show();
                 }
             }
         }, "json");
@@ -1080,6 +1095,9 @@ function CaseInitForm() {
     bindProductAreasEvents();
 
     resetProductareaByCaseType($('#case__CaseType_Id').val());
+
+    if ($(publicDepartmentControlName) != undefined)
+        showInvoice($(publicDepartmentControlName).val());
 
     $('#divCategory ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();

@@ -1897,7 +1897,16 @@ namespace DH.Helpdesk.Web.Controllers
             if (departmentId.HasValue)
             {
                 var d = _departmentService.GetDepartment(departmentId.Value);
-                return Json(new { ShowInvoice = d.ShowInvoice.ToBool(), ChargeMandatory = d.ChargeMandatory.ToBool(), Charge = d.Charge.ToBool() }, JsonRequestBehavior.AllowGet);
+                return Json(new
+                {
+                    ShowInvoice = d.ShowInvoice.ToBool(),
+                    ChargeMandatory = d.ChargeMandatory.ToBool(),
+                    Charge = d.Charge.ToBool(),
+                    ShowInvoiceTime = d.ShowInvoiceTime,
+                    ShowInvoiceOvertime = d.ShowInvoiceOvertime,
+                    ShowInvoiceMaterial = d.ShowInvoiceMaterial,
+                    ShowInvoicePrice = d.ShowInvoicePrice
+                }, JsonRequestBehavior.AllowGet);
             }
             return null;
         }

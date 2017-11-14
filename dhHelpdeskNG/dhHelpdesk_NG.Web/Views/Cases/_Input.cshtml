@@ -2637,8 +2637,9 @@
                                     depends: function(element) {
                                         var setting = _parameters.departmentInvoiceMandatory;
                                         var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
-                                        || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
-                                        return setting && logPopulated;
+                                        || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";                                        
+                                        //return setting && logPopulated;
+                                        return false;
                                     }
                     }
                         },
@@ -2649,7 +2650,8 @@
                                         var setting = _parameters.departmentInvoiceMandatory;
                                         var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
                                         || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
-                                        return setting && logPopulated;
+                                        //return setting && logPopulated;
+                                        return false;
                                     }
                     }
                         },
@@ -2660,7 +2662,8 @@
                                         var setting = _parameters.departmentInvoiceMandatory;
                                         var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
                                         || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
-                                        return setting && logPopulated;
+                                        //return setting && logPopulated;
+                                        return false;
                                     }
                     }
                         },
@@ -2671,7 +2674,8 @@
                                         var setting = _parameters.departmentInvoiceMandatory;
                                         var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
                                             || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
-                                        return setting && logPopulated;
+                                        //return setting && logPopulated;
+                                        return false;                                        
                                     }
                     }
                         }

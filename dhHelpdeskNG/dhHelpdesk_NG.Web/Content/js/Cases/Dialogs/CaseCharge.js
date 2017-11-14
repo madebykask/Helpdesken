@@ -144,6 +144,11 @@ CaseCharge.prototype = {
     _buildLogInvoicesGrid: function (logInvoices) {
         "use strict";
         var self = this;
+      
+        var _showTime = self.options.showInvoiceTime === "True";
+        var _showOvertime = self.options.showInvoiceOvertime === "True";
+        var _showPrice = self.options.showInvoicePrice === "True";
+        var _showMaterial = self.options.showInvoiceMaterial === "True";
 
         var res = [];
         for (var i = 0; i < logInvoices.length; i++) {
@@ -152,10 +157,18 @@ CaseCharge.prototype = {
             "<tr>" +
             "<td>" + "<input type=hidden id='Id' value='" + logInvoices[i].Id + "'/>" + self._formatDate(logInvoices[i].Date) + "</td>" +
 		    "<td>" + $("<span/>").text(logInvoices[i].Text).html() + "</td>" +
-		    "<td>" + (isRowReadOnly ? self._minutesToTimeString(logInvoices[i].WorkingTime) : self._getTimeEditor(logInvoices[i].WorkingTime, "WorkingTime")) + "</td>" +
-		    "<td>" + (isRowReadOnly ? self._minutesToTimeString(logInvoices[i].Overtime) : self._getTimeEditor(logInvoices[i].Overtime, "Overtime")) + "</td>" +
-		    "<td>" + (isRowReadOnly ? self._formatNumber(logInvoices[i].Material, 2, 3, " ", ",") : self._getTextBox(logInvoices[i].Material, "txtMaterial")) + "</td>" +
-		    "<td>" + (isRowReadOnly ? self._formatNumber(logInvoices[i].Price, 2, 3, " ", ",") : self._getTextBox(logInvoices[i].Price, "txtPrice")) + "</td>" +
+		    "<td>" + (isRowReadOnly ? self._minutesToTimeString(logInvoices[i].WorkingTime) :
+                                      self._getTimeEditor(logInvoices[i].WorkingTime, "WorkingTime", _showTime)) + "</td>" +
+
+		    "<td>" + (isRowReadOnly ? self._minutesToTimeString(logInvoices[i].Overtime) :
+                                      self._getTimeEditor(logInvoices[i].Overtime, "Overtime", _showOvertime)) + "</td>" +
+
+		    "<td>" + (isRowReadOnly ? self._formatNumber(logInvoices[i].Material, 2, 3, " ", ",") :
+                                      self._getTextBox(logInvoices[i].Material, "txtMaterial", _showMaterial)) + "</td>" +
+
+		    "<td>" + (isRowReadOnly ? self._formatNumber(logInvoices[i].Price, 2, 3, " ", ",") :
+                                      self._getTextBox(logInvoices[i].Price, "txtPrice", _showPrice)) + "</td>" +
+
 		    "<td class='align-center'>" + self._getChargeBox(isRowReadOnly, logInvoices[i].Charge) + "</td>" +
 		    "<td>" + self._getStatusText(logInvoices[i].InvoiceRow.Status) + "</td>" +
             "</tr>";
@@ -189,29 +202,30 @@ CaseCharge.prototype = {
         $("#externalInvoiceGrid tbody").html(res);
     },
 
-    _getTimeEditor: function (mins, name) {
+    _getTimeEditor: function (mins, name, visible) {
         "use strict";
         var self = this;
 
         var time = self._minutesToTime(mins);
-        var hours = $("<select id='ddl" + name + "Hours' name='ddl" + name + "Hours' class='inputw50'></select>");
-        for (var i = 0; i < 100; i++) {
-            hours.append($('<option>', {
-                value: i,
-                text: i,
-                selected: time.hours === i
-            }));
-        }
-        var minutes = $("<select id='ddl" + name + "Minutes' name='ddl" + name + "Minutes' class='inputw50'></select>");
-        for (i = 0; i < 60; i += self.options.minStep) {
-            minutes.append($('<option>', {
-                value: i,
-                text: i,
-                selected: time.minutes === i
-            }));
-        }
 
-        var res = $("<span/>")
+        if (visible == undefined || visible) {
+            var hours = $("<select id='ddl" + name + "Hours' name='ddl" + name + "Hours' class='inputw50'></select>");
+            for (var i = 0; i < 100; i++) {
+                hours.append($('<option>', {
+                    value: i,
+                    text: i,
+                    selected: time.hours === i
+                }));
+            }
+            var minutes = $("<select id='ddl" + name + "Minutes' name='ddl" + name + "Minutes' class='inputw50'></select>");
+            for (i = 0; i < 60; i += self.options.minStep) {
+                minutes.append($('<option>', {
+                    value: i,
+                    text: i,
+                    selected: time.minutes === i
+                }));
+            }
+            var res = $("<span/>")
              .append($("<div class='nowrap'/>")
                  .append($("<span/>")
                      .append(hours)
@@ -221,7 +235,19 @@ CaseCharge.prototype = {
                      .append(minutes)
                      .append(" " + self.options.minText))
              );
-
+        } else {
+            var hours = $("<input type='hidden' id='ddl" + name + "Hours' name='ddl" + name + "Hours' class='inputw50' value=" + time.hours + ">");
+            var minutes = $("<input type='hidden' id='ddl" + name + "Minutes' name='ddl" + name + "Minutes' class='inputw50' value=" + time.minutes + ">");
+            var res = $("<span/>")
+             .append($("<div class='nowrap'/>")
+                 .append($("<span/>")
+                     .append(hours))
+                 .append($("<span/>")
+                     .append(" ")
+                     .append(minutes))
+             );
+        }
+        
         return res.html();
     },
 
@@ -229,12 +255,13 @@ CaseCharge.prototype = {
         return status && (status === 2 || status === 3);
     },
 
-    _getTextBox: function (val, name) {
-        var res = "<input type='text' class='inputw50' id='" + name + "' name='" + name + "' placeholder='0.00' value='{1}'>"
+    _getTextBox: function (val, name, visible) {
+        var _type = visible == undefined || visible ? "text" : "hidden";
+        var res = "<input type='"+ _type +"' class='inputw50' id='" + name + "' name='" + name + "' placeholder='0.00' value='{1}'>"
             .replace(/\{1\}/g, val);
 
         return res;
-    },
+    },    
 
     _getChargeBox: function (isRowReadOnly, val) {
         "use strict";

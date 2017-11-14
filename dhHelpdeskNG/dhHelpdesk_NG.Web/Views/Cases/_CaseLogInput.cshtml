@@ -394,7 +394,7 @@
                             </div>
                         </div>
                     </div>
-                    @if (Model.CustomerSettings.ModuleInvoice == true)
+                    @if (Model.CustomerSettings.ModuleInvoice)
                     {
                         <div id="divInvoice" style="@Model.ShowInvoiceFields.displayHtml()">
                             <h4>
@@ -415,7 +415,8 @@
                                                 <th class="span5"></th>
                                             </tr>
                                         </thead>
-                                        <tr>
+                                        
+                                        <tr id="invoiceField-Time">
                                             <td>
                                                 @Translation.Get("Tidsåtgång", SessionFacade.CurrentCaseLanguageId)
                                             </td>
@@ -435,7 +436,7 @@
                                             </td>
                                             <td></td>
                                         </tr>
-                                        <tr>
+                                        <tr id="invoiceField-Overtime">
                                             <td>
                                                 @Translation.Get("Övertid", SessionFacade.CurrentCaseLanguageId)
                                             </td>
@@ -460,7 +461,7 @@
                                             <td id="timeValidationMessage"></td>
                                             <td></td>
                                         </tr>
-                                        <tr>
+                                        <tr id="invoiceField-Material">
                                             <td>
                                                 @Translation.Get("Material", SessionFacade.CurrentCaseLanguageId)
                                             </td>
@@ -476,7 +477,7 @@
                                             </td>
                                             <td></td>
                                         </tr>
-                                        <tr>
+                                        <tr id="invoiceField-Price">
                                             <td>
                                                 @Translation.Get("Pris", SessionFacade.CurrentCaseLanguageId)
                                             </td>
@@ -512,7 +513,7 @@
                                 </div>
                             </div>
                         </div>
-                                                    }
+                    }
                     @Html.Partial("ModalDialogs/_SendIntLogToDiallog", Model.SendToDialogModel)
                     @if (Model.CustomerSettings.ModuleInvoice)
                     {
