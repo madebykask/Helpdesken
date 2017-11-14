@@ -6364,6 +6364,27 @@ If not exists (select * from tblTextTranslation where text_id = 1877 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1877, 2, '	Are you sure you want to delete this FAQ')
 GO
 
+If not exists (select * from tbltext where id = 1878)
+	insert into tbltext (id, TextString) VALUES (1878, 'Huvudärende, med kopplade underärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1878 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1878, 2, 'Parent case with connected child cases')
+GO
+
+If not exists (select * from tbltext where id = 1879)
+	insert into tbltext (id, TextString) VALUES (1879, 'Nya ärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1879 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1879, 2, 'New cases')
+GO
+
+If not exists (select * from tbltext where id = 1880)
+	insert into tbltext (id, TextString) VALUES (1880, 'SelfAndDescendandts')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1880 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1880, 2, 'SelfAndDescendandts')
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
