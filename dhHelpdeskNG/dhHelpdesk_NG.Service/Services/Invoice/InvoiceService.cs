@@ -233,7 +233,8 @@ namespace DH.Helpdesk.Services.Services.Invoice
 					             .Where(x => x.Charge.ToBool())
 					             .Sum(x => ((decimal)x.WorkingTime / 60) * caseInfo.Department.AccountancyAmount +
 							             ((decimal)x.OverTime / 60) * caseInfo.Department.OverTimeAmount + 
-										 x.Price) +
+										 x.Price + 
+                                         x.EquipmentPrice) +
 				             fileCase.Value.Item2
 					             .Where(x => x.Charge.ToBool()).Sum(x => x.InvoicePrice);
 
