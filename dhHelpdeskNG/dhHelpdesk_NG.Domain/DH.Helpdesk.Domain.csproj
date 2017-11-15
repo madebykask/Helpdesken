@@ -101,6 +101,7 @@
     <Compile Include="CaseSolutionConditionPropertyEntity.cs" />
     <Compile Include="CaseSolutionSchedule.cs" />
     <Compile Include="CaseSolutionSearch.cs" />
+    <Compile Include="CaseSolution\CaseSolution_SplitToCaseSolutionEntity.cs" />
     <Compile Include="Cases\CaseExtraFollower.cs" />
     <Compile Include="Cases\CaseFollowUp.cs" />
     <Compile Include="Cases\CaseSection.cs" />

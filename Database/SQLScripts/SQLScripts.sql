@@ -58,5 +58,11 @@ begin
 	ALTER TABLE [dbo].[tblDepartment] ADD [ShowInvoicePrice] bit NOT NULL Default(1)
 end
 
+
+if  exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'SplitToCaseSolutionType' and sysobjects.name = N'tblCaseSolution')
+begin
+	EXEC sp_rename 'tblCaseSolution.SplitToCaseSolutionType', 'CaseRelationType', 'COLUMN'
+end
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.35'

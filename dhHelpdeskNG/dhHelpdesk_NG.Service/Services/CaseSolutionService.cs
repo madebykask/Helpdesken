@@ -20,6 +20,7 @@ namespace DH.Helpdesk.Services.Services
     using System.Configuration;
     using System.Data.SqlClient;
     using BusinessData.Models.Case;
+    using Dal.NewInfrastructure;
 
     public interface ICaseSolutionService
     {
@@ -44,7 +45,9 @@ namespace DH.Helpdesk.Services.Services
         void Commit();
         IList<WorkflowStepModel> GetGetWorkflowSteps(int customerId, Case _case, UserOverview user, ApplicationType applicationType, int? templateId);
 
+        IList<CaseSolution> GetCaseSolutions();
 
+        IList<CaseSolution_SplitToCaseSolutionEntity> GetSplitToCaseSolutionDescendants(CaseSolution self, int[] descendantIds);
     }
 
     public class CaseSolutionService : ICaseSolutionService
@@ -59,7 +62,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IFormRepository _formRepository;
         private readonly ILinkService _linkService;
         private readonly ILinkRepository _linkRepository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly Dal.Infrastructure.IUnitOfWork _unitOfWork;
         private readonly ICacheProvider _cache;
 
         private readonly ICaseSolutionConditionRepository _caseSolutionConditionRepository;
@@ -67,6 +70,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseSolutionConditionService _caseSolutionConditionService;
         private readonly IStateSecondaryService _stateSecondaryService;
         private readonly ICaseService _caseService;
+        private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
         public CaseSolutionService(
             ICaseSolutionRepository caseSolutionRepository,
@@ -76,14 +80,15 @@ namespace DH.Helpdesk.Services.Services
             IFormRepository formRepository,
             ILinkRepository linkRepository,
             ILinkService linkService,
-            IUnitOfWork unitOfWork,
+            Dal.Infrastructure.IUnitOfWork unitOfWork,
             ICaseSolutionConditionRepository caseSolutionConditionRepository,
             ICacheProvider cache,
             IWorkingGroupService workingGroupService,
             ICaseSolutionConditionService caseSolutionCondtionService,
             IStateSecondaryService stateSecondaryService,
             IApplicationRepository applicationRepository,
-            ICaseService caseService
+            ICaseService caseService,
+            IUnitOfWorkFactory unitOfWorkFactory
             )
         {
             this._caseSolutionRepository = caseSolutionRepository;
@@ -103,6 +108,7 @@ namespace DH.Helpdesk.Services.Services
             this._applicationRepository = applicationRepository;
             this._caseService = caseService;
             this.caseSolutionConditionRepository = caseSolutionConditionRepository;
+            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
         //public int GetAntal(int customerId, int userid)
@@ -220,6 +226,26 @@ namespace DH.Helpdesk.Services.Services
         {
             return this._caseSolutionRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
+
+        public IList<CaseSolution> GetCaseSolutions()
+        {
+            return this._caseSolutionRepository.GetMany(x => x.Status >= 0).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<CaseSolution_SplitToCaseSolutionEntity> GetSplitToCaseSolutionDescendants(CaseSolution self, int[] descendantIds)
+        {
+            return this._caseSolutionRepository.GetMany(x => descendantIds.Contains(x.Id)).Select(cs => new CaseSolution_SplitToCaseSolutionEntity
+            {
+                CaseSolution = self,
+                CaseSolution_Id  = self.Id,
+                SplitToCaseSolutionDescendant = cs,
+                SplitToCaseSolution_Id = cs.Id,
+
+            }).ToList();
+        }
+
+
+
 
         public IList<Application> GetAllApplications(int customerId)
         {
@@ -1699,8 +1725,48 @@ namespace DH.Helpdesk.Services.Services
                 this._caseSolutionScheduleRepository.Add(caseSolutionSchedule);
             }
 
+           
+          
+
             if (errors.Count == 0)
+            { 
                 this.Commit();
+
+                DeleteSplitToCaseSolutionDescendants(caseSolution.Id);
+
+                if (caseSolution.SplitToCaseSolutionDescendants != null)
+                {
+                    foreach (var item in caseSolution.SplitToCaseSolutionDescendants)
+                    {
+                        UpdateSplitToCaseSolutionDescendants(caseSolution.Id, item.SplitToCaseSolution_Id);
+                    }
+                }
+            }
+        }
+
+        private void UpdateSplitToCaseSolutionDescendants(int caseSolutionId, int splitToCaseSolutionId)
+        {
+            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var rep = uow.GetRepository<CaseSolution_SplitToCaseSolutionEntity>();
+                var relation = rep.Find(it => it.CaseSolution_Id == caseSolutionId && it.SplitToCaseSolution_Id == splitToCaseSolutionId).FirstOrDefault();
+                if (relation == null)
+                {
+                    rep.Add(new CaseSolution_SplitToCaseSolutionEntity() { CaseSolution_Id = caseSolutionId, SplitToCaseSolution_Id = splitToCaseSolutionId });
+                    uow.Save();
+                }
+            }
+        }
+
+        private void DeleteSplitToCaseSolutionDescendants(int caseSolutionId)
+        {
+            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var rep = uow.GetRepository<CaseSolution_SplitToCaseSolutionEntity>();
+
+                rep.DeleteWhere(x => x.CaseSolution_Id == caseSolutionId);
+                uow.Save();
+            }
         }
 
         private void CheckRequiredFields(CaseSolution caseSolution, IList<CaseFieldSetting> MandatoryFields, out IDictionary<string, string> errors)
@@ -1777,6 +1843,10 @@ namespace DH.Helpdesk.Services.Services
 
         public void Commit()
         {
+
+      
+
+
             this._unitOfWork.Commit();
         }
 

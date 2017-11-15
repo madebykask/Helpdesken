@@ -122,6 +122,7 @@
     <Compile Include="EntityConfigurations\CaseDocument\CaseDocumentConditionConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseDocument\CaseDocument_CaseDocumentParagraphConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseSolutionConditionPropertyConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseSolution\CaseSolution_SplitToCaseSolutionConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseExtraFollowerConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseFollowUpConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseSectionFieldConfiguration.cs" />

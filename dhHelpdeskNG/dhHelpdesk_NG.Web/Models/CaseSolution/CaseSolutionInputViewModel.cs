@@ -104,6 +104,11 @@
         public List<CaseSolutionSettingsField> CSSelectedSettingsField { get; set; }
 		public IList<CaseSolution> SplitToCaseSolutions { get; internal set; }
 
+
+        public IList<SelectListItem> SplitToAllCaseSolutions { get; internal set; }
+
         public bool isCopy { get; set; }
-	}
+
+        public int[] SplitToCaseSolutionIds { get; set; }
+    }
 }
