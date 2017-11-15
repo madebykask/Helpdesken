@@ -706,74 +706,18 @@ function CaseInitForm() {
         resetProductareaByCaseType(caseTypeId);
     });
 
-    function setDynamicDropDowns() {
-        var dynamicDropDownClass = '.DynamicDropDown';
-        var fixedArea = 90;
-        var pageSize = $(window).height() - fixedArea;
-        var scrollPos = $(window).scrollTop();
-        var elementToTop = $(dynamicDropDownClass).offset().top - scrollPos - fixedArea;
-        var elementToDown = pageSize - elementToTop;
-        if (elementToTop < -$(dynamicDropDownClass).height())
-            $(dynamicDropDownClass).removeClass('open');
-
-        if (elementToTop <= elementToDown) {
-            $(dynamicDropDownClass).removeClass('dropup');
-        } else {
-            $(dynamicDropDownClass).addClass('dropup');
-        }
-    }
-
-    function getObjectPosInView(objectId) {
-        var fixedArea = 90;
-        var pageSize = $(window).height() - fixedArea;
-        var scrollPos = $(window).scrollTop();
-        var elementToTop = $('#' + objectId).offset().top - scrollPos - fixedArea;
-        var elementToDown = pageSize - elementToTop;
-        return { ToTop: elementToTop, ToDown: elementToDown };
-    }
-
-    function dynamicDropDownBehaviorOnMouseMove(event) {
-        var dynamicDropDownClass = '.DynamicDropDown';
-        var target = $(event.target.parentElement);
-        if (target != undefined && target.hasClass('DynamicDropDown_Up') && target.index(0) !== -1) {
-            var objPos = getObjectPosInView(target[0].id);
-            var subMenu = '#subDropDownMenu_' + target[0].id;
-            $(subMenu).css('bottom', 'auto');
-            $(subMenu).css('top', 'auto');
-            var h, hstr;
-            if ($(dynamicDropDownClass).hasClass('dropup')) {
-                if (objPos.ToTop < objPos.ToDown) {
-                    h = -$(subMenu).height() + 25;
-                    hstr = h + 'px';
-                    $(subMenu).css('bottom', hstr);
-                } else
-                    $(subMenu).css('bottom', '0');
-            } else {
-                if (objPos.ToTop < objPos.ToDown || $(subMenu).height() < objPos.ToDown)
-                    $(subMenu).css('top', '0');
-                else {
-                    h = -$(subMenu).height() + 25;
-                    hstr = h + 'px';
-                    $(subMenu).css('top', hstr);
-                }
-            }
-        }
-    }
-
-    function resetProductareaByCaseType(caseTypeId) {
-        $.post('/Cases/GetProductAreaByCaseType/', { caseTypeId: caseTypeId, customerId: publicCustomerId, myTime: Date.now() }, function (result) {
+    function resetProductareaByCaseType(_caseTypeId) {
+        $.post('/Cases/GetProductAreaByCaseType/', { caseTypeId: _caseTypeId, customerId: publicCustomerId, myTime: Date.now() }, function (result) {
             if (result.success) {
                 $('#divProductArea.DynamicDropDown > ul.dropdown-menu')
                     .html("<li><a href='#'>--</a></li>" + result.data);
-                var paId = parseInt($('#case__ProductArea_Id').val());
+                var paId = parseInt($("#case__ProductArea_Id").val());
                 if (result.paIds && result.paIds.indexOf(paId) < 0) {
                     var emptyElement = $('#divProductArea.DynamicDropDown > ul.dropdown-menu').children().first();
-                    $('#divBreadcrumbs_ProductArea').text(getBreadcrumbs(emptyElement));
-                    $('#case__ProductArea_Id').val('').trigger('change');
+                    $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(emptyElement));
+                    $("#case__ProductArea_Id").val("").trigger('change');
                 }
-                setDynamicDropDowns();
                 bindProductAreasEvents();
-
             }
         }, 'json');
     }
@@ -782,10 +726,6 @@ function CaseInitForm() {
         $('#divProductArea ul.dropdown-menu li a').click(function (e) {
             e.preventDefault();
             onProductAreaChanged(this);
-        });
-        $('#divProductArea .dropdown-submenu.DynamicDropDown_Up').off('mousemove');
-        $('#divProductArea .dropdown-submenu.DynamicDropDown_Up').on('mousemove', function (event) {
-            dynamicDropDownBehaviorOnMouseMove(event);
         });
     }
     
@@ -1066,16 +1006,6 @@ function CaseInitForm() {
         $("#divBreadcrumbs_OU").text(getBreadcrumbs(this));
         $(publicOUControlName).val(val).trigger('change');
     });
-
-    $('.dropdown-submenu.DynamicDropDown_Up').on('mousemove', function (event) {
-        dynamicDropDownBehaviorOnMouseMove(event);
-    });
-
-    $(window).scroll(function () {
-        setDynamicDropDowns();
-    });
-
-    setDynamicDropDowns();
 
     bindProductAreasEvents();
 
