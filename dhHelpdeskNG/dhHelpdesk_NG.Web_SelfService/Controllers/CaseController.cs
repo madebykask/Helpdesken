@@ -172,7 +172,7 @@
             if(string.IsNullOrEmpty(id))
                 return null;
 
-            int customerId;
+            int customerId = -1;
 
             Case currentCase = null;
 
@@ -180,8 +180,10 @@
             {
                 var guid = new Guid(id);
                 currentCase = _caseService.GetCaseByEMailGUID(guid);
+                if (currentCase != null)
+                    customerId = currentCase.Customer_Id;
 
-                var dynamicCases = _caseService.GetAllDynamicCases();
+                var dynamicCases = _caseService.GetAllDynamicCases(customerId);
                 var dynamicUrl = "";
                 if (dynamicCases != null && dynamicCases.Any())
                 {
@@ -196,7 +198,15 @@
             }
             else
             {
-                currentCase = _caseService.GetCaseById(Int32.Parse(id));
+                int _intCaseId;
+
+                if (!int.TryParse(id, out _intCaseId))
+                {
+                    ErrorGenerator.MakeError("Case Id is not valid!");
+                    return RedirectToAction("Index", "Error");
+                }
+
+                currentCase = _caseService.GetCaseById(_intCaseId);
 
                 if (currentCase == null)
                 {
@@ -1609,7 +1619,7 @@
 
             if (currentApplicationType == ApplicationTypes.LineManager)
             {
-                var dynamicCases = _caseService.GetAllDynamicCases();
+                var dynamicCases = _caseService.GetAllDynamicCases(cusId);
                 model.DynamicCases = dynamicCases;
             }
             

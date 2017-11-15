@@ -71,7 +71,7 @@ namespace DH.Helpdesk.Services.Services
         EmailLog GetEMailLogByGUID(Guid GUID);
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
         IList<CaseHistoryOverview> GetCaseHistories(int caseId);
-        List<DynamicCase> GetAllDynamicCases();
+        List<DynamicCase> GetAllDynamicCases(int customerId);
         DynamicCase GetDynamicCase(int id);
         IList<Case> GetProblemCases(int problemId);
         IList<ExtendedCaseFormModel> GetExtendedCaseForm(int? caseSolutionId, int customerId, int? caseId, int userLanguageId, string userGuid, int? caseStateSecondaryId, int? caseWorkingGroupId, string extendedCasePath, int? userId, string userName, ApplicationType applicationType, int userWorkingGroupId);
@@ -325,9 +325,9 @@ namespace DH.Helpdesk.Services.Services
             return _emailLogRepository.GetEmailLogsByGuid(GUID);
         }
 
-        public List<DynamicCase> GetAllDynamicCases()
+        public List<DynamicCase> GetAllDynamicCases(int customerId)
         {
-            return _caseRepository.GetAllDynamicCases();
+            return _caseRepository.GetAllDynamicCases(customerId);
         }
 
         public DynamicCase GetDynamicCase(int id)
