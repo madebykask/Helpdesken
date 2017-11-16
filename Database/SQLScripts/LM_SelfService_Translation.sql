@@ -1,4 +1,6 @@
-﻿If not exists (select * from tbltext where id = 1409)
+﻿
+
+If not exists (select * from tbltext where id = 1409)
 	insert into tbltext (id, TextString, TextType) VALUES (1409, 'Start', 300)
 GO
 If not exists (select * from tblTextTranslation where text_id = 1409 and Language_Id = 1)
@@ -677,6 +679,14 @@ If not exists (select * from tbltext where id = 1806)
 GO
 If not exists (select * from tblTextTranslation where text_id = 1806 and Language_Id = 1)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1806, 1, 'Följare')
+GO
+
+
+If not exists (select * from tbltext where id = 1881)
+	insert into tbltext (id, TextString, TextType) VALUES (1881, 'Attachments', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1881 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1881, 1, 'Bilagor')
 GO
 
 
