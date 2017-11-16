@@ -1,13 +1,18 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
+@using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Common.Extensions.String
 @using DH.Helpdesk.Web.Infrastructure
 
 @section Scripts {
 <script type="text/javascript">
-
     $(document).ready(function () {
         LogInitForm();
-    });    
-
+    });
+    window.parameters = {
+        validationMessages: ['@Html.Raw(Translation.GetForJS("måste anges"))'],
+        requiredFieldsMessage: '@Translation.GetForJS("Ärendet kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ärendet.")',
+        mandatoryFieldsText: '@Translation.GetForJS("Obligatoriska fält")'
+    }
 </script>
 }
 
@@ -22,8 +27,7 @@
                     @if (Model.EditMode == Enums.AccessMode.FullAccess && !Model.newLog)
                     {
                         <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "deletelog", new { id = @Model.CaseLog.Id, caseId = @Model.case_.Id }, 
-                        new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post",                                                                                                 
-                              Enums.TranslationSource.TextTranslation) + "?" })</li>
+                        new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" })</li>
                     }                    
                     @if (Model.newLog)
                     {
@@ -34,9 +38,9 @@
                     }
                     else
                     {
-                        <li>@Html.ActionLink(Translation.Get("Ändra", Enums.TranslationSource.TextTranslation), "editlog", "cases", new { Id = @Model.CaseLog.Id, customerId = Model.case_.Customer_Id, newLog = true }, new { @class = "btn" })</li>
+                        <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Ändra"), "editlog", "cases", new { Id = @Model.CaseLog.Id, customerId = Model.case_.Customer_Id, newLog = true, editLog = false, isCaseReopened = Model.IsCaseReopened }, new { @class = "btn" })</li>
                     }
-                    <li>@Html.ActionLink(Translation.Get("Stäng", Enums.TranslationSource.TextTranslation), "edit", "cases", new { Id = @Model.case_.Id }, new { @class = "btn" })</li>
+                    <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Stäng"), "edit", "cases", new { Id = @Model.case_.Id }, new { @class = "btn" })</li>
                 </ul>
             </div>
         </div>
@@ -44,13 +48,13 @@
             <div class="container">
                 <ul class="nav nav-tabs" id="myTab">
                     <li class="active"><a href="#fragment-1">@Translation.Get("Logg", Enums.TranslationSource.TextTranslation)</a></li>
-                </ul>    
+                </ul>
                 <div class="tab-content">
                     <div class="tab-pane tab-pane-border active editmode" id="logtab">
-                            @Html.Partial("_CaseLogInput", Model) 
+                        @Html.Partial("_CaseLogInput", Model)
                     </div>
                 </div>
             </div>
-        </div>                       
+        </div>
     }
 }

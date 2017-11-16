@@ -1570,7 +1570,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(m);
         }
 
-        public ActionResult EditLog(int id, int customerId, bool newLog = false, bool editLog = false)
+        public ActionResult EditLog(int id, int customerId, bool newLog = false, bool editLog = false, bool isCaseReopened = false)
         {
             CaseInputViewModel m = null;
 
@@ -1593,6 +1593,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.CaseSectionModels = _caseSectionService.GetCaseSections(customerId, SessionFacade.CurrentLanguageId);
                     m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);
                     m.case_ = this._caseService.GetCaseById(m.CaseLog.CaseId);
+                    m.IsCaseReopened = isCaseReopened;
                     bool UseVD = false;
                     if (!string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId)))
                     {

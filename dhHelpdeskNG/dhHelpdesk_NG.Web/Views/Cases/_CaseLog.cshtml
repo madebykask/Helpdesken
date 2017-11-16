@@ -302,7 +302,7 @@
         {
             return Url.Action("Problem", "Problems", new { id = log.ProblemId.Value });
         }
-        return Url.Action("editlog", "cases", new { area = "", id = log.Id, customerId = Model.case_.Customer_Id, editLog = true });
+        return Url.Action("editlog", "cases", new { area = "", id = log.Id, customerId = Model.case_.Customer_Id, editLog = true, isCaseReopened = Model.IsCaseReopened });
     }
 
 }
