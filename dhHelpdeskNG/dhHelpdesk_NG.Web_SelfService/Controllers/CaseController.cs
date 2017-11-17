@@ -544,7 +544,8 @@
                 RegUserDomain = SessionFacade.CurrentUserIdentity.Domain,
                 RegUserName = string.Format("{0} {1}", SessionFacade.CurrentUserIdentity.FirstName, SessionFacade.CurrentUserIdentity.LastName),
                 IpAddress = Request.GetIpAddress(),
-                CaseSolution_Id = caseTemplateId
+                CaseSolution_Id = caseTemplateId,
+                CaseFileKey = Guid.NewGuid().ToString()
             };
 
             CaseSolution caseTemplate = null;
@@ -585,6 +586,11 @@
 
             var languageId = SessionFacade.CurrentLanguageId;
             var customerId = SessionFacade.CurrentCustomer.Id;
+
+
+            caseModel.FieldSettings = _caseFieldSettingService.ListToShowOnCasePage(customerId, languageId)
+                                                   .Where(c => c.ShowExternal == 1)
+                                                   .ToList();
 
             if (caseId.IsNew())
             {
@@ -673,6 +679,7 @@
             
             int caseId = -1;
 
+            
             //TODO: Refactor
             model.CaseDataModel.ExtendedCaseData_Id = model.ExtendedCaseDataModel.Id;
             model.CaseDataModel.ExtendedCaseForm_Id = model.ExtendedCaseDataModel.ExtendedCaseFormId;
@@ -680,6 +687,20 @@
             var res = _universalCaseService.SaveCaseCheckSplit(model.CaseDataModel, auxModel, out caseId);
             if (res.IsSucceed && caseId != -1)
             {
+                #region casefile
+                //TODO: do we need to check "isNewCase"? /Tan
+
+                var basePath = _masterDataService.GetFilePath(model.CaseDataModel.Customer_Id);
+
+                // save case files
+                var temporaryFiles = _userTemporaryFilesStorage.GetFiles(model.CaseDataModel.CaseFileKey, ModuleName.Cases);
+                var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseId)).ToList();
+                _caseFileService.AddFiles(newCaseFiles);
+
+                // delete temp folders                
+                _userTemporaryFilesStorage.DeleteFiles(model.CaseDataModel.CaseFileKey);
+                #endregion  
+
                 return RedirectToAction("UserCases", new { customerId = model.CustomerId });
             }
 

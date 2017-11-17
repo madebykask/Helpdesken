@@ -1,5 +1,6 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Shared.Input;
 using System;
+using System.Collections.Generic;
 
 namespace DH.Helpdesk.BusinessData.Models.Case
 {
@@ -237,5 +238,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public int? ExtendedCaseForm_Id { get; set; }
         #endregion
 
+        public List<CaseListToCase> FieldSettings { get; set; }
+        public string CaseFileKey { get; set; }
     }
 }
