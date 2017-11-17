@@ -110,13 +110,13 @@
             CostCentre:  "case__CostCentre",
         },
 
-        caseInitValues: {
+         caseInitValues: {
             CaseId: '@Model.case_.Id',
             CustomerId: '@Model.case_.Customer_Id',
-            ReportedBy:  '@Model.case_.ReportedBy',
-            PersonsName:  '@Model.case_.PersonsName',
-            PersonsPhone:   '@Model.case_.PersonsPhone',
-            UserCode:  '@Model.case_.UserCode',
+            ReportedBy:  @Html.Raw(Json.Encode(Model.case_.ReportedBy)),
+            PersonsName:  @Html.Raw(Json.Encode(Model.case_.PersonsName)),
+            PersonsPhone:   @Html.Raw(Json.Encode(Model.case_.PersonsPhone)),
+            UserCode:  @Html.Raw(Json.Encode(Model.case_.UserCode)),
             RegionId: '@Model.case_.Region_Id',
             DepartmentId: '@Model.case_.Department_Id',
             ParentOUId: '@(Model.case_.Ou != null && Model.case_.Ou.Parent_OU_Id != null? Model.case_.Ou.Parent_OU_Id: null)',
@@ -128,9 +128,9 @@
             WatchDate:   '@(Model.case_.WatchDate !=null ? Model.case_.WatchDate.Value.ToString() : "" )',
             PriorityId: '@Model.case_.Priority_Id',
             CaseRelationType: '@Model.CaseRelationType()',
-            PersonsEmail: '@Model.case_.PersonsEmail',
-            PersonsCellphone: '@Model.case_.PersonsCellphone',
-            Place: '@Model.case_.Place',
+            PersonsEmail: @Html.Raw(Json.Encode(Model.case_.PersonsEmail)),
+            PersonsCellphone: @Html.Raw(Json.Encode(Model.case_.PersonsCellphone)),
+            Place: @Html.Raw(Json.Encode(Model.case_.Place)),
             CostCentre: '@Model.case_.CostCentre'
         },
 
