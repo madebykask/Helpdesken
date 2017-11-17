@@ -2,6 +2,7 @@
 {
     using BusinessData.Models.Case;    
     using Domain;
+    using System.Collections.Generic;
 
     public sealed class CaseToCaseModelMapper : IEntityToBusinessModelMapper<Case, CaseModel>
     {
@@ -217,9 +218,15 @@
 
                 #region Etc
 
-                CaseSolution_Id = entity.CaseSolution_Id
+                CaseSolution_Id = entity.CaseSolution_Id,
 
                 #endregion
+
+                #region casefiles
+                CaseFiles = entity.CaseFiles
+                #endregion
+
+                
             };
 
             return ret;

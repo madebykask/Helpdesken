@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Shared.Input;
+using DH.Helpdesk.Domain;
 using System;
 using System.Collections.Generic;
 
@@ -239,6 +240,10 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         #endregion
 
         public List<CaseListToCase> FieldSettings { get; set; }
+
+        #region case files
         public string CaseFileKey { get; set; }
+        public ICollection<CaseFile> CaseFiles { get; set; }
+        #endregion
     }
 }

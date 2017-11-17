@@ -17,6 +17,10 @@
     /*Debug mode*/
     //Model.ExtendedCaseDataModel.FormModel.Path =
     //    "http://dhhelpdesk-ikea-bschr-v5-ec.datahalland.se/ExtendedCase/?formId=" + extendedFormId + "&autoLoad=1";
+
+    var downloadCaseFileUrl = Url.Action("DownloadNewCaseFile");
+    var downloadCaseFileParamUrl = (!string.IsNullOrEmpty(Model.CaseDataModel.CaseFileKey) ? "id=" + Model.CaseDataModel.CaseFileKey + "&" : string.Empty);
+    var downloadCaseFileCompleteUrl = downloadCaseFileUrl + "?" + "id=" + "{id}" + "&fileName=" + "{name}";
 }
 
 <script type="text/javascript">
@@ -26,8 +30,8 @@
         caseFileKey: '@Model.CaseDataModel.CaseFileKey',
         newCaseFilesUrl: '@Url.Action("NewCaseFiles")',
         fileAlreadyExistsMsg: '@Html.Raw(Translation.Get("File already exists", Enums.TranslationSource.TextTranslation))',
-        downloadCaseFileUrl: '@Url.Action("DownloadNewCaseFile")',
-        downloadCaseFileParamUrl: '@(!string.IsNullOrEmpty(Model.CaseDataModel.CaseFileKey) ? "id=" + Model.CaseDataModel.CaseFileKey + "&" : string.Empty)',
+        downloadCaseFileUrl: '@downloadCaseFileUrl',
+        downloadCaseFileParamUrl: '@downloadCaseFileParamUrl',
         deleteCaseFileUrl: '@Url.Action("DeleteNewCaseFile")',
         searchUserUrl: '',
         seachComputerUrl: '',
@@ -328,12 +332,15 @@
                 <i id="exTabIndicator_@extendedFormId" class="tab-indicator" style="display:none;">&nbsp;</i>
             </a>
         </li>
-        @if (Model.CaseId == 0 && Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
-        {
+        @if (Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()) && (Model.CaseId == 0 || (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null)))
+            {
+          
             <li>
-                <a href="#attachment-tab">@Translation.Get("Attachments", Enums.TranslationSource.TextTranslation) <span id="nrOfAttachedFiles"></span></a>
+                <a href="#attachment-tab">@Translation.Get("Attachments", Enums.TranslationSource.TextTranslation) <span id="nrOfAttachedFiles">@(Model.CaseDataModel.CaseFiles != null && Model.CaseDataModel.CaseFiles.Count > 0 ? "(" + Model.CaseDataModel.CaseFiles.Count.ToString() + ")":"")</span></a>
             </li>
-        }
+
+            }
+            
     </ul>
     <div class="content tab-content">
         <div id="fragment-1" class="tab-pane active">
@@ -343,7 +350,7 @@
                 </div>
             </div>
         </div>
-        @if (Model.CaseId == 0 && Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+        @if (Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()) && (Model.CaseId == 0 || (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null)))
         {
             <div id="attachment-tab" class="tab-pane" style="overflow:hidden;">
                 <div>
@@ -351,20 +358,35 @@
                         ///* TODO: Make partial or shared code */*@
 
                         <div class="col-md-12" style="margin-top:20px; margin-bottom:0px !important;">
+                            @if (Model.CaseId == 0)
+                            { 
                             <a id="" href="#NewCase_upload_files_popup" role="button" class="btn btn-default hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add", Enums.TranslationSource.TextTranslation)</a>
-                      
                             <a href="#upload_clipboard_file_popup" role="button" class="btn btn-default hasAttribute" data-src="case" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard", Enums.TranslationSource.TextTranslation)</a>
-            
+                            }
                             <table id="NewCasefiles_table" class="table table-striped" style="margin-top:10px;">
-                                <tbody></tbody>
+                                <tbody>
+                                    @if (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null && Model.CaseDataModel.CaseFiles.Count > 0)
+                                    {
+                                        foreach (var item in Model.CaseDataModel.CaseFiles)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href="@downloadCaseFileCompleteUrl.Replace("{name}", item.FileName).Replace("{id}", Model.CaseId.ToString())">@item.FileName</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
                             </table>
                         </div>
                 </div>
             </div>
         }
+       
+
     </div>
 
-
+    @*/* only on new for now.. */*@
 @if (Model.CaseId == 0 && Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
 {
     <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
