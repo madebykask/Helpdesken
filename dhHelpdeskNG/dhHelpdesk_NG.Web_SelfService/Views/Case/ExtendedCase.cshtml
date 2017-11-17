@@ -1,5 +1,7 @@
 ﻿@using System.Web.Optimization
 @using DH.Helpdesk.Common.Constants
+@using DH.Helpdesk.BusinessData.OldComponents
+@using System.Web.Script.Serialization
 
 @model DH.Helpdesk.SelfService.Models.Case.ExtendedCaseViewModel
 @{
@@ -18,6 +20,23 @@
 }
 
 <script type="text/javascript">
+
+    window.appParameters = {
+        uploadCaseFileUrl: '@Url.Action("NewCaseUploadFile")',
+        caseFileKey: '@Model.CaseDataModel.CaseFileKey',
+        newCaseFilesUrl: '@Url.Action("NewCaseFiles")',
+        fileAlreadyExistsMsg: '@Html.Raw(Translation.Get("File already exists", Enums.TranslationSource.TextTranslation))',
+        downloadCaseFileUrl: '@Url.Action("DownloadNewCaseFile")',
+        downloadCaseFileParamUrl: '@(!string.IsNullOrEmpty(Model.CaseDataModel.CaseFileKey) ? "id=" + Model.CaseDataModel.CaseFileKey + "&" : string.Empty)',
+        deleteCaseFileUrl: '@Url.Action("DeleteNewCaseFile")',
+        searchUserUrl: '',
+        seachComputerUrl: '',
+        saveNewCaseUrl: '',
+        fetchDepartmentsUrl: '',
+        fetchOUUrl: '',
+        setProductAreaByCaseTypeUrl: ''
+    };
+
     window.parameters = {
         saveCaseUrl: '@Url.Content("~/Case/ExtendedCase")',
 
@@ -58,10 +77,10 @@
         caseInitValues: {
             CaseId: '@Model.CaseDataModel.Id',
             CustomerId: '@Model.CaseDataModel.Customer_Id',
-            ReportedBy: '@Model.CaseDataModel.ReportedBy',
-            PersonsName: '@Model.CaseDataModel.PersonsName',
-            PersonsPhone: '@Model.CaseDataModel.PersonsPhone',
-            UserCode: '@Model.CaseDataModel.UserCode',
+            ReportedBy: @Html.Raw(Json.Encode(Model.CaseDataModel.ReportedBy)),
+            PersonsName: @Html.Raw(Json.Encode(Model.CaseDataModel.PersonsName)),
+            PersonsPhone: @Html.Raw(Json.Encode(Model.CaseDataModel.PersonsPhone)),
+            UserCode: @Html.Raw(Json.Encode(Model.CaseDataModel.UserCode)),
             RegionId: '@Model.CaseDataModel.Region_Id',
             DepartmentId: '@Model.CaseDataModel.Department_Id',
             ParentOUId: '@(Model.CaseOU != null && Model.CaseOU.Parent_OU_Id != null ? Model.CaseOU.Parent_OU_Id : null)',
@@ -72,9 +91,9 @@
             PlanDate: '@(Model.CaseDataModel.PlanDate != null ? Model.CaseDataModel.PlanDate.Value.ToString() : "" )',
             WatchDate: '@(Model.CaseDataModel.WatchDate != null ? Model.CaseDataModel.WatchDate.Value.ToString() : "" )',
             PriorityId: '@Model.CaseDataModel.Priority_Id',
-            PersonsEmail: '@Model.CaseDataModel.PersonsEmail',
-            PersonsCellphone: '@Model.CaseDataModel.PersonsCellphone',
-            Place: '@Model.CaseDataModel.Place',
+            PersonsEmail: @Html.Raw(Json.Encode(Model.CaseDataModel.PersonsEmail)),
+            PersonsCellphone: @Html.Raw(Json.Encode(Model.CaseDataModel.PersonsCellphone)),
+            Place: @Html.Raw(Json.Encode(Model.CaseDataModel.Place)),
             CostCentre: '@Model.CaseDataModel.CostCentre',
         },
 
@@ -92,32 +111,32 @@
 </script>
 
 @Scripts.Render("~/Content/js/Case/extendedCase")
-
+@Scripts.Render("~/Content/js/Case/edit")
 
 <div class="jumbotron greybar">
     <div class="container-fluid">
         <div class="col-lg-12 secnav">
 
-                <input id="btnSave" type="button" value='@Translation.Get("Save", Enums.TranslationSource.TextTranslation)' class="btn btn-default pull-left" style="margin-right:20px !important;" />
+            <input id="btnSave" type="button" value='@Translation.Get("Save", Enums.TranslationSource.TextTranslation)' class="btn btn-default pull-left" style="margin-right:20px !important;" />
             @if (Model.WorkflowSteps != null && Model.WorkflowSteps.Any())
             {
-                
-                    <div class="input-group" >
-                        <select id="steps" name="steps" class="dropdown-group pull-left">
-                            <option value="0" class="form-control">@Translation.Get(Text.SelectStep)</option>
-                            @if (Model.WorkflowSteps != null && Model.WorkflowSteps.Any())
+
+                <div class="input-group">
+                    <select id="steps" name="steps" class="dropdown-group pull-left">
+                        <option value="0" class="form-control">@Translation.Get(Text.SelectStep)</option>
+                        @if (Model.WorkflowSteps != null && Model.WorkflowSteps.Any())
+                        {
+                            foreach (var step in Model.WorkflowSteps)
                             {
-                                foreach (var step in Model.WorkflowSteps)
-                                {
-                            <option data-next-step="@step.NextStep" value="@step.CaseTemplateId">@Translation.Get(step.Name)</option>
-                                }
+                                <option data-next-step="@step.NextStep" value="@step.CaseTemplateId">@Translation.Get(step.Name)</option>
                             }
-                        </select>
-                        <span class="input-group-btn pull-left">
-                            <input id="btnGo" type="button" class="btn btn-default go-button" value="@Translation.Get("Send")" />
-                        </span>
-                    </div>
-                
+                        }
+                    </select>
+                    <span class="input-group-btn pull-left">
+                        <input id="btnGo" type="button" class="btn btn-default go-button" value="@Translation.Get("Send")" />
+                    </span>
+                </div>
+
             }
         </div>
     </div>
@@ -225,7 +244,7 @@
     @Html.HiddenFor(model => model.CaseDataModel.RelatedCaseNumber)
     @Html.HiddenFor(model => model.CaseDataModel.LeadTime)
     @Html.HiddenFor(model => model.CaseDataModel.CaseCleanUp_Id)
-    @Html.HiddenFor(model => model.CaseDataModel.DefaultOwnerWG_Id)    
+    @Html.HiddenFor(model => model.CaseDataModel.DefaultOwnerWG_Id)
     @Html.HiddenFor(model => model.CaseDataModel.Moved)
     @Html.HiddenFor(model => model.CaseDataModel.LatestSLACountDate)
     @Html.HiddenFor(model => model.CaseDataModel.RegTime)
@@ -271,6 +290,9 @@
     @Html.Hidden("ButtonClick", "") @*TEMP, used to define if "Send" button is clicked*@
     @Html.HiddenFor(model => model.SelectedWorkflowStep)
 
+    /* FileUpload */
+    @Html.HiddenFor(m => Model.CaseDataModel.CaseFileKey)
+
 }
 <div class="container-fluid dh-container">
     <ul class="nav nav-tabs" id="tabsArea">
@@ -280,8 +302,14 @@
                 <i id="exTabIndicator_@extendedFormId" class="tab-indicator" style="display:none;">&nbsp;</i>
             </a>
         </li>
+        @if (Model.CaseId == 0 && Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+        {
+            <li>
+                <a href="#attachment-tab">@Translation.Get("Attachments", Enums.TranslationSource.TextTranslation) <span id="nrOfAttachedFiles"></span></a>
+            </li>
+        }
     </ul>
-    <div class="content">
+    <div class="content tab-content">
         <div id="fragment-1" class="tab-pane active">
             <div class="container-fluid dh-container">
                 <div id="container_@extendedFormId" class="">
@@ -289,5 +317,69 @@
                 </div>
             </div>
         </div>
+        @if (Model.CaseId == 0 && Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+        {
+            <div id="attachment-tab" class="tab-pane" style="overflow:hidden;">
+                <div>
+
+                        @*///* This copied code from NewCase.cshtml */
+                        ///* TODO: Make partial or shared code */*@
+
+                        <div class="col-md-12" style="margin-top:20px; margin-bottom:0px !important;">
+                            <a id="" href="#NewCase_upload_files_popup" role="button" class="btn btn-default hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add", Enums.TranslationSource.TextTranslation)</a>
+                            <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            <h5 class="modal-title">&nbsp;</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="NewCasefile_uploader"></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <a href="#upload_clipboard_file_popup" role="button" class="btn btn-default hasAttribute" data-src="case" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard", Enums.TranslationSource.TextTranslation)</a>
+                            <div id="upload_clipboard_file_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            <h3>&nbsp;</h3>
+                                        </div>
+                                        <div class="modal-body" style="max-height: 600px; text-align: center;">
+                                            <form onsubmit="return false;">
+                                                <div class="form-group">
+                                                    <label>@Translation.Get("1. Write filename (leave blank for automatic naming)", Enums.TranslationSource.TextTranslation) </label><br />
+                                                    <input class="" type="text" id="imgFilename" autocomplete="Off" />
+                                                    <span id="imageNameRequired" style="color: red"> @Translation.Get("must be specified", Enums.TranslationSource.TextTranslation) </span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>@(Translation.Get("2. Press Ctrl+V for inserting picture", Enums.TranslationSource.TextTranslation) )</label><br />
+                                                    <label>@(Translation.Get("3. Click on Save for adding to case", Enums.TranslationSource.TextTranslation)) </label>
+                                                    <div id="previewPnl"></div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" id="btnSave" class="btn btn-ok btn-default" style="display: none">@Translation.Get("Save", Enums.TranslationSource.TextTranslation)</button>
+                                            <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table id="NewCasefiles_table" class="table table-striped" style="margin-top:10px;">
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                </div>
+            </div>
+        }
     </div>
 </div>
