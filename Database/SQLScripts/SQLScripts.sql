@@ -58,11 +58,29 @@ begin
 	ALTER TABLE [dbo].[tblDepartment] ADD [ShowInvoicePrice] bit NOT NULL Default(1)
 end
 
-
 if  exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'SplitToCaseSolutionType' and sysobjects.name = N'tblCaseSolution')
 begin
 	EXEC sp_rename 'tblCaseSolution.SplitToCaseSolutionType', 'CaseRelationType', 'COLUMN'
 end
+
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblReportScheduler' AND xtype='U')
+BEGIN
+	CREATE TABLE [dbo].[tblReportScheduler](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[TargetFolder] [nvarchar](200) NOT NULL,
+	[OutputFilename] [nvarchar](200) NOT NULL,
+	[AppendTime] bit NOT NULL,
+	[StartTime] [nvarchar](50) NOT NULL,
+	[CronExpression] [nvarchar](200) NULL,
+	[TimeZone] [nvarchar](200) NULL,
+	[SqlQuery] [nvarchar](max) NOT NULL,
+	[ExportFormat] [nvarchar](50) NOT NULL,
+	[LastRun] [datetime] NULL,
+ CONSTRAINT [PK_tblReportScheduler] PRIMARY KEY CLUSTERED (	[Id] ASC)
+ WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]) ON [PRIMARY]
+
+END
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.35'

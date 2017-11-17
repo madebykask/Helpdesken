@@ -51,9 +51,6 @@
       <HintPath>..\packages\DbExtensions.5.1.0\lib\net40\DbExtensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DH.Helpdesk.Services">
-      <HintPath>..\dhHelpdesk_NG.Web_SelfService\Bin\DH.Helpdesk.Services.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
