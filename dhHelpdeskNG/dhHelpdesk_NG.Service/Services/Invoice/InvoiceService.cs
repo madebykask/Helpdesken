@@ -148,8 +148,8 @@ namespace DH.Helpdesk.Services.Services.Invoice
 						if (!fileCases.ContainsKey(dbLog.Case_Id))
 						{
 							fileCases.Add(dbLog.Case_Id, new Tuple<List<Log>, List<CaseInvoiceRow>>(new List<Log>(), new List<CaseInvoiceRow>()));
-							fileCases[dbLog.Case_Id].Item1.Add(dbLog);
 						}
+					    fileCases[dbLog.Case_Id].Item1.Add(dbLog);
 					}
 				}
 
