@@ -86,34 +86,17 @@
         [HttpPost]
         public ActionResult Edit(Category category)
         {
-            //if (this.ModelState.IsValid)
-            //{
-            //    this._categoryService.UpdateCategory(category);
-            //    this._categoryService.Commit();
-
-            //    return this.RedirectToAction("index", "category", new { customerId = category.Customer_Id});
-              
-            //}
-            
-
-
-            var categoryToSave = this._categoryService.GetCategory(category.Id, category.Customer_Id);
+            var categoryToSave = this._categoryService.GetCategoryById(category.Id);
 
             categoryToSave.Name = category.Name;
             categoryToSave.Description = category.Description;
             categoryToSave.IsActive = category.IsActive;
-            //categoryToSave.ParentCategory = category.ParentCategory;
-            //categoryToSave.Parent_Category_Id = category.Parent_Category_Id;
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._categoryService.SaveCategory(categoryToSave, out errors);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "category", new { customerId = category.Customer_Id });
-
-
-
-
 
             var customer = this._customerService.GetCustomer(category.Customer_Id);
             

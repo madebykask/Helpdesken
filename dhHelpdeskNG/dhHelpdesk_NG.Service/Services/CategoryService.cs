@@ -113,7 +113,7 @@
 
         public Category GetCategoryById(int id)
         {
-            return this._categoryRepository.Get(x => x.Id == id);
+            return this._categoryRepository.GetById(id);
         }
 
         public void NewCategory(Category category)
