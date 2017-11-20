@@ -268,10 +268,12 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
             if (baseCaseSolution.SplitToCaseSolutionDescendants != null && baseCaseSolution.SplitToCaseSolutionDescendants.Any())
             {
-                foreach (var item in baseCaseSolution.SplitToCaseSolutionDescendants.Where(x => x.SplitToCaseSolutionDescendant.Status > 0))
+                foreach (var item in baseCaseSolution.SplitToCaseSolutionDescendants.Where(x => x.SplitToCaseSolutionDescendant.Status > 0).OrderBy(x => x.SplitToCaseSolutionDescendant.SortOrder))
                 {
                     var caseTemplate = _caseSolutionService.GetCaseSolution(item.SplitToCaseSolutionDescendant.Id);
                     var formId = caseTemplate.ExtendedCaseForms.FirstOrDefault().Id;
+
+                    baseCaseModel.ExtendedCaseForm_Id = formId;
 
                     //First time
                     if (baseCaseId == -1)
@@ -332,7 +334,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             {
                 if (baseCaseSolution.SplitToCaseSolutionDescendants != null && baseCaseSolution.SplitToCaseSolutionDescendants.Any())
                 {
-                    foreach (var item in baseCaseSolution.SplitToCaseSolutionDescendants.Where(x => x.SplitToCaseSolutionDescendant.Status > 0))
+                    foreach (var item in baseCaseSolution.SplitToCaseSolutionDescendants.Where(x => x.SplitToCaseSolutionDescendant.Status > 0).OrderBy(x => x.SplitToCaseSolutionDescendant.SortOrder))
                     {
                         var caseTemplate = _caseSolutionService.GetCaseSolution(item.SplitToCaseSolutionDescendant.Id);
                         var formId = caseTemplate.ExtendedCaseForms.FirstOrDefault().Id;
@@ -389,7 +391,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 //check if there should be created child cases
                 if (baseCaseSolution.SplitToCaseSolutionDescendants != null && baseCaseSolution.SplitToCaseSolutionDescendants.Any())
                 {
-                    foreach (var item in baseCaseSolution.SplitToCaseSolutionDescendants.Where(x => x.SplitToCaseSolutionDescendant.Status > 0))
+                    foreach (var item in baseCaseSolution.SplitToCaseSolutionDescendants.Where(x => x.SplitToCaseSolutionDescendant.Status > 0).OrderBy(x => x.SplitToCaseSolutionDescendant.SortOrder))
                     {
                         var caseTemplate = _caseSolutionService.GetCaseSolution(item.SplitToCaseSolutionDescendant.Id);
                         var formId = caseTemplate.ExtendedCaseForms.FirstOrDefault().Id;

@@ -359,6 +359,28 @@ namespace DH.Helpdesk.Services.Services
                     uow.Save();
                 }                                
             }
+
+            if (extendedCaseFormId.HasValue)
+            {
+                using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+                {
+                    var rep = uow.GetRepository<ExtendedCaseDataEntity>();
+                    var entity = rep.Find(it => it.Id == extendedCaseDataId).FirstOrDefault();
+                    if (entity !=  null)
+                    {
+                        if (entity.ExtendedCaseFormId != extendedCaseFormId.Value)
+                        {
+                            entity.ExtendedCaseFormId = extendedCaseFormId.Value;
+
+                            rep.Update(entity);
+                            uow.Save();
+                        }
+                       
+                    }
+                }
+            }
+
+            
         }
 
         public Guid Delete(int id, string basePath, int? parentCaseId)
