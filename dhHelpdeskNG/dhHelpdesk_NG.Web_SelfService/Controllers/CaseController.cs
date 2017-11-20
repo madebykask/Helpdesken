@@ -302,6 +302,7 @@
             model.ExLogFileGuid = Guid.NewGuid().ToString();
 
             var cs = _settingService.GetCustomerSetting(currentCustomer.Id);
+            ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
 
             if (SessionFacade.CurrentUserIdentity != null)
             {                
@@ -587,6 +588,9 @@
             var languageId = SessionFacade.CurrentLanguageId;
             var customerId = SessionFacade.CurrentCustomer.Id;
 
+
+            var cs = _settingService.GetCustomerSetting(customerId);
+            ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
 
             caseModel.FieldSettings = _caseFieldSettingService.ListToShowOnCasePage(customerId, languageId)
                                                    .Where(c => c.ShowExternal == 1)

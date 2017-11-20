@@ -332,7 +332,7 @@
                 <i id="exTabIndicator_@extendedFormId" class="tab-indicator" style="display:none;">&nbsp;</i>
             </a>
         </li>
-        @if (Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()) && (Model.CaseId == 0 || (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null)))
+        @if (ViewBag.AttachmentPlacement == 1 && Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()) && (Model.CaseId == 0 || (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null)))
             {
           
             <li>
@@ -350,10 +350,10 @@
                 </div>
             </div>
         </div>
-        @if (Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()) && (Model.CaseId == 0 || (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null)))
+        @if (ViewBag.AttachmentPlacement == 1 && Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()) && (Model.CaseId == 0 || (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null)))
         {
             <div id="attachment-tab" class="tab-pane" style="overflow:hidden;">
-                <div>
+                <div> 
                         @*///* This copied code from NewCase.cshtml */
                         ///* TODO: Make partial or shared code */*@
 
@@ -387,7 +387,7 @@
     </div>
 
     @*/* only on new for now.. */*@
-@if (Model.CaseId == 0 && Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+@if (ViewBag.AttachmentPlacement == 1 && Model.CaseId == 0 && Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
 {
     <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
