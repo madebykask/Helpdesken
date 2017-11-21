@@ -173,18 +173,34 @@ EditPage.prototype.loadExtendedCaseIfNeeded = function () {
     var $placeHolder = self.getECContainerTemplate(iframeId, targetUrl);
     $placeHolder.appendTo(extendedCaseDiv);
 
+    self.ieVer = CommonUtils.detectIE();
     var $elm = document.getElementById(iframeId);
+
     if (!self.isNullOrUndefined($elm)) {
+
+        self.exCaseFrameHeight = +$elm.style.height;
         var iframeOptions = {
             log: false,
             sizeHeight: true,
             checkOrigin: false,
             enablePublicMethods: true,
             resizedCallback: function (messageData) {
+                if (!self.ieVer.IE)
+                    return;
+                
+                var newHeight = messageData && messageData.hasOwnProperty('height') ? +messageData.height : 0;
+                var prevHeight = self.exCaseFrameHeight || 0;
+                //console.log('@resizedCallback: prevHeight: ' + prevHeight.toString() + ', newHeight: ' + newHeight.toString());
+                if (newHeight < prevHeight) {
+                    //restore max height
+                    messageData.iframe.style.height = prevHeight + 'px';
+                } else {
+                    //save last max height
+                    self.exCaseFrameHeight = newHeight;
+                }
             },
             bodyMargin: '0 0 0 0',           
-            closedCallback: function (id) {
-            },
+            closedCallback: function (id) { },
             heightCalculationMethod: 'grow'
         };
 
