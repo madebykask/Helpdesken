@@ -343,6 +343,10 @@ namespace DH.Helpdesk.Dal.Repositories
                             CustomerId = dr.SafeGetInteger("CaseCustomerId"),
                             DepartmentId = dr.SafeGetInteger("Department_Id"),
                             WorkingGroupId = dr.SafeGetInteger("CaseWorkingGroupId"),
+                            Performer_User_Id = dr.SafeGetInteger("CasePerformerUserId"),
+                            CaseResponsibleUser_Id = dr.SafeGetInteger("CaseResponsibleUserId"),
+                            ReportedBy = dr.SafeGetString("ReportedBy"),
+                            User_Id = dr.SafeGetInteger("CaseUserId")
                         };
 
                         if (!row.Ignored)

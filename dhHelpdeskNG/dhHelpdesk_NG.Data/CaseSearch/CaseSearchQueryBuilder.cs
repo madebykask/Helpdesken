@@ -279,6 +279,9 @@ namespace DH.Helpdesk.Dal.Repositories
             columns.Add("tblCase.FinishingDescription");
             columns.Add("tblCase.Caption");
 
+            columns.Add("tblCase.Performer_User_Id as CasePerformerUserId");
+            columns.Add("tblCase.CaseResponsibleUser_Id as CaseResponsibleUserId");
+            columns.Add("tblCase.User_Id as CaseUserId");
             if (searchFilter.MaxTextCharacters > 0)
                 columns.Add(string.Format("Cast(tblCase.[Description] as Nvarchar({0})) as [Description] ", searchFilter.MaxTextCharacters));
             else
@@ -585,7 +588,9 @@ namespace DH.Helpdesk.Dal.Repositories
 
             tables.Add("from tblCase WITH ( NOLOCK, INDEX(IX_tblCase_Customer_Id)) ");
             tables.Add("inner join tblCustomer on tblCase.Customer_Id = tblCustomer.Id ");
-            tables.Add("inner join tblCustomerUser on tblCase.Customer_Id = tblCustomerUser.Customer_Id ");
+            
+            if (ctx.Criterias.SearchFilter.IsExtendedSearch == false)
+                tables.Add("inner join tblCustomerUser on tblCase.Customer_Id = tblCustomerUser.Customer_Id ");
 
             if (ctx.UseFreeTextCaseSearchCTE)
             {
@@ -866,6 +871,7 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             // finns kryssruta pa anvandaren att den bara far se sina egna arenden
+            //Note, this is also checked in CasesController.cs for ExtendedSearch, so if you change logic here, change in controller
             var restrictedCasePermission = searchCriteria.CustomerUserSettings.User.RestrictedCasePermission;
             if (restrictedCasePermission == 1 && !searchFilter.IsExtendedSearch)
             {

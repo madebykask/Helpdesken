@@ -25,6 +25,12 @@
         public int CustomerId { get; set; }
         public int WorkingGroupId { get; set; }
         public int DepartmentId { get; set; }
+
+        public string ReportedBy { get; set; }
+        public int? Performer_User_Id { get; set; }
+        public int? CaseResponsibleUser_Id { get; set; }
+        public int? User_Id { get; set; }
+
     }
 
     public class CaseAggregateData

@@ -503,17 +503,13 @@ namespace DH.Helpdesk.Web.Controllers
                 extendedCustomers = _settingService.GetExtendedSearchIncludedCustomers();
                 foreach (var includedCustomer in extendedCustomers)
                 {
-                    if (!customers.Contains(includedCustomer))
-                    {
-                        customers.Add(includedCustomer);
-                    }
+                    res.Add(AdvancedSearchForCustomer(frm, includedCustomer, isExtendedSearch, extendedCustomers));
                 }
             }
-            
 
-            foreach (var customer in customers)
+            foreach (var customer in customers.Except(extendedCustomers))
             {
-                res.Add(AdvancedSearchForCustomer(frm, customer, isExtendedSearch, extendedCustomers));
+                res.Add(AdvancedSearchForCustomer(frm, customer, false, extendedCustomers));
             }
 
             var totalCount = res.Sum(x => x.Item1.Count);
@@ -522,7 +518,6 @@ namespace DH.Helpdesk.Web.Controllers
 
             return this.Json(new { result = "success", data = ret });
         }
-
         #endregion
 
         #region --Case Overview--
@@ -7202,6 +7197,40 @@ namespace DH.Helpdesk.Web.Controllers
                             {
                                 infoAvailableInExtended = true;
                             }
+
+
+                            // finns kryssruta pa anvandaren att den bara far se sina egna arenden
+                            //Note, this is also checked in where clause  in ReturnCaseSearchWhere(SearchQueryBuildContext ctx)
+                            if (SessionFacade.CurrentUser.RestrictedCasePermission == 1 && infoAvailableInExtended == false)
+                            { 
+                                if (SessionFacade.CurrentUser.UserGroupId == UserGroups.Administrator)
+                                { 
+
+                                    if (searchRow.ExtendedSearchInfo.Performer_User_Id.HasValue && searchRow.ExtendedSearchInfo.Performer_User_Id.Value == SessionFacade.CurrentUser.Id)
+                                    {
+                                        infoAvailableInExtended = true;
+                                    }
+
+                                    if (infoAvailableInExtended == false &&  searchRow.ExtendedSearchInfo.CaseResponsibleUser_Id.HasValue && searchRow.ExtendedSearchInfo.CaseResponsibleUser_Id.Value == SessionFacade.CurrentUser.Id)
+                                    {
+                                        infoAvailableInExtended = true;
+                                    }
+                                }
+                                else if (SessionFacade.CurrentUser.UserGroupId == UserGroups.User)
+                                {
+
+                                    if (searchRow.ExtendedSearchInfo.ReportedBy.ToLower() == SessionFacade.CurrentUser.UserId.ToLower())
+                                    {
+                                        infoAvailableInExtended = true;
+                                    }
+
+                                    if (infoAvailableInExtended == false && searchRow.ExtendedSearchInfo.User_Id.HasValue && searchRow.ExtendedSearchInfo.User_Id.Value == SessionFacade.CurrentUser.Id)
+                                    {
+                                        infoAvailableInExtended = true;
+                                    }
+                                }
+
+                            }
                         }
                         else
                         {
@@ -7212,6 +7241,10 @@ namespace DH.Helpdesk.Web.Controllers
                         }
                     }
                     jsRow.Add("ExtendedAvailable", infoAvailableInExtended);
+                }
+                else
+                {
+                    jsRow.Add("ExtendedAvailable", true);
                 }
 
                 foreach (var col in gridSettings.columnDefs)
