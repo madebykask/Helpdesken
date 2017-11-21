@@ -1583,7 +1583,7 @@ as
 				Set @Log_Value = @Log_Value +
 					', {' + 
 						' "Date": "' + @logInvoiceTimeStr + '"' + 
-						', "Text": "' + replace(@curText,'"','\"') + '"' + 
+						', "Text": "' + replace(replace(@curText,'"','\"'),'\','\\') + '"' + 
 						', "WorkingTime": ' + cast(@Log_WorkingTime as nvarchar(max)) + 
 						', "OverTime": ' + cast(@Log_OverTime as nvarchar(max)) + 
 						', "EquipmentPrice": ' + cast(@Log_EquipmentPrice as nvarchar(max)) + 
@@ -1675,7 +1675,7 @@ as
 			Set @Log_Value = @Log_Value +
 					', {' + 
 						 ' "Date": "' + @invoiceRowLocalTimeStr + '"' + 
-						 ', "InvoiceNumber": "' +  replace(isnull(@IR_InvoiceNumber,''),'"','\"')  + '"' + 
+						 ', "InvoiceNumber": "' +  replace(replace(isnull(@IR_InvoiceNumber,''),'"','\"'),'\','\\')  + '"' + 
 						 ', "InvoicePrice": "' + cast(@IR_InvoicePrice as nvarchar(20)) + '"' +						
 						 ', "InvoiceRow_Id": "' + cast(isnull(@IR_InvoiceRow_Id,0) as nvarchar(20))+ '"' +  
 					   '}';				
@@ -1717,5 +1717,7 @@ as
 	select * from @ResultSet order by InOrder Asc
 
 Go
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.35'
