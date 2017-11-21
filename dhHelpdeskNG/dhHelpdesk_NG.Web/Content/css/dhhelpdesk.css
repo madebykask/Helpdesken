@@ -141,6 +141,10 @@ input[type="text"] {
     width: 50px !important;
 }
 
+.inputw55 {
+    width: 55px !important;
+}
+
 .inputw100 {
     width: 100px !important;
 }
@@ -3075,6 +3079,8 @@ body.login {
 }
 
 /*** invoice ***/
+
+
 .case-invoice-container {
     font-size: 14px;
     color: #333333;

@@ -1,6 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure.Extensions
 @using ReportViewerForMvc
 @using DH.Helpdesk.Common.Enums
+@using DH.Helpdesk.Web.Models.Case
 @model DH.Helpdesk.Web.Models.Shared.ReportModel
       
 <style type="text/css">
@@ -10,19 +11,19 @@
     tfoot { display:table-footer-group }
 </style>
 
-<div id="CasePrintArea" >
+<div id="CasePrintArea">
     @if (Model != null && Model.CanShow)
     {
         var tempNewLine = "{{NEWLINE}}";
         <div id="PrintCaseDialog" class="modal modalprintA4P fade " style="display:none">
-            <div class="modal-dialog">            
+            <div class="modal-dialog">
                 <div class="modal-header" style="cursor: move; background-color:#e5e5e5;">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>                    
-                    <h5> 
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5>
                         @if (Model.ShowPrintButton)
                         {
-                            <span  id="headerCaption"> @Translation.Get("Ärende") @Translation.Get("skriv ut") </span>
-                            <button style="float:right;margin-right:20px;" type="button" class="btn sendToPrinter" >@Translation.Get("skriv ut")</button>
+                            <span id="headerCaption"> @Translation.Get("Ärende") @Translation.Get("skriv ut") </span>
+                            <button style="float:right;margin-right:20px;" type="button" class="btn sendToPrinter">@Translation.Get("skriv ut")</button>
                         }
                         else
                         {
@@ -34,27 +35,30 @@
                 <div id="caseReportContainer" class="modal-body" style="align-content:center; ">
                     @*Enable it if you need to show Report Service Report (Need to change the controller as well)*@
                     @*@Html.ReportViewer(Model.Report)*@
-                                                                              
-                    @{                        
+
+                    @{
                         var user = Model.ReportData.Where(d => d.LineType == ReportLineTypes.User).SingleOrDefault();
                         var isFirstGroup = true;
-                     }
+                    }
 
-                     <table class="printheader">
+                    <table class="printheader">
                         <tr>
-                            <td >
+                            <td>
                                 @(user != null ? user.FieldValue : "")
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                @DateTime.Now.ToLocalTime() 
+                                @DateTime.Now.ToLocalTime()
                             </td>
                         </tr>
                     </table>
-                                                         
+
                     <table border="1" style="border-color:black" class="printcase">
-                        @foreach (var row in Model.ReportData.Where(d => d.LineType != ReportLineTypes.User))
+                        @foreach (var row in Model.ReportData.Where(d => d.LineType != ReportLineTypes.User &&
+                                                            d.LineType != ReportLineTypes.InvoiceGroup &&
+                                                            d.LineType != ReportLineTypes.InvoiceTime &&
+                                                            d.LineType != ReportLineTypes.InvoiceRow))
                         {
                             var val = "";
                             if (string.IsNullOrEmpty(row.FieldValue))
@@ -65,51 +69,95 @@
                             {
                                 val = row.FieldValue.AddCharacterInParts(50, Environment.NewLine, Environment.NewLine);
                             }
-                            
+
                             if (row.LineType == ReportLineTypes.Group)
                             {
                                 if (!isFirstGroup)
                                 {
                                     <tr>
-                                        <td style="width:20%; margin-left:20px;line-height:12px;">                                    
-                                           <p> &nbsp; </p>
+                                        <td style="width:20%; margin-left:20px;line-height:12px;">
+                                            <p> &nbsp; </p>
                                         </td>
                                         <td style="width:20%;word-wrap: break-word;line-height:12px;">
-                                            <p>&nbsp;</p> 
+                                            <p>&nbsp;</p>
                                         </td>
-                                    </tr>                                                                      
+                                    </tr>
                                 }
                                 isFirstGroup = false;
                             }
-                            <tr>                                                             
+                            <tr>                                
                                 <td style="width:20%;word-wrap: break-word; margin-left:20px;line-height:10px;" class="textbold @row.LineType">
-                                   <p> @row.FieldCaption </p>                                
-                                </td>                                                               
-                                
+                                    <p> @row.FieldCaption </p>
+                                </td>
+
                                 @if (row.LineType == ReportLineTypes.File)
                                 {
                                     var filesStr = val.Replace(Environment.NewLine, tempNewLine).RemoveHTMLTags();
                                     var files = filesStr.Split(new string[] { tempNewLine }, StringSplitOptions.None);
-                                    <td style="width:80%; line-height:10px;" class="@row.LineType">                                    
+                                    <td style="width:80%; line-height:10px;" class="@row.LineType">
                                         @foreach (var file in files.Where(f => !string.IsNullOrEmpty(f)).ToList())
                                         {
-                                             <p> <img src="@Url.Content("~/Content/icons/ico-doc-black.png")" > @file.ForHtmlView() </p>
+                                            <p> <img src="@Url.Content("~/Content/icons/ico-doc-black.png")"> @file.ForHtmlView() </p>
                                         }
                                     </td>
                                 }
                                 else
-                                {                                    
-                                    <td style="width:80%; word-wrap: break-word;line-height:10px;" class="@row.LineType">                                    
+                                {
+                                    <td style="width:80%; word-wrap: break-word;line-height:10px;" class="@row.LineType">
                                         <p> @val.Replace(Environment.NewLine, tempNewLine).RemoveHTMLTags().Replace(tempNewLine, Environment.NewLine).ForHtmlView()</p>
                                     </td>
                                 }
-                            </tr>                              
+                            </tr>
                         }
-                       </table>
-                                   
-                </div>               
-            </div>    
-        </div>                         
+                    </table>
+                    @{  var invoices = Model.ReportData.Where(d => d.LineType == ReportLineTypes.InvoiceTime ||
+                                                                   d.LineType == ReportLineTypes.InvoiceRow).ToList();}
+                    @if (invoices.Any())
+                    {
+                        var invoiceHeader = Model.ReportData.FirstOrDefault(d => d.LineType == ReportLineTypes.InvoiceGroup);                        
+                        <table border="1" style="border-color:black;" class="printcase">
+                        @if (invoiceHeader != null)
+                        {                                
+                            <tr>
+                                <td style="width:100%;word-wrap: break-word; margin-left:20px;line-height:10px;" class="textbold @ReportLineTypes.Group">
+                                    <p> @invoiceHeader.FieldCaption </p>
+                                </td>                               
+                            </tr>
+                        }
+                        @{var invoiceTime = invoices.FirstOrDefault(d => d.LineType == ReportLineTypes.InvoiceTime);
+                            var invoiceRow = invoices.FirstOrDefault(d => d.LineType == ReportLineTypes.InvoiceRow);
+
+                            MvcHtmlString invoiceTimeData = null;
+                            MvcHtmlString invoiceRowData = null;
+                        }
+                        @if (invoiceTime != null)
+                        {
+                            var curVal = invoiceTime.FieldValue;
+                            invoiceTimeData = curVal.RemoveHTMLTags().JsonToHtmlTable<InvoiceTimeModel>("invoice-time-print-table");
+                        }
+                        @if (invoiceRow != null)
+                        {
+                            var curVal = invoiceRow.FieldValue;
+                            invoiceRowData = curVal.RemoveHTMLTags().JsonToHtmlTable<InvoiceRowModel>("invoice-time-print-table");
+                        }
+                            <tr>                                
+                                <td style="word-wrap: break-word;line-height:10px;" class="@invoiceTime.LineType">
+                                    @if (invoiceTimeData != null)
+                                    {
+                                        <p> @invoiceTimeData </p>
+                                    }
+                                    @if (invoiceRowData != null)
+                                    {
+                                        <p> @invoiceRowData </p>
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+                    }
+                </div>
+
+            </div>
+        </div>
     }
 </div>
 

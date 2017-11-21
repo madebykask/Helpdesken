@@ -116,5 +116,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return (roleId >= (int)BusinessData.Enums.Admin.Users.UserGroup.CustomerAdministrator);
             
         }
+
+        public static string MinToTimeSpan(this int minutes)
+        {
+            var ts = TimeSpan.FromMinutes(minutes);
+            return $"{ts.Hours}{Translation.GetCoreTextTranslation("Tim")} {ts.Minutes}{Translation.GetCoreTextTranslation("Min")}";
+        }
     }
 }

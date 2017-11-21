@@ -3,9 +3,11 @@
     font-size: 10px;
     text-align:left;
     margin-bottom:19px;
+    
 }
 .printcase {
     font-size: 11px;
+    width:100%;
 }
 
 .printcase td {
@@ -48,4 +50,24 @@
 
 .printcase .S {    
     font-size: 11px;    
+}
+
+.invoice-time-print-table {
+    width: 100%;
+    border: 1px solid #f8f1f1;
+    page-break-inside:auto;
+}
+
+.invoice-time-print-table tr{
+    page-break-inside:avoid; 
+    page-break-after:auto;
+}
+
+.invoice-time-print-table th{
+    font-size: small; 
+    background-color: lightgray!important;
+}
+
+.invoice-time-print-table td:nth-child(2){ 
+    max-width: 240px;
 }

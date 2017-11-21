@@ -209,7 +209,7 @@ CaseCharge.prototype = {
         var time = self._minutesToTime(mins);
 
         if (visible == undefined || visible) {
-            var hours = $("<select id='ddl" + name + "Hours' name='ddl" + name + "Hours' class='inputw50'></select>");
+            var hours = $("<select id='ddl" + name + "Hours' name='ddl" + name + "Hours' class='inputw55'></select>");
             for (var i = 0; i < 100; i++) {
                 hours.append($('<option>', {
                     value: i,
@@ -217,7 +217,7 @@ CaseCharge.prototype = {
                     selected: time.hours === i
                 }));
             }
-            var minutes = $("<select id='ddl" + name + "Minutes' name='ddl" + name + "Minutes' class='inputw50'></select>");
+            var minutes = $("<select id='ddl" + name + "Minutes' name='ddl" + name + "Minutes' class='inputw55'></select>");
             for (i = 0; i < 60; i += self.options.minStep) {
                 minutes.append($('<option>', {
                     value: i,
@@ -236,8 +236,8 @@ CaseCharge.prototype = {
                      .append(" " + self.options.minText))
              );
         } else {
-            var hours = $("<input type='hidden' id='ddl" + name + "Hours' name='ddl" + name + "Hours' class='inputw50' value=" + time.hours + ">");
-            var minutes = $("<input type='hidden' id='ddl" + name + "Minutes' name='ddl" + name + "Minutes' class='inputw50' value=" + time.minutes + ">");
+            var hours = $("<input type='hidden' id='ddl" + name + "Hours' name='ddl" + name + "Hours' class='inputw55' value=" + time.hours + ">");
+            var minutes = $("<input type='hidden' id='ddl" + name + "Minutes' name='ddl" + name + "Minutes' class='inputw55' value=" + time.minutes + ">");
             var res = $("<span/>")
              .append($("<div class='nowrap'/>")
                  .append($("<span/>")
@@ -257,7 +257,7 @@ CaseCharge.prototype = {
 
     _getTextBox: function (val, name, visible) {
         var _type = visible == undefined || visible ? "text" : "hidden";
-        var res = "<input type='"+ _type +"' class='inputw50' id='" + name + "' name='" + name + "' placeholder='0.00' value='{1}'>"
+        var res = "<input type='"+ _type +"' class='inputw55' id='" + name + "' name='" + name + "' placeholder='0.00' value='{1}'>"
             .replace(/\{1\}/g, val);
 
         return res;

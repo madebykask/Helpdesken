@@ -401,6 +401,10 @@ InvoicesOverview.prototype = {
             triggerTd.html("<i class='icon-plus-sign'></i>");
         }
     },
+    
+    _generatePriceFieldId: function (rowId, index){
+        return "priceField_" + rowId + "_" + index;
+    },
 
     _getExpansion: function (data) {
         "use strict";
@@ -413,6 +417,7 @@ InvoicesOverview.prototype = {
             if (!isRowReadOnly) {
                 isSectionReadOnly = false;
             }
+            var priceFieldId = self._generatePriceFieldId(data.CaseId, i);
             var rowString =
             "<tr class='expanded-row' data-parentrowid='" + data.CaseId + "' data-loginvoice='" + data.LogInvoices[i].Id + "'>" +
             "<td></td>" +
@@ -424,7 +429,7 @@ InvoicesOverview.prototype = {
 		    "<td></td>" +
 		    "<td>" + (isRowReadOnly ? self._minutesToTimeString(data.LogInvoices[i].WorkingTime) : self._getTimeEditor(data.LogInvoices[i].WorkingTime, "WorkingTime")) + "</td>" +
 		    "<td>" + (isRowReadOnly ? self._minutesToTimeString(data.LogInvoices[i].Overtime) : self._getTimeEditor(data.LogInvoices[i].Overtime, "Overtime")) + "</td>" +
-		    "<td class='align-right'>" + self._formatNumber(self._getLogInvoiceAmount(data.LogInvoices[i]), 2, 3, " ", ",") + "</td>" +
+		    "<td id='"+ priceFieldId + "' class='align-right'>" + self._formatNumber(self._getLogInvoiceAmount(data.LogInvoices[i]), 2, 3, " ", ",") + "</td>" +
 		    "<td class='align-right'>" + (isRowReadOnly ? self._formatNumber(data.LogInvoices[i].Material, 2, 3, " ", ",") : self._getTextBox(data.LogInvoices[i].Material, "txtMaterial")) + "</td>" +
 		    "<td class='align-right'>" + (isRowReadOnly ? self._formatNumber(data.LogInvoices[i].Price, 2, 3, " ", ",") : self._getTextBox(data.LogInvoices[i].Price, "txtPrice")) + "</td>" +
 		    "<td></td>" +
@@ -490,7 +495,7 @@ InvoicesOverview.prototype = {
         var self = this;
 
         var time = self._minutesToTime(mins);
-        var hours = $("<select id='ddl" + name + "Hours' name='ddl" + name + "Hours' class='inputw50'></select>");
+        var hours = $("<select id='ddl" + name + "Hours' name='ddl" + name + "Hours' class='inputw55'></select>");
         for (var i = 0; i < 100; i++) {
             hours.append($('<option>', { 
                 value: i,
@@ -498,7 +503,7 @@ InvoicesOverview.prototype = {
                 selected: time.hours === i
             }));
         }
-        var minutes = $("<select id='ddl" + name + "Minutes' name='ddl" + name + "Minutes' class='inputw50'></select>");
+        var minutes = $("<select id='ddl" + name + "Minutes' name='ddl" + name + "Minutes' class='inputw55'></select>");
         for (i = 0; i < 60; i+= self.options.minStep) {
             minutes.append($('<option>', {
                 value: i,
@@ -526,7 +531,7 @@ InvoicesOverview.prototype = {
     },
 
     _getTextBox: function(val, name) {
-        var res = "<input type='text' class='inputw50' id='" + name + "' name='" + name + "' placeholder='0.00' value='{1}'>"
+        var res = "<input type='text' class='inputw55' id='" + name + "' name='" + name + "' placeholder='0.00' value='{1}'>"
             .replace(/\{1\}/g, val);
 
         return res;
@@ -636,6 +641,8 @@ InvoicesOverview.prototype = {
                     dataEntry.Price = logInvoices[i].Price;
                     dataEntry.Charge = logInvoices[i].Charge;
                 }
+                var priceFieldId = self._generatePriceFieldId(data.CaseId, i);
+                $('#' + priceFieldId).html(self._formatNumber(self._getLogInvoiceAmount(dataEntry), 2, 3, " ", ","));
             }
             for (i = 0; i < externalInvoices.length; i++) {
                 dataEntry = self._findById(data.ExternalInvoices, externalInvoices[i].Id);
@@ -644,7 +651,7 @@ InvoicesOverview.prototype = {
                     dataEntry.Charge = externalInvoices[i].Charge;
                 }
             }
-            parent.invalidate();
+            parent.invalidate();          
             self.table.draw();
             self._setToggleIcon(parent);
         })

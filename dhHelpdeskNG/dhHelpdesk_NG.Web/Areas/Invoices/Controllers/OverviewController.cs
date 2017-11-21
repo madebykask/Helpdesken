@@ -273,8 +273,8 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
                     Id = x.Id,
                     WorkingTime = x.WorkingTime,
                     Overtime = x.Overtime,
-                    EquipmentPrice = x.Price,
-                    Price = x.Material,
+                    EquipmentPrice = x.Material,
+                    Price = x.Price,
                     Charge = x.Charge
                 }).ToList());
             }
