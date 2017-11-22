@@ -60,7 +60,12 @@ end
 
 if  exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'SplitToCaseSolutionType' and sysobjects.name = N'tblCaseSolution')
 begin
-	EXEC sp_rename 'tblCaseSolution.SplitToCaseSolutionType', 'CaseRelationType', 'COLUMN'
+
+	if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'CaseRelationType' and sysobjects.name = N'tblCaseSolution')
+	begin
+
+		EXEC sp_rename 'tblCaseSolution.SplitToCaseSolutionType', 'CaseRelationType', 'COLUMN'
+	end
 end
 
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblReportScheduler' AND xtype='U')
