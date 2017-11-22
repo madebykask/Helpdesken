@@ -121,12 +121,14 @@ var GRID_STATE = {
             autoclose: true
         });
 
-        if (doSearchAtBegining)
-            me.onSearchClick();
-
         if (isExtSearch) {
             me.onExtSearchLoading();
         }
+
+        if (doSearchAtBegining)
+            me.onSearchClick();
+
+       
     };
         
     Page.prototype.setGridState = function(gridStateId) {
