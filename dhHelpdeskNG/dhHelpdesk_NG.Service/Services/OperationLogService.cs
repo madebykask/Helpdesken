@@ -1,4 +1,7 @@
-﻿using DH.Helpdesk.BusinessData.Models.OperationLog.Output;
+﻿using System.IO;
+using System.ServiceModel.Syndication;
+using System.Xml;
+using DH.Helpdesk.BusinessData.Models.OperationLog.Output;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -53,6 +56,10 @@ namespace DH.Helpdesk.Services.Services
         /// The result.
         /// </returns>
         IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers, int? count, bool forStartPage);
+
+        IList<OperationLog> GetRssOperationLogs(int customerId);
+        Rss20FeedFormatter CreateRssFeed(string url, string title, IList<OperationLog> logs);
+        void SaveRssFeed(Rss20FeedFormatter rss, string path);
     }
 
     public class OperationLogService : IOperationLogService
@@ -61,9 +68,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWorkingGroupRepository _workingGroupRepository;
 
-        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        private readonly IWorkContext workContext;
+        private readonly IWorkContext _workContext;
         private readonly IMailTemplateService _mailTemplateService;
         private readonly IEmailService _emailService;
         private readonly IOperationLogEMailLogRepository _operationLogEmailLogRepository;
@@ -73,7 +80,7 @@ namespace DH.Helpdesk.Services.Services
         public OperationLogService(
             IOperationLogRepository operationLogRepository,
             IUnitOfWork unitOfWork,
-            IWorkingGroupRepository workingGroupRepository, 
+            IWorkingGroupRepository workingGroupRepository,
             IUnitOfWorkFactory unitOfWorkFactory,
             IMailTemplateService mailTemplateService,
             IEmailService emailService,
@@ -85,8 +92,8 @@ namespace DH.Helpdesk.Services.Services
             this._operationLogRepository = operationLogRepository;
             this._unitOfWork = unitOfWork;
             this._workingGroupRepository = workingGroupRepository;
-            this.unitOfWorkFactory = unitOfWorkFactory;
-            this.workContext = workContext;
+            this._unitOfWorkFactory = unitOfWorkFactory;
+            this._workContext = workContext;
             this._mailTemplateService = mailTemplateService;
             this._emailService = emailService;
             this._operationLogEmailLogRepository = operationLogEmailLogRepository;
@@ -96,12 +103,12 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<OperationLog> GetOperationLogs(int customerId)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var operationLogRep = uow.GetRepository<OperationLog>();
 
                 return operationLogRep.GetAll()
-                        .RestrictByWorkingGroupsAndUsers(this.workContext)
+                        .RestrictByWorkingGroupsAndUsers(this._workContext)
                         .GetByCustomer(customerId)
                         .ToList();
             }
@@ -150,14 +157,13 @@ namespace DH.Helpdesk.Services.Services
 
         public OperationLog GetOperationLog(int id)
         {
-            var ret = new OperationLog();
-            ret = null;
-            using (var uow = this.unitOfWorkFactory.Create())
+            OperationLog ret;
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var operationLogRep = uow.GetRepository<OperationLog>();
 
                 ret = operationLogRep.GetAll()
-                        .RestrictByWorkingGroupsAndUsers(this.workContext)
+                        .RestrictByWorkingGroupsAndUsers(this._workContext)
                         .GetById(id)
                         .IncludePath(o => o.Us)
                         .IncludePath(o => o.WGs)
@@ -173,13 +179,30 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<OperationLog> GetAllOpertionLogs()
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var operationLogRep = uow.GetRepository<OperationLog>();
 
                 return operationLogRep.GetAll()
-                        .RestrictByWorkingGroupsAndUsers(this.workContext)
+                        .RestrictByWorkingGroupsAndUsers(this._workContext)
                         .ToList();
+            }
+        }
+
+        public IList<OperationLog> GetRssOperationLogs(int customerId)
+        {
+            using (var uow = this._unitOfWorkFactory.Create())
+            {
+                var operationLogRep = uow.GetRepository<OperationLog>();
+                var currDate = DateTime.UtcNow;
+                var untilDate = currDate.AddDays(-1);
+
+                return operationLogRep.GetAll()
+                    .GetByCustomer(customerId)
+                    .Where(l => l.PublicInformation == 1 &&
+                            (!l.ShowUntilDate.HasValue || l.ShowUntilDate.Value >= untilDate) &&
+                            (!l.ShowDate.HasValue || l.ShowDate <= currDate))
+                    .ToList();
             }
         }
 
@@ -187,12 +210,12 @@ namespace DH.Helpdesk.Services.Services
         {
             try
             {
-                using (var uow = this.unitOfWorkFactory.Create())
+                using (var uow = this._unitOfWorkFactory.Create())
                 {
                     var rep = uow.GetRepository<OperationLog>();
 
                     var entity = rep.GetAll()
-                                  .RestrictByWorkingGroupsAndUsers(this.workContext)
+                                  .RestrictByWorkingGroupsAndUsers(this._workContext)
                                   .GetById(id)
                                   .SingleOrDefault();
 
@@ -231,7 +254,7 @@ namespace DH.Helpdesk.Services.Services
                 return;
             }
 
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var operationLogRep = uow.GetRepository<OperationLog>();
                 var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
@@ -264,14 +287,14 @@ namespace DH.Helpdesk.Services.Services
                 }
 
                 uow.Save();
-            }            
+            }
         }
 
         public void SendOperationLogEmail(OperationLog operationLog, OperationLogList operationLogList, Customer customer)
         {
-            
 
-            var helpdeskMailFromAdress = customer.HelpdeskEmail; 
+
+            var helpdeskMailFromAdress = customer.HelpdeskEmail;
 
             // get list of fields to replace [#1] tags in the subjcet and body texts
             List<Field> fields = GetFieldsForEmail(operationLogList);
@@ -312,7 +335,7 @@ namespace DH.Helpdesk.Services.Services
                     if (!string.IsNullOrWhiteSpace(t) && this._emailService.IsValidEmail(t))
                     {
 
-                        
+
                         if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                         {
                             var el = new OperationLogEMailLog(operationLog.Id, string.Empty, t);
@@ -413,8 +436,8 @@ namespace DH.Helpdesk.Services.Services
             ret.Add(new Field { Key = "[#3]", StringValue = loglist.OperationLogDescription });
             ret.Add(new Field { Key = "[#4]", StringValue = loglist.OperationLogAction });
             //ret.Add(new Field { Key = "[#5]", StringValue = loglist. });
-            
-            
+
+
             return ret;
         }
 
@@ -425,7 +448,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers, int? count, bool forStartPage)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var operationLogRepository = uow.GetRepository<OperationLog>();
 
@@ -434,9 +457,9 @@ namespace DH.Helpdesk.Services.Services
                 query = query
                        .GetFromDate()
                        .GetUntilDate();
-              
+
                 return query
-                        .RestrictByWorkingGroupsAndUsers(this.workContext)
+                        .RestrictByWorkingGroupsAndUsers(this._workContext)
                         .GetForStartPage(customers, count, forStartPage)
                         .MapToOverviews();
             }
@@ -444,14 +467,14 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<OperationLogList> GetListForIndexPage()
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var operationLogRep = uow.GetRepository<OperationLog>();
                 var operationLogCategoryRep = uow.GetRepository<OperationLogCategory>();
                 var operationObjectRep = uow.GetRepository<OperationObject>();
                 var userRep = uow.GetRepository<User>();
 
-                var query = from ol in operationLogRep.GetAll().RestrictByWorkingGroupsAndUsers(this.workContext)
+                var query = from ol in operationLogRep.GetAll().RestrictByWorkingGroupsAndUsers(this._workContext)
                             join olc in operationLogCategoryRep.GetAll() on ol.OperationLogCategory_Id equals olc.Id into gj
                             from x in gj.DefaultIfEmpty()
                             join ob in operationObjectRep.GetAll() on ol.OperationObject_Id equals ob.Id
@@ -469,23 +492,61 @@ namespace DH.Helpdesk.Services.Services
                                 OOI = ob.Id,
                                 OLCID = x == null ? 0 : x.Id
                             }
-                                into g
-                                select new OperationLogList
-                                {
-                                    OperationLogAction = g.Key.LogAction,
-                                    OperationLogAdmin = g.Key.UserID,
-                                    CreatedDate = g.Key.CreatedDate,
-                                    OperationLogCategoryName = g.Key.OLCName,
-                                    OperationLogDescription = g.Key.LogText,
-                                    OperationObjectName = g.Key.Name,
-                                    Id = g.Key.Id,
-                                    Customer_Id = g.Key.Customer_Id,
-                                    OperationObject_ID = g.Key.OOI,
-                                    OperationCategoriy_ID = g.Key.OLCID
-                                };
+                    into g
+                            select new OperationLogList
+                            {
+                                OperationLogAction = g.Key.LogAction,
+                                OperationLogAdmin = g.Key.UserID,
+                                CreatedDate = g.Key.CreatedDate,
+                                OperationLogCategoryName = g.Key.OLCName,
+                                OperationLogDescription = g.Key.LogText,
+                                OperationObjectName = g.Key.Name,
+                                Id = g.Key.Id,
+                                Customer_Id = g.Key.Customer_Id,
+                                OperationObject_ID = g.Key.OOI,
+                                OperationCategoriy_ID = g.Key.OLCID
+                            };
 
                 return query.OrderByDescending(x => x.CreatedDate).ToList();
-            }            
+            }
+        }
+
+
+        public Rss20FeedFormatter CreateRssFeed(string url, string title, IList<OperationLog> logs)
+        {
+            logs = logs ?? new List<OperationLog>();
+            title = title ?? "";
+            const string description = "Driftinformation";
+            var feed =
+                new SyndicationFeed($"{title} - {description}", description, new Uri(url))
+                {
+                    Language = "sv",
+                    LastUpdatedTime = DateTimeOffset.Now
+                };
+
+            var items = logs.Select(log => new SyndicationItem()
+            {
+                Summary = new TextSyndicationContent(log.LogTextExternal),
+                PublishDate = log.ChangedDate
+            })
+                .ToList();
+
+            feed.Items = items;
+
+            return new Rss20FeedFormatter(feed);
+        }
+
+        public void SaveRssFeed(Rss20FeedFormatter rss, string path)
+        {
+            path = path + "/rss";
+            if (!Directory.Exists(path))
+                throw new DirectoryNotFoundException($"Directory {path} does not exist");
+
+            using (var rssWriter = XmlWriter.Create($"{path}/OperationLog.xml"))
+            {
+                rss.WriteTo(rssWriter);
+                rssWriter.Close();
+            }
         }
     }
 }
