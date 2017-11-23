@@ -1,4 +1,4 @@
-﻿using DH.Helpdesk.Web.Infrastructure;
+﻿using DH.Helpdesk.Domain.Invoice;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Models.Case
@@ -9,7 +9,7 @@ namespace DH.Helpdesk.Web.Models.Case
         private string overTime;
         private string equipmentPrice;
         private string price;
-        private string invoiceRow_Id;
+        private string invoiceStatus;
 
         public string Date { get; set; }
         public string Text { get; set; }
@@ -69,18 +69,16 @@ namespace DH.Helpdesk.Web.Models.Case
                     price = value;
             }
         }
-        public string InvoiceRow_Id {
+        public string InvoiceStatus
+        {
             get
             {
-                return invoiceRow_Id;
+                return invoiceStatus;
             }
             set
             {
                 int i;
-                if (int.TryParse(value, out i))
-                    invoiceRow_Id = i > 0 ? Translation.GetCoreTextTranslation("Klara (fakturerade)") : "";
-                else
-                    invoiceRow_Id = value;
+                invoiceStatus = int.TryParse(value, out i) ? InvoiceTimeHelper.GetTextForInvoiceStatus(i) : value;
             }
         }        
     }
@@ -88,7 +86,7 @@ namespace DH.Helpdesk.Web.Models.Case
     public class InvoiceRowModel
     {        
         private string invoicePrice;        
-        private string invoiceRow_Id;
+        private string invoiceStatus;
 
         public string Date { get; set; }
         public string InvoiceNumber { get; set; }      
@@ -107,20 +105,37 @@ namespace DH.Helpdesk.Web.Models.Case
                     invoicePrice = value;
             }
         }      
-        public string InvoiceRow_Id
+        public string InvoiceStatus
         {
             get
             {
-                return invoiceRow_Id;
+                return invoiceStatus;
             }
             set
             {
                 int i;
-                if (int.TryParse(value, out i))
-                    invoiceRow_Id = i > 0 ? Translation.GetCoreTextTranslation("Klara (fakturerade)") : "";
-                else
-                    invoiceRow_Id = value;
+                invoiceStatus = int.TryParse(value, out i)? InvoiceTimeHelper.GetTextForInvoiceStatus(i) : value;
             }
+        }
+    }
+
+
+    public static class InvoiceTimeHelper
+    {
+        public static string GetTextForInvoiceStatus(int status)
+        {
+            switch (status)
+            {
+                case (int)InvoiceStatus.Ready:
+                    return InvoiceStatus.Ready.GetTranslation(true);
+
+                case (int)InvoiceStatus.Invoiced:
+                    return InvoiceStatus.Invoiced.GetTranslation(true);
+                    
+                case (int)InvoiceStatus.NotInvoiced:
+                    return InvoiceStatus.NotInvoiced.GetTranslation(true);
+            };
+            return "";
         }
     }
 }

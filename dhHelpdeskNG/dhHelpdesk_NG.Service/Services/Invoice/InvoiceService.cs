@@ -59,7 +59,7 @@ namespace DH.Helpdesk.Services.Services.Invoice
 		{
 			var dbModels = _invoiceRepository.GetInvoiceOverviewList(customerId, departmentId, dateFrom, dateTo, status, caseId, departmentCharge);
 			var res = new List<InvoiceOverview>();
-			foreach (var dbModel in dbModels)
+			foreach (var dbModel in dbModels.Item1)
 			{
 				var item = new InvoiceOverview();
 				item.CaseId = dbModel.Id;
@@ -104,7 +104,9 @@ namespace DH.Helpdesk.Services.Services.Invoice
 					InvoiceRow = new InvoiceRow { Status = x.InvoiceRow?.Status}
 				}).ToList();
 
-				res.Add(item);
+                item.Statistics = dbModels.Item2.Where(i=> i.CaseId == item.CaseId).FirstOrDefault();
+
+                res.Add(item);
 			}
 
 			return res;

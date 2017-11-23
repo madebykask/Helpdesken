@@ -226,6 +226,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
                 Department = x.Department,
                 Category = x.Category,
                 FinishingDate = x.FinishingDate?.Date,
+                Statistics = x.Statistics,
                 LogInvoices = x.LogInvoices.Select(y => new LogInvoiceItemViewModel
                 {
                     Id = y.Id,

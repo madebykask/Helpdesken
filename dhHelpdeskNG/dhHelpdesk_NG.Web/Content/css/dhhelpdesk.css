@@ -2004,6 +2004,10 @@ td.td-bottom-multiselect .btn-group {
         visibility: hidden;
     }
 
+.tooltipType{
+    cursor: pointer;
+}
+
 .tooltip.in {
     opacity: 1;
     filter: alpha(opacity=1);

@@ -1404,7 +1404,7 @@ as
 	Declare @Log_OverTime int;
 	Declare @Log_EquipmentPrice money;
 	Declare @Log_Price int;	
-	Declare @Log_InvoiceRow_Id int;	
+	Declare @Log_InvoiceStatus int;	
 
 	Declare @NewLine nvarchar(5)
 	
@@ -1424,8 +1424,9 @@ as
 			else
 				cast(u.SurName + ' ' + u.FirstName as nvarchar(max))
 			End as UserName,
-			l.WorkingTime, l.OverTime, l.EquipmentPrice,l.Price, l.InvoiceRow_Id
+			l.WorkingTime, l.OverTime, l.EquipmentPrice,l.Price, isnull(ir.Status,1) as InvoiceStatus
 	FROM tblLog l 
+		Left outer Join tblInvoiceRow ir on (l.InvoiceRow_Id = ir.Id)
 		Left outer Join tblUsers u on (l.User_Id = u.Id),
 		tblSettings s		 
 	WHERE l.Case_Id = @CaseId and s.Customer_Id = @CurrentCustomerId and (l.Text_External <> '' or l.Text_Internal <> '')
@@ -1439,7 +1440,7 @@ as
 	INTO @Log_Id, @Log_LogDate, @Log_Text_External,
 			@Log_Text_Internal, @Log_UserName, @Log_WorkingTime,
 			@Log_OverTime, @Log_EquipmentPrice,@Log_Price,
-			@Log_InvoiceRow_Id;			
+			@Log_InvoiceStatus;			
 		
 		
 	Set @ExternalFieldName  = '';
@@ -1505,7 +1506,7 @@ as
 			INTO @Log_Id, @Log_LogDate, @Log_Text_External,
 				 @Log_Text_Internal, @Log_UserName, @Log_WorkingTime,
 				 @Log_OverTime, @Log_EquipmentPrice,@Log_Price,
-				 @Log_InvoiceRow_Id;						
+				 @Log_InvoiceStatus;						
 		end
 
 	End; /* While Log_Cursor */ 
@@ -1524,7 +1525,7 @@ as
 		INTO @Log_Id, @Log_LogDate, @Log_Text_External,
 				@Log_Text_Internal, @Log_UserName, @Log_WorkingTime,
 				@Log_OverTime, @Log_EquipmentPrice, @Log_Price,
-				@Log_InvoiceRow_Id;
+				@Log_InvoiceStatus;
 
 		Insert into @ResultSet (Id, FieldName, FieldCaption, FieldValue, InOrder, LineType) 
 			         values(@FieldId, '[Title]', dbo.TextTranslate('Fakturering', @LanguageId), '', @InOrder, 'IG')
@@ -1562,7 +1563,7 @@ as
 						', "OverTime": "' + @InvoiceOverTime_Caption + '"' + 
 						', "EquipmentPrice": "' + @InvoiceEquipmentPrice_Caption + '"' + 
 						', "Price": "' + @InvoicePrice_Caption + '"' + 
-						', "InvoiceRow_Id": "' + @InvoiceStatus_Caption + '"' + 
+						', "InvoiceStatus": "' + @InvoiceStatus_Caption + '"' + 
 					 '}';
 
 		set @i = 0
@@ -1588,12 +1589,12 @@ as
 				Set @Log_Value = @Log_Value +
 					', {' + 
 						' "Date": "' + @logInvoiceTimeStr + '"' + 
-						', "Text": "' + replace(replace(@curText,'"','\"'),'\','\\') + '"' + 
+						', "Text": "' + replace(replace(@curText,'\','\\'),'"','\"') + '"' + 
 						', "WorkingTime": ' + cast(@Log_WorkingTime as nvarchar(max)) + 
 						', "OverTime": ' + cast(@Log_OverTime as nvarchar(max)) + 
 						', "EquipmentPrice": ' + cast(@Log_EquipmentPrice as nvarchar(max)) + 
 						', "Price": ' + cast(@Log_Price as nvarchar(max)) + 
-						', "InvoiceRow_Id": ' + cast(isnull(@Log_InvoiceRow_Id,0) as nvarchar(max)) + 
+						', "InvoiceStatus": ' + cast(isnull(@Log_InvoiceStatus,1) as nvarchar(max)) + 
 					  '}';				
 			End;
 
@@ -1603,7 +1604,7 @@ as
 				INTO @Log_Id, @Log_LogDate, @Log_Text_External,
 					 @Log_Text_Internal, @Log_UserName, @Log_WorkingTime,
 					 @Log_OverTime, @Log_EquipmentPrice,@Log_Price,
-					 @Log_InvoiceRow_Id;						
+					 @Log_InvoiceStatus;						
 			end
 
 		End; /* While Log_Cursor */
@@ -1626,7 +1627,7 @@ as
 	Declare @IR_InvoiceDate datetime;
 	Declare @IR_InvoiceNumber Nvarchar(50);
 	Declare @IR_InvoicePrice numeric(9,2);	
-	Declare @IR_InvoiceRow_Id int;	
+	Declare @IR_InvoiceStatus int;	
 	 
 	SELECT @Nums = Count(*) 
 	FROM tblCaseInvoiceRow
@@ -1637,15 +1638,16 @@ as
 				
 		/* Curson defination */
 		DECLARE invoiceRow_Cursor CURSOR FOR 				
-			SELECT ir.CreatedDate, ir.InvoiceNumber, ir.InvoicePrice, ir.InvoiceRow_Id
-			FROM tblCaseInvoiceRow ir 			
+			SELECT ir.CreatedDate, ir.InvoiceNumber, ir.InvoicePrice, isnull(tir.Status,1) as InvoiceStatus
+			FROM tblCaseInvoiceRow ir 	
+				 Left outer Join tblInvoiceRow tir on (ir.InvoiceRow_Id = tir.Id)		
 			WHERE ir.Case_Id = @CaseId
 			ORDER BY ir.Id desc;		
 
 		OPEN invoiceRow_Cursor
 		FETCH NEXT FROM invoiceRow_Cursor 
 		INTO @IR_InvoiceDate, @IR_InvoiceNumber, 
-			 @IR_InvoicePrice, @IR_InvoiceRow_Id;									
+			 @IR_InvoicePrice, @IR_InvoiceStatus;									
 
 		declare @IRDate_Caption nvarchar(50);
 		declare @IRNumber_Caption nvarchar(50);
@@ -1662,11 +1664,10 @@ as
 						' "Date": "' + @IRDate_Caption + '"' + 
 						', "InvoiceNumber": "' + @IRNumber_Caption + '"' + 
 						', "InvoicePrice": "' + @IRPrice_Caption + '"' +						
-						', "InvoiceRow_Id": "' + @IRStatus_Caption + '"' + 
+						', "InvoiceStatus": "' + @IRStatus_Caption + '"' + 
 					 '}';
 		
 		set @i = 0					
-
 		WHILE (@i < @Nums)
 		BEGIN	 	    
 			set @i = @i + 1		
@@ -1680,16 +1681,16 @@ as
 			Set @Log_Value = @Log_Value +
 					', {' + 
 						 ' "Date": "' + @invoiceRowLocalTimeStr + '"' + 
-						 ', "InvoiceNumber": "' +  replace(replace(isnull(@IR_InvoiceNumber,''),'"','\"'),'\','\\')  + '"' + 
+						 ', "InvoiceNumber": "' +  replace(replace(isnull(@IR_InvoiceNumber,''),'\','\\'),'"','\"')  + '"' + 
 						 ', "InvoicePrice": "' + cast(@IR_InvoicePrice as nvarchar(20)) + '"' +						
-						 ', "InvoiceRow_Id": "' + cast(isnull(@IR_InvoiceRow_Id,0) as nvarchar(20))+ '"' +  
+						 ', "InvoiceStatus": "' + cast(isnull(@IR_InvoiceStatus,1) as nvarchar(20))+ '"' +  
 					   '}';				
 			
 			if (@i < @Nums)
 			begin
 				FETCH NEXT FROM invoiceRow_Cursor 
 				INTO @IR_InvoiceDate, @IR_InvoiceNumber, 
-					 @IR_InvoicePrice, @IR_InvoiceRow_Id;						
+					 @IR_InvoicePrice, @IR_InvoiceStatus;						
 			end
 
 		End; /* While InvocieRow_Cursor */ 

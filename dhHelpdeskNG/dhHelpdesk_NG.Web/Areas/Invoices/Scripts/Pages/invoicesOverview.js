@@ -13,6 +13,9 @@ InvoicesOverview.prototype = {
 
         self.$totalRows = $("#totalRows");
         self._initGrid();
+        $(document).tooltip({
+            selector: '.tooltipType'
+        });
         $("#invoiceFilter #btnSearch").on("click", function() {
             self.table.ajax.reload();
         });
@@ -137,7 +140,9 @@ InvoicesOverview.prototype = {
                         "data": "",
                         "className": "align-center",
                         "render": function (data, type, row) {
-                            return !self._isSectionReadOnly(row) ? "<input type='button' id='btnInvoiceChargedChildren' value='" + self.options.copyText + "'/input>" : "";
+                            return self._generateInformation(row) +
+                                   (!self._isSectionReadOnly(row) ? "<input type='button' class='btn' id='btnInvoiceChargedChildren' value='" +
+                                    self.options.copyText + "'/input>" : "");
                         },
                         "sortable": false
                     },
@@ -924,6 +929,28 @@ InvoicesOverview.prototype = {
 
     _getTrForExternalInvoice: function(id) {
         return $("tr[data-externalinvoice='" + id + "']");
+    },
+
+    _generateInformation: function (row) {
+        "use strict";
+        var self = this;
+        
+        if (row != undefined &&
+            row.Statistics != undefined &&
+            (row.Statistics.NumOfInvoiced + row.Statistics.NumOfNotInvoiced)> 0 &&
+             row.Statistics.NumOfReady > 0) {
+
+            var readyText = self.options.statusList[1];
+            var invoicedText = self.options.statusList[2];
+            var notInvoicedText = self.options.statusList[3];
+            var _hint = (row.Statistics.NumOfReady > 0 ?  "<b>" + row.Statistics.NumOfReady + "</b> " + readyText + "<br/>" : "") +
+                        (row.Statistics.NumOfInvoiced > 0 ? "<b>" + row.Statistics.NumOfInvoiced + "</b> " + invoicedText + "<br/>" : "") +
+                        (row.Statistics.NumOfNotInvoiced > 0 ? "<b>" + row.Statistics.NumOfNotInvoiced + "</b> " + notInvoicedText : "");
+
+            return "<span class='icon-info-sign tooltipType' data-original-title='" + _hint + "' data-html='true' rel='tooltip'></span> &nbsp;"
+        }
+
+        return "<span style='opacity: 0.0'>---</span> &nbsp;";
     },
 
     _isSectionReadOnly: function (data) {

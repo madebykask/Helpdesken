@@ -1012,8 +1012,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
         public static MvcHtmlString JsonToHtmlTable<T>(this string jsonText, string classType = "")
         {
-            var jsonData = jsonText.Replace("\"", "'");
-            var dataList = JsonConvert.DeserializeObject<List<T>>(jsonData);
+            //var jsonData = jsonText.Replace("\"", "'");
+            var dataList = JsonConvert.DeserializeObject<List<T>>(jsonText);
             var dt = dataList.ToDataTable();
             return dt.ConvertDataTableToHTML(classType);
         }
