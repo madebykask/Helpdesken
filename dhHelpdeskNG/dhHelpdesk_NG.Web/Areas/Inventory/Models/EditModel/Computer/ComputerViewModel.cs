@@ -111,5 +111,7 @@
 
         [NotNull]
         public WorkstationFieldsViewModel WorkstationFieldsViewModel { get;  set; }
+
+        public bool IsForDialog { get; set; }
     }
 }

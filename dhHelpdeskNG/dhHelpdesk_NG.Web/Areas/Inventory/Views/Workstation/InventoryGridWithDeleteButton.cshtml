@@ -4,9 +4,14 @@
 @Model.InventoryGridModel.Inventories.Count
 @{    
     var userPermission = false;
+    var isForDialog = false;
     if (ViewData.Keys.Contains("InventoryAdminPermission"))
     {
         userPermission = (bool)ViewData["InventoryAdminPermission"];
+    }
+    if (ViewData.Keys.Contains("IsForDialog"))
+    {
+        isForDialog = (bool)ViewData["IsForDialog"];
     }
  }
 <table class="table table-striped table-bordered table-hover">
@@ -24,24 +29,48 @@
     <tbody>
         @foreach (var inventory in Model.InventoryGridModel.Inventories)
         {
-            <tr onclick=" window.location.href = '@Url.Action("Edit", "CustomInventory", new { id = inventory.Id, inventoryTypeId = Model.InventoryGridModel.CurrentMode })' ">
-                @{
-                    var fields = inventory.Fields.ToList();
-                    for (var i = 0; i < fields.Count; i++)
-                    {
-                        var inventoryField = Model.InventoryGridModel.Headers[i];
-                        var inventoryFieldValue = fields.Single(v => v.FieldName == inventoryField.FieldName);
+            if (isForDialog)
+            {
+                <tr>
+                    @{
+                        var fields = inventory.Fields.ToList();
+                        for (var i = 0; i < fields.Count; i++)
+                        {
+                            var inventoryField = Model.InventoryGridModel.Headers[i];
+                            var inventoryFieldValue = fields.Single(v => v.FieldName == inventoryField.FieldName);
 
-                        <td class="tdpointer">@inventoryFieldValue.Value.GetDisplayValue()</td>
+                            <td>@inventoryFieldValue.Value.GetDisplayValue()</td>
+                        }
                     }
-                }
-                <td>
-                    @if (userPermission)
-                    {
-                        @Html.ActionLink(Translation.Get("Ta bort"), "DeleteInventoryFromComputer", new { computerId = Model.ParentId, inventoryId = inventory.Id }, new { @class = "btn" })
+                    <td>
+                        @if (userPermission)
+                        {
+                            @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "DeleteInventoryFromComputer", new {computerId = Model.ParentId, inventoryId = inventory.Id, dialog = isForDialog}, new {@class = "btn"})
+                        }
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr onclick='window.location.href = "@Url.Action("Edit", "CustomInventory", new {id = inventory.Id, inventoryTypeId = Model.InventoryGridModel.CurrentMode})"'>
+                    @{
+                        var fields = inventory.Fields.ToList();
+                        for (var i = 0; i < fields.Count; i++)
+                        {
+                            var inventoryField = Model.InventoryGridModel.Headers[i];
+                            var inventoryFieldValue = fields.Single(v => v.FieldName == inventoryField.FieldName);
+
+                            <td class="tdpointer">@inventoryFieldValue.Value.GetDisplayValue()</td>
+                        }
                     }
-                </td>
-            </tr>
+                    <td>
+                        @if (userPermission)
+                        {
+                            @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "DeleteInventoryFromComputer", new {computerId = Model.ParentId, inventoryId = inventory.Id}, new {@class = "btn"})
+                        }
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>

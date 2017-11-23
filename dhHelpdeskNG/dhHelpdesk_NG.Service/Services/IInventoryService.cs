@@ -63,6 +63,8 @@
 
         List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter);
 
+        int GetWorkstationIdByName(string computerName, int customerId);
+
         #endregion
 
         #region Server
@@ -118,5 +120,6 @@
         void RemoveInventoryFromComputer(int inventoryId, int computerId);
 
         #endregion
+
     }
 }

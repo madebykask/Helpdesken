@@ -62,9 +62,9 @@
             return this.computerFieldSettingsRepository.GetFieldSettingsForEdit(customerId, languageId);
         }
 
-        public ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId)
+        public ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false)
         {
-            var models = this.computerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId);
+            var models = this.computerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId, isReadonly);
 
             return models;
         }

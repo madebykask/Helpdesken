@@ -451,11 +451,6 @@
                     {
                    <li><a title="@Translation.GetCoreTextTranslation("Skriv ut")" class="btn print-case"><i class="icon-file"></i></a></li>
                         }
-
-                        @if (Html.MasterModel().CustomerSetting.ModuleInventory > 0)
-                    {
-                    <li><a href="#" title="@Translation.GetCoreTextTranslation("Visa inventarie")" class="btn show-inventory"><i class="icon-th-large"></i></a></li>
-                        }
                 <li><a onclick="UnLockCase('@Model.CaseLock.LockGUID')" href="@Model.case_.Id.GetUrlForNavigationBetweenCases()" title="@Translation.GetCoreTextTranslation("Föregående ärende")" class="btn previous-case"><i class="icon-chevron-left"></i></a></li>
                 <li><a onclick="UnLockCase('@Model.CaseLock.LockGUID')" href="@Model.case_.Id.GetUrlForNavigationBetweenCases(true)"  title="@Translation.GetCoreTextTranslation("Nästa ärende")" class="btn next-case"><i class="icon-chevron-right"></i></a></li>
                     </ul>

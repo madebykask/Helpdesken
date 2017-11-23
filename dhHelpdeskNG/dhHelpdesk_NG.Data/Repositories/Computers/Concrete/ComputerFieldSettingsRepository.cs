@@ -155,7 +155,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         }
 
         [CreateMissingComputerSettings("customerId")]
-        public ComputerFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId)
+        public ComputerFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false)
         {
             var languageTextId = this.GetLanguageTextId(languageId);
             var settings = this.GetSettings(customerId);
@@ -172,7 +172,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                                 Caption = s.Label,
                                 FieldName = s.ComputerField,
                                 Show = s.Show,
-                                ReadOnly = s.ReadOnly,
+                                ReadOnly = isReadonly ? 1 : s.ReadOnly,
                                 Required = s.Required
                             }).ToList();
                     break;
@@ -185,7 +185,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                                 Caption = s.Label_ENG,
                                 FieldName = s.ComputerField,
                                 Show = s.Show,
-                                ReadOnly = s.ReadOnly,
+                                ReadOnly = isReadonly ? 1 : s.ReadOnly,
                                 Required = s.Required,
                             }).ToList();
                     break;
@@ -198,7 +198,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                                Caption = s.Label_ENG,
                                FieldName = s.ComputerField,
                                Show = s.Show,
-                               ReadOnly = s.ReadOnly,
+                               ReadOnly = isReadonly ? 1 : s.ReadOnly,
                                Required = s.Required,
                            }).ToList();
                     break;

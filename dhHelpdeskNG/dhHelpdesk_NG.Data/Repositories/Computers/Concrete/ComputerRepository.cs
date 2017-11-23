@@ -709,6 +709,12 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             return models;
         }
 
+        public int GetIdByName(string computerName, int customerId)
+        {
+            var computer = DbSet.FirstOrDefault(x => x.Customer_Id == customerId && x.ComputerName.Equals(computerName));
+            return computer?.Id ?? 0;
+        }
+
         private static void Map(Domain.Computers.Computer entity, Computer businessModel)
         {
             entity.ComputerName = businessModel.WorkstationFields.ComputerName ?? string.Empty;

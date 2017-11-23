@@ -364,6 +364,11 @@
             return computerOverviews;
         }
 
+        public int GetWorkstationIdByName(string computerName, int customerId)
+        {
+            return computerRepository.GetIdByName(computerName, customerId);
+        }
+
         #endregion
 
         #region Server
