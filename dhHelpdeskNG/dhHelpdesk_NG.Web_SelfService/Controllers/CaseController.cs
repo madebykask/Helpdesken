@@ -673,7 +673,11 @@
         public ActionResult ExtendedCase(ExtendedCaseViewModel model)
         {
             var isNewCase = model.CaseDataModel.Id == 0;
-            var auxModel = new AuxCaseModel(model.LanguageId, 0, SessionFacade.CurrentUserIdentity.UserId,
+
+            var localUserId = SessionFacade.CurrentLocalUser?.Id ?? 0;
+            var auxModel = new AuxCaseModel(model.LanguageId, 
+                                            localUserId, 
+                                            SessionFacade.CurrentUserIdentity.UserId,
                                             RequestExtension.GetAbsoluteUrl(),
                                             CreatedByApplications.ExtendedCase,
                                             TimeZoneInfo.Local);
@@ -1431,7 +1435,8 @@
                 }
             }
 
-            int caseHistoryId = _caseService.SaveCase(newCase, caseLog, 0, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
+            var localUserId = SessionFacade.CurrentLocalUser?.Id ?? 0; 
+            int caseHistoryId = _caseService.SaveCase(newCase, caseLog, localUserId, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
 
             // save log
             caseLog.CaseId = newCase.Id;
