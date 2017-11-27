@@ -32,9 +32,18 @@
                 @foreach (var question in Model.QuestionnaireOverview.Questions)
                 {
                     List<OptionResult> values = Model.OptionResults.Where(x => question.Options.Select(y => y.Id).Contains(x.OptionId)).ToList();
-
+                    var antal = values.Sum(x => x.Count);
+                    var options = question.Options.Where(x => Model.OptionResults.Select(y => y.OptionId).Contains(x.Id)).ToList();
+                    var optSum = 0;
+                    foreach (var option in options)
+                    {
+                        var optResult = values.FirstOrDefault(x => x.OptionId == option.Id);
+                        var count = optResult != null ? optResult.Count : 0;
+                        optSum = optSum + option.Value * count;
+                    }
+                    var medel = antal > 0 && optSum > 0 ? string.Format(", {0}: {1}", Translation.GetCoreTextTranslation("Medelvärde"), optSum / antal) : string.Empty;
                     <tr>
-                        <td colspan="6" class="header">@question.Number. @question.Question (@Translation.GetCoreTextTranslation("Antal svar"): @values.Sum(x => x.Count))</td>
+                        <td colspan="6" class="header">@question.Number. @question.Question (@Translation.GetCoreTextTranslation("Antal svar"): @antal@medel)</td>
                     </tr>
 
                     foreach (var option in question.Options.OrderBy(x => x.Position))
