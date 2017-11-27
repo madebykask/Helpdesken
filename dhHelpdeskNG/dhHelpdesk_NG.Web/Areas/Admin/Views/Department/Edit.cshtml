@@ -34,7 +34,8 @@
 
                 },
                 submitHandler: function (form) {
-                form.submit();
+                    $("#InvoiceSelectedOUs option").attr("selected", "selected");
+                    form.submit();                    
                 }
             });
          });

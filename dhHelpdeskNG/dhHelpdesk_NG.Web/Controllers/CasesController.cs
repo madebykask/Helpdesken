@@ -1890,23 +1890,9 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
         }
 
-        public JsonResult GetDepartmentInvoiceParameters(int? departmentId)
+        public JsonResult GetDepartmentInvoiceParameters(int? departmentId, int? ouId)
         {
-            if (departmentId.HasValue)
-            {
-                var d = _departmentService.GetDepartment(departmentId.Value);
-                return Json(new
-                {
-                    ShowInvoice = d.ShowInvoice.ToBool(),
-                    ChargeMandatory = d.ChargeMandatory.ToBool(),
-                    Charge = d.Charge.ToBool(),
-                    ShowInvoiceTime = d.ShowInvoiceTime,
-                    ShowInvoiceOvertime = d.ShowInvoiceOvertime,
-                    ShowInvoiceMaterial = d.ShowInvoiceMaterial,
-                    ShowInvoicePrice = d.ShowInvoicePrice
-                }, JsonRequestBehavior.AllowGet);
-            }
-            return null;
+            return departmentId.HasValue? GetInvoiceTime(departmentId.Value, ouId) : null;
         }
 
         public JsonResult ChangeDepartment(int? id, int customerId)
@@ -7285,6 +7271,25 @@ namespace DH.Helpdesk.Web.Controllers
             return _customerDepartments[customerId];
         }
 
+        private JsonResult GetInvoiceTime(int departmentId, int? ouId = null)
+        {
+            var canShow = _departmentService.CanShowInvoice(departmentId, ouId);
+            if (canShow)
+            {
+                var d = _departmentService.GetDepartment(departmentId);
+                return Json(new
+                {
+                    ShowInvoice = d.ShowInvoice.ToBool(),
+                    ChargeMandatory = d.ChargeMandatory.ToBool(),
+                    Charge = d.Charge.ToBool(),
+                    ShowInvoiceTime = d.ShowInvoiceTime,
+                    ShowInvoiceOvertime = d.ShowInvoiceOvertime,
+                    ShowInvoiceMaterial = d.ShowInvoiceMaterial,
+                    ShowInvoicePrice = d.ShowInvoicePrice
+                }, JsonRequestBehavior.AllowGet);
+            }
+            return null;
+        }
         #endregion
     }
 

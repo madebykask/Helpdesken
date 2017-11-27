@@ -3276,6 +3276,7 @@
     <Content Include="Content\js\DynamicCase\iframeResizer.contentWindow.map" />
     <Content Include="Content\js\DynamicCase\iframeResizer.map" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\Modals\OrderFieldTypeModal.cshtml" />
+    <Content Include="Areas\Admin\Views\Department\_Invoicing.cshtml" />
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\fontawesome-webfont.woff" />

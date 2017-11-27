@@ -1,0 +1,81 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.DepartmentInputViewModel
+
+@if (Model != null)
+{
+    <h4>@Translation.GetCoreTextTranslation("Restriction")</h4>
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+                <tr>
+                    <td class="span3">@Translation.GetCoreTextTranslation("Debitering")</td>
+                    <td class="span9">
+                    <td>
+                        <table>
+                            <tr>
+                                <td>@Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)</td>
+                                <td></td>
+                                <td>@Translation.Get("Valda", Enums.TranslationSource.TextTranslation)</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select id="InvoiceAvailableOUs" multiple="multiple" name="InvoiceAvailableOUs" style="width: 350px; height: 120px">
+                                        @foreach (var av in Model.InvoiceAvailableOUs)
+                                        {
+                                            if (av.Disabled)
+                                            {
+                                                <option value="@av.Value" class="DisabledChosen">@av.Text</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@av.Value">@av.Text</option>
+                                            }
+                                        }
+                                    </select>
+                                </td>
+                                <td style="vertical-align:middle">
+                                    <input type="button" value="&lt;" class="btn" id="removeOU" />
+                                    <input type="button" value="&gt;" class="btn" id="addOU" />
+                                </td>
+                                <td>
+                                    <select id="InvoiceSelectedOUs" multiple="multiple" name="InvoiceSelectedOUs" style="width: 350px; height: 120px">
+                                        @foreach (var s in Model.InvoiceSelectedOUs)
+                                        {
+                                            if (s.Disabled)
+                                            {
+                                                <option value="@s.Value" class="DisabledChosen">@s.Text</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@s.Value">@s.Text</option>
+                                            }
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+<script type="text/javascript">
+    var $vailableOUs = $("#InvoiceAvailableOUs");
+    var $selectedOUs = $("#InvoiceSelectedOUs");
+
+    $("#addOU").click(function () {
+        $("#InvoiceAvailableOUs option:selected").remove().appendTo($selectedOUs.selector);
+        $vailableOUs.get(0).selectedIndex = -1;
+        $selectedOUs.get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeOU").click(function () {
+        $("#InvoiceSelectedOUs option:selected").remove().appendTo($vailableOUs.selector);
+        $vailableOUs.get(0).selectedIndex = -1;
+        $selectedOUs.get(0).selectedIndex = -1;
+        return false;
+    });
+</script>
+}

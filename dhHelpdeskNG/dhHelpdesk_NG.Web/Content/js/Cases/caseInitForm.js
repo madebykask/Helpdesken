@@ -642,6 +642,12 @@ function CaseInitForm() {
             refreshOrganizationUnit(departmentId, departmentFilterFormat);
     });
 
+    $(publicOUControlName).change(function () {
+        var depId = $(publicDepartmentControlName).val();
+        var ouId = $(this).val();
+        showInvoice(depId, ouId);
+    });
+
     $(publicIsAboutDepartmentControlName).change(function () {
         if (skipRefreshIsAbout_OU)
             return;
@@ -657,7 +663,8 @@ function CaseInitForm() {
             refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat);        
     });
 
-    function showInvoice(departmentId) {
+    function showInvoice(departmentId, ouId) {
+        var _ouId = ouId == undefined ? null : ouId;
         var invoiceSelector = "#divInvoice, #btnCaseCharge, #tblCaseChargeSummary";
         var externalInvoiceSelector = "#divExternalInvoice, #totalExternalAmountRow, #externalInvoiceGrid";
         var invoiceFields = "#invoiceField-Time, #invoiceField-Overtime, #invoiceField-Material, #invoiceField-Price";
@@ -665,7 +672,7 @@ function CaseInitForm() {
         $(invoiceSelector).hide();
         $(externalInvoiceSelector).hide();
         $(invoiceFields).hide();
-        $.get("/Cases/GetDepartmentInvoiceParameters/", { departmentId: departmentId }, function (data) {
+        $.get("/Cases/GetDepartmentInvoiceParameters/", { departmentId: departmentId, ouId: _ouId }, function (data) {
             if (data) {
                 _parameters.departmentInvoiceMandatory = data.ChargeMandatory;
                 if (data.Charge) {
@@ -1096,8 +1103,17 @@ function CaseInitForm() {
 
     resetProductareaByCaseType($('#case__CaseType_Id').val());
 
+    /*Show|hide invocie time on initiating*/
     if ($(publicDepartmentControlName) != undefined)
-        showInvoice($(publicDepartmentControlName).val());
+    {
+        var depId = $(publicDepartmentControlName).val();
+        var ouId = null;
+        if ($(publicOUControlName) != undefined)
+            ouId = $(publicOUControlName).val();
+
+        showInvoice(depId, ouId);
+    }
+        
 
     $('#divCategory ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
