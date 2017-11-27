@@ -734,7 +734,6 @@ EditPage.prototype.primaryValidation = function (submitUrl) {
     } else {
         me.startSaveProcess(me, submitUrl);
     }
-    
 }
 
 EditPage.prototype.startSaveProcess = function (sender, submitUrl) {
@@ -843,7 +842,14 @@ EditPage.prototype.doTotalValidationAndSave = function (submitUrl) {
         }
 
         var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
-        return promise.then(self.doSaveCase(submitUrl), self.onSaveError);
+        promise.then(
+            function(res) {
+                self.doSaveCase(submitUrl);
+            }, 
+            function (err) { 
+                self.onSaveError(err);
+            });
+        return false;
     } else {
         if (!self.isFormValid()) {
             self.setCaseStatus(self.CASE_IN_IDLE);
@@ -851,7 +857,6 @@ EditPage.prototype.doTotalValidationAndSave = function (submitUrl) {
         }
         return self.doSaveCase(submitUrl);
     }
-    
 }
 
 EditPage.prototype.doSaveCase = function (submitUrl) {
@@ -952,59 +957,86 @@ EditPage.prototype.CaseWillFinish = function ()
     }
 };
 
-EditPage.prototype.onSaveYes = function () {    
+EditPage.prototype.onSaveYes = function (e) {
+    e.preventDefault();
+
     var self = this;
     var c = self.case;
     var url = self.EDIT_CASE_URL;
     if (c.isNew() && c.isChildCase()) {
         url = self.SAVE_GOTO_PARENT_CASE_URL;
     }
-    return self.primaryValidation(url);   
+
+    self.primaryValidation(url);
+    return false;
 };
 
-EditPage.prototype.onSaveAndNewYes = function (){
+EditPage.prototype.onSaveAndNewYes = function (e) {
+    e.preventDefault();
+
     var self = this;
-    return self.primaryValidation(self.SAVE_ADD_CASE_URL);    
+    self.primaryValidation(self.SAVE_ADD_CASE_URL);
+    return false;
 };
 
-EditPage.prototype.onSaveAndCloseYes = function () {
+EditPage.prototype.onSaveAndCloseYes = function (e) {
+    e.preventDefault();
+
     var self = this;
-    return self.primaryValidation(self.NEW_CLOSE_CASE_URL);       
+    self.primaryValidation(self.NEW_CLOSE_CASE_URL);
+    return false;
 };
 
-EditPage.prototype.onSaveClick = function () {
+EditPage.prototype.onSaveClick = function (e) {
+    e.preventDefault();
+    //debugger;
+
     var self = this;
     var c = self.case;
     var url = self.EDIT_CASE_URL;
     if (c.isNew() && c.isChildCase()) {
         url = self.SAVE_GOTO_PARENT_CASE_URL;
     }
-    return self.primaryValidation(url);   
+    self.primaryValidation(url);
+    return false;
 };
 
-EditPage.prototype.onNewCloseAndSplitClick = function () {
+EditPage.prototype.onNewCloseAndSplitClick = function (e) {
+    e.preventDefault();
+
     var self = this;
-    return self.primaryValidation(self.NEW_CLOSE_SPLIT_URL);
+    self.primaryValidation(self.NEW_CLOSE_SPLIT_URL);
+    return false;
 };
 
-EditPage.prototype.onEditCloseAndSplitClick = function () {
+EditPage.prototype.onEditCloseAndSplitClick = function (e) {
+    e.preventDefault();
+
     var self = this;
-    return self.primaryValidation(self.EDIT_CLOSE_SPLIT_URL);
+    self.primaryValidation(self.EDIT_CLOSE_SPLIT_URL);
+    return false;
 };
 
-EditPage.prototype.onSaveAndCloseClick = function () {
+EditPage.prototype.onSaveAndCloseClick = function (e) {
+    e.preventDefault();
+
     var self = this;
-    return self.primaryValidation(self.NEW_CLOSE_CASE_URL);   
+    self.primaryValidation(self.NEW_CLOSE_CASE_URL);
+    return false;
 };
 
 
-EditPage.prototype.onSaveAndNewClick = function () {
+EditPage.prototype.onSaveAndNewClick = function (e) {
+    e.preventDefault();
+
     var self = this;
-    return self.primaryValidation(self.SAVE_ADD_CASE_URL);    
+    self.primaryValidation(self.SAVE_ADD_CASE_URL);
+    return false;
 };
 
 EditPage.prototype.onSaveError = function (err) {    
     ShowToastMessage("Extended Case save was not succeed!", "error", false);
+    this.setCaseStatus(this.CASE_IN_IDLE);
     return false;
 }
 
@@ -1154,7 +1186,9 @@ EditPage.prototype.recoverTokenIfNeeded = function () {
     }
 }
 
-EditPage.prototype.onCloseClick = function(ev) {
+EditPage.prototype.onCloseClick = function (e) {
+    e.preventDefault();
+
     var me = this;
     var c = me.case;
     var url;
