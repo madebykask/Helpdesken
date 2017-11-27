@@ -6232,7 +6232,14 @@ If not exists (select * from tblTextTranslation where text_id = 1858 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1859)
+begin
 	insert into tbltext (id, TextString) VALUES (1859, 'Visa begränsat sök resultat')
+end
+else
+begin
+	update tbltext set textstring = 'Visa begränsat sökresultat' where id = 1859
+end
+
 GO
 If not exists (select * from tblTextTranslation where text_id = 1859 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1859, 2, 'Show limited search result')
