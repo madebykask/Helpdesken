@@ -18,7 +18,8 @@
                     OptionNote = new OptionNote
                 {
                     NoteText = x.QuestionnaireQuestionNote,
-                    CaseId = x.QuestionnaireResult.QuestionnaireCircularPart.Case.CaseNumber
+                    CaseId = x.QuestionnaireResult.QuestionnaireCircularPart.Case.CaseNumber,
+                    CaseSubject = x.QuestionnaireResult.QuestionnaireCircularPart.Case.Caption
                 },
                 InitiatorEmail = x.QuestionnaireResult.QuestionnaireCircularPart.Case.PersonsEmail } )
                 .GroupBy(x => x.QuestionnaireQuestionOptionId)
