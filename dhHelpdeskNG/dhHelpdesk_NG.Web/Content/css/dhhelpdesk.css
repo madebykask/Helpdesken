@@ -3963,3 +3963,9 @@ ul.nav.dh-nav .newcase a:hover{
 ul.nav.dh-nav .newcase a:focus{
     background-color: #204d6a!important;
 }
+
+th.sorting_disabled
+{
+    background-color: #fff !important;
+    background-image: none !important;
+}

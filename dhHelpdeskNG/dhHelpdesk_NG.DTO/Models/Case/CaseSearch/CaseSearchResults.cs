@@ -17,8 +17,15 @@
         public IList<Field> Columns { get; set; }
         public bool Ignored { get; set; }
         public bool IsClosed { get; set; }
+
+        public bool IsParent { get; set; }
+        public int ParentId { get; set; }
+
+
         public ExtendedSearchInfo ExtendedSearchInfo { get; set; }
     }
+
+
 
     public class ExtendedSearchInfo
     {

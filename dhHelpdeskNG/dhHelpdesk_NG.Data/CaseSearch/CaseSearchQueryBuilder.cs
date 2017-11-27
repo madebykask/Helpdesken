@@ -282,6 +282,8 @@ namespace DH.Helpdesk.Dal.Repositories
             columns.Add("tblCase.Performer_User_Id as CasePerformerUserId");
             columns.Add("tblCase.CaseResponsibleUser_Id as CaseResponsibleUserId");
             columns.Add("tblCase.User_Id as CaseUserId");
+            columns.Add("(select count(Ancestor_Id)  from tblParentChildCaseRelations where  Ancestor_Id = tblCase.Id) as IsParent");
+            columns.Add("(select Top 1 (Ancestor_Id)  from tblParentChildCaseRelations where  Descendant_Id = tblCase.Id) as ParentCaseId");
             if (searchFilter.MaxTextCharacters > 0)
                 columns.Add(string.Format("Cast(tblCase.[Description] as Nvarchar({0})) as [Description] ", searchFilter.MaxTextCharacters));
             else

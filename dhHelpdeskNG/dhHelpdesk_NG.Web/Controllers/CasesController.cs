@@ -946,7 +946,9 @@ namespace DH.Helpdesk.Web.Controllers
                     {"caseIconUrl", $"/Content/icons/{searchRow.CaseIcon.CaseIconSrc()}"},
                     {"isUnread", searchRow.IsUnread},
                     {"isUrgent", searchRow.IsUrgent},
-                    {"isClosed", searchRow.IsUrgent}
+                    {"isClosed", searchRow.IsUrgent},
+                    {"isParent", searchRow.IsParent},
+                    {"ParentId", searchRow.ParentId}
                 };
 
                 var caseLock = casesLocks.Where(x => x.CaseId == caseId).FirstOrDefault();
