@@ -171,7 +171,9 @@
                             <table class="tableform">
 
                                 <tr>
-                                    <td class="span3">@Translation.GetCoreTextTranslation("Debitering")</td>
+                                    <td class="span3">
+                                        @Translation.GetCoreTextTranslation("Debitering")
+                                    </td>
                                     <td class="span9">
                                         <label class="checkbox">
                                             <input type="checkbox" name="department.Charge" @(Model.Department.Charge == 1 ? "checked=checked" : "") value="1" />

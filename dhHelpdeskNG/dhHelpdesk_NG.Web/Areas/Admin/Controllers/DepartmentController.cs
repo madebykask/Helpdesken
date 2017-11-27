@@ -139,15 +139,15 @@
             var invoiceAvailableOUs = allOUsForDep.Where(o => !o.ShowInvoice).Select(x => new SelectListItem
             {                
                 Text = (x.Parent == null)? x.Name : $"{x.Parent.Name} - {x.Name}",
-                Value = (x.Parent == null) ? x.Id.ToString() : x.Parent.Id.ToString(),
-                Disabled = (x.Parent == null) ? x.IsActive == 0 : x.Parent.IsActive == 0
+                Value = x.Id.ToString(),
+                Disabled = x.IsActive == 0
             }).ToList();
 
             var invoiceSelectedOUs = allOUsForDep.Where(o => o.ShowInvoice).Select(x => new SelectListItem
             {
                 Text = (x.Parent == null) ? x.Name : $"{x.Parent.Name} - {x.Name}",
-                Value = (x.Parent == null) ? x.Id.ToString() : x.Parent.Id.ToString(),
-                Disabled = (x.Parent == null) ? x.IsActive == 0 : x.Parent.IsActive == 0
+                Value = x.Id.ToString(),
+                Disabled = x.IsActive == 0
             }).ToList();
 
             var model = new DepartmentInputViewModel
