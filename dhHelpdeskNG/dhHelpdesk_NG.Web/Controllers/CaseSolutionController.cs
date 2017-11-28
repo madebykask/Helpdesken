@@ -2948,7 +2948,7 @@ namespace DH.Helpdesk.Web.Controllers
             //TODO: make a setting per customer if they should be able to choose only from customer, or all customers 
             IList<SelectListItem> splitToAllCaseSolutions = _caseSolutionService.GetCaseSolutions().Select(x => new SelectListItem
             {
-                Text = x.Customer.Name + " " + x.Name.ToString(),
+                Text = x.Customer.Name + " / " + x.Name.ToString(),
                 Value = x.Id.ToString(),
                 Selected = (caseSolution.SplitToCaseSolutionDescendants != null ? (caseSolution.SplitToCaseSolutionDescendants.Where(a => a.SplitToCaseSolution_Id == x.Id).Any() == true ? true : false) : false)
              }).ToList();
