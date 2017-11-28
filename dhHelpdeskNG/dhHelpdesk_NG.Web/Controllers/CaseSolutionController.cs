@@ -3188,8 +3188,10 @@ namespace DH.Helpdesk.Web.Controllers
 
             model.isCopy = false;
 
-            model.SplitToCaseSolutionIds = caseSolution.SplitToCaseSolutionDescendants.Select(x => x.SplitToCaseSolution_Id).ToArray();
-
+            if (caseSolution.SplitToCaseSolutionDescendants != null)
+            {
+                model.SplitToCaseSolutionIds = caseSolution.SplitToCaseSolutionDescendants.Select(x => x.SplitToCaseSolution_Id).ToArray();
+            }
 
 
     return model;
