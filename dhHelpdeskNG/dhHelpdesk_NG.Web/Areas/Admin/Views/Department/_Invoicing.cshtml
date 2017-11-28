@@ -10,29 +10,22 @@
             <table class="tableform">
                 <tr>
                     <td class="span3">
-                       @Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Customer.Id)
+                        @Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Customer.Id)
                     </td>
                     <td class="span9">
                     <td>
                         <table>
                             <tr>
-                                <td>@Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)</td>
+                                <td>@Translation.GetCoreTextTranslation("Tillgängliga")</td>
                                 <td></td>
-                                <td>@Translation.Get("Valda", Enums.TranslationSource.TextTranslation)</td>
+                                <td>@Translation.GetCoreTextTranslation("Valda")</td>
                             </tr>
                             <tr>
                                 <td>
                                     <select id="InvoiceAvailableOUs" multiple="multiple" name="InvoiceAvailableOUs" style="width: 350px; height: 120px">
                                         @foreach (var av in Model.InvoiceAvailableOUs)
                                         {
-                                            if (av.Disabled)
-                                            {
-                                                <option value="@av.Value" class="DisabledChosen">@av.Text</option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@av.Value">@av.Text</option>
-                                            }
+                                            <option value="@av.Value" class='@(av.Disabled? "DisabledChosen":"")'>@av.Text</option>
                                         }
                                     </select>
                                 </td>
@@ -44,7 +37,7 @@
                                     <select id="InvoiceSelectedOUs" multiple="multiple" name="InvoiceSelectedOUs" style="width: 350px; height: 120px">
                                         @foreach (var s in Model.InvoiceSelectedOUs)
                                         {
-                                            <option value="@s.Value" class='@(s.Disabled? "DisabledChosen":"")'>@s.Text</option>                                            
+                                            <option value="@s.Value" class='@(s.Disabled? "DisabledChosen":"")'>@s.Text</option>
                                         }
                                     </select>
                                 </td>
@@ -56,22 +49,22 @@
         </div>
     </div>
 
-<script type="text/javascript">
-    var $vailableOUs = $("#InvoiceAvailableOUs");
-    var $selectedOUs = $("#InvoiceSelectedOUs");
+    <script type="text/javascript">
+        var $vailableOUs = $("#InvoiceAvailableOUs");
+        var $selectedOUs = $("#InvoiceSelectedOUs");
 
-    $("#addOU").click(function () {
-        $("#InvoiceAvailableOUs option:selected").remove().appendTo($selectedOUs.selector);
-        $vailableOUs.get(0).selectedIndex = -1;
-        $selectedOUs.get(0).selectedIndex = -1;
-        return false;
-    });
+        $("#addOU").click(function () {
+            $("#InvoiceAvailableOUs option:selected").remove().appendTo($selectedOUs.selector);
+            $vailableOUs.get(0).selectedIndex = -1;
+            $selectedOUs.get(0).selectedIndex = -1;
+            return false;
+        });
 
-    $("#removeOU").click(function () {
-        $("#InvoiceSelectedOUs option:selected").remove().appendTo($vailableOUs.selector);
-        $vailableOUs.get(0).selectedIndex = -1;
-        $selectedOUs.get(0).selectedIndex = -1;
-        return false;
-    });
-</script>
+        $("#removeOU").click(function () {
+            $("#InvoiceSelectedOUs option:selected").remove().appendTo($vailableOUs.selector);
+            $vailableOUs.get(0).selectedIndex = -1;
+            $selectedOUs.get(0).selectedIndex = -1;
+            return false;
+        });
+    </script>
 }
