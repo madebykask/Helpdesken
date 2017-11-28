@@ -6416,6 +6416,34 @@ If not exists (select * from tblTextTranslation where text_id = 1884 and Languag
 GO
 
 
+If not exists (select * from tbltext where id = 1885)
+	insert into tbltext (id, TextString) VALUES (1885, 'Multiärende (vid spara)')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1885 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1885, 2, 'Multi case (on save)')
+GO
+
+
+If not exists (select * from tbltext where id = 1886)
+begin
+	insert into tbltext (id, TextString) VALUES (1886, 'Ärendemallar för underärenden')
+end
+else
+begin
+	update tbltext set TextString = 'Ärendemallar för underärenden' where id = 1886
+end	
+GO
+If not exists (select * from tblTextTranslation where text_id = 1886 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1886, 2, 'Case templates for child cases')
+GO
+
+If not exists (select * from tbltext where id = 1887)
+	insert into tbltext (id, TextString) VALUES (1887, 'Typ av relation')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1887 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1887, 2, 'Type of relation')
+GO
+
 
 
 -- *** Run this last when put translation script above this line **--

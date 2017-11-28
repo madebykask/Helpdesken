@@ -276,12 +276,11 @@
                     @if (SessionFacade.CurrentUser.UserGroupId >= 3)
                     {
                     <div id="divSplitToCaseSolutions" style="padding:0px;width:100%">
-                        <h4>@Translation.Get("Split case (on save)", Enums.TranslationSource.TextTranslation)</h4>
-                        <p>Use this case solution as base for splitting into several cases</p>
+                        <h4>@Translation.Get("Multiärende (vid spara)", Enums.TranslationSource.TextTranslation)</h4>
                         <table class="tableform" border="0">
                             <tr>
                                 <td style="width:200px">
-                                    @Translation.Get("Case relation type", Enums.TranslationSource.TextTranslation)
+                                    @Translation.Get("Typ av relation", Enums.TranslationSource.TextTranslation)
                                 </td>
                                 <td>
                                     <select id="Casesolution_CaseRelationType" name="Casesolution.CaseRelationType">
@@ -296,7 +295,7 @@
                         <div id="divSplitToAllCaseSolutions" class="hidden">
                             <table class="tableform" border="0">
                                 <tr>
-                                    <td style="width:200px">@Translation.Get("Case solutions used ", Enums.TranslationSource.TextTranslation)</td>
+                                    <td style="width:200px">@Translation.Get("Ärendemallar för underärenden", Enums.TranslationSource.TextTranslation)</td>
                                     <td>
                                         <select id="SplitToCaseSolutionIds" name="SplitToCaseSolutionIds" data-field="id" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                             @foreach (var a in Model.SplitToAllCaseSolutions)
