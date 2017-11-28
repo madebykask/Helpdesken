@@ -19,7 +19,9 @@
 
         public string Pharse { get; set; }
 
-        public int RecordsOnPage { get; set; }
+		public int? ComputerUserCategoryID { get; set; }
+
+		public int RecordsOnPage { get; set; }
 
         public NotifierStatus Status { get; set; }
 
@@ -36,7 +38,8 @@
                 this.Pharse,
                 this.Status,
                 this.RecordsOnPage,
-                this.SortField.Name,
+				this.ComputerUserCategoryID,
+				this.SortField.Name,
                 this.SortField.SortBy ?? SortBy.Ascending);
         }
     }

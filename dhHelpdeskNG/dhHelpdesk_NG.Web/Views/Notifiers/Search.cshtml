@@ -56,7 +56,13 @@
                     <td>@Html.DropDown("division_dropdown", "DivisionId", true, Model.Division.Content)</td>
                 </tr>
             }
-
+            @if (Model.ComputerUserCategories.Show)
+            {
+                <tr>
+                    <td>Category <!--TODO translate--></td>
+                    <td>@Html.DropDown("ComputerUserCategoryDropDown", "ComputerUserCategoryID", true, Model.ComputerUserCategories.Content)</td>
+                </tr>
+            }
             <tr>
                 <td>@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)</td>
                 <td>@Html.TextBoxFor(m => m.Pharse)</td>

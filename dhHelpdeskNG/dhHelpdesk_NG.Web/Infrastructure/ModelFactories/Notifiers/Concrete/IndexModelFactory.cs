@@ -25,7 +25,8 @@
             List<ItemOverview> searchDepartments,
             List<ItemOverview> searchOrganizationUnit,
             List<ItemOverview> searchDivisions,
-            NotifierFilters filters,
+			List<ItemOverview> searchComputerUserCategories,
+			NotifierFilters filters,
             SearchResult searchResult)
         {
             var notifiersModel = this.notifiersModelFactory.Create(
@@ -35,7 +36,8 @@
                 searchDepartments,
                 searchOrganizationUnit,
                 searchDivisions,
-                filters,
+				searchComputerUserCategories,
+				filters,
                 searchResult);
 
             return new IndexModel(notifiersModel, false);

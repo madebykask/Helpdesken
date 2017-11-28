@@ -4,6 +4,8 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Notifiers.InputModel
 
+@{ var attributes = Model.ComputerUserCategoryModel.IsReadOnly ? (object)new { htmlAttributes = new { @readonly = "readonly" } } : new { };}
+
 <div class="container">
     <h4>@Translation.Get("Organisation", Enums.TranslationSource.TextTranslation)</h4>
     <div class="row">
@@ -19,7 +21,7 @@
                             @(Translation.Get(Model.Region.Caption, Enums.TranslationSource.TextTranslation))
                         </td>
                         <td>
-                            @Html.DropDown("region_dropdown", "RegionId", !Model.Region.Required, Model.Region.Value)
+                            @Html.DropDown("region_dropdown", "RegionId", !Model.Region.Required, Model.Region.Value, false, Model.ComputerUserCategoryModel.IsReadOnly)
                         </td>
                     </tr>
                 }
@@ -32,7 +34,7 @@
                         </td>
                         <td>
                             <div id="department_dropdown_container">
-                                @Html.Partial("DepartmentDropDown", Model.Department.Value, new ViewDataDictionary { { "Required", Model.Department.Required } })
+                                @Html.DropDown("region_dropdown", "RegionId", !Model.Region.Required, Model.Region.Value, false, Model.ComputerUserCategoryModel.IsReadOnly)
 
                             </div>
                         </td>
@@ -47,7 +49,7 @@
                         </td>
                         <td>
                             <div id="organizationUnit_dropdown_container">
-                                @Html.Partial("OrganizationUnitDropDown", Model.OrganizationUnit.Value, new ViewDataDictionary { { "Required", Model.OrganizationUnit.Required } })
+                                @Html.Partial("OrganizationUnitDropDown", Model.OrganizationUnit.Value, new ViewDataDictionary { { "Required", Model.OrganizationUnit.Required }, { "ReadOnly", Model.ComputerUserCategoryModel.IsReadOnly } })
                             </div>
                         </td>
                     </tr>
@@ -64,7 +66,7 @@
                             @(Translation.Get(Model.Division.Caption, Enums.TranslationSource.TextTranslation) + (Model.Division.Required ? "*" : string.Empty))
                         </td>
                         <td>
-                            @Html.DropDown("division_dropdown", "DivisionId", !Model.Division.Required, Model.Division.Value)
+                            @Html.DropDown("division_dropdown", "DivisionId", !Model.Division.Required, Model.Division.Value, Model.Division.Required, Model.ComputerUserCategoryModel.IsReadOnly)
                         </td>
                     </tr>
                 }
@@ -99,12 +101,12 @@
                             @(Translation.Get(Model.Group.Caption, Enums.TranslationSource.TextTranslation) + (Model.Group.Required ? "*" : string.Empty))
                         </td>
                         <td>
-                            @Html.DropDown("group_dropdown", "GroupId", !Model.Group.Required, Model.Group.Value)
+                            @Html.DropDown("group_dropdown", "GroupId", !Model.Group.Required, Model.Group.Value, false, Model.ComputerUserCategoryModel.IsReadOnly)
                         </td>
                     </tr>
                 }
 
-                @Html.EditorFor(m => m.Other, "TextArea")
+                @Html.EditorFor(m => m.Other, "TextArea", attributes)
             </table>
         </div>
     </div>
