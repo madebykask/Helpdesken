@@ -44,14 +44,7 @@
                                     <select id="InvoiceSelectedOUs" multiple="multiple" name="InvoiceSelectedOUs" style="width: 350px; height: 120px">
                                         @foreach (var s in Model.InvoiceSelectedOUs)
                                         {
-                                            if (s.Disabled)
-                                            {
-                                                <option value="@s.Value" class="DisabledChosen">@s.Text</option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@s.Value">@s.Text</option>
-                                            }
+                                            <option value="@s.Value" class='@(s.Disabled? "DisabledChosen":"")'>@s.Text</option>                                            
                                         }
                                     </select>
                                 </td>
