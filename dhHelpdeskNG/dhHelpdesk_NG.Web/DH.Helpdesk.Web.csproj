@@ -318,6 +318,7 @@
     <Compile Include="Infrastructure\WebApi\WebApiService.cs" />
     <Compile Include="Models\JsonModels\Base\BaseJsonModel.cs" />
     <Compile Include="Models\JsonModels\Case\CaseJsonModel.cs" />
+    <Compile Include="Models\Notifiers\ComputerUserCategoryModel.cs" />
     <Compile Include="Models\WebApi\TokenModel.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Areas\Invoices\Models\BaseIndexModel.cs" />

@@ -146,6 +146,11 @@ EditPage.prototype.getECTargetUrl = function () {
     return decodeURIComponent(path.replace(/&amp;/g, '&'));
 }
 
+EditPage.prototype.getExtendedCaseSectionUrl = function (path, formID) {
+    path = path.replace('[ExtendedCaseFormId]', formID);
+    return decodeURIComponent(path.replace(/&amp;/g, '&'));
+}
+
 EditPage.prototype.loadExtendedCaseIfNeeded = function () {
     "use strict";
     var self = this;
@@ -214,6 +219,80 @@ EditPage.prototype.loadExtendedCaseIfNeeded = function () {
         $indicator.css("display", "none");
     }
 };
+
+EditPage.prototype.loadExtendedSection = function (extendedSection) {
+    var self = this;
+
+    var frame = $(extendedSection.iframeId);
+
+    var targetUrl = self.getExtendedCaseSectionUrl(extendedSection.path, extendedSection.formId);
+
+    // var $placeHolder = self.getECContainerTemplate(iframeId, targetUrl);
+
+    frame.load(function () {
+        if (frame.attr('src').length > 0) {
+
+            var iframeOptions = {
+                log: false,
+                sizeHeight: true,
+                checkOrigin: false,
+                enablePublicMethods: true,
+                resizedCallback: function (messageData) {
+                },
+                bodyMargin: '0 0 0 0',
+                closedCallback: function (id) {
+                },
+                heightCalculationMethod: 'grow'
+            };
+
+            var formParameters = frame[0].contentWindow.getFormParameters();
+            formParameters.languageId = extendedSection.languageId;
+            formParameters.extendedCaseGuid = extendedSection.guid;
+
+            var isLockedValue = window.parameters.isCaseLocked || '';
+            formParameters.isCaseLocked = isLockedValue.toLowerCase() === 'true'; //important to pass boolean type value
+
+            var fieldValues = self.Case_Field_Init_Values;
+
+            // TODO: Evaluate if required for extended initiator
+            frame[0].contentWindow.setInitialData({ step: 0, isNextValidation: false });
+
+            if (fieldValues != null) {
+                var pr = frame[0].contentWindow.loadExtendedCase(
+                    {
+                        formParameters: formParameters,
+                        caseValues: {
+                            reportedby: { Value: $('#case__ReportedBy').val() },
+                        }
+                    });
+                pr.then(function () {
+                    //frame.iFrameResize(iframeOptions);
+                });
+            }
+
+            $(extendedSection.container).show();
+            //frame[0]
+        }
+    });
+
+    frame[0].src = targetUrl;
+
+
+}
+
+EditPage.prototype.loadExtendedSectionsIfNeeded = function () {
+    var self = this;
+
+    // Todo refactor and automate all sections
+    //  if (self.extendedSections.length > 0) {
+    if (self.extendedSections.Initiator != null) {
+        self.loadExtendedSection(self.extendedSections.Initiator);
+    }
+    if (self.extendedSections.Regarding != null) {
+        self.loadExtendedSection(self.extendedSections.Regarding);
+    }
+}
+
 
 EditPage.prototype.loadExtendedCase = function () {
     var self = this;
@@ -828,6 +907,14 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
 
 EditPage.prototype.doTotalValidationAndSave = function (submitUrl) {
     var self = this;
+
+    if ($("#ExtendedInitiatorGUID").val().length > 0) {
+        $('#extendedSection-iframe-Initiator')[0].contentWindow.saveExtendedCase(false);
+    }
+
+    if ($("#ExtendedRegardingGUID").val().length > 0) {
+        $('#extendedSection-iframe-Regarding')[0].contentWindow.saveExtendedCase(false);
+    }
     
     var $_ex_Container = self.getExtendedCaseContainer();
     if (!self.isNullOrUndefined($_ex_Container)) {
@@ -1256,6 +1343,10 @@ EditPage.prototype.init = function (p) {
     EditPage.prototype.Current_EC_LanguageId = p.extendedCaseLanguageId;
     EditPage.prototype.Current_EC_Path = p.extendedCasePath;
 
+
+    EditPage.prototype.extendedSections = p.extendedSections;
+
+
     /*Debug mode*/    
     //EditPage.prototype.Current_EC_Path = "http://dhhelpdesk-ikea-bschr-v5.datahalland.se/ExtendedCase/?formId=[ExtendedCaseFormId]&autoLoad=1";
 
@@ -1316,7 +1407,9 @@ EditPage.prototype.init = function (p) {
 
 
     /*Load extended case*/
-    self.loadExtendedCaseIfNeeded();    
+    self.loadExtendedCaseIfNeeded();
+    self.loadExtendedSectionsIfNeeded();
+
 
     self.$watchDateChangers.on('change', function () {        
         var deptId = parseInt(self.$department.val(), 10);

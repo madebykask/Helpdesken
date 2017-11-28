@@ -14,7 +14,8 @@
             int? organizationUnitId,
             int? divisionId,
             string pharse,
-            NotifierStatus status,
+			int? computerUserCategoryID,
+			NotifierStatus status,
             int recordsOnPage,
             SortField sortField)
         {
@@ -25,7 +26,8 @@
             this.OrganizationUnit = organizationUnitId;
             this.DivisionId = divisionId;
             this.Pharse = pharse;
-            this.Status = status;
+			this.ComputerUserCategoryID = computerUserCategoryID;
+			this.Status = status;
             this.SelectCount = recordsOnPage;
             this.SortField = sortField;
         }
@@ -56,5 +58,7 @@
         public int SelectCount { get; private set; }
 
         public SortField SortField { get; private set; }
-    }
+
+		public int? ComputerUserCategoryID { get; private set; }
+	}
 }

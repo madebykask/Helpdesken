@@ -44,7 +44,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dapper.1.50.2\lib\net40\Dapper.dll</HintPath>
+      <HintPath>..\packages\Dapper.1.50.2\lib\net45\Dapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DbExtensions, Version=5.1.0.0, Culture=neutral, PublicKeyToken=6b3b4f54da52bca4, processorArchitecture=MSIL">
@@ -122,16 +122,19 @@
     <Compile Include="EntityConfigurations\CaseDocument\CaseDocumentConditionConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseDocument\CaseDocument_CaseDocumentParagraphConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseSolutionConditionPropertyConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseSolution_CaseSection_ExtendedCaseFormConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseExtraFollowerConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseFollowUpConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseSectionFieldConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseSectionsConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseTypeProductAreaConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Computers\ComputerUserCategoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractFileConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractHistoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractFieldSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\EmailLogAttemptConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ExtendedCaseEntity\Case_CaseSection_ExtendedCaseConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\Case_ExtendedCaseDataConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseValuesConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseDataConfiguration.cs" />
@@ -487,6 +490,8 @@
     <Compile Include="Repositories\Cases\Concrete\CausingPartRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CaseFilterFavoriteRepository.cs" />
     <Compile Include="Repositories\Cases\ICaseFilterFavoriteRepository.cs" />
+    <Compile Include="Repositories\ComputerUserCategoryRepository.cs" />
+    <Compile Include="Repositories\IComputerUserCategoryRepository.cs" />
     <Compile Include="Repositories\IExtendedCaseValueRepository.cs" />
     <Compile Include="Repositories\IExtendedCaseDataRepository.cs" />
     <Compile Include="Repositories\IExtendedCaseFormRepository.cs" />
