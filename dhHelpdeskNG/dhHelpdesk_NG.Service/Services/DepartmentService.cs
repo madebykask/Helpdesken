@@ -43,6 +43,8 @@
         IList<Department> GetChargedDepartments(int customerId);
         bool CanShowInvoice(int departmentId, int? ouId = null);
 
+        int? GetDepartmentIdByCustomerAndName(int customerId, string name);
+
     }
 
     public class DepartmentService : IDepartmentService
@@ -265,6 +267,17 @@
                 }
             }
         }
+
+        public int? GetDepartmentIdByCustomerAndName(int customerId, string name)
+        {
+            var department = this._departmentRepository.Get(x => x.Customer_Id == customerId && x.DepartmentName.ToLower() == name.ToLower());
+
+            if (department != null)
+                return department.Id;
+
+            return null;
+        }
+
 
         public void Commit()
         {
