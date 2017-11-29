@@ -1,4 +1,4 @@
-﻿use DH_Support
+﻿
 
 UPDATE tblTextTranslation Set TextTranslation = 'Cases on hold' WHERE Text_Id=6 AND Language_Id=2;
 GO
@@ -6442,6 +6442,50 @@ If not exists (select * from tbltext where id = 1887)
 GO
 If not exists (select * from tblTextTranslation where text_id = 1887 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1887, 2, 'Type of relation')
+GO
+
+If not exists (select * from tbltext where id = 1888)
+	insert into tbltext (id, TextString) VALUES (1888, 'ParentAndChildren')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1888 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1888, 1, 'Huvud och underärenden (med relation)')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1888 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1888, 2, 'Parent and Children (with relation)')
+GO
+
+If not exists (select * from tbltext where id = 1889)
+	insert into tbltext (id, TextString) VALUES (1889, 'OnlyDescendants')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1889 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1889, 1, 'Endast underärenden (utan relation)')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1889 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1889, 2, 'Only childs (no relation)')
+GO
+
+-- UPDATE!
+If not exists (select * from tbltext where id = 1880)
+	insert into tbltext (id, TextString) VALUES (1880, 'SelfAndDescendandts')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1880 and Language_Id = 1)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1880, 1, 'Huvud och underärenden (utan relation)')
+end
+begin
+	update tblTextTranslation set TextTranslation = 'Huvud och underärenden (utan relation)'  where text_id = 1880 and Language_Id = 1
+end
+
+GO
+If not exists (select * from tblTextTranslation where text_id = 1880 and Language_Id = 2)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1880, 2, 'Parent and Children (no relation)')
+end
+else
+begin
+	update tblTextTranslation set TextTranslation = 'Parent and Children (no relation)'  where text_id = 1880 and Language_Id = 2
+end
+
 GO
 
 
