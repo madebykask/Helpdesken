@@ -502,7 +502,7 @@ namespace DH.Helpdesk.Web.Controllers
                 managers,
                 groups,
                 inputParams,
-                language,
+                languages,
 				categoryModel);
 
             return this.View(model);

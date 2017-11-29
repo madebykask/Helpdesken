@@ -3,38 +3,40 @@ using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
 
 namespace DH.Helpdesk.Web.Models.Case
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Web.Mvc;
 
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.CaseSolution;
-    using DH.Helpdesk.BusinessData.Models.Customer;
-    using DH.Helpdesk.BusinessData.Models.Language.Output;
-    using DH.Helpdesk.BusinessData.Models.Logs.Output;
-    using DH.Helpdesk.BusinessData.Models.Problem.Output;
-    using DH.Helpdesk.BusinessData.Models.Projects.Output;
-    using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.CaseDocument;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Domain.Changes;
-    using DH.Helpdesk.Web.Infrastructure.CaseOverview;
-    using DH.Helpdesk.Web.Infrastructure.Grid.Output;
-    using DH.Helpdesk.Web.Models.Case.ChildCase;
-    using DH.Helpdesk.Web.Models.Case.Output;
-    using DH.Helpdesk.Web.Models.CaseLock;
-    using DH.Helpdesk.Web.Models.Invoice;
-    using DH.Helpdesk.Web.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.MailTemplates;
-    
-    using ParentCaseInfo = DH.Helpdesk.Web.Models.Case.ChildCase.ParentCaseInfo;
-    using DH.Helpdesk.Domain.Cases;
-    using DH.Helpdesk.BusinessData.Models.Case.Output;
-    using Microsoft.Reporting.WebForms;
+	using DH.Helpdesk.BusinessData.Models;
+	using DH.Helpdesk.BusinessData.Models.Case;
+	using DH.Helpdesk.BusinessData.Models.CaseSolution;
+	using DH.Helpdesk.BusinessData.Models.Customer;
+	using DH.Helpdesk.BusinessData.Models.Language.Output;
+	using DH.Helpdesk.BusinessData.Models.Logs.Output;
+	using DH.Helpdesk.BusinessData.Models.Problem.Output;
+	using DH.Helpdesk.BusinessData.Models.Projects.Output;
+	using DH.Helpdesk.BusinessData.Models.Shared;
+	using DH.Helpdesk.BusinessData.Models.CaseDocument;
+	using DH.Helpdesk.Domain;
+	using DH.Helpdesk.Domain.Changes;
+	using DH.Helpdesk.Web.Infrastructure.CaseOverview;
+	using DH.Helpdesk.Web.Infrastructure.Grid.Output;
+	using DH.Helpdesk.Web.Models.Case.ChildCase;
+	using DH.Helpdesk.Web.Models.Case.Output;
+	using DH.Helpdesk.Web.Models.CaseLock;
+	using DH.Helpdesk.Web.Models.Invoice;
+	using DH.Helpdesk.Web.Models.Shared;
+	using DH.Helpdesk.BusinessData.Models.MailTemplates;
+
+	using ParentCaseInfo = DH.Helpdesk.Web.Models.Case.ChildCase.ParentCaseInfo;
+	using DH.Helpdesk.Domain.Cases;
+	using DH.Helpdesk.BusinessData.Models.Case.Output;
+	using Microsoft.Reporting.WebForms;
 	using Controllers;
 	using Helpdesk.Common.Enums.Cases;
+	using Domain.Computers;
+	using System.Text;
 
 	public class CaseInputViewModel
     {

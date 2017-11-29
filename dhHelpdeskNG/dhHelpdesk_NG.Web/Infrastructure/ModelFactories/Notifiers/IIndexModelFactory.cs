@@ -18,7 +18,8 @@
             List<ItemOverview> searchDepartments,
             List<ItemOverview> searchOrganizationUnit,
             List<ItemOverview> searchDivisions,
-            NotifierFilters filters,
+			List<ItemOverview> searchComputerUserCategories,
+			NotifierFilters filters,
             SearchResult searchResult);
 
         IndexModel CreateEmpty();

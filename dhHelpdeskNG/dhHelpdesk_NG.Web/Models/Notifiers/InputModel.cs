@@ -84,7 +84,7 @@
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
             this.SynchronizationDate = synchronizationDate;
-			this.ComputerUserCategoryModel = categoryMode;
+			this.ComputerUserCategoryModel = categoryModel;
 
 		}
 
