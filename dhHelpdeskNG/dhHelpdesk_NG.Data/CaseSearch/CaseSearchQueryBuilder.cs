@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.OldComponents;
@@ -17,6 +18,12 @@ namespace DH.Helpdesk.Dal.Repositories
     public class CaseSearchQueryBuilder
     {
         private bool _useFts = false;
+        private readonly Regex _fullTextExpression;
+
+        public CaseSearchQueryBuilder()
+        {
+            _fullTextExpression = new Regex("(?:\"([^\"]*)\")|([^\\s]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        }
 
         #region Tables Fields Constants
 
@@ -1289,11 +1296,16 @@ namespace DH.Helpdesk.Dal.Repositories
 
         private string GetSqlLike(string field, string text, string combinator = CaseSearchConstants.Combinator_OR, bool userLower = false)
         {
+            
             var sb = new StringBuilder();
             if (!string.IsNullOrEmpty(field) && !string.IsNullOrEmpty(text))
             {
                 sb.Append(" (");
-                var words = text.FreeTextSafeForSqlInject().ToLower().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var words = _fullTextExpression.Matches(text.FreeTextSafeForSqlInject())
+                        .Cast<Match>()
+                        .Select(v => string.IsNullOrWhiteSpace(v.Groups[2].Value) ? v.Groups[1].Value : v.Groups[2].Value)
+                        .Distinct()
+                        .ToArray();
 
                 for (var i = 0; i < words.Length; i++)
                 {
