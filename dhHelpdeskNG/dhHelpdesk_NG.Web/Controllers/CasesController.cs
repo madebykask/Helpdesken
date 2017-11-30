@@ -1355,6 +1355,19 @@ namespace DH.Helpdesk.Web.Controllers
                 customerId = SessionFacade.CurrentCustomer.Id;
             }
 
+            //Check if customer has a default casetemplate
+            if (!templateId.HasValue && customerId.HasValue)
+            {
+                var setting = this._settingService.GetCustomerSetting(customerId.Value);
+
+                if (setting.DefaultCaseTemplateId != 0)
+                {
+                    templateId = setting.DefaultCaseTemplateId;
+                    templateistrue = 1;
+                }
+
+            }
+
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             if (SessionFacade.CurrentUser != null)
             {

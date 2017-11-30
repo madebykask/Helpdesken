@@ -1733,5 +1733,13 @@ begin
 	ALTER TABLE [dbo].[tblOU] ADD [ShowInvoice] bit NOT NULL Default(0)
 end
 
+
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'DefaultCaseTemplateId' and sysobjects.name = N'tblSettings')
+begin
+	ALTER TABLE [dbo].[tblSettings] ADD DefaultCaseTemplateId int NOT NULL Default(0)
+end
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.35'
