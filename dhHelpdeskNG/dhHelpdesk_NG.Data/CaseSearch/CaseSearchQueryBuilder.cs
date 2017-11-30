@@ -1370,7 +1370,12 @@ namespace DH.Helpdesk.Dal.Repositories
 
         private string BuildFtsContainsConditionCriteria(string text, bool useWildCard = true)
         {
-            var words = text.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            var words = _fullTextExpression.Matches(text.FreeTextSafeForSqlInject())
+                .Cast<Match>()
+                .Select(v => string.IsNullOrWhiteSpace(v.Groups[2].Value) ? v.Groups[1].Value : v.Groups[2].Value)
+                .Distinct()
+                .ToArray();
+
             var searchCriteriaText = string.Join(" OR ", words.Select(w => FormatFtsContainsConditionValue(w, useWildCard)));
             return searchCriteriaText;
         }
