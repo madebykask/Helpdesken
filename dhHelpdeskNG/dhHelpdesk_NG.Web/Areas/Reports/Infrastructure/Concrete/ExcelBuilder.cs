@@ -114,7 +114,7 @@
 
                 foreach (var header in data.Headers)
                 {
-                    ws.SetHeader(row, column, Translation.Get(header.Caption));
+                    ws.SetHeader(row, column, Translation.GetCoreTextTranslation(header.Caption));
                     column++;
                 }
 

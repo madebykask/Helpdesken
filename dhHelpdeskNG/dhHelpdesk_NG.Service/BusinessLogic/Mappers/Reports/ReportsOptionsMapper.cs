@@ -260,6 +260,18 @@
                 // Add calculation fields manually to the available fields
                 var leadTimeId = Convert.ToInt32(CalculationFields.LeadTime).ToString();
                 fieldsResult.Add(new ItemOverview(CaseInfoFields.LeadTime, leadTimeId));
+
+                var twId = Convert.ToInt32(CalculationFields.TotalWork).ToString();
+                fieldsResult.Add(new ItemOverview(LogFields.TotalWork, twId));
+
+                var totId = Convert.ToInt32(CalculationFields.TotalOverTime).ToString();
+                fieldsResult.Add(new ItemOverview(LogFields.TotalOverTime, totId));
+
+                var tmId = Convert.ToInt32(CalculationFields.TotalMaterial).ToString();
+                fieldsResult.Add(new ItemOverview(LogFields.TotalMaterial, tmId));
+
+                var tpId = Convert.ToInt32(CalculationFields.TotalPrice).ToString();
+                fieldsResult.Add(new ItemOverview(LogFields.TotalPrice, tpId));
             }
   
             if (caseTypeRootsOnly)

@@ -367,13 +367,34 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                 var ouRep = uow.GetRepository<OU>();
                 var finishingCauseRep = uow.GetRepository<FinishingCause>();
                 var fieldRep = uow.GetRepository<CaseFieldSetting>();
-                var hasLeadTime = (fieldIds.Count == 0) || (fieldIds.Count != 0 && fieldIds.Contains(Convert.ToInt32(CalculationFields.LeadTime)));
+                var manualFields = new List<string>();
+                if (fieldIds.Count == 0)
+                {
+                    manualFields.Add(CaseInfoFields.LeadTime);
+                    manualFields.Add(LogFields.TotalWork);
+                    manualFields.Add(LogFields.TotalOverTime);
+                    manualFields.Add(LogFields.TotalMaterial);
+                    manualFields.Add(LogFields.TotalPrice);
+                }
+                else
+                {
+                    if (fieldIds.Contains(Convert.ToInt32(CalculationFields.LeadTime)))
+                        manualFields.Add(CaseInfoFields.LeadTime);
+                    if (fieldIds.Contains(Convert.ToInt32(CalculationFields.TotalWork)))
+                        manualFields.Add(LogFields.TotalWork);
+                    if (fieldIds.Contains(Convert.ToInt32(CalculationFields.TotalOverTime)))
+                        manualFields.Add(LogFields.TotalOverTime);
+                    if (fieldIds.Contains(Convert.ToInt32(CalculationFields.TotalMaterial)))
+                        manualFields.Add(LogFields.TotalMaterial);
+                    if (fieldIds.Contains(Convert.ToInt32(CalculationFields.TotalPrice)))
+                        manualFields.Add(LogFields.TotalPrice);
+                }
 
                 var settings = fieldRep.GetAll()
                             .GetByNullableCustomer(customerId)
                             .GetByIds(fieldIds)
                             .GetShowable()
-                            .MapToCaseSettings(languageId, hasLeadTime);                
+                            .MapToCaseSettings(languageId, manualFields);
 
                 var caseTypeChainIds = new List<int>();
                 foreach (var caseTypeId in caseTypeIds)

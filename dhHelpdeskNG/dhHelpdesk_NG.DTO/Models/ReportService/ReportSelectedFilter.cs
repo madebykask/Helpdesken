@@ -18,6 +18,7 @@
             SelectedCaseStatus = new SelectedItems();
             GeneralParameter = new List<GeneralParameter>();
             SelectedReportCategory = new SelectedItems();
+            SelectedReportCategoryRt = new SelectedItems();
             CaseClosingDate = new DateToDate();
         }
 
@@ -48,6 +49,7 @@
         public List<GeneralParameter> GeneralParameter {get; set;}
 
         public SelectedItems SelectedReportCategory { get; set; }
+        public SelectedItems SelectedReportCategoryRt { get; set; }
 
     }
        

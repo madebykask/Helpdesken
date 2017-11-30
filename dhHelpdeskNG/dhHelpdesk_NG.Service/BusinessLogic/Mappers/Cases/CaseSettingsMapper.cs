@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
+﻿using System.Collections.Generic;
+
+namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
 {
     using System.Linq;
 
@@ -13,7 +15,7 @@
     {
         public static FullCaseSettings MapToCaseSettings(
                             this IQueryable<CaseFieldSetting> query,
-                            int languageId, bool hasLeadTime = false)
+                            int languageId, List<string> manualFields = null)
         {
             var exceptFields = new string[] { LogFields.AttachedFile };
             var entities = query.Select(f => new CaseSettingsMapData
@@ -25,15 +27,18 @@
                                                  .Where(f=> !exceptFields.ToList().Contains(f.FieldName))
                                                  .ToList();
 
-            // Add LeadTime calculation field manually 
-            if (hasLeadTime)
+            // Add LeadTime calculation field and log totals fields manually 
+            if (manualFields != null && manualFields.Any())
             {
-                entities.Add(new CaseSettingsMapData
+                foreach (var fieldName in manualFields)
                 {
-                    FieldName = CaseInfoFields.LeadTime,
-                    Show = 1,
-                    ShowInList = 1
-                });
+                    entities.Add(new CaseSettingsMapData
+                    {
+                        FieldName = fieldName,
+                        Show = 1,
+                        ShowInList = 1
+                    });
+                }
             }
             var fieldSettings = new NamedObjectCollection<CaseSettingsMapData>(entities);
 
@@ -211,6 +216,10 @@
             var finishingDescription = CreateFieldSetting(fieldSettings.FindByName(LogFields.FinishingDescription));
             var finishingDate = CreateFieldSetting(fieldSettings.FindByName(LogFields.FinishingDate));
             var finishingCause = CreateFieldSetting(fieldSettings.FindByName(LogFields.FinishingCause));
+            var totalMaterial = CreateFieldSetting(fieldSettings.FindByName(LogFields.TotalMaterial));
+            var totalOverTime = CreateFieldSetting(fieldSettings.FindByName(LogFields.TotalOverTime));
+            var totalPrice = CreateFieldSetting(fieldSettings.FindByName(LogFields.TotalPrice));
+            var totalWork = CreateFieldSetting(fieldSettings.FindByName(LogFields.TotalWork));
 
             return new LogSettings(
                         internalLogNote,
@@ -219,7 +228,11 @@
                         attachedFile,
                         finishingDescription,
                         finishingDate,
-                        finishingCause);
+                        finishingCause,
+                        totalMaterial,
+                        totalOverTime,
+                        totalPrice,
+                        totalWork);
         }
 
         private static FieldOverviewSetting CreateFieldSetting(CaseSettingsMapData fieldSetting)

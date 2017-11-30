@@ -156,6 +156,11 @@ using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 
         public List<string> AllExtenalText { get; set; }
 
+        public int TotalMaterial { get; set; }
+        public int TotalOverTime { get; set; }
+        public decimal TotalPrice { get; set; }
+        public int TotalWork { get; set; }
+
     }
 
     public sealed class ReportGeneratorData

@@ -28,6 +28,7 @@ namespace DH.Helpdesk.BusinessData.Models.ReportService
         public CustomSelectList Status { get; set; }
 
         public CustomSelectList ReportCategory { get; set; }
+        public CustomSelectList ReportCategoryRt { get; set; }
 
     }
        
