@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -1301,11 +1302,7 @@ namespace DH.Helpdesk.Dal.Repositories
             if (!string.IsNullOrEmpty(field) && !string.IsNullOrEmpty(text))
             {
                 sb.Append(" (");
-                var words = _fullTextExpression.Matches(text.FreeTextSafeForSqlInject())
-                        .Cast<Match>()
-                        .Select(v => string.IsNullOrWhiteSpace(v.Groups[2].Value) ? v.Groups[1].Value : v.Groups[2].Value)
-                        .Distinct()
-                        .ToArray();
+                var words = GetSearchWords(text);
 
                 for (var i = 0; i < words.Length; i++)
                 {
@@ -1370,21 +1367,35 @@ namespace DH.Helpdesk.Dal.Repositories
 
         private string BuildFtsContainsConditionCriteria(string text, bool useWildCard = true)
         {
-            var words = _fullTextExpression.Matches(text.FreeTextSafeForSqlInject())
-                .Cast<Match>()
-                .Select(v => string.IsNullOrWhiteSpace(v.Groups[2].Value) ? v.Groups[1].Value : v.Groups[2].Value)
-                .Distinct()
-                .ToArray();
+            var words = GetSearchWords(text);
 
-            var searchCriteriaText = string.Join(" OR ", words.Select(w => FormatFtsContainsConditionValue(w, useWildCard)));
+            var searchCriteriaText = string.Join(" OR ", 
+                words
+                .Where(w => !string.IsNullOrEmpty(w))
+                .Select(w =>
+                {
+                    var isExactPhrase = w.Trim().Split(' ').Length > 1;
+                    return FormatFtsContainsConditionValue(w, isExactPhrase, useWildCard );
+                }));
             return searchCriteriaText;
         }
 
-        private string FormatFtsContainsConditionValue(string text, bool useWildCard = true)
+        private string[] GetSearchWords(string text)
+        {
+            return _fullTextExpression.Matches(text.FreeTextSafeForSqlInject())
+                .Cast<Match>()
+                .Where(v => !string.IsNullOrWhiteSpace(v.Groups[1].Value) || !string.IsNullOrWhiteSpace(v.Groups[2].Value))
+                .Select(v => string.IsNullOrWhiteSpace(v.Groups[2].Value) ? v.Groups[1].Value : v.Groups[2].Value)
+                .Distinct()
+                .ToArray();
+        }
+
+        private string FormatFtsContainsConditionValue(string text, bool isExactPhrase, bool useWildCard = true)
         {
             if (string.IsNullOrEmpty(text))
                 return null;
 
+            if (isExactPhrase) return $"\"{text}\"";
             return useWildCard ? $"\"{text}*\"" : $"{text}";
         }
 
