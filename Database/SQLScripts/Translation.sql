@@ -6501,7 +6501,6 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1891 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1891, 2, 'Total Over time')
 GO
-
 If not exists (select * from tbltext where id = 1892)
 	insert into tbltext (id, TextString) VALUES (1892, 'Totalt Material')
 GO
@@ -6516,6 +6515,13 @@ If not exists (select * from tblTextTranslation where text_id = 1893 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1893, 2, 'Total Price')
 GO
 
+
+If not exists (select * from tbltext where id = 1894)
+	insert into tbltext (id, TextString) VALUES (1894, 'Förvald ärendemall')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1894 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1894, 2, 'Default Case template')
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 

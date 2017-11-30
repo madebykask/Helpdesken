@@ -18,7 +18,7 @@
                                 @operationLog.CustomerName | Skapad @operationLog.CreatedDate.ToFormattedDateTime() Uppdaterad @operationLog.ChangedDate.ToFormattedDateTime()
                             </div>
                             <div class="captionrow">@operationLog.Object.Name</div>
-                            <div class="textrow">@Html.Raw(operationLog.LogText.Replace(Environment.NewLine, "<br />"))</div>
+                            <div class="textrow">@Html.Raw(operationLog.LogText.Replace(Environment.NewLine, "<br />")) <br /> @Html.Raw(operationLog.LogAction.Replace(Environment.NewLine, "<br />"))</div>
                         </div>
                     }
                 }            

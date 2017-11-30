@@ -16,7 +16,8 @@
                                         o.LogText,
                                         o.Category,
                                         o.Customer,
-                                        o.Object
+                                        o.Object,
+                                        o.LogAction
                                     })
                                     .ToArray();
 
@@ -34,7 +35,8 @@
                                         {
                                             Name = o.Object != null ? o.Object.Name : null,
                                             Status = o.Object.IsActive
-                                        }
+                                        },
+                                        LogAction = o.LogAction
                                     }).ToArray();
         }
 
