@@ -34,8 +34,7 @@
                         </td>
                         <td>
                             <div id="department_dropdown_container">
-                                @Html.DropDown("region_dropdown", "RegionId", !Model.Region.Required, Model.Region.Value, false, Model.ComputerUserCategoryModel.IsReadOnly)
-
+                                @Html.Partial("DepartmentDropDown", Model.Department.Value, new ViewDataDictionary { { "Required", Model.Department.Required }, { "ReadOnly", Model.ComputerUserCategoryModel.IsReadOnly } })
                             </div>
                         </td>
                     </tr>

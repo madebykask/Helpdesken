@@ -40,8 +40,11 @@ $(document).ready(function () {
     var initiatorCategory = window.parameters.computerUserCategories[initiatorID];
     intiatorReadOnly = initiatorCategory == null ? false : initiatorCategory.IsReadOnly;
     applyReadOnlyOn(readOnlyExpressions['initiator'], intiatorReadOnly);
-    if (intiatorReadOnly)
+
+    $('#AddNotifier')[0].prevState = $('#AddNotifier').is(':visible');
+    if (intiatorReadOnly) {
         $('#AddNotifier').hide();
+    }
 
     var regardingID = $('#IsAboutCategory').val()
     var regardingCategory = window.parameters.computerUserCategories[regardingID];
@@ -205,12 +208,12 @@ function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentI
                     $(publicDepartmentControlName).append(option);                
             }
 
-            if (IsInitiatorCategoryReadOnly()) {
-                $(publicDepartmentControlName).find('option:not(:selected)').attr('disabled', 'disabled');
-            }
-            else {
-                $(publicDepartmentControlName).find('option').removeAttr('disabled');
-            }
+            //if (IsInitiatorCategoryReadOnly()) {
+            //    $(publicDepartmentControlName).find('option:not(:selected)').attr('disabled', 'disabled');
+            //}
+            //else {
+            //    $(publicDepartmentControlName).find('option').removeAttr('disabled');
+            //}
         }
     }, 'json').always(function () {
         $(publicDepartmentControlName).prop('disabled', false);
@@ -249,12 +252,12 @@ function refreshIsAboutDepartment(regionId, departmentFilterFormat, selectedDepa
                     $(publicIsAboutDepartmentControlName).append(option);
             }
 
-            if (IsAboutCategoryReadOnly()) {
-                $(publicIsAboutDepartmentControlName).find('option:not(:selected)').attr('disabled', 'disabled');
-            }
-            else {
-                $(publicIsAboutDepartmentControlName).find('option').removeAttr('disabled');
-            }
+            //if (IsAboutCategoryReadOnly()) {
+            //    $(publicIsAboutDepartmentControlName).find('option:not(:selected)').attr('disabled', 'disabled');
+            //}
+            //else {
+            //    $(publicIsAboutDepartmentControlName).find('option').removeAttr('disabled');
+            //}
         }
     }, 'json').always(function () {
         if (!IsRegardingCategoryReadOnly()) {
@@ -321,19 +324,15 @@ var readOnlyExpressions = {
         '#case__Place',
         '#case__UserCode',
         '#case__CostCentre',
-        '#case__Region_Id',
-        '#RegionName',
-        '#case__Department_Id',
-        '#case__Ou_Id',
         '#AddNotifier'
     ],
     'regarding': [
         '#case__IsAbout_Person_Name',
-        '#case__IsAbout_Person_Phone',
-        '#case__IsAbout_Region_Id',
+        '#case__IsAbout_Person_Phone'
+        /*'#case__IsAbout_Region_Id',
         '#case__IsAbout_Department_Id',
         '#case__IsAbout_Ou_Id',
-        '#case__IsAbout_Person_Email'
+        '#case__IsAbout_Person_Email'*/
     ]
 }
 
@@ -490,16 +489,18 @@ function GetComputerUserSearchOptions() {
                     $('#case__CostCentre').val(item.costcentre);
 
                 if (item.regionid != "" && item.regionid != null) {
-                    if (IsInitiatorCategoryReadOnly()) {
-                        $('#case__Region_Id').removeAttr('disabled')
-                        $('#case__Region_Id').val(item.regionid);
-                        $('#case__Region_Id').find('option:selected').removeAttr('disabled');
-                        $('#case__Region_Id').find('option:not(:selected)').attr('disabled', 'disabled');
-                    }
-                    else {
-                        $('#case__Region_Id').find('option').removeAttr('disabled');
-                        $('#case__Region_Id').val(item.regionid);
-                    }
+                    // SHould not be rad only anymore, todo: find better way to configure read only per category
+                    //if (IsInitiatorCategoryReadOnly()) {
+                    //    $('#case__Region_Id').removeAttr('disabled')
+                    //    $('#case__Region_Id').val(item.regionid);
+                    //    $('#case__Region_Id').find('option:selected').removeAttr('disabled');
+                    //    $('#case__Region_Id').find('option:not(:selected)').attr('disabled', 'disabled');
+                    //}
+                    //else {
+                    //    $('#case__Region_Id').find('option').removeAttr('disabled');
+                    //    $('#case__Region_Id').val(item.regionid);
+                    //}
+                    $('#case__Region_Id').val(item.regionid);
                     $('#RegionName').val(item.regionname);
                 }
 
@@ -749,16 +750,18 @@ function GetComputerUserSearchOptionsForIsAbout() {
                     $('#case__IsAbout_CostCentre').val(item.costcentre);
 
                 if (item.regionid != "" && item.regionid != null) {
-                    if (IsAboutCategoryReadOnly()) {
-                        $('#case__IsAbout_Region_Id').removeAttr('disabled')
-                        $('#case__IsAbout_Region_Id').val(item.regionid);
-                        $('#case__IsAbout_Region_Id').find('option:selected').removeAttr('disabled');
-                        $('#case__IsAbout_Region_Id').find('option:not(:selected)').attr('disabled', 'disabled');
-                    }
-                    else {
-                        $('#case__IsAbout_Region_Id').find('option').removeAttr('disabled');
-                        $('#case__IsAbout_Region_Id').val(item.regionid);
-                    }
+                    // Should not be read only, TODO: proper configuration of read only values
+                    //if (IsAboutCategoryReadOnly()) {
+                    //    $('#case__IsAbout_Region_Id').removeAttr('disabled')
+                    //    $('#case__IsAbout_Region_Id').val(item.regionid);
+                    //    $('#case__IsAbout_Region_Id').find('option:selected').removeAttr('disabled');
+                    //    $('#case__IsAbout_Region_Id').find('option:not(:selected)').attr('disabled', 'disabled');
+                    //}
+                    //else {
+                    //    $('#case__IsAbout_Region_Id').find('option').removeAttr('disabled');
+                    //    $('#case__IsAbout_Region_Id').val(item.regionid);
+                    //}
+                    $('#case__IsAbout_Region_Id').val(item.regionid);
                     $('#IsAboutRegionName').val(item.regionname);
                 }
 
@@ -942,9 +945,11 @@ function CaseInitForm() {
             $('#AddNotifier').hide();
         }
         else {
-            $('#case__Region_Id').find('option').removeAttr('disabled');
+          //  $('#case__Region_Id').find('option').removeAttr('disabled');
             readOnlySection('initiator', false);
-            $('#AddNotifier').show();
+            if ($('#AddNotifier')[0].prevState) {
+                $('#AddNotifier').show();
+            }
         }
     });
 

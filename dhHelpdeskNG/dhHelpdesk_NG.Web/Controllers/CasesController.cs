@@ -1770,7 +1770,7 @@ namespace DH.Helpdesk.Web.Controllers
 		public JsonResult GetExtendedCaseUrlForCategoryAndSection(int categoryID, int caseSectionType)
 		{
 			var category = _computerService.GetComputerUserCategoryByID(categoryID);
-			var customerID = SessionFacade.CurrentUser.CustomerId;
+			var customerID = SessionFacade.CurrentCustomer.Id;
 
 			var currentUserID = SessionFacade.CurrentUser.Id;
 			var currentUserGroupID = SessionFacade.CurrentUser.UserGroupId;
@@ -1784,19 +1784,27 @@ namespace DH.Helpdesk.Web.Controllers
 
 			string url;
 			Guid guid;
-			if (extendedCaseForms != null && extendedCaseForms.Any())
+			//if (extendedCaseForms != null && extendedCaseForms.Any())
 			{
 				var extendedCasePath = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
 				var extendedCaseForm = _caseService.GetExtendedCaseSectionForm(category.CaseSolutionID.Value, customerID, 0, caseSectionType, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.UserGUID.ToString(), 0, 0, extendedCasePath, userRole);
 
-				url = extendedCaseForm.Path;
-				guid = extendedCaseForm.ExtendedCaseGuid;
+				if (extendedCaseForm != null)
+				{
+					url = extendedCaseForm.Path;
+					guid = extendedCaseForm.ExtendedCaseGuid;
+				}
+				else
+				{
+					url = null;
+					guid = Guid.Empty;
+				}
 			}
-			else
+			/*else
 			{
 				url = null;
 				guid = Guid.Empty;
-			}
+			}*/
 
 			return Json(new { guid, url });
 		}
@@ -6023,6 +6031,10 @@ namespace DH.Helpdesk.Web.Controllers
 					//			CaseSolutionID = o.CaseSolutionID
 					//		});
 
+				}
+				else
+				{
+					m.ExtendedCaseSections = new Dictionary<CaseSectionType, ExtendedCaseFormModel>();
 				}
 			}
 			/*}

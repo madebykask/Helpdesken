@@ -3,9 +3,9 @@ BEGIN TRAN
 
 	DECLARE @today DATE = GETDATE()
 	DECLARE @now DATETIME = GETDATE()
-	DECLARE @cluCode NVARCHAR(5) = 'E901A'--'1190D'--'4B310'
+	--DECLARE @cluCode NVARCHAR(5) = 'E901A'--'1190D'--'4B310'
 	DECLARE @computerUserCategoryID INT = 1
-	DECLARE @customerID INT = 39
+	DECLARE @customerID INT = 4
 
 	DECLARE @businessUnits TABLE
 	(
@@ -29,15 +29,20 @@ BEGIN TRAN
 
 
 	INSERT INTO tblComputerUsers(UserId, FirstName, ComputerUsersCategoryID)
-	SELECT BU.CLUT_TYPE + ' ' + BU.CLU_CODE, BU.[NAME] + + ' (' + BU.CLUT_TYPE + ' ' + BU.CLU_CODE + ')', @computerUserCategoryID FROM @businessUnits BU
+	SELECT BU.CLUT_TYPE + ' ' + BU.CLU_CODE, CASE WHEN LEN(BU.[NAME] + ' (' + BU.CLUT_TYPE + ' ' + BU.CLU_CODE + ')') > 49
+	THEN
+		SUBSTRING(BU.[NAME],0, 36) + '. (' + BU.CLUT_TYPE + ' ' + BU.CLU_CODE + ')'
+	ELSE 
+		BU.[NAME] + ' (' + BU.CLUT_TYPE + ' ' + BU.CLU_CODE + ')'
+	END, @computerUserCategoryID FROM @businessUnits BU
 
 
 	UPDATE BU SET Exported = @now FROM CBD_IN_CEM_BUSINESS_UNIT_T BU
 	JOIN @businessUnits BU2 ON BU.BU_TK = BU2.BU_TK
+
+	SELECT * FROM tblComputerUsers ORDER BY Len(FirstName) DESC
+
 COMMIT
 
-
-BEGIN TRAN
-	DECLARE @customerID INT = 39
-	UPDATE CU SET OU_Id = 29494, Department_Id = 45464 FROM tblComputerUsers CU WHERE RegTime = '2017-10-20 15:17:26.440'
-COMMIT
+--SELECT BU.CLUT_TYPE + ' ' + BU.CLU_CODE, BU.[NAME] + + ' (' + BU.CLUT_TYPE + ' ' + BU.CLU_CODE + ')', LEN(BU.[NAME] + ' (' + BU.CLUT_TYPE + ' ' + BU.CLU_CODE + ')') L FROM CBD_IN_CEM_BUSINESS_UNIT_T BU
+--ORDER BY LEN(BU.[NAME] + + ' (' + BU.CLUT_TYPE + ' ' + BU.CLU_CODE + ')') DESC

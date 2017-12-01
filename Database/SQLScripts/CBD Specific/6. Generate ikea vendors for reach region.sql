@@ -1,6 +1,6 @@
 BEGIN TRAN
 
-DECLARE @customerID INT = 39, 
+DECLARE @customerID INT = 4, 
 	@now DATETIME = GETDATE()
 
 INSERT INTO tblRegion(Customer_Id, Region, Status, IsDefault, CreatedDate, ChangedDate, RegionGUID, LanguageId)

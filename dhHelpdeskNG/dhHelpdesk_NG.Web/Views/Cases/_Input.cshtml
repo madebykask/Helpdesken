@@ -584,7 +584,7 @@
                                                             {
                                                                 foreach (var e in Model.regions.Where(e => e.IsActive == 1 || Model.case_.Region_Id == e.Id))
                                                                 {
-                                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Region_Id.ToString()) @(Model.InitiatorReadOnly && e.Id != Model.case_.Region_Id ? "disabled=\"disabled\"" : "")>@e.Name</option>
+                                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Region_Id.ToString())>@e.Name</option>
 }
                                                             }
                                                         </select>
@@ -611,7 +611,7 @@
                                                             {
                                                                 foreach (var e in Model.departments.Where(e => e.IsActive == 1 || Model.case_.Department_Id == e.Id).Where(e => Model.case_.Region_Id == e.Region_Id || !Model.case_.Region_Id.IntHasValue()))
                                                                 {
-                                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Department_Id.ToString()) @(Model.InitiatorReadOnly && e.Id != Model.case_.Department_Id ? "disabled=\"disabled\"" : "")>@e.DepartmentDescription(Model.DepartmentFilterFormat)</option>
+                                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Department_Id.ToString())>@e.DepartmentDescription(Model.DepartmentFilterFormat)</option>
                                                                 }
                                                             }
                                                         </select>
@@ -703,6 +703,7 @@
                                                     {
                                                         @Html.CheckBoxFor(m => Model.UpdateNotifierInformation, new { @class = "switchcheckbox" })
                                                     }
+                                              
 
                                                 </td>
                                             </tr>
