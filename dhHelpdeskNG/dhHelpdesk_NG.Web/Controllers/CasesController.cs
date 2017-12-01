@@ -7147,7 +7147,7 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CurrentAdvancedSearch = sm;
             #endregion
             
-            var availableDepIds = new List<int> ();
+            var availableDepIds = new List<int> { 0 };
             var availableWgIds = new List<int> { 0 };
             var availableCustomerIds = new List<int> { 0 };
             if (isExtendedSearch)
@@ -7202,7 +7202,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                             // finns kryssruta pa anvandaren att den bara far se sina egna arenden
                             //Note, this is also checked in where clause  in ReturnCaseSearchWhere(SearchQueryBuildContext ctx)
-                            if (SessionFacade.CurrentUser.RestrictedCasePermission == 1 && infoAvailableInExtended == false)
+                            if (SessionFacade.CurrentUser.RestrictedCasePermission == 1 && infoAvailableInExtended == false && availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
+                                && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId))
                             { 
                                 if (SessionFacade.CurrentUser.UserGroupId == UserGroups.Administrator)
                                 { 
