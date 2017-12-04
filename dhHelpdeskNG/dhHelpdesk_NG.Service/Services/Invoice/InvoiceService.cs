@@ -194,12 +194,13 @@ namespace DH.Helpdesk.Services.Services.Invoice
 
 		public List<InvoiceFile> GetInvoiceHeaders(int customerId)
 		{
-		    var res = _invoiceHeaderRepository.GetMany(x => !(x.InvoiceFilename == null || x.InvoiceFilename.Trim() == string.Empty) &&
-		                                                                 x.InvoiceRows.Any(y =>
-		                                                                     y.CaseInvoiceRows.Any(z => z.Case.Customer_Id == customerId) ||
-		                                                                     y.Logs.Any(z => z.Case.Customer_Id == customerId))
-		        )
-                .Select(x => new InvoiceFile
+		    var res = _invoiceHeaderRepository.GetAll()
+                .AsQueryable()
+		        .Where(x => !(x.InvoiceFilename == null || x.InvoiceFilename.Trim() == string.Empty) &&
+                    x.InvoiceRows.Any(y =>
+		                y.CaseInvoiceRows.Any(z => z.Case.Customer_Id == customerId) ||
+		                y.Logs.Any(z => z.Case.Customer_Id == customerId)))
+		        .Select(x => new InvoiceFile
 		        {
 		            Guid = x.InvoiceHeaderGUID,
 		            Date = x.CreatedDate,
@@ -212,7 +213,8 @@ namespace DH.Helpdesk.Services.Services.Invoice
 		public InvoiceFile GetInvoiceHeader(Guid guid)
 		{
 			var res = _invoiceHeaderRepository.GetAll()
-				.Where(x => x.InvoiceHeaderGUID == guid)
+			    .AsQueryable()
+                .Where(x => x.InvoiceHeaderGUID == guid)
 				.FirstOrDefault();
 
 			return res == null ? null : new InvoiceFile
