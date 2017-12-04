@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -193,17 +194,19 @@ namespace DH.Helpdesk.Services.Services.Invoice
 
 		public List<InvoiceFile> GetInvoiceHeaders(int customerId)
 		{
-			var res = _invoiceHeaderRepository.GetAll()
-				.Where(x => !String.IsNullOrWhiteSpace(x.InvoiceFilename))
-				.Where(x => x.InvoiceRows.Any(y => y.CaseInvoiceRows.Any(z => z.Case.Customer_Id == customerId) || y.Logs.Any(z => z.Case.Customer_Id == customerId)))
-				.ToList();
+		    var res = _invoiceHeaderRepository.GetMany(x => !(x.InvoiceFilename == null || x.InvoiceFilename.Trim() == string.Empty) &&
+		                                                                 x.InvoiceRows.Any(y =>
+		                                                                     y.CaseInvoiceRows.Any(z => z.Case.Customer_Id == customerId) ||
+		                                                                     y.Logs.Any(z => z.Case.Customer_Id == customerId))
+		        )
+                .Select(x => new InvoiceFile
+		        {
+		            Guid = x.InvoiceHeaderGUID,
+		            Date = x.CreatedDate,
+		            Name = x.InvoiceFilename
+		        }).ToList();
 
-			return res.Select(x => new InvoiceFile
-			{
-				Guid = x.InvoiceHeaderGUID,
-				Date = x.CreatedDate,
-				Name = x.InvoiceFilename
-			}).ToList();
+            return res;
 		}
 
 		public InvoiceFile GetInvoiceHeader(Guid guid)
