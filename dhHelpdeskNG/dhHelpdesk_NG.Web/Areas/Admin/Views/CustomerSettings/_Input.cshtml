@@ -564,6 +564,15 @@
                                         @Translation.Get("Visa på Bilagor tab", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td style="width:100px">
+                                        @Translation.Get("Standardärendemall", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.Setting.DefaultCaseTemplateId, Model.CaseSolutionList, "", new { })
+                                    </td>
+
+                                </tr>
                             </table>
                         </div>
                     </div>
@@ -623,15 +632,6 @@
                                     <td>
                                         @Html.TextBoxFor(model => model.Setting.QuickNewCaseLinkUrl, new { maxlength = "100", style = "width: 400px;" })
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td style="width:100px">
-                                        @Translation.Get("Förvald ärendemall", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                        @Html.DropDownListFor(model => model.Setting.DefaultCaseTemplateId, Model.CaseSolutionList, "", new { })
-                                    </td>
-                                    
                                 </tr>
                             </table>
                         </div>

@@ -6517,7 +6517,7 @@ GO
 
 
 If not exists (select * from tbltext where id = 1894)
-	insert into tbltext (id, TextString) VALUES (1894, 'Förvald ärendemall')
+	insert into tbltext (id, TextString) VALUES (1894, 'Standardärendemall')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1894 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1894, 2, 'Default Case template')
