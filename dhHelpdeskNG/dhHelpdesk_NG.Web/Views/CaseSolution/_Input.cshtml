@@ -300,7 +300,7 @@
                                         <select id="SplitToCaseSolutionIds" name="SplitToCaseSolutionIds" data-field="id" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                             @foreach (var a in Model.SplitToAllCaseSolutions)
                                             {
-                                                <option @(a.Selected ? "selected" : "") value="@a.Value">@a.Text</option>
+                                                <option @(a.Selected ? " selected" : "") @(a.Disabled && a.Selected == false ? " disabled" : "") value="@a.Value">@a.Text</option>
                                             }
                                         </select>
                                     </td>

@@ -2950,6 +2950,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 Text = x.Customer.Name + " / " + x.Name.ToString(),
                 Value = x.Id.ToString(),
+                Disabled = (x.Status == 0),
                 Selected = (caseSolution.SplitToCaseSolutionDescendants != null ? (caseSolution.SplitToCaseSolutionDescendants.Where(a => a.SplitToCaseSolution_Id == x.Id).Any() == true ? true : false) : false)
              }).ToList();
 
