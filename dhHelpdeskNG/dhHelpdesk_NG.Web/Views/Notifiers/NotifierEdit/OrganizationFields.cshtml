@@ -54,9 +54,8 @@
                     </tr>
                 }
 
-                @Html.EditorFor(m => m.CostCentre, "TextBox")
-
-                @Html.EditorFor(m => m.Unit, "TextBox")
+                @Html.EditorFor(m => m.CostCentre, "TextBox", attributes)
+                @Html.EditorFor(m => m.Unit, "TextBox", attributes)
 
                 @if (Model.Division.Show)
                 {
@@ -104,9 +103,9 @@
                         </td>
                     </tr>
                 }
-
                 @Html.EditorFor(m => m.Other, "TextArea", attributes)
             </table>
+            
         </div>
     </div>
 </div>
