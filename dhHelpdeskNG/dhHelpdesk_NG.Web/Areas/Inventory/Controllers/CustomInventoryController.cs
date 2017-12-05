@@ -165,7 +165,7 @@
                 SessionFacade.FindPageFilters<InventorySearchFilter>(
                     this.CreateFilterId(TabName.Inventories, InventoryFilterMode.CustomType.ToString()))
                 ?? InventorySearchFilter.CreateDefault(inventoryTypeId);
-            InventoryGridModel gridModel = this.CreateInventoryGridModel(inventoryFilter, inventoryTypeId);
+            InventoryGridModel gridModel = this.CreateInventoryGridModel(inventoryFilter, inventoryTypeId, true);
 
             // todo move into invetory overview query
             InventoryType inventoryType = this.inventoryService.GetInventoryType(inventoryTypeId);
@@ -230,12 +230,15 @@
             return new InventoryEditOptions(departments, buildings, floors, rooms);
         }
 
-        private InventoryGridModel CreateInventoryGridModel(InventorySearchFilter filter, int inventoryTypeId)
+        private InventoryGridModel CreateInventoryGridModel(InventorySearchFilter filter, int inventoryTypeId, bool takeAllRecords = false)
         {
             InventoryFieldSettingsOverviewResponse settings =
                 this.inventorySettingsService.GetInventoryFieldSettingsOverview(inventoryTypeId);
+
+            /*-1: take all records */
+            var _filter = filter.CreateRequest(inventoryTypeId, takeAllRecords? (int?) -1 :null);
             InventoriesOverviewResponse models =
-                this.inventoryService.GetInventories(filter.CreateRequest(inventoryTypeId));
+                inventoryService.GetInventories(_filter);
 
             InventoryGridModel viewModel = InventoryGridModel.BuildModel(
                 models,

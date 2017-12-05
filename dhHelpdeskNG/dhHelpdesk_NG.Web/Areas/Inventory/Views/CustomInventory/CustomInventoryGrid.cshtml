@@ -1,16 +1,21 @@
 ﻿@using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Web.Infrastructure
+
 @model DH.Helpdesk.Web.Areas.Inventory.Models.InventoryGridModel
 @Translation.Get("Poster i sökresultat"): @Model.Inventories.Count   @(Model.Inventories.Count >= DH.Helpdesk.Common.Constants.SearchFilter.RecordsOnPage ? string.Format(Translation.GetMasterDataTranslation("(Antal inventarier som visas är begränsade till {0})"), DH.Helpdesk.Common.Constants.SearchFilter.RecordsOnPage.ToString()) : "")
 
+@*Disabled to export all records #59490*@
+@*@{var numOfInventories = Model.Inventories.Count; }*@
+
 @if (Model.Inventories.Any())
 {
-<table class="table table-striped table-bordered table-hover">
-    <thead>
-        <tr>
-            @foreach (var header in Model.Headers)
-            {
-                <th onclick=" sortGrid('@header.FieldName') " class="thpointer">@Translation.Get(header.Caption)
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                @foreach (var header in Model.Headers)
+                {
+                    <th onclick=" sortGrid('@header.FieldName') " class="thpointer">
+                        @Translation.Get(header.Caption)
                     @if (Model.SortField != null && header.FieldName == Model.SortField.Name)
                     {
                         switch (Model.SortField.SortBy)
@@ -26,25 +31,33 @@
                         }
                     }
                 </th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var inventory in Model.Inventories)
-        {
-            <tr onclick=" window.location.href = '@Url.Action("Edit", new { id = inventory.Id, inventoryTypeId = Model.CurrentMode })' ">
-                @{
-                    var fields = inventory.Fields.ToList();
-                    for (var i = 0; i < fields.Count; i++)
-                    {
-                        var inventoryField = Model.Headers[i];
-                        var inventoryFieldValue = fields.Single(v => v.FieldName == inventoryField.FieldName);
-
-                        <td class="tdpointer">@inventoryFieldValue.Value.GetDisplayValue()</td>
-                    }
                 }
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var inventory in Model.Inventories)
+            {
+                <tr onclick=" window.location.href='@Url.Action("Edit", new { id = inventory.Id, inventoryTypeId = Model.CurrentMode })' ">
+                    @{
+                        var fields = inventory.Fields.ToList();
+                        for (var i = 0; i < fields.Count; i++)
+                        {
+                            var inventoryField = Model.Headers[i];
+                            var inventoryFieldValue = fields.Single(v => v.FieldName == inventoryField.FieldName);
+
+                            <td class="tdpointer">@inventoryFieldValue.Value.GetDisplayValue()</td>
+                        }
                     }
+                </tr>
+            }
+        </tbody>
+    </table>
+                        }
+
+
+/* Disabled to export all records #59490*/
+@*<script type="text/javascript">
+    $(document).ready(function () {        
+        inventoryLogic.prototype.setNumOfRows('@numOfInventories');
+    });
+</script>*@

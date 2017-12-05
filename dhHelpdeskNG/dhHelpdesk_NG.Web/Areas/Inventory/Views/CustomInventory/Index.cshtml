@@ -1,8 +1,25 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web
+@using System.Web.Optimization
+
 @model DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels.InventorySearchViewModel
 @{
     Layout = "~/Areas/Inventory/Views/Shared/_IndexInventoryLayout.cshtml";
 }
+
+@*Disabled to export all records #59490*@
+@*@Scripts.Render(BundleConfig.ScriptNames.InventoryOverview)
+
+<script type="text/javascript">    
+    $(function() {
+        var params = {
+            numOfRows: 0,
+            exportToExcelUrl: "@Url.Content("~/CustomInventory/ExportGridToExcelFile")"
+        };
+        inventoryLogic.prototype.init(params);
+    });
+</script>*@
+
 
 @section Actions
 {
@@ -13,10 +30,34 @@
                 @Html.ActionLink(string.Format("{0} {1}", Translation.Get("Ny"), Translation.Get(Model.Name)), "New", "CustomInventory", new { inventoryTypeId = Model.InventoryTypeId }, new { @class = "btn" })
             </li>
         }
-        <li>
-            @Html.ActionLink(Translation.Get("Excel"), "ExportGridToExcelFile", "CustomInventory", new { inventoryTypeId = Model.InventoryTypeId }, new { @class = "btn", id = "excel_report_inventory_button" })
+        <li>            
+            @Html.ActionLink(Translation.Get("Excel"), "ExportGridToExcelFile", "CustomInventory", new { inventoryTypeId = Model.InventoryTypeId }, new { @class = "btn", id = "excel_report_inventory_button"})
+            @*<a href="#" id="excel_report_inventory_button" class="btn" onclick="inventoryLogic.prototype.exportToExcel('@Model.InventoryTypeId')"> EX2 </a>*@
         </li>
     </ul>
 }
 
 @Html.Partial("Inventories", Model)
+
+@*Disabled to export all records #59490 : Check with Stina*@
+@*<div id="exportToExcelDialog" class="modal fade" style="display: none;">
+    <div class="modal-dialog">
+        <form method="post" id="exportToExcelDialogForm" autocomplete="off" class="">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5>
+                    <span id="headerCaption"> Export to Excel</span>
+                </h5>
+            </div>
+            <div class="modal-body">                
+                <p  style="margin-top:20px;">
+                    Description....
+                </p>                
+            </div>
+            <div class="modal-footer">
+                @Html.ActionLink(Translation.Get("Export 500"), "ExportGridToExcelFile", "CustomInventory", new { inventoryTypeId = Model.InventoryTypeId, numOfRows = 500 }, new { @class = "btn", id = "btnExport500" })
+                @Html.ActionLink(Translation.Get("Export all"), "ExportGridToExcelFile", "CustomInventory", new { inventoryTypeId = Model.InventoryTypeId }, new { @class = "btn", id = "btnExportAll" })                
+            </div>
+        </form>
+    </div>
+</div>*@
