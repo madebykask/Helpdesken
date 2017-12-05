@@ -107,7 +107,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var displayLeftTime = userCaseSettings.Any(it => it.Name == TimeLeftColumn);
             
             var queryBuilderContext = BuildSearchQueryContext(context);
-            
+                       
             //build search query
             var searchQueryBuilder = new CaseSearchQueryBuilder();
             var sql = searchQueryBuilder.BuildCaseSearchSql(queryBuilderContext);
@@ -338,8 +338,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         row.IsUnread = dr.SafeGetInteger("Status") == 1;
                         row.IsUrgent = timeLeft.HasValue && timeLeft < 0;
                         row.IsClosed = caseFinishingDate.HasValue;
-                        row.IsParent = (dr.SafeGetInteger("IsParent") > 0) ? true :false;
-                        row.ParentId = dr.SafeGetInteger("ParentCaseId");
+                        row.IsParent = (context.f.FetchInfoAboutParentChild && dr.SafeGetInteger("IsParent") > 0);
+                        row.ParentId = context.f.FetchInfoAboutParentChild? dr.SafeGetInteger("ParentCaseId") : 0;
                         
 
                         row.ExtendedSearchInfo = new ExtendedSearchInfo

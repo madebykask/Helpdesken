@@ -821,6 +821,7 @@ namespace DH.Helpdesk.Web.Controllers
             var gridSettings = SessionFacade.CaseOverviewGridSettings;
             sm.Search.SortBy = gridSettings.sortOptions.sortBy;
             sm.Search.Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc;
+            
             m.caseSettings = _caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
             var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
             var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
@@ -828,6 +829,9 @@ namespace DH.Helpdesk.Web.Controllers
             CaseAggregateData aggregateData;
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
             f.MaxTextCharacters = MaxTextCharCount;
+
+            //Show Parent/child icons with hint on Case overview
+            f.FetchInfoAboutParentChild = true;
 
             int recPerPage;
             int pageStart;
