@@ -7203,22 +7203,26 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         if (SessionFacade.CurrentUser.UserGroupId == UserGroups.User || SessionFacade.CurrentUser.UserGroupId == UserGroups.Administrator)
                         {
-                            if (availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
-                                && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId)
-                                && availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
-                            {
-                                infoAvailableInExtended = true;
-                            }
 
 
                             // finns kryssruta pa anvandaren att den bara far se sina egna arenden
                             //Note, this is also checked in where clause  in ReturnCaseSearchWhere(SearchQueryBuildContext ctx)
-                            if (SessionFacade.CurrentUser.RestrictedCasePermission == 1 && infoAvailableInExtended == false && availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
+                            if (SessionFacade.CurrentUser.RestrictedCasePermission == 1 && availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
                                 && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId))
                             {
                                 //Use functionality from VerifyCase
                                 infoAvailableInExtended = _userService.VerifyUserCasePermissions(SessionFacade.CurrentUser, searchRow.Id);
                             }
+
+                            if (infoAvailableInExtended == true && availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
+                               && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId)
+                               && availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
+                            {
+                                infoAvailableInExtended = true;
+                            }
+
+
+
                         }
                         else
                         {
