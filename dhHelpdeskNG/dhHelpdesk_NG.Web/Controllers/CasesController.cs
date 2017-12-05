@@ -7148,6 +7148,7 @@ namespace DH.Helpdesk.Web.Controllers
             #endregion
             
             var availableDepIds = new List<int>();
+            bool accessToAllDepartments = false;
             var availableWgIds = new List<int>();
             var availableCustomerIds = new List<int> { 0 };
             if (isExtendedSearch)
@@ -7163,6 +7164,7 @@ namespace DH.Helpdesk.Web.Controllers
                     if(availableDepIds.Count() == 0)
                     {
                         availableDepIds.Add(0);
+                        accessToAllDepartments = true;
                     }
 
                     //ShowNotAssignedWorkingGroups
@@ -7207,7 +7209,9 @@ namespace DH.Helpdesk.Web.Controllers
 
                             // finns kryssruta pa anvandaren att den bara far se sina egna arenden
                             //Note, this is also checked in where clause  in ReturnCaseSearchWhere(SearchQueryBuildContext ctx)
-                            if (SessionFacade.CurrentUser.RestrictedCasePermission == 1 && availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
+                            //Check for access Department
+                            //Check for access WorkingGroups
+                            if (SessionFacade.CurrentUser.RestrictedCasePermission == 1 && (availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId) || accessToAllDepartments)
                                 && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId))
                             {
                                 //Use functionality from VerifyCase
