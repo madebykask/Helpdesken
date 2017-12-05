@@ -7147,8 +7147,8 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CurrentAdvancedSearch = sm;
             #endregion
             
-            var availableDepIds = new List<int> { 0 };
-            var availableWgIds = new List<int> { 0 };
+            var availableDepIds = new List<int>();
+            var availableWgIds = new List<int>();
             var availableCustomerIds = new List<int> { 0 };
             if (isExtendedSearch)
             {
@@ -7156,8 +7156,20 @@ namespace DH.Helpdesk.Web.Controllers
                 if (user != null)
                 {
                     availableCustomerIds.AddRange(user.Cs.Select(x => x.Id));
-                    availableDepIds.AddRange(user.Departments.Select(x => x.Id));
+                    availableDepIds.AddRange(user.Departments.Where(x => x.Customer_Id == customerId).Select(x => x.Id));
                     availableWgIds.AddRange(user.UserWorkingGroups.Select(x => x.WorkingGroup_Id));
+
+                    //Department, If 0 selected you should have access to all departments
+                    if(availableDepIds.Count() == 0)
+                    {
+                        availableDepIds.Add(0);
+                    }
+
+                    //ShowNotAssignedWorkingGroups
+                    if (SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups == 1)
+                    {
+                        availableWgIds.Add(0);
+                    }
                 }
             }
 
@@ -7189,8 +7201,7 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                     else
                     {
-                        if (SessionFacade.CurrentUser.UserGroupId == UserGroups.User ||
-                            SessionFacade.CurrentUser.UserGroupId == UserGroups.Administrator)
+                        if (SessionFacade.CurrentUser.UserGroupId == UserGroups.User || SessionFacade.CurrentUser.UserGroupId == UserGroups.Administrator)
                         {
                             if (availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
                                 && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId)
@@ -7204,34 +7215,9 @@ namespace DH.Helpdesk.Web.Controllers
                             //Note, this is also checked in where clause  in ReturnCaseSearchWhere(SearchQueryBuildContext ctx)
                             if (SessionFacade.CurrentUser.RestrictedCasePermission == 1 && infoAvailableInExtended == false && availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
                                 && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId))
-                            { 
-                                if (SessionFacade.CurrentUser.UserGroupId == UserGroups.Administrator)
-                                { 
-
-                                    if (searchRow.ExtendedSearchInfo.Performer_User_Id.HasValue && searchRow.ExtendedSearchInfo.Performer_User_Id.Value == SessionFacade.CurrentUser.Id)
-                                    {
-                                        infoAvailableInExtended = true;
-                                    }
-
-                                    if (infoAvailableInExtended == false &&  searchRow.ExtendedSearchInfo.CaseResponsibleUser_Id.HasValue && searchRow.ExtendedSearchInfo.CaseResponsibleUser_Id.Value == SessionFacade.CurrentUser.Id)
-                                    {
-                                        infoAvailableInExtended = true;
-                                    }
-                                }
-                                else if (SessionFacade.CurrentUser.UserGroupId == UserGroups.User)
-                                {
-
-                                    if (searchRow.ExtendedSearchInfo.ReportedBy.ToLower() == SessionFacade.CurrentUser.UserId.ToLower())
-                                    {
-                                        infoAvailableInExtended = true;
-                                    }
-
-                                    if (infoAvailableInExtended == false && searchRow.ExtendedSearchInfo.User_Id.HasValue && searchRow.ExtendedSearchInfo.User_Id.Value == SessionFacade.CurrentUser.Id)
-                                    {
-                                        infoAvailableInExtended = true;
-                                    }
-                                }
-
+                            {
+                                //Use functionality from VerifyCase
+                                infoAvailableInExtended = _userService.VerifyUserCasePermissions(SessionFacade.CurrentUser, searchRow.Id);
                             }
                         }
                         else
@@ -7241,6 +7227,7 @@ namespace DH.Helpdesk.Web.Controllers
                                 infoAvailableInExtended = true;
                             }
                         }
+
                     }
                     jsRow.Add("ExtendedAvailable", infoAvailableInExtended);
                 }
