@@ -461,6 +461,23 @@
                         </div>
                     </div>
                 </div>
+                <h4>@Translation.Get("Avancerad sökning", Enums.TranslationSource.TextTranslation)</h4>
+                <div class="container">
+                    <div class="row">
+                        <div class="span15">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="setting.CustomerInExtendedSearch" @(Model.Setting.CustomerInExtendedSearch == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="setting.CustomerInExtendedSearch" value="0" />
+                                        @Translation.GetCoreTextTranslation("Inkludera kund i Utökad sökning")
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
                 <h4>@Translation.GetCoreTextTranslation("Ärende")</h4>
 
@@ -470,17 +487,8 @@
                     <div class="row">
                         <div class="span12">
                             <table id="customerOrder">
-                                @*Hide temporary this release - Stina*@
-                                @*<tr>
-                                    <td>
-                                        @Translation.GetCoreTextTranslation("Visa begränsat sök resultat")
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" name="setting.CustomerInExtendedSearch" @(Model.Setting.CustomerInExtendedSearch == 1 ? "checked=checked" : "") value="1" />
-                                        <input type="hidden" name="setting.CustomerInExtendedSearch" value="0" />
-                                        @Translation.GetCoreTextTranslation("Inkludera kund i Utökad sökning")
-                                    </td>
-                                </tr>*@
+                                
+                            
                                 <tr>
                                     <td>
                                         @Translation.GetCoreTextTranslation("Anmälare")
@@ -555,6 +563,15 @@
                                         <input type="radio" name="Setting.AttachmentPlacement" @(Model.Setting.AttachmentPlacement == 1 ? "checked='checked'" : "") id="Customer_Setting_AttachmentPlacement1" value="1"/>
                                         @Translation.Get("Visa på Bilagor tab", Enums.TranslationSource.TextTranslation)
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:100px">
+                                        @Translation.Get("Standardärendemall", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.Setting.DefaultCaseTemplateId, Model.CaseSolutionList, "", new { })
+                                    </td>
+
                                 </tr>
                             </table>
                         </div>
@@ -718,4 +735,5 @@
 
         }
     });
+
 </script>

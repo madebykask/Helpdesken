@@ -162,7 +162,25 @@ function getCollapseCaption(cap) {
                             html.push('<img class="img-case-locked" title="', data.caseLockedIconTitle, '" alt="', data.caseLockedIconTitle, '" src="', data.caseLockedIconUrl, '" />');
                         }
                         html.push('</a>');
+
                         row.cells[0].innerHTML = html.join("");
+
+                        html = [];
+                        if (data.ParentId > 0 || data.isParent) {
+
+                            var link = '/Cases/Edit/' + data.ParentId;
+                            var text = appSettings.isParentText; 
+                            var icon = 'fa fa-link';
+
+                            if (data.isParent) {
+                                text = appSettings.isChildText;
+                                link = '/Cases/Edit/' + data.case_id + '#childcases-tab';
+                                icon = 'fa fa-sitemap'; 
+                           }
+                           html.push('<a class="btn btn-mini" href="' + link + '" title="' + text + '"><i style="color: #000 !important;" class="' + icon + '"></i></a>');
+                        }
+                                                    
+                        row.cells[row.cells.length-1].innerHTML = html.join("");
                     }
                 },
                 columns: columns,
@@ -339,6 +357,7 @@ function getCollapseCaption(cap) {
         //};
         var columns = [];
         columns.push({ data: null, width: "18px", orderable: false, defaultContent: "&nbsp;" });
+   
         $.each(gridSettings.columnDefs, function (idx, fieldSetting) {
 
             columns.push({
@@ -361,6 +380,9 @@ function getCollapseCaption(cap) {
                 }
             });
         });
+
+
+        columns.push({ data: null, width: "22px", orderable: false, defaultContent: "&nbsp;" });
 
         return columns;
     };

@@ -226,6 +226,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
                 Department = x.Department,
                 Category = x.Category,
                 FinishingDate = x.FinishingDate?.Date,
+                Statistics = x.Statistics,
                 LogInvoices = x.LogInvoices.Select(y => new LogInvoiceItemViewModel
                 {
                     Id = y.Id,
@@ -273,8 +274,8 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
                     Id = x.Id,
                     WorkingTime = x.WorkingTime,
                     Overtime = x.Overtime,
-                    EquipmentPrice = x.Price,
-                    Price = x.Material,
+                    EquipmentPrice = x.Material,
+                    Price = x.Price,
                     Charge = x.Charge
                 }).ToList());
             }

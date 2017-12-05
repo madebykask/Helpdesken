@@ -12,7 +12,11 @@
             FieldOverviewSetting attachedFile, 
             FieldOverviewSetting finishingDescription, 
             FieldOverviewSetting finishingDate, 
-            FieldOverviewSetting finishingCause)
+            FieldOverviewSetting finishingCause,
+            FieldOverviewSetting totalMaterial,
+            FieldOverviewSetting totalOverTime,
+            FieldOverviewSetting totalPrice,
+            FieldOverviewSetting totalWork)
         {
             this.FinishingCause = finishingCause;
             this.FinishingDate = finishingDate;
@@ -21,6 +25,10 @@
             this.Debiting = debiting;
             this.ExternalLogNote = externalLogNote;
             this.InternalLogNote = internalLogNote;
+            this.TotalMaterial = totalMaterial;
+            this.TotalOverTime = totalOverTime;
+            this.TotalPrice = totalPrice;
+            this.TotalWork = totalWork;
         }
 
         [NotNull]
@@ -43,5 +51,14 @@
 
         [NotNull]
         public FieldOverviewSetting FinishingCause { get; private set; }
+
+        [NotNull]
+        public FieldOverviewSetting TotalMaterial { get; private set; }
+        [NotNull]
+        public FieldOverviewSetting TotalOverTime { get; private set; }
+        [NotNull]
+        public FieldOverviewSetting TotalPrice { get; private set; }
+        [NotNull]
+        public FieldOverviewSetting TotalWork { get; private set; }
     }
 }

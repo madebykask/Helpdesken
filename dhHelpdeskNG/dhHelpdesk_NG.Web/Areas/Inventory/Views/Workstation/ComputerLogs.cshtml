@@ -9,10 +9,12 @@
     using (Html.BeginForm("NewComputerLog", "Workstation", FormMethod.Post, new { id = "log_edit_form" }))
     {
         @Html.EditorFor(x => Model.ComputerLogModel)
-        <input type="submit" value="@Translation.Get("Lägg till")" class="btn"/>
+        @Html.HiddenFor(m => m.ComputerLogModel.IsForDialog)
+        <input type="submit" value="@Translation.GetCoreTextTranslation("Lägg till")" class="btn"/>
     }
 }
 @{ var extraData = new ViewDataDictionary();
-   extraData.Add(new KeyValuePair<string,object>("InventoryAdminPermission", Model.UserHasInventoryAdminPermission));  
+    extraData.Add(new KeyValuePair<string,object>("InventoryAdminPermission", Model.UserHasInventoryAdminPermission));
+    extraData.Add(new KeyValuePair<string, object>("IsForDialog", Model.IsForDialog));
  }
 @Html.Partial("LogGrid", Model.ComputerLogs, extraData)

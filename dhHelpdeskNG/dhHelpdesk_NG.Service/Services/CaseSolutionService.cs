@@ -229,7 +229,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CaseSolution> GetCaseSolutions()
         {
-            return this._caseSolutionRepository.GetMany(x => x.Status >= 0).OrderBy(x => x.Name).ToList();
+            return this._caseSolutionRepository.GetMany(x => x.Status >= 0).OrderBy(x => x.Customer.Name).ThenBy(x => x.Name).ToList();
         }
 
         public IList<CaseSolution_SplitToCaseSolutionEntity> GetSplitToCaseSolutionDescendants(CaseSolution self, int[] descendantIds)

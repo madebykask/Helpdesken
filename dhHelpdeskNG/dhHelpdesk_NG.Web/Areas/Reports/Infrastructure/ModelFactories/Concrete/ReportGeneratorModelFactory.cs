@@ -155,6 +155,10 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.FinishingDescription, LogFields.FinishingDescription, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.FinishingDate, LogFields.FinishingDate, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.FinishingCause, LogFields.FinishingCause, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.TotalWork, LogFields.TotalWork, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.TotalOverTime, LogFields.TotalOverTime, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.TotalMaterial, LogFields.TotalMaterial, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.TotalPrice, LogFields.TotalPrice, headers);
         }
 
         #endregion
@@ -259,7 +263,11 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
             //FieldSettingsHelper.CreateValueIfNeeded(settings.AttachedFile, LogFields.AttachedFile, attachedFiles, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.FinishingDescription, LogFields.FinishingDescription, fields.FinishingDescription, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.FinishingDate, LogFields.FinishingDate, fields.ClosingDate, values);
-            FieldSettingsHelper.CreateValueIfNeeded(settings.FinishingCause, LogFields.FinishingCause, fields.FinishingCause, values);            
+            FieldSettingsHelper.CreateValueIfNeeded(settings.FinishingCause, LogFields.FinishingCause, fields.FinishingCause, values);
+            FieldSettingsHelper.CreateTotalTimeValueIfNeeded(settings.TotalWork, LogFields.TotalWork, fields.TotalWork, values);
+            FieldSettingsHelper.CreateTotalTimeValueIfNeeded(settings.TotalOverTime, LogFields.TotalOverTime, fields.TotalOverTime, values);
+            FieldSettingsHelper.CreateTotalValueIfNeeded(settings.TotalMaterial, LogFields.TotalMaterial, fields.TotalMaterial, values);
+            FieldSettingsHelper.CreateTotalValueIfNeeded(settings.TotalPrice, LogFields.TotalPrice, fields.TotalPrice, values);
         }
 
         #endregion

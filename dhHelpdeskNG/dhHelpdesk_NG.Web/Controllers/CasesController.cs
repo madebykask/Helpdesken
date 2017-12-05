@@ -503,17 +503,13 @@ namespace DH.Helpdesk.Web.Controllers
                 extendedCustomers = _settingService.GetExtendedSearchIncludedCustomers();
                 foreach (var includedCustomer in extendedCustomers)
                 {
-                    if (!customers.Contains(includedCustomer))
-                    {
-                        customers.Add(includedCustomer);
-                    }
+                    res.Add(AdvancedSearchForCustomer(frm, includedCustomer, isExtendedSearch, extendedCustomers));
                 }
             }
-            
 
-            foreach (var customer in customers)
+            foreach (var customer in customers.Except(extendedCustomers))
             {
-                res.Add(AdvancedSearchForCustomer(frm, customer, isExtendedSearch, extendedCustomers));
+                res.Add(AdvancedSearchForCustomer(frm, customer, false, extendedCustomers));
             }
 
             var totalCount = res.Sum(x => x.Item1.Count);
@@ -522,7 +518,6 @@ namespace DH.Helpdesk.Web.Controllers
 
             return this.Json(new { result = "success", data = ret });
         }
-
         #endregion
 
         #region --Case Overview--
@@ -951,7 +946,9 @@ namespace DH.Helpdesk.Web.Controllers
                     {"caseIconUrl", $"/Content/icons/{searchRow.CaseIcon.CaseIconSrc()}"},
                     {"isUnread", searchRow.IsUnread},
                     {"isUrgent", searchRow.IsUrgent},
-                    {"isClosed", searchRow.IsUrgent}
+                    {"isClosed", searchRow.IsUrgent},
+                    {"isParent", searchRow.IsParent},
+                    {"ParentId", searchRow.ParentId}
                 };
 
                 var caseLock = casesLocks.Where(x => x.CaseId == caseId).FirstOrDefault();
@@ -1356,6 +1353,19 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 customerId = SessionFacade.CurrentCustomer.Id;
+            }
+
+            //Check if customer has a default casetemplate
+            if (!templateId.HasValue && customerId.HasValue)
+            {
+                var setting = this._settingService.GetCustomerSetting(customerId.Value);
+
+                if (setting.DefaultCaseTemplateId != 0)
+                {
+                    templateId = setting.DefaultCaseTemplateId;
+                    templateistrue = 1;
+                }
+
             }
 
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
@@ -1893,23 +1903,9 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
         }
 
-        public JsonResult GetDepartmentInvoiceParameters(int? departmentId)
+        public JsonResult GetDepartmentInvoiceParameters(int? departmentId, int? ouId)
         {
-            if (departmentId.HasValue)
-            {
-                var d = _departmentService.GetDepartment(departmentId.Value);
-                return Json(new
-                {
-                    ShowInvoice = d.ShowInvoice.ToBool(),
-                    ChargeMandatory = d.ChargeMandatory.ToBool(),
-                    Charge = d.Charge.ToBool(),
-                    ShowInvoiceTime = d.ShowInvoiceTime,
-                    ShowInvoiceOvertime = d.ShowInvoiceOvertime,
-                    ShowInvoiceMaterial = d.ShowInvoiceMaterial,
-                    ShowInvoicePrice = d.ShowInvoicePrice
-                }, JsonRequestBehavior.AllowGet);
-            }
-            return null;
+            return departmentId.HasValue? GetInvoiceTime(departmentId.Value, ouId) : null;
         }
 
         public JsonResult ChangeDepartment(int? id, int customerId)
@@ -7151,8 +7147,8 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CurrentAdvancedSearch = sm;
             #endregion
             
-            var availableDepIds = new List<int> ();
-            var availableWgIds = new List<int> { 0 };
+            var availableDepIds = new List<int>();
+            var availableWgIds = new List<int>();
             var availableCustomerIds = new List<int> { 0 };
             if (isExtendedSearch)
             {
@@ -7160,8 +7156,20 @@ namespace DH.Helpdesk.Web.Controllers
                 if (user != null)
                 {
                     availableCustomerIds.AddRange(user.Cs.Select(x => x.Id));
-                    availableDepIds.AddRange(user.Departments.Select(x => x.Id));
+                    availableDepIds.AddRange(user.Departments.Where(x => x.Customer_Id == customerId).Select(x => x.Id));
                     availableWgIds.AddRange(user.UserWorkingGroups.Select(x => x.WorkingGroup_Id));
+
+                    //Department, If 0 selected you should have access to all departments
+                    if(availableDepIds.Count() == 0)
+                    {
+                        availableDepIds.Add(0);
+                    }
+
+                    //ShowNotAssignedWorkingGroups
+                    if (SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups == 1)
+                    {
+                        availableWgIds.Add(0);
+                    }
                 }
             }
 
@@ -7193,15 +7201,28 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                     else
                     {
-                        if (SessionFacade.CurrentUser.UserGroupId == UserGroups.User ||
-                            SessionFacade.CurrentUser.UserGroupId == UserGroups.Administrator)
+                        if (SessionFacade.CurrentUser.UserGroupId == UserGroups.User || SessionFacade.CurrentUser.UserGroupId == UserGroups.Administrator)
                         {
-                            if (availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
-                                && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId)
-                                && availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
+
+
+                            // finns kryssruta pa anvandaren att den bara far se sina egna arenden
+                            //Note, this is also checked in where clause  in ReturnCaseSearchWhere(SearchQueryBuildContext ctx)
+                            if (SessionFacade.CurrentUser.RestrictedCasePermission == 1 && availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
+                                && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId))
+                            {
+                                //Use functionality from VerifyCase
+                                infoAvailableInExtended = _userService.VerifyUserCasePermissions(SessionFacade.CurrentUser, searchRow.Id);
+                            }
+
+                            if (infoAvailableInExtended == true && availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
+                               && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId)
+                               && availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
                             {
                                 infoAvailableInExtended = true;
                             }
+
+
+
                         }
                         else
                         {
@@ -7210,8 +7231,13 @@ namespace DH.Helpdesk.Web.Controllers
                                 infoAvailableInExtended = true;
                             }
                         }
+
                     }
                     jsRow.Add("ExtendedAvailable", infoAvailableInExtended);
+                }
+                else
+                {
+                    jsRow.Add("ExtendedAvailable", true);
                 }
 
                 foreach (var col in gridSettings.columnDefs)
@@ -7250,6 +7276,25 @@ namespace DH.Helpdesk.Web.Controllers
             return _customerDepartments[customerId];
         }
 
+        private JsonResult GetInvoiceTime(int departmentId, int? ouId = null)
+        {
+            var canShow = _departmentService.CanShowInvoice(departmentId, ouId);
+            if (canShow)
+            {
+                var d = _departmentService.GetDepartment(departmentId);
+                return Json(new
+                {
+                    ShowInvoice = d.ShowInvoice.ToBool(),
+                    ChargeMandatory = d.ChargeMandatory.ToBool(),
+                    Charge = d.Charge.ToBool(),
+                    ShowInvoiceTime = d.ShowInvoiceTime,
+                    ShowInvoiceOvertime = d.ShowInvoiceOvertime,
+                    ShowInvoiceMaterial = d.ShowInvoiceMaterial,
+                    ShowInvoicePrice = d.ShowInvoicePrice
+                }, JsonRequestBehavior.AllowGet);
+            }
+            return null;
+        }
         #endregion
     }
 

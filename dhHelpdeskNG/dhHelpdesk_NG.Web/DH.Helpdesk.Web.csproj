@@ -33,7 +33,7 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <IISExpressSSLPort>44302</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <DontImportPostSharp>True</DontImportPostSharp>
     <TargetFrameworkProfile />
@@ -212,6 +212,7 @@
     <Reference Include="System.Net.Http.WebRequest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Net.Http.WebRequest.dll</HintPath>
     </Reference>
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Cors, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.0.0\lib\net45\System.Web.Cors.dll</HintPath>
@@ -316,6 +317,7 @@
     <Compile Include="Infrastructure\Helpers\AsyncHelper.cs" />
     <Compile Include="Infrastructure\Helpers\TranslateHelper.cs" />
     <Compile Include="Infrastructure\WebApi\WebApiService.cs" />
+    <Compile Include="Models\Case\InvoiceTimeModel.cs" />
     <Compile Include="Models\JsonModels\Base\BaseJsonModel.cs" />
     <Compile Include="Models\JsonModels\Case\CaseJsonModel.cs" />
     <Compile Include="Models\WebApi\TokenModel.cs" />
@@ -345,6 +347,7 @@
     <Compile Include="Areas\Invoices\Models\LogInvoiceItemViewModel.cs" />
     <Content Include="Areas\Admin\Content\js\OrderType\index.logic.js" />
     <Content Include="Areas\Admin\Content\js\QuickLinks\index.logic.js" />
+    <Content Include="Areas\Inventory\Scripts\inventoryOverview.js" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\Partials\OrderFieldWebTypes.cshtml" />
     <Content Include="Areas\Invoices\Scripts\Pages\invoiceFiles.js" />
     <Content Include="Areas\Invoices\Views\Overview\Files.cshtml" />
@@ -582,6 +585,8 @@
     <Content Include="Content\css\images\sort_desc.png" />
     <Content Include="Content\css\print.css" />
     <Content Include="Content\css\select2.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\icons\advanced_search.png" />
     <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\icons\clip.png" />
@@ -1973,6 +1978,7 @@
     <Content Include="Content\themes\flick\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\themes\flick\jquery-ui-1.8.4.custom.css" />
     <Content Include="favicon.ico" />
+    <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\Predifened_CostCentre.xml" />
     <Content Include="FormLibContent\Areas\SouthKorea\Shared\SouthKoreaJS.js" />
     <Content Include="FormLibContent\Assemblies\ECT.Core.dll" />
@@ -3271,6 +3277,12 @@
     <Content Include="Content\js\DynamicCase\iframeResizer.contentWindow.map" />
     <Content Include="Content\js\DynamicCase\iframeResizer.map" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\Modals\OrderFieldTypeModal.cshtml" />
+    <Content Include="Areas\Admin\Views\Department\_Invoicing.cshtml" />
+    <Content Include="Content\fonts\FontAwesome.otf" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\fonts\fontawesome-webfont.eot" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />
@@ -3934,6 +3946,7 @@
     <Content Include="Views\Cases\ModalDialogs\_CaseAttachExistFile.cshtml" />
     <Content Include="Views\Shared\_CaseDocumentPrint.cshtml" />
     <Content Include="Views\Cases\_CaseInformation.cshtml" />
+    <Content Include="Views\Cases\_CaseValidation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">
@@ -4653,6 +4666,7 @@
     <Folder Include="Areas\Inventory\Infrastucture\" />
     <Folder Include="FormLibContent\Xmls\Norway\Data\AdditionalPaymentsDeductions\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
+    <Folder Include="rss\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Login\Login.cshtml" />

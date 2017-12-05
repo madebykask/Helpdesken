@@ -138,6 +138,8 @@
                             @Html.HiddenFor(model => Model.OU.Parent_OU_Id)
                             @Html.HiddenFor(model => Model.OU.Code)
                             @Html.HiddenFor(model => Model.OU.SearchKey)
+                            @Html.HiddenFor(model => Model.OU.ShowInvoice)
+
                             <input type="hidden" id="sdepartments" value="@Model.SDepartments.ToJavaScriptObject()" />
                             <input type="hidden" id="allAvailableOrganizationUnits" value="@Model.AllAvailableOrganizationUnits.ToJavaScriptObject()" />
                             <input type="hidden" id="parentId" value="@Model.OU.Parent_OU_Id" />

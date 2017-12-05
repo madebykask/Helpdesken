@@ -12,17 +12,24 @@
             <li id="menu1">
                 <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#workstation_edit_form').submit(); "/>
             </li>
-            <li id="menu3">
-                @Html.ActionLink(Translation.Get("Ta bort"), "Delete", new { id = Model.ComputerViewModel.Id }, new
-                      { @class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?" })
-        </li>
+            if (!Model.IsForDialog)
+            {
+                <li id="menu3">
+                    @Html.ActionLink(Translation.Get("Ta bort"), "Delete", new {id = Model.ComputerViewModel.Id}, new
+                    {@class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?"})
+                </li>
+            }
         }
-        <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
+        @if (!Model.IsForDialog)
+        {
+            <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new {@class = "btn"})</li>
+        }
     </ul>
 }
 
 @using (Html.BeginForm("Edit", "Workstation", FormMethod.Post, new { id = "workstation_edit_form" }))
 {
+    @Html.HiddenFor(m => m.ComputerViewModel.IsForDialog)
     @Html.HiddenFor(m => m.ComputerViewModel.Id)
     @Html.EditorFor(m => m.ComputerViewModel.WorkstationFieldsViewModel)
     @Html.EditorFor(m => m.ComputerViewModel.ChassisFieldsModel)
@@ -85,4 +92,5 @@
         </div>
     </div>
 }
+
 

@@ -20,6 +20,8 @@
         private readonly IWatchDateCalendarService _watchDateCalendarService;
         private readonly ISettingService _settingService;
         private readonly ILanguageService _languageService;
+        private readonly IOUService _ouService;
+
 
         public DepartmentController(
             ICountryService countryService,
@@ -30,17 +32,19 @@
             ICustomerService customerService,
             IMasterDataService masterDataService,
             ISettingService settingService,
-            ILanguageService languageService)
+            ILanguageService languageService,
+            IOUService ouService)
             : base(masterDataService)
         {
-            this._countryService = countryService;
-            this._departmentService = departmentService;
-            this._regionService = regionService;
-            this._holidayService = holidayService;
-            this._watchDateCalendarService = watchDateCalendarService;
-            this._customerService = customerService;
-            this._settingService = settingService;
-            this._languageService = languageService;
+            _countryService = countryService;
+            _departmentService = departmentService;
+            _regionService = regionService;
+            _holidayService = holidayService;
+            _watchDateCalendarService = watchDateCalendarService;
+            _customerService = customerService;
+            _settingService = settingService;
+            _languageService = languageService;
+            _ouService = ouService;
 
         }
 
@@ -73,16 +77,16 @@
         }
 
         [HttpPost]
-        public ActionResult New(Department department)
+        public ActionResult New(Department department, int[] invoiceSelectedOUs)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._departmentService.SaveDepartment(department, out errors);
+            _departmentService.SaveDepartment(department, invoiceSelectedOUs, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("index", "department", new { customerId = department.Customer_Id });
+                return RedirectToAction("index", "department", new { customerId = department.Customer_Id });
 
-            var customer = this._customerService.GetCustomer(department.Customer_Id);
-            var model = this.CreateInputViewModel(department, customer);
+            var customer = _customerService.GetCustomer(department.Customer_Id);
+            var model = CreateInputViewModel(department, customer);
 
             return this.View(model);
         }
@@ -101,18 +105,18 @@
         }
 
         [HttpPost]
-        public ActionResult Edit(Department department)
+        public ActionResult Edit(Department department, int[] invoiceSelectedOUs)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._departmentService.SaveDepartment(department, out errors);
+            _departmentService.SaveDepartment(department, invoiceSelectedOUs, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("index", "department", new { customerId = department.Customer_Id });
+                return RedirectToAction("index", "department", new { customerId = department.Customer_Id });
 
-            var customer = this._customerService.GetCustomer(department.Customer_Id);
-            var model = this.CreateInputViewModel(department, customer);
+            var customer = _customerService.GetCustomer(department.Customer_Id);
+            var model = CreateInputViewModel(department, customer);
 
-            return this.View(model);
+            return View(model);
         }
 
         [HttpPost]
@@ -131,36 +135,53 @@
 
         private DepartmentInputViewModel CreateInputViewModel(Department department, Customer customer)
         {
+            var allOUsForDep = _ouService.GetOuForDepartment(department.Id).Where(d=> d.Parent_OU_Id == null || (d.Parent?.Parent == null));
+            var invoiceAvailableOUs = allOUsForDep.Where(o => !o.ShowInvoice).Select(x => new SelectListItem
+            {                
+                Text = (x.Parent == null)? x.Name : $"{x.Parent.Name} - {x.Name}",
+                Value = x.Id.ToString(),
+                Disabled = x.IsActive == 0
+            }).ToList();
+
+            var invoiceSelectedOUs = allOUsForDep.Where(o => o.ShowInvoice).Select(x => new SelectListItem
+            {
+                Text = (x.Parent == null) ? x.Name : $"{x.Parent.Name} - {x.Name}",
+                Value = x.Id.ToString(),
+                Disabled = x.IsActive == 0
+            }).ToList();
+
             var model = new DepartmentInputViewModel
             {
                 Department = department,
                 Customer = customer,
-                CustomerSettings = this._settingService.GetCustomerSettings(customer.Id),
-                Regions = this._regionService.GetRegions(customer.Id).Where(x => x.IsActive == 1).Select(x => new SelectListItem
+                CustomerSettings = _settingService.GetCustomerSettings(customer.Id),
+                Regions = _regionService.GetRegions(customer.Id).Where(x => x.IsActive == 1).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Countries = this._countryService.GetCountries(customer.Id).Select(x => new SelectListItem
+                Countries = _countryService.GetCountries(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Holidays = this._holidayService.GetHolidayHeaders().Select(x => new SelectListItem
+                Holidays = _holidayService.GetHolidayHeaders().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(), 
-                WatchDateCalendar = this._watchDateCalendarService.GetAllWatchDateCalendars().Select(x => new SelectListItem
+                WatchDateCalendar = _watchDateCalendarService.GetAllWatchDateCalendars().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
+                Languages = _languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
+                InvoiceAvailableOUs = invoiceAvailableOUs,
+                InvoiceSelectedOUs = invoiceSelectedOUs 
             };
 
             return model;

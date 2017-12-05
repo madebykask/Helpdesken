@@ -22,6 +22,7 @@
         var caseCloseFrom = "#ReportFilter_CaseClosingDate_FromDate";
         var caseCloseTo = "#ReportFilter_CaseClosingDate_ToDate";
         var reportCategoryDropdown = "#lstfilterReportCategory";
+        var reportCategoryDropdownRt = "#lstfilterReportCategoryRt";
 
         /*specify all extra parameters element*/
         var $extraParameters = $("#reportCategoryParam");
@@ -256,6 +257,7 @@
             var productArea = "";
             var status = "";
             var reportCategory = "";
+            var reportCategoryRt = "";
 
             customer = currentCustomerId;
 
@@ -282,6 +284,7 @@
             status = $(statusList + " option:selected").val();
 
             reportCategory = $(reportCategoryDropdown + " option:selected").val();
+            reportCategoryRt = $(reportCategoryDropdownRt + " option:selected").val();
 
             var regDateFrom = $(caseCreateFrom).val();
             var regDateTo = $(caseCreateTo).val();
@@ -304,6 +307,7 @@
                     'filter.CloseFrom': closeDateFrom,
                     'filter.CloseTo': closeDateTo,
                     'filter.ReportCategory': reportCategory,
+                    'filter.ReportCategoryRt': reportCategoryRt,
                     curTime: new Date().getTime()
                 },
                 function (reportPresentation) {
@@ -478,12 +482,20 @@
   
             switch (reportName) {
                 case "NumberOfCases":
-                    $("#lstfilterReportCategory").show()
+                    $("#lstfilterReportCategory").show();
+                    $("#lstfilterReportCategoryRt").hide();
+                    $("#lstfilterReportCategory_repl").hide();
+                    break;
+
+                case "ReportedTime":
+                    $("#lstfilterReportCategory").hide();
+                    $("#lstfilterReportCategoryRt").show();
                     $("#lstfilterReportCategory_repl").hide();
                     break;
 
                 default:
-                    $("#lstfilterReportCategory").hide()
+                    $("#lstfilterReportCategory").hide();
+                    $("#lstfilterReportCategoryRt").hide();
                     $("#lstfilterReportCategory_repl").show();
                     break;
             }

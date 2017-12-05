@@ -15,6 +15,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Tools
         private static string SOLVED_IN_TIME = "Rätt tid";
         private static string NOT_SOLVED_IN_TIME = "Ej rätt tid";
         private static string SOLVED_TIME_IS_NOT_CALCULATED = " - ";
+        private static string TOTAL_HOUR = "Tim";
+        private static string TOTAL_MINUTE = "Min";
 
         public static void CreateHeaderIfNeeded(
             FieldOverviewSetting setting,
@@ -143,5 +145,36 @@ namespace DH.Helpdesk.Web.Infrastructure.Tools
             CreateValueIfNeeded(setting, fieldName, displayValue, values);
         }
 
+        public static void CreateTotalValueIfNeeded(FieldOverviewSetting setting, string fieldName, decimal? value, List<NewGridRowCellValueModel> values)
+        {
+            if (!setting.Show)
+            {
+                return;
+            }
+
+            var tempValue = string.Empty;
+
+            if (value.HasValue && value.Value > 0)
+                tempValue = value.Value.ToString("0.00");
+
+            var fieldValue = new NewGridRowCellValueModel(fieldName, new StringDisplayValue(tempValue));
+            values.Add(fieldValue);
+        }
+
+        public static void CreateTotalTimeValueIfNeeded(FieldOverviewSetting setting, string fieldName, int? value, List<NewGridRowCellValueModel> values)
+        {
+            if (!setting.Show)
+            {
+                return;
+            }
+
+            var tempValue = string.Empty;
+
+            if (value.HasValue && value.Value > 0)
+                tempValue = string.Format("{0} {1} {2} {3}", value.Value / 60, Translation.GetCoreTextTranslation(TOTAL_HOUR), value.Value % 60, Translation.GetCoreTextTranslation(TOTAL_MINUTE));
+
+            var fieldValue = new NewGridRowCellValueModel(fieldName, new StringDisplayValue(tempValue));
+            values.Add(fieldValue);
+        }
     }
 }

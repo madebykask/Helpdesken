@@ -24,7 +24,7 @@
 
         DeleteMessage DeleteDepartment(int id);
 
-        void SaveDepartment(Department department, out IDictionary<string, string> errors);
+        void SaveDepartment(Department department,int[] invoiceOus, out IDictionary<string, string> errors);
 
         void Commit();
 
@@ -41,6 +41,10 @@
         IEnumerable<Department> GetDepartmentsByIds(int[] departmentsIds);
 
         IList<Department> GetChargedDepartments(int customerId);
+        bool CanShowInvoice(int departmentId, int? ouId = null);
+
+        int? GetDepartmentIdByCustomerAndName(int customerId, string name);
+
     }
 
     public class DepartmentService : IDepartmentService
@@ -51,14 +55,19 @@
 
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
+        private readonly IOrganizationUnitRepository _ouRepository;
+
+
         public DepartmentService(
             IDepartmentRepository departmentRepository,
             IUnitOfWork unitOfWork, 
-            IUnitOfWorkFactory unitOfWorkFactory)
+            IUnitOfWorkFactory unitOfWorkFactory,
+            IOrganizationUnitRepository ouRepository)
         {
-            this._departmentRepository = departmentRepository;
-            this._unitOfWork = unitOfWork;
-            this._unitOfWorkFactory = unitOfWorkFactory;
+            _departmentRepository = departmentRepository;
+            _unitOfWork = unitOfWork;
+            _unitOfWorkFactory = unitOfWorkFactory;
+            _ouRepository = ouRepository;
         }
 
         public IList<Department> GetDepartments(int customerId, ActivationStatus isActive = ActivationStatus.Active)
@@ -202,7 +211,7 @@
             return this._departmentRepository.GetAll().Where(it => deptMap.ContainsKey(it.Id));
         }
 
-        public void SaveDepartment(Department department, out IDictionary<string, string> errors)
+        public void SaveDepartment(Department department,int[] invoiceOus, out IDictionary<string, string> errors)
         {
             if (department == null)
             {
@@ -239,7 +248,36 @@
             {
                 this.Commit();
             }
+
+            var ous = _ouRepository.GetMany(x => x.Department_Id == department.Id);
+            if (ous.Any())
+            {
+                try
+                {
+                    foreach (var ou in ous)
+                    {
+                        ou.ShowInvoice = invoiceOus != null && invoiceOus.Contains(ou.Id);
+                        _ouRepository.Update(ou);
+                    }
+                    Commit();
+                }
+                catch (Exception ex)
+                {
+                    errors.Add(new KeyValuePair<string, string>("Invoice OUs", ex.Message));
+                }
+            }
         }
+
+        public int? GetDepartmentIdByCustomerAndName(int customerId, string name)
+        {
+            var department = this._departmentRepository.Get(x => x.Customer_Id == customerId && x.DepartmentName.ToLower() == name.ToLower());
+
+            if (department != null)
+                return department.Id;
+
+            return null;
+        }
+
 
         public void Commit()
         {
@@ -260,6 +298,20 @@
         {
             return this._departmentRepository.GetMany(x => x.Customer_Id == customerId && x.Charge == 1)
                 .OrderBy(x => x.DepartmentName).ToList();
+        }
+
+        
+        public bool CanShowInvoice(int departmentId, int? ouId = null)
+        {
+            var ous = _ouRepository.GetMany(o => o.Department_Id.HasValue && o.Department_Id == departmentId);
+            if (!ous.Any(o => o.ShowInvoice))
+                return true;
+
+            if (!ouId.HasValue)
+                return false;
+
+            var ou = ous.FirstOrDefault(o=> o.Id == ouId.Value && o.ShowInvoice);
+            return ou != null;            
         }
     }
 }

@@ -35,6 +35,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
 
         public string ReportCategory { get; set; }
 
+        public string ReportCategoryRt { get; set; }
+
         public string Fields { get; set; }
     }
 
@@ -55,6 +57,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
             ret.CaseCreationDate = new DateToDate(reportFilter.RegisterFrom, reportFilter.RegisterTo);
             ret.CaseClosingDate = new DateToDate(reportFilter.CloseFrom, reportFilter.CloseTo);
             ret.SelectedReportCategory.AddItems(reportFilter.ReportCategory);
+            ret.SelectedReportCategoryRt.AddItems(reportFilter.ReportCategoryRt);
             return ret;
         }
 

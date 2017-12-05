@@ -3,7 +3,7 @@ using DH.Helpdesk.Common.Constants;
 
 namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
-    
+
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -25,9 +25,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using DH.Helpdesk.Web.Models.Case.ChildCase;
 
     using UserGroup = DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup;
-using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
     using System;
     using System.Text.RegularExpressions;
+    using Newtonsoft.Json;
+    using Models.Case;
+    using System.ComponentModel;
+    using System.Data;
+    using System.Web;
 
     public static class HtmlHelperExtension
     {
@@ -1003,6 +1008,51 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
             }
             else
                 return new MvcHtmlString(string.Empty);
+        }
+
+        public static MvcHtmlString JsonToHtmlTable<T>(this string jsonText, string classType = "")
+        {
+            //var jsonData = jsonText.Replace("\"", "'");
+            var dataList = JsonConvert.DeserializeObject<List<T>>(jsonText);
+            var dt = dataList.ToDataTable();
+            return dt.ConvertDataTableToHTML(classType);
+        }
+
+        public static DataTable ToDataTable<T>(this IList<T> data)
+        {
+            PropertyDescriptorCollection props =
+            TypeDescriptor.GetProperties(typeof(T));
+            DataTable table = new DataTable();
+            for (int i = 0; i < props.Count; i++)
+            {
+                PropertyDescriptor prop = props[i];
+                table.Columns.Add(prop.Name, prop.PropertyType);
+            }
+            object[] values = new object[props.Count];
+            foreach (T item in data)
+            {
+                for (int i = 0; i < values.Length; i++)
+                {
+                    values[i] = props[i].GetValue(item);
+                }
+                table.Rows.Add(values);
+            }
+            return table;
+        }
+
+        public static MvcHtmlString ConvertDataTableToHTML(this DataTable dt, string classType = "")
+        {
+            var html = $"<table border='1' class='{classType}'>";            
+            //add rows
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                html += "<tr>";
+                for (int j = 0; j < dt.Columns.Count; j++)
+                    html += (i == 0 ? "<th>" : "<td>") + dt.Rows[i][j].ToString() + (i == 0 ? "</th>" : "</td>");
+                html += "</tr>";
+            }
+            html += "</table>";
+            return new MvcHtmlString(html);
         }
 
         private static MvcHtmlString BuildCaseTypeTreeRow(IList<CaseType> caseTypes, 

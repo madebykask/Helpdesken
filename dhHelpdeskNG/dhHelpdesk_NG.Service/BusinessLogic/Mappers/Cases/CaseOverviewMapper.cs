@@ -159,7 +159,7 @@
                                                    q.SolutionRate, q.CausingPart),
 
                                 q.LogData != null ? new LogsOverview((q.LogData.FinishingType.HasValue && q.FinishingDate.HasValue? closingReasonFullNames[q.LogData.FinishingType.ToString()] : string.Empty), 
-                                                                      q.FinishingDate, q.FinishingDescription, q.AllInternalText, q.AllExtenalText) : new LogsOverview(string.Empty, null, string.Empty, null, null)
+                                                                      q.FinishingDate, q.FinishingDescription, q.AllInternalText, q.AllExtenalText, q.TotalMaterial, q.TotalOverTime, q.TotalPrice, q.TotalWork) : new LogsOverview(string.Empty, null, string.Empty, null, null)
 
                                 )).ToList();
            

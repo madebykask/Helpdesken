@@ -63,6 +63,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         private readonly Dictionary<string, string> _reportTypeNames;
 
         private readonly CustomSelectList _reportCategories;
+        private readonly CustomSelectList _reportCategoriesRt;
 
         public ReportController(
             IMasterDataService masterDataService,
@@ -94,10 +95,12 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 {"-5", "CasesPerAdministrator"},
                 {"-6", "CasesPerDepartment"},
                 {"-7", "NumberOfCases"},
-                {"-8", "AvgResolutionTime" }
+                {"-8", "AvgResolutionTime" },
+                {"-9", "ReportedTime" }
             };
 
             _reportCategories = new CustomSelectList();
+            _reportCategoriesRt = new CustomSelectList();
 
 			var reportCategories = new List<ListItem>()
 			{
@@ -116,7 +119,20 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 				new ListItem("6", "Registration Hour", false)
 			};
 
+            var reprotCategoriesRt = new List<ListItem>
+            {
+                new ListItem("1", "Case Type", false),
+                new ListItem("2", "Case Number", false),
+                new ListItem("3", "Department", false),
+                new ListItem("4", "Priority", false),
+                new ListItem("5", "Product Area", false),
+                new ListItem("6", "Log note date", false),
+                new ListItem("7", "Administrator", false),
+                new ListItem("8", "Working Group", false)
+            };
+
 			_reportCategories.Items.AddItems(reportCategories.OrderBy(o => o.Value).ToList());
+			_reportCategoriesRt.Items.AddItems(reprotCategoriesRt.OrderBy(o => o.Value).ToList());
 
         }
 
@@ -584,7 +600,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             foreach (ItemOverview f in reportOptions.Fields)
                 translatedFields.Add(new ItemOverview
                                             (
-                                                Translation.Get(f.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id),
+                                                Translation.GetCoreTextTranslation(f.Name),
                                                 f.Value
                                             ));
 
@@ -681,7 +697,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 ProductAreas = reportFilter.ProductAreas,
                 Status = GetCaseStateFilter(),
                 UserNameOrientation = customerSettings != null ? customerSettings.IsUserFirstLastNameRepresentation : 1,
-                ReportCategory = _reportCategories
+                ReportCategory = _reportCategories,
+                ReportCategoryRt = _reportCategoriesRt
             };
 
             if (lastState != null)
@@ -718,15 +735,14 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 			var newReports = new List<KeyValuePair<string, string>>()
 			{
 				new KeyValuePair<string, string>("-7", "NumberOfCases"),
-				new KeyValuePair<string, string>("-8", "AvgResolutionTime")
+				new KeyValuePair<string, string>("-8", "AvgResolutionTime"),
+				new KeyValuePair<string, string>("-9", "ReportedTime")
 			};
 
 			// List new report first (order by name) then old reports (order by name)
 			var listItems = newReports
 				.OrderBy(o => o.Value)
-				.Concat(
-					oldReports.OrderBy(o => o.Value)
-				)
+				.Concat(oldReports.OrderBy(o => o.Value))
 				.Select(o => new ListItem(o.Key, o.Value, false))
 				.ToList();
 
@@ -780,16 +796,17 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 reportViewer.LocalReport.ReportPath = reportFile;
 
                 /*Temp solution*/
-                if (reportName == "NumberOfCases")
-                {                    
-                    var selectedReportCategory = reportSelectedFilter.SelectedReportCategory.GetFirstOrDefaultSelected();                    
-                    var itemId = selectedReportCategory != null?selectedReportCategory.Value.ToString() : "1";                  
+                if (reportName == "NumberOfCases" || reportName == "ReportedTime")
+                {
+                    var selectedReportCategory = reportName == "ReportedTime"
+                        ? reportSelectedFilter.SelectedReportCategoryRt.GetFirstOrDefaultSelected()
+                        : reportSelectedFilter.SelectedReportCategory.GetFirstOrDefaultSelected();
+                    var itemId = selectedReportCategory != null ? selectedReportCategory.Value.ToString() : "1";
                     var categoryParam = new ReportParameter("Category", itemId, false);
-                    var paramList = new List<ReportParameter>();
-                    paramList.Add(categoryParam);
+                    var paramList = new List<ReportParameter> {categoryParam};
                     reportViewer.LocalReport.SetParameters(paramList);
                 }
-                
+
                 foreach (var dataSet in reportData.DataSets)
                     reportViewer.LocalReport.DataSources.Add(new ReportDataSource(dataSet.DataSetName, dataSet.DataSet));
 

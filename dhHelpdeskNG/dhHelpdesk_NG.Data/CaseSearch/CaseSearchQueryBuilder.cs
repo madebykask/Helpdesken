@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.OldComponents;
@@ -17,6 +19,12 @@ namespace DH.Helpdesk.Dal.Repositories
     public class CaseSearchQueryBuilder
     {
         private bool _useFts = false;
+        private readonly Regex _fullTextExpression;
+
+        public CaseSearchQueryBuilder()
+        {
+            _fullTextExpression = new Regex("(?:\"([^\"]*)\")|([^\\s]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        }
 
         #region Tables Fields Constants
 
@@ -279,6 +287,11 @@ namespace DH.Helpdesk.Dal.Repositories
             columns.Add("tblCase.FinishingDescription");
             columns.Add("tblCase.Caption");
 
+            columns.Add("tblCase.Performer_User_Id as CasePerformerUserId");
+            columns.Add("tblCase.CaseResponsibleUser_Id as CaseResponsibleUserId");
+            columns.Add("tblCase.User_Id as CaseUserId");
+            columns.Add("(select count(Ancestor_Id)  from tblParentChildCaseRelations where  Ancestor_Id = tblCase.Id) as IsParent");
+            columns.Add("(select Top 1 (Ancestor_Id)  from tblParentChildCaseRelations where  Descendant_Id = tblCase.Id) as ParentCaseId");
             if (searchFilter.MaxTextCharacters > 0)
                 columns.Add(string.Format("Cast(tblCase.[Description] as Nvarchar({0})) as [Description] ", searchFilter.MaxTextCharacters));
             else
@@ -585,7 +598,9 @@ namespace DH.Helpdesk.Dal.Repositories
 
             tables.Add("from tblCase WITH ( NOLOCK, INDEX(IX_tblCase_Customer_Id)) ");
             tables.Add("inner join tblCustomer on tblCase.Customer_Id = tblCustomer.Id ");
-            tables.Add("inner join tblCustomerUser on tblCase.Customer_Id = tblCustomerUser.Customer_Id ");
+            
+            if (ctx.Criterias.SearchFilter.IsExtendedSearch == false)
+                tables.Add("inner join tblCustomerUser on tblCase.Customer_Id = tblCustomerUser.Customer_Id ");
 
             if (ctx.UseFreeTextCaseSearchCTE)
             {
@@ -866,6 +881,7 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             // finns kryssruta pa anvandaren att den bara far se sina egna arenden
+            //Note, this is also checked in CasesController.cs for ExtendedSearch, so if you change logic here, change in controller
             var restrictedCasePermission = searchCriteria.CustomerUserSettings.User.RestrictedCasePermission;
             if (restrictedCasePermission == 1 && !searchFilter.IsExtendedSearch)
             {
@@ -1281,11 +1297,12 @@ namespace DH.Helpdesk.Dal.Repositories
 
         private string GetSqlLike(string field, string text, string combinator = CaseSearchConstants.Combinator_OR, bool userLower = false)
         {
+            
             var sb = new StringBuilder();
             if (!string.IsNullOrEmpty(field) && !string.IsNullOrEmpty(text))
             {
                 sb.Append(" (");
-                var words = text.FreeTextSafeForSqlInject().ToLower().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var words = GetSearchWords(text);
 
                 for (var i = 0; i < words.Length; i++)
                 {
@@ -1350,16 +1367,35 @@ namespace DH.Helpdesk.Dal.Repositories
 
         private string BuildFtsContainsConditionCriteria(string text, bool useWildCard = true)
         {
-            var words = text.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-            var searchCriteriaText = string.Join(" OR ", words.Select(w => FormatFtsContainsConditionValue(w, useWildCard)));
+            var words = GetSearchWords(text);
+
+            var searchCriteriaText = string.Join(" OR ", 
+                words
+                .Where(w => !string.IsNullOrEmpty(w))
+                .Select(w =>
+                {
+                    var isExactPhrase = w.Trim().Split(' ').Length > 1;
+                    return FormatFtsContainsConditionValue(w, isExactPhrase, useWildCard );
+                }));
             return searchCriteriaText;
         }
 
-        private string FormatFtsContainsConditionValue(string text, bool useWildCard = true)
+        private string[] GetSearchWords(string text)
+        {
+            return _fullTextExpression.Matches(text.FreeTextSafeForSqlInject())
+                .Cast<Match>()
+                .Where(v => !string.IsNullOrWhiteSpace(v.Groups[1].Value) || !string.IsNullOrWhiteSpace(v.Groups[2].Value))
+                .Select(v => string.IsNullOrWhiteSpace(v.Groups[2].Value) ? v.Groups[1].Value : v.Groups[2].Value)
+                .Distinct()
+                .ToArray();
+        }
+
+        private string FormatFtsContainsConditionValue(string text, bool isExactPhrase, bool useWildCard = true)
         {
             if (string.IsNullOrEmpty(text))
                 return null;
 
+            if (isExactPhrase) return $"\"{text}\"";
             return useWildCard ? $"\"{text}*\"" : $"{text}";
         }
 

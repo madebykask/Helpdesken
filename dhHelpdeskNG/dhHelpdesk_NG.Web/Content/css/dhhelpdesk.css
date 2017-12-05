@@ -141,6 +141,10 @@ input[type="text"] {
     width: 50px !important;
 }
 
+.inputw55 {
+    width: 55px !important;
+}
+
 .inputw100 {
     width: 100px !important;
 }
@@ -1403,9 +1407,14 @@ table th.thpointer {
         border-bottom: 1px dotted #ccc;
     }
 
-        .box-post div.textrow span {
-            line-height: 100%;
-        }
+    .box-post div.textrow span {
+        line-height: 100%;
+    }
+
+    .box-post div.textrow a {
+        padding: 5px 0 10px 0;
+        text-decoration:underline;
+    }
 /*.box-post div.textrow ul
 {
 	margin-top:0;
@@ -1999,6 +2008,10 @@ td.td-bottom-multiselect .btn-group {
     .ui-sortable .portlet-placeholder * {
         visibility: hidden;
     }
+
+.tooltipType{
+    cursor: pointer;
+}
 
 .tooltip.in {
     opacity: 1;
@@ -3075,6 +3088,8 @@ body.login {
 }
 
 /*** invoice ***/
+
+
 .case-invoice-container {
     font-size: 14px;
     color: #333333;
@@ -3952,4 +3967,10 @@ ul.nav.dh-nav .newcase a:hover{
 }
 ul.nav.dh-nav .newcase a:focus{
     background-color: #204d6a!important;
+}
+
+th.sorting_disabled
+{
+    background-color: #fff !important;
+    background-image: none !important;
 }

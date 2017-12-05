@@ -10,5 +10,7 @@ namespace DH.Helpdesk.Services.Response.Questionnaire
         public string NoteText { get; set; }
 
         public decimal CaseId { get; set; }
+
+        public string CaseSubject { get; set; }
     }
 }

@@ -50,6 +50,7 @@ namespace DH.Helpdesk.Web.Models.Case
 			ExternalInvoices = new List<ExternalInvoiceModel>();
             		this.SelectedWorkflowStep = 0;
 			CaseAttachedExFiles = new List<CaseAttachedExFileModel>();
+            CaseLock = new CaseLockModel();
         }
 
         public string CaseKey { get; set; }

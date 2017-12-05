@@ -11,6 +11,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
     using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using BusinessData.Models.CaseSolution;
 
     public class CustomerCaseSummaryViewModel
     {
@@ -99,5 +100,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         /// Selected representation modes of users first last name 
         /// </summary>
         public UserFirstLastNameModes UserFirstLastNameRepresentationId { get; set; }
+
+        public IList<SelectListItem> CaseSolutionList { get; set; }
     }
 }

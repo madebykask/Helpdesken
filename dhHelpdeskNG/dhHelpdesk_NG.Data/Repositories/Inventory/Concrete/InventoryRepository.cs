@@ -173,7 +173,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         || x.Manufacturer == searchString || x.SerialNumber == searchString);
             }
 
-            query = query.Take(pageSize);
+            /*-1: take all records*/
+            if (pageSize != -1)
+                query = query.Take(pageSize);            
 
             const string Delimeter = "; ";
 

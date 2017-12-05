@@ -338,11 +338,19 @@ namespace DH.Helpdesk.Dal.Repositories
                         row.IsUnread = dr.SafeGetInteger("Status") == 1;
                         row.IsUrgent = timeLeft.HasValue && timeLeft < 0;
                         row.IsClosed = caseFinishingDate.HasValue;
+                        row.IsParent = (dr.SafeGetInteger("IsParent") > 0) ? true :false;
+                        row.ParentId = dr.SafeGetInteger("ParentCaseId");
+                        
+
                         row.ExtendedSearchInfo = new ExtendedSearchInfo
                         {
                             CustomerId = dr.SafeGetInteger("CaseCustomerId"),
                             DepartmentId = dr.SafeGetInteger("Department_Id"),
                             WorkingGroupId = dr.SafeGetInteger("CaseWorkingGroupId"),
+                            Performer_User_Id = dr.SafeGetInteger("CasePerformerUserId"),
+                            CaseResponsibleUser_Id = dr.SafeGetInteger("CaseResponsibleUserId"),
+                            ReportedBy = dr.SafeGetString("ReportedBy"),
+                            User_Id = dr.SafeGetInteger("CaseUserId")
                         };
 
                         if (!row.Ignored)

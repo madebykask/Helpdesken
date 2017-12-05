@@ -20,7 +20,7 @@
 
         public string SearchFor { get; private set; }
 
-        [MinValue(0)]
+        [MinValue(-1)]
         public int RecordsOnPage { get; private set; }
     }
 }

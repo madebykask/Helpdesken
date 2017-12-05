@@ -62,5 +62,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
         int GetComputerCount(int customerId, int? departmentId);
 
         List<ReportModel> FindConnectedToComputerLocationOverviews(int customerId, int? departmentId, string searchFor);
+
+        int GetIdByName(string computerName, int customerId);
     }
 }

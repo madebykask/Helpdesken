@@ -299,6 +299,7 @@
     <Compile Include="Models\Invoice\InvoiceHeader.cs" />
     <Compile Include="Models\Invoice\InvoiceOverview.cs" />
     <Compile Include="Models\Invoice\InvoiceRow.cs" />
+    <Compile Include="Models\Invoice\InvoiceRowStatistics.cs" />
     <Compile Include="Models\Invoice\Xml\ExportInvoiceOrderXML.cs" />
     <Compile Include="Models\Licenses\Computers\ComputerOverview.cs" />
     <Compile Include="Models\DailyReport\Output\DailyReportSubject.cs" />

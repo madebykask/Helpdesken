@@ -33,6 +33,8 @@ namespace DH.Helpdesk.BusinessData.Models.OperationLog.Output
 
         public string CustomerName { get; set; }
 
+        public string LogAction { get; set; }
+
         /// <summary>
         /// Gets or sets the category.
         /// </summary>

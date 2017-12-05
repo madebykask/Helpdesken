@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -20,6 +21,7 @@ namespace DH.Helpdesk.Web.Controllers
     using System.Text;
     using DH.Helpdesk.BusinessData.Models.WorkingGroup;
 
+
     public class OperationLogController : BaseController
     {
         private readonly IOperationLogService _operationLogService;
@@ -33,6 +35,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IEmailService _emailService;
         private readonly IOperationLogEmailLogService _operationLogEmailLogService;
         private readonly ISystemService _systemService;
+        private readonly IGlobalSettingService _globalService;
 
         public OperationLogController(
             IOperationLogService operationLogService,
@@ -46,7 +49,8 @@ namespace DH.Helpdesk.Web.Controllers
             IEmailGroupService emailGroupService,
             IEmailService emailService,
             IOperationLogEmailLogService operationLogEmailLogService,
-            ISystemService systemService)
+            ISystemService systemService,
+            IGlobalSettingService globalService)
             : base(masterDataService)
         {
             this._operationLogService = operationLogService;
@@ -60,6 +64,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._emailService = emailService;
             this._operationLogEmailLogService = operationLogEmailLogService;
             this._systemService = systemService;
+            this._globalService = globalService;
         }
 
         public ActionResult Index()
@@ -277,13 +282,17 @@ namespace DH.Helpdesk.Web.Controllers
                 this._operationLogService.SendOperationLogSMS(operationlogToSave, SMSRecipients, txtSMS, customer);
             }
 
+            SaveRssFeed(operationlogToSave.Customer_Id);
+
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "operationlog");
-            
+
+
             var model = this.OperationLogInputViewModel(operationlogToSave);
             
             return this.View(model);
         }
+
 
         [HttpPost]
         public ActionResult Delete(int id)
@@ -490,5 +499,14 @@ namespace DH.Helpdesk.Web.Controllers
             }
             return builder.ToString();
         }
+
+        private void SaveRssFeed(int customerId)
+        {
+            var logs = _operationLogService.GetRssOperationLogs(customerId);
+            var title = _globalService.GetGlobalSettings().FirstOrDefault()?.ApplicationName;
+            var rss = _operationLogService.CreateRssFeed(RequestExtension.GetAbsoluteUrl(), title, logs);
+            _operationLogService.SaveRssFeed(rss, HttpContext.Request.PhysicalApplicationPath);
+        }
+
     }
 }

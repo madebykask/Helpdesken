@@ -99,55 +99,7 @@
             </div>
         </div>
     }
-    <div id="hiddenCaseFields" style="display: none !important">
-        @Html.HiddenFor(m => m.case_.ReportedBy)
-        @Html.HiddenFor(m => m.case_.PersonsName)
-        @Html.HiddenFor(m => m.case_.PersonsEmail)
-        @Html.HiddenFor(m => m.case_.PersonsPhone)
-        @Html.HiddenFor(m => m.case_.PersonsCellphone)
-        @Html.HiddenFor(m => m.case_.Region_Id)
-        @Html.HiddenFor(m => m.case_.Department_Id)
-        @Html.HiddenFor(m => m.case_.OU_Id)
-        @Html.HiddenFor(m => m.case_.CostCentre)
-        @Html.HiddenFor(m => m.case_.Place)
-        @Html.HiddenFor(m => m.case_.UserCode)
 
-        @Html.HiddenFor(m => m.case_.InventoryNumber)
-        @Html.HiddenFor(m => m.case_.InventoryType)
-        @Html.HiddenFor(m => m.case_.InventoryLocation)
-
-        @Html.HiddenFor(m => m.CustomerRegistrationSourceId)
-        @Html.HiddenFor(m => m.case_.ProductArea_Id)
-        @Html.HiddenFor(m => m.case_.System_Id)
-        @Html.HiddenFor(m => m.case_.Urgency_Id)
-        @Html.HiddenFor(m => m.case_.Impact_Id)
-        @Html.HiddenFor(m => m.case_.Category_Id)
-        @Html.HiddenFor(m => m.case_.Supplier_Id)
-        @Html.HiddenFor(m => m.case_.InvoiceNumber)
-        @Html.HiddenFor(m => m.case_.ReferenceNumber)
-        @Html.HiddenFor(m => m.case_.Caption)
-        @Html.HiddenFor(m => m.case_.Description)
-        @Html.HiddenFor(m => m.case_.Miscellaneous)
-        @Html.HiddenFor(m => m.case_.AgreedDate)
-        @Html.HiddenFor(m => m.case_.Available)
-        @Html.HiddenFor(m => m.case_.Cost)
-        @Html.HiddenFor(m => m.case_.OtherCost)
-        @Html.HiddenFor(m => m.case_.Currency)
-
-        @Html.HiddenFor(m => m.case_.WorkingGroup_Id)
-        @Html.HiddenFor(m => m.ResponsibleUser_Id)
-        @Html.HiddenFor(m => m.Performer_Id)
-        @Html.HiddenFor(m => m.case_.Priority_Id)
-        @Html.HiddenFor(m => m.case_.Status_Id)
-        @Html.HiddenFor(m => m.case_.StateSecondary_Id)
-        @Html.HiddenFor(m => m.case_.Project_Id)
-        @Html.HiddenFor(m => m.case_.Problem_Id)
-        @Html.HiddenFor(m => m.case_.CausingPartId)
-        @Html.HiddenFor(m => m.case_.PlanDate)
-        @Html.HiddenFor(m => m.case_.WatchDate)
-        @Html.HiddenFor(m => m.case_.VerifiedDescription)
-        @Html.HiddenFor(m => m.case_.SolutionRate)
-    </div>
     <div class="row">
         <div class="span12">
             <table class="tableform">
@@ -665,271 +617,60 @@
         $(this).parents(".section-block").removeClass("hideshow");
     });
 
-   function getRules(){
-        var rules = {
-                "case_.ReportedBy": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.PersonsName": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.PersonsEmail": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.PersonsCellPhone": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.PersonsPhone": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.Region_Id": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.Department_Id": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.OU_Id": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.CostCentre":{
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CostCentre.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.Place": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Place.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.UserCode": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.InventoryNumber": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.InventoryLocation": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.ComputerType_Id": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.ProductArea_Id": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.CaseType_Id": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.System_Id": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.Urgency_Id": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.Impact_Id": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.Category_Id": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.Supplier_Id": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.InvoiceNumber": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.ReferenceNumber": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.Caption": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Caption.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.Description": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Description.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.Miscellaneous": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.AgreedDate": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.Available": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Available.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.WorkingGroup_Id": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.CausingPartId": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CausingPart.ToString(), Model.IsCaseReopened)"); }
-                },
-                "ResponsibleUser_Id": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Model.IsCaseReopened)"); }
-                },
-                "Performer_Id": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.Priority_Id": {
-                    required: function () { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.Status_Id": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.StateSecondary_Id": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.PlanDate": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Model.IsCaseReopened)"); }
-                },
-                "case_.WatchDate": {
-                    required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Model.IsCaseReopened)"); }
-                }
-                    }
-        return rules;
-    }
-
-    var validator = $("#target")
-        .validate({
-            ignore: "",
-            rules: getRules(),
-            groups: {
-                logInput: "CaseLog.TextExternal CaseLog.TextInternal"
-            },
-            errorPlacement: function(error, element) {
-                if (element.hasClass("time-field")) {
-                    $("#timeValidationMessage").html(error);
-                } else {
-                    if (element.is("select.chosen-single-select")) {
-                        error.insertAfter($("#" + element.attr("id") + "_chosen"));
-                        error.css("width", "315px");
-                    } else {
-                        error.insertAfter(element);
-                    }
-                }
-            },
-            messages: {
-                "case_.ReportedBy": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.PersonsName": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.PersonsEmail": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.PersonsCellPhone": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.PersonsPhone": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.Region_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.Department_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.OU_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.CostCentre": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.CostCentre.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.Place": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.UserCode": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.InventoryNumber": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.InventoryLocation": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.ComputerType_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.ProductArea_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.CaseType_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.System_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.Urgency_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.Impact_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.Category_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.Supplier_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.InvoiceNumber": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.ReferenceNumber": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.Caption": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.Description": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.Miscellaneous": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.AgreedDate": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.Available": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.WorkingGroup_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.CausingPartId": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.CausingPart.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "Performer_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "ResponsibleUser_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.Priority_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.Status_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.StateSecondary_Id": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.PlanDate": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                },
-                "case_.WatchDate": {
-                    required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-                }
-            }
-        });
-
-    function FieldIsRequired(value) {
-        var ret = false;
-        if (value == '1') {
-            ret = true;
-        }
-        if (value == '2'){
-            var finnishDateValue = $("#CaseLog_FinishingDate").val();
-            var hasCloseDate = finnishDateValue != undefined && finnishDateValue.length > 0;
-            if (hasCloseDate)
-                ret = true;
-            else
-                ret = false;
-        }
-        return ret;
-    }
-
 </script>
+
+
+@if (Model.editLog || Model.newLog)
+{
+    @Html.Partial("~/Views/Cases/_CaseValidation.cshtml", Model)
+
+    <div id="hiddenCaseFields" style="display: none !important">
+        @Html.HiddenFor(m => m.case_.ReportedBy)
+        @Html.HiddenFor(m => m.case_.PersonsName)
+        @Html.HiddenFor(m => m.case_.PersonsEmail)
+        @Html.HiddenFor(m => m.case_.PersonsPhone)
+        @Html.HiddenFor(m => m.case_.PersonsCellphone)
+        @Html.HiddenFor(m => m.case_.Region_Id)
+        @Html.HiddenFor(m => m.case_.Department_Id)
+        @Html.HiddenFor(m => m.case_.OU_Id)
+        @Html.HiddenFor(m => m.case_.CostCentre)
+        @Html.HiddenFor(m => m.case_.Place)
+        @Html.HiddenFor(m => m.case_.UserCode)
+
+        @Html.HiddenFor(m => m.case_.InventoryNumber)
+        @Html.HiddenFor(m => m.case_.InventoryType)
+        @Html.HiddenFor(m => m.case_.InventoryLocation)
+
+        @Html.HiddenFor(m => m.CustomerRegistrationSourceId)
+        @Html.HiddenFor(m => m.case_.ProductArea_Id)
+        @Html.HiddenFor(m => m.case_.System_Id)
+        @Html.HiddenFor(m => m.case_.Urgency_Id)
+        @Html.HiddenFor(m => m.case_.Impact_Id)
+        @Html.HiddenFor(m => m.case_.Category_Id)
+        @Html.HiddenFor(m => m.case_.Supplier_Id)
+        @Html.HiddenFor(m => m.case_.InvoiceNumber)
+        @Html.HiddenFor(m => m.case_.ReferenceNumber)
+        @Html.HiddenFor(m => m.case_.Caption)
+        @Html.HiddenFor(m => m.case_.Description)
+        @Html.HiddenFor(m => m.case_.Miscellaneous)
+        @Html.HiddenFor(m => m.case_.AgreedDate)
+        @Html.HiddenFor(m => m.case_.Available)
+        @Html.HiddenFor(m => m.case_.Cost)
+        @Html.HiddenFor(m => m.case_.OtherCost)
+        @Html.HiddenFor(m => m.case_.Currency)
+
+        @Html.HiddenFor(m => m.case_.WorkingGroup_Id)
+        @Html.HiddenFor(m => m.ResponsibleUser_Id)
+        @Html.HiddenFor(m => m.Performer_Id)
+        @Html.HiddenFor(m => m.case_.Priority_Id)
+        @Html.HiddenFor(m => m.case_.Status_Id)
+        @Html.HiddenFor(m => m.case_.StateSecondary_Id)
+        @Html.HiddenFor(m => m.case_.Project_Id)
+        @Html.HiddenFor(m => m.case_.Problem_Id)
+        @Html.HiddenFor(m => m.case_.CausingPartId)
+        @Html.HiddenFor(m => m.case_.PlanDate)
+        @Html.HiddenFor(m => m.case_.WatchDate)
+        @Html.HiddenFor(m => m.case_.VerifiedDescription)
+        @Html.HiddenFor(m => m.case_.SolutionRate)
+    </div>
+}

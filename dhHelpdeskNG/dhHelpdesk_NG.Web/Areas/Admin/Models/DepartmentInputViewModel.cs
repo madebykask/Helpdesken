@@ -19,5 +19,8 @@
         public CustomerSettings CustomerSettings { get; set; }
 
         public IList<SelectListItem> Languages { get; set; }
+        public IList<SelectListItem> InvoiceAvailableOUs { get; set; }
+        public IList<SelectListItem> InvoiceSelectedOUs { get; set; }
+
     }
 }

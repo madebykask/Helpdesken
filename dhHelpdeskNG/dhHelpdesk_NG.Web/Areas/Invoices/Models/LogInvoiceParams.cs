@@ -9,8 +9,8 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Models
 	{
 		public int Id { get; set; }
 		public bool Charge { get; set; }
-		public decimal Price { get; set; }
-		public int Material { get; set; }
+		public int Price { get; set; }
+		public decimal Material { get; set; }
 		public int WorkingTime { get; set; }
 		public int Overtime { get; set; }
 	}
