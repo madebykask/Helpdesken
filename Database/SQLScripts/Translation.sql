@@ -6395,7 +6395,7 @@ GO
 If not exists (select * from tbltext where id = 1882)
 	insert into tbltext (id, TextString) VALUES (1882, 'Det här ärendet är ett underärende, klicka för att gå till huvudärendet')
 GO
-If not exists (select * from tblTextTranslation where text_id = 1880 and Language_Id = 2)
+If not exists (select * from tblTextTranslation where text_id = 1882 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1882, 2, 'This is a child case, click here to go to parent case')
 GO
 
