@@ -36,7 +36,7 @@ namespace DH.Helpdesk.Web.Models.Notifiers
 			/*new List<ComputerUserCategory>(new ComputerUserCategory[] {
 			new ComputerUserCategory() { ID = 2, Name = "Vendor mock" }
 		});*/
-			ExtendedCasePath = string.Format("http://localhost/ExtendedCase/?formId={0}&autoLoad=true", ExtendedCaseFormID);
+			ExtendedCasePath = string.Format("/ExtendedCase/?formId={0}&autoLoad=true", ExtendedCaseFormID);
 
 			var dropDownItems = ComputerUserCategories.Select(o => new DropDownItem(o.Name, o.ID.ToString())).ToList();
 
