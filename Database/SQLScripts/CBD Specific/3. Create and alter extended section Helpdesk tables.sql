@@ -108,22 +108,24 @@ ALTER TABLE [dbo].[tblComputerUsers] WITH NOCHECK
 
 
 GO
+/****** Object:  StoredProcedure [dbo].[CBD_ComputerUser_Sync]    Script Date: 2017-12-06 16:22:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 -- =============================================
 -- Author:		Johan Weinitz
 -- =============================================
-CREATE PROCEDURE CBD_ComputerUser_Sync 
+CREATE PROCEDURE [dbo].[CBD_ComputerUser_Sync] 
 (
 	@customerID INT,
+	@ouID INT,
 	@computerUserCategoryGUID UNIQUEIDENTIFIER
 )
 AS
 BEGIN
-	--BEGIN TRAN
-
-	DECLARE @now DATETIME = GETUTCDATE(),
+DECLARE @now DATETIME = GETUTCDATE(),
 		@today DATE = GETUTCDATE(),
-		--@departmentID INT = 45464,
-		@ouID INT = 29494,
 		@departmentId NVARCHAR(MAX) = 'IKEA Vendor'
 
 
@@ -179,7 +181,7 @@ BEGIN
 		CLUT_TYPE VARCHAR(3),		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.CLUT_TYPE		-- 'ISV' 
 		CLU_CODE VARCHAR(5),		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.CLU_CODE		-- '0012A'
 		Exported DATETIME NULL,		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.Exported
-		AccountNo VARCHAR(30)		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.ACCOUNT_NO			
+		AccountNo VARCHAR(35)		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.ACCOUNT_NO			
 	)
 
 	DECLARE @inactiveBU TABLE
@@ -663,35 +665,9 @@ BEGIN
 	SELECT 'Expired BU_BANK' [Inactive BU_BANK], * FROM @inactiveBU_BANK ORDER BY CLU_CODE
 	SELECT 'Expired BU_ADDR' [Inactive BU_ADDR], * FROM @inactiveBU_ADDR ORDER BY CLU_CODE
 
-	--SELECT 'Expired BU' [Expired BU], * FROM @expiredBU ORDER BY CLU_CODE
-	--SELECT 'Expired BU_M' [Expired BU_M], * FROM @expiredBU_M ORDER BY CLU_CODE
-	--SELECT 'Expired BU_TR' [Expired BU_TR], * FROM @expiredBU_BANK ORDER BY CLU_CODE
-
-
-
-	--SELECT * FROM @activeBU
-	--SELECT * FROM @activeAddr
-	--SELECT * FROM @activeEmail
-	--SELECT * FROM @activeBank
-
-
-
-	-- 1. insert new vendors
-	-- 2. update new vendor data (active and exported is null)
-	-- 3. remove inactive data (not BU)
-	-- 4. set inactive BU to inactive (no active record sets)
-
-	-- only email when insert, user updates data?
-
-
-	
-
-
-
-
-	--ROLLBACK
 
 END
+
 GO
 
 -- =============================================
