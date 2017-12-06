@@ -1741,5 +1741,15 @@ begin
 end
 
 
+--#59777 Quickopen
+SET IDENTITY_INSERT tblModule ON
+
+  if not exists(Select * from tblModule where id = 13) 
+	INSERT tblModule (Id, Name, [Description]) VALUES (13, 'Snabbåtkomst', 'Snabbåtkomst')  
+
+  SET IDENTITY_INSERT tblModule OFF
+
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.35'

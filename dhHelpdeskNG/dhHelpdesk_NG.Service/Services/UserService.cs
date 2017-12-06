@@ -180,6 +180,7 @@ namespace DH.Helpdesk.Services.Services
         bool IsUserValidAdmin(string userId, string pass);
 
         bool VerifyUserCasePermissions(UserOverview user, int caseId);
+        Expression<Func<Case, bool>> GetCasePermissionFilter(UserOverview user);
     }
 
     public class UserService : IUserService
@@ -1015,6 +1016,26 @@ namespace DH.Helpdesk.Services.Services
             return isAuthorised;
         }
 
+        public Expression<Func<Case, bool>> GetCasePermissionFilter(UserOverview user)
+        {
+            Expression<Func<Case, bool>> casePermissionFilter = null;
+
+            if (user.RestrictedCasePermission.ToBool())
+            {
+                switch (user.UserGroupId)
+                {
+                    case (int)BusinessData.Enums.Admin.Users.UserGroup.Administrator:
+                        return casePermissionFilter = CaseSpecifications.GetByAdministratorOrResponsibleUserExpression(user.Id, user.Id);
+                    case (int)BusinessData.Enums.Admin.Users.UserGroup.User:
+                        return casePermissionFilter = CaseSpecifications.GetByReportedByOrUserId(user.UserId, user.Id);
+
+                }
+            }
+
+            return casePermissionFilter;
+
+        }
+
         /// <summary>
         /// The update user modules.
         /// </summary>
@@ -1281,6 +1302,8 @@ namespace DH.Helpdesk.Services.Services
             switch (module)
             {
                 case Module.QuickLinks:
+                    return null;
+                case Module.CaseQuickOpen:
                     return null;
             }
 

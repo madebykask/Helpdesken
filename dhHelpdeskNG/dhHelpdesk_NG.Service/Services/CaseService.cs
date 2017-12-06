@@ -43,7 +43,8 @@ namespace DH.Helpdesk.Services.Services
     using Feedback;
     using BusinessData.Models.MailTemplates;
     using DH.Helpdesk.Domain.ExtendedCaseEntity;
-
+    using System.Linq.Expressions;
+    using Common.Extensions.String;
 
     public interface ICaseService
     {
@@ -163,6 +164,7 @@ namespace DH.Helpdesk.Services.Services
 
         IList<Case> GetTop100CasesForTest();
         int GetCaseRelatedInventoryCount(int customerId, string userId, UserOverview currentUser);
+        int GetCaseQuickOpen(UserOverview user, string searchFor);
     }
 
     public class CaseService : ICaseService
@@ -2097,6 +2099,24 @@ namespace DH.Helpdesk.Services.Services
                         .GetRelatedInventories(userId, currentUser)
                         .Count();
             }
+        }
+
+        public int GetCaseQuickOpen(UserOverview user, string searchFor)
+        {
+
+            Expression<Func<Case, bool>> casePermissionFilter = _userService.GetCasePermissionFilter(user);
+
+            searchFor = searchFor.Tidy();
+
+            if (searchFor.Length > 0)
+            {
+                var case_ = _caseRepository.GetCaseQuickOpen(user, casePermissionFilter, searchFor);
+
+                if (case_ != null)
+                    return case_.Id;
+            }
+
+            return 0;
         }
 
         #region Private methods

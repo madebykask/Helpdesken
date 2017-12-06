@@ -3948,6 +3948,7 @@
     <Content Include="Views\Cases\_CaseInformation.cshtml" />
     <Content Include="Views\Cases\_CaseValidation.cshtml" />
     <Content Include="Areas\Inventory\Views\Workstation\RelatedInventoryFull.cshtml" />
+    <Content Include="Views\Shared\CaseQuickOpen.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

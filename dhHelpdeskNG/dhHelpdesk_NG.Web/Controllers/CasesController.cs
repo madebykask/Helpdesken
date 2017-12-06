@@ -519,6 +519,36 @@ namespace DH.Helpdesk.Web.Controllers
 
             return this.Json(new { result = "success", data = ret });
         }
+
+        [ValidateInput(false)]
+        public ActionResult QuickOpen(FormCollection frm)
+        {
+            if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
+            {
+                return new RedirectResult("~/Error/Unathorized");
+            }
+
+            string searchFor = frm.ReturnFormValue("txtQuickOpen");
+
+            string notFoundText = Translation.GetCoreTextTranslation("Inget ärende tillgängligt");
+
+            int caseId = _caseService.GetCaseQuickOpen(SessionFacade.CurrentUser, searchFor);
+
+            if (caseId > 0)
+            {
+
+                if (_userService.VerifyUserCasePermissions(SessionFacade.CurrentUser, caseId))
+                {
+                    return this.Json(new { result = "success", data = "/Cases/Edit/" + caseId });
+                }
+                else
+                {
+                    notFoundText = Translation.GetCoreTextTranslation("Åtkomst nekad");
+                }
+            }
+
+            return this.Json(new { result = "error", data = notFoundText });
+        }
         #endregion
 
         #region --Case Overview--

@@ -14,7 +14,8 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
     using DH.Helpdesk.Domain;
     using Mappers;
-    //using System.Data;
+    using System.Linq.Expressions;
+    using System.Data.Linq.SqlClient;
 
     public interface ICaseRepository : IRepository<Case>
     {
@@ -59,6 +60,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IList<int> GetCasesIdsByType(int caseTypeId);
 
         List<Case> GetTop100CasesToTest();
+        Case GetCaseQuickOpen(UserOverview user, Expression<Func<Case, bool>> casePermissionFilter, string searchFor);
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -473,6 +475,28 @@ namespace DH.Helpdesk.Dal.Repositories
         public List<Case> GetTop100CasesToTest()
         {
             return DataContext.Cases.Take(100).ToList();            
+        }
+
+        public Case GetCaseQuickOpen(UserOverview currentUser, Expression<Func<Case, bool>> casePermissionFilter, string searchFor)
+        {
+
+            IQueryable<Case> query;
+
+            query = from _case in DataContext.Set<Case>()
+                    from user in _case.Customer.Users
+                    where (_case.CaseNumber.ToString() == searchFor.Replace("#", "")) && user.Id == currentUser.Id
+                    orderby _case.RegTime descending
+                    select _case;
+
+            if (casePermissionFilter != null)
+            {
+                query = query.Where(casePermissionFilter);
+            }
+
+            if (query.Any())
+                return query.FirstOrDefault();
+
+            return null;
         }
     }
 }

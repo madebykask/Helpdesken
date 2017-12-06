@@ -1,0 +1,119 @@
+﻿<style>
+    .nomargin-padding-bottom {
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+    }
+
+    #btnQuickOpen {
+        float: right;
+        min-width: 100px;
+    }
+
+    #txtQuickOpen {
+        width: 100%;
+    }
+</style>
+<div class="row-fluid">
+    <div class="box-box span12">
+        <div class="box-header portlet-header">
+            <h4>@Translation.GetCoreTextTranslation("Snabbåtkomst") </h4>
+        </div>
+        <div class="box-body portlet-content">
+            <div class="span12 pull-right nomargin-padding-bottom">
+                <div class="box-post">
+                    <form id="frmQuickOpen" name="frmQuickOpen" class="form-inline nomargin-padding-bottom">
+                        <button type="button" id="btnQuickOpen" class="btn">
+                            @Translation.GetCoreTextTranslation("Öppna")
+                        </button>
+                        <div style="overflow: hidden; padding-right: .3em;">
+                            <input id="txtQuickOpen" tabindex="0" name="txtQuickOpen" rel="tooltip" title="@Translation.GetCoreTextTranslation("Ange ärendenummer du vill öppna")" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="@Translation.GetCoreTextTranslation("Ange ärendenummer du vill öppna")" type="text" />
+                        </div>
+                        <span id="messageQuickOpen">&nbsp;</span>
+                    </form>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+
+        $('#txtQuickOpen').focusout(function () {
+            $('#btnQuickOpen').focus();
+        });
+
+        $('#txtQuickOpen').focusin(function () {
+            $(this).select();
+        });
+
+        $('#txtQuickOpen').keypress(function (e) {
+
+            var $this = $(this);
+
+            if ($this.val() != '') {
+                $('#messageQuickOpen').html('&nbsp;');
+                $('#txtQuickOpen').tooltip('hide');
+            }
+
+            var key = e.keyCode || e.which;
+
+            if (key == 13)  // the enter key code
+            {
+                e.preventDefault();
+                $("#btnQuickOpen").click();
+                return false;
+            }
+        });
+
+        if ($('#txtQuickOpen')[0]) {
+            $('#txtQuickOpen').focus();
+        }
+    });
+    $("#btnQuickOpen").unbind().click(function (e) {
+        e.preventDefault();
+
+        if ($('#txtQuickOpen').val() != '') {
+
+            $('#txtQuickOpen').addClass('input-searching');
+
+            var $this = $(this);
+            $this.attr('disabled', 'disabled');
+
+            var form = $("#frmQuickOpen").serialize();
+            $.ajax({
+                type: 'POST',
+                url: "/Cases/QuickOpen",
+                data: form,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.result == "success") {
+                        window.location.href = data.data;
+                        $('#btnQuickOpen').focus();
+                        $('#txtQuickOpen').attr('disabled', 'disabled');
+                        $('#messageQuickOpen').html('&nbsp;');
+                    }
+                    else {
+                        $this.removeAttr('disabled');
+                        $('#txtQuickOpen').removeAttr('disabled');
+                        $('#messageQuickOpen').html(data.data);
+                        $('#txtQuickOpen').removeClass('input-searching');
+                        $("#txtQuickOpen").select();
+                    }
+                }
+                , error: function (XMLHttpRequest, texmessageQuickOpenatus, errorThrown) {
+
+                    $('#messageQuickOpen').html('&nbsp;');
+                    $this.removeAttr('disabled');
+                    $('#txtQuickOpen').removeAttr('disabled');
+                    $("#txtQuickOpen").select();
+                }
+            });
+        }
+
+        else
+        {
+            $('#messageQuickOpen').html($('#txtQuickOpen').attr('placeholder'));
+        }
+    });
+</script>
