@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.User.Input;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System.Collections.Generic;
 
@@ -121,5 +123,6 @@
 
         #endregion
 
+        List<ComputerOverview> GetRelatedInventory(int customerId, string userId, UserOverview user);
     }
 }

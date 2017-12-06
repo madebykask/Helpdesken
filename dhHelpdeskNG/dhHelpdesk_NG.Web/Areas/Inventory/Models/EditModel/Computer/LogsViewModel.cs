@@ -7,11 +7,11 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer
 
     public class LogsViewModel : BaseEditWorkstationModel
     {
-        public LogsViewModel(int id, List<ComputerLogOverview> computerLogs, bool dialog = false)
+        public LogsViewModel(int id, List<ComputerLogOverview> computerLogs, bool dialog = false, string userId = null)
             : base(id)
         {
             this.ComputerLogs = computerLogs;
-            this.ComputerLogModel = new ComputerLogModel { ComputerId = id, IsForDialog = dialog };
+            this.ComputerLogModel = new ComputerLogModel { ComputerId = id, IsForDialog = dialog, UserId = userId };
         }
 
         [NotNull]

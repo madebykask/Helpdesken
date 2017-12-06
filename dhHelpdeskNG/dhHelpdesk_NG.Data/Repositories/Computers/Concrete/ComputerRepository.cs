@@ -1,3 +1,7 @@
+using System.Data.Entity;
+using DH.Helpdesk.BusinessData.Enums.Admin.Users;
+using DH.Helpdesk.BusinessData.Models.User.Input;
+
 namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 {
     using System;
@@ -473,109 +477,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 }
             }
 
-            var anonymus =
-                query.Select(
-                    x =>
-                    new
-                        {
-                            Entity = x,
-                            ComputerTypeName = x.ComputerType.Name,
-                            ComputerModelName = x.ComputerModel.Name,
-                            OperatingName = x.OS.Name,
-                            ProcessorName = x.Processor.Name,
-                            RamName = x.RAM.Name,
-                            NetworkAdapterName = x.NIC.Name,
-                            x.Department.DepartmentName,
-                            DomainName = x.Domain.Name,
-                            UnitName = x.OU.Name,
-                            RoomName = x.Room.Name,
-                            x.User.UserId,
-                            UserDepartmentName = x.User.Department.DepartmentName,
-                            UserUnitName = x.User.OU.Name
-                        }).ToList().OrderBy(x => x.Entity.ComputerName);
-
-            var overviewAggregates =
-                anonymus.Select(
-                    x =>
-                    new ComputerOverview(
-                        x.Entity.Id,
-                        x.Entity.Customer_Id,
-                        x.Entity.CreatedDate,
-                        x.Entity.ChangedDate,
-                        new BusinessData.Models.Inventory.Output.Computer.WorkstationFields(
-                        x.Entity.ComputerName,
-                        x.Entity.Manufacturer,
-                        x.ComputerModelName,
-                        x.Entity.SerialNumber,
-                        x.Entity.BIOSVersion,
-                        x.Entity.BIOSDate,
-                        x.Entity.TheftMark,
-                        x.Entity.CarePackNumber,
-                        x.ComputerTypeName,
-                        x.Entity.Location),
-                        new BusinessData.Models.Inventory.Output.Shared.ProcessorFields(x.ProcessorName),
-                        new BusinessData.Models.Inventory.Output.Computer.OrganizationFields(
-                        x.DepartmentName,
-                        x.DomainName,
-                        x.UnitName),
-                        new BusinessData.Models.Inventory.Output.Shared.OperatingSystemFields(
-                        x.OperatingName,
-                        x.Entity.Version,
-                        x.Entity.SP,
-                        x.Entity.RegistrationCode,
-                        x.Entity.ProductKey),
-                        new BusinessData.Models.Inventory.Output.Shared.MemoryFields(x.RamName),
-                        new BusinessData.Models.Inventory.Output.Shared.InventoryFields(
-                        x.Entity.BarCode,
-                        x.Entity.PurchaseDate),
-                        new BusinessData.Models.Inventory.Output.Shared.ChassisFields(x.Entity.ChassisType),
-                        new BusinessData.Models.Inventory.Output.Computer.StateFields(
-                        (ComputerStatuses)x.Entity.Status,
-                        x.Entity.Stolen.ToBool(),
-                        x.Entity.ReplacedWithComputerName,
-                        x.Entity.SendBack.ToBool(),
-                        x.Entity.ScrapDate),
-                        new BusinessData.Models.Inventory.Output.Computer.SoundFields(x.Entity.SoundCard),
-                        new BusinessData.Models.Inventory.Output.Computer.PlaceFields(
-                        x.RoomName,
-                        x.Entity.LocationAddress,
-                        x.Entity.LocationPostalCode,
-                        x.Entity.LocationPostalAddress,
-                        x.Entity.LocationRoom,
-                        x.Entity.Location2),
-                        new BusinessData.Models.Inventory.Output.Computer.OtherFields(x.Entity.Info),
-                        new BusinessData.Models.Inventory.Output.Computer.GraphicsFields(x.Entity.VideoCard),
-                        new BusinessData.Models.Inventory.Output.Computer.ContractFields(
-                        (ContractStatuses?)x.Entity.ContractStatus_Id,
-                        x.Entity.ContractNumber,
-                        x.Entity.ContractStartDate,
-                        x.Entity.ContractEndDate,
-                        x.Entity.Price,
-                        x.Entity.AccountingDimension1,
-                        x.Entity.AccountingDimension2,
-                        x.Entity.AccountingDimension3,
-                        x.Entity.AccountingDimension4,
-                        x.Entity.AccountingDimension5),
-                        new BusinessData.Models.Inventory.Output.Computer.ContactInformationFields(
-                        x.UserId,
-                        x.UserDepartmentName,
-                        x.UserUnitName),
-                        new BusinessData.Models.Inventory.Output.Computer.ContactFields(
-                        x.Entity.ContactName,
-                        x.Entity.ContactPhone,
-                        x.Entity.ContactEmailAddress),
-                        new BusinessData.Models.Inventory.Output.Computer.CommunicationFields(
-                        x.NetworkAdapterName,
-                        x.Entity.IPAddress,
-                        x.Entity.MACAddress,
-                        x.Entity.RAS.ToBool(),
-                        x.Entity.NovellClient),
-                        new BusinessData.Models.Inventory.Output.Computer.DateFields(
-                        x.Entity.SyncChangedDate,
-                        x.Entity.ScanDate,
-                        x.Entity.LDAPPath))).ToList();
-
-            return overviewAggregates;
+            var overviews = MapToComputerOverview(query);
+            return overviews;
         }
 
         // todo
@@ -713,6 +616,131 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         {
             var computer = DbSet.FirstOrDefault(x => x.Customer_Id == customerId && x.ComputerName.Equals(computerName));
             return computer?.Id ?? 0;
+        }
+
+        public List<ComputerOverview> GetRelatedOverviews(int customerId, string userId, UserOverview user)
+        {
+            var cases = DbContext.Cases.Where(x => x.Customer_Id == customerId);
+            cases = cases.Where(c => c.ReportedBy.Trim().Equals(userId.Trim()) && !string.IsNullOrEmpty(c.InventoryNumber));
+
+            if (user.RestrictedCasePermission == 1 && user.UserGroupId == (int)UserGroup.Administrator)
+            {
+                cases = cases.Where(c => c.Performer_User_Id == user.Id || c.CaseResponsibleUser_Id == user.Id);
+            }
+
+            if (user.RestrictedCasePermission == 1 && user.UserGroupId == (int)UserGroup.User)
+            {
+                cases = cases.Where(c => c.ReportedBy.Trim().Equals(user.UserId.Trim()));
+            }
+
+            var inventoryNumbers = cases.Select(x => x.InventoryNumber).Distinct().ToList();
+
+            var computers = DbSet.Where(x => x.Customer_Id == customerId && inventoryNumbers.Contains(x.ComputerName));
+            var overviews = MapToComputerOverview(computers);
+            return overviews;
+        }
+
+        private static List<ComputerOverview> MapToComputerOverview(IQueryable<Domain.Computers.Computer> query)
+        {
+            var anonymus = query.Select(x =>
+                    new
+                    {
+                        Entity = x,
+                        ComputerTypeName = x.ComputerType.Name,
+                        ComputerModelName = x.ComputerModel.Name,
+                        OperatingName = x.OS.Name,
+                        ProcessorName = x.Processor.Name,
+                        RamName = x.RAM.Name,
+                        NetworkAdapterName = x.NIC.Name,
+                        x.Department.DepartmentName,
+                        DomainName = x.Domain.Name,
+                        UnitName = x.OU.Name,
+                        RoomName = x.Room.Name,
+                        x.User.UserId,
+                        UserDepartmentName = x.User.Department.DepartmentName,
+                        UserUnitName = x.User.OU.Name
+                    }).ToList().OrderBy(x => x.Entity.ComputerName);
+
+            var overviewAggregates = anonymus.Select(x =>
+                    new ComputerOverview(
+                        x.Entity.Id,
+                        x.Entity.Customer_Id,
+                        x.Entity.CreatedDate,
+                        x.Entity.ChangedDate,
+                        new BusinessData.Models.Inventory.Output.Computer.WorkstationFields(
+                        x.Entity.ComputerName,
+                        x.Entity.Manufacturer,
+                        x.ComputerModelName,
+                        x.Entity.SerialNumber,
+                        x.Entity.BIOSVersion,
+                        x.Entity.BIOSDate,
+                        x.Entity.TheftMark,
+                        x.Entity.CarePackNumber,
+                        x.ComputerTypeName,
+                        x.Entity.Location),
+                        new BusinessData.Models.Inventory.Output.Shared.ProcessorFields(x.ProcessorName),
+                        new BusinessData.Models.Inventory.Output.Computer.OrganizationFields(
+                        x.DepartmentName,
+                        x.DomainName,
+                        x.UnitName),
+                        new BusinessData.Models.Inventory.Output.Shared.OperatingSystemFields(
+                        x.OperatingName,
+                        x.Entity.Version,
+                        x.Entity.SP,
+                        x.Entity.RegistrationCode,
+                        x.Entity.ProductKey),
+                        new BusinessData.Models.Inventory.Output.Shared.MemoryFields(x.RamName),
+                        new BusinessData.Models.Inventory.Output.Shared.InventoryFields(
+                        x.Entity.BarCode,
+                        x.Entity.PurchaseDate),
+                        new BusinessData.Models.Inventory.Output.Shared.ChassisFields(x.Entity.ChassisType),
+                        new BusinessData.Models.Inventory.Output.Computer.StateFields(
+                        (ComputerStatuses)x.Entity.Status,
+                        x.Entity.Stolen.ToBool(),
+                        x.Entity.ReplacedWithComputerName,
+                        x.Entity.SendBack.ToBool(),
+                        x.Entity.ScrapDate),
+                        new BusinessData.Models.Inventory.Output.Computer.SoundFields(x.Entity.SoundCard),
+                        new BusinessData.Models.Inventory.Output.Computer.PlaceFields(
+                        x.RoomName,
+                        x.Entity.LocationAddress,
+                        x.Entity.LocationPostalCode,
+                        x.Entity.LocationPostalAddress,
+                        x.Entity.LocationRoom,
+                        x.Entity.Location2),
+                        new BusinessData.Models.Inventory.Output.Computer.OtherFields(x.Entity.Info),
+                        new BusinessData.Models.Inventory.Output.Computer.GraphicsFields(x.Entity.VideoCard),
+                        new BusinessData.Models.Inventory.Output.Computer.ContractFields(
+                        (ContractStatuses?)x.Entity.ContractStatus_Id,
+                        x.Entity.ContractNumber,
+                        x.Entity.ContractStartDate,
+                        x.Entity.ContractEndDate,
+                        x.Entity.Price,
+                        x.Entity.AccountingDimension1,
+                        x.Entity.AccountingDimension2,
+                        x.Entity.AccountingDimension3,
+                        x.Entity.AccountingDimension4,
+                        x.Entity.AccountingDimension5),
+                        new BusinessData.Models.Inventory.Output.Computer.ContactInformationFields(
+                        x.UserId,
+                        x.UserDepartmentName,
+                        x.UserUnitName),
+                        new BusinessData.Models.Inventory.Output.Computer.ContactFields(
+                        x.Entity.ContactName,
+                        x.Entity.ContactPhone,
+                        x.Entity.ContactEmailAddress),
+                        new BusinessData.Models.Inventory.Output.Computer.CommunicationFields(
+                        x.NetworkAdapterName,
+                        x.Entity.IPAddress,
+                        x.Entity.MACAddress,
+                        x.Entity.RAS.ToBool(),
+                        x.Entity.NovellClient),
+                        new BusinessData.Models.Inventory.Output.Computer.DateFields(
+                        x.Entity.SyncChangedDate,
+                        x.Entity.ScanDate,
+                        x.Entity.LDAPPath))).ToList();
+
+            return overviewAggregates;
         }
 
         private static void Map(Domain.Computers.Computer entity, Computer businessModel)

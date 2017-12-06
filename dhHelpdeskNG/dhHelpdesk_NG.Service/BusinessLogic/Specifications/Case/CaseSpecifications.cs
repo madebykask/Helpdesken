@@ -367,7 +367,24 @@ namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Case
             }
 
             return query;
-        } 
+        }
+
+        public static IQueryable<string> GetRelatedInventories(this IQueryable<Case> query, string userId, UserOverview user)
+        {
+            query = query.Where(c => c.ReportedBy.Trim().Equals(userId.Trim()) && !string.IsNullOrEmpty(c.InventoryNumber));
+
+            if (user.RestrictedCasePermission == 1 && user.UserGroupId == (int)UserGroup.Administrator)
+            {
+                query = query.Where(c => c.Performer_User_Id == user.Id || c.CaseResponsibleUser_Id == user.Id);
+            }
+
+            if (user.RestrictedCasePermission == 1 && user.UserGroupId == (int)UserGroup.User)
+            {
+                query = query.Where(c => c.ReportedBy.Trim().Equals(user.UserId.Trim()));
+            }
+
+            return query.Select(x => x.InventoryNumber).Distinct();
+        }
 
         public static IQueryable<Case> Search(
                                 this IQueryable<Case> query,

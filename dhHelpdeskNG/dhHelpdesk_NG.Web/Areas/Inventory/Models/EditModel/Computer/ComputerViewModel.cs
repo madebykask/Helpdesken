@@ -113,5 +113,6 @@
         public WorkstationFieldsViewModel WorkstationFieldsViewModel { get;  set; }
 
         public bool IsForDialog { get; set; }
+        public string UserId { get; set; }
     }
 }

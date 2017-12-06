@@ -14,6 +14,7 @@ using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Dal.DbQueryExecutor;
 using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Services.Services.Cases;
+using DH.Helpdesk.Web.Areas.Inventory.Models;
 using DH.Helpdesk.Web.Models.Invoice;
 
 
@@ -2964,6 +2965,18 @@ namespace DH.Helpdesk.Web.Controllers
                                                 userId,
                                                 SessionFacade.CurrentUser);
             return this.Json(count, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
+        #region Related Inventory
+
+        [ValidateInput(false)]
+        [HttpGet]
+        public JsonResult RelatedInventoryCount(string userId)
+        {
+            var count = _caseService.GetCaseRelatedInventoryCount(workContext.Customer.CustomerId, userId, SessionFacade.CurrentUser);
+            return Json(count, JsonRequestBehavior.AllowGet);
         }
 
         #endregion

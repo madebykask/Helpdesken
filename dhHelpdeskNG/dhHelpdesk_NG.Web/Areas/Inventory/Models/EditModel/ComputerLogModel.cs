@@ -32,6 +32,8 @@
 
         public bool IsForDialog { get; set; }
 
+        public string UserId { get; set; }
+
         public ComputerLog CreateBusinessModel()
         {
             return ComputerLog.CreateNew(

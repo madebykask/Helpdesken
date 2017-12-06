@@ -281,8 +281,9 @@
                                                        class="btn @Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
                                                     @if (Model.CanGetRelatedCases)
                                                     {
-                                                        <a href="#" data-field="relatedCases" style="display: none;" title="@Translation.Get("Relaterade ärenden")" class="btn"><i class="icon-list"></i></a>
+                                                        <a href="#" data-field="relatedCases" style="display: none;" title="@Translation.GetCoreTextTranslation("Relaterade ärenden")" class="btn"><i class="icon-list"></i></a>
                                                     }
+                                                    <a href="#" data-field="relatedInventory" style="display: none;" title="@Translation.GetCoreTextTranslation("Relaterade") @Translation.GetCoreTextTranslation("Inventarie")" class="btn"><i class="icon-th-large"></i></a>
                                                 </td>
                                             </tr>
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName)">

@@ -162,7 +162,8 @@ namespace DH.Helpdesk.Services.Services
 		void SetIndependentChild(int caseID, bool independentChild);
 
         IList<Case> GetTop100CasesForTest();
-	}
+        int GetCaseRelatedInventoryCount(int customerId, string userId, UserOverview currentUser);
+    }
 
     public class CaseService : ICaseService
     {
@@ -2083,6 +2084,19 @@ namespace DH.Helpdesk.Services.Services
         public IList<Case> GetTop100CasesForTest()
         {
             return _caseRepository.GetTop100CasesToTest();
+        }
+
+        public int GetCaseRelatedInventoryCount(int customerId, string userId, UserOverview currentUser)
+        {
+            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var caseRep = uow.GetRepository<Case>();
+
+                return caseRep.GetAll()
+                        .GetByCustomer(customerId)
+                        .GetRelatedInventories(userId, currentUser)
+                        .Count();
+            }
         }
 
         #region Private methods

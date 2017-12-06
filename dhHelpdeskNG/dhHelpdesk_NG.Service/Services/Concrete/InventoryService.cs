@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services.Concrete
+﻿using DH.Helpdesk.BusinessData.Models.User.Input;
+
+namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -649,6 +651,11 @@
         {
             this.computerInventoryRepository.DeleteById(computerId, inventoryId);
             this.computerInventoryRepository.Commit();
+        }
+
+        public List<ComputerOverview> GetRelatedInventory(int customerId, string userId, UserOverview user)
+        {
+            return this.computerRepository.GetRelatedOverviews(customerId, userId, user);
         }
 
         public ComputerShortOverview GetWorkstationShortInfo(int computerId)

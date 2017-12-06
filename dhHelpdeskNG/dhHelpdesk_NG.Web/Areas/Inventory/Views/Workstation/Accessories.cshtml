@@ -16,6 +16,7 @@
 @{ var extraData = new ViewDataDictionary();
    extraData.Add(new KeyValuePair<string,object>("InventoryAdminPermission", Model.UserHasInventoryAdminPermission));  
    extraData.Add(new KeyValuePair<string,object>("IsForDialog", Model.IsForDialog));
+   extraData.Add(new KeyValuePair<string,object>("UserId", Model.UserId));
  } 
 <script>
     $(function () {
@@ -55,7 +56,7 @@
     <div>
         @Html.DropDownListFor(x => x.InventoryTypeId, Model.InventoryTypes, new { id = "inventory_types_dropdown" })
     </div>
-    using (Html.BeginForm("ConnectInventoryToComputer", "Workstation", new { computerId = Model.Id, dialog = Model.IsForDialog}, FormMethod.Post, new { id = "log_edit_form" }))
+    using (Html.BeginForm("ConnectInventoryToComputer", "Workstation", new { computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId}, FormMethod.Post, new { id = "log_edit_form" }))
     {
         @Html.DropDownListFor(x => x.InventoryId, Model.Inventories, new { id = "inventories_dropdown" })
         <input type="submit" value="@Translation.Get("Lägg till")" class="btn" style="@style" id="inventory_button" />

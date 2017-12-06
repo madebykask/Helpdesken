@@ -5,6 +5,7 @@
 @{    
     var userPermission = false;
     var isForDialog = false;
+    string userId = null;
     if (ViewData.Keys.Contains("InventoryAdminPermission"))
     {
         userPermission = (bool)ViewData["InventoryAdminPermission"];
@@ -12,6 +13,10 @@
     if (ViewData.Keys.Contains("IsForDialog"))
     {
         isForDialog = (bool)ViewData["IsForDialog"];
+    }
+    if (ViewData.Keys.Contains("UserId"))
+    {
+        userId = (string)ViewData["UserId"];
     }
  }
 <table class="table table-striped table-bordered table-hover">
@@ -45,7 +50,7 @@
                     <td>
                         @if (userPermission)
                         {
-                            @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "DeleteInventoryFromComputer", new {computerId = Model.ParentId, inventoryId = inventory.Id, dialog = isForDialog}, new {@class = "btn"})
+                            @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "DeleteInventoryFromComputer", new {computerId = Model.ParentId, inventoryId = inventory.Id, dialog = isForDialog, userId }, new {@class = "btn"})
                         }
                     </td>
                 </tr>
