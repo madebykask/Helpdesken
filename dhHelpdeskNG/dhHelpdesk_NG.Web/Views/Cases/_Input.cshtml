@@ -1710,7 +1710,7 @@
                                                             foreach (var e in Model.statuses.Where(e => e.IsActive == 1 || Model.case_.Status_Id == e.Id))
                                                             {
                                                                 @*<option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Status_Id.ToString())>@e.Name</option>*@
-                                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Status_Id.ToString())>@Translation.Get(e.Name)</option>
+                                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Status_Id.ToString())>@Translation.GetMasterDataTranslation(e.Name)</option>
                                                             }
                                                         }
                                                     </select>
@@ -1744,7 +1744,7 @@
                                                         {
                                                             foreach (var e in Model.stateSecondaries.Where(e => e.IsActive == 1 || Model.case_.StateSecondary_Id == e.Id))
                                                             {
-                                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.StateSecondary_Id.ToString())>@Translation.Get(e.Name)</option>
+                                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.StateSecondary_Id.ToString())>@Translation.GetMasterDataTranslation(e.Name)</option>
                                                             }
                                                         }
                                                     </select>

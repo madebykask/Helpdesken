@@ -281,7 +281,7 @@
                                      {
                                          if (e.IsActive != 0)
                                          {
-                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.Status)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>                                            
+                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.Status)>@Translation.GetMasterDataTranslation(e.Name)</option>                                            
                                          }
                                      }
                                  </select>
@@ -301,7 +301,7 @@
                                      {
                                          if (e.IsActive != 0)
                                          {
-                                           <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.StateSecondary)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>
+                                           <option value="@e.Id" @e.Id.IdIsSelected(Model.caseSearchFilter.StateSecondary)>@Translation.GetMasterDataTranslation(e.Name)</option>
                                          }
                                      }
                                  </select>

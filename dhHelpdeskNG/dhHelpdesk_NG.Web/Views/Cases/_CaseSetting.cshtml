@@ -307,7 +307,7 @@
                                             {
                                                 if (e.IsActive != 0)
                                                 {
-                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedState)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation) </option>
+                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedState)>@Translation.GetMasterDataTranslation(e.Name) </option>
                                                 }
                                             }
                                         </select>
@@ -334,7 +334,7 @@
                                             {
                                                 if (e.IsActive != 0)
                                                 {
-                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedSubState)>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation) </option>                                       
+                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.SelectedSubState)>@Translation.GetMasterDataTranslation(e.Name) </option>                                       
                                                 }
                                             }
                                         </select>
