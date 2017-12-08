@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.SelfService.Controllers
+﻿using log4net;
+
+namespace DH.Helpdesk.SelfService.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -36,6 +38,8 @@
 
     public class CaseController : BaseController
     {
+        private readonly ILog _log = LogManager.GetLogger(typeof(CaseController));
+
         private readonly ICustomerService _customerService;
         private readonly IInfoService _infoService;
         private readonly ICaseService _caseService;
@@ -541,6 +545,8 @@
         [HttpGet]
         public ActionResult ExtendedCase(int? caseTemplateId = null, int? caseId = null)
         {
+            //LogWithContext($"ExtendedCase.Get: called. caseTemplateId = {caseTemplateId}, caseId: {caseId}");
+
             if (caseTemplateId.IsNew() && caseId.IsNew())
             {
                 ErrorGenerator.MakeError("Template or Case must be specified!", 210);
@@ -663,6 +669,8 @@
             if (!caseId.IsNew() && !model.CaseDataModel.FinishingDate.HasValue)
                 ViewBag.CurrentCaseId = caseId.Value;
 
+            //LogWithContext($"ExtendedCase.Get: case info has been prepared. caseId = {model.CaseId},  customerId = {model.CustomerId}");
+
             return View("ExtendedCase", model);
         }
 
@@ -670,10 +678,16 @@
         public ActionResult ExtendedCase(ExtendedCaseViewModel model)
         {
             var isNewCase = model.CaseDataModel.Id == 0;
-            var auxModel = new AuxCaseModel(model.LanguageId, 0, SessionFacade.CurrentUserIdentity.UserId,
+
+            var localUserId = SessionFacade.CurrentLocalUser?.Id ?? 0;
+            var auxModel = new AuxCaseModel(model.LanguageId,
+                                            localUserId,
+                                            SessionFacade.CurrentUserIdentity.UserId,
                                             RequestExtension.GetAbsoluteUrl(),
                                             CreatedByApplications.ExtendedCase,
                                             TimeZoneInfo.Local);
+
+            //LogWithContext($"ExtendedCase.Post: Saving extended case data. LocalUserId: {auxModel.CurrentUserId}, url: {auxModel.AbsolutreUrl}.");
 
             if (model.SelectedWorkflowStep.HasValue && model.SelectedWorkflowStep.Value > 0)            
                 model.CaseDataModel = ApplyNextWorkflowStepOnCase(model.CaseDataModel, model.SelectedWorkflowStep.Value);
@@ -1394,7 +1408,6 @@
                         newCase.WorkingGroup_Id = productArea.WorkingGroup_Id;
                     }
                 }
-                
             }
 
             if (newCase.Department_Id.HasValue && newCase.Priority_Id.HasValue)
@@ -1411,11 +1424,19 @@
                 }
             }
 
-            int caseHistoryId = _caseService.SaveCase(newCase, caseLog, 0, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
+            var localUserId = SessionFacade.CurrentLocalUser?.Id ?? 0;
+            int caseHistoryId = _caseService.SaveCase(newCase, caseLog, localUserId, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
 
             // save log
             caseLog.CaseId = newCase.Id;
             caseLog.CaseHistoryId = caseHistoryId;
+
+            if (caseLog.UserId <= 0 && localUserId > 0)
+                caseLog.UserId = localUserId;
+
+            if (string.IsNullOrWhiteSpace(caseLog.RegUser))
+                caseLog.RegUser = SessionFacade.CurrentUserIdentity?.UserId ?? string.Empty;
+
             caseLog.Id = this._logService.SaveLog(caseLog, 0, out errors);
 
             // save case files
@@ -2176,6 +2197,23 @@
             return criteria;
         }
 
-       
+        // keep for diagnostic purposes
+        private void LogWithContext(string msg)
+        {
+            var customerId = SessionFacade.CurrentCustomerID;
+            var userIdentityEmail = SessionFacade.CurrentUserIdentity?.Email;
+            var userIdentityEmployeeNumber = SessionFacade.CurrentUserIdentity?.EmployeeNumber;
+            var userIdentityUserId = SessionFacade.CurrentUserIdentity?.UserId;
+            var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
+            var localUserId = SessionFacade.CurrentLocalUser?.UserId;
+
+            _log.Debug($@"{msg}. Context: 
+                        -customerId: {customerId}, 
+                        -userIdentityEmail = {userIdentityEmail},
+                        -userIdentityEmployeeNumber = {userIdentityEmployeeNumber},
+                        -userIdentityUserId = {userIdentityUserId},
+                        -localUserPkId = {localUserPkId},
+                        -localUserId = {localUserId}");
+        }
     }
 }

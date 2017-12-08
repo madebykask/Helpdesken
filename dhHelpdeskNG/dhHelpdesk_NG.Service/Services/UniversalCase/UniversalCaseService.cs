@@ -409,7 +409,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 oldCase = _caseService.GetCaseById(caseModel.Id);
 
             var caseEntity = ConvertCaseModelToCase(caseModel, oldCase);
-            var logEntity = GetCaseLog(caseModel);
+            var logEntity = GetCaseLog(caseModel, auxModel);
             var extraInfo = new CaseExtraInfo()
             {
                 ActionExternalTime = timesModel.ActionExternalTime,
@@ -690,7 +690,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             return caseEntity;
         }
 
-        private CaseLog GetCaseLog(CaseModel caseModel)
+        private CaseLog GetCaseLog(CaseModel caseModel, AuxCaseModel auxCaseModel)
         {
             var ret = new CaseLog
             {
@@ -702,7 +702,12 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 LogGuid = Guid.NewGuid(),
                 LogType = 0,
                 TextExternal = caseModel.Text_External,
-                TextInternal = caseModel.Text_Internal
+                TextInternal = caseModel.Text_Internal,
+
+                //// aux model values
+                UserId = auxCaseModel.CurrentUserId > 0 ? (int?)auxCaseModel.CurrentUserId : null,
+                RegUser = auxCaseModel.UserIdentityName ?? String.Empty
+                
             };
 
             return ret;
