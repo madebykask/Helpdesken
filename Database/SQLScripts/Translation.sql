@@ -6562,7 +6562,24 @@ If not exists (select * from tblTextTranslation where text_id = 1898 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1898, 2, 'Quick open')
 GO
 
+if exists (Select * from tblText where Id = 1312)
+BEGIN
+	UPDATE tblText SET TextString = N'lista bara administratörer med medlemskap i arbetsgruppen' where Id = 1312
+END
+GO
 
+if exists (Select * from tblTextTranslation where Text_Id = 1312 and Language_Id = 2)
+BEGIN
+	UPDATE tblTextTranslation SET TextTranslation = N'only list administrators with membership of the working group' where Text_Id = 1312 and Language_Id = 2
+END
+GO
+
+If not exists (select * from tbltext where id = 1899)
+	insert into tbltext (id, TextString) VALUES (1899, 'Medlem i grupp')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1899 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1899, 2, 'Member of group')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
