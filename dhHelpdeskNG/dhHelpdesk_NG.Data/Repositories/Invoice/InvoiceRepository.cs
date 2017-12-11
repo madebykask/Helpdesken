@@ -79,14 +79,14 @@ namespace DH.Helpdesk.Dal.Repositories.Invoice
 
                 if (logQuery != null)
                 {
-                    _readyRows += logQuery.Count(l => !l.InvoiceRow_Id.HasValue);
+                    _readyRows += logQuery.Count(l => l.InvoiceRow == null || l.InvoiceRow.Status == InvoiceStatus.No);
                     _invoicedRows += logQuery.Count(l => l.InvoiceRow != null && l.InvoiceRow.Status == InvoiceStatus.Invoiced);
                     _notInvoicedRows += logQuery.Count(l => l.InvoiceRow != null && l.InvoiceRow.Status == InvoiceStatus.NotInvoiced);
                 }
 
                 if (externalQuery != null)
                 {
-                    _readyRows += externalQuery.Count(l => !l.InvoiceRow_Id.HasValue);
+                    _readyRows += externalQuery.Count(l => l.InvoiceRow == null || l.InvoiceRow.Status == InvoiceStatus.No);
                     _invoicedRows += externalQuery.Count(l => l.InvoiceRow != null && l.InvoiceRow.Status == InvoiceStatus.Invoiced);
                     _notInvoicedRows += externalQuery.Count(l => l.InvoiceRow != null && l.InvoiceRow.Status == InvoiceStatus.NotInvoiced);
                 }
