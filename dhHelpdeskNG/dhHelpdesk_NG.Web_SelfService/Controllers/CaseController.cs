@@ -173,7 +173,7 @@
             if(string.IsNullOrEmpty(id))
                 return null;
 
-            int customerId;
+            int customerId = -1;
 
             Case currentCase = null;
 
@@ -181,12 +181,18 @@
             {
                 var guid = new Guid(id);
                 currentCase = _caseService.GetCaseByEMailGUID(guid);
-
-                var dynamicCases = _caseService.GetAllDynamicCases();
-                var dynamicUrl = "";
-                if (dynamicCases != null && dynamicCases.Any())
+                if (currentCase == null)
                 {
-                    dynamicUrl = dynamicCases.Where(w => w.CaseId == currentCase.Id).Select(d => "/" + d.FormPath).FirstOrDefault();
+                    ErrorGenerator.MakeError("Link is not valid!");
+                    return RedirectToAction("Index", "Error");
+                }
+
+                customerId = currentCase.Customer_Id;
+                var dynamicCase = _caseService.GetDynamicCase(currentCase.Id);
+                var dynamicUrl = "";
+                if (dynamicCase != null)
+                {
+                    dynamicUrl =  $"/{dynamicCase.FormPath}";
                     if (!string.IsNullOrEmpty(dynamicUrl)) // Show Case in eform
                     {
                         var urlStr = dynamicUrl.SetUrlParameters(currentCase.Id);
@@ -197,7 +203,15 @@
             }
             else
             {
-                currentCase = _caseService.GetCaseById(Int32.Parse(id));
+                int _intCaseId;
+
+                if (!int.TryParse(id, out _intCaseId))
+                {
+                    ErrorGenerator.MakeError("Case Id is not valid!");
+                    return RedirectToAction("Index", "Error");
+                }
+
+                currentCase = _caseService.GetCaseById(_intCaseId);                
 
                 if (currentCase == null)
                 {
@@ -1644,7 +1658,7 @@
 
             if (currentApplicationType == ApplicationTypes.LineManager)
             {
-                var dynamicCases = _caseService.GetAllDynamicCases();
+                var dynamicCases = _caseService.GetAllDynamicCases(cusId, srm.Cases.Select(c=> c.Id).ToArray());
                 model.DynamicCases = dynamicCases;
             }
             
