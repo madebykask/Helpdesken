@@ -89,19 +89,21 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var chL = this._CheckListsService.GetChecklist(id);         
+            var chL = this._CheckListsService.GetChecklist(id);
 
             var chLServices = this._CheckListServiceService.GetCheckListServices(id).ToList();
 
-            var model = this.CreatcheckListInput(chL);       // , chLServices                
+            var model = this.CreatcheckListInput(chL);
 
-            model.Services = new CheckListServiceModel();
+            model.Services = new CheckListServiceModel
+            {
+                CheckList_Id = id,
+                Service_Id = 0,
+                SId = null,
+                IsActive = 1,
+                ServiceName = string.Empty
+            };
 
-            model.Services.CheckList_Id = id;
-            model.Services.Service_Id = 0;
-            model.Services.SId = null;
-            model.Services.IsActive = 1;
-            model.Services.ServiceName = "";
             var sL = chLServices.Select(x => new SelectListItem
             {
                 Text = x.Name,
@@ -109,43 +111,40 @@ namespace DH.Helpdesk.Web.Controllers
             }).ToList();
 
             //sL.Insert(0, new SelectListItem { Text = "", Value = "0", Selected = true });
-            model.Services.ServicesList = sL;            
+            model.Services.ServicesList = sL;
+            model.Services.ActionsList = new List<CheckListActionsInputModel>();
 
-
-            if (chLServices != null)
+            foreach (var s in chLServices)
             {
-                foreach (var s in chLServices)
+                var allActions = this._CheckListActionService.GetActions(s.Id).ToList();
+                var actionsInput = allActions.Select(a => new CheckListActionsInputModel
+                    (
+                    a.Service_Id,
+                    a.Id,
+                    a.IsActive,
+                    a.ActionName,
+                    a.CreatedDate,
+                    a.ChangedDate
+                    )).ToList();
+
+                foreach (var checkListActionsInputModel in actionsInput)
                 {
-                    var allActions = this._CheckListActionService.GetActions(s.Id).ToList();
+                    model.Services.ActionsList.Add(checkListActionsInputModel);
+                }
 
-                    var actionsInput = allActions.Select(a => new CheckListActionsInputModel
-                             (               
-                                 a.Service_Id,
-                                 a.Id,
-                                 a.IsActive,
-                                 a.ActionName,
-                                 a.CreatedDate,
-                                 a.ChangedDate
-                             )).ToList();
-
-                    
-                        model.Services.ActionsList = actionsInput;
-
-                        if (allActions.Count == 0)
-                        {
-                            var New_action = CreatActionInput(s.Id);
-                            model.Services.ActionsList.Insert(0, New_action);
-                        }
-                       
+                if (actionsInput.Count == 0)
+                {
+                    var newAction = CreatActionInput(s.Id);
+                    model.Services.ActionsList.Add(newAction);
                 }
             }
-           
+
             return this.View(model);
         }
 
 
         [HttpPost]
-        public ActionResult Edit(int id, CheckListInputModel checkList, CheckListServiceModel CLService , CheckListActionsInputModel CLAction )
+        public ActionResult Edit(int id, CheckListInputModel checkList, CheckListServiceModel CLService, CheckListActionsInputModel CLAction)
         {
             var model = this.UpdateCheckList(checkList);
 
@@ -153,7 +152,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 CLService.CheckList_Id = checkList.CheckListId;
                 model.Services = this.SaveCheckListService(CLService);
-               
+
                 var chLServices = this._CheckListServiceService.GetCheckListServices(id).ToList();
 
                 var sL = chLServices.Select(x => new SelectListItem
@@ -191,30 +190,19 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
             }
-                return this.View(model);
+            return this.View(model);
         }
 
 
 
         [HttpPost]
-        public ActionResult SaveAction(int selectedServiceId, CheckListServiceModel ch_Service, CheckListActionsInputModel cL_Action)
+        public ActionResult SaveAction(int serviceId, int checkListId, string actionName)
         {
+            var newAction = new CheckListActionBM(0, serviceId, 1, actionName, DateTime.Now, DateTime.Now);
 
-            var new_Action = new CheckListActionBM
-            (
-                cL_Action.Action_Id,
-                ch_Service.Service_Id,
-                cL_Action.IsActive,
-                ch_Service.ActionInput,
-                DateTime.Now,
-                DateTime.Now
-           );
+            _CheckListActionService.SaveCheckListAction(newAction);
 
-
-            this._CheckListActionService.SaveCheckListAction(new_Action);
-
-            return this.RedirectToAction("Edit", "CheckList", new { id = ch_Service.CheckList_Id });
-
+            return Json(Url.Action("Edit", "CheckList", new { id = checkListId }));
         }
 
 
