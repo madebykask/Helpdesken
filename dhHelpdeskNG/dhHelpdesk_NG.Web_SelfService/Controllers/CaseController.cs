@@ -184,14 +184,18 @@ namespace DH.Helpdesk.SelfService.Controllers
             {
                 var guid = new Guid(id);
                 currentCase = _caseService.GetCaseByEMailGUID(guid);
-                if (currentCase != null)
-                    customerId = currentCase.Customer_Id;
-
-                var dynamicCases = _caseService.GetAllDynamicCases(customerId);
-                var dynamicUrl = "";
-                if (dynamicCases != null && dynamicCases.Any())
+                if (currentCase == null)
                 {
-                    dynamicUrl = dynamicCases.Where(w => w.CaseId == currentCase.Id).Select(d => "/" + d.FormPath).FirstOrDefault();
+                    ErrorGenerator.MakeError("Link is not valid!");
+                    return RedirectToAction("Index", "Error");
+                }
+
+                customerId = currentCase.Customer_Id;
+                var dynamicCase = _caseService.GetDynamicCase(currentCase.Id);
+                var dynamicUrl = "";
+                if (dynamicCase != null)
+                {
+                    dynamicUrl =  $"/{dynamicCase.FormPath}";
                     if (!string.IsNullOrEmpty(dynamicUrl)) // Show Case in eform
                     {
                         var urlStr = dynamicUrl.SetUrlParameters(currentCase.Id);
@@ -1640,7 +1644,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             if (currentApplicationType == ApplicationTypes.LineManager)
             {
-                var dynamicCases = _caseService.GetAllDynamicCases(cusId);
+                var dynamicCases = _caseService.GetAllDynamicCases(cusId, srm.Cases.Select(c=> c.Id).ToArray());
                 model.DynamicCases = dynamicCases;
             }
             

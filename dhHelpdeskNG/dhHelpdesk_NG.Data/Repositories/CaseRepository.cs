@@ -23,7 +23,6 @@ namespace DH.Helpdesk.Dal.Repositories
         Case GetCaseByEmailGUID(Guid GUID);
         Case GetDetachedCaseById(int id);
         Case GetDetachedCaseIncludesById(int id);
-        List<DynamicCase> GetAllDynamicCases(int customerId);
         DynamicCase GetDynamicCase(int id);
         IList<Case> GetProjectCases(int customerId, int projectId);
         IList<Case> GetProblemCases(int customerId, int problemId);
@@ -36,6 +35,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         IEnumerable<CaseOverview> GetCaseOverviews(int[] customers);
         int LookupLanguage(int custid, string notid, int regid, int depid, string notifierid);
+        List<DynamicCase> GetAllDynamicCases(int customerId, int[] caseIds);
 
 
 
@@ -89,12 +89,12 @@ namespace DH.Helpdesk.Dal.Repositories
                     select w).FirstOrDefault();
         }
 
-        public List<DynamicCase> GetAllDynamicCases(int customerId)
+        public List<DynamicCase> GetAllDynamicCases(int customerId, int[] caseIds)
         {
             var query = from f in this.DataContext.Forms
                         join ff in this.DataContext.FormField on f.Id equals ff.Form_Id
                         join ffv in this.DataContext.FormFieldValue on ff.Id equals ffv.FormField_Id
-                        where f.Customer_Id == customerId && f.ExternalPage == 1 
+                        where f.Customer_Id == customerId && f.ExternalPage == 1 && caseIds.Contains(ffv.Case_Id)
                         select new DynamicCase
                         {
                             CaseId = ffv.Case_Id,
