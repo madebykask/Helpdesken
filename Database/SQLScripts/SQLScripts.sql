@@ -1804,7 +1804,7 @@ begin
 	end
 	else
 	begin
-		update [tblCaseSolutionType] set Name = 'Multicase - Split', [Status] = 1, [SortOrder] = 0 where [Guid] = @ConditionTypeGuid
+		update [tblConditionType] set Name = 'Multicase - Split', [Status] = 1, [SortOrder] = 0 where [Guid] = @ConditionTypeGuid
 	end
 
 end
@@ -1859,7 +1859,7 @@ begin
 	SET QUOTED_IDENTIFIER ON
 
 	CREATE TABLE [dbo].[tblCaseSolutionType](
-		[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Id] [int] NOT NULL,
 		[Guid] [uniqueidentifier] NULL,
 		[Name] [nvarchar](200) NULL,
 		[Status] [int] NOT NULL,
@@ -1887,11 +1887,10 @@ begin
 	
 	if not exists  (select * from [tblCaseSolutionType] where [Guid] = @Guid)
 	begin
-		SET IDENTITY_INSERT [tblCaseSolutionType] ON
 
 		insert into [tblCaseSolutionType] (Id, [Guid], Name, [Status], [SortOrder]) VALUES (@Id,@Guid, 'User - CaseSolution', 1, 0)
 
-		SET IDENTITY_INSERT [tblCaseSolutionType] OFF
+
 
 	end
 	else
@@ -1918,6 +1917,53 @@ begin
 	
 	UPDATE [dbo].[tblUserWorkingGroup] SET [IsMemberOfGroup] = 1 WHERE [UserRole] = 2
 end
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'Name' and sysobjects.name = N'tblCaseSolutionCondition')
+begin
+	ALTER TABLE [tblCaseSolutionCondition] ADD [Name]  nvarchar(255)
+end
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'SortOrder' and sysobjects.name = N'tblCaseSolutionCondition')
+begin
+	ALTER TABLE [tblCaseSolutionCondition] ADD [SortOrder] int NOT NULL DEFAULT(0) 
+end
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'Name' and sysobjects.name = N'tblCaseDocumentCondition')
+begin
+	ALTER TABLE [tblCaseDocumentCondition] ADD [Name]  nvarchar(255)
+end
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'SortOrder' and sysobjects.name = N'tblCaseDocumentCondition')
+begin
+	ALTER TABLE [tblCaseDocumentCondition] ADD [SortOrder] int NOT NULL DEFAULT(0) 
+end
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'Name' and sysobjects.name = N'tblCaseDocumentTextCondition')
+begin
+	ALTER TABLE [tblCaseDocumentTextCondition] ADD [Name]  nvarchar(255)
+end
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'SortOrder' and sysobjects.name = N'tblCaseDocumentTextCondition')
+begin
+	ALTER TABLE [tblCaseDocumentTextCondition] ADD [SortOrder] int NOT NULL DEFAULT(0) 
+end
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'Name' and sysobjects.name = N'tblCaseDocumentParagraphCondition')
+begin
+	ALTER TABLE [tblCaseDocumentParagraphCondition] ADD [Name]  nvarchar(255)
+end
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'SortOrder' and sysobjects.name = N'tblCaseDocumentParagraphCondition')
+begin
+	ALTER TABLE [tblCaseDocumentParagraphCondition] ADD [SortOrder] int NOT NULL DEFAULT(0) 
+end
+
+
+
+
+
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.35'

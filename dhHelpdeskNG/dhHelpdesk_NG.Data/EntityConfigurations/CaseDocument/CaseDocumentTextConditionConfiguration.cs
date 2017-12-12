@@ -23,6 +23,8 @@
             Property(e => e.Status).IsRequired();
             Property(e => e.CreatedDate).IsRequired();
             Property(e => e.ChangedDate).IsRequired();
+            Property(e => e.SortOrder).IsRequired();
+            Property(e => e.Name).IsOptional().HasMaxLength(200);
 
             ToTable("tblCaseDocumentTextCondition");
         }
