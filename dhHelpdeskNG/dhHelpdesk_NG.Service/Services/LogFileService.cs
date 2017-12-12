@@ -24,6 +24,7 @@ namespace DH.Helpdesk.Services.Services
         List<LogExistingFileModel> GetExistingFileNamesByCaseId(int caseId);
         bool SaveAttachedExistingLogFiles(IEnumerable<LogExistingFileModel> allFiles, int caseId);
         void DeleteByFileIdAndFileName(int fileId, string trim);
+        void DeleteByFileName(string trim);
         void ClearExistingAttachedFiles(int caseId);
         List<LogFileModel> GetLogFileNamesByLogId(int logId);
         List<LogFileModel> GetLogFilesByCaseId(int caseId);
@@ -135,6 +136,11 @@ namespace DH.Helpdesk.Services.Services
         public void DeleteByFileIdAndFileName(int fileId, string filename)
         {
             _logFileRepository.DeleteByFileIdAndFileName(fileId, filename);
+        }
+
+        public void DeleteByFileName(string filename)
+        {
+            _logFileRepository.DeleteByFileName(filename);
         }
 
         public void ClearExistingAttachedFiles(int caseId)

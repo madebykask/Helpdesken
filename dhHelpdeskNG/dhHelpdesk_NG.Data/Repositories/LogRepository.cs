@@ -208,6 +208,7 @@ namespace DH.Helpdesk.Dal.Repositories
         List<LogFileExisting> GetExistingFileNamesByCaseId(int caseId);
         bool SaveAttachedExistingLogFiles(IEnumerable<LogFileExisting> logExistingFiles);
         void DeleteByFileIdAndFileName(int fileId, string filename);
+        void DeleteByFileName(string filename);
         void ClearExistingAttachedFiles(int caseId);
         void AddExistLogFiles(IEnumerable<LogFile> logExFiles);
         byte[] GetCaseFileContentByIdAndFileName(int caseId, string basePath, string fileName);
@@ -302,8 +303,18 @@ namespace DH.Helpdesk.Dal.Repositories
                 DataContext.LogFiles.Remove(file);
                 DataContext.SaveChanges();
             }
+
         }
 
+        public void DeleteByFileName(string filename)
+        {
+            var file = DataContext.LogFilesExisting.FirstOrDefault(x => x.FileName.Equals(filename));
+            if (file != null)
+            {
+                DataContext.LogFilesExisting.Remove(file);
+                DataContext.SaveChanges();
+            }
+        }        
         public void ClearExistingAttachedFiles(int caseId)
         {
             var files = DataContext.LogFilesExisting.Where(x => x.Case_Id == caseId).ToList();

@@ -2349,7 +2349,12 @@ namespace DH.Helpdesk.Web.Controllers
         {
             if ( fileId.HasValue)
             {
-                _logFileService.DeleteByFileIdAndFileName(fileId.Value, fileName.Trim());
+                if (fileId == 0)
+                {
+                    _logFileService.DeleteByFileName(fileName.Trim());
+                }
+                else
+                    _logFileService.DeleteByFileIdAndFileName(fileId.Value, fileName.Trim());
             }
             else
             {
