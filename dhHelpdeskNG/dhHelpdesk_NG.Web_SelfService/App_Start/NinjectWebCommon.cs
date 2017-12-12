@@ -320,6 +320,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IConditionService>().To<ConditionService>();
 
             kernel.Bind<ICaseFollowUpService>().To<CaseFollowUpService>();
+            kernel.Bind<ILogProgramService>().To<LogProgramService>();
 
 
             // Cache
