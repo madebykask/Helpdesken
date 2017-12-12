@@ -125,6 +125,7 @@
     <Compile Include="EntityConfigurations\Cases\CaseSectionFieldConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseSectionsConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseTypeProductAreaConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Condition\ConditionConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractFileConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractHistoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractConfiguration.cs" />
@@ -304,6 +305,8 @@
     <Compile Include="Mappers\Changes\BusinessModelToEntity\NewChangeToChangeEntityMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\UpdatedChangeToChangeEntityMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeEditSettingsMapper.cs" />
+    <Compile Include="Mappers\Condition\BusinessModelToEntity\ConditionToEntityMapper.cs" />
+    <Compile Include="Mappers\Condition\EntityToBusinessModel\ConditionToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Customer\EntityToBusinessModel\CustomerSettingsToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Customer\EntityToBusinessModel\CustomerToBusinessModel.cs" />
     <Compile Include="Mappers\Documents\EntityToBusinessModel\DocumentToBusinessModelMapper.cs" />
@@ -457,6 +460,7 @@
     <Compile Include="Repositories\BusinessRules\Concrete\BusinessRuleRepository.cs" />
     <Compile Include="Repositories\BusinessRules\IBusinessRuleRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentTextConditionIdentifierRepository.cs" />
+    <Compile Include="Repositories\Condition\Concrete\ConditionRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentTextIdentifierRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentTextConditionRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentRepository.cs" />
@@ -485,6 +489,7 @@
     <Compile Include="Repositories\Cases\Concrete\CausingPartRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\CaseFilterFavoriteRepository.cs" />
     <Compile Include="Repositories\Cases\ICaseFilterFavoriteRepository.cs" />
+    <Compile Include="Repositories\Condition\IConditionRepository.cs" />
     <Compile Include="Repositories\IExtendedCaseValueRepository.cs" />
     <Compile Include="Repositories\IExtendedCaseDataRepository.cs" />
     <Compile Include="Repositories\IExtendedCaseFormRepository.cs" />

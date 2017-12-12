@@ -173,6 +173,7 @@
     <Compile Include="Models\BusinessRules\BusinessRuleReadModel.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentTemplateModel.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentTextConditionIdentifierModel.cs" />
+    <Compile Include="Models\Condition\ConditionModel.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentTextIdentifierModel.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentTextConditionModel.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentParagraphConditionModel.cs" />

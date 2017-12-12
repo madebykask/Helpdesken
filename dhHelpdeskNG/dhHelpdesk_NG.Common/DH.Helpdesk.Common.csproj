@@ -71,6 +71,8 @@
     <Compile Include="Constants\UserAccessRole.cs" />
     <Compile Include="Constraints\NotifierConstraint.cs" />
     <Compile Include="Enums\AppSettingsKey.cs" />
+    <Compile Include="Enums\Condition\ConditionType.cs" />
+    <Compile Include="Enums\Condition\ConditionOperator.cs" />
     <Compile Include="Enums\UserRoleType.cs" />
     <Compile Include="Enums\BusinessRules\BREventType.cs" />
     <Compile Include="Enums\BusinessRules\BRFieldType.cs" />

@@ -360,6 +360,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     rep.Add(new Case_ExtendedCaseEntity() { Case_Id = caseId, ExtendedCaseData_Id = extendedCaseDataId, ExtendedCaseForm_Id = extendedCaseFormId });
                     uow.Save();
+                    
                 }                                
             }
 
@@ -382,8 +383,6 @@ namespace DH.Helpdesk.Services.Services
                     }
                 }
             }
-
-            
         }
 
         public Guid Delete(int id, string basePath, int? parentCaseId)
@@ -467,7 +466,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (var l in elogs)
                 {
-                    if (l.EmailLogAttempts.Any())
+                    if (l.EmailLogAttempts != null && l.EmailLogAttempts.Any())
                         _emailLogAttemptRepository.DeleteLogAttempts(l.Id);
 
                     this._emailLogRepository.Delete(l);
@@ -514,11 +513,8 @@ namespace DH.Helpdesk.Services.Services
 
             var c = this._caseRepository.GetById(id);
             ret = c.CaseGUID;
-            this._caseRepository.Delete(c);
-            this._caseRepository.Commit();
 
-
-            
+            DeleteCaseById(id);
 
             return ret;
         }
@@ -2135,6 +2131,15 @@ namespace DH.Helpdesk.Services.Services
             using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 uow.GetRepository<Case_ExtendedCaseEntity>().DeleteWhere(it => it.Case_Id == caseId);
+                uow.Save();
+            }
+        }
+
+        private void DeleteCaseById(int caseId)
+        {
+            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                uow.GetRepository<Case>().DeleteWhere(it => it.Id == caseId);
                 uow.Save();
             }
         }
