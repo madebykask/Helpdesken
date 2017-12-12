@@ -32,7 +32,6 @@ namespace DH.Helpdesk.BusinessData.Models.Checklists.Output
 
         public int Id { get; set; }
         public int Service_Id { get; private set; }
-        [IsId]
         public int IsActive { get; private set; }
         public string ActionName { get; private set; }
         public DateTime ChangedDate { get; private set; }

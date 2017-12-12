@@ -18,8 +18,7 @@ namespace DH.Helpdesk.Web.Models.CheckLists
             int wgId, 
             string checklistName,
             List<SelectListItem> workingGroups,
-            CheckListServiceModel services,
-            List<CheckListActionBM> checkListActions
+            List<CheckListServiceModel> services
             )
         {
             this.CheckListId = checkListId;
@@ -27,7 +26,6 @@ namespace DH.Helpdesk.Web.Models.CheckLists
             this.CheckListName = checklistName;
             this.WorkingGroups = workingGroups;
             this.Services = services;
-            this.CheckListActions = checkListActions;
         }
 
                
@@ -39,8 +37,14 @@ namespace DH.Helpdesk.Web.Models.CheckLists
              
         public List<SelectListItem> WorkingGroups {get; set;}
 
-        public CheckListServiceModel Services { get; set; }
+        public List<CheckListServiceModel> Services { get; set; }
 
-        public List<CheckListActionBM> CheckListActions { get; set; }
+        public List<SelectListItem> ServicesList { get; set; }
+
+        public int? SelectedServiceId { get; set; }
+
+        public string ActionInput { get; set; }
+
+        public string ServiceName { get; set; }
     }
 }

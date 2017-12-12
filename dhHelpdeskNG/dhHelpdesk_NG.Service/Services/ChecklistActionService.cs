@@ -26,6 +26,7 @@ namespace DH.Helpdesk.Services.Services
         void UpdateAction(CheckListActionBM checkListAction);
 
         void Commit();
+        int GetCheckListIdByAction(int id);
     }
 
     public class ChecklistActionService : IChecklistActionService
@@ -123,6 +124,11 @@ namespace DH.Helpdesk.Services.Services
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public int GetCheckListIdByAction(int id)
+        {
+            return _checklistActionRepository.GetCheckListIdByAction(id);
         }
     }
 }

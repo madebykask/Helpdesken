@@ -1601,7 +1601,7 @@
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
     <Compile Include="Models\CheckLists\CheckListIndexViewModel.cs" />
     <Compile Include="Models\CheckLists\CheckListInputModel.cs" />
-    <Compile Include="Models\CheckLists\CheckListserviceModel.cs" />
+    <Compile Include="Models\CheckLists\CheckListServiceModel.cs" />
     <Compile Include="Models\CheckLists\CheckListActionsInputModel.cs" />
     <Compile Include="Models\CheckLists\CheckListsModel.cs" />
     <Compile Include="Models\CheckLists\WorkingGroupMapperModel.cs" />
