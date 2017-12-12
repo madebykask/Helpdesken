@@ -1911,7 +1911,13 @@ begin
 
 end
 
-
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'IsMemberOfGroup' and sysobjects.name = N'tblUserWorkingGroup')
+begin
+	ALTER TABLE [dbo].[tblUserWorkingGroup] ADD IsMemberOfGroup bit NOT NULL Default(0)
+	
+	UPDATE [dbo].[tblUserWorkingGroup] SET [IsMemberOfGroup] = 1 WHERE [UserRole] = 2
+end
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.35'

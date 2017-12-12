@@ -7,5 +7,6 @@
         public const int READ_ONLY = 1;
 
         public const int ADMINSTRATOR = 2;
+
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using DH.Helpdesk.BusinessData.Enums.Users;
 using DH.Helpdesk.BusinessData.Models.Feedback;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Feedback;
@@ -1722,7 +1723,7 @@ namespace DH.Helpdesk.Services.Services
                                 foreach (var ur in newCase.Workinggroup.UserWorkingGroups)
                                 {
                                     if (ur.User != null)
-                                        if (ur.User.IsActive == 1 && ur.User.AllocateCaseMail == 1 && _emailService.IsValidEmail(ur.User.Email) && ur.UserRole == 2)
+                                        if (ur.User.IsActive == 1 && ur.User.AllocateCaseMail == 1 && _emailService.IsValidEmail(ur.User.Email) && ur.UserRole == WorkingGroupUserPermission.ADMINSTRATOR)
                                         {
                                             if (newCase.Department_Id != null && ur.User.Departments != null && ur.User.Departments.Count > 0)
                                             {

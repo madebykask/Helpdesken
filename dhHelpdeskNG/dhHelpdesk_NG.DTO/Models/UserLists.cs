@@ -19,6 +19,7 @@ namespace DH.Helpdesk.BusinessData.Models
     {
         public int? IsStandard { get; set; }
         public int RoleToUWG { get; set; }
+        public bool IsMemberOfGroup { get; set; }
         public int User_Id { get; set; }
         public int WorkingGroup_Id { get; set; }
         public string CustomerName { get; set; }

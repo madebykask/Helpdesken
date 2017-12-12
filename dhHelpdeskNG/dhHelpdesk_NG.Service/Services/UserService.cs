@@ -702,7 +702,7 @@ namespace DH.Helpdesk.Services.Services
                         //Filter 0 because problem in Case
                         var wg = this._workingGroupRepository.GetById(uwg.WorkingGroup_Id);
 
-                        if (uwg.UserRole != 0 && wg != null && customersSelected.Contains(wg.Customer_Id))
+                        if (uwg.UserRole != WorkingGroupUserPermission.NO_ACCESS && wg != null && customersSelected.Contains(wg.Customer_Id))
                             user.UserWorkingGroups.Add(uwg);
 
                         //user.userWorkingGroups.Add(uwg);
@@ -863,7 +863,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     foreach (var uwg in UserWorkingGroups)
                     {
-                        if (uwg.UserRole != 0)
+                        if (uwg.UserRole != WorkingGroupUserPermission.NO_ACCESS)
                             user.UserWorkingGroups.Add(uwg);
                     }
                 }
