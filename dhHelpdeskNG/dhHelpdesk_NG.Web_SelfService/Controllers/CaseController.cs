@@ -701,14 +701,13 @@
                 model.CaseDataModel = ApplyNextWorkflowStepOnCase(model.CaseDataModel, model.SelectedWorkflowStep.Value);
             
             int caseId = -1;
-
-            
+            decimal caseNum;
             
             //TODO: Refactor
             model.CaseDataModel.ExtendedCaseData_Id = model.ExtendedCaseDataModel.Id;
             model.CaseDataModel.ExtendedCaseForm_Id = model.ExtendedCaseDataModel.ExtendedCaseFormId;
 
-            var res = _universalCaseService.SaveCaseCheckSplit(model.CaseDataModel, auxModel, out caseId);
+            var res = _universalCaseService.SaveCaseCheckSplit(model.CaseDataModel, auxModel, out caseId, out caseNum);
             if (res.IsSucceed && caseId != -1)
             {
                 #region casefile
@@ -736,7 +735,7 @@
                     SessionFacade.LastMessageDialog = new MessageDialogModel(
                         MessageTypes.success,
                         "Your case has been successfully registered.",
-                        $"You can follow up your case status via this number: {model.CaseDataModel?.CaseNumber}");
+                        $"You can follow up your case status via this number: {caseNum}");
 
                     return RedirectToAction("Index", "Message");
                 }

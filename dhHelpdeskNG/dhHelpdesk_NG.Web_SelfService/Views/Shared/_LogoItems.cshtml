@@ -5,9 +5,7 @@
     <a href="@Url.Action("Index", "Start", new { customerId = Model.CustomerId, area = "" })">
         <div class="pull-left toplogo"></div>
     </a>
-    <div class="pull-right small toplogout">
-        @if (Model.LoginType != LoginMode.Anonymous)
-        {
+    <div class="pull-right small toplogout">        
             <div class="dropdown">
                 <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">
                     @Translation.Get("Select language", Enums.TranslationSource.TextTranslation)<span class="caret"></span>
@@ -27,7 +25,7 @@
                 }
             </div>
             <span class="toplogout-space"> | </span>
-        }
+        
         @if (!string.IsNullOrEmpty(SessionFacade.CurrentSystemUser))
         {
             <a href="#" title="Employee number: @(SessionFacade.CurrentUserIdentity != null? SessionFacade.CurrentUserIdentity.EmployeeNumber:"")">
