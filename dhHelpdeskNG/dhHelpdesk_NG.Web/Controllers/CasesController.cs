@@ -3676,6 +3676,7 @@ namespace DH.Helpdesk.Web.Controllers
                         TextInternal = string.Format("[{0} #{1}]: {2}", Translation.Get(CaseLog.ChildCaseMarker), case_.CaseNumber, caseLog.TextInternal)
                     };
                     this.UpdateCaseLogForCase(parentCase, parentCaseLog);
+                    
                 }
 
                 if (childCasesIds != null && childCasesIds.Length > 0)
@@ -3820,6 +3821,8 @@ namespace DH.Helpdesk.Web.Controllers
             IDictionary<string, string> errors;
 
             var c = this._caseService.GetCaseById(caseLog.CaseId);
+
+            this._logService.AddChildCaseLogToParentCase(c.Id, caseLog);
 
             // save case and case history
             var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0 };
