@@ -49,7 +49,7 @@ namespace DH.Helpdesk.Services.Services
         
 		public IEnumerable<ConditionModel> GetConditions(int parent_Id, int conditionType_Id)
         {
-            var conditions = _conditionRepository.GetConditions(parent_Id);
+            var conditions = _conditionRepository.GetConditions(parent_Id, conditionType_Id);
 
             return conditions;
         }

@@ -33,12 +33,10 @@ namespace DH.Helpdesk.Dal.Repositories.Condition.Concrete
         }
 
 
-        public IEnumerable<ConditionModel> GetConditions(int parent_Id)
+        public IEnumerable<ConditionModel> GetConditions(int parent_Id, int conditionType_Id)
         {
             var entities = this.Table
-                   .Where(c => c.Parent_Id == parent_Id && c.Status != 0)
-
-                   .Distinct()
+                   .Where(c => c.Parent_Id == parent_Id && c.Status != 0 && c.ConditionType_Id == conditionType_Id)
                    .ToList();
 
             return entities

@@ -714,7 +714,11 @@
                 #region casefile
                 //TODO: do we need to check "isNewCase"? /Tan
 
-                var basePath = _masterDataService.GetFilePath(model.CaseDataModel.Customer_Id);
+                var case_ = _universalCaseService.GetCase(caseId);
+
+                //var basePath = _masterDataService.GetFilePath(model.CustomerId);
+                //Get from baseCase path
+                var basePath = _masterDataService.GetFilePath(case_.Customer_Id);
 
                 // save case files
                 var temporaryFiles = _userTemporaryFilesStorage.GetFiles(model.CaseDataModel.CaseFileKey, ModuleName.Cases);

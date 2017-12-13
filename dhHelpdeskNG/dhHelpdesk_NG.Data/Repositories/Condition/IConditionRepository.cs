@@ -7,6 +7,6 @@
     
     public interface IConditionRepository : IRepository<ConditionEntity>
     {
-        IEnumerable<ConditionModel> GetConditions(int parent_Id);
+        IEnumerable<ConditionModel> GetConditions(int parent_Id, int conditionType_Id);
     }
 }

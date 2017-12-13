@@ -945,33 +945,38 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                         //save "base"
                         res = SaveCase(baseCaseModel, baseAuxModel, out baseCaseId);
 
+                        if (caseId == -1)
+                            caseId = baseCaseId;
+
                         //If it should be included in split
                         keepBaseCase = _conditionService.CheckConditions(baseCaseId, item.SplitToCaseSolutionDescendant.Id, conditionType_Id).Show;
                     }
                     else
                     {
-                         childCaseId = -1;
-
-                        
-                        //clone model
-                        CaseModel descendantCaseModel = baseCaseModel;
-
-                        //apply values from case solution
-                        descendantCaseModel = ApplyValuesFromCaseSolution(descendantCaseModel, item.SplitToCaseSolutionDescendant.Id);
-
-                        //todo: refactor
-                        descendantCaseModel.ExtendedCaseData_Id = null;
-                        descendantCaseModel.ExtendedCaseForm_Id = null;
-
+    
                         var doSplit = _conditionService.CheckConditions(baseCaseId, item.SplitToCaseSolutionDescendant.Id, conditionType_Id);
 
                         if (doSplit.Show)
-                        { 
+                        {
+
+                            childCaseId = -1;
+
+
+                            //clone model
+                            CaseModel descendantCaseModel = baseCaseModel;
+
+                            //apply values from case solution
+                            descendantCaseModel = ApplyValuesFromCaseSolution(descendantCaseModel, item.SplitToCaseSolutionDescendant.Id);
+
+                            //todo: refactor
+                            descendantCaseModel.ExtendedCaseData_Id = null;
+                            descendantCaseModel.ExtendedCaseForm_Id = null;
+
                             res = SaveCase(descendantCaseModel, baseAuxModel, out childCaseId);
 
                             if (res.IsSucceed && childCaseId != -1)
                             {
-
+                                if (caseId == -1)
                                 caseId = childCaseId;
 
                                 //Todo: refactor
@@ -991,8 +996,9 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 _caseService.Delete(baseCaseId, "", null);
             }
             else
-            { 
-                caseId = baseCaseId;
+            {
+                if (caseId == -1)
+                    caseId = baseCaseId;
             }
 
             return res;
