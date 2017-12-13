@@ -97,7 +97,7 @@
                     {
                         <li data-active-tab="@CaseTabs.ExtendedCaseTab" class="@((Model.ActiveTab.StartsWith(CaseTabs.ExtendedCaseTab)) ? "active" : "")" >
                             <a href="#container_@extendedCase.Id" id="extendedcase-tab" class="extendedcase" data-id="@extendedCase.Id" data-state="">
-                                @(Translation.GetCoreTextTranslation(extendedCase.Name))
+                                @(Translation.GetMasterDataTranslation(extendedCase.Name))
                                 <i id="exTabIndicator_@extendedCase.Id" class="tab-indicator" style="display:none">&nbsp;</i>
                             </a>                            
                         </li>
