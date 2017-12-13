@@ -66,27 +66,27 @@
                     </button>
                 </div>
                 <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        @if (!layoutModel.HideMenu)
-                            {
-                                <li class="blue">
-                                    <a href="@Url.Action("Index", "Start", new { customerId = layoutModel.CustomerId, area = "" })">
-                                        <i class="fa fa-home mnu-fa"></i><br />
-                                        @Translation.Get("Start", Enums.TranslationSource.TextTranslation)
-                                    </a>
-                                </li>
+                    <ul class="nav navbar-nav">                        
+                        @if (!layoutModel.HideMenu && layoutModel.LoginType != LoginMode.Anonymous)
+                        {
+                            <li class="blue">
+                                <a href="@Url.Action("Index", "Start", new { customerId = layoutModel.CustomerId, area = "" })">
+                                    <i class="fa fa-home mnu-fa"></i><br />
+                                    @Translation.Get("Start", Enums.TranslationSource.TextTranslation)
+                                </a>
+                            </li>
 
-                                if (!layoutModel.HasError)
-                                {
-                                    @Html.Partial("MainMenuItems/_CaseTemplatesMenu", layoutModel)
-                                    @Html.Partial("MainMenuItems/_CaseListMenu", layoutModel)
-                                    @Html.Partial("MainMenuItems/_OrderMenu", layoutModel)
-                                    @Html.Partial("MainMenuItems/_DocumentMenu", layoutModel)
-                                    @Html.Partial("MainMenuItems/_FAQMenu", layoutModel)
-                                    @Html.Partial("MainMenuItems/_UserGroupMenu", layoutModel)
-                                    @Html.Partial("MainMenuItems/_HelpAboutMenu", layoutModel)
-                                }
+                            if (!layoutModel.HasError)
+                            {
+                                @Html.Partial("MainMenuItems/_CaseTemplatesMenu", layoutModel)
+                                @Html.Partial("MainMenuItems/_CaseListMenu", layoutModel)
+                                @Html.Partial("MainMenuItems/_OrderMenu", layoutModel)
+                                @Html.Partial("MainMenuItems/_DocumentMenu", layoutModel)
+                                @Html.Partial("MainMenuItems/_FAQMenu", layoutModel)
+                                @Html.Partial("MainMenuItems/_UserGroupMenu", layoutModel)
+                                @Html.Partial("MainMenuItems/_HelpAboutMenu", layoutModel)
                             }
+                        }
                     </ul>
                 </div>
             </div>
@@ -95,12 +95,15 @@
         @RenderBody()
         <div class="container-fluid dh-container">
             <div class="row">
-                <div class="col-md-10 small">
-                    <div class="footerdhhd">
-                        <img src="@Url.Content("~/Content/img/dh_solutions_slogan.png")" />&nbsp;
-                        <br /><i>@Translation.Get("Version")&nbsp;@ApplicationFacade.Version</i>
+                @if (ViewBag.Title != "MessageDialog")
+                {
+                    <div class="col-md-10 small">
+                        <div class="footerdhhd">
+                            <img src="@Url.Content("~/Content/img/dh_solutions_slogan.png")" />&nbsp;
+                            <br /><i>@Translation.Get("Version")&nbsp;@ApplicationFacade.Version</i>
+                        </div>
                     </div>
-                </div>
+                }
             </div>
             @RenderSection("Scripts", false)
             <input type="hidden" value="@Request.RawUrl" id="rawUrl" />

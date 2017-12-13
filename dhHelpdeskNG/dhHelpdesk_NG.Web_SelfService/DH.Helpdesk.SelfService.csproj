@@ -30,8 +30,8 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
     <IISExpressSSLPort>44340</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SkipPostSharp>True</SkipPostSharp>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
@@ -252,6 +252,7 @@
     <Compile Include="Controllers\FAQController.cs" />
     <Compile Include="Controllers\DocumentsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\InfoController.cs" />
@@ -286,6 +287,7 @@
     <Compile Include="Infrastructure\Common\Concrete\ErrorGenerator.cs" />
     <Compile Include="Infrastructure\Common\ICommonFunctions.cs" />
     <Compile Include="Infrastructure\Configuration\FederatedAuthenticationSettings.cs" />
+    <Compile Include="Infrastructure\Configuration\SelfServiceConfigModel.cs" />
     <Compile Include="Infrastructure\Constants.cs" />
     <Compile Include="Infrastructure\Enums.cs" />
     <Compile Include="Infrastructure\Extensions\BooleanExtensions.cs" />
@@ -375,6 +377,7 @@
     <Compile Include="Models\Help\HelpModel.cs" />
     <Compile Include="Models\ISearchModel.cs" />
     <Compile Include="Models\MasterPageViewModel.cs" />
+    <Compile Include="Models\Message\MessageDialogModel.cs" />
     <Compile Include="Models\Notifiers\ConfigurableFields\BooleanFieldModel.cs" />
     <Compile Include="Models\Notifiers\ConfigurableFields\ConfigurableFieldModel.cs" />
     <Compile Include="Models\Notifiers\ConfigurableFields\DropDownFieldModel.cs" />
@@ -793,6 +796,7 @@
     <Content Include="Views\Shared\MainMenuItems\_FAQMenu.cshtml" />
     <Content Include="Views\Shared\MainMenuItems\_UserGroupMenu.cshtml" />
     <Content Include="Views\Shared\MainMenuItems\_HelpAboutMenu.cshtml" />
+    <Content Include="Views\Message\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">

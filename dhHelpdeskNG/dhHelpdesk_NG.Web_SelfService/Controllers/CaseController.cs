@@ -34,6 +34,7 @@
     using Common.Extensions.DateTime;
     using Infrastructure.Helpers;
     using BusinessData.Models.Shared;
+    using Models.Message;
 
     public class CaseController : BaseController
     {
@@ -722,16 +723,30 @@
 
                 // delete temp folders                
                 _userTemporaryFilesStorage.DeleteFiles(model.CaseDataModel.CaseFileKey);
-                #endregion  
+                #endregion
 
-                return RedirectToAction("UserCases", new { customerId = model.CustomerId });
+                var showConfirmMessage = AppConfigHelper.GetAppSetting(AppSettingsKey.ConfirmMsgAfterCaseRegistration);
+
+                if (!string.IsNullOrEmpty(showConfirmMessage) && showConfirmMessage == "true")
+                {
+                    SessionFacade.LastMessageDialog = new MessageDialogModel(
+                        MessageTypes.success,
+                        "Your case has been successfully registered.",
+                        $"You can follow up your case status via this number: {model.CaseDataModel?.CaseNumber}");
+
+                    return RedirectToAction("Index", "Message");
+                }
+                else
+                {                    
+                    return RedirectToAction("UserCases", new { customerId = model.CustomerId });
+                }
             }
 
             if (model.CaseDataModel.OU_Id.HasValue)            
                 model.CaseOU = _ouService.GetOU(model.CaseDataModel.OU_Id.Value);                
             
 
-            model.Result = res;            
+            model.Result = res;                     
             return View("ExtendedCase", model);
         }
 
@@ -1099,8 +1114,24 @@
         [HttpPost]
         public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
         {
-            int caseId = Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog);
-            return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
+            decimal caseNum;
+            int caseId = Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog, out caseNum);
+
+            var showConfirmMessage = AppConfigHelper.GetAppSetting(AppSettingsKey.ConfirmMsgAfterCaseRegistration);
+
+            if (!string.IsNullOrEmpty(showConfirmMessage) && showConfirmMessage == "true")
+            {
+                SessionFacade.LastMessageDialog = new MessageDialogModel(
+                    MessageTypes.success,
+                    "Your case has been successfully registered.",
+                    $"You can follow up your case status via this number: {caseNum}");
+
+                return RedirectToAction("Index", "Message");
+            }
+            else
+            {
+                return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
+            }
         }
 
         [HttpPost]
@@ -1388,10 +1419,10 @@
             return result;
         }
 
-        private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
+        private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog, out decimal caseNumber)
         {
             IDictionary<string, string> errors;
-
+            caseNumber = 0;
             // save case and case history
             if (newCase.User_Id <= 0)
                 newCase.User_Id = null;
@@ -1477,7 +1508,7 @@
             }
 
             _caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase);
-
+            caseNumber = newCase.CaseNumber;
             return newCase.Id;
         }
 

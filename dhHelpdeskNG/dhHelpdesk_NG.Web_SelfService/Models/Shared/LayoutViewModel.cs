@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Domain;
+﻿using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Domain;
 using DH.Helpdesk.SelfService.Models.Case;
 using DH.Helpdesk.SelfService.Models.CaseTemplate;
 using System.Collections.Generic;
@@ -22,8 +23,8 @@ namespace DH.Helpdesk.SelfService.Models.Shared
         public bool ShowLanguage{ get; set; }
         public CaseLogModel CaseLog { get; set; }
         public bool HasError { get; set; }
+        public string LoginType { get; set; }
 
-
-
+        
     }
 }

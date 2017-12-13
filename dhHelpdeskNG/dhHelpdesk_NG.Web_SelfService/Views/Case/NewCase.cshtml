@@ -345,7 +345,7 @@
                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.InventoryNumber)
                             </label>
                             <div class="col-md-9">
-                                @Html.TextBoxFor(i => Model.NewCase.InventoryNumber, new {@class = "hasAttribute", maxlength = "20", standardName = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()})
+                                @Html.TextBoxFor(i => Model.NewCase.InventoryNumber, new {@class = "hasAttribute", maxlength = "20", standardName = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), autocomplete = "off" })
                             </div>
                         </div>
                     }
