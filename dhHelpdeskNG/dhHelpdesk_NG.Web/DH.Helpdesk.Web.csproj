@@ -32,7 +32,7 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
     <IISExpressSSLPort>44302</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <DontImportPostSharp>True</DontImportPostSharp>
@@ -309,6 +309,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\WebApi\Controllers\CaseApiController.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />
+    <Compile Include="Enums\ReportItemNames.cs" />
     <Compile Include="Infrastructure\Cryptography\AESCryptoProvider.cs" />
     <Compile Include="Infrastructure\Extensions\DicExtentions.cs" />
     <Compile Include="Infrastructure\Extensions\NewtonsoftJsonExtensions.cs" />
