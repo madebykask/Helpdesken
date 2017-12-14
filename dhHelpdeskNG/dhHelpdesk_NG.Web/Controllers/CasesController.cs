@@ -5434,7 +5434,11 @@ namespace DH.Helpdesk.Web.Controllers
                             m.case_.Project_Id = caseTemplate.Project_Id;
 
                         if (!string.IsNullOrEmpty(caseTemplate.Text_External))
+                        {
                             m.CaseLog.TextExternal = caseTemplate.Text_External;
+                            m.CaseLog.SendMailAboutCaseToNotifier = true;
+                        }
+                            
 
                         if (!string.IsNullOrEmpty(caseTemplate.Text_Internal))
                             m.CaseLog.TextInternal = caseTemplate.Text_Internal;
@@ -5733,7 +5737,10 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             // check state secondary info
-            m.CaseLog.SendMailAboutCaseToNotifier = false;
+            if (string.IsNullOrEmpty(m.CaseLog.TextExternal))
+            {
+                m.CaseLog.SendMailAboutCaseToNotifier = false;
+            }
 
             m.Disable_SendMailAboutCaseToNotifier = false;
             if (m.case_.StateSecondary_Id > 0)
