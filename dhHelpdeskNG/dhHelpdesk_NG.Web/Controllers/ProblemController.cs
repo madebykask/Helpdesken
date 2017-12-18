@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
+
+namespace DH.Helpdesk.Web.Controllers
 {
     using System;
     using System.Globalization;
@@ -24,8 +27,10 @@
         private readonly IProblemService problemService;
         private readonly IProblemLogService problemLogService;
         private readonly IFinishingCauseService finishingCauseService;
-        private readonly ISettingService settingService;
+        private readonly ISettingService _settingService;
         private readonly ICaseService caseService;
+        private readonly IMasterDataService _masterDataService;
+        private readonly ICustomerService _customerService;
 
         private readonly IUserService userService;
 
@@ -36,7 +41,8 @@
                 IProblemLogService problemLogService,
                 ICaseService caseService,
                 ISettingService settingService,
-                IFinishingCauseService finishingCauseService)
+                IFinishingCauseService finishingCauseService,
+                ICustomerService customerService)
             : base(masterDataService)
         {
             this.problemService = problemService;
@@ -44,7 +50,9 @@
             this.problemLogService = problemLogService;
             this.caseService = caseService;
             this.finishingCauseService = finishingCauseService;
-            this.settingService = settingService;
+            this._settingService = settingService;
+            _masterDataService = masterDataService;
+            _customerService = customerService;
         }
 
         // todo refactor
@@ -145,7 +153,7 @@
             var filter = SessionFacade.FindPageFilters<ProblemFilter>(PageName.Problems) ?? new ProblemFilter { EntityStatus = EntityStatus.Active };
             var problems = this.problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id, filter.EntityStatus);
             var customerId = SessionFacade.CurrentCustomer.Id;
-            var settings = this.settingService.GetCustomerSetting(customerId);
+            var settings = this._settingService.GetCustomerSetting(customerId);
 
             var problemOutputModels = problems.Select(t=> MapProblemOverviewToOutputModel(t, settings.IsUserFirstLastNameRepresentation==1)).ToList();
 
@@ -159,7 +167,7 @@
         public PartialViewResult Search(EntityStatus show)
         {
             var problems = this.problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id, show);
-            var settings = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+            var settings = this._settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
             var problemOutputModels = problems.Select(t=> MapProblemOverviewToOutputModel(t, settings.IsUserFirstLastNameRepresentation == 1)).ToList();
 
             SessionFacade.SavePageFilters(PageName.Problems, new ProblemFilter { EntityStatus = show });
@@ -343,6 +351,7 @@
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId };
 
             this.problemLogService.AddLog(logDto);
+            SendProblemLogEmail(log);
             return this.RedirectToAction("ProblemActiveLog", new { id = log.ProblemId });
         }
 
@@ -373,6 +382,7 @@
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId, Id = log.Id };
 
             this.problemLogService.UpdateLog(logDto);
+            SendProblemLogEmail(log);
             return this.RedirectToAction("ProblemActiveLog", new { id = log.ProblemId });
         }
 
@@ -387,6 +397,8 @@
             return null;
         }
 
+        #region Private
+
         private ProblemEditViewModel CreateProblemEditViewModel(int id)
         {
             var problem = this.problemService.GetProblem(id);
@@ -394,7 +406,7 @@
 
             // todo!!!
             var cases = this.caseService.GetProblemCases(SessionFacade.CurrentCustomer.Id, id);
-            var setting = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+            var setting = this._settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
             var isFirstName = (setting.IsUserFirstLastNameRepresentation == 1);
 
             var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id);
@@ -413,5 +425,46 @@
 
             return new ProblemEditViewModel { Problem = problemOutputModel, Users = userOutputModels, Logs = outputLogs, Cases = outputCases };
         }
+
+        private void SendProblemLogEmail(LogEditModel log)
+        {
+            if (log.ExternNotering || log.FinishConnectedCases)
+            {
+                var cases = caseService.GetProblemCases(log.ProblemId);
+                foreach (var c in cases)
+                {
+                    var userTimeZone = TimeZoneInfo.Local;
+                    var basePath = _masterDataService.GetFilePath(c.Customer_Id);
+                    var caseHistoryId = problemService.GetCaseHistoryId(c.Id, log.ProblemId);
+
+                    var customer = _customerService.GetCustomer(c.Customer_Id);
+                    var caseMailSetting = new CaseMailSetting(string.Empty, customer.HelpdeskEmail, RequestExtension.GetAbsoluteUrl(), 1)
+                    {
+                        DontSendMailToNotifier = false,
+                    };
+
+                    var mailSenders = new MailSenders { SystemEmail = caseMailSetting.HelpdeskMailFromAdress };
+                    caseMailSetting.CustomeMailFromAddress = mailSenders;
+
+                    var caseLog = new CaseLog
+                    {
+                        CaseId = c.Id,
+                        FinishingDate = log.FinishConnectedCases ? (log.FinishingDate.HasValue ? log.FinishingDate : DateTime.Now) : null,
+                        FinishingType = log.FinishConnectedCases ? log.FinishingCauseId : null,
+                        SendMailAboutLog = true,
+                        CaseHistoryId = caseHistoryId
+                    };
+                    if (log.ExternNotering)
+                        caseLog.TextExternal = log.LogText;
+                    if (log.InternNotering)
+                        caseLog.TextInternal = log.LogText;
+
+                    caseService.SendCaseEmail(c.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, null, caseLog);
+                }
+            }
+        }
+
+        #endregion
+
     }
 }

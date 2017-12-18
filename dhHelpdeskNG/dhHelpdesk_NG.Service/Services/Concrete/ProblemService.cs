@@ -120,5 +120,11 @@
                         .MapToOverviews();
             }
         }
+
+        public int GetCaseHistoryId(int caseId, int problemId)
+        {
+            var caseHistory = caseHistoryRepository.GetCaseHistoryByProblemId(caseId, problemId);
+            return caseHistory != null ? caseHistory.Id : 0;
+        }
     }
 }

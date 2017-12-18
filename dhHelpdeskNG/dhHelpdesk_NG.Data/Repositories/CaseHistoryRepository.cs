@@ -20,6 +20,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         CaseHistory GetCloneOfLatest(int caseId);
         CaseHistory GetCloneOfPenultimate(int caseId);
+        CaseHistory GetCaseHistoryByProblemId(int caseId, int problemId);
     }
 
     public class CaseHistoryRepository : RepositoryBase<CaseHistory>, ICaseHistoryRepository
@@ -136,6 +137,15 @@ namespace DH.Helpdesk.Dal.Repositories
                 .Where(it => it.Case_Id == caseId)
                 .OrderByDescending(it => it.Id)
                 .Skip(1).Take(1)
+                .FirstOrDefault();
+        }
+
+        public CaseHistory GetCaseHistoryByProblemId(int caseId, int problemId)
+        {
+            return this.DataContext.Set<CaseHistory>()
+                .AsNoTracking()
+                .Where(it => it.Case_Id == caseId && it.Problem_Id == problemId)
+                .OrderByDescending(it => it.Id)
                 .FirstOrDefault();
         }
     }

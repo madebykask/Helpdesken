@@ -42,5 +42,7 @@
         /// The result.
         /// </returns>
         IEnumerable<ProblemInfoOverview> GetProblemOverviews(int[] customers, int? count, bool forStartPage);
+
+        int GetCaseHistoryId(int caseId, int problemId);
     }
 }
