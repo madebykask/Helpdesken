@@ -653,9 +653,9 @@ namespace DH.Helpdesk.Services.Services.Concrete
             this.computerInventoryRepository.Commit();
         }
 
-        public List<ComputerOverview> GetRelatedInventory(int customerId, string userId, UserOverview user)
+        public List<ComputerOverview> GetRelatedInventory(int customerId, string userId)
         {
-            return this.computerRepository.GetRelatedOverviews(customerId, userId, user);
+            return this.computerRepository.GetRelatedOverviews(customerId, userId);
         }
 
         public ComputerShortOverview GetWorkstationShortInfo(int computerId)

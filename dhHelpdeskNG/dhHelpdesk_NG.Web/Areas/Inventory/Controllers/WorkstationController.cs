@@ -439,7 +439,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 SortBy = SortBy.Ascending
             };
             var settings = inventorySettingsService.GetWorkstationFieldSettingsOverview(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
-            var models = inventoryService.GetRelatedInventory(SessionFacade.CurrentCustomer.Id, userId, SessionFacade.CurrentUser);
+            var models = inventoryService.GetRelatedInventory(SessionFacade.CurrentCustomer.Id, userId);
             var viewModel = InventoryGridModel.BuildModel(models, settings, sortField);
             ViewData.Add(new KeyValuePair<string, object>("UserId", userId));
             return View(viewModel);

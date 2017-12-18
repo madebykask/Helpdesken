@@ -5,6 +5,7 @@ using System.Linq;
 using DH.Helpdesk.BusinessData.Enums.Users;
 using DH.Helpdesk.BusinessData.Models.Feedback;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Feedback;
 
 namespace DH.Helpdesk.Services.Services
@@ -2089,12 +2090,9 @@ namespace DH.Helpdesk.Services.Services
         {
             using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
-                var caseRep = uow.GetRepository<Case>();
+                var computerRep = uow.GetRepository<Computer>();
 
-                return caseRep.GetAll()
-                        .GetByCustomer(customerId)
-                        .GetRelatedInventories(userId, currentUser)
-                        .Count();
+                return computerRep.GetAll().GetRelatedInventoriesCount(userId, currentUser, customerId);
             }
         }
 

@@ -123,6 +123,6 @@ namespace DH.Helpdesk.Services.Services
 
         #endregion
 
-        List<ComputerOverview> GetRelatedInventory(int customerId, string userId, UserOverview user);
+        List<ComputerOverview> GetRelatedInventory(int customerId, string userId);
     }
 }

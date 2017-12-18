@@ -1,7 +1,3 @@
-using System.Data.Entity;
-using DH.Helpdesk.BusinessData.Enums.Admin.Users;
-using DH.Helpdesk.BusinessData.Models.User.Input;
-
 namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 {
     using System;
@@ -618,24 +614,9 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             return computer?.Id ?? 0;
         }
 
-        public List<ComputerOverview> GetRelatedOverviews(int customerId, string userId, UserOverview user)
+        public List<ComputerOverview> GetRelatedOverviews(int customerId, string userId)
         {
-            var cases = DbContext.Cases.Where(x => x.Customer_Id == customerId);
-            cases = cases.Where(c => c.ReportedBy.Trim().Equals(userId.Trim()) && !string.IsNullOrEmpty(c.InventoryNumber));
-
-            if (user.RestrictedCasePermission == 1 && user.UserGroupId == (int)UserGroup.Administrator)
-            {
-                cases = cases.Where(c => c.Performer_User_Id == user.Id || c.CaseResponsibleUser_Id == user.Id);
-            }
-
-            if (user.RestrictedCasePermission == 1 && user.UserGroupId == (int)UserGroup.User)
-            {
-                cases = cases.Where(c => c.ReportedBy.Trim().Equals(user.UserId.Trim()));
-            }
-
-            var inventoryNumbers = cases.Select(x => x.InventoryNumber).Distinct().ToList();
-
-            var computers = DbSet.Where(x => x.Customer_Id == customerId && inventoryNumbers.Contains(x.ComputerName));
+            var computers = DbSet.Where(x => x.Customer_Id == customerId && x.User.UserId.Trim().Equals(userId.Trim()));
             var overviews = MapToComputerOverview(computers);
             return overviews;
         }

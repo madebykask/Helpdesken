@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using DH.Helpdesk.Domain.Computers;
 
 namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Case
 {
@@ -369,21 +370,11 @@ namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Case
             return query;
         }
 
-        public static IQueryable<string> GetRelatedInventories(this IQueryable<Case> query, string userId, UserOverview user)
+        public static int GetRelatedInventoriesCount(this IQueryable<Computer> query, string userId, UserOverview user, int customerId)
         {
-            query = query.Where(c => c.ReportedBy.Trim().Equals(userId.Trim()) && !string.IsNullOrEmpty(c.InventoryNumber));
+            query = query.Where(c => c.User.UserId.Trim().Equals(userId.Trim()));
 
-            if (user.RestrictedCasePermission == 1 && user.UserGroupId == (int)UserGroup.Administrator)
-            {
-                query = query.Where(c => c.Performer_User_Id == user.Id || c.CaseResponsibleUser_Id == user.Id);
-            }
-
-            if (user.RestrictedCasePermission == 1 && user.UserGroupId == (int)UserGroup.User)
-            {
-                query = query.Where(c => c.ReportedBy.Trim().Equals(user.UserId.Trim()));
-            }
-
-            return query.Select(x => x.InventoryNumber).Distinct();
+            return query.Count();
         }
 
         public static IQueryable<Case> Search(
