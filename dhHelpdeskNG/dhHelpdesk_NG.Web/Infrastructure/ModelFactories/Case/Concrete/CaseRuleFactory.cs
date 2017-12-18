@@ -568,7 +568,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                                                                 string.Format("{0} {1}", a.FirstName, a.SurName) : string.Format("{0} {1}", a.SurName, a.FirstName)),
                                                          a.IsActive != 0)
                               {
-                                  ForeignKeyValue1 = string.Join(",", a.UserWorkingGroups.Where(w => w.UserRole == WorkingGroupUserPermission.ADMINSTRATOR)
+                                  ForeignKeyValue1 = string.Join(",", a.UserWorkingGroups.Where(w => w.UserRole == WorkingGroupUserPermission.ADMINSTRATOR && w.IsMemberOfGroup)
                                                                                         .Select(w => w.WorkingGroup_Id)
                                                                                         .ToArray())
                               })

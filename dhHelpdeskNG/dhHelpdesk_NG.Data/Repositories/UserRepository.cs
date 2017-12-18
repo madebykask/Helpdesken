@@ -37,7 +37,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         List<ItemWithEmail> FindUsersEmails(List<int> userIds, bool isActive = false);
 
-        IEnumerable<User> GetUsers(int customerId);
+        IQueryable<User> GetUsers(int customerId);
         IEnumerable<User> GetUsersByUserGroup(int customerId);
         IEnumerable<User> GetUsersForWorkingGroup(int customerId, int workingGroupId);
         IEnumerable<User> GetUsersForWorkingGroup(int workingGroupId);
@@ -249,7 +249,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return query;
         }
 
-        public IEnumerable<User> GetUsers(int customerId)
+        public IQueryable<User> GetUsers(int customerId)
         {
             var query = from u in this.DataContext.Users
                         where u.CustomerUsers.Any(c => c.Customer_Id == customerId) // u.Customer_Id == customerId &&
