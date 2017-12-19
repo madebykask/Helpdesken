@@ -98,7 +98,7 @@ function close_window() {
 
 function SelectValueInOtherDropdownOnChange(id, postTo, ctl, readonlyElement) {
     var ctlOption = ctl + ' option';
-    $.post(postTo, { 'id': id }, function (data) {
+    return $.post(postTo, { 'id': id }, function (data) {
         if (data != null) {
             var exists = $(ctlOption + '[value=' + data + ']').length;
             if (exists > 0) {

@@ -924,10 +924,13 @@ function CaseInitForm() {
             CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#Performer_Id', $('#DepartmentFilterFormat').val());
         }
         //set state secondery
-        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeWorkingGroupSetStateSecondary/', '#case__StateSecondary_Id', '.readonlySubstate');        
+        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeWorkingGroupSetStateSecondary/', '#case__StateSecondary_Id', '.readonlySubstate')
+            .done(function() {
+                $('#case__StateSecondary_Id').trigger('change', 'case__WorkingGroup_Id');
+            });
       });
 
-    $('#case__StateSecondary_Id').change(function () {
+    $('#case__StateSecondary_Id').change(function (d, source) {
         $('#CaseLog_SendMailAboutCaseToNotifier').removeAttr('disabled');
         curVal = $('#case__StateSecondary_Id').val();
         $('#case__StateSecondary_Id option[value=' + curVal + ']').attr('selected', 'selected');
@@ -949,7 +952,7 @@ function CaseInitForm() {
             }
             // set workinggroup id
             var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
-            if (exists > 0 && data.WorkingGroup_Id > 0) {               
+            if (exists > 0 && data.WorkingGroup_Id > 0 && source !== 'case__WorkingGroup_Id') {
                 $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id);
             }
         }, 'json');
@@ -960,7 +963,7 @@ function CaseInitForm() {
     });
 
     function addTextToLog(text) {
-        var regexp = /<BR>/g
+        var regexp = /<BR>/g;
         var txt = text.replace(regexp, "\n");
         var writeTextToExternalNote = $("#WriteTextToExternalNote").val();
         var field = "#CaseLog_TextInternal";

@@ -585,14 +585,14 @@ EditPage.prototype.fetchWatchDateByDept = function (deptId) {
             if (response.result === 'success') {
                 if (response.data != null) {
 
-                    var utcTime = parseInt(response.data.replace("/Date(", "").replace(")/", ""), 10)
+                    var utcTime = parseInt(response.data.replace("/Date(", "").replace(")/", ""), 10);
 
                     var dt = new Date(utcTime);
                     dt = new Date(utcTime - (dt.getTimezoneOffset() * 1000 * 60));
                     me.$watchDate.datepicker('update', dt);
 
                     var readOnly = $(me.$watchDateEdit).attr("readonly");
-                    if (readOnly != undefined && readOnly.toLowerCase() == 'readonly') {
+                    if (readOnly != undefined && readOnly.toLowerCase() === 'readonly') {
                         var dateText = dt.format('yyyy-MM-dd');
                         me.$watchDateEdit.val(dateText);
                     }
@@ -1274,19 +1274,22 @@ EditPage.prototype.init = function (p) {
         if (isNaN(SLA)) {            
             SLA = parseInt(self.$SLAText.attr('data-sla'), 10);
         }
-        if (this.id == "case__StateSecondary_Id") {
-            $.post('/Cases/ChangeStateSecondary', { 'id': $(this).val() }, function (data) {
-                if (data.ReCalculateWatchDate == 1) {
-                    if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
-                        return self.fetchWatchDateByDept.call(self, deptId);
+        if (this.id === "case__StateSecondary_Id") {
+            $.post('/Cases/ChangeStateSecondary',
+                { 'id': $(this).val() },
+                function(data) {
+                    if (data.ReCalculateWatchDate == 1) {
+                        if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
+                            self.fetchWatchDateByDept.call(self, deptId);
+                        }
                     }
-                }
-            }, 'json');
-            return;
-        }
+                },
+                'json');
+        } else {
 
-        if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
-            return self.fetchWatchDateByDept.call(self, deptId);
+            if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
+                self.fetchWatchDateByDept.call(self, deptId);
+            }
         }
         //else {
         //    if (self.$watchDateEdit.val() == '')
