@@ -23,5 +23,7 @@ namespace DH.Helpdesk.Dal.Repositories
         string RelatedCasesUserId { get; }
         int[] CaseIds { get; }
         IList<int> CaseTypes { get; }
+        bool FetchInfoAboutParentChild { get; set; }
+
     }
 }

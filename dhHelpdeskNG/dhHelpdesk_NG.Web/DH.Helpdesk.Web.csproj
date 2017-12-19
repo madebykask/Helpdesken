@@ -209,9 +209,7 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Net.Http.WebRequest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Net.Http.WebRequest.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Cors, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -311,6 +309,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\WebApi\Controllers\CaseApiController.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />
+    <Compile Include="Enums\ReportItemNames.cs" />
     <Compile Include="Infrastructure\Cryptography\AESCryptoProvider.cs" />
     <Compile Include="Infrastructure\Extensions\DicExtentions.cs" />
     <Compile Include="Infrastructure\Extensions\NewtonsoftJsonExtensions.cs" />
@@ -1603,7 +1602,7 @@
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
     <Compile Include="Models\CheckLists\CheckListIndexViewModel.cs" />
     <Compile Include="Models\CheckLists\CheckListInputModel.cs" />
-    <Compile Include="Models\CheckLists\CheckListserviceModel.cs" />
+    <Compile Include="Models\CheckLists\CheckListServiceModel.cs" />
     <Compile Include="Models\CheckLists\CheckListActionsInputModel.cs" />
     <Compile Include="Models\CheckLists\CheckListsModel.cs" />
     <Compile Include="Models\CheckLists\WorkingGroupMapperModel.cs" />
@@ -3947,6 +3946,8 @@
     <Content Include="Views\Shared\_CaseDocumentPrint.cshtml" />
     <Content Include="Views\Cases\_CaseInformation.cshtml" />
     <Content Include="Views\Cases\_CaseValidation.cshtml" />
+    <Content Include="Areas\Inventory\Views\Workstation\RelatedInventoryFull.cshtml" />
+    <Content Include="Views\Shared\CaseQuickOpen.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

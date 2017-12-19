@@ -1,0 +1,61 @@
+﻿@using DH.Helpdesk.Common.Enums
+@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+@model DH.Helpdesk.Web.Areas.Inventory.Models.InventoryGridModel
+
+@{
+    Layout = "~/Views/Shared/_PopupLayout.cshtml";
+
+    string userId = null;
+    if (ViewData.Keys.Contains("UserId"))
+    {
+        userId = (string)ViewData["UserId"];
+    }
+}
+
+<div style="margin: 5px">
+    @Translation.GetCoreTextTranslation("Poster i sökresultat"): @Model.Inventories.Count
+    <table class="table table-striped table-bordered table-hover table-cases">
+        <thead>
+            <tr>
+                @foreach (var header in Model.Headers)
+            {
+                    <th onclick="sortGrid('@header.FieldName')" class="thpointer">
+                        @Translation.GetCoreTextTranslation(header.Caption)
+                        @if (Model.SortField != null && header.FieldName == Model.SortField.Name)
+                {
+                    switch (Model.SortField.SortBy)
+                    {
+                        case SortBy.Ascending:
+                                    <i class="icon-chevron-up"></i>
+                                    break;
+                                case SortBy.Descending:
+                                    <i class="icon-chevron-down"></i>
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+                        }
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var inventory in Model.Inventories)
+            {
+                <tr onclick="window.location.href='@Url.Action("Edit", new { id = inventory.Id, dialog = true, userId })'">
+                    @{
+                        var fields = inventory.Fields.ToList();
+                        for (var i = 0; i < fields.Count; i++)
+                        {
+                            var inventoryField = Model.Headers[i];
+                            var inventoryFieldValue = fields.Single(v => v.FieldName == inventoryField.FieldName);
+
+                            <td class="tdpointer">@inventoryFieldValue.Value.GetDisplayValue().ForHtmlView()</td>
+                        }
+                    }
+                </tr>
+                        }
+        </tbody>
+    </table>
+</div>

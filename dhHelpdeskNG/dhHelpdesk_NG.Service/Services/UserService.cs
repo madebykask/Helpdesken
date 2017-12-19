@@ -180,6 +180,7 @@ namespace DH.Helpdesk.Services.Services
         bool IsUserValidAdmin(string userId, string pass);
 
         bool VerifyUserCasePermissions(UserOverview user, int caseId);
+        Expression<Func<Case, bool>> GetCasePermissionFilter(UserOverview user);
     }
 
     public class UserService : IUserService
@@ -701,7 +702,7 @@ namespace DH.Helpdesk.Services.Services
                         //Filter 0 because problem in Case
                         var wg = this._workingGroupRepository.GetById(uwg.WorkingGroup_Id);
 
-                        if (uwg.UserRole != 0 && wg != null && customersSelected.Contains(wg.Customer_Id))
+                        if (uwg.UserRole != WorkingGroupUserPermission.NO_ACCESS && wg != null && customersSelected.Contains(wg.Customer_Id))
                             user.UserWorkingGroups.Add(uwg);
 
                         //user.userWorkingGroups.Add(uwg);
@@ -862,7 +863,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     foreach (var uwg in UserWorkingGroups)
                     {
-                        if (uwg.UserRole != 0)
+                        if (uwg.UserRole != WorkingGroupUserPermission.NO_ACCESS)
                             user.UserWorkingGroups.Add(uwg);
                     }
                 }
@@ -1013,6 +1014,26 @@ namespace DH.Helpdesk.Services.Services
 
             var isAuthorised = _customerUserRepository.CheckUserCasePermissions(user.Id, caseId, casePermissionFilter);
             return isAuthorised;
+        }
+
+        public Expression<Func<Case, bool>> GetCasePermissionFilter(UserOverview user)
+        {
+            Expression<Func<Case, bool>> casePermissionFilter = null;
+
+            if (user.RestrictedCasePermission.ToBool())
+            {
+                switch (user.UserGroupId)
+                {
+                    case (int)BusinessData.Enums.Admin.Users.UserGroup.Administrator:
+                        return casePermissionFilter = CaseSpecifications.GetByAdministratorOrResponsibleUserExpression(user.Id, user.Id);
+                    case (int)BusinessData.Enums.Admin.Users.UserGroup.User:
+                        return casePermissionFilter = CaseSpecifications.GetByReportedByOrUserId(user.UserId, user.Id);
+
+                }
+            }
+
+            return casePermissionFilter;
+
         }
 
         /// <summary>
@@ -1281,6 +1302,8 @@ namespace DH.Helpdesk.Services.Services
             switch (module)
             {
                 case Module.QuickLinks:
+                    return null;
+                case Module.CaseQuickOpen:
                     return null;
             }
 

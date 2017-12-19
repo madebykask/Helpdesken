@@ -16,6 +16,7 @@ using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Common.Extensions.DateTime;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.CaseSolution;
+using DH.Helpdesk.Common.Enums.Condition;
 
 namespace DH.Helpdesk.Services.Services.UniversalCase
 {
@@ -59,6 +60,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         private readonly IDepartmentService _departmentService;
         private readonly IRegionService _regionService;
         private readonly IOUService _oUService;
+        private readonly IConditionService  _conditionService;
 
         public UniversalCaseService(ICaseRepository caseRepository,
                                     ICustomerService customerService,
@@ -76,7 +78,8 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                                     IExtendedCaseService extendedCaseService,
                                     IDepartmentService departmentService,
                                     IRegionService regionService,
-                                    IOUService oUService
+                                    IOUService oUService,
+                                    IConditionService conditionService
             )
         {
             _caseRepository = caseRepository;
@@ -96,6 +99,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             _departmentService = departmentService;
             _regionService = regionService;
             _oUService = oUService;
+            _conditionService = conditionService;
         }
 
         public CaseModel GetCase(int id)
@@ -103,12 +107,13 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             return _caseRepository.GetCase(id);
         }
 
-         public ProcessResult SaveCase(CaseModel caseModel, AuxCaseModel auxModel, out int caseId)
+         public ProcessResult SaveCase(CaseModel caseModel, AuxCaseModel auxModel, out int caseId, out decimal caseNumber)
         {
             var isNewCase = caseModel.Id == 0;
 
             var res = new ProcessResult("Save Case");
             caseId = -1;
+            caseNumber = -1; 
 
             res = PrimaryValidation(ref caseModel);
             if (res.IsSucceed)
@@ -121,7 +126,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                     if (res.IsSucceed)
                     {
                         var emailSettings = GetEmailSettings(caseModel, auxModel);
-                        res = DoSaveCase(caseModel, auxModel, timeMetrics, emailSettings, out caseId);
+                        res = DoSaveCase(caseModel, auxModel, timeMetrics, emailSettings, out caseId, out caseNumber);
                     }
                 }
             }
@@ -132,7 +137,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 _caseService.CreateExtendedCaseRelationship(caseId, caseModel.ExtendedCaseData_Id.Value, caseModel.ExtendedCaseForm_Id.Value);
             }
 
-
+            
             return res;
         }
 
@@ -235,8 +240,10 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             return model;
         }
 
-        public ProcessResult SaveCaseCheckSplit(CaseModel caseModel, AuxCaseModel auxModel, out int caseId)
+        public ProcessResult SaveCaseCheckSplit(CaseModel caseModel, AuxCaseModel auxModel, out int caseId, out decimal caseNumber)
         {
+           
+
             var isNewCase = caseModel.Id == 0;
 
             ProcessResult res = new ProcessResult("Save Case Check Split");
@@ -244,28 +251,31 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             if (caseModel.CaseSolution_Id.HasValue && isNewCase == true)
             {
 
+                
+
+
                 var caseSolution = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id.Value);
 
                 ////Split into "parent" and "child(s)"
                 if (caseSolution.CaseRelationType == CaseRelationType.ParentAndChildren)
                 {
-                    return res = SaveParentAndChildren(caseModel, auxModel, out caseId);
+                    return res = SaveParentAndChildren(caseModel, auxModel, out caseId, out caseNumber);
                 }
 
                 //Create indepent cases based on the "parent" case solution template
                 if (caseSolution.CaseRelationType == CaseRelationType.OnlyDescendants)
                 {
-                    return res = SaveNewDescendandts(caseModel, auxModel, out caseId);
+                    return res = SaveNewDescendandts(caseModel, auxModel, out caseId, out caseNumber);
                 }
                 //Create cases based on "parent", and "child" but independent
                 if (caseSolution.CaseRelationType == CaseRelationType.SelfAndDescendandts)
                 {
-                    return res = SaveNewSelfAndDescendandts(caseModel, auxModel, out caseId);
+                    return res = SaveNewSelfAndDescendandts(caseModel, auxModel, out caseId, out caseNumber);
                 }
             }
 
             //do regular save
-            return res = SaveCase(caseModel, auxModel, out caseId);
+            return res = SaveCase(caseModel, auxModel, out caseId, out caseNumber);
 
         }
 
@@ -564,11 +574,12 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
         private ProcessResult DoSaveCase(CaseModel caseModel, AuxCaseModel auxModel,
                                          CaseTimeMetricsModel timesModel,
-                                         CaseMailSetting mailSettings, out int caseId)
+                                         CaseMailSetting mailSettings, out int caseId, out decimal caseNumber)
         {
             /*TODO: After merge CaseServices case must be sent to the Repository directly from here(No need to use CaseService anymore) */
             /* Convert caseModel to Case entity to make it ready for Save method */
             caseId = -1;
+            caseNumber = -1;
             var oldCase = new Case();
             if (caseModel.Id != 0)
                 oldCase = _caseService.GetCaseById(caseModel.Id);
@@ -607,6 +618,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                                                     historyId, "", auxModel.CurrentLanguageId, mailSettings);
 
             caseId = caseEntity.Id;
+            caseNumber = caseEntity.CaseNumber;
             return new ProcessResult("Case saved");
         }
 
@@ -899,13 +911,22 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             return baseDepartmentId;
         }
 
-        private ProcessResult SaveNewDescendandts(CaseModel baseCaseModel, AuxCaseModel baseAuxModel, out int caseId)
+        private ProcessResult SaveNewDescendandts(CaseModel baseCaseModel, AuxCaseModel baseAuxModel, out int caseId, out decimal caseNumber)
         {
             ProcessResult res = new ProcessResult("SaveNew Descendants");
+            //Multicase - Split
+            int conditionType_Id = (int)((ConditionType)Enum.Parse(typeof(ConditionType), ConditionType.MultiCaseSplit.ToString()));
+
+            caseId = -1;
+
             int baseCaseId = -1;
+
 
             var baseCaseSolution = _caseSolutionService.GetCaseSolution(baseCaseModel.CaseSolution_Id.Value);
 
+            bool keepBaseCase = false;
+            int childCaseId = -1;
+            decimal caseNum = -1;
             if (baseCaseSolution.SplitToCaseSolutionDescendants != null && baseCaseSolution.SplitToCaseSolutionDescendants.Any())
             {
                 foreach (var item in baseCaseSolution.SplitToCaseSolutionDescendants.Where(x => x.SplitToCaseSolutionDescendant.Status > 0).OrderBy(x => x.SplitToCaseSolutionDescendant.SortOrder))
@@ -925,42 +946,73 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                         baseCaseModel = ApplyValuesFromCaseSolution(baseCaseModel, item.SplitToCaseSolutionDescendant.Id);
 
                         //save "base"
-                        res = SaveCase(baseCaseModel, baseAuxModel, out baseCaseId);
+                        res = SaveCase(baseCaseModel, baseAuxModel, out baseCaseId, out caseNum);
+
+                        if (caseId == -1)
+                            caseId = baseCaseId;
+
+                        //If it should be included in split
+                        keepBaseCase = _conditionService.CheckConditions(baseCaseId, item.SplitToCaseSolutionDescendant.Id, conditionType_Id).Show;
                     }
                     else
                     {
-                        int childCaseId = -1;
-                        //clone model
-                        CaseModel descendantCaseModel = baseCaseModel;
+    
+                        var doSplit = _conditionService.CheckConditions(baseCaseId, item.SplitToCaseSolutionDescendant.Id, conditionType_Id);
 
-                        //apply values from case solution
-                        descendantCaseModel = ApplyValuesFromCaseSolution(descendantCaseModel, item.SplitToCaseSolutionDescendant.Id);
-
-                        //todo: refactor
-                        descendantCaseModel.ExtendedCaseData_Id = null;
-                        descendantCaseModel.ExtendedCaseForm_Id = null;
-
-                        res = SaveCase(descendantCaseModel, baseAuxModel, out childCaseId);
-
-                        if (res.IsSucceed && childCaseId != -1)
+                        if (doSplit.Show)
                         {
-                            //Todo: refactor
-                            var data = _extendedCaseService.GetExtendedCaseFromCase(baseCaseId);
-                            if (data != null)
+
+                            childCaseId = -1;
+
+
+                            //clone model
+                            CaseModel descendantCaseModel = baseCaseModel;
+
+                            //apply values from case solution
+                            descendantCaseModel = ApplyValuesFromCaseSolution(descendantCaseModel, item.SplitToCaseSolutionDescendant.Id);
+
+                            //todo: refactor
+                            descendantCaseModel.ExtendedCaseData_Id = null;
+                            descendantCaseModel.ExtendedCaseForm_Id = null;
+
+                            res = SaveCase(descendantCaseModel, baseAuxModel, out childCaseId, out caseNum);
+
+                            if (res.IsSucceed && childCaseId != -1)
                             {
-                                _extendedCaseService.CopyExtendedCaseToCase(data.Id, childCaseId, baseAuxModel.UserIdentityName, formId);
+                                if (caseId == -1)
+                                caseId = childCaseId;
+
+                                //Todo: refactor
+                                var data = _extendedCaseService.GetExtendedCaseFromCase(baseCaseId);
+                                if (data != null)
+                                {
+                                    _extendedCaseService.CopyExtendedCaseToCase(data.Id, childCaseId, baseAuxModel.UserIdentityName, formId);
+                                }
                             }
                         }
                     }
                 }
             }
 
-            caseId = baseCaseId;
+            if (keepBaseCase == false)
+            { 
+                _caseService.Delete(baseCaseId, "", null);
+            }
+            else
+            {
+                if (caseId == -1)
+                    caseId = baseCaseId;
+            }
+
+            caseNumber = caseNum;
             return res;
         }
 
-        private ProcessResult SaveNewSelfAndDescendandts(CaseModel baseCaseModel, AuxCaseModel baseAuxModel, out int caseId)
+        private ProcessResult SaveNewSelfAndDescendandts(CaseModel baseCaseModel, AuxCaseModel baseAuxModel, out int caseId, out decimal caseNumber)
         {
+            //Multicase - Split
+            int conditionType_Id = (int)((ConditionType)Enum.Parse(typeof(ConditionType), ConditionType.MultiCaseSplit.ToString()));
+
             var isNewCase = baseCaseModel.Id == 0;
             ProcessResult res = new ProcessResult("SaveNew SelfAndDescendandts");
             int selfCaseId = -1;
@@ -970,8 +1022,9 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             //apply values from case solution
             baseCaseModel = ApplyValuesFromCaseSolution(baseCaseModel, baseCaseSolution.Id);
 
+            decimal caseNum;
             //save "base"
-            res = SaveCase(baseCaseModel, baseAuxModel, out selfCaseId);
+            res = SaveCase(baseCaseModel, baseAuxModel, out selfCaseId, out caseNum);
 
             if (res.IsSucceed && selfCaseId != -1)
             {
@@ -982,42 +1035,52 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                         var caseTemplate = _caseSolutionService.GetCaseSolution(item.SplitToCaseSolutionDescendant.Id);
                         var formId = caseTemplate.ExtendedCaseForms.FirstOrDefault().Id;
 
-                        CaseModel childCaseModel = baseCaseModel;
+                     
+                        var doSplit = _conditionService.CheckConditions(selfCaseId, item.SplitToCaseSolutionDescendant.Id, conditionType_Id);
 
-                        //TODO: refactor and make a long term solution, this is just for DepartmentId
-                        baseCaseModel.Department_Id = ChangeDepartmentId(childCaseModel.Customer_Id, childCaseModel.Department_Id, caseTemplate.Customer_Id);
-
-                        int childCaseId = -1;
-
-                        //apply values from case solution
-                        childCaseModel = ApplyValuesFromCaseSolution(childCaseModel, item.SplitToCaseSolutionDescendant.Id);
-
-                        //todo: refactor
-                        childCaseModel.ExtendedCaseData_Id = null;
-                        childCaseModel.ExtendedCaseForm_Id = null;
-
-                        res = SaveCase(childCaseModel, baseAuxModel, out childCaseId);
-
-                        if (res.IsSucceed && childCaseId != -1)
+                        if (doSplit.Show)
                         {
-                            //Todo: refactor
-                            var data = _extendedCaseService.GetExtendedCaseFromCase(selfCaseId);
-                            if (data != null)
+                            CaseModel childCaseModel = baseCaseModel;
+
+                            //TODO: refactor and make a long term solution, this is just for DepartmentId
+                            baseCaseModel.Department_Id = ChangeDepartmentId(childCaseModel.Customer_Id, childCaseModel.Department_Id, caseTemplate.Customer_Id);
+
+                            int childCaseId = -1;
+                            decimal childCaseNum;
+                            //apply values from case solution
+                            childCaseModel = ApplyValuesFromCaseSolution(childCaseModel, item.SplitToCaseSolutionDescendant.Id);
+
+                            //todo: refactor
+                            childCaseModel.ExtendedCaseData_Id = null;
+                            childCaseModel.ExtendedCaseForm_Id = null;
+
+                            res = SaveCase(childCaseModel, baseAuxModel, out childCaseId, out childCaseNum);
+
+                            if (res.IsSucceed && childCaseId != -1)
                             {
-                                _extendedCaseService.CopyExtendedCaseToCase(data.Id, childCaseId, baseAuxModel.UserIdentityName, formId);
+                                //Todo: refactor
+                                var data = _extendedCaseService.GetExtendedCaseFromCase(selfCaseId);
+                                if (data != null)
+                                {
+                                    _extendedCaseService.CopyExtendedCaseToCase(data.Id, childCaseId, baseAuxModel.UserIdentityName, formId);
+                                }
                             }
+
                         }
                     }
                 }
             }
 
             caseId = selfCaseId;
+            caseNumber = caseNum;         
             return res;
         }
 
-        private ProcessResult SaveParentAndChildren(CaseModel baseCaseModel, AuxCaseModel baseAuxModel, out int caseId)
+        private ProcessResult SaveParentAndChildren(CaseModel baseCaseModel, AuxCaseModel baseAuxModel, out int caseId, out decimal caseNumber)
         {
             IDictionary<string, string> errors;
+            //Multicase - Split
+            int conditionType_Id = (int)((ConditionType)Enum.Parse(typeof(ConditionType), ConditionType.MultiCaseSplit.ToString()));
 
             var isNewCase = baseCaseModel.Id == 0;
             ProcessResult res = new ProcessResult("Save Parent And Children");
@@ -1028,12 +1091,12 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             //apply values from case solution
             baseCaseModel = ApplyValuesFromCaseSolution(baseCaseModel, baseCaseModel.CaseSolution_Id.Value);
 
+            decimal _caseNum;
             //save base
-            res = SaveCase(baseCaseModel, baseAuxModel, out selfCaseId);
-
+            res = SaveCase(baseCaseModel, baseAuxModel, out selfCaseId, out _caseNum);
+            
             if (res.IsSucceed && selfCaseId != -1)
             {
-
                 //check if there should be created child cases
                 if (baseCaseSolution.SplitToCaseSolutionDescendants != null && baseCaseSolution.SplitToCaseSolutionDescendants.Any())
                 {
@@ -1042,42 +1105,51 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                         var caseTemplate = _caseSolutionService.GetCaseSolution(item.SplitToCaseSolutionDescendant.Id);
                         var formId = caseTemplate.ExtendedCaseForms.FirstOrDefault().Id;
 
-                        //Duplicate
-                        CaseModel childCaseModel = baseCaseModel;
-                        //TODO: refactor and make a long term solution, this is just for DepartmentId
-                        baseCaseModel.Department_Id = ChangeDepartmentId(childCaseModel.Customer_Id, childCaseModel.Department_Id, caseTemplate.Customer_Id);
+                        var doSplit = _conditionService.CheckConditions(selfCaseId, item.SplitToCaseSolutionDescendant.Id, conditionType_Id);
 
-                        int childCaseId = -1;
-
-                        //apply values from case solution
-                        childCaseModel = ApplyValuesFromCaseSolution(childCaseModel, item.SplitToCaseSolutionDescendant.Id);
-
-                        childCaseModel.ExtendedCaseData_Id = null;
-                        childCaseModel.ExtendedCaseForm_Id = null;
-
-                        res = SaveCase(childCaseModel, baseAuxModel, out childCaseId);
-
-                        if (res.IsSucceed && childCaseId != -1)
+                        if (doSplit.Show)
                         {
 
-                            var data = _extendedCaseService.GetExtendedCaseFromCase(selfCaseId);
-                            if (data != null)
+                            //Duplicate
+                            CaseModel childCaseModel = baseCaseModel;
+                            //TODO: refactor and make a long term solution, this is just for DepartmentId
+                            baseCaseModel.Department_Id = ChangeDepartmentId(childCaseModel.Customer_Id, childCaseModel.Department_Id, caseTemplate.Customer_Id);
+
+                            int childCaseId = -1;
+                            decimal childCaseNum;
+
+                            //apply values from case solution
+                            childCaseModel = ApplyValuesFromCaseSolution(childCaseModel, item.SplitToCaseSolutionDescendant.Id);
+
+                            childCaseModel.ExtendedCaseData_Id = null;
+                            childCaseModel.ExtendedCaseForm_Id = null;
+
+                           
+                            res = SaveCase(childCaseModel, baseAuxModel, out childCaseId, out childCaseNum);
+
+                            if (res.IsSucceed && childCaseId != -1)
                             {
-                                _extendedCaseService.CopyExtendedCaseToCase(data.Id, childCaseId, baseAuxModel.UserIdentityName, formId);
+
+                                var data = _extendedCaseService.GetExtendedCaseFromCase(selfCaseId);
+                                if (data != null)
+                                {
+                                    _extendedCaseService.CopyExtendedCaseToCase(data.Id, childCaseId, baseAuxModel.UserIdentityName, formId);
+                                }
+
+                                //TODO: om fel, visa det
+                                _caseService.AddChildCase(childCaseId, selfCaseId, out errors);
+
+                                if (errors.Count() == 0)
+                                    _caseService.SetIndependentChild(childCaseId, true);
+
                             }
-
-                            //TODO: om fel, visa det
-                            _caseService.AddChildCase(childCaseId, selfCaseId, out errors);
-
-                            if (errors.Count() == 0)
-                                _caseService.SetIndependentChild(childCaseId, true);
-
                         }
                     }
                 }
             }
 
             caseId = selfCaseId;
+            caseNumber = _caseNum;
             return res;
         }
 

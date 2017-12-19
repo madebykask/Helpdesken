@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
 using DH.Helpdesk.BusinessData.Enums.Case;
+using DH.Helpdesk.BusinessData.Enums.Users;
 using DH.Helpdesk.BusinessData.Models.Case.CaseIntLog;
 using DH.Helpdesk.Dal.Repositories.Notifiers;
 
@@ -96,7 +97,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
                 if (isInternalLog)
                 {
-                    usWkgs = usWkgs.Where(x => x.UserRole == 2);
+                    usWkgs = usWkgs.Where(x => x.UserRole == WorkingGroupUserPermission.ADMINSTRATOR);
                 }
 
                 var workGs = wgs.GroupJoin(usWkgs, wg => wg.Id, uwg => uwg.WorkingGroup_Id, (wg, uwgs) => new

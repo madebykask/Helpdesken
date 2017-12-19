@@ -20,6 +20,8 @@
 
         public static readonly string DefaultEmployeeNumber = "DefaultEmployeeNumber";
 
+        public static readonly string ConfirmMsgAfterCaseRegistration = "ConfirmMsgAfterCaseRegistration";
+
         public static readonly string SSOLog = "SSOLog";
 
         public static readonly string ApplicationId = "ApplicationId";

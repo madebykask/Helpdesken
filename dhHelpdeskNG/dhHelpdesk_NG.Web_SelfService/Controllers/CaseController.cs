@@ -34,6 +34,7 @@
     using Common.Extensions.DateTime;
     using Infrastructure.Helpers;
     using BusinessData.Models.Shared;
+    using Models.Message;
 
     public class CaseController : BaseController
     {
@@ -173,7 +174,7 @@
             if(string.IsNullOrEmpty(id))
                 return null;
 
-            int customerId;
+            int customerId = -1;
 
             Case currentCase = null;
 
@@ -181,12 +182,18 @@
             {
                 var guid = new Guid(id);
                 currentCase = _caseService.GetCaseByEMailGUID(guid);
-
-                var dynamicCases = _caseService.GetAllDynamicCases();
-                var dynamicUrl = "";
-                if (dynamicCases != null && dynamicCases.Any())
+                if (currentCase == null)
                 {
-                    dynamicUrl = dynamicCases.Where(w => w.CaseId == currentCase.Id).Select(d => "/" + d.FormPath).FirstOrDefault();
+                    ErrorGenerator.MakeError("Link is not valid!");
+                    return RedirectToAction("Index", "Error");
+                }
+
+                customerId = currentCase.Customer_Id;
+                var dynamicCase = _caseService.GetDynamicCase(currentCase.Id);
+                var dynamicUrl = "";
+                if (dynamicCase != null)
+                {
+                    dynamicUrl =  $"/{dynamicCase.FormPath}";
                     if (!string.IsNullOrEmpty(dynamicUrl)) // Show Case in eform
                     {
                         var urlStr = dynamicUrl.SetUrlParameters(currentCase.Id);
@@ -197,7 +204,15 @@
             }
             else
             {
-                currentCase = _caseService.GetCaseById(Int32.Parse(id));
+                int _intCaseId;
+
+                if (!int.TryParse(id, out _intCaseId))
+                {
+                    ErrorGenerator.MakeError("Case Id is not valid!");
+                    return RedirectToAction("Index", "Error");
+                }
+
+                currentCase = _caseService.GetCaseById(_intCaseId);                
 
                 if (currentCase == null)
                 {
@@ -686,19 +701,23 @@
                 model.CaseDataModel = ApplyNextWorkflowStepOnCase(model.CaseDataModel, model.SelectedWorkflowStep.Value);
             
             int caseId = -1;
-
+            decimal caseNum;
             
             //TODO: Refactor
             model.CaseDataModel.ExtendedCaseData_Id = model.ExtendedCaseDataModel.Id;
             model.CaseDataModel.ExtendedCaseForm_Id = model.ExtendedCaseDataModel.ExtendedCaseFormId;
 
-            var res = _universalCaseService.SaveCaseCheckSplit(model.CaseDataModel, auxModel, out caseId);
+            var res = _universalCaseService.SaveCaseCheckSplit(model.CaseDataModel, auxModel, out caseId, out caseNum);
             if (res.IsSucceed && caseId != -1)
             {
                 #region casefile
                 //TODO: do we need to check "isNewCase"? /Tan
 
-                var basePath = _masterDataService.GetFilePath(model.CaseDataModel.Customer_Id);
+                var case_ = _universalCaseService.GetCase(caseId);
+
+                //var basePath = _masterDataService.GetFilePath(model.CustomerId);
+                //Get from baseCase path
+                var basePath = _masterDataService.GetFilePath(case_.Customer_Id);
 
                 // save case files
                 var temporaryFiles = _userTemporaryFilesStorage.GetFiles(model.CaseDataModel.CaseFileKey, ModuleName.Cases);
@@ -707,16 +726,30 @@
 
                 // delete temp folders                
                 _userTemporaryFilesStorage.DeleteFiles(model.CaseDataModel.CaseFileKey);
-                #endregion  
+                #endregion
 
-                return RedirectToAction("UserCases", new { customerId = model.CustomerId });
+                var showConfirmMessage = AppConfigHelper.GetAppSetting(AppSettingsKey.ConfirmMsgAfterCaseRegistration);
+
+                if (!string.IsNullOrEmpty(showConfirmMessage) && showConfirmMessage == "true")
+                {
+                    SessionFacade.LastMessageDialog = new MessageDialogModel(
+                        MessageTypes.success,
+                        "Your case has been successfully registered.",
+                        $"You can follow up your case status via this number: {caseNum}");
+
+                    return RedirectToAction("Index", "Message");
+                }
+                else
+                {                    
+                    return RedirectToAction("UserCases", new { customerId = model.CustomerId });
+                }
             }
 
             if (model.CaseDataModel.OU_Id.HasValue)            
                 model.CaseOU = _ouService.GetOU(model.CaseDataModel.OU_Id.Value);                
             
 
-            model.Result = res;            
+            model.Result = res;                     
             return View("ExtendedCase", model);
         }
 
@@ -1084,8 +1117,24 @@
         [HttpPost]
         public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
         {
-            int caseId = Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog);
-            return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
+            decimal caseNum;
+            int caseId = Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog, out caseNum);
+
+            var showConfirmMessage = AppConfigHelper.GetAppSetting(AppSettingsKey.ConfirmMsgAfterCaseRegistration);
+
+            if (!string.IsNullOrEmpty(showConfirmMessage) && showConfirmMessage == "true")
+            {
+                SessionFacade.LastMessageDialog = new MessageDialogModel(
+                    MessageTypes.success,
+                    "Your case has been successfully registered.",
+                    $"You can follow up your case status via this number: {caseNum}");
+
+                return RedirectToAction("Index", "Message");
+            }
+            else
+            {
+                return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
+            }
         }
 
         [HttpPost]
@@ -1373,10 +1422,10 @@
             return result;
         }
 
-        private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
+        private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog, out decimal caseNumber)
         {
             IDictionary<string, string> errors;
-
+            caseNumber = 0;
             // save case and case history
             if (newCase.User_Id <= 0)
                 newCase.User_Id = null;
@@ -1462,7 +1511,7 @@
             }
 
             _caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase);
-
+            caseNumber = newCase.CaseNumber;
             return newCase.Id;
         }
 
@@ -1644,7 +1693,7 @@
 
             if (currentApplicationType == ApplicationTypes.LineManager)
             {
-                var dynamicCases = _caseService.GetAllDynamicCases();
+                var dynamicCases = _caseService.GetAllDynamicCases(cusId, srm.Cases.Select(c=> c.Id).ToArray());
                 model.DynamicCases = dynamicCases;
             }
             

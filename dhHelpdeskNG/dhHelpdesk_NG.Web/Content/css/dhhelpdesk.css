@@ -3974,3 +3974,14 @@ th.sorting_disabled
     background-color: #fff !important;
     background-image: none !important;
 }
+
+.input-searching {
+    background: url('/content/img/ajax-loader.gif');
+    background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right center;
+    padding-right: 20px;
+    border: none;
+    display: inline-block;
+}

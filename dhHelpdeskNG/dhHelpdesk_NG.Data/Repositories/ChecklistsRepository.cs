@@ -103,12 +103,14 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public void UpdateCheckList(CheckListBM checklist)
         {
-            var checkListEntity =
-                  this.DbContext.CheckLists.Find(checklist.Id);
-            
-            checkListEntity.ChecklistName = checklist.ChecklistName;            
-            checkListEntity.WorkingGroup_Id = checklist.WorkingGroupId;
-            checkListEntity.ChangedDate = checklist.ChangedDate;       
+            var checkListEntity = DbContext.CheckLists.Find(checklist.Id);
+
+            if (checkListEntity != null)
+            {
+                checkListEntity.ChecklistName = checklist.ChecklistName;
+                checkListEntity.WorkingGroup_Id = checklist.WorkingGroupId;
+                checkListEntity.ChangedDate = checklist.ChangedDate;
+            }
         }
 
     }

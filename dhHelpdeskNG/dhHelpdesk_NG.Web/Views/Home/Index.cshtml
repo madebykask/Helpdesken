@@ -161,7 +161,13 @@
         @{
             Html.RenderPartial("MyCasesInfo", Model.MyCases);
         }                                                                                            
-    </div>                                        
+    </div>
+    <div class="cases quick-open"
+         data-usermodules="item"
+         data-usermodules-moduleid="@(GetModuleId(Module.CaseQuickOpen))"
+         data-usermodules-position="@(GetModulePosition(Module.CaseQuickOpen))">
+        @{ Html.RenderPartial("CaseQuickOpen");}
+    </div>                                      
 </div>
 @functions
 {

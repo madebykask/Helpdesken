@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using DH.Helpdesk.Domain.Computers;
 
 namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Case
 {
@@ -367,7 +368,14 @@ namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Case
             }
 
             return query;
-        } 
+        }
+
+        public static int GetRelatedInventoriesCount(this IQueryable<Computer> query, string userId, UserOverview user, int customerId)
+        {
+            query = query.Where(c => c.User.UserId.Trim().Equals(userId.Trim()));
+
+            return query.Count();
+        }
 
         public static IQueryable<Case> Search(
                                 this IQueryable<Case> query,

@@ -26,6 +26,7 @@ namespace DH.Helpdesk.Services.Services
          void UpdateCheckList(CheckListBM checklist);
 
         //void Commit();
+        void CommitChanges();
     }
 
     public class CheckListsService : ICheckListsService
@@ -86,6 +87,11 @@ namespace DH.Helpdesk.Services.Services
         {
             this._checkListsRepository.UpdateCheckList(checklist);
             this._checkListsRepository.Commit();
+        }
+
+        public void CommitChanges()
+        {
+            _checkListsRepository.Commit();
         }
 
         public void Commit()

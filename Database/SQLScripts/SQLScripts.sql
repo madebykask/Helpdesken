@@ -8,6 +8,7 @@ begin
 end
    
 
+
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblCaseSolution_SplitToCaseSolution' AND xtype='U')
 BEGIN
 
@@ -1739,6 +1740,229 @@ IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 begin
 	ALTER TABLE [dbo].[tblSettings] ADD DefaultCaseTemplateId int NOT NULL Default(0)
 end
+
+
+--#59777 Quickopen
+
+  if not exists(Select * from tblModule where id = 13) 
+  begin
+	SET IDENTITY_INSERT tblModule ON
+
+	INSERT tblModule (Id, Name, [Description]) VALUES (13, 'Snabbåtkomst', 'Snabbåtkomst')  
+	
+	SET IDENTITY_INSERT tblModule OFF
+
+	end
+
+
+--#59677 - Multi case split
+
+
+if not exists(select * from sysobjects WHERE Name = N'tblConditionType')
+begin
+
+	SET ANSI_NULLS ON
+	SET QUOTED_IDENTIFIER ON
+
+	CREATE TABLE [dbo].[tblConditionType](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[Guid] [uniqueidentifier] NULL,
+		[Name] [nvarchar](200) NULL,
+		[Status] [int] NULL,
+		[SortOrder] [int] NULL,
+		[CreatedDate] [datetime] NULL,
+		[CreatedByUser_Id] [int] NULL,
+		[ChangedDate] [datetime] NULL,
+		[ChangedByUser_Id] [int] NULL,
+	 CONSTRAINT [PK_tblConditionType] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+
+
+	ALTER TABLE [dbo].[tblConditionType] ADD  CONSTRAINT [DF_tblConditionType_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+
+
+	ALTER TABLE [dbo].[tblConditionType] ADD  CONSTRAINT [DF_tblConditionType_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
+
+
+	--insert content to [tblConditionType]
+	
+	Declare @ConditionTypeGuid uniqueidentifier = '1DB0EC37-3EFF-4270-B22A-5707C03F1E61'
+	Declare @ConditionTypeId int = 1
+	
+	if not exists  (select * from [tblConditionType] where [Guid] = @ConditionTypeGuid)
+	begin
+		SET IDENTITY_INSERT [tblConditionType] ON
+
+		insert into [tblConditionType] (Id, [Guid], Name, [Status], [SortOrder]) VALUES (@ConditionTypeId,@ConditionTypeGuid, 'Multicase - Split', 1, 0)
+
+		SET IDENTITY_INSERT [tblCaseSolutionType] OFF
+
+	end
+	else
+	begin
+		update [tblConditionType] set Name = 'Multicase - Split', [Status] = 1, [SortOrder] = 0 where [Guid] = @ConditionTypeGuid
+	end
+
+end
+
+
+if not exists(select * from sysobjects WHERE Name = N'tblCondition')
+begin
+
+SET QUOTED_IDENTIFIER ON
+
+	CREATE TABLE [dbo].[tblCondition](
+		[Id] [int] IDENTITY(1,1) NOT NULL,
+		[GUID] [uniqueidentifier] NULL,
+		[ConditionType_Id] [int] NULL,
+		[Name] [nvarchar](200) NULL,
+		[Description] [nvarchar](200) NULL,
+		[Parent_Id] [int] NULL,
+		[Property_Name] [nvarchar](500) NULL,
+		[Operator] int NOT NULL,
+		[Values] [nvarchar](max) NULL,
+		[SortOrder] [int] NOT NULL,
+		[Status] [int] NOT NULL,
+		[CreatedDate] [datetime] NULL,
+		[CreatedByUser_Id] [int] NULL,
+		[ChangedDate] [datetime] NULL,
+		[ChangedByUser_Id] [int] NULL,
+	 CONSTRAINT [PK_Condition] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+
+	ALTER TABLE [dbo].[tblCondition] ADD  CONSTRAINT [DF_tblCondition_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+
+	ALTER TABLE [dbo].[tblCondition] ADD  CONSTRAINT [DF_tblCondition_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
+
+	ALTER TABLE [dbo].[tblCondition] ADD  CONSTRAINT [DF_tblCondition_Operator]  DEFAULT (0) FOR [Operator]
+
+	ALTER TABLE [dbo].[tblCondition]  WITH CHECK ADD  CONSTRAINT [FK_tblCondition_tblConditionType] FOREIGN KEY([ConditionType_Id])
+	REFERENCES [dbo].[tblConditionType] ([Id])
+
+	ALTER TABLE [dbo].[tblCondition] CHECK CONSTRAINT [FK_tblCondition_tblConditionType]
+end
+
+
+
+if not exists(select * from sysobjects WHERE Name = N'tblCaseSolutionType')
+begin
+
+	SET ANSI_NULLS ON
+	SET QUOTED_IDENTIFIER ON
+
+	CREATE TABLE [dbo].[tblCaseSolutionType](
+	[Id] [int] NOT NULL,
+		[Guid] [uniqueidentifier] NULL,
+		[Name] [nvarchar](200) NULL,
+		[Status] [int] NOT NULL,
+		[SortOrder] [int] NOT NULL,
+		[CreatedDate] [datetime] NULL,
+		[CreatedByUser_Id] [int] NULL,
+		[ChangedDate] [datetime] NULL,
+		[ChangedByUser_Id] [int] NULL,
+	 CONSTRAINT [PK_tblCaseSolutionType] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+
+
+	ALTER TABLE [dbo].[tblCaseSolutionType] ADD  CONSTRAINT [DF_tblCaseSolutionType_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+
+
+	ALTER TABLE [dbo].[tblCaseSolutionType] ADD  CONSTRAINT [DF_tblCaseSolutionType_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
+
+	--insert content to [tblCaseSolutionType]
+	Declare @Guid uniqueidentifier = '266EBECD-C55A-4848-A980-1EEEFF13E9B7'
+	Declare @Id int = 1
+	
+	if not exists  (select * from [tblCaseSolutionType] where [Guid] = @Guid)
+	begin
+
+		insert into [tblCaseSolutionType] (Id, [Guid], Name, [Status], [SortOrder]) VALUES (@Id,@Guid, 'User - CaseSolution', 1, 0)
+
+
+
+	end
+	else
+	begin
+		update [tblCaseSolutionType] set Name = 'User - CaseSolution', [Status] = 1, [SortOrder] = 0 where [Guid] = @Guid
+	end
+
+	
+
+end
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'CaseSolutionType_Id' and sysobjects.name = N'tblCaseSolution')
+begin
+
+	--refer to table above!
+	ALTER TABLE [tblCaseSolution] ADD [CaseSolutionType_Id]  int NOT NULL DEFAULT(1) 
+
+end
+
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'IsMemberOfGroup' and sysobjects.name = N'tblUserWorkingGroup')
+begin
+	ALTER TABLE [dbo].[tblUserWorkingGroup] ADD IsMemberOfGroup bit NOT NULL Default(0)
+	
+	UPDATE [dbo].[tblUserWorkingGroup] SET [IsMemberOfGroup] = 1 WHERE [UserRole] = 2
+end
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'Name' and sysobjects.name = N'tblCaseSolutionCondition')
+begin
+	ALTER TABLE [tblCaseSolutionCondition] ADD [Name]  nvarchar(255)
+end
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'SortOrder' and sysobjects.name = N'tblCaseSolutionCondition')
+begin
+	ALTER TABLE [tblCaseSolutionCondition] ADD [SortOrder] int NOT NULL DEFAULT(0) 
+end
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'Name' and sysobjects.name = N'tblCaseDocumentCondition')
+begin
+	ALTER TABLE [tblCaseDocumentCondition] ADD [Name]  nvarchar(255)
+end
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'SortOrder' and sysobjects.name = N'tblCaseDocumentCondition')
+begin
+	ALTER TABLE [tblCaseDocumentCondition] ADD [SortOrder] int NOT NULL DEFAULT(0) 
+end
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'Name' and sysobjects.name = N'tblCaseDocumentTextCondition')
+begin
+	ALTER TABLE [tblCaseDocumentTextCondition] ADD [Name]  nvarchar(255)
+end
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'SortOrder' and sysobjects.name = N'tblCaseDocumentTextCondition')
+begin
+	ALTER TABLE [tblCaseDocumentTextCondition] ADD [SortOrder] int NOT NULL DEFAULT(0) 
+end
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'Name' and sysobjects.name = N'tblCaseDocumentParagraphCondition')
+begin
+	ALTER TABLE [tblCaseDocumentParagraphCondition] ADD [Name]  nvarchar(255)
+end
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'SortOrder' and sysobjects.name = N'tblCaseDocumentParagraphCondition')
+begin
+	ALTER TABLE [tblCaseDocumentParagraphCondition] ADD [SortOrder] int NOT NULL DEFAULT(0) 
+end
+
+
+
+
+
 
 
 -- Last Line to update database version

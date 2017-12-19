@@ -12,7 +12,7 @@
         @Model.Module.Name
     </td>
     <td>
-        @if (Model.Id != (int)Module.Statistics)
+        @if (Model.Id != (int)Module.Statistics && Model.Id != (int)Module.CaseQuickOpen)
         {
             @Html.DropDownListFor(m => m.NumberOfRows, 
                 GetNumberOfRowsList(), 

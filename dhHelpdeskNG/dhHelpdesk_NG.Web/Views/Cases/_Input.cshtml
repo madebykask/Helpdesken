@@ -97,7 +97,7 @@
                     {
                         <li data-active-tab="@CaseTabs.ExtendedCaseTab" class="@((Model.ActiveTab.StartsWith(CaseTabs.ExtendedCaseTab)) ? "active" : "")" >
                             <a href="#container_@extendedCase.Id" id="extendedcase-tab" class="extendedcase" data-id="@extendedCase.Id" data-state="">
-                                @(Translation.GetCoreTextTranslation(extendedCase.Name))
+                                @(Translation.GetMasterDataTranslation(extendedCase.Name))
                                 <i id="exTabIndicator_@extendedCase.Id" class="tab-indicator" style="display:none">&nbsp;</i>
                             </a>                            
                         </li>
@@ -281,8 +281,9 @@
                                                        class="btn @Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
                                                     @if (Model.CanGetRelatedCases)
                                                     {
-                                                        <a href="#" data-field="relatedCases" style="display: none;" title="@Translation.Get("Relaterade ärenden")" class="btn"><i class="icon-list"></i></a>
+                                                        <a href="#" data-field="relatedCases" style="display: none;" title="@Translation.GetCoreTextTranslation("Relaterade ärenden")" class="btn"><i class="icon-list"></i></a>
                                                     }
+                                                    <a href="#" data-field="relatedInventory" style="display: none;" title="@Translation.GetCoreTextTranslation("Relaterade") @Translation.GetCoreTextTranslation("Inventarie")" class="btn"><i class="icon-th-large"></i></a>
                                                 </td>
                                             </tr>
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName)">
@@ -1709,7 +1710,7 @@
                                                             foreach (var e in Model.statuses.Where(e => e.IsActive == 1 || Model.case_.Status_Id == e.Id))
                                                             {
                                                                 @*<option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Status_Id.ToString())>@e.Name</option>*@
-                                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Status_Id.ToString())>@Translation.Get(e.Name)</option>
+                                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Status_Id.ToString())>@Translation.GetMasterDataTranslation(e.Name)</option>
                                                             }
                                                         }
                                                     </select>
@@ -1743,7 +1744,7 @@
                                                         {
                                                             foreach (var e in Model.stateSecondaries.Where(e => e.IsActive == 1 || Model.case_.StateSecondary_Id == e.Id))
                                                             {
-                                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.StateSecondary_Id.ToString())>@Translation.Get(e.Name)</option>
+                                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.StateSecondary_Id.ToString())>@Translation.GetMasterDataTranslation(e.Name)</option>
                                                             }
                                                         }
                                                     </select>

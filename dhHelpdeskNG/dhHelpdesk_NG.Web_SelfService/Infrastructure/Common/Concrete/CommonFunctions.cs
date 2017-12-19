@@ -158,7 +158,9 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
             model.OrderModuleIsEnabled = IsOrderModuleEnabled(pCustomerId);            
             model.UserHasOrderTypes = (SessionFacade.CurrentLocalUser != null)? 
                                         IsUserHasOrderTypes(SessionFacade.CurrentLocalUser.Id, pCustomerId) : false;
-            model.HideMenu = !SessionFacade.UserHasAccess;            
+            model.HideMenu = !SessionFacade.UserHasAccess;
+            model.LoginType = AppConfigHelper.GetAppSetting(AppSettingsKey.LoginMode);             
+
             model.ShowLanguage = tmpDataLanguge != null && tmpDataLanguge.ToString().ToLower() == "true";
             model.CaseLog = (currentCase_Id.HasValue)? GetCaseLogs(currentCase_Id.Value) : null;
             model.HasError = SessionFacade.LastError != null && !string.IsNullOrEmpty(SessionFacade.LastError.Message);

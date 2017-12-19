@@ -46,7 +46,7 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.SelfService.Infrastructure.Tools.Concrete;
     using DH.Helpdesk.Dal.Repositories.Problem.Concrete;
     using DH.Helpdesk.Dal.Repositories.Invoice;
-    using DH.Helpdesk.Dal.Repositories.Invoice.Concrete;    
+    using DH.Helpdesk.Dal.Repositories.Invoice.Concrete;
     using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
     using DH.Helpdesk.Dal.Repositories.BusinessRules;
@@ -62,6 +62,8 @@ namespace DH.Helpdesk.SelfService
     using Services.Services.EmployeeService;
     using Services.Services.EmployeeService.Concrete;
     using Services.Services.WebApi;
+    using Dal.Repositories.Condition;
+    using Dal.Repositories.Condition.Concrete;
 
     public static class NinjectWebCommon 
     {
@@ -244,6 +246,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IMetaDataRepository>().To<MetaDataRepository>();            
             kernel.Bind<IEntityInfoRepository>().To<EntityInfoRepository>();
             kernel.Bind<ICaseFollowUpRepository>().To<CaseFollowUpRepository>();
+            kernel.Bind<IConditionRepository>().To<ConditionRepository>();
 
 
             // Service             
@@ -314,8 +317,10 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IEmployeeService>().To<EmployeeService>();
             kernel.Bind<IMetaDataService>().To<MetaDataService>();            
             kernel.Bind<IWebApiService>().To<WebApiService>();
+            kernel.Bind<IConditionService>().To<ConditionService>();
 
             kernel.Bind<ICaseFollowUpService>().To<CaseFollowUpService>();
+            kernel.Bind<ILogProgramService>().To<LogProgramService>();
 
 
             // Cache

@@ -1,6 +1,4 @@
-﻿using System.IdentityModel.Services;
-using DH.Helpdesk.SelfService.Infrastructure.Configuration;
-using DH.Helpdesk.Services.Infrastructure;
+﻿using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 
 namespace DH.Helpdesk.SelfService.Infrastructure
 {
@@ -31,7 +29,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure
     {
         private readonly IMasterDataService _masterDataService;
         private readonly ICaseSolutionService _caseSolutionService;
-        private bool userOrCustomerChanged = false; 
+        private bool userOrCustomerChanged = false;
+        private const string DEFAULT_ANONYMOUS_USER_ID = "AnonymousUser";
 
         public BaseController(
             IMasterDataService masterDataService,
@@ -44,6 +43,14 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         //called before a controller action is executed, that is before ~/HomeController/index 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            if (!CheckUserAccessToUrl(filterContext))
+            {
+                SessionFacade.UserHasAccess = false;
+                ErrorGenerator.MakeError("Url is not valid!");
+                filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                return;
+            }
+
             var customerId = -1;
             TempData["ShowLanguageSelect"] = true;
             SessionFacade.LastError = null;
@@ -92,7 +99,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     SessionFacade.UserHasAccess = true;
                 } // SSO Login
 
-                else if (loginMode == LoginMode.Windows || loginMode == LoginMode.Anonymous)
+                else if (loginMode == LoginMode.Windows)
                 {
 
                     SessionFacade.CurrentCoWorkers = null;
@@ -108,6 +115,22 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     SessionFacade.CurrentSystemUser = userIdentity.UserId;
                     SessionFacade.CurrentUserIdentity = userIdentity;
                     SessionFacade.UserHasAccess = true;                    
+                }
+                else
+                {
+                    SessionFacade.CurrentCoWorkers = null;
+                    var userIdentity = TryAnonymousLogin(customerId, out lastError);
+                    if (lastError != null)
+                    {
+                        SessionFacade.UserHasAccess = false;
+                        ErrorGenerator.MakeError(lastError);
+                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                        return;
+                    }
+
+                    SessionFacade.CurrentSystemUser = userIdentity.UserId;
+                    SessionFacade.CurrentUserIdentity = userIdentity;
+                    SessionFacade.UserHasAccess = true;
                 }
 
                 userOrCustomerChanged = true;
@@ -404,6 +427,37 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             return userIdentity;
         }
 
+        private UserIdentity TryAnonymousLogin(int customerId, out ErrorModel lastError)
+        {
+            lastError = null;
+            UserIdentity userIdentity = null;
+            var employeeNum = string.Empty;            
+            string userId = DEFAULT_ANONYMOUS_USER_ID;
+
+            var defaultUserId = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultUserId);
+            if (!string.IsNullOrEmpty(defaultUserId))
+                userId = defaultUserId;
+
+            var defaultEmployeeNumber = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultEmployeeNumber);
+            if (!string.IsNullOrEmpty(defaultEmployeeNumber))
+                employeeNum = defaultEmployeeNumber;
+            
+            string userDomain = string.Empty;            
+            var initiator = _masterDataService.GetInitiatorByUserId(userId, customerId);
+            userIdentity = new UserIdentity()
+            {
+                UserId = userId,
+                Domain = userDomain,
+                FirstName = initiator?.FirstName,
+                LastName = initiator?.LastName,
+                EmployeeNumber = employeeNum,
+                Phone = initiator?.Phone,
+                Email = initiator?.Email
+            };
+            
+            return userIdentity;
+        }
+
         private UserIdentity TryWindowsLogin(int customerId, out ErrorModel lastError)
         {
             lastError = null;
@@ -421,8 +475,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             var defaultEmployeeNumber = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultEmployeeNumber);
             if (!string.IsNullOrEmpty(defaultEmployeeNumber))
                 employeeNum = defaultEmployeeNumber;
-            
-            string userDomain = fullName.GetDomainFromAdPath();            
+
+            string userDomain = fullName.GetDomainFromAdPath();
             var initiator = _masterDataService.GetInitiatorByUserId(userId, customerId);
             userIdentity = new UserIdentity()
             {
@@ -434,7 +488,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 Phone = initiator?.Phone,
                 Email = initiator?.Email
             };
-            
+
             return userIdentity;
         }
 
@@ -602,6 +656,108 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
             }
         }
+
+        private bool CheckUserAccessToUrl(ActionExecutingContext filterContext)
+        {
+            var urlConfig = (SelfServiceUrlSetting)ConfigurationManager.GetSection("selfServiceConfigurable/selfServiceUrlSetting");
+            if (urlConfig == null || urlConfig.DeniedUrls == null || !urlConfig.DeniedUrls.Any())
+                return true;
+
+            foreach (var url in urlConfig.DeniedUrls)
+            {                
+                if (IsStringMatch(url.Path, filterContext.HttpContext.Request.RawUrl))
+                {
+                    foreach (var allowUrl in urlConfig.AllowedUrls)
+                    {
+                        if (IsStringMatch(allowUrl.Path, filterContext.HttpContext.Request.RawUrl))
+                            return true;
+                    }
+
+                    return false;
+                }                    
+            }
+            
+            return true;
+        }
+
+        private bool IsStringMatch(string pattern, string compareStr)
+        {
+            /*TODO: Use regular experssion */
+
+            var _pattern = pattern.ToLower();
+            var _compareStr = compareStr.ToLower();
+            
+            var _patternWithoutStar = _pattern.Replace("*", "");
+            if (_pattern.EndsWith("*"))
+            {
+                var purePattern = "";
+                var patternWithQuestionMark = "";
+                var patternWithSlash = "";
+                if (_patternWithoutStar.EndsWith("/"))
+                {
+                    purePattern = _patternWithoutStar.Remove(_patternWithoutStar.Length - 1);
+
+                    patternWithSlash = $"{purePattern}/";
+                    patternWithQuestionMark = $"{purePattern}?";                    
+                    if (_compareStr.StartsWith(patternWithSlash) || _compareStr.StartsWith(patternWithQuestionMark))
+                        return true;
+                }
+
+                if (_patternWithoutStar.EndsWith("?"))
+                {
+                    purePattern = _patternWithoutStar.Remove(_patternWithoutStar.Length - 1);
+                    patternWithQuestionMark = $"{purePattern}?";
+                    if (_compareStr.StartsWith(patternWithQuestionMark))
+                        return true;
+                }
+
+                if (_compareStr.StartsWith(_patternWithoutStar))
+                    return true;
+            }
+
+            
+            if (_pattern.EndsWith("{guid}"))
+            {
+                var _patternWithoutGuid = _patternWithoutStar.Replace("{guid}", "");
+                if (_compareStr.Length < _patternWithoutGuid.Length)
+                    return false;
+
+                var rightSide = _compareStr.Remove(0, _patternWithoutGuid.Length);
+                Guid param; 
+                try
+                {
+                    if (Guid.TryParse(rightSide, out param))
+                        return true;
+                }
+                catch 
+                {
+                    return false;
+                }                
+            }
+
+            if (_pattern.EndsWith("{int}"))
+            {
+                var _patternWithoutInt = _patternWithoutStar.Replace("{int}", "");
+                if (_compareStr.Length < _patternWithoutInt.Length)
+                    return false;
+
+                var rightSide = _compareStr.Remove(0, _patternWithoutInt.Length);
+                int param;
+                try
+                {
+                    if (int.TryParse(rightSide, out param))
+                        return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            return _pattern.Equals(_compareStr, StringComparison.CurrentCultureIgnoreCase);
+            
+        }
+
     }
-    
+
 }

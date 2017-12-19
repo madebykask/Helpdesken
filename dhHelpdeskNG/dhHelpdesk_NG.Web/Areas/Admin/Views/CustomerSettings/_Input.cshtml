@@ -508,7 +508,7 @@
                                         @Translation.GetCoreTextTranslation("visa alla handläggare oavsett vald driftgrupp")
                                         <br/>
                                         <input type="radio" name="Setting.DontConnectUserToWorkingGroup" @(Model.Setting.DontConnectUserToWorkingGroup == 0 ? "checked='checked'" : "") id="Customer_Setting_DontConnectUserToWorkingGroup2" value="0"/>
-                                        @Translation.GetCoreTextTranslation("visa endast handläggare i vald driftgrupp")
+                                        @Translation.GetCoreTextTranslation("lista bara administratörer med medlemskap i arbetsgruppen")
                                     </td>
                                 </tr>
                                 <tr>
@@ -518,25 +518,25 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <label> @Translation.Get("Avslutsdatum", Enums.TranslationSource.TextTranslation) </label>
+                                        <label> @Translation.GetCoreTextTranslation("Avslutsdatum") </label>
                                     </td>
                                     <td>
                                         <input type="checkbox" name="setting.DisableCaseEndDate" @(Model.Setting.DisableCaseEndDate == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.DisableCaseEndDate" value="0"/>
                                         <span>
-                                            @Translation.Get("Avslutsdatum sätt automatiskt till det datum då ärendet stängs (användaren kan inte ändra det)", Enums.TranslationSource.TextTranslation)
+                                            @Translation.GetCoreTextTranslation("Avslutsdatum sätt automatiskt till det datum då ärendet stängs (användaren kan inte ändra det)")
                                         </span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <label> @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) </label>
+                                        <label> @Translation.GetCoreTextTranslation("Ärende") </label>
                                     </td>
                                     <td>
                                         <input type="checkbox" name="setting.PreventToSaveCaseWithInactiveValue" @(Model.Setting.PreventToSaveCaseWithInactiveValue == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.PreventToSaveCaseWithInactiveValue" value="0"/>
                                         <span>
-                                            @Translation.Get("Tillåt inte att spara ärenden med inaktiva värden.", Enums.TranslationSource.TextTranslation)
+                                            @Translation.GetCoreTextTranslation("Tillåt inte att spara ärenden med inaktiva värden.")
                                         </span>
                                     </td>
                                 </tr>
@@ -554,19 +554,19 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Bilagor", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Bilagor")
                                     </td>
                                     <td>
                                         <input type="radio" name="Setting.AttachmentPlacement" @(Model.Setting.AttachmentPlacement == 0 ? "checked='checked'" : "") id="Customer_Setting_AttachmentPlacement0" value="0"/>
-                                        @Translation.Get("Visa på Ärende tab", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Visa på Ärende tab")
                                         <br/>
                                         <input type="radio" name="Setting.AttachmentPlacement" @(Model.Setting.AttachmentPlacement == 1 ? "checked='checked'" : "") id="Customer_Setting_AttachmentPlacement1" value="1"/>
-                                        @Translation.Get("Visa på Bilagor tab", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Visa på Bilagor tab")
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="width:100px">
-                                        @Translation.Get("Standardärendemall", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Standardärendemall")
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(model => model.Setting.DefaultCaseTemplateId, Model.CaseSolutionList, "", new { })
@@ -584,21 +584,21 @@
                             <table id="">
                                 <tr>
                                     <td>
-                                        @Translation.Get("E-post mall Nytt ärende skickas till", Enums.TranslationSource.TextTranslation)&nbsp;
+                                        @Translation.GetCoreTextTranslation("E-post mall Nytt ärende skickas till")&nbsp;
                                     </td>
                                     <td>
                                         <input type="radio" name="Setting.M2TNewCaseMailTo" @(Model.Setting.M2TNewCaseMailTo == 0 ? "checked='checked'" : "") id="Customer_Setting_M2TNewCaseMailTo0" value="0" />
-                                        @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Anmälare")
                                         <br />
                                         <input type="radio" name="Setting.M2TNewCaseMailTo" @(Model.Setting.M2TNewCaseMailTo == 1 ? "checked='checked'" : "") id="Customer_Setting_M2TNewCaseMailTo1" value="1" />
-                                        @Translation.Get("Avsändare", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Avsändare")
                                     </td>
                                 </tr>
                             </table>
                         </div>
                     </div>
                 </div>
-                <h4>@Translation.Get("Helpdesk meny", Enums.TranslationSource.TextTranslation)</h4>
+                <h4>@Translation.GetCoreTextTranslation("Helpdesk meny")</h4>
                 <div class="container">
                     <div class="row">
                         <div class="span15">
@@ -606,18 +606,18 @@
                                 
                                 <tr>
                                     <td style="width:150px">
-                                        @Translation.Get("Genväg", Enums.TranslationSource.TextTranslation) 
+                                        @Translation.GetCoreTextTranslation("Genväg") 
                                         
                                     </td>
                                     <td>
                                         <input type="checkbox" name="setting.ShowQuickNewCaseLink" @(Model.Setting.ShowQuickNewCaseLink == 1 ? "checked=checked" : "") value="1" />
                                         <input type="hidden" name="setting.ShowQuickNewCaseLink" value="0" />
-                                        @Translation.Get("Visa genväg för Nytt ärende", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Visa genväg för Nytt ärende")
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="width:150px">
-                                        @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Text")
 
                                     </td>
                                     <td>
@@ -626,7 +626,7 @@
                                 </tr>
                                 <tr>
                                     <td style="width:150px">
-                                        @Translation.Get("URL", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("URL")
 
                                     </td>
                                     <td>
@@ -648,7 +648,7 @@
 <div id="divPasswordDialog" class="modal hide fade">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)</h3>
+        <h3>@Translation.GetCoreTextTranslation("Byt lösenord")</h3>
     </div>
     <div class="modal-body">
         @Html.Partial("_ChangePassword", Model)

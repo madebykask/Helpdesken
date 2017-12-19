@@ -95,8 +95,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 {"-5", "CasesPerAdministrator"},
                 {"-6", "CasesPerDepartment"},
                 {"-7", "NumberOfCases"},
-                {"-8", "AvgResolutionTime" },
-                {"-9", "ReportedTime" }
+                {"-8", "AvgResolutionTime"},
+                {"-9", "ReportedTime"}
             };
 
             _reportCategories = new CustomSelectList();
@@ -104,31 +104,31 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
 			var reportCategories = new List<ListItem>()
 			{
-				new ListItem("1", "Case Type", false),
-				new ListItem("8", "Working Group", false),
-				new ListItem("9", "SubStatus", false),
-				new ListItem("10", "Department", false),
-				new ListItem("11", "Priority", false),
-				new ListItem("13", "Product Area", false),
-				new ListItem("12", "Closing Date", false),
-				new ListItem("7", "Source", false),
-				new ListItem("5", "Registration Date", false),
-				new ListItem("2", "Registration Year", false),
-				new ListItem("4", "Registration Month", false),
-				new ListItem("3", "Registration Weekday", false),
-				new ListItem("6", "Registration Hour", false)
+				new ListItem("1", GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), false),
+				new ListItem("8", GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), false),
+				new ListItem("9", GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), false),
+				new ListItem("10", GlobalEnums.TranslationCaseFields.Department_Id.ToString(), false),
+				new ListItem("11", GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), false),
+				new ListItem("13", GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), false),
+				new ListItem("12", GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), false),
+				new ListItem("7", GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(), false),
+				new ListItem("5", ReportItemNames.RegistrationDate, false),
+				new ListItem("2", ReportItemNames.RegistrationYear, false),
+				new ListItem("4", ReportItemNames.RegistrationMonth, false),
+				new ListItem("3", ReportItemNames.RegistrationWeekday, false),
+				new ListItem("6", ReportItemNames.RegistrationHour, false)
 			};
 
             var reprotCategoriesRt = new List<ListItem>
             {
-                new ListItem("1", "Case Type", false),
-                new ListItem("2", "Case Number", false),
-                new ListItem("3", "Department", false),
-                new ListItem("4", "Priority", false),
-                new ListItem("5", "Product Area", false),
-                new ListItem("6", "Log note date", false),
-                new ListItem("7", "Administrator", false),
-                new ListItem("8", "Working Group", false)
+                new ListItem("1", GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), false),
+                new ListItem("2", GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), false),
+                new ListItem("3", GlobalEnums.TranslationCaseFields.Department_Id.ToString(), false),
+                new ListItem("4", GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), false),
+                new ListItem("5", GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), false),
+                new ListItem("6", ReportItemNames.LogNoteDate, false),
+                new ListItem("7", GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), false),
+                new ListItem("8", GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), false)
             };
 
 			_reportCategories.Items.AddItems(reportCategories.OrderBy(o => o.Value).ToList());

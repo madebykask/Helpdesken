@@ -7,7 +7,12 @@ namespace DH.Helpdesk.BusinessData.Models.Case
     using DH.Helpdesk.BusinessData.Enums.Case;
 
     public class CaseSearchFilter
-    {        
+    {
+        public CaseSearchFilter()
+        {
+            FetchInfoAboutParentChild = false;                 
+        }
+
         #region Case state filter string constants, aka Case progress
         public const string UnreadCases = "4";
         public const string HoldCases = "3";
@@ -103,6 +108,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public CaseOverviewCriteriaModel CaseOverviewCriteria { get; set; }
 
+        public bool FetchInfoAboutParentChild { get; set; }
+
 
         public CaseSearchFilter Copy(CaseSearchFilter o)
         {
@@ -158,6 +165,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.IsConnectToParent = o.IsConnectToParent;
             r.CurrentCaseId = o.CurrentCaseId;
             r.IsExtendedSearch = o.IsExtendedSearch;
+            r.FetchInfoAboutParentChild = o.FetchInfoAboutParentChild;
 
             if (CaseOverviewCriteria != null)
             {

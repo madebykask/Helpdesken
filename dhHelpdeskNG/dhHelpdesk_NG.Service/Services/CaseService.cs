@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using DH.Helpdesk.BusinessData.Enums.Users;
 using DH.Helpdesk.BusinessData.Models.Feedback;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Feedback;
 
 namespace DH.Helpdesk.Services.Services
@@ -43,7 +45,8 @@ namespace DH.Helpdesk.Services.Services
     using Feedback;
     using BusinessData.Models.MailTemplates;
     using DH.Helpdesk.Domain.ExtendedCaseEntity;
-
+    using System.Linq.Expressions;
+    using Common.Extensions.String;
 
     public interface ICaseService
     {
@@ -71,7 +74,7 @@ namespace DH.Helpdesk.Services.Services
         EmailLog GetEMailLogByGUID(Guid GUID);
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
         IList<CaseHistoryOverview> GetCaseHistories(int caseId);
-        List<DynamicCase> GetAllDynamicCases();
+        List<DynamicCase> GetAllDynamicCases(int customerId, int[] caseIds);
         DynamicCase GetDynamicCase(int id);
         IList<Case> GetProblemCases(int problemId);
         IList<ExtendedCaseFormModel> GetExtendedCaseForm(int? caseSolutionId, int customerId, int? caseId, int userLanguageId, string userGuid, int? caseStateSecondaryId, int? caseWorkingGroupId, string extendedCasePath, int? userId, string userName, ApplicationType applicationType, int userWorkingGroupId);
@@ -162,7 +165,9 @@ namespace DH.Helpdesk.Services.Services
 		void SetIndependentChild(int caseID, bool independentChild);
 
         IList<Case> GetTop100CasesForTest();
-	}
+        int GetCaseRelatedInventoryCount(int customerId, string userId, UserOverview currentUser);
+        int GetCaseQuickOpen(UserOverview user, string searchFor);
+    }
 
     public class CaseService : ICaseService
     {
@@ -327,9 +332,9 @@ namespace DH.Helpdesk.Services.Services
             return _emailLogRepository.GetEmailLogsByGuid(GUID);
         }
 
-        public List<DynamicCase> GetAllDynamicCases()
+        public List<DynamicCase> GetAllDynamicCases(int customerId, int[] caseIds)
         {
-            return _caseRepository.GetAllDynamicCases();
+            return _caseRepository.GetAllDynamicCases(customerId, caseIds);
         }
 
         public DynamicCase GetDynamicCase(int id)
@@ -357,6 +362,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     rep.Add(new Case_ExtendedCaseEntity() { Case_Id = caseId, ExtendedCaseData_Id = extendedCaseDataId, ExtendedCaseForm_Id = extendedCaseFormId });
                     uow.Save();
+                    
                 }                                
             }
 
@@ -379,8 +385,6 @@ namespace DH.Helpdesk.Services.Services
                     }
                 }
             }
-
-            
         }
 
         public Guid Delete(int id, string basePath, int? parentCaseId)
@@ -464,7 +468,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (var l in elogs)
                 {
-                    if (l.EmailLogAttempts.Any())
+                    if (l.EmailLogAttempts != null && l.EmailLogAttempts.Any())
                         _emailLogAttemptRepository.DeleteLogAttempts(l.Id);
 
                     this._emailLogRepository.Delete(l);
@@ -511,11 +515,8 @@ namespace DH.Helpdesk.Services.Services
 
             var c = this._caseRepository.GetById(id);
             ret = c.CaseGUID;
-            this._caseRepository.Delete(c);
-            this._caseRepository.Commit();
 
-
-            
+            DeleteCaseById(id);
 
             return ret;
         }
@@ -1723,7 +1724,7 @@ namespace DH.Helpdesk.Services.Services
                                 foreach (var ur in newCase.Workinggroup.UserWorkingGroups)
                                 {
                                     if (ur.User != null)
-                                        if (ur.User.IsActive == 1 && ur.User.AllocateCaseMail == 1 && _emailService.IsValidEmail(ur.User.Email) && ur.UserRole == 2)
+                                        if (ur.User.IsActive == 1 && ur.User.AllocateCaseMail == 1 && _emailService.IsValidEmail(ur.User.Email) && ur.UserRole == WorkingGroupUserPermission.ADMINSTRATOR)
                                         {
                                             if (newCase.Department_Id != null && ur.User.Departments != null && ur.User.Departments.Count > 0)
                                             {
@@ -2085,6 +2086,34 @@ namespace DH.Helpdesk.Services.Services
             return _caseRepository.GetTop100CasesToTest();
         }
 
+        public int GetCaseRelatedInventoryCount(int customerId, string userId, UserOverview currentUser)
+        {
+            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var computerRep = uow.GetRepository<Computer>();
+
+                return computerRep.GetAll().GetRelatedInventoriesCount(userId, currentUser, customerId);
+            }
+        }
+
+        public int GetCaseQuickOpen(UserOverview user, string searchFor)
+        {
+
+            Expression<Func<Case, bool>> casePermissionFilter = _userService.GetCasePermissionFilter(user);
+
+            searchFor = searchFor.Tidy();
+
+            if (searchFor.Length > 0)
+            {
+                var case_ = _caseRepository.GetCaseQuickOpen(user, casePermissionFilter, searchFor);
+
+                if (case_ != null)
+                    return case_.Id;
+            }
+
+            return 0;
+        }
+
         #region Private methods
 
         private void DeleteChildCasesFor(int caseId)
@@ -2101,6 +2130,15 @@ namespace DH.Helpdesk.Services.Services
             using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 uow.GetRepository<Case_ExtendedCaseEntity>().DeleteWhere(it => it.Case_Id == caseId);
+                uow.Save();
+            }
+        }
+
+        private void DeleteCaseById(int caseId)
+        {
+            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                uow.GetRepository<Case>().DeleteWhere(it => it.Id == caseId);
                 uow.Save();
             }
         }

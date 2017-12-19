@@ -16,7 +16,7 @@ namespace DH.Helpdesk.Web.Infrastructure
     using DH.Helpdesk.Web.Infrastructure.Attributes;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     //using DH.Helpdesk.Web.Infrastructure.StringExtensions;
-    
+
     using DH.Helpdesk.Web.Models;
     using System.Configuration;
     using System.Security.Claims;
@@ -26,6 +26,7 @@ namespace DH.Helpdesk.Web.Infrastructure
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Common.Enums;
+    using BusinessData.Models.LogProgram;
 
     [SessionRequired]
     [CustomAuthorize]
@@ -132,6 +133,22 @@ namespace DH.Helpdesk.Web.Infrastructure
                             LatestActivity = DateTime.UtcNow,
                             SessionId = this.Session.SessionID
                         });
+
+                    var logProgramModel = new LogProgram()
+                    {
+                        CaseId = 0,
+                        CustomerId = user.CustomerId,
+                        LogType = 2,  //ToDo: define in Enum
+                        LogText = Request.GetIpAddress(),
+                        New_Performer_user_Id = 0,
+                        Old_Performer_User_Id = "0",
+                        RegTime = DateTime.UtcNow,
+                        UserId = user.Id,
+                        ServerNameIP = $"{Environment.MachineName} ({Request.ServerVariables["LOCAL_ADDR"]})",
+                        NumberOfUsers = GetLiveUserCount()
+                    };
+
+                    _masterDataService.UpdateUserLogin(logProgramModel);
                 }
                 else
                 {
@@ -140,6 +157,14 @@ namespace DH.Helpdesk.Web.Infrastructure
             } // if User Session = Null
 
             base.OnAuthorization(filterContext);
+        }
+
+        private int GetLiveUserCount()
+        {
+            if (ApplicationFacade.LoggedInUsers != null)
+                return ApplicationFacade.LoggedInUsers.Count();
+            else
+                return 0;
         }
 
         protected string RenderRazorViewToString(string viewName, object model, bool partial = true)

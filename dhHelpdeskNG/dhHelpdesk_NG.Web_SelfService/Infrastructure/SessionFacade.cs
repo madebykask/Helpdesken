@@ -15,6 +15,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
     using DH.Helpdesk.BusinessData.Models.Language.Output;
     using DH.Helpdesk.BusinessData.Models.Error;
     using BusinessData.Models.Employee;
+    using Models.Message;
 
     public static class SessionFacade
     {
@@ -45,6 +46,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         private const string _ALL_LANGUAGES = "ALL_LANGUAGES";
         private const string _LAST_CORRECT_URL = "LAST_CORRECT_URL";
         private const string _LAST_ERROR = "LAST_ERROR";
+        private const string _LAST_MESSAGE_DIALOG = "_LAST_MESSAGE_DIALOG";
 
         public static int CurrentCustomerID
         {
@@ -499,6 +501,21 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             if (value != null)
             {
                 HttpContext.Current.Session.Remove(composedKey);
+            }
+        }
+
+        public static MessageDialogModel LastMessageDialog
+        {
+            get
+            {
+                return (MessageDialogModel)HttpContext.Current.Session[_LAST_MESSAGE_DIALOG];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_LAST_MESSAGE_DIALOG] == null)
+                    HttpContext.Current.Session.Add(_LAST_MESSAGE_DIALOG, value);
+                else
+                    HttpContext.Current.Session[_LAST_MESSAGE_DIALOG] = value;
             }
         }
 

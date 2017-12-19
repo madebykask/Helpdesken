@@ -1,3 +1,5 @@
+using DH.Helpdesk.BusinessData.Models.User.Input;
+
 namespace DH.Helpdesk.Dal.Repositories.Computers
 {
     using System;
@@ -64,5 +66,6 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
         List<ReportModel> FindConnectedToComputerLocationOverviews(int customerId, int? departmentId, string searchFor);
 
         int GetIdByName(string computerName, int customerId);
+        List<ComputerOverview> GetRelatedOverviews(int customerId, string userId);
     }
 }

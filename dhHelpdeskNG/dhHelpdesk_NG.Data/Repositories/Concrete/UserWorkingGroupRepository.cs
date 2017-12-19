@@ -1,3 +1,5 @@
+using DH.Helpdesk.BusinessData.Enums.Users;
+
 namespace DH.Helpdesk.Dal.Repositories.Concrete
 {
     using System.Collections.Generic;
@@ -30,7 +32,7 @@ namespace DH.Helpdesk.Dal.Repositories.Concrete
             
             if (!includeAdmins)
             {
-                items = items.Where(x => x.UserRole == 2).ToList();
+                items = items.Where(x => x.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).ToList();
             }
 
             if (activeUsers)

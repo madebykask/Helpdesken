@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
+﻿using DH.Helpdesk.BusinessData.OldComponents;
+
+namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
 {
     using System;
     using System.Threading;
@@ -43,6 +45,10 @@
                 default:
                     if (field.TranslateThis)
                     {
+                        if (field.Key.Equals(GlobalEnums.TranslationCaseFields.Status_Id.ToString()) || field.Key.Equals(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()))
+                        {
+                            return Translation.GetMasterDataTranslation(field.StringValue);
+                        }
                         return Translation.Get(field.StringValue);
                     }
                     else

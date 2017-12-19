@@ -8,6 +8,5 @@ namespace DH.Helpdesk.Domain
         public Guid CaseSolutionConditionGUID { get; set; }
         public string Property_Name { get; set; }
         public string Values { get; set; }
-        public string Description { get; set; }
     }
 }

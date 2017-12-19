@@ -465,13 +465,13 @@
 
                 if (customersAlert.Any())
                 {
-                    err = Translation.Get("Användare") + " [" + userToSave.FirstName + " " + userToSave.SurName + "] " +
-                          Translation.Get("har aktiva ärenden hos kund") + ":";
+                    err = Translation.GetCoreTextTranslation("Användare") + " [" + userToSave.FirstName + " " + userToSave.SurName + "] " +
+                          Translation.GetCoreTextTranslation("har aktiva ärenden hos kund") + ":";
                     err += "(" + string.Join(",", customersAlert.ToArray()) + ")|";
-                    err += " " + Translation.Get("För att se över dessa ärenden, gå till") + ":|";
-                    err += " " + Translation.Get("Ärendeöversikt") + "|";
-                    err += " " + Translation.Get("Pågående ärenden") + "|";
-                    err += " " + Translation.Get("Handläggare");
+                    err += " " + Translation.GetCoreTextTranslation("För att se över dessa ärenden, gå till") + ":|";
+                    err += " " + Translation.GetCoreTextTranslation("Ärendeöversikt") + "|";
+                    err += " " + Translation.GetCoreTextTranslation("Pågående ärenden") + "|";
+                    err += " " + Translation.GetCoreTextTranslation("Handläggare");
                 }
 
                 if (userToSave.UserRoles != null)
@@ -544,7 +544,7 @@
                 
                 foreach (var error in errors)
                 {
-                    ModelState.AddModelError(error.Key, Translation.Get(error.Value));
+                    ModelState.AddModelError(error.Key, Translation.GetCoreTextTranslation(error.Value));
                 }
                 
                 var model = this.CreateInputViewModel(userToSave);

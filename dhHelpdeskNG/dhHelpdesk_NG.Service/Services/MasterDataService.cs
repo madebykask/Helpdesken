@@ -14,6 +14,8 @@ namespace DH.Helpdesk.Services.Services
     using EmployeeService;
     using BusinessData.Models.Employee;
     using BusinessData.Models.WebApi;
+    using BusinessData.Models.LogProgram;
+    using Concrete;
 
     public interface IMasterDataService
     {
@@ -39,7 +41,7 @@ namespace DH.Helpdesk.Services.Services
         string GetVirtualDirectoryPath(int customerId);
         Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true);
         EmployeeModel GetEmployee(int customerId, string employeeNumber, bool useApi = false, WebApiCredentialModel credentialModel = null);
-        
+        void UpdateUserLogin(LogProgram logProgram);
     }
 
     public class MasterDataService : IMasterDataService
@@ -56,6 +58,8 @@ namespace DH.Helpdesk.Services.Services
         private readonly INotifierRepository _computerUserRepository;
         private readonly ICustomerUserRepository _customerUserRepository;
         private readonly IEmployeeService _employeeService;
+        private readonly ILogProgramService _logProgramService;
+
 
         public MasterDataService(
             ICustomerRepository customerRepository,
@@ -69,7 +73,8 @@ namespace DH.Helpdesk.Services.Services
             IADFSRepository adfsRepository,
             INotifierRepository computerUserRepository,
             ICustomerUserRepository customerUserRepository,
-            IEmployeeService employeeService)
+            IEmployeeService employeeService,
+            ILogProgramService logProgramService)
         {
             this._customerRepository = customerRepository;
             this._languageRepository = languageRepository;
@@ -83,6 +88,7 @@ namespace DH.Helpdesk.Services.Services
             _computerUserRepository = computerUserRepository;
             _customerUserRepository = customerUserRepository;
             _employeeService = employeeService;
+            _logProgramService = logProgramService;
         }
 
         public IList<Customer> GetCustomers(int userId)
@@ -226,6 +232,11 @@ namespace DH.Helpdesk.Services.Services
         public EmployeeModel GetEmployee(int customerId, string employeeNumber, bool useApi = false, WebApiCredentialModel credentialModel = null)
         {            
             return _employeeService.GetEmployee(customerId, employeeNumber, useApi, credentialModel);
+        }
+
+        public void UpdateUserLogin(LogProgram logProgram)
+        {
+            _logProgramService.UpdateUserLogin(logProgram);
         }
     }
 }

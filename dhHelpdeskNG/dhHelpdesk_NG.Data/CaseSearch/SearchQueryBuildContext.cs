@@ -16,7 +16,7 @@ namespace DH.Helpdesk.Dal.Repositories
                                        IList<Department> userDepartments, 
                                        List<int> caseTypes)
         {
-            
+
             Criterias = new CaseSearchCriterias
             {
                 ApplicationType = context.applicationType,
@@ -36,10 +36,12 @@ namespace DH.Helpdesk.Dal.Repositories
 
                 CustomerUserSettings = customerUserSettings,
                 UserDepartments = userDepartments,
-                CaseTypes = caseTypes
+                CaseTypes = caseTypes,
+                FetchInfoAboutParentChild = context.f.FetchInfoAboutParentChild
             };
 
             UseFullTextSearch = context.useFullTextSearch;
+            
         }
 
         #endregion

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Enums.Users;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -126,7 +128,6 @@
             {
                 userWorkingGroups = userWorkingGroupRepository.GetAll()
                 .Where(uw => uw.User_Id == userId && uw.UserRole != 0).Select(uw => uw.WorkingGroup_Id);
-                //.Where(uw => uw.User_Id == userId && uw.UserRole == 2).Select(uw => uw.WorkingGroup_Id);
             }
             return  this.workingGroupRepository
                     .GetMany(x => x.Customer_Id == customerId && (!isTakeOnlyActive || (isTakeOnlyActive && x.IsActive == 1)))
@@ -139,7 +140,7 @@
         {
             IEnumerable<int> userWorkingGroups;
                 userWorkingGroups = userWorkingGroupRepository.GetAll()
-                .Where(uw => uw.User_Id == userId && uw.UserRole == 2).Select(uw => uw.WorkingGroup_Id);
+                .Where(uw => uw.User_Id == userId && uw.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).Select(uw => uw.WorkingGroup_Id);
          
             return this.workingGroupRepository
                     .GetMany(x => x.Customer_Id == customerId && (!isTakeOnlyActive || (isTakeOnlyActive && x.IsActive == 1)))

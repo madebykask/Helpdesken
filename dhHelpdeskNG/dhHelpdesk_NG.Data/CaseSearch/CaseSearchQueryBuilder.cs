@@ -151,11 +151,12 @@ namespace DH.Helpdesk.Dal.Repositories
             //TODO: remove top 500 limit when true sql side paging is implemented
             //vid avslutade ärenden visas bara första 500
             var sqlTop500 = (searchFilter.CaseProgress == CaseProgressFilter.ClosedCases || searchFilter.CaseProgress == CaseProgressFilter.None) ? "top 500" : "";
-
-            sql.Add($@"SELECT * 
+            const string subQueryName = "RowConstrainedResult";
+            var outerFields = ctx.Criterias.FetchInfoAboutParentChild? $",{GetParentChildInfo(subQueryName)}" : "";
+            sql.Add($@"SELECT * {outerFields} 
                        FROM ( SELECT {sqlTop500} *, ROW_NUMBER() OVER ( ORDER BY {orderBy} ) AS RowNum 
                               FROM ( {searchQuery} ) as tbl
-                            ) as RowConstrainedResult");
+                            ) as {subQueryName}");
 
             //if (f.PageInfo != null)
             //{
@@ -290,8 +291,6 @@ namespace DH.Helpdesk.Dal.Repositories
             columns.Add("tblCase.Performer_User_Id as CasePerformerUserId");
             columns.Add("tblCase.CaseResponsibleUser_Id as CaseResponsibleUserId");
             columns.Add("tblCase.User_Id as CaseUserId");
-            columns.Add("(select count(Ancestor_Id)  from tblParentChildCaseRelations where  Ancestor_Id = tblCase.Id) as IsParent");
-            columns.Add("(select Top 1 (Ancestor_Id)  from tblParentChildCaseRelations where  Descendant_Id = tblCase.Id) as ParentCaseId");
             if (searchFilter.MaxTextCharacters > 0)
                 columns.Add(string.Format("Cast(tblCase.[Description] as Nvarchar({0})) as [Description] ", searchFilter.MaxTextCharacters));
             else
@@ -585,6 +584,14 @@ namespace DH.Helpdesk.Dal.Repositories
         }
 
         #endregion
+
+        private string GetParentChildInfo(string nestedTableAlias)
+        {
+            var columns = new List<string>();
+            columns.Add($"(select count(Ancestor_Id)  from tblParentChildCaseRelations where  Ancestor_Id = {nestedTableAlias}.Id) as IsParent");
+            columns.Add($"(select Top 1 (Ancestor_Id)  from tblParentChildCaseRelations where  Descendant_Id = {nestedTableAlias}.Id) as ParentCaseId");
+            return string.Join(",", columns);
+        }
 
         private string GetTablesAndJoins(SearchQueryBuildContext ctx)
         {

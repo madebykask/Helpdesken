@@ -1,3 +1,6 @@
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Web.Models.Shared;
+
 namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 {
     using System.Collections.Generic;
@@ -123,7 +126,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpGet]
-        public ViewResult Edit(int id, bool dialog = false)
+        public ViewResult Edit(int id, bool dialog = false, string userId = null)
         {
             var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
             var readOnly = !userHasInventoryAdminPermission && dialog;
@@ -136,13 +139,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
             ComputerViewModel computerEditModel = this.computerViewModelBuilder.BuildViewModel(model, options, settings);
             computerEditModel.IsForDialog = dialog;
+            computerEditModel.UserId = userId;
             var viewModel = new ComputerEditViewModel(id, computerEditModel)
             {
                 UserHasInventoryAdminPermission = userHasInventoryAdminPermission,
-                IsForDialog = dialog
+                IsForDialog = dialog,
+                UserId = userId
             };
 
-            return this.View(viewModel);
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -156,12 +161,16 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [BadRequestOnNotValid]
         public RedirectToRouteResult Edit(ComputerViewModel computerViewModel)
         {
-            ComputerForUpdate businessModel = this.computerBuilder.BuildForUpdate(
-                computerViewModel,
-                this.OperationContext);
+            ComputerForUpdate businessModel = this.computerBuilder.BuildForUpdate(computerViewModel, OperationContext);
             this.inventoryService.UpdateWorkstation(businessModel, this.OperationContext);
             if (computerViewModel.IsForDialog)
-                return RedirectToAction("Edit", new {id = computerViewModel.Id, dialog = computerViewModel.IsForDialog});
+            {
+                if (!string.IsNullOrEmpty(computerViewModel.UserId))
+                {
+                    return RedirectToAction("RelatedInventoryFull", new {userId = computerViewModel.UserId});
+                }
+                return RedirectToAction("Edit", new { id = computerViewModel.Id, dialog = computerViewModel.IsForDialog });
+            }
             return this.RedirectToAction("Index");
         }
 
@@ -201,45 +210,48 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpGet]
-        public ViewResult Storage(int computerId, bool dialog = false)
+        public ViewResult Storage(int computerId, bool dialog = false, string userId = null)
         {
             List<LogicalDriveOverview> models = this.computerModulesService.GetComputerLogicalDrive(computerId);
 
-            var viewModel = new StorageViewModel(computerId, models) {IsForDialog = dialog };
+            var viewModel = new StorageViewModel(computerId, models) {IsForDialog = dialog, UserId = userId };
 
             return this.View(viewModel);
         }
 
         [HttpGet]
-        public ViewResult Software(int computerId, bool dialog = false)
+        public ViewResult Software(int computerId, bool dialog = false, string userId = null)
         {
             List<SoftwareOverview> models = this.computerModulesService.GetComputerSoftware(computerId);
 
-            var viewModel = new SoftwareViewModel(computerId, models) {IsForDialog = dialog };
+            var viewModel = new SoftwareViewModel(computerId, models) {IsForDialog = dialog, UserId = userId };
 
             return this.View(viewModel);
         }
 
         [HttpGet]
-        public ViewResult HotFixes(int computerId, bool dialog = false)
+        public ViewResult HotFixes(int computerId, bool dialog = false, string userId = null)
         {
             List<SoftwareOverview> models = this.computerModulesService.GetComputerSoftware(computerId);
 
-            var viewModel = new HotfixViewModel(computerId, models) {IsForDialog = dialog };
+            var viewModel = new HotfixViewModel(computerId, models) {IsForDialog = dialog, UserId = userId };
 
             return this.View(viewModel);
         }
 
         [HttpGet]
-        public ViewResult ComputerLogs(int computerId, bool dialog = false)
+        public ViewResult ComputerLogs(int computerId, bool dialog = false, string userId = null)
         {
             var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
 
             List<ComputerLogOverview> models = this.inventoryService.GetWorkstationLogOverviews(computerId);
 
-            var viewModel = new LogsViewModel(computerId, models, dialog);
-            viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
-            viewModel.IsForDialog = dialog;
+            var viewModel = new LogsViewModel(computerId, models, dialog, userId)
+            {
+                UserHasInventoryAdminPermission = userHasInventoryAdminPermission,
+                IsForDialog = dialog,
+                UserId = userId
+            };
 
             return this.View(viewModel);
         }
@@ -249,19 +261,19 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         public RedirectToRouteResult NewComputerLog(ComputerLogModel computerLogModel)
         {
             this.inventoryService.AddComputerLog(computerLogModel.CreateBusinessModel());
-            return this.RedirectToAction("ComputerLogs", new { computerId = computerLogModel.ComputerId, dialog = computerLogModel.IsForDialog });
+            return this.RedirectToAction("ComputerLogs", new { computerId = computerLogModel.ComputerId, dialog = computerLogModel.IsForDialog, userId = computerLogModel.UserId });
         }
 
         [HttpGet]
-        public RedirectToRouteResult DeleteComputerLog(int logId, int computerId, bool dialog = false)
+        public RedirectToRouteResult DeleteComputerLog(int logId, int computerId, bool dialog = false, string userId = null)
         {
             this.inventoryService.DeleteComputerLog(logId);
 
-            return this.RedirectToAction("ComputerLogs", new { computerId, dialog });
+            return this.RedirectToAction("ComputerLogs", new { computerId, dialog, userId });
         }
 
         [HttpGet]
-        public ViewResult Accessories(int computerId, bool dialog = false)
+        public ViewResult Accessories(int computerId, bool dialog = false, string userId = null)
         {
             InventoryOverviewResponseWithType inventory =
                 this.inventoryService.GetConnectedToComputerInventories(computerId);
@@ -292,6 +304,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
             viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
             viewModel.IsForDialog = dialog;
+            viewModel.UserId = userId;
             return this.View(viewModel);
         }
 
@@ -308,7 +321,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult ConnectInventoryToComputer(int? inventoryId, int computerId, bool dialog = false)
+        public RedirectToRouteResult ConnectInventoryToComputer(int? inventoryId, int computerId, bool dialog = false, string userId = null)
         {
             if (!inventoryId.HasValue)
             {
@@ -317,15 +330,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
             this.inventoryService.ConnectInventoryToComputer(inventoryId.Value, computerId);
 
-            return this.RedirectToAction("Accessories", new { computerId, dialog });
+            return this.RedirectToAction("Accessories", new { computerId, dialog, userId });
         }
 
         [HttpGet]
-        public RedirectToRouteResult DeleteInventoryFromComputer(int computerId, int inventoryId, bool dialog = false)
+        public RedirectToRouteResult DeleteInventoryFromComputer(int computerId, int inventoryId, bool dialog = false, string userId = null)
         {
             this.inventoryService.RemoveInventoryFromComputer(inventoryId, computerId);
 
-            return this.RedirectToAction("Accessories", new { computerId, dialog });
+            return this.RedirectToAction("Accessories", new { computerId, dialog, userId });
         }
 
         [HttpGet]
@@ -415,6 +428,21 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 rooms);
 
             return computerResponse;
+        }
+
+        [HttpGet]
+        public ActionResult RelatedInventoryFull(string userId)
+        {
+            var sortField = new SortFieldModel
+            {
+                Name = BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.Name,
+                SortBy = SortBy.Ascending
+            };
+            var settings = inventorySettingsService.GetWorkstationFieldSettingsOverview(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
+            var models = inventoryService.GetRelatedInventory(SessionFacade.CurrentCustomer.Id, userId);
+            var viewModel = InventoryGridModel.BuildModel(models, settings, sortField);
+            ViewData.Add(new KeyValuePair<string, object>("UserId", userId));
+            return View(viewModel);
         }
     }
 }

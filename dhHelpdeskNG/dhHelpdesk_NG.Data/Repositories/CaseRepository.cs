@@ -14,7 +14,8 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
     using DH.Helpdesk.Domain;
     using Mappers;
-    //using System.Data;
+    using System.Linq.Expressions;
+    using System.Data.Linq.SqlClient;
 
     public interface ICaseRepository : IRepository<Case>
     {
@@ -23,7 +24,6 @@ namespace DH.Helpdesk.Dal.Repositories
         Case GetCaseByEmailGUID(Guid GUID);
         Case GetDetachedCaseById(int id);
         Case GetDetachedCaseIncludesById(int id);
-        List<DynamicCase> GetAllDynamicCases();
         DynamicCase GetDynamicCase(int id);
         IList<Case> GetProjectCases(int customerId, int projectId);
         IList<Case> GetProblemCases(int customerId, int problemId);
@@ -36,6 +36,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         IEnumerable<CaseOverview> GetCaseOverviews(int[] customers);
         int LookupLanguage(int custid, string notid, int regid, int depid, string notifierid);
+        List<DynamicCase> GetAllDynamicCases(int customerId, int[] caseIds);
 
 
 
@@ -59,6 +60,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IList<int> GetCasesIdsByType(int caseTypeId);
 
         List<Case> GetTop100CasesToTest();
+        Case GetCaseQuickOpen(UserOverview user, Expression<Func<Case, bool>> casePermissionFilter, string searchFor);
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -89,19 +91,19 @@ namespace DH.Helpdesk.Dal.Repositories
                     select w).FirstOrDefault();
         }
 
-        public List<DynamicCase> GetAllDynamicCases()
+        public List<DynamicCase> GetAllDynamicCases(int customerId, int[] caseIds)
         {
             var query = from f in this.DataContext.Forms
                         join ff in this.DataContext.FormField on f.Id equals ff.Form_Id
                         join ffv in this.DataContext.FormFieldValue on ff.Id equals ffv.FormField_Id
-                        where f.ExternalPage == 1
+                        where f.Customer_Id == customerId && f.ExternalPage == 1 && caseIds.Contains(ffv.Case_Id)
                         select new DynamicCase
                         {
                             CaseId = ffv.Case_Id,
                             FormPath = f.FormPath
                         };
 
-            return query.Take(5000).Distinct().ToList();
+            return query.Distinct().ToList();
         }
 
         public IList<Case> GetProjectCases(int customerId, int projectId)
@@ -473,6 +475,28 @@ namespace DH.Helpdesk.Dal.Repositories
         public List<Case> GetTop100CasesToTest()
         {
             return DataContext.Cases.Take(100).ToList();            
+        }
+
+        public Case GetCaseQuickOpen(UserOverview currentUser, Expression<Func<Case, bool>> casePermissionFilter, string searchFor)
+        {
+
+            IQueryable<Case> query;
+
+            query = from _case in DataContext.Set<Case>()
+                    from user in _case.Customer.Users
+                    where (_case.CaseNumber.ToString() == searchFor.Replace("#", "")) && user.Id == currentUser.Id
+                    orderby _case.RegTime descending
+                    select _case;
+
+            if (casePermissionFilter != null)
+            {
+                query = query.Where(casePermissionFilter);
+            }
+
+            if (query.Any())
+                return query.FirstOrDefault();
+
+            return null;
         }
     }
 }

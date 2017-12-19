@@ -157,6 +157,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IOrderAccountDefaultSettingsCreator>().To<OrderAccountDefaultSettingsCreator>();
             this.Bind<ICaseDocumentService>().To<CaseDocumentService>();
 
+            this.Bind<IConditionService>().To<ConditionService>();
+
 
             // Survey service
             this.Bind<ISurveyService>().To<SurveyService>();
@@ -179,6 +181,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             Bind<IMetaDataService>().To<MetaDataService>();
             Bind<IEmployeeService>().To<EmployeeService>();
             Bind<IWebApiService>().To<WebApiService>();
+
 
 
         }

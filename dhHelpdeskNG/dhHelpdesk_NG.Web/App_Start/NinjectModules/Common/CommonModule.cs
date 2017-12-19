@@ -42,6 +42,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
     using DH.Helpdesk.BusinessData.Models.CaseDocument;
     using Ninject.Modules;
     using DH.Helpdesk.Domain.ExtendedCaseEntity;
+    using BusinessData.Models.Condition;
+    using Dal.Mappers.Condition;
 
     /// <summary>
     /// The common module.
@@ -202,6 +204,15 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
 
             this.Bind<IEntityToBusinessModelMapper<CaseDocumentTextConditionIdentifierEntity, CaseDocumentTextConditionIdentifierModel>>()
                 .To<CaseDocumentTextConditionIdentifierToBusinessModelMapper>()
+                .InSingletonScope();
+
+
+            this.Bind<IBusinessModelToEntityMapper<ConditionModel, ConditionEntity>>()
+            .To<ConditionToEntityMapper>()
+            .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ConditionEntity, ConditionModel>>()
+                .To<ConditionToBusinessModelMapper>()
                 .InSingletonScope();
 
         }

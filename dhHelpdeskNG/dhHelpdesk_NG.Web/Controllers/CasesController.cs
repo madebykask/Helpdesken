@@ -14,6 +14,7 @@ using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Dal.DbQueryExecutor;
 using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Services.Services.Cases;
+using DH.Helpdesk.Web.Areas.Inventory.Models;
 using DH.Helpdesk.Web.Models.Invoice;
 
 
@@ -518,6 +519,36 @@ namespace DH.Helpdesk.Web.Controllers
 
             return this.Json(new { result = "success", data = ret });
         }
+
+        [ValidateInput(false)]
+        public ActionResult QuickOpen(FormCollection frm)
+        {
+            if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
+            {
+                return new RedirectResult("~/Error/Unathorized");
+            }
+
+            string searchFor = frm.ReturnFormValue("txtQuickOpen");
+
+            string notFoundText = Translation.GetCoreTextTranslation("Inget ärende tillgängligt");
+
+            int caseId = _caseService.GetCaseQuickOpen(SessionFacade.CurrentUser, searchFor);
+
+            if (caseId > 0)
+            {
+
+                if (_userService.VerifyUserCasePermissions(SessionFacade.CurrentUser, caseId))
+                {
+                    return this.Json(new { result = "success", data = "/Cases/Edit/" + caseId });
+                }
+                else
+                {
+                    notFoundText = Translation.GetCoreTextTranslation("Åtkomst nekad");
+                }
+            }
+
+            return this.Json(new { result = "error", data = notFoundText });
+        }
         #endregion
 
         #region --Case Overview--
@@ -821,6 +852,7 @@ namespace DH.Helpdesk.Web.Controllers
             var gridSettings = SessionFacade.CaseOverviewGridSettings;
             sm.Search.SortBy = gridSettings.sortOptions.sortBy;
             sm.Search.Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc;
+            
             m.caseSettings = _caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
             var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
             var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
@@ -828,6 +860,9 @@ namespace DH.Helpdesk.Web.Controllers
             CaseAggregateData aggregateData;
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
             f.MaxTextCharacters = MaxTextCharCount;
+
+            //Show Parent/child icons with hint on Case overview
+            f.FetchInfoAboutParentChild = true;
 
             int recPerPage;
             int pageStart;
@@ -2314,7 +2349,12 @@ namespace DH.Helpdesk.Web.Controllers
         {
             if ( fileId.HasValue)
             {
-                _logFileService.DeleteByFileIdAndFileName(fileId.Value, fileName.Trim());
+                if (fileId == 0)
+                {
+                    _logFileService.DeleteByFileName(fileName.Trim());
+                }
+                else
+                    _logFileService.DeleteByFileIdAndFileName(fileId.Value, fileName.Trim());
             }
             else
             {
@@ -2960,6 +3000,18 @@ namespace DH.Helpdesk.Web.Controllers
                                                 userId,
                                                 SessionFacade.CurrentUser);
             return this.Json(count, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
+        #region Related Inventory
+
+        [ValidateInput(false)]
+        [HttpGet]
+        public JsonResult RelatedInventoryCount(string userId)
+        {
+            var count = _caseService.GetCaseRelatedInventoryCount(workContext.Customer.CustomerId, userId, SessionFacade.CurrentUser);
+            return Json(count, JsonRequestBehavior.AllowGet);
         }
 
         #endregion
@@ -3624,6 +3676,7 @@ namespace DH.Helpdesk.Web.Controllers
                         TextInternal = string.Format("[{0} #{1}]: {2}", Translation.Get(CaseLog.ChildCaseMarker), case_.CaseNumber, caseLog.TextInternal)
                     };
                     this.UpdateCaseLogForCase(parentCase, parentCaseLog);
+                    
                 }
 
                 if (childCasesIds != null && childCasesIds.Length > 0)
@@ -3768,6 +3821,8 @@ namespace DH.Helpdesk.Web.Controllers
             IDictionary<string, string> errors;
 
             var c = this._caseService.GetCaseById(caseLog.CaseId);
+
+            this._logService.AddChildCaseLogToParentCase(c.Id, caseLog);
 
             // save case and case history
             var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.Helpdesk5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0 };
@@ -5379,7 +5434,11 @@ namespace DH.Helpdesk.Web.Controllers
                             m.case_.Project_Id = caseTemplate.Project_Id;
 
                         if (!string.IsNullOrEmpty(caseTemplate.Text_External))
+                        {
                             m.CaseLog.TextExternal = caseTemplate.Text_External;
+                            m.CaseLog.SendMailAboutCaseToNotifier = true;
+                        }
+                            
 
                         if (!string.IsNullOrEmpty(caseTemplate.Text_Internal))
                             m.CaseLog.TextInternal = caseTemplate.Text_Internal;
@@ -5678,7 +5737,10 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             // check state secondary info
-            m.CaseLog.SendMailAboutCaseToNotifier = false;
+            if (string.IsNullOrEmpty(m.CaseLog.TextExternal))
+            {
+                m.CaseLog.SendMailAboutCaseToNotifier = false;
+            }
 
             m.Disable_SendMailAboutCaseToNotifier = false;
             if (m.case_.StateSecondary_Id > 0)

@@ -394,7 +394,9 @@ $(function () {
         var that = dhHelpdesk.cases.caseFields(spec, my);
 
         var relatedCasesUrl = spec.relatedCasesUrl || '';
+        var relatedInventoryUrl = spec.relatedInventoryUrl || '';
         var relatedCasesCountUrl = spec.relatedCasesCountUrl || '';
+        var relatedInventoryCountUrl = spec.relatedInventoryCountUrl || '';
         var userId = spec.userId || {};
         var region = spec.region || {};
         var department = spec.department || {};
@@ -402,14 +404,24 @@ $(function () {
         var departmentFilterFormat = spec.departmentFilterFormat || {};
         var dontConnectUserToWorkingGroup = spec.dontConnectUserToWorkingGroup || {};
         var relatedCases = spec.relatedCases || {};
+        var relatedInventory = spec.relatedInventory || {};
         relatedCases.getElement().hide();
+        relatedInventory.getElement().hide();
 
         var getRelatedCasesUrl = function() {
             return relatedCasesUrl;
         }
 
+        var getRelatedInventoryUrl = function () {
+            return relatedInventoryUrl;
+        }
+
         var getRelatedCasesCountUrl = function() {
             return relatedCasesCountUrl;
+        }
+
+        var getRelatedInventoryCountUrl = function () {
+            return relatedInventoryCountUrl;
         }
 
         var getUserId = function() {
@@ -440,8 +452,13 @@ $(function () {
             return relatedCases;
         }
 
+        var getRelatedInventory = function () {
+            return relatedInventory;
+        }
+
         that.getRelatedCasesUrl = getRelatedCasesUrl;
         that.getRelatedCasesCountUrl = getRelatedCasesCountUrl;
+        that.getRelatedInventoryCountUrl = getRelatedInventoryCountUrl;
         that.getUserId = getUserId;
         that.getRegion = getRegion;
         that.getDepartment = getDepartment;
@@ -472,14 +489,40 @@ $(function () {
                 checkRelatedCases();
             }
 
+            var checkRelatedInventory = function (uId) {
+                var userIdValue = uId || userId.getElement().val();
+                if (userIdValue == null || userIdValue.trim() == '') {
+                    relatedInventory.getElement().hide();
+                    return;
+                }
+                $.getJSON(getRelatedInventoryCountUrl() +
+                            "?userId=" + encodeURIComponent(userIdValue), function (data) {
+                                if (data > 0) {
+                                    relatedInventory.getElement().show();
+                                } else {
+                                    relatedInventory.getElement().hide();
+                                }
+                            });
+            }
+            if (!relatedInventory.isEmpty()) {
+                checkRelatedInventory();
+            }
+
             userId.getElement().keyup(function() {
                 dhHelpdesk.cases.utils.delay(checkRelatedCases, 500);
+                dhHelpdesk.cases.utils.delay(checkRelatedInventory, 500);
             });
 
             relatedCases.getElement().click(function () {
                 var caseId = that.getCase().getCaseId().getElement();
                 var userIdValue = encodeURIComponent(userId.getElement().val());
                 window.open(getRelatedCasesUrl() + '?caseId=' + caseId.val() + '&userId=' + userIdValue, '_blank');
+            });
+
+            relatedInventory.getElement().click(function () {
+                var caseId = that.getCase().getCaseId().getElement();
+                var userIdValue = encodeURIComponent(userId.getElement().val());
+                window.open(getRelatedInventoryUrl() + "?userId=" + userIdValue, "_blank", "width=1400,height=600,menubar=no,toolbar=no,location=no,status=no,left=100,top=100,scrollbars=yes,resizable=yes");
             });
 
             region.getElement().change(function () {
@@ -775,7 +818,9 @@ $(function () {
         var getDepartmentsUrl = spec.getDepartmentsUrl || '';
         var getDepartmentUsersUrl = spec.getDepartmentUsersUrl || '';
         var relatedCasesUrl = spec.relatedCasesUrl || '';
+        var relatedInventoryUrl = spec.relatedInventoryUrl || '';
         var relatedCasesCountUrl = spec.relatedCasesCountUrl || '';
+        var relatedInventoryCountUrl = spec.relatedInventoryCountUrl || '';
         var getDepartmentOusUrl = spec.getDepartmentOusUrl || '';
         var deleteCaseFileConfirmMessage = spec.deleteCaseFileConfirmMessage || '';
         var okText = spec.okText || '';
@@ -784,7 +829,6 @@ $(function () {
         var noText = spec.noText || '';
         var validationMessages = spec.validationMessages || [];
         var mandatoryFieldsText = spec.mandatoryFieldsText || '';
-        
 
         dhHelpdesk.cases.utils.init(okText, cancelText, yesText, noText);
 
@@ -796,8 +840,11 @@ $(function () {
             departmentFilterFormat: dhHelpdesk.cases.object({ element: $('[data-field="departmentFilterFormat"]') }),
             dontConnectUserToWorkingGroup: dhHelpdesk.cases.object({ element: $('[data-field="dontConnectUserToWorkingGroup"]') }),
             relatedCases: dhHelpdesk.cases.object({ element: $('[data-field="relatedCases"]') }),
+            relatedInventory: dhHelpdesk.cases.object({ element: $('[data-field="relatedInventory"]') }),
             relatedCasesUrl: relatedCasesUrl,
-            relatedCasesCountUrl: relatedCasesCountUrl
+            relatedInventoryUrl: relatedInventoryUrl,
+            relatedCasesCountUrl: relatedCasesCountUrl,
+            relatedInventoryCountUrl: relatedInventoryCountUrl
         });
         var computer = dhHelpdesk.cases.computer({});
 

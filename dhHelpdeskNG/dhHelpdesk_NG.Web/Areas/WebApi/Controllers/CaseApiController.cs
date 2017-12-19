@@ -103,8 +103,9 @@ namespace DH.Helpdesk.Web.Areas.WebApi
             var auxModel = new AuxCaseModel(1, curUserId, User.Identity.Name,
                                             RequestExtension.GetAbsoluteUrl(),
                                             CreatedByApplications.Helpdesk5Api);
-            int caseId = -1;         
-            var res = _universalCaseService.SaveCase(infoToSave, auxModel, out caseId);
+            int caseId = -1;
+            decimal caseNum = -1;     
+            var res = _universalCaseService.SaveCase(infoToSave, auxModel, out caseId, out caseNum);
 
             #endregion            
 
