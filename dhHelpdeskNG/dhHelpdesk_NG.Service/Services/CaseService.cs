@@ -198,7 +198,6 @@ namespace DH.Helpdesk.Services.Services
 		private readonly ICaseSectionsRepository _caseSectionsRepository;
 
 
-
 		private readonly ICaseMailer caseMailer;
 
         private readonly IInvoiceArticleService invoiceArticleService;
@@ -508,16 +507,20 @@ namespace DH.Helpdesk.Services.Services
             // delete Invoice
             this.invoiceArticleService.DeleteCaseInvoices(id);
 
+
             //delete FollowUp
             this._caseFollowUpService.DeleteFollowUp(id);
 
             var c = this._caseRepository.GetById(id);
+
+			if (c.CaseSectionExtendedCaseDatas != null && c.CaseSectionExtendedCaseDatas.Any())
+			{
+				c.CaseSectionExtendedCaseDatas.Clear();
+			}
+			
             ret = c.CaseGUID;
             this._caseRepository.Delete(c);
             this._caseRepository.Commit();
-
-
-            
 
             return ret;
         }
