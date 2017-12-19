@@ -351,7 +351,7 @@ namespace DH.Helpdesk.Web.Controllers
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId };
 
             this.problemLogService.AddLog(logDto);
-            SendProblemLogEmail(log);
+//            SendProblemLogEmail(log);
             return this.RedirectToAction("ProblemActiveLog", new { id = log.ProblemId });
         }
 
@@ -382,7 +382,7 @@ namespace DH.Helpdesk.Web.Controllers
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId, Id = log.Id };
 
             this.problemLogService.UpdateLog(logDto);
-            SendProblemLogEmail(log);
+//            SendProblemLogEmail(log);
             return this.RedirectToAction("ProblemActiveLog", new { id = log.ProblemId });
         }
 
