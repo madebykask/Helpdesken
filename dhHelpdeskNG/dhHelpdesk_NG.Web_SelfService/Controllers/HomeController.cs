@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.SelfService.Controllers
+﻿using DH.Helpdesk.SelfService.Infrastructure.Configuration;
+
+namespace DH.Helpdesk.SelfService.Controllers
 {
     using System.Web.Mvc;
 
@@ -8,9 +10,10 @@
 
     public class HomeController : BaseController
     {                
-        public HomeController( IMasterDataService masterDataService,           
-                               ICaseSolutionService caseSolutionService                               
-                              ):base(masterDataService, caseSolutionService)
+        public HomeController( IMasterDataService masterDataService,
+                               ISelfServiceConfigurationService configurationService,
+                               ICaseSolutionService caseSolutionService                        
+                              ) : base(configurationService, masterDataService, caseSolutionService)
             
         {
             //this._customerService = customerService;

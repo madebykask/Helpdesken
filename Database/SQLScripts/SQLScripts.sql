@@ -30,7 +30,6 @@ GO
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'ExtendedCaseForm_Id' and sysobjects.name = N'tblCase_ExtendedCaseData')
 begin
-
 	ALTER TABLE [tblCase_ExtendedCaseData] ADD [ExtendedCaseForm_Id] int 
 end
 
@@ -1913,8 +1912,7 @@ end
 IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
                where syscolumns.name = N'IsMemberOfGroup' and sysobjects.name = N'tblUserWorkingGroup')
 begin
-	ALTER TABLE [dbo].[tblUserWorkingGroup] ADD IsMemberOfGroup bit NOT NULL Default(0)
-	
+	ALTER TABLE [dbo].[tblUserWorkingGroup] ADD IsMemberOfGroup bit NOT NULL Default(0)	
 	UPDATE [dbo].[tblUserWorkingGroup] SET [IsMemberOfGroup] = 1 WHERE [UserRole] = 2
 end
 
@@ -1962,7 +1960,21 @@ end
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'FetchPcNumber' and sysobjects.name = N'tblCustomer')
 begin
 	ALTER TABLE [tblCustomer] ADD [FetchPcNumber] bit NOT NULL DEFAULT(1) 
-end
+END
+
+IF NOT EXISTS(SELECT 1 FROM sys.columns WHERE Name = N'MultiCustomersSearch' and Object_ID = Object_ID(N'dbo.tblGlobalSettings'))
+BEGIN
+    ALTER TABLE tblGlobalSettings
+    ADD [MultiCustomersSearch] int null
+        
+    DECLARE @SQLQuery AS NVARCHAR(500)
+    SET @SQLQuery = N'UPDATE tblGlobalSettings SET [MultiCustomersSearch] = 0'
+    EXECUTE sp_executesql @SQLQuery
+    ALTER TABLE tblGlobalSettings ALTER COLUMN [MultiCustomersSearch] int not null    
+END
+GO
+-- enable MultiCustomers
+-- UPDATE tblGlobalSettings SET [MultiCustomersSearch] = 1
 
 
 -- Last Line to update database version

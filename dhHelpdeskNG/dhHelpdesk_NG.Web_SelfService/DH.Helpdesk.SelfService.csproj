@@ -246,9 +246,12 @@
     <Compile Include="App_Start\ToolsModule.cs" />
     <Compile Include="App_Start\UserModule.cs" />
     <Compile Include="App_Start\WorkContextModule.cs" />
+    <Compile Include="Controllers\Behaviors\CaseControllerBehavior.cs" />
     <Compile Include="Controllers\CaseController.cs" />
     <Compile Include="Controllers\CaseSearchController.cs" />
+    <Compile Include="Entites\CaseSearchInputParameters.cs" />
     <Compile Include="Controllers\CoWorkersController.cs" />
+    <Compile Include="Controllers\CasesSearchAsyncController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\FAQController.cs" />
     <Compile Include="Controllers\DocumentsController.cs" />
@@ -287,6 +290,8 @@
     <Compile Include="Infrastructure\Common\Concrete\CommonFunctions.cs" />
     <Compile Include="Infrastructure\Common\Concrete\ErrorGenerator.cs" />
     <Compile Include="Infrastructure\Common\ICommonFunctions.cs" />
+    <Compile Include="Infrastructure\Configuration\ApplicationSettingsProvider.cs" />
+    <Compile Include="Infrastructure\Configuration\SelfServiceConfigurationService.cs" />
     <Compile Include="Infrastructure\Configuration\FederatedAuthenticationSettings.cs" />
     <Compile Include="Infrastructure\Configuration\SelfServiceConfigModel.cs" />
     <Compile Include="Infrastructure\Constants.cs" />
@@ -317,6 +322,7 @@
     <Compile Include="Infrastructure\FederatedAuthenticationService.cs" />
     <Compile Include="Infrastructure\Filters\Notifiers\NotifierFilters.cs" />
     <Compile Include="Infrastructure\Helpers\AppConfigHelper.cs" />
+    <Compile Include="Infrastructure\Helpers\ModelStateExtensions.cs" />
     <Compile Include="Infrastructure\Helpers\UrlsHelper.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\ConditionalValidationAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedDisplayAttribute.cs" />
@@ -426,6 +432,7 @@
     <Compile Include="Models\Shared\LayoutViewModel.cs" />
     <Compile Include="Models\Shared\SendToDialogModel.cs" />
     <Compile Include="Models\Start\StartPageModel.cs" />
+    <Compile Include="Models\CaseSearchInputModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\bootstrap-datepicker.css" />
@@ -465,6 +472,7 @@
     <Content Include="Content\img\throbber.gif" />
     <Content Include="Content\img\transp50.png" />
     <Content Include="Content\js\Case\case.extended.js" />
+    <Content Include="Content\js\Case\caseSearch.js" />
     <Content Include="Content\js\Case\_caseAddFollowersSearch.js" />
     <Content Include="Content\js\Case\_caseUserSearchCommon.js" />
     <Content Include="Content\js\chosen.jquery.js" />
@@ -798,6 +806,9 @@
     <Content Include="Views\Shared\MainMenuItems\_UserGroupMenu.cshtml" />
     <Content Include="Views\Shared\MainMenuItems\_HelpAboutMenu.cshtml" />
     <Content Include="Views\Message\Index.cshtml" />
+    <Content Include="Views\Case\_CaseSearchResults.cshtml" />
+    <Content Include="Views\Case\MultiCustomerCaseOverview.cshtml" />
+    <Content Include="Views\Case\_SearchError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">

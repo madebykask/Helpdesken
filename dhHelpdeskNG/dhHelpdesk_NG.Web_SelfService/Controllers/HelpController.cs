@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
@@ -20,10 +21,11 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly IInfoService _infoService;
 
         public HelpController(IMasterDataService masterDataService,
+                              ISelfServiceConfigurationService configurationService,
                               ICustomerService customerService,
                               ICaseSolutionService caseSolutionService,
                               IInfoService infoService
-                             ): base(masterDataService, caseSolutionService)
+                             ): base(configurationService, masterDataService, caseSolutionService)
         {            
             this._customerService = customerService;
             this._infoService = infoService;

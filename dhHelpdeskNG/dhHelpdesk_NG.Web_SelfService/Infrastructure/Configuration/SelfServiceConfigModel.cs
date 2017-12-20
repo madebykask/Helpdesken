@@ -1,29 +1,61 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
-
+using System.Linq;
 
 namespace DH.Helpdesk.SelfService.Infrastructure.Configuration
 {
+    #region SelfServiceUrlSettings
+
+    public interface ISelfServiceUrlSettings
+    {
+        IList<string> AllowedUrls { get; }
+        IList<string> DeniedUrls { get; }
+    }
+
+    public class SelfServiceUrlSettings : ISelfServiceUrlSettings
+    {
+        public IList<string> AllowedUrls { get; set; }
+        public IList<string> DeniedUrls { get; set; }
+    }
+
+    #endregion
+
     public class SelfServiceUrlSetting : ConfigurationSection
-    {        
+    {
+        public const string SectionPath = "selfServiceConfigurable/selfServiceUrlSetting";
+
         [ConfigurationProperty("allowedUrls", IsDefaultCollection = true)]
         public UrlCollection AllowedUrls
         {
-            get {
-                return (UrlCollection)base["allowedUrls"];
-            }
+            get { return (UrlCollection)base["allowedUrls"]; }
         }
 
         [ConfigurationProperty("deniedUrls", IsDefaultCollection = true)]
         public UrlCollection DeniedUrls
         {
-            get
-            {
-                return (UrlCollection)base["deniedUrls"];
-            }
+            get { return (UrlCollection)base["deniedUrls"]; }
         }
+
+        #region Factory Method
+
+        public static ISelfServiceUrlSettings GetSelfServiceUrlSettings()
+        {
+            var setting = (SelfServiceUrlSetting)ConfigurationManager.GetSection(SectionPath);
+            if (setting == null)
+                return new SelfServiceUrlSettings();
+            
+            return new SelfServiceUrlSettings
+            {
+                AllowedUrls = setting.AllowedUrls?.Select(x => x.Path).ToList(),
+                DeniedUrls = setting.DeniedUrls?.Select(x => x.Path).ToList()
+            };
+        }
+
+        #endregion
     }
-    
+
+    #region UrlCollection 
+
     public sealed class UrlCollection : ConfigurationElementCollection, IEnumerable<UrlElement>
     {
 
@@ -85,12 +117,12 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Configuration
         }        
     }
 
+    #endregion
+
+    #region UrlElement
+
     public sealed class UrlElement : ConfigurationElement
     {
-        public UrlElement()
-        {
-        }
-
         [ConfigurationProperty("key", IsKey = true, IsRequired = true)]
         public string Key
         {
@@ -104,6 +136,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Configuration
             get { return (string)this["path"]; }
             set { this["path"] = value; }
         }
-
     }
+
+    #endregion
 }

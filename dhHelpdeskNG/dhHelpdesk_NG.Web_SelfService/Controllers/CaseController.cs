@@ -1,4 +1,11 @@
-﻿namespace DH.Helpdesk.SelfService.Controllers
+﻿using System.Diagnostics;
+using System.Web.SessionState;
+using DH.Helpdesk.BusinessData.Models.WorktimeCalculator;
+using DH.Helpdesk.SelfService.Controllers.Behaviors;
+using DH.Helpdesk.SelfService.Entites;
+using DH.Helpdesk.SelfService.Infrastructure.Configuration;
+
+namespace DH.Helpdesk.SelfService.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -75,6 +82,7 @@
         private readonly IUniversalCaseService _universalCaseService;
         private readonly IWatchDateCalendarService _watchDateCalendarService;
         private readonly IInventoryService _inventoryService;
+        private readonly ICustomerUserService _customerUserService;
 
 
         private const string ParentPathDefaultValue = "--";
@@ -82,6 +90,7 @@
         private readonly IOrganizationService _orgService;
         private readonly OrganizationJsonService _orgJsonService;
         private readonly char[] EMAIL_SEPARATOR = new char[] { ';' };
+        private readonly CaseControllerBehavior _caseControllerBehavior;
 
         public CaseController(
             ICaseService caseService,
@@ -122,9 +131,15 @@
             IExtendedCaseService extendedCaseService,
             IUniversalCaseService universalCaseService,
             IInventoryService inventoryService,
-            IWatchDateCalendarService watchDateCalendarService)
-            : base(masterDataService, caseSolutionService)
+            ICustomerUserService customerUserService,
+            IWatchDateCalendarService watchDateCalendarService,
+            ISelfServiceConfigurationService configurationService)
+            : base(configurationService, masterDataService, caseSolutionService)
         {
+            _caseControllerBehavior = new CaseControllerBehavior(masterDataService, caseService, caseSearchService,
+                caseSettingService, caseFieldSettingService, 
+                productAreaService, configurationService);
+
             _masterDataService = masterDataService;
             _caseService = caseService;
             _logService = logService;
@@ -164,6 +179,7 @@
             _universalCaseService = universalCaseService;
             _watchDateCalendarService = watchDateCalendarService;
             _inventoryService = inventoryService;
+            _customerUserService = customerUserService;
         }
 
 
@@ -318,6 +334,8 @@
             var cs = _settingService.GetCustomerSetting(currentCustomer.Id);
             ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
 
+            var appSettings = ConfigurationService.AppSettings;
+
             if (SessionFacade.CurrentUserIdentity != null)
             {                
                 model.NewCase = _caseService.InitCase(
@@ -332,7 +350,7 @@
                 model.CaseMailSetting = new CaseMailSetting(
                     currentCustomer.NewCaseEmailList,
                     currentCustomer.HelpdeskEmail,
-                    ConfigurationManager.AppSettings[AppSettingsKey.HelpdeskPath].ToString(),
+                    appSettings.HelpdeskPath,
                     cs.DontConnectUserToWorkingGroup);
 
                 model.NewCase.RegUserId = SessionFacade.CurrentUserIdentity.UserId;
@@ -781,58 +799,77 @@
             return Json(new { success = true, data = list }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult HandleError(RequestValidationResult result)
+        {
+            ErrorGenerator.MakeError(result.ErrorMessage, result.ErrorCode > 0 ? result.ErrorCode : (int?)null);
+            return RedirectToErrorPage();
+        }
+
         [HttpGet]
         public ActionResult UserCases(int customerId, string progressId = "")
         {
-            var currentCustomer = default(Customer);
-            if (SessionFacade.CurrentCustomer != null)
-                currentCustomer = SessionFacade.CurrentCustomer;
-            else
+            var res = _caseControllerBehavior.ValidateCustomer();
+            if (!res.Valid) return HandleError(res);
+
+            res = _caseControllerBehavior.ValidateCurrentUser();
+            if (!res.Valid) return HandleError(res);
+
+            res = _caseControllerBehavior.ValidateLocalUser();
+            if (!res.Valid) return HandleError(res);
+
+            var searchParameters = PrepareCaseSearchInputParameters();
+
+            res = _caseControllerBehavior.ValidateSearchParameters(searchParameters);
+            if (!res.Valid) return HandleError(res);
+
+            var model = new UserCasesModel
             {
-                ErrorGenerator.MakeError("Customer is not valid!");
-                return RedirectToAction("Index", "Error");
-            }
+                CustomerId  = customerId,
 
-            var pharaseSearch = "";        
-            if (progressId == "")
-            {
-                if (SessionFacade.CurrentCaseSearch != null)
-                {
-                    var lastprogressId = SessionFacade.CurrentCaseSearch.caseSearchFilter?.CaseProgress;
-                    pharaseSearch = SessionFacade.CurrentCaseSearch.caseSearchFilter?.FreeTextSearch;
-                    progressId = (!string.IsNullOrEmpty(lastprogressId) ? lastprogressId : CaseProgressFilter.CasesInProgress);
-                }
-                else
-                {
-                    progressId = CaseProgressFilter.CasesInProgress;
-                }
-            }
-
-            var languageId = SessionFacade.CurrentLanguageId;
-
-            UserCasesModel model = null;
-
-            if (progressId != CaseProgressFilter.ClosedCases && 
-                progressId != CaseProgressFilter.CasesInProgress &&
-                progressId != CaseProgressFilter.None)
-            {
-                ErrorGenerator.MakeError("Process is not valid!", 202);
-                return RedirectToAction("Index", "Error");                
-            }
-
-            if(SessionFacade.CurrentUserIdentity != null)
-            {
-
-                model = GetUserCasesModel(currentCustomer.Id, languageId, SessionFacade.CurrentUserIdentity.UserId, pharaseSearch, 20, progressId);
-
-            }
-            else
-            {
-                ErrorGenerator.MakeError("You don't have access to cases, please login again.", 203);
-                return RedirectToAction("Index", "Error");                
-            }
+                ////////////////////////////////////////
+                // search model
+                PharasSearch = searchParameters.PharasSearch,
+                ProgressId = searchParameters.ProgressId,
+                ProgressItems = _caseControllerBehavior.PrepareProgressSelectItems(),
+                ////////////////////////////////////////
+            };
 
             return View("CaseOverview", model);
+        }
+
+        [HttpGet]
+        public ActionResult MultiCustomerUserCases(string progressId = "")
+        {
+            var res = _caseControllerBehavior.ValidateCustomer();
+            if (!res.Valid) return HandleError(res);
+
+            res = _caseControllerBehavior.ValidateLocalUser();
+            if (!res.Valid) return HandleError(res);
+
+            var searchParameters = PrepareCaseSearchInputParameters();
+
+            res = _caseControllerBehavior.ValidateSearchParameters(searchParameters);
+            if (!res.Valid) return HandleError(res);
+
+            var customerUser = SessionFacade.CurrentLocalUser;
+            if (customerUser == null)
+                throw new Exception("There is no user account for logged in user");
+
+            //todo: find out how customer should be found for logged in user
+            var customers = _customerUserService.GetUserCustomersWithCases(customerUser.Id);
+
+            var model = new MultiCustomerUserFilterModel
+            {
+                ////////////////////////////////////////
+                // search model
+                PharasSearch = searchParameters.PharasSearch,
+                ProgressId = searchParameters.ProgressId,
+                ProgressItems = _caseControllerBehavior.PrepareProgressSelectItems(),
+                ////////////////////////////////////////
+                Customers = customers
+            };
+
+            return View("MultiCustomerCaseOverview", model);
         }
 
         [HttpGet]
@@ -1022,6 +1059,9 @@
             var currentCustomer = _customerService.GetCustomer(currentCase.Customer_Id);
             var cs = _settingService.GetCustomerSetting(currentCustomer.Id);
             var caseIsActivated = false;
+
+            var appSettings = ConfigurationService.AppSettings;
+
             // save case history
 
             // unread/status flag update if not case is closed
@@ -1102,12 +1142,11 @@
                 }
             }
 
-            var caseMailSetting = new CaseMailSetting(
-                                                          currentCustomer.NewCaseEmailList,
-                                                          currentCustomer.HelpdeskEmail,
-                                                          ConfigurationManager.AppSettings[AppSettingsKey.HelpdeskPath].ToString(),
-                                                          cs.DontConnectUserToWorkingGroup
-                                                        );
+            var caseMailSetting = new CaseMailSetting(currentCustomer.NewCaseEmailList,
+                currentCustomer.HelpdeskEmail,
+                appSettings.HelpdeskPath,
+                cs.DontConnectUserToWorkingGroup
+            );
 
             var temporaryLogFiles = new List<WebTemporaryFile>();
             var userTimeZone = TimeZoneInfo.Local;
@@ -1183,42 +1222,6 @@
         {
             var result = _computerService.SearchComputer(customerId, query);
             return Json(result);
-        }
-
-        public ActionResult SearchUserCase(FormCollection frm)
-        {
-            try
-            {
-                var customerId = frm.ReturnFormValue("customerId").convertStringToInt();
-                var languageId = frm.ReturnFormValue("languageId").convertStringToInt();
-                var userId = frm.ReturnFormValue("userId");
-                var pharasSearch = frm.ReturnFormValue("pharasSearch");
-                var maxRecords = frm.ReturnFormValue("maxRecords").convertStringToInt();
-                var progressId = frm.ReturnFormValue("progressId");
-                var sortBy = frm.ReturnFormValue("hidSortBy");
-                var ascending = frm.ReturnFormValue("hidSortByAsc").ConvertStringToBool();
-                var id = frm.ReturnFormValue("MailGuid");
-
-                if (progressId != CaseProgressFilter.ClosedCases && 
-                    progressId != CaseProgressFilter.CasesInProgress &&
-                    progressId != CaseProgressFilter.None)
-                {                    
-                    ErrorGenerator.MakeError("Process is not valid!", 202);
-                    return RedirectToAction("Index", "Error");                                 
-                }
-
-                var model = GetUserCasesModel(customerId, languageId, userId,
-                                              pharasSearch, maxRecords, progressId,
-                                              sortBy, ascending);
-
-                model.ProgressId = progressId;
-                return PartialView("CaseOverview", model);
-            }
-            catch(Exception e)
-            {
-                ErrorGenerator.MakeError("Not able to load user cases.", 204);
-                return RedirectToAction("Index", "Error");                
-            }
         }
 
         [ValidateInput(false)]
@@ -1320,7 +1323,7 @@
             if (currentCase.CaseType.ShowOnExtPageCases == 0 || currentCase.ProductArea?.ShowOnExtPageCases == 0)            
                 return false;
 
-            var criteria = GetCaseOverviewCriteria();
+            var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();
 
             /*User creator*/
             if (criteria.MyCasesRegistrator && !string.IsNullOrEmpty(criteria.UserId) && !string.IsNullOrEmpty(currentCase.RegUserId))
@@ -1375,7 +1378,7 @@
             if (caseType.ShowOnExtPageCases == 0 || productArea?.ShowOnExtPageCases == 0)
                 return false;
 
-            var criteria = GetCaseOverviewCriteria();
+            var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();
 
             /*User creator*/
             if (criteria.MyCasesRegistrator && !string.IsNullOrEmpty(criteria.UserId) && !string.IsNullOrEmpty(currentCase.RegUserId))
@@ -1638,93 +1641,6 @@
             return model;
         }
 
-        private UserCasesModel GetUserCasesModel(int customerId, int languageId, string curUser,
-                                                 string pharasSearch, int maxRecords, string progressId = "",
-                                                 string sortBy = "", bool ascending = false)
-        {
-            var cusId = customerId;
-
-            var model = new UserCasesModel
-                    {
-                        CustomerId = cusId,
-                        LanguageId = languageId,
-                        UserId = curUser,
-                        MaxRecords = maxRecords,
-                        PharasSearch = pharasSearch,
-                        ProgressId = progressId
-                    };
-
-            if (SessionFacade.CurrentCustomer == null)
-            {
-                throw new Exception("Session expired! Please reload the page and try again.");                
-            }
-                
-            var srm = new CaseSearchResultModel();
-            var sm = new CaseSearchModel();
-            var cs = new CaseSearchFilter();
-            var search = new Search();
-
-            if(string.IsNullOrEmpty(sortBy)) sortBy = "Casenumber";
-
-            cs.CustomerId = cusId;
-            cs.FreeTextSearch = pharasSearch;
-            cs.CaseProgress = progressId;
-            cs.ReportedBy = "";            
-            var currentApplicationType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();                        
-            
-            cs.RegUserId = curUser;                       
-            cs.CaseOverviewCriteria = GetCaseOverviewCriteria();
-           
-            search.SortBy = sortBy;
-            search.Ascending = ascending;
-
-            sm.Search = search;
-            sm.caseSearchFilter = cs;
-            
-            // 1: User in Customer Setting            
-            srm.CaseSettings = _caseSettingService.GetCaseSettingsByUserGroup(cusId, 1);
-            
-            var workTimeCalc = TimeZoneInfo.Local;
-            var showRemainingTime = false;
-            CaseRemainingTimeData remainingTimeData;
-            CaseAggregateData aggregateData;
-            var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(cusId).ToArray();
-            srm.Cases = _caseSearchService.Search(
-                sm.caseSearchFilter,
-                srm.CaseSettings,
-                caseFieldSettings,
-                -1,
-                curUser,
-                1,
-                1,
-                1,
-                search,
-                SessionFacade.CurrentCustomer.WorkingDayStart,
-                SessionFacade.CurrentCustomer.WorkingDayEnd,
-                workTimeCalc,
-                currentApplicationType,
-                showRemainingTime,
-                out remainingTimeData,
-                out aggregateData).Items.ToList(); // Take(maxRecords)
-
-            if (currentApplicationType == ApplicationTypes.LineManager)
-            {
-                var dynamicCases = _caseService.GetAllDynamicCases(cusId, srm.Cases.Select(c=> c.Id).ToArray());
-                model.DynamicCases = dynamicCases;
-            }
-            
-            srm.Cases = CaseSearchTranslate(srm.Cases, cusId);
-            model.CaseSearchResult = srm;
-
-            SessionFacade.CurrentCaseSearch = sm;
-            SessionFacade.CurrentCaseSearch.caseSearchFilter.CaseProgress = progressId;
-            SessionFacade.CurrentCaseSearch.caseSearchFilter.FreeTextSearch = pharasSearch;
-
-            model.NumberOfCases = srm.Cases.Count;
-
-            return model;
-        }
-
         private NewCaseModel GetNewCaseModel(int customerId, int languageId, List<CaseListToCase> caseFieldSetting)
         {           
             var caseFieldGroups = GetVisibleFieldGroups(caseFieldSetting);
@@ -1972,33 +1888,7 @@
             return caseTypes.OrderBy(p => p.Name).ToList();
         }
 
-        private IList<CaseSearchResult> CaseSearchTranslate(IList<CaseSearchResult> cases, int customerId)
-        {
-            var ret = cases;
-            var productareaCache = _productAreaService.GetProductAreasForCustomer(customerId).ToDictionary(it => it.Id, it => true);
-            foreach (CaseSearchResult r in ret)
-            {
-                foreach (var c in r.Columns)
-                {
-                    if (c.TreeTranslation)
-                    {
-                        switch (c.Key.ToLower())
-                        {
-                            case "productarea_id":
-                                if (productareaCache.ContainsKey(c.Id))
-                                {
-                                    var names = _productAreaService.GetParentPath(c.Id, customerId).Select(name => Translation.Get(name,Enums.TranslationSource.TextTranslation));
-                                    c.StringValue = string.Join(" - ", names);
-                                }
-
-                                break;
-                        }
-                    }
-                }
-            }
-
-            return ret;
-        }
+        
 
         private CaseModel LoadTemplateToCase(CaseModel model, CaseSolution caseTemplate)
         {
@@ -2220,52 +2110,42 @@
 
         }                  
 
-        private CaseOverviewCriteriaModel GetCaseOverviewCriteria()
+       
+
+        #region Helper Methods
+
+        private CaseSearchInputParameters PrepareCaseSearchInputParameters(string progressId = "")
         {
-            var curUser = SessionFacade.CurrentUserIdentity.UserId;
-            var userEmployeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
-            
-            var criteria = new CaseOverviewCriteriaModel()
-             {
-                 MyCasesRegistrator = SessionFacade.CurrentCustomer.MyCasesRegistrator,
-                 MyCasesInitiator = SessionFacade.CurrentCustomer.MyCasesInitiator,
-                 MyCasesFollower = SessionFacade.CurrentCustomer.MyCasesFollower,
-                 MyCasesRegarding = SessionFacade.CurrentCustomer.MyCasesRegarding,
-                 MyCasesUserGroup = SessionFacade.CurrentCustomer.MyCasesUserGroup,
-                 UserId = curUser,
-                 UserEmployeeNumber = userEmployeeNumber,
-                 GroupMember = new List<string>()
-             };
-
-            if (criteria.MyCasesUserGroup)
+            var pharaseSearch = string.Empty;
+            if (string.IsNullOrEmpty(progressId))
             {
-                var employees = SessionFacade.CurrentCoWorkers;
-                if (employees == null)
+                if (SessionFacade.CurrentCaseSearch != null)
                 {
-                    try
-                    {
-                        var useApi = SessionFacade.CurrentCustomer.FetchDataFromApiOnExternalPage;
-                        var customerId = SessionFacade.CurrentCustomer.Id;
-                        var apiCredential = AppConfigHelper.GetAmApiInfo();
-                        var employee = _masterDataService.GetEmployee(customerId, userEmployeeNumber, useApi, apiCredential);
-
-                        if (employee != null)
-                        {
-                            SessionFacade.CurrentCoWorkers = employee.Subordinates;
-                            employees = employee.Subordinates;
-                        }
-                    }
-                    catch { }
+                    var lastprogressId = SessionFacade.CurrentCaseSearch.caseSearchFilter?.CaseProgress;
+                    progressId = string.IsNullOrEmpty(lastprogressId) ? CaseProgressFilter.CasesInProgress : lastprogressId;
+                    pharaseSearch = SessionFacade.CurrentCaseSearch.caseSearchFilter?.FreeTextSearch;
                 }
-
-                if (employees != null)
-                    criteria.GroupMember.AddRange(employees.Where(e => !string.IsNullOrEmpty(e.EmployeeNumber))
-                                                           .Select(e => e.EmployeeNumber).ToList());
+                else
+                {
+                    progressId = CaseProgressFilter.CasesInProgress;
+                }
             }
 
-            return criteria;
+            return new CaseSearchInputParameters
+            {
+                CustomerId = SessionFacade.CurrentCustomer.Id,
+                LanguageId = SessionFacade.CurrentLanguageId,
+                IdentityUser = SessionFacade.CurrentUserIdentity.UserId,
+                ProgressId = progressId,
+                PharasSearch = pharaseSearch,
+                MaxRecords = 20,
+                SortBy = "Casenumber",
+                SortAscending = false
+            };
         }
 
-       
+        
+
+        #endregion
     }
 }

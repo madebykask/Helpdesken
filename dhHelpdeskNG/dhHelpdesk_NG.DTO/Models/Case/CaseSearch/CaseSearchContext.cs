@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Case.CaseSearch
+﻿using System;
+
+namespace DH.Helpdesk.BusinessData.Models.Case.CaseSearch
 {
     using System.Collections.Generic;
 
@@ -18,13 +20,15 @@
 
         public string userUserId;
 
+        public int WorkingHours;
+
         public int showNotAssignedWorkingGroups;
 
         public int userGroupId;
 
         public int restrictedCasePermission;
 
-        public GlobalSetting gs;
+        public GlobalSetting globalSettings;
 
         public Setting customerSetting;
 
@@ -43,6 +47,8 @@
         public string relatedCasesUserId = null;
 
         public int[] caseIds = null;
+
+        public DateTime now;
 
         public bool useFullTextSearch;
     }

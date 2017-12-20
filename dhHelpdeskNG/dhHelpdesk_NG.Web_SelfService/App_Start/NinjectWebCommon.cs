@@ -125,6 +125,7 @@ namespace DH.Helpdesk.SelfService
 
             kernel.Bind<IFederatedAuthenticationSettings>().To<FederatedAuthenticationSettings>();
             kernel.Bind<IFederatedAuthenticationService>().To<FederatedAuthenticationService>().InSingletonScope();
+            kernel.Bind<ISelfServiceConfigurationService>().To<SelfServiceConfigurationService>().InSingletonScope();
 
             // Repositories
             kernel.Bind<ICircularRepository>().To<CircularRepository>();

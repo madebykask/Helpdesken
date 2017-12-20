@@ -1,147 +1,61 @@
-﻿@using DH.Helpdesk.Common.Enums.Cases;
-@using DH.Helpdesk.Common.Enums;
-@using System.Configuration;
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.SelfService
 @model DH.Helpdesk.SelfService.Models.Case.UserCasesModel         
 
 @{
-    var appType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();    
-}
+    var tabTitle = ViewBag.IsLineManagerApplication ? Translation.Get("Service Requests") : Translation.Get("Cases");
+ }
 
-<div id="search_result">
-    <div class="container-fluid dh-container">
-        <form id="frmUserCases" name="frmUserCases">
-            @Html.HiddenFor(c => Model.CustomerId)
-            @Html.HiddenFor(l => Model.LanguageId)
-            @Html.HiddenFor(u => Model.UserId)            
-            <ul class="nav nav-tabs" id="NewCaseTab">
-                <li id="NewCaseT" class="active">
-                    <a href="#fragment-1">
-                        @{
-                            string tabTitle = "";
-                            if (Model != null)
-                            {                                                               
-                                if (appType == ApplicationTypes.LineManager)
-                                {
-                                    tabTitle = Translation.Get("Service Requests", Enums.TranslationSource.TextTranslation);
-                                }
-                                else
-                                {
-                                    tabTitle = Translation.Get("Cases", Enums.TranslationSource.TextTranslation);
-                                }                                                                          
-                            }                       
-                        }
-                        @tabTitle
-                    </a>
-                </li>
-            </ul>            
-            <div id="fragment-1" class="tab-pane active">
-                <div class="container-fluid dh-container">
-                    <div class="row dh-container">
-                        <div class="col-md-12">
-                            @Html.Partial("_CaseSearch", Model)
-                        </div>
-                    </div>
-                    <div> @Translation.Get("Records in search result", Enums.TranslationSource.TextTranslation): @Model.NumberOfCases </div>
-                    <div class="row" style="">                        
-                        <div class="col-md-12 table-responsive">                            
-                            <table class="table table-striped table-bordered table-hover linkcolor">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        @if (Model.CaseSearchResult.CaseSettings != null)
-                                            {
-                                                foreach (var c in Model.CaseSearchResult.CaseSettings)
-                                                {
-                                                <th onclick=" sortCases('@c.Name') " class="thpointer" >
-                                                    @Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
-                                                    <i class="@c.Name.SetCaseSortIcon()"></i>
-                                                </th>
-                                                }
-                                            }
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (Model.CaseSearchResult.Cases != null)
-                                        {
-                                            foreach (var r in Model.CaseSearchResult.Cases)
-                                            {                                                
-                                                var dynamicUrl = "";
-                                                if (Model.DynamicCases != null && Model.DynamicCases.Any())
-                                                {
-                                                   dynamicUrl = Model.DynamicCases.Where(w => w.CaseId == r.Id).Select(d => "~/" + d.FormPath).FirstOrDefault();
-                                                }
-
-                                                <tr>
-                                                    <!--fasta kolumner -->
-                                                    <td style="width:40px">
-                                                        <a href="@Url.Action("Index", "case", new { id = r.Id , area ="" })"> <span class='@(r.IsClosed? "glyphicon glyphicon-check":"glyphicon glyphicon-file")' title="@r.CaseIcon.CaseIconTitle()"></span> </a>
-                                                    </td>
-                                                    <!-- valbara kolumner -->
-
-                                                    @foreach (var c in r.Columns)
-                                                    {
-                                                        <td>
-                                                            @if (c.FieldType == FieldTypes.Date)
-                                                            {
-                                                                <!-- date -->
-                                                                if (string.IsNullOrEmpty(dynamicUrl))
-                                                                {
-                                                                    <a href="@Url.Action("Index", "case", new { id = r.Id , area ="" })"> @Html.DisplayFor(m => c.DateTimeValue, "Date") </a>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
-                                                                }
-                                                            }
-                                                            else if (c.FieldType == FieldTypes.Time)
-                                                            {
-                                                                <!-- dateTime -->
-                                                                if (string.IsNullOrEmpty(dynamicUrl))
-                                                                {
-                                                                    <a href="@Url.Action("Index", "case", new { id = r.Id, area ="" })">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                if (c.TranslateThis)
-                                                                {
-                                                                    <!-- string -->
-                                                                    if (string.IsNullOrEmpty(dynamicUrl))
-                                                                    {
-                                                                        <a href="@Url.Action("Index", "case", new { id = r.Id, area ="" })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
-                                                                    if (string.IsNullOrEmpty(dynamicUrl))
-                                                                    {
-                                                                        <a href="@Url.Action("Index", "case", new { id = r.Id, area ="" })">@c.StringValue</a>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <a href="@Url.Content(dynamicUrl.SetUrlParameters(r.Id))">@c.StringValue</a>
-                                                                    }
-                                                                }
-                                                            }
-                                                        </td>
-                                                    }
-                                                </tr>
-                                            }
-                                        }
-                                </tbody>
-                            </table>                            
-                        </div>
+<div class="container-fluid dh-container">
+        <ul class="nav nav-tabs" id="NewCaseTab">
+            <li id="NewCaseT" class="active">
+                <a href="#fragment-1">@tabTitle</a>
+            </li>
+        </ul>
+        <div id="fragment-1" class="tab-pane active">
+            <div class="container-fluid dh-container">
+                <div class="row dh-container">
+                    <div class="col-md-12">
+                        @Html.Partial("_CaseSearch", Model)
                     </div>
                 </div>
+                <div> @Translation.Get("Records in search result"): <span id="casesCount_@Model.CustomerId">0</span></div>
+                <div id="result_@Model.CustomerId">
+                </div>
             </div>
-        </form>
-    </div>
+        </div>
 </div>
+
+@section Scripts{
+    @Scripts.Render(BundleConfig.ScriptNames.CasesSearch)
+
+    <script type="text/javascript">
+        
+        $(function () {
+            var caseSearch = new CaseSearch();
+            caseSearch.init({
+                searchAction: '@Url.Action("SearchCustomerCases", "CasesSearchAsync")'
+            });
+            
+            //set for global access
+            window.caseSearch = caseSearch;
+            
+            var customerId = @Model.CustomerId;
+            
+            $("#btnSearch").click(function(e) {
+                e.preventDefault();
+
+                window.caseSearch.searchCustomerCases(customerId);
+
+                return false;
+            });
+
+            //run first search
+            caseSearch.searchCustomerCases(customerId);
+        });
+
+        function sortCases(customerId, newSortBy) {
+            window.caseSearch.sortCases(customerId, newSortBy);
+        }
+    </script>
+}

@@ -1,12 +1,12 @@
-﻿namespace DH.Helpdesk.Services.Services
-{
-    using System.Collections.Generic;
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.Customer;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Domain;
+﻿using System.Collections.Generic;
+using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Customer;
+using DH.Helpdesk.Dal.Repositories;
+using DH.Helpdesk.Domain;
 
+namespace DH.Helpdesk.Services.Services
+{
     public interface ICustomerUserService
     {
         IList<UserCustomer> GetCustomerUsersForHomeIndexPage(int userId);
@@ -26,46 +26,52 @@
         void SaveCustomerUser(CustomerUser customerUser, out IDictionary<string, string> errors);
 
         void SaveCustomerUserForCopy(CustomerUser customerUser, out IDictionary<string, string> errors);
+
+        IList<UserCustomerOverview> GetUserCustomersWithCases(int userId);
     }
 
     public class CustomerUserService : ICustomerUserService
     {
-        private readonly ICustomerUserRepository customerUserRepository;
+        private readonly ICustomerUserRepository _customerUserRepository;
 
-        public CustomerUserService(
-            ICustomerUserRepository customerUserRepository)
+        public CustomerUserService(ICustomerUserRepository customerUserRepository)
         {
-            this.customerUserRepository = customerUserRepository;
+            _customerUserRepository = customerUserRepository;
+        }
+
+        public IList<UserCustomerOverview> GetUserCustomersWithCases(int userId)
+        {
+            return _customerUserRepository.GetUserCustomersWithCases(userId);
         }
 
         public IList<UserCustomer> GetCustomerUsersForHomeIndexPage(int userId)
         {
-            return this.customerUserRepository.GetCustomerUsersForStart(userId);
+            return _customerUserRepository.GetCustomerUsersForStart(userId);
         }
 
         public IList<CustomerUser> GetCustomerUsersForCustomer(int customerId)
         {
-            return this.customerUserRepository.GetCustomerUsersForCustomer(customerId);
+            return _customerUserRepository.GetCustomerUsersForCustomer(customerId);
         }
 
         public IList<CustomerUser> GetCustomerUsersForUser(int userId)
         {
-            return this.customerUserRepository.GetCustomerUsersForUser(userId);
+            return _customerUserRepository.GetCustomerUsersForUser(userId);
         }
 
         public IList<CustomerUserList> GetFinalListForCustomerUsersHomeIndexPage(int userId)
         {
-            return this.customerUserRepository.GetCustomerUsersForStartFinal(userId);
+            return _customerUserRepository.GetCustomerUsersForStartFinal(userId);
         }
 
         public CustomerUser GetCustomerSettings(int customer, int user)
         {
-            return this.customerUserRepository.GetCustomerSettings(customer, user);
+            return _customerUserRepository.GetCustomerSettings(customer, user);
         }
 
         public UserCaseSetting GetUserCaseSettings(int customerId, int userId)
         {
-            var userSetting = this.customerUserRepository.GetCustomerSettings(customerId, userId);
+            var userSetting = _customerUserRepository.GetCustomerSettings(customerId, userId);
             return new UserCaseSetting(
                   customerId,
                   userId,
@@ -97,25 +103,25 @@
 
         public void UpdateUserCaseSetting(UserCaseSetting newSetting)
         {
-            this.customerUserRepository.UpdateUserSetting(newSetting);
-            this.customerUserRepository.Commit();
+            _customerUserRepository.UpdateUserSetting(newSetting);
+            _customerUserRepository.Commit();
         }
 
         public void SaveCustomerUser(CustomerUser customerUser, out IDictionary<string, string> errors)
         {
             errors = new Dictionary<string, string>();
 
-            this.customerUserRepository.Update(customerUser);
+            _customerUserRepository.Update(customerUser);
             //this.customerUserRepository.Add(customerUser);
-            this.customerUserRepository.Commit();
+            _customerUserRepository.Commit();
         }
 
         public void SaveCustomerUserForCopy(CustomerUser customerUser, out IDictionary<string, string> errors)
         {
             errors = new Dictionary<string, string>();
 
-            this.customerUserRepository.Add(customerUser);
-            this.customerUserRepository.Commit();
+            _customerUserRepository.Add(customerUser);
+            _customerUserRepository.Commit();
         }
     }
 }

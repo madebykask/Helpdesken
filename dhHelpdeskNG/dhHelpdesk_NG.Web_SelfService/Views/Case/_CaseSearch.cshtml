@@ -1,101 +1,33 @@
-﻿@using System.Configuration;
-@using DH.Helpdesk.Common.Enums;
-@using DH.Helpdesk.BusinessData.Enums.Case;
-@model  DH.Helpdesk.SelfService.Models.Case.UserCasesModel
+﻿@model DH.Helpdesk.SelfService.Models.Case.CaseSearchFilterModel
 
-@{
-    var appType = ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower();
-
-    var ongoingCaseCaption = appType == ApplicationTypes.LineManager ?
-                                Translation.Get("Ongoing Service Requests", Enums.TranslationSource.TextTranslation) :
-                                Translation.Get("Ongoing Cases", Enums.TranslationSource.TextTranslation);
-
-    var closedCaseCaption = appType == ApplicationTypes.LineManager ?
-                                Translation.Get("Finished Service Requests", Enums.TranslationSource.TextTranslation) :
-                                Translation.Get("Closed Cases", Enums.TranslationSource.TextTranslation);
-
-    var allCaseCaption = appType == ApplicationTypes.LineManager ?
-                                Translation.Get("All Service Requests", Enums.TranslationSource.TextTranslation) :
-                                Translation.Get("All Cases", Enums.TranslationSource.TextTranslation);
-
-}
-<form id="frmCaseSearch" name="frmCaseSearch">
-    <input type="hidden" value="@SessionFacade.CurrentCaseSearch.Search.SortBy" id="hidSortBy" name="hidSortBy" />
-    <input type="hidden" value="@SessionFacade.CurrentCaseSearch.Search.Ascending" id="hidSortByAsc" name="hidSortByAsc" />
-
-    <div class="row">
-        <div class="col-md-3 dh-col">
-            <div class="container form-horizontal">
-                <div class="form-group row">
-                    <table>
-                        <tr>
-                            <td class="">
-                                &nbsp; &nbsp;  @Translation.Get("Status", Enums.TranslationSource.TextTranslation) &nbsp;&nbsp;
-                            </td>
-                            <td>
-                                <select id="ProgressId" name="ProgressId">
-                                    <option value="@CaseProgressFilter.CasesInProgress" @(Model.ProgressId==CaseProgressFilter.CasesInProgress?"selected":"")>@ongoingCaseCaption</option>
-                                    <option value="@CaseProgressFilter.ClosedCases" @(Model.ProgressId==CaseProgressFilter.ClosedCases?"selected":"")>@closedCaseCaption</option>
-                                    <option value="@CaseProgressFilter.None" @(Model.ProgressId==CaseProgressFilter.None?"selected":"")>@allCaseCaption</option>
-                                </select>                                
-                            </td>
-                            
-                        </tr>
-                        <tr>
-                            <td>
-                                <br />
-                            </td>                            
-                        </tr>
-                        <tr>
-                            <td class="">
-                                &nbsp; &nbsp;  @Translation.Get("Search Phrase", Enums.TranslationSource.TextTranslation) &nbsp;&nbsp;
-                            </td>
-                            <td>
-                                @Html.TextBoxFor(s => Model.PharasSearch)
-                                <button id="btnSearch" name="btnSearch" class="btn btn-default">@Translation.Get("Search", Enums.TranslationSource.TextTranslation)</button>
-                                <i id="searchIndicator" class="gif-loader">&nbsp;</i>
-                            </td>
-                        </tr>
-                    </table>
-
-                    @*<div class="col-md-10">
-
-                        </div>*@
-                </div>
+<div class="row">
+    <div class="col-md-3 dh-col">
+        <div class="container form-horizontal">
+            <div class="form-group row">
+                <table>
+                    <tr>
+                        <td class="">
+                            &nbsp; &nbsp; @Translation.Get("Status") &nbsp;&nbsp;
+                        </td>
+                        <td>@Html.DropDownListFor(m => m.ProgressId, Model.ProgressItems)</td>
+                    </tr>
+                    <tr>
+                        <td><br/></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp; &nbsp; @Translation.Get("Search Phrase") &nbsp;&nbsp;
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.PharasSearch)
+                            <button id="btnSearch" name="btnSearch" type="submit" class="btn btn-default">@Translation.Get("Search")</button>
+                            <i id="searchIndicator" class="gif-loader" style="display: none">&nbsp;</i>
+                        </td>
+                    </tr>
+                </table>
+                @*<div class="col-md-10"></div>*@
             </div>
         </div>
     </div>
-</form>
+</div>
 
-<script type="text/javascript">
-    $("#searchIndicator").hide();
-
-    $('#btnSearch').click(function (e) {
-        e.preventDefault();
-        search();
-    });
-
-    function search() {
-        $("#searchIndicator").show();
-        $.post('@Url.Action("SearchUserCase", "Case")', $("#frmUserCases").serialize(), function (result) {
-            $('#search_result').html(result);
-        }).done(function () { $("#searchIndicator").hide(); });
-    }
-
-
-    function sortCases(sortBy) {
-        var asc = '@SessionFacade.CurrentCaseSearch.Search.Ascending';
-        var selected = $("#hidSortBy").val();
-
-        if (sortBy == selected) {
-            asc = asc.toLowerCase().match('true') ? 'false' : 'true';
-        }
-        else {
-            asc = 'true';
-        }
-
-        $("#hidSortBy").val(sortBy);
-        $("#hidSortByAsc").val(asc);
-        search();
-    }
-</script>
