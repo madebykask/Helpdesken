@@ -351,7 +351,7 @@ namespace DH.Helpdesk.Web.Controllers
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId };
 
             this.problemLogService.AddLog(logDto);
-//            SendProblemLogEmail(log);
+            SendProblemLogEmail(log);
             return this.RedirectToAction("ProblemActiveLog", new { id = log.ProblemId });
         }
 
@@ -382,7 +382,7 @@ namespace DH.Helpdesk.Web.Controllers
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId, Id = log.Id };
 
             this.problemLogService.UpdateLog(logDto);
-//            SendProblemLogEmail(log);
+            SendProblemLogEmail(log);
             return this.RedirectToAction("ProblemActiveLog", new { id = log.ProblemId });
         }
 
@@ -434,7 +434,6 @@ namespace DH.Helpdesk.Web.Controllers
                 foreach (var c in cases)
                 {
                     var userTimeZone = TimeZoneInfo.Local;
-                    var basePath = _masterDataService.GetFilePath(c.Customer_Id);
                     var caseHistoryId = problemService.GetCaseHistoryId(c.Id, log.ProblemId);
 
                     var customer = _customerService.GetCustomer(c.Customer_Id);
@@ -449,9 +448,11 @@ namespace DH.Helpdesk.Web.Controllers
                     var caseLog = new CaseLog
                     {
                         CaseId = c.Id,
+                        Id = 1,
                         FinishingDate = log.FinishConnectedCases ? (log.FinishingDate.HasValue ? log.FinishingDate : DateTime.Now) : null,
                         FinishingType = log.FinishConnectedCases ? log.FinishingCauseId : null,
                         SendMailAboutLog = true,
+                        SendMailAboutCaseToNotifier = true,
                         CaseHistoryId = caseHistoryId
                     };
                     if (log.ExternNotering)
@@ -459,7 +460,7 @@ namespace DH.Helpdesk.Web.Controllers
                     if (log.InternNotering)
                         caseLog.TextInternal = log.LogText;
 
-                    caseService.SendCaseEmail(c.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, null, caseLog);
+                    caseService.SendProblemLogEmail(c, caseMailSetting, caseHistoryId, userTimeZone, caseLog, log.FinishConnectedCases);
                 }
             }
         }
