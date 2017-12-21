@@ -59,7 +59,6 @@
         private readonly ISupplierService _supplierService;
         private readonly ISettingService _settingService;
         private readonly IComputerService _computerService;
-        private readonly ICustomerUserService _customerUserService;
         private readonly ICaseSettingsService _caseSettingService;
         private readonly ICaseSearchService _caseSearchService;
         private readonly IUserService _userService;
@@ -75,6 +74,7 @@
         private readonly IExtendedCaseService _extendedCaseService;
         private readonly IUniversalCaseService _universalCaseService;
         private readonly IWatchDateCalendarService _watchDateCalendarService;
+        private readonly IInventoryService _inventoryService;
 
 
         private const string ParentPathDefaultValue = "--";
@@ -87,7 +87,6 @@
             ICaseService caseService,
             ICaseFieldSettingService caseFieldSettingService,
             IMasterDataService masterDataService,
-
             ILogService logService,
             IInfoService infoService,
             IUserTemporaryFilesStorageFactory userTemporaryFilesStorageFactory,
@@ -106,7 +105,6 @@
             ICustomerService customerService,
             ISettingService settingService,
             IComputerService computerService,
-            ICustomerUserService customerUserService,
             ICaseSettingsService caseSettingService,
             ICaseSearchService caseSearchService,
             IUserService userService,
@@ -123,6 +121,7 @@
             IPriorityService priorityService,
             IExtendedCaseService extendedCaseService,
             IUniversalCaseService universalCaseService,
+            IInventoryService inventoryService,
             IWatchDateCalendarService watchDateCalendarService)
             : base(masterDataService, caseSolutionService)
         {
@@ -145,7 +144,6 @@
             _systemService = systemService;
             _settingService = settingService;
             _computerService = computerService;
-            _customerUserService = customerUserService;
             _customerService = customerService;
             _caseSettingService = caseSettingService;
             _caseSearchService = caseSearchService;
@@ -165,6 +163,7 @@
             _extendedCaseService = extendedCaseService;
             _universalCaseService = universalCaseService;
             _watchDateCalendarService = watchDateCalendarService;
+            _inventoryService = inventoryService;
         }
 
 
@@ -380,9 +379,26 @@
                 model.NewCase.UserCode = string.IsNullOrEmpty(caseTemplate.UserCode) ? notifier?.Code : caseTemplate.UserCode;
                 model.NewCase.CostCentre = string.IsNullOrEmpty(caseTemplate.CostCentre) ? notifier?.CostCentre : caseTemplate.CostCentre;
 
-                model.NewCase.InventoryNumber = string.IsNullOrEmpty(caseTemplate.InventoryNumber)? Request.GetComputerName() : caseTemplate.InventoryNumber;
-                model.NewCase.InventoryType = caseTemplate.InventoryType;
-                model.NewCase.InventoryLocation = caseTemplate.InventoryLocation;
+                var inventoryNumber = caseTemplate.InventoryNumber;
+                var inventoryType = caseTemplate.InventoryType;
+                var inventoryLocation = caseTemplate.InventoryLocation;
+                if (currentCustomer.FetchPcNumber)
+                {
+                    var pcNumber = Request.GetComputerName();
+                    if (!string.IsNullOrEmpty(pcNumber))
+                    {
+                        var inventory = _inventoryService.GetWorkstationByNumber(pcNumber, currentCustomer.Id);
+                        inventoryNumber = string.IsNullOrEmpty(inventoryNumber) ? pcNumber : inventoryNumber;
+                        if (inventory != null)
+                        {
+                            inventoryType = string.IsNullOrEmpty(inventoryType) ? inventory.WorkstationFields.ComputerTypeName : inventoryType;
+                            inventoryLocation = string.IsNullOrEmpty(inventoryLocation) ? inventory.WorkstationFields.Location : inventoryLocation;
+                        }
+                    }
+                }
+                model.NewCase.InventoryNumber = inventoryNumber;
+                model.NewCase.InventoryType = inventoryType;
+                model.NewCase.InventoryLocation = inventoryLocation;
 
                 model.NewCase.ProductArea_Id = caseTemplate.ProductArea_Id;
                 model.NewCase.System_Id = caseTemplate.System_Id;

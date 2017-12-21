@@ -52,6 +52,8 @@
 
         public string Location { get; set; }
 
+        public string ComputerTypeName { get; set; }
+
         public static WorkstationFields CreateDefault()
         {
             return new WorkstationFields(null, null, null, null, null, null, null, null, null, null);

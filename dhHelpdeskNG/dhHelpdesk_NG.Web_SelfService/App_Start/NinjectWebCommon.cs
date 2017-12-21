@@ -1,3 +1,9 @@
+using DH.Helpdesk.Dal.Repositories.Inventory;
+using DH.Helpdesk.Dal.Repositories.Inventory.Concrete;
+using DH.Helpdesk.Dal.Repositories.Printers;
+using DH.Helpdesk.Dal.Repositories.Printers.Concrete;
+using DH.Helpdesk.Dal.Repositories.Servers;
+using DH.Helpdesk.Dal.Repositories.Servers.Concrete;
 using DH.Helpdesk.SelfService;
 using DH.Helpdesk.SelfService.Infrastructure;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
@@ -95,7 +101,7 @@ namespace DH.Helpdesk.SelfService
         {
             var kernel = new StandardKernel(new WorkContextModule(),  new UserModule() , new ProblemModule() ,
                 new CommonModule(), new EmailModule() , new NotifiersModule() , new ToolsModule(),
-                new OrdersModule());
+                new OrdersModule(), new InventoryModule());
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             
@@ -248,6 +254,28 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ICaseFollowUpRepository>().To<CaseFollowUpRepository>();
             kernel.Bind<IConditionRepository>().To<ConditionRepository>();
 
+            kernel.Bind<IInventoryTypeRepository>().To<InventoryTypeRepository>();
+            kernel.Bind<IServerRepository>().To<ServerRepository>();
+            kernel.Bind<IPrinterRepository>().To<PrinterRepository>();
+            kernel.Bind<IInventoryRepository>().To<InventoryRepository>();
+            kernel.Bind<IInventoryTypePropertyValueRepository>().To<InventoryTypePropertyValueRepository>();
+            kernel.Bind<IComputerLogRepository>().To<ComputerLogRepository>();
+            kernel.Bind<IComputerInventoryRepository>().To<ComputerInventoryRepository>();
+            kernel.Bind<IOperationLogRepository>().To<OperationLogRepository>();
+            kernel.Bind<IInventoryTypeGroupRepository>().To<InventoryTypeGroupRepository>();
+            kernel.Bind<IInventoryFieldSettingsRepository>().To<InventoryFieldSettingsRepository>();
+            kernel.Bind<IInventoryDynamicFieldSettingsRepository>().To<InventoryDynamicFieldSettingsRepository>();
+            kernel.Bind<IComputerFieldSettingsRepository>().To<ComputerFieldSettingsRepository>();
+            kernel.Bind<IComputerHistoryRepository>().To<ComputerHistoryRepository>();
+            kernel.Bind<ILogicalDriveRepository>().To<LogicalDriveRepository>();
+            kernel.Bind<ISoftwareRepository>().To<SoftwareRepository>();
+            kernel.Bind<IServerFieldSettingsRepository>().To<ServerFieldSettingsRepository>();
+            kernel.Bind<IOperationObjectRepository>().To<OperationObjectRepository>();
+            kernel.Bind<IOperationLogEMailLogRepository>().To<OperationLogEMailLogRepository>();
+            kernel.Bind<IServerLogicalDriveRepository>().To<ServerLogicalDriveRepository>();
+            kernel.Bind<IServerSoftwareRepository>().To<ServerSoftwareRepository>();
+            kernel.Bind<IPrinterFieldSettingsRepository>().To<PrinterFieldSettingsRepository>();
+
 
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
@@ -321,6 +349,7 @@ namespace DH.Helpdesk.SelfService
 
             kernel.Bind<ICaseFollowUpService>().To<CaseFollowUpService>();
             kernel.Bind<ILogProgramService>().To<LogProgramService>();
+            kernel.Bind<IInventoryService>().To<InventoryService>();
 
 
             // Cache

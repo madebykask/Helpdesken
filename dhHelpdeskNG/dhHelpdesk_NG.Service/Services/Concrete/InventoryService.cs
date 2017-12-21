@@ -604,6 +604,12 @@ namespace DH.Helpdesk.Services.Services.Concrete
             return response;
         }
 
+        public ComputerForRead GetWorkstationByNumber(string computerName, int customerId)
+        {
+            var pcId = computerRepository.GetIdByName(computerName, customerId);
+            return pcId > 0 ? computerRepository.FindById(pcId) : null;
+        }
+
         public InventoriesOverviewResponse GetInventories(InventoriesFilter filter)
         {
             var models = this.inventoryRepository.FindOverviews(

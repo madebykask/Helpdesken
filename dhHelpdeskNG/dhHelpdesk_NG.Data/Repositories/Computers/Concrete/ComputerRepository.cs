@@ -119,6 +119,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                     anonymus.Entity.CarePackNumber,
                     anonymus.Entity.ComputerType_Id,
                     anonymus.Entity.Location);
+            workstation.ComputerTypeName = anonymus.Entity.ComputerType.ComputerTypeDescription;
 
             var processor = new BusinessData.Models.Inventory.Edit.Shared.ProcessorFields(anonymus.Entity.Processor_Id);
 

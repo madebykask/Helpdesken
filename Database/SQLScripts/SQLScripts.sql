@@ -1959,10 +1959,10 @@ begin
 	ALTER TABLE [tblCaseDocumentParagraphCondition] ADD [SortOrder] int NOT NULL DEFAULT(0) 
 end
 
-
-
-
-
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'FetchPcNumber' and sysobjects.name = N'tblCustomer')
+begin
+	ALTER TABLE [tblCustomer] ADD [FetchPcNumber] bit NOT NULL DEFAULT(1) 
+end
 
 
 -- Last Line to update database version

@@ -238,6 +238,7 @@
     <Compile Include="App_Start\FederatedAuthenticationConfiguration.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\CommonModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\EmailModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\InventoryModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\NotifiersModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\OrdersModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\ProblemModule.cs" />

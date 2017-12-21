@@ -67,6 +67,8 @@ namespace DH.Helpdesk.Services.Services
 
         int GetWorkstationIdByName(string computerName, int customerId);
 
+        ComputerForRead GetWorkstationByNumber(string computerName, int customerId);
+
         #endregion
 
         #region Server
@@ -124,5 +126,6 @@ namespace DH.Helpdesk.Services.Services
         #endregion
 
         List<ComputerOverview> GetRelatedInventory(int customerId, string userId);
+        
     }
 }

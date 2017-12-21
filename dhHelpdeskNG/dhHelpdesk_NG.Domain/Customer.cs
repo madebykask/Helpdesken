@@ -63,6 +63,7 @@
         public bool FetchDataFromApiOnExternalPage { get; set; }
         public bool RestrictUserToGroupOnExternalPage { get; set; }
         public int GroupCaseTemplates { get; set; }
+        public bool FetchPcNumber { get; set; }
 
         public virtual Language Language { get; set; }
         public virtual ICollection<Application> Applications { get; set; }

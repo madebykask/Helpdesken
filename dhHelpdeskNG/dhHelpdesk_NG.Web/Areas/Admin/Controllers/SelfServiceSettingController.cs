@@ -139,6 +139,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             customerToSave.ShowCasesOnExternalPage = vmodel.Customer.ShowCasesOnExternalPage;
             customerToSave.ShowCaseOnExternalPage = vmodel.Customer.ShowCaseOnExternalPage;
             customerToSave.GroupCaseTemplates = vmodel.Customer.GroupCaseTemplates;
+            customerToSave.FetchPcNumber = vmodel.Customer.FetchPcNumber;
 
             if (customerToSave == null)
                 throw new Exception("No customer found...");
