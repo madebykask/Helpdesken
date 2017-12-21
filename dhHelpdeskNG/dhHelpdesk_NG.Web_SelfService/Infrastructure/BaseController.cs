@@ -1,6 +1,8 @@
-﻿using System.IdentityModel.Services;
+﻿using System.Diagnostics;
+using System.IdentityModel.Services;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.Services.Infrastructure;
+using log4net;
 
 namespace DH.Helpdesk.SelfService.Infrastructure
 {
@@ -29,6 +31,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
     public class BaseController : Controller
     {
+        private readonly ILog _log = LogManager.GetLogger(typeof(BaseController));
+
         private readonly IMasterDataService _masterDataService;
         private readonly ICaseSolutionService _caseSolutionService;
         private bool userOrCustomerChanged = false; 
@@ -44,6 +48,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         //called before a controller action is executed, that is before ~/HomeController/index 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            //LogWithContext("OnActionExecuting: called.");
+
             var customerId = -1;
             TempData["ShowLanguageSelect"] = true;
             SessionFacade.LastError = null;
@@ -124,7 +130,9 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 //load user info from tblUsers if such user exist
                 LoadLocalUserInfo();
             }
-            
+
+            //LogWithContext("OnActionExecuting: user and customer has been loaded.");
+
             if (SessionFacade.CurrentCustomer.RestrictUserToGroupOnExternalPage)
             {
                 SetUserRestriction(customerId, out lastError);
@@ -287,6 +295,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
         private void LoadLocalUserInfo()
         {
+            //_log.Debug("LoadLocalUserInfo: check if local user information can be loaded.");
+
             if (SessionFacade.CurrentCustomer != null &&
                 SessionFacade.CurrentUserIdentity != null)
             {
@@ -602,6 +612,24 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
             }
         }
+
+        //keep for diagnostics purposes
+        private void LogWithContext(string msg)
+        {
+            var customerId = SessionFacade.CurrentCustomerID;
+            var userIdentityEmail = SessionFacade.CurrentUserIdentity?.Email;
+            var userIdentityEmployeeNumber = SessionFacade.CurrentUserIdentity?.EmployeeNumber;
+            var userIdentityUserId = SessionFacade.CurrentUserIdentity?.UserId;
+            var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
+            var localUserId = SessionFacade.CurrentLocalUser?.UserId;
+
+            _log.Debug($@"{msg}. Context: 
+                        -customerId: {customerId}, 
+                        -userIdentityEmail = {userIdentityEmail},
+                        -userIdentityEmployeeNumber = {userIdentityEmployeeNumber},
+                        -userIdentityUserId = {userIdentityUserId},
+                        -localUserPkId = {localUserPkId},
+                        -localUserId = {localUserId}");
+        }
     }
-    
 }
