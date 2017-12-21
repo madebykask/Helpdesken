@@ -254,7 +254,7 @@ namespace DH.Helpdesk.Web.Controllers
 				if (computerUserCategories.Any())
 				{
 					searchComputerUserCategories = computerUserCategories.Select(o => new ItemOverview(o.Name, o.ID.ToString())).ToList();
-					searchComputerUserCategories.Insert(0, new ItemOverview("Employee", "0"));
+					searchComputerUserCategories.Insert(0, new ItemOverview(Translation.Get("Employee", Enums.TranslationSource.TextTranslation), "0"));
 				}
 
 				if (filters.ComputerUserCategoryID.HasValue && filters.ComputerUserCategoryID.Value == 0)

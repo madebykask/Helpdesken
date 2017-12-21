@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.Domain.Computers;
+using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace DH.Helpdesk.Web.Models.Notifiers
 			var dropDownItems = ComputerUserCategories.Select(o => new DropDownItem(o.Name, o.ID.ToString())).ToList();
 
 			// Todo: translation of non-categories computer users
-			dropDownItems.Insert(0, new DropDownItem("Employee", "0"));
+			dropDownItems.Insert(0, new DropDownItem(Translation.Get("Employee", DH.Helpdesk.Web.Infrastructure.Enums.TranslationSource.TextTranslation), "0"));
 
 			ComputerUserCategoryDropDownContent = new DropDownContent(dropDownItems, ComputerUserCategoryID.HasValue ?
 				ComputerUserCategoryID.Value.ToString() : "0");
@@ -41,7 +42,7 @@ namespace DH.Helpdesk.Web.Models.Notifiers
 			var dropDownItems = ComputerUserCategories.Select(o => new DropDownItem(o.Name, o.ID.ToString())).ToList();
 
 			// Todo: translation of non-categories computer users
-			dropDownItems.Insert(0, new DropDownItem("Employee", "0"));
+			dropDownItems.Insert(0, new DropDownItem(Translation.Get("Employee", DH.Helpdesk.Web.Infrastructure.Enums.TranslationSource.TextTranslation), "0"));
 
 			ComputerUserCategoryDropDownContent = new DropDownContent(dropDownItems, ComputerUserCategoryID.HasValue ?
 				ComputerUserCategoryID.Value.ToString() : "0");
