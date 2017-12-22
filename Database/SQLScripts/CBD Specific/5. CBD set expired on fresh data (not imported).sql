@@ -5,23 +5,28 @@ DECLARE @now DATETIME = GETUTCDATE(),
 	
 
 UPDATE X SET Expired = @now FROM CBD_IN_CEM_BU_ADDRESS_T X
-WHERE X.VALID_TO < @today OR
-	X.DELETE_DATE <= @today
+WHERE (X.VALID_TO < @today OR
+	X.DELETE_DATE <= @today)
+	AND Expired IS NULL
 
 UPDATE X SET Expired = @now FROM CBD_IN_CEM_BU_BANK_ACCOUNT_T X
 WHERE X.DELETE_DATE <= @today
+AND Expired IS NULL
 
 UPDATE X SET Expired = @now FROM CBD_IN_CEM_BU_MEDIA_T X
-WHERE X.VALID_TO < @today OR
-	X.DELETE_DATE <= @today
+WHERE (X.VALID_TO < @today OR
+	X.DELETE_DATE <= @today)
+	AND Expired IS NULL
 
 UPDATE X SET Expired = @now FROM CBD_IN_CEM_BUSINESS_UNIT_T X
-WHERE X.VALID_TO < @today OR
-	X.DELETE_DATE <= @today
+WHERE (X.VALID_TO < @today OR
+	X.DELETE_DATE <= @today)
+	AND Expired IS NULL
 
 UPDATE X SET Expired = @now FROM CBD_IN_CEM_E_BU_TAX_REG_T X
-WHERE X.VALID_TO < @today OR
-	X.DELETE_DATE <= @today
+WHERE (X.VALID_TO < @today OR
+	X.DELETE_DATE <= @today)
+	AND Expired IS NULL
 
 
 

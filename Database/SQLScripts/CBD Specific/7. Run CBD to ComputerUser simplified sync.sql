@@ -31,7 +31,7 @@ BEGIN TRAN
 	INSERT INTO tblComputerUsers(UserId, FirstName, ComputerUsersCategoryID)
 	SELECT BU.CLUT_TYPE + ' ' + BU.CLU_CODE, CASE WHEN LEN(BU.[NAME] + ' (' + BU.CLUT_TYPE + ' ' + BU.CLU_CODE + ')') > 49
 	THEN
-		SUBSTRING(BU.[NAME],0, 36) + '. (' + BU.CLUT_TYPE + ' ' + BU.CLU_CODE + ')'
+		SUBSTRING(BU.[NAME],0, 36)  + '. (' + BU.CLUT_TYPE + ' ' + BU.CLU_CODE + ')'
 	ELSE 
 		BU.[NAME] + ' (' + BU.CLUT_TYPE + ' ' + BU.CLU_CODE + ')'
 	END, @computerUserCategoryID FROM @businessUnits BU
@@ -40,7 +40,9 @@ BEGIN TRAN
 	UPDATE BU SET Exported = @now FROM CBD_IN_CEM_BUSINESS_UNIT_T BU
 	JOIN @businessUnits BU2 ON BU.BU_TK = BU2.BU_TK
 
-	SELECT * FROM tblComputerUsers ORDER BY Len(FirstName) DESC
+	SELECT TOP 1000 * FROM tblComputerUsers 
+	ORDER BY Id DESC
+
 
 COMMIT
 
