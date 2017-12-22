@@ -761,11 +761,11 @@ function CaseInitForm() {
     }
 
     function resetProductareaByCaseType(caseTypeId) {
-        $.post('/Cases/GetProductAreaByCaseType/', { caseTypeId: caseTypeId, customerId: publicCustomerId, myTime: Date.now() }, function (result) {
+        var paId = parseInt($('#case__ProductArea_Id').val());
+        $.post('/Cases/GetProductAreaByCaseType/', { caseTypeId: caseTypeId, customerId: publicCustomerId, myTime: Date.now(), productAreaIdToInclude: paId }, function (result) {
             if (result.success) {
                 $('#divProductArea.DynamicDropDown > ul.dropdown-menu')
                     .html("<li><a href='#'>--</a></li>" + result.data);
-                var paId = parseInt($('#case__ProductArea_Id').val());
                 if (result.paIds && result.paIds.indexOf(paId) < 0) {
                     var emptyElement = $('#divProductArea.DynamicDropDown > ul.dropdown-menu').children().first();
                     $('#divBreadcrumbs_ProductArea').text(getBreadcrumbs(emptyElement));
