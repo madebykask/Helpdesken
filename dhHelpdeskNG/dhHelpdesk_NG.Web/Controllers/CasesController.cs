@@ -2099,9 +2099,9 @@ namespace DH.Helpdesk.Web.Controllers
             });
         }
 
-        public JsonResult GetProductAreaByCaseType(int? caseTypeId, int customerId)
+        public JsonResult GetProductAreaByCaseType(int? caseTypeId, int customerId, int? productAreaIdToInclude)
         {
-            var pa = _productAreaService.GetTopProductAreasForUserOnCase(customerId, null, SessionFacade.CurrentUser).ToList();
+            var pa = _productAreaService.GetTopProductAreasForUserOnCase(customerId, productAreaIdToInclude, SessionFacade.CurrentUser).ToList();
 
             /*TODO: This part does not cover all states and needs to be fixed*/
             if (caseTypeId.HasValue)

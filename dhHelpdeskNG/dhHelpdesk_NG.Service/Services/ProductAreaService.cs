@@ -199,7 +199,7 @@
                     x.Customer_Id == customerId && x.Parent_ProductArea_Id == null
                     && x.IsActive != 0);
 
-            if (productAreaIdToInclude == null)
+            if (user.UserGroupId < (int)UserGroup.CustomerAdministrator)
             { 
                 var groupsMap = user.UserWorkingGroups.Where(it => it.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).ToDictionary(it => it.WorkingGroup_Id, it => true);
                 res = res.Where(
