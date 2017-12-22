@@ -1021,7 +1021,7 @@
                                                     </button>
                                                     <ul class="dropdown-menu" style="z-index:99999999999;">
                                                         <li><a href="#">@Translation.Get("--")</a></li>
-                                                        @Html.ProductAreaDropdownButtonString(Model.productAreas)
+                                                        @Html.ProductAreaDropdownButtonString(Model.productAreas, true, Model.case_.ProductArea_Id)
                                                     </ul>
                                                     @Html.HiddenFor(model => model.case_.ProductArea_Id, new { @class = "product-area-id" })
                                                 </div>

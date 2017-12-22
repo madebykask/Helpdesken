@@ -2117,7 +2117,7 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         paIds.AddRange(GetSubProductAreasIds(ctProductArea));
                     }
-                    var drString = Infrastructure.Extensions.HtmlHelperExtension.ProductAreaDropdownString(ctProductAreas);
+                    var drString = Infrastructure.Extensions.HtmlHelperExtension.ProductAreaDropdownString(ctProductAreas, true, productAreaIdToInclude);
                     return Json(new { success = true, data = drString, paIds });
                 }
             }
@@ -2127,7 +2127,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 praIds.AddRange(GetSubProductAreasIds(ctProductArea));
             }
-            var dropString = Infrastructure.Extensions.HtmlHelperExtension.ProductAreaDropdownString(pa);
+            var dropString = Infrastructure.Extensions.HtmlHelperExtension.ProductAreaDropdownString(pa, true, productAreaIdToInclude);
             return Json(new { success = true, data = dropString, praIds });
         }
 
