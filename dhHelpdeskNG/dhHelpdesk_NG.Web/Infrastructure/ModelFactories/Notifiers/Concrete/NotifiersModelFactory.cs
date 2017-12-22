@@ -116,7 +116,7 @@
             var sortField = new SortFieldModel { Name = filters.SortByField, SortBy = filters.SortBy };
 
 			SearchDropDownModel computerUserCategories;
-			if (searchComputerUserCategories.Any())
+			if (searchComputerUserCategories != null && searchComputerUserCategories.Any())
 			{
 				var items = searchComputerUserCategories.Select(d => new DropDownItem(d.Name, d.Value)).ToList();
 
