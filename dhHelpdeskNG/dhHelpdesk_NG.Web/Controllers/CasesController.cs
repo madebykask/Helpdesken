@@ -2129,9 +2129,9 @@ namespace DH.Helpdesk.Web.Controllers
             });
         }
 
-        public JsonResult GetProductAreaByCaseType(int? caseTypeId, int customerId)
+        public JsonResult GetProductAreaByCaseType(int? caseTypeId, int customerId, int? productAreaIdToInclude)
         {
-            var pa = _productAreaService.GetTopProductAreasForUserOnCase(customerId, null, SessionFacade.CurrentUser).ToList();
+            var pa = _productAreaService.GetTopProductAreasForUserOnCase(customerId, productAreaIdToInclude, SessionFacade.CurrentUser).ToList();
 
             /*TODO: This part does not cover all states and needs to be fixed*/
             if (caseTypeId.HasValue)
@@ -2147,7 +2147,7 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         paIds.AddRange(GetSubProductAreasIds(ctProductArea));
                     }
-                    var drString = Infrastructure.Extensions.HtmlHelperExtension.ProductAreaDropdownString(ctProductAreas);
+                    var drString = Infrastructure.Extensions.HtmlHelperExtension.ProductAreaDropdownString(ctProductAreas, true, productAreaIdToInclude);
                     return Json(new { success = true, data = drString, paIds });
                 }
             }
@@ -2157,7 +2157,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 praIds.AddRange(GetSubProductAreasIds(ctProductArea));
             }
-            var dropString = Infrastructure.Extensions.HtmlHelperExtension.ProductAreaDropdownString(pa);
+            var dropString = Infrastructure.Extensions.HtmlHelperExtension.ProductAreaDropdownString(pa, true, productAreaIdToInclude);
             return Json(new { success = true, data = dropString, praIds });
         }
 

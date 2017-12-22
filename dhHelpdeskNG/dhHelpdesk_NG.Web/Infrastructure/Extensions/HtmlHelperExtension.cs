@@ -182,19 +182,19 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                 return new MvcHtmlString(string.Empty);
         }
 
-        public static MvcHtmlString ProductAreaDropdownButtonString(this HtmlHelper helper, IList<ProductArea> pal, bool isTakeOnlyActive = true)
+        public static MvcHtmlString ProductAreaDropdownButtonString(this HtmlHelper helper, IList<ProductArea> pal, bool isTakeOnlyActive = true, int? productAreaIdToInclude = null)
         {
             if (pal != null)
             {
-                return BuildProcuctAreaDropdownButton(pal, isTakeOnlyActive);
+                return BuildProcuctAreaDropdownButton(pal, isTakeOnlyActive, null, productAreaIdToInclude);
             }
             else
                 return new MvcHtmlString(string.Empty);
         }
 
-        public static string ProductAreaDropdownString(IList<ProductArea> pal, bool isTakeOnlyActive = true)
+        public static string ProductAreaDropdownString(IList<ProductArea> pal, bool isTakeOnlyActive = true, int? productAreaIdToInclude = null)
         {
-            return pal != null ? BuildProcuctAreaDropdownButtonString(pal, isTakeOnlyActive) : string.Empty;
+            return pal != null ? BuildProcuctAreaDropdownButtonString(pal, isTakeOnlyActive, null, productAreaIdToInclude) : string.Empty;
         }
 
         public static MvcHtmlString CategoryDropdownButtonString(this HtmlHelper helper, IList<Category> cats, bool isTakeOnlyActive = true)
@@ -1175,16 +1175,18 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
         private static MvcHtmlString BuildProcuctAreaDropdownButton(
             IList<ProductArea> pal,            
             bool isTakeOnlyActive = true,
-            Dictionary<int, bool> userGroupDictionary = null)
+            Dictionary<int, bool> userGroupDictionary = null,
+            int? productAreaIdToInclude = null)
         {
-            var pas = BuildProcuctAreaDropdownButtonString(pal, isTakeOnlyActive, userGroupDictionary);
+            var pas = BuildProcuctAreaDropdownButtonString(pal, isTakeOnlyActive, userGroupDictionary, productAreaIdToInclude);
             return new MvcHtmlString(pas);
         }
 
         private static string BuildProcuctAreaDropdownButtonString(
             IList<ProductArea> pal,
             bool isTakeOnlyActive = true,
-            Dictionary<int, bool> userGroupDictionary = null)
+            Dictionary<int, bool> userGroupDictionary = null,
+            int? productAreaIdToInclude = null)
         {
             string htmlOutput = string.Empty;
             var user = SessionFacade.CurrentUser;
@@ -1211,7 +1213,8 @@ using DH.Helpdesk.Web.Areas.Admin.Models;
                                 it.WorkingGroups.Count == 0
                                 || it.WorkingGroups.Any(
                                     productAreaWorkingGroup =>
-                                    userGroupDictionary.ContainsKey(productAreaWorkingGroup.Id)));
+                                    userGroupDictionary.ContainsKey(productAreaWorkingGroup.Id))
+                                || (productAreaIdToInclude.HasValue && it.Id == productAreaIdToInclude.Value));
                     }
 
                     childList = childs.ToList();
