@@ -2132,48 +2132,52 @@
                                                                                     && (x.InvoiceRow.Status.Value == InvoiceStatus.Invoiced || x.InvoiceRow.Status.Value == InvoiceStatus.NotInvoiced))
                                                                                 .ToList();
                                                     var editableExternalInvoices = Model.ExternalInvoices.Except(readonlyExternalInvoices).ToList();
+                                                    var extInvoicesCount = 0;
                                                 }
-                                                @foreach (var extInv in readonlyExternalInvoices)
+                                                @for (var i = 0; i < readonlyExternalInvoices.Count; i++)
                                                 {
                                                     <tr>
                                                         <td>
-                                                            @extInv.Name
+                                                            @readonlyExternalInvoices[i].Name
+                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@readonlyExternalInvoices[i].Name">
                                                         </td>
                                                         <td>
-                                                            @extInv.Amount.ToString("#.##")
-
+                                                            @readonlyExternalInvoices[i].Amount.ToString("#.##")
+                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@readonlyExternalInvoices[i].Amount.ToString("#.##")" placeholder="0.00">
+                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="@readonlyExternalInvoices[i].Id">
                                                         </td>
                                                         <td>
-                                                            @extInv.InvoiceRow.Status.Value.GetTranslation()
+                                                            @readonlyExternalInvoices[i].InvoiceRow.Status.Value.GetTranslation()
                                                         </td>
                                                     </tr>
+                                                    extInvoicesCount++;
                                                 }
                                                 @for (var i = 0; i < editableExternalInvoices.Count; i++)
                                                 {
                                                     <tr>
                                                         <td>
-                                                            <input type="text" id="ExternalInvoices[@i].Name" name="ExternalInvoices[@i].Name" value="@editableExternalInvoices[i].Name">
+                                                            <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@editableExternalInvoices[i].Name">
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="inputw100" id="ExternalInvoices[@i].Amount" name="ExternalInvoices[@i].Amount" value="@editableExternalInvoices[i].Amount.ToString("#.##")" placeholder="0.00">
-                                                            <input type="hidden" id="ExternalInvoices[@i].Id" name="ExternalInvoices[@i].Id" value="@editableExternalInvoices[i].Id">
-
+                                                            <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@editableExternalInvoices[i].Amount.ToString("#.##")" placeholder="0.00">
+                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="@editableExternalInvoices[i].Id">
                                                         </td>
                                                         <td>
                                                             <a id="btnDeleteExternalInvoice0" class="btn bt-small" title="Delete" data-rowid="@i"><i class="icon-remove"></i></a>
                                                         </td>
                                                     </tr>
+                                                    extInvoicesCount++;
                                                 }
                                                 <tr>
                                                     <td>
-                                                        <input type="text" id="ExternalInvoices[@editableExternalInvoices.Count].Name" name="ExternalInvoices[@editableExternalInvoices.Count].Name">
+                                                        <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name">
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="inputw100" id="ExternalInvoices[@editableExternalInvoices.Count].Amount" name="ExternalInvoices[@editableExternalInvoices.Count].Amount" placeholder="0.00">
-                                                        <input type="hidden" id="ExternalInvoices[@editableExternalInvoices.Count].Id" name="ExternalInvoices[@editableExternalInvoices.Count].Id" value="0">
+                                                        <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" placeholder="0.00">
+                                                        <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="0">
                                                     </td>
                                                     <td>
-                                                        <a id="@("btnDeleteExternalInvoice" + editableExternalInvoices.Count)" class="btn bt-small" title="Delete" data-rowid="@editableExternalInvoices.Count"><i class="icon-remove"></i></a>
+                                                        <a id="@("btnDeleteExternalInvoice" + extInvoicesCount)" class="btn bt-small" title="Delete" data-rowid="@extInvoicesCount"><i class="icon-remove"></i></a>
                                                         <a id="btnAddExternalInvoice" class="btn bt-small" title="Add"><i class="icon-plus"></i></a>
                                                     </td>
                                                 </tr>
