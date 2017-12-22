@@ -948,11 +948,15 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                         //save "base"
                         res = SaveCase(baseCaseModel, baseAuxModel, out baseCaseId, out caseNum);
 
-                        if (caseId == -1)
-                            caseId = baseCaseId;
-
                         //If it should be included in split
                         keepBaseCase = _conditionService.CheckConditions(baseCaseId, item.SplitToCaseSolutionDescendant.Id, conditionType_Id).Show;
+
+                        //If keep, set caseId
+                        if (keepBaseCase)
+                        {
+                            caseId = baseCaseId;
+                        }
+
                     }
                     else
                     {
