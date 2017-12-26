@@ -148,7 +148,7 @@
     <div class="container-fluid">
         <div class="col-lg-12 secnav">
 
-            <input id="btnSave" type="button" value='@Translation.Get("Save", Enums.TranslationSource.TextTranslation)' class="btn btn-default pull-left" style="margin-right:20px !important;" />
+            <input id="btnSave" type="button" value='@Translation.Get("Save")' class="btn btn-default pull-left" style="margin-right:20px !important;" />
             @if (Model.WorkflowSteps != null && Model.WorkflowSteps.Any())
             {
                 <div class="input-group">
@@ -343,6 +343,7 @@
         <div id="fragment-1" class="tab-pane active">
             <div class="container-fluid dh-container">
                 <div id="container_@extendedFormId" class="">
+                    @Html.Partial("_CaseInformation", Model.CaseDataModel, new ViewDataDictionary { { "Headline", Translation.Get(Model.ExtendedCaseDataModel.FormModel.Name) } })
                     @*Extended case placement*@
                 </div>
             </div>

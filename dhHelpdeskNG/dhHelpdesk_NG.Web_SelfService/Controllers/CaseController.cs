@@ -671,10 +671,17 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             /*Get StateSecondaryId if existing*/
             int caseStateSecondaryId = 0;
-            if (caseModel != null && caseModel.StateSecondary_Id.HasValue)
+            if (caseModel?.StateSecondary_Id != null)
             {
                 var ss = _stateSecondaryService.GetStateSecondary(caseModel.StateSecondary_Id.Value);
                 caseStateSecondaryId = ss?.StateSecondaryId ?? 0;
+                caseModel.StateSecondaryName = ss?.Name;
+            }
+
+            if (caseModel?.WorkingGroup_Id != null)
+            {
+                var curWorkingGroup = _workingGroupService.GetWorkingGroup(caseModel.WorkingGroup_Id.Value);
+                caseModel.WorkingGroupName = curWorkingGroup?.WorkingGroupName;
             }
 
             var initData = new InitExtendedForm(customerId, languageId, SessionFacade.CurrentUserIdentity.UserId, caseTemplateId, caseId, UserRoleType.LineManager, caseStateSecondaryId);
