@@ -1,4 +1,6 @@
-﻿using DH.Helpdesk.BusinessData.Models.Case;
+﻿using System.Data;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Controllers
@@ -145,6 +147,7 @@ namespace DH.Helpdesk.Web.Controllers
                 WatchDate = arg.WatchDate,
                 CaseType = arg.CaseType.Name,
                 SubState = subStateName,
+                CaseIcon = GetCaseIcon(arg)
             };
         }
 
@@ -463,6 +466,19 @@ namespace DH.Helpdesk.Web.Controllers
                     caseService.SendProblemLogEmail(c, caseMailSetting, caseHistoryId, userTimeZone, caseLog, log.FinishConnectedCases);
                 }
             }
+        }
+
+        private static GlobalEnums.CaseIcon GetCaseIcon(Case cs)
+        {
+            var ret = GlobalEnums.CaseIcon.Normal;
+
+            if (cs.FinishingDate.HasValue)
+                if (!cs.ApprovedDate.HasValue && string.Compare("1", cs.CaseType.RequireApproving.ToString(), true, CultureInfo.InvariantCulture) == 0)
+                    ret = GlobalEnums.CaseIcon.FinishedNotApproved;
+                else
+                    ret = GlobalEnums.CaseIcon.Finished;
+
+            return ret;
         }
 
         #endregion

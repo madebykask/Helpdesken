@@ -71,14 +71,14 @@
             {
                 htmlOutput.AppendLine(
                     string.Format(
-                        @"<button id=""{0}"" class=""btn dropdown-toggle sr-only"" type=""button"" data-toggle=""dropdown"" disabled=""disabled"">",
+                        @"<button id=""{0}"" class=""btn dropdown-toggle"" type=""button"" data-toggle=""dropdown"" disabled=""disabled"">",
                         buttonId));
             }
             else
             {
                 htmlOutput.AppendLine(
                     string.Format(
-                        @"<button id=""{0}"" class=""btn dropdown-toggle sr-only"" type=""button"" data-toggle=""dropdown"">",
+                        @"<button id=""{0}"" class=""btn dropdown-toggle"" type=""button"" data-toggle=""dropdown"">",
                         buttonId));
             }
 
@@ -173,7 +173,7 @@
                             }}
                         }}
     
-                        $('#{2}').text(breadcrumbs);
+                        $('#{2}').html(breadcrumbs + ' <span class=""caret""></span>');
                     }});
                 }});", controlId, valueContainerId, buttonId));
         }

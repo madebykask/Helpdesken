@@ -10,12 +10,12 @@
 }
 
 <div class="container">
-    <h4>@Translation.Get("Loggpost", Enums.TranslationSource.TextTranslation)</h4>
+    <h4>@Translation.GetCoreTextTranslation("Loggpost")</h4>
     <div class="row">
         <div class="span12">
             <table>
                 <tr>
-                    <td class="span3">@Translation.Get("Loggtext", Enums.TranslationSource.TextTranslation)
+                    <td class="span3">@Translation.GetCoreTextTranslation("Loggtext")
                     </td>
                     <td class="span9">
                         @Html.TextAreaFor(x => x.LogText)
@@ -23,17 +23,18 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>@Translation.Get("Visa i ärendelogg som", Enums.TranslationSource.TextTranslation)
+                    <td>@Translation.GetCoreTextTranslation("Visa i ärendelogg som")
                     </td>
                     <td>
                         @Html.CheckBoxFor(x => x.InternNotering, new { id = "notering_intern_checkBox" })
-                        @Translation.Get("Intern notering", Enums.TranslationSource.TextTranslation)
+                        @Translation.GetCoreTextTranslation("Intern notering")
                         @Html.CheckBoxFor(x => x.ExternNotering, new { id = "notering_extern_checkBox" })
-                        @Translation.Get("Extern notering", Enums.TranslationSource.TextTranslation)
+                        @Translation.GetCoreTextTranslation("Extern notering")
                     </td>
                 </tr>
                 <tr>
-                    <td>@Translation.Get("Avslutsorsak", Enums.TranslationSource.TextTranslation)
+                    <td>
+                        @Translation.GetCoreTextTranslation("Avslutsorsak")
                     </td>
                     <td>
                         @Html.DropDownWithSubmenus("causes_dropdown", "FinishingCauseId", true, Model.FinishingCauses)
@@ -41,18 +42,18 @@
                 </tr>
                 <tr>
                     <td>
-                        @Translation.Get("Avslutsdatum", Enums.TranslationSource.TextTranslation)
+                        @Translation.GetCoreTextTranslation("Avslutsdatum")
                     </td>
                     <td>
                         @Html.EditorFor(m => m.FinishingDate, "DatePicker", new { id = "finishing_date_datepicker" })
                     </td>
                 </tr>
                 <tr>
-                    <td>@Translation.Get("Kopplade ärenden", Enums.TranslationSource.TextTranslation)
+                    <td>@Translation.GetCoreTextTranslation("Kopplade ärenden")
                     </td>
                     <td>
                         @Html.CheckBoxFor(x => x.FinishConnectedCases)
-                        @Translation.Get("Avsluta kopplade ärenden", Enums.TranslationSource.TextTranslation)
+                        @Translation.GetCoreTextTranslation("Avsluta kopplade ärenden")
                     </td>
                 </tr>
             </table>
