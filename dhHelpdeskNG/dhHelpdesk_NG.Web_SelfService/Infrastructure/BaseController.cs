@@ -170,6 +170,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             }
 
             ViewBag.IsLineManagerApplication = IsLineManagerApplication();
+            ViewBag.ApplicationType = _configurationService.AppSettings.ApplicationType;
 
             SetTextTranslation(filterContext);
         }

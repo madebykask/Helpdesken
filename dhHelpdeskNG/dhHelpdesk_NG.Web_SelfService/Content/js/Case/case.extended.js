@@ -194,6 +194,8 @@ ExtendedCasePage.prototype.loadExtendedCaseIfNeeded = function () {
 ExtendedCasePage.prototype.loadExtendedCase = function () {
     var self = this;
     var $_ex_Container = self.getExtendedCaseContainer();
+
+
     var formParameters = $_ex_Container.contentWindow.getFormParameters();
     formParameters.languageId = self.Current_EC_LanguageId;
     formParameters.extendedCaseGuid = self.Current_EC_Guid;
@@ -201,6 +203,8 @@ ExtendedCasePage.prototype.loadExtendedCase = function () {
     formParameters.userRole = self.UserRole;    
     formParameters.currentUser = self.CurrentUser;
     formParameters.userGuid = '';
+    formParameters.caseId = self.Case_Field_Init_Values.CaseId;
+    formParameters.applicationType = self.ApplicationType;
 
     $_ex_Container.contentWindow.setInitialData({ step: 0, isNextValidation: false });
 
@@ -481,7 +485,7 @@ ExtendedCasePage.prototype.init = function (params) {
     self.CaseStatus = params.caseStatus;
     self.CurrentUser = params.currentUser;
     self.Current_EC_Path = params.extendedCasePath;
-
+    self.ApplicationType = params.applicationType;
     var lastError = params.lastError;
 
     /// controls binding

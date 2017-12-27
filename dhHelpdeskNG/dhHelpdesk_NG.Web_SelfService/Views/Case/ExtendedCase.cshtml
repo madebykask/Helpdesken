@@ -20,7 +20,7 @@
 
     var downloadCaseFileUrl = Url.Action("DownloadNewCaseFile");
     var downloadCaseFileParamUrl = (!string.IsNullOrEmpty(Model.CaseDataModel.CaseFileKey) ? "id=" + Model.CaseDataModel.CaseFileKey + "&" : string.Empty);
-    var downloadCaseFileCompleteUrl = downloadCaseFileUrl + "?" + "id=" + "{id}" + "&fileName=" + "{name}";
+    var downloadCaseFileCompleteUrl = downloadCaseFileUrl + "?" + "id=" + "{id}" + "&fileName=" + "{name}";    
 }
 
 <script type="text/javascript">
@@ -108,7 +108,7 @@
         userRole: '@(Model.UserRole)',
         caseStatus: '@(Model.StateSecondaryId)',
         currentUser: '@(Model.CurrentUser)',
-
+        applicationType: '@ViewBag.ApplicationType',
         lastError: '@Html.Raw(lastErrorMessage)'
     }
 
