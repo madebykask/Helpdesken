@@ -262,8 +262,6 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
                 progressId != CaseProgressFilter.CasesInProgress &&
                 progressId != CaseProgressFilter.None)
             {
-                //ErrorGenerator.MakeError("Process is not valid!", 202);
-
                 return RequestValidationResult.Error("Process is not valid!", 202);
             }
             return RequestValidationResult.Ok();
@@ -273,17 +271,15 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
         {
             if (SessionFacade.CurrentCustomer == null)
             {
-                //ErrorGenerator.MakeError("Customer is not valid!");
                 return RequestValidationResult.Error("Customer is not valid!");
             }
             return RequestValidationResult.Ok();
         }
 
-        public RequestValidationResult ValidateCurrentUser()
+        public RequestValidationResult ValidateCurrentUserIdentity()
         {
             if (SessionFacade.CurrentUserIdentity == null)
             {
-                //ErrorGenerator.MakeError("You don't have access to cases, please login again.", 203);
                 return RequestValidationResult.Error("You don't have access to cases, please login again.", 203);
             }
             return RequestValidationResult.Ok();
@@ -293,20 +289,12 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
         {
             if (SessionFacade.CurrentLocalUser == null)
             {
-                //ErrorGenerator.MakeError("There's no associated customer user for logged in user.", 203);
                 return RequestValidationResult.Error("There's no associated customer user for logged in user.", 203);
             }
             return RequestValidationResult.Ok();
         }
 
         #endregion
-
-        
-
-        public void HandleAjaxError(RequestValidationResult result)
-        {
-            //todo: create result
-        }
     }
 
     #region RequestValidationResult class

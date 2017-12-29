@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
 using System.Web.SessionState;
-using System.Web.UI;
 using DH.Helpdesk.SelfService.Controllers.Behaviors;
 using DH.Helpdesk.SelfService.Entites;
 using DH.Helpdesk.SelfService.Infrastructure;
@@ -14,7 +13,8 @@ using DH.Helpdesk.Services.Services;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
-    //NOTE: its important to keep it readonly to allow ajax requests to run in parallel!
+    //NOTE: its important to keep search logic in this separate controller with Session readonly attribute to allow ajax requests running in parallel!
+    // if session is not readonly requests will be blocked in queue by session lock and executed one by one...
     [SessionState(SessionStateBehavior.ReadOnly)]
     public class CasesSearchAsyncController : Controller
     {

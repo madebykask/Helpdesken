@@ -1076,25 +1076,26 @@ div .multitext i {
     margin: 20px 0;
 }
 
-.searchGroupCaption,
-.searchGroupCaptionLoading {
+.searchGroupCaption{ 
+    background: #f0f0f0;
     padding: 10px 20px;
-    border-bottom: dotted 1px #828282;
     font-weight: bold;
     font-size: 14px;
 }
 
-.searchGroupCaption {
-    background: #f0f0f0;
+.searchGroupCaption.loading {
+    background: #FFF281!important;
 }
 
-.searchGroupCaptionLoading {
-    background: #FFF281;
+.searchGroupCaption.collapsed {
+    border-bottom: solid 2px #ccc;
 }
 
 .searchGroupCaption a,
-.searchGroupCaptionLoading a
-{
+.searchGroupCaption a:hover,
+.searchGroupCaption a:visited {
     color: #000;   
     text-decoration: none;
+    outline: 0;
 }
+

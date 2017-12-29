@@ -56,7 +56,7 @@ function CaseSearch() {
 
         var allComplete = true;
         for (var key in this.requests) {
-            if (this.requests.hasOwnProperty(key) && this.requests[key] == false) {
+            if (this.requests.hasOwnProperty(key) && this.requests[key] === false) {
                 allComplete = false;
                 break;
             }
@@ -106,10 +106,28 @@ function CaseSearch() {
         }
     };
 
-
     this.updateCasesCount = function (customerId) {
-        var casesCount = $("#hdnCasesCount_" + customerId).val();
+        var casesCount = parseInt($("#hdnCasesCount_" + customerId).val(), 10);
         $("#casesCount_" + customerId).text(casesCount);
+
+        this.toggleSearchResults(customerId, casesCount > 0);
+    }
+
+    this.toggleSearchResults = function(customerId, expand) {
+        var searchGroup$ = $("#searchGroup_" + customerId);
+        var searchResults$ = searchGroup$.find("div.searchResults:first");
+        var searchGroupCaption$ = searchGroup$.find("div.searchGroupCaption:first");
+        var iconEl$ = $("#searchGroup_" + customerId).find(".fa:first");
+        
+        if (expand) {
+            iconEl$.removeClass('fa-angle-double-down').addClass('fa-angle-double-up');
+            searchGroupCaption$.removeClass("collapsed");
+            searchResults$.show();
+        } else {
+            iconEl$.removeClass('fa-angle-double-up').addClass('fa-angle-double-down');
+            searchGroupCaption$.addClass("collapsed");
+            searchResults$.hide();
+        }
     }
 
     this.blockUI = function (block) {
@@ -122,12 +140,11 @@ function CaseSearch() {
     };
 
     this.toggleMultiCustomerProgress = function (customerId, isRunning) {
-        var captionDiv = $('#searchGroup_' + customerId).children(":first");
-
+        var searchGroupCaption$ = $("#searchGroup_" + customerId).find("div.searchGroupCaption:first");
         if (isRunning) {
-            captionDiv.removeClass("searchGroupCaption").addClass("searchGroupCaptionLoading");
+            searchGroupCaption$.addClass("loading");
         } else {
-            captionDiv.removeClass("searchGroupCaptionLoading").addClass("searchGroupCaption");
+            searchGroupCaption$.removeClass("loading");
         }
     }
 

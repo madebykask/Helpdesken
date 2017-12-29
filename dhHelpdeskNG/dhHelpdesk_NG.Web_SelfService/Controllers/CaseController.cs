@@ -818,10 +818,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var res = _caseControllerBehavior.ValidateCustomer();
             if (!res.Valid) return HandleError(res);
 
-            res = _caseControllerBehavior.ValidateCurrentUser();
-            if (!res.Valid) return HandleError(res);
-
-            res = _caseControllerBehavior.ValidateLocalUser();
+            res = _caseControllerBehavior.ValidateCurrentUserIdentity();
             if (!res.Valid) return HandleError(res);
 
             var searchParameters = PrepareCaseSearchInputParameters();
@@ -850,7 +847,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var res = _caseControllerBehavior.ValidateCustomer();
             if (!res.Valid) return HandleError(res);
 
-            res = _caseControllerBehavior.ValidateLocalUser();
+            res = _caseControllerBehavior.ValidateCurrentUserIdentity();
             if (!res.Valid) return HandleError(res);
 
             var searchParameters = PrepareCaseSearchInputParameters();
@@ -858,12 +855,9 @@ namespace DH.Helpdesk.SelfService.Controllers
             res = _caseControllerBehavior.ValidateSearchParameters(searchParameters);
             if (!res.Valid) return HandleError(res);
 
-            var customerUser = SessionFacade.CurrentLocalUser;
-            if (customerUser == null)
-                throw new Exception("There is no user account for logged in user");
+            var userId = SessionFacade.CurrentUserIdentity.UserId;
 
-            //todo: find out how customer should be found for logged in user
-            var customers = _customerUserService.GetUserCustomersWithCases(customerUser.Id);
+            var customers = _customerUserService.ListCustomersByInitiatorCases(userId);
 
             var model = new MultiCustomerUserFilterModel
             {

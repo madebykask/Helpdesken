@@ -30,9 +30,9 @@
                     </div>
                     @foreach (var result in Model.Customers)
                     {
-                        <div id="searchGroup_@result.CustomerId" class="searchGroup">
+                        <div id="searchGroup_@result.CustomerId" class="searchGroup" data-customerId="@result.CustomerId">
                             <div class="searchGroupCaption">
-                                <a href="javascript:void(0)" onclick="toggleSearchResult(this, @result.CustomerId)">
+                                <a href="javascript:void(0)" onclick="toggleCustomerSearchResults(this, @result.CustomerId)">
                                     <i class="fa fa-angle-double-up" aria-hidden="true"></i> @result.CustomerName (<span id="casesCount_@result.CustomerId">0</span> @Translation.Get("Cases"))</a>
                             </div>
                             <div id="result_@result.CustomerId" class="searchResults">
@@ -70,11 +70,11 @@
             });
 
             $("#collapseAll").click(function (e) {
-                window.toggleSearchResults(0);
+                window.toggleSearchResults(false);
             });
 
             $("#expandAll").click(function (e) {
-                window.toggleSearchResults(1);
+                window.toggleSearchResults(true);
             });
 
             //run search for all user customers
@@ -85,35 +85,21 @@
             window.caseSearch.sortCases(customerId, newSortBy);
         }
 
-        function toggleSearchResults(toggleMode) {
+        function toggleSearchResults(expand) {
             $("div.searchGroup").each(function() {
-                //change icon
-                var iconEl = $(this).children(":first").find(".fa");
-                var searchResults = $(this).children(".searchResults:first");
-
-                if (toggleMode == 0) {
-                    iconEl.removeClass('fa-angle-double-up').addClass('fa-angle-double-down');
-                    searchResults.hide();
-                }
-                else
-                {
-                    iconEl.removeClass('fa-angle-double-down').addClass('fa-angle-double-up');
-                    searchResults.show();
-                }
+                var customerId = +$(this).data("customerid");
+                window.caseSearch.toggleSearchResults(customerId, expand);
             });
         }
 
-        function toggleSearchResult(sender, customerId) {
+        function toggleCustomerSearchResults(sender, customerId) {
             var results = $('#result_' + customerId);
-            var iconEl = $(sender).children(":first");
-
+            
             if (results.is(":visible")) {
-                iconEl.removeClass('fa-angle-double-up').addClass('fa-angle-double-down');
-                results.hide();
+                window.caseSearch.toggleSearchResults(customerId, false);
             } else {
-                iconEl.removeClass('fa-angle-double-down').addClass('fa-angle-double-up');
-                results.show();
+                window.caseSearch.toggleSearchResults(customerId, true);
             }
-        }
+        } 
     </script>
 }

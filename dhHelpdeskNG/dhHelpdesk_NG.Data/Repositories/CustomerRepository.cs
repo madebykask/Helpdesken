@@ -141,7 +141,9 @@ using System;
         bool CheckUserCasePermissions(int userId, int caseId, Expression<Func<Case, bool>> casePermissionsFilter = null);
         CustomerUser GetCustomerSettingsByCustomer(int customerId);
 
+        IList<UserCustomerOverview> ListCustomersByInitiatorCases(string userId);
         IList<UserCustomerOverview> GetUserCustomersWithCases(int userId);
+
     }
 
     public class CustomerUserRepository : RepositoryBase<CustomerUser>, ICustomerUserRepository
@@ -161,6 +163,23 @@ using System;
             return Table
                     .Include(x => x.User)   
                     .Where(cu => cu.Customer_Id == customerId && cu.User_Id == userId).FirstOrDefault();
+        }
+
+        public IList<UserCustomerOverview> ListCustomersByInitiatorCases(string userId)
+        {
+            var queryable = (from _case in DataContext.Cases
+                             where _case.RegUserId == userId && 
+                                   _case.RegUserId != null && 
+                                   _case.Deleted == 0
+                             group _case by new { CustomerId = _case.Customer_Id, CustomerName = _case.Customer.Name } into grouppedCases
+                             select new UserCustomerOverview
+                             {
+                                 CustomerId = grouppedCases.Key.CustomerId,
+                                 CustomerName = grouppedCases.Key.CustomerName,
+                                 CasesCount = grouppedCases.Count()
+                             }).OrderByDescending(x => x.CasesCount);
+
+            return queryable.ToList();
         }
 
         public IList<UserCustomerOverview> GetUserCustomersWithCases(int userId)
