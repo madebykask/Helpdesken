@@ -309,6 +309,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\WebApi\Controllers\CaseApiController.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />
+    <Compile Include="Controllers\QuestionnaireAnswerController.cs" />
     <Compile Include="Enums\ReportItemNames.cs" />
     <Compile Include="Infrastructure\Cryptography\AESCryptoProvider.cs" />
     <Compile Include="Infrastructure\Extensions\DicExtentions.cs" />
@@ -319,6 +320,7 @@
     <Compile Include="Models\Case\InvoiceTimeModel.cs" />
     <Compile Include="Models\JsonModels\Base\BaseJsonModel.cs" />
     <Compile Include="Models\JsonModels\Case\CaseJsonModel.cs" />
+    <Compile Include="Models\Questionnaire\Input\QuestionnaireAnswerParams.cs" />
     <Compile Include="Models\WebApi\TokenModel.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Areas\Invoices\Models\BaseIndexModel.cs" />
@@ -1620,7 +1622,6 @@
     <Compile Include="Models\Feedback\AddQuestionOptionParams.cs" />
     <Compile Include="Models\Feedback\DeleteQuestionOptionParams.cs" />
     <Compile Include="Models\Feedback\FeedbackAnswerModel.cs" />
-    <Compile Include="Models\Feedback\FeedbackAnswerParams.cs" />
     <Compile Include="Models\IConfigurableFieldModel.cs" />
     <Compile Include="Areas\Inventory\Models\EditModel\Computer\AccesoriesEditViewModel.cs" />
     <Compile Include="Areas\Admin\Models\Invoice\ArticlesImportModel.cs" />
@@ -3866,7 +3867,6 @@
     <Content Include="Views\Questionnaire\_CircularPartOverviewWithDelete.cshtml" />
     <Content Include="Views\Questionnaire\CircularOverviewGrid.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MultiSelectListModel.cshtml" />
-    <Content Include="Views\Questionnaire\Quiestionnaire.cshtml" />
     <Content Include="Views\Faq\_FAQFiles.cshtml" />
     <Content Include="Views\Questionnaire\Statistics.cshtml" />
     <Content Include="Views\Faq\_Plupload.cshtml" />
@@ -3919,7 +3919,6 @@
     <Content Include="Views\Cases\_Invoice.cshtml" />
     <Content Include="Views\Cases\_CasePrint.cshtml" />
     <Content Include="Views\CaseSolution\_RowsOverview.cshtml" />
-    <Content Include="Views\Questionnaire\QuestionnaireCompleted.cshtml" />
     <Content Include="Views\Contracts\Index.cshtml" />
     <Content Include="Views\Contracts\_ContractsIndexRows.cshtml" />
     <Content Include="Views\Contracts\_Settings.cshtml" />
@@ -3948,6 +3947,8 @@
     <Content Include="Views\Cases\_CaseValidation.cshtml" />
     <Content Include="Areas\Inventory\Views\Workstation\RelatedInventoryFull.cshtml" />
     <Content Include="Views\Shared\CaseQuickOpen.cshtml" />
+    <Content Include="Views\QuestionnaireAnswer\QuestionnaireCompleted.cshtml" />
+    <Content Include="Views\QuestionnaireAnswer\Quiestionnaire.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

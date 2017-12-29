@@ -7,6 +7,7 @@ using System.Web.Routing;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Models.Feedback;
+using DH.Helpdesk.Web.Models.Questionnaire.Input;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -25,7 +26,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Answer(FeedbackAnswerParams parameters)
+        public ActionResult Answer(QuestionnaireAnswerParams parameters)
         {
             var detailed = _circularService.GetQuestionnaire(parameters.Guid, parameters.LanguageId);
             var question = detailed.Questionnaire.Questions.First();
