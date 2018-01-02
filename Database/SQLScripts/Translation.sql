@@ -6596,6 +6596,13 @@ If not exists (select * from tblTextTranslation where text_id = 1901 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1901, 2, 'Show all customers on Case overview ')
 GO
 
+If not exists (select * from tbltext where id = 1902)
+	insert into tbltext (id, TextString) VALUES (1902, 'Fristående underärende')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1902 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1902, 2, 'Independent child')
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 
