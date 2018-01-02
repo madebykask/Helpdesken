@@ -5455,8 +5455,8 @@ namespace DH.Helpdesk.Web.Controllers
                         if (!string.IsNullOrEmpty(caseTemplate.PersonsEmail))
                             m.case_.PersonsEmail = caseTemplate.PersonsEmail;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.PersonsEmail))
-                            m.case_.PersonsPhone = caseTemplate.PersonsEmail;
+                        if (!string.IsNullOrEmpty(caseTemplate.PersonsPhone))
+                            m.case_.PersonsPhone = caseTemplate.PersonsPhone;
 
                         if (caseTemplate.Region_Id.HasValue)
                             m.case_.Region_Id = caseTemplate.Region_Id;
