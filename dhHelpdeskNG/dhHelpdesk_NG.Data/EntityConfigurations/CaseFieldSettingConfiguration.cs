@@ -27,6 +27,8 @@
             this.Property(x => x.RequiredIfReopened).IsRequired();
             this.Property(x => x.ShowOnStartPage).IsRequired().HasColumnName("Show");
             this.Property(x => x.ShowExternal).IsRequired();
+            this.Property(x => x.ShowStatusBar).IsRequired();
+            this.Property(x => x.ShowExternalStatusBar).IsRequired();
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.RelatedField).IsRequired().HasMaxLength(50).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);

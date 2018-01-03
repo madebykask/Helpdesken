@@ -75,6 +75,16 @@ $(function () {
         max_selected_options: 4
     });
 
+    $('#showStatusBarIds, #showExternalStatusBarIds').chosen({
+        width: '315px',
+        max_selected_options: 10,
+        hide_results_on_select: false,
+        placeholder_text_multiple: placeholder_text_multiple,
+        no_results_text: no_results_text
+    });
+
+    //$("#showStatusBarIds, #showExternalStatusBarIds").bind("chosen:maxselected", function () { alert("max elements selected"); });
+
     var sectionElement;
     var sectionType;
 

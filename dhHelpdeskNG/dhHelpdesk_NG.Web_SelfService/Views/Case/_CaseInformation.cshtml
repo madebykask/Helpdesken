@@ -45,8 +45,6 @@
 
         if (!string.IsNullOrEmpty(Model.WorkingGroupName))
         {
-
-
             workingGroup = string.Format(templateText, Translation.GetForCase(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), customerId), Model.WorkingGroupName);
             texts.Add("Workinggroup", workingGroup);
         }

@@ -741,7 +741,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (model.SelectedWorkflowStep.HasValue && model.SelectedWorkflowStep.Value > 0)            
                 model.CaseDataModel = ApplyNextWorkflowStepOnCase(model.CaseDataModel, model.SelectedWorkflowStep.Value);
             
-            int caseId = -1;
+            var caseId = -1;
             decimal caseNum;
             
             //TODO: Refactor
@@ -769,21 +769,22 @@ namespace DH.Helpdesk.SelfService.Controllers
                 _userTemporaryFilesStorage.DeleteFiles(model.CaseDataModel.CaseFileKey);
                 #endregion
 
-                var showConfirmMessage = AppConfigHelper.GetAppSetting(AppSettingsKey.ConfirmMsgAfterCaseRegistration);
+                //var showConfirmMessage = AppConfigHelper.GetAppSetting(AppSettingsKey.ConfirmMsgAfterCaseRegistration);
 
-                if (!string.IsNullOrEmpty(showConfirmMessage) && showConfirmMessage == "true")
-                {
-                    SessionFacade.LastMessageDialog = new MessageDialogModel(
-                        MessageTypes.success,
-                        "Your case has been successfully registered.",
-                        $"You can follow up your case status via this number: {caseNum}");
+                //if (!string.IsNullOrEmpty(showConfirmMessage) && showConfirmMessage == "true")
+                //{
+                //    SessionFacade.LastMessageDialog = new MessageDialogModel(
+                //        MessageTypes.success,
+                //        "Your case has been successfully registered.",
+                //        $"You can follow up your case status via this number: {caseNum}");
 
-                    return RedirectToAction("Index", "Message");
-                }
-                else
-                {                    
-                    return RedirectToAction("UserCases", new { customerId = model.CustomerId });
-                }
+                //    return RedirectToAction("Index", "Message");
+                //}
+                //else
+                //{                    
+                //    return RedirectToAction("UserCases", new { customerId = model.CustomerId });
+                //}
+                return RedirectToAction("ExtendedCase", new {caseId = caseId});
             }
 
             if (model.CaseDataModel.OU_Id.HasValue)            

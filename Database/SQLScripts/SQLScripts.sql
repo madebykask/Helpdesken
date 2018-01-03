@@ -1973,6 +1973,21 @@ BEGIN
     ALTER TABLE tblGlobalSettings ALTER COLUMN [MultiCustomersSearch] int not null    
 END
 GO
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'ShowStatusBar' and
+	 sysobjects.name = N'tblCaseFieldSettings')
+begin
+	ALTER TABLE [tblCaseFieldSettings] ADD [ShowStatusBar] bit NOT NULL DEFAULT(0)
+end
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'ShowExternalStatusBar' and
+	 sysobjects.name = N'tblCaseFieldSettings')
+begin
+	ALTER TABLE [tblCaseFieldSettings] ADD [ShowExternalStatusBar] bit NOT NULL DEFAULT(0)
+end
+
+
 -- enable MultiCustomers
 -- UPDATE tblGlobalSettings SET [MultiCustomersSearch] = 1
 

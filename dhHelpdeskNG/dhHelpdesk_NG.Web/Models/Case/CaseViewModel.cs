@@ -306,7 +306,8 @@ namespace DH.Helpdesk.Web.Models.Case
 		public CaseSolution CurrentCaseSolution { get; internal set; }
 
         public int CurrentUserRole { get; set; }
-	}
+        public Dictionary<string, string> StatusBar { get; internal set; }
+    }
 
     public class CaseIndexViewModel
     {

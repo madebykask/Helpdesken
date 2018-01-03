@@ -16,6 +16,7 @@ using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Web.Areas.Inventory.Models;
 using DH.Helpdesk.Web.Models.Invoice;
+using DH.Helpdesk.Common.Tools;
 
 
 namespace DH.Helpdesk.Web.Controllers
@@ -5455,8 +5456,8 @@ namespace DH.Helpdesk.Web.Controllers
                         if (!string.IsNullOrEmpty(caseTemplate.PersonsEmail))
                             m.case_.PersonsEmail = caseTemplate.PersonsEmail;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.PersonsPhone))
-                            m.case_.PersonsPhone = caseTemplate.PersonsPhone;
+                        if (!string.IsNullOrEmpty(caseTemplate.PersonsEmail))
+                            m.case_.PersonsPhone = caseTemplate.PersonsEmail;
 
                         if (caseTemplate.Region_Id.HasValue)
                             m.case_.Region_Id = caseTemplate.Region_Id;
@@ -5890,9 +5891,298 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.InsideTheCase);
             m.CasePrintView = new ReportModel(false);
             m.UserHasInvoicePermission = userHasInvoicePermission;
-            m.IsCaseReopened = m.case_.CaseHistories != null && m.case_.CaseHistories.Where(ch => ch.FinishingDate.HasValue).Any(); 
+            m.IsCaseReopened = m.case_.CaseHistories != null && m.case_.CaseHistories.Where(ch => ch.FinishingDate.HasValue).Any();
+
+            m.StatusBar = isCreateNewCase ? new Dictionary<string, string>() : GetStatusBar(m);
 
             return m;
+        }
+
+        private Dictionary<string, string> GetStatusBar(CaseInputViewModel model)
+        {
+            var values = new Dictionary<string, string>();
+            var templateText = "<strong>{0}</strong>&nbsp;{1}&nbsp;|&nbsp;";
+            var settings = model.caseFieldSettings.Where(m => m.ShowStatusBar).Select(m => m.Name).ToList();
+            var defaultValue = "";
+            var dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
+            foreach (var setting in settings)
+            {
+                var template = "";
+                var value = "";
+                if(setting == GlobalEnums.TranslationCaseFields.ReportedBy.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.CostCentre.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.Place.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.UserCode.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.InventoryLocation.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.CaseNumber.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.RegTime.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.ChangeTime.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.Caption.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.Available.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.SolutionRate.ToString())
+                {
+                    var property = model.case_.GetType().GetProperty(setting);
+                    value = defaultValue;
+                    if (property != null)
+                    {
+                        var propValue = property.GetValue(model.case_, null);
+                        if (propValue != null)
+                            value = propValue.ToString();
+                    }
+
+                } else if (setting == GlobalEnums.TranslationCaseFields.Persons_Name.ToString())
+                {
+                    value = model.case_.PersonsName;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())
+                {
+                    value = model.case_.PersonsEmail;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())
+                {
+                    value = model.case_.PersonsPhone;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())
+                {
+                    value = model.case_.PersonsCellphone;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())
+                {
+                    value = model.case_.PersonsCellphone;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Region_Id.ToString())
+                {
+                    value = model.case_.Region != null ? model.case_.Region.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Department_Id.ToString())
+                {
+                    value = model.case_.Department != null ? model.case_.Department.DepartmentName : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.OU_Id.ToString())
+                {
+                    value = model.case_.Ou != null ? model.case_.Ou.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString())
+                {
+                    value = model.case_.IsAbout != null ? model.case_.IsAbout.ReportedBy : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString())
+                {
+                    value = model.case_.IsAbout != null ? model.case_.IsAbout.Person_Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString())
+                {
+                    value = model.case_.IsAbout != null ? model.case_.IsAbout.Person_Email : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString())
+                {
+                    value = model.case_.IsAbout != null ? model.case_.IsAbout.Person_Phone : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString())
+                {
+                    value = model.case_.IsAbout != null ? model.case_.IsAbout.Person_Cellphone : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString())
+                {
+                    var region = model.regions.FirstOrDefault(m => m.Id == model.case_.IsAbout.Region_Id);
+                    value = region != null ? region.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString())
+                {
+                    var department = model.departments.FirstOrDefault(m => m.Id == model.case_.IsAbout.Department_Id);
+                    value = department != null ? department.DepartmentName : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString())
+                {
+                    var ou = model.ous.FirstOrDefault(m => m.Id == model.case_.IsAbout.OU_Id);
+                    value = ou != null ? ou.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString())
+                {
+                    value = model.case_.IsAbout != null ? model.case_.IsAbout.CostCentre : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString())
+                {
+                    value = model.case_.IsAbout != null ? model.case_.IsAbout.Place : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString())
+                {
+                    value = model.case_.IsAbout != null ? model.case_.IsAbout.UserCode : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())
+                {
+                    value = model.case_.InventoryType;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())
+                {
+                    var regSource = model.case_.RegistrationSourceCustomer_Id.HasValue ?
+                        model.CustomerRegistrationSources.FirstOrDefault(m => m.Value == model.case_.RegistrationSourceCustomer_Id.Value.ToString()) :
+                        null;
+                    value = regSource != null ? regSource.Text : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.User_Id.ToString())
+                {
+                    value = defaultValue;
+                    if (model.RegByUser != null)
+                    {
+                        value = model.RegByUser.SurName;
+                        if (model.CaseOwnerDefaultWorkingGroup != null)
+                            value += string.Format(" {0}", model.CaseOwnerDefaultWorkingGroup.WorkingGroupName);
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrWhiteSpace(model.case_.RegUserName))
+                            value = model.case_.RegUserName;
+                        if (!string.IsNullOrWhiteSpace(model.case_.RegUserId))
+                            value += string.Format(" {0}", model.case_.RegUserId);
+                    }
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())
+                {
+                    var caseType = model.caseTypes.FirstOrDefault(m => m.Id == model.case_.CaseType_Id);
+
+                    if (caseType == null)
+                    {
+                        var productAreas = model.caseTypes;
+                        var maxDepth = 10;
+                        for (int i = 0; i < maxDepth; i++)
+                        {
+                            caseType = productAreas
+                                .Where(m => m.SubCaseTypes != null && m.SubCaseTypes.Any())
+                                .SelectMany(m => m.SubCaseTypes)
+                                .FirstOrDefault(m => m.Id == model.case_.CaseType_Id); ;
+                            if (caseType != null) break;
+                            productAreas = productAreas.Where(m => m.SubCaseTypes != null && m.SubCaseTypes.Any())
+                                .SelectMany(m => m.SubCaseTypes).ToList();
+                        }
+
+                    }
+                    value = caseType != null ? caseType.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())
+                {
+                    var prodArea = model.productAreas.FirstOrDefault(m => m.Id == model.case_.ProductArea_Id);
+                    if (prodArea == null)
+                    {
+                        var productAreas = model.productAreas;
+                        var maxDepth = 10;
+                        for (int i = 0; i < maxDepth; i++)
+                        {
+                            prodArea = productAreas
+                                .Where(m => m.SubProductAreas != null && m.SubProductAreas.Any())
+                                .SelectMany(m => m.SubProductAreas)
+                                .FirstOrDefault(m => m.Id == model.case_.ProductArea_Id); ;
+                            if(prodArea != null) break;
+                            productAreas = productAreas.Where(m => m.SubProductAreas != null && m.SubProductAreas.Any())
+                                .SelectMany(m => m.SubProductAreas).ToList();
+                        }
+                    }
+                    value = prodArea != null ? prodArea.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.System_Id.ToString())
+                {
+                    var system = model.systems.FirstOrDefault(m => m.Id == model.case_.System_Id);
+                    value = system != null ? system.SystemName : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())
+                {
+                    var urgency = model.urgencies.FirstOrDefault(m => m.Id == model.case_.Urgency_Id);
+                    value = urgency != null ? urgency.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Impact_Id.ToString())
+                {
+                    var impact = model.impacts.FirstOrDefault(m => m.Id == model.case_.Impact_Id);
+                    value = impact != null ? impact.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Category_Id.ToString())
+                {
+                    var cat = model.categories.FirstOrDefault(m => m.Id == model.case_.Category_Id);
+                    value = cat != null ? cat.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())
+                {
+                    var sup = model.suppliers.FirstOrDefault(m => m.Id == model.case_.Supplier_Id);
+                    value = sup != null ? sup.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.AgreedDate.ToString())
+                {
+                    value = model.case_.AgreedDate.HasValue ? model.case_.AgreedDate.Value.ToString(dateFormat) : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Cost.ToString())
+                {
+                    value = string.Format("{0}/{1} {2}", model.case_.Cost, model.case_.OtherCost, model.case_.Currency);
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())
+                {
+                    var wg = model.workingGroups.FirstOrDefault(m => m.Id == model.case_.WorkingGroup_Id);
+                    value = wg != null ? wg.WorkingGroupName : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())
+                {
+                    var resp = model.case_.CaseResponsibleUser_Id.HasValue
+                        ? model.ResponsibleUsersAvailable.FirstOrDefault(m =>
+                            m.Value == model.case_.CaseResponsibleUser_Id.Value.ToString())
+                        : null;
+                    value = resp != null ? resp.Text : defaultValue;
+                }
+
+                else if (setting == GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())
+                {
+                    var perfomer = model.case_.Performer_User_Id.HasValue ?
+                        model.Performers.FirstOrDefault(m => m.Value == model.case_.Performer_User_Id.Value.ToString()) :
+                        null;
+                    value = perfomer != null ? perfomer.Text : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Priority_Id.ToString())
+                {
+                    var priority = model.priorities.FirstOrDefault(m => m.Id == model.case_.Priority_Id);
+                    value = priority != null ? priority.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Status_Id.ToString())
+                {
+                    var status = model.statuses.FirstOrDefault(m => m.Id == model.case_.Status_Id);
+                    value = status != null ? status.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())
+                {
+                    var status = model.stateSecondaries.FirstOrDefault(m => m.Id == model.case_.StateSecondary_Id);
+                    value = status != null ? status.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.PlanDate.ToString())
+                {
+                    value = model.case_.PlanDate.HasValue ? model.case_.PlanDate.Value.ToString(dateFormat) : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.WatchDate.ToString())
+                {
+                    value = model.case_.WatchDate.HasValue ? model.case_.WatchDate.Value.ToString(dateFormat) : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Verified.ToString())
+                {
+                    value = Translation.GetCoreTextTranslation(model.case_.Verified == 1 ? "Ja" : "Nej");
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.CausingPart.ToString())
+                {
+                    var causing = model.case_.CausingPartId.HasValue ?
+                        model.causingParts.FirstOrDefault(m => m.Value == model.case_.CausingPartId.Value.ToString()) :
+                        null;
+                    value = causing != null ? causing.Text : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.FinishingDate.ToString())
+                {
+                    value = model.case_.FinishingDate.HasValue ? model.case_.FinishingDate.Value.ToString(dateFormat) : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.ClosingReason.ToString())
+                {
+                    value = model.FinishingCause;
+                }
+                template = string.Format(templateText, Translation.GetForCase(setting, model.CustomerSettings.CustomerId), value);
+                values.Add(setting, template);
+            }
+
+            return values;
         }
 
         private CaseSearchResultModel GetUnfilteredCases(
