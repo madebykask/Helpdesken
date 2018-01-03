@@ -61,6 +61,16 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                   .FirstOrDefault();
         }
 
+        public int GetCaseIdByExtendedCaseGuid(Guid uniqueId)
+        {
+            var query = from c_cd in DataContext.Case_ExtendedCases
+                where c_cd.ExtendedCaseData.ExtendedCaseGuid == uniqueId
+                select c_cd.Case_Id;
+
+            var caseId = query.FirstOrDefault();
+            return caseId;
+        }
+
         public ExtendedCaseDataModel GetExtendedCaseDataByCaseId(int caseId)
         {
             var case_ExtendedCaseEntity = DataContext.Case_ExtendedCases.Where(ce => ce.Case_Id == caseId).FirstOrDefault();

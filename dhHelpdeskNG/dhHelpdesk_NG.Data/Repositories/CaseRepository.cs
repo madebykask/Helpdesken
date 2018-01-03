@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         Case GetCaseById(int id, bool markCaseAsRead = false);
         Case GetCaseByGUID(Guid GUID);
+        int GetCaseIdByEmailGUID(Guid GUID);
         Case GetCaseByEmailGUID(Guid GUID);
         Case GetDetachedCaseById(int id);
         Case GetDetachedCaseIncludesById(int id);
@@ -146,6 +147,14 @@ namespace DH.Helpdesk.Dal.Repositories
                                               .FirstOrDefault();
 
             return caseEntity;
+        }
+
+        public int GetCaseIdByEmailGUID(Guid GUID)
+        {
+            var caseId = DataContext.EmailLogs.Where(e => e.EmailLogGUID == GUID && e.CaseHistory_Id > 0)
+                                              .Select(e => e.CaseHistory.Case_Id)
+                                              .FirstOrDefault();
+            return caseId;
         }
 
         public Case GetCaseByEmailGUID(Guid GUID)

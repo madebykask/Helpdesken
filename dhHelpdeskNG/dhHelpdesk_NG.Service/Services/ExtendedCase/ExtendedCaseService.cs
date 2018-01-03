@@ -100,7 +100,15 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
         {
             return _extendedCaseDataRepository.GetExtendedCaseDataByCaseId(caseID);
         }
+
+        public ExtendedCaseDataEntity GetExtendedCaseData(Guid uniqueId)
+        {
+            return _extendedCaseDataRepository.GetExtendedCaseData(uniqueId);
+        }
+
+        public int GetCaseIdByExtendedCaseGuid(Guid uniqueId)
+        {
+            return _extendedCaseDataRepository.GetCaseIdByExtendedCaseGuid(uniqueId);
+        }
     }
-
-
 }

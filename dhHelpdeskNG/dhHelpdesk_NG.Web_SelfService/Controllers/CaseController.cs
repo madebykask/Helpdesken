@@ -182,89 +182,86 @@ namespace DH.Helpdesk.SelfService.Controllers
             _customerUserService = customerUserService;
         }
 
-
         [HttpGet]
         public ActionResult Index(string id, bool showRegistrationMessage = false)
         {
             if(string.IsNullOrEmpty(id))
-                return null;
+            {
+                ErrorGenerator.MakeError("Id was not specified!", 210);
+                return RedirectToAction("Index", "Error");
+            }
 
-            int customerId = -1;
+            var caseId = 0;
 
-            Case currentCase = null;
-
-            if(id.Is<Guid>())
+            if (id.Is<Guid>())
             {
                 var guid = new Guid(id);
-                currentCase = _caseService.GetCaseByEMailGUID(guid);
-                if (currentCase == null)
+                caseId = _caseService.GetCaseIdByEmailGUID(guid);
+                if (caseId == 0)
                 {
                     ErrorGenerator.MakeError("Link is not valid!");
                     return RedirectToAction("Index", "Error");
                 }
 
-                customerId = currentCase.Customer_Id;
-                var dynamicCase = _caseService.GetDynamicCase(currentCase.Id);
-                var dynamicUrl = "";
+                // open extended case by guid
+                var data = _extendedCaseService.GetExtendedCaseFromCase(caseId);
+                if (data != null)
+                {
+                    return RedirectToAction("ExtendedCasePublic", new {uniqueId = data.ExtendedCaseGuid});
+                }
+                
+                //check dynamic case
+                var dynamicCase = _caseService.GetDynamicCase(caseId);
                 if (dynamicCase != null)
                 {
-                    dynamicUrl =  $"/{dynamicCase.FormPath}";
+                    //todo: refactor to use common class
+                    var dynamicUrl = $"/{dynamicCase.FormPath}";
                     if (!string.IsNullOrEmpty(dynamicUrl)) // Show Case in eform
                     {
-                        var urlStr = dynamicUrl.SetUrlParameters(currentCase.Id);
-                        var url = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, urlStr);                         
+                        var urlStr = dynamicUrl.SetUrlParameters(caseId);
+                        var url = $"{Request.Url.Scheme}://{Request.Url.Authority}{urlStr}";
                         return Redirect(url);
                     }
                 }
             }
             else
             {
-                int _intCaseId;
-
-                if (!int.TryParse(id, out _intCaseId))
+                if (!int.TryParse(id, out caseId))
                 {
                     ErrorGenerator.MakeError("Case Id is not valid!");
                     return RedirectToAction("Index", "Error");
                 }
-
-                currentCase = _caseService.GetCaseById(_intCaseId);                
-
-                if (currentCase == null)
-                {
-                    ErrorGenerator.MakeError("Case not found!");
-                    return RedirectToAction("Index", "Error");
-                }
-
-                if (!UserHasAccessToCase(currentCase))
-                {
-                    ErrorGenerator.MakeError("Case not found among your cases!");
-                    return RedirectToAction("Index", "Error");
-                }                
             }
+            
+            var currentCase = _caseService.GetCaseById(caseId);                
 
-            if(currentCase == null)
+            if (currentCase == null)
             {
                 ErrorGenerator.MakeError("Case not found!");
-                return RedirectToAction("Index", "Error");                
+                return RedirectToAction("Index", "Error");
             }
-            else
+
+            if (!UserHasAccessToCase(currentCase))
             {
-                if (currentCase.CaseExtendedCaseDatas.Any())
-                    return RedirectToAction("ExtendedCase", new { caseId = currentCase.Id });
-
-                if(currentCase.FinishingDate == null)
-                {
-                    ViewBag.CurrentCaseId = currentCase.Id;
-                }
-
-                currentCase.Description = currentCase.Description.Replace("\n", EnterMarkup);
-                customerId = currentCase.Customer_Id;
+                ErrorGenerator.MakeError("Case not found among your cases!");
+                return RedirectToAction("Index", "Error");
             }
 
-            Customer currentCustomer = default(Customer);
+            if (currentCase.CaseExtendedCaseDatas.Any())
+                return RedirectToAction("ExtendedCase", new { caseId = currentCase.Id });
 
+            if (currentCase.FinishingDate == null)
+            {
+                ViewBag.CurrentCaseId = currentCase.Id;
+            }
+
+            currentCase.Description = currentCase.Description.Replace("\n", EnterMarkup);
+            
+            Customer currentCustomer;
             if (SessionFacade.CurrentCustomer != null)
+            {
                 currentCustomer = SessionFacade.CurrentCustomer;
+            }
             else
             {
                 ErrorGenerator.MakeError("Customer is not valid!");
@@ -284,12 +281,12 @@ namespace DH.Helpdesk.SelfService.Controllers
             _userTemporaryFilesStorage.DeleteFiles(caseReceipt.ExLogFileGuid);
             _userTemporaryFilesStorage.DeleteFiles(id);
                         
-            if(id.Is<Guid>())
+            if (id.Is<Guid>())
             {
                 if(currentCase.StateSecondary_Id.HasValue && caseReceipt.CasePreview.FinishingDate == null)
                 {
                     var stateSecondary = _stateSecondaryService.GetStateSecondary(currentCase.StateSecondary_Id.Value);
-                    if(stateSecondary.NoMailToNotifier == 1)
+                    if (stateSecondary.NoMailToNotifier == 1)
                         caseReceipt.CasePreview.FinishingDate = DateTime.UtcNow; 
                 }
                 caseReceipt.CanAddExternalNote = true;
@@ -580,12 +577,47 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
+        public ActionResult ExtendedCasePublic(string uniqueId)
+        {
+            var exCaseGuid = Guid.Empty;
+            if (!Guid.TryParse(uniqueId, out exCaseGuid))
+            {
+                ErrorGenerator.MakeError("UniqueId value must be specified!", 210);
+                return RedirectToAction("Index", "Error");
+            }
+
+            var caseId = _extendedCaseService.GetCaseIdByExtendedCaseGuid(exCaseGuid);
+            if (caseId <= 0)
+            {
+                ErrorGenerator.MakeError("Extended case data not found!", 210);
+                return RedirectToAction("Index", "Error");
+            }
+
+            var model = GetExtendedCaseViewModel(null, caseId);
+            if (ErrorGenerator.HasError())
+                return RedirectToAction("Index", "Error");
+
+
+            return View("ExtendedCase", model);
+        }
+
+        [HttpGet]
         public ActionResult ExtendedCase(int? caseTemplateId = null, int? caseId = null)
+        {
+            var model = GetExtendedCaseViewModel(caseTemplateId, caseId);
+            if (ErrorGenerator.HasError())
+                return RedirectToAction("Index", "Error");
+
+
+            return View("ExtendedCase", model);
+        }
+
+        private ExtendedCaseViewModel GetExtendedCaseViewModel(int? caseTemplateId = null, int? caseId = null)
         {
             if (caseTemplateId.IsNew() && caseId.IsNew())
             {
                 ErrorGenerator.MakeError("Template or Case must be specified!", 210);
-                return RedirectToAction("Index", "Error");
+                return null;
             }
 
             var caseModel = new CaseModel
@@ -602,36 +634,34 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (caseTemplateId.HasValue)
                 caseTemplate = _caseSolutionService.GetCaseSolution(caseTemplateId.Value);
 
-            if (caseId.HasValue)            
-                caseModel = _universalCaseService.GetCase(caseId.Value);               
-            
+            if (caseId.HasValue)
+                caseModel = _universalCaseService.GetCase(caseId.Value);
+
             if (caseModel == null && caseTemplate == null)
             {
                 ErrorGenerator.MakeError("Template or Case must be specified!", 211);
-                return RedirectToAction("Index", "Error");
+                return null;
             }
-            
+
             if (caseId.HasValue && !UserHasAccessToCase(caseModel))
             {
                 ErrorGenerator.MakeError("Case not found among your cases!");
-                return RedirectToAction("Index", "Error");
+                return null;
             }
 
-            var currentCustomer = default(Customer);
-            if (SessionFacade.CurrentCustomer != null)
-                currentCustomer = SessionFacade.CurrentCustomer;
-            else
+            if (SessionFacade.CurrentCustomer == null)
             {
-                var _cusId = caseModel != null && caseModel.Customer_Id > 0 ?
-                    caseModel.Customer_Id : (caseTemplate != null ? caseTemplate.Customer_Id : 0);
+                var cusId = caseModel != null && caseModel.Customer_Id > 0
+                    ? caseModel.Customer_Id
+                    : (caseTemplate?.Customer_Id ?? 0);
 
-                currentCustomer = _customerService.GetCustomer(_cusId);
+                SessionFacade.CurrentCustomer = _customerService.GetCustomer(cusId);
             }
 
             if (SessionFacade.CurrentCustomer == null)
             {
                 ErrorGenerator.MakeError("Customer is not valid!");
-                return RedirectToAction("Index", "Error");
+                return null;
             }
 
             var languageId = SessionFacade.CurrentLanguageId;
@@ -651,16 +681,14 @@ namespace DH.Helpdesk.SelfService.Controllers
                     !caseTemplate.ShowInSelfService || caseTemplate.Customer_Id != customerId)
                 {
                     ErrorGenerator.MakeError("Selected template is not available anymore!");
-                    return RedirectToAction("Index", "Error");
+                    return null;
                 }
             }
-            else
+
+            if (caseId.HasValue && caseModel.Customer_Id != customerId)
             {
-                if (caseModel != null && caseModel.Customer_Id != customerId)
-                {
-                    ErrorGenerator.MakeError("Selected Case is not belong to current customer!");
-                    return RedirectToAction("Index", "Error");
-                }
+                ErrorGenerator.MakeError("Selected Case is not belong to current customer!");
+                return null;
             }
 
             if (caseId == null || caseId == 0)
@@ -691,7 +719,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (extendedCaseDataModel == null)
             {
                 ErrorGenerator.MakeError(lastError);
-                return RedirectToAction("Index", "Error");
+                return null;
             }
 
             var model = new ExtendedCaseViewModel
@@ -703,12 +731,11 @@ namespace DH.Helpdesk.SelfService.Controllers
                 ExtendedCaseDataModel = extendedCaseDataModel,
                 CurrentUser = SessionFacade.CurrentUserIdentity.EmployeeNumber,
                 UserRole = initData.UserRole,
-                StateSecondaryId =  caseStateSecondaryId,
+                StateSecondaryId = caseStateSecondaryId,
                 CaseOU = caseModel.OU_Id.HasValue ? _ouService.GetOU(caseModel.OU_Id.Value) : null,
                 WorkflowSteps = GetWorkflowStepModel(customerId, caseId ?? 0, caseTemplateId ?? 0).ToList(),
                 CaseDataModel = caseModel
             };
-
 
             if (string.IsNullOrEmpty(model.ExtendedCaseDataModel.FormModel.Name))
             {
@@ -718,11 +745,11 @@ namespace DH.Helpdesk.SelfService.Controllers
                 if (caseTemplate != null)
                     model.ExtendedCaseDataModel.FormModel.Name = caseTemplate.Name;
             }
-                
+
             if (!caseId.IsNew() && !model.CaseDataModel.FinishingDate.HasValue)
                 ViewBag.CurrentCaseId = caseId.Value;
 
-            return View("ExtendedCase", model);
+            return model;
         }
 
         [HttpPost]
