@@ -5,6 +5,8 @@ using DH.Helpdesk.BusinessData.Models.WorktimeCalculator;
 using DH.Helpdesk.SelfService.Controllers.Behaviors;
 using DH.Helpdesk.SelfService.Entites;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
+using log4net;
+using log4net.Core;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
@@ -46,6 +48,8 @@ namespace DH.Helpdesk.SelfService.Controllers
 
     public class CaseController : BaseController
     {
+        private readonly ILog _logger = LogManager.GetLogger(typeof(CaseController));
+
         private readonly ICustomerService _customerService;
         private readonly IInfoService _infoService;
         private readonly ICaseService _caseService;
@@ -208,7 +212,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 var data = _extendedCaseService.GetExtendedCaseFromCase(caseId);
                 if (data != null)
                 {
-                    return RedirectToAction("ExtendedCasePublic", new {uniqueId = data.ExtendedCaseGuid});
+                    return RedirectToAction("ExtendedCasePublic", new { id = data.ExtendedCaseGuid });
                 }
                 
                 //check dynamic case
@@ -578,16 +582,19 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
-        public ActionResult ExtendedCasePublic(string uniqueId)
+        public ActionResult ExtendedCasePublic(string id)
         {
-            var exCaseGuid = Guid.Empty;
-            if (!Guid.TryParse(uniqueId, out exCaseGuid))
+            _logger.Warn($"ExtendedCasePublic: {id}");
+            var uniqueId = Guid.Empty;
+
+            if (!Guid.TryParse(id, out uniqueId))
             {
+                _logger.Warn($"ExtendedCasePublic: failed to parse - {id}");
                 ErrorGenerator.MakeError("UniqueId value must be specified!", 210);
                 return RedirectToAction("Index", "Error");
             }
 
-            var caseId = _extendedCaseService.GetCaseIdByExtendedCaseGuid(exCaseGuid);
+            var caseId = _extendedCaseService.GetCaseIdByExtendedCaseGuid(uniqueId);
             if (caseId <= 0)
             {
                 ErrorGenerator.MakeError("Extended case data not found!", 210);
