@@ -20,7 +20,8 @@
             int position,
             int maxSize,
             FieldTypes fieldTypes,
-            string value)
+            string value,
+            bool isReadOnly = false)
         {
             this.InventoryTypePropertyId = inventoryTypePropertyId;
             this.GroupId = groupId;
@@ -29,6 +30,7 @@
             this.MaxSize = maxSize;
             this.FieldTypes = fieldTypes;
             this.Value = value;
+            this.IsReadOnly = isReadOnly;
         }
 
         [IsId]
@@ -55,5 +57,7 @@
 
         [LocalizedMaxSizeFrom("IsUseMaxSize", "MaxSize")]
         public string Value { get; set; }
+
+        public bool IsReadOnly { get; set; }
     }
 }

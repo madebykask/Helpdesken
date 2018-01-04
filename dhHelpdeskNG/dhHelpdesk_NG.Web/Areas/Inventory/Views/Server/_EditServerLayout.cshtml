@@ -2,33 +2,33 @@
 @using DH.Helpdesk.Web.Infrastructure
 @model BaseEditServerModel
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = Model.IsForDialog ? "~/Views/Shared/_PopupLayout.cshtml" : "~/Views/Shared/_Layout.cshtml";
 }
 
 @RenderSection("Scripts", false)
 
-<div class="secnavs fixed">
+<div class="secnavs fixed" style="@(Model.IsForDialog ? "top: 0" : "")">
     <div class="pull-left">
         @RenderSection("Actions", false)
     </div>
 </div>
-<div class="content">
+<div class="content" style="@(Model.IsForDialog ? "margin-top: 50px" : "")">
     <div class="container">
         <ul class="nav nav-tabs nav-tabs-actions">
             <li class="@GetIsActive(ServerEditTabs.Server)">
-                @Html.ActionLink(Translation.Get("Servrar"), "Edit", "Server", new { id = Model.Id }, new { })
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Servrar"), "Edit", "Server", new { id = Model.Id, dialog = Model.IsForDialog }, new { })
             </li>
             <li class="@GetIsActive(ServerEditTabs.Storage)">
-                @Html.ActionLink(Translation.Get("Lagring"), "Storage", "Server", new { serverId = Model.Id }, new { })
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Lagring"), "Storage", "Server", new { serverId = Model.Id, dialog = Model.IsForDialog }, new { })
             </li>
             <li class="@GetIsActive(ServerEditTabs.Programs)">
-                @Html.ActionLink(Translation.Get("Program"), "Software", "Server", new { serverId = Model.Id }, new { })
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Program"), "Software", "Server", new { serverId = Model.Id, dialog = Model.IsForDialog }, new { })
             </li>
             <li class="@GetIsActive(ServerEditTabs.Hotfix)">
-                @Html.ActionLink(Translation.Get("Hotfix"), "HotFixes", "Server", new { serverId = Model.Id }, new { })
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Hotfix"), "HotFixes", "Server", new { serverId = Model.Id, dialog = Model.IsForDialog }, new { })
             </li>
             <li class="@GetIsActive(ServerEditTabs.OperationLog)">
-                @Html.ActionLink(Translation.Get("Logg"), "Logs", "Server", new { serverId = Model.Id }, new { })
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Logg"), "Logs", "Server", new { serverId = Model.Id, dialog = Model.IsForDialog }, new { })
             </li>
         </ul>
         <div class="tab-content overflow-visible">

@@ -10,12 +10,12 @@
         @if (Model.UserHasInventoryAdminPermission)
         {
             <li id="menu1">
-                <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#workstation_edit_form').submit(); "/>
+                <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn" onclick=" $('#workstation_edit_form').submit(); "/>
             </li>
             if (!Model.IsForDialog)
             {
                 <li id="menu3">
-                    @Html.ActionLink(Translation.Get("Ta bort"), "Delete", new {id = Model.ComputerViewModel.Id}, new
+                    @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "Delete", new {id = Model.ComputerViewModel.Id}, new
                     {@class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?"})
                 </li>
             }

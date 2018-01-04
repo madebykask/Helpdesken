@@ -12,7 +12,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers
 
         PrinterFieldsSettings GetFieldSettingsForEdit(int customerId, int languageId);
 
-        PrinterFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId);
+        PrinterFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false);
 
         PrinterFieldsSettingsOverview GetFieldSettingsOverview(int customerId, int languageId);
 

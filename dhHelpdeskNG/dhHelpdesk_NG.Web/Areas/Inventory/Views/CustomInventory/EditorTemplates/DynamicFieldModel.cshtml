@@ -12,7 +12,9 @@
             {
                 case FieldTypes.Bool:
                     var boolValue = !string.IsNullOrWhiteSpace(Model.Value) && Model.Value == DynamicFieldModel.True;
-                    @Html.CheckBoxFor(m => boolValue, new { Name = ViewData.TemplateInfo.HtmlFieldPrefix + ".Value" })
+                    @(Model.IsReadOnly
+                        ? Html.CheckBoxFor(m => boolValue, new {@readonly = true, @disabled = "disabled", Name = ViewData.TemplateInfo.HtmlFieldPrefix + ".Value"})
+                        : Html.CheckBoxFor(m => boolValue, new {Name = ViewData.TemplateInfo.HtmlFieldPrefix + ".Value"}))
                     break;
                 case FieldTypes.Date:
                     DateTime dateValueTemp;
@@ -21,10 +23,14 @@
                     {
                         dateValue = dateValueTemp;
                     }
-                    @Html.EditorFor(m => dateValue, "DatePicker", new { id = "general_finishing_date_datepicker" + ViewData["Id"], Name = ViewData.TemplateInfo.HtmlFieldPrefix + ".Value" })
+                    @(Model.IsReadOnly
+                        ? Html.DisplayFor(m => dateValue, "Date")
+                        : Html.EditorFor(m => dateValue, "DatePicker", new {id = "general_finishing_date_datepicker" + ViewData["Id"], Name = ViewData.TemplateInfo.HtmlFieldPrefix + ".Value"}))
                     break;
                 case FieldTypes.Text:
-                    @Html.TextBoxFor(m => m.Value, new Dictionary<string, object> { { "data-dh-is-use-maxlength", Model.IsUseMaxSize }, { "data-dh-maxlength", Model.MaxSize } })
+                    @(Model.IsReadOnly
+                        ? Html.TextBoxFor(m => m.Value, new {@readonly = true})
+                        : Html.TextBoxFor(m => m.Value, new Dictionary<string, object> {{"data-dh-is-use-maxlength", Model.IsUseMaxSize}, {"data-dh-maxlength", Model.MaxSize}}))
                     @Html.ValidationMessageFor(m => m.Value)
                     @Html.HiddenFor(m => m.IsUseMaxSize)
                     @Html.HiddenFor(m => m.MaxSize)
@@ -32,10 +38,12 @@
                     break;
                 case FieldTypes.Numeric:
                     var intValue = !string.IsNullOrWhiteSpace(Model.Value) ? (int?)int.Parse(Model.Value) : null;
-                    @Html.TextBoxFor(m => intValue, new { Name = ViewData.TemplateInfo.HtmlFieldPrefix + ".Value" })
+                    @(Model.IsReadOnly
+                        ? Html.TextBoxFor(m => intValue, new {@readonly = true})
+                        : Html.TextBoxFor(m => intValue, new {Name = ViewData.TemplateInfo.HtmlFieldPrefix + ".Value"}))
                     break;
                 default:
-                    @Html.EditorFor(m => Model.Value)
+                    @(Model.IsReadOnly ? Html.EditorFor(m => Model.Value, new { @readonly = true }) : Html.EditorFor(m => Model.Value))
                     break;
             }
         }

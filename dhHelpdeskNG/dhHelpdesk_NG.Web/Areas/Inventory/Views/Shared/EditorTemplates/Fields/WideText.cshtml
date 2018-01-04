@@ -1,0 +1,28 @@
+﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.ConfigurableFieldModel<string>
+@if (!Model.Show)
+{
+    return;
+}
+@{
+    var validationMessage = string.Format(" {0} {1}", Html.PureFieldCaption(Model), Translation.Get("måste anges"));
+}
+
+<tr>
+    <td class="span3">
+        @Html.FieldCaption(Model)
+    </td>
+    <td class="span9">
+        @if (!Model.IsReadOnly)
+        {
+            @Html.TextAreaFor(m => m.Value, new { data_dh_is_required = Model.IsRequired, @class = "inputw500 inputmh100" })
+            @Html.HiddenFor(m => m.IsRequired)
+            @Html.ValidationMessageFor(m => m.Value, validationMessage)
+        }
+        else
+        {
+            @Html.TextAreaFor(m => m.Value, new { @readonly = true })
+        }
+    </td>
+</tr>

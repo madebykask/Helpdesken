@@ -5,14 +5,14 @@
         || Model.Model.Show
         || Model.SerialNumber.Show)
 {
-    <h4>@Translation.Get("Allmänt")</h4>
+    <h4>@Translation.GetCoreTextTranslation("Allmänt")</h4>
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @Html.EditorFor(m => m.Name, "NotReadonlyFields/Text")
-                @Html.EditorFor(m => m.Manufacturer, "NotReadonlyFields/Text")
-                @Html.EditorFor(m => m.Model, "NotReadonlyFields/Text")
-                @Html.EditorFor(m => m.SerialNumber, "NotReadonlyFields/Text")
+                @Html.EditorFor(m => m.Name, "Fields/Text")
+                @Html.EditorFor(m => m.Manufacturer, "Fields/Text")
+                @Html.EditorFor(m => m.Model, "Fields/Text")
+                @Html.EditorFor(m => m.SerialNumber, "Fields/Text")
             </table>
         </div>
     </div>

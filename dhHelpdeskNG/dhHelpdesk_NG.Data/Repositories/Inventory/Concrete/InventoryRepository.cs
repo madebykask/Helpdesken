@@ -309,6 +309,12 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             models.ForEach(x => this.DbSet.Remove(x));
         }
 
+        public int GetIdByName(string inventoryName, int inventoryTypeId)
+        {
+            var inventory = DbSet.FirstOrDefault(x => x.InventoryType_Id == inventoryTypeId && x.InventoryName.Equals(inventoryName));
+            return inventory?.Id ?? 0;
+        }
+
         private void Map(Inventory businessModel, Domain.Inventory.Inventory entity)
         {
             entity.Department_Id = businessModel.DepartmentId;

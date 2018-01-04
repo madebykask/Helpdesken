@@ -176,45 +176,42 @@
         }
 
         [HttpGet]
-        public ViewResult Edit(int id, int inventoryTypeId)
+        public ViewResult Edit(int id, int inventoryTypeId, bool dialog = false)
         {
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            var readOnly = !userHasInventoryAdminPermission && dialog;
+
             InventoryOverviewResponse model = this.inventoryService.GetInventory(id);
-            InventoryFieldSettingsForModelEditResponse settings = this.inventorySettingsService.GetInventoryFieldSettingsForModelEdit(inventoryTypeId);
+            InventoryFieldSettingsForModelEditResponse settings = this.inventorySettingsService.GetInventoryFieldSettingsForModelEdit(inventoryTypeId, readOnly);
             InventoryEditOptions options = this.GetInventoryInventoryEditOptions(SessionFacade.CurrentCustomer.Id);
             List<TypeGroupModel> typeGroupModels = this.inventoryService.GetTypeGroupModels(inventoryTypeId);
 
-            InventoryViewModel inventoryViewModel = this.inventoryViewModelBuilder.BuildViewModel(
-                model.Inventory,
-                options,
-                settings.InventoryFieldSettingsForModelEdit);
-            List<DynamicFieldModel> dynamicFieldsModel = this.dynamicsFieldsModelBuilder.BuildViewModel(
-                model.DynamicData,
-                settings.InventoryDynamicFieldSettingForModelEditData,
-                id);
+            InventoryViewModel inventoryViewModel = this.inventoryViewModelBuilder.BuildViewModel(model.Inventory, options, settings.InventoryFieldSettingsForModelEdit);
+            List<DynamicFieldModel> dynamicFieldsModel = this.dynamicsFieldsModelBuilder.BuildViewModel(model.DynamicData, settings.InventoryDynamicFieldSettingForModelEditData, id);
             inventoryViewModel.Name = model.Inventory.InventoryTypeName;
+            inventoryViewModel.IsForDialog = dialog;
 
-            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
-
-            var viewModel = new InventoryEditViewModel(inventoryViewModel, dynamicFieldsModel, typeGroupModels);
-            viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
+            var viewModel = new InventoryEditViewModel(inventoryViewModel, dynamicFieldsModel, typeGroupModels)
+            {
+                UserHasInventoryAdminPermission = userHasInventoryAdminPermission,
+                IsForDialog = dialog
+            };
 
             return this.View(viewModel);
         }
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public RedirectToRouteResult Edit(
-            InventoryViewModel inventoryViewModel,
-            List<DynamicFieldModel> allModels)
+        public RedirectToRouteResult Edit(InventoryViewModel inventoryViewModel, List<DynamicFieldModel> allModels)
         {
             InventoryForUpdate businessModel = this.inventoryModelBuilder.BuildForUpdate(inventoryViewModel, OperationContext);
-            List<InventoryValueForWrite> dynamicBusinessModels = this.inventoryValueBuilder.BuildForWrite(
-                inventoryViewModel.Id,
-                allModels);
-            this.inventoryService.UpdateInventory(
-                businessModel,
-                dynamicBusinessModels,
-                inventoryViewModel.InventoryTypeId);
+            List<InventoryValueForWrite> dynamicBusinessModels = this.inventoryValueBuilder.BuildForWrite(inventoryViewModel.Id, allModels);
+            this.inventoryService.UpdateInventory(businessModel, dynamicBusinessModels, inventoryViewModel.InventoryTypeId);
+
+            if (inventoryViewModel.IsForDialog)
+            {
+                return RedirectToAction("Edit", new { id = inventoryViewModel.Id, inventoryTypeId = inventoryViewModel.InventoryTypeId, dialog = inventoryViewModel.IsForDialog });
+            }
 
             return this.RedirectToAction("Index", new { inventoryTypeId = inventoryViewModel.InventoryTypeId });
         }

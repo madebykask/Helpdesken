@@ -194,6 +194,12 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
             return result;
         }
 
+        public int GetIdByName(string printerName, int customerId)
+        {
+            var printer = DbSet.FirstOrDefault(x => x.Customer_Id == customerId && x.PrinterName.Equals(printerName));
+            return printer?.Id ?? 0;
+        }
+
         private static void Map(Domain.Printers.Printer entity, Printer businessModel)
         {
             entity.PrinterName = businessModel.GeneralFields.Name ?? string.Empty;

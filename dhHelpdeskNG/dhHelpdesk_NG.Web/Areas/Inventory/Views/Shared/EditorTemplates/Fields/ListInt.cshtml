@@ -1,10 +1,5 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Inventory.ConfigurableFieldModel<int?>
-@if (!Model.Show)
-{
-    return;
-}           
-
+@model int?
 @{
     if (!ViewData.ContainsKey("Source"))
     {
@@ -12,6 +7,8 @@
     }
 
     var source = (SelectList)ViewData["Source"];
+    var label = (string)ViewData["Label"];
+    var readOnly = (bool)ViewData["IsReadOnly"];
 
     var attributes = new Dictionary<string, object>();
 
@@ -19,28 +16,25 @@
     {
         attributes.Add("Id", ViewData["Id"]);
     }
+
+    var validationMessage = string.Format(" {0} {1}", label, Translation.GetCoreTextTranslation("måste anges"));
 }
 
 <tr>
     <td class="span3">
-        @Translation.Get(Model.Caption)
+        @label
     </td>
     <td class="span9">
-        @if (!Model.IsReadOnly)
+        @if (!readOnly)
         {
             @Html.DropDownListFor(m => m.Value, source, string.Empty, attributes)
-            @Html.ValidationMessageFor(m => m.Value)
+            @Html.ValidationMessageFor(m => m.Value, validationMessage)
         }
         else
         {
-            if (!Model.Value.HasValue)
-            {
-                @Html.TextBoxFor(m => m.Value, new { @readonly = true })
-            }
-            else
-            {
-                @Html.TextBoxFor(m => source.SingleOrDefault(x => x.Value == Model.Value.ToString()).Text, new { @readonly = true })
-            }
+            @(!Model.HasValue
+                ? Html.TextBoxFor(m => m, new {@readonly = true})
+                : Html.TextBoxFor(m => source.SingleOrDefault(x => x.Value == Model.Value.ToString()).Text, new {@readonly = true}))
         }
     </td>
 </tr>

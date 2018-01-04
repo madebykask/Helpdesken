@@ -124,13 +124,11 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             return settingAgregate;
         }
 
-        public InventoryFieldSettingsForModelEdit GetFieldSettingsForModelEdit(int inventoryTypeId)
+        public InventoryFieldSettingsForModelEdit GetFieldSettingsForModelEdit(int inventoryTypeId, bool isReadonly = false)
         {
             var settings = this.GetSettings(inventoryTypeId);
 
-            var anonymus =
-                settings.Select(
-                    s =>
+            var anonymus = settings.Select(s =>
                     new
                     {
                         Caption = s.PropertyValue,
@@ -139,14 +137,13 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         s.PropertySize
                     }).ToList();
 
-            var mapperData =
-                anonymus.Select(
-                    s =>
+            var mapperData = anonymus.Select(s =>
                     new InventoryFieldSettingMapperDataForModelEdit
                     {
                         Caption = s.Caption,
                         FieldName = s.FieldName.ToString(CultureInfo.InvariantCulture),
                         Show = s.Show,
+                        ReadOnly = isReadonly ? 1 : 0,
                         PropertySize = s.PropertySize
                     }).ToList();
 
@@ -163,8 +160,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             var workstation = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.Workstation.ToString(CultureInfo.InvariantCulture)));
             var info = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)));
 
-            var settingAgregate =
-                new InventoryFieldSettingsForModelEdit(
+            var settingAgregate = new InventoryFieldSettingsForModelEdit(
                     new BusinessData.Models.Inventory.Output.Settings.ModelEdit.InventorySettings.DefaultFieldSettings(
                         department,
                         name,
@@ -395,10 +391,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
         private static InventoryFieldSettingForModelEdit CreateFieldSettingForModelEdit(InventoryFieldSettingMapperDataForModelEdit fieldSetting)
         {
-            return new InventoryFieldSettingForModelEdit(
-                fieldSetting.Caption,
-                fieldSetting.PropertySize,
-                fieldSetting.Show.ToBool());
+            return new InventoryFieldSettingForModelEdit(fieldSetting.Caption, fieldSetting.PropertySize, fieldSetting.Show.ToBool(), fieldSetting.ReadOnly.ToBool());
         }
 
         private static InventoryFieldSettingForProcessing CreateFieldSettingForProcessing(

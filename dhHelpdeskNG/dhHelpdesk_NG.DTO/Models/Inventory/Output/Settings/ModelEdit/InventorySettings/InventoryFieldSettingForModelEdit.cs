@@ -7,11 +7,13 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.In
         public InventoryFieldSettingForModelEdit(
             string caption,
             int propertySize,
-            bool showInDetails)
+            bool showInDetails,
+            bool readOnly)
         {
             this.Caption = caption;
             this.PropertySize = propertySize;
             this.ShowInDetails = showInDetails;
+            this.ReadOnly = readOnly;
         }
 
         [NotNullAndEmpty]
@@ -20,5 +22,7 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.In
         public int PropertySize { get; private set; }
 
         public bool ShowInDetails { get; private set; }
+
+        public bool ReadOnly { get; set; }
     }
 }

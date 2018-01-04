@@ -123,21 +123,23 @@
         }
 
         [HttpGet]
-        public ViewResult Edit(int id)
+        public ViewResult Edit(int id, bool dialog = false)
         {
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            var readOnly = !userHasInventoryAdminPermission && dialog;
+
             ServerForRead model = this.inventoryService.GetServer(id);
             ServerEditOptions options = this.GetServerEditOptions(SessionFacade.CurrentCustomer.Id);
-            ServerFieldsSettingsForModelEdit settings =
-                this.inventorySettingsService.GetServerFieldSettingsForModelEdit(
-                    SessionFacade.CurrentCustomer.Id,
-                    SessionFacade.CurrentLanguageId);
-
-            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            ServerFieldsSettingsForModelEdit settings = inventorySettingsService.GetServerFieldSettingsForModelEdit(
+                SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId, readOnly);
 
             ServerViewModel serverEditModel = this.serverViewModelBuilder.BuildViewModel(model, options, settings);
-
-            var viewModel = new ServerEditViewModel(id, serverEditModel );
-            viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
+            serverEditModel.IsForDialog = dialog;
+            var viewModel = new ServerEditViewModel(id, serverEditModel)
+            {
+                UserHasInventoryAdminPermission = userHasInventoryAdminPermission,
+                IsForDialog = dialog
+            };
 
             return this.View(viewModel);
         }
@@ -148,7 +150,10 @@
         {
             ServerForUpdate businessModel = this.serverBuilder.BuildForUpdate(serverViewModel, this.OperationContext);
             this.inventoryService.UpdateServer(businessModel, this.OperationContext);
-
+            if (serverViewModel.IsForDialog)
+            {
+                return RedirectToAction("Edit", new { id = serverViewModel.Id, dialog = serverViewModel.IsForDialog });
+            }
             return this.RedirectToAction("Index");
         }
 
@@ -176,41 +181,41 @@
         }
 
         [HttpGet]
-        public ViewResult Storage(int serverId)
+        public ViewResult Storage(int serverId, bool dialog = false)
         {
             List<LogicalDriveOverview> models = this.computerModulesService.GetServerLogicalDrive(serverId);
 
-            var viewModel = new StorageViewModel(serverId, models);
+            var viewModel = new StorageViewModel(serverId, models) { IsForDialog = dialog };
 
             return this.View(viewModel);
         }
 
         [HttpGet]
-        public ViewResult Software(int serverId)
+        public ViewResult Software(int serverId, bool dialog = false)
         {
             List<SoftwareOverview> models = this.computerModulesService.GetServerSoftware(serverId);
 
-            var viewModel = new SoftwareViewModel(serverId, models);
+            var viewModel = new SoftwareViewModel(serverId, models) { IsForDialog = dialog };
 
             return this.View(viewModel);
         }
 
         [HttpGet]
-        public ViewResult HotFixes(int serverId)
+        public ViewResult HotFixes(int serverId, bool dialog = false)
         {
             List<SoftwareOverview> models = this.computerModulesService.GetServerSoftware(serverId);
 
-            var viewModel = new HotfixViewModel(serverId, models);
+            var viewModel = new HotfixViewModel(serverId, models) { IsForDialog = dialog };
 
             return this.View(viewModel);
         }
 
         [HttpGet]
-        public ViewResult Logs(int serverId)
+        public ViewResult Logs(int serverId, bool dialog = false)
         {
             List<OperationServerLogOverview> models = this.inventoryService.GetOperationServerLogOverviews(serverId, SessionFacade.CurrentCustomer.Id);
 
-            var viewModel = new LogsViewModel(serverId, models);
+            var viewModel = new LogsViewModel(serverId, models) {IsForDialog = dialog};
 
             return this.View(viewModel);
         }

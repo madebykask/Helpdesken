@@ -855,7 +855,10 @@
                                             <td>
                                                 @if (Html.MasterModel().CustomerSetting.ModuleInventory > 0)
                                                 {
-                                                    <a title="@Translation.GetCoreTextTranslation("Visa inventarie")" class="btn show-inventory"><i class="icon-th-large"></i></a>
+                                                    <a id="ShowInventoryBtn" title="@Translation.GetCoreTextTranslation("Visa inventarie")" class="btn show-inventory"
+                                                       style='@(!string.IsNullOrEmpty(Model.case_.InventoryNumber) ? string.Empty : "display: none")'>
+                                                        <i class="icon-th-large"></i>
+                                                    </a>
                                                 }
                                             </td>
                                         </tr>

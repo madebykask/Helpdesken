@@ -10,6 +10,8 @@
         @Html.FieldCaption(Model)
     </td>
     <td class="span9">
-        @Html.CheckBoxFor(m => m.Value)
+        @(!Model.IsReadOnly
+            ? Html.CheckBoxFor(m => m.Value, new { @class = "switchcheckbox" })
+            : Html.CheckBoxFor(m => m.Value, new { @readonly = true, @disabled = "disabled", @class = "switchcheckbox" }))
     </td>
 </tr>

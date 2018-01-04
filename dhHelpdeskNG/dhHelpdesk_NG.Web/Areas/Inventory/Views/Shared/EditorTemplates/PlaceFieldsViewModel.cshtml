@@ -13,34 +13,32 @@
         applyCascadingBehivarior(parameters);
     });
 </script>
-@if (Model.PlaceFieldsModel.RoomId.Show
-        || Model.PlaceFieldsModel.Location.Show)
+@if (Model.PlaceFieldsModel.RoomId.Show || Model.PlaceFieldsModel.Location.Show)
 {
-    <h4>@Translation.Get("Placering")</h4>
+    <h4>@Translation.GetCoreTextTranslation("Placering")</h4>
     <div class="row">
         <div class="span12">
             <table class="tableform">
                 @if (Model.PlaceFieldsModel.RoomId.Show)
                 {
-                    <tr>
-                        <td class="span3">
-                            <label>@Translation.Get("Byggnad")</label>
-                        </td>
-                        <td class="span9">
-                            @Html.DropDownListFor(m => m.PlaceFieldsModel.BuildingId, Model.Buildings, string.Empty, new { id = "buildings_dropdown" })
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">
-                            <label>@Translation.Get("Våning")</label>
-                        </td>
-                        <td class="span9">
-                            @Html.DropDownListFor(m => m.PlaceFieldsModel.FloorId, Model.Floors, string.Empty, new { id = "floors_dropdown" })
-                        </td>
-                    </tr>
+                    @Html.EditorFor(m => m.PlaceFieldsModel.BuildingId, "Fields/ListInt",
+                   new
+                   {
+                       Source = Model.Buildings,
+                       id = "buildings_dropdown",
+                       Label = Translation.GetCoreTextTranslation("Byggnad"),
+                       Model.PlaceFieldsModel.RoomId.IsReadOnly
+                   })
+                    @Html.EditorFor(m => m.PlaceFieldsModel.FloorId, "Fields/ListInt",
+                   new {
+                       Source = Model.Floors,
+                       id = "floors_dropdown",
+                       Label = Translation.GetCoreTextTranslation("Våning"),
+                       Model.PlaceFieldsModel.RoomId.IsReadOnly
+                   })
                 }
-                @Html.EditorFor(m => m.PlaceFieldsModel.RoomId, "NotReadonlyFields/List", new { Source = Model.Rooms, id = "rooms_dropdown" })
-                @Html.EditorFor(m => m.PlaceFieldsModel.Location, "NotReadonlyFields/Text")
+                @Html.EditorFor(m => m.PlaceFieldsModel.RoomId, "Fields/List", new { Source = Model.Rooms, id = "rooms_dropdown" })
+                @Html.EditorFor(m => m.PlaceFieldsModel.Location, "Fields/Text")
             </table>
         </div>
     </div>

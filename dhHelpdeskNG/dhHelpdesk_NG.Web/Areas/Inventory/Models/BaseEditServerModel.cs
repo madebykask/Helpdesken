@@ -11,6 +11,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models
 
         public int Id { get; set; }
 
+        public bool IsForDialog { get; set; }
+
         public abstract ServerEditTabs Tab { get; }
     }
 }

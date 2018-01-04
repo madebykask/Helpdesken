@@ -169,7 +169,7 @@
 
         private static ModelEditFieldSetting CreateFieldSetting(FieldSettingMapperDataForModelEdit fieldSetting)
         {
-            return new ModelEditFieldSetting(fieldSetting.Show.ToBool(), fieldSetting.Caption, fieldSetting.Required.ToBool());
+            return new ModelEditFieldSetting(fieldSetting.Show.ToBool(), fieldSetting.Caption, fieldSetting.Required.ToBool(), fieldSetting.ReadOnly.ToBool());
         }
     }
 }

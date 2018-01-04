@@ -124,7 +124,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
         }
 
         [CreateMissingServerSettings("customerId")]
-        public ServerFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId)
+        public ServerFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false)
         {
             var languageTextId = this.GetLanguageTextId(languageId);
             var settings = this.GetSettings(customerId);
@@ -141,6 +141,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                                 Caption = s.Label,
                                 FieldName = s.ServerField,
                                 Show = s.Show,
+                                ReadOnly = isReadonly ? 1 : 0,
                                 Required = s.Required
                             }).ToList();
                     break;
@@ -153,6 +154,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                                 Caption = s.Label_ENG,
                                 FieldName = s.ServerField,
                                 Show = s.Show,
+                                ReadOnly = isReadonly ? 1 : 0,
                                 Required = s.Required,
                             }).ToList();
                     break;
@@ -165,6 +167,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                                 Caption = s.Label_ENG,
                                 FieldName = s.ServerField,
                                 Show = s.Show,
+                                ReadOnly = isReadonly ? 1 : 0,
                                 Required = s.Required,
                             }).ToList();
                     break;

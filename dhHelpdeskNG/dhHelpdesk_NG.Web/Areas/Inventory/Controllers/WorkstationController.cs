@@ -151,13 +151,6 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpPost]
-        public int GetWorkstationId(string computerName)
-        {
-            var id = inventoryService.GetWorkstationIdByName(computerName, SessionFacade.CurrentCustomer.Id);
-            return id;
-        }
-
-        [HttpPost]
         [BadRequestOnNotValid]
         public RedirectToRouteResult Edit(ComputerViewModel computerViewModel)
         {
