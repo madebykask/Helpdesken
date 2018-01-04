@@ -838,7 +838,9 @@
             //default paste action
             this.paste_auto = function (e) {
                 pasteMode = '';
-                pasteCatcher.innerHTML = '';
+                if (pasteCatcher) {
+                    pasteCatcher.innerHTML = '';
+                }
                 var clipboardData = (e.clipboardData || e.originalEvent.clipboardData);
                 var isIe = !clipboardData && window.clipboardData; //IE
                 if (isIe) {
