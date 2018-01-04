@@ -1070,6 +1070,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
+        [ValidateInput(false)]
         public ActionResult _CaseLogNote(int caseId, string note, string logFileGuid)
         {
             SaveExternalMessage(caseId, note, logFileGuid);            
