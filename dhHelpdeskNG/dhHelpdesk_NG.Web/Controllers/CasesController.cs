@@ -5920,10 +5920,6 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     value = model.case_.PersonsCellphone;
                 }
-                else if (setting == GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())
-                {
-                    value = model.case_.PersonsCellphone;
-                }
                 else if (setting == GlobalEnums.TranslationCaseFields.Region_Id.ToString())
                 {
                     value = model.case_.Region != null ? model.case_.Region.Name : defaultValue;
@@ -6017,16 +6013,16 @@ namespace DH.Helpdesk.Web.Controllers
 
                     if (caseType == null)
                     {
-                        var productAreas = model.caseTypes;
+                        var caseTypes = model.caseTypes;
                         var maxDepth = 10;
-                        for (int i = 0; i < maxDepth; i++)
+                        for (var i = 0; i < maxDepth; i++)
                         {
-                            caseType = productAreas
+                            caseType = caseTypes
                                 .Where(m => m.SubCaseTypes != null && m.SubCaseTypes.Any())
                                 .SelectMany(m => m.SubCaseTypes)
                                 .FirstOrDefault(m => m.Id == model.case_.CaseType_Id); ;
                             if (caseType != null) break;
-                            productAreas = productAreas.Where(m => m.SubCaseTypes != null && m.SubCaseTypes.Any())
+                            caseTypes = caseTypes.Where(m => m.SubCaseTypes != null && m.SubCaseTypes.Any())
                                 .SelectMany(m => m.SubCaseTypes).ToList();
                         }
 
@@ -6040,7 +6036,7 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         var productAreas = model.productAreas;
                         var maxDepth = 10;
-                        for (int i = 0; i < maxDepth; i++)
+                        for (var i = 0; i < maxDepth; i++)
                         {
                             prodArea = productAreas
                                 .Where(m => m.SubProductAreas != null && m.SubProductAreas.Any())

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading;
 using System.Web.SessionState;
 using DH.Helpdesk.BusinessData.Models.WorktimeCalculator;
 using DH.Helpdesk.SelfService.Controllers.Behaviors;
@@ -749,6 +750,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (!caseId.IsNew() && !model.CaseDataModel.FinishingDate.HasValue)
                 ViewBag.CurrentCaseId = caseId.Value;
 
+            model.StatusBar = caseId.IsNew() ? new Dictionary<string, string>() : GetStatusBar(model);
+
             return model;
         }
 
@@ -818,7 +821,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                 model.CaseOU = _ouService.GetOU(model.CaseDataModel.OU_Id.Value);                
             
 
-            model.Result = res;                     
+            model.Result = res;
+            model.StatusBar = isNewCase ? new Dictionary<string, string>() : GetStatusBar(model);
+
             return View("ExtendedCase", model);
         }
 
@@ -1343,6 +1348,232 @@ namespace DH.Helpdesk.SelfService.Controllers
             return Json(new { success = true, data = dropString, praIds });
         }
 
+        private Dictionary<string, string> GetStatusBar(ExtendedCaseViewModel model)
+        {
+            var values = new Dictionary<string, string>();
+            var templateText = "<strong>{0}</strong>&nbsp;{1}&nbsp;|&nbsp;";
+            var settings = _caseFieldSettingService.GetCaseFieldSettings(model.CustomerId)
+                .Where(c => c.ShowExternalStatusBar == true)
+                .Select(c => c.Name)
+                .ToList();
+
+            var defaultValue = "";
+            var dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
+            foreach (var setting in settings)
+            {
+                var value = "";
+                if (setting == GlobalEnums.TranslationCaseFields.ReportedBy.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.CostCentre.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.Place.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.UserCode.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.InventoryLocation.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.CaseNumber.ToString() ||
+                   //setting == GlobalEnums.TranslationCaseFields.RegTime.ToString() ||
+                   //setting == GlobalEnums.TranslationCaseFields.ChangeTime.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.Caption.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.Available.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.SolutionRate.ToString() ||
+                   setting == GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString())
+                {
+                    var property = model.CaseDataModel.GetType().GetProperty(setting);
+                    value = defaultValue;
+                    if (property != null)
+                    {
+                        var propValue = property.GetValue(model.CaseDataModel, null);
+                        if (propValue != null)
+                            value = propValue.ToString();
+                    }
+
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Persons_Name.ToString())
+                {
+                    value = model.CaseDataModel.PersonsName;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())
+                {
+                    value = model.CaseDataModel.PersonsEmail;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())
+                {
+                    value = model.CaseDataModel.PersonsPhone;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())
+                {
+                    value = model.CaseDataModel.PersonsCellphone;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Region_Id.ToString() && model.CaseDataModel.Region_Id.HasValue)
+                {
+                    var region = _regionService.GetRegion(model.CaseDataModel.Region_Id.Value);
+                    value = region != null ? region.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Department_Id.ToString() && model.CaseDataModel.Department_Id.HasValue)
+                {
+                    var department = _departmentService.GetDepartment(model.CaseDataModel.Department_Id.Value);
+                    value = department != null ? department.DepartmentName : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.OU_Id.ToString() && model.CaseDataModel.OU_Id.HasValue)
+                {
+                    var ou = _ouService.GetOU(model.CaseDataModel.OU_Id.Value);
+                    value = ou != null ? ou.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString())
+                {
+                    value = model.CaseDataModel.IsAbout_PersonsName;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString())
+                {
+                    value = model.CaseDataModel.IsAbout_PersonsEmail;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString())
+                {
+                    value = model.CaseDataModel.IsAbout_PersonsPhone;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString())
+                {
+                    value = model.CaseDataModel.IsAbout_PersonsCellPhone;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString() && model.CaseDataModel.IsAbout_Region_Id.HasValue)
+                {
+                    var region = _regionService.GetRegion(model.CaseDataModel.IsAbout_Region_Id.Value);
+                    value = region != null ? region.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString() && model.CaseDataModel.IsAbout_Department_Id.HasValue)
+                {
+                    var department = _departmentService.GetDepartment(model.CaseDataModel.IsAbout_Department_Id.Value);
+                    value = department != null ? department.DepartmentName : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString() && model.CaseDataModel.IsAbout_OU_Id.HasValue)
+                {
+                    var ou = _ouService.GetOU(model.CaseDataModel.IsAbout_OU_Id.Value);
+                    value = ou != null ? ou.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString())
+                {
+                    value = model.CaseDataModel.IsAbout_CostCentre;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString())
+                {
+                    value = model.CaseDataModel.IsAbout_Place;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString())
+                {
+                    value = model.CaseDataModel.IsAbout_UserCode;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())
+                {
+                    value = model.CaseDataModel.InventoryType;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString() && model.CaseDataModel.RegistrationSourceCustomer_Id.HasValue)
+                {
+                    var source = _registrationSourceCustomerService.GetRegistrationSouceCustomer(model.CaseDataModel.RegistrationSourceCustomer_Id.Value);
+                    value = source != null ? Translation.Get(source.SourceName) : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.User_Id.ToString())
+                {
+                    //Not used in self service
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())
+                {
+                    var caseType = _caseTypeService.GetCaseType(model.CaseDataModel.CaseType_Id);
+                    
+                    value = caseType != null ? Translation.Get(caseType.Name) : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString() && model.CaseDataModel.ProductArea_Id.HasValue)
+                {
+                    var prodArea = _productAreaService.GetProductArea(model.CaseDataModel.ProductArea_Id.Value);
+
+                    value = prodArea != null ? Translation.Get(prodArea.Name) : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.System_Id.ToString() && model.CaseDataModel.System_Id.HasValue)
+                {
+                    var system = _systemService.GetSystem(model.CaseDataModel.System_Id.Value);
+                    value = system != null ? system.SystemName : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Urgency_Id.ToString() && model.CaseDataModel.Urgency_Id.HasValue)
+                {
+                    var urgency = _urgencyService.GetUrgency(model.CaseDataModel.Urgency_Id.Value);
+                    value = urgency != null ? urgency.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Impact_Id.ToString() && model.CaseDataModel.Impact_Id.HasValue)
+                {
+                    var impact = _impactService.GetImpact(model.CaseDataModel.Impact_Id.Value);
+                    value = impact != null ? impact.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Category_Id.ToString() && model.CaseDataModel.Category_Id.HasValue)
+                {
+                    var cat = _categoryService.GetCategoryById(model.CaseDataModel.Category_Id.Value);
+                    value = cat != null ? cat.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Supplier_Id.ToString() && model.CaseDataModel.Supplier_Id.HasValue)
+                {
+                    var sup = _supplierService.GetSupplier(model.CaseDataModel.Supplier_Id.Value);
+                    value = sup != null ? sup.Name : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.AgreedDate.ToString())
+                {
+                    value = model.CaseDataModel.AgreedDate.HasValue ? model.CaseDataModel.AgreedDate.Value.ToString(dateFormat) : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Cost.ToString())
+                {
+                    value = string.Format("{0}/{1} {2}", model.CaseDataModel.Cost, model.CaseDataModel.OtherCost, model.CaseDataModel.Currency);
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString() && model.CaseDataModel.WorkingGroup_Id.HasValue)
+                {
+                    //not used in selfservice
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())
+                {
+                    //not used in selfservice
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())
+                {
+                    //not used in selfservice
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Priority_Id.ToString())
+                {
+                    //not used in selfservice
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Status_Id.ToString())
+                {
+                    //not used in selfservice
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())
+                {
+                    //not used in selfservice
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.PlanDate.ToString())
+                {
+                    value = model.CaseDataModel.PlanDate.HasValue ? model.CaseDataModel.PlanDate.Value.ToString(dateFormat) : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.WatchDate.ToString())
+                {
+                    value = model.CaseDataModel.WatchDate.HasValue ? model.CaseDataModel.WatchDate.Value.ToString(dateFormat) : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Verified.ToString())
+                {
+                    value = Translation.Get(model.CaseDataModel.Verified == 1 ? "Yes" : "No");
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.CausingPart.ToString())
+                {
+                    //not used in selfservice
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.FinishingDate.ToString())
+                {
+                    value = model.CaseDataModel.FinishingDate.HasValue ? model.CaseDataModel.FinishingDate.Value.ToString(dateFormat) : defaultValue;
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.ClosingReason.ToString())
+                {
+                    //not used in selfservice
+                }
+                var template = string.Format(templateText, Translation.GetForCase(setting, model.CustomerId), value);
+                values.Add(setting, template);
+            }
+
+            return values;
+        }
 
         private bool UserHasAccessToCase(Case currentCase)
         {            

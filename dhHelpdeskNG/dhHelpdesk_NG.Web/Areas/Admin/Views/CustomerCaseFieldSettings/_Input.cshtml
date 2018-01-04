@@ -3158,7 +3158,7 @@
                                     @Translation.GetCoreTextTranslation("Utökat fall Statusfält")&nbsp;&nbsp;&nbsp;&nbsp;
                                 </td>
                                 <td colspan="6">
-                                    @Html.ListBoxFor(m => m.ShowExternalStatusBarIds, new SelectList((List<CustomKeyValue<int, string>>)ViewBag.AllFields, "Key", "Value", Model.ShowExternalStatusBarIds), new { id = "showExternalStatusBarIds", multiple = "multiple" })
+                                    @Html.ListBoxFor(m => m.ShowExternalStatusBarIds, new SelectList((List<CustomKeyValue<int, string>>)ViewBag.ShowExternalStatusBarFields, "Key", "Value", Model.ShowExternalStatusBarIds), new { id = "showExternalStatusBarIds", multiple = "multiple" })
                                 </td>
                             </tr>
                             <tr>

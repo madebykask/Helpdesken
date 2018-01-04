@@ -342,7 +342,7 @@
         <div id="fragment-1" class="tab-pane active">
             <div class="container-fluid dh-container">
                 <div id="container_@extendedFormId" class="">
-                    @Html.Partial("_CaseInformation", Model.CaseDataModel, new ViewDataDictionary { { "Headline", Translation.Get(Model.ExtendedCaseDataModel.FormModel.Name) } })
+                    @Html.Partial("_CaseInformation", Model, new ViewDataDictionary { { "Headline", Translation.Get(Model.ExtendedCaseDataModel.FormModel.Name) } })
                     @*Extended case placement*@
                 </div>
             </div>

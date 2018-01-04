@@ -237,11 +237,41 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 GlobalEnums.TranslationCaseFields.Project.ToString(),
                 GlobalEnums.TranslationCaseFields.Problem.ToString(),
             };
-            ViewBag.AllFields = model.CaseFieldSettings
-                .Where(c => FieldSettingsUiNames.Names.ContainsKey(c.Name) && !fieldstoExclude.Any(f => f == c.Name))
-                .Select(c => new CustomKeyValue<int, string> { Key = c.Id,
-                    Value = FieldSettingsUiNames.Names.ContainsKey(c.Name) ? Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[c.Name]) : ""})
-                    .ToList();
+            var externalFieldsToExclude = new[]
+            {
+                GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(),
+                GlobalEnums.TranslationCaseFields.RegTime.ToString(),
+                GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
+                GlobalEnums.TranslationCaseFields.User_Id.ToString(),
+                GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(),
+                GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(),
+                GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(),
+                GlobalEnums.TranslationCaseFields.Priority_Id.ToString(),
+                GlobalEnums.TranslationCaseFields.Status_Id.ToString(),
+                GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(),
+                GlobalEnums.TranslationCaseFields.CausingPart.ToString(),
+                GlobalEnums.TranslationCaseFields.ClosingReason.ToString(),
+                GlobalEnums.TranslationCaseFields.FinishingDate.ToString()
+            };
+
+            var allFields = model.CaseFieldSettings
+                .Where(c => FieldSettingsUiNames.Names.ContainsKey(c.Name) && !fieldstoExclude.Any(f => f == c.Name));
+
+            ViewBag.AllFields = allFields.Select(c => new CustomKeyValue<int, string>
+                {
+                    Key = c.Id,
+                    Value = FieldSettingsUiNames.Names.ContainsKey(c.Name) ? Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[c.Name]) : ""
+                })
+                .ToList();
+            ;
+            ViewBag.ShowExternalStatusBarFields = allFields.Where(c => !externalFieldsToExclude.Any(f => f == c.Name))
+                .Select(c => new CustomKeyValue<int, string>
+                {
+                    Key = c.Id,
+                    Value = FieldSettingsUiNames.Names.ContainsKey(c.Name) ? Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[c.Name]) : ""
+                })
+                .ToList();
+
 
             return model;
         }

@@ -23,6 +23,7 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public int StateSecondaryId { get; set; }
         public string CurrentUser { get; set; }
         public CaseModel CaseDataModel { get; set; }
+        public Dictionary<string, string> StatusBar { get; internal set; }
         public ExtendedCaseDataModel ExtendedCaseDataModel { get; set; }
         public List<WorkflowStepModel> WorkflowSteps { get; set; }
         public OU CaseOU { get; set; } 
