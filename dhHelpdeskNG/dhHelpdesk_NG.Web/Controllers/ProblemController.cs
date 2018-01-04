@@ -1,7 +1,9 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Infrastructure.Helpers;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -55,24 +57,6 @@ namespace DH.Helpdesk.Web.Controllers
             this._settingService = settingService;
             _masterDataService = masterDataService;
             _customerService = customerService;
-        }
-
-        // todo refactor
-        public DropDownWithSubmenusItem CauseToDropDownItem(FinishingCauseOverview causes)
-        {
-            var item = new DropDownWithSubmenusItem(
-                causes.Name, causes.Id.ToString(CultureInfo.InvariantCulture));
-
-            if (causes.ChildFinishingCauses.Any())
-            {
-                var subitems =
-                    causes.ChildFinishingCauses.Select(
-                        this.CauseToDropDownItem).ToList();
-
-                item.Subitems.AddRange(subitems);
-            }
-
-            return item;
         }
 
         public ProblemOutputModel MapProblemOverviewToOutputModel(ProblemOverview problemOverview, bool isFirstNameFirst)
@@ -303,28 +287,25 @@ namespace DH.Helpdesk.Web.Controllers
 
         public PartialViewResult LogForNewProblem()
         {
-            var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).ToList();
-            var causesTree = new DropDownWithSubmenusContent(causes, null);
-            return this.PartialView("_InputLog", new LogEditModel { FinishingCauses = causesTree });
+            var causes = finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id);
+            return this.PartialView("_InputLog", new LogEditModel { FinishingCauses = causes });
         }
 
         public PartialViewResult Log(int id)
         {
+            var causes = finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id);
+            var finishingCauses = finishingCauseService.GetFinishingCauseInfos(SessionFacade.CurrentCustomer.Id);
             var log = MapLogs(this.problemLogService.GetProblemLog(id));
-            var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).OrderBy(x => x.Name).ToList();
-            var finishingCauseId = log.FinishingCauseId.HasValue
-                                       ? log.FinishingCauseId.ToString()
-                                       : null;
-            var causesTree = new DropDownWithSubmenusContent(causes, finishingCauseId);
-            log.FinishingCauses = causesTree;
+            log.FinishingCauses = causes;
+            log.FinishingCause = CommonHelper.GetFinishingCauseFullPath(finishingCauses.ToArray(), log.FinishingCauseId);
+
             return this.PartialView("EditLog", log);
         }
 
         public PartialViewResult NewLog(int problemId)
         {
-            var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).ToList();
-            var causesTree = new DropDownWithSubmenusContent(causes, null);
-            return this.PartialView("NewLog", new LogEditModel { FinishingCauses = causesTree });
+            var causes = finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id);
+            return this.PartialView("NewLog", new LogEditModel { FinishingCauses = causes });
         }
 
         [HttpPost]

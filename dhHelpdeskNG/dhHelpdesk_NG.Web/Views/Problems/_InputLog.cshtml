@@ -37,7 +37,19 @@
                         @Translation.GetCoreTextTranslation("Avslutsorsak")
                     </td>
                     <td>
-                        @Html.DropDownWithSubmenus("causes_dropdown", "FinishingCauseId", true, Model.FinishingCauses)
+                        <div id="divFinishingType" class="btn-group">
+                            <div class="btn" id="divBreadcrumbs_FinishingType">
+                                @(string.IsNullOrEmpty(Model.FinishingCause) ? Translation.GetCoreTextTranslation("--") : Model.FinishingCause)
+                            </div>
+                            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropup">
+                                <li><a href="#">@Translation.GetCoreTextTranslation("--")</a></li>
+                                @Html.FinishingCauseDropdownButtonString(Model.FinishingCauses)
+                            </ul>
+                            @Html.HiddenFor(model => Model.FinishingCauseId)
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -65,5 +77,28 @@
 <script>
     $("input:checkbox[id*='notering']").click(function () {
         $("input:checkbox[id*='notering']").not(this).attr("checked", false);
+    });
+
+    var $finishTypeContainer = $('#divFinishingType');
+    var $finishTypeId = $("#FinishingCauseId");
+    var $finishTypeBreadcrubs = $("#divBreadcrumbs_FinishingType");
+    var $finishDate = $('#FinishingDate');
+
+    $finishTypeContainer.find('ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var value = $(this).attr('value');
+        $finishTypeBreadcrubs.text(window.getBreadcrumbs(this));
+        $finishTypeId.val(value).trigger('change');
+    });
+
+    $finishTypeId.on('change', function (ev) {
+        var value = $(ev.target).val();
+        if (value == '' || value === undefined) {
+            $finishDate.val('');
+        } else {
+            if ($finishDate.val() == '') {
+                $finishDate.val(window.today());
+            }
+        }
     });
 </script>

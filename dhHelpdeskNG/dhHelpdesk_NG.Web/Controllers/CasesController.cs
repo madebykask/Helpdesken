@@ -4876,33 +4876,6 @@ namespace DH.Helpdesk.Web.Controllers
 
             return defaultFileName;
         }
-
-        private string GetFinishingCauseFullPath(
-                        FinishingCauseInfo[] finishingCauses,
-                        int? finishingCauseId)
-        {
-            if (!finishingCauseId.HasValue)
-            {
-                return string.Empty;
-            }
-
-            var finishingCause = finishingCauses.FirstOrDefault(f => f.Id == finishingCauseId);
-            if (finishingCause == null)
-            {
-                return string.Empty;
-            }
-
-            var list = new List<FinishingCauseInfo>();
-            var parent = finishingCause;
-            do
-            {
-                list.Add(parent);
-                parent = finishingCauses.FirstOrDefault(c => c.Id == parent.ParentId);
-            }
-            while (parent != null);
-
-            return string.Join(" - ", list.Select(c => c.Name).Reverse());
-        }
         #endregion
 
         #region --Get Models--
@@ -5123,7 +5096,7 @@ namespace DH.Helpdesk.Web.Controllers
                     var lastLog = m.Logs.FirstOrDefault();
                     if (lastLog != null)
                     {
-                        m.FinishingCause = this.GetFinishingCauseFullPath(finishingCauses.ToArray(), lastLog.FinishingType);
+                        m.FinishingCause = CommonHelper.GetFinishingCauseFullPath(finishingCauses.ToArray(), lastLog.FinishingType);
                     }
                 }
 
@@ -5627,9 +5600,7 @@ namespace DH.Helpdesk.Web.Controllers
                         // This is used for hide fields(which are not in casetemplate) in new case input
                         m.templateistrue = templateistrue;
                         var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
-                        m.FinishingCause = this.GetFinishingCauseFullPath(
-                            finishingCauses.ToArray(),
-                            caseTemplate.FinishingCause_Id);
+                        m.FinishingCause = CommonHelper.GetFinishingCauseFullPath(finishingCauses.ToArray(), caseTemplate.FinishingCause_Id);
                         #endregion
                     }
                 }
