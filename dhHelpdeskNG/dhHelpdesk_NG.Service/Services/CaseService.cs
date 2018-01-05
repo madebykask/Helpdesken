@@ -2137,7 +2137,7 @@ namespace DH.Helpdesk.Services.Services
 
                     }
 
-                    if (isProblemSend)
+                    if (isProblemSend) 
                     {
                         // send sms
                         if (newCase.SMS == 1 && !dontSendMailToNotfier && !string.IsNullOrWhiteSpace(newCase.PersonsCellphone))
@@ -2150,19 +2150,24 @@ namespace DH.Helpdesk.Services.Services
                                 {
                                     var smsTo = GetSmsRecipient(customerSetting, newCase.PersonsCellphone);
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 10, userTimeZone);
-                                    var identifiers = _feedbackTemplateService.FindIdentifiers(m.Body);
-                                    var templateFields = _feedbackTemplateService.GetCustomerTemplates(identifiers,
-                                        newCase.Customer_Id, newCase.RegLanguage_Id, newCase.Id, cms.AbsoluterUrl);
+
+                                    var identifiers = _feedbackTemplateService.FindIdentifiers(mt.Body);
+
+                                    var templateFields = 
+                                        _feedbackTemplateService.GetCustomerTemplates(identifiers, newCase.Customer_Id, newCase.RegLanguage_Id, newCase.Id, cms.AbsoluterUrl);
+                                    
                                     fields.AddRange(templateFields.Select(tf => tf.MapToFields()));
 
-                                    string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"] + el.EmailLogGUID;
+                                    var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"] + el.EmailLogGUID;
 
                                     var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
                                     var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                     var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
                                     var e_res = _emailService.SendEmail(el, helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, mailSetting, el.MessageId, false, files, siteSelfService, siteHelpdesk);
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+
                                     var now = DateTime.Now;
                                     el.CreatedDate = now;
                                     el.ChangedDate = now;
