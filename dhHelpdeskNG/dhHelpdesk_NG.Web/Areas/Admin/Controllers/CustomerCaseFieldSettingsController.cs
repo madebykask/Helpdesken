@@ -79,12 +79,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-            if (vmodel.ShowStatusBarIds.Any())
+            if (vmodel.ShowStatusBarIds != null && vmodel.ShowStatusBarIds.Any())
             {
                 var selected = CaseFieldSettings.Where(c => vmodel.ShowStatusBarIds.Any(m => m == c.Id));
                 selected.ForEach(c => c.ShowStatusBar = true );
             }
-            if (vmodel.ShowExternalStatusBarIds.Any())
+            if (vmodel.ShowExternalStatusBarIds != null && vmodel.ShowExternalStatusBarIds.Any())
             {
                 var selected = CaseFieldSettings.Where(c => vmodel.ShowExternalStatusBarIds.Any(m => m == c.Id));
                 selected.ForEach(c => c.ShowExternalStatusBar = true);
