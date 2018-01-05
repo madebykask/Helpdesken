@@ -267,7 +267,7 @@ DECLARE @now DATETIME = GETUTCDATE(),
 		CLT_CLASS VARCHAR(2),
 		CLUT_TYPE VARCHAR(3), 
 		CLU_CODE VARCHAR(5),
-		[ADDRESS] VARCHAR(90),
+		[ADDRESS] VARCHAR(115),
 		SEQ_NO INT,
 		MEDT_TYPE VARCHAR(10),
 		VALID_FROM DATETIME,
@@ -294,7 +294,7 @@ DECLARE @now DATETIME = GETUTCDATE(),
 		CLT_CLASS VARCHAR(2),
 		CLUT_TYPE VARCHAR(3), 
 		CLU_CODE VARCHAR(5),
-		ACCOUNT_NO VARCHAR(30),
+		ACCOUNT_NO VARCHAR(35),
 		DELETE_DATE DATETIME
 	)
 
@@ -426,7 +426,7 @@ DECLARE @now DATETIME = GETUTCDATE(),
 
 
 	-- Update email data to computeruser
-	UPDATE CU SET Email = ISNULL(AE.Email, '')
+	UPDATE CU SET Email = SUBSTRING(ISNULL(AE.Email, ''),0,100)
 	OUTPUT inserted.Id, inserted.UserId, inserted.FirstName, inserted.Email, deleted.Email 
 	INTO @updatedCU_M(ID, UserId, FirstName, Email, Before_Email)
 	FROM @activeEmail AE
@@ -555,6 +555,7 @@ DECLARE @now DATETIME = GETUTCDATE(),
 	SELECT 'Expired BU_M' [Inactive BU_M], * FROM @inactiveBU_M ORDER BY CLU_CODE
 	SELECT 'Expired BU_BANK' [Inactive BU_BANK], * FROM @inactiveBU_BANK ORDER BY CLU_CODE
 	SELECT 'Expired BU_ADDR' [Inactive BU_ADDR], * FROM @inactiveBU_ADDR ORDER BY CLU_CODE
+
 
 
 END

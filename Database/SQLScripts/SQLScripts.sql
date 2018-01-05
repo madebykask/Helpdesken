@@ -205,7 +205,7 @@ END
 GO	
 
 RAISERROR('Create table tblComputerUsersCategory', 10, 1) WITH NOWAIT
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblComputerUsersCategory' AND xtype='U')
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblComputerUsersCategory' AND type='U')
 BEGIN
 	CREATE TABLE [dbo].[tblComputerUsersCategory] (
 		[ID]                        INT              IDENTITY (1, 1) NOT NULL,
@@ -230,7 +230,7 @@ CREATE NONCLUSTERED INDEX [IX_tblComputerUsers_ComputerUSersCategory]
 GO
 
 
-/* Create table tblCase_tblCaseSection_ExtendedCaseData for connecting case section with extended data*/
+RAISERROR('Create table tblCase_tblCaseSection_ExtendedCaseData for connecting case section with extended data', 10, 1) WITH NOWAIT
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblCase_tblCaseSection_ExtendedCaseData' AND type = 'U')
 BEGIN
 	CREATE TABLE [dbo].[tblCase_tblCaseSection_ExtendedCaseData] (

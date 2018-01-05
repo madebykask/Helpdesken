@@ -5164,7 +5164,7 @@ namespace DH.Helpdesk.Web.Controllers
 				if (m.case_.ReportedBy != null)
 				{
 					var reportedByUser = this._computerService.GetComputerUserByUserID(m.case_.ReportedBy);
-					if (reportedByUser.ComputerUsersCategoryID.HasValue)
+					if (reportedByUser != null && reportedByUser.ComputerUsersCategoryID.HasValue)
 					{
 						m.InitiatorComputerUserCategory = _computerService.GetComputerUserCategoryByID(reportedByUser.ComputerUsersCategoryID.Value);
 						if (m.InitiatorComputerUserCategory != null)
@@ -5176,7 +5176,7 @@ namespace DH.Helpdesk.Web.Controllers
 				if (m.case_.IsAbout != null && m.case_.IsAbout.ReportedBy != null)
 				{
 					var reportedByUser = this._computerService.GetComputerUserByUserID(m.case_.IsAbout.ReportedBy);
-					if (reportedByUser.ComputerUsersCategoryID.HasValue)
+					if (reportedByUser != null && reportedByUser.ComputerUsersCategoryID.HasValue)
 					{
 						m.RegardingComputerUserCategory = _computerService.GetComputerUserCategoryByID(reportedByUser.ComputerUsersCategoryID.Value);
 						if (m.RegardingComputerUserCategory != null)
