@@ -45,7 +45,7 @@
             for (var i = 0; i < headers.Count; i++)
             {
                 worksheet.SetValue(1, i + 1, headers[i].Caption);
-
+                worksheet.Cells[1, i + 1].Style.Font.Bold = true;
             }
 
             int rowIndex = 1;
