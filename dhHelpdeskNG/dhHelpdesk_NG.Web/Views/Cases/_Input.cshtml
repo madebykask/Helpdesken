@@ -236,7 +236,7 @@
                                 <br />
                                 @*@Translation.Get("Independent child")&nbsp;<input id="IndependentChild" name="IndependentChild" type="checkbox" @(Model.IndependentChild ? "checked" : "") value="true" />
                                 @Html.HiddenFor(model => Model.IndependentChild)*@
-                                @Translation.Get("Independent child")&nbsp;
+                                @Translation.GetCoreTextTranslation("Fristående underärende")&nbsp;
                                 @Html.CheckBoxFor(model => Model.IndependentChild)
                             </div>
                         }
