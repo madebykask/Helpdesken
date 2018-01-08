@@ -88,6 +88,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly IWatchDateCalendarService _watchDateCalendarService;
         private readonly IInventoryService _inventoryService;
         private readonly ICustomerUserService _customerUserService;
+        private readonly IGlobalSettingService _globalSettingService;
 
 
         private const string ParentPathDefaultValue = "--";
@@ -137,6 +138,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             IUniversalCaseService universalCaseService,
             IInventoryService inventoryService,
             ICustomerUserService customerUserService,
+            IGlobalSettingService globalSettingService,
             IWatchDateCalendarService watchDateCalendarService,
             ISelfServiceConfigurationService configurationService)
             : base(configurationService, masterDataService, caseSolutionService)
@@ -185,6 +187,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             _watchDateCalendarService = watchDateCalendarService;
             _inventoryService = inventoryService;
             _customerUserService = customerUserService;
+            _globalSettingService = globalSettingService;
         }
 
         [HttpGet]
@@ -884,6 +887,10 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpGet]
         public ActionResult MultiCustomerUserCases(string progressId = "")
         {
+            var globalSettings = _globalSettingService.GetGlobalSettings().First();
+            if (globalSettings.MultiCustomersSearch == 0)
+                return RedirectToAction("UserCases", new { customerId = SessionFacade.CurrentCustomerID });
+
             var res = _caseControllerBehavior.ValidateCustomer();
             if (!res.Valid) return HandleError(res);
 

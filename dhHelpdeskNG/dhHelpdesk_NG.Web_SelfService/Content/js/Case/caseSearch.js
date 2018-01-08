@@ -110,7 +110,16 @@ function CaseSearch() {
         var casesCount = parseInt($("#hdnCasesCount_" + customerId).val(), 10);
         $("#casesCount_" + customerId).text(casesCount);
 
-        this.toggleSearchResults(customerId, casesCount > 0);
+        //collapse/expand results
+        //this.toggleSearchResults(customerId, casesCount > 0);
+
+        //hide empty results
+        var searchGroup$ = $("#searchGroup_" + customerId);
+        if (casesCount > 0) {
+            searchGroup$.show();
+        } else {
+            searchGroup$.hide();
+        }
     }
 
     this.toggleSearchResults = function(customerId, expand) {

@@ -2165,7 +2165,11 @@ namespace DH.Helpdesk.Services.Services
                                     var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
                                     var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                     var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
-                                    var e_res = _emailService.SendEmail(el, helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, mailSetting, el.MessageId, false, files, siteSelfService, siteHelpdesk);
+
+                                    var e_res = _emailService.SendEmail(el, helpdeskMailFromAdress, el.EmailAddress,
+                                        GetSmsSubject(customerSetting), mt.Body, fields, mailSetting, el.MessageId,
+                                        false, files, siteSelfService, siteHelpdesk);
+
                                     el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
 
                                     var now = DateTime.Now;

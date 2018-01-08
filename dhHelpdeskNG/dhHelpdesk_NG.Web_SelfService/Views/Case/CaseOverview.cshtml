@@ -41,13 +41,22 @@
             window.caseSearch = caseSearch;
             
             var customerId = @Model.CustomerId;
-            
+
+            //todo: subscrive key press:
+
             $("#btnSearch").click(function(e) {
                 e.preventDefault();
 
                 window.caseSearch.searchCustomerCases(customerId);
 
                 return false;
+            });
+
+            $("#PharasSearch").keypress(function(ev) {
+                var keycode = (ev.keyCode ? ev.keyCode : ev.which);
+                if (keycode == '13') {
+                    $("#btnSearch").click();
+                }
             });
 
             //run first search

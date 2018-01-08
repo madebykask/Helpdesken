@@ -69,6 +69,13 @@
                 return false;
             });
 
+            $("#PharasSearch").keypress(function(ev) {
+                var keycode = (ev.keyCode ? ev.keyCode : ev.which);
+                if (keycode == '13') {
+                    $("#btnSearch").click();
+                }
+            });
+
             $("#collapseAll").click(function (e) {
                 window.toggleSearchResults(false);
             });

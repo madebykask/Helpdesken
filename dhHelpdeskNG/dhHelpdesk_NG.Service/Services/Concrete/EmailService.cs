@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using DH.Helpdesk.BusinessData.Enums.Email;
 using DH.Helpdesk.Domain;
+using log4net;
 
 namespace DH.Helpdesk.Services.Services.Concrete
 {
@@ -17,6 +18,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
 	public sealed class EmailService : IEmailService
 	{
+	    private ILog _logger = LogManager.GetLogger(typeof(EmailService));
+
 		private readonly string _EMAIL_SEND_MESSAGE = "Email has been sent!";
 		private readonly int _MAX_NUMBER_SENDING_EMAIL = 3;
 
@@ -362,9 +365,11 @@ namespace DH.Helpdesk.Services.Services.Concrete
 			msg.BodyEncoding = System.Text.Encoding.UTF8;
 			msg.Body = AddInformationToMailBodyAndSubject(body, fields).Replace(Environment.NewLine, "<br />");
 
+            //body
+            _logger.Warn($"Email: {msg.Subject} | {msg.Body}");
 
-			// för log filer 
-			if (files != null && attachFiles)
+            // för log filer 
+            if (files != null && attachFiles)
 			{
 				foreach (var f in files)
 				{
