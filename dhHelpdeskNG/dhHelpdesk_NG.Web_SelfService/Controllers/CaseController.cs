@@ -311,6 +311,11 @@ namespace DH.Helpdesk.SelfService.Controllers
                 caseReceipt.CanAddExternalNote = false;
             }
 
+
+            var cs = _settingService.GetCustomerSetting(currentCase.Customer.Id);
+            ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
+
+
             return View(caseReceipt);
         }
 
