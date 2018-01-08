@@ -19,6 +19,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IUserService _userService;
         private readonly ICaseSolutionService _casesolutionService;
         private readonly IWorkingGroupService _workgroupService;
+        private readonly ICaseService _caseService;
 
         public QuickLinkController(
             IDocumentService documentService,
@@ -28,7 +29,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             ICaseSolutionService casesolutionService,
             ISettingService settingService,
             IMasterDataService masterDataService,
-            IWorkingGroupService workgroupService)
+            IWorkingGroupService workgroupService,
+            ICaseService caseService)
             : base(masterDataService)
         {
             this._documentService = documentService;
@@ -38,6 +40,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this._casesolutionService = casesolutionService;
             this._settingService = settingService;
             this._workgroupService = workgroupService;
+            _caseService = caseService;
         }
 
         public ActionResult Index(int customerId)
@@ -185,6 +188,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Text = (isFirstName ? string.Format("{0} {1}", x.FirstName, x.SurName) : string.Format("{0} {1}", x.SurName, x.FirstName)),
                     Value = x.Id.ToString()
                 }).OrderBy(s => s.Text).ToList(),
+
+                FavoriteSearchFilters = _caseService.GetCustomerFavorites(customer.Id)
+                    .Select(x => new SelectListItem
+                    {
+                        Text = x.Name,
+                        Value = x.Id.ToString()
+                    }).ToList(),
 
                 WgAvailable = wgAvailable.Select(x => new SelectListItem
                 {

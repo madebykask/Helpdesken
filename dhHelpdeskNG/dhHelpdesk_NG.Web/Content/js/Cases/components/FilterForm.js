@@ -367,7 +367,6 @@ FilterForm.prototype.setMyFavorites = function(selectedId, favName) {
     var me = this;    
 
     if (me.$favorites != undefined && me.$favorites.length > 0) {
-        var defaultSeleted = (selectedId? selectedId: 0); 
         var defaultText = "";
         if (me.$myFavorites.attr("data-placeholder")) {
             defaultText = me.$myFavorites.attr("data-placeholder");
@@ -380,11 +379,15 @@ FilterForm.prototype.setMyFavorites = function(selectedId, favName) {
         $.each(me.$favorites, function (key, value) {            
             me.$myFavorites.append($("<option></option>").attr("value", value.Id).text(value.Name));
 
-            if (value.Id == selectedId)
+            if (value.Id == selectedId) {
                 me.$myFavorites.val(selectedId);
+                me.$myFavorites.change();
+            }
 
-            if(favName != undefined && selectedId == 0 && value.Name == favName)
+            if (favName != undefined && selectedId == 0 && value.Name == favName) {
                 me.$myFavorites.val(value.Id);
+                me.$myFavorites.change();
+            }
 
             me.$myFavorites.show();
         });        

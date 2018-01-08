@@ -621,11 +621,16 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
 
-        public ActionResult Index()
+        public ActionResult Index(int? filterId)
         {
             if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
             {
                 return new RedirectResult("~/Error/Unathorized");
+            }
+            if (filterId.HasValue)
+            {
+                TempData["CaseFilterId"] = filterId.Value.ToString();
+                return RedirectToAction("index");
             }
 
             ApplicationFacade.UpdateLoggedInUser(Session.SessionID, string.Empty);
@@ -650,6 +655,10 @@ namespace DH.Helpdesk.Web.Controllers
 
             var customerUser = this._customerUserService.GetCustomerSettings(customerId, userId);
             m.CaseSearchFilterData = this.CreateCaseSearchFilterData(customerId, SessionFacade.CurrentUser, customerUser, SessionFacade.CurrentCaseSearch);
+            if (TempData["CaseFilterId"] != null)
+            {
+                m.CaseSearchFilterData.caseSearchFilter.CaseFilterFavorite = TempData["CaseFilterId"] as string;
+            }
             m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.OnCaseOverview);
             this._caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
 

@@ -29,6 +29,11 @@
                 .HasForeignKey(x => x.CaseSolution_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.CaseFilterFavorite)
+                .WithMany()
+                .HasForeignKey(x => x.CaseFilterFavorite_Id)
+                .WillCascadeOnDelete(false);
+
             HasOptional(x => x.LinkGroup)
                 .WithMany()
                 .HasForeignKey(x => x.LinkGroup_Id)
@@ -66,6 +71,7 @@
             //Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.CaseSolution_Id).IsOptional();
+            this.Property(x => x.CaseFilterFavorite_Id).IsOptional();
             this.Property(x => x.SortOrder).IsOptional().HasMaxLength(2);
             //this.Property(x => x.LinkGUID).IsOptional();
 

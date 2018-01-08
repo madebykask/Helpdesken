@@ -1987,6 +1987,16 @@ begin
 	ALTER TABLE [tblCaseFieldSettings] ADD [ShowExternalStatusBar] bit NOT NULL DEFAULT(0)
 end
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'CaseFilterFavorite_Id' and
+	 sysobjects.name = N'tblLink')
+begin
+	ALTER TABLE [tblLink] ADD [CaseFilterFavorite_Id] int NULL
+
+	ALTER TABLE [dbo].[tblLink]  WITH NOCHECK ADD  CONSTRAINT [FK_tblLink_tblCaseFilterFavorite] FOREIGN KEY([CaseFilterFavorite_Id])
+	REFERENCES [dbo].[tblCaseFilterFavorite] ([Id])
+
+	ALTER TABLE [dbo].[tblLink] NOCHECK CONSTRAINT [FK_tblLink_tblCaseFilterFavorite]	
+end
 
 -- enable MultiCustomers
 -- UPDATE tblGlobalSettings SET [MultiCustomersSearch] = 1

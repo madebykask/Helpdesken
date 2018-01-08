@@ -42,8 +42,15 @@ using DH.Helpdesk.Domain;
 
              return ret;
          }
+        
+         public List<CaseFilterFavorite> GetCustomerFavoriteFilters(int customerId)
+         {
+             var entities = Table.Where(f => f.Customer_Id == customerId).ToList();
 
-         public string SaveFavorite(CaseFilterFavorite favorite)
+             return entities.Select(entity => _caseFilterFavoriteToBusinessModelMapper.Map(entity)).ToList();
+         }
+
+        public string SaveFavorite(CaseFilterFavorite favorite)
          {             
              var entities = Table.Where(f => f.Customer_Id == favorite.CustomerId && f.User_Id == favorite.UserId).ToList();
 

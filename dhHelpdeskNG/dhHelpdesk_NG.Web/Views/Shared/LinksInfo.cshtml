@@ -5,9 +5,9 @@
         <div class="box-box span12">
             <div class="box-header portlet-header">
                 <div class="start-tile-img label orange">
-                    <img src="@Url.Content("~/Content/icons/quicklinks.png")" alt="@Translation.Get("Snabblänkar", Enums.TranslationSource.TextTranslation)" />
+                    <img src="@Url.Content("~/Content/icons/quicklinks.png")" alt="@Translation.Get("Snabblänkar")" />
                 </div>
-                <h4>@Translation.Get("Snabblänkar", Enums.TranslationSource.TextTranslation)</h4>
+                <h4>@Translation.Get("Snabblänkar")</h4>
             </div>
             <div class="box-body portlet-content">
                 <div class="box-main">
@@ -17,7 +17,7 @@
                             <div id="quicklinksstart@(customerGroup.CustomerId)" class="accordion-group accordion-caret">
                                 <div class="accordion-heading">
                                     <a class="accordion-toggle accordion-caret collapsed" data-toggle="collapse" data-parent="#quicklinksstart" 
-                                        href="#collapseLinkInfo@(customerGroup.CustomerId)"><strong>@Translation.Get(customerGroup.CustomerName, Enums.TranslationSource.TextTranslation)</strong>
+                                        href="#collapseLinkInfo@(customerGroup.CustomerId)"><strong>@Translation.Get(customerGroup.CustomerName)</strong>
                                     </a>
                                 </div>
                                 <div id="collapseLinkInfo@(customerGroup.CustomerId)" class="accordion-body collapse">
@@ -29,7 +29,7 @@
                                                 {
                                                 <div class="accordion-heading accordion-group">
                                                     <a class="accordion-toggle accordion-caret collapsed" data-toggle="collapse" data-parent="#parent@(customerGroup.CustomerId)" 
-                                                        href="#collapseLinkInfoGroup@(categoryGroup.CategoryId)"><strong>@Translation.Get(categoryGroup.CategoryName, Enums.TranslationSource.TextTranslation)</strong>
+                                                        href="#collapseLinkInfoGroup@(categoryGroup.CategoryId)"><strong>@Translation.Get(categoryGroup.CategoryName)</strong>
                                                     </a>
                                                 </div>
                                                 <ul id="collapseLinkInfoGroup@(categoryGroup.CategoryId)" class="accordion-body collapse">
@@ -39,13 +39,17 @@
                                                         <li style="padding-left: 18px;">
                                                             @if(string.IsNullOrEmpty(link.UrlAddress))
                                                             {
-                                                                if (link.DocumentId == null || link.DocumentId == 0)
+                                                                if (link.CaseSolutionId.HasValue && link.CaseSolutionId != 0)
                                                                 {
-                                                                <a @target href="@Url.Action("new/", "cases", new { customerId = link.CustomerId, templateId = link.CaseSolutionId, templateistrue = 1 })">@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
+                                                                    <a @target href="@Url.Action("new/", "cases", new { customerId = link.CustomerId, templateId = link.CaseSolutionId, templateistrue = 1 })">@Translation.Get(link.UrlName)</a>
                                                                 }
-                                                                else
+                                                                else if(link.DocumentId.HasValue && link.DocumentId != 0)
                                                                 {
-                                                                <a @target href="@Url.Action("DocumentFile", "Document", new { document = link.DocumentId })">@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
+                                                                    <a @target href="@Url.Action("DocumentFile", "Document", new { document = link.DocumentId })">@Translation.Get(link.UrlName)</a>
+                                                                }
+                                                                else if (link.CaseFilterFavoriteId.HasValue && link.CaseFilterFavoriteId != 0)
+                                                                {
+                                                                    <a @target href="@Url.Action("index", "cases", new { filterId = link.CaseFilterFavoriteId })">@Translation.Get(link.UrlName)</a>
                                                                 }
                                                             }
                                                             else
@@ -53,14 +57,14 @@
                                                                 var linkUrlAddress = link.UrlAddress;
                                                                 linkUrlAddress = linkUrlAddress.Replace("[UserId]", SessionFacade.CurrentUser.UserId).Replace("[Language]", SessionFacade.CurrentLanguageCode).Replace("[ApplicationType]", "HD5");
 
-                                                                if(link.OpenInNewWindow)
+                                                                if (link.OpenInNewWindow)
                                                                 {
                                                                 <a onclick="window.open('@linkUrlAddress', null, 'width=@link.NewWindowWidth,height=@link.NewWindowHeight,resizable=yes,scrollbars=yes');" 
-                                                                            style="cursor:pointer"><i class="icon-play-circle"></i>&nbsp;@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
+                                                                            style="cursor:pointer"><i class="icon-play-circle"></i>&nbsp;@Translation.Get(link.UrlName)</a>
                                                                 }
                                                                 else
                                                                 {         
-                                                                <a href="@linkUrlAddress"><i class="icon-play-circle"></i>&nbsp;@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
+                                                                <a href="@linkUrlAddress"><i class="icon-play-circle"></i>&nbsp;@Translation.Get(link.UrlName)</a>
                                                                 }
                                                             }
                                                         </li>
@@ -76,13 +80,17 @@
                                                         <li>
                                                             @if(string.IsNullOrEmpty(link.UrlAddress))
                                                             {
-                                                                if(link.DocumentId == null || link.DocumentId==0)
+                                                                if (link.CaseSolutionId.HasValue && link.CaseSolutionId != 0)
                                                                 {
-                                                                <a @target href="@Url.Action("new/", "cases", new { customerId = link.CustomerId, templateId = link.CaseSolutionId, templateistrue = 1 })">@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
+                                                                    <a @target href="@Url.Action("new/", "cases", new { customerId = link.CustomerId, templateId = link.CaseSolutionId, templateistrue = 1 })">@Translation.Get(link.UrlName)</a>
                                                                 }
-                                                                else
+                                                                else if (link.DocumentId.HasValue && link.DocumentId != 0)
                                                                 {
-                                                                <a @target href="@Url.Action("DocumentFile", "Document", new { document = link.DocumentId })">@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
+                                                                    <a @target href="@Url.Action("DocumentFile", "Document", new { document = link.DocumentId })">@Translation.Get(link.UrlName)</a>
+                                                                }
+                                                                else if (link.CaseFilterFavoriteId.HasValue && link.CaseFilterFavoriteId != 0)
+                                                                {
+                                                                    <a @target href="@Url.Action("Index", "cases", new { filterId = link.CaseFilterFavoriteId })">@Translation.Get(link.UrlName)</a>
                                                                 }
                                                             }
                                                             else
@@ -90,14 +98,14 @@
                                                                 var linkUrlAddress = link.UrlAddress;
                                                                 linkUrlAddress = linkUrlAddress.Replace("[UserId]", SessionFacade.CurrentUser.UserId).Replace("[Language]", SessionFacade.CurrentLanguageCode);
 
-                                                                if(link.OpenInNewWindow)
+                                                                if (link.OpenInNewWindow)
                                                                 {
                                                                 <a onclick="window.open('@linkUrlAddress', null, 'width=@link.NewWindowWidth,height=@link.NewWindowHeight,resizable=yes,scrollbars=yes');" 
-                                                                            style="cursor:pointer"><i class="icon-play-circle"></i>&nbsp;@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
+                                                                            style="cursor:pointer"><i class="icon-play-circle"></i>&nbsp;@Translation.Get(link.UrlName)</a>
                                                                 }
                                                                 else
                                                                 {         
-                                                                <a href="@linkUrlAddress"><i class="icon-play-circle"></i>&nbsp;@Translation.Get(link.UrlName, Enums.TranslationSource.TextTranslation)</a>
+                                                                <a href="@linkUrlAddress"><i class="icon-play-circle"></i>&nbsp;@Translation.Get(link.UrlName)</a>
                                                                 }
                                                             }
                                                         </li>

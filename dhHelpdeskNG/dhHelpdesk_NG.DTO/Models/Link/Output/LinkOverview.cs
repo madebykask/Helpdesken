@@ -66,6 +66,10 @@ namespace DH.Helpdesk.BusinessData.Models.Link.Output
         /// </summary>
         public int? DocumentId { get; set; }
 
+
+        public int? CaseFilterFavoriteId { get; set; }
+
+        public string CaseFilterFavoritуName { get; set; }
         /// <summary>
         /// Gets or sets document name.
         /// </summary>
