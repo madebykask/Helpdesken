@@ -258,7 +258,7 @@ namespace DH.Helpdesk.Dal.Repositories
             sql += "ISNULL([Project3].[CaseFilterFavorite_Id], '') AS [CaseFilterFavorite_Id], ";
             sql += "ISNULL([Project3].[CaseSolution_Id], 0) AS [CaseSolution_Id], ";
             sql += " ISNULL((SELECT CaseSolutionName FROM dbo.tblCaseSolution WHERE(Id = [Project3].[CaseSolution_Id])), '') AS CaseSolutionName, ";
-            sql += " ISNULL((SELECT Name FROM dbo.tblCaseFilterFavorite WHERE(Id = [Project3].[CaseFilterFavorite_Id])), '') AS CaseFilterFavoritóName, ";
+            sql += " ISNULL((SELECT Name FROM dbo.tblCaseFilterFavorite WHERE(Id = [Project3].[CaseFilterFavorite_Id])), '') AS CaseFilterFavoriteName, ";
             sql += " ISNULL((SELECT Name FROM dbo.tblCustomer WHERE(Id = [Project3].[Customer_Id])), '') AS CustomerName, ";
             sql += " (SELECT DocumentName FROM dbo.tblDocument WHERE(Id = [Project3].[Document_Id])) AS DocumentName,  ";
             sql += " (SELECT LinkGroup FROM dbo.tblLinkGroup WHERE(Id = [Project3].[LinkGroup_Id])) AS LinkGroupName ";
@@ -342,7 +342,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 ltemp.CaseSolutionId = row["CaseSolution_Id"].ToString() != null ? Convert.ToInt32(row["CaseSolution_Id"].ToString()) : 0;
                 ltemp.CaseSolutionName = row["CaseSolutionName"].ToString() != null ? Convert.ToString(row["CaseSolutionName"].ToString()) : string.Empty;
                 ltemp.CaseFilterFavoriteId = row["CaseFilterFavorite_Id"].ToString() != null ? Convert.ToInt32(row["CaseFilterFavorite_Id"].ToString()) : 0;
-                ltemp.CaseFilterFavoritóName = row["CaseFilterFavoritóName"].ToString() != null ? Convert.ToString(row["CaseFilterFavoritóName"].ToString()) : string.Empty;
+                ltemp.CaseFilterFavoriteName = row["CaseFilterFavoriteName"].ToString() != null ? Convert.ToString(row["CaseFilterFavoriteName"].ToString()) : string.Empty;
                 ltemp.CustomerId = row["Customer_Id"].ToString() != null ? Convert.ToInt32(row["Customer_Id"].ToString()) : 0;
                 ltemp.CustomerName = row["CustomerName"].ToString() != null ? Convert.ToString(row["CustomerName"].ToString()) : string.Empty;
                 ltemp.DocumentId = row["Document_Id"].ToString() != null ? Convert.ToInt32(row["Document_Id"].ToString()) : 0;

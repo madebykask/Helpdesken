@@ -69,7 +69,7 @@ namespace DH.Helpdesk.BusinessData.Models.Link.Output
 
         public int? CaseFilterFavoriteId { get; set; }
 
-        public string CaseFilterFavoritуName { get; set; }
+        public string CaseFilterFavoriteName { get; set; }
         /// <summary>
         /// Gets or sets document name.
         /// </summary>
