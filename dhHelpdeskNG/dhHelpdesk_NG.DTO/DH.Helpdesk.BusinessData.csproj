@@ -295,6 +295,7 @@
     <Compile Include="Models\Grid\GridColumnDefinition.cs" />
     <Compile Include="Models\Grid\GridSettingsModel.cs" />
     <Compile Include="Models\IdName.cs" />
+    <Compile Include="Models\Inventory\InventorySearchResult.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceOrderFile.cs" />
     <Compile Include="Models\Invoice\InvoiceArticleProductAreaSelectedFilter.cs" />
     <Compile Include="Models\Invoice\InvoiceArticleProductArea.cs" />

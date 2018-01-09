@@ -1857,7 +1857,12 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public ActionResult Search_Computer(string query, int customerId)
         {
-            var result = this._computerService.SearchComputer(customerId, query);
+            var result = this._computerService.SearchPcNumber(customerId, query);
+            foreach (var inv in result)
+            {
+                if (inv.NeedTranslate)
+                    inv.TypeName = Translation.GetCoreTextTranslation(inv.TypeName);
+            }
             return this.Json(result);
         }
 

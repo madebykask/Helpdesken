@@ -54,9 +54,10 @@ function GetComputerSearchOptions() {
                     var resultList = jQuery.map(result, function (item) {
                         var aItem = {
                             id: item.Id
-                                , num: item.ComputerName
+                                , num: item.Name
                                 , location: item.Location
-                                , computertype: item.ComputerTypeDescription
+                                , computertype: item.TypeDescription
+                            , ctype: item.TypeName
                         };
                         return JSON.stringify(aItem);
                     });
@@ -89,7 +90,7 @@ function GetComputerSearchOptions() {
         highlighter: function (obj) {
             var item = JSON.parse(obj);
             var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-            var result = item.num + ' - ' + item.location + ' - ' + (item.computertype == null ? ' ' : item.computertype);
+            var result =item.ctype + ": " + item.num + ' - ' + item.location + ' - ' + (item.computertype == null ? ' ' : item.computertype);
 
             return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
                 return '<strong>' + match + '</strong>';

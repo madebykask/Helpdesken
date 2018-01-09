@@ -315,6 +315,63 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             return inventory?.Id ?? 0;
         }
 
+        public List<InventorySearchResult> SearchPcNumber(int customerId, string searchFor)
+        {
+            var s = searchFor.ToLower();
+
+            var workstations =
+                from c in this.DbContext.Computers
+                join ct in this.DbContext.ComputerTypes on c.ComputerType_Id equals ct.Id into res
+                from k in res.DefaultIfEmpty()
+                where c.Customer_Id == customerId && (c.ComputerName.ToLower().Contains(s) || c.Location.ToLower().Contains(s) || k.ComputerTypeDescription.ToLower().Contains(s))
+                select new InventorySearchResult
+                {
+                    Id = c.Id,
+                    Name = c.ComputerName,
+                    Location = c.Location,
+                    TypeDescription = k.ComputerTypeDescription,
+                    TypeName = "Arbetsstation",
+                    NeedTranslate = true
+                };
+            var result = workstations.ToList();
+
+            var servers = DbContext.Servers.Where(x => x.Customer_Id == customerId && (x.ServerName.ToLower().Contains(s) || x.Location.ToLower().Contains(s)))
+                    .Select(x => new InventorySearchResult
+                    {
+                        Id = x.Id,
+                        Name = x.ServerName,
+                        Location = x.Location,
+                        TypeDescription = string.Empty,
+                        TypeName = "Server",
+                        NeedTranslate = true
+                    }).ToList();
+            result.AddRange(servers);
+            var printers = DbContext.Printers.Where(x => x.Customer_Id == customerId && (x.PrinterName.ToLower().Contains(s) || x.Location.ToLower().Contains(s)))
+                    .Select(x => new InventorySearchResult
+                    {
+                        Id = x.Id,
+                        Name = x.PrinterName,
+                        Location = x.Location,
+                        TypeDescription = string.Empty,
+                        TypeName = "Skrivare",
+                        NeedTranslate = true
+                    }).ToList();
+            result.AddRange(printers);
+            var customInventories = DbContext.Inventories.Where(x => x.InventoryType.Customer_Id == customerId).OrderBy(x => x.InventoryType.Name)
+                .Where(x => x.InventoryName.ToLower().Contains(s))
+                    .Select(x => new InventorySearchResult
+                    {
+                        Id = x.Id,
+                        Name = x.InventoryName,
+                        Location = string.Empty,
+                        TypeDescription = string.Empty,
+                        TypeName = x.InventoryType.Name
+                    }).ToList();
+            result.AddRange(customInventories);
+
+            return result;
+        }
+
         private void Map(Inventory businessModel, Domain.Inventory.Inventory entity)
         {
             entity.Department_Id = businessModel.DepartmentId;

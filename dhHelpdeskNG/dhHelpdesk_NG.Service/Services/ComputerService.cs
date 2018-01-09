@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.Inventory;
+using DH.Helpdesk.Dal.Repositories.Inventory;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -48,7 +51,7 @@
 
         Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true);
         void Commit();
-
+        List<InventorySearchResult> SearchPcNumber(int customerId, string query);
     }
 
     public class ComputerService : IComputerService
@@ -61,6 +64,7 @@
         private readonly IOrganizationUnitRepository _ouRespository;
         private readonly INotifierFieldSettingLanguageRepository _computerUserFieldSettingLanguageRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IInventoryRepository _inventoryRepository;
        
 
         public ComputerService(
@@ -71,6 +75,7 @@
             IComputerRepository computerRepository,
             IOrganizationUnitRepository ouRespository,
             INotifierFieldSettingLanguageRepository computerUserFieldSettingLanguageRepository,
+            IInventoryRepository inventoryRepository,
             IUnitOfWork unitOfWork)
         {
             this._computerUserFieldSettingsRepository = computerUserFieldSettingsRepository;
@@ -81,6 +86,7 @@
             this._ouRespository = ouRespository;
             this._unitOfWork = unitOfWork;
             this._computerUserFieldSettingLanguageRepository = computerUserFieldSettingLanguageRepository;
+            this._inventoryRepository = inventoryRepository;
         }
 
         public IDictionary<string, string> Validate(ComputerUsersBlackList computerUsersBlackListToValidate)
@@ -449,6 +455,11 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public List<InventorySearchResult> SearchPcNumber(int customerId, string query)
+        {
+            return _inventoryRepository.SearchPcNumber(customerId, query);
         }
     }
 }

@@ -29,5 +29,6 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
         void DeleteByInventoryTypeId(int inventoryTypeId);
 
         int GetIdByName(string inventoryName, int inventoryTypeId);
+        List<InventorySearchResult> SearchPcNumber(int customerId, string query);
     }
 }
