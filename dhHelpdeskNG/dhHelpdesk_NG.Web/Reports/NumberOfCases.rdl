@@ -21,6 +21,7 @@ Parameters!Category.Label="SubStatus", Fields!SubStatus.Value,
 Parameters!Category.Label="Department", Fields!Department.Value, 
 Parameters!Category.Label="Priority", Fields!Priority.Value, 
 Parameters!Category.Label="Closing Date", Fields!Closing_Date.Value, 
+Parameters!Category.Label="Closing Weekday", Fields!Closing_Weekday.Value,
 Parameters!Category.Label="Product Area", Fields!ProductArea.Value
 )</GroupExpression>
                 </GroupExpressions>
@@ -30,7 +31,7 @@ Parameters!Category.Label="Product Area", Fields!ProductArea.Value
                   <Value>=Switch
 (Parameters!Category.Label="Case Type", Fields!CaseType.Value, 
 Parameters!Category.Label="Registration Year", Fields!Registration_Year.Value, 
-Parameters!Category.Label="Registration Weekday", Fields!Registration_Weekday.Value, 
+Parameters!Category.Label="Registration Weekday", Fields!RegistrationDayNoOfWeek.Value, 
 Parameters!Category.Label="Registration Month", Fields!Registration_Month.Value,
 Parameters!Category.Label="Registration Date", Fields!Registration_Date.Value, 
 Parameters!Category.Label="Registration Hour", Fields!Registration_Hour.Value,
@@ -39,7 +40,9 @@ Parameters!Category.Label="Working Group", Fields!Working_group.Value,
 Parameters!Category.Label="SubStatus", Fields!SubStatus.Value, 
 Parameters!Category.Label="Department", Fields!Department.Value, 
 Parameters!Category.Label="Priority", Fields!Priority.Value, 
-Parameters!Category.Label="Closing Date", Fields!Closing_Date.Value
+Parameters!Category.Label="Closing Date", Fields!Closing_Date.Value,
+Parameters!Category.Label="Closing Weekday", Fields!ClosingDayNoOfWeek.Value
+
 )</Value>
                 </SortExpression>
               </SortExpressions>
@@ -56,6 +59,7 @@ Parameters!Category.Label="SubStatus", Fields!SubStatus.Value,
 Parameters!Category.Label="Department", Fields!Department.Value, 
 Parameters!Category.Label="Priority", Fields!Priority.Value, 
 Parameters!Category.Label="Closing Date", Fields!Closing_Date.Value, 
+Parameters!Category.Label="Closing Weekday", Fields!Closing_Weekday.Value, 
 Parameters!Category.Label="Product Area", Fields!ProductArea.Value
 )</Label>
             </ChartMember>
@@ -126,6 +130,7 @@ Parameters!Category.Label="Registration Hour", "Registration Hour",
 Parameters!Category.Label="Department", "Department", 
 Parameters!Category.Label="Priority", "Priority", 
 Parameters!Category.Label="Closing Date", "Closing Date", 
+Parameters!Category.Label="Closing Weekday", "Closing Weekday", 
 Parameters!Category.Label="Registration Weekday", "Registration Weekday", 
 Parameters!Category.Label="Registration Month", "Registration Month",
 Parameters!Category.Label="Product Area", "ProductArea"
@@ -378,6 +383,7 @@ Parameters!Category.Label="SubStatus", "SubStatus",
 Parameters!Category.Label="Department", "Department", 
 Parameters!Category.Label="Priority", "Priority", 
 Parameters!Category.Label="Closing Date","Closing Date",
+Parameters!Category.Label="Closing Weekday", "Closing Weekday",
 Parameters!Category.Label="Product Area", "Product Area"
 )</Value>
                 <Style>
@@ -463,8 +469,7 @@ Parameters!Category.Label="Product Area", "Product Area"
     <DataSet Name="VariabelAxel">
       <Query>
         <DataSourceName>DataSource1</DataSourceName>
-        <CommandText>
-SELECT  
+        <CommandText>SELECT  
 								1 AS Quantity
 								  ,dbo.tblCustomer.Name AS Customer, 
 						dbo.tblCase.Casenumber, 
@@ -480,16 +485,19 @@ SELECT
 						 
 						-- dbo.tblCaseType.CaseType, dbo.tblCaseType.CaseType AS CaseTypeUser, 
                          
-						 dbo.tblCase.Caption AS Subject, CONVERT(nvarchar(10), dbo.tblCase.FinishingDate, 121) AS [Closing Date], 
+						 dbo.tblCase.Caption AS Subject, CONVERT(nvarchar(10), 
+						 dbo.tblCase.FinishingDate, 121) AS [Closing Date], 
+						 dbo.tblCase.FinishingDate, 
+						 CASE DATEPART(dw, dbo.tblCase.FinishingDate) WHEN 1 THEN 8 ELSE DATEPART(dw, dbo.tblCase.FinishingDate) END AS [ClosingDayNoOfWeek], 
+						CASE DATEPART(dw, dbo.tblCase.FinishingDate) 
+                         WHEN 2 THEN 'Måndag' WHEN 3 THEN 'Tisdag' WHEN 4 THEN 'Onsdag' WHEN 5 THEN 'Torsdag' WHEN 6 THEN 'Fredag' WHEN 7 THEN 'Lördag' WHEN 1 THEN 'Söndag' ELSE 'Saknas' END
+                          AS [Closing Weekday],
 						 CASE isnull(tblcase.FinishingDate, 0) 
                          WHEN 0 THEN 'On Going' ELSE 'Closed' END AS [Case Status], 
 						 dbo.tblRegion.Region, dbo.tblDepartment.Department, 
 						 ISNULL(dbo.tblOU.OU, '') AS [Org unit], 
-                         
 						 [dbo].[GetHierarchy]
-						 (tblCase.CaseType_id,'tblCaseType') AS CaseType,
-	
-						 
+						 (tblCase.CaseType_id,'tblCaseType') AS CaseType,					 
 						  [dbo].[GetHierarchy]
 						 (tblCase.ProductArea_id,'tblProductArea') AS ProductArea,
 						  ISNULL(dbo.tblRegistrationSourceCustomer.SourceName, '') AS Source, 
@@ -497,8 +505,8 @@ SELECT
 						 dbo.tblPriority.PriorityName AS Priority, 
 						 dbo.tblStatus.StatusName AS Status, 
                          dbo.tblStateSecondary.StateSecondary AS [SubStatus], 
-						 CASE DATEPART(dw, dbo.tblCase.RegTime) 
-                         WHEN 2 THEN 'Måndag' WHEN 3 THEN 'Tisdag' WHEN 4 THEN 'Onsdag' WHEN 5 THEN 'Torsdag' WHEN 6 THEN 'Fredag' WHEN 7 THEN 'Lördag' ELSE 'Söndag' END
+						CASE DATEPART(dw, dbo.tblCase.RegTime) WHEN 1 THEN 8 ELSE DATEPART(dw, dbo.tblCase.RegTime)  END AS RegistrationDayNoOfWeek, 
+                         CASE DATEPART(dw, dbo.tblCase.RegTime) WHEN 2 THEN 'Måndag' WHEN 3 THEN 'Tisdag' WHEN 4 THEN 'Onsdag' WHEN 5 THEN 'Torsdag' WHEN 6 THEN 'Fredag' WHEN 7 THEN 'Lördag' WHEN 1 THEN 'Söndag' ELSE 'Saknas' END
                           AS [Registration Weekday], 
 						  DATEPART(hh, dbo.tblCase.RegTime) AS [Registration Hour], 
 						  CASE DatePart(m, tblCase.regtime) 
@@ -510,8 +518,8 @@ SELECT
                          dbo.tblCase.RegTime)) END AS YearMonth,
                              (SELECT        CASE WHEN MAX(id) IS NOT NULL THEN 'Ja' ELSE 'Nej' END AS Expr1
                                FROM            dbo.tblCaseHistory
-                               WHERE        (Case_Id = dbo.tblCase.Id) AND (StateSecondary_Id IS NOT NULL)) AS OnHold, CASE WHEN tblCase.Watchdate IS NULL 
-                         THEN CASE WHEN tblCase.LeadTime / 60 &gt; tblPriority.SolutionTime AND 
+                               WHERE        (Case_Id = dbo.tblCase.Id) AND (StateSecondary_Id IS NOT NULL)) AS OnHold, 
+							   CASE WHEN tblCase.Watchdate IS NULL THEN CASE WHEN tblCase.LeadTime / 60 &gt; tblPriority.SolutionTime AND 
                          tblPriority.SolutionTime &gt; 0 THEN 'Nej' ELSE 'Ja' END ELSE CASE WHEN tblCase.LeadTime &gt; 0 THEN 'Nej' ELSE 'Ja' END END AS InTime, 
                          CASE WHEN tblCase.Watchdate IS NULL THEN CASE WHEN tblCase.LeadTime / 60 &gt; tblPriority.SolutionTime AND 
                          tblPriority.SolutionTime &gt; 0 THEN 'Nej' ELSE 'Ja' END ELSE CASE WHEN CONVERT(varchar(10), tblCase.WatchDate, 121) &lt; CONVERT(varchar(10), 
@@ -596,6 +604,14 @@ ORDER BY dbo.tblCase.Casenumber</CommandText>
           <DataField>Financial Year</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="ClosingDayNoOfWeek">
+          <DataField>ClosingDayNoOfWeek</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="FinishingDate">
+          <DataField>FinishingDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
         <Field Name="Registrated_By">
           <DataField>Registrated By</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -603,6 +619,10 @@ ORDER BY dbo.tblCase.Casenumber</CommandText>
         <Field Name="Registration_Hour">
           <DataField>Registration Hour</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Closing_Weekday">
+          <DataField>Closing Weekday</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Subject">
           <DataField>Subject</DataField>
@@ -643,6 +663,10 @@ ORDER BY dbo.tblCase.Casenumber</CommandText>
         <Field Name="Org_unit">
           <DataField>Org unit</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="RegistrationDayNoOfWeek">
+          <DataField>RegistrationDayNoOfWeek</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="Status">
           <DataField>Status</DataField>
@@ -757,6 +781,10 @@ ORDER BY dbo.tblCase.Casenumber</CommandText>
           <ParameterValue>
             <Value>12</Value>
             <Label>Closing Date</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>14</Value>
+            <Label>Closing Weekday</Label>
           </ParameterValue>
         </ParameterValues>
       </ValidValues>
