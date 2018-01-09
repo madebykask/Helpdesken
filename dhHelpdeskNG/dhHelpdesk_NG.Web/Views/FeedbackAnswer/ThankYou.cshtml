@@ -19,6 +19,7 @@
                 @Html.HiddenFor(m => m.QuestionId)
                 <br/>
                 <a href="#" id="btnSaveComment" class="btn templateQuickButton"> Save </a>
+                <span id="saveMessage" style="display: none"></span>
             }
         }
     </div>
@@ -26,7 +27,6 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-
             $("#btnSaveComment").click(function(e) {
                     $.ajax({
                         type: "POST",
@@ -39,15 +39,22 @@
                         },
                         dataType: 'json',
                         success: function(data) {
-                            if (data && data.success) {
+                            if (data){
                                 $("#btnSaveComment").attr('disabled', 'disabled');
                                 $("#feedbackComment").attr('disabled', 'disabled');
                                 $('#btnSaveComment').unbind('click');
+                                $('#btnSaveComment').hide();
+                                $('#saveMessage').text(data.message);
+                                $('#saveMessage').show();
+                                if (data.success) {
+                                    $('#saveMessage').addClass("textgreen");
+                                } else {
+                                    $('#saveMessage').addClass("textred");
+                                }
                             }
                         }
                     });
                     e.preventDefault();
                 });
-
         });
 </script>
