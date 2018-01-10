@@ -4,11 +4,12 @@
 
     public class PrintersFilter
     {
-        public PrintersFilter(int customerId, int? departmentId, string searchFor)
+        public PrintersFilter(int customerId, int? departmentId, string searchFor, int? recordsCount)
         {
             this.CustomerId = customerId;
             this.DepartmentId = departmentId;
             this.SearchFor = searchFor;
+            this.RecordsCount = recordsCount;
         }
 
         [IsId]
@@ -18,5 +19,7 @@
         public int? DepartmentId { get; private set; }
 
         public string SearchFor { get; private set; }
+
+        public int? RecordsCount { get; set; }
     }
 }

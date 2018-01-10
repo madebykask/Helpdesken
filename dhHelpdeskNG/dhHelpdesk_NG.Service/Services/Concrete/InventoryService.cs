@@ -361,7 +361,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 computersFilter.SearchFor,
                 computersFilter.IsShowScrapped,
                 computersFilter.RecordsOnPage,
-                computersFilter.SortField);
+                computersFilter.SortField,
+                computersFilter.RecordsCount);
 
             return computerOverviews;
         }
@@ -501,9 +502,11 @@ namespace DH.Helpdesk.Services.Services.Concrete
             using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var repository = uow.GetRepository<DH.Helpdesk.Domain.Servers.Server>();
-                var overviews = repository.GetAll()
-                    .Search(computersFilter.CustomerId, computersFilter.SearchFor, computersFilter.SortField)
-                    .MapToFullOverviews();
+                var servers = repository.GetAll()
+                    .Search(computersFilter.CustomerId, computersFilter.SearchFor, computersFilter.SortField);
+                if (computersFilter.RecordsCount.HasValue)
+                    servers = servers.Take(computersFilter.RecordsCount.Value);
+                var overviews = servers.MapToFullOverviews();
                 return overviews;
             }
         }
@@ -551,7 +554,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
             var models = this.printerRepository.FindOverviews(
                 printersFilter.CustomerId,
                 printersFilter.DepartmentId,
-                printersFilter.SearchFor);
+                printersFilter.SearchFor,
+                printersFilter.RecordsCount);
 
             return models;
         }

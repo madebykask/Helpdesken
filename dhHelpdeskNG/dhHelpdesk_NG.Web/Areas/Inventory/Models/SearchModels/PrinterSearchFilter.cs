@@ -18,6 +18,8 @@
 
         public SortFieldModel SortField { get; set; }
 
+        public int? RecordsCount { get; set; }
+
         public static PrinterSearchFilter CreateDefault()
         {
             return new PrinterSearchFilter { SortField = new SortFieldModel() };
@@ -25,7 +27,7 @@
 
         public PrintersFilter CreateRequest(int customerId)
         {
-            return new PrintersFilter(customerId, this.DepartmentId, this.SearchFor);
+            return new PrintersFilter(customerId, this.DepartmentId, this.SearchFor, this.RecordsCount);
         }
     }
 }

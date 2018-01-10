@@ -5,11 +5,12 @@
 
     public class ServersFilter
     {
-        public ServersFilter(int customerId, string searchFor, SortField sortField)
+        public ServersFilter(int customerId, string searchFor, SortField sortField, int? recordsCount)
         {
             this.CustomerId = customerId;
             this.SearchFor = searchFor;
             this.SortField = sortField;
+            this.RecordsCount = recordsCount;
         }
 
         [IsId]
@@ -18,5 +19,7 @@
         public string SearchFor { get; private set; }
 
         public SortField SortField { get; private set; }
+
+        public int? RecordsCount { get; set; }
     }
 }

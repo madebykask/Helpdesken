@@ -113,7 +113,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
             return serverAggregate;
         }
 
-        public List<PrinterOverview> FindOverviews(int customerId, int? departmentId, string searchFor)
+        public List<PrinterOverview> FindOverviews(int customerId, int? departmentId, string searchFor, int? recordCount)
         {
             var query = this.DbSet.Where(x => x.Customer_Id == customerId);
 
@@ -134,6 +134,8 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
             {
                 query = query.Where(x => x.Department_Id == departmentId);
             }
+            if (recordCount.HasValue)
+                query = query.Take(recordCount.Value);
 
             var anonymus =
                 query.Select(

@@ -2,7 +2,9 @@
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @model DH.Helpdesk.Web.Areas.Inventory.Models.InventoryGridModel
-@Translation.Get("Poster i sökresultat"): @Model.Inventories.Count
+@Translation.GetCoreTextTranslation("Poster i sökresultat"): @Model.Inventories.Count @(Model.Inventories.Count >= DH.Helpdesk.Common.Constants.SearchFilter.RecordsOnPage 
+    ? string.Format(Translation.GetCoreTextTranslation("(Antal inventarier som visas är begränsade till {0})"), DH.Helpdesk.Common.Constants.SearchFilter.RecordsOnPage) 
+    : "")
 
 <table class="table table-striped table-bordered table-hover table-cases">
     <thead>

@@ -13,6 +13,8 @@
 
         public SortFieldModel SortField { get; set; }
 
+        public int? RecordsCount { get; set; }
+
         public static ServerSearchFilter CreateDefault()
         {
             return new ServerSearchFilter { SortField = new SortFieldModel() };
@@ -26,7 +28,7 @@
                 sf = new SortField(this.SortField.Name, this.SortField.SortBy ?? SortBy.Ascending);
             }
 
-            return new ServersFilter(customerId, this.SearchFor, sf);
+            return new ServersFilter(customerId, this.SearchFor, sf, this.RecordsCount);
         }
     }
 }

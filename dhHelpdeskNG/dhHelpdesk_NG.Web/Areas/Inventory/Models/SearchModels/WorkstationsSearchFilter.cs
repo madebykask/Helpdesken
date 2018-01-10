@@ -63,6 +63,8 @@
 
         public SortFieldModel SortField { get; set; }
 
+        public int? RecordsCount { get; set; }
+
         public static WorkstationsSearchFilter CreateDefault()
         {
             return new WorkstationsSearchFilter(500);
@@ -92,7 +94,8 @@
                 this.SearchFor,
                 this.IsShowScrapped,
                 this.RecordsOnPage,
-                sf);
+                sf,
+                this.RecordsCount);
         }
     }
 }
