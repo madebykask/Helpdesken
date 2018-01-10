@@ -453,7 +453,6 @@ namespace DH.Helpdesk.SelfService.Controllers
                 model.NewCase.FinishingDescription = caseTemplate.FinishingDescription;
 
                 //Hidden fields
-                model.NewCase.Performer_User_Id = caseTemplate.PerformerUser_Id;
                 model.NewCase.CausingPartId = caseTemplate.CausingPartId;
                 model.NewCase.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
                 model.NewCase.Project_Id = caseTemplate.Project_Id;
@@ -461,7 +460,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                 model.NewCase.PlanDate = caseTemplate.PlanDate;
                 model.NewCase.WatchDate = caseTemplate.WatchDate;
 
-                if(model.NewCase.IsAbout == null)
+                var defaultAdmin = cs.DefaultAdministratorExternal.HasValue ? cs.DefaultAdministratorExternal : caseTemplate.PerformerUser_Id;
+                model.NewCase.Performer_User_Id = caseTemplate.PerformerUser_Id.HasValue ? caseTemplate.PerformerUser_Id : defaultAdmin;
+
+                if (model.NewCase.IsAbout == null)
                     model.NewCase.IsAbout = new CaseIsAboutEntity();
 
                 model.NewCase.IsAbout.Id = 0;
