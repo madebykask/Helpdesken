@@ -6732,6 +6732,22 @@ begin
 end
 
 GO
+
+If not exists (select * from tbltext where id = 1922)
+	insert into tbltext (id, TextString) VALUES (1922, 'Ange')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1922 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1922, 2, 'Enter the')
+GO
+
+If not exists (select * from tbltext where id = 1923)
+	insert into tbltext (id, TextString) VALUES (1923, 'nummer du vill öppna')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1923 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1923, 2, 'number you want to open')
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 
