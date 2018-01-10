@@ -6635,6 +6635,110 @@ If not exists (select * from tblTextTranslation where text_id = 1906 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1906, 2, 'saved successfully')
 GO
 
+If not exists (select * from tbltext where id = 1907)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1907, 'ReportedTime', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1908)
+begin
+	insert into tbltext (TextString, TextType) VALUES (1908, 'CasesPerAdministrator', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1909)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1909, 'CasesPerDepartment', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1910)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1910, 'CasesPerDate', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1911)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1911, 'CasesPerSource', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1912)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1912, 'CasesPerWorkingGroup', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1913)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1913, 'AvgResolutionTime', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1914)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1914, 'NumberOfCases', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1915)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1915, 'CasesPerAdministrator', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1916)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1916, 'RegistrationDate', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1917)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1917, 'RegistrationYear', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1918)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1918, 'RegistrationMonth', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1919)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1919, 'RegistrationWeekday', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1920)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1920, 'RegistrationHour', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1921)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1921, 'LogNoteDate', 1)
+end
+
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 
