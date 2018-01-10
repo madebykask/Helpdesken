@@ -6642,13 +6642,6 @@ end
 
 GO
 
-If not exists (select * from tbltext where id = 1908)
-begin
-	insert into tbltext (TextString, TextType) VALUES (1908, 'CasesPerAdministrator', 1)
-end
-
-GO
-
 If not exists (select * from tbltext where id = 1909)
 begin
 	insert into tbltext (id, TextString, TextType) VALUES (1909, 'CasesPerDepartment', 1)
