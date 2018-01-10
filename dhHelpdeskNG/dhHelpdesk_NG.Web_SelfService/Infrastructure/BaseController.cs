@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.SelfService.Infrastructure.Configuration;
+﻿using System.Diagnostics;
+using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 
 namespace DH.Helpdesk.SelfService.Infrastructure
 {
@@ -27,15 +28,21 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
     public class BaseController : Controller
     {
+        const string DEFAULT_ANONYMOUS_USER_ID = "AnonymousUser";
+
+        private readonly ISelfServiceConfigurationService _configurationService;
         private readonly IMasterDataService _masterDataService;
         private readonly ICaseSolutionService _caseSolutionService;
         private bool userOrCustomerChanged = false;
-        private const string DEFAULT_ANONYMOUS_USER_ID = "AnonymousUser";
+
+        protected ISelfServiceConfigurationService ConfigurationService => _configurationService;
 
         public BaseController(
+            ISelfServiceConfigurationService configurationService,
             IMasterDataService masterDataService,
             ICaseSolutionService caseSolutionService)
         {
+            _configurationService = configurationService;
             _masterDataService = masterDataService;
             _caseSolutionService = caseSolutionService;
         }
@@ -43,6 +50,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         //called before a controller action is executed, that is before ~/HomeController/index 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            //Debugger.Launch();
+
             if (!CheckUserAccessToUrl(filterContext))
             {
                 SessionFacade.UserHasAccess = false;
@@ -159,7 +168,10 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     return;
                 }
             }
-            
+
+            ViewBag.IsLineManagerApplication = IsLineManagerApplication();
+            ViewBag.ApplicationType = _configurationService.AppSettings.ApplicationType;
+
             SetTextTranslation(filterContext);
         }
 
@@ -592,6 +604,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     filterContext.HttpContext.Request.Url.AbsoluteUri;
         }
        
+        //todo: move to separate class
         protected string RenderRazorViewToString(string viewName, object model, bool partial = true)
         {
             var viewResult = partial ? ViewEngines.Engines.FindPartialView(this.ControllerContext, viewName) : ViewEngines.Engines.FindView(this.ControllerContext, viewName, null);
@@ -607,6 +620,17 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 viewResult.ViewEngine.ReleaseView(this.ControllerContext, viewResult.View);
                 return sw.GetStringBuilder().ToString();
             }
+        }
+
+        protected bool IsLineManagerApplication()
+        {
+            var applicationType = _configurationService.AppSettings.ApplicationType;
+            return ApplicationTypes.LineManager.Equals(applicationType, StringComparison.OrdinalIgnoreCase);
+        }
+
+        protected ActionResult RedirectToErrorPage()
+        {
+            return RedirectToAction("Index", "Error");
         }
 
         private void SessionCheck(ActionExecutingContext filterContext)
@@ -657,19 +681,21 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             }
         }
 
+        //todo: make action filter
         private bool CheckUserAccessToUrl(ActionExecutingContext filterContext)
         {
-            var urlConfig = (SelfServiceUrlSetting)ConfigurationManager.GetSection("selfServiceConfigurable/selfServiceUrlSetting");
-            if (urlConfig == null || urlConfig.DeniedUrls == null || !urlConfig.DeniedUrls.Any())
+            var urlSettings = _configurationService.UrlSettings;
+            
+            if (urlSettings?.DeniedUrls == null || !urlSettings.DeniedUrls.Any())
                 return true;
 
-            foreach (var url in urlConfig.DeniedUrls)
+            foreach (var url in urlSettings.DeniedUrls)
             {                
-                if (IsStringMatch(url.Path, filterContext.HttpContext.Request.RawUrl))
+                if (IsStringMatch(url, filterContext.HttpContext.Request.RawUrl))
                 {
-                    foreach (var allowUrl in urlConfig.AllowedUrls)
+                    foreach (var allowUrl in urlSettings.AllowedUrls)
                     {
-                        if (IsStringMatch(allowUrl.Path, filterContext.HttpContext.Request.RawUrl))
+                        if (IsStringMatch(allowUrl, filterContext.HttpContext.Request.RawUrl))
                             return true;
                     }
 

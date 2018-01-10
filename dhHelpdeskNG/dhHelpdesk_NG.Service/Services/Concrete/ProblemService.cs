@@ -114,10 +114,13 @@
             using (var uow = this.unitOfWorkFactory.Create())
             {
                 var repository = uow.GetRepository<Problem>();
+                var problems = repository.GetAll();
+                if (forStartPage)
+                {
+                    problems = problems.Where(x => !x.FinishingDate.HasValue);
+                }
 
-                return repository.GetAll()
-                        .GetForStartPage(customers, count, forStartPage)
-                        .MapToOverviews();
+                return problems.GetForStartPage(customers, count, forStartPage).MapToOverviews();
             }
         }
 

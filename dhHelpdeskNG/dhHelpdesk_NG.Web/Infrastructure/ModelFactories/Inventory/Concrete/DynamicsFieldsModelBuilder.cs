@@ -29,7 +29,8 @@
                     setting.Position,
                     setting.PropertySize,
                     setting.FieldType,
-                    dynamicField != null ? dynamicField.Value : null);
+                    dynamicField != null ? dynamicField.Value : null,
+                    setting.IsReadOnly);
 
                 data.Add(dynamicFieldModel);
             }
@@ -50,7 +51,8 @@
                     setting.Position,
                     setting.PropertySize,
                     setting.FieldType,
-                    null);
+                    null,
+                    setting.IsReadOnly);
 
                 data.Add(dynamicFieldModel);
             }

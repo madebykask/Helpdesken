@@ -18,6 +18,7 @@
         public IList<SelectListItem> UsSelected { get; set; }
 
         public IList<SelectListItem> CaseSolutions { get; set; }
+        public IList<SelectListItem> FavoriteSearchFilters { get; set; }
 
 
         public IList<SelectListItem> WgAvailable { get; set; }

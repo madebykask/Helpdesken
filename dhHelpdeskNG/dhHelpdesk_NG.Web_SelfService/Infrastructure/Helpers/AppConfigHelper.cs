@@ -14,7 +14,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Helpers
         public static string GetAppSetting(string name)
         {
             if (ConfigurationManager.AppSettings.AllKeys.Contains(name))
-                return ConfigurationManager.AppSettings[name].ToString().CleanSpaceAndLowStr();
+                return ConfigurationManager.AppSettings[name].CleanSpaceAndLowStr();
 
             return null;
         }

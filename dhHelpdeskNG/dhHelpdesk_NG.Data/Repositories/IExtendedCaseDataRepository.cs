@@ -18,5 +18,7 @@
 
 
         ExtendedCaseDataModel GetExtendedCaseDataByCaseId(int caseID);
-	}
+
+        int GetCaseIdByExtendedCaseGuid(Guid uniqueId);
+    }
 }

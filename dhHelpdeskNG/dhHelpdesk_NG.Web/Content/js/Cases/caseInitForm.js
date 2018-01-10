@@ -54,9 +54,10 @@ function GetComputerSearchOptions() {
                     var resultList = jQuery.map(result, function (item) {
                         var aItem = {
                             id: item.Id
-                                , num: item.ComputerName
+                                , num: item.Name
                                 , location: item.Location
-                                , computertype: item.ComputerTypeDescription
+                                , computertype: item.TypeDescription
+                            , ctype: item.TypeName
                         };
                         return JSON.stringify(aItem);
                     });
@@ -89,7 +90,7 @@ function GetComputerSearchOptions() {
         highlighter: function (obj) {
             var item = JSON.parse(obj);
             var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-            var result = item.num + ' - ' + item.location + ' - ' + (item.computertype == null ? ' ' : item.computertype);
+            var result =item.ctype + ": " + item.num + ' - ' + item.location + ' - ' + (item.computertype == null ? ' ' : item.computertype);
 
             return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
                 return '<strong>' + match + '</strong>';
@@ -783,11 +784,11 @@ function CaseInitForm() {
     }
 
     function resetProductareaByCaseType(caseTypeId) {
-        $.post('/Cases/GetProductAreaByCaseType/', { caseTypeId: caseTypeId, customerId: publicCustomerId, myTime: Date.now() }, function (result) {
+        var paId = parseInt($('#case__ProductArea_Id').val());
+        $.post('/Cases/GetProductAreaByCaseType/', { caseTypeId: caseTypeId, customerId: publicCustomerId, myTime: Date.now(), productAreaIdToInclude: paId }, function (result) {
             if (result.success) {
                 $('#divProductArea.DynamicDropDown > ul.dropdown-menu')
                     .html("<li><a href='#'>--</a></li>" + result.data);
-                var paId = parseInt($('#case__ProductArea_Id').val());
                 if (result.paIds && result.paIds.indexOf(paId) < 0) {
                     var emptyElement = $('#divProductArea.DynamicDropDown > ul.dropdown-menu').children().first();
                     $('#divBreadcrumbs_ProductArea').text(getBreadcrumbs(emptyElement));
@@ -924,10 +925,13 @@ function CaseInitForm() {
             CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#Performer_Id', $('#DepartmentFilterFormat').val());
         }
         //set state secondery
-        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeWorkingGroupSetStateSecondary/', '#case__StateSecondary_Id', '.readonlySubstate');        
+        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeWorkingGroupSetStateSecondary/', '#case__StateSecondary_Id', '.readonlySubstate')
+            .done(function() {
+                $('#case__StateSecondary_Id').trigger('change', 'case__WorkingGroup_Id');
+            });
       });
 
-    $('#case__StateSecondary_Id').change(function () {
+    $('#case__StateSecondary_Id').change(function (d, source) {
         $('#CaseLog_SendMailAboutCaseToNotifier').removeAttr('disabled');
         curVal = $('#case__StateSecondary_Id').val();
         $('#case__StateSecondary_Id option[value=' + curVal + ']').attr('selected', 'selected');
@@ -949,7 +953,7 @@ function CaseInitForm() {
             }
             // set workinggroup id
             var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
-            if (exists > 0 && data.WorkingGroup_Id > 0) {               
+            if (exists > 0 && data.WorkingGroup_Id > 0 && source !== 'case__WorkingGroup_Id') {
                 $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id);
             }
         }, 'json');
@@ -960,7 +964,7 @@ function CaseInitForm() {
     });
 
     function addTextToLog(text) {
-        var regexp = /<BR>/g
+        var regexp = /<BR>/g;
         var txt = text.replace(regexp, "\n");
         var writeTextToExternalNote = $("#WriteTextToExternalNote").val();
         var field = "#CaseLog_TextInternal";

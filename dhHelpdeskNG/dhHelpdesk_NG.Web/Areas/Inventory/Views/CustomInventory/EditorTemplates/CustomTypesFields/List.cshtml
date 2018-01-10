@@ -26,7 +26,21 @@
         @Translation.Get(Model.Caption)
     </td>
     <td class="span9">
-        @Html.DropDownListFor(m => m.Value, source, string.Empty, attributes)
-        @Html.ValidationMessageFor(m => m.Value)
+        @if (!Model.IsReadOnly)
+        {
+            @Html.DropDownListFor(m => m.Value, source, string.Empty, attributes)
+            @Html.ValidationMessageFor(m => m.Value)
+        }
+        else
+        {
+            if (!Model.Value.HasValue)
+            {
+                @Html.TextBoxFor(m => m.Value, new { @readonly = true })
+            }
+            else
+            {
+                @Html.TextBoxFor(m => source.SingleOrDefault(x => x.Value == Model.Value.ToString()).Text, new { @readonly = true })
+            }
+        }
     </td>
 </tr>

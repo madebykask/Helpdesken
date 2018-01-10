@@ -136,6 +136,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public string BuildCaseSearchSql(SearchQueryBuildContext ctx)
         {
+            
             _useFts = ctx.UseFullTextSearch;
 
             var search = ctx.Criterias.Search;
@@ -198,7 +199,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var applicationType = criterias.ApplicationType;
             if (applicationType.ToLower() == ApplicationTypes.LineManager || applicationType.ToLower() == ApplicationTypes.SelfService)
             {
-                var caseSearchWhere = this.ReturnCustomCaseSearchWhere(searchFilter, criterias.UserUniqueId, userId);
+                var caseSearchWhere = this.ReturnCustomCaseSearchWhere(searchFilter, criterias.UserUniqueId, userId, criterias.GlobalSetting);
                 sql.Add(caseSearchWhere);
             }
             else
@@ -416,7 +417,7 @@ namespace DH.Helpdesk.Dal.Repositories
             }
             else
             {
-                whereStatement = ReturnCustomCaseSearchWhere(searchFilter, criterias.UserUniqueId, criterias.UserId);
+                whereStatement = ReturnCustomCaseSearchWhere(searchFilter, criterias.UserUniqueId, criterias.UserId, criterias.GlobalSetting);
             }
 
             searchQueryBld.Append(whereStatement);
@@ -661,7 +662,7 @@ namespace DH.Helpdesk.Dal.Repositories
         }
 
         //Used for LineManager & SelfService
-        private string ReturnCustomCaseSearchWhere(CaseSearchFilter f, string userUserId, int userId)
+        private string ReturnCustomCaseSearchWhere(CaseSearchFilter f, string userUserId, int userId, GlobalSetting globalSetting)
         {
             if (f == null)
             {
@@ -670,20 +671,19 @@ namespace DH.Helpdesk.Dal.Repositories
 
             var sb = new StringBuilder();
 
-            // kund 
-            sb.Append(" where (tblCase.Customer_Id = " + f.CustomerId + ")");
-            sb.Append(" and (tblCase.Deleted = 0)");
-
+            // kund             
+            sb.AppendLine($" where (tblCase.Customer_Id = {f.CustomerId}) ");
+            sb.AppendLine(" and (tblCase.Deleted = 0)");
 
             //CaseType
             //sb.Append(" and (tblCaseType.ShowOnExternalPage <> 0)");
             //Hide this for next release #57742
-            sb.Append(" and (tblCaseType.ShowOnExtPageCases <> 0)");
+            sb.AppendLine(" and (tblCaseType.ShowOnExtPageCases <> 0)");
 
             //ProductArea
             //sb.Append(" and (tblCase.ProductArea_Id Is Null or tblCase.ProductArea_Id in (select id from tblProductArea where ShowOnExternalPage <> 0))");
             //Hide this for next release #57742
-            sb.Append(" and (tblCase.ProductArea_Id Is Null or tblCase.ProductArea_Id in (select id from tblProductArea where ShowOnExtPageCases <> 0))");
+            sb.AppendLine(" and (tblCase.ProductArea_Id Is Null or tblCase.ProductArea_Id in (select id from tblProductArea where ShowOnExtPageCases <> 0))");
 
             
             var criteria = f.CaseOverviewCriteria;
@@ -761,7 +761,8 @@ namespace DH.Helpdesk.Dal.Repositories
                 sb.Append(") ");
             }
 
-            return sb.ToString();
+            var s = sb.ToString();
+            return s;
         }
 
         private string BuildCaseProgressConditions(CaseSearchFilter searchFilter, int userId)
@@ -1407,6 +1408,13 @@ namespace DH.Helpdesk.Dal.Repositories
         }
 
         #endregion
+
+        private string FormatWithOperand(string condition, bool useAnd = true)
+        {
+            return useAnd
+                ? $"AND {condition}"
+                : $"OR {condition}";
+        }
 
         private string InsensitiveSearch(string fieldName)
         {

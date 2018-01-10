@@ -19,5 +19,6 @@ namespace DH.Helpdesk.Dal.Repositories.Printers
         List<PrinterOverview> FindOverviews(int customerId, int? departmentId, string searchFor);
 
         int GetPrinterCount(int customerId, int? departmentId);
+        int GetIdByName(string printerName, int customerId);
     }
 }

@@ -4,14 +4,15 @@
         padding-bottom: 0px;
     }
 
-    /*#btnQuickOpen {
+    #btnQuickOpen {
         float: right;
         min-width: 100px;
     }
 
-    #txtQuickOpen {
-        width: 100%;
-    }*/
+    #messageQuickOpen {
+      vertical-align: middle;
+      line-height:30px;
+    }
 </style>
 <div class="row-fluid">
     <div class="box-box span12">
@@ -21,12 +22,11 @@
         <div class="box-body portlet-content">
             <div class="span12 pull-right nomargin-padding-bottom">
                 <div class="box-post">
-                    <form id="frmQuickOpen" name="frmQuickOpen" class="form-inline nomargin-padding-bottom">
-                        <div class="input-append" style="width:98%;">
-                            <input class="span11" id="txtQuickOpen" tabindex="0" name="txtQuickOpen" rel="tooltip" title="@Translation.GetCoreTextTranslation("Ange ärendenummer du vill öppna")" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="@Translation.GetCoreTextTranslation("Ange ärendenummer du vill öppna")" type="text" />
-                            <button id="btnQuickOpen" class="btn" tabindex="1" type="button">@Translation.GetCoreTextTranslation("Öppna")</button>
+                     <form id="frmQuickOpen" name="frmQuickOpen" class="form-inline">
+                        <div>
+                            <input id="txtQuickOpen" class="span12" tabindex="0" name="txtQuickOpen" rel="tooltip" title="@Translation.GetCoreTextTranslation("Ange ärendenummer du vill öppna")" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="@Translation.GetCoreTextTranslation("Ange ärendenummer du vill öppna")" type="text" />
                         </div>
-                        <span id="messageQuickOpen">&nbsp;</span>
+                        <div><span id="messageQuickOpen">&nbsp;</span><button id="btnQuickOpen" class="btn" tabindex="1" type="button">@Translation.GetCoreTextTranslation("Öppna")</button></div>
                     </form>
                 </div>
             </div>
@@ -55,7 +55,6 @@
             }
 
             var key = e.keyCode || e.which;
-
             if (key == 13)  // the enter key code
             {
                 e.preventDefault();
@@ -63,10 +62,6 @@
                 return false;
             }
         });
-
-        //if ($('#txtQuickOpen')[0]) {
-        //    $('#txtQuickOpen').focus();
-        //}
     });
     $("#btnQuickOpen").unbind().click(function (e) {
         e.preventDefault();

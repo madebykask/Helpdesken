@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Printer.PrinterViewModel
 @{
-    Layout = "~/Areas/Inventory/Views/Shared/_EditLayout.cshtml";
+    Layout = "~/Areas/Inventory/Views/Shared/_EditPopupLayout.cshtml";
 }
 
 @section Actions
@@ -10,20 +10,26 @@
         @if (Model.UserHasInventoryAdminPermission)
         {
             <li id="menu1">
-                <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#printer_edit_form').submit(); "/>
+                <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn" onclick=" $('#printer_edit_form').submit(); "/>
             </li>
-            <li id="menu3">
-                @Html.ActionLink(Translation.Get("Ta bort"), "Delete", new { id = Model.Id }, new
-                      { @class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?" })
-        </li>
+            if (!Model.IsForDialog)
+            {
+                <li id="menu3">
+                    @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "Delete", new {id = Model.Id}, new
+                    {@class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?"})
+                </li>
+            }
         }
-        <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
+        @if (!Model.IsForDialog)
+        {
+            <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", null, new {@class = "btn"})</li>
+        }
     </ul>
 }
 
 @section Title
 {
-    @Translation.Get("Skrivare")
+    @Translation.GetCoreTextTranslation("Skrivare")
 }
 
 @section Content
@@ -31,6 +37,7 @@
     @using (Html.BeginForm("Edit", "Printer", FormMethod.Post, new { id = "printer_edit_form" }))
     {
         @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.IsForDialog)
         @Html.EditorFor(m => m.GeneralFieldsModel)
         @Html.EditorFor(m => m.InventoryFieldsModel)
         @Html.EditorFor(m => m.CommunicationFieldsModel)
@@ -39,7 +46,7 @@
         @Html.EditorFor(m => m.PlaceFieldsViewModel)
         if (Model.CreatedDate.Show || Model.ChangedDate.Show)
         {
-        <h4>@Translation.Get("Status")</h4>
+        <h4>@Translation.GetCoreTextTranslation("Status")</h4>
         }
         <div class="row">
             <div class="span12">
@@ -69,7 +76,7 @@
                         {
                         <tr>
                             <td class="span3">
-                                <label>@Translation.Get("Changed by")</label>
+                                <label>@Translation.GetCoreTextTranslation("Changed by")</label>
                             </td>
                             <td class="span9">
                                 @Html.DisplayFor(m => m.StateFieldsModel.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.StateFieldsModel.ChangedByUserName.LastName)

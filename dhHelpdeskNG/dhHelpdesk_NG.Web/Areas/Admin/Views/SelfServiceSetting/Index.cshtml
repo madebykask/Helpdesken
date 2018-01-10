@@ -157,18 +157,18 @@
                         </div>
 
                         <h4>
-                            @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
+                            @Translation.GetCoreTextTranslation("Ärende")
                         </h4>
                         <div class="formContainer">
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Loggpost", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Loggpost")
                                     </td>
                                     <td>
                                         <input type="checkbox" name="customer.UseInternalLogNoteOnExternalPage" @(Model.Customer.UseInternalLogNoteOnExternalPage == 1 ? "checked=checked" : "") value="1" />
                                         <input type="hidden" name="customer.UseInternalLogNoteOnExternalPage" value="0" />
-                                        &nbsp; &nbsp; @Translation.Get("Intern loggpost i ärende", Enums.TranslationSource.TextTranslation)
+                                        &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Intern loggpost i ärende")
                                     </td>
                                 </tr>
                                 <tr>
@@ -176,13 +176,21 @@
                                         @Translation.GetCoreTextTranslation("Möjligt att aktivera ärende inom")
                                     </td>
                                     <td>
-                                        @Html.TextBoxFor(m => m.CaseComplaintDays, new { style = "width: 40px;" })&nbsp;
+                                        @Html.TextBoxFor(m => m.CaseComplaintDays, new {style = "width: 40px;"})&nbsp;
                                         @Translation.GetCoreTextTranslation("dagar")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.GetCoreTextTranslation("Inventarie")
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => m.Customer.FetchPcNumber) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Hämta PC Nummer")
                                     </td>
                                 </tr>
                             </table>
                         </div>
-                        <h4>@Translation.Get("Begränsning", Enums.TranslationSource.TextTranslation)</h4>
+                        <h4>@Translation.GetCoreTextTranslation("Begränsning")</h4>
                         <div class="formContainer">
                             <table class="tableform">
                                 <tr>

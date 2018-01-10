@@ -3,6 +3,7 @@ using DH.Helpdesk.Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
@@ -17,9 +18,10 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly ICustomerService _customerService;        
 
         public CoWorkersController(IMasterDataService masterDataService,
+                                   ISelfServiceConfigurationService configurationService,
                                    ICustomerService customerService,
                                    ICaseSolutionService caseSolutionService                                   
-                                  ):base(masterDataService, caseSolutionService)
+                                  ):base(configurationService, masterDataService, caseSolutionService)
         {
             _customerService = customerService;
             _masterDataService = masterDataService;

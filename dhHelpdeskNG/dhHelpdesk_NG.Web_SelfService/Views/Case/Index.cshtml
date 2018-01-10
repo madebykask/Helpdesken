@@ -1,5 +1,7 @@
 ﻿@using System.Activities.Statements
 @using DH.Helpdesk.SelfService.Infrastructure
+@using DH.Helpdesk.BusinessData.OldComponents
+
 @model DH.Helpdesk.SelfService.Models.Case.CaseOverviewModel
 @{
     ViewBag.Title = "Index";    
@@ -11,18 +13,24 @@
         <li id="CasePreviewTab" class="active">                             
             <a href="#fragment-1">@Translation.Get("Case", Enums.TranslationSource.TextTranslation): @Model.CasePreview.CaseNumber</a>                                         
         </li>
+        @if (ViewBag.AttachmentPlacement == 1 && Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+        {
+            <li>
+                <a href="#attachment-tab">@Translation.Get("Attachments", Enums.TranslationSource.TextTranslation) <span id="nrOfAttachedFiles">@(Model.CasePreview.CaseFiles != null && Model.CasePreview.CaseFiles.Count > 0 ? "(" + Model.CasePreview.CaseFiles.Count.ToString() + ")" : "")</span></a>
+            </li>
+        }
     </ul>
 
-    <div class="content">                       
+    <div class="content tab-content">
         @if (Model.CasePreview != null)
-        {                
-            <div id="fragment-1" class="tab-pane active" >                                                   
+        {
+            <div id="fragment-1" class="tab-pane active">
                 <div class="container-fluid dh-container">
-                                       
+
                     @if (Model.CasePreview.FinishingDate != null)
                     {
                         <div class="alert alert-success">
-                            @if (Model.CustomerSettings.CaseComplaintDays != 0 )
+                            @if (Model.CustomerSettings.CaseComplaintDays != 0)
                             {
                                 TimeSpan diff = DateTime.Today - Model.CasePreview.FinishingDate.Value;
                                 if (diff.Days <= Model.CustomerSettings.CaseComplaintDays || Model.CustomerSettings.CaseComplaintDays == 9999)
@@ -39,20 +47,42 @@
                     else
                     {
                         if (!string.IsNullOrEmpty(Model.CaseRegistrationMessage) && Model.ShowRegistringMessage)
-                        {                            
-                            <div class="alert alert-success">                                 
+                        {
+                            <div class="alert alert-success">
                                 @Html.Raw(Model.CaseRegistrationMessage.SetHtmlParameters())
-                            </div>   
-                        }                      
+                            </div>
+                        }
                     }
 
-                    @Html.Partial("_CaseReceipt", Model)                     
-                                           
-                </div>                
+                    @Html.Partial("_CaseReceipt", Model)
+
+                </div>
             </div>
-            
-        }          
-                                   
-    </div>    
-</div>
+
+            if (ViewBag.AttachmentPlacement == 1 && Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+            {
+                <div id="attachment-tab" class="tab-pane" style="overflow:hidden;">
+                    <div class="container-fluid dh-container">
+                    <table id="case_files_table" class="table table-striped">
+                        @if (Model.CasePreview.CaseFiles != null)
+                        {
+                            foreach (var file in Model.CasePreview.CaseFiles)
+                            {
+                                <tr>
+                                    <td>
+                                        <a style="color:blue" href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+
+                </div>
+            </div>
+            }
+        }
+
+    </div>
+
+            </div>
 

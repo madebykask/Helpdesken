@@ -1,5 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
 @using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Common.Enums.Settings
 
 <script type="text/javascript">
@@ -55,7 +56,7 @@
         extendedCaseLanguageId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().LanguageId.ToString() : "" )',
         extendedCasePath: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Path.ToString() : "" )',
         fileExistError: '@Translation.GetForJS("Bifogad fil är borttagen från ärendet")',
-
+        applicationType: '@ApplicationTypes.Helpdesk',
         caseFieldIds: {
             CaseId: "case__Id",
             CustomerId: "case__Customer_Id",
@@ -140,7 +141,7 @@
             mandatoryFieldsText: '@Translation.GetForJS("Obligatoriska fält")',
             formatFieldsText: '@Translation.GetForJS("Giltiga Format är")',
             descriptionText: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)',
-            getWorkstationIdUrl: '@Url.Action("Edit", "Inventory/Workstation")'
+            getInventoryUrl: '@Url.Action("GetInventoryUrlByName", "Inventory/InventoryRouting")'
         }
     };
 

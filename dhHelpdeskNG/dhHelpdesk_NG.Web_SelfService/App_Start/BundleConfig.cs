@@ -15,6 +15,7 @@ namespace DH.Helpdesk.SelfService
         {
             public const string Orders = "~/bundles/orders/index";
             public const string EditOrder = "~/bundles/orders/orderedit";
+            public const string CasesSearch = "~/bundles/cases/search";
         }
        
         public static void RegisterBundles(BundleCollection bundles)
@@ -53,8 +54,7 @@ namespace DH.Helpdesk.SelfService
                             "~/Content/js/MicrosoftAjax.js",
                             "~/Content/js/MicrosoftMvcAjax.js",
                             "~/Content/js/typeahead.js",
-                            "~/Content/js/jquery.toastmessage.js"
-                            ));
+                            "~/Content/js/jquery.toastmessage.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/common").Include(
                           "~/Content/js/plupload.full.min.js",
@@ -81,6 +81,9 @@ namespace DH.Helpdesk.SelfService
 
             bundles.Add(new ScriptBundle("~/Content/js/helpdesk").Include(
                          "~/Content/js/dhHelpdesk.js"));
+
+            bundles.Add(new ScriptBundle(ScriptNames.CasesSearch).Include(
+               "~/Content/js/Case/caseSearch.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/case/caseaddfollowerssearch").Include(
                "~/Content/js/Case/_caseAddFollowersSearch.js",

@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class Enums
+    public static class Enums
     {
         public enum TranslationSource
         {
@@ -101,5 +101,10 @@
             public static readonly string BinaryFile = "application/octet-stream";
         }
 
+        public enum SortOrder
+        {
+            Asc = 0,
+            Desc = 1
+        }
     }
 }

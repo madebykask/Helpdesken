@@ -79,6 +79,7 @@
     <Compile Include="Enums\Case\CaseSearchGroup.cs" />
     <Compile Include="Enums\Case\Fields\CaseInfoFields.cs" />
     <Compile Include="Enums\Case\Fields\ComputerFields.cs" />
+    <Compile Include="Enums\Case\Fields\FieldSettingsUINames.cs" />
     <Compile Include="Enums\Case\Fields\LogFields.cs" />
     <Compile Include="Enums\Case\Fields\OtherFields.cs" />
     <Compile Include="Enums\Case\Fields\UserFields.cs" />
@@ -247,6 +248,7 @@
     <Compile Include="Models\Contract\ContractSelectedFilter.cs" />
     <Compile Include="Models\Contract\ContractsSettingRowModel.cs" />
     <Compile Include="Models\Contract\ContractInputModel.cs" />
+    <Compile Include="Models\Customer\UserCustomerOverview.cs" />
     <Compile Include="Models\DailyReport\Input\DailyReportUpdate.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\AccountFieldsSettingsForModelEdit.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\AccountInformationFieldSettings.cs" />
@@ -293,6 +295,7 @@
     <Compile Include="Models\Grid\GridColumnDefinition.cs" />
     <Compile Include="Models\Grid\GridSettingsModel.cs" />
     <Compile Include="Models\IdName.cs" />
+    <Compile Include="Models\Inventory\InventorySearchResult.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceOrderFile.cs" />
     <Compile Include="Models\Invoice\InvoiceArticleProductAreaSelectedFilter.cs" />
     <Compile Include="Models\Invoice\InvoiceArticleProductArea.cs" />

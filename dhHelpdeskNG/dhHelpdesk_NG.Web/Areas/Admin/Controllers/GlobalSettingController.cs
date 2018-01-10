@@ -1417,5 +1417,28 @@
             return View("newwatchdate", model);
 
         }
+
+        [HttpPost]
+        public JsonResult UpdateMultiCustomersSearch(bool val)
+        {
+            var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
+            globalSettings.MultiCustomersSearch = val ? 1 : 0;
+
+            IDictionary<string,string> errors = new Dictionary<string,string>();
+            _globalSettingService.SaveGlobalSetting(globalSettings, out errors);
+            
+            if (errors.Any())
+            {
+                var errRes = new
+                {
+                    Success = false,
+                    ErrorMessage = string.Join(",", errors.Select(kv => kv.Value))
+                };
+                return Json(errRes);
+            }
+
+            var res = new { Success = true };
+            return Json(res);
+        }
     }
 }

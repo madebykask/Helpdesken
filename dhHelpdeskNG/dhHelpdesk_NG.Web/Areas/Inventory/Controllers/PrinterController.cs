@@ -103,20 +103,21 @@
         }
 
         [HttpGet]
-        public ViewResult Edit(int id)
+        public ViewResult Edit(int id, bool dialog = false)
         {
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            var readOnly = !userHasInventoryAdminPermission && dialog;
+
             PrinterForRead model = this.inventoryService.GetPrinter(id);
             PrinterEditOptions options = this.GetPrinterEditOptions(SessionFacade.CurrentCustomer.Id);
             PrinterFieldsSettingsForModelEdit settings =
                 this.inventorySettingsService.GetPrinterFieldSettingsForModelEdit(
                     SessionFacade.CurrentCustomer.Id,
-                    SessionFacade.CurrentLanguageId);
-
-            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+                    SessionFacade.CurrentLanguageId, readOnly);
 
             PrinterViewModel printerEditModel = this.printerViewModelBuilder.BuildViewModel(model, options, settings);
             printerEditModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
-
+            printerEditModel.IsForDialog = dialog;
 
             return this.View("Edit", printerEditModel);
         }
@@ -128,6 +129,10 @@
             PrinterForUpdate businessModel = this.printerBuilder.BuildForUpdate(printerViewModel, this.OperationContext);
             this.inventoryService.UpdatePrinter(businessModel, this.OperationContext);
 
+            if (printerViewModel.IsForDialog)
+            {
+                return RedirectToAction("Edit", new { id = printerViewModel.Id, dialog = printerViewModel.IsForDialog });
+            }
             return this.RedirectToAction("Index");
         }
 

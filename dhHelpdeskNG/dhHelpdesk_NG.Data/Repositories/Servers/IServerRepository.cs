@@ -29,5 +29,6 @@ namespace DH.Helpdesk.Dal.Repositories.Servers
         int GetServerCount(int customerId);
 
         List<ReportModel> FindConnectedToServerLocationOverviews(int customerId, string searchFor);
+        int GetIdByName(string serverName, int customerId);
     }
 }

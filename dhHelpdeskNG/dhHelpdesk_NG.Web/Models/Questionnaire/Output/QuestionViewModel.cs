@@ -13,5 +13,9 @@
 
         [NotNull]
         public List<QuestionInputModel> Questions { get; set; }
+
+        public int CustomerId { get; set; }
+
+        public int LanguageId { get; set; }
     }
 }

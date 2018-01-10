@@ -64,6 +64,14 @@
                                 </tr>
                                 <tr>
                                     <td>
+                                        @Translation.GetCoreTextTranslation("Favorit sökfilter")
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.Link.CaseFilterFavorite_Id, Model.FavoriteSearchFilters, "")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
                                         @Translation.Get("Öppna i nytt fönster", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td><label class="checkbox">
@@ -208,11 +216,11 @@
         if (document.getElementById("link.user").checked == true) {
 
             document.getElementById("divUser").style.display = "";
-            
+
         }
         else {
             document.getElementById("divUser").style.display = "none";
-            
+
         }
     }
 
@@ -247,31 +255,47 @@
 
 
     $(function () {
-        var ClearAndLock = function (Main, Second, Third, ChangeEvent) {
-            if ($(Main).val() != '') {
-                $(Main).attr('disabled', false);
-                $(Second).attr('disabled', true);
-                $(Second).val('');
-                $(Third).attr('disabled', true);
-                $(Third).val('');
+        var serchFilterId = '#@Html.IdFor(x => x.Link.CaseFilterFavorite_Id)';
+        var urlId = '#@Html.IdFor(x => x.Link.URLAddress)';
+        var documentId = '#@Html.IdFor(x => x.Link.Document_Id)';
+        var solutionId = '#@Html.IdFor(x => x.Link.CaseSolution_Id)';
+        var clearAndLock = function (main, other, changeEvent) {
+            if ($(main).val() !== '') {
+                $(main).attr('disabled', false);
+                if (other == null || !$.isArray(other)) return;
+
+                $.each(other, function(i, item) {
+                    $(item).attr('disabled', true);
+                    $(item).val('');
+                });
             }
-            else if (ChangeEvent == true && $(Main).val() == '') {
-                $(Second).attr('disabled', false);
-                $(Third).attr('disabled', false);
+            else if (changeEvent === true && $(main).val() === '') {
+                if (other == null || !$.isArray(other)) return;
+
+                $.each(other, function (i, item) {
+                    $(item).attr('disabled', false);
+                });
             };
         };
-        ClearAndLock('#Link_URLAddress', '#Link_Document_Id', '#Link_CaseSolution_Id');
-        ClearAndLock('#Link_Document_Id', '#Link_CaseSolution_Id', '#Link_URLAddress');
-        ClearAndLock('#Link_CaseSolution_Id', '#Link_URLAddress', '#Link_Document_Id');
-        $("#Link_URLAddress").change(function () {
-            ClearAndLock(this, '#Link_Document_Id', '#Link_CaseSolution_Id', true);
+
+        clearAndLock(urlId, [documentId, solutionId, serchFilterId]);
+        clearAndLock(documentId, [solutionId, urlId, serchFilterId]);
+        clearAndLock(solutionId, [urlId, documentId, serchFilterId]);
+        clearAndLock(serchFilterId, [urlId, documentId, solutionId]);
+
+        $(urlId).change(function () {
+            clearAndLock(this, [documentId, solutionId, serchFilterId], true);
         });
-        $("#Link_Document_Id").change(function () {
-            ClearAndLock(this, '#Link_URLAddress', '#Link_CaseSolution_Id', true);
+        $(documentId).change(function () {
+            clearAndLock(this, [urlId, solutionId, serchFilterId], true);
         });
-        $("#Link_CaseSolution_Id").change(function () {
-            ClearAndLock(this, '#Link_URLAddress', '#Link_Document_Id', true);
+        $(solutionId).change(function () {
+            clearAndLock(this, [urlId, documentId, serchFilterId], true);
         });
+        $(serchFilterId).change(function () {
+            clearAndLock(this, [urlId, documentId, solutionId], true);
+        });
+
     });
 
 </script>

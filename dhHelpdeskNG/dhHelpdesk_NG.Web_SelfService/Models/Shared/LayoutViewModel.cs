@@ -24,7 +24,7 @@ namespace DH.Helpdesk.SelfService.Models.Shared
         public CaseLogModel CaseLog { get; set; }
         public bool HasError { get; set; }
         public string LoginType { get; set; }
+        public bool IsMultiCustomerSearchEnabled { get; set; }
 
-        
     }
 }

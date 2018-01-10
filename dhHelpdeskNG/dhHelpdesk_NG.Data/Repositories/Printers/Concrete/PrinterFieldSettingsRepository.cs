@@ -121,7 +121,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
         }
 
         [CreateMissingPrinterSettings("customerId")]
-        public PrinterFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId)
+        public PrinterFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false)
         {
             var languageTextId = this.GetLanguageTextId(languageId);
             var settings = this.GetSettings(customerId);
@@ -130,38 +130,35 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
             switch (languageTextId)
             {
                 case LanguageTextId.Swedish:
-                    mapperData =
-                        settings.Select(
-                            s =>
+                    mapperData = settings.Select(s =>
                             new FieldSettingMapperDataForModelEdit
                             {
                                 Caption = s.Label,
                                 FieldName = s.PrinterField,
                                 Show = s.Show,
+                                ReadOnly = isReadonly ? 1 : 0,
                                 Required = s.Required
                             }).ToList();
                     break;
                 case LanguageTextId.English:
-                    mapperData =
-                        settings.Select(
-                            s =>
+                    mapperData = settings.Select(s =>
                             new FieldSettingMapperDataForModelEdit
                             {
                                 Caption = s.Label_ENG,
                                 FieldName = s.PrinterField,
                                 Show = s.Show,
+                                ReadOnly = isReadonly ? 1 : 0,
                                 Required = s.Required,
                             }).ToList();
                     break;
                 default:
-                    mapperData =
-                         settings.Select(
-                             s =>
+                    mapperData = settings.Select(s =>
                              new FieldSettingMapperDataForModelEdit
                              {
                                  Caption = s.Label_ENG,
                                  FieldName = s.PrinterField,
                                  Show = s.Show,
+                                 ReadOnly = isReadonly ? 1 : 0,
                                  Required = s.Required,
                              }).ToList();
                     break;

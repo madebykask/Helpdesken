@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.Models.Faq.Output;
 using DH.Helpdesk.SelfService.Infrastructure;
+using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.Services.Services;
 
 namespace DH.Helpdesk.SelfService.Controllers
@@ -21,10 +22,11 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly IFaqService _faqService;
         
         public FAQController(IMasterDataService masterDataService,
+                             ISelfServiceConfigurationService configurationService,
                              ICustomerService customerService,
                              ICaseSolutionService caseSolutionService,
                              IFaqService faqService)
-                : base(masterDataService, caseSolutionService)
+                : base(configurationService, masterDataService, caseSolutionService)
         {
             _masterDataService = masterDataService;
             _customerService = customerService;

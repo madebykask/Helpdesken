@@ -10,7 +10,14 @@
         @Translation.Get(Model.Caption)
     </td>
     <td class="span9">
-        @Html.EditorFor(m => m.Value, "DatePicker", new { id = ViewData["Id"] })
-        @Html.ValidationMessageFor(m => m.Value)
+        @if (!Model.IsReadOnly)
+        {
+            @Html.EditorFor(m => m.Value, "DatePicker", new {id = ViewData["Id"]})
+            @Html.ValidationMessageFor(m => m.Value)
+        }
+        else
+        {
+            @Html.DisplayFor(m => m.Value, "Date")
+        }
     </td>
 </tr>

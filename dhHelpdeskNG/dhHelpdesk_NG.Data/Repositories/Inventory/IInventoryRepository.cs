@@ -27,5 +27,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
         ReportModelWithInventoryType FindAllConnectedInventory(int inventoryTypeId, int? departmentId, string searchFor);
 
         void DeleteByInventoryTypeId(int inventoryTypeId);
+
+        int GetIdByName(string inventoryName, int inventoryTypeId);
+        List<InventorySearchResult> SearchPcNumber(int customerId, string query);
     }
 }

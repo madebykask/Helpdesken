@@ -1,94 +1,14 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
-@using DH.Helpdesk.BusinessData.OldComponents;
 @using DH.Helpdesk.Common.Extensions.String
-@functions    {
-
-    private MvcHtmlString CaseFieldCaption(GlobalEnums.TranslationCaseFields field, string defaultCaption = "")
-    {
-        var res =
-           Html.CaseFieldCaption(
-                    Model.caseFieldSettings,
-                    Model.CaseFieldSettingWithLangauges,
-                    field,
-                    Model.case_.Customer_Id,
-                    Model.IsCaseReopened,
-                    SessionFacade.CurrentLanguageId,
-                    defaultCaption);
-
-        return res;
-    }
 
 
-  
-
-}
-
-@{
-    string templateText = "<strong>{0}</strong>&nbsp;{1}&nbsp;|&nbsp;";
-
-    string reportedBy = string.Empty;
-    string personsName = string.Empty;
-    string personPhone = string.Empty;
-    string stateSecondary = string.Empty;
-    string workingGroup = string.Empty;
-
-    var texts = new Dictionary<string, string>();
-
-    if (Model.case_.Id > 0)
-    {
-
-        int customerId = Model.case_.Customer_Id;
-
-        if (!string.IsNullOrEmpty(Model.case_.ReportedBy))
-        {
-
-
-            reportedBy = string.Format(templateText, Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), customerId), Model.case_.ReportedBy);
-            texts.Add("ReportedBy", reportedBy);
-        }
-
-        if (!string.IsNullOrEmpty(Model.case_.PersonsName))
-        {
-            
-
-            personsName = string.Format(templateText, Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), customerId), Model.case_.PersonsName);
-            texts.Add("PersonsName", personsName);
-        }
-
-        //Note, IKEA MYHR uses Phone for last name
-        if (!string.IsNullOrEmpty(Model.case_.PersonsPhone))
-        {
-            
-
-            personPhone = string.Format(templateText, Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), customerId), Model.case_.PersonsPhone);
-            texts.Add("PersonsPhone", personPhone);
-        }
-
-        if (Model.case_.StateSecondary != null && !string.IsNullOrEmpty(Model.case_.StateSecondary.Name))
-        {
-
-            
-            stateSecondary = string.Format(templateText, Translation.GetForCase(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), customerId), Model.case_.StateSecondary.Name);
-            texts.Add("StateSecondary", stateSecondary);
-        }
-
-        if (Model.case_.Workinggroup != null && !string.IsNullOrEmpty(Model.case_.Workinggroup.WorkingGroupName))
-        {
-
-            
-            workingGroup = string.Format(templateText, Translation.GetForCase(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), customerId), Model.case_.Workinggroup.WorkingGroupName);
-            texts.Add("Workinggroup", workingGroup);
-        }
-    }
-}
-
-@if (!string.IsNullOrEmpty(ViewData["Headline"].ToString()) || texts.Count > 0)
+@if (!string.IsNullOrEmpty(ViewData["Headline"].ToString()) || Model.StatusBar.Count > 0)
 {
     <h4 style="font-weight:normal !important; font-size:11px !important;">
         
-        @if (texts.Count > 0 && !string.IsNullOrEmpty(ViewData["Headline"].ToString())){
+        @if (Model.StatusBar.Count > 0 && !string.IsNullOrEmpty(ViewData["Headline"].ToString())){
         <strong>@ViewData["Headline"].ToString()</strong>
-            if (texts.Count() > 0)
+            if (Model.StatusBar.Count() > 0)
             {
                 <text> | </text>
             }
@@ -98,9 +18,9 @@
             <text>&nbsp;</text>
 }
 
-        @foreach (var item in texts)
+        @foreach (var item in Model.StatusBar)
         {
-            if (!texts[item.Key].Equals(texts.Last().Value))
+            if (!item.Value.Equals(Model.StatusBar.Last().Value))
             {
                 @item.Value.RemoveRequiredText().ToHtmlString()
             }

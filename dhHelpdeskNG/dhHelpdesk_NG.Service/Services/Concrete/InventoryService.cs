@@ -506,7 +506,12 @@ namespace DH.Helpdesk.Services.Services.Concrete
                     .MapToFullOverviews();
                 return overviews;
             }
-        }        
+        }
+
+        public int GetServerIdByName(string serverName, int customerId)
+        {
+            return serverRepository.GetIdByName(serverName, customerId);
+        }
 
         #endregion
 
@@ -549,6 +554,11 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 printersFilter.SearchFor);
 
             return models;
+        }
+
+        public int GetPrinterIdByName(string printerName, int customerId)
+        {
+            return printerRepository.GetIdByName(printerName, customerId);
         }
 
         #endregion
@@ -604,6 +614,12 @@ namespace DH.Helpdesk.Services.Services.Concrete
             return response;
         }
 
+        public ComputerForRead GetWorkstationByNumber(string computerName, int customerId)
+        {
+            var pcId = computerRepository.GetIdByName(computerName, customerId);
+            return pcId > 0 ? computerRepository.FindById(pcId) : null;
+        }
+
         public InventoriesOverviewResponse GetInventories(InventoriesFilter filter)
         {
             var models = this.inventoryRepository.FindOverviews(
@@ -651,6 +667,11 @@ namespace DH.Helpdesk.Services.Services.Concrete
         {
             this.computerInventoryRepository.DeleteById(computerId, inventoryId);
             this.computerInventoryRepository.Commit();
+        }
+
+        public int GetCustomInventoryIdByName(string inventoryName, int inventoryTypeId)
+        {
+            return inventoryRepository.GetIdByName(inventoryName, inventoryTypeId);
         }
 
         public List<ComputerOverview> GetRelatedInventory(int customerId, string userId)

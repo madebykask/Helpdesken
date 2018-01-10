@@ -21,6 +21,8 @@
                                             l.Document,
                                             l.Document_Id,
                                             l.CaseSolution_Id,
+                                            l.CaseFilterFavorite_Id,
+                                            l.CaseFilterFavorite,
                                             l.CaseSolution,
                                             l.OpenInNewWindow,
                                             l.NewWindowWidth,
@@ -39,6 +41,8 @@
                                             DocumentId = l.Document_Id,
                                             DocumentName = l.Document != null ? l.Document.Name : null,
                                             CaseSolutionId = l.CaseSolution_Id,
+                                            CaseFilterFavoriteId = l.CaseFilterFavorite_Id,
+                                            CaseFilterFavoriteName = l.CaseFilterFavorite != null ? l.CaseFilterFavorite.Name : null,
                                             CaseSolutionName = l.CaseSolution != null ? l.CaseSolution.Name : null,
                                             OpenInNewWindow = l.OpenInNewWindow == 1 ? true : false,
                                             NewWindowHeight = l.NewWindowHeight,
@@ -50,6 +54,7 @@
         {
             entity.Customer_Id = model.Customer_Id;
             entity.CaseSolution_Id = model.CaseSolution_Id;
+            entity.CaseFilterFavorite_Id = model.CaseFilterFavorite_Id;
             entity.Document_Id = model.Document_Id;
             entity.LinkGroup_Id = model.LinkGroup_Id;
             entity.NewWindowHeight = model.NewWindowHeight;

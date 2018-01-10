@@ -28,7 +28,14 @@
         @Translation.Get(Model.Caption)
     </td>
     <td class="span9">
-        @Html.TextBoxFor(m => m.Value, htmlAttributes)
-        @Html.ValidationMessageFor(m => m.Value)
+        @if (!Model.IsReadOnly)
+        {
+            @Html.TextBoxFor(m => m.Value, htmlAttributes)
+            @Html.ValidationMessageFor(m => m.Value)
+        }
+        else
+        {
+            @Html.TextBoxFor(m => m.Value, new { @readonly = true })
+        }
     </td>
 </tr>

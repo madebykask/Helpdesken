@@ -516,7 +516,7 @@
             </div>
         </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+                @if (ViewBag.AttachmentPlacement == 0 &&  Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
                 {
                     <div class="form-group row">
                         <label class="col-md-3">

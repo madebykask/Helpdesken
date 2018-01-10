@@ -3,12 +3,14 @@ using DH.Helpdesk.SelfService.Infrastructure;
 using DH.Helpdesk.Services.Services;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using DH.Helpdesk.BusinessData.Models.ADFS.Input;
 using DH.Helpdesk.Common.Types;
+using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.SelfService.Infrastructure.Helpers;
 
 namespace DH.Helpdesk.SelfService.Controllers
@@ -37,8 +39,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                                IInfoService infoService,                               
                                IBulletinBoardService bulletinBoardService,
                                ISettingService settingService,
-                               IUserService userService
-                              ):base(masterDataService, caseSolutionService)
+                               IUserService userService,
+                               ISelfServiceConfigurationService configurationService
+                              ):base(configurationService, masterDataService, caseSolutionService)
         {
             
             this._customerService = customerService;

@@ -67,6 +67,8 @@ namespace DH.Helpdesk.Services.Services
 
         int GetWorkstationIdByName(string computerName, int customerId);
 
+        ComputerForRead GetWorkstationByNumber(string computerName, int customerId);
+
         #endregion
 
         #region Server
@@ -83,6 +85,8 @@ namespace DH.Helpdesk.Services.Services
 
         ServerOverview[] GetServers(ServersFilter computersFilter);
 
+        int GetServerIdByName(string serverName, int customerId);
+
         #endregion
 
         #region Printer
@@ -96,6 +100,8 @@ namespace DH.Helpdesk.Services.Services
         PrinterForRead GetPrinter(int id);
 
         List<PrinterOverview> GetPrinters(PrintersFilter printersFilter);
+
+        int GetPrinterIdByName(string printerName, int customerId);
 
         #endregion
 
@@ -121,8 +127,11 @@ namespace DH.Helpdesk.Services.Services
 
         void RemoveInventoryFromComputer(int inventoryId, int computerId);
 
+        int GetCustomInventoryIdByName(string inventoryName, int inventoryTypeId);
+
         #endregion
 
         List<ComputerOverview> GetRelatedInventory(int customerId, string userId);
+        
     }
 }

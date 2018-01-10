@@ -16,18 +16,21 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
     public sealed class CommonFunctions : ICommonFunctions
     {                
         private readonly ICaseSolutionService _caseSolutionService;
+        private readonly IGlobalSettingService _globalSettingService;
         private readonly IActionSettingService _actionSettingService;
         private readonly ILogService _logService;
         private readonly IOrderTypeService _orderTypeService;
         private readonly ISettingService _settingService;
 
         public CommonFunctions(ICaseSolutionService caseSolutionService,
+                               IGlobalSettingService globalSettingService,
                                ILogService logService,
                                IActionSettingService actionSettingService,
                                IOrderTypeService orderTypeService,
                                ISettingService settingService)
         {
             _caseSolutionService = caseSolutionService;
+            _globalSettingService = globalSettingService;
             _actionSettingService = actionSettingService;
             _logService = logService;
             _orderTypeService = orderTypeService;
@@ -135,6 +138,9 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
         {
             var model = new LayoutViewModel();
             model.AppType = AppConfigHelper.GetAppSetting(AppSettingsKey.CurrentApplicationType);
+
+            var globalSettings = _globalSettingService.GetGlobalSettings();
+            model.IsMultiCustomerSearchEnabled = globalSettings.First().MultiCustomersSearch == 1;
 
             int pCustomerId = -1;
             if (SessionFacade.CurrentCustomer != null)

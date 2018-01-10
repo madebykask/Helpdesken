@@ -87,19 +87,28 @@ $(function () {
         langEl.hide();
     }
 
+    $("#case__InventoryNumber").on("input", function () {
+        if ($(this).val() === "") {
+            $("#ShowInventoryBtn").hide();
+        } else {
+            $("#ShowInventoryBtn").show();
+        }
+    });
+    
+
     $("a.btn.show-inventory").on("click", function (e) {
         $.ajax({
-            url: "/workstation/GetWorkstationId",
+            url: window.parameters.casesScopeInitParameters.getInventoryUrl,
             type: "POST",
             async: false,
             data:
             {
-                computerName: $("#case__InventoryNumber").val()
+                inventoryName: $("#case__InventoryNumber").val()
             },
-            success: function (pcId) {
-                if (pcId > 0) {
+            success: function (result) {
+                if (result && result.success) {
                     var newWindow = window.open("", "_blank", "width=1400,height=600,menubar=no,toolbar=no,location=no,status=no,left=100,top=100,scrollbars=yes,resizable=yes");
-                    var url = window.parameters.casesScopeInitParameters.getWorkstationIdUrl + "?id=" + pcId + "&dialog=true";
+                    var url = result.url;
                     newWindow.location.href = url;
                 } else {
                     ShowToastMessage(window.parameters.noResultLabel, "warning");

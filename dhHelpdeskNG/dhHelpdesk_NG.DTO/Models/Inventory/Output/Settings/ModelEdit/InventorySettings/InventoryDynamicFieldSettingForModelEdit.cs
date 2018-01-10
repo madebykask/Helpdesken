@@ -11,7 +11,8 @@
             string caption,
             int position,
             FieldTypes fieldType,
-            int propertySize)
+            int propertySize,
+            bool isReadOnly = false)
         {
             this.Id = id;
             this.InventoryTypeGroupId = inventoryTypeGroupId;
@@ -19,6 +20,7 @@
             this.Position = position;
             this.FieldType = fieldType;
             this.PropertySize = propertySize;
+            this.IsReadOnly = isReadOnly;
         }
 
         [IsId]
@@ -35,5 +37,7 @@
         public FieldTypes FieldType { get; private set; }
 
         public int PropertySize { get; private set; }
+
+        public bool IsReadOnly { get; set; }
     }
 }

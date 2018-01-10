@@ -242,18 +242,12 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
         public ProcessResult SaveCaseCheckSplit(CaseModel caseModel, AuxCaseModel auxModel, out int caseId, out decimal caseNumber)
         {
-           
-
             var isNewCase = caseModel.Id == 0;
 
             ProcessResult res = new ProcessResult("Save Case Check Split");
 
             if (caseModel.CaseSolution_Id.HasValue && isNewCase == true)
             {
-
-                
-
-
                 var caseSolution = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id.Value);
 
                 ////Split into "parent" and "child(s)"
@@ -267,6 +261,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 {
                     return res = SaveNewDescendandts(caseModel, auxModel, out caseId, out caseNumber);
                 }
+
                 //Create cases based on "parent", and "child" but independent
                 if (caseSolution.CaseRelationType == CaseRelationType.SelfAndDescendandts)
                 {
@@ -276,9 +271,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
             //do regular save
             return res = SaveCase(caseModel, auxModel, out caseId, out caseNumber);
-
         }
-
 
         public CaseTimeMetricsModel ClaculateCaseTimeMetrics(CaseModel caseModel, AuxCaseModel auxModel, CaseModel oldCase = null)
         {
@@ -948,11 +941,15 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                         //save "base"
                         res = SaveCase(baseCaseModel, baseAuxModel, out baseCaseId, out caseNum);
 
-                        if (caseId == -1)
-                            caseId = baseCaseId;
-
                         //If it should be included in split
                         keepBaseCase = _conditionService.CheckConditions(baseCaseId, item.SplitToCaseSolutionDescendant.Id, conditionType_Id).Show;
+
+                        //If keep, set caseId
+                        if (keepBaseCase)
+                        {
+                            caseId = baseCaseId;
+                        }
+
                     }
                     else
                     {

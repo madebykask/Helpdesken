@@ -29,7 +29,7 @@ namespace DH.Helpdesk.Domain
         public int CaseLockExtendTime { get; set; }
 		public string InvoiceFileFolder { get; set; }
         public string ExtendedCasePath { get; set; }
-
+        public int MultiCustomersSearch { get; set; }
         public virtual Language DefaultLanguage { get; set; }
     }
 }

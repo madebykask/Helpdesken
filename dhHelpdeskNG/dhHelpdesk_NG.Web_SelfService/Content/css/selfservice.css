@@ -945,6 +945,9 @@ a.error, input[type=¨button].error .btn
     width: 90%!important;
 }
 
+.padding10 {
+    padding: 10px;
+}
 .padding20 {
     padding: 20px;
 }
@@ -1068,3 +1071,31 @@ div .multitext i {
 .messageIcon {    
     width: 60px;  
 }
+
+.searchGroup {
+    margin: 20px 0;
+}
+
+.searchGroupCaption{ 
+    background: #f0f0f0;
+    padding: 10px 20px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.searchGroupCaption.loading {
+    background: #FFF281!important;
+}
+
+.searchGroupCaption.collapsed {
+    border-bottom: solid 2px #ccc;
+}
+
+.searchGroupCaption a,
+.searchGroupCaption a:hover,
+.searchGroupCaption a:visited {
+    color: #000;   
+    text-decoration: none;
+    outline: 0;
+}
+

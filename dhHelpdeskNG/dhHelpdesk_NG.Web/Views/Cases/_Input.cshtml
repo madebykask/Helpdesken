@@ -236,7 +236,7 @@
                                 <br />
                                 @*@Translation.Get("Independent child")&nbsp;<input id="IndependentChild" name="IndependentChild" type="checkbox" @(Model.IndependentChild ? "checked" : "") value="true" />
                                 @Html.HiddenFor(model => Model.IndependentChild)*@
-                                @Translation.Get("Independent child")&nbsp;
+                                @Translation.GetCoreTextTranslation("Fristående underärende")&nbsp;
                                 @Html.CheckBoxFor(model => Model.IndependentChild)
                             </div>
                         }
@@ -855,7 +855,10 @@
                                             <td>
                                                 @if (Html.MasterModel().CustomerSetting.ModuleInventory > 0)
                                                 {
-                                                    <a title="@Translation.GetCoreTextTranslation("Visa inventarie")" class="btn show-inventory"><i class="icon-th-large"></i></a>
+                                                    <a id="ShowInventoryBtn" title="@Translation.GetCoreTextTranslation("Visa inventarie")" class="btn show-inventory"
+                                                       style='@(!string.IsNullOrEmpty(Model.case_.InventoryNumber) ? string.Empty : "display: none")'>
+                                                        <i class="icon-th-large"></i>
+                                                    </a>
                                                 }
                                             </td>
                                         </tr>
@@ -1021,7 +1024,7 @@
                                                     </button>
                                                     <ul class="dropdown-menu" style="z-index:99999999999;">
                                                         <li><a href="#">@Translation.Get("--")</a></li>
-                                                        @Html.ProductAreaDropdownButtonString(Model.productAreas)
+                                                        @Html.ProductAreaDropdownButtonString(Model.productAreas, true, Model.case_.ProductArea_Id)
                                                     </ul>
                                                     @Html.HiddenFor(model => model.case_.ProductArea_Id, new { @class = "product-area-id" })
                                                 </div>
@@ -2132,48 +2135,52 @@
                                                                                     && (x.InvoiceRow.Status.Value == InvoiceStatus.Invoiced || x.InvoiceRow.Status.Value == InvoiceStatus.NotInvoiced))
                                                                                 .ToList();
                                                     var editableExternalInvoices = Model.ExternalInvoices.Except(readonlyExternalInvoices).ToList();
+                                                    var extInvoicesCount = 0;
                                                 }
-                                                @foreach (var extInv in readonlyExternalInvoices)
+                                                @for (var i = 0; i < readonlyExternalInvoices.Count; i++)
                                                 {
                                                     <tr>
                                                         <td>
-                                                            @extInv.Name
+                                                            @readonlyExternalInvoices[i].Name
+                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@readonlyExternalInvoices[i].Name">
                                                         </td>
                                                         <td>
-                                                            @extInv.Amount.ToString("#.##")
-
+                                                            @readonlyExternalInvoices[i].Amount.ToString("#.##")
+                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@readonlyExternalInvoices[i].Amount.ToString("#.##")" placeholder="0.00">
+                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="@readonlyExternalInvoices[i].Id">
                                                         </td>
                                                         <td>
-                                                            @extInv.InvoiceRow.Status.Value.GetTranslation()
+                                                            @readonlyExternalInvoices[i].InvoiceRow.Status.Value.GetTranslation()
                                                         </td>
                                                     </tr>
+                                                    extInvoicesCount++;
                                                 }
                                                 @for (var i = 0; i < editableExternalInvoices.Count; i++)
                                                 {
                                                     <tr>
                                                         <td>
-                                                            <input type="text" id="ExternalInvoices[@i].Name" name="ExternalInvoices[@i].Name" value="@editableExternalInvoices[i].Name">
+                                                            <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@editableExternalInvoices[i].Name">
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="inputw100" id="ExternalInvoices[@i].Amount" name="ExternalInvoices[@i].Amount" value="@editableExternalInvoices[i].Amount.ToString("#.##")" placeholder="0.00">
-                                                            <input type="hidden" id="ExternalInvoices[@i].Id" name="ExternalInvoices[@i].Id" value="@editableExternalInvoices[i].Id">
-
+                                                            <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@editableExternalInvoices[i].Amount.ToString("#.##")" placeholder="0.00">
+                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="@editableExternalInvoices[i].Id">
                                                         </td>
                                                         <td>
                                                             <a id="btnDeleteExternalInvoice0" class="btn bt-small" title="Delete" data-rowid="@i"><i class="icon-remove"></i></a>
                                                         </td>
                                                     </tr>
+                                                    extInvoicesCount++;
                                                 }
                                                 <tr>
                                                     <td>
-                                                        <input type="text" id="ExternalInvoices[@editableExternalInvoices.Count].Name" name="ExternalInvoices[@editableExternalInvoices.Count].Name">
+                                                        <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name">
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="inputw100" id="ExternalInvoices[@editableExternalInvoices.Count].Amount" name="ExternalInvoices[@editableExternalInvoices.Count].Amount" placeholder="0.00">
-                                                        <input type="hidden" id="ExternalInvoices[@editableExternalInvoices.Count].Id" name="ExternalInvoices[@editableExternalInvoices.Count].Id" value="0">
+                                                        <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" placeholder="0.00">
+                                                        <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="0">
                                                     </td>
                                                     <td>
-                                                        <a id="@("btnDeleteExternalInvoice" + editableExternalInvoices.Count)" class="btn bt-small" title="Delete" data-rowid="@editableExternalInvoices.Count"><i class="icon-remove"></i></a>
+                                                        <a id="@("btnDeleteExternalInvoice" + extInvoicesCount)" class="btn bt-small" title="Delete" data-rowid="@extInvoicesCount"><i class="icon-remove"></i></a>
                                                         <a id="btnAddExternalInvoice" class="btn bt-small" title="Add"><i class="icon-plus"></i></a>
                                                     </td>
                                                 </tr>
@@ -2201,7 +2208,7 @@
 
                         <div id="container_@extendedCase.Id" class="tab-pane tab-pane-border @((Model.ActiveTab.StartsWith(CaseTabs.ExtendedCaseTab)) ? "active" : "")">
                             <div class="container">
-                                @Html.Partial("_CaseInformation", Model, new ViewDataDictionary { { "Headline", Translation.GetCoreTextTranslation(extendedCase.Name) } })
+                                @Html.Partial("_CaseInformation", Model, new ViewDataDictionary { { "Headline", Translation.GetMasterDataTranslation(extendedCase.Name) } })
                                 @*<div>@extendedCase.Version</div>*@
                                 </div>
                          

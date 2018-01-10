@@ -1,0 +1,40 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model int?
+@{
+    if (!ViewData.ContainsKey("Source"))
+    {
+        throw new ArgumentNullException("Source", "\"ComputerId\" ViewData parameter must be specified.");
+    }
+
+    var source = (SelectList)ViewData["Source"];
+    var label = (string)ViewData["Label"];
+    var readOnly = (bool)ViewData["IsReadOnly"];
+
+    var attributes = new Dictionary<string, object>();
+
+    if (ViewData.ContainsKey("Id"))
+    {
+        attributes.Add("Id", ViewData["Id"]);
+    }
+
+    var validationMessage = string.Format(" {0} {1}", label, Translation.GetCoreTextTranslation("måste anges"));
+}
+
+<tr>
+    <td class="span3">
+        @label
+    </td>
+    <td class="span9">
+        @if (!readOnly)
+        {
+            @Html.DropDownListFor(m => m.Value, source, string.Empty, attributes)
+            @Html.ValidationMessageFor(m => m.Value, validationMessage)
+        }
+        else
+        {
+            @(!Model.HasValue
+                ? Html.TextBoxFor(m => m, new {@readonly = true})
+                : Html.TextBoxFor(m => source.SingleOrDefault(x => x.Value == Model.Value.ToString()).Text, new {@readonly = true}))
+        }
+    </td>
+</tr>

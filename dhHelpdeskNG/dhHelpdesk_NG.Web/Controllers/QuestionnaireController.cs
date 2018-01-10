@@ -666,64 +666,6 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public ViewResult Questionnaire(Guid guid)
-        {
-            var detailed = this._circularService.GetQuestionnaire(guid, this.OperationContext.LanguageId);
-
-            List<QuestionnaireQuestionModel> questionnarieQuestionsModel = (from question in detailed.Questionnaire.Questions
-                                                                            let options =
-                                                                                question.Options.Select(
-                                                                                    option =>
-                                                                                    new QuestionnaireQuestionOptionModel
-                                                                                        (
-                                                                                        option.Id,
-                                                                                        option.Option,
-                                                                                        option.Position)).ToList()
-                                                                            select
-                                                                                new QuestionnaireQuestionModel(
-                                                                                question.Id,
-                                                                                question.Question,
-                                                                                question.Number,
-                                                                                question.IsShowNote,
-                                                                                question.NoteText,
-                                                                                options)).ToList();
-
-            var questionnarieModel = new QuestionnaireModel(
-                detailed.Questionnaire.Id,
-                detailed.Questionnaire.Name,
-                detailed.Questionnaire.Description,
-                detailed.CaseId,
-                detailed.Caption,
-                questionnarieQuestionsModel);
-
-            var questionnarieViewModel = new QuestionnaireViewModel(questionnarieModel, false, guid);
-
-            return this.View("Quiestionnaire", questionnarieViewModel);
-        }
-
-        [HttpPost]
-        public RedirectToRouteResult Questionnaire(AnswersViewModel model)
-        {
-            List<Answer> ids =
-                model.Questions.Where(x => x.SelectedOptionId != null)
-                    .Select(x => new Answer(x.NoteText, (int)x.SelectedOptionId))
-                    .ToList();
-
-            var participant = new ParticipantForInsert(model.Guid, model.IsAnonym, OperationContext.DateAndTime, ids);
-
-            this._circularService.SaveAnswers(participant);
-
-            return this.RedirectToAction("QuestionnaireCompleted", "Questionnaire");
-        }
-
-        [HttpGet]
-        public ViewResult QuestionnaireCompleted()
-        {
-            var html = _infoService.GetInfoText(4, OperationContext.CustomerId, OperationContext.LanguageId).Name;
-            return View("QuestionnaireCompleted", model: html);
-        }
-
-        [HttpGet]
         public ViewResult Statistics(int questionnaireId, int circularId)
         {
             QuestionnaireOverview questionnaire = this._circularService.GetQuestionnaire(
@@ -861,7 +803,7 @@ namespace DH.Helpdesk.Web.Controllers
             string fullUrl = string.Empty;
             if (url != null)
             {
-                fullUrl = this.Url.Action("Questionnaire", "Questionnaire", null, url.Scheme, null);
+                fullUrl = this.Url.Action("Questionnaire", "QuestionnaireAnswer", null, url.Scheme, null);
                 fullUrl = string.Format("{0}{1}", fullUrl, ParamString);
             }
 

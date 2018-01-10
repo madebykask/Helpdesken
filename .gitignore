@@ -32,9 +32,11 @@ dhHelpdeskNG/dhHelpdesk_NG.Web_SelfService/Web.config
 dhHelpdeskNG/CommonAssembly/SharedAssemblyInfo.cs
 dhHelpdeskNG/.vs/config/applicationhost.config
 
-dhHelpdeskNG/dhHelpdesk_NG.Web/ExtendedCaseWebApi/
-dhHelpdeskNG/dhHelpdesk_NG.Web/ExtendedCase/
-dhHelpdeskNG/dhHelpdesk_NG.Web_SelfService/ExtendedCase/
-dhHelpdeskNG/dhHelpdesk_NG.Web_SelfService/ExtendedCaseWebApi/
+dhHelpdeskNG/dhHelpdesk_NG.Web/Logs/
+dhHelpdeskNG/dhHelpdesk_NG.Web/ExtendedCaseApi/**
+dhHelpdeskNG/dhHelpdesk_NG.Web/ExtendedCase/**
+dhHelpdeskNG/dhHelpdesk_NG.Web_SelfService/ExtendedCase/**
+dhHelpdeskNG/dhHelpdesk_NG.Web_SelfService/ExtendedCaseApi/**
+dhHelpdeskNG/dhHelpdesk_NG.Web_SelfService/Logs/
 
 dhHelpdeskNG/.vs/

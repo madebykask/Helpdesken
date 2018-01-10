@@ -6,15 +6,15 @@
         || Model.URL2.Show
         || Model.Owner.Show)
 {
-    <h4>@Translation.Get("Övrigt")</h4>
+    <h4>@Translation.GetCoreTextTranslation("Övrigt")</h4>
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @Html.EditorFor(m => m.Info, "NotReadonlyFields/WideText")
-                @Html.EditorFor(m => m.Other, "NotReadonlyFields/Text")
-                @Html.EditorFor(m => m.URL, "NotReadonlyFields/Text")
-                @Html.EditorFor(m => m.URL2, "NotReadonlyFields/Text")
-                @Html.EditorFor(m => m.Owner, "NotReadonlyFields/Text")
+                @Html.EditorFor(m => m.Info, "Fields/WideText")
+                @Html.EditorFor(m => m.Other, "Fields/Text")
+                @Html.EditorFor(m => m.URL, "Fields/Text")
+                @Html.EditorFor(m => m.URL2, "Fields/Text")
+                @Html.EditorFor(m => m.Owner, "Fields/Text")
             </table>
         </div>
     </div>

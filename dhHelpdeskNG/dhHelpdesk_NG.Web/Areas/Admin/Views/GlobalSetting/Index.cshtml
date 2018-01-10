@@ -21,6 +21,7 @@
             <li id="menu4" style="display: none">
                 @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation), "newtranslation", new { newtext = 1, texttypeid = Model.TextType.Id }, new { @class = "btn" })
             </li>
+            <li id="menu5" style="display: none"></li>
         </ul>
     </div>
 </div>
@@ -28,10 +29,11 @@
     <div class="container">
 
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active" id="tab1" onclick="$('#menu1').show(); $('#menu2').hide(); $('#menu3').hide(); $('#menu4').hide();"><a href="#fragment-1">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</a></li>
-            <li id="tab2" onclick="$('#menu2').show(); $('#menu1').hide(); $('#menu3').hide(); $('#menu4').hide();"><a href="#fragment-2">@Translation.Get("Kalender helgdagar", Enums.TranslationSource.TextTranslation)</a></li>
-            <li id="tab3" onclick="$('#menu3').show(); $('#menu1').hide(); $('#menu2').hide(); $('#menu4').hide();"><a href="#fragment-3">@Translation.Get("Kalender bevakningsdatum", Enums.TranslationSource.TextTranslation)</a></li>
-            <li id="tab4" onclick="$('#menu4').show(); $('#menu1').hide(); $('#menu2').hide(); $('#menu3').hide();"><a href="#fragment-4">@Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation)</a></li>
+            <li class="active" id="tab1" onclick="toggleMenuItems(1)"><a href="#fragment-1">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</a></li>
+            <li id="tab2" onclick="toggleMenuItems(2)"><a href="#fragment-2">@Translation.Get("Kalender helgdagar", Enums.TranslationSource.TextTranslation)</a></li>
+            <li id="tab3" onclick="toggleMenuItems(3)"><a href="#fragment-3">@Translation.Get("Kalender bevakningsdatum", Enums.TranslationSource.TextTranslation)</a></li>
+            <li id="tab4" onclick="toggleMenuItems(4)"><a href="#fragment-4">@Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation)</a></li>
+            <li id="tab5" onclick="toggleMenuItems(5)"><a href="#fragment-5">@Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
@@ -166,6 +168,18 @@
                 </div>
             </div>
            
+            <div class="tab-pane tab-pane-border" id="fragment-5">
+                <div id="selfServiceError" class="alert alert-error alert-dismissable" style="display:none"></div>
+                <table class="tableform">
+                    <tbody>
+                    <tr>
+                        <td class="span4">@Translation.Get("Visa alla kunder på Ärendeöversikten")</td>
+                        <td>@Html.CheckBox("multiCustomersSearch", Model.GlobalSettings.FirstOrDefault().MultiCustomersSearch == 1, new {@class = "switchcheckbox"})</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
             <input type="hidden" name="activeTab" id="activeTab" value="@SessionFacade.ActiveTab" />
         </div>
 
@@ -174,25 +188,44 @@
 
 @section Scripts {
     <script type="text/javascript">
-        $(function () {
+        $(function() {
             $('#SearchId').val(@ViewBag.SelectedSearchCondition);
-        });
 
+            $("#multiCustomersSearch").on('switchChange.bootstrapSwitch',
+                function () {
+
+                    $("#selfServiceError").text('').hide();
+
+                    var res = $(this).is(':checked');
+                    var data = {
+                        val: res ? 'true' : 'false'
+                    };
+
+                    $.post('@Url.Action("UpdateMultiCustomersSearch", "GlobalSetting", new { Area = "Admin" })',
+                        data,
+                        function (response) {
+                            if (!response.Success && response.ErrorMessage) {
+                                $("#selfServiceError").text(response.ErrorMessage).show();
+                            }
+                        });
+                });
+        });
 
         var texttypeId = $("#TextTypeId").val();
 
         var activeTab = $('#activeTab').val();
-        if(activeTab)
-            $('#myTab a[href="' + activeTab + '"]').click();//.tab('show')
-        
+        if (activeTab)
+            $('#myTab a[href="' + activeTab + '"]').click(); //.tab('show')
+
 
         function changeTextType(id) {
             var list = $('#translationList');
             list.html('');
             if (id != '') {
-                $.get('/GlobalSetting/ChangeTextType/' + id, function (result) {
-                    list.html($(result).html());                    
-                });
+                $.get('/GlobalSetting/ChangeTextType/' + id,
+                    function(result) {
+                        list.html($(result).html());
+                    });
             }
         }
 
@@ -200,15 +233,22 @@
             var list = $('#holidays');
             list.html('');
             if (id != '') {
-                $.get('/GlobalSetting/ChangeHoliday/' + id, function (result) {
-                    list.html(result);
-                });
+                $.get('/GlobalSetting/ChangeHoliday/' + id,
+                    function(result) {
+                        list.html(result);
+                    });
             }
         }
 
         function getCurTextType() {
             return $("#TextTypeId").val();
         }
-                    
+
+        function toggleMenuItems(number){
+            $('ul.secnav > li').hide();
+            var menuId = '#menu' + number;
+            $(menuId).show();
+        }
+
     </script>
 }

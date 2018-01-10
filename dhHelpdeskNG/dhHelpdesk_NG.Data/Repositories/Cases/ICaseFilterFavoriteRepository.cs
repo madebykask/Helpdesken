@@ -10,6 +10,7 @@
     public interface ICaseFilterFavoriteRepository : IRepository<CaseFilterFavoriteEntity>
     {
         List<CaseFilterFavorite> GetUserFavoriteFilters(int customerId, int userId);
+        List<CaseFilterFavorite> GetCustomerFavoriteFilters(int customerId);
 
         string SaveFavorite(CaseFilterFavorite favorite);
 

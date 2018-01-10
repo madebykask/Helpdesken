@@ -1,5 +1,9 @@
-﻿using DH.Helpdesk.BusinessData.Models.Case;
+﻿using System.Collections.Generic;
+using System.Data;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Infrastructure.Helpers;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -53,24 +57,6 @@ namespace DH.Helpdesk.Web.Controllers
             this._settingService = settingService;
             _masterDataService = masterDataService;
             _customerService = customerService;
-        }
-
-        // todo refactor
-        public DropDownWithSubmenusItem CauseToDropDownItem(FinishingCauseOverview causes)
-        {
-            var item = new DropDownWithSubmenusItem(
-                causes.Name, causes.Id.ToString(CultureInfo.InvariantCulture));
-
-            if (causes.ChildFinishingCauses.Any())
-            {
-                var subitems =
-                    causes.ChildFinishingCauses.Select(
-                        this.CauseToDropDownItem).ToList();
-
-                item.Subitems.AddRange(subitems);
-            }
-
-            return item;
         }
 
         public ProblemOutputModel MapProblemOverviewToOutputModel(ProblemOverview problemOverview, bool isFirstNameFirst)
@@ -145,6 +131,7 @@ namespace DH.Helpdesk.Web.Controllers
                 WatchDate = arg.WatchDate,
                 CaseType = arg.CaseType.Name,
                 SubState = subStateName,
+                CaseIcon = GetCaseIcon(arg)
             };
         }
 
@@ -300,28 +287,25 @@ namespace DH.Helpdesk.Web.Controllers
 
         public PartialViewResult LogForNewProblem()
         {
-            var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).ToList();
-            var causesTree = new DropDownWithSubmenusContent(causes, null);
-            return this.PartialView("_InputLog", new LogEditModel { FinishingCauses = causesTree });
+            var causes = finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id);
+            return this.PartialView("_InputLog", new LogEditModel { FinishingCauses = causes });
         }
 
         public PartialViewResult Log(int id)
         {
+            var causes = finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id);
+            var finishingCauses = finishingCauseService.GetFinishingCauseInfos(SessionFacade.CurrentCustomer.Id);
             var log = MapLogs(this.problemLogService.GetProblemLog(id));
-            var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).OrderBy(x => x.Name).ToList();
-            var finishingCauseId = log.FinishingCauseId.HasValue
-                                       ? log.FinishingCauseId.ToString()
-                                       : null;
-            var causesTree = new DropDownWithSubmenusContent(causes, finishingCauseId);
-            log.FinishingCauses = causesTree;
+            log.FinishingCauses = causes;
+            log.FinishingCause = CommonHelper.GetFinishingCauseFullPath(finishingCauses.ToArray(), log.FinishingCauseId);
+
             return this.PartialView("EditLog", log);
         }
 
         public PartialViewResult NewLog(int problemId)
         {
-            var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).ToList();
-            var causesTree = new DropDownWithSubmenusContent(causes, null);
-            return this.PartialView("NewLog", new LogEditModel { FinishingCauses = causesTree });
+            var causes = finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id);
+            return this.PartialView("NewLog", new LogEditModel { FinishingCauses = causes });
         }
 
         [HttpPost]
@@ -351,7 +335,7 @@ namespace DH.Helpdesk.Web.Controllers
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId };
 
             this.problemLogService.AddLog(logDto);
-//            SendProblemLogEmail(log);
+            SendProblemLogEmail(log);
             return this.RedirectToAction("ProblemActiveLog", new { id = log.ProblemId });
         }
 
@@ -382,7 +366,7 @@ namespace DH.Helpdesk.Web.Controllers
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId, Id = log.Id };
 
             this.problemLogService.UpdateLog(logDto);
-//            SendProblemLogEmail(log);
+            SendProblemLogEmail(log);
             return this.RedirectToAction("ProblemActiveLog", new { id = log.ProblemId });
         }
 
@@ -434,7 +418,6 @@ namespace DH.Helpdesk.Web.Controllers
                 foreach (var c in cases)
                 {
                     var userTimeZone = TimeZoneInfo.Local;
-                    var basePath = _masterDataService.GetFilePath(c.Customer_Id);
                     var caseHistoryId = problemService.GetCaseHistoryId(c.Id, log.ProblemId);
 
                     var customer = _customerService.GetCustomer(c.Customer_Id);
@@ -449,9 +432,11 @@ namespace DH.Helpdesk.Web.Controllers
                     var caseLog = new CaseLog
                     {
                         CaseId = c.Id,
+                        Id = 1,
                         FinishingDate = log.FinishConnectedCases ? (log.FinishingDate.HasValue ? log.FinishingDate : DateTime.Now) : null,
                         FinishingType = log.FinishConnectedCases ? log.FinishingCauseId : null,
                         SendMailAboutLog = true,
+                        SendMailAboutCaseToNotifier = true,
                         CaseHistoryId = caseHistoryId
                     };
                     if (log.ExternNotering)
@@ -459,9 +444,22 @@ namespace DH.Helpdesk.Web.Controllers
                     if (log.InternNotering)
                         caseLog.TextInternal = log.LogText;
 
-                    caseService.SendCaseEmail(c.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, null, caseLog);
+                    caseService.SendProblemLogEmail(c, caseMailSetting, caseHistoryId, userTimeZone, caseLog, log.FinishConnectedCases);
                 }
             }
+        }
+
+        private static GlobalEnums.CaseIcon GetCaseIcon(Case cs)
+        {
+            var ret = GlobalEnums.CaseIcon.Normal;
+
+            if (cs.FinishingDate.HasValue)
+                if (!cs.ApprovedDate.HasValue && string.Compare("1", cs.CaseType.RequireApproving.ToString(), true, CultureInfo.InvariantCulture) == 0)
+                    ret = GlobalEnums.CaseIcon.FinishedNotApproved;
+                else
+                    ret = GlobalEnums.CaseIcon.Finished;
+
+            return ret;
         }
 
         #endregion

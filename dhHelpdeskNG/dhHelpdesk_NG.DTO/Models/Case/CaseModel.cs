@@ -151,6 +151,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         #region Other Info
 
         public int? WorkingGroup_Id { get; set; }
+        public string WorkingGroupName { get; set; }
 
         public int? Performer_User_Id { get; set; }
 
@@ -161,6 +162,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public int? Status_Id { get; set; }
 
         public int? StateSecondary_Id { get; set; }
+        public string StateSecondaryName { get; set; }
 
         public int? Project_Id { get; set; }
 

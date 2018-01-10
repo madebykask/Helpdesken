@@ -102,5 +102,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         public UserFirstLastNameModes UserFirstLastNameRepresentationId { get; set; }
 
         public IList<SelectListItem> CaseSolutionList { get; set; }
+
+        public IList<int> ShowStatusBarIds { get; set; }
+        public IList<int> ShowExternalStatusBarIds { get; set; }
     }
 }

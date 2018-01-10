@@ -1,26 +1,28 @@
 ﻿@using DH.Helpdesk.Web.Models.Questionnaire.Output
 @model QuestionnaireViewModel
-@using (Html.BeginForm("Questionnaire", "Questionnaire", FormMethod.Post, new { id = "edit_form" }))
+@using (Html.BeginForm("Questionnaire", "QuestionnaireAnswer", FormMethod.Post, new { id = "edit_form" }))
 {
     @Html.HiddenFor(x => x.Guid)
-    <div class="secnavs fixed">
+    @Html.HiddenFor(x => x.CustomerId)
+    @Html.HiddenFor(x => x.LanguageId)
+    <div class="secnavs fixed" style="top: 0px">
         <div class="pull-left">
             <ul class="secnav">
                 <li>
-                    <input type="submit" value="@Translation.Get("Spara och stäng")" class="btn"/>
-                    <a href="@Url.Action("Questionnaire", "Questionnaire", new { guid = Model.Guid })" class="btn">
-                        @Translation.Get("Rensa")
+                    <input type="submit" value="@Translation.Get("Spara och stäng", Model.LanguageId, Enums.TranslationSource.TextTranslation, Model.CustomerId)" class="btn"/>
+                    <a href="@Url.Action("Questionnaire", "QuestionnaireAnswer", new { guid = Model.Guid, customerId = Model.CustomerId, languageId = Model.LanguageId })" class="btn">
+                        @Translation.Get("Rensa", Model.LanguageId, Enums.TranslationSource.TextTranslation, Model.CustomerId)
                     </a>
                 </li>
                 <li>
                     @Html.CheckBoxFor(x => x.IsAnonym)
-                    @Translation.Get("Jag vill vara anonym")
+                    @Translation.Get("Jag vill vara anonym", Model.LanguageId, Enums.TranslationSource.TextTranslation, Model.CustomerId)
                 </li>
             </ul>
         </div>
     </div>
 
-    <div class="content">
+    <div class="content" style="margin-top: 45px">
         <div class="container">
             <ul class="nav nav-tabs">
                 <li class="active"></li>
@@ -36,12 +38,12 @@
                         </div>
                         <div class="row">
                             <div class="span12">
-                                @Translation.Get("Ärende"): @Model.QuestionnaireModel.CaseId
+                                @Translation.Get("Ärende", Model.LanguageId, Enums.TranslationSource.TextTranslation, Model.CustomerId): @Model.QuestionnaireModel.CaseId
                             </div>
                         </div>
                         <div class="row">
                             <div class="span12">
-                                @Translation.Get("Rubrik"): @Model.QuestionnaireModel.Caption
+                                @Translation.Get("Rubrik", Model.LanguageId, Enums.TranslationSource.TextTranslation, Model.CustomerId): @Model.QuestionnaireModel.Caption
                             </div>
                         </div>
                     </div>

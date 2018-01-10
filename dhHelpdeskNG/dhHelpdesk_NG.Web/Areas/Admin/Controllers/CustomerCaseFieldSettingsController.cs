@@ -1,10 +1,14 @@
 ﻿using System;
+using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
+using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain.Cases;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Web.Infrastructure.Cache;
+using Microsoft.Ajax.Utilities;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
@@ -64,6 +68,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             var model = this.CustomerInputViewModel(customer, language);
             model.CaseSections = caseSections;
+
             return this.View(model);
         }
 
@@ -73,6 +78,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         public ActionResult Edit(int customerId, CustomerInputViewModel vmodel, List<CaseFieldSetting> CaseFieldSettings, int[] UsSelected, int languageId)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            if (vmodel.ShowStatusBarIds != null && vmodel.ShowStatusBarIds.Any())
+            {
+                var selected = CaseFieldSettings.Where(c => vmodel.ShowStatusBarIds.Any(m => m == c.Id));
+                selected.ForEach(c => c.ShowStatusBar = true );
+            }
+            if (vmodel.ShowExternalStatusBarIds != null && vmodel.ShowExternalStatusBarIds.Any())
+            {
+                var selected = CaseFieldSettings.Where(c => vmodel.ShowExternalStatusBarIds.Any(m => m == c.Id));
+                selected.ForEach(c => c.ShowExternalStatusBar = true);
+            }
 
             _customerService.SaveCaseFieldSettingsForCustomer(customerId, languageId, vmodel.CaseFieldSettingWithLangauges, CaseFieldSettings, out errors);
             _caseSectionService.SaveCaseSections(languageId, vmodel.CaseSections, customerId);
@@ -85,7 +101,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var language = this._languageService.GetLanguage(languageId);
 
             var model = this.CustomerInputViewModel(customer, language);
-           
+
             return this.View(model);
         }
 
@@ -196,8 +212,66 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 }).ToList(),
                 LockedFieldOptions = GetLockedFieldOptions() 
             };
-
+            ;
+            model.ShowStatusBarIds = model.CaseFieldSettings.Where(m => m.ShowStatusBar).Select(m => m.Id).ToList();
+            model.ShowExternalStatusBarIds = model.CaseFieldSettings.Where(m => m.ShowExternalStatusBar)
+                .Select(m => m.Id).ToList();
             #endregion
+
+            var fieldstoExclude = new []
+            {
+                GlobalEnums.TranslationCaseFields.AddUserBtn.ToString(),
+                GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString(),
+                GlobalEnums.TranslationCaseFields.Filename.ToString(),
+                GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(),
+                GlobalEnums.TranslationCaseFields.tblLog_Charge.ToString(),
+                GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(),
+                GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(),
+                GlobalEnums.TranslationCaseFields.Description.ToString(),
+                GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(),
+                GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(),
+                GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString(),
+                GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(),
+                GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(),
+                GlobalEnums.TranslationCaseFields.SMS.ToString(),
+                GlobalEnums.TranslationCaseFields.Project.ToString(),
+                GlobalEnums.TranslationCaseFields.Problem.ToString(),
+            };
+            var externalFieldsToExclude = new[]
+            {
+                GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(),
+                GlobalEnums.TranslationCaseFields.RegTime.ToString(),
+                GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
+                GlobalEnums.TranslationCaseFields.User_Id.ToString(),
+                GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(),
+                GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(),
+                GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(),
+                GlobalEnums.TranslationCaseFields.Priority_Id.ToString(),
+                GlobalEnums.TranslationCaseFields.Status_Id.ToString(),
+                GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(),
+                GlobalEnums.TranslationCaseFields.CausingPart.ToString(),
+                GlobalEnums.TranslationCaseFields.ClosingReason.ToString(),
+                GlobalEnums.TranslationCaseFields.FinishingDate.ToString()
+            };
+
+            var allFields = model.CaseFieldSettings
+                .Where(c => FieldSettingsUiNames.Names.ContainsKey(c.Name) && !fieldstoExclude.Any(f => f == c.Name));
+
+            ViewBag.AllFields = allFields.Select(c => new CustomKeyValue<int, string>
+                {
+                    Key = c.Id,
+                    Value = FieldSettingsUiNames.Names.ContainsKey(c.Name) ? Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[c.Name]) : ""
+                })
+                .ToList();
+            ;
+            ViewBag.ShowExternalStatusBarFields = allFields.Where(c => !externalFieldsToExclude.Any(f => f == c.Name))
+                .Select(c => new CustomKeyValue<int, string>
+                {
+                    Key = c.Id,
+                    Value = FieldSettingsUiNames.Names.ContainsKey(c.Name) ? Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[c.Name]) : ""
+                })
+                .ToList();
+
 
             return model;
         }
