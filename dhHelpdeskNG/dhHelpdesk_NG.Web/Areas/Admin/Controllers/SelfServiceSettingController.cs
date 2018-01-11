@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Areas.Admin.Models;
 using DH.Helpdesk.Web.Infrastructure;
@@ -141,6 +142,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             customerToSave.GroupCaseTemplates = vmodel.Customer.GroupCaseTemplates;
             customerToSave.FetchPcNumber = vmodel.Customer.FetchPcNumber;
 
+            var caseType_Id = 0;
             if (customerToSave == null)
                 throw new Exception("No customer found...");
 
@@ -191,7 +193,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     wgs = prodareawgs.ToArray();
                 }
 
-                _productAreaService.SaveProductArea(prod, wgs, 0, out errors);
+                CaseTypeProductArea connectedCaseType = null;
+                if (prod.Id > 0)
+                {
+                    connectedCaseType = prod.CaseTypeProductAreas?.FirstOrDefault(x => x.ProductArea_Id == prod.Id);
+                }
+                caseType_Id = connectedCaseType?.CaseType_Id ?? 0;
+
+                _productAreaService.SaveProductArea(prod, wgs, caseType_Id, out errors);
             }
 
 
