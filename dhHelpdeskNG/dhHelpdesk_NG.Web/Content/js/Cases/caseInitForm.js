@@ -844,8 +844,9 @@ function CaseInitForm() {
             $('#CaseTemplate_ExternalLogNote').val("");
             return;
         }
-
-        $.post('/Cases/ChangePriority/', { 'id': $(this).val() }, function (data) {
+        var textExternalLogNote = $('#CaseLog_TextExternal').val();
+  
+        $.post('/Cases/ChangePriority/', { 'id': $(this).val(), 'textExternalLogNote': textExternalLogNote }, function (data) {
             if (data.ExternalLogText != null && data.ExternalLogText != "") {
                 $('#CaseLog_TextExternal').val(data.ExternalLogText);
                 $('#CaseLog_TextExternal').trigger("propertychange");
