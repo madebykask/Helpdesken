@@ -1998,6 +1998,12 @@ begin
 	ALTER TABLE [dbo].[tblLink] NOCHECK CONSTRAINT [FK_tblLink_tblCaseFilterFavorite]	
 end
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'QuickLinkWGRestriction' and
+	 sysobjects.name = N'tblSettings')
+begin
+	ALTER TABLE [tblSettings] ADD [QuickLinkWGRestriction] bit NOT NULL DEFAULT(0)
+end
+
 -- enable MultiCustomers
 -- UPDATE tblGlobalSettings SET [MultiCustomersSearch] = 1
 
