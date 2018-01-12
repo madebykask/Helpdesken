@@ -882,6 +882,7 @@
 				BatchEmail = customerToCopySettings.BatchEmail,
                 BulletinBoardWGRestriction = customerToCopySettings.BulletinBoardWGRestriction,
                 CalendarWGRestriction = customerToCopySettings.CalendarWGRestriction,
+                QuickLinkWGRestriction = customerToCopySettings.QuickLinkWGRestriction,
                 ModuleExtendedCase = customerToCopySettings.ModuleExtendedCase,
                 AttachmentPlacement = customerToCopySettings.AttachmentPlacement,
                 M2TNewCaseMailTo = customerToCopySettings.M2TNewCaseMailTo,

@@ -71,7 +71,7 @@
                     if (!bulletinBoardWGRestriction)
                         query = query.RestrictByWorkingGroups(this.workContext);
                     else
-                        query = query.RestrictByWorkingGroupsOnyRead(this.workContext);
+                        query = query.RestrictByWorkingGroupsOnlyRead(this.workContext);
                 }
 
                 return query                            
@@ -93,7 +93,7 @@
                     if (!bulletinBoardWGRestriction)
                         query = query.RestrictByWorkingGroups(this.workContext);
                     else
-                        query = query.RestrictByWorkingGroupsOnyRead(this.workContext);
+                        query = query.RestrictByWorkingGroupsOnlyRead(this.workContext);
                 }
 
                 //query.GetByCustomer(customerId);
@@ -239,7 +239,7 @@
                     if (!bulletinBoardWGRestriction)
                         query = query.RestrictByWorkingGroups(this.workContext);
                     else
-                        query = query.RestrictByWorkingGroupsOnyRead(this.workContext);
+                        query = query.RestrictByWorkingGroupsOnlyRead(this.workContext);
                 }
 
                 return query
