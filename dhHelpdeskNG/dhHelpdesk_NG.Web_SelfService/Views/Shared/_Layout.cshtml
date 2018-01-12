@@ -67,7 +67,7 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">                        
-                        @if (!layoutModel.HideMenu && layoutModel.LoginType != LoginMode.Anonymous)
+                        @if (!layoutModel.HideMenu && layoutModel.LoginMode != LoginMode.Anonymous)
                         {
                             <li class="blue">
                                 <a href="@Url.Action("Index", "Start", new { customerId = layoutModel.CustomerId, area = "" })">

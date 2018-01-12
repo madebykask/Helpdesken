@@ -92,21 +92,24 @@ namespace DH.Helpdesk.Web.Infrastructure
             var redirectToUrl = "~/login/login?returnUrl=" + filterContext.HttpContext.Request.Url;            
             var curUserId = "";
 
-            if (string.IsNullOrEmpty(SessionFacade.CurrentLoginMode))
-               SessionFacade.CurrentLoginMode = GetCurrentLoginMode();
-            
+            if (SessionFacade.CurrentLoginMode == LoginMode.None)
+            {
+                SessionFacade.CurrentLoginMode = GetCurrentLoginMode();
+            }
 
             if (SessionFacade.CurrentUser == null)
-            {                                
-                switch (SessionFacade.CurrentLoginMode)
+            {
+                if (SessionFacade.CurrentLoginMode == LoginMode.Application)
                 {
-                   case LoginMode.Application:
-                        curUserId = this.User.Identity.Name;
-                        break;
-                        
-                   case LoginMode.SSO:                        
-                        curUserId = GetSSOUserId();                            
-                        break;                   
+                    curUserId = this.User.Identity.Name;
+                }
+                else if (SessionFacade.CurrentLoginMode == LoginMode.SSO)
+                {
+                    curUserId = GetSSOUserId();
+                }
+                else
+                {
+                    // shall we create anonymous identity here ?
                 }
 
                 var user = this._masterDataService.GetUserForLogin(curUserId);
@@ -193,12 +196,14 @@ namespace DH.Helpdesk.Web.Infrastructure
             }
         }
 
-        private string GetCurrentLoginMode()
-        {                        
-            if (ConfigurationManager.AppSettings[AppSettingsKey.LoginMode] == null)
+        private LoginMode GetCurrentLoginMode()
+        {
+            var val = ConfigurationManager.AppSettings[AppSettingsKey.LoginMode];
+            if (string.IsNullOrEmpty(val))
                 return LoginMode.Application;
-            else
-                return ConfigurationManager.AppSettings[AppSettingsKey.LoginMode].ToString().ToLower();                       
+
+            var loginMode = (LoginMode)Enum.Parse(typeof(LoginMode), val, true);
+            return loginMode;                       
         }
 
         private string GetSSOUserId()

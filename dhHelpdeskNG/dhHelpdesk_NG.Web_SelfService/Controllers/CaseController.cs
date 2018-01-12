@@ -592,19 +592,20 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
-        public ActionResult ExtendedCasePublic(string id)
+        public ActionResult ExtendedCasePublic(Guid id)
         {
             _logger.Warn($"ExtendedCasePublic: {id}");
-            var uniqueId = Guid.Empty;
-
+            //var uniqueId = Guid.Empty;
+            /*
             if (!Guid.TryParse(id, out uniqueId))
             {
                 _logger.Warn($"ExtendedCasePublic: failed to parse - {id}");
                 ErrorGenerator.MakeError("UniqueId value must be specified!", 210);
                 return RedirectToAction("Index", "Error");
             }
+            */
 
-            var caseId = _extendedCaseService.GetCaseIdByExtendedCaseGuid(uniqueId);
+            var caseId = _extendedCaseService.GetCaseIdByExtendedCaseGuid(id);
             if (caseId <= 0)
             {
                 ErrorGenerator.MakeError("Extended case data not found!", 210);
@@ -615,6 +616,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (ErrorGenerator.HasError())
                 return RedirectToAction("Index", "Error");
 
+            //return url after save
+            ViewBag.ReturnUrl = Url.Action("ExtendedCasePublic", new { id });
 
             return View("ExtendedCase", model);
         }
@@ -622,11 +625,11 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpGet]
         public ActionResult ExtendedCase(int? caseTemplateId = null, int? caseId = null)
         {
+
             var model = GetExtendedCaseViewModel(caseTemplateId, caseId);
             if (ErrorGenerator.HasError())
                 return RedirectToAction("Index", "Error");
-
-
+            
             return View("ExtendedCase", model);
         }
 
@@ -661,7 +664,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                 return null;
             }
 
-            if (caseId.HasValue && !UserHasAccessToCase(caseModel))
+            var isAnonymousMode = ConfigurationService.AppSettings.LoginMode == LoginMode.Anonymous;
+
+            if (!isAnonymousMode && caseId.HasValue && !UserHasAccessToCase(caseModel))
             {
                 ErrorGenerator.MakeError("Case not found among your cases!");
                 return null;
@@ -773,7 +778,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpPost]
-        public ActionResult ExtendedCase(ExtendedCaseViewModel model)
+        public ActionResult ExtendedCase(ExtendedCaseViewModel model, string returnUrl = null)
         {
             var isNewCase = model.CaseDataModel.Id == 0;
 
@@ -798,23 +803,29 @@ namespace DH.Helpdesk.SelfService.Controllers
             var res = _universalCaseService.SaveCaseCheckSplit(model.CaseDataModel, auxModel, out caseId, out caseNum);
             if (res.IsSucceed && caseId != -1)
             {
-                #region casefile
                 //TODO: do we need to check "isNewCase"? /Tan
-
                 var case_ = _universalCaseService.GetCase(caseId);
+
+                #region casefile
 
                 //var basePath = _masterDataService.GetFilePath(model.CustomerId);
                 //Get from baseCase path
                 var basePath = _masterDataService.GetFilePath(case_.Customer_Id);
 
                 // save case files
-                var temporaryFiles = _userTemporaryFilesStorage.GetFiles(model.CaseDataModel.CaseFileKey, ModuleName.Cases);
-                var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseId)).ToList();
-                _caseFileService.AddFiles(newCaseFiles);
+                if (model.CaseDataModel.CaseFileKey != null)
+                {
+                    var temporaryFiles = _userTemporaryFilesStorage.GetFiles(model.CaseDataModel.CaseFileKey, ModuleName.Cases);
+                    var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseId)).ToList();
+                    _caseFileService.AddFiles(newCaseFiles);
 
-                // delete temp folders                
-                _userTemporaryFilesStorage.DeleteFiles(model.CaseDataModel.CaseFileKey);
+                    // delete temp folders                
+                    _userTemporaryFilesStorage.DeleteFiles(model.CaseDataModel.CaseFileKey);
+                }
+
                 #endregion
+
+                #region obsolete
 
                 //var showConfirmMessage = AppConfigHelper.GetAppSetting(AppSettingsKey.ConfirmMsgAfterCaseRegistration);
 
@@ -831,12 +842,16 @@ namespace DH.Helpdesk.SelfService.Controllers
                 //{                    
                 //    return RedirectToAction("UserCases", new { customerId = model.CustomerId });
                 //}
-                return RedirectToAction("ExtendedCase", new {caseId = caseId});
+                #endregion
+
+                if (string.IsNullOrEmpty(returnUrl))
+                    return RedirectToAction("ExtendedCase", new { caseId = caseId });
+                else
+                    return Redirect(returnUrl);
             }
 
             if (model.CaseDataModel.OU_Id.HasValue)            
-                model.CaseOU = _ouService.GetOU(model.CaseDataModel.OU_Id.Value);                
-            
+                model.CaseOU = _ouService.GetOU(model.CaseDataModel.OU_Id.Value);
 
             model.Result = res;
             model.StatusBar = isNewCase ? new Dictionary<string, string>() : GetStatusBar(model);

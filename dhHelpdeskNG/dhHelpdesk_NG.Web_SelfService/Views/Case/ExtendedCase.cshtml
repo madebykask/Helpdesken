@@ -322,6 +322,7 @@
     /* FileUpload */
     @Html.HiddenFor(m => Model.CaseDataModel.CaseFileKey)
 
+    @Html.Hidden("ReturnUrl", (object)ViewBag.ReturnUrl)
 }
 <div class="container-fluid dh-container">
     <ul class="nav nav-tabs" id="tabsArea">

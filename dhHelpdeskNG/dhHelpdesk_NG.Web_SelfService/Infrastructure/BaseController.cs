@@ -66,10 +66,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             var lastError = new ErrorModel(string.Empty);
             userOrCustomerChanged = false;
 
-            var appType = AppConfigHelper.GetAppSetting(AppSettingsKey.CurrentApplicationType);
-            var loginMode = AppConfigHelper.GetAppSetting(AppSettingsKey.LoginMode);
-            var isSsoMode = loginMode.Equals(LoginMode.SSO, StringComparison.OrdinalIgnoreCase);
-            var federatedAuthenticationSettings = new FederatedAuthenticationSettings();
+            var appSettings = ConfigurationService.AppSettings;
+            var loginMode = appSettings.LoginMode;
 
             var res = SetCustomer(filterContext, out lastError);
             

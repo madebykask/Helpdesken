@@ -524,26 +524,20 @@
             }
         }
 
-        public static string CurrentLoginMode
+        public static LoginMode CurrentLoginMode
         {
             get
             {
                 if (HttpContext.Current.Session[_CURRENT_LOGIN_Mode] == null)
                 {
-                    return null;
+                    return LoginMode.None;
                 }
-                return (string) HttpContext.Current.Session[_CURRENT_LOGIN_Mode];
+
+                return (LoginMode) HttpContext.Current.Session[_CURRENT_LOGIN_Mode];
             }
             set
             {
-                if (HttpContext.Current.Session[_CURRENT_LOGIN_Mode] == null)
-                {
-                    HttpContext.Current.Session.Add(_CURRENT_LOGIN_Mode, value);
-                }
-                else
-                {
-                    HttpContext.Current.Session[_CURRENT_LOGIN_Mode] = value;
-                }
+                HttpContext.Current.Session[_CURRENT_LOGIN_Mode] = value;
             }
         }
 

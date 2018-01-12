@@ -57,9 +57,8 @@ namespace DH.Helpdesk.SelfService
             RegisterRoutes(RouteTable.Routes);
 
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            var loginMode = AppConfigHelper.GetAppSetting(AppSettingsKey.LoginMode);
-            if (loginMode.Equals(LoginMode.SSO, StringComparison.OrdinalIgnoreCase))
+            
+            if (IsSsoMode())
             {
                 FederatedAuthenticationConfiguration.Configure();
             }
@@ -244,8 +243,8 @@ namespace DH.Helpdesk.SelfService
 
         private static bool IsSsoMode()
         {
-            var loginMode = AppConfigHelper.GetAppSetting(AppSettingsKey.LoginMode);
-            return LoginMode.SSO.Equals(loginMode, StringComparison.OrdinalIgnoreCase);
+            var appSettingsProvider = new ApplicationSettingsProvider();
+            return appSettingsProvider.LoginMode == LoginMode.SSO;
         }
 
         private void RefreshSessionId()
