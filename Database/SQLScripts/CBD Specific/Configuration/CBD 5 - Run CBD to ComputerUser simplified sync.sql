@@ -4,7 +4,7 @@ BEGIN TRAN
 	DECLARE @today DATE = GETDATE()
 	DECLARE @now DATETIME = GETDATE()
 	--DECLARE @cluCode NVARCHAR(5) = 'E901A'--'1190D'--'4B310'
-	DECLARE @computerUserCategoryID INT = 1
+	DECLARE @computerUserCategoryID INT = 2
 	DECLARE @customerID INT = 4
 
 	DECLARE @businessUnits TABLE
@@ -28,8 +28,8 @@ BEGIN TRAN
 	AND Exported IS NULL
 
 
-	INSERT INTO tblComputerUsers(UserId, FirstName, ComputerUsersCategoryID)
-	SELECT BU.CLUT_TYPE + ' ' + BU.CLU_CODE, CASE WHEN LEN(BU.[NAME] + ' (' + BU.CLUT_TYPE + ' ' + BU.CLU_CODE + ')') > 49
+	INSERT INTO tblComputerUsers(UserId, Customer_Id, FirstName, ComputerUsersCategoryID)
+	SELECT BU.CLUT_TYPE + ' ' + BU.CLU_CODE, @customerID, CASE WHEN LEN(BU.[NAME] + ' (' + BU.CLUT_TYPE + ' ' + BU.CLU_CODE + ')') > 49
 	THEN
 		SUBSTRING(BU.[NAME],0, 36)  + '. (' + BU.CLUT_TYPE + ' ' + BU.CLU_CODE + ')'
 	ELSE 
@@ -45,6 +45,5 @@ BEGIN TRAN
 
 
 COMMIT
-
 --SELECT BU.CLUT_TYPE + ' ' + BU.CLU_CODE, BU.[NAME] + + ' (' + BU.CLUT_TYPE + ' ' + BU.CLU_CODE + ')', LEN(BU.[NAME] + ' (' + BU.CLUT_TYPE + ' ' + BU.CLU_CODE + ')') L FROM CBD_IN_CEM_BUSINESS_UNIT_T BU
 --ORDER BY LEN(BU.[NAME] + + ' (' + BU.CLUT_TYPE + ' ' + BU.CLU_CODE + ')') DESC
