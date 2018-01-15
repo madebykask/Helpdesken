@@ -687,17 +687,17 @@ namespace DH.Helpdesk.SelfService.Controllers
                 ErrorGenerator.MakeError("Customer is not valid!");
                 return null;
             }
-
+        
             var languageId = SessionFacade.CurrentLanguageId;
             var customerId = SessionFacade.CurrentCustomer.Id;
-
-
+            var globalSettings = _globalSettingService.GetGlobalSettings().First();
             var cs = _settingService.GetCustomerSetting(customerId);
+
             ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
 
             caseModel.FieldSettings = _caseFieldSettingService.ListToShowOnCasePage(customerId, languageId)
-                                                   .Where(c => c.ShowExternal == 1)
-                                                   .ToList();
+                .Where(c => c.ShowExternal == 1)
+                .ToList();
 
             if (caseId.IsNew())
             {
@@ -709,9 +709,11 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
             }
 
-            if (caseId.HasValue && caseModel.Customer_Id != customerId)
+            // check only if multi customer is not enabled. Allow user to see own cases for different customers.
+            if (globalSettings.MultiCustomersSearch == 0 &&
+                caseId.IsNew() == false && caseModel.Customer_Id != customerId)
             {
-                ErrorGenerator.MakeError("Selected Case is not belong to current customer!");
+                ErrorGenerator.MakeError("Selected Case doesn't belong to current customer!");
                 return null;
             }
 
