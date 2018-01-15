@@ -249,7 +249,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
-            if (!UserHasAccessToCase(currentCase))
+            var isAnonymousMode = ConfigurationService.AppSettings.LoginMode == LoginMode.Anonymous;
+            if (!isAnonymousMode && !UserHasAccessToCase(currentCase))
             {
                 ErrorGenerator.MakeError("Case not found among your cases!");
                 return RedirectToAction("Index", "Error");
@@ -1616,8 +1617,11 @@ namespace DH.Helpdesk.SelfService.Controllers
             var userEmployeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
 
             //Hide this to next release #57742
-            if (currentCase.CaseType.ShowOnExtPageCases == 0 || currentCase.ProductArea?.ShowOnExtPageCases == 0)            
+            if (currentCase.CaseType.ShowOnExtPageCases == 0 || currentCase.ProductArea?.ShowOnExtPageCases == 0)
+            {
+                _logger.Warn("UserHasAccessToCase: ShowOnExtPageCases == 0");
                 return false;
+            }
 
             var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();
 
@@ -1625,7 +1629,13 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (criteria.MyCasesRegistrator && !string.IsNullOrEmpty(criteria.UserId) && !string.IsNullOrEmpty(currentCase.RegUserId))
             {
                 if (currentCase.RegUserId.Equals(criteria.UserId, StringComparison.CurrentCultureIgnoreCase))
+                {
                     return true;
+                }
+                else
+                {
+                    _logger.Warn($"UserHasAccessToCase: currentCase.RegUserId ('{currentCase.RegUserId}') != CurrentUserIdenity.UserId ('{criteria.UserId}')");
+                }
             }
 
             /*User initiator*/
