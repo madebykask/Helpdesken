@@ -1288,7 +1288,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
                 if (childList != null && childList.Count > 0)
                 {
-                    htmlOutput += string.Format("<ul class='dropdown-menu' id=\"subDropDownMenu_{0}\" >", pa.Id);
+                    htmlOutput += string.Format("<ul class='dropdown-menu subddMenu' id=\"subDropDownMenu_{0}\" >", pa.Id);
                     htmlOutput += BuildProcuctAreaDropdownButtonString(childList.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive, userGroupDictionary);
                     htmlOutput += "</ul>";
                 }

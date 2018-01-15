@@ -3985,3 +3985,9 @@ th.sorting_disabled
     border: none;
     display: inline-block;
 }
+
+.subddMenu {
+    overflow-x: hidden;
+    overflow-y: auto;
+    direction: rtl;
+}

@@ -756,32 +756,46 @@ function CaseInitForm() {
     }
 
     function dynamicDropDownBehaviorOnMouseMove(event) {
-        var dynamicDropDownClass = '.DynamicDropDown';
         var target = $(event.target.parentElement);
         if (target != undefined && target.hasClass('DynamicDropDown_Up') && target.index(0) !== -1) {
             var objPos = getObjectPosInView(target[0].id);
             var subMenu = '#subDropDownMenu_' + target[0].id;
             $(subMenu).css('bottom', 'auto');
             $(subMenu).css('top', 'auto');
-            var h, hstr;
-            if ($(dynamicDropDownClass).hasClass('dropup')) {
-                if (objPos.ToTop < objPos.ToDown) {
-                    h = -$(subMenu).height() + 25;
-                    hstr = h + 'px';
-                    $(subMenu).css('bottom', hstr);
-                } else
-                    $(subMenu).css('bottom', '0');
-            } else {
-                if (objPos.ToTop < objPos.ToDown || $(subMenu).height() < objPos.ToDown)
-                    $(subMenu).css('top', '0');
-                else {
-                    h = -$(subMenu).height() + 25;
-                    hstr = h + 'px';
-                    $(subMenu).css('top', hstr);
-                }
+
+            $(subMenu).css({
+                position: "fixed",
+                top: $(window).height() - objPos.ToDown + "px"
+            });
+            $(subMenu).css("left", $(target).offset().left + $(target).innerWidth() + "px");
+            $(subMenu).css("max-height", $(window).height() - objPos.ToDown + "px");
+            $(target).children(".subddMenu").children(".dropdown-submenu").css("position", "static");
+
+            var isChrome = navigator.userAgent.toLowerCase().indexOf("chrome") > -1;
+            if (isChrome) {
+                if ($(target).parent().hasClass("parentddMenu") === false && $(subMenu).get(0).scrollHeight <= $(subMenu).innerHeight())
+                    $(subMenu).css("left", $(target).offset().left + $(target).innerWidth() - $(target).position().left + "px");
+            }
+
+            var offset = 0;
+            var rect = $(subMenu)[0].getBoundingClientRect();
+            if ((rect.top + rect.height) > window.innerHeight)
+                offset = (rect.top + rect.height) - window.innerHeight;
+            if (offset > 0) {
+                var top = $(window).height() - objPos.ToDown - offset;
+                $(subMenu).css("top", top);
             }
         }
     }
+
+    $("#dropDownBtn").on("click", function() {
+                var objPos = getObjectPosInView(this.id);
+                if (objPos.ToTop < objPos.ToDown) {
+                    $(".dropdown-menu.subddMenu").css("max-height", objPos.ToDown - 50 + "px");
+                } else {
+                    $(".dropdown-menu.subddMenu").css("max-height", objPos.ToTop + "px");
+                }
+            });
 
     function resetProductareaByCaseType(caseTypeId) {
         var paId = parseInt($('#case__ProductArea_Id').val());
@@ -1118,7 +1132,6 @@ function CaseInitForm() {
 
         showInvoice(depId, ouId);
     }
-        
 
     $('#divCategory ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();

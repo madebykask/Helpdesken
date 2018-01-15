@@ -427,7 +427,7 @@ namespace DH.Helpdesk.Services.Services
             }
             else
             {
-                if (productArea.CaseTypeProductAreas.Count > 0)
+                if (productArea.CaseTypeProductAreas != null && productArea.CaseTypeProductAreas.Count > 0)
                 {
                     productArea.CaseTypeProductAreas.Clear();
                 }
