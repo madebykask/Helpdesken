@@ -89,7 +89,8 @@
     popupIntLogInput.typeahead(getCasesIntLogEmailSearchOptions());
 
     popupIntLogInput.keydown(function (e) {
-        if (e.keyCode === 13 || e.keyCode === 186) {
+        if (e.keyCode === 13 || e.keyCode === 186 ||
+            e.keyCode === 32) {
             if (dialogType === 1) {
                 onEnterKeyUp(e, popupIntLogInput, mainIntLogInputTo);
             }
@@ -110,10 +111,16 @@
         }
     });
 
+    popupIntLogInput.on('blur',
+        function (e) {
+            onEnterKeyUp(e, popupIntLogInput, dialogType === toType ? mainIntLogInputTo : mainIntLogInputCc);
+        });
+
     fakeInputTo.typeahead(getCasesIntLogEmailSearchOptions());
 
     fakeInputTo.keydown(function (e) {
-        if (e.keyCode === 13 || e.keyCode === 186) {
+        if (e.keyCode === 13 || e.keyCode === 186 ||
+            e.keyCode === 32) {
             onEnterKeyUp(e, fakeInputTo, mainIntLogInputTo);
         }
     });
@@ -125,10 +132,16 @@
         }
     });
 
+    fakeInputTo.on('blur',
+        function(e) {
+            onEnterKeyUp(e, fakeInputTo, mainIntLogInputTo);
+        });
+
     fakeInputCc.typeahead(getCasesIntLogEmailSearchOptions());
 
     fakeInputCc.keydown(function (e) {
-        if (e.keyCode === 13 || e.keyCode === 186) {
+        if (e.keyCode === 13 || e.keyCode === 186 ||
+            e.keyCode === 32) {
             onEnterKeyUp(e, fakeInputCc, mainIntLogInputCc);
         }
     });
@@ -140,17 +153,23 @@
         }
     });
 
+    fakeInputCc.on('blur',
+        function (e) {
+            onEnterKeyUp(e, fakeInputTo, mainIntLogInputTo);
+        });
+
     function onEnterKeyUp(e, fakeInput, mainInput) {
         if (e.keyCode === 13 && searchSelected)
             return;
         e.preventDefault();
         e.stopImmediatePropagation();
-        var emails = $(e.target).html();
-        var arr = getEmailsFromHtml(emails);
-        var newEmail = "";
-        if (e.keyCode === 13 || e.keyCode === 186) {
-            newEmail = arr[arr.length - 1];
-            if (newEmail !== "" && newEmail !== "&nbsp" && newEmail.indexOf("@") >= 0) {
+
+        if (e.keyCode === 13 || e.keyCode === 186 ||
+            e.type === 'blur' || e.keyCode === 32 ) {
+            var emails = $(e.target).html();
+            var arr = getEmailsFromHtml(emails);
+            var newEmail = arr[arr.length - 1] || '';
+            if (newEmail !== '' && newEmail !== '&nbsp' && newEmail.indexOf('@') >= 0) {
                 checkAndAddEmailsTo(newEmail);
                 fakeInput.html(getHtmlFromEmails(mainInput.val()));
                 changeFakeInputValueForView();

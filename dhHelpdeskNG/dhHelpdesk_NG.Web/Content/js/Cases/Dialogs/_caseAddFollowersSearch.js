@@ -64,13 +64,19 @@
     mainFakeFollowersInput.typeahead(getCasesAddFollowersSearchOptions());
 
     mainFakeFollowersInput.keydown(function (e) {
-        if (e.keyCode === 8 || e.keyCode === 46) {
+        if (e.keyCode === 8 || e.keyCode === 46 ) {
             onRemoveKeyDown(e, mainFakeFollowersInput, mainFollowersInput);
         }
-        if (e.keyCode === 13 || e.keyCode === 186) {
+        if (e.keyCode === 13 || e.keyCode === 186 ||
+            e.keyCode === 32) {
             onEnterKeyUp(e, mainFakeFollowersInput);
         }
     });
+
+    mainFakeFollowersInput.on('blur',
+        function (e) {
+            onEnterKeyUp(e, mainFakeFollowersInput);
+        });
 
     popupFollowersInput.typeahead(getCasesAddFollowersSearchOptions());
 
@@ -78,22 +84,28 @@
         if (e.keyCode === 8 || e.keyCode === 46) {
             onRemoveKeyDown(e, popupFollowersInput, mainFollowersInput);
         }
-        if (e.keyCode === 13 || e.keyCode === 186) {
+        if (e.keyCode === 13 || e.keyCode === 186 ||
+            e.keyCode === 32) {
             onEnterKeyUp(e, popupFollowersInput);
         }
     });
+
+    popupFollowersInput.on('blur',
+        function (e) {
+            onEnterKeyUp(e, popupFollowersInput);
+        });
 
     function onEnterKeyUp(e, fakeInput) {
         if (e.keyCode === 13 && searchSelected)
             return;
         e.preventDefault();
         e.stopImmediatePropagation();
-        var emails = $(e.target).html();
-        var arr = getEmailsFromHtml(emails);
-        var newEmail = "";
-        if (e.keyCode === 13 || e.keyCode === 186) {
-            newEmail = arr[arr.length - 1];
-            if (newEmail !== "" && newEmail !== "&nbsp" && newEmail.indexOf("@") >= 0) {
+        if (e.keyCode === 13 || e.keyCode === 186 ||
+            e.type === 'blur' || e.keyCode === 32) {
+            var emails = $(e.target).html();
+            var arr = getEmailsFromHtml(emails);
+            var newEmail = arr[arr.length - 1] || '';
+            if (newEmail !== '' && newEmail !== '&nbsp' && newEmail.indexOf('@') >= 0) {
                 checkAndAddEmailsTo(newEmail);
                 fakeInput.html(getHtmlFromEmails(mainFollowersInput.val()));
                 placeCaretAtEnd(fakeInput);
