@@ -441,6 +441,7 @@
             var id = 0;
             var caseId = 0;
             var caption = "";
+            decimal caseNumber = 0;
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
@@ -449,18 +450,19 @@
                 var circular =
                     circularPartRepository.GetAll()
                         .GetByGuid(guid)
-                        .Select(x => new { id = x.QuestionnaireCircular.Questionnaire_Id, caseId = x.Case_Id, caption = x.Case.Caption })
+                        .Select(x => new { id = x.QuestionnaireCircular.Questionnaire_Id, caseId = x.Case_Id, caption = x.Case.Caption, caseNumber = x.Case.CaseNumber })
                         .SingleOrDefault();
                 if (circular != null)
                 {
                     id = circular.id;
                     caseId = circular.caseId;
                     caption = circular.caption;
+                    caseNumber = circular.caseNumber;
                 }
             }
 
             QuestionnaireOverview overview = GetQuestionnaireEntity(id, languageId);
-            return new QuestionnaireDetailedOverview { Questionnaire = overview, CaseId = caseId, Caption = caption };
+            return new QuestionnaireDetailedOverview { Questionnaire = overview, CaseId = caseId, Caption = caption, CaseNumber = caseNumber};
         }
 
         public QuestionnaireOverview GetQuestionnaire(int id, OperationContext operationContext)

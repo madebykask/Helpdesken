@@ -11,6 +11,7 @@
             string name,
             string description,
             int caseId,
+            decimal caseNumber,
             string caption,
             List<QuestionnaireQuestionModel> questions)
         {
@@ -19,6 +20,7 @@
             this.Description = description;
             this.Questions = questions;
             CaseId = caseId;
+            CaseNumber = caseNumber;
             Caption = caption;
         }
 
@@ -36,5 +38,7 @@
         public int CaseId { get; private set; }
 
         public string Caption { get; set; }
+
+        public decimal CaseNumber { get; set; }
     }
 }
