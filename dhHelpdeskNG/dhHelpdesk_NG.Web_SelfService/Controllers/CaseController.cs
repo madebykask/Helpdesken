@@ -819,7 +819,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 if (model.CaseDataModel.CaseFileKey != null)
                 {
                     var temporaryFiles = _userTemporaryFilesStorage.GetFiles(model.CaseDataModel.CaseFileKey, ModuleName.Cases);
-                    var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseId)).ToList();
+                    var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseId, localUserId)).ToList();
                     _caseFileService.AddFiles(newCaseFiles);
 
                     // delete temp folders                
@@ -1821,7 +1821,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             // save case files
             var temporaryFiles = _userTemporaryFilesStorage.GetFiles(caseFileKey, ModuleName.Cases);
-            var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, newCase.Id)).ToList();
+            var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, newCase.Id, localUserId)).ToList();
             _caseFileService.AddFiles(newCaseFiles);
 
             // delete temp folders                
