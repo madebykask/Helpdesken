@@ -12,11 +12,14 @@
     <RootNamespace>DH_Helpdesk</RootNamespace>
     <AssemblyName>DH_Helpdesk</AssemblyName>
     <MyType>Windows</MyType>
-    <SccProjectName>"%24/Datahalland/dhHelpdesk/DH_Helpdesk", KRVAAAAA</SccProjectName>
-    <SccLocalPath>.</SccLocalPath>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
     <SccAuxPath>
     </SccAuxPath>
-    <SccProvider>MSSCCI:Microsoft Visual SourceSafe</SccProvider>
+    <SccProvider>
+    </SccProvider>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>

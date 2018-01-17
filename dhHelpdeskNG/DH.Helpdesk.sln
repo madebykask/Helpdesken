@@ -201,15 +201,4 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 2
-		SccProjectUniqueName0 = DH_Helpdesk_Mail\\DH_Helpdesk_Mail.vbproj
-		SccProjectName0 = \u0022$/Datahalland/dhHelpdesk/DH_Helpdesk_Mail\u0022,\u0020CNCBAAAA
-		SccLocalPath0 = DH_Helpdesk_Mail
-		SccProvider0 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
-		SccProjectUniqueName1 = DH_Helpdesk\\DH_Helpdesk.vbproj
-		SccProjectName1 = \u0022$/Datahalland/dhHelpdesk/DH_Helpdesk\u0022,\u0020KRVAAAAA
-		SccLocalPath1 = DH_Helpdesk
-		SccProvider1 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
-	EndGlobalSection
 EndGlobal

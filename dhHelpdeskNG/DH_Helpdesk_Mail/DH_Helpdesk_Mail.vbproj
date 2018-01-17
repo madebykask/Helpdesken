@@ -10,11 +10,14 @@
     <RootNamespace>DH_Helpdesk_Mail</RootNamespace>
     <AssemblyName>DH_Helpdesk_Mail</AssemblyName>
     <MyType>Console</MyType>
-    <SccProjectName>"%24/Datahalland/dhHelpdesk/DH_Helpdesk_Mail", CNCBAAAA</SccProjectName>
-    <SccLocalPath>.</SccLocalPath>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
     <SccAuxPath>
     </SccAuxPath>
-    <SccProvider>MSSCCI:Microsoft Visual SourceSafe</SccProvider>
+    <SccProvider>
+    </SccProvider>
     <StartupObject>Sub Main</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
