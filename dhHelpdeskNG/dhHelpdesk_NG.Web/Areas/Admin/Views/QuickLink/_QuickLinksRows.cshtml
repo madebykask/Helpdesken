@@ -16,9 +16,6 @@
                 <th>
                     @Translation.GetCoreTextTranslation("Ärendemall")
                 </th>
-                <th>
-                    @Translation.GetCoreTextTranslation("Favorit sökfilter")
-                </th>
             </tr>
         </thead>
         <tbody>
@@ -41,12 +38,6 @@
                         @if (item.CaseSolution != null)
                         {
                             <a href="@Url.Action("edit", "quicklink", new {area = "admin", id = item.Id})">@Translation.GetCoreTextTranslation(item.CaseSolution.Name)</a>
-                        }
-                    </td>
-                    <td>
-                        @if (item.CaseFilterFavorite != null)
-                        {
-                            <a href="@Url.Action("edit", "quicklink", new {area = "admin", id = item.Id})">@Translation.GetCoreTextTranslation(item.CaseFilterFavorite.Name)</a>
                         }
                     </td>
                 </tr>

@@ -257,10 +257,8 @@ namespace DH.Helpdesk.Dal.Repositories
             sql += "ISNULL([LinksOverview].[SortOrder], '') AS [SortOrder], ";
             sql += "ISNULL([LinksOverview].[ChangedDate], '') AS [ChangedDate], ";
             sql += "ISNULL([LinksOverview].[CreatedDate], '') AS [CreatedDate], ";
-            sql += "ISNULL([LinksOverview].[CaseFilterFavorite_Id], '') AS [CaseFilterFavorite_Id], ";
             sql += "ISNULL([LinksOverview].[CaseSolution_Id], 0) AS [CaseSolution_Id], ";
-            sql += " ISNULL((SELECT CaseSolutionName FROM dbo.tblCaseSolution WHERE(Id = [LinksOverview].[CaseSolution_Id])), '') AS CaseSolutionName, ";
-            sql += " ISNULL((SELECT Name FROM dbo.tblCaseFilterFavorite WHERE(Id = [LinksOverview].[CaseFilterFavorite_Id])), '') AS CaseFilterFavoriteName, ";
+            sql += " ISNULL((SELECT CaseSolutionName FROM dbo.tblCaseSolution WHERE(Id = [LinksOverview].[CaseSolution_Id])), '') AS CaseSolutionName, ";            
             sql += " ISNULL((SELECT Name FROM dbo.tblCustomer WHERE(Id = [LinksOverview].[Customer_Id])), '') AS CustomerName, ";
             sql += " (SELECT DocumentName FROM dbo.tblDocument WHERE(Id = [LinksOverview].[Document_Id])) AS DocumentName,  ";
             sql += " (SELECT LinkGroup FROM dbo.tblLinkGroup WHERE(Id = [LinksOverview].[LinkGroup_Id])) AS LinkGroupName ";
@@ -278,7 +276,6 @@ namespace DH.Helpdesk.Dal.Repositories
             sql += "[Links].[SortOrder] AS [SortOrder], ";
             sql += "[Links].[ChangedDate] AS [ChangedDate], ";
             sql += "[Links].[CreatedDate] AS [CreatedDate], ";
-            sql += "[Links].[CaseFilterFavorite_Id] AS [CaseFilterFavorite_Id], ";
             sql += "[Links].[CaseSolution_Id] AS [CaseSolution_Id], ";
             sql += "[Customer].[Name] AS [Name] ";
             sql += "FROM[dbo].[tbllink] AS [Links] ";
@@ -344,8 +341,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
                 ltemp.CaseSolutionId = row["CaseSolution_Id"] != null ? Convert.ToInt32(row["CaseSolution_Id"].ToString()) : 0;
                 ltemp.CaseSolutionName = row["CaseSolutionName"] != null ? Convert.ToString(row["CaseSolutionName"].ToString()) : string.Empty;
-                ltemp.CaseFilterFavoriteId = row["CaseFilterFavorite_Id"] != null ? Convert.ToInt32(row["CaseFilterFavorite_Id"].ToString()) : 0;
-                ltemp.CaseFilterFavoriteName = row["CaseFilterFavoriteName"] != null ? Convert.ToString(row["CaseFilterFavoriteName"].ToString()) : string.Empty;
                 ltemp.CustomerId = row["Customer_Id"] != null ? Convert.ToInt32(row["Customer_Id"].ToString()) : 0;
                 ltemp.CustomerName = row["CustomerName"] != null ? Convert.ToString(row["CustomerName"].ToString()) : string.Empty;
                 ltemp.DocumentId = row["Document_Id"] != null ? Convert.ToInt32(row["Document_Id"].ToString()) : 0;

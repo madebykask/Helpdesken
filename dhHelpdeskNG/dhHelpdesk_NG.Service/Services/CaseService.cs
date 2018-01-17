@@ -157,7 +157,6 @@ namespace DH.Helpdesk.Services.Services
         Dictionary<int, string> GetCaseFiles(List<int> caseIds);
 
         List<CaseFilterFavorite> GetMyFavorites(int customerId, int userId);
-        List<CaseFilterFavorite> GetCustomerFavorites(int customerId);
 
         string SaveFavorite(CaseFilterFavorite favorite);
 
@@ -540,12 +539,6 @@ namespace DH.Helpdesk.Services.Services
         public List<CaseFilterFavorite> GetMyFavorites(int customerId, int userId)
         {
             var ret = this._caseFilterFavoriteRepository.GetUserFavoriteFilters(customerId, userId);
-            return ret;
-        }
-
-        public List<CaseFilterFavorite> GetCustomerFavorites(int customerId)
-        {
-            var ret = this._caseFilterFavoriteRepository.GetCustomerFavoriteFilters(customerId);
             return ret;
         }
 
