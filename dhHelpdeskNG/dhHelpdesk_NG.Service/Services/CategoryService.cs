@@ -138,10 +138,10 @@
 
             if (category != null)
             {
-                if (category.SubCategories != null && category.SubCategories.Any())
-                {
-                    return DeleteMessage.Error;
-                }
+                //if (category.SubCategories != null && category.SubCategories.Any())
+                //{
+                //    return DeleteMessage.Error;
+                //}
                 try
                 {
                     this._categoryRepository.Delete(category);
