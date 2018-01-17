@@ -1,10 +1,10 @@
-﻿Imports DH_Helpdesk
+﻿Imports DH.Helpdesk.Mail2Ticket.Library
 Imports System.Configuration
 Imports System.Data.OleDb
 Imports Rebex.Net
 Imports System.IO
 Imports System.Net.Mail
-Imports DH_Helpdesk.SharedFunctions
+Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
 Imports ICSharpCode.SharpZipLib.Zip
 Imports System.Web
 Imports System.Text.RegularExpressions

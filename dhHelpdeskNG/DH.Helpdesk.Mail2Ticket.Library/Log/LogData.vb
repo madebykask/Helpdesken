@@ -1,4 +1,4 @@
-Imports DH_Helpdesk.SharedFunctions
+Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
 
 Public Class LogData
     Public Function createLog(ByVal Case_Id As Integer, ByVal EMail As String, ByVal InternalLogText As String, ByVal ExternalLogText As String, ByVal iLogType As Integer, ByVal sRegUser As String, ByVal iCaseHistory_Id As Integer, ByVal iFinishingCause_Id As Integer) As Integer

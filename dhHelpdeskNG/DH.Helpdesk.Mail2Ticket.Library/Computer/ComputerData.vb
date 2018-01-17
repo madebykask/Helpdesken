@@ -2,7 +2,7 @@ Imports System.Data.SqlClient
 Imports System.Data.Odbc
 Imports System.Net
 Imports System.IO
-Imports DH_Helpdesk.SharedFunctions
+Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
 
 Public Class ComputerData
     Public Function getComputerByName(ByVal sComputerName As String, ByVal iCustomer_Id As Integer, ByVal iComputerRole As SharedFunctions.ComputerRole) As Computer

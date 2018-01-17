@@ -1,4 +1,4 @@
-﻿Imports DH_Helpdesk.SharedFunctions
+﻿Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
 
 Public Class OUData
     Public Function getOUs(ByVal iCustomer_Id As Integer) As Collection

@@ -1,6 +1,6 @@
 Imports System.Data.SqlClient
 'Imports System.Data.Odbc
-Imports DH_Helpdesk.SharedFunctions
+Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
 
 Public Class CaseData
     Public Function getTodayPlanDate() As Collection

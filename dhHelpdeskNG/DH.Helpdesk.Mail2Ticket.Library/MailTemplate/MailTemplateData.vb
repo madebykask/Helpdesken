@@ -1,4 +1,4 @@
-Imports DH_Helpdesk.SharedFunctions
+Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
 
 Public Class MailTemplateData
     Public Function getMailTemplateById(ByVal MailId As Integer, ByVal Customer_Id As Integer, ByVal Language_Id As Integer, Optional ByVal dbVersion As String = "") As MailTemplate

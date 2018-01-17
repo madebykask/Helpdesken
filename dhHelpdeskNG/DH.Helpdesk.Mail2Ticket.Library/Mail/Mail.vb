@@ -269,7 +269,7 @@ Public Class Mail
 
     End Function
 
-    Public Function Send(ByVal sFrom As String, ByVal sTo As String, ByVal sSubject As String, ByVal sBody As String, ByVal sEMailBodyEncoding As String, ByVal sSMTPServer As String, ByVal sMessageId As String, ByVal customerSetting As Setting) As String
+    Public Function Send(ByVal sFrom As String, ByVal sTo As String, ByVal sSubject As String, ByVal sBody As String, ByVal sEMailBodyEncoding As String, ByVal sSMTPServer As String, ByVal sMessageId As String) As String
         ' Create Mail
         Dim msg As New MailMessage()
         Dim sRet As String = ""
