@@ -9,8 +9,8 @@
     <OutputType>Library</OutputType>
     <StartupObject>
     </StartupObject>
-    <RootNamespace>DH_Helpdesk</RootNamespace>
-    <AssemblyName>DH_Helpdesk</AssemblyName>
+    <RootNamespace>DH.Helpdesk.Mail2Ticket.Library</RootNamespace>
+    <AssemblyName>DH.Helpdesk.Mail2Ticket.Library</AssemblyName>
     <MyType>Windows</MyType>
     <SccProjectName>
     </SccProjectName>
@@ -25,7 +25,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -34,10 +34,11 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>DH_Helpdesk.xml</DocumentationFile>
+    <DocumentationFile>DH.Helpdesk.Mail2Ticket.Library.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <RegisterForComInterop>false</RegisterForComInterop>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -45,9 +46,10 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>DH_Helpdesk.xml</DocumentationFile>
+    <DocumentationFile>DH.Helpdesk.Mail2Ticket.Library.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <RegisterForComInterop>false</RegisterForComInterop>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -158,7 +160,24 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
+      <Project>{90defcb6-e297-4f99-a532-da1e0522aa49}</Project>
+      <Name>DH.Helpdesk.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Data\DH.Helpdesk.Dal.csproj">
+      <Project>{a8f6b7b8-8055-4bb7-82c4-85004f52e6ef}</Project>
+      <Name>DH.Helpdesk.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Domain\DH.Helpdesk.Domain.csproj">
+      <Project>{5bd5f918-3be4-474d-ac30-9dbd02fc385d}</Project>
+      <Name>DH.Helpdesk.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.DTO\DH.Helpdesk.BusinessData.csproj">
+      <Project>{c4520e52-cb9e-4fd6-bee9-92aa532685a2}</Project>
+      <Name>DH.Helpdesk.BusinessData</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2C7C24FC-D3E7-4A07-AF74-2392D5484A0A}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>DH_Helpdesk_Mail</RootNamespace>
-    <AssemblyName>DH_Helpdesk_Mail</AssemblyName>
+    <RootNamespace>DH.Helpdesk.Mail2Ticket</RootNamespace>
+    <AssemblyName>DH.Helpdesk.Mail2Ticket</AssemblyName>
     <MyType>Console</MyType>
     <SccProjectName>
     </SccProjectName>
@@ -24,7 +24,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>C:\Develop\vb.net\Datahalland\DH_Helpdesk\DH_Helpdesk_Mail\Publish\</PublishUrl>
@@ -50,9 +50,10 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>DH_Helpdesk_Mail.xml</DocumentationFile>
+    <DocumentationFile>DH.Helpdesk.Mail2Ticket.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <RegisterForComInterop>true</RegisterForComInterop>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -60,9 +61,10 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>DH_Helpdesk_Mail.xml</DocumentationFile>
+    <DocumentationFile>DH.Helpdesk.Mail2Ticket.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <RegisterForComInterop>true</RegisterForComInterop>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
@@ -142,9 +144,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DH_Helpdesk\DH_Helpdesk.vbproj">
+    <ProjectReference Include="..\DH.Helpdesk.Mail2Ticket.Library\DH.Helpdesk.Mail2Ticket.Library.vbproj">
       <Project>{300807AD-E3DA-4BF5-93FC-2503D617EDC1}</Project>
-      <Name>DH_Helpdesk</Name>
+      <Name>DH.Helpdesk.Mail2Ticket.Library</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +167,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\CommonAssembly\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Content>
     <Content Include="Dependencies\Rebex.Mail.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

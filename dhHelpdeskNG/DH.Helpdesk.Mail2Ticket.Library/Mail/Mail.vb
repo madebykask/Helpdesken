@@ -1,5 +1,9 @@
 Imports System.Net.Mail
-Imports DH_Helpdesk.SharedFunctions
+Imports DH.Helpdesk.Dal.Infrastructure
+Imports DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
+Imports DH.Helpdesk.Dal.Repositories
+Imports DH.Helpdesk.Domain
+Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
 
 Public Class Mail
     Public Function sendMail(ByVal objCase As CCase, ByVal objLog As Log, ByVal objCustomer As Customer, ByVal sEmailTo As String, ByVal objmailTemplate As MailTemplate, ByVal objGlobalSettings As GlobalSettings, ByVal sMessageId As String, ByVal sEMailLogGUID As String) As String
@@ -14,6 +18,10 @@ Public Class Mail
         Try
             sSubject = objmailTemplate.Subject
             sBody = objmailTemplate.Body
+
+            Dim settingsRepository As New SettingRepository(New DatabaseFactory(), New CustomerSettingsToBusinessModelMapper())
+
+            Dim setting As Setting = settingsRepository.Get(Function(x) x.Id = objCustomer.Id)
 
 
             '[#1]
@@ -261,7 +269,7 @@ Public Class Mail
 
     End Function
 
-    Public Function Send(ByVal sFrom As String, ByVal sTo As String, ByVal sSubject As String, ByVal sBody As String, ByVal sEMailBodyEncoding As String, ByVal sSMTPServer As String, ByVal sMessageId As String) As String
+    Public Function Send(ByVal sFrom As String, ByVal sTo As String, ByVal sSubject As String, ByVal sBody As String, ByVal sEMailBodyEncoding As String, ByVal sSMTPServer As String, ByVal sMessageId As String, ByVal customerSetting As Setting) As String
         ' Create Mail
         Dim msg As New MailMessage()
         Dim sRet As String = ""

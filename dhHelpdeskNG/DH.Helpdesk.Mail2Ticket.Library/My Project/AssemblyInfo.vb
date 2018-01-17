@@ -8,17 +8,17 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("DH_Helpdesk_Mail")> 
+<Assembly: AssemblyTitle("DH.Helpdesk.Mail2Ticket.Library")>
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("DH_Helpdesk_Mail")> 
+<Assembly: AssemblyCompany("Datahalland")>
+<Assembly: AssemblyProduct("DH.Helpdesk.Mail2Ticket.Library")>
 <Assembly: AssemblyCopyright("Copyright ©  2008")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)> 
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("7921568d-583b-4929-b75f-4e8492a924d1")> 
+<Assembly: Guid("649ab365-138e-4ddf-bcea-f81f5fbb5116")> 
 
 ' Version information for an assembly consists of the following four values:
 '
