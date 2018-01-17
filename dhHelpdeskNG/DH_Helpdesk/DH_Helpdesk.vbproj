@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{300807AD-E3DA-4BF5-93FC-2503D617EDC1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <StartupObject>
+    </StartupObject>
+    <RootNamespace>DH_Helpdesk</RootNamespace>
+    <AssemblyName>DH_Helpdesk</AssemblyName>
+    <MyType>Windows</MyType>
+    <SccProjectName>"%24/Datahalland/dhHelpdesk/DH_Helpdesk", KRVAAAAA</SccProjectName>
+    <SccLocalPath>.</SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>MSSCCI:Microsoft Visual SourceSafe</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>DH_Helpdesk.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>DH_Helpdesk.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
+    <RegisterForComInterop>false</RegisterForComInterop>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Account\Account.vb" />
+    <Compile Include="Account\AccountActivity.vb" />
+    <Compile Include="Account\AccountData.vb" />
+    <Compile Include="CaseType\CaseType.vb" />
+    <Compile Include="CaseType\CaseTypeData.vb" />
+    <Compile Include="Case\Case.vb" />
+    <Compile Include="Case\CaseData.vb" />
+    <Compile Include="Checklist\Checklist.vb" />
+    <Compile Include="Checklist\ChecklistData.vb" />
+    <Compile Include="ComputerUsers\ComputerUser.vb" />
+    <Compile Include="ComputerUsers\ComputerUserData.vb" />
+    <Compile Include="ComputerUsers\ComputerUserFieldSettings.vb" />
+    <Compile Include="Computer\Computer.vb" />
+    <Compile Include="Computer\ComputerData.vb" />
+    <Compile Include="Computer\Inventory.vb" />
+    <Compile Include="Computer\InventoryType.vb" />
+    <Compile Include="Computer\LogicalDrive.vb" />
+    <Compile Include="Computer\Software.vb" />
+    <Compile Include="Contract\Contract.vb" />
+    <Compile Include="Contract\ContractData.vb" />
+    <Compile Include="Customer\Customer.vb" />
+    <Compile Include="Customer\CustomerData.vb" />
+    <Compile Include="Department\Department.vb" />
+    <Compile Include="Department\DepartmentData.vb" />
+    <Compile Include="GlobalSettings\GlobalSettings.vb" />
+    <Compile Include="GlobalSettings\GlobalSettingsData.vb" />
+    <Compile Include="Holiday\Holiday.vb" />
+    <Compile Include="Holiday\HolidayData.vb" />
+    <Compile Include="Invoice\Invoice.vb" />
+    <Compile Include="Invoice\InvoiceData.vb" />
+    <Compile Include="Log\Log.vb" />
+    <Compile Include="Log\LogData.vb" />
+    <Compile Include="Mail2Ticket\Mail2TicketData.vb" />
+    <Compile Include="MailTemplate\MailTemplate.vb" />
+    <Compile Include="MailTemplate\MailTemplateData.vb" />
+    <Compile Include="Mail\Mail.vb" />
+    <Compile Include="MGlobal.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="OU\OU.vb" />
+    <Compile Include="OU\OUData.vb" />
+    <Compile Include="Priority\Priority.vb" />
+    <Compile Include="Priority\PriorityData.vb" />
+    <Compile Include="ProductArea\ProductArea.vb" />
+    <Compile Include="ProductArea\ProductAreaData.vb" />
+    <Compile Include="Questionnaire\Questionnaire.vb" />
+    <Compile Include="Questionnaire\QuestionnaireCircular.vb" />
+    <Compile Include="Questionnaire\QuestionnaireCircularPart.vb" />
+    <Compile Include="Questionnaire\QuestionnaireData.vb" />
+    <Compile Include="Region\Region.vb" />
+    <Compile Include="Region\RegionData.vb" />
+    <Compile Include="SharedFunctions.vb" />
+    <Compile Include="Text\TextTranslationData.vb" />
+    <Compile Include="User\User.vb" />
+    <Compile Include="User\UserData.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

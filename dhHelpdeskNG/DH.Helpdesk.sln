@@ -32,6 +32,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.EmailEngine.Con
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.TaskScheduler", "DH.Helpdesk.TaskScheduler\DH.Helpdesk.TaskScheduler.csproj", "{F1F92517-4922-42EC-B001-02612A9CD50D}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DH_Helpdesk_Mail", "DH_Helpdesk_Mail\DH_Helpdesk_Mail.vbproj", "{2C7C24FC-D3E7-4A07-AF74-2392D5484A0A}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DH_Helpdesk", "DH_Helpdesk\DH_Helpdesk.vbproj", "{300807AD-E3DA-4BF5-93FC-2503D617EDC1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -169,8 +173,43 @@ Global
 		{F1F92517-4922-42EC-B001-02612A9CD50D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F1F92517-4922-42EC-B001-02612A9CD50D}.Release|x86.ActiveCfg = Release|Any CPU
 		{F1F92517-4922-42EC-B001-02612A9CD50D}.Release|x86.Build.0 = Release|Any CPU
+		{2C7C24FC-D3E7-4A07-AF74-2392D5484A0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C7C24FC-D3E7-4A07-AF74-2392D5484A0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C7C24FC-D3E7-4A07-AF74-2392D5484A0A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2C7C24FC-D3E7-4A07-AF74-2392D5484A0A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2C7C24FC-D3E7-4A07-AF74-2392D5484A0A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2C7C24FC-D3E7-4A07-AF74-2392D5484A0A}.Debug|x86.Build.0 = Debug|Any CPU
+		{2C7C24FC-D3E7-4A07-AF74-2392D5484A0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C7C24FC-D3E7-4A07-AF74-2392D5484A0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C7C24FC-D3E7-4A07-AF74-2392D5484A0A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2C7C24FC-D3E7-4A07-AF74-2392D5484A0A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2C7C24FC-D3E7-4A07-AF74-2392D5484A0A}.Release|x86.ActiveCfg = Release|Any CPU
+		{2C7C24FC-D3E7-4A07-AF74-2392D5484A0A}.Release|x86.Build.0 = Release|Any CPU
+		{300807AD-E3DA-4BF5-93FC-2503D617EDC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{300807AD-E3DA-4BF5-93FC-2503D617EDC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{300807AD-E3DA-4BF5-93FC-2503D617EDC1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{300807AD-E3DA-4BF5-93FC-2503D617EDC1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{300807AD-E3DA-4BF5-93FC-2503D617EDC1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{300807AD-E3DA-4BF5-93FC-2503D617EDC1}.Debug|x86.Build.0 = Debug|Any CPU
+		{300807AD-E3DA-4BF5-93FC-2503D617EDC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{300807AD-E3DA-4BF5-93FC-2503D617EDC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{300807AD-E3DA-4BF5-93FC-2503D617EDC1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{300807AD-E3DA-4BF5-93FC-2503D617EDC1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{300807AD-E3DA-4BF5-93FC-2503D617EDC1}.Release|x86.ActiveCfg = Release|Any CPU
+		{300807AD-E3DA-4BF5-93FC-2503D617EDC1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 2
+		SccProjectUniqueName0 = DH_Helpdesk_Mail\\DH_Helpdesk_Mail.vbproj
+		SccProjectName0 = \u0022$/Datahalland/dhHelpdesk/DH_Helpdesk_Mail\u0022,\u0020CNCBAAAA
+		SccLocalPath0 = DH_Helpdesk_Mail
+		SccProvider0 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		SccProjectUniqueName1 = DH_Helpdesk\\DH_Helpdesk.vbproj
+		SccProjectName1 = \u0022$/Datahalland/dhHelpdesk/DH_Helpdesk\u0022,\u0020KRVAAAAA
+		SccLocalPath1 = DH_Helpdesk
+		SccProvider1 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
 	EndGlobalSection
 EndGlobal
