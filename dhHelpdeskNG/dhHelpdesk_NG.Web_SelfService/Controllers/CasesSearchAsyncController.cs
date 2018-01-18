@@ -50,7 +50,13 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             var searchParams = CaseSearchInputParameters.Create(inputModel);
-            
+
+            if (string.IsNullOrEmpty(searchParams.SortBy))
+            {
+                searchParams.SortBy = "Casenumber";
+                searchParams.SortAscending = false;
+            }
+
             var res = _caseControllerBehavior.ValidateSearchParameters(searchParams);
             if (!res.Valid)
             {

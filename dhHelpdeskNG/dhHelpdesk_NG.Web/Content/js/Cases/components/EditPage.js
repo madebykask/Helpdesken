@@ -344,7 +344,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
         return;
     }
 
-    var fieldData = $_ex_Container.contentWindow.getCaseValues()
+    var fieldData = $_ex_Container.contentWindow.getCaseValues();
     if (fieldData == undefined) {
         return;
     }

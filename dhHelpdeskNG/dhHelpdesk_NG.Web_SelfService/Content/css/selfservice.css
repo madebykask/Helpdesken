@@ -1083,10 +1083,6 @@ div .multitext i {
     font-size: 14px;
 }
 
-.searchGroupCaption.loading {
-    background: #FFF281!important;
-}
-
 .searchGroupCaption.collapsed {
     border-bottom: solid 2px #ccc;
 }

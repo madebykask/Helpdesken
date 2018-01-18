@@ -1,3 +1,4 @@
+using DH.Helpdesk.SelfService.Infrastructure;
 using DH.Helpdesk.SelfService.Models;
 
 namespace DH.Helpdesk.SelfService.Entites
@@ -23,8 +24,8 @@ namespace DH.Helpdesk.SelfService.Entites
                 ProgressId = m.ProgressId,
                 PharasSearch = m.PharasSearch,
                 //MaxRecords = m.MaxRecords,
-                SortBy = m.SortBy ?? "Casenumber",
-                SortAscending = m.SortOrder == 0 //todo: enum?
+                SortBy = m.SortBy,
+                SortAscending = m.SortOrder == (int)Enums.SortOrder.Asc
             };
         }
     }

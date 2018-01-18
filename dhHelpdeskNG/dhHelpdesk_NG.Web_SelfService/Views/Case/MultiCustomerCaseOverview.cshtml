@@ -23,8 +23,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="btn-group" role="group">
-                                <button id="expandAll" class="btn btn-sm btn-default">Expand All</button>
-                                <button id="collapseAll"class="btn btn-sm btn-default">Collpase All</button>    
+                                <button id="expandAll" class="btn btn-sm btn-default">@Translation.Get("Expand")</button>
+                                <button id="collapseAll"class="btn btn-sm btn-default">@Translation.Get("Collapse")</button>    
                             </div>
                         </div>
                     </div>
@@ -34,6 +34,7 @@
                             <div class="searchGroupCaption">
                                 <a href="javascript:void(0)" onclick="toggleCustomerSearchResults(this, @result.CustomerId)">
                                     <i class="fa fa-angle-double-up" aria-hidden="true"></i> @result.CustomerName (<span id="casesCount_@result.CustomerId">0</span> @Translation.Get("Cases"))</a>
+                                <i id="searchIndicator_@result.CustomerId" class="gif-loader" style="display: none">&nbsp;</i>
                             </div>
                             <div id="result_@result.CustomerId" class="searchResults">
                             </div>
@@ -89,7 +90,7 @@
         });
 
         function sortCases(customerId, newSortBy) {
-            window.caseSearch.sortCases(customerId, newSortBy);
+            window.caseSearch.sortCasesMulti(customerId, newSortBy);
         }
 
         function toggleSearchResults(expand) {
