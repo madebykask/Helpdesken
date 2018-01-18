@@ -571,7 +571,7 @@ Module DH_Helpdesk_Mail
                                                         newcaseEmailTo = sNewCaseToEmailAddress
                                                     End If
                                                     'helpdesk case 58782
-                                                    sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, newcaseEmailTo, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID)
+                                                    sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, newcaseEmailTo, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
                                                     objLogData.createEMailLog(iCaseHistory_Id, newcaseEmailTo, 1, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                                 End If
                                             End If
@@ -596,7 +596,7 @@ Module DH_Helpdesk_Mail
 
                                                 Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
 
-                                                sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, vNewCaseEmailList(Index), objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID)
+                                                sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, vNewCaseEmailList(Index), objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
 
                                                 objLogData.createEMailLog(iCaseHistory_Id, vNewCaseEmailList(Index), 1, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             Next
@@ -620,7 +620,7 @@ Module DH_Helpdesk_Mail
 
                                                     Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
 
-                                                    sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID)
+                                                    sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
 
                                                     objLogData.createEMailLog(iCaseHistory_Id, objUser.EMail, 2, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                                 End If
@@ -642,7 +642,7 @@ Module DH_Helpdesk_Mail
 
                                                 Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
 
-                                                sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, vPriorityEmailList(Index), objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID)
+                                                sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, vPriorityEmailList(Index), objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
 
                                                 objLogData.createEMailLog(iCaseHistory_Id, vPriorityEmailList(Index), 13, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             Next
@@ -805,7 +805,7 @@ Module DH_Helpdesk_Mail
 
                                             Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
 
-                                            sRet_SendMail = objMail.sendMail(objCase, objLog, objCustomer, objCase.PerformerEMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID)
+                                            sRet_SendMail = objMail.sendMail(objCase, objLog, objCustomer, objCase.PerformerEMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
 
                                             objLogData.createEMailLog(iCaseHistory_Id, objCase.PerformerEMail, 10, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                         End If
@@ -823,7 +823,7 @@ Module DH_Helpdesk_Mail
 
                                             Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
 
-                                            sRet_SendMail = objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID)
+                                            sRet_SendMail = objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
 
                                             objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, 3, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
 
@@ -896,7 +896,7 @@ Module DH_Helpdesk_Mail
                 objLogFile.Close()
             End If
 
-            Throw ex
+            Throw
         End Try
     End Function
 

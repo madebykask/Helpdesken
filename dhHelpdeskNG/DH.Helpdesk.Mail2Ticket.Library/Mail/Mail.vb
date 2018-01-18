@@ -6,7 +6,7 @@ Imports DH.Helpdesk.Domain
 Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
 
 Public Class Mail
-    Public Function sendMail(ByVal objCase As CCase, ByVal objLog As Log, ByVal objCustomer As Customer, ByVal sEmailTo As String, ByVal objmailTemplate As MailTemplate, ByVal objGlobalSettings As GlobalSettings, ByVal sMessageId As String, ByVal sEMailLogGUID As String) As String
+    Public Function sendMail(ByVal objCase As CCase, ByVal objLog As Log, ByVal objCustomer As Customer, ByVal sEmailTo As String, ByVal objmailTemplate As MailTemplate, ByVal objGlobalSettings As GlobalSettings, ByVal sMessageId As String, ByVal sEMailLogGUID As String, Optional ByVal connectionString As String = Nothing) As String
         ' Skicka mail
         Dim sSubject As String
         Dim sBody As String
@@ -19,10 +19,13 @@ Public Class Mail
             sSubject = objmailTemplate.Subject
             sBody = objmailTemplate.Body
 
-            Dim settingsRepository As New SettingRepository(New DatabaseFactory(), New CustomerSettingsToBusinessModelMapper())
+            Dim setting As Setting
+            Using factory As DatabaseFactory = New DatabaseFactory(connectionString)
 
-            Dim setting As Setting = settingsRepository.Get(Function(x) x.Id = objCustomer.Id)
+                Dim settingsRepository As New SettingRepository(New DatabaseFactory(connectionString), New CustomerSettingsToBusinessModelMapper())
+                setting = settingsRepository.Get(Function(x) x.Id = objCustomer.Id)
 
+            End Using
 
             '[#1]
             sSubject = Replace(sSubject, getMailTemplateIdentifier("CaseNumber"), objCase.Casenumber)
@@ -202,7 +205,11 @@ Public Class Mail
                 'objLogFile.WriteLine(Now() & ", sendMail, Body:" & sBody)
             End If
 
-            sRet = Send(objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
+            If Not String.IsNullOrEmpty(setting.SMTPServer) Then
+                sRet = Send(objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, setting.SMTPServer, setting.SMTPPort, setting.IsSMTPSecured, setting.SMTPUserName, setting.SMTPPassWord, sMessageId)
+            Else
+                sRet = Send(objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
+            End If
 
         Catch ex As Exception
             If giLoglevel > 0 Then
@@ -270,6 +277,37 @@ Public Class Mail
     End Function
 
     Public Function Send(ByVal sFrom As String, ByVal sTo As String, ByVal sSubject As String, ByVal sBody As String, ByVal sEMailBodyEncoding As String, ByVal sSMTPServer As String, ByVal sMessageId As String) As String
+
+        Dim smtpServer As String = Nothing
+        Dim smtpUsername As String = Nothing
+        Dim smtpPassword As String = Nothing
+        Dim smtpPort As Integer = Nothing
+        Dim smtpSecure As Boolean = Nothing
+
+        If Not String.IsNullOrEmpty(sSMTPServer) Then
+            Dim aConfiguration() As String = Split(sSMTPServer, ";")
+
+            smtpServer = aConfiguration(0)
+
+            If aConfiguration.Length > 2 Then
+                smtpUsername = aConfiguration(1)
+                smtpPassword = aConfiguration(2)
+            End If
+
+            If aConfiguration.Length > 3 Then
+                smtpPort = CType(aConfiguration(3), Integer)
+            End If
+
+
+            If aConfiguration.Length > 4 Then
+                smtpSecure = CType(aConfiguration(4), Boolean)
+            End If
+        End If
+
+        Return Send(sFrom, sTo, sSubject, sBody, sEMailBodyEncoding, smtpServer, smtpPort, smtpSecure, smtpUsername, smtpPassword, sMessageId)
+    End Function
+
+    Public Function Send(ByVal sFrom As String, ByVal sTo As String, ByVal sSubject As String, ByVal sBody As String, ByVal sEMailBodyEncoding As String, ByVal smtpServer As String, ByVal smtpPort As Integer, ByVal smtpSecure As Boolean, ByVal smtpUsername As String, ByVal smtpPassword As String, ByVal sMessageId As String) As String
         ' Create Mail
         Dim msg As New MailMessage()
         Dim sRet As String = ""
@@ -292,22 +330,22 @@ Public Class Mail
 
         Dim smtp As New SmtpClient()
 
-        If sSMTPServer = "" Then
+        If smtpServer = "" Then
             smtp.DeliveryMethod = SmtpDeliveryMethod.PickupDirectoryFromIis
         Else
-            Dim aConfiguration() As String = Split(sSMTPServer, ";")
+            smtp.Host = smtpServer
 
-            smtp.Host = aConfiguration(0)
-
-            If aConfiguration.Length > 2 Then
-                Dim credentials = New System.Net.NetworkCredential(aConfiguration(1), aConfiguration(2))
+            If Not String.IsNullOrEmpty(smtpUsername) Then
+                Dim credentials = New System.Net.NetworkCredential(smtpUsername, smtpPassword)
 
                 smtp.Credentials = credentials
             End If
 
-            If aConfiguration.Length > 4 Then
-                smtp.EnableSsl = CType(aConfiguration(4), Boolean)
+            If smtpPort > 0 Then
+                smtp.Port = smtpPort
             End If
+
+            smtp.EnableSsl = smtpSecure
 
         End If
 
