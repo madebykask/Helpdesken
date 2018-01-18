@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Web
             public const string InventoryUserSearch = ("~/bundles/inventory/inventorysearch");
             public const string CaseIntLogEmailSearch = ("~/bundles/case/caseintlogemailsearch");
             public const string CaseAddFollowersSearch = ("~/bundles/case/caseaddfollowerssearch");
-            public const string CaseUserSearchCommon = ("~/bundles/case/caseusersearchcommon");
+            public const string UserSearchCommon = ("~/bundles/common/usersearchcommon");
             public const string CaseCharge = ("~/bundles/case/CaseCharge");
             public const string Select2 = "~/bundles/select2";
             public const string CaseConnectToParent = "~/bundles/case/caseconnecttoparent";
@@ -30,6 +30,7 @@ namespace DH.Helpdesk.Web
             public const string CaseAttachExistingFiles = "~/bundles/case/attachexfile";
             public const string ConfirmationDialog = "~/bundles/confirmdialog";
             public const string InventoryOverview = "~/bundles/inventory/overview";
+            public const string EditCircular = "~/bundles/questionnaire/editcircular";
 
         }
 
@@ -453,12 +454,12 @@ namespace DH.Helpdesk.Web
                 "~/Content/js/Inventory/inventory.search.js"));
             bundles.Add(new ScriptBundle(ScriptNames.CaseIntLogEmailSearch).Include(
                 "~/Content/js/Cases/Dialogs/_caseIntLogSearch.js",
-                "~/Content/js/Cases/Dialogs/_caseUserSearchCommon.js"));
+                "~/Content/js/Common/userSearchCommon.js"));
             bundles.Add(new ScriptBundle(ScriptNames.CaseAddFollowersSearch).Include(
                 "~/Content/js/Cases/Dialogs/_caseAddFollowersSearch.js",
-                "~/Content/js/Cases/Dialogs/_caseUserSearchCommon.js"));
-            bundles.Add(new ScriptBundle(ScriptNames.CaseUserSearchCommon).Include(
-                "~/Content/js/Cases/Dialogs/_caseUserSearchCommon.js"));
+                "~/Content/js/Common/userSearchCommon.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.UserSearchCommon).Include(
+                "~/Content/js/Common/userSearchCommon.js"));
             bundles.Add(new ScriptBundle(ScriptNames.CaseConnectToParent).Include(
                 "~/Content/js/Cases/Dialogs/_caseConnectToParent.js",
                 "~/Content/js/Cases/components/FilterForm.js",
@@ -480,6 +481,9 @@ namespace DH.Helpdesk.Web
 
             bundles.Add(new ScriptBundle(ScriptNames.InventoryOverview).Include(
                     "~/Areas/Inventory/Scripts/inventoryOverview.js"));
+
+            bundles.Add(new ScriptBundle(ScriptNames.EditCircular).Include(
+                    "~/Content/js/Questionnaire/editCircular.js"));
 
             RegisterOrdersAreaBundles(bundles);
             RegisterInvoicesAreaBundles(bundles);

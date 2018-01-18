@@ -698,7 +698,6 @@
     <Content Include="Content\js\Cases\Dialogs\_caseAttachExistFile.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseConnectToParent.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseIntLogSearch.js" />
-    <Content Include="Content\js\Cases\Dialogs\_caseUserSearchCommon.js" />
     <Content Include="Content\js\Cases\externalInvoice.js" />
     <Content Include="Content\js\Cases\_caseLogInput.js" />
     <Content Include="Content\js\Cases\components\BaseField.js" />
@@ -1050,6 +1049,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\SupplierEditModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
+    <Content Include="Content\js\Common\userSearchCommon.js" />
     <Content Include="Content\js\Contract\contractIndex.js" />
     <Content Include="Content\js\Contract\edit.js" />
     <Content Include="Content\js\DynamicCase\ie8.polyfils.min.js" />
@@ -1059,6 +1059,7 @@
     <Content Include="Content\js\Feedback\feedback.edit.js" />
     <Content Include="Content\js\Feedback\feedbackStatisticsCases.js" />
     <Content Include="Content\js\Inventory\inventory.search.js" />
+    <Content Include="Content\js\Questionnaire\editCircular.js" />
     <Content Include="Content\js\Shared\commonUtils.js" />
     <Content Include="Content\js\Shared\errors.js" />
     <Content Include="Content\js\Shared\jquery.customAjax.js" />

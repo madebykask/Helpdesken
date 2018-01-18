@@ -155,7 +155,7 @@
 
     fakeInputCc.on('blur',
         function (e) {
-            onEnterKeyUp(e, fakeInputTo, mainIntLogInputTo);
+            onEnterKeyUp(e, fakeInputCc, mainIntLogInputCc);
         });
 
     function onEnterKeyUp(e, fakeInput, mainInput) {
@@ -191,9 +191,7 @@
                 var searchText = $.trim(arr[arr.length - 1]);
                 if (searchText) {
                     lastIntLogEmailSearchKey = generateRandomKey();
-
                     delayFunc(function (){
-                        //console.log('getCasesIntLogEmailSearchOptions: running ajax request.');
                         $.ajax({
                             url: "/cases/CaseSearchUserEmails",
                             type: "post",

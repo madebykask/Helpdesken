@@ -14,7 +14,7 @@
 @Scripts.Render("~/bundles/cases/_input")
 @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseSolutionFields.AddFollowersBtn) && Model.caseFieldSettings.IsFieldVisible(GlobalEnums.TranslationCaseFields.AddFollowersBtn))
 {
-    @Scripts.Render(BundleConfig.ScriptNames.CaseUserSearchCommon)
+    @Scripts.Render(BundleConfig.ScriptNames.UserSearchCommon)
 }
 
 <script type="text/javascript">
