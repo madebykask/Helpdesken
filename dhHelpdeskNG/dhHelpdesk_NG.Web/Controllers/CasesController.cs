@@ -1993,6 +1993,10 @@ namespace DH.Helpdesk.Web.Controllers
                 }else
                     ret = textExternalLogNote;
             }
+            else
+            {
+                ret = textExternalLogNote;
+            }
             return Json(new { ExternalLogText = ret });
         }
 
