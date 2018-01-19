@@ -6693,35 +6693,35 @@ GO
 
 If not exists (select * from tbltext where id = 1916)
 begin
-	insert into tbltext (id, TextString, TextType) VALUES (1916, 'RegistrationDate', 1)
+	insert into tbltext (id, TextString, TextType) VALUES (1916, 'Registration Date', 1)
 end
 
 GO
 
 If not exists (select * from tbltext where id = 1917)
 begin
-	insert into tbltext (id, TextString, TextType) VALUES (1917, 'RegistrationYear', 1)
+	insert into tbltext (id, TextString, TextType) VALUES (1917, 'Registration Year', 1)
 end
 
 GO
 
 If not exists (select * from tbltext where id = 1918)
 begin
-	insert into tbltext (id, TextString, TextType) VALUES (1918, 'RegistrationMonth', 1)
+	insert into tbltext (id, TextString, TextType) VALUES (1918, 'Registration Month', 1)
 end
 
 GO
 
 If not exists (select * from tbltext where id = 1919)
 begin
-	insert into tbltext (id, TextString, TextType) VALUES (1919, 'RegistrationWeekday', 1)
+	insert into tbltext (id, TextString, TextType) VALUES (1919, 'Registration Weekday', 1)
 end
 
 GO
 
 If not exists (select * from tbltext where id = 1920)
 begin
-	insert into tbltext (id, TextString, TextType) VALUES (1920, 'RegistrationHour', 1)
+	insert into tbltext (id, TextString, TextType) VALUES (1920, 'Registration Hour', 1)
 end
 
 GO
@@ -6748,6 +6748,8 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1923 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1923, 2, 'number you want to open')
 GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 
