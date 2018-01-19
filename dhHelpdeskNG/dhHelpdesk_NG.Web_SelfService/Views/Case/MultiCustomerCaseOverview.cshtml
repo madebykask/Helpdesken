@@ -20,14 +20,6 @@
                             @Html.Partial("_CaseSearch", Model)
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="btn-group" role="group">
-                                <button id="expandAll" class="btn btn-sm btn-default">@Translation.Get("Expand")</button>
-                                <button id="collapseAll"class="btn btn-sm btn-default">@Translation.Get("Collapse")</button>    
-                            </div>
-                        </div>
-                    </div>
                     @foreach (var result in Model.Customers)
                     {
                         <div id="searchGroup_@result.CustomerId" class="searchGroup" data-customerId="@result.CustomerId">
@@ -77,13 +69,8 @@
                 }
             });
 
-            $("#collapseAll").click(function (e) {
-                window.toggleSearchResults(false);
-            });
-
-            $("#expandAll").click(function (e) {
-                window.toggleSearchResults(true);
-            });
+            //$("#collapseAll").click(function (e) { window.toggleSearchResults(false); });
+            //$("#expandAll").click(function (e) { window.toggleSearchResults(true); });
 
             //run search for all user customers
             caseSearch.searchMultipleCustomers(window.userCustomers);
