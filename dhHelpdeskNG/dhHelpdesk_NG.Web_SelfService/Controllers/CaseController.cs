@@ -783,6 +783,22 @@ namespace DH.Helpdesk.SelfService.Controllers
             return model;
         }
 
+        private void SaveCaseFiles(string caseFileKey, int customerId, int caseId, int userId)
+        {
+            //Get from baseCase path
+            var basePath = _masterDataService.GetFilePath(customerId);
+
+            if (!string.IsNullOrEmpty(caseFileKey))
+            {
+                var temporaryFiles = _userTemporaryFilesStorage.GetFiles(caseFileKey, ModuleName.Cases);
+                var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseId, userId)).ToList();
+                _caseFileService.AddFiles(newCaseFiles);
+
+                // delete temp folders                
+                _userTemporaryFilesStorage.DeleteFiles(caseFileKey);
+            }
+        }
+
         [HttpPost]
         public ActionResult ExtendedCase(ExtendedCaseViewModel model, string returnUrl = null)
         {
@@ -805,55 +821,26 @@ namespace DH.Helpdesk.SelfService.Controllers
             //TODO: Refactor
             model.CaseDataModel.ExtendedCaseData_Id = model.ExtendedCaseDataModel.Id;
             model.CaseDataModel.ExtendedCaseForm_Id = model.ExtendedCaseDataModel.ExtendedCaseFormId;
-
+            
             var res = _universalCaseService.SaveCaseCheckSplit(model.CaseDataModel, auxModel, out caseId, out caseNum);
-            if (res.IsSucceed && caseId != -1)
+            if (res.IsSucceed && caseId > 0)
             {
-                //TODO: do we need to check "isNewCase"? /Tan
                 var case_ = _universalCaseService.GetCase(caseId);
 
-                #region casefile
-
-                //var basePath = _masterDataService.GetFilePath(model.CustomerId);
-                //Get from baseCase path
-                var basePath = _masterDataService.GetFilePath(case_.Customer_Id);
-
-                // save case files
-                if (model.CaseDataModel.CaseFileKey != null)
+                SaveCaseFiles(model.CaseDataModel.CaseFileKey, case_.Customer_Id, caseId, localUserId);
+                
+                if (ConfigurationService.AppSettings.ShowConfirmAfterCaseRegistration)
                 {
-                    var temporaryFiles = _userTemporaryFilesStorage.GetFiles(model.CaseDataModel.CaseFileKey, ModuleName.Cases);
-                    var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseId, localUserId)).ToList();
-                    _caseFileService.AddFiles(newCaseFiles);
-
-                    // delete temp folders                
-                    _userTemporaryFilesStorage.DeleteFiles(model.CaseDataModel.CaseFileKey);
+                    return RedirectToCaseConfirmation("Your case has been successfully registered.", string.Empty);
                 }
-
-                #endregion
-
-                #region obsolete
-
-                //var showConfirmMessage = AppConfigHelper.GetAppSetting(AppSettingsKey.ConfirmMsgAfterCaseRegistration);
-
-                //if (!string.IsNullOrEmpty(showConfirmMessage) && showConfirmMessage == "true")
-                //{
-                //    SessionFacade.LastMessageDialog = new MessageDialogModel(
-                //        MessageTypes.success,
-                //        "Your case has been successfully registered.",
-                //        $"You can follow up your case status via this number: {caseNum}");
-
-                //    return RedirectToAction("Index", "Message");
-                //}
-                //else
-                //{                    
-                //    return RedirectToAction("UserCases", new { customerId = model.CustomerId });
-                //}
-                #endregion
-
-                if (string.IsNullOrEmpty(returnUrl))
-                    return RedirectToAction("ExtendedCase", new { caseId = caseId });
                 else
-                    return Redirect(returnUrl);
+                {
+                    //return RedirectToAction("UserCases", new { customerId = model.CustomerId });
+                    if (string.IsNullOrEmpty(returnUrl))
+                        return RedirectToAction("ExtendedCase", new { caseId = caseId });
+                    else
+                        return Redirect(returnUrl);
+                }
             }
 
             if (model.CaseDataModel.OU_Id.HasValue)            
@@ -1246,26 +1233,25 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
+        public ActionResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
         {
             decimal caseNum;
             int caseId = Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog, out caseNum);
 
-            var showConfirmMessage = AppConfigHelper.GetAppSetting(AppSettingsKey.ConfirmMsgAfterCaseRegistration);
-
-            if (!string.IsNullOrEmpty(showConfirmMessage) && showConfirmMessage == "true")
+            if (ConfigurationService.AppSettings.ShowConfirmAfterCaseRegistration)
             {
-                SessionFacade.LastMessageDialog = new MessageDialogModel(
-                    MessageTypes.success,
-                    "Your case has been successfully registered.",
-                    $"You can follow up your case status via this number: {caseNum}");
-
-                return RedirectToAction("Index", "Message");
+                return RedirectToCaseConfirmation("Your case has been successfully registered.", $"You can follow up your case status via this number: {caseNum}");
             }
             else
             {
                 return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
             }
+        }
+
+        private ActionResult RedirectToCaseConfirmation(string title, string details)
+        {
+            SessionFacade.LastMessageDialog = MessageDialogModel.Success(title, details);
+            return RedirectToAction("Index", "Message");
         }
 
         [HttpPost]
@@ -1825,12 +1811,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             caseLog.Id = this._logService.SaveLog(caseLog, 0, out errors);
 
             // save case files
-            var temporaryFiles = _userTemporaryFilesStorage.GetFiles(caseFileKey, ModuleName.Cases);
-            var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, newCase.Id, localUserId)).ToList();
-            _caseFileService.AddFiles(newCaseFiles);
+            SaveCaseFiles(caseFileKey, newCase.Customer_Id, newCase.Id, localUserId);
 
-            // delete temp folders                
-            _userTemporaryFilesStorage.DeleteFiles(caseFileKey);
             var oldCase = new Case();            
             // send emails
             var userTimeZone = TimeZoneInfo.Local;
@@ -1843,6 +1825,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             _caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase);
+
             caseNumber = newCase.CaseNumber;
             return newCase.Id;
         }

@@ -19,7 +19,7 @@ namespace DH.Helpdesk.SelfService.Models.Message
             Details = "";
         }
 
-        public MessageDialogModel(MessageTypes msgType, string title, string details)
+        public MessageDialogModel(MessageTypes msgType, string title, string details = "")
         {
             MsgType = msgType;
             Title = title;
@@ -29,7 +29,14 @@ namespace DH.Helpdesk.SelfService.Models.Message
         public string Title { get; set; }
         public string Details { get; set; }
         public MessageTypes MsgType { get; set; }
+
+        #region Factory Methods
+
+        public static MessageDialogModel Success(string title, string details = "")
+        {
+            return new MessageDialogModel(MessageTypes.success, title, details);
+        }
+
+        #endregion
     }
-
-
 }
