@@ -700,7 +700,7 @@ If not exists (select * from tbltext where id = 1925)
 	insert into tbltext (id, TextString, TextType) VALUES (1925, 'Collapse', 300)
 GO
 If not exists (select * from tblTextTranslation where text_id = 1925 and Language_Id = 1)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1925, 1, 'Kollapsa')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1925, 1, 'Minimera')
 GO
 
 -- select TOP 100 * from tbltextORDER BY Id desc
