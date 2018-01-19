@@ -247,8 +247,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(),
                 GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(),
                 GlobalEnums.TranslationCaseFields.Priority_Id.ToString(),
-                GlobalEnums.TranslationCaseFields.Status_Id.ToString(),
-                GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(),
+                //GlobalEnums.TranslationCaseFields.Status_Id.ToString(),
+                //GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(),
                 GlobalEnums.TranslationCaseFields.CausingPart.ToString(),
                 GlobalEnums.TranslationCaseFields.ClosingReason.ToString(),
                 GlobalEnums.TranslationCaseFields.FinishingDate.ToString()

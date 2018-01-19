@@ -89,6 +89,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly IInventoryService _inventoryService;
         private readonly ICustomerUserService _customerUserService;
         private readonly IGlobalSettingService _globalSettingService;
+        private readonly IStatusService _statusService;
 
 
         private const string ParentPathDefaultValue = "--";
@@ -140,7 +141,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             ICustomerUserService customerUserService,
             IGlobalSettingService globalSettingService,
             IWatchDateCalendarService watchDateCalendarService,
-            ISelfServiceConfigurationService configurationService)
+            ISelfServiceConfigurationService configurationService,
+            IStatusService statusService)
             : base(configurationService, masterDataService, caseSolutionService)
         {
             _caseControllerBehavior = new CaseControllerBehavior(masterDataService, caseService, caseSearchService,
@@ -188,6 +190,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             _inventoryService = inventoryService;
             _customerUserService = customerUserService;
             _globalSettingService = globalSettingService;
+            _statusService = statusService;
         }
 
         [HttpGet]
@@ -1574,21 +1577,23 @@ namespace DH.Helpdesk.SelfService.Controllers
                 {
                     //not used in selfservice
                 }
-                else if (setting == GlobalEnums.TranslationCaseFields.Status_Id.ToString())
+                else if (setting == GlobalEnums.TranslationCaseFields.Status_Id.ToString() && model.CaseDataModel.Status_Id.HasValue)
                 {
-                    //not used in selfservice
+                    var status = _statusService.GetStatus(model.CaseDataModel.Status_Id.Value);
+                    value = status?.Name ?? defaultValue;
                 }
-                else if (setting == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())
+                else if (setting == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString() && model.CaseDataModel.StateSecondary_Id.HasValue)
                 {
-                    //not used in selfservice
+                    var subStatus = _stateSecondaryService.GetStateSecondary(model.CaseDataModel.StateSecondary_Id.Value);
+                    value = subStatus?.Name ?? defaultValue;
                 }
                 else if (setting == GlobalEnums.TranslationCaseFields.PlanDate.ToString())
                 {
-                    value = model.CaseDataModel.PlanDate.HasValue ? model.CaseDataModel.PlanDate.Value.ToString(dateFormat) : defaultValue;
+                    value = model.CaseDataModel.PlanDate?.ToString(dateFormat) ?? defaultValue;
                 }
                 else if (setting == GlobalEnums.TranslationCaseFields.WatchDate.ToString())
                 {
-                    value = model.CaseDataModel.WatchDate.HasValue ? model.CaseDataModel.WatchDate.Value.ToString(dateFormat) : defaultValue;
+                    value = model.CaseDataModel.WatchDate?.ToString(dateFormat) ?? defaultValue;
                 }
                 else if (setting == GlobalEnums.TranslationCaseFields.Verified.ToString())
                 {
@@ -1600,7 +1605,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
                 else if (setting == GlobalEnums.TranslationCaseFields.FinishingDate.ToString())
                 {
-                    value = model.CaseDataModel.FinishingDate.HasValue ? model.CaseDataModel.FinishingDate.Value.ToString(dateFormat) : defaultValue;
+                    value = model.CaseDataModel.FinishingDate?.ToString(dateFormat) ?? defaultValue;
                 }
                 else if (setting == GlobalEnums.TranslationCaseFields.ClosingReason.ToString())
                 {
