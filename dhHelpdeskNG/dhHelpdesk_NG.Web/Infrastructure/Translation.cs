@@ -234,6 +234,7 @@ namespace DH.Helpdesk.Web.Infrastructure
                             "Den här ordern är redan skickat. Du kan inte utföra den här aktiviteten.",
                             "Det finns inga artiklar att skicka!",
                             "Det finns inga filer att lägga till.",
+                            "Det finns inga valbara filer att lägga till på ordern.",
                             "Det saknas inställningar för fakturering",
                             "Du har valt en artikel, men inte lagt till den än!",
                             "Du kan inte använda ärendemall eftersom det finns order som inte är skickade.",
@@ -246,10 +247,12 @@ namespace DH.Helpdesk.Web.Infrastructure
                             "Ett fel har uppstått vid spara Order",
                             "för",
                             "Inget kvar att kreditera",
+                            "kan inte faktureras",
+                            "kan inte ändras eftersom det finns order som är skickade.",
                             "Kredit",
                             "Kreditera",
                             "Kreditera order",
-                            "kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern.",                            
+                            "kunde inte sparas då det saknas data i ett eller flera obligatoriska fält. Var vänlig kontrollera i ordern.",
                             "Lägg order",
                             "Lägg till",
                             "Max antal för denna artikel är",
@@ -273,15 +276,14 @@ namespace DH.Helpdesk.Web.Infrastructure
                             "Total",
                             "Totalt alla ordrar",
                             "Typ",
+                            "Vald",                            
                             "Var god kontakta systemadministratör.",
                             "Var vänlig spara ordern först.",
                             "Var vänlig spara ärendet och försök igen!",
                             "Välj artikel",
                             "Ärende",
                             "Ärendefiler",
-                            "Översikt",
-                            "kan inte ändras eftersom det finns order som är skickade.",
-                            "Det finns inga valbara filer att lägga till på ordern."
+                            "Översikt"                                                        
                         };
             return ret;
         }

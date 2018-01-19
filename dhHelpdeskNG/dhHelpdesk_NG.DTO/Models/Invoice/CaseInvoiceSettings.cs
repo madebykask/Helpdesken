@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Invoice
+﻿using System.Collections.Generic;
+
+namespace DH.Helpdesk.BusinessData.Models.Invoice
 {
     public sealed class CaseInvoiceSettings
     {
@@ -24,14 +26,17 @@
             this.Filter = filter;
         }
 
+        public CaseInvoiceSettings()
+        {
+            Departments = new List<MultiSelectListItem>();
+        }
+
         public CaseInvoiceSettings(int customerId)
         {
             this.CustomerId = customerId;
+            Departments = new List<MultiSelectListItem>();
         }
 
-        public CaseInvoiceSettings()
-        {            
-        }
 
         public int Id { get; set; } 
 
@@ -50,5 +55,21 @@
         public string DocTemplate { get; set; }
 
         public string Filter { get; set; }
+
+        public IList<MultiSelectListItem> Departments { get; set; }
+
+        public int[] DisabledDepartmentIds { get; set; }
+
+    }
+
+    public class MultiSelectListItem
+    {
+        public int Value { get; set; }
+
+        public string Text { get; set; }
+
+        public bool Selected { get; set; }
+
+        public bool Disabled { get; set; }        
     }
 }

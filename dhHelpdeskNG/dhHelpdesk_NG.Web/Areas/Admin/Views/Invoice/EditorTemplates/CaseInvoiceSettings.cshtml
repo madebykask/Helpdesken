@@ -1,68 +1,74 @@
-﻿@model DH.Helpdesk.BusinessData.Models.Invoice.CaseInvoiceSettings
+﻿@using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.BusinessData.Models.Invoice
+@model DH.Helpdesk.BusinessData.Models.Invoice.CaseInvoiceSettings
 
 @using (Html.BeginForm("SaveSettings", "Invoice", FormMethod.Post, new { id = "invoice_settings_form" }))
 {
     @Html.HiddenFor(m => m.Id)
     @Html.HiddenFor(m => m.CustomerId)
+    var desabledDepartmentIds = string.Join(",", Model.Departments.Where(d => d.Selected).Select(d => d.Value).ToList());
     <div class="container">
         <div class="row">
-            <div class="span12">
+            <div class="span100">
                 <h4>@Translation.GetCoreTextTranslation("Export fil")</h4>
-                <table class="tableform">
-                    <tr>
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Export sökväg")
-                        </td>
-                        <td class="span9">
-                            @Html.TextBoxFor(m => m.ExportPath, new {maxlength = "200", style = "line-height: 0"})
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Valuta")
-                        </td>
-                        <td class="span9">
-                            @Html.TextBoxFor(m => m.Currency, new {maxlength = "50"})
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Utfärdare")
-                        </td>
-                        <td class="span9">
-                            @Html.TextBoxFor(m => m.Issuer, new {maxlength = "50"})
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Vår referens")
-                        </td>
-                        <td class="span9">
-                            @Html.TextBoxFor(m => m.OurReference, new {maxlength = "50"})
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Ordernummer/prefix")
-                        </td>
-                        <td class="span9">
-                            @Html.TextBoxFor(m => m.OrderNoPrefix, new {maxlength = "50"})
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Dokumentmall")
-                        </td>
-                        <td class="span9">
-                            @Html.TextBoxFor(m => m.DocTemplate, new {maxlength = "50"})
-                        </td>
-                    </tr>
-                </table>
+                <div class="span12">
+                    <table class="tableform">
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Export sökväg")
+                            </td>
+                            <td class="span9">
+                                @Html.TextBoxFor(m => m.ExportPath, new { maxlength = "200", style = "line-height: 0" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Valuta")
+                            </td>
+                            <td class="span9">
+                                @Html.TextBoxFor(m => m.Currency, new { maxlength = "50" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Utfärdare")
+                            </td>
+                            <td class="span9">
+                                @Html.TextBoxFor(m => m.Issuer, new { maxlength = "50" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Vår referens")
+                            </td>
+                            <td class="span9">
+                                @Html.TextBoxFor(m => m.OurReference, new { maxlength = "50" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Ordernummer/prefix")
+                            </td>
+                            <td class="span9">
+                                @Html.TextBoxFor(m => m.OrderNoPrefix, new { maxlength = "50" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Dokumentmall")
+                            </td>
+                            <td class="span9">
+                                @Html.TextBoxFor(m => m.DocTemplate, new { maxlength = "50" })
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
-            <div class="row">
+        <div class="row">
+            <div class="span100">
+                <h4>@Translation.GetCoreTextTranslation("Import fil")</h4>
                 <div class="span12">
-                    <h4>@Translation.GetCoreTextTranslation("Import fil")</h4>
                     <table class="tableform">
                         <tr>
                             <td class="span3">
@@ -75,6 +81,30 @@
                     </table>
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="span100">
+                <h4>@Translation.GetCoreTextTranslation("Begränsningar")</h4>
+                <div class="span12">
+                    <table class="tableform">
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Inaktivera") 
+                                @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Model.CustomerId)                                 
+                            </td>
+                            <td class="span9">
+                                <select id="Settings.DisabledDepartmentIds" name="Settings.DisabledDepartmentIds"  data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
+                                    @foreach (var e in Model.Departments)
+                                    {                                                                                
+                                        <option class='(e.Disabled)? "DisabledChosen" : ""' value="@e.Value" @e.Value.IdIsSelected(desabledDepartmentIds)>@e.Text</option>
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 }
 <script type="text/javascript">

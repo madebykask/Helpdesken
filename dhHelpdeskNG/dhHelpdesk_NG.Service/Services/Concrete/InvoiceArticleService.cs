@@ -16,25 +16,25 @@
 
     public class InvoiceArticleService : IInvoiceArticleService
     {
-        private readonly IInvoiceArticleUnitRepository invoiceArticleUnitRepository;
+        private readonly IInvoiceArticleUnitRepository _invoiceArticleUnitRepository;
 
-        private readonly IInvoiceArticleRepository invoiceArticleRepository;
+        private readonly IInvoiceArticleRepository _invoiceArticleRepository;
 
-        private readonly ICaseInvoiceArticleRepository caseInvoiceArticleRepository;
+        private readonly ICaseInvoiceArticleRepository _caseInvoiceArticleRepository;
 
-        private readonly ICaseInvoiceSettingsService caseInvoiceSettingsService;
+        private readonly ICaseInvoiceSettingsService _caseInvoiceSettingsService;
 
-        private readonly IProjectService projectService;
+        private readonly IProjectService _projectService;
 
-        private readonly IUserService userService;
+        private readonly IUserService _userService;
 
-        private readonly ICaseFileService caseFileService;
+        private readonly ICaseFileService _caseFileService;
 
-        private readonly IDepartmentService departmentService;
+        private readonly IDepartmentService _departmentService;
 
-        private readonly IMasterDataService masterDataService;
+        private readonly IMasterDataService _masterDataService;
 
-        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
         public InvoiceArticleService(
                 IInvoiceArticleUnitRepository invoiceArticleUnitRepository,
@@ -48,48 +48,48 @@
                 IMasterDataService masterDataService,
                 IUnitOfWorkFactory unitOfWorkFactory)
         {
-            this.invoiceArticleUnitRepository = invoiceArticleUnitRepository;
-            this.invoiceArticleRepository = invoiceArticleRepository;
-            this.caseInvoiceArticleRepository = caseInvoiceArticleRepository;
-            this.caseInvoiceSettingsService = caseInvoiceSettingsService;
-            this.userService = userService;
-            this.projectService = projectService;
-            this.caseFileService = caseFileService;
-            this.departmentService = departmentService;
-            this.masterDataService = masterDataService;
-            this.unitOfWorkFactory = unitOfWorkFactory;
+            _invoiceArticleUnitRepository = invoiceArticleUnitRepository;
+            _invoiceArticleRepository = invoiceArticleRepository;
+            _caseInvoiceArticleRepository = caseInvoiceArticleRepository;
+            _caseInvoiceSettingsService = caseInvoiceSettingsService;
+            _userService = userService;
+            _projectService = projectService;
+            _caseFileService = caseFileService;
+            _departmentService = departmentService;
+            _masterDataService = masterDataService;
+            _unitOfWorkFactory = unitOfWorkFactory;
         }
 
         public InvoiceArticleUnit[] GetUnits(int customerId)
         {
-            return this.invoiceArticleUnitRepository.GetUnits(customerId);
+            return _invoiceArticleUnitRepository.GetUnits(customerId);
         }
 
         public InvoiceArticle[] GetArticles(int customerId, int productAreaId)
         {
-            return this.invoiceArticleRepository.GetArticles(customerId, productAreaId);
+            return _invoiceArticleRepository.GetArticles(customerId, productAreaId);
         }
 
         public InvoiceArticle[] GetArticles(int customerId)
         {
-            return this.invoiceArticleRepository.GetArticles(customerId);
+            return _invoiceArticleRepository.GetArticles(customerId);
         }
 
 		public List<InvoiceArticle> GetActiveArticles(int customerId)
 		{
-			return this.invoiceArticleRepository.GetActiveArticles(customerId);
+			return _invoiceArticleRepository.GetActiveArticles(customerId);
 		}
 
 		public CaseInvoice[] GetCaseInvoices(int caseId)
         {
-            var CaseInvoices = this.caseInvoiceArticleRepository.GetCaseInvoices(caseId);
+            var CaseInvoices = _caseInvoiceArticleRepository.GetCaseInvoices(caseId);
             CaseInvoices = SetInvoicedByUsername(CaseInvoices);
             return CaseInvoices;
         }
 
         public CaseInvoiceOrder[] GetInvoiceOrders(int caseId, InvoiceOrderFetchStatus status)
         {
-            return this.caseInvoiceArticleRepository.GetOrders(caseId, status);
+            return _caseInvoiceArticleRepository.GetOrders(caseId, status);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@
         /// <returns></returns>
         public CaseInvoice[] GetCaseInvoicesWithTimeZone(int caseId, TimeZoneInfo userTimeZone)
         {
-            var CaseInvoices = this.caseInvoiceArticleRepository.GetCaseInvoices(caseId);
+            var CaseInvoices = _caseInvoiceArticleRepository.GetCaseInvoices(caseId);
             CaseInvoices = SetInvoicedByUsername(CaseInvoices);
             CaseInvoices = SetInvoiceOrderToTimeZone(CaseInvoices, userTimeZone);
             return CaseInvoices;
@@ -108,32 +108,32 @@
 
         public int SaveArticle(InvoiceArticle article)
         {
-            return this.invoiceArticleRepository.SaveArticle(article);
+            return _invoiceArticleRepository.SaveArticle(article);
         }
 
         public int SaveUnit(InvoiceArticleUnit unit)
         {
-            return this.invoiceArticleUnitRepository.SaveUnit(unit);
+            return _invoiceArticleUnitRepository.SaveUnit(unit);
         }
 
         public void SaveArticleProductArea(InvoiceArticleProductAreaSelectedFilter selectedItems)
         {
-            this.invoiceArticleRepository.SaveArticleProductArea(selectedItems);
+            _invoiceArticleRepository.SaveArticleProductArea(selectedItems);
         }
 
         public void DeleteArticleProductArea(int articleid, int productareaid)
         {
-            this.invoiceArticleRepository.DeleteArticleProductArea(articleid, productareaid);
+            _invoiceArticleRepository.DeleteArticleProductArea(articleid, productareaid);
         }
 
         public void DeactivateArticlesBySyncDate(int customerId, DateTime lastSyncDate)
         {
-            invoiceArticleRepository.DeactivateArticlesBySyncDate(customerId, lastSyncDate);
+            _invoiceArticleRepository.DeactivateArticlesBySyncDate(customerId, lastSyncDate);
         }
 
         public void SaveArticles(List<InvoiceArticle> articles)
         {
-            invoiceArticleRepository.SaveArticles(articles);
+            _invoiceArticleRepository.SaveArticles(articles);
         }
 
         /// <summary>
@@ -177,7 +177,7 @@
                         {
                             if (Order.InvoicedByUserId != null)
                             {
-                                Order.InvoicedByUser = this.userService.GetUser(Order.InvoicedByUserId ?? 0).UserID;
+                                Order.InvoicedByUser = _userService.GetUser(Order.InvoicedByUserId ?? 0).UserID;
                             }
                         }
                     }
@@ -188,12 +188,12 @@
 
         public int SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId, int userId)
         {
-            return this.caseInvoiceArticleRepository.SaveCaseInvoices(invoices, caseId, userId);
+            return _caseInvoiceArticleRepository.SaveCaseInvoices(invoices, caseId, userId);
         }
 
         public void DeleteCaseInvoices(int caseId)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var caseInvoicesRep = uow.GetRepository<CaseInvoiceEntity>();
                 var caseInvoiceOrdersRep = uow.GetRepository<CaseInvoiceOrderEntity>();
@@ -219,7 +219,7 @@
 
         public DataValidationResult ValidateInvoiceSettings(int customerId)
         {
-            var caseInvoiceSettings = this.caseInvoiceSettingsService.GetSettings(customerId);
+            var caseInvoiceSettings = _caseInvoiceSettingsService.GetSettings(customerId);
 
             if (string.IsNullOrEmpty(caseInvoiceSettings.ExportPath))
             {
@@ -252,7 +252,7 @@
         public ProcessResult DoInvoiceWork(CaseInvoice[] caseInvoiceData, int caseId, decimal caseNumber, int customerId, int userId, int? orderIdToXML)
         {            
 
-            var newOrderId = this.SaveCaseInvoices(caseInvoiceData, caseId, userId);
+            var newOrderId = SaveCaseInvoices(caseInvoiceData, caseId, userId);
             
             if (orderIdToXML.HasValue)
             {   
@@ -260,18 +260,29 @@
                 if (orderIdToXML <= 0)
                     orderIdToXML = newOrderId;
 
-                var orderToExport = this.caseInvoiceArticleRepository.GetCaseInvoiceOrder(caseId, orderIdToXML.Value);
+                var orderToExport = _caseInvoiceArticleRepository.GetCaseInvoiceOrder(caseId, orderIdToXML.Value);
                 if (orderToExport != null)
                 {
-                    var caseInvoiceSettings = this.caseInvoiceSettingsService.GetSettings(customerId);
+                    var caseInvoiceSettings = _caseInvoiceSettingsService.GetSettings(customerId);
                     if (caseInvoiceSettings == null)
                         return new ProcessResult(System.Reflection.MethodBase.GetCurrentMethod().Name, 
                                                  ProcessResult.ResultTypeEnum.ERROR, "There is no invoice settings for Customer");
-                    
+
+                    if (orderToExport.Department_Id.HasValue)
+                    {
+                        var selectedDep = _departmentService.GetDepartment(orderToExport.Department_Id.Value);
+                        if (selectedDep != null && selectedDep.DisabledForOrder)                        
+                        {
+                            return new ProcessResult(System.Reflection.MethodBase.GetCurrentMethod().Name,
+                                                     ProcessResult.ResultTypeEnum.ERROR, 
+                                                     "Order cannot be sent with selected department.");
+                        }
+                    }
+
                     var res = ExportOrder(orderToExport, caseInvoiceSettings, caseId, caseNumber);
                     if (!res.IsSucceed)
                     {
-                        this.caseInvoiceArticleRepository.CancelInvoiced(caseId, orderIdToXML.Value);
+                        _caseInvoiceArticleRepository.CancelInvoiced(caseId, orderIdToXML.Value);
                         return new ProcessResult(res.ProcessName, ProcessResult.ResultTypeEnum.WARNING, res.LastMessage);
                     }
                 }                
@@ -283,7 +294,7 @@
 
         public void DeleteFileByCaseId(int caseId, string fileName)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var caseInvoiceOrderFilesRep = uow.GetRepository<CaseInvoiceOrderFileEntity>();
                 var recToDelete = caseInvoiceOrderFilesRep.Find(f => f.Order.Invoice.CaseId == caseId && f.FileName == fileName).Select(f=> f.Id).ToList();
@@ -339,7 +350,7 @@
             var originalOrderSeq = 0;
             if (order.CreditForOrder_Id.HasValue)
             {
-                var originalOrder = this.caseInvoiceArticleRepository.GetCaseInvoiceOrder(caseId, order.CreditForOrder_Id.Value);
+                var originalOrder = _caseInvoiceArticleRepository.GetCaseInvoiceOrder(caseId, order.CreditForOrder_Id.Value);
                 if (originalOrder != null)
                     originalOrderSeq = GetSequenceNumber(caseId, originalOrder);
             }
@@ -438,9 +449,9 @@
         private int GetSequenceNumber(int caseId, CaseInvoiceOrder order)
         {
             var orders = (order.CreditForOrder_Id.HasValue)?            
-                        this.caseInvoiceArticleRepository.GetOrders(caseId, InvoiceOrderFetchStatus.Credits)
+                        _caseInvoiceArticleRepository.GetOrders(caseId, InvoiceOrderFetchStatus.Credits)
                         .Where(o=> o.Id < order.Id && o.CreditForOrder_Id ==  order.CreditForOrder_Id) : 
-                        this.caseInvoiceArticleRepository.GetOrders(caseId, InvoiceOrderFetchStatus.Orders)
+                        _caseInvoiceArticleRepository.GetOrders(caseId, InvoiceOrderFetchStatus.Orders)
                                                          .Where(o=> o.Id < order.Id);            
 
             if (orders == null)
@@ -487,8 +498,8 @@
         {
             byte[] fileContent;
             var basePath = string.Empty;
-            basePath = masterDataService.GetFilePath(CustomerId);
-            fileContent = caseFileService.GetFileContentByIdAndFileName(caseId, basePath, file.FileName);
+            basePath = _masterDataService.GetFilePath(CustomerId);
+            fileContent = _caseFileService.GetFileContentByIdAndFileName(caseId, basePath, file.FileName);
             var encodedString = Convert.ToBase64String(fileContent);
             return encodedString;
         }
@@ -498,7 +509,7 @@
             var res = string.Empty;
             if (departmentId.HasValue)
             {
-                var dep = this.departmentService.GetDepartment(departmentId.Value);
+                var dep = _departmentService.GetDepartment(departmentId.Value);
                 if (dep != null)
                     res = dep.DepartmentId;
             }
@@ -508,7 +519,7 @@
         private string GetJobNo(int projectId)
         {
             var res = string.Empty;
-            var project = projectService.GetProject(projectId);
+            var project = _projectService.GetProject(projectId);
             if (project != null)
             {  
 

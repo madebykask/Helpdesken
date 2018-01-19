@@ -29,14 +29,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         private readonly ICaseInvoiceSettingsService caseInvoiceSettingsService;
 
+        private readonly IDepartmentService departmentService;
+
+
 
         public InvoiceController(
-                IMasterDataService masterDataService, 
-                ICustomerService customerService, 
-                ICaseInvoiceFactory caseInvoiceFactory, 
-                IProductAreaService productAreaService, 
-                IInvoiceArticleService invoiceArticleService, 
-                ICaseInvoiceSettingsService caseInvoiceSettingsService)
+                IMasterDataService masterDataService,
+                ICustomerService customerService,
+                ICaseInvoiceFactory caseInvoiceFactory,
+                IProductAreaService productAreaService,
+                IInvoiceArticleService invoiceArticleService,
+                ICaseInvoiceSettingsService caseInvoiceSettingsService,
+                IDepartmentService departmentService)
             : base(masterDataService)
         {
             this.customerService = customerService;
@@ -44,6 +48,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this.productAreaService = productAreaService;
             this.invoiceArticleService = invoiceArticleService;
             this.caseInvoiceSettingsService = caseInvoiceSettingsService;
+            this.departmentService = departmentService;
         }
 
         [HttpGet]
@@ -51,6 +56,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             var customer = this.customerService.GetCustomer(customerId);
             var settings = this.caseInvoiceSettingsService.GetSettings(customerId);
+
+            var departments = departmentService.GetDepartments(customerId, Common.Enums.ActivationStatus.All);
+            settings.Departments = departments.Select(d => new MultiSelectListItem
+            {
+                Value = d.Id,
+                Text = d.DepartmentName,
+                Selected = d.DisabledForOrder,
+                Disabled = d.IsActive != 0
+            }).ToList();
+
             if (settings == null)
             {
                 settings = new CaseInvoiceSettings(customerId);

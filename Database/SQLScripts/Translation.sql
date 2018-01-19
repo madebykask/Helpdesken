@@ -6750,6 +6750,29 @@ If not exists (select * from tblTextTranslation where text_id = 1923 and Languag
 GO
 
 
+If not exists (select * from tbltext where id = 1926)
+	insert into tbltext (id, TextString) VALUES (1926, 'kan inte faktureras')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1926 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1926, 2, 'can not be invoiced')
+GO
+
+If not exists (select * from tbltext where id = 1927)
+	insert into tbltext (id, TextString) VALUES (1927, 'Begränsningar')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1927 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1927, 2, 'Restrictions')
+GO
+
+If not exists (select * from tbltext where id = 1928)
+	insert into tbltext (id, TextString) VALUES (1928, 'Inaktivera')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1928 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1928, 2, 'Disable')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
-

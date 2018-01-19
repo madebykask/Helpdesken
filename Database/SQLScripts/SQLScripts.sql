@@ -2068,5 +2068,12 @@ DEALLOCATE MY_CURSOR
 -- UPDATE tblGlobalSettings SET [MultiCustomersSearch] = 1
 
 
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'DisabledForOrder' and
+	 sysobjects.name = N'tblDepartment')
+begin
+	ALTER TABLE [tblDepartment] ADD [DisabledForOrder] bit NOT NULL DEFAULT(0)
+end
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.35'
