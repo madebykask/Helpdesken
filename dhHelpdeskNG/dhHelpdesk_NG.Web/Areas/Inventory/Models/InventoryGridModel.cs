@@ -1294,6 +1294,16 @@
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Info,
                 (StringDisplayValue)overview.Info,
                 values);
+            CreateValueIfNeeded(
+                settings.DefaultSettings.CreatedDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.CreatedDate,
+                (DateTimeDisplayValue)overview.CreatedDate,
+                values);
+            CreateValueIfNeeded(
+                settings.DefaultSettings.ChangedDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.ChangedDate,
+                (DateTimeDisplayValue)overview.ChangedDate,
+                values);
 
             var dynamicValues = dynamicData.Where(x => x.InventoryId == overview.Id).ToList();
 
@@ -1377,6 +1387,14 @@
             CreateHeaderIfNeeded(
                 settings.DefaultSettings.InfoFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Info,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.DefaultSettings.CreatedDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.CreatedDate,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.DefaultSettings.ChangedDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.ChangedDate,
                 headers);
 
             headers.AddRange(

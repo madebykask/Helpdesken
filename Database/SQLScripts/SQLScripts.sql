@@ -1994,6 +1994,76 @@ begin
 	ALTER TABLE [tblSettings] ADD [QuickLinkWGRestriction] bit NOT NULL DEFAULT(0)
 end
 
+DECLARE @InvTypeId int
+DECLARE MY_CURSOR CURSOR LOCAL STATIC READ_ONLY FORWARD_ONLY FOR SELECT DISTINCT Id FROM tblInventoryType
+
+OPEN MY_CURSOR
+FETCH NEXT FROM MY_CURSOR INTO @InvTypeId
+WHILE @@FETCH_STATUS = 0
+BEGIN 
+	IF NOT EXISTS (SELECT * FROM tblInventoryTypeProperty WHERE InventoryType_Id = @InvTypeId AND PropertyType = -12)
+		BEGIN
+		    INSERT INTO [dbo].[tblInventoryTypeProperty]
+		        ([InventoryType_Id]
+		        ,[PropertyValue]
+		        ,[PropertyPos]
+		        ,[PropertyDefault]
+		        ,[PropertyType]
+		        ,[PropertySize]
+		        ,[Show]
+		        ,[ShowInList]
+		        ,[ChangedDate]
+		        ,[CreatedDate]
+		        ,[ReadOnly]
+		        ,[Unique])
+		  VALUES
+		        (@InvTypeId
+		        ,'Skapad datum'
+		        ,0
+		        ,''
+		        ,-12
+		        ,12
+		        ,0
+		        ,0
+		        ,'2018-01-19 13:22:52.473'
+		        ,'2018-01-19 13:22:52.473'
+		        ,0
+		        ,0)
+		END
+	IF NOT EXISTS (SELECT * FROM tblInventoryTypeProperty WHERE InventoryType_Id = @InvTypeId AND PropertyType = -13)
+		BEGIN
+		    INSERT INTO [dbo].[tblInventoryTypeProperty]
+		        ([InventoryType_Id]
+		        ,[PropertyValue]
+		        ,[PropertyPos]
+		        ,[PropertyDefault]
+		        ,[PropertyType]
+		        ,[PropertySize]
+		        ,[Show]
+		        ,[ShowInList]
+		        ,[ChangedDate]
+		        ,[CreatedDate]
+		        ,[ReadOnly]
+		        ,[Unique])
+		  VALUES
+		        (@InvTypeId
+		        ,'Ändrad datum'
+		        ,0
+		        ,''
+		        ,-13
+		        ,12
+		        ,0
+		        ,0
+		        ,'2018-01-19 13:22:52.473'
+		        ,'2018-01-19 13:22:52.473'
+		        ,0
+		        ,0)
+		END
+	FETCH NEXT FROM MY_CURSOR INTO @InvTypeId
+END
+CLOSE MY_CURSOR
+DEALLOCATE MY_CURSOR
+
 -- enable MultiCustomers
 -- UPDATE tblGlobalSettings SET [MultiCustomersSearch] = 1
 

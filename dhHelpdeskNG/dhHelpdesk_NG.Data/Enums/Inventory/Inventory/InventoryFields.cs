@@ -23,5 +23,9 @@
         public static readonly int Workstation = -10;
 
         public static readonly int Info = -11;
+
+        public static readonly int CreatedDate = -12;
+
+        public static readonly int ChangedDate = -13;
     }
 }

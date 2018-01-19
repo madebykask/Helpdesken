@@ -16,16 +16,19 @@
         public List<InventoryValueForWrite> BuildForWrite(int inventoryId, List<DynamicFieldModel> models)
         {
             var businessModels = new List<InventoryValueForWrite>();
-            foreach (DynamicFieldModel model in models)
+            if (models != null)
             {
-                string value = model.Value;
-
-                if (model.FieldTypes == FieldTypes.Bool)
+                foreach (DynamicFieldModel model in models)
                 {
-                    value = model.Value == MvcTrue ? True : False;
-                }
+                    string value = model.Value;
 
-                businessModels.Add(new InventoryValueForWrite(inventoryId, model.InventoryTypePropertyId, value));
+                    if (model.FieldTypes == FieldTypes.Bool)
+                    {
+                        value = model.Value == MvcTrue ? True : False;
+                    }
+
+                    businessModels.Add(new InventoryValueForWrite(inventoryId, model.InventoryTypePropertyId, value));
+                }
             }
 
             return businessModels;
