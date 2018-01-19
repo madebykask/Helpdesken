@@ -48,36 +48,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DH.Helpdesk.Mail2Ticket.Library\DH.Helpdesk.Mail2Ticket.Library.vbproj">
-      <Project>{300807ad-e3da-4bf5-93fc-2503d617edc1}</Project>
-      <Name>DH.Helpdesk.Mail2Ticket.Library</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DH.Helpdesk.Mail2Ticket\DH.Helpdesk.Mail2Ticket.vbproj">
-      <Project>{2c7c24fc-d3e7-4a07-af74-2392d5484a0a}</Project>
-      <Name>DH.Helpdesk.Mail2Ticket</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
-      <Project>{90defcb6-e297-4f99-a532-da1e0522aa49}</Project>
-      <Name>DH.Helpdesk.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\dhHelpdesk_NG.Data\DH.Helpdesk.Dal.csproj">
-      <Project>{a8f6b7b8-8055-4bb7-82c4-85004f52e6ef}</Project>
-      <Name>DH.Helpdesk.Dal</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\dhHelpdesk_NG.Domain\DH.Helpdesk.Domain.csproj">
-      <Project>{5bd5f918-3be4-474d-ac30-9dbd02fc385d}</Project>
-      <Name>DH.Helpdesk.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\dhHelpdesk_NG.DTO\DH.Helpdesk.BusinessData.csproj">
-      <Project>{c4520e52-cb9e-4fd6-bee9-92aa532685a2}</Project>
-      <Name>DH.Helpdesk.BusinessData</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\dhHelpdesk_NG.Service\DH.Helpdesk.Services.csproj">
-      <Project>{3a5bfa9b-c033-4c1c-81af-7b4e1bedcfa3}</Project>
-      <Name>DH.Helpdesk.Services</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

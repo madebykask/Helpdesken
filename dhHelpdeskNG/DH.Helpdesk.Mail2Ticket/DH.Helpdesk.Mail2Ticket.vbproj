@@ -153,12 +153,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DH.Helpdesk.Mail2Ticket.Library\DH.Helpdesk.Mail2Ticket.Library.vbproj">
-      <Project>{300807AD-E3DA-4BF5-93FC-2503D617EDC1}</Project>
-      <Name>DH.Helpdesk.Mail2Ticket.Library</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -197,6 +191,12 @@
     <Content Include="Dependencies\Rebex.Security.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DH.Helpdesk.Mail2Ticket.Library\DH.Helpdesk.Mail2Ticket.Library.vbproj">
+      <Project>{300807ad-e3da-4bf5-93fc-2503d617edc1}</Project>
+      <Name>DH.Helpdesk.Mail2Ticket.Library</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
