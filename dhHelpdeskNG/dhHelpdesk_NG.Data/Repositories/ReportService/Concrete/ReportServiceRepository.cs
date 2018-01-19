@@ -72,68 +72,68 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
             var _whereClause = GetWhereClauseBy(filters);
             switch (reportIdentity)
             {
-                case "CasesPerSource":                    
-                    ret.Add(                               
-                          new Tuple<string, string, int>(
-                            "CasesPerDate",
-                            "SELECT COUNT(tblCase.Casenumber) AS Volume, tblCustomer.Name, " +
-                                   "tblDate.CalendarYearMonth, tblCustomer.Id, tblRegistrationSourceCustomer.SourceName " +
-                            "FROM tblCustomer INNER JOIN " +
-                                 "tblCase ON tblCustomer.Id = tblCase.Customer_Id LEFT OUTER JOIN " +
-                                 "tblRegistrationSourceCustomer ON tblCase.RegistrationSourceCustomer_Id = tblRegistrationSourceCustomer.Id " +
-                                 "RIGHT OUTER JOIN tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate " +
-                            _whereClause +  
-                            "GROUP BY tblCustomer.Name, tblDate.CalendarYearMonth, tblCustomer.Id, tblRegistrationSourceCustomer.SourceName " +
-                            "ORDER BY tblDate.CalendarYearMonth",
-                            (int) QueryType.SQLQUERY)                            
-                            );
-                    break;
+                //case "CasesPerSource":                    
+                //    ret.Add(                               
+                //          new Tuple<string, string, int>(
+                //            "CasesPerDate",
+                //            "SELECT COUNT(tblCase.Casenumber) AS Volume, tblCustomer.Name, " +
+                //                   "tblDate.CalendarYearMonth, tblCustomer.Id, tblRegistrationSourceCustomer.SourceName " +
+                //            "FROM tblCustomer INNER JOIN " +
+                //                 "tblCase ON tblCustomer.Id = tblCase.Customer_Id LEFT OUTER JOIN " +
+                //                 "tblRegistrationSourceCustomer ON tblCase.RegistrationSourceCustomer_Id = tblRegistrationSourceCustomer.Id " +
+                //                 "RIGHT OUTER JOIN tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate " +
+                //            _whereClause +  
+                //            "GROUP BY tblCustomer.Name, tblDate.CalendarYearMonth, tblCustomer.Id, tblRegistrationSourceCustomer.SourceName " +
+                //            "ORDER BY tblDate.CalendarYearMonth",
+                //            (int) QueryType.SQLQUERY)                            
+                //            );
+                //    break;
 
-                case "CasesPerDate":
-                    ret.Add(                               
-                          new Tuple<string, string, int>(
-                            "CasesPerDate",
-                            "SELECT COUNT(tblCase.Casenumber) AS Volume, cast(convert(date, cast(tblDate.DateKey as nvarchar),11) as nvarchar) as DateKey, tblCustomer.Id " + 
-                            "FROM  tblCustomer INNER JOIN " + 
-                                "tblCase ON tblCustomer.Id = tblCase.Customer_Id RIGHT OUTER JOIN " +
-                                "tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate "  +
-                            _whereClause +  
-                            "GROUP BY tblDate.DateKey, tblCustomer.Name, tblCustomer.Id " +
-                            "ORDER BY tblDate.DateKey",(int) QueryType.SQLQUERY)                            
-                            );
-                    break;
+                //case "CasesPerDate":
+                //    ret.Add(                               
+                //          new Tuple<string, string, int>(
+                //            "CasesPerDate",
+                //            "SELECT COUNT(tblCase.Casenumber) AS Volume, cast(convert(date, cast(tblDate.DateKey as nvarchar),11) as nvarchar) as DateKey, tblCustomer.Id " + 
+                //            "FROM  tblCustomer INNER JOIN " + 
+                //                "tblCase ON tblCustomer.Id = tblCase.Customer_Id RIGHT OUTER JOIN " +
+                //                "tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate "  +
+                //            _whereClause +  
+                //            "GROUP BY tblDate.DateKey, tblCustomer.Name, tblCustomer.Id " +
+                //            "ORDER BY tblDate.DateKey",(int) QueryType.SQLQUERY)                            
+                //            );
+                //    break;
 
-                case "CasesPerCasetype":
-                    ret.Add(
-                          new Tuple<string, string, int>(
-                            "CasesPerDate",
-                            "SELECT COUNT(tblCase.Casenumber) AS Volume, tblDate.CalendarYearMonth, tblCaseType.CaseType " +
-                            "FROM tblCase INNER JOIN " +
-                                 "tblCaseType ON tblCase.CaseType_Id = tblCaseType.Id RIGHT OUTER JOIN "+
-                                 "tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate " + 
-                            _whereClause +
-                            "GROUP BY tblDate.CalendarYearMonth, tblCaseType.CaseType " +
-                            "ORDER BY tblDate.CalendarYearMonth", (int)QueryType.SQLQUERY)
-                            );
-                    break;
+                //case "CasesPerCasetype":
+                //    ret.Add(
+                //          new Tuple<string, string, int>(
+                //            "CasesPerDate",
+                //            "SELECT COUNT(tblCase.Casenumber) AS Volume, tblDate.CalendarYearMonth, tblCaseType.CaseType " +
+                //            "FROM tblCase INNER JOIN " +
+                //                 "tblCaseType ON tblCase.CaseType_Id = tblCaseType.Id RIGHT OUTER JOIN "+
+                //                 "tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate " + 
+                //            _whereClause +
+                //            "GROUP BY tblDate.CalendarYearMonth, tblCaseType.CaseType " +
+                //            "ORDER BY tblDate.CalendarYearMonth", (int)QueryType.SQLQUERY)
+                //            );
+                //    break;
 
-                case "CasesPerWorkingGroup":
-                    ret.Add(
-                          new Tuple<string, string, int>(
-                            "CasesPerWorkGroup",
-                            "SELECT COUNT(tblCase.Casenumber) AS Volume, tblCustomer.Name, tblDate.DateKey, tblCustomer.Id, " +
-                                   "tblCase.WorkingGroup_Id, tblWorkingGroup.WorkingGroup, tblDate.CalendarYearMonth " +
-                            "FROM tblCustomer INNER JOIN " + 
-                                 "tblCase ON tblCustomer.Id = tblCase.Customer_Id INNER JOIN " +
-                                 "tblWorkingGroup ON tblCustomer.Id = tblWorkingGroup.Customer_Id AND "+
-                                 "tblCase.WorkingGroup_Id = tblWorkingGroup.Id RIGHT OUTER JOIN " +
-                                 "tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate " +
-                            _whereClause +
-                            "GROUP BY tblDate.DateKey, tblCustomer.Name, tblCustomer.Id, tblCase.WorkingGroup_Id, " + 
-                                     "tblWorkingGroup.WorkingGroup, tblDate.CalendarYearMonth " +
-                            "ORDER BY tblDate.DateKey", (int)QueryType.SQLQUERY)
-                            );                                        
-                    break;
+                //case "CasesPerWorkingGroup":
+                //    ret.Add(
+                //          new Tuple<string, string, int>(
+                //            "CasesPerWorkGroup",
+                //            "SELECT COUNT(tblCase.Casenumber) AS Volume, tblCustomer.Name, tblDate.DateKey, tblCustomer.Id, " +
+                //                   "tblCase.WorkingGroup_Id, tblWorkingGroup.WorkingGroup, tblDate.CalendarYearMonth " +
+                //            "FROM tblCustomer INNER JOIN " + 
+                //                 "tblCase ON tblCustomer.Id = tblCase.Customer_Id INNER JOIN " +
+                //                 "tblWorkingGroup ON tblCustomer.Id = tblWorkingGroup.Customer_Id AND "+
+                //                 "tblCase.WorkingGroup_Id = tblWorkingGroup.Id RIGHT OUTER JOIN " +
+                //                 "tblDate ON CAST(tblCase.RegTime AS Date) = tblDate.FullDate " +
+                //            _whereClause +
+                //            "GROUP BY tblDate.DateKey, tblCustomer.Name, tblCustomer.Id, tblCase.WorkingGroup_Id, " + 
+                //                     "tblWorkingGroup.WorkingGroup, tblDate.CalendarYearMonth " +
+                //            "ORDER BY tblDate.DateKey", (int)QueryType.SQLQUERY)
+                //            );                                        
+                //    break;
 
                 case "CasesPerAdministrator":
                     ret.Add(
@@ -152,23 +152,23 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                             );
                     break;
 
-                case "CasesPerDepartment":
-                    ret.Add(
-                          new Tuple<string, string, int>(
-                            "CasesPerDepartment",
-                            "SELECT  tblDepartment.Department AS Name, " +
-                                "COUNT(CASE WHEN tblCase.FinishingDate IS NULL THEN tblCase.Id ELSE NULL END) AS CasesInProgress, " +
-                                "COUNT(CASE WHEN tblCase.FinishingDate IS NULL AND tblCase.StateSecondary_Id IS NOT NULL AND tblStateSecondary.IncludeInCaseStatistics = 0 " +
-                                    "THEN tblCase.Id ELSE NULL END) AS CasesInRest, " +
-                                "COUNT(CASE WHEN tblCase.FinishingDate IS NULL THEN NULL ELSE tblCase.Id END) AS CasesClosed " +
-                            "FROM tblCase " +
-                                "INNER JOIN tblDepartment ON tblCase.Department_Id = tblDepartment.Id " +
-                                "LEFT OUTER JOIN tblStateSecondary ON tblCase.StateSecondary_Id = tblStateSecondary.Id " +
-                            _whereClause +
-                            " AND (tblCase.Deleted = 0) " +
-                            "GROUP BY tblDepartment.Department", (int)QueryType.SQLQUERY)
-                            );
-                    break;
+                //case "CasesPerDepartment":
+                //    ret.Add(
+                //          new Tuple<string, string, int>(
+                //            "CasesPerDepartment",
+                //            "SELECT  tblDepartment.Department AS Name, " +
+                //                "COUNT(CASE WHEN tblCase.FinishingDate IS NULL THEN tblCase.Id ELSE NULL END) AS CasesInProgress, " +
+                //                "COUNT(CASE WHEN tblCase.FinishingDate IS NULL AND tblCase.StateSecondary_Id IS NOT NULL AND tblStateSecondary.IncludeInCaseStatistics = 0 " +
+                //                    "THEN tblCase.Id ELSE NULL END) AS CasesInRest, " +
+                //                "COUNT(CASE WHEN tblCase.FinishingDate IS NULL THEN NULL ELSE tblCase.Id END) AS CasesClosed " +
+                //            "FROM tblCase " +
+                //                "INNER JOIN tblDepartment ON tblCase.Department_Id = tblDepartment.Id " +
+                //                "LEFT OUTER JOIN tblStateSecondary ON tblCase.StateSecondary_Id = tblStateSecondary.Id " +
+                //            _whereClause +
+                //            " AND (tblCase.Deleted = 0) " +
+                //            "GROUP BY tblDepartment.Department", (int)QueryType.SQLQUERY)
+                //            );
+                //    break;
                     
                 case "ReportedTime":
                     ret.Add(new Tuple<string, string, int>("VariabelAxel",
