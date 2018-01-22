@@ -307,6 +307,7 @@
     <Compile Include="App_Start\BundleConfig.Orders.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\EFormModule.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\Admin\Controllers\ExtendedCaseController.cs" />
     <Compile Include="Areas\WebApi\Controllers\CaseApiController.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />
     <Compile Include="Controllers\QuestionnaireAnswerController.cs" />
@@ -3299,6 +3300,8 @@
     <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\Fields\WideText.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\_EditPopupLayout.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\Fields\ListInt.cshtml" />
+    <Content Include="Areas\Admin\Views\ExtendedCase\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ExtendedCase\_Input.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />

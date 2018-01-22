@@ -1,0 +1,40 @@
+﻿@using DH.Helpdesk.BusinessData.Models
+@model DH.Helpdesk.Web.Areas.Admin.Models.CustomerInputViewModel
+
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#subfragment-1">@Translation.GetCoreTextTranslation("Statusfält") - @Model.Customer.Name</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    @*<h4>@Translation.GetCoreTextTranslation("Statusfält"))</h4>*@
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td colspan="4">
+                                        @Translation.GetCoreTextTranslation("Helpdesk")&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </td>
+                                    <td colspan="6">
+                                        @Html.ListBoxFor(m => m.ShowStatusBarIds, new SelectList((List<CustomKeyValue<int, string>>)ViewBag.AllFields, "Key", "Value", Model.ShowStatusBarIds), new {id= "showStatusBarIds", multiple = "multiple", })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        @Translation.GetCoreTextTranslation("Självservice")&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </td>
+                                    <td colspan="6">
+                                        @Html.ListBoxFor(m => m.ShowExternalStatusBarIds, new SelectList((List<CustomKeyValue<int, string>>)ViewBag.ShowExternalStatusBarFields, "Key", "Value", Model.ShowExternalStatusBarIds), new { id = "showExternalStatusBarIds", multiple = "multiple" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

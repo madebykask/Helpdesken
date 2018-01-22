@@ -6774,5 +6774,22 @@ If not exists (select * from tblTextTranslation where text_id = 1928 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1928, 2, 'Disable')
 GO
 
+If not exists (select * from tbltext where id = 1929)
+	insert into tbltext (id, TextString) VALUES (1929, N'Uttökat ärende')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1929 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1929, 2, N'Extended case')
+GO
+
+If not exists (select * from tbltext where id = 1930)
+	insert into tbltext (id, TextString) VALUES (1930, N'Statusfält')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1930 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1930, 2, N'Status bar')
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
