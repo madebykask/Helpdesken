@@ -788,6 +788,16 @@ function CaseInitForm() {
         }
     }
 
+    $("ul.dropdown-menu.subddMenu.parentddMenu").on("mouseenter", function () {
+        var html = $("html");
+        html.css("overflow", "hidden");
+    });
+
+    $("ul.dropdown-menu.subddMenu.parentddMenu").on("mouseleave", function () {
+        var html = $("html");
+        html.css("overflow", "auto");
+    });
+
     $("#dropDownBtn").on("click", function() {
                 var objPos = getObjectPosInView(this.id);
                 if (objPos.ToTop < objPos.ToDown) {
