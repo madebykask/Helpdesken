@@ -179,7 +179,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
             /*-1: take all records*/
             if (pageSize != -1)
-                query = query.Take(pageSize);            
+                query = query.OrderBy(x => x.InventoryName).Take(pageSize);            
 
             const string Delimeter = "; ";
 

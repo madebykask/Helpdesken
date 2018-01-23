@@ -135,12 +135,9 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
                 query = query.Where(x => x.Department_Id == departmentId);
             }
             if (recordCount.HasValue)
-                query = query.Take(recordCount.Value);
+                query = query.OrderBy(x => x.PrinterName).Take(recordCount.Value);
 
-            var anonymus =
-                query.Select(
-                    x =>
-                    new
+            var anonymus = query.Select(x => new
                         {
                             Entity = x,
                             RoomName = x.Room.Name,

@@ -475,7 +475,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 }
             }
             if (recordsCount.HasValue)
-                query = query.Take(recordsCount.Value);
+                query = query.OrderBy(x => x.ComputerName).Take(recordsCount.Value);
             var overviews = MapToComputerOverview(query);
             return overviews;
         }
