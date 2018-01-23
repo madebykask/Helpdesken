@@ -6728,7 +6728,7 @@ GO
 
 If not exists (select * from tbltext where id = 1921)
 begin
-	insert into tbltext (id, TextString, TextType) VALUES (1921, 'LogNoteDate', 1)
+	insert into tbltext (id, TextString, TextType) VALUES (1921, 'Log Note Date', 1)
 end
 
 GO
