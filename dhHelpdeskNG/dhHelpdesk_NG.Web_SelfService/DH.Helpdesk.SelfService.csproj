@@ -810,6 +810,7 @@
     <Content Include="Views\Case\MultiCustomerCaseOverview.cshtml" />
     <Content Include="Views\Case\_SearchError.cshtml" />
     <Content Include="Views\Case\_CaseInformation.cshtml" />
+    <Content Include="Views\Case\_ExtendedCaseControlPanel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">

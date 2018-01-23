@@ -788,7 +788,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             //Get from baseCase path
             var basePath = _masterDataService.GetFilePath(customerId);
 
-            if (!string.IsNullOrEmpty(caseFileKey))
+            if (!string.IsNullOrWhiteSpace(caseFileKey))
             {
                 var temporaryFiles = _userTemporaryFilesStorage.GetFiles(caseFileKey, ModuleName.Cases);
                 var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseId, userId)).ToList();
@@ -828,7 +828,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 var case_ = _universalCaseService.GetCase(caseId);
 
                 SaveCaseFiles(model.CaseDataModel.CaseFileKey, case_.Customer_Id, caseId, localUserId);
-                
+
                 if (ConfigurationService.AppSettings.ShowConfirmAfterCaseRegistration)
                 {
                     return RedirectToCaseConfirmation("Your case has been successfully registered.", string.Empty);
