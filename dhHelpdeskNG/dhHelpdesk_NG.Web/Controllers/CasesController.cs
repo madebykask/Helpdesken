@@ -2079,6 +2079,18 @@ namespace DH.Helpdesk.Web.Controllers
             });
         }
 
+        [HttpGet]
+        public JsonResult GetStateSecondary(int id)
+        {
+            var state = _caseService.GetCaseSubStatus(id) ?? new StateSecondary();
+            return Json(new
+            {
+                state.Id,
+                state.StateSecondaryId,
+                StateSecondaryName = state.Name
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult ChangeStatus(int? id)
         {
             int workinggroupId = 0;

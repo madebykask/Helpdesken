@@ -1,27 +1,4 @@
-﻿/*
-Used with iframeResizer.js:
-This library enables the automatic resizing of the height and width of both same and cross domain iFrames to fit the contained content.
-Place iframeResizer.contentWindow.min.js in the page contained within the iframe.
-*/
-
-var iframeOptions = {
-    log: false,                                                         // Enable console logging
-    sizeHeight: true,
-    checkOrigin: false,                                                 // Not sure if this works or not, DL
-    enablePublicMethods: true,                                          // Enable methods within iframe hosted page
-    resizedCallback: function (messageData) {                           // Callback fn when resize is received     
-    },
-    bodyMargin: '0 0 200px 0',
-    messageCallback: function (messageData) {                           // Callback fn when message is received
-        if (messageData.message === 'cancelCase') {
-            var elem = $('#case-action-close');
-            location.href = elem.attr('href');
-        }
-    },
-    closedCallback: function (id) {                                     // Callback fn when iFrame is closed
-    }
-};
-
+﻿
 var dhform = function (options) {
     "use strict";
     var _this = this;
@@ -42,6 +19,26 @@ var dhform = function (options) {
                              '  </div>' +
                              '</div>';
 
+    
+    // Used with iframeResizer.js:
+    // This library enables the automatic resizing of the height and width of both same and cross domain iFrames to fit the contained content.
+    // Place iframeResizer.contentWindow.min.js in the page contained within the iframe.
+    _this.iframeOptions = {
+        log: false,                                                         // Enable console logging
+        sizeHeight: true,
+        checkOrigin: false,                                                 // Not sure if this works or not, DL
+        enablePublicMethods: true,                                          // Enable methods within iframe hosted page
+        resizedCallback: function (messageData) {                           // Callback fn when resize is received     
+        },
+        bodyMargin: '0 0 200px 0',
+        messageCallback: function (data) {                                  // Callback fn when message is received
+            //data:{iframe,message}
+            _this.processMessage(data);
+        },
+        closedCallback: function (id) {                                     // Callback fn when iFrame is closed
+        }
+    };
+
     (function () {
         if (_this._options.modal == 0) {
             $('#loadContainer').on('click', function (event) {
@@ -60,7 +57,7 @@ var dhform = function (options) {
 
             $(document).on('hidden', '#' + _this._modalId, function () {
                 _this.closeModal();
-            })
+            });
         }
         else if (_this._options.modal == 2) {
             _this._formAreaId = 'dh-form-on-case-area';
@@ -69,6 +66,51 @@ var dhform = function (options) {
         }
     })();
 };
+
+dhform.prototype.processMessage = function(messageData) {
+    "use strict";
+    
+    var message = messageData && messageData.message;
+    
+    //keep for compatibility in case eForms have not been updated yet with new msg format (ect.js)
+    if (message === 'cancelCase') { 
+        cancelCase();
+        return;
+    }
+
+    if (message && message.type) {
+        var msgType = message.type || '';
+
+        if (msgType === 'cancelCase') {
+            this.cancelCase();
+        }
+
+        if (msgType === 'refreshData' && message.caseStatus) {
+            this.updateCaseStatus(messageData.message);
+        }
+    }
+};
+
+dhform.prototype.cancelCase = function () {
+    var elem = $('#case-action-close');
+    location.href = elem.attr('href');
+};
+
+dhform.prototype.updateCaseStatus = function () {
+    var caseId = $('#case__Id').val();
+    
+    $.getJSON('/Cases/GetStateSecondary/' + caseId)
+        .done(function (res) {
+            if (res && res.Id) {
+                $("#case__StateSecondary_Id").val(res.Id);
+                var subStateName$ = $("#subStateName");
+                if (subStateName$.length)
+                    subStateName$.val(res.StateSecondaryName);
+            }
+        }).fail(function (err) {
+            console.error(err);
+        });
+}
 
 dhform.prototype.progress = function () {
     "use strict";
@@ -101,7 +143,7 @@ dhform.prototype.load = function (options) {
     $('<iframe id="test" class="hidden2" scrolling="no" frameBorder="0" width="100%" src="' + options.url + '"></iframe>').appendTo(_this._formArea);
 
     $('[id*=test]').load(function () {
-        $('#test').iFrameResize(iframeOptions);
+        $('#test').iFrameResize(_this.iframeOptions);
         _this.progress();
     });
 };
@@ -148,7 +190,7 @@ dhform.prototype.loadModal = function (options) {
     $('<iframe id="test" class="hidden2" scrolling="no" frameBorder="0" width="100%"src="' + options.url + '"></iframe>').appendTo(_this._formArea);
 
     $('[id*=test]').load(function () {
-        $('#test').iFrameResize(iframeOptions);
+        $('#test').iFrameResize(_this.iframeOptions);
         _this.progress();
     });
 };

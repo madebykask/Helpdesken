@@ -140,6 +140,8 @@ namespace DH.Helpdesk.Services.Services
 
         MyCase[] GetMyCases(int userId, int? count = null);
 
+        StateSecondary GetCaseSubStatus(int caseId);
+
         CustomerCases[] GetCustomersCases(int[] customerIds, int userId);
 
         List<RelatedCase> GetCaseRelatedCases(int caseId, int customerId, string userId, UserOverview currentUser);
@@ -637,6 +639,11 @@ namespace DH.Helpdesk.Services.Services
         public MyCase[] GetMyCases(int userId, int? count = null)
         {
             return this._caseRepository.GetMyCases(userId, count);
+        }
+
+        public StateSecondary GetCaseSubStatus(int caseId)
+        {
+            return this._caseRepository.GetCaseSubStatus(caseId);
         }
 
         public CustomerCases[] GetCustomersCases(int[] customerIds, int userId)
