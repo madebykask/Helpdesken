@@ -761,41 +761,41 @@ function CaseInitForm() {
             var objPos = getObjectPosInView(target[0].id);
             var subMenu = '#subDropDownMenu_' + target[0].id;
             $(subMenu).css('bottom', 'auto');
-            $(subMenu).css('top', 'auto');
-
             $(subMenu).css({
                 position: "fixed",
                 top: $(window).height() - objPos.ToDown + "px"
             });
-            $(subMenu).css("left", $(target).offset().left + $(target).innerWidth() + "px");
-            $(subMenu).css("max-height", $(window).height() - objPos.ToDown + "px");
+
+            var targetPos = $(target)[0].getBoundingClientRect();
+            $(subMenu).css("left", targetPos.left + $(target).innerWidth() + "px");
+            $(subMenu).css("max-height", $(window).innerHeight() - objPos.ToDown + "px");
             $(target).children(".subddMenu").children(".dropdown-submenu").css("position", "static");
 
             var isChrome = navigator.userAgent.toLowerCase().indexOf("chrome") > -1;
             if (isChrome) {
                 if ($(target).parent().hasClass("parentddMenu") === false && $(subMenu).get(0).scrollHeight <= $(subMenu).innerHeight())
-                    $(subMenu).css("left", $(target).offset().left + $(target).innerWidth() - $(target).position().left + "px");
+                    $(subMenu).css("left", targetPos.left + $(target).innerWidth() - $(target).position().left + "px");
             }
 
-            var offset = 0;
-            var rect = $(subMenu)[0].getBoundingClientRect();
-            if ((rect.top + rect.height) > window.innerHeight)
-                offset = (rect.top + rect.height) - window.innerHeight;
-            if (offset > 0) {
-                var top = $(window).height() - objPos.ToDown - offset;
-                $(subMenu).css("top", top);
+            var submenuPos = $(subMenu)[0].getBoundingClientRect();
+            if ((submenuPos.top + submenuPos.height) > window.innerHeight) {
+                var offset = (submenuPos.top + submenuPos.height) - window.innerHeight;
+                if (offset > 0) {
+                    var top = $(window).height() - objPos.ToDown - offset;
+                    $(subMenu).css("top", top);
+                }
             }
         }
     }
 
     $("ul.dropdown-menu.subddMenu.parentddMenu").on("mouseenter", function () {
-        var html = $("html");
-        html.css("overflow", "hidden");
+        var x = window.scrollX;
+        var y = window.scrollY;
+        window.onscroll = function () { window.scrollTo(x, y); };
     });
 
     $("ul.dropdown-menu.subddMenu.parentddMenu").on("mouseleave", function () {
-        var html = $("html");
-        html.css("overflow", "auto");
+        window.onscroll = function () { };
     });
 
     $("#dropDownBtn").on("click", function() {
