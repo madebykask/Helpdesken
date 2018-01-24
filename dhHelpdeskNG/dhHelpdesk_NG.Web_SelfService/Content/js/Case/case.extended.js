@@ -487,7 +487,7 @@ ExtendedCasePage.prototype.init = function (params) {
     self.ApplicationType = params.applicationType;
     var lastError = params.lastError;
     var lastClickTimeStamp = null;
-    var clickTimeStampDelay = 2000;
+    var nextAllowedClickDelay = 5000;
 
     /// controls binding
     self.$Form = $('#extendedCaseForm');
@@ -498,7 +498,7 @@ ExtendedCasePage.prototype.init = function (params) {
     self.$selectedWorkflow = $('#SelectedWorkflowStep');
 
     self.$btnSave.on('click', function (e) {
-        if (lastClickTimeStamp == null || lastClickTimeStamp + clickTimeStampDelay < event.timeStamp) {
+        if (lastClickTimeStamp == null || lastClickTimeStamp + nextAllowedClickDelay < event.timeStamp) {
             lastClickTimeStamp = e.timeStamp;
         } else {
             return;
@@ -510,7 +510,7 @@ ExtendedCasePage.prototype.init = function (params) {
    
     self.$btnGo.on("click", function (e) {
         e.preventDefault();
-        if (lastClickTimeStamp == null || lastClickTimeStamp + clickTimeStampDelay < event.timeStamp) {
+        if (lastClickTimeStamp == null || lastClickTimeStamp + nextAllowedClickDelay < event.timeStamp) {
             lastClickTimeStamp = e.timeStamp;
         } else {
             return;

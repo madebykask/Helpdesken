@@ -143,9 +143,10 @@
 
 @Scripts.Render("~/Content/js/Case/extendedCase")
 @Scripts.Render("~/Content/js/Case/edit")
-
-@Html.Partial("_ExtendedCaseControlPanel", Model)
-
+@if (Model.CaseId == 0 || (Model.WorkflowSteps != null && Model.WorkflowSteps.Any()))
+{
+    @Html.Partial("_ExtendedCaseControlPanel", Model)
+}
 @using (Html.BeginForm("ExtendedCase", "case", null, FormMethod.Post, new { id = "extendedCaseForm" }))
 {
     // Base
@@ -410,5 +411,7 @@
 
 </div>
 
-
-@Html.Partial("_ExtendedCaseControlPanel", Model)
+@if (Model.CaseId == 0 || (Model.WorkflowSteps != null && Model.WorkflowSteps.Any()))
+{
+    @Html.Partial("_ExtendedCaseControlPanel", Model)
+}

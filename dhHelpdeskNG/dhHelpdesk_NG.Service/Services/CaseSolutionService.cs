@@ -306,10 +306,10 @@ namespace DH.Helpdesk.Services.Services
             }).OrderBy(c => c.SortOrder).ToList();
 
 
-            return templates.Where(c => showWorkflowStep(customerId, _case, c.CaseTemplateId, user, applicationType, templateId) == true).ToList();
+            return templates.Where(c => ShowWorkflowStep(customerId, _case, c.CaseTemplateId, user, applicationType, templateId) == true).ToList();
         }
 
-        private bool showWorkflowStep(int customerId, Case _case, int caseSolution_Id, UserOverview user, ApplicationType applicationType, int? templateId)
+        private bool ShowWorkflowStep(int customerId, Case _case, int caseSolution_Id, UserOverview user, ApplicationType applicationType, int? templateId)
         {
 
             //ALL conditions must be met
