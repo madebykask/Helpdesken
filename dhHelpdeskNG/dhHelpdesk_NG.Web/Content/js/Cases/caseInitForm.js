@@ -789,13 +789,14 @@ function CaseInitForm() {
     }
 
     $("ul.dropdown-menu.subddMenu.parentddMenu").on("mouseenter", function () {
-        var x = window.scrollX;
-        var y = window.scrollY;
-        window.onscroll = function () { window.scrollTo(x, y); };
+        var html = $("html");
+        html.data('previous-overflow', html.css('overflow'));
+        html.css("overflow", "hidden");
     });
 
     $("ul.dropdown-menu.subddMenu.parentddMenu").on("mouseleave", function () {
-        window.onscroll = function () { };
+        var html = $("html");
+        html.css('overflow', html.data('previous-overflow'));
     });
 
     $("#dropDownBtn").on("click", function() {
