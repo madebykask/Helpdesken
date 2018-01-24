@@ -193,8 +193,8 @@ namespace DH.Helpdesk.Services.Services
 
         public List<GroupWithEmails> GetWorkingGroupsWithActiveEmails(int customerId, bool includeAdmins = true)
         {
-            var workingGroupOverviews = this.workingGroupRepository.FindActiveIdAndNameOverviews(customerId);
-            var workingGroupIds = workingGroupOverviews.Select(g => g.Id).ToList();
+            var workingGroups = this.workingGroupRepository.GetMany(w => w.Customer_Id == customerId).ToList();
+            var workingGroupIds = workingGroups.Select(g => g.Id).ToList();
 
             var workingGroupsUserIds = this.userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds, includeAdmins, true);
             
@@ -202,25 +202,35 @@ namespace DH.Helpdesk.Services.Services
 
             var userIdsWithEmails = this.userRepository.FindUsersEmails(userIds, true);
 
-            var workingGroupsWithEmails = new List<GroupWithEmails>(workingGroupOverviews.Count);
+            var workingGroupsWithEmails = new List<GroupWithEmails>(workingGroups.Count);
 
-            foreach (var workingGroupOverview in workingGroupOverviews)
+            foreach (var workingGroupOverview in workingGroups)
             {
-                var groupUserIdsWithEmails = workingGroupsUserIds.FirstOrDefault(g => g.WorkingGroupId == workingGroupOverview.Id);
-                if (groupUserIdsWithEmails != null)
+                var groupEmails = new List<string>();
+
+                if (!string.IsNullOrWhiteSpace(workingGroupOverview.EMail))
                 {
-                    var groupEmails =
+                    groupEmails.Add(workingGroupOverview.EMail);
+                }
+                else
+                {
+                    var groupUserIdsWithEmails =
+                        workingGroupsUserIds.FirstOrDefault(g => g.WorkingGroupId == workingGroupOverview.Id);
+
+                    if (groupUserIdsWithEmails == null) continue;
+
+                    groupEmails =
                         userIdsWithEmails.Where(e => groupUserIdsWithEmails.UserIds.Contains(e.ItemId))
                             .Select(e => e.Email)
                             .ToList();
+               }
 
-                    var groupWithEmails = new GroupWithEmails(
-                        workingGroupOverview.Id,
-                        workingGroupOverview.Name,
-                        groupEmails);
+                var groupWithEmails = new GroupWithEmails(
+                    workingGroupOverview.Id,
+                    workingGroupOverview.WorkingGroupName,
+                    groupEmails);
 
-                    workingGroupsWithEmails.Add(groupWithEmails);
-                }
+                workingGroupsWithEmails.Add(groupWithEmails);
             }
 
             return workingGroupsWithEmails;
