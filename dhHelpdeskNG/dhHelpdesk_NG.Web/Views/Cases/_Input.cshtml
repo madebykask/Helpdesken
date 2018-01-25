@@ -303,17 +303,17 @@
                                                 @if (Model.caseFieldSettings.IsFieldVisible(GlobalEnums.TranslationCaseFields.AddFollowersBtn))
                                                 {
                                                     <td>
-                                                        @Html.HiddenFor(model => model.FollowerUsers, new { @readonly = "true", id = "caseFollowerUsersInput" })
+                                                        @Html.HiddenFor(model => model.FollowerUsers, new { @readonly = "true", id = "extraEmailsInput" })
                                                         @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseSolutionFields.AddFollowersBtn))
                                                         {
-                                                            @Html.Partial("ModalDialogs/_CaseAddFollowers", Model.FollowersModel)
-                                                            <a href="#case_add_followers_btn" role="button" class="btn case-usersearch-btn" data-src="case" data-toggle="modal">@Translation.GetCoreTextTranslation("Välj följare")</a>
-                                                            <div id="fakeCaseFollowerUsersInput" contenteditable="true" class="case-send-emails-div case-usersearch-textarea @Model.getSearchEmailClass(CaseSectionType.Initiator)"></div>
+                                                            @Html.Partial("ModalDialogs/_ExtraEmails", Model.FollowersModel)
+                                                            <a href="#add_extra_emails_btn" role="button" class="btn case-usersearch-btn" data-src="case" data-toggle="modal">@Translation.GetCoreTextTranslation("Välj följare")</a>
+                                                            <div id="fakeExtraEmailsInput" contenteditable="true" class="case-send-emails-div case-usersearch-textarea @Model.getSearchEmailClass(CaseSectionType.Initiator)"></div>
                                                         }
                                                         else
                                                         {
-                                                            <a href="#case_add_followers_btn" role="button" class="btn case-usersearch-btn disabled" disabled="true" data-toggle="modal">@Translation.GetCoreTextTranslation("Välj följare")</a>
-                                                            <div id="fakeCaseFollowerUsersInput" contenteditable="false" class="case-send-emails-div-readonly case-send-emails-div case-usersearch-textarea @Model.getSearchEmailClass(CaseSectionType.Initiator)"></div>
+                                                            <a href="#add_extra_emails_btn" role="button" class="btn case-usersearch-btn disabled" disabled="true" data-toggle="modal">@Translation.GetCoreTextTranslation("Välj följare")</a>
+                                                            <div id="fakeExtraEmailsInput" contenteditable="false" class="case-send-emails-div-readonly case-send-emails-div case-usersearch-textarea @Model.getSearchEmailClass(CaseSectionType.Initiator)"></div>
                                                         }
                                                     </td>
                                                 }

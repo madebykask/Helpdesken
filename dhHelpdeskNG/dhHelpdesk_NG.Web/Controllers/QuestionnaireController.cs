@@ -3,6 +3,7 @@ using DH.Helpdesk.BusinessData.Models.Questionnaire;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Infrastructure.Helpers;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -45,11 +46,13 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly IWorkingGroupService _workingGroupService;
 
-        private readonly IInfoService _infoService;
-
         private readonly ILanguageService _languageService;
 
         private readonly IMailTemplateService _mailTemplateService;
+        private readonly IUserService _userService;
+        private readonly ISettingService _settingService;
+        private readonly IEmailGroupService _emailGroupService;
+        private readonly IEmailService _emailService;
 
         #endregion
 
@@ -68,7 +71,10 @@ namespace DH.Helpdesk.Web.Controllers
             IMasterDataService masterDataService,
             ILanguageService languageService,
             IMailTemplateService mailTemplateService,
-            IInfoService infoService)
+            IUserService userService,
+            IEmailGroupService emailGroupService,
+            IEmailService emailService,
+            ISettingService settingService)
             : base(masterDataService)
         {
             _questionnaireService = questionnaireService;
@@ -80,9 +86,12 @@ namespace DH.Helpdesk.Web.Controllers
             _caseTypeService = caseTypeService;
             _productAreaService = productAreaService;
             _workingGroupService = workingGroupService;
-            _infoService = infoService;
             _languageService = languageService;
             _mailTemplateService = mailTemplateService;
+            _userService = userService;
+            _settingService = settingService;
+            _emailGroupService = emailGroupService;
+            _emailService = emailService;
         }
 
         #endregion
@@ -741,6 +750,11 @@ namespace DH.Helpdesk.Web.Controllers
                         Text = x.Name
                     }).ToList());
 
+            var responsibleUsersList = _userService.GetAvailablePerformersOrUserId(SessionFacade.CurrentCustomer.Id);
+            var customerSettings = _settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+            var extraEmailsModel = CommonHelper.CreateNewSendToDialogModel(SessionFacade.CurrentCustomer.Id, responsibleUsersList.ToList(), customerSettings,
+                _emailGroupService, _workingGroupService, _emailService);
+
             var model = new CircularModel(
                 circularId,
                 questionnaireId,
@@ -758,7 +772,8 @@ namespace DH.Helpdesk.Web.Controllers
                 status,
                 connectedCases,
                 extraEmailsStr,
-                templates);
+                templates,
+                extraEmailsModel);
 
             var lst = new List<SelectListItem>();
             lst.Add(new SelectListItem { Text = "5", Value = "5" });

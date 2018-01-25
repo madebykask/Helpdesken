@@ -2,6 +2,7 @@
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Services.DisplayValues.Questionnaire;
+using DH.Helpdesk.Web.Models.Shared;
 
 namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 {
@@ -36,7 +37,8 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
             CircularStates circularState,
             List<ConnectedToCircularOverview> connectedCases,
             string extraEmails,
-            List<SelectListItem> mailTemplates)
+            List<SelectListItem> mailTemplates,
+            SendToDialogModel extraEmailsModel)
         {
             CaseFilter = new CircularCaseFilter();
             Id = id;
@@ -56,6 +58,7 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
             ConnectedCases = connectedCases;
             ExtraEmails = extraEmails;
             MailTemplates = mailTemplates;
+            ExtraEmailsModel = extraEmailsModel;
         }
 
         //[IsId]
@@ -104,5 +107,7 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
         public IList<SelectListItem> MailTemplates { get; set; }
 
         public int? MailTemplateId { get; set; }
+
+        public SendToDialogModel ExtraEmailsModel { get; set; }
     }
 }

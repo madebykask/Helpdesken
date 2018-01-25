@@ -222,7 +222,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 var c = _caseTypeService.GetCaseType(model.CaseType_Id);
                 if (c != null)
                 {
-                    c = TranslateHelper.TranslateCaseType(c);
+                    c = Translation.TranslateCaseType(c);
                     model.ParentPath_CaseType = c.getCaseTypeParentPath();
                 }
             }

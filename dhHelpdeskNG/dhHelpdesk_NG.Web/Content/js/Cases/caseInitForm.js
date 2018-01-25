@@ -767,11 +767,11 @@ function CaseInitForm() {
             });
 
             var targetPos = $(target)[0].getBoundingClientRect();
-            $(subMenu).css("left", targetPos.left + $(target).innerWidth() + "px");
+            $(subMenu).css("left", targetPos.left + $(target).width() + "px");
             $(subMenu).css("max-height", $(window).innerHeight() - objPos.ToDown + "px");
             $(target).children(".subddMenu").children(".dropdown-submenu").css("position", "static");
 
-            var isChrome = navigator.userAgent.toLowerCase().indexOf("chrome") > -1;
+            var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
             if (isChrome) {
                 if ($(target).parent().hasClass("parentddMenu") === false && $(subMenu).get(0).scrollHeight <= $(subMenu).innerHeight())
                     $(subMenu).css("left", targetPos.left + $(target).innerWidth() - $(target).position().left + "px");

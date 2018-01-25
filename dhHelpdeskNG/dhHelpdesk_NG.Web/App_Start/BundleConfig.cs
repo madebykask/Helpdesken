@@ -18,7 +18,6 @@ namespace DH.Helpdesk.Web
             public const string AttributesValidation = "~/bundles/jqueryattrval";
             public const string InventoryUserSearch = ("~/bundles/inventory/inventorysearch");
             public const string CaseIntLogEmailSearch = ("~/bundles/case/caseintlogemailsearch");
-            public const string CaseAddFollowersSearch = ("~/bundles/case/caseaddfollowerssearch");
             public const string UserSearchCommon = ("~/bundles/common/usersearchcommon");
             public const string CaseCharge = ("~/bundles/case/CaseCharge");
             public const string Select2 = "~/bundles/select2";
@@ -30,7 +29,6 @@ namespace DH.Helpdesk.Web
             public const string CaseAttachExistingFiles = "~/bundles/case/attachexfile";
             public const string ConfirmationDialog = "~/bundles/confirmdialog";
             public const string InventoryOverview = "~/bundles/inventory/overview";
-            public const string EditCircular = "~/bundles/questionnaire/editcircular";
 
         }
 
@@ -455,9 +453,6 @@ namespace DH.Helpdesk.Web
             bundles.Add(new ScriptBundle(ScriptNames.CaseIntLogEmailSearch).Include(
                 "~/Content/js/Cases/Dialogs/_caseIntLogSearch.js",
                 "~/Content/js/Common/userSearchCommon.js"));
-            bundles.Add(new ScriptBundle(ScriptNames.CaseAddFollowersSearch).Include(
-                "~/Content/js/Cases/Dialogs/_caseAddFollowersSearch.js",
-                "~/Content/js/Common/userSearchCommon.js"));
             bundles.Add(new ScriptBundle(ScriptNames.UserSearchCommon).Include(
                 "~/Content/js/Common/userSearchCommon.js"));
             bundles.Add(new ScriptBundle(ScriptNames.CaseConnectToParent).Include(
@@ -481,9 +476,6 @@ namespace DH.Helpdesk.Web
 
             bundles.Add(new ScriptBundle(ScriptNames.InventoryOverview).Include(
                     "~/Areas/Inventory/Scripts/inventoryOverview.js"));
-
-            bundles.Add(new ScriptBundle(ScriptNames.EditCircular).Include(
-                    "~/Content/js/Questionnaire/editCircular.js"));
 
             RegisterOrdersAreaBundles(bundles);
             RegisterInvoicesAreaBundles(bundles);

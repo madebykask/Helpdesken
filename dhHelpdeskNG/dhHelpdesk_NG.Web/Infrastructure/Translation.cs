@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using DH.Helpdesk.Domain;
 using DH.Helpdesk.Web.Infrastructure.Cache;
 
 namespace DH.Helpdesk.Web.Infrastructure
@@ -286,6 +287,16 @@ namespace DH.Helpdesk.Web.Infrastructure
                             "Översikt"                                                        
                         };
             return ret;
+        }
+
+        internal static CaseType TranslateCaseType(CaseType caseType)
+        {
+            if (caseType.ParentCaseType != null)
+                caseType.ParentCaseType = TranslateCaseType(caseType.ParentCaseType);
+
+            caseType.Name = GetCoreTextTranslation(caseType.Name);
+
+            return caseType;
         }
     }
 

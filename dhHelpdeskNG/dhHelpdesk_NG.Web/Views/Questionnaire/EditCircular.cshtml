@@ -64,7 +64,7 @@
                                 @Html.HiddenFor(m => m.QuestionnaireId)
                                 @Html.HiddenFor(m => m.State)
                                 @Html.Hidden("backStatusId", (int?) ViewBag.BackStatusId)
-                                @Html.HiddenFor(m => m.ExtraEmails)
+                                @Html.HiddenFor(m => m.ExtraEmails, new { @readonly = "true", id = "extraEmailsInput" })
                                 <div id="hiddenDiv" style="display: none"></div>
                                 <table class="tableform">
                                     <tr>
@@ -76,10 +76,10 @@
                                             @Html.ValidationMessageFor(model => model.CircularName)
                                         </td>
                                         <td class="span5">
-                                            @Translation.GetCoreTextTranslation("Extra") @Translation.GetCoreTextTranslation("E-post").ToLower()
+                                            <a href="#add_extra_emails_btn" role="button" class="btn case-usersearch-btn" data-src="circular" data-toggle="modal">@Translation.GetCoreTextTranslation("Extra") @Translation.GetCoreTextTranslation("E-post").ToLower()</a>
                                         </td>
                                         <td class="span9">
-                                            <div id="fakeCircularExtraEmailsInput" contenteditable="true" style="height: 75px;" class="case-usersearch-textarea case-send-emails-div"></div>
+                                            <div id="fakeExtraEmailsInput" contenteditable="true" class="case-usersearch-textarea case-send-emails-div"></div>
                                         </td>
                                     </tr>
                                     <tr>
@@ -192,21 +192,24 @@
         </div>
     </div>
 </div>
-
-@Scripts.Render(BundleConfig.ScriptNames.UserSearchCommon)
-@Scripts.Render(BundleConfig.ScriptNames.EditCircular)
+@Html.Partial("~/Views/Cases/ModalDialogs/_ExtraEmails.cshtml", Model.ExtraEmailsModel)
 
 <script type="text/javascript">
-    $(function() {
-        document.parameters = {
-            emailNotValid: '@Translation.GetForJS("E-postadress är inte giltig.")',
-            emailAlreadyAdded: '@Translation.GetForJS("E-postadress redan tillagd.")',
-            adminLabel: '@Translation.GetForJS("Handläggare")',
-            emailLabel: '@Translation.GetForJS("E-postgrupp")',
-            initLabel: '@Translation.GetForJS("Anmälare")',
-            wgLabel: '@Translation.GetForJS("Driftgrupp")',
-            noResultLabel: '@Translation.GetForJS("Inga resultat matchar")'
+    $("#subbut").click(function () {
+        if (!$("#circular_new_form").valid()) {
+            return;
         }
-        InitEditCircular();
+        $.each($('#circular_case_grid_form input').serializeArray(), function (i, obj) {
+            $('<input type="hidden">').prop(obj).appendTo($('#circular_new_form'));
+        });
+        $.each($('#circular_case_filter_form input:not(:hidden), select').serializeArray(), function (i, obj) {
+            $('<input type="hidden">').prop(obj).appendTo($('#hiddenDiv'));
+        });
+
+        $("#circular_new_form").submit();
+    });
+
+    $("#async_subbut").click(function () {
+        $("#circular_case_filter_form").submit();
     });
 </script>

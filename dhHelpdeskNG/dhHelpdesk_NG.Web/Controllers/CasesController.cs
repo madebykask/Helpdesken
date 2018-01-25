@@ -1651,7 +1651,7 @@ namespace DH.Helpdesk.Web.Controllers
                     var responsibleUsersAvailable = this._userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
                     m.OutFormatter = new OutputFormatter(cs.IsUserFirstLastNameRepresentation == 1, userTimeZone);
                     m.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(cs, isAddEmpty);
-                    m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList(), cs);
+                    m.SendToDialogModel = CommonHelper.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList(), cs, _emailGroupService, _workingGroupService, _emailService);
                     m.MinWorkingTime = cs.MinRegWorkingTime;
                     m.CaseMailSetting = new CaseMailSetting(
                         customer.NewCaseEmailList,
@@ -5306,8 +5306,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
             m.Languages = this._languageService.GetActiveLanguages();
-            m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting, false);
-            m.FollowersModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting);
+            m.SendToDialogModel = CommonHelper.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting, _emailGroupService, _workingGroupService, _emailService, false);
+            m.FollowersModel = CommonHelper.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting, _emailGroupService, _workingGroupService, _emailService);
             m.CaseLog = this._logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
             m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString(global::System.Globalization.CultureInfo.InvariantCulture);
             m.LogKey = m.CaseLog.LogGuid.ToString();
@@ -5678,7 +5678,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);
                 if (c != null)
                 {
-                    c = TranslateHelper.TranslateCaseType(c);
+                    c = Translation.TranslateCaseType(c);
                     m.ParantPath_CaseType = c.getCaseTypeParentPath();
                     if (isCreateNewCase && c.User_Id.HasValue)
                     {
@@ -6634,47 +6634,6 @@ namespace DH.Helpdesk.Web.Controllers
             #endregion
 
             return ret;
-        }
-
-        private SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<DHDomain.User> users, Setting customerSetting, bool includeAdmins = true)
-        {
-            var emailGroups = _emailGroupService.GetEmailGroupsWithEmails(customerId);
-            var workingGroups = _workingGroupService.GetWorkingGroupsWithActiveEmails(customerId, includeAdmins);
-            var administrators = new List<ItemOverview>();
-
-            if (users != null)
-            {
-                var validUsers = users.Where(u => u.IsActive != 0 &&
-                                                 u.Performer == 1 &&
-                                                 _emailService.IsValidEmail(u.Email) &&
-                                                 !String.IsNullOrWhiteSpace(u.Email)).ToList();
-
-                if (customerSetting.IsUserFirstLastNameRepresentation == 1)
-                {
-                    foreach (var u in users.OrderBy(it => it.FirstName).ThenBy(it => it.SurName))
-                        if (u.IsActive == 1 && u.Performer == 1 && _emailService.IsValidEmail(u.Email) && !String.IsNullOrWhiteSpace(u.Email))
-                            administrators.Add(new ItemOverview(string.Format("{0} {1}", u.FirstName, u.SurName), u.Email));
-                }
-                else
-                {
-                    foreach (var u in users.OrderBy(it => it.SurName).ThenBy(it => it.FirstName))
-                        if (u.IsActive == 1 && u.Performer == 1 && _emailService.IsValidEmail(u.Email) && !String.IsNullOrWhiteSpace(u.Email))
-                            administrators.Add(new ItemOverview(string.Format("{0} {1}", u.SurName, u.FirstName), u.Email));
-                }
-            }
-
-            var emailGroupList = new MultiSelectList(emailGroups, "Id", "Name");
-            var emailGroupEmails = emailGroups.Select(g => new GroupEmailsModel(g.Id, g.Emails)).ToList();
-            var workingGroupList = new MultiSelectList(workingGroups, "Id", "Name");
-            var workingGroupEmails = workingGroups.Select(g => new GroupEmailsModel(g.Id, g.Emails)).ToList();
-            var administratorList = new MultiSelectList(administrators, "Value", "Name");
-
-            return new SendToDialogModel(
-                emailGroupList,
-                emailGroupEmails,
-                workingGroupList,
-                workingGroupEmails,
-                administratorList);
         }
 
         private CaseSettingModel GetCaseSettingModel(int customerId, int userId,

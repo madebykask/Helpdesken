@@ -2,7 +2,7 @@
 @using DH.Helpdesk.Web
 @model DH.Helpdesk.Web.Models.Shared.SendToDialogModel
 
-@Scripts.Render(BundleConfig.ScriptNames.CaseAddFollowersSearch)
+@Scripts.Render(BundleConfig.ScriptNames.UserSearchCommon)
 
 <script type="text/javascript">
     $(function() {
@@ -17,11 +17,11 @@
         var admins = @Html.SerializeObjectToJson(Model.Administrators.Items);
         var emailGroups = @Html.SerializeObjectToJson(Model.EmailGroups.Items);
         var workingGroups = @Html.SerializeObjectToJson(Model.WorkingGroups.Items);
-        InitCaseAddFollowersSearch(admins, emailGroups, workingGroups);
+        InitExtraEmailsSearch(admins, emailGroups, workingGroups);
     });
 </script>
 
-<div id="case_add_followers_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true" style="display: none;">
+<div id="extra_emails_popup" role="dialog" class="modal fade" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -29,30 +29,30 @@
                 <h5>@Translation.GetCoreTextTranslation("Välj E-post")</h5>
             </div>
             <div class="modal-body overflow-visible">
-                <div id="caseAddFollowersModalInput" contenteditable="true" class="case-send-emails-div case-popup-div"></div>
+                <div id="extraEmailsModalInput" contenteditable="true" class="case-send-emails-div case-popup-div"></div>
             </div>
             <div class="modal-body overflow-visible case-dropdown-area">
-                <div id="caseFollowers_emailGroupsDiv" class="case-dropdown-div">
+                <div id="extraEmails_emailGroupsDiv" class="case-dropdown-div">
                     @Translation.GetCoreTextTranslation("E-postgrupp")<br/>
-                    <select id="caseFollowersEmailGroupsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
+                    <select id="extraEmailsEmailGroupsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
                         @foreach (var emailGroup in Model.EmailGroups)
                         {
                             <option value="@emailGroup.Value">@emailGroup.Text</option>
                         }
                     </select>
                 </div>
-                <div id="caseFollowers_workingGroupsDiv" class="case-dropdown-div">
+                <div id="extraEmails_workingGroupsDiv" class="case-dropdown-div">
                     @Translation.GetCoreTextTranslation("Driftgrupp")<br/>
-                    <select id="caseFollowersWorkingGroupsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
+                    <select id="extraEmailsWorkingGroupsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
                         @foreach (var workingGroup in Model.WorkingGroups)
                         {
                             <option value="@workingGroup.Value">@workingGroup.Text</option>
                         }
                     </select>
                 </div>
-                <div id="caseFollowers_adminsDiv" class="case-dropdown-div">
+                <div id="extraEmails_adminsDiv" class="case-dropdown-div">
                     @Translation.GetCoreTextTranslation("Handläggare")<br/>
-                    <select id="caseFollowersAdministratorsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
+                    <select id="extraEmailsAdministratorsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
                         @foreach (var administrator in Model.Administrators)
                         {
                             <option value="@administrator.Value">@administrator.Text</option>

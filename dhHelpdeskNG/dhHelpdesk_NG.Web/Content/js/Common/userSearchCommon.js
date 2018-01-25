@@ -1,4 +1,118 @@
-﻿function onRemoveKeyDown(e, fakeInput, mainInput) {
+﻿function InitExtraEmailsSearch(admins, emailGroups, workingGroups) {
+
+    var mainInput = $("#extraEmailsInput");
+    var mainFakeInput = $("#fakeExtraEmailsInput");
+    var popupInput = $("#extraEmailsModalInput");
+    var searchSelected = false;
+
+    initEditableDiv();
+
+    $("a[href='#add_extra_emails_btn']").on("click", function () {
+        var $src = $(this);
+        var $target = $("#extra_emails_popup");
+        popupInput.html(getHtmlFromEmails(mainInput.val()));
+        $target.attr("data-src", $src.attr("data-src"));
+        $target.modal("show");
+    });
+
+    $("#extra_emails_popup").on("hide", function () {
+        $(".toast-container").removeClass("case-followers-toastmessage");
+        changeFakeInputValueForView();
+    });
+
+    $("#extra_emails_popup").on("shown", function () {
+        placeCaretAtEnd(popupInput);
+    });
+
+    $(".case-usersearch-multiselect").multiselect({
+        enableFiltering: true,
+        filterPlaceholder: "",
+        maxHeight: 250,
+        buttonClass: "btn",
+        buttonContainer: '<span class="btn-group" />',
+        buttonText: function (options) {
+            return '-- <i class="caret"></i>';
+        },
+        onChange: function (element, checked) {
+            if (element.parent().attr("id") === "extraEmailsEmailGroupsDropdown") {
+                appendDropdownsEmails(emailGroups, element.val());
+            }
+            if (element.parent().attr("id") === "extraEmailsWorkingGroupsDropdown") {
+                appendDropdownsEmails(workingGroups, element.val());
+            }
+            if (element.parent().attr("id") === "extraEmailsAdministratorsDropdown") {
+                checkAndAddEmailsFromDropdown(element.val());
+            }
+        }
+
+    });
+
+    function appendDropdownsEmails(array, selectedId) {
+        var arr = $.grep(array,
+                        function (a) {
+                            return a.Id == selectedId;
+                        });
+        for (var j = 0; j < arr[0].Emails.length; j++) {
+            checkAndAddEmailsFromDropdown(arr[0].Emails[j]);
+        }
+    }
+
+    mainFakeInput.html(getHtmlFromEmails(mainInput.val()));
+
+    mainFakeInput.typeahead(getUserSearchOptions(mainInput, mainFakeInput, popupInput));
+
+    mainFakeInput.keydown(function (e) {
+        if (e.keyCode === 8 || e.keyCode === 46) {
+            onRemoveKeyDown(e, mainFakeInput, mainInput);
+        }
+        if (e.keyCode === 13 || e.keyCode === 186 || e.keyCode === 32) {
+            onEnterKeyUp(e, mainFakeInput, mainInput);
+        }
+    });
+
+    mainFakeInput.on('blur',
+        function (e) {
+            onEnterKeyUp(e, mainFakeInput, mainInput);
+        });
+
+    popupInput.typeahead(getUserSearchOptions(mainInput, mainFakeInput, popupInput));
+
+    popupInput.keydown(function (e) {
+        if (e.keyCode === 8 || e.keyCode === 46) {
+            onRemoveKeyDown(e, popupInput, mainInput);
+        }
+        if (e.keyCode === 13 || e.keyCode === 186 || e.keyCode === 32) {
+            onEnterKeyUp(e, popupInput, mainInput);
+        }
+    });
+
+    popupInput.on('blur',
+        function (e) {
+            onEnterKeyUp(e, popupInput, mainInput);
+        });
+
+    function checkAndAddEmailsFromDropdown(value) {
+        if (isValidEmailAddress(value)) {
+            if (mainInput.val().indexOf(value) < 0) {
+                mainInput.val(mainInput.val() + value + ";");
+                popupInput.html(getHtmlFromEmails(mainInput.val()));
+            } else {
+                return false;
+            }
+            return true;
+        } else {
+            ShowToastModalMessage(value + " : " + document.parameters.emailNotValid, "error");
+            return false;
+        }
+    }
+
+    function changeFakeInputValueForView() {
+        var text = mainInput.val();
+        mainFakeInput.html(getHtmlFromEmails(text));
+    }
+}
+
+function onRemoveKeyDown(e, fakeInput, mainInput) {
     e.stopImmediatePropagation();
     var text = mainInput.val();
     var email = getEmailsToRemove();
