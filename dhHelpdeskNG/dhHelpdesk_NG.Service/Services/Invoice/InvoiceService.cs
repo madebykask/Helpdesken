@@ -245,10 +245,10 @@ namespace DH.Helpdesk.Services.Services.Invoice
 				             fileCase.Value.Item2
 					             .Where(x => x.Charge.ToBool()).Sum(x => x.InvoicePrice);
 
-				sb.AppendLine($"{caseInfo.CaseNumber}-{invoiceHeader_Id}\t{translations[0]}\t{caseInfo.Department.DepartmentName}" +
+                sb.AppendLine($"{caseInfo.CaseNumber}-{invoiceHeader_Id}\t{translations[0]}\t{caseInfo.Department.DepartmentName}" +
                               $"\t{caseInfo.Workinggroup?.Code}\t{translations[1]}:{caseInfo.CaseNumber}, {caseInfo.Caption}" +
 				              $"{(String.IsNullOrWhiteSpace(externalInvoices) ? "" : $", {translations[2]}: " + externalInvoices)}" +
-				              $"{(referenceNumber == null ? "" : $", {translations[3]}: " + referenceNumber)}\t{translations[4]}\t{caseInfo.FinishingDate?.ToString("yyyy-MM-dd")}\t\t{amount}");
+				              $"{(referenceNumber == null ? "" : $", {translations[3]}: " + referenceNumber)}\t{translations[4]}\t{caseInfo.FinishingDate?.ToString("yyyy-MM-dd")}\t\t{amount.ToString("F2")}");
 
 				using (var file = new StreamWriter(path))
 				{
