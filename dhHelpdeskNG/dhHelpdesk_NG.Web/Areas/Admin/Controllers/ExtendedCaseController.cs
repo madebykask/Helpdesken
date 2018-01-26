@@ -33,19 +33,21 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         [CustomAuthorize(Roles = "3,4")]
         [HttpGet]
-        public ActionResult Edit(int customerId, int languageId)
+        public ActionResult Edit(int customerId, int? languageId)
         {
-            var model = CustomerInputViewModel(customerId, languageId);
-            
+            languageId = languageId ?? SessionFacade.CurrentLanguageId;
+            var model = CustomerInputViewModel(customerId, languageId.Value);
+
             return View("Edit", model);
         }
 
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Edit(int customerId, int languageId, IList<int> ShowStatusBarIds, IList<int> ShowExternalStatusBarIds)
+        public ActionResult Edit(int customerId, int? languageId,  IList<int> ShowStatusBarIds, IList<int> ShowExternalStatusBarIds)
         {
-            var model = CustomerInputViewModel(customerId, languageId);
+            languageId = languageId ?? SessionFacade.CurrentLanguageId;
+            var model = CustomerInputViewModel(customerId, languageId.Value);
 
             model.CaseFieldSettings.ForEach(s =>
             {
@@ -53,10 +55,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 s.ShowExternalStatusBar = (ShowExternalStatusBarIds != null && ShowExternalStatusBarIds.Any(m => m == s.Id));
             });
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _customerService.SaveCaseFieldSettingsForCustomer(customerId, languageId, model.CaseFieldSettingWithLangauges, model.CaseFieldSettings.ToList(), out errors);
-            
+            _customerService.SaveCaseFieldSettingsForCustomer(customerId, languageId.Value, model.CaseFieldSettingWithLangauges, model.CaseFieldSettings.ToList(), out errors);
+
             if (errors.Count == 0)
-                return RedirectToAction("edit", new { customerId, languageId });
+                return RedirectToAction("edit", new { customerId });
 
             return View("Edit", model);
         }
@@ -115,18 +117,20 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 .Where(c => FieldSettingsUiNames.Names.ContainsKey(c.Name) && fieldstoExclude.All(f => f != c.Name));
 
             ViewBag.AllFields = allFields.Select(c => new CustomKeyValue<int, string>
-            {
-                Key = c.Id,
-                Value = model.CaseFieldSettingWithLangauges.getLabel(c.Name) ?? ""
-            })
+                {
+                    Key = c.Id,
+                    Value = model.CaseFieldSettingWithLangauges.getLabel(c.Name) ?? ""
+                })
+                .OrderBy(c => c.Value)
                 .ToList();
-            ;
+
             ViewBag.ShowExternalStatusBarFields = allFields.Where(c => externalFieldsToExclude.All(f => f != c.Name))
                 .Select(c => new CustomKeyValue<int, string>
                 {
                     Key = c.Id,
                     Value = model.CaseFieldSettingWithLangauges.getLabel(c.Name) ?? ""
                 })
+                .OrderBy(c => c.Value)
                 .ToList();
             return model;
         }

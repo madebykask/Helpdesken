@@ -6775,7 +6775,7 @@ If not exists (select * from tblTextTranslation where text_id = 1928 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1929)
-	insert into tbltext (id, TextString) VALUES (1929, N'Uttökat ärende')
+	insert into tbltext (id, TextString) VALUES (1929, N'Utökat ärende')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1929 and Language_Id = 2)
@@ -6783,11 +6783,11 @@ If not exists (select * from tblTextTranslation where text_id = 1929 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1930)
-	insert into tbltext (id, TextString) VALUES (1930, N'Statusfält')
+	insert into tbltext (id, TextString) VALUES (1930, N'Informationsfält')
 GO
 
 If not exists (select * from tblTextTranslation where text_id = 1930 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1930, 2, N'Status bar')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1930, 2, N'Information bar')
 GO
 
 
