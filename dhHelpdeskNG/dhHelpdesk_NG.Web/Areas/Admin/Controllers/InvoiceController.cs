@@ -242,10 +242,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return this.RedirectToAction("Index", new { customerId = model.Settings.CustomerId });
         }
 
-        public ActionResult GetArticleProductAreaList(InvoiceArticleProductAreaSelectedFilter filter)
+        public ActionResult GetArticleProductAreaList(InvoiceArticleProductAreaSelectedFilterJS jsfilter)
         {
             var ResolveName = true;
-
+            var filter = jsfilter.ToModel();
             var res = new List<InvoiceArticleProductAreaIndexRowModel>();
 
             var articles = invoiceArticleService.GetActiveArticles(filter.CustomerId);
@@ -284,14 +284,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             {
                 if (dir == SortingDirection.Asc)
                 {
-                    res = res.OrderBy(x => x.InvoiceArticleNumber)
+                    res = res.OrderBy(x => x.InvoiceArticleNumber  == null ? 
+                                        0 : (x.InvoiceArticleNumber.Replace(".", "") == "" ?
+                                        0 : int.Parse(x.InvoiceArticleNumber.Replace(".", ""))))
                             .ThenBy(x => x.InvoiceArticleName)
                             .ThenBy(x => x.InvoiceArticleNameEng)
                             .ToList();
                 }
                 else
                 {
-                    res = res.OrderByDescending(x => x.InvoiceArticleNumber)
+                    res = res.OrderByDescending(x => x.InvoiceArticleNumber == null ?
+                                        0 : (x.InvoiceArticleNumber.Replace(".", "") == "" ?
+                                        0 : int.Parse(x.InvoiceArticleNumber.Replace(".", ""))))
                             .ThenByDescending(x => x.InvoiceArticleName)
                             .ThenByDescending(x => x.InvoiceArticleNameEng)
                             .ToList();
