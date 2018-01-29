@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using DH.Helpdesk.Common.Configuration;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 
 namespace DH.Helpdesk.SelfService.Infrastructure
@@ -358,13 +359,13 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 string claimData = "";
                 bool isFirst = true;
                 
-                var claimDomain = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimDomain);
-                var claimUserId = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimUserId);
-                var claimEmployeeNumber = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimEmployeeNumber);
-                var claimFirstName = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimFirstName);
-                var claimLastName = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimLastName);
-                var claimEmail = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimEmail);
-                var claimPhone = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimPhone);
+                var claimDomain = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimDomain);
+                var claimUserId = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimUserId);
+                var claimEmployeeNumber = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimEmployeeNumber);
+                var claimFirstName = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimFirstName);
+                var claimLastName = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimLastName);
+                var claimEmail = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimEmail);
+                var claimPhone = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimPhone);
 
                 foreach (Claim claim in principal.Claims)
                 {
@@ -524,7 +525,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 }
                
                 var useApi = SessionFacade.CurrentCustomer.FetchDataFromApiOnExternalPage;
-                var apiCredential = AppConfigHelper.GetAmApiInfo();
+                var apiCredential = WebApiConfig.GetAmApiInfo();
                 var employee = _masterDataService.GetEmployee(customerId, employeeNumber, useApi, apiCredential);
                 
                 if (employee != null && employee.IsManager)

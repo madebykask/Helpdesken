@@ -11,6 +11,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Users;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Authentication;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Services.Services.Concrete;
@@ -42,6 +43,7 @@
         private readonly IRouteResolver routeResolver;
 
         private readonly ILogProgramService _logProgramService;
+        private readonly IAuthenticationService _authenticationService;
 
         public LoginController(
                 IUserService userService, 
@@ -50,7 +52,8 @@
                 ICaseLockService caseLockService,
                 ILanguageService languageService, 
                 IRouteResolver routeResolver,
-                ILogProgramService logProgramService)
+                ILogProgramService logProgramService,
+                IAuthenticationService authenticationService)
         {
             this.userService = userService;
             this.customerService = customerService;
@@ -59,19 +62,13 @@
             this.languageService = languageService;
             this.routeResolver = routeResolver;
             this._logProgramService = logProgramService;
+            _authenticationService = authenticationService;
         }
 
         [HttpGet]
         public ActionResult Logout()
         {
-            if (this.Session != null)
-            {
-                this.Session.Clear();
-                ApplicationFacade.RemoveLoggedInUser(this.Session.SessionID);  
-                this.Session.Abandon();
-            }
-
-            FormsAuthentication.SignOut();
+            _authenticationService.SignOut(ControllerContext.HttpContext);
 
             TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
 

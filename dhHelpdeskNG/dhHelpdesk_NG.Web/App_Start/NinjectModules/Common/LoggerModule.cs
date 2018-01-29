@@ -10,16 +10,26 @@
         public override void Load()
         {
             this.Bind<IStartUpTask>().To<Log4NetStartUpTask>().InSingletonScope();
+
             this.Bind<ILoggerService>()
                 .To<Log4NetLoggerService>()
                 .InSingletonScope()
                 .Named(Log4NetLoggerService.LogType.EMAIL)
                 .WithConstructorArgument(Log4NetLoggerService.LogType.EMAIL);
+
             this.Bind<ILoggerService>()
                 .To<Log4NetLoggerService>()
                 .InSingletonScope()
                 .Named(Log4NetLoggerService.LogType.ERROR)
                 .WithConstructorArgument(Log4NetLoggerService.LogType.ERROR);
+
+            this.Bind<ILoggerService>()
+                .To<Log4NetLoggerService>()
+                .InSingletonScope()
+                .Named(Log4NetLoggerService.LogType.Session)
+                .WithConstructorArgument(Log4NetLoggerService.LogType.Session);
+
+
         }
     }
 }

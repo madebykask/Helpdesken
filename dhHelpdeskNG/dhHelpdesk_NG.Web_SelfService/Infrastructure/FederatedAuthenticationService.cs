@@ -5,7 +5,7 @@ using Thinktecture.IdentityModel.Web;
 
 namespace DH.Helpdesk.SelfService.Infrastructure
 {
-    public interface IFederatedAuthenticationService
+    public interface IFederatedAuthenticationService2
     {
         void SetDefaultSessionDuration(int durationInMinutes);
         SessionSecurityToken RefreshSecurityTokenLifeTime(SessionAuthenticationModule sam, SessionSecurityToken sessionToken, int maxTokenLifeTimeMin = 0);
@@ -13,7 +13,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         void SignOut(string returnUrl);
     }
 
-    public class FederatedAuthenticationService : IFederatedAuthenticationService
+    public class FederatedAuthenticationService2 : IFederatedAuthenticationService2
     {
         #region SetDefaultSessionDuration
 
@@ -29,7 +29,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
         public SessionSecurityToken RefreshSecurityTokenLifeTime(SessionAuthenticationModule sam, SessionSecurityToken sessionToken, int maxTokenLifeTimeMin = 0)
         {
-            SsoLogger.Debug($"SecurityToken current lifetime: {sessionToken.ValidFrom} - {sessionToken.ValidTo}");
+            //SsoLogger.Debug($"SecurityToken current lifetime: {sessionToken.ValidFrom} - {sessionToken.ValidTo}");
 
             if (sessionToken.ValidTo.Subtract(sessionToken.ValidFrom) <= TimeSpan.Zero)
                 return null;
@@ -37,7 +37,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             //check token max life time value
             if (maxTokenLifeTimeMin > 0 && DateTime.UtcNow.Subtract(sessionToken.ValidFrom) > TimeSpan.FromMinutes(maxTokenLifeTimeMin)) 
             {
-                SsoLogger.Debug($"SecurityToken: Max lifetime ({maxTokenLifeTimeMin}min) has been reached. Current lifetime: {sessionToken.ValidFrom} - {sessionToken.ValidTo}");
+                //SsoLogger.Debug($"SecurityToken: Max lifetime ({maxTokenLifeTimeMin}min) has been reached. Current lifetime: {sessionToken.ValidFrom} - {sessionToken.ValidTo}");
                 return null;
             }
 
@@ -60,7 +60,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                           IsReferenceMode = sessionToken.IsReferenceMode
                       };
 
-                SsoLogger.Debug($"SecurityToken lifetime updated: {sessionToken.ValidFrom} - {sessionToken.ValidTo}");
+                //SsoLogger.Debug($"SecurityToken lifetime updated: {sessionToken.ValidFrom} - {sessionToken.ValidTo}");
             }
 
             return refreshedToken;

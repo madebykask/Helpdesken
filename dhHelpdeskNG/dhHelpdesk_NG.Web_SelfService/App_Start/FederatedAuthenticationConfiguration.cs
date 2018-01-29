@@ -4,6 +4,7 @@ using DH.Helpdesk.SelfService.Infrastructure;
 using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.Services.Infrastructure;
+using DH.Helpdesk.Services.Services.Authentication;
 
 namespace DH.Helpdesk.SelfService
 {

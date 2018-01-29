@@ -7,9 +7,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     {
         public static ActionResult ToJsonResult(this object obj, JsonSerializerSettings settings)
         {
-            var content = new ContentResult();
-            content.Content = JsonConvert.SerializeObject(obj, settings);
-            content.ContentType = "application/json";
+            var content = new ContentResult
+            {
+                Content = JsonConvert.SerializeObject(obj, settings),
+                ContentType = "application/json"
+            };
             return content;
         }       
     }

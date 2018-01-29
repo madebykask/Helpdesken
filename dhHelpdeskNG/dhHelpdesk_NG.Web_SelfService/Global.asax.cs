@@ -2,11 +2,13 @@
 using System.IdentityModel.Services;
 using System.IO;
 using System.Web;
+using DH.Helpdesk.Common.Configuration;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.SelfService.Infrastructure;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.SelfService.Infrastructure.Helpers;
 using DH.Helpdesk.Services.Infrastructure;
+using DH.Helpdesk.Services.Services.Authentication;
 using log4net;
 using log4net.Config;
 
@@ -184,8 +186,7 @@ namespace DH.Helpdesk.SelfService
             {
                 var sam = (SessionAuthenticationModule) sender;
                 var refreshedToken =
-                    federationAuthenticationService.RefreshSecurityTokenLifeTime(sam, args.SessionToken,
-                        configuration.SecurityTokenMaxDuration);
+                    federationAuthenticationService.RefreshSecurityTokenLifeTime(sam, args.SessionToken, configuration.SecurityTokenMaxDuration);
 
                 if (refreshedToken != null)
                 {

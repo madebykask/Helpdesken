@@ -1,4 +1,5 @@
 using System;
+using DH.Helpdesk.Common.Configuration;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.SelfService.Infrastructure.Helpers;
 

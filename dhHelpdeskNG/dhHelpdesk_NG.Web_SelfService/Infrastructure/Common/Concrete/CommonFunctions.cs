@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DH.Helpdesk.Common.Configuration;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 

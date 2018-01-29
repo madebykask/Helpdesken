@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using DH.Helpdesk.BusinessData.Models.User.Input;
 
 namespace DH.Helpdesk.Dal.Infrastructure.Context
 {
@@ -43,6 +44,11 @@ namespace DH.Helpdesk.Dal.Infrastructure.Context
         /// Gets the modules.
         /// </summary>
         IEnumerable<UserModuleOverview> Modules { get; }
+
+        /// <summary>
+        /// Sets customer user
+        /// </summary>
+        void SetCurrentUser(UserOverview user);
 
         /// <summary>
         /// The refresh.

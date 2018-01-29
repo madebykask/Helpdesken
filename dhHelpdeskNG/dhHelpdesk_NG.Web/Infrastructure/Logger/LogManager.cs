@@ -20,5 +20,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Logger
         {
             get { return ServiceLocator.Current.GetInstance<ILoggerService>(Log4NetLoggerService.LogType.DATA_IMPORT); }
         }
+
+        public static ILoggerService Session
+        {
+            get { return ServiceLocator.Current.GetInstance<ILoggerService>(Log4NetLoggerService.LogType.Session); }
+        }
     }
 }

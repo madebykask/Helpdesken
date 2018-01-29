@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using DH.Helpdesk.Web.Infrastructure.Authentication;
+
 namespace DH.Helpdesk.Web.NinjectModules.Common
 {
     using DH.Helpdesk.Dal.Infrastructure.Context;
@@ -29,6 +31,9 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             Bind<IUserContext>().To<UserContext>().InRequestScope();
             Bind<ICacheContext>().To<CacheContext>().InRequestScope();
             Bind<ICustomerContext>().To<CustomerContext>().InRequestScope();
+            Bind<ISessionContext>().To<SessionContext>().InRequestScope();
+            Bind<IApplicationContext>().To<ApplicationContext>().InRequestScope();
+
         }
     }
 }

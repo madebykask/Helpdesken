@@ -78,10 +78,12 @@ namespace DH.Helpdesk.Services.Services
         IList<User> GetUsersForWorkingGroup(int workingGroupId);
         bool UserHasActiveCase(int customerId, int userId, List<int> workingGroups);
 
+        
         User GetUser(int id);
         string GetUserTimeZoneId(int userId);
         UserRole GetUserRoleById(int id);
         UserWorkingGroup GetUserWorkingGroupById(int userId, int workingGroupId);
+        UserOverview GetUserByLogin(string userId, int? customerId);
 
         DeleteMessage DeleteUser(int id);
 
@@ -272,6 +274,11 @@ namespace DH.Helpdesk.Services.Services
         public IList<CustomerWorkingGroupForUser> GetListToUserWorkingGroup(int userId)
         {
             return this._userRepository.ListForWorkingGroupsInUser(userId).ToList();
+        }
+
+        public UserOverview GetUserByLogin(string userId, int? customerId)
+        {
+            return _userRepository.GetUserByLogin(userId, customerId);
         }
 
         public List<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId)

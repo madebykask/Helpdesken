@@ -1229,6 +1229,29 @@
 
         #endregion
 
+        #region Common Methods and Properties
+
+        public static string SessionId
+        {
+            get
+            {
+                return HttpContext.Current?.Session?.SessionID;
+            }
+        }
+
+        public static void ClearSession()
+        {
+            var session = HttpContext.Current?.Session;
+            if (session != null)
+            {
+                session.Clear();
+                session.RemoveAll();
+                session.Abandon();
+            }
+        }
+
+        #endregion
+
         #region Methods
 
         private static string ComposeCustomValueKey(string key)

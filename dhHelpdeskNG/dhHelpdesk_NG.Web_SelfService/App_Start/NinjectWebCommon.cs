@@ -7,6 +7,7 @@ using DH.Helpdesk.Dal.Repositories.Servers.Concrete;
 using DH.Helpdesk.SelfService;
 using DH.Helpdesk.SelfService.Infrastructure;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
+using DH.Helpdesk.Services.Services.Authentication;
 using DH.Helpdesk.Services.Services.Feedback;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]

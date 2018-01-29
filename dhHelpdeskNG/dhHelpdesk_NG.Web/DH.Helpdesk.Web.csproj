@@ -201,6 +201,12 @@
     <Reference Include="System.Drawing">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.identitymodel.services" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.1.0.0\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.IdentityModel.Tokens.ValidatingIssuerNameRegistry">
       <HintPath>..\packages\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.4.5.1\lib\net45\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.dll</HintPath>
     </Reference>
@@ -286,6 +292,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Thinktecture.IdentityModel, Version=3.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Thinktecture.IdentityModel.3.6.1\lib\net45\Thinktecture.IdentityModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
       <HintPath>..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
       <Private>True</Private>
@@ -305,6 +315,7 @@
     </Compile>
     <Compile Include="App_Start\BundleConfig.Invoices.cs" />
     <Compile Include="App_Start\BundleConfig.Orders.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\AuthenticationModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\EFormModule.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Admin\Controllers\ExtendedCaseController.cs" />
@@ -312,12 +323,24 @@
     <Compile Include="Controllers\CaseDocumentController.cs" />
     <Compile Include="Controllers\QuestionnaireAnswerController.cs" />
     <Compile Include="Enums\ReportItemNames.cs" />
+    <Compile Include="Infrastructure\Authentication\Behaviors\AdfsAuthenticationBehavior.cs" />
+    <Compile Include="Infrastructure\Authentication\AdfsClaimsUserTransformer.cs" />
+    <Compile Include="Infrastructure\Authentication\AuthenticationService.cs" />
+    <Compile Include="Infrastructure\Authentication\Behaviors\AuthenticationServiceBehaviorFactory.cs" />
+    <Compile Include="Infrastructure\Authentication\Behaviors\WindowsAuthenticationBehavior.cs" />
+    <Compile Include="Infrastructure\Authentication\ClaimsExtensions.cs" />
+    <Compile Include="Infrastructure\Authentication\Behaviors\FormsAuthenticationBehavior.cs" />
+    <Compile Include="Infrastructure\Authentication\HelpdeskAuthenticationFilter.cs" />
+    <Compile Include="Infrastructure\WorkContext\Concrete\SessionContext.cs" />
+    <Compile Include="Infrastructure\Configuration\Concrete\AdfsConfiguration.cs" />
     <Compile Include="Infrastructure\Cryptography\AESCryptoProvider.cs" />
+    <Compile Include="Infrastructure\Attributes\CustomAuthorize.cs" />
     <Compile Include="Infrastructure\Extensions\DicExtentions.cs" />
     <Compile Include="Infrastructure\Extensions\NewtonsoftJsonExtensions.cs" />
     <Compile Include="Infrastructure\Helpers\AsyncHelper.cs" />
     <Compile Include="Infrastructure\Helpers\CommonHelper.cs" />
     <Compile Include="Infrastructure\WebApi\WebApiService.cs" />
+    <Compile Include="Infrastructure\WorkContext\Concrete\ApplicationContext.cs" />
     <Compile Include="Models\Case\InvoiceTimeModel.cs" />
     <Compile Include="Models\JsonModels\Base\BaseJsonModel.cs" />
     <Compile Include="Models\JsonModels\Case\CaseJsonModel.cs" />

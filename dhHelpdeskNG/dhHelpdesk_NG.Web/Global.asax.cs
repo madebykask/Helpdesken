@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.IdentityModel.Services;
+using System.Web.Http;
 
 namespace DH.Helpdesk.Web
 {
@@ -32,15 +33,17 @@ namespace DH.Helpdesk.Web
         private readonly IConfiguration configuration = ManualDependencyResolver.Get<IConfiguration>();
         
         protected void Application_Start()
-        {           
+        {
+            //Debugger.Launch();
+
             AreaRegistration.RegisterAllAreas();
             //MARK: Remove old Api
             //GlobalConfiguration.Configure(WebApiConfig.Register);
 
             ViewEngineInit();
 
-			RegisterLocalizedAttributes();
-			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            RegisterLocalizedAttributes();
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             //MARK: Remove old Api
             //FilterConfig.RegisterWebApiGlobalFilters(GlobalConfiguration.Configuration.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
@@ -48,8 +51,8 @@ namespace DH.Helpdesk.Web
             ProcessStartupTasks();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-			JsonFormatConfig.ConfigWebApi();
-			JsonFormatConfig.ConfigMVC();
+            JsonFormatConfig.ConfigWebApi();
+            JsonFormatConfig.ConfigMVC();
 
             ECT.FormLib.FormLibSetup.Setup();
             ECT.FormLib.FormLibSetup.SetupRoutes(RouteTable.Routes);
@@ -63,6 +66,9 @@ namespace DH.Helpdesk.Web
             #else
                 BundleTable.EnableOptimizations = true;
             #endif
+
+            //fix for adfs(sso) claims-based identity
+            System.Web.Helpers.AntiForgeryConfig.UniqueClaimTypeIdentifier = System.Security.Claims.ClaimTypes.Name;
         }
 
         private void ViewEngineInit()
@@ -80,7 +86,7 @@ namespace DH.Helpdesk.Web
         }
 
         protected void Application_PostAuthorizeRequest()
-		{
+        {
             //MARK: Remove old Api
             //if (IsWebApiRequest())
             //{
@@ -95,12 +101,103 @@ namespace DH.Helpdesk.Web
         //}        
 
         protected void Application_BeginRequest(object sender, EventArgs e)
-		{
-			Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
-		}
+        {
+            //todo: Remove. For test only!
+            LogManager.Session.Debug("--- START -------------------------------------------------------------------------------------------------------------");
+
+            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
+            LogSession("Application.BeginRequest", Context);
+        }
+
+        protected void Application_EndRequest(object sender, EventArgs e)
+        {
+            //todo: Remove. For test only!
+            LogManager.Session.Debug("--- END -------------------------------------------------------------------------------------------------------------");
+        }
+
+        #region ADFS Module Events 
+
+        protected void WSFederationAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs e)
+        {
+            LogSession($"WSFederationAuthenticationModule.SessionSecurityTokenCreated: token created.", Context);
+        }
+        
+        protected void WSFederationAuthenticationModule_SecurityTokenValidated(object sender, SecurityTokenValidatedEventArgs e)
+        {
+            LogSession($"WSFederationAuthenticationModule.SecurityTokenValidated: token has been validated. {e.ClaimsPrincipal}", Context);
+        }
+
+        protected void WSFederationAuthenticationModule_SignedIn(object sender, EventArgs e)
+        {
+            LogSession($"WSFederationAuthenticationModule.SignedIn: user signed In.", Context);
+        }
+
+        protected void WSFederationAuthenticationModule_RedirectingToIdentityProvider(object sender, RedirectingToIdentityProviderEventArgs e)
+        {
+            var redirectUrl = e.SignInRequestMessage.WriteQueryString();
+            LogSession($"WSFederationAuthenticationModule.RedirectingToIdentityProvider. Redirect to sts - {redirectUrl}", Context);
+        }
+
+        protected void WSFederationAuthenticationModule_SignInError(object sender, ErrorEventArgs e)
+        {
+            LogSession($"WSFederationAuthenticationModule.SignInError: sign in error. {e.Exception?.Message ?? "Unknown"}", Context);
+        }
+
+        protected void WSFederationAuthenticationModule_AuthorizationFailed(object sender, AuthorizationFailedEventArgs e)
+        {
+            LogSession($"WSFederationAuthenticationModule.AuthorizationFailed. Authorisation failed.", Context);
+        }
+        
+        #region SessionAuthenticationModule events
+
+        protected void SessionAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs args)
+        {
+            var sessionToken = args.SessionToken;
+            var identity = "anonymous";
+            var authType = "none";
+
+            if (sessionToken.ClaimsPrincipal?.Identity?.IsAuthenticated ?? false)
+            {
+                authType = sessionToken.ClaimsPrincipal.Identity.AuthenticationType;
+                identity = sessionToken.ClaimsPrincipal.Identity.Name;
+            }
+            
+            LogSession($"SessionAuthenticationModule.SessionSecurityTokenCreated. Identity: {identity}, AuthType: {authType}, Valid: {sessionToken.ValidFrom} - {sessionToken.ValidTo}.", Context);
+        }
+
+        protected void SessionAuthenticationModule_SessionSecurityTokenReceived(object sender, SessionSecurityTokenReceivedEventArgs args)
+        {
+            var sessionToken = args.SessionToken;
+            var identity = "anonymous";
+            var authType = "none";
+
+            if (sessionToken.ClaimsPrincipal?.Identity?.IsAuthenticated ?? false)
+            {
+                authType = sessionToken.ClaimsPrincipal.Identity.AuthenticationType;
+                identity = sessionToken.ClaimsPrincipal.Identity.Name;
+            }
+
+            LogSession($"SessionAuthenticationModule.SessionSecurityTokenReceived. Identity: {identity}, AuthType: {authType}, Valid: {sessionToken.ValidFrom} - {sessionToken.ValidTo}.", Context);
+        }
+
+        #endregion
+
+        private void LogSession(string msg, HttpContext ctx)
+        {
+            var request = ctx.Request;
+            var identity = ctx.User?.Identity;
+            var isAuthenticated = identity?.IsAuthenticated ?? false;
+            var contextInfo = $"Authenticated: {isAuthenticated}, User: {identity?.Name}, Request: {request.Url}";
+
+            var logger = LogManager.Session;
+            logger.Debug($"{msg} {contextInfo}");
+        }
+
+        #endregion
 
         protected void Application_AcquireRequestState(object sender, EventArgs e)
         {
+            LogSession("Application.AcquireRequestState called.", Context);
             try
             {
                 var session = HttpContext.Current.Session;

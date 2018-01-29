@@ -53,7 +53,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                     else
                     {
                         var useApi = SessionFacade.CurrentCustomer.FetchDataFromApiOnExternalPage;
-                        var apiCredential = AppConfigHelper.GetAmApiInfo();
+                        var apiCredential = WebApiConfig.GetAmApiInfo();
                         var employee = _masterDataService.GetEmployee(customerId, curIdentity.EmployeeNumber, useApi, apiCredential);
 
                         if (employee != null)                        

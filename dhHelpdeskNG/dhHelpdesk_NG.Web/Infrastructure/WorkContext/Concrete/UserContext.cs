@@ -192,6 +192,14 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         }
 
         /// <summary>
+        /// Gets current user associated with customer
+        /// </summary>
+        public void SetCurrentUser(UserOverview userOverview)
+        {
+            SessionFacade.CurrentUser = userOverview;
+        }
+
+        /// <summary>
         /// The refresh.
         /// </summary>
         public void Refresh()

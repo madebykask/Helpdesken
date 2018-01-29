@@ -7,6 +7,7 @@ using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain.Cases;
 using DH.Helpdesk.Services.Services.Cases;
+using DH.Helpdesk.Web.Infrastructure.Attributes;
 using DH.Helpdesk.Web.Infrastructure.Cache;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using Microsoft.Ajax.Utilities;
