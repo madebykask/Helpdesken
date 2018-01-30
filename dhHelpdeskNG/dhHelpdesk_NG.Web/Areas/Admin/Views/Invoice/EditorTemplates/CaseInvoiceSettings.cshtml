@@ -1,12 +1,10 @@
 ﻿@using DH.Helpdesk.BusinessData.OldComponents
-@using DH.Helpdesk.BusinessData.Models.Invoice
 @model DH.Helpdesk.BusinessData.Models.Invoice.CaseInvoiceSettings
 
 @using (Html.BeginForm("SaveSettings", "Invoice", FormMethod.Post, new { id = "invoice_settings_form" }))
 {
     @Html.HiddenFor(m => m.Id)
     @Html.HiddenFor(m => m.CustomerId)
-    var desabledDepartmentIds = string.Join(",", Model.Departments.Where(d => d.Selected).Select(d => d.Value).ToList());
     <div class="container">
         <div class="row">
             <div class="span100">
@@ -89,19 +87,61 @@
                     <table class="tableform">
                         <tr>
                             <td class="span3">
-                                @Translation.GetCoreTextTranslation("Inaktivera") 
-                                @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Model.CustomerId)                                 
+                                @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Model.CustomerId)
                             </td>
-                            <td class="span9">
-                                <select id="Settings.DisabledDepartmentIds" name="Settings.DisabledDepartmentIds"  data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
-                                    @foreach (var e in Model.Departments)
-                                    {                                                                                
-                                        <option class='(e.Disabled)? "DisabledChosen" : ""' value="@e.Value" @e.Value.IdIsSelected(desabledDepartmentIds)>@e.Text</option>
-                                    }
-                                </select>
+                            <td>
+                                <input type="checkbox" name="chkDisabledDep" id="chkDisabledDep" onchange="showDisablingDep()" @(Model.DisabledDepartments.Items.Count > 0 ? "checked=checked" : "") value="1" /> @Translation.GetCoreTextTranslation("Inaktivera") @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Model.CustomerId)
                             </td>
                         </tr>
                     </table>
+                </div>
+                <div class="row" id="divDisabledDeps" @(Model.DisabledDepartments.Items.Count > 0 ? "display:block" : "" )>
+                    <div class="span100">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3"></td>
+                                    <td class="span15">
+                                        @Translation.GetCoreTextTranslation("Tillgängliga")
+                                    </td>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Valda")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <select id="Settings_AvailableDepartments" multiple="multiple" name="Settings.AvailableDepartments" style="width: 314px; height: 350px">
+                                                        @foreach (var us in Model.AvailableDepartments.Items)
+                                                        {
+                                                            var classType = us.IsActive ? "" : "style=color:lightgray;";
+                                                            <option @classType value="@us.Id"> @us.Value </option>
+                                                        }
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="button" value="&gt;" class="btn" id="addDep" /><br />
+                                                    <input type="button" value="&lt;" class="btn" id="removeDep" />
+                                                </td>
+                                                <td>
+                                                    <select id="Settings_DisabledDepartmentIds" multiple="multiple" name="Settings.DisabledDepartmentIds" style="width: 314px; height: 350px">
+                                                        @foreach (var us in Model.DisabledDepartments.Items)
+                                                        {
+                                                            var classType = us.IsActive ? "" : "style=color:lightgray;";
+                                                            <option @classType value="@us.Id"> @us.Value </option>
+                                                        }
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -109,9 +149,39 @@
 }
 <script type="text/javascript">
     $(function() {
-        $("#save_invoice_settings").click(function() {
+        $("#save_invoice_settings").click(function () {
+            if ($("#chkDisabledDep").prop("checked")) {
+                $('#Settings_DisabledDepartmentIds option').prop('selected', true);
+            } else {
+                $('#Settings_DisabledDepartmentIds option').prop('selected', false);
+            }
             $("#invoice_settings_form").submit();
             return true;
         });
+
+        $("#removeDep").click(function () {
+            $("#Settings_DisabledDepartmentIds").find('option:selected').detach().appendTo($("#Settings_AvailableDepartments"));
+        });
+
+        $("#addDep").click(function () {
+            $("#Settings_AvailableDepartments").find('option:selected').detach().appendTo($("#Settings_DisabledDepartmentIds"));
+        });
+
+        if ($("#chkDisabledDep").prop("checked")) {
+            $("#divDisabledDeps").show();
+        }
+        else {
+            $("#divDisabledDeps").hide();
+        }
     });
+
+    function showDisablingDep() {
+        if ($("#chkDisabledDep").prop("checked")) {
+            $("#divDisabledDeps").show();
+        }
+        else {
+            $("#divDisabledDeps").hide();
+            $("#chkDisabledDep").checked = false;
+        }
+    }
 </script>

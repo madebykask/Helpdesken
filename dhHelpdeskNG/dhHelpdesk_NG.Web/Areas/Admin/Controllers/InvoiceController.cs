@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DH.Helpdesk.BusinessData.Models.Grid;
+using DH.Helpdesk.BusinessData.Models.Shared;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
@@ -56,21 +57,22 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             var customer = this.customerService.GetCustomer(customerId);
             var settings = this.caseInvoiceSettingsService.GetSettings(customerId);
-
-            var departments = departmentService.GetDepartments(customerId, Common.Enums.ActivationStatus.All);
-            settings.Departments = departments.Select(d => new MultiSelectListItem
-            {
-                Value = d.Id,
-                Text = d.DepartmentName,
-                Selected = d.DisabledForOrder,
-                Disabled = d.IsActive != 0
-            }).ToList();
-
             if (settings == null)
             {
                 settings = new CaseInvoiceSettings(customerId);
             }
-            
+
+            var departments = departmentService.GetDepartments(customerId, Common.Enums.ActivationStatus.All);
+            var availableDepartments = departments.Where(x => !x.DisabledForOrder).Select(x => new ListItem(x.Id.ToString(), x.DepartmentName, Convert.ToBoolean(x.IsActive))).ToList();
+            var disabledDepartments = departments.Where(x => x.DisabledForOrder).Select(x => new ListItem(x.Id.ToString(), x.DepartmentName, Convert.ToBoolean(x.IsActive))).ToList();
+
+            var availableDepartmentsModel = new CustomSelectList();
+            availableDepartmentsModel.Items.AddItems(availableDepartments);
+            var disabledDepartmentsModel = new CustomSelectList();
+            disabledDepartmentsModel.Items.AddItems(disabledDepartments);
+            settings.AvailableDepartments = availableDepartmentsModel;
+            settings.DisabledDepartments = disabledDepartmentsModel;
+
             var model = this.caseInvoiceFactory.GetSettingsModel(customer, settings);
             return this.View(model);
         }

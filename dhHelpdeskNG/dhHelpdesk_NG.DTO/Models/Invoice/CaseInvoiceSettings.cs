@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DH.Helpdesk.BusinessData.Models.Shared;
+using System.Collections.Generic;
 
 namespace DH.Helpdesk.BusinessData.Models.Invoice
 {
@@ -28,13 +29,15 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice
 
         public CaseInvoiceSettings()
         {
-            Departments = new List<MultiSelectListItem>();
+            AvailableDepartments = new CustomSelectList();
+            DisabledDepartments = new CustomSelectList();
         }
 
         public CaseInvoiceSettings(int customerId)
         {
             this.CustomerId = customerId;
-            Departments = new List<MultiSelectListItem>();
+            AvailableDepartments = new CustomSelectList();
+            DisabledDepartments = new CustomSelectList();
         }
 
 
@@ -56,7 +59,8 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice
 
         public string Filter { get; set; }
 
-        public IList<MultiSelectListItem> Departments { get; set; }
+        public CustomSelectList AvailableDepartments { get; set; }
+        public CustomSelectList DisabledDepartments { get; set; }
 
         public int[] DisabledDepartmentIds { get; set; }
 
