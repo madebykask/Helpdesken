@@ -66,13 +66,15 @@
             onRemoveKeyDown(e, mainFakeInput, mainInput);
         }
         if (e.keyCode === 13 || e.keyCode === 186 || e.keyCode === 32) {
-            onEnterKeyUp(e, mainFakeInput, mainInput);
+            processEmails(e, mainFakeInput, mainInput);
         }
     });
 
-    mainFakeInput.on('blur',
+    mainFakeInput.on('focusout',
         function (e) {
-            onEnterKeyUp(e, mainFakeInput, mainInput);
+            if ($(e.relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) {
+                processEmails(e, mainFakeInput, mainInput);
+            }
         });
 
     popupInput.typeahead(getUserSearchOptions(mainInput, mainFakeInput, popupInput));
@@ -82,13 +84,15 @@
             onRemoveKeyDown(e, popupInput, mainInput);
         }
         if (e.keyCode === 13 || e.keyCode === 186 || e.keyCode === 32) {
-            onEnterKeyUp(e, popupInput, mainInput);
+            processEmails(e, popupInput, mainInput);
         }
     });
 
-    popupInput.on('blur',
+    popupInput.on('focusout',
         function (e) {
-            onEnterKeyUp(e, popupInput, mainInput);
+            if ($(e.relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) {
+                processEmails(e, popupInput, mainInput);
+            }
         });
 
     function checkAndAddEmailsFromDropdown(value) {
@@ -110,6 +114,33 @@
         var text = mainInput.val();
         mainFakeInput.html(getHtmlFromEmails(text));
     }
+
+    function isNewEmail(newEmail, mainInput) {
+        var emails = mainInput.val().split(';');
+        return emails.indexOf(newEmail) < 0;
+    }
+
+    function processEmails(e, fakeInput, mainInput) {
+        if (e.keyCode === 13 && searchSelected)
+            return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        if (e.keyCode === 13 || e.keyCode === 186 ||
+            e.type === 'focusout' || e.keyCode === 32) {
+            var emails = $(e.target).html();
+            var arr = getEmailsFromHtml(emails);
+            for (var i = 0; i < arr.length; i++) {
+                var newEmail = arr[i] || '';
+                if (newEmail !== '' && newEmail !== '&nbsp' && isNewEmail(newEmail, mainInput)) {
+                    checkAndAddEmailsTo(newEmail, mainInput);
+                }
+            }
+            fakeInput.html(getHtmlFromEmails(mainInput.val()));
+            if (e.type !== 'focusout') placeCaretAtEnd(fakeInput);
+        }
+    }
+
+
 }
 
 function onRemoveKeyDown(e, fakeInput, mainInput) {
@@ -117,7 +148,6 @@ function onRemoveKeyDown(e, fakeInput, mainInput) {
     var text = mainInput.val();
     var email = getEmailsToRemove();
     if (email === "&nbsp;" || email.trim() === "") {
-        e.preventDefault();
         if (e.keyCode !== 46) {
             var arr = text.split(";");
             var lastEmail = arr[arr.length - 2];
@@ -126,15 +156,19 @@ function onRemoveKeyDown(e, fakeInput, mainInput) {
                 mainInput.val(text);
                 fakeInput.html(getHtmlFromEmails(mainInput.val()));
                 placeCaretAtEnd(fakeInput);
+                e.preventDefault();
             }
+        } else {
+            e.preventDefault();
         }
+
     } else {
         if (email !== "" && email.indexOf(";") >= 0) {
-            e.preventDefault();
             text = text.replace(email, "");
             mainInput.val(text);
             fakeInput.html(getHtmlFromEmails(mainInput.val()));
             placeCaretAtEnd(fakeInput);
+            e.preventDefault();
         }
     }
 }
@@ -396,20 +430,4 @@ function checkAndAddEmailsTo(value, mainInput) {
     }
 }
 
-function onEnterKeyUp(e, fakeInput, mainInput) {
-    if (e.keyCode === 13 && searchSelected)
-        return;
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    if (e.keyCode === 13 || e.keyCode === 186 ||
-        e.type === 'blur' || e.keyCode === 32) {
-        var emails = $(e.target).html();
-        var arr = getEmailsFromHtml(emails);
-        var newEmail = arr[arr.length - 1] || '';
-        if (newEmail !== '' && newEmail !== '&nbsp' && newEmail.indexOf('@') >= 0) {
-            checkAndAddEmailsTo(newEmail, mainInput);
-            fakeInput.html(getHtmlFromEmails(mainInput.val()));
-            placeCaretAtEnd(fakeInput);
-        }
-    }
-}
+
