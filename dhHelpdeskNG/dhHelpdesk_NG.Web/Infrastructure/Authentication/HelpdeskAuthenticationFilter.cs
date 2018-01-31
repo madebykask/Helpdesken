@@ -1,5 +1,8 @@
+using System;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Filters;
+using DH.Helpdesk.Common.Logger;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete;
 
@@ -9,7 +12,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly ISessionContext _sessionContext;
-        
+        private readonly ILoggerService _logger = LogManager.Session;
+
         public HelpdeskAuthenticationFilter(IAuthenticationService authenticationService, 
                                             ISessionContext sessionContext)
         {
@@ -21,19 +25,21 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
 
         public void OnAuthentication(AuthenticationContext filterContext)
         {
-            //todo:remove logging
-            var log = LogManager.Session;
-            log.Debug("AuthenticationFilter called.");
+            _logger.Debug("AuthenticationFilter called.");
 
             var ctx = filterContext.HttpContext;
+            var identity = ctx.User.Identity;
 
             //authenticate only if user has been authenticated and principal has been created
-            if (ctx.User.Identity.IsAuthenticated && _sessionContext.UserIdentity == null)
+            if (identity != null && identity.IsAuthenticated && _sessionContext.UserIdentity == null)
             {
-                var isAuthenticated =_authenticationService.Authenticate(filterContext.HttpContext);
+                var isAuthenticated =_authenticationService.SignIn(filterContext.HttpContext);
                 if (!isAuthenticated)
                 {
-                    log.Warn("AuthenticationFilter. Failed to authenticate.");
+                    _logger.Warn($"AuthenticationFilter. Failed to sign in. Signing out. Identity: {identity?.Name}");
+
+                    SignOut(ctx);
+
                     filterContext.Result = new HttpUnauthorizedResult();
                 }
             }
@@ -45,5 +51,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         }
 
         #endregion
+
+        private void SignOut(HttpContextBase ctx)
+        {
+            _authenticationService.SignOut(ctx);
+        }
     }
 }

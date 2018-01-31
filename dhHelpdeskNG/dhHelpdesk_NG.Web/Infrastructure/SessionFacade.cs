@@ -1239,14 +1239,17 @@
             }
         }
 
-        public static void ClearSession()
+        public static void ClearSession(bool abandon = false)
         {
             var session = HttpContext.Current?.Session;
             if (session != null)
             {
                 session.Clear();
-                session.RemoveAll();
-                session.Abandon();
+                if (abandon)
+                {
+                    session.RemoveAll();
+                    session.Abandon();
+                }
             }
         }
 

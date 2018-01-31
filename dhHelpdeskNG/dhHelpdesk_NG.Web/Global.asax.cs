@@ -1,5 +1,11 @@
 ﻿using System.IdentityModel.Services;
+using System.Linq;
+using System.Security.Claims;
 using System.Web.Http;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Services.Services.Authentication;
+using DH.Helpdesk.Web.Infrastructure.Authentication;
+using DH.Helpdesk.Web.Infrastructure.Configuration.Concrete;
 
 namespace DH.Helpdesk.Web
 {
@@ -69,6 +75,11 @@ namespace DH.Helpdesk.Web
 
             //fix for adfs(sso) claims-based identity
             System.Web.Helpers.AntiForgeryConfig.UniqueClaimTypeIdentifier = System.Security.Claims.ClaimTypes.Name;
+
+            if (IsSsoMode())
+            {
+                FederatedAuthenticationConfiguration.Configure();
+            }
         }
 
         private void ViewEngineInit()
@@ -102,20 +113,17 @@ namespace DH.Helpdesk.Web
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            //todo: Remove. For test only!
-            LogManager.Session.Debug("--- START -------------------------------------------------------------------------------------------------------------");
-
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
             LogSession("Application.BeginRequest", Context);
         }
 
-        protected void Application_EndRequest(object sender, EventArgs e)
-        {
-            //todo: Remove. For test only!
-            LogManager.Session.Debug("--- END -------------------------------------------------------------------------------------------------------------");
-        }
-
         #region ADFS Module Events 
+
+        protected void Session_Start(object sender, EventArgs e)
+        {
+            var sessionId = Session.SessionID;
+            LogManager.Session.Debug("Session.Start: " + sessionId);
+        }
 
         protected void WSFederationAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs e)
         {
@@ -129,6 +137,7 @@ namespace DH.Helpdesk.Web
 
         protected void WSFederationAuthenticationModule_SignedIn(object sender, EventArgs e)
         {
+            LogIdentityClaims(Context);
             LogSession($"WSFederationAuthenticationModule.SignedIn: user signed In.", Context);
         }
 
@@ -145,6 +154,7 @@ namespace DH.Helpdesk.Web
 
         protected void WSFederationAuthenticationModule_AuthorizationFailed(object sender, AuthorizationFailedEventArgs e)
         {
+            //e.RedirectToIdentityProvider = false;
             LogSession($"WSFederationAuthenticationModule.AuthorizationFailed. Authorisation failed.", Context);
         }
         
@@ -153,31 +163,41 @@ namespace DH.Helpdesk.Web
         protected void SessionAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs args)
         {
             var sessionToken = args.SessionToken;
-            var identity = "anonymous";
-            var authType = "none";
-
-            if (sessionToken.ClaimsPrincipal?.Identity?.IsAuthenticated ?? false)
-            {
-                authType = sessionToken.ClaimsPrincipal.Identity.AuthenticationType;
-                identity = sessionToken.ClaimsPrincipal.Identity.Name;
-            }
-            
-            LogSession($"SessionAuthenticationModule.SessionSecurityTokenCreated. Identity: {identity}, AuthType: {authType}, Valid: {sessionToken.ValidFrom} - {sessionToken.ValidTo}.", Context);
+            LogSession($"SessionAuthenticationModule.SessionSecurityTokenCreated. Token valid: {sessionToken.ValidFrom} - {sessionToken.ValidTo}.", Context);
         }
 
         protected void SessionAuthenticationModule_SessionSecurityTokenReceived(object sender, SessionSecurityTokenReceivedEventArgs args)
         {
-            var sessionToken = args.SessionToken;
-            var identity = "anonymous";
-            var authType = "none";
+            var token = args.SessionToken;
+            LogSession($"SessionAuthenticationModule.SessionSecurityTokenReceived. Token valid: {token.ValidFrom} - {token.ValidTo}.", Context);
+            
+            var configuration = ManualDependencyResolver.Get<IAdfsConfiguration>();
+            var federationAuthenticationService = ManualDependencyResolver.Get<IFederatedAuthenticationService>();
 
-            if (sessionToken.ClaimsPrincipal?.Identity?.IsAuthenticated ?? false)
+            //check if token has expired:
+            if (token.ValidTo < DateTime.UtcNow)
             {
-                authType = sessionToken.ClaimsPrincipal.Identity.AuthenticationType;
-                identity = sessionToken.ClaimsPrincipal.Identity.Name;
+                LogSession($"Security token lifetime has been expired: ValidTo: {token.ValidTo}, UtcNow: {DateTime.UtcNow}. Signing out.", Context);
+                SessionFacade.ClearSession();
+                federationAuthenticationService.SignOut(null);
+                return;
             }
 
-            LogSession($"SessionAuthenticationModule.SessionSecurityTokenReceived. Identity: {identity}, AuthType: {authType}, Valid: {sessionToken.ValidFrom} - {sessionToken.ValidTo}.", Context);
+            if (configuration.EnableSlidingExpiration)
+            {
+                LogSession("Try to refresh adfs Token lifetime.", Context);
+
+                var sam = (SessionAuthenticationModule)sender;
+                var refreshedToken =
+                    federationAuthenticationService.RefreshSecurityTokenLifeTime(sam, args.SessionToken, configuration.SecurityTokenMaxDuration);
+
+                if (refreshedToken != null)
+                {
+                    args.SessionToken = refreshedToken;
+                    args.ReissueCookie = true;
+                    LogSession($"Adfs Token lifetime has been refreshed to: {refreshedToken.ValidTo},", Context);
+                }
+            }
         }
 
         #endregion
@@ -421,6 +441,25 @@ namespace DH.Helpdesk.Web
                 catch (Exception ex)
                 {
                     errorLoggerService.Error(ex);
+                }
+            }
+        }
+
+        private static bool IsSsoMode()
+        {
+            var appSettingsProvider = new ApplicationConfiguration();
+            return appSettingsProvider.LoginMode == LoginMode.SSO;
+        }
+        private static void LogIdentityClaims(HttpContext ctx)
+        {
+            var log = LogManager.Session;
+            var claimsIdentity = ctx.User.Identity as ClaimsIdentity;
+            if (claimsIdentity != null && claimsIdentity.Claims.Any())
+            {
+                log.Debug(">>> Claims found:");
+                foreach (var claim in claimsIdentity.Claims)
+                {
+                    log.Debug($"Claim: {claim.Type}, value: {claim.Value}, Issuer: {claim.Issuer}");
                 }
             }
         }

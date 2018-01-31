@@ -51,12 +51,14 @@ function CaseSearch() {
 
                 request.done(function(cusId) {
                     self.onMultipleCustomersSearchComplete(cusId);
+                }).fail(function(res) {
+                    self.onMultipleCustomersSearchError(res);
                 });
             }
 
             //handle all requests complete
             if (this.requests.length > 0) {
-                $.when.apply($, this.requests).done(function () {
+                $.when.apply($, this.requests).always(function () {
                     //console.warn('All requests are complete.'); // todo: comment
                     self.blockUI(false);
                     self.showProgress(false);
@@ -70,6 +72,12 @@ function CaseSearch() {
     this.onMultipleCustomersSearchComplete = function (customerId) {
         this.toggleMultiCustomerProgress(customerId, false);
         this.updateCasesCount(customerId);
+    };
+
+    this.onMultipleCustomersSearchError = function (customerId) {
+        this.toggleMultiCustomerProgress(customerId, false);
+        var searchGroup$ = $("#searchGroup_" + customerId);
+        searchGroup$.show();
     };
 
     this.runSearchRequest = function (searchData) {
@@ -90,8 +98,9 @@ function CaseSearch() {
                 $searchReq.resolve(searchData.CustomerId);
             },
             error: function (err) {
-                console.error(err);
-                $searchReq.fail(err);
+                console.error('Request for customer ' + customerId + ' has failed.');
+                self.setResult(customerId, err.responseText);
+                $searchReq.reject(searchData.CustomerId);
             }
         });
 

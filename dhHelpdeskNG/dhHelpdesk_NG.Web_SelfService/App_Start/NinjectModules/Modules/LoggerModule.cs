@@ -1,22 +1,20 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Common
+﻿using DH.Helpdesk.Common.Logger;
+using log4net.Core;
+using Ninject.Modules;
+using Ninject.Web.Common;
+
+namespace DH.Helpdesk.SelfService.NinjectModules.Modules
 {
-    using DH.Helpdesk.Common.Logger;
-    using DH.Helpdesk.Web.Infrastructure.Logger;
-
-    using Ninject.Modules;
-
     public class LoggerModule : NinjectModule
     {
         public override void Load()
         {
-            this.Bind<IStartUpTask>().To<Log4NetStartUpTask>().InSingletonScope();
-
+            //default logger
             this.Bind<ILoggerService>()
                 .To<Log4NetLoggerService>()
-                .InSingletonScope()
-                .Named(Log4NetLoggerService.LogType.EMAIL)
-                .WithConstructorArgument(Log4NetLoggerService.LogType.EMAIL);
-
+                .InRequestScope()
+                .WithConstructorArgument("logType", x => x.Request.Target.Type.DeclaringType.ToString());
+                
             this.Bind<ILoggerService>()
                 .To<Log4NetLoggerService>()
                 .InSingletonScope()

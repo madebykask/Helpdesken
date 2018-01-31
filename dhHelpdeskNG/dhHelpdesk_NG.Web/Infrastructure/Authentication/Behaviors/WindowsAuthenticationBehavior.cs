@@ -39,6 +39,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
         public void SignOut(HttpContextBase ctx)
         {
         }
+
+        public string GetLoginUrl()
+        {
+            return string.Empty;
+        }
     }
 }
 

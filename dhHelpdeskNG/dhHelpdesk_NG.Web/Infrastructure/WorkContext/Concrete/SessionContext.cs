@@ -13,7 +13,7 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         LoginMode LoginMode { get; }
         void SetLoginMode(LoginMode mode);
 
-        void ClearSession();
+        void ClearSession(bool abandon = false);
     }
     
     public class SessionContext : ISessionContext
@@ -43,9 +43,9 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             SessionFacade.CurrentLoginMode = mode;
         }
 
-        public void ClearSession()
+        public void ClearSession(bool abandon = false)
         {
-            SessionFacade.ClearSession();
+            SessionFacade.ClearSession(abandon);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Web;
 using DH.Helpdesk.BusinessData.Models.LogProgram;
 using DH.Helpdesk.BusinessData.Models.User.Input;
+using DH.Helpdesk.Common.Logger;
 using DH.Helpdesk.Common.Types;
 using DH.Helpdesk.Dal.Infrastructure.Context;
 using DH.Helpdesk.Services.Services;
@@ -17,7 +18,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
 {
     public interface IAuthenticationService
     {
-        bool Authenticate(HttpContextBase ctx);
+        bool SignIn(HttpContextBase ctx);
         void SignOut(HttpContextBase ctx);
     }
 
@@ -33,6 +34,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         private readonly ISessionContext _sessionContext;
 
         private readonly IAuthenticationBehavior _authenticationBehavior;
+        private readonly ILoggerService _logger = LogManager.Session;
 
         #region ctor()
 
@@ -61,67 +63,69 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
 
         #endregion
 
-        public bool Authenticate(HttpContextBase ctx)
+        public bool SignIn(HttpContextBase ctx)
         {
-            //authenticate only if context.CurrentUser is not set
-            if (_sessionContext.UserIdentity == null) //todo: shall context.CurrentUser be checked instead?
+            var loginMode = _appConfiguration.LoginMode;
+            _sessionContext.SetLoginMode(loginMode);
+
+            _logger.Debug($"AuthenticationService: authenticating user. LoginMode: {loginMode}");
+
+            var userIdentity = _authenticationBehavior.CreateUserIdentity(ctx);
+
+            if (!string.IsNullOrWhiteSpace(userIdentity?.UserId))
             {
-                var loginMode = _appConfiguration.LoginMode;
-                _sessionContext.SetLoginMode(loginMode);
+                ApplyUserIdentityOverrides(userIdentity);
+                _sessionContext.SetUserIdentity(userIdentity);
 
-                var log = LogManager.Session;
-                log.Debug($"AuthenticationService: authenticating user. LoginMode: {loginMode}");
+                _logger.Debug($"AuthenticationService: user has successfully been authenticated. " +
+                            $"User: {userIdentity.UserId}, Domain: {userIdentity.Domain}, FullName: {userIdentity.FirstName + " " + userIdentity.LastName} ");
 
-                var userIdentity = _authenticationBehavior.CreateUserIdentity(ctx);
+                //get customer user
+                var customerUser = _userService.GetUserByLogin(userIdentity.UserId, null);
 
-                if (userIdentity != null)
+                //set only if its non-empty
+                if (customerUser != null)
                 {
-                    ApplyUserIdentityOverrides(userIdentity);
-                    _sessionContext.SetUserIdentity(userIdentity);
+                    //set user and customer context
+                    _userContext.SetCurrentUser(customerUser);
+                    _customerContext.SetCustomer(customerUser.CustomerId);
 
-                    log.Debug($"AuthenticationService: user has successfully been authenticated. " +
-                              $"User: {userIdentity.UserId}, Domain: {userIdentity.Domain}, FullName: {userIdentity.FirstName + " " + userIdentity.LastName} ");
+                    FixUserTimeZone(customerUser);
 
-                    //get customer user
-                    var customerUser = _userService.GetUserByLogin(userIdentity.UserId, null);
-
-                    //set only if its non-empty
-                    if (customerUser != null)
-                    {
-                        //set user and customer context
-                        _userContext.SetCurrentUser(customerUser);
-                        _customerContext.SetCustomer(customerUser.CustomerId);
-
-                        FixUserTimeZone(customerUser);
-
-                        AddLoggedInUser(customerUser, _customerContext, ctx);
-                        UpdateUserLogin(ctx, customerUser);
-                        //_caseLockService.CaseLockCleanUp(); //todo: check if required?
-                    }
-                    else
-                    {
-                        // handle customer user was not found
-                        ClearLoginSession(ctx);
-                        return false;
-                    }
+                    AddLoggedInUser(customerUser, _customerContext, ctx);
+                    UpdateUserLogin(ctx, customerUser);
+                    //_caseLockService.CaseLockCleanUp(); //todo: check if required?
                 }
                 else
                 {
-                    ClearLoginSession(ctx);
+                    _logger.Warn($"Customer user doesn't exist for login '{userIdentity.UserId}'.");
                     return false;
                 }
             }
+            else
+            {
+                _logger.Warn($"User identity is null or empty.");
+                return false;
+            }
+            
 
             return true;
         }
-
+        
         public void SignOut(HttpContextBase ctx)
         {
-            //do login mode specific sign out
-            _authenticationBehavior.SignOut(ctx);
+            _logger.Debug("AuthenticationService. Siging out.");
 
             // end user login session
             ClearLoginSession(ctx);
+
+            //do login mode specific sign out
+            _authenticationBehavior.SignOut(ctx);
+        }
+
+        public string GetLoginUrl()
+        {
+            return _authenticationBehavior.GetLoginUrl();
         }
 
         #region Helper Methods

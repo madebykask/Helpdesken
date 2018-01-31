@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IdentityModel.Tokens;
+using DH.Helpdesk.Common.Logger;
 using DH.Helpdesk.SelfService.Infrastructure;
 using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
@@ -29,11 +30,9 @@ namespace DH.Helpdesk.SelfService
 
         private static void HandleSecurityTokenException(SecurityTokenException ex)
         {
-            var errorMsg = "Unknown security tokenk error. " + ex.Message;
+            var errorMsg = "Unknown security token exception. " + ex.Message;
             ErrorGenerator.MakeError(errorMsg);
-            
-            //since there's no logger in the project - log error with the trace.
-            Trace.TraceError(errorMsg);
+            SsoLogger.Debug(errorMsg);
         }
     }
 }

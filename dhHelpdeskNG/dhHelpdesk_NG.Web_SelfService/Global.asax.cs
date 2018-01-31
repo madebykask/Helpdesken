@@ -1,9 +1,12 @@
 ﻿using System;
 using System.IdentityModel.Services;
 using System.IO;
+using System.Linq;
+using System.Security.Claims;
 using System.Web;
 using DH.Helpdesk.Common.Configuration;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Logger;
 using DH.Helpdesk.SelfService.Infrastructure;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.SelfService.Infrastructure.Helpers;
@@ -75,14 +78,10 @@ namespace DH.Helpdesk.SelfService
             if (configFile.Exists)
             {
                 XmlConfigurator.Configure(configFile);
-                try
-                {
-                    var ssoLogger = LogManager.GetLogger("sso");
-                    SsoLogger.SetLoggerInstance(ssoLogger);
-                }
-                catch
-                {
-                }
+                
+                //init sso static logger
+                var ssoLogger = new Log4NetLoggerService(Log4NetLoggerService.LogType.Session);
+                SsoLogger.SetLoggerInstance(ssoLogger);
             }
         }
 
@@ -90,6 +89,7 @@ namespace DH.Helpdesk.SelfService
 
         protected void WSFederationAuthenticationModule_SignedIn(object sender, EventArgs e)
         {
+            LogIdentityClaims(Context);
             SsoLogger.Debug("WSFederationAuthenticationModule: SignedIn!", Context);
         }
 
@@ -139,8 +139,7 @@ namespace DH.Helpdesk.SelfService
                         SsoLogger.Debug($"Sign out user due user session restart! ReturnUrl: {returnUrl}.", Context);
                         
                         //clear sessionId sync so that the next time session time out logic was ignored
-                        ClearSessionId(); 
-
+                        ClearSessionId();
                         fedAuthService?.SignOut(returnUrl);
                     }
                 }
@@ -177,8 +176,9 @@ namespace DH.Helpdesk.SelfService
                 SsoLogger.Debug(
                     $"Security token lifetime has been expired: ValidTo: {token.ValidTo}, UtcNow: {DateTime.UtcNow}. Signing out. ReturnUrl: {returnUrl}.",
                     Context);
-                federationAuthenticationService.SignOut(returnUrl);
 
+                SessionFacade.ClearSession();
+                federationAuthenticationService.SignOut(returnUrl);
                 return;
             }
 
@@ -230,9 +230,24 @@ namespace DH.Helpdesk.SelfService
             SsoLogger.Debug("Application_EndRequest called.", Context);
         }
 
-        #endif
+#endif
 
         #region Helper Methods
+
+        private static void LogIdentityClaims(HttpContext ctx)
+        {
+            
+            var claimsIdentity = ctx.User.Identity as ClaimsIdentity;
+            if (claimsIdentity != null && claimsIdentity.Claims.Any())
+            {
+                SsoLogger.Debug(">>> Claims found:");
+                foreach (var claim in claimsIdentity.Claims)
+                {
+                    SsoLogger.Debug($"Claim: {claim.Type}, value: {claim.Value}, Issuer: {claim.Issuer}");
+                }
+            }
+        }
+
 
         private static string BuildHomeUrl(HttpContext ctx)
         {

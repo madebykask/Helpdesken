@@ -6,6 +6,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
 {
     public class FormsAuthenticationBehavior : IAuthenticationBehavior
     {
+        public string GetLoginUrl()
+        {
+            return FormsAuthentication.LoginUrl ?? "/Login/Login";
+        }
+
         public UserIdentity CreateUserIdentity(HttpContextBase ctx)
         {
             UserIdentity userIdentity = null;

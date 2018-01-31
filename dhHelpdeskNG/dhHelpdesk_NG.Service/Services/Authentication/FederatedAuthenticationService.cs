@@ -2,6 +2,8 @@
 using System.IdentityModel.Services;
 using System.IdentityModel.Tokens;
 using System.Web;
+using DH.Helpdesk.Common.Logger;
+using log4net;
 using Thinktecture.IdentityModel.Web;
 
 namespace DH.Helpdesk.Services.Services.Authentication
@@ -11,11 +13,29 @@ namespace DH.Helpdesk.Services.Services.Authentication
         void SetDefaultSessionDuration(int durationInMinutes);
         SessionSecurityToken RefreshSecurityTokenLifeTime(SessionAuthenticationModule sam, SessionSecurityToken sessionToken, int maxTokenLifeTimeMin = 0);
         void HandleSecurityTokenExceptions(string redirectUrl, Action<SecurityTokenException> handleAction);
-        void SignOut(string returnUrl);
+        void SignOut(string returnUrl, bool localOnly = false);
+
+        string GetSignInUrl();
+        string GetSignOutUrl();
     }
 
     public class FederatedAuthenticationService : IFederatedAuthenticationService
     {
+        private readonly ILoggerService _logger;
+
+        #region ctor
+
+        public FederatedAuthenticationService()
+        {
+        }
+
+        public FederatedAuthenticationService(ILoggerService logger)
+        {
+            _logger = logger;
+        }
+
+        #endregion
+
         #region SetDefaultSessionDuration
 
         public void SetDefaultSessionDuration(int durationInMinutes)
@@ -30,7 +50,7 @@ namespace DH.Helpdesk.Services.Services.Authentication
 
         public SessionSecurityToken RefreshSecurityTokenLifeTime(SessionAuthenticationModule sam, SessionSecurityToken sessionToken, int maxTokenLifeTimeMin = 0)
         {
-            //SsoLogger.Debug($"SecurityToken current lifetime: {sessionToken.ValidFrom} - {sessionToken.ValidTo}");
+            _logger.Debug($"SecurityToken current lifetime: {sessionToken.ValidFrom} - {sessionToken.ValidTo}");
 
             if (sessionToken.ValidTo.Subtract(sessionToken.ValidFrom) <= TimeSpan.Zero)
                 return null;
@@ -38,7 +58,7 @@ namespace DH.Helpdesk.Services.Services.Authentication
             //check token max life time value
             if (maxTokenLifeTimeMin > 0 && DateTime.UtcNow.Subtract(sessionToken.ValidFrom) > TimeSpan.FromMinutes(maxTokenLifeTimeMin)) 
             {
-                //SsoLogger.Debug($"SecurityToken: Max lifetime ({maxTokenLifeTimeMin}min) has been reached. Current lifetime: {sessionToken.ValidFrom} - {sessionToken.ValidTo}");
+                _logger.Debug($"SecurityToken: Max lifetime ({maxTokenLifeTimeMin}min) has been reached. Current lifetime: {sessionToken.ValidFrom} - {sessionToken.ValidTo}");
                 return null;
             }
 
@@ -61,7 +81,7 @@ namespace DH.Helpdesk.Services.Services.Authentication
                           IsReferenceMode = sessionToken.IsReferenceMode
                       };
 
-                //SsoLogger.Debug($"SecurityToken lifetime updated: {sessionToken.ValidFrom} - {sessionToken.ValidTo}");
+                _logger.Debug($"SecurityToken lifetime updated: {refreshedToken.ValidFrom} - {refreshedToken.ValidTo}");
             }
 
             return refreshedToken;
@@ -74,39 +94,54 @@ namespace DH.Helpdesk.Services.Services.Authentication
             PassiveModuleConfiguration.SuppressSecurityTokenExceptions("~/", handleAction);
         }
 
-        public void SignOut(string returnUrl)
+        public void SignOut(string returnUrl, bool localOnly = false)
         {
-            HttpContext.Current.Session?.Clear(); // replace with IHttpService
+            DoLocalSignOut();
 
-            //local sign out
-            //var sam = FederatedAuthentication.SessionAuthenticationModule;
-            //sam?.SignOut();
+            if (!localOnly)
+            {
+                var fam = FederatedAuthentication.WSFederationAuthenticationModule;
 
-            //sign out with FAM
-            //FederatedAuthentication.WSFederationAuthenticationModule.SignOut();
+                //build sign out urls
+                var signoutUrl = WSFederationAuthenticationModule.GetFederationPassiveSignOutUrl(fam.Issuer, fam.Realm, null);
+                var signOutUri = new Uri(signoutUrl);
+                var returnUri = BuildReturnUri(returnUrl, fam.Realm);
 
-            PerformPassiveSignOut(returnUrl);
+                _logger.Debug($"WSFedAuth Signout(). SignOutUrl: {signOutUri.OriginalString}, ReturnUrl: {returnUri.OriginalString}");
+                WSFederationAuthenticationModule.FederatedSignOut(signOutUri, returnUri);
+            }
         }
 
         #region Helper Methods
 
-        private void PerformPassiveSignOut(string returnUrl = null)
+        private void DoLocalSignOut()
         {
-            var fam = FederatedAuthentication.WSFederationAuthenticationModule;
-
             FederatedAuthentication.SessionAuthenticationModule.CookieHandler.Delete();
             FederatedAuthentication.SessionAuthenticationModule.DeleteSessionTokenCookie();
 
-            //build sign out urls
-            var signoutUrl = (WSFederationAuthenticationModule.GetFederationPassiveSignOutUrl(fam.Issuer, fam.Realm, null));
-            var signOutUri = new Uri(signoutUrl);
-            var returnUri = BuildSignOutReturnUri(returnUrl, fam.Realm);
-
-            //SsoLogger.Debug($"WSFedAuth Signout(). SignOutUrl: {signOutUri.OriginalString}, ReturnUrl: {returnUri.OriginalString}");
-            WSFederationAuthenticationModule.FederatedSignOut(signOutUri, returnUri);
+            WSFederationAuthenticationModule fedAuthenticationModule = FederatedAuthentication.WSFederationAuthenticationModule;
+            fedAuthenticationModule.SignOut(false);
         }
 
-        private Uri BuildSignOutReturnUri(string returnUrl, string realmUrl)
+        public string GetSignInUrl()
+        {
+            var fam = FederatedAuthentication.WSFederationAuthenticationModule;
+            var msg = new SignInRequestMessage(new Uri(fam.Issuer), fam.Realm);
+
+            var url = msg.WriteQueryString();
+            return url;
+        }
+
+        public string GetSignOutUrl()
+        {
+            var fam = FederatedAuthentication.WSFederationAuthenticationModule;
+            var signOutRequestMessage = new SignOutRequestMessage(new Uri(fam.Issuer), fam.Realm);
+
+            var url = signOutRequestMessage.WriteQueryString();
+            return url;
+        }
+
+        private Uri BuildReturnUri(string returnUrl, string realmUrl)
         {
             var returnUri = string.IsNullOrEmpty(returnUrl) ? null : new Uri(returnUrl, System.UriKind.RelativeOrAbsolute);
             if (returnUri != null && returnUri.IsAbsoluteUri)

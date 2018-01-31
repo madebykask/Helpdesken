@@ -18,6 +18,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
     {
         string DefaultUserId { get; }
         string DefaultEmployeeNumber { get; }
+        int SecurityTokenMaxDuration { get; }
+        int SecurityTokenDuration { get; }
+        bool EnableSlidingExpiration { get; }
+
         bool SsoLog { get; }
     }
 
@@ -70,6 +74,33 @@ namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
         public string DefaultEmployeeNumber
         {
             get { return AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultEmployeeNumber); }
+        }
+
+        public int SecurityTokenDuration
+        {
+            get
+            {
+                var val = AppConfigHelper.GetInt32(AppSettingsKey.TokenLifeTime);
+                return val ?? 0;
+            }
+        }
+
+        public int SecurityTokenMaxDuration
+        {
+            get
+            {
+                var val = AppConfigHelper.GetInt32(AppSettingsKey.TokenMaxLifeTime);
+                return val ?? 0;
+            }
+        }
+
+        public bool EnableSlidingExpiration
+        {
+            get
+            {
+                var val = AppConfigHelper.GetBoolean(AppSettingsKey.EnableSlidingExpiration);
+                return val ?? false;
+            }
         }
 
         public bool SsoLog
