@@ -766,6 +766,7 @@ function CaseInitForm() {
             if (result.success) {
                 $('#divProductArea.DynamicDropDown > ul.dropdown-menu')
                     .html("<li><a href='#'>--</a></li>" + result.data);
+                paId = parseInt($('#case__ProductArea_Id').val());
                 if (result.paIds && result.paIds.indexOf(paId) < 0) {
                     var emptyElement = $('#divProductArea.DynamicDropDown > ul.dropdown-menu').children().first();
                     $('#divBreadcrumbs_ProductArea').text(getBreadcrumbs(emptyElement));
