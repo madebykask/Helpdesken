@@ -1,1 +1,0 @@
-﻿-- use normal script file for updating database, TODO: implement all construction in normal script file
