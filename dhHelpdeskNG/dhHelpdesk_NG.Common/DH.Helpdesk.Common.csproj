@@ -114,6 +114,7 @@
     <Compile Include="Extensions\ComparableInterface\ComparableInterfaceExtension.cs" />
     <Compile Include="Extensions\Integer\IntExtension.cs" />
     <Compile Include="Extensions\Integer\ToBoolExtension.cs" />
+    <Compile Include="Extensions\Object\ObjectExtension.cs" />
     <Compile Include="Extensions\String\SplitExtension.cs" />
     <Compile Include="Extensions\String\StringExtension.cs" />
     <Compile Include="Logger\ILoggerService.cs" />

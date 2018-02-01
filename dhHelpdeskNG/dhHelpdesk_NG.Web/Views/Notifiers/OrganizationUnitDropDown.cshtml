@@ -1,11 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
-@model DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content.DropDownContent           
+@model DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content.DropDownContent  
+    
+@{ var required = ViewBag.Required != null ? (bool)ViewBag.Required : false; }
+@{ var readOnly = ViewBag.ReadOnly != null ? (bool)ViewBag.ReadOnly : false; }         
 
-@if (ViewBag.Required != null)
-{
-    @Html.DropDown("organizationUnit_dropdown", "OrganizationUnitId", true, Model, (bool)ViewBag.Required)
-}
-else
-{
-    @Html.DropDown("organizationUnit_dropdown", "OrganizationUnitId", true, Model)
-}
+@Html.DropDown("organizationUnit_dropdown", "OrganizationUnitId", true, Model, required, readOnly)

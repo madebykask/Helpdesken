@@ -1,4 +1,6 @@
-﻿
+﻿--BEGIN TRAN -- TMP
+
+
 --update DB from 5.3.33 to 5.3.34 version
 
 --UPDATE tblCustomerUser field length
@@ -191,5 +193,205 @@ if not exists(select * from sysobjects WHERE Name = N'FK_tblCategory_tblCategory
 			)
 GO 
 
+/************************************************************************** CBD **************************************************************************/
+
+RAISERROR ('Add column ComputerUserCategoryID on table tblComputerUsers', 10, 1) WITH NOWAIT
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'ComputerUsersCategoryID' and sysobjects.name = N'tblComputerUsers')
+BEGIN
+    ALTER TABLE [dbo].[tblComputerUsers]
+    ADD [ComputerUsersCategoryID] INT NULL;
+END
+GO	
+
+RAISERROR('Create table tblComputerUsersCategory', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblComputerUsersCategory' AND type='U')
+BEGIN
+	CREATE TABLE [dbo].[tblComputerUsersCategory] (
+		[ID]                        INT              IDENTITY (1, 1) NOT NULL,
+		[Name]                      NVARCHAR (MAX)   NOT NULL,
+		[CaseSolutionID]            INT              NULL,
+		[ComputerUsersCategoryGuid] UNIQUEIDENTIFIER NOT NULL,
+		[IsReadOnly]                BIT              NOT NULL,
+		[CustomerID]                INT              NOT NULL,
+		[ExtendedCaseFormID]        INT              NULL,
+		CONSTRAINT [PK_tblComputerUsersCategory] PRIMARY KEY CLUSTERED ([ID] ASC)
+	);
+END
+GO
+
+RAISERROR('Create index for tblComputerUsers on Customer_Id and ComputerUsersCategoryID', 10, 1) WITH NOWAIT
+IF EXISTS (SELECT name FROM sysindexes WHERE name = 'IX_tblComputerUsers_ComputerUSersCategory')
+	DROP INDEX IX_tblComputerUsers_ComputerUSersCategory ON [dbo].[tblComputerUsers]
+GO
+CREATE NONCLUSTERED INDEX [IX_tblComputerUsers_ComputerUSersCategory]
+    ON [dbo].[tblComputerUsers]([Customer_Id] ASC, [ComputerUsersCategoryID] ASC, [Status] ASC)
+    INCLUDE([Id], [UserId], [FirstName], [SurName], [Location], [Phone], [Cellphone], [Email], [UserCode], [Department_Id], [OU_Id], [CostCentre]);
+GO
+
+
+RAISERROR('Create table tblCase_tblCaseSection_ExtendedCaseData for connecting case section with extended data', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblCase_tblCaseSection_ExtendedCaseData' AND type = 'U')
+BEGIN
+	CREATE TABLE [dbo].[tblCase_tblCaseSection_ExtendedCaseData] (
+		[Case_Id]             INT NOT NULL,
+		[CaseSection_Id]      INT NOT NULL,
+		[ExtendedCaseData_Id] INT NOT NULL,
+		CONSTRAINT [PK_tblCase_tblCaseSection_ExtendedCaseData] PRIMARY KEY CLUSTERED ([Case_Id] ASC, [CaseSection_Id] ASC, [ExtendedCaseData_Id] ASC)
+	);
+
+END
+GO
+
+RAISERROR('Create table tblCaseSolution_tblCaseSection_ExtendedCaseForm to connect section, solution and extended case form', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblCaseSolution_tblCaseSection_ExtendedCaseForm' AND xtype='U')
+BEGIN
+	CREATE TABLE [dbo].[tblCaseSolution_tblCaseSection_ExtendedCaseForm] (
+		[ID]                 INT IDENTITY (1, 1) NOT NULL,
+		[tblCaseSolutionID]  INT NOT NULL,
+		[tblCaseSectionID]   INT NOT NULL,
+		[ExtendedCaseFormID] INT NOT NULL,
+		CONSTRAINT [PK_tblCaseSolution_tblCaseSection_ExtendedCaseForm] PRIMARY KEY CLUSTERED ([ID] ASC)
+	);
+END
+GO
+
+RAISERROR('Create table tblComputerUserCategory_ExtendedCaseForm to connect computerusercategory with extended case form. TODO: Evaluate usage, already exist in tblComputerUsersCategory', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblComputerUserCategory_ExtendedCaseForm' AND xtype='U')
+BEGIN
+	CREATE TABLE [dbo].[tblComputerUserCategory_ExtendedCaseForm] (
+		[ComputerUserCategoryID] INT NOT NULL,
+		[ExtendedCaseFormID]     INT NOT NULL,
+		CONSTRAINT [PK_tblComputerUserCategory_ExtendedCaseForm_1] PRIMARY KEY CLUSTERED ([ComputerUserCategoryID] ASC)
+	);
+END
+GO
+
+
+RAISERROR('Default constraint on tblComputerUsersCategory.IsReadOnly, value 0', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'DF_tblComputerUsersCategory_ReadOnly') AND type = 'D')
+BEGIN
+	ALTER TABLE [dbo].[tblComputerUsersCategory] 
+	ADD CONSTRAINT [DF_tblComputerUsersCategory_ReadOnly] DEFAULT ((0)) FOR [IsReadOnly];
+END
+GO
+
+RAISERROR('Foreign key tblCase_tblCaseSection_ExtendedCaseData.Case_Id', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblCase_tblCaseSection_ExtendedCaseData_tblCase') AND type = 'F')
+BEGIN
+	ALTER TABLE [dbo].[tblCase_tblCaseSection_ExtendedCaseData] WITH NOCHECK 
+	ADD CONSTRAINT [FK_tblCase_tblCaseSection_ExtendedCaseData_tblCase] FOREIGN KEY ([Case_Id]) REFERENCES [dbo].[tblCase] ([Id]);
+END
+GO
+
+RAISERROR('Foreign key tblCase_tblCaseSection_ExtendedCaseData.CaseSectionID ', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblCase_tblCaseSection_ExtendedCaseData_tblCaseSections') AND type = 'F')
+BEGIN
+	ALTER TABLE [dbo].[tblCase_tblCaseSection_ExtendedCaseData] WITH NOCHECK
+    ADD CONSTRAINT [FK_tblCase_tblCaseSection_ExtendedCaseData_tblCaseSections] FOREIGN KEY ([CaseSection_Id]) REFERENCES [dbo].[tblCaseSections] ([Id]);
+END
+GO
+
+RAISERROR('Foreign key tblCase_tblCaseSection_ExtendedCaseData.ExtendedCaseData_Id', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblCase_tblCaseSection_ExtendedCaseData_ExtendedCaseData') AND type = 'F')
+BEGIN
+	ALTER TABLE [dbo].[tblCase_tblCaseSection_ExtendedCaseData] WITH NOCHECK
+    ADD CONSTRAINT [FK_tblCase_tblCaseSection_ExtendedCaseData_ExtendedCaseData] FOREIGN KEY ([ExtendedCaseData_Id]) REFERENCES [dbo].[ExtendedCaseData] ([Id]);
+END
+
+RAISERROR('Foreign key tblCaseSolution_tblCaseSection_ExtendedCaseForm.tblCaseSolutionID', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblCaseSolution_tblCaseSection_ExtendedCaseForm_tblCaseSolution') AND type = 'F')
+BEGIN
+	ALTER TABLE [dbo].[tblCaseSolution_tblCaseSection_ExtendedCaseForm] WITH NOCHECK
+    ADD CONSTRAINT [FK_tblCaseSolution_tblCaseSection_ExtendedCaseForm_tblCaseSolution] FOREIGN KEY ([tblCaseSolutionID]) REFERENCES [dbo].[tblCaseSolution] ([Id]);
+END
+
+RAISERROR('Foreign key tblCaseSolution_tblCaseSection_ExtendedCaseForm.tblCaseSectionID', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblCaseSolution_tblCaseSection_ExtendedCaseForm_tblCaseSections') AND type = 'F')
+BEGIN
+	ALTER TABLE [dbo].[tblCaseSolution_tblCaseSection_ExtendedCaseForm] WITH NOCHECK
+    ADD CONSTRAINT [FK_tblCaseSolution_tblCaseSection_ExtendedCaseForm_tblCaseSections] FOREIGN KEY ([tblCaseSectionID]) REFERENCES [dbo].[tblCaseSections] ([Id]);
+END
+
+RAISERROR('Foreign key tblCaseSolution_tblCaseSection_ExtendedCaseForm.ExtendedCaseFormID', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblCaseSolution_tblCaseSection_ExtendedCaseForm_ExtendedCaseForms') AND type = 'F')
+BEGIN
+	ALTER TABLE [dbo].[tblCaseSolution_tblCaseSection_ExtendedCaseForm] WITH NOCHECK
+    ADD CONSTRAINT [FK_tblCaseSolution_tblCaseSection_ExtendedCaseForm_ExtendedCaseForms] FOREIGN KEY ([ExtendedCaseFormID]) REFERENCES [dbo].[ExtendedCaseForms] ([Id]);
+END
+GO
+
+RAISERROR('Foreign key tblComputerUserCategory_ExtendedCaseForm.ComputerUserCategoryID', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblComputerUserCategory_ExtendedCaseForm_tblComputerUsersCategory') AND type = 'F')
+BEGIN
+	ALTER TABLE [dbo].[tblComputerUserCategory_ExtendedCaseForm] WITH NOCHECK
+    ADD CONSTRAINT [FK_tblComputerUserCategory_ExtendedCaseForm_tblComputerUsersCategory] FOREIGN KEY ([ComputerUserCategoryID]) REFERENCES [dbo].[tblComputerUsersCategory] ([ID]);
+END
+GO
+
+RAISERROR('Foreign key tblComputerUserCategory_ExtendedCaseForm.ComputerUserCategoryID', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblComputerUserCategory_ExtendedCaseForm_tblComputerUsersCategory') AND type = 'F')
+BEGIN
+	ALTER TABLE [dbo].[tblComputerUserCategory_ExtendedCaseForm] WITH NOCHECK
+    ADD CONSTRAINT [FK_tblComputerUserCategory_ExtendedCaseForm_tblComputerUsersCategory] FOREIGN KEY ([ComputerUserCategoryID]) REFERENCES [dbo].[tblComputerUsersCategory] ([ID]);
+END
+GO
+
+RAISERROR('Foreign key tblComputerUserCategory_ExtendedCaseForm.ExtendedCaseFormID', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblComputerUserCategory_ExtendedCaseForm_ExtendedCaseForms') AND type = 'F')
+BEGIN
+	ALTER TABLE [dbo].[tblComputerUserCategory_ExtendedCaseForm] WITH NOCHECK
+    ADD CONSTRAINT [FK_tblComputerUserCategory_ExtendedCaseForm_ExtendedCaseForms] FOREIGN KEY ([ExtendedCaseFormID]) REFERENCES [dbo].[ExtendedCaseForms] ([Id]);
+END
+GO
+
+/* Foreign key tblComputerUsersCategory.ID TODO: Remove this one*/
+/*IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblComputerUsersCategory_tblComputerUsersCategory') AND type = 'D')
+BEGIN
+	ALTER TABLE [dbo].[tblComputerUsersCategory] WITH NOCHECK
+    ADD CONSTRAINT [FK_tblComputerUsersCategory_tblComputerUsersCategory] FOREIGN KEY ([ID]) REFERENCES [dbo].[tblComputerUsersCategory] ([ID]);
+END
+GO*/
+
+RAISERROR('Foreign key tblComputerUsersCategory.ExtendedCaseFormID', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblComputerUsersCategory_ExtendedCaseForms1') AND type = 'F')
+BEGIN
+	ALTER TABLE [dbo].[tblComputerUsersCategory] WITH NOCHECK
+    ADD CONSTRAINT [FK_tblComputerUsersCategory_ExtendedCaseForms1] FOREIGN KEY ([ExtendedCaseFormID]) REFERENCES [dbo].[ExtendedCaseForms] ([Id]);
+END
+GO
+
+RAISERROR('Foreign key tblComputerUsersCategory.CustomerID ', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblComputerUsersCategory_tblCustomer') AND type = 'F')
+BEGIN
+	ALTER TABLE [dbo].[tblComputerUsersCategory] WITH NOCHECK
+    ADD CONSTRAINT [FK_tblComputerUsersCategory_tblCustomer] FOREIGN KEY ([CustomerID]) REFERENCES [dbo].[tblCustomer] ([Id]);
+END
+GO
+
+/* Foreign key tblComputerUsersCategory TODO: Remove this one */
+/*IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblComputerUsersCategory_ExtendedCaseForms') AND type = 'D')
+BEGIN
+	ALTER TABLE [dbo].[tblComputerUsersCategory] WITH NOCHECK
+    ADD CONSTRAINT [FK_tblComputerUsersCategory_ExtendedCaseForms] FOREIGN KEY ([ID]) REFERENCES [dbo].[ExtendedCaseForms] ([Id]);
+END
+GO*/
+
+
+RAISERROR('Foreign key tblComputerUsers.ComputerUsersCategoryID', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblComputerUsers_tblComputerUsersCategory') AND type = 'F')
+BEGIN
+	ALTER TABLE [dbo].[tblComputerUsers] WITH NOCHECK
+    ADD CONSTRAINT [FK_tblComputerUsers_tblComputerUsersCategory] FOREIGN KEY ([ComputerUsersCategoryID]) REFERENCES [dbo].[tblComputerUsersCategory] ([ID]);
+END
+GO
+
+
+
+
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.34'
+
+--ROLLBACK --TMP

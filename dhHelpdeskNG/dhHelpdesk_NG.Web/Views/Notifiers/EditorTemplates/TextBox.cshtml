@@ -9,6 +9,17 @@
         {"maxlength", Model.MaxLength}
     };
 
+    object addAttributes = null;
+    if (ViewContext.ViewData.Keys.Contains("htmlAttributes"))
+    {
+        addAttributes = ViewContext.ViewData["htmlAttributes"];
+
+        foreach (var prop in addAttributes.GetType().GetProperties())
+        {
+            htmlAttributes.Add(prop.Name, prop.GetValue(addAttributes, null));
+        }
+    }
+
     <tr>
         <td class="span3">
             @if (!Model.Required)

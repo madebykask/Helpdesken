@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DH.Helpdesk.Domain.ExtendedCaseEntity;
+using System;
 using System.Collections.Generic;
 
 namespace DH.Helpdesk.Domain.Cases
@@ -22,5 +23,7 @@ namespace DH.Helpdesk.Domain.Cases
         public virtual List<CaseSectionField> CaseSectionFields { get; set; }
 
         public virtual List<CaseSectionLanguage> CaseSectionLanguages { get; set; }
-    }
+
+		public virtual List<Case_CaseSection_ExtendedCase> Case_CaseSection_ExtendedCases { get; set; }
+	}
 }

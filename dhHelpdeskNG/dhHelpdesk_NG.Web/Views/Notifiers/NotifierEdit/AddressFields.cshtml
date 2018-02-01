@@ -1,14 +1,15 @@
 ﻿
 @model DH.Helpdesk.Web.Models.Notifiers.InputModel
 
+@{ var attributes = Model.ComputerUserCategoryModel.IsReadOnly ? (object)new { htmlAttributes = new { @readonly = "readonly" } } : new { };}
 <div class="container">
     <h4>@Translation.Get("Adress", Enums.TranslationSource.TextTranslation)</h4>
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @Html.EditorFor(m => m.PostalAddress, "TextBox")
-                @Html.EditorFor(m => m.PostalCode, "TextBox")
-                @Html.EditorFor(m => m.City, "TextBox")
+                @Html.EditorFor(m => m.PostalAddress, "TextBox", attributes)
+                @Html.EditorFor(m => m.PostalCode, "TextBox", attributes)
+                @Html.EditorFor(m => m.City, "TextBox", attributes)
             </table>
         </div>
     </div>

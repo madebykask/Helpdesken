@@ -276,8 +276,8 @@
             return notifierWithUserIdOverviews;
         }
 
-        public IList<UserSearchResults> Search(int customerId, string searchFor)
-        {
+		public IList<UserSearchResults> Search(int customerId, string searchFor, int? categoryID = null)
+		{
             var s = searchFor.ToLower();
 
             var query = from cu in this.DataContext.ComputerUsers
@@ -285,7 +285,8 @@
                         from k in res.DefaultIfEmpty()
                         where
                             cu.Customer_Id == customerId &&
-                            cu.Status != 0
+							(/*categoryID == null || decide how to behave if null*/ cu.ComputerUsersCategoryID == categoryID) &&
+							 cu.Status != 0
                             && (cu.UserId.ToLower().Contains(s) || cu.FirstName.ToLower().Contains(s)
                                 || cu.SurName.ToLower().Contains(s) || cu.Phone.ToLower().Contains(s)
                                 || cu.Email.ToLower().Contains(s) || cu.UserCode.ToLower().Contains(s)
@@ -315,8 +316,14 @@
                                 UserId = (cu.UserId != null ? cu.UserId : string.Empty),
                                 RegionName = k.Region.Name,
                                 DepartmentName = cu.Department.DepartmentName,
-                                OUName = (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name
-                            };
+                                OUName = (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name,
+								CategoryID = cu.ComputerUsersCategoryID,
+								CategoryName = cu.ComputerUserCategory == null ? null : cu.ComputerUserCategory.Name,
+								IsReadOnly = cu.ComputerUserCategory != null ?
+									 cu.ComputerUserCategory.IsReadOnly :
+									 false
+
+							};
 
             return query.OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ThenBy(x => x.Id).Take(25).ToList();
         }
@@ -352,7 +359,10 @@
                 requestBuilder.FilterByPharse(parameters.Pharse);
             }
 
-            var countingRequest = requestBuilder.Build();
+			requestBuilder.FilterByComputerUserCategoryID(parameters.ComputerUserCategoryID);
+
+			var countingRequest = requestBuilder.Build();
+
             var notifiersFound = countingRequest.Count();
 
             if (parameters.SortField == null)

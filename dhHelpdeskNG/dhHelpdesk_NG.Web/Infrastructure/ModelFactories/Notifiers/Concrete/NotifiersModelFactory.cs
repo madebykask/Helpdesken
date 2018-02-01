@@ -29,7 +29,8 @@
             List<ItemOverview> searchDepartments,
             List<ItemOverview> searchOrganizationUnit,
             List<ItemOverview> searchDivisions,
-            NotifierFilters filters,
+			List<ItemOverview> searchComputerUserCategories,
+			NotifierFilters filters,
             SearchResult searchResult)
         {
             SearchDropDownModel domain;
@@ -114,13 +115,29 @@
 
             var sortField = new SortFieldModel { Name = filters.SortByField, SortBy = filters.SortBy };
 
-            var searchModel = new SearchModel(
+			SearchDropDownModel computerUserCategories;
+			if (searchComputerUserCategories != null && searchComputerUserCategories.Any())
+			{
+				var items = searchComputerUserCategories.Select(d => new DropDownItem(d.Name, d.Value)).ToList();
+
+				// TODO: Translation
+				//items.Insert(0, new DropDownItem("Employee", "0"));
+				var content = new DropDownContent(items, "0");
+				computerUserCategories = new SearchDropDownModel(true, content);
+			}
+			else
+			{
+				computerUserCategories = new SearchDropDownModel(false);
+			}
+
+			var searchModel = new SearchModel(
                 domain,
                 region,
                 department,
                 organizationUnit,
                 division,
-                filters.Pharse,
+				computerUserCategories,
+				filters.Pharse,
                 filters.Status,
                 filters.RecordsOnPage,
                 sortField);
@@ -139,8 +156,9 @@
                         new SearchDropDownModel(false),
                         new SearchDropDownModel(false),
                         new SearchDropDownModel(false),
-                        string.Empty,
-                        new NotifierStatus(),
+						new SearchDropDownModel(false),
+						string.Empty,
+						new NotifierStatus(),
                         0,
                         new SortFieldModel()),
                     new NotifiersGridModel(

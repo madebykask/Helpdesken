@@ -12,7 +12,8 @@
             SearchDropDownModel department,
             SearchDropDownModel organizationUnit,
             SearchDropDownModel division,
-            string pharse,
+			SearchDropDownModel computerUserCategories,
+			string pharse,
             NotifierStatus status,
             int recordsOnPage,
             SortFieldModel sortField)
@@ -22,7 +23,8 @@
             this.Department = department;
             this.OrganizationUnit = organizationUnit;
             this.Division = division;
-            this.Pharse = pharse;
+			this.ComputerUserCategories = computerUserCategories;
+			this.Pharse = pharse;
             this.Status = status;
             this.RecordsOnPage = recordsOnPage;
             this.SortField = sortField;
@@ -50,5 +52,7 @@
         public NotifierStatus Status { get; private set; }
 
         public SortFieldModel SortField { get; private set; }
-    }
+
+		public SearchDropDownModel ComputerUserCategories { get; private set; }
+	}
 }

@@ -1,8 +1,10 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models
 {
     using System;
+	using System.Collections.Generic;
+	using Domain.Computers;
 
-    [Serializable]
+	[Serializable]
     public class UserSearchResults
     {
         public int Id { get; set; }
@@ -22,6 +24,9 @@
         public string RegionName { get; set; }
         public string DepartmentName { get; set; }
         public string OUName { get; set; }
+		public int? CategoryID { get; internal set; }
+		public string CategoryName { get; internal set; }
+		public bool IsReadOnly { get; internal set; }
 
-    }
+	}
 }

@@ -19,6 +19,6 @@ namespace DH.Helpdesk.Domain.ExtendedCaseEntity
 
         public virtual ICollection<ExtendedCaseValueEntity> ExtendedCaseValues { get; set; }
 
-        
+		public virtual ICollection<Case_CaseSection_ExtendedCase> CaseSectionExtendedCaseDatas { get; set; }
 	}
 }

@@ -294,8 +294,9 @@
             this.Bind<IEmailLogAttemptRepository>().To<EmailLogAttemptRepository>();
             this.Bind<IMetaDataRepository>().To<MetaDataRepository>();
             this.Bind<IEntityInfoRepository>().To<EntityInfoRepository>();
+			this.Bind<IComputerUserCategoryRepository>().To<ComputerUserCategoryRepository>();
 
-        }
+		}
 
         #endregion
     }

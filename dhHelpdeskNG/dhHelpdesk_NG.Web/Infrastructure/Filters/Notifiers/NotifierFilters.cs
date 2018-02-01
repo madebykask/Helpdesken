@@ -19,7 +19,8 @@
             string pharse,
             NotifierStatus status,
             int recordsOnPage,
-            string sortByField,
+			int? computerUserCategoryID,
+			string sortByField,
             SortBy sortBy)
         {
             this.DomainId = domainId;
@@ -30,7 +31,8 @@
             this.Pharse = pharse;
             this.Status = status;
             this.RecordsOnPage = recordsOnPage;
-            this.SortByField = sortByField;
+			this.ComputerUserCategoryID = computerUserCategoryID;
+			this.SortByField = sortByField;
             this.SortBy = sortBy;
         }
 
@@ -60,7 +62,9 @@
 
         public SortBy SortBy { get; private set; }
 
-        public static NotifierFilters CreateDefault()
+		public int? ComputerUserCategoryID { get; set; }
+
+		public static NotifierFilters CreateDefault()
         {
             return new NotifierFilters { Status = NotifierStatus.Active, RecordsOnPage = 100 };
         }
