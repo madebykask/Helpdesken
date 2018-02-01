@@ -2001,13 +2001,22 @@ namespace DH.Helpdesk.Web.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult ChangePriority(int? id)
+        public JsonResult ChangePriority(int? id, string textExternalLogNote)
         {
             string ret = string.Empty;
             if (id.HasValue)
             {
                 var p = _priorityService.GetPriority(id.Value);
-                ret = p != null ? p.LogText : string.Empty;
+                if (textExternalLogNote == string.Empty)
+                {
+                    ret = p != null ? p.LogText : string.Empty;
+                }
+                else if (p.LogText != null)
+                {
+                    ret = p.LogText;
+                }
+                else
+                    ret = textExternalLogNote;
             }
             return Json(new { ExternalLogText = ret });
         }

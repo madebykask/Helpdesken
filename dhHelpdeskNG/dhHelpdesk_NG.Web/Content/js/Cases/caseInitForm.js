@@ -1060,6 +1060,7 @@ function CaseInitForm() {
             if (result.success) {
                 $('#divProductArea.DynamicDropDown > ul.dropdown-menu')
                     .html("<li><a href='#'>--</a></li>" + result.data);
+                paId = parseInt($('#case__ProductArea_Id').val());
                 if (result.paIds && result.paIds.indexOf(paId) < 0) {
                     var emptyElement = $('#divProductArea.DynamicDropDown > ul.dropdown-menu').children().first();
                     $('#divBreadcrumbs_ProductArea').text(getBreadcrumbs(emptyElement));
@@ -1164,8 +1165,9 @@ function CaseInitForm() {
             $('#CaseTemplate_ExternalLogNote').val("");
             return;
         }
+        var textExternalLogNote = $('#CaseLog_TextExternal').val();
 
-        $.post('/Cases/ChangePriority/', { 'id': $(this).val() }, function (data) {
+        $.post('/Cases/ChangePriority/', { 'id': $(this).val(), 'textExternalLogNote': textExternalLogNote }, function (data) {
             if (data.ExternalLogText != null && data.ExternalLogText != "") {
                 $('#CaseLog_TextExternal').val(data.ExternalLogText);
                 $('#CaseLog_TextExternal').trigger("propertychange");
