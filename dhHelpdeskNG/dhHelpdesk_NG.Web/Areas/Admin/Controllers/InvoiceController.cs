@@ -63,14 +63,24 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
             var departments = departmentService.GetDepartments(customerId, Common.Enums.ActivationStatus.All);
-            var availableDepartments = departments.Where(x => !x.DisabledForOrder).Select(x => new ListItem(x.Id.ToString(), x.DepartmentName, Convert.ToBoolean(x.IsActive))).ToList();
-            var disabledDepartments = departments.Where(x => x.DisabledForOrder).Select(x => new ListItem(x.Id.ToString(), x.DepartmentName, Convert.ToBoolean(x.IsActive))).ToList();
-
-            var availableDepartmentsModel = new CustomSelectList();
-            availableDepartmentsModel.Items.AddItems(availableDepartments);
+            var selectedDepartmentsModel = new CustomSelectList();
             var disabledDepartmentsModel = new CustomSelectList();
+            List<ListItem> selectedDepartments;
+
+            var disabledDepartments = departments.Where(x => x.DisabledForOrder).Select(x => new ListItem(x.Id.ToString(), x.DepartmentName, Convert.ToBoolean(x.IsActive))).ToList();
+            if (!disabledDepartments.Any())
+            {
+                disabledDepartments = departments.Where(x => !x.DisabledForOrder).Select(x => new ListItem(x.Id.ToString(), x.DepartmentName, Convert.ToBoolean(x.IsActive))).ToList();
+                selectedDepartments = departments.Where(x => x.DisabledForOrder).Select(x => new ListItem(x.Id.ToString(), x.DepartmentName, Convert.ToBoolean(x.IsActive))).ToList();
+            }
+            else
+            {
+                selectedDepartments = departments.Where(x => !x.DisabledForOrder).Select(x => new ListItem(x.Id.ToString(), x.DepartmentName, Convert.ToBoolean(x.IsActive))).ToList();
+            }
+            selectedDepartmentsModel.Items.AddItems(selectedDepartments);
             disabledDepartmentsModel.Items.AddItems(disabledDepartments);
-            settings.AvailableDepartments = availableDepartmentsModel;
+
+            settings.AvailableDepartments = selectedDepartmentsModel;
             settings.DisabledDepartments = disabledDepartmentsModel;
 
             var model = this.caseInvoiceFactory.GetSettingsModel(customer, settings);

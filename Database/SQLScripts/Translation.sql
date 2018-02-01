@@ -6790,6 +6790,13 @@ If not exists (select * from tblTextTranslation where text_id = 1930 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1930, 2, N'Information bar')
 GO
 
+If not exists (select * from tbltext where id = 1931)
+	insert into tbltext (id, TextString) VALUES (1931, 'Begränsa rättighet att skicka order till')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1931 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1931, 2, 'Limit permission to send orders for')
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
