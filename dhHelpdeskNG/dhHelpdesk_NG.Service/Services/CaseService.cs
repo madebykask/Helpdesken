@@ -3093,17 +3093,21 @@ namespace DH.Helpdesk.Services.Services
 			using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
 			{
 				var caseSections = _caseSectionsRepository.GetCaseSections(customerID);
-				var caseSection = caseSections.Single(o => o.SectionType == (int)sectionType);
+				var caseSection = caseSections.SingleOrDefault(o => o.SectionType == (int)sectionType);
 
-				var rep = uow.GetRepository<Case_CaseSection_ExtendedCase>();
-
-				var all = rep.Find(o => o.Case_Id == caseID && o.CaseSection_Id == caseSection.Id);
-
-				foreach (var r in all)
+				if (caseSection != null)
 				{
-					rep.Delete(r);
+
+					var rep = uow.GetRepository<Case_CaseSection_ExtendedCase>();
+
+					var all = rep.Find(o => o.Case_Id == caseID && o.CaseSection_Id == caseSection.Id);
+
+					foreach (var r in all)
+					{
+						rep.Delete(r);
+					}
+					uow.Save();
 				}
-				uow.Save();
 			}
 		}
 
