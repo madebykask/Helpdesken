@@ -122,7 +122,7 @@ namespace DH.Helpdesk.Web
         protected void Session_Start(object sender, EventArgs e)
         {
             var sessionId = Session.SessionID;
-            LogManager.Session.Debug("Session.Start: " + sessionId);
+            LogSession("Session.Start: " + sessionId, Context);
         }
 
         protected void WSFederationAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs e)
@@ -154,7 +154,6 @@ namespace DH.Helpdesk.Web
 
         protected void WSFederationAuthenticationModule_AuthorizationFailed(object sender, AuthorizationFailedEventArgs e)
         {
-            //e.RedirectToIdentityProvider = false;
             LogSession($"WSFederationAuthenticationModule.AuthorizationFailed. Authorisation failed.", Context);
         }
         

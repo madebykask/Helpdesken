@@ -69,6 +69,17 @@ namespace DH.Helpdesk.SelfService
             }
         }
 
+        //todo: implement more advanced error handling similar to helpdesk 
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            var logger = new Log4NetLoggerService(Log4NetLoggerService.LogType.ERROR);
+            var ex = Server.GetLastError();
+            if (ex != null)
+            {
+                logger.Error(ex);
+            }
+        }
+
         #region Logging
 
         private void InitLogging()
@@ -86,12 +97,6 @@ namespace DH.Helpdesk.SelfService
         }
 
         #endregion
-
-        protected void WSFederationAuthenticationModule_SignedIn(object sender, EventArgs e)
-        {
-            LogIdentityClaims(Context);
-            SsoLogger.Debug("WSFederationAuthenticationModule: SignedIn!", Context);
-        }
 
         #region Session Timeout Handling
 
@@ -148,7 +153,37 @@ namespace DH.Helpdesk.SelfService
 
         #endregion
 
+        #region ADFS events
+
+        protected void WSFederationAuthenticationModule_RedirectingToIdentityProvider(object sender, RedirectingToIdentityProviderEventArgs e)
+        {
+            var stsUrl = e.SignInRequestMessage.WriteQueryString();
+            SsoLogger.Debug($"WSFederationAuthenticationModule.RedirectingToIdentityProvider. Redirect to sts - {stsUrl}", Context);
+        }
+
+
+        protected void WSFederationAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs e)
+        {
+            SsoLogger.Debug("WSFederationAuthenticationModule: SessionSecurityTokenCreated!", Context);
+        }
+
+        protected void WSFederationAuthenticationModule_SignedIn(object sender, EventArgs e)
+        {
+            LogIdentityClaims(Context);
+            SsoLogger.Debug("WSFederationAuthenticationModule: SignedIn!", Context);
+        }
+
+        protected void WSFederationAuthenticationModule_AuthorizationFailed(object sender, AuthorizationFailedEventArgs e)
+        {
+            SsoLogger.Debug($"WSFederationAuthenticationModule.AuthorizationFailed. Authorisation failed.", Context);
+        }
+
         #region SSO token lifetime handling
+
+        protected void SessionAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs e)
+        {
+            SsoLogger.Debug("SessionAuthenticationModule_SessionSecurityTokenCreated called!", Context);
+        }
 
         protected void SessionAuthenticationModule_SessionSecurityTokenReceived(object sender, SessionSecurityTokenReceivedEventArgs args)
         {
@@ -198,40 +233,8 @@ namespace DH.Helpdesk.SelfService
 
         #endregion
 
-        #if DEBUG
-
-        protected void Session_OnEnd(object sender, EventArgs e)
-        {
-            SsoLogger.Debug("Session_OnEnd called!");
-        }
-
-        protected void Application_OnEnd(object sender, EventArgs e)
-        {
-            SsoLogger.Debug("Application_OnEnd called!");
-        }
-
-        protected void SessionAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs e)
-        {
-            SsoLogger.Debug("SessionAuthenticationModule_SessionSecurityTokenCreated called!",Context);
-        }
-
-        protected void WSFederationAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs e)
-        {
-            SsoLogger.Debug("WSFederationAuthenticationModule: SessionSecurityTokenCreated!", Context);
-        }
-
-        protected void Application_PostAuthenticateRequest(object sender, EventArgs e)
-        {
-            SsoLogger.Debug("Application_PostAuthenticate called.", Context);
-        }
-
-        protected void Application_EndRequest(object sender, EventArgs e)
-        {
-            SsoLogger.Debug("Application_EndRequest called.", Context);
-        }
-
-#endif
-
+        #endregion //adfs
+     
         #region Helper Methods
 
         private static void LogIdentityClaims(HttpContext ctx)
@@ -252,7 +255,13 @@ namespace DH.Helpdesk.SelfService
         private static string BuildHomeUrl(HttpContext ctx)
         {
             var httpContext = new HttpContextWrapper(ctx);
-            var customerId = httpContext.GetCustomerIdFromCookie();
+
+            var customerId = httpContext.GetCustomerIdFromQueryString();
+            if (customerId <= 0)
+            {
+                customerId = httpContext.GetCustomerIdFromCookie();
+            }
+
             var returnUrl =  UrlsHelper.BuildHomeUrl(customerId);
             return returnUrl;
         }

@@ -85,8 +85,9 @@ dhform.prototype.processMessage = function(messageData) {
             this.cancelCase();
         }
 
-        if (msgType === 'refreshData' && message.caseStatus) {
-            this.updateCaseStatus(messageData.message);
+        if (msgType === 'refreshData') {
+            // NOTE:you can use this handler to proces refresh data from eForm app
+            // but its already handled in EditPage.prototype.refreshCasePage by checking IsCaseDataChanged session flag on server
         }
     }
 };
@@ -95,6 +96,7 @@ dhform.prototype.cancelCase = function () {
     var elem = $('#case-action-close');
     location.href = elem.attr('href');
 };
+
 
 dhform.prototype.updateCaseStatus = function () {
     var caseId = $('#case__Id').val();
