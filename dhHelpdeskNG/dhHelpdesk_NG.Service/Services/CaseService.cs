@@ -3112,31 +3112,34 @@ namespace DH.Helpdesk.Services.Services
 			using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
 			{
 				var caseSections = _caseSectionsRepository.GetCaseSections(customerID);
-				var caseSection = caseSections.Single(o => o.SectionType == (int)sectionType);
+				var caseSection = caseSections.SingleOrDefault(o => o.SectionType == (int)sectionType);
 
-				var rep = uow.GetRepository<Case_CaseSection_ExtendedCase>();
-
-				var all = rep.Find(o => o.Case_Id == caseID && o.CaseSection_Id == caseSection.Id).ToList();
-
-				var toRemove = all.Where(o => o.ExtendedCaseData_Id != extendedCaseDataID).ToList();
-
-				foreach (var r in toRemove)
+				if (caseSection != null)
 				{
-					rep.Delete(r);
-				}
+					var rep = uow.GetRepository<Case_CaseSection_ExtendedCase>();
 
-				// If there isn't already a connection
-				if (!all.Any(o => o.ExtendedCaseData_Id == extendedCaseDataID))
-				{
-					rep.Add(new Case_CaseSection_ExtendedCase
+					var all = rep.Find(o => o.Case_Id == caseID && o.CaseSection_Id == caseSection.Id).ToList();
+
+					var toRemove = all.Where(o => o.ExtendedCaseData_Id != extendedCaseDataID).ToList();
+
+					foreach (var r in toRemove)
 					{
-						Case_Id = caseID,
-						CaseSection_Id = caseSection.Id,
-						ExtendedCaseData_Id = extendedCaseDataID
-					});
-				}
+						rep.Delete(r);
+					}
 
-				uow.Save();
+					// If there isn't already a connection
+					if (!all.Any(o => o.ExtendedCaseData_Id == extendedCaseDataID))
+					{
+						rep.Add(new Case_CaseSection_ExtendedCase
+						{
+							Case_Id = caseID,
+							CaseSection_Id = caseSection.Id,
+							ExtendedCaseData_Id = extendedCaseDataID
+						});
+					}
+
+					uow.Save();
+				}
 			}
 
 		}
