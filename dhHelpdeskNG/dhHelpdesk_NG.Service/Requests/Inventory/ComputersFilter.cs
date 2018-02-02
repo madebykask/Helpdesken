@@ -24,7 +24,8 @@
             string searchFor,
             bool isShowScrapped, 
             int recordsOnPage,
-            SortField sortField)
+            SortField sortField,
+            int? recordsCount)
         {
             this.SortField = sortField;
             this.CustomerId = customerId;
@@ -43,6 +44,7 @@
             this.SearchFor = searchFor;
             this.IsShowScrapped = isShowScrapped;
             this.RecordsOnPage = recordsOnPage;
+            this.RecordsCount = recordsCount;
         }
 
         [IsId]
@@ -84,5 +86,7 @@
         public bool IsShowScrapped { get; private set; }
 
         public SortField SortField { get; private set; }
+
+        public int? RecordsCount { get; set; }
     }
 }

@@ -11,21 +11,35 @@
         @if (Model.UserHasInventoryAdminPermission)
         {
             <li id="menu1">
-                <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#server_edit_form').submit(); "/>
+                <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn" onclick=" $('#server_edit_form').submit(); "/>
             </li>
-            <li id="menu3">
-                @Html.ActionLink(Translation.Get("Ta bort"), "Delete", new { id = Model.ServerViewModel.Id },
-                          new { @class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?" })
-        </li>
+            if (!Model.IsForDialog)
+            {
+                <li id="menu3">
+                    @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "Delete", new {id = Model.ServerViewModel.Id},
+                        new {@class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?"})
+                </li>
+            }
         }
-        <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
+        @if (!Model.IsForDialog)
+        {
+            <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", null, new {@class = "btn"})</li>
+        }
     </ul>
 }
 
 @using (Html.BeginForm("Edit", "Server", FormMethod.Post, new { id = "server_edit_form" }))
 {
-    <label class="checkbox">@Html.CheckBoxFor(m => m.ServerViewModel.IsOperationObject) @Translation.Get("Driftobjekt")</label>
+    if (!Model.UserHasInventoryAdminPermission && Model.IsForDialog)
+    {
+        <label>@Html.CheckBoxFor(m => m.ServerViewModel.IsOperationObject, new { @disabled = "disabled"}) @Translation.GetCoreTextTranslation("Driftobjekt")</label>
+    }
+    else
+    {
+        <label class="checkbox" > @Html.CheckBoxFor(m => m.ServerViewModel.IsOperationObject) @Translation.GetCoreTextTranslation("Driftobjekt") </label>
+    }
 
+    @Html.HiddenFor(m => m.ServerViewModel.IsForDialog)
     @Html.HiddenFor(m => m.ServerViewModel.Id)
     @Html.EditorFor(m => m.ServerViewModel.GeneralFieldsModel)
     @Html.EditorFor(m => m.ServerViewModel.ChassisFieldsModel)
@@ -40,7 +54,7 @@
     @Html.EditorFor(m => m.ServerViewModel.StateFieldsModel)
     if (Model.ServerViewModel.CreatedDate.Show || Model.ServerViewModel.ChangedDate.Show)
     {
-    <h4>@Translation.Get("Status")</h4>
+    <h4>@Translation.GetCoreTextTranslation("Status")</h4>
     }
     <div class="row">
         <div class="span12">
@@ -70,7 +84,7 @@
                     {
                     <tr>
                         <td class="span3">
-                            <label>@Translation.Get("Changed by")</label>
+                            <label>@Translation.GetCoreTextTranslation("Changed by")</label>
                         </td>
                         <td class="span9">
                             @Html.DisplayFor(m => m.ServerViewModel.StateFieldsModel.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.ServerViewModel.StateFieldsModel.ChangedByUserName.LastName)

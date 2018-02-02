@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Enums.Users;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -126,7 +128,6 @@
             {
                 userWorkingGroups = userWorkingGroupRepository.GetAll()
                 .Where(uw => uw.User_Id == userId && uw.UserRole != 0).Select(uw => uw.WorkingGroup_Id);
-                //.Where(uw => uw.User_Id == userId && uw.UserRole == 2).Select(uw => uw.WorkingGroup_Id);
             }
             return  this.workingGroupRepository
                     .GetMany(x => x.Customer_Id == customerId && (!isTakeOnlyActive || (isTakeOnlyActive && x.IsActive == 1)))
@@ -139,7 +140,7 @@
         {
             IEnumerable<int> userWorkingGroups;
                 userWorkingGroups = userWorkingGroupRepository.GetAll()
-                .Where(uw => uw.User_Id == userId && uw.UserRole == 2).Select(uw => uw.WorkingGroup_Id);
+                .Where(uw => uw.User_Id == userId && uw.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).Select(uw => uw.WorkingGroup_Id);
          
             return this.workingGroupRepository
                     .GetMany(x => x.Customer_Id == customerId && (!isTakeOnlyActive || (isTakeOnlyActive && x.IsActive == 1)))
@@ -192,8 +193,8 @@
 
         public List<GroupWithEmails> GetWorkingGroupsWithActiveEmails(int customerId, bool includeAdmins = true)
         {
-            var workingGroupOverviews = this.workingGroupRepository.FindActiveIdAndNameOverviews(customerId);
-            var workingGroupIds = workingGroupOverviews.Select(g => g.Id).ToList();
+            var workingGroups = this.workingGroupRepository.GetMany(w => w.Customer_Id == customerId).OrderBy(w => w.WorkingGroupName).ToList();
+            var workingGroupIds = workingGroups.Select(g => g.Id).ToList();
 
             var workingGroupsUserIds = this.userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds, includeAdmins, true);
             
@@ -201,25 +202,35 @@
 
             var userIdsWithEmails = this.userRepository.FindUsersEmails(userIds, true);
 
-            var workingGroupsWithEmails = new List<GroupWithEmails>(workingGroupOverviews.Count);
+            var workingGroupsWithEmails = new List<GroupWithEmails>(workingGroups.Count);
 
-            foreach (var workingGroupOverview in workingGroupOverviews)
+            foreach (var workingGroupOverview in workingGroups)
             {
-                var groupUserIdsWithEmails = workingGroupsUserIds.FirstOrDefault(g => g.WorkingGroupId == workingGroupOverview.Id);
-                if (groupUserIdsWithEmails != null)
+                var groupEmails = new List<string>();
+
+                if (!string.IsNullOrWhiteSpace(workingGroupOverview.EMail))
                 {
-                    var groupEmails =
+                    groupEmails.Add(workingGroupOverview.EMail);
+                }
+                else
+                {
+                    var groupUserIdsWithEmails =
+                        workingGroupsUserIds.FirstOrDefault(g => g.WorkingGroupId == workingGroupOverview.Id);
+
+                    if (groupUserIdsWithEmails == null) continue;
+
+                    groupEmails =
                         userIdsWithEmails.Where(e => groupUserIdsWithEmails.UserIds.Contains(e.ItemId))
                             .Select(e => e.Email)
                             .ToList();
+               }
 
-                    var groupWithEmails = new GroupWithEmails(
-                        workingGroupOverview.Id,
-                        workingGroupOverview.Name,
-                        groupEmails);
+                var groupWithEmails = new GroupWithEmails(
+                    workingGroupOverview.Id,
+                    workingGroupOverview.WorkingGroupName,
+                    groupEmails);
 
-                    workingGroupsWithEmails.Add(groupWithEmails);
-                }
+                workingGroupsWithEmails.Add(groupWithEmails);
             }
 
             return workingGroupsWithEmails;

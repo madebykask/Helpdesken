@@ -140,6 +140,10 @@ using System;
         bool IsCustomerUser(int customerId, int userId);
         bool CheckUserCasePermissions(int userId, int caseId, Expression<Func<Case, bool>> casePermissionsFilter = null);
         CustomerUser GetCustomerSettingsByCustomer(int customerId);
+
+        IList<UserCustomerOverview> ListCustomersByInitiatorCases(string userId);
+        IList<UserCustomerOverview> GetUserCustomersWithCases(int userId);
+
     }
 
     public class CustomerUserRepository : RepositoryBase<CustomerUser>, ICustomerUserRepository
@@ -161,14 +165,53 @@ using System;
                     .Where(cu => cu.Customer_Id == customerId && cu.User_Id == userId).FirstOrDefault();
         }
 
+        public IList<UserCustomerOverview> ListCustomersByInitiatorCases(string userId)
+        {
+            var queryable = (from _case in DataContext.Cases
+                             where _case.RegUserId == userId && 
+                                   _case.RegUserId != null && 
+                                   _case.Deleted == 0
+                             group _case by new { CustomerId = _case.Customer_Id, CustomerName = _case.Customer.Name } into grouppedCases
+                             select new UserCustomerOverview
+                             {
+                                 CustomerId = grouppedCases.Key.CustomerId,
+                                 CustomerName = grouppedCases.Key.CustomerName,
+                                 CasesCount = grouppedCases.Count()
+                             }).OrderByDescending(x => x.CasesCount);
+
+            return queryable.ToList();
+        }
+
+        public IList<UserCustomerOverview> GetUserCustomersWithCases(int userId)
+        {
+            var entities = (from cu in DataContext.CustomerUsers
+                            join c in DataContext.Customers on cu.Customer_Id equals c.Id
+                            where cu.User_Id == userId 
+                            select new UserCustomerOverview
+                            {
+                                UserId = cu.User_Id,
+                                CustomerId = c.Id,
+                                CustomerName = c.Name,
+                                CasesCount = DataContext.Cases.Where(x => x.Customer_Id == c.Id).Count()
+                            })
+                         .ToList();
+
+            return entities;
+        }
+
         public IList<UserCustomer> GetCustomerUsersForStart(int userId)
         {
             var entities = (from cu in this.DataContext.CustomerUsers
-                         join c in this.DataContext.Customers on cu.Customer_Id equals c.Id
-                         join u in this.DataContext.Users on cu.User_Id equals u.Id
-                         join s in this.DataContext.Settings on c.Id equals s.Customer_Id
-                         where u.Id == userId && cu.ShowOnStartPage != 0
-                         select new { UserId = u.Id, Customer = cu, Settings = s })
+                            join c in this.DataContext.Customers on cu.Customer_Id equals c.Id
+                            join u in this.DataContext.Users on cu.User_Id equals u.Id
+                            join s in this.DataContext.Settings on c.Id equals s.Customer_Id
+                            where u.Id == userId && cu.ShowOnStartPage != 0
+                            select new
+                            {
+                                UserId = u.Id,
+                                Customer = cu,
+                                Settings = s
+                            })
                          .ToList();
 
             return entities

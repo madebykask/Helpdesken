@@ -166,7 +166,8 @@
                 this.IsLicenseVisible() ||
                 this.IsAccountVisible() ||
                 this.IsContractVisible() ||
-                this.IsOrderVisible();
+                this.IsOrderVisible() ||
+                this.IsInvoicesVisible();
         }
 
         public bool IsModulesVisible()

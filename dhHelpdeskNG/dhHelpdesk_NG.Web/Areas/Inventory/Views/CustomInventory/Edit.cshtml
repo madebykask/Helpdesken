@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Inventory.InventoryEditViewModel
 @{
-    Layout = "~/Areas/Inventory/Views/Shared/_EditLayout.cshtml";
+    Layout = "~/Areas/Inventory/Views/Shared/_EditPopupLayout.cshtml";
 }
 
 @section Actions
@@ -10,15 +10,20 @@
         @if (Model.UserHasInventoryAdminPermission)
         {
             <li id="menu1">
-                <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#inventory_edit_form').submit(); "/>
+                <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn" onclick=" $('#inventory_edit_form').submit(); "/>
             </li>
-            <li id="menu3">
-                @Html.ActionLink(Translation.Get("Ta bort"), "Delete", new { inventoryTypeId = Model.InventoryViewModel.InventoryTypeId, id = Model.InventoryViewModel.Id }, new
-                      { @class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?" })
-        </li>
+            if (!Model.IsForDialog)
+            {
+                <li id="menu3">
+                    @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "Delete", new {inventoryTypeId = Model.InventoryViewModel.InventoryTypeId, id = Model.InventoryViewModel.Id}, new
+                    {@class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?"})
+                </li>
+            }
         }
-        
-        <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", new { inventoryTypeId = Model.InventoryViewModel.InventoryTypeId }, new { @class = "btn" })</li>
+        @if (!Model.IsForDialog)
+        {
+            <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", new {inventoryTypeId = Model.InventoryViewModel.InventoryTypeId}, new {@class = "btn"})</li>
+        }
     </ul>
 }
 
@@ -34,7 +39,7 @@
         @Html.EditorFor(m => m)
         if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.ComputerName.Show)
         {
-        <h4>@Translation.Get("Tillbehör till")</h4>
+        <h4>@Translation.GetCoreTextTranslation("Tillbehör till")</h4>
 
         <div class="row">
             <div class="span12">
@@ -51,25 +56,25 @@
             </div>
         </div>
         }
-        <h4>@Translation.Get("Status")</h4>
+        <h4>@Translation.GetCoreTextTranslation("Status")</h4>
 
         <div class="row">
             <div class="span12">
                 <table class="tableform">
                     <tr>
                         <td class="span3">
-                            <label>@Translation.Get("Skapad datum")</label>
+                            <label>@Translation.GetCoreTextTranslation("Skapad datum")</label>
                         </td>
                         <td class="span9">
-                            @Html.DisplayFor(m => m.InventoryViewModel.ChangeDate, "Date")
+                            @Html.DisplayFor(m => m.InventoryViewModel.CreatedDate, "Date")
                         </td>
                     </tr>
                     <tr>
                         <td class="span3">
-                            <label>@Translation.Get("Senast ändrad datum")</label>
+                            <label>@Translation.GetCoreTextTranslation("Senast ändrad datum")</label>
                         </td>
                         <td class="span9">
-                            @Html.DisplayFor(m => m.InventoryViewModel.CreatedDate, "Date")
+                            @Html.DisplayFor(m => m.InventoryViewModel.ChangeDate, "Date")
                         </td>
                     </tr>
                 </table>
@@ -77,5 +82,6 @@
         </div>
         @Html.HiddenFor(m => m.InventoryViewModel.Id)
         @Html.HiddenFor(m => m.InventoryViewModel.InventoryTypeId)
+        @Html.HiddenFor(m => m.InventoryViewModel.IsForDialog)
     }
 }

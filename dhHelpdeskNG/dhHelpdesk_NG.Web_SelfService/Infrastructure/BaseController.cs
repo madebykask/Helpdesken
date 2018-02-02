@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
-using System.IdentityModel.Services;
+using DH.Helpdesk.Common.Configuration;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
-using DH.Helpdesk.Services.Infrastructure;
 using log4net;
 
 namespace DH.Helpdesk.SelfService.Infrastructure
@@ -31,16 +30,22 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
     public class BaseController : Controller
     {
+        const string DEFAULT_ANONYMOUS_USER_ID = "AnonymousUser";
         private readonly ILog _log = LogManager.GetLogger(typeof(BaseController));
 
+        private readonly ISelfServiceConfigurationService _configurationService;
         private readonly IMasterDataService _masterDataService;
         private readonly ICaseSolutionService _caseSolutionService;
-        private bool userOrCustomerChanged = false; 
+        private bool userOrCustomerChanged = false;
+
+        protected ISelfServiceConfigurationService ConfigurationService => _configurationService;
 
         public BaseController(
+            ISelfServiceConfigurationService configurationService,
             IMasterDataService masterDataService,
             ICaseSolutionService caseSolutionService)
         {
+            _configurationService = configurationService;
             _masterDataService = masterDataService;
             _caseSolutionService = caseSolutionService;
         }
@@ -48,7 +53,15 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         //called before a controller action is executed, that is before ~/HomeController/index 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            //LogWithContext("OnActionExecuting: called.");
+            //Debugger.Launch();
+
+            if (!CheckUserAccessToUrl(filterContext))
+            {
+                SessionFacade.UserHasAccess = false;
+                ErrorGenerator.MakeError("Url is not valid!");
+                filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                return;
+            }
 
             var customerId = -1;
             TempData["ShowLanguageSelect"] = true;
@@ -56,10 +69,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             var lastError = new ErrorModel(string.Empty);
             userOrCustomerChanged = false;
 
-            var appType = AppConfigHelper.GetAppSetting(AppSettingsKey.CurrentApplicationType);
-            var loginMode = AppConfigHelper.GetAppSetting(AppSettingsKey.LoginMode);
-            var isSsoMode = loginMode.Equals(LoginMode.SSO, StringComparison.OrdinalIgnoreCase);
-            var federatedAuthenticationSettings = new FederatedAuthenticationSettings();
+            var appSettings = ConfigurationService.AppSettings;
+            var loginMode = appSettings.LoginMode;
 
             var res = SetCustomer(filterContext, out lastError);
             
@@ -98,7 +109,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     SessionFacade.UserHasAccess = true;
                 } // SSO Login
 
-                else if (loginMode == LoginMode.Windows || loginMode == LoginMode.Anonymous)
+                else if (loginMode == LoginMode.Windows)
                 {
 
                     SessionFacade.CurrentCoWorkers = null;
@@ -114,6 +125,22 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     SessionFacade.CurrentSystemUser = userIdentity.UserId;
                     SessionFacade.CurrentUserIdentity = userIdentity;
                     SessionFacade.UserHasAccess = true;                    
+                }
+                else
+                {
+                    SessionFacade.CurrentCoWorkers = null;
+                    var userIdentity = TryAnonymousLogin(customerId, out lastError);
+                    if (lastError != null)
+                    {
+                        SessionFacade.UserHasAccess = false;
+                        ErrorGenerator.MakeError(lastError);
+                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                        return;
+                    }
+
+                    SessionFacade.CurrentSystemUser = userIdentity.UserId;
+                    SessionFacade.CurrentUserIdentity = userIdentity;
+                    SessionFacade.UserHasAccess = true;
                 }
 
                 userOrCustomerChanged = true;
@@ -144,7 +171,10 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     return;
                 }
             }
-            
+
+            ViewBag.IsLineManagerApplication = IsLineManagerApplication();
+            ViewBag.ApplicationType = _configurationService.AppSettings.ApplicationType;
+
             SetTextTranslation(filterContext);
         }
 
@@ -335,13 +365,13 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 string claimData = "";
                 bool isFirst = true;
                 
-                var claimDomain = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimDomain);
-                var claimUserId = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimUserId);
-                var claimEmployeeNumber = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimEmployeeNumber);
-                var claimFirstName = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimFirstName);
-                var claimLastName = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimLastName);
-                var claimEmail = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimEmail);
-                var claimPhone = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimPhone);
+                var claimDomain = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimDomain);
+                var claimUserId = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimUserId);
+                var claimEmployeeNumber = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimEmployeeNumber);
+                var claimFirstName = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimFirstName);
+                var claimLastName = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimLastName);
+                var claimEmail = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimEmail);
+                var claimPhone = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimPhone);
 
                 foreach (Claim claim in principal.Claims)
                 {
@@ -414,6 +444,37 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             return userIdentity;
         }
 
+        private UserIdentity TryAnonymousLogin(int customerId, out ErrorModel lastError)
+        {
+            lastError = null;
+            UserIdentity userIdentity = null;
+            var employeeNum = string.Empty;            
+            string userId = DEFAULT_ANONYMOUS_USER_ID;
+
+            var defaultUserId = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultUserId);
+            if (!string.IsNullOrEmpty(defaultUserId))
+                userId = defaultUserId;
+
+            var defaultEmployeeNumber = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultEmployeeNumber);
+            if (!string.IsNullOrEmpty(defaultEmployeeNumber))
+                employeeNum = defaultEmployeeNumber;
+            
+            string userDomain = string.Empty;            
+            var initiator = _masterDataService.GetInitiatorByUserId(userId, customerId);
+            userIdentity = new UserIdentity()
+            {
+                UserId = userId,
+                Domain = userDomain,
+                FirstName = initiator?.FirstName,
+                LastName = initiator?.LastName,
+                EmployeeNumber = employeeNum,
+                Phone = initiator?.Phone,
+                Email = initiator?.Email
+            };
+            
+            return userIdentity;
+        }
+
         private UserIdentity TryWindowsLogin(int customerId, out ErrorModel lastError)
         {
             lastError = null;
@@ -431,8 +492,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             var defaultEmployeeNumber = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultEmployeeNumber);
             if (!string.IsNullOrEmpty(defaultEmployeeNumber))
                 employeeNum = defaultEmployeeNumber;
-            
-            string userDomain = fullName.GetDomainFromAdPath();            
+
+            string userDomain = fullName.GetDomainFromAdPath();
             var initiator = _masterDataService.GetInitiatorByUserId(userId, customerId);
             userIdentity = new UserIdentity()
             {
@@ -444,7 +505,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 Phone = initiator?.Phone,
                 Email = initiator?.Email
             };
-            
+
             return userIdentity;
         }
 
@@ -470,7 +531,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 }
                
                 var useApi = SessionFacade.CurrentCustomer.FetchDataFromApiOnExternalPage;
-                var apiCredential = AppConfigHelper.GetAmApiInfo();
+                var apiCredential = WebApiConfig.GetAmApiInfo();
                 var employee = _masterDataService.GetEmployee(customerId, employeeNumber, useApi, apiCredential);
                 
                 if (employee != null && employee.IsManager)
@@ -548,6 +609,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     filterContext.HttpContext.Request.Url.AbsoluteUri;
         }
        
+        //todo: move to separate class
         protected string RenderRazorViewToString(string viewName, object model, bool partial = true)
         {
             var viewResult = partial ? ViewEngines.Engines.FindPartialView(this.ControllerContext, viewName) : ViewEngines.Engines.FindView(this.ControllerContext, viewName, null);
@@ -563,6 +625,17 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 viewResult.ViewEngine.ReleaseView(this.ControllerContext, viewResult.View);
                 return sw.GetStringBuilder().ToString();
             }
+        }
+
+        protected bool IsLineManagerApplication()
+        {
+            var applicationType = _configurationService.AppSettings.ApplicationType;
+            return ApplicationTypes.LineManager.Equals(applicationType, StringComparison.OrdinalIgnoreCase);
+        }
+
+        protected ActionResult RedirectToErrorPage()
+        {
+            return RedirectToAction("Index", "Error");
         }
 
         private void SessionCheck(ActionExecutingContext filterContext)
@@ -612,6 +685,110 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
             }
         }
+
+        //todo: make action filter
+        private bool CheckUserAccessToUrl(ActionExecutingContext filterContext)
+        {
+            var urlSettings = _configurationService.UrlSettings;
+            
+            if (urlSettings?.DeniedUrls == null || !urlSettings.DeniedUrls.Any())
+                return true;
+
+            foreach (var url in urlSettings.DeniedUrls)
+            {                
+                if (IsStringMatch(url, filterContext.HttpContext.Request.RawUrl))
+                {
+                    foreach (var allowUrl in urlSettings.AllowedUrls)
+                    {
+                        if (IsStringMatch(allowUrl, filterContext.HttpContext.Request.RawUrl))
+                            return true;
+                    }
+
+                    return false;
+                }                    
+            }
+            
+            return true;
+        }
+
+        private bool IsStringMatch(string pattern, string compareStr)
+        {
+            /*TODO: Use regular experssion */
+
+            var _pattern = pattern.ToLower();
+            var _compareStr = compareStr.ToLower();
+            
+            var _patternWithoutStar = _pattern.Replace("*", "");
+            if (_pattern.EndsWith("*"))
+            {
+                var purePattern = "";
+                var patternWithQuestionMark = "";
+                var patternWithSlash = "";
+                if (_patternWithoutStar.EndsWith("/"))
+                {
+                    purePattern = _patternWithoutStar.Remove(_patternWithoutStar.Length - 1);
+
+                    patternWithSlash = $"{purePattern}/";
+                    patternWithQuestionMark = $"{purePattern}?";                    
+                    if (_compareStr.StartsWith(patternWithSlash) || _compareStr.StartsWith(patternWithQuestionMark))
+                        return true;
+                }
+
+                if (_patternWithoutStar.EndsWith("?"))
+                {
+                    purePattern = _patternWithoutStar.Remove(_patternWithoutStar.Length - 1);
+                    patternWithQuestionMark = $"{purePattern}?";
+                    if (_compareStr.StartsWith(patternWithQuestionMark))
+                        return true;
+                }
+
+                if (_compareStr.StartsWith(_patternWithoutStar))
+                    return true;
+            }
+
+            
+            if (_pattern.EndsWith("{guid}"))
+            {
+                var _patternWithoutGuid = _patternWithoutStar.Replace("{guid}", "");
+                if (_compareStr.Length < _patternWithoutGuid.Length)
+                    return false;
+
+                var rightSide = _compareStr.Remove(0, _patternWithoutGuid.Length);
+                Guid param; 
+                try
+                {
+                    if (Guid.TryParse(rightSide, out param))
+                        return true;
+                }
+                catch 
+                {
+                    return false;
+                }                
+            }
+
+            if (_pattern.EndsWith("{int}"))
+            {
+                var _patternWithoutInt = _patternWithoutStar.Replace("{int}", "");
+                if (_compareStr.Length < _patternWithoutInt.Length)
+                    return false;
+
+                var rightSide = _compareStr.Remove(0, _patternWithoutInt.Length);
+                int param;
+                try
+                {
+                    if (int.TryParse(rightSide, out param))
+                        return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            return _pattern.Equals(_compareStr, StringComparison.CurrentCultureIgnoreCase);
+            
+        }
+
 
         //keep for diagnostics purposes
         private void LogWithContext(string msg)

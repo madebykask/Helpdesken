@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.OldComponents;
@@ -17,6 +19,12 @@ namespace DH.Helpdesk.Dal.Repositories
     public class CaseSearchQueryBuilder
     {
         private bool _useFts = false;
+        private readonly Regex _fullTextExpression;
+
+        public CaseSearchQueryBuilder()
+        {
+            _fullTextExpression = new Regex("(?:\"([^\"]*)\")|([^\\s]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        }
 
         #region Tables Fields Constants
 
@@ -128,6 +136,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public string BuildCaseSearchSql(SearchQueryBuildContext ctx)
         {
+            
             _useFts = ctx.UseFullTextSearch;
 
             var search = ctx.Criterias.Search;
@@ -143,11 +152,12 @@ namespace DH.Helpdesk.Dal.Repositories
             //TODO: remove top 500 limit when true sql side paging is implemented
             //vid avslutade ärenden visas bara första 500
             var sqlTop500 = (searchFilter.CaseProgress == CaseProgressFilter.ClosedCases || searchFilter.CaseProgress == CaseProgressFilter.None) ? "top 500" : "";
-
-            sql.Add($@"SELECT * 
+            const string subQueryName = "RowConstrainedResult";
+            var outerFields = ctx.Criterias.FetchInfoAboutParentChild? $",{GetParentChildInfo(subQueryName)}" : "";
+            sql.Add($@"SELECT * {outerFields} 
                        FROM ( SELECT {sqlTop500} *, ROW_NUMBER() OVER ( ORDER BY {orderBy} ) AS RowNum 
                               FROM ( {searchQuery} ) as tbl
-                            ) as RowConstrainedResult");
+                            ) as {subQueryName}");
 
             //if (f.PageInfo != null)
             //{
@@ -189,7 +199,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var applicationType = criterias.ApplicationType;
             if (applicationType.ToLower() == ApplicationTypes.LineManager || applicationType.ToLower() == ApplicationTypes.SelfService)
             {
-                var caseSearchWhere = this.ReturnCustomCaseSearchWhere(searchFilter, criterias.UserUniqueId, userId);
+                var caseSearchWhere = this.ReturnCustomCaseSearchWhere(searchFilter, criterias.UserUniqueId, userId, criterias.GlobalSetting);
                 sql.Add(caseSearchWhere);
             }
             else
@@ -279,6 +289,9 @@ namespace DH.Helpdesk.Dal.Repositories
             columns.Add("tblCase.FinishingDescription");
             columns.Add("tblCase.Caption");
 
+            columns.Add("tblCase.Performer_User_Id as CasePerformerUserId");
+            columns.Add("tblCase.CaseResponsibleUser_Id as CaseResponsibleUserId");
+            columns.Add("tblCase.User_Id as CaseUserId");
             if (searchFilter.MaxTextCharacters > 0)
                 columns.Add(string.Format("Cast(tblCase.[Description] as Nvarchar({0})) as [Description] ", searchFilter.MaxTextCharacters));
             else
@@ -404,7 +417,7 @@ namespace DH.Helpdesk.Dal.Repositories
             }
             else
             {
-                whereStatement = ReturnCustomCaseSearchWhere(searchFilter, criterias.UserUniqueId, criterias.UserId);
+                whereStatement = ReturnCustomCaseSearchWhere(searchFilter, criterias.UserUniqueId, criterias.UserId, criterias.GlobalSetting);
             }
 
             searchQueryBld.Append(whereStatement);
@@ -573,6 +586,14 @@ namespace DH.Helpdesk.Dal.Repositories
 
         #endregion
 
+        private string GetParentChildInfo(string nestedTableAlias)
+        {
+            var columns = new List<string>();
+            columns.Add($"(select count(Ancestor_Id)  from tblParentChildCaseRelations where  Ancestor_Id = {nestedTableAlias}.Id) as IsParent");
+            columns.Add($"(select Top 1 (Ancestor_Id)  from tblParentChildCaseRelations where  Descendant_Id = {nestedTableAlias}.Id) as ParentCaseId");
+            return string.Join(",", columns);
+        }
+
         private string GetTablesAndJoins(SearchQueryBuildContext ctx)
         {
             var customerSetting = ctx.Criterias.CustomerSetting;
@@ -585,7 +606,9 @@ namespace DH.Helpdesk.Dal.Repositories
 
             tables.Add("from tblCase WITH ( NOLOCK, INDEX(IX_tblCase_Customer_Id)) ");
             tables.Add("inner join tblCustomer on tblCase.Customer_Id = tblCustomer.Id ");
-            tables.Add("inner join tblCustomerUser on tblCase.Customer_Id = tblCustomerUser.Customer_Id ");
+            
+            if (ctx.Criterias.SearchFilter.IsExtendedSearch == false)
+                tables.Add("inner join tblCustomerUser on tblCase.Customer_Id = tblCustomerUser.Customer_Id ");
 
             if (ctx.UseFreeTextCaseSearchCTE)
             {
@@ -639,7 +662,7 @@ namespace DH.Helpdesk.Dal.Repositories
         }
 
         //Used for LineManager & SelfService
-        private string ReturnCustomCaseSearchWhere(CaseSearchFilter f, string userUserId, int userId)
+        private string ReturnCustomCaseSearchWhere(CaseSearchFilter f, string userUserId, int userId, GlobalSetting globalSetting)
         {
             if (f == null)
             {
@@ -648,20 +671,19 @@ namespace DH.Helpdesk.Dal.Repositories
 
             var sb = new StringBuilder();
 
-            // kund 
-            sb.Append(" where (tblCase.Customer_Id = " + f.CustomerId + ")");
-            sb.Append(" and (tblCase.Deleted = 0)");
-
+            // kund             
+            sb.AppendLine($" where (tblCase.Customer_Id = {f.CustomerId}) ");
+            sb.AppendLine(" and (tblCase.Deleted = 0)");
 
             //CaseType
             //sb.Append(" and (tblCaseType.ShowOnExternalPage <> 0)");
             //Hide this for next release #57742
-            sb.Append(" and (tblCaseType.ShowOnExtPageCases <> 0)");
+            sb.AppendLine(" and (tblCaseType.ShowOnExtPageCases <> 0)");
 
             //ProductArea
             //sb.Append(" and (tblCase.ProductArea_Id Is Null or tblCase.ProductArea_Id in (select id from tblProductArea where ShowOnExternalPage <> 0))");
             //Hide this for next release #57742
-            sb.Append(" and (tblCase.ProductArea_Id Is Null or tblCase.ProductArea_Id in (select id from tblProductArea where ShowOnExtPageCases <> 0))");
+            sb.AppendLine(" and (tblCase.ProductArea_Id Is Null or tblCase.ProductArea_Id in (select id from tblProductArea where ShowOnExtPageCases <> 0))");
 
             
             var criteria = f.CaseOverviewCriteria;
@@ -739,7 +761,8 @@ namespace DH.Helpdesk.Dal.Repositories
                 sb.Append(") ");
             }
 
-            return sb.ToString();
+            var s = sb.ToString();
+            return s;
         }
 
         private string BuildCaseProgressConditions(CaseSearchFilter searchFilter, int userId)
@@ -866,8 +889,9 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             // finns kryssruta pa anvandaren att den bara far se sina egna arenden
+            //Note, this is also checked in CasesController.cs for ExtendedSearch, so if you change logic here, change in controller
             var restrictedCasePermission = searchCriteria.CustomerUserSettings.User.RestrictedCasePermission;
-            if (restrictedCasePermission == 1)
+            if (restrictedCasePermission == 1 && !searchFilter.IsExtendedSearch)
             {
                 if (searchCriteria.UserGroupId == 2)
                     sb.Append(" and (tblCase.Performer_User_Id = " + searchCriteria.UserId + " or tblcase.CaseResponsibleUser_Id = " + searchCriteria.UserId + ")");
@@ -1281,11 +1305,12 @@ namespace DH.Helpdesk.Dal.Repositories
 
         private string GetSqlLike(string field, string text, string combinator = CaseSearchConstants.Combinator_OR, bool userLower = false)
         {
+            
             var sb = new StringBuilder();
             if (!string.IsNullOrEmpty(field) && !string.IsNullOrEmpty(text))
             {
                 sb.Append(" (");
-                var words = text.FreeTextSafeForSqlInject().ToLower().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var words = GetSearchWords(text);
 
                 for (var i = 0; i < words.Length; i++)
                 {
@@ -1350,20 +1375,46 @@ namespace DH.Helpdesk.Dal.Repositories
 
         private string BuildFtsContainsConditionCriteria(string text, bool useWildCard = true)
         {
-            var words = text.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-            var searchCriteriaText = string.Join(" OR ", words.Select(w => FormatFtsContainsConditionValue(w, useWildCard)));
+            var words = GetSearchWords(text);
+
+            var searchCriteriaText = string.Join(" OR ", 
+                words
+                .Where(w => !string.IsNullOrEmpty(w))
+                .Select(w =>
+                {
+                    var isExactPhrase = w.Trim().Split(' ').Length > 1;
+                    return FormatFtsContainsConditionValue(w, isExactPhrase, useWildCard );
+                }));
             return searchCriteriaText;
         }
 
-        private string FormatFtsContainsConditionValue(string text, bool useWildCard = true)
+        private string[] GetSearchWords(string text)
+        {
+            return _fullTextExpression.Matches(text.FreeTextSafeForSqlInject())
+                .Cast<Match>()
+                .Where(v => !string.IsNullOrWhiteSpace(v.Groups[1].Value) || !string.IsNullOrWhiteSpace(v.Groups[2].Value))
+                .Select(v => string.IsNullOrWhiteSpace(v.Groups[2].Value) ? v.Groups[1].Value : v.Groups[2].Value)
+                .Distinct()
+                .ToArray();
+        }
+
+        private string FormatFtsContainsConditionValue(string text, bool isExactPhrase, bool useWildCard = true)
         {
             if (string.IsNullOrEmpty(text))
                 return null;
 
+            if (isExactPhrase) return $"\"{text}\"";
             return useWildCard ? $"\"{text}*\"" : $"{text}";
         }
 
         #endregion
+
+        private string FormatWithOperand(string condition, bool useAnd = true)
+        {
+            return useAnd
+                ? $"AND {condition}"
+                : $"OR {condition}";
+        }
 
         private string InsensitiveSearch(string fieldName)
         {

@@ -102,15 +102,18 @@ jQuery.fn.selectText = function () {
 // DH+ specific
 
 var reload = function (cancelCase) {
-    //debugger;
-
     var jump = false;
     if ('parentIFrame' in window)
         jump = true;
 
     // DL: used with iframeResizer.contentWindow.min.js
-    if (jump && cancelCase) {
-        window.parentIFrame.sendMessage('cancelCase');
+    if (jump) {
+        if (cancelCase) {
+            window.parentIFrame.sendMessage({ type: 'cancelCase' });
+        } else {
+            //refresh hd case status
+            window.parentIFrame.sendMessage({ type: 'refreshData', caseStatus: 1 });
+        }
     }
 
     if (!jump && window.parent.cancelCase != undefined && cancelCase) {

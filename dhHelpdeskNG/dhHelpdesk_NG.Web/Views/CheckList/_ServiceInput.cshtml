@@ -50,8 +50,7 @@
                                 @Translation.Get("Åtgärder", Enums.TranslationSource.TextTranslation)
                             </h4>
                             <div id="newservicesAndactions">
-                                @Html.Partial("_NewServices", Model.Services)
-                                @Html.HiddenFor(model => model.Services)
+                                @Html.Partial("_NewServices", Model)
                             </div>
                         </div>
                     }

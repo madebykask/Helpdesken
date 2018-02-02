@@ -10,19 +10,31 @@
         @if (Model.UserHasInventoryAdminPermission)
         {
             <li id="menu1">
-                <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#workstation_edit_form').submit(); "/>
+                <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn" onclick=" $('#workstation_edit_form').submit(); "/>
             </li>
-            <li id="menu3">
-                @Html.ActionLink(Translation.Get("Ta bort"), "Delete", new { id = Model.ComputerViewModel.Id }, new
-                      { @class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?" })
-        </li>
+            if (!Model.IsForDialog)
+            {
+                <li id="menu3">
+                    @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "Delete", new {id = Model.ComputerViewModel.Id}, new
+                    {@class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?"})
+                </li>
+            }
         }
-        <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
+        @if (Model.IsForDialog && !string.IsNullOrEmpty(Model.UserId))
+        {
+            <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "RelatedInventoryFull", new {userId = Model.UserId}, new {@class = "btn"})</li>
+        }
+        @if(!Model.IsForDialog)
+        {
+            <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", null, new {@class = "btn"})</li>
+        }
     </ul>
 }
 
 @using (Html.BeginForm("Edit", "Workstation", FormMethod.Post, new { id = "workstation_edit_form" }))
 {
+    @Html.HiddenFor(m => m.ComputerViewModel.IsForDialog)
+    @Html.HiddenFor(m => m.ComputerViewModel.UserId)
     @Html.HiddenFor(m => m.ComputerViewModel.Id)
     @Html.EditorFor(m => m.ComputerViewModel.WorkstationFieldsViewModel)
     @Html.EditorFor(m => m.ComputerViewModel.ChassisFieldsModel)
@@ -85,4 +97,5 @@
         </div>
     </div>
 }
+
 

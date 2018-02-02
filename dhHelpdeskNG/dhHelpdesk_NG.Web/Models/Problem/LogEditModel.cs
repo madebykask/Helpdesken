@@ -1,10 +1,11 @@
-﻿namespace DH.Helpdesk.Web.Models.Problem
+﻿using System.Collections.Generic;
+using DH.Helpdesk.Domain;
+
+namespace DH.Helpdesk.Web.Models.Problem
 {
     using System;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
-
-    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
     public class LogEditModel
     {
@@ -29,6 +30,8 @@
 
         public int ProblemId { get; set; }
 
-        public DropDownWithSubmenusContent FinishingCauses { get; set; }
+        public IList<FinishingCause> FinishingCauses { get; set; }
+
+        public string FinishingCause { get; set; }
     }
 }

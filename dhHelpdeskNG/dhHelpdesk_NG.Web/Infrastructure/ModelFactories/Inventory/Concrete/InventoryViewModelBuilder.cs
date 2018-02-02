@@ -13,13 +13,6 @@
 
     public class InventoryViewModelBuilder : IInventoryViewModelBuilder
     {
-        public static ConfigurableFieldModel<string> CreateStringField(InventoryFieldSettingForModelEdit setting, string value)
-        {
-            return !setting.ShowInDetails
-                       ? ConfigurableFieldModel<string>.CreateUnshowable()
-                       : new ConfigurableFieldModel<string>(setting.Caption, value);
-        }
-
         public InventoryViewModel BuildViewModel(
             InventoryForRead model,
             InventoryEditOptions options,
@@ -160,20 +153,27 @@
             return list;
         }
 
+        public static ConfigurableFieldModel<string> CreateStringField(InventoryFieldSettingForModelEdit setting, string value)
+        {
+            return !setting.ShowInDetails
+                       ? ConfigurableFieldModel<string>.CreateUnshowable()
+                       : new ConfigurableFieldModel<string>(setting.Caption, value, setting.ReadOnly);
+        }
+
         private static ConfigurableFieldModel<DateTime?> CreateNullableDateTimeField(
             InventoryFieldSettingForModelEdit setting,
             DateTime? value)
         {
             return !setting.ShowInDetails
                        ? ConfigurableFieldModel<DateTime?>.CreateUnshowable()
-                       : new ConfigurableFieldModel<DateTime?>(setting.Caption, value);
+                       : new ConfigurableFieldModel<DateTime?>(setting.Caption, value, setting.ReadOnly);
         }
 
         private static ConfigurableFieldModel<int?> CreateNullableIntegerField(InventoryFieldSettingForModelEdit setting, int? value)
         {
             return !setting.ShowInDetails
                        ? ConfigurableFieldModel<int?>.CreateUnshowable()
-                       : new ConfigurableFieldModel<int?>(setting.Caption, value);
+                       : new ConfigurableFieldModel<int?>(setting.Caption, value, setting.ReadOnly);
         }
     }
 }

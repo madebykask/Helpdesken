@@ -1,3 +1,7 @@
+using DH.Helpdesk.Common.Constants;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Web.Models.Shared;
+
 namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 {
     using System.Collections.Generic;
@@ -113,45 +117,52 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult WorkstationsGrid(WorkstationsSearchFilter filter)
         {
-            SessionFacade.SavePageFilters(
-                this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Workstation.ToString()),
-                filter);
+            SessionFacade.SavePageFilters(CreateFilterId(TabName.Inventories, InventoryFilterMode.Workstation.ToString()), filter);
+            filter.RecordsCount = SearchFilter.RecordsOnPage;
 
             InventoryGridModel viewModel = this.CreateInventoryGridModel(filter);
-
             return this.PartialView("InventoryGrid", viewModel);
         }
 
         [HttpGet]
-        public ViewResult Edit(int id)
+        public ViewResult Edit(int id, bool dialog = false, string userId = null)
         {
             var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
-
+            var readOnly = !userHasInventoryAdminPermission && dialog;
             ComputerForRead model = this.inventoryService.GetWorkstation(id);
             ComputerEditOptions options = this.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);
             ComputerFieldsSettingsForModelEdit settings =
                 this.inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
                     SessionFacade.CurrentCustomer.Id,
-                    SessionFacade.CurrentLanguageId);
+                    SessionFacade.CurrentLanguageId, readOnly);
 
             ComputerViewModel computerEditModel = this.computerViewModelBuilder.BuildViewModel(model, options, settings);
+            computerEditModel.IsForDialog = dialog;
+            computerEditModel.UserId = userId;
+            var viewModel = new ComputerEditViewModel(id, computerEditModel)
+            {
+                UserHasInventoryAdminPermission = userHasInventoryAdminPermission,
+                IsForDialog = dialog,
+                UserId = userId
+            };
 
-            var viewModel = new ComputerEditViewModel(id, computerEditModel);
-
-            viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
-
-            return this.View(viewModel);
+            return View(viewModel);
         }
 
         [HttpPost]
         [BadRequestOnNotValid]
         public RedirectToRouteResult Edit(ComputerViewModel computerViewModel)
         {
-            ComputerForUpdate businessModel = this.computerBuilder.BuildForUpdate(
-                computerViewModel,
-                this.OperationContext);
+            ComputerForUpdate businessModel = this.computerBuilder.BuildForUpdate(computerViewModel, OperationContext);
             this.inventoryService.UpdateWorkstation(businessModel, this.OperationContext);
-
+            if (computerViewModel.IsForDialog)
+            {
+                if (!string.IsNullOrEmpty(computerViewModel.UserId))
+                {
+                    return RedirectToAction("RelatedInventoryFull", new {userId = computerViewModel.UserId});
+                }
+                return RedirectToAction("Edit", new { id = computerViewModel.Id, dialog = computerViewModel.IsForDialog });
+            }
             return this.RedirectToAction("Index");
         }
 
@@ -191,44 +202,48 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpGet]
-        public ViewResult Storage(int computerId)
+        public ViewResult Storage(int computerId, bool dialog = false, string userId = null)
         {
             List<LogicalDriveOverview> models = this.computerModulesService.GetComputerLogicalDrive(computerId);
 
-            var viewModel = new StorageViewModel(computerId, models);
+            var viewModel = new StorageViewModel(computerId, models) {IsForDialog = dialog, UserId = userId };
 
             return this.View(viewModel);
         }
 
         [HttpGet]
-        public ViewResult Software(int computerId)
+        public ViewResult Software(int computerId, bool dialog = false, string userId = null)
         {
             List<SoftwareOverview> models = this.computerModulesService.GetComputerSoftware(computerId);
 
-            var viewModel = new SoftwareViewModel(computerId, models);
+            var viewModel = new SoftwareViewModel(computerId, models) {IsForDialog = dialog, UserId = userId };
 
             return this.View(viewModel);
         }
 
         [HttpGet]
-        public ViewResult HotFixes(int computerId)
+        public ViewResult HotFixes(int computerId, bool dialog = false, string userId = null)
         {
             List<SoftwareOverview> models = this.computerModulesService.GetComputerSoftware(computerId);
 
-            var viewModel = new HotfixViewModel(computerId, models);
+            var viewModel = new HotfixViewModel(computerId, models) {IsForDialog = dialog, UserId = userId };
 
             return this.View(viewModel);
         }
 
         [HttpGet]
-        public ViewResult ComputerLogs(int computerId)
+        public ViewResult ComputerLogs(int computerId, bool dialog = false, string userId = null)
         {
             var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
 
             List<ComputerLogOverview> models = this.inventoryService.GetWorkstationLogOverviews(computerId);
 
-            var viewModel = new LogsViewModel(computerId, models);
-            viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
+            var viewModel = new LogsViewModel(computerId, models, dialog, userId)
+            {
+                UserHasInventoryAdminPermission = userHasInventoryAdminPermission,
+                IsForDialog = dialog,
+                UserId = userId
+            };
 
             return this.View(viewModel);
         }
@@ -238,19 +253,19 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         public RedirectToRouteResult NewComputerLog(ComputerLogModel computerLogModel)
         {
             this.inventoryService.AddComputerLog(computerLogModel.CreateBusinessModel());
-            return this.RedirectToAction("ComputerLogs", new { computerId = computerLogModel.ComputerId });
+            return this.RedirectToAction("ComputerLogs", new { computerId = computerLogModel.ComputerId, dialog = computerLogModel.IsForDialog, userId = computerLogModel.UserId });
         }
 
         [HttpGet]
-        public RedirectToRouteResult DeleteComputerLog(int logId, int computerId)
+        public RedirectToRouteResult DeleteComputerLog(int logId, int computerId, bool dialog = false, string userId = null)
         {
             this.inventoryService.DeleteComputerLog(logId);
 
-            return this.RedirectToAction("ComputerLogs", new { computerId });
+            return this.RedirectToAction("ComputerLogs", new { computerId, dialog, userId });
         }
 
         [HttpGet]
-        public ViewResult Accessories(int computerId)
+        public ViewResult Accessories(int computerId, bool dialog = false, string userId = null)
         {
             InventoryOverviewResponseWithType inventory =
                 this.inventoryService.GetConnectedToComputerInventories(computerId);
@@ -280,7 +295,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 inventoryGridModels);
 
             viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
-
+            viewModel.IsForDialog = dialog;
+            viewModel.UserId = userId;
             return this.View(viewModel);
         }
 
@@ -297,7 +313,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult ConnectInventoryToComputer(int? inventoryId, int computerId)
+        public RedirectToRouteResult ConnectInventoryToComputer(int? inventoryId, int computerId, bool dialog = false, string userId = null)
         {
             if (!inventoryId.HasValue)
             {
@@ -306,15 +322,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
             this.inventoryService.ConnectInventoryToComputer(inventoryId.Value, computerId);
 
-            return this.RedirectToAction("Accessories", new { computerId });
+            return this.RedirectToAction("Accessories", new { computerId, dialog, userId });
         }
 
         [HttpGet]
-        public RedirectToRouteResult DeleteInventoryFromComputer(int computerId, int inventoryId)
+        public RedirectToRouteResult DeleteInventoryFromComputer(int computerId, int inventoryId, bool dialog = false, string userId = null)
         {
             this.inventoryService.RemoveInventoryFromComputer(inventoryId, computerId);
 
-            return this.RedirectToAction("Accessories", new { computerId });
+            return this.RedirectToAction("Accessories", new { computerId, dialog, userId });
         }
 
         [HttpGet]
@@ -358,8 +374,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 this.inventorySettingsService.GetWorkstationFieldSettingsOverview(
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId);
-            List<ComputerOverview> models =
-                this.inventoryService.GetWorkstations(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
+            List<ComputerOverview> models = this.inventoryService.GetWorkstations(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
 
             InventoryGridModel viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
             return viewModel;
@@ -404,6 +419,21 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 rooms);
 
             return computerResponse;
+        }
+
+        [HttpGet]
+        public ActionResult RelatedInventoryFull(string userId)
+        {
+            var sortField = new SortFieldModel
+            {
+                Name = BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.Name,
+                SortBy = SortBy.Ascending
+            };
+            var settings = inventorySettingsService.GetWorkstationFieldSettingsOverview(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
+            var models = inventoryService.GetRelatedInventory(SessionFacade.CurrentCustomer.Id, userId);
+            var viewModel = InventoryGridModel.BuildModel(models, settings, sortField);
+            ViewData.Add(new KeyValuePair<string, object>("UserId", userId));
+            return View(viewModel);
         }
     }
 }

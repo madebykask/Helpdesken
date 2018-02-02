@@ -18,8 +18,7 @@ namespace DH.Helpdesk.Web
             public const string AttributesValidation = "~/bundles/jqueryattrval";
             public const string InventoryUserSearch = ("~/bundles/inventory/inventorysearch");
             public const string CaseIntLogEmailSearch = ("~/bundles/case/caseintlogemailsearch");
-            public const string CaseAddFollowersSearch = ("~/bundles/case/caseaddfollowerssearch");
-            public const string CaseUserSearchCommon = ("~/bundles/case/caseusersearchcommon");
+            public const string UserSearchCommon = ("~/bundles/common/usersearchcommon");
             public const string CaseCharge = ("~/bundles/case/CaseCharge");
             public const string Select2 = "~/bundles/select2";
             public const string CaseConnectToParent = "~/bundles/case/caseconnecttoparent";
@@ -28,6 +27,9 @@ namespace DH.Helpdesk.Web
             public const string OrderTypes = "~/bundles/admin/ordertypes/index";
             public const string FeedbackEdit = "~/bundles/feedback/feedbackedit";
             public const string CaseAttachExistingFiles = "~/bundles/case/attachexfile";
+            public const string ConfirmationDialog = "~/bundles/confirmdialog";
+            public const string InventoryOverview = "~/bundles/inventory/overview";
+
         }
 
 
@@ -40,7 +42,8 @@ namespace DH.Helpdesk.Web
 
             bundles.Add(new StyleBundle("~/Content/bundles/css").Include(
                             "~/Content/css/*.css",
-                            "~/Content/themes/base/minified/jquery-ui.min.css",                            
+                            "~/Content/themes/base/minified/jquery-ui.min.css",
+                            "~/Content/font-awesome.min.css",
                             "~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css"));
 
             bundles.Add(new StyleBundle("~/Content/css/admin").Include(
@@ -453,12 +456,9 @@ namespace DH.Helpdesk.Web
                 "~/Content/js/Inventory/inventory.search.js"));
             bundles.Add(new ScriptBundle(ScriptNames.CaseIntLogEmailSearch).Include(
                 "~/Content/js/Cases/Dialogs/_caseIntLogSearch.js",
-                "~/Content/js/Cases/Dialogs/_caseUserSearchCommon.js"));
-            bundles.Add(new ScriptBundle(ScriptNames.CaseAddFollowersSearch).Include(
-                "~/Content/js/Cases/Dialogs/_caseAddFollowersSearch.js",
-                "~/Content/js/Cases/Dialogs/_caseUserSearchCommon.js"));
-            bundles.Add(new ScriptBundle(ScriptNames.CaseUserSearchCommon).Include(
-                "~/Content/js/Cases/Dialogs/_caseUserSearchCommon.js"));
+                "~/Content/js/Common/userSearchCommon.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.UserSearchCommon).Include(
+                "~/Content/js/Common/userSearchCommon.js"));
             bundles.Add(new ScriptBundle(ScriptNames.CaseConnectToParent).Include(
                 "~/Content/js/Cases/Dialogs/_caseConnectToParent.js",
                 "~/Content/js/Cases/components/FilterForm.js",
@@ -474,6 +474,12 @@ namespace DH.Helpdesk.Web
                 "~/Content/js/Feedback/feedback.edit.js"));
             bundles.Add(new ScriptBundle(ScriptNames.CaseAttachExistingFiles).Include(
                 "~/Content/js/Cases/Dialogs/_caseAttachExistFile.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.ConfirmationDialog).Include(
+                "~/Content/js/Cases/components/ConfirmationDialog.js",
+                "~/Content/js/Cases/components/Utils.js"));
+
+            bundles.Add(new ScriptBundle(ScriptNames.InventoryOverview).Include(
+                    "~/Areas/Inventory/Scripts/inventoryOverview.js"));
 
             RegisterOrdersAreaBundles(bundles);
             RegisterInvoicesAreaBundles(bundles);

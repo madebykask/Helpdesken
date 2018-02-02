@@ -20,7 +20,9 @@
             string barCode,
             DateTime? purchaseDate,
             string workstationName,
-            string info)
+            string info,
+            DateTime createdDate,
+            DateTime changedDate)
         {
             this.Id = id;
             this.DepartmentName = departmentName;
@@ -35,6 +37,8 @@
             this.PurchaseDate = purchaseDate;
             this.WorkstationName = workstationName;
             this.Info = info;
+            this.CreatedDate = createdDate;
+            this.ChangedDate = changedDate;
         }
 
         [IsId]
@@ -68,5 +72,9 @@
         public string WorkstationName { get; private set; }
 
         public string Info { get; private set; }
+
+        public DateTime CreatedDate { get; private set; }
+
+        public DateTime ChangedDate { get; private set; }
     }
 }

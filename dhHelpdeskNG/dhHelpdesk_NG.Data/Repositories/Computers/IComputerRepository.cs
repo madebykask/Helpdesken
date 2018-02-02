@@ -1,3 +1,5 @@
+using DH.Helpdesk.BusinessData.Models.User.Input;
+
 namespace DH.Helpdesk.Dal.Repositories.Computers
 {
     using System;
@@ -43,7 +45,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
             string searchFor,
             bool isShowScrapped,
             int recordsOnPage,
-            SortField sortOptions);
+            SortField sortOptions,
+            int? recordsCount);
 
         ComputerShortOverview FindShortOverview(int id);
 
@@ -62,5 +65,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
         int GetComputerCount(int customerId, int? departmentId);
 
         List<ReportModel> FindConnectedToComputerLocationOverviews(int customerId, int? departmentId, string searchFor);
+
+        int GetIdByName(string computerName, int customerId);
+        List<ComputerOverview> GetRelatedOverviews(int customerId, string userId);
     }
 }

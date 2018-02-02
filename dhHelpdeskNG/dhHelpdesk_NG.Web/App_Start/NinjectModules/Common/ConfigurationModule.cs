@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Common
+﻿using Ninject;
+
+namespace DH.Helpdesk.Web.NinjectModules.Common
 {
     using DH.Helpdesk.Web.Infrastructure.Configuration;
     using DH.Helpdesk.Web.Infrastructure.Configuration.Concrete;
@@ -9,7 +11,8 @@
     {
         public override void Load()
         {
-            this.Bind<IApplicationConfiguration>().To<ApplicationConfiguration>().InSingletonScope();
+            this.Bind<IAdfsConfiguration, IAdfsClaimsSettings>().To<AdfsConfiguration>();
+            this.Bind<IApplicationConfiguration>().To<ApplicationConfiguration>();
             this.Bind<IConfiguration>().To<Configuration>().InSingletonScope();
         }
     }

@@ -31,6 +31,7 @@ dhHelpdeskNG/packages/*
 dhHelpdeskNG/dhHelpdesk_NG.Web_SelfService/Web.config
 dhHelpdeskNG/CommonAssembly/SharedAssemblyInfo.cs
 dhHelpdeskNG/.vs/config/applicationhost.config
+
 dhHelpdeskNG/dhHelpdesk_NG.Web/Logs/
 dhHelpdeskNG/dhHelpdesk_NG.Web/ExtendedCaseApi/**
 dhHelpdeskNG/dhHelpdesk_NG.Web/ExtendedCase/**

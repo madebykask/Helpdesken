@@ -1,7 +1,7 @@
 ﻿// .po file like language pack
 plupload.addI18n({
 	'Select files' : 'Välj filer',
-	'Add files to the upload queue and click the start button.' : 'Lägg till filer till kön och tryck på start.',
+	'Add files to the upload queue and click start upload.': 'Lägg till filer till kön och tryck på lägg till.',
 	'Filename' : 'Filnamn',
 	'Status' : 'Status',
 	'Size' : 'Storlek',

@@ -17,12 +17,16 @@
 								{ (int)InvoiceStatus.Invoiced, InvoiceStatus.Invoiced.GetTranslation(true) },
 								{ (int)InvoiceStatus.NotInvoiced, InvoiceStatus.NotInvoiced.GetTranslation(true) }
 							}),
+    			minStep: @Model.Setting.MinRegWorkingTime,
+    	        caseId: @Model.case_.Id,
+    	        showInvoiceTime: "@(Model.case_.Department != null && Model.case_.Department.ShowInvoiceTime)",
+    	        showInvoiceOvertime: "@(Model.case_.Department != null && Model.case_.Department.ShowInvoiceOvertime)",
+    	        showInvoicePrice: "@(Model.case_.Department != null && Model.case_.Department.ShowInvoicePrice)",
+    	        showInvoiceMaterial: "@(Model.case_.Department != null && Model.case_.Department.ShowInvoiceMaterial)",    	        
 				getListUrl: "@Url.Action(MvcInvoicesUrlName.Overview.GetInvoicesOverviewList, MvcInvoicesUrlName.Overview.Controller)",
 				saveValuesUrl: "@Url.Action(MvcInvoicesUrlName.Overview.SaveInvoiceValues, MvcInvoicesUrlName.Overview.Controller)",
 				actionUrl: "@Url.Action(MvcInvoicesUrlName.Overview.InvoiceAction, MvcInvoicesUrlName.Overview.Controller)",
-				exportUrl: "@Url.Action(MvcInvoicesUrlName.Overview.InvoiceExport, MvcInvoicesUrlName.Overview.Controller)",
-    			minStep: @Model.Setting.MinRegWorkingTime,
-				caseId: @Model.case_.Id
+				exportUrl: "@Url.Action(MvcInvoicesUrlName.Overview.InvoiceExport, MvcInvoicesUrlName.Overview.Controller)"
 			});
     	window.caseChargeObj = caseChargeObj;
 

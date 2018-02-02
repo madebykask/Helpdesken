@@ -7,6 +7,7 @@
 @using DH.Helpdesk.Common.Enums.Settings
 @using DH.Helpdesk.Common.Extensions.Integer
 @using DH.Helpdesk.Domain.Invoice
+@using DH.Helpdesk.Web
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
@@ -98,6 +99,7 @@
             </div>
         </div>
     }
+
     <div class="row">
         <div class="span12">
             <table class="tableform">
@@ -394,7 +396,7 @@
                             </div>
                         </div>
                     </div>
-                    @if (Model.CustomerSettings.ModuleInvoice == true)
+                    @if (Model.CustomerSettings.ModuleInvoice)
                     {
                         <div id="divInvoice" style="@Model.ShowInvoiceFields.displayHtml()">
                             <h4>
@@ -415,7 +417,8 @@
                                                 <th class="span5"></th>
                                             </tr>
                                         </thead>
-                                        <tr>
+                                        
+                                        <tr id="invoiceField-Time">
                                             <td>
                                                 @Translation.Get("Tidsåtgång", SessionFacade.CurrentCaseLanguageId)
                                             </td>
@@ -435,7 +438,7 @@
                                             </td>
                                             <td></td>
                                         </tr>
-                                        <tr>
+                                        <tr id="invoiceField-Overtime">
                                             <td>
                                                 @Translation.Get("Övertid", SessionFacade.CurrentCaseLanguageId)
                                             </td>
@@ -460,7 +463,7 @@
                                             <td id="timeValidationMessage"></td>
                                             <td></td>
                                         </tr>
-                                        <tr>
+                                        <tr id="invoiceField-Material">
                                             <td>
                                                 @Translation.Get("Material", SessionFacade.CurrentCaseLanguageId)
                                             </td>
@@ -476,7 +479,7 @@
                                             </td>
                                             <td></td>
                                         </tr>
-                                        <tr>
+                                        <tr id="invoiceField-Price">
                                             <td>
                                                 @Translation.Get("Pris", SessionFacade.CurrentCaseLanguageId)
                                             </td>
@@ -512,7 +515,7 @@
                                 </div>
                             </div>
                         </div>
-                                                    }
+                    }
                     @Html.Partial("ModalDialogs/_SendIntLogToDiallog", Model.SendToDialogModel)
                     @if (Model.CustomerSettings.ModuleInvoice)
                     {
@@ -538,80 +541,136 @@
 
                     }
 
-                    <script>
-                        $('#CaseLog_TextExternal').on('onchange', function () {
-                            checkLength(this);
-                        });
+<script>
+    $('#CaseLog_TextExternal').on('onchange', function () {
+        checkLength(this);
+    });
 
-                        $('#CaseLog_TextExternal').on('onkeyup', function () {
-                            checkLength(this);
-                        });
+    $('#CaseLog_TextExternal').on('onkeyup', function () {
+        checkLength(this);
+    });
 
-                        $('#CaseLog_TextExternal').on('onpaste', function () {
-                            checkLength(this);
-                        });
+    $('#CaseLog_TextExternal').on('onpaste', function () {
+        checkLength(this);
+    });
 
-                        $('#CaseLog_TextInternal').on('onchange', function () {
-                            checkLength(this);
-                        });
+    $('#CaseLog_TextInternal').on('onchange', function () {
+        checkLength(this);
+    });
 
-                        $('#CaseLog_TextInternal').on('onkeyup', function () {
-                            checkLength(this);
-                        });
+    $('#CaseLog_TextInternal').on('onkeyup', function () {
+        checkLength(this);
+    });
 
-                        $('#CaseLog_TextInternal').on('onpaste', function () {
-                            checkLength(this);
-                        });
+    $('#CaseLog_TextInternal').on('onpaste', function () {
+        checkLength(this);
+    });
 
-                        $(document)
-                            .on('change'
-                                , "#" + "@Html.IdFor(x => x.CaseLog.WorkingTimeHour)" +
-                                ", #" + "@Html.IdFor(x => x.CaseLog.WorkingTimeMinute)" +
-                                ", #" + "@Html.IdFor(x => x.CaseLog.OvertimeHour)" +
-                                ", #" + "@Html.IdFor(x => x.CaseLog.OvertimeMinute)"
-                                , function () {
-                                    $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
-                                });
+    $(document)
+        .on('change'
+            , "#" + "@Html.IdFor(x => x.CaseLog.WorkingTimeHour)" +
+            ", #" + "@Html.IdFor(x => x.CaseLog.WorkingTimeMinute)" +
+            ", #" + "@Html.IdFor(x => x.CaseLog.OvertimeHour)" +
+            ", #" + "@Html.IdFor(x => x.CaseLog.OvertimeMinute)"
+            , function () {
+                $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+            });
 
-                        $(document)
-                            .on('keyup'
-                                , "#" + "@Html.IdFor(x => x.CaseLog.Price)" +
-                                ", #" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)" +
-                                ", [id^='ExternalInvoices['][id$='].Amount']"
-                                , function () {
-                                    var val = $(this).val();
-                                    if (val && val !== "0")
-                                        $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
-                                });
+    $(document)
+        .on('keyup'
+            , "#" + "@Html.IdFor(x => x.CaseLog.Price)" +
+            ", #" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)" +
+            ", [id^='ExternalInvoices['][id$='].Amount']"
+            , function () {
+                var val = $(this).val();
+                if (val && val !== "0")
+                    $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+            });
 
-                        $(document)
-                            .on('keyup'
-                                , "[id^='ExternalInvoices['][id$='].Name']"
-                                , function () {
-                                    var val = $(this).val();
-                                    if (val)
-                                        $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
-                                });
+    $(document)
+        .on('keyup'
+            , "[id^='ExternalInvoices['][id$='].Name']"
+            , function () {
+                var val = $(this).val();
+                if (val)
+                    $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+            });
 
-                        var maxLength = 3000;
-                        function checkLength(el) {
-                            if (el.value.length > maxLength) {
-                                el.value = el.value.substring(0, maxLength);
-                            }
-                        }
+    var maxLength = 3000;
+    function checkLength(el) {
+        if (el.value.length > maxLength) {
+            el.value = el.value.substring(0, maxLength);
+        }
+    }
 
-                        $(function () {
-                            $('#CaseLog_TextExternal').resizable();
-                            $('#CaseLog_TextInternal').resizable();
-                        });
+    $(function () {
+        $('#CaseLog_TextExternal').resizable();
+        $('#CaseLog_TextInternal').resizable();
+    });
 
-                        $(".hidebtn").on("click", function (e) {
-                            e.preventDefault();
-                            $(this).parents(".section-block").addClass("hideshow");
-                        });
-                        $(".showbtn").on("click", function (e) {
-                            e.preventDefault();
-                            $(this).parents(".section-block").removeClass("hideshow");
-                        });
+    $(".hidebtn").on("click", function (e) {
+        e.preventDefault();
+        $(this).parents(".section-block").addClass("hideshow");
+    });
+    $(".showbtn").on("click", function (e) {
+        e.preventDefault();
+        $(this).parents(".section-block").removeClass("hideshow");
+    });
 
-                    </script>
+</script>
+
+
+@if (Model.editLog || Model.newLog)
+{
+    @Html.Partial("~/Views/Cases/_CaseValidation.cshtml", Model)
+
+    <div id="hiddenCaseFields" style="display: none !important">
+        @Html.HiddenFor(m => m.case_.ReportedBy)
+        @Html.HiddenFor(m => m.case_.PersonsName)
+        @Html.HiddenFor(m => m.case_.PersonsEmail)
+        @Html.HiddenFor(m => m.case_.PersonsPhone)
+        @Html.HiddenFor(m => m.case_.PersonsCellphone)
+        @Html.HiddenFor(m => m.case_.Region_Id)
+        @Html.HiddenFor(m => m.case_.Department_Id)
+        @Html.HiddenFor(m => m.case_.OU_Id)
+        @Html.HiddenFor(m => m.case_.CostCentre)
+        @Html.HiddenFor(m => m.case_.Place)
+        @Html.HiddenFor(m => m.case_.UserCode)
+
+        @Html.HiddenFor(m => m.case_.InventoryNumber)
+        @Html.HiddenFor(m => m.case_.InventoryType)
+        @Html.HiddenFor(m => m.case_.InventoryLocation)
+
+        @Html.HiddenFor(m => m.CustomerRegistrationSourceId)
+        @Html.HiddenFor(m => m.case_.ProductArea_Id)
+        @Html.HiddenFor(m => m.case_.System_Id)
+        @Html.HiddenFor(m => m.case_.Urgency_Id)
+        @Html.HiddenFor(m => m.case_.Impact_Id)
+        @Html.HiddenFor(m => m.case_.Category_Id)
+        @Html.HiddenFor(m => m.case_.Supplier_Id)
+        @Html.HiddenFor(m => m.case_.InvoiceNumber)
+        @Html.HiddenFor(m => m.case_.ReferenceNumber)
+        @Html.HiddenFor(m => m.case_.Caption)
+        @Html.HiddenFor(m => m.case_.Description)
+        @Html.HiddenFor(m => m.case_.Miscellaneous)
+        @Html.HiddenFor(m => m.case_.AgreedDate)
+        @Html.HiddenFor(m => m.case_.Available)
+        @Html.HiddenFor(m => m.case_.Cost)
+        @Html.HiddenFor(m => m.case_.OtherCost)
+        @Html.HiddenFor(m => m.case_.Currency)
+
+        @Html.HiddenFor(m => m.case_.WorkingGroup_Id)
+        @Html.HiddenFor(m => m.ResponsibleUser_Id)
+        @Html.HiddenFor(m => m.Performer_Id)
+        @Html.HiddenFor(m => m.case_.Priority_Id)
+        @Html.HiddenFor(m => m.case_.Status_Id)
+        @Html.HiddenFor(m => m.case_.StateSecondary_Id)
+        @Html.HiddenFor(m => m.case_.Project_Id)
+        @Html.HiddenFor(m => m.case_.Problem_Id)
+        @Html.HiddenFor(m => m.case_.CausingPartId)
+        @Html.HiddenFor(m => m.case_.PlanDate)
+        @Html.HiddenFor(m => m.case_.WatchDate)
+        @Html.HiddenFor(m => m.case_.VerifiedDescription)
+        @Html.HiddenFor(m => m.case_.SolutionRate)
+    </div>
+}

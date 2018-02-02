@@ -111,13 +111,11 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             return data;
         }
 
-        public List<InventoryDynamicFieldSettingForModelEdit> GetFieldSettingsForModelEdit(int inventoryTypeId)
+        public List<InventoryDynamicFieldSettingForModelEdit> GetFieldSettingsForModelEdit(int inventoryTypeId, bool isReadonly = false)
         {
             var settings = this.GetSettings(inventoryTypeId).Where(x => x.Show == True);
 
-            var mapperData =
-                settings.Select(
-                    x =>
+            var mapperData = settings.Select(x =>
                     new
                         {
                             x.Id,
@@ -128,16 +126,14 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             x.PropertySize
                         }).ToList();
 
-            var data =
-                mapperData.Select(
-                    x =>
+            var data = mapperData.Select(x =>
                     new InventoryDynamicFieldSettingForModelEdit(
                         x.Id,
                         x.InventoryTypeGroup_Id,
                         x.PropertyValue,
                         x.PropertyPos,
                         (FieldTypes)x.PropertyType,
-                        x.PropertySize)).ToList();
+                        x.PropertySize, isReadonly)).ToList();
 
             return data;
         }

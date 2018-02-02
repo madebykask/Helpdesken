@@ -20,6 +20,8 @@
         public int ShowOnStartPage { get; set; }
 
         public int ShowExternal { get; set; }
+        public bool ShowStatusBar { get; set; }
+        public bool ShowExternalStatusBar { get; set; }
         public string DefaultValue { get; set; }
         public string Name { get; set; }
         //public string NameOrigin { get; set; }

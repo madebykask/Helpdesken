@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿using DH.Helpdesk.Services.Services.Authentication;
+using DH.Helpdesk.Web.Infrastructure.Configuration;
+
+namespace DH.Helpdesk.Web.Controllers
 {
     using System;
     using System.Linq;
@@ -11,6 +14,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Users;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Authentication;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Services.Services.Concrete;
@@ -42,6 +46,9 @@
         private readonly IRouteResolver routeResolver;
 
         private readonly ILogProgramService _logProgramService;
+        private readonly IApplicationConfiguration _applicationConfiguration;
+        private readonly IFederatedAuthenticationService _federatedAuthenticationService;
+        private readonly IAuthenticationService _authenticationService;
 
         public LoginController(
                 IUserService userService, 
@@ -50,7 +57,10 @@
                 ICaseLockService caseLockService,
                 ILanguageService languageService, 
                 IRouteResolver routeResolver,
-                ILogProgramService logProgramService)
+                ILogProgramService logProgramService,
+                IApplicationConfiguration applicationConfiguration,
+                IFederatedAuthenticationService federatedAuthenticationService,
+                IAuthenticationService authenticationService)
         {
             this.userService = userService;
             this.customerService = customerService;
@@ -59,19 +69,15 @@
             this.languageService = languageService;
             this.routeResolver = routeResolver;
             this._logProgramService = logProgramService;
+            _applicationConfiguration = applicationConfiguration;
+            _federatedAuthenticationService = federatedAuthenticationService;
+            _authenticationService = authenticationService;
         }
 
         [HttpGet]
         public ActionResult Logout()
         {
-            if (this.Session != null)
-            {
-                this.Session.Clear();
-                ApplicationFacade.RemoveLoggedInUser(this.Session.SessionID);  
-                this.Session.Abandon();
-            }
-
-            FormsAuthentication.SignOut();
+            _authenticationService.SignOut(ControllerContext.HttpContext);
 
             TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
 
@@ -79,8 +85,14 @@
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)]
-        public ViewResult Login()
+        public ActionResult Login()
         {
+            if (_applicationConfiguration.LoginMode == LoginMode.SSO)
+            {
+                var loginUrl = _federatedAuthenticationService.GetSignInUrl();
+                return Redirect(loginUrl);
+            }
+
             TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);            
             return View();
         }

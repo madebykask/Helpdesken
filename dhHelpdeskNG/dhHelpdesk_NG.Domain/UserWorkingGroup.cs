@@ -15,6 +15,8 @@
 
         public int WorkingGroup_Id { get; set; }
 
+        public bool IsMemberOfGroup { get; set; }
+
         public int IsDefault { get; set; }
 
         public virtual User User { get; set; }

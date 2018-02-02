@@ -15,5 +15,10 @@
         public const string FinishingDate = "FinishingDate";
 
         public const string FinishingCause = "ClosingReason";
+
+        public const string TotalMaterial = "Totalt Material";
+        public const string TotalOverTime = "Totalt Övertid";
+        public const string TotalPrice = "Totalt Pris";
+        public const string TotalWork = "Totalt Arbete";
     }
 }

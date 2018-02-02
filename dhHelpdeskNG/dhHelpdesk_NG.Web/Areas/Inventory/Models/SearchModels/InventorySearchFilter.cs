@@ -37,9 +37,9 @@
             return new InventorySearchFilter(Common.Constants.SearchFilter.RecordsOnPage);
         }
 
-        public InventoriesFilter CreateRequest(int inventoryTypeId)
+        public InventoriesFilter CreateRequest(int inventoryTypeId, int? numberOfRecords = null)
         {
-            return new InventoriesFilter(inventoryTypeId, this.DepartmentId, this.SearchFor, this.RecordsOnPage);
+            return new InventoriesFilter(inventoryTypeId, DepartmentId, SearchFor, numberOfRecords?? RecordsOnPage);
         }
     }
 }

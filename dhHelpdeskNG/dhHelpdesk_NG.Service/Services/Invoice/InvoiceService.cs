@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -59,7 +60,7 @@ namespace DH.Helpdesk.Services.Services.Invoice
 		{
 			var dbModels = _invoiceRepository.GetInvoiceOverviewList(customerId, departmentId, dateFrom, dateTo, status, caseId, departmentCharge);
 			var res = new List<InvoiceOverview>();
-			foreach (var dbModel in dbModels)
+			foreach (var dbModel in dbModels.Item1)
 			{
 				var item = new InvoiceOverview();
 				item.CaseId = dbModel.Id;
@@ -104,7 +105,9 @@ namespace DH.Helpdesk.Services.Services.Invoice
 					InvoiceRow = new InvoiceRow { Status = x.InvoiceRow?.Status}
 				}).ToList();
 
-				res.Add(item);
+                item.Statistics = dbModels.Item2.Where(i=> i.CaseId == item.CaseId).FirstOrDefault();
+
+                res.Add(item);
 			}
 
 			return res;
@@ -148,8 +151,8 @@ namespace DH.Helpdesk.Services.Services.Invoice
 						if (!fileCases.ContainsKey(dbLog.Case_Id))
 						{
 							fileCases.Add(dbLog.Case_Id, new Tuple<List<Log>, List<CaseInvoiceRow>>(new List<Log>(), new List<CaseInvoiceRow>()));
-							fileCases[dbLog.Case_Id].Item1.Add(dbLog);
 						}
+					    fileCases[dbLog.Case_Id].Item1.Add(dbLog);
 					}
 				}
 
@@ -191,23 +194,27 @@ namespace DH.Helpdesk.Services.Services.Invoice
 
 		public List<InvoiceFile> GetInvoiceHeaders(int customerId)
 		{
-			var res = _invoiceHeaderRepository.GetAll()
-				.Where(x => !String.IsNullOrWhiteSpace(x.InvoiceFilename))
-				.Where(x => x.InvoiceRows.Any(y => y.CaseInvoiceRows.Any(z => z.Case.Customer_Id == customerId) || y.Logs.Any(z => z.Case.Customer_Id == customerId)))
-				.ToList();
+		    var res = _invoiceHeaderRepository.GetAll()
+                .AsQueryable()
+		        .Where(x => !(x.InvoiceFilename == null || x.InvoiceFilename.Trim() == string.Empty) &&
+                    x.InvoiceRows.Any(y =>
+		                y.CaseInvoiceRows.Any(z => z.Case.Customer_Id == customerId) ||
+		                y.Logs.Any(z => z.Case.Customer_Id == customerId)))
+		        .Select(x => new InvoiceFile
+		        {
+		            Guid = x.InvoiceHeaderGUID,
+		            Date = x.CreatedDate,
+		            Name = x.InvoiceFilename
+		        }).ToList();
 
-			return res.Select(x => new InvoiceFile
-			{
-				Guid = x.InvoiceHeaderGUID,
-				Date = x.CreatedDate,
-				Name = x.InvoiceFilename
-			}).ToList();
+            return res;
 		}
 
 		public InvoiceFile GetInvoiceHeader(Guid guid)
 		{
 			var res = _invoiceHeaderRepository.GetAll()
-				.Where(x => x.InvoiceHeaderGUID == guid)
+			    .AsQueryable()
+                .Where(x => x.InvoiceHeaderGUID == guid)
 				.FirstOrDefault();
 
 			return res == null ? null : new InvoiceFile
@@ -233,14 +240,15 @@ namespace DH.Helpdesk.Services.Services.Invoice
 					             .Where(x => x.Charge.ToBool())
 					             .Sum(x => ((decimal)x.WorkingTime / 60) * caseInfo.Department.AccountancyAmount +
 							             ((decimal)x.OverTime / 60) * caseInfo.Department.OverTimeAmount + 
-										 x.Price) +
+										 x.Price + 
+                                         x.EquipmentPrice) +
 				             fileCase.Value.Item2
 					             .Where(x => x.Charge.ToBool()).Sum(x => x.InvoicePrice);
 
-				sb.AppendLine($"{caseInfo.CaseNumber}-{invoiceHeader_Id}\t{translations[0]}\t{caseInfo.Department.DepartmentName}" +
+                sb.AppendLine($"{caseInfo.CaseNumber}-{invoiceHeader_Id}\t{translations[0]}\t{caseInfo.Department.DepartmentName}" +
                               $"\t{caseInfo.Workinggroup?.Code}\t{translations[1]}:{caseInfo.CaseNumber}, {caseInfo.Caption}" +
 				              $"{(String.IsNullOrWhiteSpace(externalInvoices) ? "" : $", {translations[2]}: " + externalInvoices)}" +
-				              $"{(referenceNumber == null ? "" : $", {translations[3]}: " + referenceNumber)}\t{translations[4]}\t{caseInfo.FinishingDate?.ToString("yyyy-MM-dd")}\t\t{amount}");
+				              $"{(referenceNumber == null ? "" : $", {translations[3]}: " + referenceNumber)}\t{translations[4]}\t{caseInfo.FinishingDate?.ToString("yyyy-MM-dd")}\t\t{amount.ToString("F2")}");
 
 				using (var file = new StreamWriter(path))
 				{

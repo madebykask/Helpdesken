@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.User.Input;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System.Collections.Generic;
 
@@ -63,6 +65,10 @@
 
         List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter);
 
+        int GetWorkstationIdByName(string computerName, int customerId);
+
+        ComputerForRead GetWorkstationByNumber(string computerName, int customerId);
+
         #endregion
 
         #region Server
@@ -79,6 +85,8 @@
 
         ServerOverview[] GetServers(ServersFilter computersFilter);
 
+        int GetServerIdByName(string serverName, int customerId);
+
         #endregion
 
         #region Printer
@@ -92,6 +100,8 @@
         PrinterForRead GetPrinter(int id);
 
         List<PrinterOverview> GetPrinters(PrintersFilter printersFilter);
+
+        int GetPrinterIdByName(string printerName, int customerId);
 
         #endregion
 
@@ -117,6 +127,11 @@
 
         void RemoveInventoryFromComputer(int inventoryId, int computerId);
 
+        int GetCustomInventoryIdByName(string inventoryName, int inventoryTypeId);
+
         #endregion
+
+        List<ComputerOverview> GetRelatedInventory(int customerId, string userId);
+        
     }
 }

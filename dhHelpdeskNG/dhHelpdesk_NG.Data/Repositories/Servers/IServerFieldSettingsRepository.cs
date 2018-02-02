@@ -12,7 +12,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers
 
         ServerFieldsSettings GetFieldSettingsForEdit(int customerId, int languageId);
 
-        ServerFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId);
+        ServerFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false);
 
         ServerFieldsSettingsOverview GetFieldSettingsOverview(int customerId, int languageId);
 

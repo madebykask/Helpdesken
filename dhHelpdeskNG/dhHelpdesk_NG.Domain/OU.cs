@@ -21,6 +21,8 @@
         public DateTime CreatedDate { get; set; }
         public string Code { get; set; }
         public string SearchKey { get; set; }
+        public bool ShowInvoice { get; set; }
+
         //public Guid? OUGUID { get; set; }
         //public DateTime? SynchronizedDate { get; set; }
 

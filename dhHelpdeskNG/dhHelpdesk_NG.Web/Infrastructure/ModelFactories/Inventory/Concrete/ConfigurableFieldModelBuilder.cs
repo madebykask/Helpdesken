@@ -46,7 +46,7 @@
                        : new ConfigurableFieldModel<DateTime?>(
                              setting.Caption,
                              value,
-                             setting.IsRequired);
+                             setting.IsRequired, setting.IsReadOnly);
         }
 
         public ConfigurableFieldModel<DateTime> CreateDateTimeField(ModelEditFieldSetting setting, DateTime value)
@@ -56,7 +56,7 @@
                        : new ConfigurableFieldModel<DateTime>(
                              setting.Caption,
                              value,
-                             setting.IsRequired);
+                             setting.IsRequired, setting.IsReadOnly);
         }
 
         public ConfigurableFieldModel<string> CreateStringField(ModelEditFieldSetting setting, string value)
@@ -66,28 +66,28 @@
                        : new ConfigurableFieldModel<string>(
                              setting.Caption,
                              value,
-                             setting.IsRequired);
+                             setting.IsRequired, setting.IsReadOnly);
         }
 
         public ConfigurableFieldModel<bool> CreateBooleanField(ModelEditFieldSetting setting, bool value)
         {
             return !setting.IsShow
                        ? ConfigurableFieldModel<bool>.CreateUnshowable()
-                       : new ConfigurableFieldModel<bool>(setting.Caption, value, setting.IsRequired);
+                       : new ConfigurableFieldModel<bool>(setting.Caption, value, setting.IsRequired, setting.IsReadOnly);
         }
 
         public ConfigurableFieldModel<int> CreateIntegerField(ModelEditFieldSetting setting, int value)
         {
             return !setting.IsShow
                        ? ConfigurableFieldModel<int>.CreateUnshowable()
-                       : new ConfigurableFieldModel<int>(setting.Caption, value, setting.IsRequired);
+                       : new ConfigurableFieldModel<int>(setting.Caption, value, setting.IsRequired, setting.IsReadOnly);
         }
 
         public ConfigurableFieldModel<int?> CreateNullableIntegerField(ModelEditFieldSetting setting, int? value)
         {
             return !setting.IsShow
                        ? ConfigurableFieldModel<int?>.CreateUnshowable()
-                       : new ConfigurableFieldModel<int?>(setting.Caption, value, setting.IsRequired);
+                       : new ConfigurableFieldModel<int?>(setting.Caption, value, setting.IsRequired, setting.IsReadOnly);
         }
     }
 }

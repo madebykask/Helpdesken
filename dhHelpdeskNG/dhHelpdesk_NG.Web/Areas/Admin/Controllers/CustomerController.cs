@@ -12,6 +12,7 @@
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Attributes;
     using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.BusinessData.Models.Shared;
@@ -355,7 +356,7 @@
                 setting.ComplexPassword = vmodel.Setting.ComplexPassword;
                 setting.IsUserFirstLastNameRepresentation = vmodel.UserFirstLastNameRepresentationId == UserFirstLastNameModes.LastFirstNameMode ? 0 : 1;
                 setting.CalcSolvedInTimeByLatestSLADate = vmodel.Setting.CalcSolvedInTimeByLatestSLADate;
-	            setting.BatchEmail = vmodel.Setting.BatchEmail;
+                setting.BatchEmail = vmodel.Setting.BatchEmail;
             }
 
             IDictionary<string, string> errors;
@@ -879,9 +880,10 @@
                 ShowOUsOnDepartmentFilter = customerToCopySettings.ShowOUsOnDepartmentFilter,
                 FileIndexingServerName = customerToCopySettings.FileIndexingServerName,
                 FileIndexingCatalogName = customerToCopySettings.FileIndexingCatalogName,
-				BatchEmail = customerToCopySettings.BatchEmail,
+                BatchEmail = customerToCopySettings.BatchEmail,
                 BulletinBoardWGRestriction = customerToCopySettings.BulletinBoardWGRestriction,
                 CalendarWGRestriction = customerToCopySettings.CalendarWGRestriction,
+                QuickLinkWGRestriction = customerToCopySettings.QuickLinkWGRestriction,
                 ModuleExtendedCase = customerToCopySettings.ModuleExtendedCase,
                 AttachmentPlacement = customerToCopySettings.AttachmentPlacement,
                 M2TNewCaseMailTo = customerToCopySettings.M2TNewCaseMailTo,

@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DH.Helpdesk.Common.Configuration;
 using DH.Helpdesk.Domain;
+using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 
 namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
 {
@@ -16,22 +18,28 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
     public sealed class CommonFunctions : ICommonFunctions
     {                
         private readonly ICaseSolutionService _caseSolutionService;
+        private readonly IGlobalSettingService _globalSettingService;
         private readonly IActionSettingService _actionSettingService;
         private readonly ILogService _logService;
         private readonly IOrderTypeService _orderTypeService;
         private readonly ISettingService _settingService;
+        private readonly ISelfServiceConfigurationService _configurationService;
 
         public CommonFunctions(ICaseSolutionService caseSolutionService,
+                               IGlobalSettingService globalSettingService,
                                ILogService logService,
                                IActionSettingService actionSettingService,
                                IOrderTypeService orderTypeService,
-                               ISettingService settingService)
+                               ISettingService settingService,
+                               ISelfServiceConfigurationService configurationService)
         {
             _caseSolutionService = caseSolutionService;
+            _globalSettingService = globalSettingService;
             _actionSettingService = actionSettingService;
             _logService = logService;
             _orderTypeService = orderTypeService;
             _settingService = settingService;
+            _configurationService = configurationService;
         }
 
         public List<CaseSolution> GetCaseTemplates(int customerId)
@@ -136,6 +144,9 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
             var model = new LayoutViewModel();
             model.AppType = AppConfigHelper.GetAppSetting(AppSettingsKey.CurrentApplicationType);
 
+            var globalSettings = _globalSettingService.GetGlobalSettings();
+            model.IsMultiCustomerSearchEnabled = globalSettings.First().MultiCustomersSearch == 1;
+
             int pCustomerId = -1;
             if (SessionFacade.CurrentCustomer != null)
             {
@@ -158,7 +169,9 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
             model.OrderModuleIsEnabled = IsOrderModuleEnabled(pCustomerId);            
             model.UserHasOrderTypes = (SessionFacade.CurrentLocalUser != null)? 
                                         IsUserHasOrderTypes(SessionFacade.CurrentLocalUser.Id, pCustomerId) : false;
-            model.HideMenu = !SessionFacade.UserHasAccess;            
+            model.HideMenu = !SessionFacade.UserHasAccess;
+            model.LoginMode = _configurationService.AppSettings.LoginMode;
+
             model.ShowLanguage = tmpDataLanguge != null && tmpDataLanguge.ToString().ToLower() == "true";
             model.CaseLog = (currentCase_Id.HasValue)? GetCaseLogs(currentCase_Id.Value) : null;
             model.HasError = SessionFacade.LastError != null && !string.IsNullOrEmpty(SessionFacade.LastError.Message);

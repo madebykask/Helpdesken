@@ -487,7 +487,15 @@ $(function () {
                             for (var i = 0; i < data.departments.length; i++) {
                                 var item = data.departments[i];
                                 var curRegion = (item.RegionId != null ? _region.GetById(item.RegionId) : null);
-                                _department.Items.push({ Id: item.Id, Name: item.Name, IsActive: item.IsActive, RegionId: item.RegionId, Region: curRegion });
+                                _department.Items.push(
+                                    {
+                                        Id: item.Id,
+                                        Name: item.Name,
+                                        IsActive: item.IsActive,
+                                        RegionId: item.RegionId,
+                                        DisabledForOrder: item.DisabledForOrder,
+                                        Region: curRegion
+                                    });
                             }
                         }
                 });
@@ -814,7 +822,8 @@ $(function () {
                 order.Department_Id = null;
             }
 
-            dhHelpdesk.CaseArticles.PopulateDropDownItem(elementId, departments, selectedItem);
+            dhHelpdesk.CaseArticles.PopulateDropDownItem(elementId, departments, selectedItem);            
+            this.SetSendOrderForDepartment(order.Id, order.Department_Id);
             dhHelpdesk.CaseArticles.FillOrderOU(order, selectedItem, noSelection);
         },
 
@@ -829,6 +838,28 @@ $(function () {
 
             dhHelpdesk.CaseArticles.PopulateDropDownItem(elementId, ous, selectedItem);
             dhHelpdesk.CaseArticles.UpdateAvailableOrder(order);
+        },
+
+        SetSendOrderForDepartment: function (orderId, departmentId) {
+            if (departmentId == undefined) {
+                $("#doInvoiceButton_" + orderId).removeAttr("disabled");
+                return;
+            }
+
+            var department = dhHelpdesk.CaseArticles.OrganizationData.Department.GetById(departmentId);
+            if (department != null && department.DisabledForOrder) {
+                $("#doInvoiceButton_" + orderId).attr("disabled", "disabled");
+
+                var _hint = dhHelpdesk.Common.Translate("Vald") + " " + 
+                            dhHelpdesk.Common.TranslateCaseFields("Department_Id") + " " + 
+                            dhHelpdesk.Common.Translate("kan inte faktureras");
+                            
+                $("#doInvoiceButton_" + orderId).attr("title", _hint);
+            }
+            else {
+                $("#doInvoiceButton_" + orderId).removeAttr("disabled");
+                $("#doInvoiceButton_" + orderId).attr("title", "");
+            }
         },
 
         PopulateDropDownItem: function (elementId, items, selectedItem_Id) {
@@ -2998,7 +3029,7 @@ $(function () {
                 ////////initiator field
 
                 model.ReportedBy = this.ReportedBy != null ? dhHelpdesk.Common.HtmlQuotationUpdate(this.ReportedBy) : "";
-                model.ShowReportedBy = dhHelpdesk.CaseArticles.ShowCaseField('ReportedBy')
+                model.ShowReportedBy = dhHelpdesk.CaseArticles.ShowCaseField('ReportedBy');
                 model.RequiredReportedBy = dhHelpdesk.CaseArticles.OtherReferenceRequired.ReportedBy;
 
                 model.Persons_Name = this.Persons_Name != null ? dhHelpdesk.Common.HtmlQuotationUpdate(this.Persons_Name) : "";
@@ -3019,7 +3050,7 @@ $(function () {
 
                 model.Region_Id = this.Region_Id != null ? this.Region_Id : "";
                 model.ShowRegion_Id = dhHelpdesk.CaseArticles.ShowCaseField('Region_Id');
-                model.RequiredRegion_Id = dhHelpdesk.CaseArticles.OtherReferenceRequired.Region_Id
+                model.RequiredRegion_Id = dhHelpdesk.CaseArticles.OtherReferenceRequired.Region_Id;
 
                 model.Department_Id = this.Department_Id != null ? this.Department_Id : "";
                 model.ShowDepartment_Id = dhHelpdesk.CaseArticles.ShowCaseField('Department_Id');
@@ -3163,6 +3194,7 @@ $(function () {
                         }
                         dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrd.Id);
                         dhHelpdesk.CaseArticles.UpdateAvailableOrder(th);
+                        dhHelpdesk.CaseArticles.SetSendOrderForDepartment(curOrd.Id, th.Department_Id);
                     });
 
                     var ou = this.Container.find(publicClassName + ".ou");
@@ -4331,144 +4363,149 @@ $(function () {
     var loadTranslationList = function () {
         return $.get('/Translation/GetAllTextTranslations', {
             curTime: Date.now
-        }, function (returnedData) {
-            AllTranslations = returnedData
         });
     };
 
     var loadCaseFieldTranslations = function () {
-        return $.get("/Translation/GetCaseFieldsForTranslation", {
+        return $.get('/Translation/GetCaseFieldsForTranslation', {
             curTime: Date.now
-        }, function (data) {
-            AllCaseFields = data;
         });
     };
 
     var loadCaseFieldSettings = function () {
-        return $.getJSON("/Cases/GetCaseFields", function (data) {
-            CaseFieldSettings = data;
-
-            var caseFieldSettings = new dhHelpdesk.CaseArticles.OtherReferenceMandatoryFields();
-            if (CaseFieldSettings.Result != null) {
-                for (var i = 0; i < CaseFieldSettings.Result.length; i++) {
-                    switch (CaseFieldSettings.Result[i].Name.toLowerCase()) {
-                        case 'reportedby':
-                            caseFieldSettings.ReportedBy = CaseFieldSettings.Result[i].Required != 0;
-                            break;
-
-                        case 'persons_name':
-                            caseFieldSettings.Persons_Name = CaseFieldSettings.Result[i].Required != 0;
-                            break;
-
-                        case 'persons_email':
-                            caseFieldSettings.Persons_Email = CaseFieldSettings.Result[i].Required != 0;
-                            break;
-
-                        case 'persons_phone':
-                            caseFieldSettings.Persons_Phone = CaseFieldSettings.Result[i].Required != 0;
-                            break;
-
-                        case 'persons_cellphone':
-                            caseFieldSettings.Persons_CellPhone = CaseFieldSettings.Result[i].Required != 0;
-                            break;
-
-                        case 'region_id':
-                            caseFieldSettings.Region_Id = CaseFieldSettings.Result[i].Required != 0;
-                            break;
-
-                        case 'department_id':
-                            caseFieldSettings.Department_Id = CaseFieldSettings.Result[i].Required != 0;
-                            break;
-
-                        case 'ou_id':
-                            caseFieldSettings.OU_Id = CaseFieldSettings.Result[i].Required != 0;
-                            break;
-
-                        case 'place':
-                            caseFieldSettings.Place = CaseFieldSettings.Result[i].Required != 0;
-                            break;
-
-                        case 'usercode':
-                            caseFieldSettings.UserCode = CaseFieldSettings.Result[i].Required != 0;
-                            break;
-
-                        case 'costcentre':
-                            // Always required
-                            caseFieldSettings.CostCentre = true;
-                            break;
-
-                    }
-                }
-
-                dhHelpdesk.CaseArticles.OtherReferenceRequired = caseFieldSettings;
-            }
-        });
+        return $.getJSON("/Cases/GetCaseFields");
     };
 
+    var processCaseFieldSettings = function(data) {
+        CaseFieldSettings = data;
+
+        var caseFieldSettings = new dhHelpdesk.CaseArticles.OtherReferenceMandatoryFields();
+        if (CaseFieldSettings.Result != null) {
+            for (var i = 0; i < CaseFieldSettings.Result.length; i++) {
+                switch (CaseFieldSettings.Result[i].Name.toLowerCase()) {
+                case 'reportedby':
+                    caseFieldSettings.ReportedBy = CaseFieldSettings.Result[i].Required != 0;
+                    break;
+
+                case 'persons_name':
+                    caseFieldSettings.Persons_Name = CaseFieldSettings.Result[i].Required != 0;
+                    break;
+
+                case 'persons_email':
+                    caseFieldSettings.Persons_Email = CaseFieldSettings.Result[i].Required != 0;
+                    break;
+
+                case 'persons_phone':
+                    caseFieldSettings.Persons_Phone = CaseFieldSettings.Result[i].Required != 0;
+                    break;
+
+                case 'persons_cellphone':
+                    caseFieldSettings.Persons_CellPhone = CaseFieldSettings.Result[i].Required != 0;
+                    break;
+
+                case 'region_id':
+                    caseFieldSettings.Region_Id = CaseFieldSettings.Result[i].Required != 0;
+                    break;
+
+                case 'department_id':
+                    caseFieldSettings.Department_Id = CaseFieldSettings.Result[i].Required != 0;
+                    break;
+
+                case 'ou_id':
+                    caseFieldSettings.OU_Id = CaseFieldSettings.Result[i].Required != 0;
+                    break;
+
+                case 'place':
+                    caseFieldSettings.Place = CaseFieldSettings.Result[i].Required != 0;
+                    break;
+
+                case 'usercode':
+                    caseFieldSettings.UserCode = CaseFieldSettings.Result[i].Required != 0;
+                    break;
+
+                case 'costcentre':
+                    // Always required
+                    caseFieldSettings.CostCentre = true;
+                    break;
+
+                }
+            }
+
+            dhHelpdesk.CaseArticles.OtherReferenceRequired = caseFieldSettings;
+        }
+    }
+
     var loadCaseInvoiceTemplate = function () {
-        return $.get("/content/templates/case-invoice.tmpl.html", function (caseInvoiceTemplate) {
-            dhHelpdesk.CaseArticles.CaseInvoiceTemplate = $.templates("caseInvoice", caseInvoiceTemplate);
-        });
+        return $.get("/content/templates/case-invoice.tmpl.html");
     };
 
     var loadCaseInvoiceOrderTemplate = function () {
-        return $.get("/content/templates/case-invoice-order.tmpl.html", function (caseInvoiceOrderTemplate) {
-            dhHelpdesk.CaseArticles.CaseInvoiceOrderTemplate = $.templates("caseInvoiceOrder", caseInvoiceOrderTemplate);
-        });
+        return $.get("/content/templates/case-invoice-order.tmpl.html");
     };
 
     var loadCaseInvoiceArticleTemplate = function () {
-        return $.get("/content/templates/case-invoice-article.tmpl.html", function (caseInvoiceArticleTemplate) {
-            dhHelpdesk.CaseArticles.CaseInvoiceArticleTemplate = $.templates("caseInvoiceArticle", caseInvoiceArticleTemplate);
-        });
+        return $.get("/content/templates/case-invoice-article.tmpl.html");
     };
 
     var loadCaseInvoiceOverviewTemplate = function () {
-        return $.get("/content/templates/case-invoice-overview.tmpl.html", function (caseInvoiceOverviewTemplate) {
-            dhHelpdesk.CaseArticles.CaseInvoiceOverviewTemplate = $.templates("caseInvoiceOverview", caseInvoiceOverviewTemplate);
-        });
+        return $.get("/content/templates/case-invoice-overview.tmpl.html");
     };
 
     var loadCaseInvoiceArticleOverviewTemplate = function () {
-        return $.get("/content/templates/case-invoice-article-overview.tmpl.html", function (caseInvoiceArticleOverviewTemplate) {
-            dhHelpdesk.CaseArticles.CaseInvoiceArticleOverviewTemplate = $.templates("caseInvoiceArticleOverview", caseInvoiceArticleOverviewTemplate);
-        });
+        return $.get("/content/templates/case-invoice-article-overview.tmpl.html");
     };
 
     var loadCaseInvoiceOrderActionsTemplate = function () {
-        return $.get("/content/templates/case-invoice-order-actions.tmpl.html", function (caseInvoiceOrderActionsTemplate) {
-            dhHelpdesk.CaseArticles.CaseInvoiceOrderActionsTemplate = $.templates("caseInvoiceOrderActions", caseInvoiceOrderActionsTemplate);
-        });
+        return $.get("/content/templates/case-invoice-order-actions.tmpl.html");
     };
 
     var loadCaseInvoiceCaseFilesTemplate = function () {
-        return $.get("/content/templates/case-invoice-case-files.tmpl.html", function (caseInvoiceCaseFilesTemplate) {
-            dhHelpdesk.CaseArticles.CaseInvoiceCaseFilesTemplate = $.templates("CaseInvoiceCaseFiles", caseInvoiceCaseFilesTemplate);
-        });
+        return $.get("/content/templates/case-invoice-case-files.tmpl.html");
     };
 
     var loadCaseInvoiceOrderFilesTemplate = function () {
-        return $.get("/content/templates/case-invoice-order-files.tmpl.html", function (caseInvoiceOrderFilesTemplate) {
-            dhHelpdesk.CaseArticles.CaseInvoiceOrderFilesTemplate = $.templates("CaseInvoiceOrderFiles", caseInvoiceOrderFilesTemplate);
-        });
+        return $.get("/content/templates/case-invoice-order-files.tmpl.html");
     };
 
     var loadAllData = function (callBack, obj) {
-        loadTranslationList()            
-            .then(loadCaseFieldTranslations)
-            .then(loadOrganizationData)
-            .then(loadCaseFieldSettings)
-            .then(loadCaseInvoiceTemplate)
-            .then(loadCaseInvoiceOrderTemplate)
-            .then(loadCaseInvoiceArticleTemplate)
-            .then(loadCaseInvoiceOverviewTemplate)
-            .then(loadCaseInvoiceArticleOverviewTemplate)
-            .then(loadCaseInvoiceOrderActionsTemplate)
-            .then(loadCaseInvoiceCaseFilesTemplate)
-            .then(loadCaseInvoiceOrderFilesTemplate)
-            .then(loadCaseFiles)
-            .then(function () {                
-
+        $.when(loadTranslationList(),
+                loadCaseFieldTranslations(), loadOrganizationData(), loadCaseFieldSettings(), loadCaseInvoiceTemplate(), loadCaseInvoiceOrderTemplate(),
+                loadCaseInvoiceArticleTemplate(), loadCaseInvoiceOverviewTemplate(), loadCaseInvoiceArticleOverviewTemplate(), loadCaseInvoiceOrderActionsTemplate(),
+                loadCaseInvoiceCaseFilesTemplate(), loadCaseInvoiceOrderFilesTemplate())
+            .then(function(translationList,
+                caseFieldTranslations,
+                organizationData,
+                caseFieldSettings,
+                caseInvoiceTemplate,
+                caseInvoiceOrderTemplate,
+                caseInvoiceArticleTemplate,
+                caseInvoiceOverviewTemplate,
+                caseInvoiceArticleOverviewTemplate,
+                caseInvoiceOrderActionsTemplate,
+                caseInvoiceCaseFilesTemplate,
+                caseInvoiceOrderFilesTemplate) {
+                AllTranslations = translationList;
+                AllCaseFields = caseFieldTranslations;
+                //organizationData
+                processCaseFieldSettings(caseFieldSettings);
+                dhHelpdesk.CaseArticles.CaseInvoiceTemplate = $.templates("caseInvoice", caseInvoiceTemplate);
+                dhHelpdesk.CaseArticles.CaseInvoiceOrderTemplate =
+                    $.templates("caseInvoiceOrder", caseInvoiceOrderTemplate);
+                dhHelpdesk.CaseArticles.CaseInvoiceArticleTemplate =
+                    $.templates("caseInvoiceArticle", caseInvoiceArticleTemplate);
+                dhHelpdesk.CaseArticles.CaseInvoiceOverviewTemplate =
+                    $.templates("caseInvoiceOverview", caseInvoiceOverviewTemplate);
+                dhHelpdesk.CaseArticles.CaseInvoiceArticleOverviewTemplate =
+                    $.templates("caseInvoiceArticleOverview", caseInvoiceArticleOverviewTemplate);
+                dhHelpdesk.CaseArticles.CaseInvoiceOrderActionsTemplate =
+                    $.templates("caseInvoiceOrderActions", caseInvoiceOrderActionsTemplate);
+                dhHelpdesk.CaseArticles.CaseInvoiceCaseFilesTemplate =
+                    $.templates("CaseInvoiceCaseFiles", caseInvoiceCaseFilesTemplate);
+                dhHelpdesk.CaseArticles.CaseInvoiceOrderFilesTemplate =
+                    $.templates("CaseInvoiceOrderFiles", caseInvoiceOrderFilesTemplate);
+            })
+            .then(loadCaseFiles())
+            .then(function(){
                 $("[data-invoice]").each(function () {
                     var $this = $(this);                                        
                     var data = $.parseJSON($this.attr("data-invoice-case-articles"));

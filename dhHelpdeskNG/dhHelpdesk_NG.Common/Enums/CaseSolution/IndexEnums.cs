@@ -19,4 +19,13 @@
         public const string SortOrder = "SortOrder";
 
     }
+
+
+    public enum CaseRelationType
+    {
+        None,
+        ParentAndChildren,
+        OnlyDescendants,
+        SelfAndDescendandts,
+    }
 }

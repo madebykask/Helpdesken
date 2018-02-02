@@ -30,5 +30,7 @@
 
         [NotNull]
         public DefaultFieldsViewModel DefaultFieldsViewModel { get; set; }
+
+        public bool IsForDialog { get; set; }
     }
 }

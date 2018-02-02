@@ -42,7 +42,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-   <ItemGroup>
+  <ItemGroup>
     <Reference Include="EPPlus">
       <HintPath>..\packages\EPPlus.3.1.3.3\lib\net35\EPPlus.dll</HintPath>
     </Reference>
@@ -54,8 +54,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
@@ -70,6 +71,12 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.IdentityModel.Services" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.1.0.0\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Linq.Dynamic">
       <HintPath>..\packages\System.Linq.Dynamic.1.0.3\lib\net40\System.Linq.Dynamic.dll</HintPath>
     </Reference>
@@ -79,11 +86,16 @@
     </Reference>
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Http">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Thinktecture.IdentityModel, Version=3.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Thinktecture.IdentityModel.3.6.1\lib\net45\Thinktecture.IdentityModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
@@ -142,6 +154,12 @@
     <Compile Include="BusinessLogic\CaseDocument\CaseDocumentConditionResult.cs" />
     <Compile Include="BusinessLogic\CaseDocument\CaseDocumentReplacePropertiesResult.cs" />
     <Compile Include="BusinessLogic\Cases\CaseHelper.cs" />
+    <Compile Include="BusinessLogic\Condition\ConditionPropertyException.cs" />
+    <Compile Include="BusinessLogic\Condition\ConditionResult.cs" />
+    <Compile Include="BusinessLogic\Condition\ConditionParseException.cs" />
+    <Compile Include="BusinessLogic\Condition\ConditionBaseException.cs" />
+    <Compile Include="BusinessLogic\Condition\ConditionException.cs" />
+    <Compile Include="BusinessLogic\Condition\ConditionEvaluator.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\MailTemplateFormatterNew.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\OrderMailTemplateFormatter.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\SurveyTemplate1.cs">
@@ -302,6 +320,8 @@
     <Compile Include="Infrastructure\Email\ICaseMailer.cs" />
     <Compile Include="Infrastructure\TimeZoneResolver\TimeZoneResolver.cs" />
     <Compile Include="Response\Questionnaire\OptionNote.cs" />
+    <Compile Include="Services\Authentication\FederatedAuthenticationService.cs" />
+    <Compile Include="Services\ConditionService.cs" />
     <Compile Include="Services\CaseExtraFollowersService.cs" />
     <Compile Include="Services\CaseFollowUpService.cs" />
     <Compile Include="Services\CaseDocumentService.cs" />
@@ -573,6 +593,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

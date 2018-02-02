@@ -1,0 +1,48 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.ConfigurableFieldModel<string>
+@if (!Model.Show)
+{
+    return;
+}
+
+@{
+    var inputAttributes = (Dictionary<string, object>)ViewData["inputAttributes"];
+    Dictionary<string, object> htmlAttributes;
+    if (inputAttributes != null)
+    {
+        htmlAttributes = new Dictionary<string, object>(inputAttributes.Count + 1);
+
+        foreach (var inputAttribute in inputAttributes)
+        {
+            htmlAttributes.Add(inputAttribute.Key, inputAttribute.Value);
+        }
+    }
+    else
+    {
+        htmlAttributes = new Dictionary<string, object>(1);
+    }
+
+    htmlAttributes.Add("data-dh-is-required", Model.IsRequired);
+
+
+    var validationMessage = string.Format(" {0} {1}", Html.PureFieldCaption(Model), Translation.GetCoreTextTranslation("måste anges"));
+     
+ }
+<tr>
+    <td class="span3">
+        @Html.FieldCaption(Model)
+    </td>
+    <td class="span9">
+        @if (!Model.IsReadOnly)
+        {
+            @Html.TextBoxFor(m => m.Value, htmlAttributes)
+            @Html.HiddenFor(m => m.IsRequired)
+            @Html.ValidationMessageFor(m => m.Value, validationMessage)
+        }
+        else
+        {
+            @Html.TextBoxFor(m => m.Value, new { @readonly = true })
+        }
+    </td>
+</tr>

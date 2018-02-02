@@ -410,6 +410,12 @@ namespace DH.Helpdesk.Web.Controllers
             if (caseSolutionInputViewModel.CaseSolution.ShowInsideCase != 1 || caseSolutionInputViewModel.CaseSolution.SaveAndClose < 0)
                 caseSolutionInputViewModel.CaseSolution.SaveAndClose = null;
 
+             if (caseSolutionInputViewModel.SplitToCaseSolutionIds != null)
+             {
+                 caseSolutionInputViewModel.CaseSolution.SplitToCaseSolutionDescendants = _caseSolutionService.GetSplitToCaseSolutionDescendants(caseSolutionInputViewModel.CaseSolution, caseSolutionInputViewModel.SplitToCaseSolutionIds);
+             }
+         
+
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
             //if (t == "0")
@@ -1442,6 +1448,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (caseSolutionInputViewModel.CaseSolution.ShowInsideCase != 1 || caseSolutionInputViewModel.CaseSolution.SaveAndClose < 0)
                 caseSolutionInputViewModel.CaseSolution.SaveAndClose = null;
+
+            if (caseSolutionInputViewModel.SplitToCaseSolutionIds != null)
+            {
+                   caseSolutionInputViewModel.CaseSolution.SplitToCaseSolutionDescendants = _caseSolutionService.GetSplitToCaseSolutionDescendants(caseSolutionInputViewModel.CaseSolution, caseSolutionInputViewModel.SplitToCaseSolutionIds);
+            }
 
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
@@ -2931,11 +2942,17 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = caseSolution.SaveAndClose.HasValue && caseSolution.SaveAndClose.Value != 0
             });
 
-            // 
-
-            //var splitToCaseSolutions = _caseSolutionService.GetCaseSolutions(curCustomerId).Where(z=>z.Status==1);
             IList<CaseSolution> splitToCaseSolutions = _caseSolutionService.GetCaseSolutions(curCustomerId).Where(z => z.Status == 1).ToList();
-            //IList<CaseSolution> splitToCaseSolutions = _caseSolutionService.GetCaseSolutions(curCustomerId).Where(z => z.Status == 1).ToList();
+
+            //TODO: better naming here
+            //TODO: make a setting per customer if they should be able to choose only from customer, or all customers 
+            IList<SelectListItem> splitToAllCaseSolutions = _caseSolutionService.GetCaseSolutions().Select(x => new SelectListItem
+            {
+                Text = x.Customer.Name + " / " + x.Name.ToString(),
+                Value = x.Id.ToString(),
+                Disabled = (x.Status == 0),
+                Selected = (caseSolution.SplitToCaseSolutionDescendants != null ? (caseSolution.SplitToCaseSolutionDescendants.Where(a => a.SplitToCaseSolution_Id == x.Id).Any() == true ? true : false) : false)
+             }).ToList();
 
             var model = new CaseSolutionInputViewModel
             {
@@ -3036,7 +3053,9 @@ namespace DH.Helpdesk.Web.Controllers
                 CaseSolutionFieldSettings = feildSettings,
                 CSSettingsField = lFieldSetting.ToList(),
                 CSSelectedSettingsField = lFieldSettingSelected.ToList(),
-                SplitToCaseSolutions = splitToCaseSolutions
+                SplitToCaseSolutions = splitToCaseSolutions,
+                SplitToAllCaseSolutions = splitToAllCaseSolutions
+
 
             };
 
@@ -3169,6 +3188,12 @@ namespace DH.Helpdesk.Web.Controllers
             model.CustomerSetting = _settingService.GetCustomerSetting(model.CaseSolution.Customer_Id);
 
             model.isCopy = false;
+
+            if (caseSolution.SplitToCaseSolutionDescendants != null)
+            { 
+                model.SplitToCaseSolutionIds = caseSolution.SplitToCaseSolutionDescendants.Select(x => x.SplitToCaseSolution_Id).ToArray();
+            }
+
 
             return model;
         }

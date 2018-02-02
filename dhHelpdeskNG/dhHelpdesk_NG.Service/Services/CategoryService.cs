@@ -8,6 +8,7 @@
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.utils;
 
     public interface ICategoryService
     {
@@ -17,7 +18,9 @@
         IList<Category> GetActiveCategories(int customerId);
         IList<Category> GetActiveParentCategories(int customerId);
         Category GetCategory(int id, int customerId);
+        Category GetCategoryById(int id);
         DeleteMessage DeleteCategory(int id);
+        string GetCategoryChildren(int id, string separator, string valueToReturn);
         //IList<Category> GetCaseCategory(int customer);
 
         //IList<Category> GetCategoriesSelected(int customerId, string[] reg);
@@ -108,6 +111,11 @@
             return this._categoryRepository.Get(x => x.Id == id && x.Customer_Id == customerId);
         }
 
+        public Category GetCategoryById(int id)
+        {
+            return this._categoryRepository.GetById(id);
+        }
+
         public void NewCategory(Category category)
         {
             this._categoryRepository.Add(category);
@@ -130,6 +138,10 @@
 
             if (category != null)
             {
+                //if (category.SubCategories != null && category.SubCategories.Any())
+                //{
+                //    return DeleteMessage.Error;
+                //}
                 try
                 {
                     this._categoryRepository.Delete(category);
@@ -146,6 +158,51 @@
             return DeleteMessage.Error;
         }
 
+        private string loopCategories(IList<Category> cat, string separator, string valueToReturn)
+        {
+            string ret = string.Empty;
+
+            foreach (var ca in cat)
+            {
+                if (string.IsNullOrWhiteSpace(ret))
+                    ret += ca.getObjectValue(valueToReturn);
+                else
+                    ret += separator + ca.getObjectValue(valueToReturn);
+
+                if (ca.SubCategories != null)
+                    if (ca.SubCategories.Count > 0)
+                        ret += separator + this.loopCategories(ca.SubCategories.ToList(), separator, valueToReturn);
+            }
+
+            return ret;
+        }
+
+        public string GetCategoryChildren(int id, string separator, string valueToReturn)
+        {
+            string ret = string.Empty;
+
+            if (id != 0)
+            {
+                string children = string.Empty;
+                Category ca = this.GetCategoryById(id);
+                ret = ca.getObjectValue(valueToReturn);
+
+                if (ca.SubCategories != null)
+                    if (ca.SubCategories.Count > 0)
+                        children = this.loopCategories(ca.SubCategories.ToList(), separator, valueToReturn);
+
+                if (!string.IsNullOrWhiteSpace(children))
+                {
+                    ret = children;
+                }
+                else
+                {
+                    ret = string.Empty;
+                }
+
+            }
+            return ret;
+        }
 
         public void SaveCategory(Category category, out IDictionary<string, string> errors)
         {
@@ -158,6 +215,39 @@
 
             if (string.IsNullOrEmpty(category.Name))
                 errors.Add("Category.Name", "Du måste ange en kategori");
+
+            if (category.IsActive == 1)
+            {
+                //Check if category has parents, if they are inactive the child can't be active
+                if (category.Parent_Category_Id.HasValue)
+                {
+                    var parent = GetCategory(category.Parent_Category_Id.Value, category.Customer_Id);
+
+                    if (parent.IsActive == 0)
+                        errors.Add("category.IsActive", "Denna kategori kan inte aktiveras, eftersom huvudnivån är inaktiv");
+                }
+            }
+
+            if (category.IsActive == 0)
+            {
+                //Check if category has childs and inactivate the child 
+                var children = GetCategoryChildren(category.Id, ",", "Id");
+                if (!string.IsNullOrEmpty(children))
+                {
+                    List<string> listOfChilds = new List<string>(children.Split(',')).ToList();
+                    List<int> listOfChildsId = listOfChilds.Select(s => int.Parse(s)).ToList();
+
+                    foreach (var child in listOfChildsId)
+                    {
+                        var childCategory = GetCategoryById(child);
+                        if (childCategory.IsActive == 1)
+                            childCategory.IsActive = 0;
+
+                        SaveCategory(childCategory, out errors);
+                    }
+                }
+
+            }
 
             if (category.Id == 0)
             {

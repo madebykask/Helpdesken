@@ -121,7 +121,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             entity.BarCode,
                             entity.PurchaseDate,
                             entity.Info,
-                            Worstations = computerName
+                            Worstations = computerName,
+                            entity.CreatedDate,
+                            entity.ChangedDate
                         }).GroupBy(x => x.InventoryTypeId).ToList();
 
             foreach (var item in anonymus)
@@ -142,7 +144,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             a.BarCode,
                             a.PurchaseDate,
                             a.Worstations,
-                            a.Info)).ToList();
+                            a.Info,
+                            a.CreatedDate,
+                            a.ChangedDate)).ToList();
 
                 var overviewWithType = new InventoryOverviewWithType(item.Key, overviews);
                 overviewsWithType.Add(overviewWithType);
@@ -173,7 +177,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         || x.Manufacturer == searchString || x.SerialNumber == searchString);
             }
 
-            query = query.Take(pageSize);
+            /*-1: take all records*/
+            if (pageSize != -1)
+                query = query.OrderBy(x => x.InventoryName).Take(pageSize);            
 
             const string Delimeter = "; ";
 
@@ -196,7 +202,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                                         i.BarCode,
                                         i.PurchaseDate,
                                         i.Info,
-                                        WorkstationName = k.Computer.ComputerName
+                                        WorkstationName = k.Computer.ComputerName,
+                                        i.CreatedDate,
+                                        i.ChangedDate
                                     }).ToList()
                 .GroupBy(
                     x =>
@@ -215,6 +223,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             x.BarCode,
                             x.PurchaseDate,
                             x.Info,
+                            x.CreatedDate,
+                            x.ChangedDate
                         });
 
             var overviews =
@@ -233,7 +243,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         a.Key.BarCode,
                         a.Key.PurchaseDate,
                         string.Join(Delimeter, a.Select(x => x.WorkstationName)), // todo change to array
-                        a.Key.Info)).ToList();
+                        a.Key.Info,
+                        a.Key.CreatedDate,
+                        a.Key.ChangedDate)).ToList();
 
             return overviews;
         }
@@ -305,6 +317,69 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
         {
             var models = this.DbSet.Where(x => x.InventoryType_Id == inventoryTypeId).ToList();
             models.ForEach(x => this.DbSet.Remove(x));
+        }
+
+        public int GetIdByName(string inventoryName, int inventoryTypeId)
+        {
+            var inventory = DbSet.FirstOrDefault(x => x.InventoryType_Id == inventoryTypeId && x.InventoryName.Equals(inventoryName));
+            return inventory?.Id ?? 0;
+        }
+
+        public List<InventorySearchResult> SearchPcNumber(int customerId, string searchFor)
+        {
+            var s = searchFor.ToLower();
+
+            var workstations =
+                from c in this.DbContext.Computers
+                join ct in this.DbContext.ComputerTypes on c.ComputerType_Id equals ct.Id into res
+                from k in res.DefaultIfEmpty()
+                where c.Customer_Id == customerId && (c.ComputerName.ToLower().Contains(s) || c.Location.ToLower().Contains(s) || k.ComputerTypeDescription.ToLower().Contains(s))
+                select new InventorySearchResult
+                {
+                    Id = c.Id,
+                    Name = c.ComputerName,
+                    Location = c.Location,
+                    TypeDescription = k.ComputerTypeDescription,
+                    TypeName = "Arbetsstation",
+                    NeedTranslate = true
+                };
+            var result = workstations.ToList();
+
+            var servers = DbContext.Servers.Where(x => x.Customer_Id == customerId && (x.ServerName.ToLower().Contains(s) || x.Location.ToLower().Contains(s)))
+                    .Select(x => new InventorySearchResult
+                    {
+                        Id = x.Id,
+                        Name = x.ServerName,
+                        Location = x.Location,
+                        TypeDescription = string.Empty,
+                        TypeName = "Server",
+                        NeedTranslate = true
+                    }).ToList();
+            result.AddRange(servers);
+            var printers = DbContext.Printers.Where(x => x.Customer_Id == customerId && (x.PrinterName.ToLower().Contains(s) || x.Location.ToLower().Contains(s)))
+                    .Select(x => new InventorySearchResult
+                    {
+                        Id = x.Id,
+                        Name = x.PrinterName,
+                        Location = x.Location,
+                        TypeDescription = string.Empty,
+                        TypeName = "Skrivare",
+                        NeedTranslate = true
+                    }).ToList();
+            result.AddRange(printers);
+            var customInventories = DbContext.Inventories.Where(x => x.InventoryType.Customer_Id == customerId).OrderBy(x => x.InventoryType.Name)
+                .Where(x => x.InventoryName.ToLower().Contains(s))
+                    .Select(x => new InventorySearchResult
+                    {
+                        Id = x.Id,
+                        Name = x.InventoryName,
+                        Location = string.Empty,
+                        TypeDescription = string.Empty,
+                        TypeName = x.InventoryType.Name
+                    }).ToList();
+            result.AddRange(customInventories);
+
+            return result;
         }
 
         private void Map(Inventory businessModel, Domain.Inventory.Inventory entity)

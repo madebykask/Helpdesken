@@ -33,7 +33,7 @@ namespace DH.Helpdesk.Dal.Repositories.Invoice.Concrete
             productAreas.AddRange(this.GetProductAreaChildren(productAreaId));
 
             var entities = this.DbContext.InvoiceArticles
-                        .Where(a => a.CustomerId == customerId &&
+                        .Where(a => a.CustomerId == customerId && (a.Blocked == false || a.Blocked == null) && a.IsActive == 1 &&
                             a.ProductAreas.Where(p=>productAreas.Contains(p.Id)).Any()) //does this work?
                         .OrderBy(a => a.Number)
                         .ToList();

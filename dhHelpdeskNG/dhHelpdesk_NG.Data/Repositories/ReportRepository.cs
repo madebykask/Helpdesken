@@ -12,11 +12,7 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Dal.Infrastructure.Translate;
     using DH.Helpdesk.Domain;
     using System;
-    using DH.Helpdesk.BusinessData.Models.Shared.Input;
-    using DH.Helpdesk.BusinessData.Models.Case.CaseOverview;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Dal.Infrastructure.Helpers;
 
     #region REPORT
 
@@ -419,7 +415,19 @@ namespace DH.Helpdesk.Dal.Repositories
                             AllExtenalText = (from r2 in this.DataContext.Logs
                                               where (r2.Case_Id == c.Id && r2.Text_External != null && r2.Text_External != "")
                                               orderby r2.LogDate
-                                              select r2.Text_External).ToList()
+                                              select r2.Text_External).ToList(),
+                            TotalWork = (from r2 in DataContext.Logs
+                                         where (r2.Case_Id == c.Id)
+                                         select r2.WorkingTime).DefaultIfEmpty(0).Sum(),
+                            TotalPrice = (from r2 in DataContext.Logs
+                                          where (r2.Case_Id == c.Id)
+                                          select r2.EquipmentPrice).DefaultIfEmpty(0).Sum(),
+                            TotalOverTime = (from r2 in DataContext.Logs
+                                             where (r2.Case_Id == c.Id)
+                                             select r2.OverTime).DefaultIfEmpty(0).Sum(),
+                            TotalMaterial = (from r2 in DataContext.Logs
+                                             where (r2.Case_Id == c.Id)
+                                             select r2.Price).DefaultIfEmpty(0).Sum(),
                         };
             
             if (caseStatusIds.Any())

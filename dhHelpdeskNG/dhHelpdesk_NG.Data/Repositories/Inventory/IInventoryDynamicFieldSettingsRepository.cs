@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
 
         List<InventoryDynamicFieldSetting> GetFieldSettingsForEdit(int inventoryTypeId);
 
-        List<InventoryDynamicFieldSettingForModelEdit> GetFieldSettingsForModelEdit(int inventoryTypeId);
+        List<InventoryDynamicFieldSettingForModelEdit> GetFieldSettingsForModelEdit(int inventoryTypeId, bool isReadonly = false);
 
         List<InventoryDynamicFieldSettingOverviewWithType> GetFieldSettingsOverviewWithType(List<int> inventoryTypeIds);
 

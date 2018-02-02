@@ -6,6 +6,8 @@
 
         public int ExtendedCaseData_Id { get; set; }
 
+        public int? ExtendedCaseForm_Id { get; set; }
+
         public virtual Case CaseEntity { get; set; }
 
         public virtual ExtendedCaseDataEntity ExtendedCaseData { get; set; }

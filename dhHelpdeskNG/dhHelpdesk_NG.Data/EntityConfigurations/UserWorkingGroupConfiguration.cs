@@ -12,6 +12,7 @@
 
             this.Property(x => x.UserRole).IsRequired();
             this.Property(x => x.IsDefault).IsRequired();
+            this.Property(x => x.IsMemberOfGroup).IsRequired();
 
             this.ToTable("tblUserWorkingGroup");
         }

@@ -12,6 +12,8 @@
 
         public int PropertySize { get; set; }
 
+        public int ReadOnly { get; set; }
+
         public string GetName()
         {
             return this.FieldName;

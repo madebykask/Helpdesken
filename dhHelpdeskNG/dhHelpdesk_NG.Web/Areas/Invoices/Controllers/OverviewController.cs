@@ -10,12 +10,18 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
 using DH.Helpdesk.BusinessData.Models.Invoice;
 using DH.Helpdesk.Domain.Invoice;
+using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport;
+using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
+using DH.Helpdesk.Services.DisplayValues;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Invoice;
 using DH.Helpdesk.Web.Areas.Invoices.Models;
+using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order;
+using DH.Helpdesk.Web.Enums;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Models.Invoice;
+using DH.Helpdesk.Web.Models.Shared;
 
 namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 {
@@ -28,6 +34,9 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
         private readonly IExternalInvoiceService _externalInvoiceService;
         private readonly ILogService _logService;
 
+        protected readonly IExportFileNameFormatter _exportFileNameFormatter;
+        protected readonly IExcelFileComposer _excelFileComposer;
+
         public OverviewController(
 		    IMasterDataService masterDataService,
 			IDepartmentService departmentService,
@@ -35,6 +44,8 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 			ISettingService settingService,
 			IGlobalSettingService globalSettingService,
             IExternalInvoiceService externalInvoiceService,
+            IExportFileNameFormatter exportFileNameFormatter,
+            IExcelFileComposer excelFileComposer,
             ILogService logService)
 		    : base(masterDataService)
 		{
@@ -44,6 +55,8 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 			_globalSettingService = globalSettingService;
 		    _externalInvoiceService = externalInvoiceService;
 		    _logService = logService;
+            _exportFileNameFormatter = exportFileNameFormatter;
+            _excelFileComposer = excelFileComposer;
         }
 
 		// GET: Invoices/Overview
@@ -95,111 +108,57 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 			return View(model);
 	    }
 
-		[System.Web.Http.HttpGet]
-		public ActionResult InvoiceExport(InvoiceOverviewFilterModel filter)
-		{
-			var sb = new StringBuilder();
-			var customerId = SessionFacade.CurrentCustomer.Id;
-			var data = _invoiceService.GetInvoiceOverviewList(customerId, filter.DepartmentId, filter.DateFrom, filter.DateTo,
-				filter.Status, null);
+        [System.Web.Http.HttpGet]
+        public ActionResult InvoiceExport(InvoiceOverviewFilterModel filter)
+        {
+            const string name = "Invoice";
+            const string sheetName = "dhHelpdesk";
 
-			sb.AppendFormat(@"<HTML xmlns:x=""urn:schemas-microsoft-com:office:excel"">
-							<HEAD>
-								<meta http-equiv=""Content-Type"" content=""text/html; charset=UTF-8"" />
-								<style>
-									<!--table
-										@page {{
-											mso-header-data:""&dhHeldesk\000ADate\: &D\000APage &P"";
-											mso-page-orientation:landscape;
-										}}
-										br
-										{{mso-data-placement:same-cell;}}
-									-->
-								</style>
-								<!--[if gte mso 9]>
-									<xml>
-										<x:ExcelWorkbook>
-											<x:ExcelWorksheets>
-												<x:ExcelWorksheet>
-													<x:Name>dhHeldesk</x:Name>
-													<x:WorksheetOptions>
-														<x:Print>
-															<x:ValidPrinterInfo/>
-														</x:Print>
-													</x:WorksheetOptions>
-												</x:ExcelWorksheet>
-											</x:ExcelWorksheets>
-										</x:ExcelWorkbook>
-									 </xml>
-								<![endif]-->
-							</HEAD>
-							<BODY>
-							   <table Width=""100%"" Border=""1"" Cellspacing=""1"" cellpadding=""2"">
-										  <tr>
-											<td Width=""60""><b>{0}</b></td>
-											<td Width=""300""><b>{1}</b></td>
-											<td><b>{2}</b></td>
-											<td><b>{3}</b></td>
-											<td><b>{4}</b></td>
-											<td><b>{5}</b></td>
-											<td><b>{6}</b></td>
-											<td><b>{7}</b></td>
-											<td><b>{8}</b></td>
-											<td><b>{9}</b></td>
-										</tr>",
-					Translation.GetCoreTextTranslation("Ärende"),
-					Translation.GetCoreTextTranslation("Text"),
-					Translation.GetCoreTextTranslation("Cat"),
-					Translation.GetCoreTextTranslation("Avslutsdatum"),
-					Translation.GetCoreTextTranslation("Dept"),
-					Translation.GetCoreTextTranslation("Arbete"),
-					$"{Translation.GetCoreTextTranslation("Arbete")} {Translation.GetCoreTextTranslation("belopp")}",
-					Translation.GetCoreTextTranslation("Material"),
-					Translation.GetCoreTextTranslation("Pris"),
-					Translation.GetCoreTextTranslation("Fakturor")
-					);
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var data = _invoiceService.GetInvoiceOverviewList(customerId, filter.DepartmentId, filter.DateFrom, filter.DateTo, filter.Status, null);
+            data = data.OrderBy(x => x.CaseNumber).ToList();
 
-			var odd = true;
-			foreach (var caseRow in data)
-			{
-				odd = !odd;
-				sb.AppendFormat(@"
-					<tr>
-						<td valign=""top"" BgColor={0}>{1}</td>
-						<td valign=""top"" BgColor={0}>{2}</td>
-						<td valign=""top"" BgColor={0}>{3}</td>
-						<td valign=""top"" BgColor={0}>{4}</td>
-						<td valign=""top"" BgColor={0}>{5}</td>
-						<td valign=""top"" BgColor={0}>{6} / {7}</td>
-						<td valign=""top"" BgColor={0}>{8}</td>
-						<td valign=""top"" BgColor={0}>{9}</td>
-						<td valign=""top"" BgColor={0}>{10}</td>
-						<td valign=""top"" BgColor={0}>{11}</td>
-					</tr>",
-					odd ? "#FFFFFF" : "#E6EDF7",
-					caseRow.CaseNumber,
-					caseRow.Caption,
-					caseRow.Category,
-					caseRow.FinishingDate?.ToString("yyyy-MM-dd") ?? "",
-					caseRow.Department,
-					caseRow.LogInvoices.Sum(x => x.WorkingTime),
-					caseRow.LogInvoices.Sum(x => x.Overtime),
-					Math.Round(((decimal)caseRow.LogInvoices.Sum(x => x.WorkingTime)) / 60 * caseRow.WorkingHourRate + ((decimal)caseRow.LogInvoices.Sum(x => x.Overtime)) / 60 * caseRow.OvertimeHourRate, 2),
-					caseRow.LogInvoices.Sum(x => x.Price),
-					caseRow.LogInvoices.Sum(x => x.EquipmentPrice),
-					caseRow.ExternalInvoices.Sum(x => x.InvoicePrice)
-					);
-			}
+            var headers = new List<GridColumnHeaderModel>
+            {
+                new GridColumnHeaderModel("2", Translation.GetCoreTextTranslation("Ärende")),
+                new GridColumnHeaderModel ("3", Translation.GetCoreTextTranslation("Text")),
+                new GridColumnHeaderModel ("4", Translation.GetCoreTextTranslation("Kategori")),
+                new GridColumnHeaderModel ("5", Translation.GetCoreTextTranslation("Avslutsdatum")),
+                new GridColumnHeaderModel ("6", Translation.GetCoreTextTranslation("Avdelning")),
+                new GridColumnHeaderModel ("7", Translation.GetCoreTextTranslation("Arbete")),
+                new GridColumnHeaderModel ("8", $"{Translation.GetCoreTextTranslation("Arbete")} {Translation.GetCoreTextTranslation("belopp")}"),
+                new GridColumnHeaderModel ("9", Translation.GetCoreTextTranslation("Material")),
+                new GridColumnHeaderModel ("10", Translation.GetCoreTextTranslation("Pris")),
+                new GridColumnHeaderModel ("11", Translation.GetCoreTextTranslation("Fakturor"))
+            };
 
-			sb.AppendFormat(@"</table>
-						</BODY>
-					</HTML>");
+            var rows = new List<RowModel>();
+            var i = 1;
+            foreach (var inv in data)
+            {
+                var fields = new List<NewGridRowCellValueModel>
+                {
+                    new NewGridRowCellValueModel("2", new StringDisplayValue(inv.CaseNumber.ToString("F0"))),
+                    new NewGridRowCellValueModel("3", new StringDisplayValue(inv.Caption)),
+                    new NewGridRowCellValueModel("4", new StringDisplayValue(inv.Category)),
+                    new NewGridRowCellValueModel("5", new StringDisplayValue(inv.FinishingDate?.ToString("yyyy-MM-dd") ?? "")),
+                    new NewGridRowCellValueModel("6", new StringDisplayValue(inv.Department)),
+                    new NewGridRowCellValueModel("7", new StringDisplayValue($"{inv.LogInvoices.Sum(x => x.WorkingTime)} / {inv.LogInvoices.Sum(x => x.Overtime)}")),
+                    new NewGridRowCellValueModel("8", new StringDisplayValue(((decimal)inv.LogInvoices.Sum(x => x.WorkingTime) / 60 * inv.WorkingHourRate + (decimal)inv.LogInvoices.Sum(x => x.Overtime) / 60 * inv.OvertimeHourRate).ToString("F"))),
+                    new NewGridRowCellValueModel("9", new StringDisplayValue(inv.LogInvoices.Sum(x => x.Price).ToString("F0"))),
+                    new NewGridRowCellValueModel("10", new StringDisplayValue(inv.LogInvoices.Sum(x => x.EquipmentPrice).ToString("F0"))),
+                    new NewGridRowCellValueModel("11", new StringDisplayValue(inv.ExternalInvoices.Sum(x => x.InvoicePrice).ToString("F0")))
+                };
+                rows.Add(new RowModel(i, fields));
+                i++;
+            }
+            var content = _excelFileComposer.Compose(headers, rows, sheetName);
 
-			var bytes = Encoding.ASCII.GetBytes(sb.ToString());
-			return File(bytes, "application/vnd.ms-excel", "Invoice.xls");
-		}
+            var fileName = _exportFileNameFormatter.Format(name, "xlsx");
+            return File(content, MimeType.ExcelFile, fileName);
+        }
 
-	    [System.Web.Http.HttpGet]
+        [System.Web.Http.HttpGet]
 	    public ActionResult InvoiceFile(Guid id)
 	    {
 		    var file = _invoiceService.GetInvoiceHeader(id);
@@ -226,13 +185,14 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
                 Department = x.Department,
                 Category = x.Category,
                 FinishingDate = x.FinishingDate?.Date,
+                Statistics = x.Statistics,
                 LogInvoices = x.LogInvoices.Select(y => new LogInvoiceItemViewModel
                 {
                     Id = y.Id,
                     Date = y.LogDate,
                     Charge = y.Charge,
-                    Material = y.Price,
-                    Price = y.EquipmentPrice,
+                    Material = y.EquipmentPrice,
+                    Price = y.Price,
                     Text = y.TextInternal,
                     Overtime = y.Overtime,
                     WorkingTime = y.WorkingTime,
@@ -273,8 +233,8 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
                     Id = x.Id,
                     WorkingTime = x.WorkingTime,
                     Overtime = x.Overtime,
-                    EquipmentPrice = x.Price,
-                    Price = x.Material,
+                    EquipmentPrice = x.Material,
+                    Price = x.Price,
                     Charge = x.Charge
                 }).ToList());
             }

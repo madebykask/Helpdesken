@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <Body>
+    <ReportItems>
+      <Chart Name="Chart1">
+        <ChartCategoryHierarchy>
+          <ChartMembers>
+            <ChartMember>
+              <Group Name="Chart1_CategoryGroup">
+                <GroupExpressions>
+                  <GroupExpression>=Switch
+					  (Parameters!Category.Label="Case Type", Fields!CaseType.Value,
+					  Parameters!Category.Label="Case Number", Fields!Casenumber.Value,
+					  Parameters!Category.Label="Department", Fields!Department.Value,
+					  Parameters!Category.Label="Priority", Fields!Priority.Value,
+					  Parameters!Category.Label="Product Area", Fields!ProductArea.Value,
+					  Parameters!Category.Label="Log Note Date", Fields!LogDate.Value,
+					  Parameters!Category.Label="Working Group", Fields!Working_group.Value,
+					  Parameters!Category.Label="Administrator", Fields!Administrator.Value
+					  )</GroupExpression>
+                </GroupExpressions>
+              </Group>
+              <SortExpressions>
+                <SortExpression>
+                  <Value>=Switch
+					  (Parameters!Category.Label="Case Type", Fields!CaseType.Value,
+					  Parameters!Category.Label="Case Number", Fields!Casenumber.Value,
+					  Parameters!Category.Label="Department", Fields!Department.Value,
+					  Parameters!Category.Label="Priority", Fields!Priority.Value,
+					  Parameters!Category.Label="Product Area", Fields!ProductArea.Value,
+					  Parameters!Category.Label="Log Note Date", Fields!LogDate.Value,
+					  Parameters!Category.Label="Working Group", Fields!Working_group.Value,
+					  Parameters!Category.Label="Administrator", Fields!Administrator.Value
+					  )</Value>
+                </SortExpression>
+              </SortExpressions>
+              <Label>=Switch
+				  (Parameters!Category.Label="Case Type", Fields!CaseType.Value,
+				  Parameters!Category.Label="Case Number", Fields!Casenumber.Value,
+				  Parameters!Category.Label="Department", Fields!Department.Value,
+				  Parameters!Category.Label="Priority", Fields!Priority.Value,
+				  Parameters!Category.Label="Product Area", Fields!ProductArea.Value,
+				  Parameters!Category.Label="Log Note Date", Fields!LogDate.Value,
+				  Parameters!Category.Label="Working Group", Fields!Working_group.Value,
+				  Parameters!Category.Label="Administrator", Fields!Administrator.Value
+				  )</Label>
+            </ChartMember>
+          </ChartMembers>
+        </ChartCategoryHierarchy>
+        <ChartSeriesHierarchy>
+          <ChartMembers>
+            <ChartMember>
+              <Label>Quantity</Label>
+            </ChartMember>
+          </ChartMembers>
+        </ChartSeriesHierarchy>
+        <ChartData>
+          <ChartSeriesCollection>
+            <ChartSeries Name="Quantity">
+              <ChartDataPoints>
+                <ChartDataPoint>
+                  <ChartDataPointValues>
+                    <Y>=Sum(Fields!Quantity.Value)</Y>
+                  </ChartDataPointValues>
+                  <ChartDataLabel>
+                    <Style />
+                    <UseValueAsLabel>true</UseValueAsLabel>
+                    <Visible>true</Visible>
+                  </ChartDataLabel>
+                  <Style />
+                  <ChartMarker>
+                    <Style />
+                  </ChartMarker>
+                  <DataElementOutput>Output</DataElementOutput>
+                </ChartDataPoint>
+              </ChartDataPoints>
+              <Style />
+              <ChartEmptyPoints>
+                <Style />
+                <ChartMarker>
+                  <Style />
+                </ChartMarker>
+                <ChartDataLabel>
+                  <Style />
+                </ChartDataLabel>
+              </ChartEmptyPoints>
+              <ValueAxisName>Primary</ValueAxisName>
+              <CategoryAxisName>Primary</CategoryAxisName>
+              <ChartSmartLabel>
+                <CalloutLineColor>Black</CalloutLineColor>
+                <MinMovingDistance>0pt</MinMovingDistance>
+              </ChartSmartLabel>
+            </ChartSeries>
+          </ChartSeriesCollection>
+        </ChartData>
+        <ChartAreas>
+          <ChartArea Name="Default">
+            <ChartCategoryAxes>
+              <ChartAxis Name="Primary">
+                <Style>
+                  <FontSize>8pt</FontSize>
+                </Style>
+                <ChartAxisTitle>
+                  <Caption>=Switch
+					  (Parameters!Category.Label="Case Type", "Case Type",
+					  Parameters!Category.Label="Case Number", "Case Number",
+					  Parameters!Category.Label="Log Note Date", "Log Note Date",
+					  Parameters!Category.Label="Working Group", "Working Group",
+					  Parameters!Category.Label="Department", "Department",
+					  Parameters!Category.Label="Priority", "Priority",
+					  Parameters!Category.Label="Product Area", "ProductArea",
+					  Parameters!Category.Label="Administrator", "Administrator"
+					  )</Caption>
+                  <Style>
+                    <FontSize>9pt</FontSize>
+                    <FontWeight>Bold</FontWeight>
+                  </Style>
+                </ChartAxisTitle>
+                <Interval>1</Interval>
+                <ChartMajorGridLines>
+                  <Enabled>False</Enabled>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                    </Border>
+                  </Style>
+                </ChartMajorGridLines>
+                <ChartMinorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                      <Style>Dotted</Style>
+                    </Border>
+                  </Style>
+                </ChartMinorGridLines>
+                <ChartMinorTickMarks>
+                  <Length>0.5</Length>
+                </ChartMinorTickMarks>
+                <CrossAt>NaN</CrossAt>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
+                <Angle>-45</Angle>
+                <LabelsAutoFitDisabled>true</LabelsAutoFitDisabled>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
+              </ChartAxis>
+              <ChartAxis Name="Secondary">
+                <Style>
+                  <FontSize>8pt</FontSize>
+                </Style>
+                <ChartAxisTitle>
+                  <Caption>Axis Title</Caption>
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                  </Style>
+                </ChartAxisTitle>
+                <ChartMajorGridLines>
+                  <Enabled>False</Enabled>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                    </Border>
+                  </Style>
+                </ChartMajorGridLines>
+                <ChartMinorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                      <Style>Dotted</Style>
+                    </Border>
+                  </Style>
+                </ChartMinorGridLines>
+                <ChartMinorTickMarks>
+                  <Length>0.5</Length>
+                </ChartMinorTickMarks>
+                <CrossAt>NaN</CrossAt>
+                <Location>Opposite</Location>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
+              </ChartAxis>
+            </ChartCategoryAxes>
+            <ChartValueAxes>
+              <ChartAxis Name="Primary">
+                <Style>
+                  <FontSize>8pt</FontSize>
+                </Style>
+                <ChartAxisTitle>
+                  <Caption />
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                  </Style>
+                </ChartAxisTitle>
+                <ChartMajorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                    </Border>
+                  </Style>
+                </ChartMajorGridLines>
+                <ChartMinorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                      <Style>Dotted</Style>
+                    </Border>
+                  </Style>
+                </ChartMinorGridLines>
+                <ChartMinorTickMarks>
+                  <Length>0.5</Length>
+                </ChartMinorTickMarks>
+                <CrossAt>NaN</CrossAt>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
+              </ChartAxis>
+              <ChartAxis Name="Secondary">
+                <Style>
+                  <FontSize>8pt</FontSize>
+                </Style>
+                <ChartAxisTitle>
+                  <Caption>Axis Title</Caption>
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                  </Style>
+                </ChartAxisTitle>
+                <ChartMajorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                    </Border>
+                  </Style>
+                </ChartMajorGridLines>
+                <ChartMinorGridLines>
+                  <Style>
+                    <Border>
+                      <Color>Gainsboro</Color>
+                      <Style>Dotted</Style>
+                    </Border>
+                  </Style>
+                </ChartMinorGridLines>
+                <ChartMinorTickMarks>
+                  <Length>0.5</Length>
+                </ChartMinorTickMarks>
+                <CrossAt>NaN</CrossAt>
+                <Location>Opposite</Location>
+                <Minimum>NaN</Minimum>
+                <Maximum>NaN</Maximum>
+                <ChartAxisScaleBreak>
+                  <Style />
+                </ChartAxisScaleBreak>
+              </ChartAxis>
+            </ChartValueAxes>
+            <Style>
+              <BackgroundGradientType>None</BackgroundGradientType>
+            </Style>
+          </ChartArea>
+        </ChartAreas>
+        <ChartLegends>
+          <ChartLegend Name="Default">
+            <Style>
+              <BackgroundGradientType>None</BackgroundGradientType>
+              <FontSize>8pt</FontSize>
+            </Style>
+            <ChartLegendTitle>
+              <Caption />
+              <Style>
+                <FontSize>8pt</FontSize>
+                <FontWeight>Bold</FontWeight>
+                <TextAlign>Center</TextAlign>
+              </Style>
+            </ChartLegendTitle>
+            <HeaderSeparatorColor>Black</HeaderSeparatorColor>
+            <ColumnSeparatorColor>Black</ColumnSeparatorColor>
+          </ChartLegend>
+        </ChartLegends>
+        <Palette>BrightPastel</Palette>
+        <ChartBorderSkin>
+          <Style>
+            <BackgroundColor>Gray</BackgroundColor>
+            <BackgroundGradientType>None</BackgroundGradientType>
+            <Color>White</Color>
+          </Style>
+        </ChartBorderSkin>
+        <ChartNoDataMessage Name="NoDataMessage">
+          <Caption>No Data Available</Caption>
+          <Style>
+            <BackgroundGradientType>None</BackgroundGradientType>
+            <TextAlign>General</TextAlign>
+            <VerticalAlign>Top</VerticalAlign>
+          </Style>
+        </ChartNoDataMessage>
+        <DataSetName>VariabelAxel</DataSetName>
+        <Top>1.09361cm</Top>
+        <Height>12.28287cm</Height>
+        <Width>24.98896cm</Width>
+        <Style>
+          <Border>
+            <Color>LightGrey</Color>
+            <Style>Solid</Style>
+          </Border>
+          <BackgroundColor>White</BackgroundColor>
+          <BackgroundGradientType>None</BackgroundGradientType>
+        </Style>
+      </Chart>
+      <Textbox Name="Textbox6">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Total records:</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox6</rd:DefaultName>
+        <Top>0.31722cm</Top>
+        <Left>14.24905cm</Left>
+        <Height>0.6cm</Height>
+        <Width>2.07667cm</Width>
+        <ZIndex>1</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox1">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>= "Reported Time by " +
+					Switch
+					(Parameters!Category.Label="Case Type", "Case Type",
+					Parameters!Category.Label="Case Number", "Case Number",
+					Parameters!Category.Label="Log Note Date", "Log Note Date",
+					Parameters!Category.Label="Working Group", "Working Group",
+					Parameters!Category.Label="Department", "Department",
+					Parameters!Category.Label="Priority", "Priority",
+					Parameters!Category.Label="Product Area", "ProductArea",
+					Parameters!Category.Label="Administrator", "Administrator"
+					)</Value>
+                <Style>
+                  <FontSize>12pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox1</rd:DefaultName>
+        <Top>0.31722cm</Top>
+        <Left>1.87537cm</Left>
+        <Height>0.6cm</Height>
+        <Width>12.19729cm</Width>
+        <ZIndex>2</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox2">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Sum(Fields!Quantity.Value, "VariabelAxel")</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox2</rd:DefaultName>
+        <Top>0.31722cm</Top>
+        <Left>16.32572cm</Left>
+        <Height>0.6cm</Height>
+        <Width>1.46813cm</Width>
+        <ZIndex>3</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+    </ReportItems>
+    <Height>16.9cm</Height>
+    <Style />
+  </Body>
+  <Width>25.5975cm</Width>
+  <Page>
+    <PageHeight>21cm</PageHeight>
+    <PageWidth>29.7cm</PageWidth>
+    <InteractiveHeight>16.9cm</InteractiveHeight>
+    <InteractiveWidth>25.6cm</InteractiveWidth>
+    <LeftMargin>2cm</LeftMargin>
+    <RightMargin>2cm</RightMargin>
+    <TopMargin>2cm</TopMargin>
+    <BottomMargin>2cm</BottomMargin>
+    <ColumnSpacing>0.13cm</ColumnSpacing>
+    <Style />
+  </Page>
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource1">
+      <DataSourceReference>Helpdesk</DataSourceReference>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>e2ddc81e-2bd5-40c2-96eb-480e62b90040</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="VariabelAxel">
+      <Query>
+        <DataSourceName>DataSource1</DataSourceName>
+        <CommandText>
+			SELECT 1 AS Quantity,
+			dbo.tblcustomer.NAME AS Customer,
+			dbo.tblcase.casenumber,
+			CONVERT(nvarchar(10), dbo.tblLog.LogDate, 121) AS [LogDate],
+			CONVERT(VARCHAR, dbo.tblcase.casenumber) + ' ' + dbo.tblcase.caption AS[Case],
+			CONVERT(NVARCHAR(10), dbo.tblcase.regtime, 121) AS [Registration Date],
+			dbo.tblusers.firstname + N' ' + dbo.tblusers.surname AS[Registrated By],
+			CONVERT(NVARCHAR(10), dbo.tblcase.finishingdate, 121) AS[Closing Date],
+			CASE Isnull(tblcase.finishingdate, 0)   WHEN 0 THEN 'On Going'   ELSE 'Closed' END AS[Case Status],
+			dbo.tbldepartment.department,
+			[dbo].[Gethierarchy](tblcase.casetype_id, 'tblCaseType') AS CaseType,
+			[dbo].[Gethierarchy](tblcase.productarea_id, 'tblProductArea') AS ProductArea,
+			dbo.tblworkinggroup.workinggroup AS[Working group],
+			dbo.tblpriority.priorityname AS [Priority],
+			dbo.tblstatus.statusname AS [Status],
+			Isnull(tblUsers2.firstname, '') + ' ' +   Isnull(tblUsers2.surname, '') AS [Administrator],
+			[dbo].[Gethierarchy]((SELECT TOP(1) dbo.tblfinishingcause.id FROM   dbo.tbllog INNER JOIN dbo.tblfinishingcause ON dbo.tbllog.finishingtype = dbo.tblfinishingcause.id
+			WHERE(dbo.tblcase.id = dbo.tbllog.case_id) ORDER  BY dbo.tbllog.id DESC), 'tblFinishingCause') AS [ClosingReason]
+			FROM dbo.tblcase
+			INNER JOIN dbo.tblcustomer   ON dbo.tblcase.customer_id = dbo.tblcustomer.id
+			INNER JOIN dbo.tblLog ON dbo.tblLog.Case_Id = dbo.tblcase.id
+			LEFT OUTER JOIN dbo.tblusers                ON dbo.tblcase.user_id = dbo.tblusers.id
+			LEFT OUTER JOIN dbo.tblstatus                ON dbo.tblcase.status_id = dbo.tblstatus.id
+			LEFT OUTER JOIN dbo.tblworkinggroup                ON dbo.tblcase.workinggroup_id = dbo.tblworkinggroup.id
+			LEFT OUTER JOIN dbo.tblpriority                ON dbo.tblcase.priority_id = dbo.tblpriority.id
+			LEFT OUTER JOIN dbo.tbldepartment                ON dbo.tblcase.department_id = dbo.tbldepartment.id
+			LEFT OUTER JOIN dbo.tblcasetype                ON dbo.tblcase.casetype_id = dbo.tblcasetype.id
+			LEFT OUTER JOIN dbo.tblusers AS tblUsers2 ON dbo.tblcase.performer_user_id = tblUsers2.id
+			ORDER BY dbo.tblCase.Casenumber</CommandText>
+      </Query>
+      <Fields>
+		  <Field Name="Customer">
+			  <DataField>Customer</DataField>
+			  <rd:TypeName>System.String</rd:TypeName>
+		  </Field>
+		  <Field Name="Quantity">
+			  <DataField>Quantity</DataField>
+			  <rd:TypeName>System.Int32</rd:TypeName>
+		  </Field>
+        <Field Name="CaseType">
+          <DataField>CaseType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Casenumber">
+          <DataField>Casenumber</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+		  <Field Name="LogDate">
+			  <DataField>LogDate</DataField>
+			  <rd:TypeName>System.String</rd:TypeName>
+		  </Field>
+        <Field Name="ProductArea">
+          <DataField>ProductArea</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Working_group">
+          <DataField>Working group</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Department">
+          <DataField>Department</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Priority">
+          <DataField>Priority</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Administrator">
+          <DataField>Administrator</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <ReportParameters>
+    <ReportParameter Name="Category">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>1</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Choose Category</Prompt>
+      <ValidValues>
+        <ParameterValues>
+          <ParameterValue>
+            <Value>1</Value>
+            <Label>Case Type</Label>
+          </ParameterValue>
+			<ParameterValue>
+				<Value>2</Value>
+				<Label>Case Number</Label>
+			</ParameterValue>
+			<ParameterValue>
+				<Value>3</Value>
+				<Label>Department</Label>
+			</ParameterValue>
+			<ParameterValue>
+				<Value>4</Value>
+				<Label>Priority</Label>
+			</ParameterValue>
+			<ParameterValue>
+				<Value>5</Value>
+				<Label>Product Area</Label>
+			</ParameterValue>
+			<ParameterValue>
+				<Value>6</Value>
+				<Label>Log Note Date</Label>
+			</ParameterValue>
+			<ParameterValue>
+				<Value>7</Value>
+				<Label>Administrator</Label>
+			</ParameterValue>
+			<ParameterValue>
+				<Value>8</Value>
+				<Label>Working Group</Label>
+			</ParameterValue>
+        </ParameterValues>
+      </ValidValues>
+    </ReportParameter>
+  </ReportParameters>
+  <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>db2292d4-3403-4c4e-9c04-b254dec2b70f</rd:ReportID>
+</Report>

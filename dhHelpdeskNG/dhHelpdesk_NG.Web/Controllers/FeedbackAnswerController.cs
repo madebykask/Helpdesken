@@ -6,7 +6,9 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Models.Feedback;
+using DH.Helpdesk.Web.Models.Questionnaire.Input;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -25,7 +27,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Answer(FeedbackAnswerParams parameters)
+        public ActionResult Answer(QuestionnaireAnswerParams parameters)
         {
             var detailed = _circularService.GetQuestionnaire(parameters.Guid, parameters.LanguageId);
             var question = detailed.Questionnaire.Questions.First();
@@ -75,8 +77,9 @@ namespace DH.Helpdesk.Web.Controllers
             if (questionId > 0 && !string.IsNullOrEmpty(noteText))
             {
                 _circularService.SaveFeedbackNote(questionId, noteText);
+                return Json(new { success = true});
             }
-            return Json(new { success = true });
+            return Json(new { success = false });
         }
 
         [AllowAnonymous]

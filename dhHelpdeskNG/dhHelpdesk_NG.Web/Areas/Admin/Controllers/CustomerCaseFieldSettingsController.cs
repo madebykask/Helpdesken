@@ -1,10 +1,16 @@
 ﻿using System;
+using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
+using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain.Cases;
 using DH.Helpdesk.Services.Services.Cases;
+using DH.Helpdesk.Web.Infrastructure.Attributes;
 using DH.Helpdesk.Web.Infrastructure.Cache;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
+using Microsoft.Ajax.Utilities;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
@@ -22,7 +28,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
     public class CustomerCaseFieldSettingsController : BaseAdminController
     {
         private readonly ICaseFieldSettingService _caseFieldSettingService;
-        private readonly ICaseSettingsService _caseSettingsService;
         private readonly ICustomerService _customerService;
         private readonly ILanguageService _languageService;
         private readonly IHelpdeskCache _cache;
@@ -31,7 +36,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         public CustomerCaseFieldSettingsController(
             ICaseFieldSettingService caseFieldSettingService,
-            ICaseSettingsService caseSettingsService,
             ICustomerService customerService,
             ILanguageService languageService,
             IMasterDataService masterDataService,
@@ -41,7 +45,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
-            this._caseSettingsService = caseSettingsService;
             this._customerService = customerService;
             this._languageService = languageService;
             _cache = cache;
@@ -64,6 +67,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             var model = this.CustomerInputViewModel(customer, language);
             model.CaseSections = caseSections;
+
             return this.View(model);
         }
 
@@ -73,6 +77,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         public ActionResult Edit(int customerId, CustomerInputViewModel vmodel, List<CaseFieldSetting> CaseFieldSettings, int[] UsSelected, int languageId)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            if (vmodel.ShowStatusBarIds != null && vmodel.ShowStatusBarIds.Any())
+            {
+                var selected = CaseFieldSettings.Where(c => vmodel.ShowStatusBarIds.Any(m => m == c.Id));
+                selected.ForEach(c => c.ShowStatusBar = true );
+            }
+            if (vmodel.ShowExternalStatusBarIds != null && vmodel.ShowExternalStatusBarIds.Any())
+            {
+                var selected = CaseFieldSettings.Where(c => vmodel.ShowExternalStatusBarIds.Any(m => m == c.Id));
+                selected.ForEach(c => c.ShowExternalStatusBar = true);
+            }
 
             _customerService.SaveCaseFieldSettingsForCustomer(customerId, languageId, vmodel.CaseFieldSettingWithLangauges, CaseFieldSettings, out errors);
             _caseSectionService.SaveCaseSections(languageId, vmodel.CaseSections, customerId);
@@ -85,7 +100,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var language = this._languageService.GetLanguage(languageId);
 
             var model = this.CustomerInputViewModel(customer, language);
-           
+
             return this.View(model);
         }
 
@@ -196,60 +211,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 }).ToList(),
                 LockedFieldOptions = GetLockedFieldOptions() 
             };
-
+            ;
+            model.ShowStatusBarIds = model.CaseFieldSettings.Where(m => m.ShowStatusBar).Select(m => m.Id).ToList();
+            model.ShowExternalStatusBarIds = model.CaseFieldSettings.Where(m => m.ShowExternalStatusBar)
+                .Select(m => m.Id).ToList();
             #endregion
-
-            return model;
-        }
-
-        private CustomerCaseSummaryViewModel CustomerCaseSummaryViewModel(CaseSettings caseSetting)
-        {
-            List<SelectListItem> li = new List<SelectListItem>();
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Info", Enums.TranslationSource.TextTranslation),
-                Value = "1",
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Utökad info", Enums.TranslationSource.TextTranslation),
-                Value = "2",
-                Selected = false
-            });
-
-            var model = new CustomerCaseSummaryViewModel
-            {
-                CaseSettings = this._caseSettingsService.GetCaseSettings(SessionFacade.CurrentCustomer.Id),
-                CSetting = caseSetting,
-                CaseFieldSettingLanguages = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId),
-                LineList = li,
-            };
-
-            return model;
-        }
-
-        private CustomerInputViewModel CreateInputViewModel(Customer customer, int languageId)
-        {
-            var model = new CustomerInputViewModel
-            {
-                CustomerCaseSummaryViewModel = new CustomerCaseSummaryViewModel(),
-                CaseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customer.Id),
-                Customer = customer,
-                ListCaseForLabel = this._caseFieldSettingService.ListToShowOnCasePage(customer.Id, languageId),
-                Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
-                Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString(),
-                }).ToList()
-
-            };
-
+            
             return model;
         }
 

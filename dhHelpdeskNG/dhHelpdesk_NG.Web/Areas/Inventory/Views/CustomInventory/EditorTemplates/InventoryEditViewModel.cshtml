@@ -31,7 +31,7 @@
 
 @if (IsVisibleGeneral())
 {
-    <h4>@Translation.Get("Allmänt")</h4>
+    <h4>@Translation.GetCoreTextTranslation("Allmänt")</h4>
 
     <div class="row">
         <div class="span12">
@@ -49,7 +49,7 @@
 
 @if (IsVisibleInventory())
 {
-    <h4>@Translation.Get("Inventering")</h4>
+    <h4>@Translation.GetCoreTextTranslation("Inventering")</h4>
     
     <div class="row">
         <div class="span12">
@@ -63,31 +63,30 @@
 }
 @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.RoomId.Show)
 {
-    <h4>@Translation.Get("Placering")</h4>
+    <h4>@Translation.GetCoreTextTranslation("Placering")</h4>
 }
 @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.RoomId.Show)
 {
     <div class="row">
         <div class="span12">
             <table class="tableform">
+                @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.BuildingId, "Fields/ListInt",
+                    new {
+                        Source = Model.InventoryViewModel.DefaultFieldsViewModel.Buildings,
+                        id = "buildings_dropdown",
+                        Label = Translation.GetCoreTextTranslation("Byggnad"),
+                        Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.RoomId.IsReadOnly
+                    })
+                @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.FloorId, "Fields/ListInt",
+                    new
+                    {
+                        Source = Model.InventoryViewModel.DefaultFieldsViewModel.Floors,
+                        id = "floors_dropdown",
+                        Label = Translation.GetCoreTextTranslation("Våning"),
+                        Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.RoomId.IsReadOnly
+                    })
                 <tr>
-                    <td class="span3">
-                        <label>@Translation.Get("Byggnad")</label>
-                    </td>
-                    <td class="span9">
-                        @Html.DropDownListFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.BuildingId, Model.InventoryViewModel.DefaultFieldsViewModel.Buildings, string.Empty, new { id = "buildings_dropdown" })
-                    </td>
-                </tr>
-                <tr>
-                    <td class="span3">
-                        <label>@Translation.Get("Våning")</label>
-                    </td>
-                    <td class="span9">
-                        @Html.DropDownListFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.FloorId, Model.InventoryViewModel.DefaultFieldsViewModel.Floors, string.Empty, new { id = "floors_dropdown" })
-                    </td>
-                </tr>
-                <tr>
-                    @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.RoomId, "CustomTypesFields/List", new { Source = Model.InventoryViewModel.DefaultFieldsViewModel.Rooms, id = "rooms_dropdown" })
+                    @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.RoomId, "CustomTypesFields/List", new {Source = Model.InventoryViewModel.DefaultFieldsViewModel.Rooms, id = "rooms_dropdown"})
                 </tr>
             </table>
         </div>

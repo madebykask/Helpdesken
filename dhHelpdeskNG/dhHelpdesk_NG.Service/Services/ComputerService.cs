@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.Inventory;
+using DH.Helpdesk.Dal.Repositories.Inventory;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -49,7 +52,7 @@
         void UpdateComputerUsersBlackList(ComputerUsersBlackList computerUsersBlackList);
 
         Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true);
-
+        List<InventorySearchResult> SearchPcNumber(int customerId, string query);
 		ComputerUserCategory GetComputerUserCategoryByID(int computerUserCategoryID);
 
 		void Commit();
@@ -67,6 +70,7 @@
         private readonly IOrganizationUnitRepository _ouRespository;
         private readonly INotifierFieldSettingLanguageRepository _computerUserFieldSettingLanguageRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IInventoryRepository _inventoryRepository;
 		private readonly IComputerUserCategoryRepository _computerUserCategoryRepository;
 
 
@@ -79,6 +83,7 @@
             IComputerRepository computerRepository,
             IOrganizationUnitRepository ouRespository,
             INotifierFieldSettingLanguageRepository computerUserFieldSettingLanguageRepository,
+            IInventoryRepository inventoryRepository,
             IUnitOfWork unitOfWork,
 			IComputerUserCategoryRepository computerUserCategoryRepository)
 
@@ -92,6 +97,7 @@
             this._unitOfWork = unitOfWork;
             this._computerUserFieldSettingLanguageRepository = computerUserFieldSettingLanguageRepository;
 			this._computerUserCategoryRepository = computerUserCategoryRepository;
+            this._inventoryRepository = inventoryRepository;
 
 		}
 
@@ -467,6 +473,11 @@
 		public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public List<InventorySearchResult> SearchPcNumber(int customerId, string query)
+        {
+            return _inventoryRepository.SearchPcNumber(customerId, query);
         }
 
 		public IList<ComputerUserCategory> GetComputerUserCategoriesByCustomerID(int customerID)

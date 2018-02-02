@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services.Concrete
+﻿using DH.Helpdesk.BusinessData.Models.User.Input;
+
+namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -359,9 +361,15 @@
                 computersFilter.SearchFor,
                 computersFilter.IsShowScrapped,
                 computersFilter.RecordsOnPage,
-                computersFilter.SortField);
+                computersFilter.SortField,
+                computersFilter.RecordsCount);
 
             return computerOverviews;
+        }
+
+        public int GetWorkstationIdByName(string computerName, int customerId)
+        {
+            return computerRepository.GetIdByName(computerName, customerId);
         }
 
         #endregion
@@ -494,12 +502,19 @@
             using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var repository = uow.GetRepository<DH.Helpdesk.Domain.Servers.Server>();
-                var overviews = repository.GetAll()
-                    .Search(computersFilter.CustomerId, computersFilter.SearchFor, computersFilter.SortField)
-                    .MapToFullOverviews();
+                var servers = repository.GetAll()
+                    .Search(computersFilter.CustomerId, computersFilter.SearchFor, computersFilter.SortField);
+                if (computersFilter.RecordsCount.HasValue)
+                    servers = servers.OrderBy(x => x.ServerName).Take(computersFilter.RecordsCount.Value);
+                var overviews = servers.MapToFullOverviews();
                 return overviews;
             }
-        }        
+        }
+
+        public int GetServerIdByName(string serverName, int customerId)
+        {
+            return serverRepository.GetIdByName(serverName, customerId);
+        }
 
         #endregion
 
@@ -539,9 +554,15 @@
             var models = this.printerRepository.FindOverviews(
                 printersFilter.CustomerId,
                 printersFilter.DepartmentId,
-                printersFilter.SearchFor);
+                printersFilter.SearchFor,
+                printersFilter.RecordsCount);
 
             return models;
+        }
+
+        public int GetPrinterIdByName(string printerName, int customerId)
+        {
+            return printerRepository.GetIdByName(printerName, customerId);
         }
 
         #endregion
@@ -597,6 +618,12 @@
             return response;
         }
 
+        public ComputerForRead GetWorkstationByNumber(string computerName, int customerId)
+        {
+            var pcId = computerRepository.GetIdByName(computerName, customerId);
+            return pcId > 0 ? computerRepository.FindById(pcId) : null;
+        }
+
         public InventoriesOverviewResponse GetInventories(InventoriesFilter filter)
         {
             var models = this.inventoryRepository.FindOverviews(
@@ -644,6 +671,16 @@
         {
             this.computerInventoryRepository.DeleteById(computerId, inventoryId);
             this.computerInventoryRepository.Commit();
+        }
+
+        public int GetCustomInventoryIdByName(string inventoryName, int inventoryTypeId)
+        {
+            return inventoryRepository.GetIdByName(inventoryName, inventoryTypeId);
+        }
+
+        public List<ComputerOverview> GetRelatedInventory(int customerId, string userId)
+        {
+            return this.computerRepository.GetRelatedOverviews(customerId, userId);
         }
 
         public ComputerShortOverview GetWorkstationShortInfo(int computerId)

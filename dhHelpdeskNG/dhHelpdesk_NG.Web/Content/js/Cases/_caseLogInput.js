@@ -4,12 +4,13 @@
 * Initializator for Log form and case-log related controls
 */
 function LogInitForm() {
+
     var $finishTypeContainer = $('#divFinishingType');
     var $finishTypeId = $("#CaseLog_FinishingType");
     var $finishTypeBreadcrubs = $("#divBreadcrumbs_FinishingType");
     var $finishDate = $('#CaseLog_FinishingDate');
     var EDIT_LOG_URL = '/Cases/EditLog';
-
+    
     $finishTypeContainer.find('ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var value = $(this).attr('value');
@@ -30,10 +31,6 @@ function LogInitForm() {
 
     $('#CaseLog_TextExternal').bind('input propertychange', function () {
         var informNotifier = $('#CaseLog_SendMailAboutCaseToNotifier');
-//        var isInformNotifierBehavior = informNotifier.attr("InformNotifierBehavior");
-//        if (isInformNotifierBehavior == "false") {
-//            return;
-//        }
 
         informNotifier.removeAttr('checked');
         if (this.value.length) {
@@ -46,11 +43,7 @@ function LogInitForm() {
     $("#btnCaseCharge").on('click', function (ev) {
         window.caseChargeObj.show();
     });
-
-    $('#log-action-save').on('click',function(e){
-      
-    });
-
+    
     $('#case__StateSecondary_Id').change(function (d, source) {
 
         $('#CaseLog_SendMailAboutCaseToNotifier').removeAttr('disabled');

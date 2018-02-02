@@ -9,6 +9,7 @@ using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.Cases;
 using DH.Helpdesk.Domain.Invoice;
+using DH.Helpdesk.BusinessData.Models.Invoice;
 
 namespace DH.Helpdesk.Dal.Repositories.Invoice
 {
@@ -27,7 +28,7 @@ namespace DH.Helpdesk.Dal.Repositories.Invoice
 			//this._caseLockToEntityMapper = caseLockToEntityMapper;
 		}
 
-		public List<Case> GetInvoiceOverviewList(int customerId, int? departmentId, DateTime? dateFrom, DateTime? dateTo, InvoiceStatus? status, int? caseId, bool departmentCharge = true)
+		public Tuple<List<Case>, IEnumerable<InvoiceRowStatistics>> GetInvoiceOverviewList(int customerId, int? departmentId, DateTime? dateFrom, DateTime? dateTo, InvoiceStatus? status, int? caseId, bool departmentCharge = true)
 		{
 
 			var query = DataContext.Cases
@@ -66,12 +67,33 @@ namespace DH.Helpdesk.Dal.Repositories.Invoice
             }
 
             var res = query.ToList();
-
+            var statictics = new List<InvoiceRowStatistics>();
 			foreach (var item in res)
 			{
 				var logQuery = item.Logs.Where(y => y.WorkingTime > 0 || y.OverTime > 0 || y.EquipmentPrice > 0 || y.Price > 0);
 				var externalQuery = item.CaseInvoiceRows.Where(x => true);
-				if (status.HasValue && status.Value != InvoiceStatus.No && status.Value != InvoiceStatus.Ready)
+
+                var _readyRows = 0;
+                var _invoicedRows = 0;
+                var _notInvoicedRows = 0;
+
+                if (logQuery != null)
+                {
+                    _readyRows += logQuery.Count(l => l.InvoiceRow == null || l.InvoiceRow.Status == InvoiceStatus.No);
+                    _invoicedRows += logQuery.Count(l => l.InvoiceRow != null && l.InvoiceRow.Status == InvoiceStatus.Invoiced);
+                    _notInvoicedRows += logQuery.Count(l => l.InvoiceRow != null && l.InvoiceRow.Status == InvoiceStatus.NotInvoiced);
+                }
+
+                if (externalQuery != null)
+                {
+                    _readyRows += externalQuery.Count(l => l.InvoiceRow == null || l.InvoiceRow.Status == InvoiceStatus.No);
+                    _invoicedRows += externalQuery.Count(l => l.InvoiceRow != null && l.InvoiceRow.Status == InvoiceStatus.Invoiced);
+                    _notInvoicedRows += externalQuery.Count(l => l.InvoiceRow != null && l.InvoiceRow.Status == InvoiceStatus.NotInvoiced);
+                }
+
+                statictics.Add(new InvoiceRowStatistics(item.Id, _readyRows, _invoicedRows, _notInvoicedRows));                                    
+
+                if (status.HasValue && status.Value != InvoiceStatus.No && status.Value != InvoiceStatus.Ready)
 				{
 					logQuery = logQuery.Where(y => y.InvoiceRow?.Status == status);
 					externalQuery = externalQuery.Where(y => y.InvoiceRow?.Status == status);
@@ -88,7 +110,7 @@ namespace DH.Helpdesk.Dal.Repositories.Invoice
 				item.CaseInvoiceRows = externalQuery.ToList();
 			}
 
-			return res;
+            return new Tuple<List<Case>, IEnumerable<InvoiceRowStatistics>> (res, statictics);
 
 			//var q1 = DataContext.Logs
 			//	.Include(x => x.Case)
@@ -140,6 +162,6 @@ namespace DH.Helpdesk.Dal.Repositories.Invoice
 
 	public interface IInvoiceRepository
 	{
-		List<Case> GetInvoiceOverviewList(int customerId, int? departmentId, DateTime? dateFrom, DateTime? dateTo, InvoiceStatus? status, int? caseId, bool departmentCharge = true);
+        Tuple<List<Case>, IEnumerable<InvoiceRowStatistics>> GetInvoiceOverviewList(int customerId, int? departmentId, DateTime? dateFrom, DateTime? dateTo, InvoiceStatus? status, int? caseId, bool departmentCharge = true);
 	}
 }

@@ -1,7 +1,15 @@
+using DH.Helpdesk.Dal.Repositories.Inventory;
+using DH.Helpdesk.Dal.Repositories.Inventory.Concrete;
+using DH.Helpdesk.Dal.Repositories.Printers;
+using DH.Helpdesk.Dal.Repositories.Printers.Concrete;
+using DH.Helpdesk.Dal.Repositories.Servers;
+using DH.Helpdesk.Dal.Repositories.Servers.Concrete;
 using DH.Helpdesk.SelfService;
 using DH.Helpdesk.SelfService.Infrastructure;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
+using DH.Helpdesk.Services.Services.Authentication;
 using DH.Helpdesk.Services.Services.Feedback;
+using DH.Helpdesk.Common.Logger;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
@@ -46,7 +54,7 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.SelfService.Infrastructure.Tools.Concrete;
     using DH.Helpdesk.Dal.Repositories.Problem.Concrete;
     using DH.Helpdesk.Dal.Repositories.Invoice;
-    using DH.Helpdesk.Dal.Repositories.Invoice.Concrete;    
+    using DH.Helpdesk.Dal.Repositories.Invoice.Concrete;
     using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
     using DH.Helpdesk.Dal.Repositories.BusinessRules;
@@ -62,6 +70,8 @@ namespace DH.Helpdesk.SelfService
     using Services.Services.EmployeeService;
     using Services.Services.EmployeeService.Concrete;
     using Services.Services.WebApi;
+    using Dal.Repositories.Condition;
+    using Dal.Repositories.Condition.Concrete;
 
     public static class NinjectWebCommon 
     {
@@ -91,9 +101,18 @@ namespace DH.Helpdesk.SelfService
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new WorkContextModule(),  new UserModule() , new ProblemModule() ,
-                new CommonModule(), new EmailModule() , new NotifiersModule() , new ToolsModule(),
-                new OrdersModule());
+            var kernel = new StandardKernel(
+                new LoggerModule(),
+                new WorkContextModule(),  
+                new UserModule(), 
+                new ProblemModule(),
+                new CommonModule(), 
+                new EmailModule(), 
+                new NotifiersModule(), 
+                new ToolsModule(),
+                new OrdersModule(), 
+                new InventoryModule());
+
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             
@@ -116,7 +135,12 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IEmailSendingSettingsProvider>().To<EmailSendingSettingsProvider>().InRequestScope();
 
             kernel.Bind<IFederatedAuthenticationSettings>().To<FederatedAuthenticationSettings>();
-            kernel.Bind<IFederatedAuthenticationService>().To<FederatedAuthenticationService>().InSingletonScope();
+
+            kernel.Bind<IFederatedAuthenticationService>()
+                .ToMethod(ctx => new FederatedAuthenticationService(ctx.Kernel.Get<ILoggerService>(Log4NetLoggerService.LogType.Session)))
+                .InRequestScope();
+
+            kernel.Bind<ISelfServiceConfigurationService>().To<SelfServiceConfigurationService>().InSingletonScope();
 
             // Repositories
             kernel.Bind<ICircularRepository>().To<CircularRepository>();
@@ -244,6 +268,29 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IMetaDataRepository>().To<MetaDataRepository>();            
             kernel.Bind<IEntityInfoRepository>().To<EntityInfoRepository>();
             kernel.Bind<ICaseFollowUpRepository>().To<CaseFollowUpRepository>();
+            kernel.Bind<IConditionRepository>().To<ConditionRepository>();
+
+            kernel.Bind<IInventoryTypeRepository>().To<InventoryTypeRepository>();
+            kernel.Bind<IServerRepository>().To<ServerRepository>();
+            kernel.Bind<IPrinterRepository>().To<PrinterRepository>();
+            kernel.Bind<IInventoryRepository>().To<InventoryRepository>();
+            kernel.Bind<IInventoryTypePropertyValueRepository>().To<InventoryTypePropertyValueRepository>();
+            kernel.Bind<IComputerLogRepository>().To<ComputerLogRepository>();
+            kernel.Bind<IComputerInventoryRepository>().To<ComputerInventoryRepository>();
+            kernel.Bind<IOperationLogRepository>().To<OperationLogRepository>();
+            kernel.Bind<IInventoryTypeGroupRepository>().To<InventoryTypeGroupRepository>();
+            kernel.Bind<IInventoryFieldSettingsRepository>().To<InventoryFieldSettingsRepository>();
+            kernel.Bind<IInventoryDynamicFieldSettingsRepository>().To<InventoryDynamicFieldSettingsRepository>();
+            kernel.Bind<IComputerFieldSettingsRepository>().To<ComputerFieldSettingsRepository>();
+            kernel.Bind<IComputerHistoryRepository>().To<ComputerHistoryRepository>();
+            kernel.Bind<ILogicalDriveRepository>().To<LogicalDriveRepository>();
+            kernel.Bind<ISoftwareRepository>().To<SoftwareRepository>();
+            kernel.Bind<IServerFieldSettingsRepository>().To<ServerFieldSettingsRepository>();
+            kernel.Bind<IOperationObjectRepository>().To<OperationObjectRepository>();
+            kernel.Bind<IOperationLogEMailLogRepository>().To<OperationLogEMailLogRepository>();
+            kernel.Bind<IServerLogicalDriveRepository>().To<ServerLogicalDriveRepository>();
+            kernel.Bind<IServerSoftwareRepository>().To<ServerSoftwareRepository>();
+            kernel.Bind<IPrinterFieldSettingsRepository>().To<PrinterFieldSettingsRepository>();
 
 
             // Service             
@@ -314,8 +361,11 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IEmployeeService>().To<EmployeeService>();
             kernel.Bind<IMetaDataService>().To<MetaDataService>();            
             kernel.Bind<IWebApiService>().To<WebApiService>();
+            kernel.Bind<IConditionService>().To<ConditionService>();
 
             kernel.Bind<ICaseFollowUpService>().To<CaseFollowUpService>();
+            kernel.Bind<ILogProgramService>().To<LogProgramService>();
+            kernel.Bind<IInventoryService>().To<InventoryService>();
 
 
             // Cache

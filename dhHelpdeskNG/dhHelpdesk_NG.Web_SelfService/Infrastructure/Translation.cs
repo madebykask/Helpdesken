@@ -22,10 +22,10 @@
                 {
                     try
                     {
-                        var translation = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == translate.ToLower()).FirstOrDefault();
+                        var translation = SessionFacade.TextTranslation.FirstOrDefault(x => x.TextToTranslate.ToLower() == translate.ToLower());
                         if (translation != null)
                         {
-                            var trans = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
+                            var trans = translation.TextTranslations.FirstOrDefault(x => x.Language_Id == SessionFacade.CurrentLanguageId);
                             var text = (trans != null ? trans.TextTranslated : string.Empty);
                             //if (string.IsNullOrEmpty(text) && SessionFacade.CurrentLanguageId != LanguageIds.Swedish)
                             //{
@@ -48,7 +48,7 @@
                 {
                     try
                     {
-                        var translation = SessionFacade.CaseTranslation.Where(x => x.Customer_Id == customerId && x.Name.ToLower() == translate.getCaseFieldName().ToLower() && x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
+                        var translation = SessionFacade.CaseTranslation.FirstOrDefault(x => x.Customer_Id == customerId && x.Name.ToLower() == translate.getCaseFieldName().ToLower() && x.Language_Id == SessionFacade.CurrentLanguageId);
 
                         if (translation != null && !string.IsNullOrEmpty(translation.Label))
                             translate = translation.Label;
@@ -58,10 +58,10 @@
                             var instanceWord = GetInstanceWord(translate);
                             if (instanceWord != string.Empty)
                             {
-                                var translationText = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == instanceWord.ToLower()).FirstOrDefault();
+                                var translationText = SessionFacade.TextTranslation.FirstOrDefault(x => x.TextToTranslate.ToLower() == instanceWord.ToLower());
                                 if (translationText != null)
                                 {
-                                    var trans = translationText.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
+                                    var trans = translationText.TextTranslations.FirstOrDefault(x => x.Language_Id == SessionFacade.CurrentLanguageId);
                                     translateByText = (trans != null ? trans.TextTranslated : string.Empty);
                                     if (translateByText != string.Empty)
                                         translate = translateByText;
@@ -103,10 +103,10 @@
                 {
                     try
                     {
-                        var translation = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == translate.ToLower()).FirstOrDefault();
+                        var translation = SessionFacade.TextTranslation.FirstOrDefault(x => x.TextToTranslate.ToLower() == translate.ToLower());
                         if (translation != null)
                         {
-                            var trans = translation.TextTranslations.Where(x => x.Language_Id == languageId).FirstOrDefault();
+                            var trans = translation.TextTranslations.FirstOrDefault(x => x.Language_Id == languageId);
                             var text = (trans != null ? trans.TextTranslated : string.Empty);
                             //if (string.IsNullOrEmpty(text) && SessionFacade.CurrentLanguageId != LanguageIds.Swedish)
                             //{
@@ -128,7 +128,7 @@
                 {
                     try
                     {
-                        var translation = SessionFacade.CaseTranslation.Where(x => x.Customer_Id == customerId && x.Name.ToLower() == translate.getCaseFieldName().ToLower() && x.Language_Id == languageId).FirstOrDefault();
+                        var translation = SessionFacade.CaseTranslation.FirstOrDefault(x => x.Customer_Id == customerId && x.Name.ToLower() == translate.getCaseFieldName().ToLower() && x.Language_Id == languageId);
                         if (translation != null && !string.IsNullOrEmpty(translation.Label))
                             translate = translation.Label;
                         else
@@ -137,10 +137,10 @@
                             var instanceWord = GetInstanceWord(translate);
                             if (instanceWord != string.Empty)
                             {
-                                var translationText = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == instanceWord.ToLower()).FirstOrDefault();
+                                var translationText = SessionFacade.TextTranslation.FirstOrDefault(x => x.TextToTranslate.ToLower() == instanceWord.ToLower());
                                 if (translationText != null)
                                 {
-                                    var trans = translationText.TextTranslations.Where(x => x.Language_Id == languageId).FirstOrDefault();
+                                    var trans = translationText.TextTranslations.FirstOrDefault(x => x.Language_Id == languageId);
                                     translateByText = (trans != null ? trans.TextTranslated : string.Empty);
                                     if (translateByText != string.Empty)
                                         translate = translateByText;

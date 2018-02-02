@@ -6,15 +6,15 @@ namespace DH.Helpdesk.Services.Services
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.Dal.Infrastructure.Context;
-    using DH.Helpdesk.Dal.NewInfrastructure;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services.BusinessLogic.Mappers.Links;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications.Links;
+    using Dal.Infrastructure.Context;
+    using Dal.NewInfrastructure;
+    using Dal.Repositories;
+    using Domain;
+    using BusinessLogic.Mappers.Links;
+    using BusinessLogic.Specifications;
+    using BusinessLogic.Specifications.Links;
 
-    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
+    using IUnitOfWork = Dal.Infrastructure.IUnitOfWork;
 
     public interface ILinkService
     {
@@ -50,7 +50,7 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count, bool forStartPage);
 
-        IEnumerable<LinkOverview> GetLinkOverviewsForStartPage(int[] customers, int? count, bool forStartPage);
+        IEnumerable<LinkOverview> GetLinkOverviewsForStartPage(int[] customers, int? count, bool forStartPage, bool workGroupRestriction = false);
 
         IList<Link> SearchLinks(int customerId, string searchText, List<int> groupIds);
     }
@@ -60,63 +60,60 @@ namespace DH.Helpdesk.Services.Services
         private readonly ILinkRepository _linkRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILinkGroupRepository _linkGroupRepository;
-        private readonly IUserRepository _userRepository;
 
-        private readonly IWorkContext workContext;
+        private readonly IWorkContext _workContext;
 
-        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
         public LinkService(
             ILinkRepository linkRepository,
             ILinkGroupRepository linkGroupRepository,
-            IUserRepository userRepository,
             IUnitOfWork unitOfWork,
             IWorkContext workContext,
             IUnitOfWorkFactory unitOfWorkFactory)
         {
-            this._linkRepository = linkRepository;
-            this._unitOfWork = unitOfWork;
-            this.workContext = workContext;
-            this.unitOfWorkFactory = unitOfWorkFactory;
-            this._linkGroupRepository = linkGroupRepository;
-            this._userRepository = userRepository;
+            _linkRepository = linkRepository;
+            _unitOfWork = unitOfWork;
+            _workContext = workContext;
+            _unitOfWorkFactory = unitOfWorkFactory;
+            _linkGroupRepository = linkGroupRepository;
         }
 
         public IList<Link> GetLinks(int customerId)
         {
-            return this._linkRepository.GetMany(x => x.Customer_Id == customerId).ToList();
+            return _linkRepository.GetMany(x => x.Customer_Id == customerId).ToList();
         }
 
         public IList<LinkGroup> GetLinkGroups(int customerId)
         {
-            return this._linkGroupRepository.GetAll().Where(it => it.Customer_Id == customerId).OrderBy(x => x.LinkGroupName).ToList();
+            return _linkGroupRepository.GetAll().Where(it => it.Customer_Id == customerId).OrderBy(x => x.LinkGroupName).ToList();
         }
 
         public Link GetLink(int id)
         {
-            return this._linkRepository.GetById(id);
+            return _linkRepository.GetById(id);
         }
 
         public IList<Link> GetLinksBySolutionIdAndCustomer(int id, int customerId)
         {
-            return this._linkRepository.GetMany(x => x.Customer_Id == customerId && x.CaseSolution_Id == id).ToList();
+            return _linkRepository.GetMany(x => x.Customer_Id == customerId && x.CaseSolution_Id == id).ToList();
         }
 
         public Link GetLinkByCustomerAndSolution(int id, int customerId)
         {
-            return this._linkRepository.Get(x => x.CaseSolution_Id == id && x.Customer_Id == customerId);
+            return _linkRepository.Get(x => x.CaseSolution_Id == id && x.Customer_Id == customerId);
         }
 
         public DeleteMessage DeleteLink(int id)
         {
-            var link = this._linkRepository.GetById(id);
+            var link = _linkRepository.GetById(id);
 
             if (link != null)
             {
                 try
                 {
-                    this._linkRepository.Delete(link);
-                    this.Commit();
+                    _linkRepository.Delete(link);
+                    Commit();
 
                     return DeleteMessage.Success;
                 }
@@ -147,7 +144,7 @@ namespace DH.Helpdesk.Services.Services
             //    errors.Add("Link.URLAddress", "Du måste ange en URL-adress");
 
 
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var linkRep = uow.GetRepository<Link>();
                 var userRep = uow.GetRepository<User>();
@@ -206,18 +203,18 @@ namespace DH.Helpdesk.Services.Services
 
         public void Commit()
         {
-            this._unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         public IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count, bool forStartPage)
         {
 
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var repository = uow.GetRepository<Link>();
 
                 return repository.GetAll()
-                        .RestrictByUsers(this.workContext)
+                        .RestrictByUsers(_workContext)
                         .GetLinksForStartPage(customers, count, forStartPage)
                         .MapToOverviews();
             }
@@ -225,12 +222,11 @@ namespace DH.Helpdesk.Services.Services
 
 
 
-        public IEnumerable<LinkOverview> GetLinkOverviewsForStartPage(int[] customers, int? count, bool forStartPage)
+        public IEnumerable<LinkOverview> GetLinkOverviewsForStartPage(int[] customers, int? count, bool forStartPage, bool workGroupRestriction = false)
         {
-            int userid = this.workContext.User.UserId;
-            
-            return _linkRepository.GetLinkOverviewsToStartPage(customers, count, forStartPage, userid);
+            var userid = _workContext.User.UserId;
 
+            return _linkRepository.GetLinkOverviewsToStartPage(customers, count, forStartPage, userid, workGroupRestriction);
 
         }
 
@@ -297,7 +293,7 @@ namespace DH.Helpdesk.Services.Services
                 _linkGroupRepository.Update(linkGroup);
 
             if (errors.Count == 0)
-                this.Commit();
+                Commit();
         }
     }
 }

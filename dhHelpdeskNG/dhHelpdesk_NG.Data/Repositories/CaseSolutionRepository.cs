@@ -7,8 +7,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface ICaseSolutionRepository : IRepository<CaseSolution>
     {
-        //int GetAntal(int customerid, int userid);
-        
     }
 
     public class CaseSolutionRepository : RepositoryBase<CaseSolution>, ICaseSolutionRepository
@@ -17,43 +15,6 @@ namespace DH.Helpdesk.Dal.Repositories
             : base(databaseFactory)
         {
         }
-
-        //public int GetAntal(int customerid, int userid)
-        //{
-        //    string sSQL = "";
-        //    int antal = 0;
-
-        //    sSQL = "SELECT Count(*) AS Antal ";
-        //    sSQL += "FROM tblCaseSolution ";
-        //    sSQL += "WHERE tblCaseSolution.Customer_Id=" + customerid;
-        //    sSQL += " AND (WorkingGroup_Id IN (SELECT workinggroup_id FROM tblUserWorkingGroup where user_id=" + userid + ") OR WorkingGroup_Id is null)";
-
-        //    string con = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
-
-        //    using (var connection = new SqlConnection(con))
-        //    {
-        //        using (var command = connection.CreateCommand())
-        //        {
-        //            command.CommandType = CommandType.Text;
-        //            command.CommandText = sSQL;
-        //            connection.Open();
-
-        //            using (var dr = command.ExecuteReader())
-        //            {
-        //                while (dr.Read())
-        //                {
-        //                    antal = dr.SafeGetInteger("Antal");
-        //                    break;
-
-        //                }
-
-        //            }
-
-        //        }
-
-        //    }
-        //    return antal;
-        //}
     }
 
     #endregion

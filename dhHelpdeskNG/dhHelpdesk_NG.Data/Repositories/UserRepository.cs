@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Users.Input;
+﻿using DH.Helpdesk.BusinessData.Enums.Users;
+using DH.Helpdesk.BusinessData.Models.Users.Input;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Users;
 
@@ -36,7 +37,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         List<ItemWithEmail> FindUsersEmails(List<int> userIds, bool isActive = false);
 
-        IEnumerable<User> GetUsers(int customerId);
+        IQueryable<User> GetUsers(int customerId);
         IEnumerable<User> GetUsersByUserGroup(int customerId);
         IEnumerable<User> GetUsersForWorkingGroup(int customerId, int workingGroupId);
         IEnumerable<User> GetUsersForWorkingGroup(int workingGroupId);
@@ -234,7 +235,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var query = from u in this.DataContext.Users
                         join uw in this.DataContext.UserWorkingGroups on u.Id equals uw.User_Id
-                        where u.CustomerUsers.Any(c => c.Customer_Id == customerId) && uw.WorkingGroup_Id == workingGroupId && uw.UserRole != 1 //u.Customer_Id == customerId
+                        where u.CustomerUsers.Any(c => c.Customer_Id == customerId) && uw.WorkingGroup_Id == workingGroupId && uw.UserRole != WorkingGroupUserPermission.READ_ONLY && uw.IsMemberOfGroup //u.Customer_Id == customerId
                         select u;
             return query;
         }
@@ -248,7 +249,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return query;
         }
 
-        public IEnumerable<User> GetUsers(int customerId)
+        public IQueryable<User> GetUsers(int customerId)
         {
             var query = from u in this.DataContext.Users
                         where u.CustomerUsers.Any(c => c.Customer_Id == customerId) // u.Customer_Id == customerId &&
@@ -284,7 +285,8 @@ namespace DH.Helpdesk.Dal.Repositories
                             User_Id = uwg.User_Id,
                             WorkingGroup_Id = uwg.WorkingGroup_Id,
                             RoleToUWG = uwg.UserRole,
-                            IsActive = wg.IsActive == 0 ? false : true
+                            IsMemberOfGroup = uwg.IsMemberOfGroup,
+                            IsActive = wg.IsActive != 0
                         };
 
             var queryList = query.OrderBy(x => x.WorkingGroupName).ToList();
@@ -296,9 +298,8 @@ namespace DH.Helpdesk.Dal.Repositories
             var query = from cu in this.DataContext.CustomerUsers.Where(x => x.User_Id == userId)
                         join c in this.DataContext.Customers on cu.Customer_Id equals c.Id
                         join wg in this.DataContext.WorkingGroups on c.Id equals wg.Customer_Id
-                        join u in this.DataContext.Users on userId equals u.Id
                         from uwg in this.DataContext.UserWorkingGroups.Where(x => x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()
-                        group uwg by new { wg.WorkingGroupName, userId, c.Name, wg.Id, uwg.UserRole, CustomerId = c.Id, uwg.IsDefault, wg.IsActive } into g
+                        group uwg by new { wg.WorkingGroupName, userId, c.Name, wg.Id, uwg.UserRole, uwg.IsMemberOfGroup, CustomerId = c.Id, uwg.IsDefault, wg.IsActive } into g
                         select new CustomerWorkingGroupForUser
                         {
                             WorkingGroupName = g.Key.WorkingGroupName,
@@ -306,8 +307,9 @@ namespace DH.Helpdesk.Dal.Repositories
                             CustomerName = g.Key.Name,
                             IsStandard = g.Key.IsDefault,
                             WorkingGroup_Id = g.Key.Id,
-                            RoleToUWG = g.Key.UserRole == null ? 0 : g.Key.UserRole,
-                            IsActive = g.Key.IsActive == 0 ? false : true,
+                            RoleToUWG = (int?)g.Key.UserRole ?? WorkingGroupUserPermission.NO_ACCESS,
+                            IsMemberOfGroup = (bool?)g.Key.IsMemberOfGroup ?? false,
+                            IsActive = g.Key.IsActive != 0,
                             CustomerId = g.Key.CustomerId
                         };
 

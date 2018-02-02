@@ -8,5 +8,6 @@
         public CaseSearchFilter caseSearchFilter { get; set; }
 
         public ISearch Search { get; set; }
+       
     }
 }

@@ -90,7 +90,7 @@
                 primaryModules.Add(newMod);
             }
 
-            modules.Modules = primaryModules;
+            modules.Modules = primaryModules.OrderBy(x => x.Module.Name);
             var customerSettings = this.userService.GetUserProfileCustomersSettings(user.Id);
             var customerSettingsModel = new UserCustomersSettingsViewModel(customerSettings);
             var model = this.CreateInputViewModel(user, modules, customerSettingsModel);

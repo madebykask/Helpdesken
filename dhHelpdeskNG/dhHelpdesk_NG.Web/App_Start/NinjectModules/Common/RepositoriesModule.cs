@@ -45,6 +45,8 @@
     using Ninject.Modules;
     using Dal.Repositories.MetaData;
     using Dal.Repositories.MetaData.Concrete;
+    using Dal.Repositories.Condition;
+    using Dal.Repositories.Condition.Concrete;
 
     public sealed class RepositoriesModule : NinjectModule
     {
@@ -294,8 +296,8 @@
             this.Bind<IEmailLogAttemptRepository>().To<EmailLogAttemptRepository>();
             this.Bind<IMetaDataRepository>().To<MetaDataRepository>();
             this.Bind<IEntityInfoRepository>().To<EntityInfoRepository>();
+            this.Bind<IConditionRepository>().To<ConditionRepository>();
 			this.Bind<IComputerUserCategoryRepository>().To<ComputerUserCategoryRepository>();
-
 		}
 
         #endregion

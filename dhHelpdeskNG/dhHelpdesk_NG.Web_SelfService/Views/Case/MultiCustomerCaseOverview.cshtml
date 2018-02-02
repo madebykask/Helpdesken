@@ -1,0 +1,100 @@
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.SelfService
+@model DH.Helpdesk.SelfService.Models.Case.MultiCustomerUserFilterModel
+
+@{
+    var tabTitle = ViewBag.IsLineManagerApplication ? Translation.Get("Service Requests") : Translation.Get("Cases");
+}
+
+<div id="search_result">
+    <div class="container-fluid dh-container">
+            <ul class="nav nav-tabs" id="NewCaseTab">
+                <li id="NewCaseT" class="active">
+                    <a href="#fragment-1">@tabTitle</a>
+                </li>
+            </ul>
+            <div id="fragment-1" class="tab-pane active">
+                <div class="container-fluid dh-container">
+                    <div class="row dh-container">
+                        <div class="col-md-12">
+                            @Html.Partial("_CaseSearch", Model)
+                        </div>
+                    </div>
+                    @foreach (var result in Model.Customers)
+                    {
+                        <div id="searchGroup_@result.CustomerId" class="searchGroup" data-customerId="@result.CustomerId">
+                            <div class="searchGroupCaption">
+                                <a href="javascript:void(0)" onclick="toggleCustomerSearchResults(this, @result.CustomerId)">
+                                    <i class="fa fa-angle-double-up" aria-hidden="true"></i> @result.CustomerName (<span id="casesCount_@result.CustomerId">0</span> @Translation.Get("Cases"))</a>
+                                <i id="searchIndicator_@result.CustomerId" class="gif-loader" style="display: none">&nbsp;</i>
+                            </div>
+                            <div id="result_@result.CustomerId" class="searchResults">
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+    </div>
+</div>
+
+@section Scripts{
+    @Scripts.Render(BundleConfig.ScriptNames.CasesSearch)
+    <script type="text/javascript">
+        
+        var userCustomers = [@(string.Join(",", Model.Customers.Select(x => x.CustomerId).ToArray()))];
+
+        //onload
+        $(function () {
+
+            //create and set new instance
+            var caseSearch = new CaseSearch();
+            caseSearch.init({
+                searchAction: '@Url.Action("SearchCustomerCases", "CasesSearchAsync")'
+            });
+            window.caseSearch = caseSearch;
+
+            $("#btnSearch").click(function (e) {
+                e.preventDefault();
+                
+                //run search for all user customers
+                window.caseSearch.searchMultipleCustomers(window.userCustomers);
+                
+                return false;
+            });
+
+            $("#PharasSearch").keypress(function(ev) {
+                var keycode = (ev.keyCode ? ev.keyCode : ev.which);
+                if (keycode == '13') {
+                    $("#btnSearch").click();
+                }
+            });
+
+            //$("#collapseAll").click(function (e) { window.toggleSearchResults(false); });
+            //$("#expandAll").click(function (e) { window.toggleSearchResults(true); });
+
+            //run search for all user customers
+            caseSearch.searchMultipleCustomers(window.userCustomers);
+        });
+
+        function sortCases(customerId, newSortBy) {
+            window.caseSearch.sortCasesMulti(customerId, newSortBy);
+        }
+
+        function toggleSearchResults(expand) {
+            $("div.searchGroup").each(function() {
+                var customerId = +$(this).data("customerid");
+                window.caseSearch.toggleSearchResults(customerId, expand);
+            });
+        }
+
+        function toggleCustomerSearchResults(sender, customerId) {
+            var results = $('#result_' + customerId);
+            
+            if (results.is(":visible")) {
+                window.caseSearch.toggleSearchResults(customerId, false);
+            } else {
+                window.caseSearch.toggleSearchResults(customerId, true);
+            }
+        } 
+    </script>
+}

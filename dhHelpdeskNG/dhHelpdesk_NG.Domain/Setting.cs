@@ -136,7 +136,6 @@ namespace DH.Helpdesk.Domain
         public int ModuleExtendedCase { get; set; }
         public int AttachmentPlacement { get; set; }
         public int M2TNewCaseMailTo { get; set; }
-
         public virtual OrderState CloseOrderState { get; set; }
         /// <summary>
         /// If 1 - indicates that users should be presented(and sorted by) as "FirstName LastName", and vice versa
@@ -146,5 +145,7 @@ namespace DH.Helpdesk.Domain
         public int ShowQuickNewCaseLink { get; set; }
         public string QuickNewCaseLinkText { get; set; }
         public string QuickNewCaseLinkUrl { get; set; }
+        public int DefaultCaseTemplateId { get; set; }
+        public bool QuickLinkWGRestriction { get; set; }
     }
 }

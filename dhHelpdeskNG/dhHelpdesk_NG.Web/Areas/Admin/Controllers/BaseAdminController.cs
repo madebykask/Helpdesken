@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿using DH.Helpdesk.Web.Infrastructure.Attributes;
+
+namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;

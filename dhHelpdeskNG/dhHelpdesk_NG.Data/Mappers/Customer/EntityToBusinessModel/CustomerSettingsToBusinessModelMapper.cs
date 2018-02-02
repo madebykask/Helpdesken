@@ -69,6 +69,7 @@ namespace DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
                            CreateCaseFromOrder = entity.CreateCaseFromOrder.ToBool(),
                            BulletinBoardWGRestriction = entity.BulletinBoardWGRestriction.ToBool(),
                            CalendarWGRestriction = entity.CalendarWGRestriction.ToBool(),
+                           QuickLinkWGRestriction = entity.QuickLinkWGRestriction,
                            ModuleExtendedCase = entity.ModuleExtendedCase.ToBool(),
                            AttachmentPlacement = entity.AttachmentPlacement,
                            M2TNewCaseMailTo = entity.M2TNewCaseMailTo,

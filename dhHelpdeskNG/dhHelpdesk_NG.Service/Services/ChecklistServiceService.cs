@@ -14,6 +14,7 @@ namespace DH.Helpdesk.Services.Services
     {        
         List<CheckListServiceBM> GetCheckListServices(int checkListId);
         void SaveCheckListService(CheckListServiceBM checkListService);
+        void UpdateCheckListService(CheckListServiceBM checkListService);
     }
 
     public class CheckListServiceService : ICheckListServiceService
@@ -40,7 +41,10 @@ namespace DH.Helpdesk.Services.Services
             this._checkListServiceRepository.SaveCheckListService(checklistService);
             this._checkListServiceRepository.Commit();
         }
-       
-        
+
+        public void UpdateCheckListService(CheckListServiceBM checkListService)
+        {
+            _checkListServiceRepository.UpdateCheckListService(checkListService);
+        }
     }
 }

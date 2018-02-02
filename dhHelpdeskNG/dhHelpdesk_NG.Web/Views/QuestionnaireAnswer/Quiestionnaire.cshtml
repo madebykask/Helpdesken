@@ -1,0 +1,126 @@
+﻿@using DH.Helpdesk.Web.Models.Questionnaire.Output
+@model QuestionnaireViewModel
+@using (Html.BeginForm("Questionnaire", "QuestionnaireAnswer", FormMethod.Post, new { id = "edit_form" }))
+{
+    @Html.HiddenFor(x => x.Guid)
+    @Html.HiddenFor(x => x.CustomerId)
+    @Html.HiddenFor(x => x.LanguageId)
+    <div class="secnavs fixed" style="top: 0px">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>
+                    <input type="submit" value="@Translation.Get("Spara och stäng", Model.LanguageId, Enums.TranslationSource.TextTranslation, Model.CustomerId)" class="btn"/>
+                    <a href="@Url.Action("Questionnaire", "QuestionnaireAnswer", new { guid = Model.Guid, customerId = Model.CustomerId, languageId = Model.LanguageId })" class="btn">
+                        @Translation.Get("Rensa", Model.LanguageId, Enums.TranslationSource.TextTranslation, Model.CustomerId)
+                    </a>
+                </li>
+                <li>
+                    @Html.CheckBoxFor(x => x.IsAnonym)
+                    @Translation.Get("Jag vill vara anonym", Model.LanguageId, Enums.TranslationSource.TextTranslation, Model.CustomerId)
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="content" style="margin-top: 45px">
+        <div class="container">
+            <ul class="nav nav-tabs">
+                <li class="active"></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    <div class="container">
+                        <h3 style="color: gray">@Model.QuestionnaireModel.Name</h3>
+                        <div class="row">
+                            <div class="span12">
+                                @Model.QuestionnaireModel.Description
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span12">
+                                @Translation.Get("Ärende", Model.LanguageId, Enums.TranslationSource.TextTranslation, Model.CustomerId): @Model.QuestionnaireModel.CaseNumber
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span12">
+                                @Translation.Get("Rubrik", Model.LanguageId, Enums.TranslationSource.TextTranslation, Model.CustomerId): @Model.QuestionnaireModel.Caption
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="tab-pane tab-pane-border active" id="fragment-2">
+                    <div class="container">
+
+                        @for (int index = 0; index < Model.QuestionnaireModel.Questions.Count; index++)
+                        {
+                            QuestionnaireQuestionModel question = Model.QuestionnaireModel.Questions[index];
+                            List<QuestionnaireQuestionModel> questions = Model.QuestionnaireModel.Questions;
+                            <h5>@(question.Number). @question.Question</h5>
+                            @Html.HiddenFor(x => questions[index].Id)
+                            <div class="row">
+                                <div class="span12">
+
+                                    @Html.ValidationMessageFor(x => questions[index].SelectedOptionId)
+
+                                    <table class="span10">
+
+                                        @foreach (QuestionnaireQuestionOptionModel option in question.Options.OrderBy(x => x.Position))
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <div class="radio">
+                                                    @Html.RadioButtonFor(x => questions[index].SelectedOptionId, option.Id)
+                                                    @option.Option
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                        @if (question.IsShowNote)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.Label("     ")
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @Html.Label("     ")
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @Html.Label(question.NoteTextLabel)
+                                                    @Html.TextAreaFor(x => questions[index].NoteText, new { maxlength = "2000", style = "height:80px;" })
+                                                </td>
+                                            </tr>
+                                        }
+                                        <tr>
+                                            <td>
+                                                @Html.Label("     ")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.Label("     ")
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </div>
+                            </div>
+                            <table border="1" class="span12">
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

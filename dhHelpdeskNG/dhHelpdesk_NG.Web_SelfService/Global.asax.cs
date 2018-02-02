@@ -1,12 +1,17 @@
 ﻿using System;
 using System.IdentityModel.Services;
 using System.IO;
+using System.Linq;
+using System.Security.Claims;
 using System.Web;
+using DH.Helpdesk.Common.Configuration;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Logger;
 using DH.Helpdesk.SelfService.Infrastructure;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.SelfService.Infrastructure.Helpers;
 using DH.Helpdesk.Services.Infrastructure;
+using DH.Helpdesk.Services.Services.Authentication;
 using log4net;
 using log4net.Config;
 
@@ -57,11 +62,21 @@ namespace DH.Helpdesk.SelfService
             RegisterRoutes(RouteTable.Routes);
 
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            var loginMode = AppConfigHelper.GetAppSetting(AppSettingsKey.LoginMode);
-            if (loginMode.Equals(LoginMode.SSO, StringComparison.OrdinalIgnoreCase))
+            
+            if (IsSsoMode())
             {
                 FederatedAuthenticationConfiguration.Configure();
+            }
+        }
+
+        //todo: implement more advanced error handling similar to helpdesk 
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            var logger = new Log4NetLoggerService(Log4NetLoggerService.LogType.ERROR);
+            var ex = Server.GetLastError();
+            if (ex != null)
+            {
+                logger.Error(ex);
             }
         }
 
@@ -74,23 +89,14 @@ namespace DH.Helpdesk.SelfService
             if (configFile.Exists)
             {
                 XmlConfigurator.Configure(configFile);
-                try
-                {
-                    var ssoLogger = LogManager.GetLogger("sso");
-                    SsoLogger.SetLoggerInstance(ssoLogger);
-                }
-                catch
-                {
-                }
+                
+                //init sso static logger
+                var ssoLogger = new Log4NetLoggerService(Log4NetLoggerService.LogType.Session);
+                SsoLogger.SetLoggerInstance(ssoLogger);
             }
         }
 
         #endregion
-
-        protected void WSFederationAuthenticationModule_SignedIn(object sender, EventArgs e)
-        {
-            SsoLogger.Debug("WSFederationAuthenticationModule: SignedIn!", Context);
-        }
 
         #region Session Timeout Handling
 
@@ -138,8 +144,7 @@ namespace DH.Helpdesk.SelfService
                         SsoLogger.Debug($"Sign out user due user session restart! ReturnUrl: {returnUrl}.", Context);
                         
                         //clear sessionId sync so that the next time session time out logic was ignored
-                        ClearSessionId(); 
-
+                        ClearSessionId();
                         fedAuthService?.SignOut(returnUrl);
                     }
                 }
@@ -148,7 +153,37 @@ namespace DH.Helpdesk.SelfService
 
         #endregion
 
+        #region ADFS events
+
+        protected void WSFederationAuthenticationModule_RedirectingToIdentityProvider(object sender, RedirectingToIdentityProviderEventArgs e)
+        {
+            var stsUrl = e.SignInRequestMessage.WriteQueryString();
+            SsoLogger.Debug($"WSFederationAuthenticationModule.RedirectingToIdentityProvider. Redirect to sts - {stsUrl}", Context);
+        }
+
+
+        protected void WSFederationAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs e)
+        {
+            SsoLogger.Debug("WSFederationAuthenticationModule: SessionSecurityTokenCreated!", Context);
+        }
+
+        protected void WSFederationAuthenticationModule_SignedIn(object sender, EventArgs e)
+        {
+            LogIdentityClaims(Context);
+            SsoLogger.Debug("WSFederationAuthenticationModule: SignedIn!", Context);
+        }
+
+        protected void WSFederationAuthenticationModule_AuthorizationFailed(object sender, AuthorizationFailedEventArgs e)
+        {
+            SsoLogger.Debug($"WSFederationAuthenticationModule.AuthorizationFailed. Authorisation failed.", Context);
+        }
+
         #region SSO token lifetime handling
+
+        protected void SessionAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs e)
+        {
+            SsoLogger.Debug("SessionAuthenticationModule_SessionSecurityTokenCreated called!", Context);
+        }
 
         protected void SessionAuthenticationModule_SessionSecurityTokenReceived(object sender, SessionSecurityTokenReceivedEventArgs args)
         {
@@ -176,8 +211,9 @@ namespace DH.Helpdesk.SelfService
                 SsoLogger.Debug(
                     $"Security token lifetime has been expired: ValidTo: {token.ValidTo}, UtcNow: {DateTime.UtcNow}. Signing out. ReturnUrl: {returnUrl}.",
                     Context);
-                federationAuthenticationService.SignOut(returnUrl);
 
+                SessionFacade.ClearSession();
+                federationAuthenticationService.SignOut(returnUrl);
                 return;
             }
 
@@ -185,8 +221,7 @@ namespace DH.Helpdesk.SelfService
             {
                 var sam = (SessionAuthenticationModule) sender;
                 var refreshedToken =
-                    federationAuthenticationService.RefreshSecurityTokenLifeTime(sam, args.SessionToken,
-                        configuration.SecurityTokenMaxDuration);
+                    federationAuthenticationService.RefreshSecurityTokenLifeTime(sam, args.SessionToken, configuration.SecurityTokenMaxDuration);
 
                 if (refreshedToken != null)
                 {
@@ -198,54 +233,43 @@ namespace DH.Helpdesk.SelfService
 
         #endregion
 
-        #if DEBUG
-
-        protected void Session_OnEnd(object sender, EventArgs e)
-        {
-            SsoLogger.Debug("Session_OnEnd called!");
-        }
-
-        protected void Application_OnEnd(object sender, EventArgs e)
-        {
-            SsoLogger.Debug("Application_OnEnd called!");
-        }
-
-        protected void SessionAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs e)
-        {
-            SsoLogger.Debug("SessionAuthenticationModule_SessionSecurityTokenCreated called!",Context);
-        }
-
-        protected void WSFederationAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs e)
-        {
-            SsoLogger.Debug("WSFederationAuthenticationModule: SessionSecurityTokenCreated!", Context);
-        }
-
-        protected void Application_PostAuthenticateRequest(object sender, EventArgs e)
-        {
-            SsoLogger.Debug("Application_PostAuthenticate called.", Context);
-        }
-
-        protected void Application_EndRequest(object sender, EventArgs e)
-        {
-            SsoLogger.Debug("Application_EndRequest called.", Context);
-        }
-
-        #endif
-
+        #endregion //adfs
+     
         #region Helper Methods
+
+        private static void LogIdentityClaims(HttpContext ctx)
+        {
+            
+            var claimsIdentity = ctx.User.Identity as ClaimsIdentity;
+            if (claimsIdentity != null && claimsIdentity.Claims.Any())
+            {
+                SsoLogger.Debug(">>> Claims found:");
+                foreach (var claim in claimsIdentity.Claims)
+                {
+                    SsoLogger.Debug($"Claim: {claim.Type}, value: {claim.Value}, Issuer: {claim.Issuer}");
+                }
+            }
+        }
+
 
         private static string BuildHomeUrl(HttpContext ctx)
         {
             var httpContext = new HttpContextWrapper(ctx);
-            var customerId = httpContext.GetCustomerIdFromCookie();
+
+            var customerId = httpContext.GetCustomerIdFromQueryString();
+            if (customerId <= 0)
+            {
+                customerId = httpContext.GetCustomerIdFromCookie();
+            }
+
             var returnUrl =  UrlsHelper.BuildHomeUrl(customerId);
             return returnUrl;
         }
 
         private static bool IsSsoMode()
         {
-            var loginMode = AppConfigHelper.GetAppSetting(AppSettingsKey.LoginMode);
-            return LoginMode.SSO.Equals(loginMode, StringComparison.OrdinalIgnoreCase);
+            var appSettingsProvider = new ApplicationSettingsProvider();
+            return appSettingsProvider.LoginMode == LoginMode.SSO;
         }
 
         private void RefreshSessionId()

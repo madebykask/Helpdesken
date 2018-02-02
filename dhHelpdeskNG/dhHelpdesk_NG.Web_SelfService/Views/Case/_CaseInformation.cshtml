@@ -1,0 +1,34 @@
+﻿@model DH.Helpdesk.SelfService.Models.Case.ExtendedCaseViewModel
+@using DH.Helpdesk.BusinessData.OldComponents;
+@using DH.Helpdesk.Common.Extensions.String
+
+
+@if (!string.IsNullOrEmpty(ViewData["Headline"].ToString()) && Model.StatusBar.Count > 0)
+{
+    <h4 style="font-weight:normal !important; font-size:11px !important;">
+        
+        @if (Model.StatusBar.Count > 0 && !string.IsNullOrEmpty(ViewData["Headline"].ToString())){
+            <strong>@ViewData["Headline"].ToString()</strong>
+            if (Model.StatusBar.Any())
+            {
+                <text> | </text>
+            }
+        }
+        else
+        {
+            <text>&nbsp;</text>
+        }
+
+        @foreach (var item in Model.StatusBar)
+        {
+            if (!item.Value.Equals(Model.StatusBar.Last().Value))
+            {
+                @item.Value.RemoveRequiredText().ToHtmlString()
+            }
+            else
+            {
+                @item.Value.RemoveRequiredText().Replace("|", "").ToHtmlString()
+            }
+        }
+    </h4>
+}

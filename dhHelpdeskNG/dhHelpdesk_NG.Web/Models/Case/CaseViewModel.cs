@@ -54,6 +54,7 @@ namespace DH.Helpdesk.Web.Models.Case
 			ExternalInvoices = new List<ExternalInvoiceModel>();
             		this.SelectedWorkflowStep = 0;
 			CaseAttachedExFiles = new List<CaseAttachedExFileModel>();
+            CaseLock = new CaseLockModel();
         }
 
         public string CaseKey { get; set; }
@@ -352,7 +353,7 @@ namespace DH.Helpdesk.Web.Models.Case
 		public CaseSolution CurrentCaseSolution { get; internal set; }
 
         public int CurrentUserRole { get; set; }
-
+        public Dictionary<string, string> StatusBar { get; internal set; }
 		public bool HasExtendedComputerUsers { get; internal set; }
 		public IList<ComputerUserCategory> ComputerUserCategories { get; internal set; }
 		public ComputerUserCategory InitiatorComputerUserCategory { get; internal set; }
@@ -360,7 +361,7 @@ namespace DH.Helpdesk.Web.Models.Case
 		public IDictionary<CaseSectionType, ExtendedCaseFormModel> ExtendedCaseSections { get; internal set; }
 		public ComputerUserCategory RegardingComputerUserCategory { get; internal set; }
 		public bool RegardingReadOnly { get; internal set; }
-	}
+    }
 
     public class CaseIndexViewModel
     {

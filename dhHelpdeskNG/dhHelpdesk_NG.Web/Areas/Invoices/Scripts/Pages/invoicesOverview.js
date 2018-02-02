@@ -13,6 +13,9 @@ InvoicesOverview.prototype = {
 
         self.$totalRows = $("#totalRows");
         self._initGrid();
+        $(document).tooltip({
+            selector: '.tooltipType'
+        });
         $("#invoiceFilter #btnSearch").on("click", function() {
             self.table.ajax.reload();
         });
@@ -137,7 +140,9 @@ InvoicesOverview.prototype = {
                         "data": "",
                         "className": "align-center",
                         "render": function (data, type, row) {
-                            return !self._isSectionReadOnly(row) ? "<input type='button' id='btnInvoiceChargedChildren' value='" + self.options.copyText + "'/input>" : "";
+                            return self._generateInformation(row) +
+                                   (!self._isSectionReadOnly(row) ? "<input type='button' class='btn' id='btnInvoiceChargedChildren' value='" +
+                                    self.options.copyText + "'/input>" : "");
                         },
                         "sortable": false
                     },
@@ -401,6 +406,10 @@ InvoicesOverview.prototype = {
             triggerTd.html("<i class='icon-plus-sign'></i>");
         }
     },
+    
+    _generatePriceFieldId: function (rowId, index){
+        return "priceField_" + rowId + "_" + index;
+    },
 
     _getExpansion: function (data) {
         "use strict";
@@ -413,6 +422,7 @@ InvoicesOverview.prototype = {
             if (!isRowReadOnly) {
                 isSectionReadOnly = false;
             }
+            var priceFieldId = self._generatePriceFieldId(data.CaseId, i);
             var rowString =
             "<tr class='expanded-row' data-parentrowid='" + data.CaseId + "' data-loginvoice='" + data.LogInvoices[i].Id + "'>" +
             "<td></td>" +
@@ -424,7 +434,7 @@ InvoicesOverview.prototype = {
 		    "<td></td>" +
 		    "<td>" + (isRowReadOnly ? self._minutesToTimeString(data.LogInvoices[i].WorkingTime) : self._getTimeEditor(data.LogInvoices[i].WorkingTime, "WorkingTime")) + "</td>" +
 		    "<td>" + (isRowReadOnly ? self._minutesToTimeString(data.LogInvoices[i].Overtime) : self._getTimeEditor(data.LogInvoices[i].Overtime, "Overtime")) + "</td>" +
-		    "<td class='align-right'>" + self._formatNumber(self._getLogInvoiceAmount(data.LogInvoices[i]), 2, 3, " ", ",") + "</td>" +
+		    "<td id='"+ priceFieldId + "' class='align-right'>" + self._formatNumber(self._getLogInvoiceAmount(data.LogInvoices[i]), 2, 3, " ", ",") + "</td>" +
 		    "<td class='align-right'>" + (isRowReadOnly ? self._formatNumber(data.LogInvoices[i].Material, 2, 3, " ", ",") : self._getTextBox(data.LogInvoices[i].Material, "txtMaterial")) + "</td>" +
 		    "<td class='align-right'>" + (isRowReadOnly ? self._formatNumber(data.LogInvoices[i].Price, 2, 3, " ", ",") : self._getTextBox(data.LogInvoices[i].Price, "txtPrice")) + "</td>" +
 		    "<td></td>" +
@@ -490,7 +500,7 @@ InvoicesOverview.prototype = {
         var self = this;
 
         var time = self._minutesToTime(mins);
-        var hours = $("<select id='ddl" + name + "Hours' name='ddl" + name + "Hours' class='inputw50'></select>");
+        var hours = $("<select id='ddl" + name + "Hours' name='ddl" + name + "Hours' class='inputw55'></select>");
         for (var i = 0; i < 100; i++) {
             hours.append($('<option>', { 
                 value: i,
@@ -498,7 +508,7 @@ InvoicesOverview.prototype = {
                 selected: time.hours === i
             }));
         }
-        var minutes = $("<select id='ddl" + name + "Minutes' name='ddl" + name + "Minutes' class='inputw50'></select>");
+        var minutes = $("<select id='ddl" + name + "Minutes' name='ddl" + name + "Minutes' class='inputw55'></select>");
         for (i = 0; i < 60; i+= self.options.minStep) {
             minutes.append($('<option>', {
                 value: i,
@@ -526,7 +536,7 @@ InvoicesOverview.prototype = {
     },
 
     _getTextBox: function(val, name) {
-        var res = "<input type='text' class='inputw50' id='" + name + "' name='" + name + "' placeholder='0.00' value='{1}'>"
+        var res = "<input type='text' class='inputw55' id='" + name + "' name='" + name + "' placeholder='0.00' value='{1}'>"
             .replace(/\{1\}/g, val);
 
         return res;
@@ -636,6 +646,8 @@ InvoicesOverview.prototype = {
                     dataEntry.Price = logInvoices[i].Price;
                     dataEntry.Charge = logInvoices[i].Charge;
                 }
+                var priceFieldId = self._generatePriceFieldId(data.CaseId, i);
+                $('#' + priceFieldId).html(self._formatNumber(self._getLogInvoiceAmount(dataEntry), 2, 3, " ", ","));
             }
             for (i = 0; i < externalInvoices.length; i++) {
                 dataEntry = self._findById(data.ExternalInvoices, externalInvoices[i].Id);
@@ -644,7 +656,7 @@ InvoicesOverview.prototype = {
                     dataEntry.Charge = externalInvoices[i].Charge;
                 }
             }
-            parent.invalidate();
+            parent.invalidate();          
             self.table.draw();
             self._setToggleIcon(parent);
         })
@@ -917,6 +929,28 @@ InvoicesOverview.prototype = {
 
     _getTrForExternalInvoice: function(id) {
         return $("tr[data-externalinvoice='" + id + "']");
+    },
+
+    _generateInformation: function (row) {
+        "use strict";
+        var self = this;
+        
+        if (row != undefined &&
+            row.Statistics != undefined &&
+            (row.Statistics.NumOfInvoiced + row.Statistics.NumOfNotInvoiced)> 0 &&
+             row.Statistics.NumOfReady > 0) {
+
+            var readyText = self.options.statusList[1];
+            var invoicedText = self.options.statusList[2];
+            var notInvoicedText = self.options.statusList[3];
+            var _hint = (row.Statistics.NumOfReady > 0 ?  "<b>" + row.Statistics.NumOfReady + "</b> " + readyText + "<br/>" : "") +
+                        (row.Statistics.NumOfInvoiced > 0 ? "<b>" + row.Statistics.NumOfInvoiced + "</b> " + invoicedText + "<br/>" : "") +
+                        (row.Statistics.NumOfNotInvoiced > 0 ? "<b>" + row.Statistics.NumOfNotInvoiced + "</b> " + notInvoicedText : "");
+
+            return "<span class='icon-info-sign tooltipType' data-original-title='" + _hint + "' data-html='true' rel='tooltip'></span> &nbsp;"
+        }
+
+        return "<span style='opacity: 0.0'>---</span> &nbsp;";
     },
 
     _isSectionReadOnly: function (data) {

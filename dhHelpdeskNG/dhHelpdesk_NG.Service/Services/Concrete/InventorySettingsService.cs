@@ -62,9 +62,9 @@
             return this.computerFieldSettingsRepository.GetFieldSettingsForEdit(customerId, languageId);
         }
 
-        public ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId)
+        public ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false)
         {
-            var models = this.computerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId);
+            var models = this.computerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId, isReadonly);
 
             return models;
         }
@@ -105,9 +105,9 @@
             return this.serverFieldSettingsRepository.GetFieldSettingsForEdit(customerId, languageId);
         }
 
-        public ServerFieldsSettingsForModelEdit GetServerFieldSettingsForModelEdit(int customerId, int languageId)
+        public ServerFieldsSettingsForModelEdit GetServerFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false)
         {
-            var models = this.serverFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId);
+            var models = this.serverFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId, isReadonly);
 
             return models;
         }
@@ -134,9 +134,9 @@
             return this.printerFieldSettingsRepository.GetFieldSettingsForEdit(customerId, languageId);
         }
 
-        public PrinterFieldsSettingsForModelEdit GetPrinterFieldSettingsForModelEdit(int customerId, int languageId)
+        public PrinterFieldsSettingsForModelEdit GetPrinterFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false)
         {
-            return this.printerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId);
+            return this.printerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId, isReadonly);
         }
 
         public PrinterFieldsSettingsOverview GetPrinterFieldSettingsOverview(int customerId, int languageId)
@@ -201,11 +201,10 @@
             return response;
         }
 
-        public InventoryFieldSettingsForModelEditResponse GetInventoryFieldSettingsForModelEdit(int inventoryTypeId)
+        public InventoryFieldSettingsForModelEditResponse GetInventoryFieldSettingsForModelEdit(int inventoryTypeId, bool isReadonly = false)
         {
-            var setings = this.inventoryFieldSettingsRepository.GetFieldSettingsForModelEdit(inventoryTypeId);
-            var dynamicSettings = this.inventoryDynamicFieldSettingsRepository.GetFieldSettingsForModelEdit(
-                inventoryTypeId);
+            var setings = this.inventoryFieldSettingsRepository.GetFieldSettingsForModelEdit(inventoryTypeId, isReadonly);
+            var dynamicSettings = this.inventoryDynamicFieldSettingsRepository.GetFieldSettingsForModelEdit(inventoryTypeId, isReadonly);
 
             var response = new InventoryFieldSettingsForModelEditResponse(setings, dynamicSettings);
 

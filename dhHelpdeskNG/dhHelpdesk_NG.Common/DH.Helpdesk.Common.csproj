@@ -52,6 +52,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web">
@@ -64,6 +65,7 @@
     </Compile>
     <Compile Include="Collections\INamedObject.cs" />
     <Compile Include="Collections\NamedObjectCollection.cs" />
+    <Compile Include="Configuration\AppConfigHelper.cs" />
     <Compile Include="Constants\CaseSections.cs" />
     <Compile Include="Constants\Shared.cs" />
     <Compile Include="Constants\DataTypeValue.cs" />
@@ -71,6 +73,9 @@
     <Compile Include="Constants\UserAccessRole.cs" />
     <Compile Include="Constraints\NotifierConstraint.cs" />
     <Compile Include="Enums\AppSettingsKey.cs" />
+    <Compile Include="Enums\Condition\ConditionType.cs" />
+    <Compile Include="Enums\Condition\ConditionOperator.cs" />
+    <Compile Include="Enums\FederationServiceKeys.cs" />
     <Compile Include="Enums\UserRoleType.cs" />
     <Compile Include="Enums\BusinessRules\BREventType.cs" />
     <Compile Include="Enums\BusinessRules\BRFieldType.cs" />

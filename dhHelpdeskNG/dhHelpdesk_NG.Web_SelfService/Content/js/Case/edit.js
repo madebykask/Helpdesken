@@ -431,7 +431,7 @@
                         '<td>' +
                             '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href=' + downloadCaseFileUrl + '?' + downloadCaseFileParamUrl + 'fileName=' + file + '>' + file + '</a>' +
                         '</td>' +
-                        '<td>' +
+                        '<td style="text-align:right !important;">' +
                             '<a id="delete_file_button_' + i + '" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-remove"></span> </a>' +
                         '</td>' +
                         '</tr>');
@@ -440,15 +440,31 @@
             }
 
             Application.prototype.bindDeleteNewCaseFileBehaviorToDeleteButtons();
+            Application.prototype.countNrOfAttatchedFiles();
+        }
+
+        Application.prototype.countNrOfAttatchedFiles = function () {
+            if ($('#attachment-tab').length) {
+                var nrOfFiles = parseInt($('#NewCasefiles_table tr').length) || 0;
+                if (nrOfFiles > 0 && $('#nrOfAttachedFiles')[0])
+                    {
+                    $('#nrOfAttachedFiles').html('(' + nrOfFiles + ')');
+                }
+                else {
+                    $('#nrOfAttachedFiles').html('');
+                }
+            }
         }
 
         Application.prototype.bindDeleteNewCaseFileBehaviorToDeleteButtons = function () {
+            
             $('#NewCasefiles_table a[id^="delete_file_button_"]').click(function () {
                 var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
                 var pressedDeleteFileButton = this;
 
                 $.post(deleteCaseFileUrl, { id: caseFileKey, fileName: fileName, curTime: Date.now() }, function () {
                     $(pressedDeleteFileButton).parents('tr:first').remove();
+                    Application.prototype.countNrOfAttatchedFiles();
                 });
             });
         }
@@ -822,7 +838,9 @@
             //default paste action
             this.paste_auto = function (e) {
                 pasteMode = '';
-                pasteCatcher.innerHTML = '';
+                if (pasteCatcher) {
+                    pasteCatcher.innerHTML = '';
+                }
                 var clipboardData = (e.clipboardData || e.originalEvent.clipboardData);
                 var isIe = !clipboardData && window.clipboardData; //IE
                 if (isIe) {

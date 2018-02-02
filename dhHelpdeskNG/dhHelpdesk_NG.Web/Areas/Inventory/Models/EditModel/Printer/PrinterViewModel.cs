@@ -61,5 +61,7 @@
         public StateFieldsModel StateFieldsModel { get; set; }
 
         public bool UserHasInventoryAdminPermission { get; set; }
+
+        public bool IsForDialog { get; set; }
     }
 }

@@ -10,7 +10,14 @@
         @Translation.Get(Model.Caption)
     </td>
     <td class="span9">
-        @Html.TextAreaFor(m => m.Value, new { @class = "inputw500 inputmh100" })
-        @Html.ValidationMessageFor(m => m.Value)
+        @if (!Model.IsReadOnly)
+        {
+            @Html.TextAreaFor(m => m.Value, new {@class = "inputw500 inputmh100"})
+            @Html.ValidationMessageFor(m => m.Value)
+        }
+        else
+        {
+            @Html.TextAreaFor(m => m.Value, new { @class = "inputw500 inputmh100", @readonly = true })
+        }
     </td>
 </tr>

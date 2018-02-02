@@ -35,7 +35,6 @@ namespace DH.Helpdesk.Web
             DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
             DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
             Bootstrapper.Initialize(CreateKernel);
-            
         }
 
         public static void Stop()
@@ -73,7 +72,8 @@ namespace DH.Helpdesk.Web
                 new OrdersModule(),
                 new AccountModule(),
                 new AdminModule(),
-                new EFormModule());
+                new EFormModule(),
+                new AuthenticationModule());
 
             ManualDependencyResolver.SetKernel(kernel);
 

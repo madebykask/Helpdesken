@@ -23,9 +23,9 @@ namespace DH.Helpdesk.BusinessData.Models.Invoice
 		public string Department { get; set; }
 		
 		public int WorkingHourRate { get; set; }
-		public int OvertimeHourRate { get; set; }
-
+		public int OvertimeHourRate { get; set; }        
 		public List<CaseLog> LogInvoices { get; set; }
 		public List<ExternalInvoice.ExternalInvoice> ExternalInvoices { get; set; }
-	}
+        public InvoiceRowStatistics Statistics { get; set; }
+    }
 }

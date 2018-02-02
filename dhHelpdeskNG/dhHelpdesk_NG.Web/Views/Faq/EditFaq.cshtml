@@ -1,12 +1,11 @@
-﻿@using System.Globalization
-@using System.Web.Optimization
-@using DH.Helpdesk.Web.Infrastructure
+﻿@using DH.Helpdesk.Web
 @using DH.Helpdesk.Web.Models.Faq.Output
 
-@model DH.Helpdesk.Web.Models.Faq.Output.EditFaqModel
+@model EditFaqModel
 
 
 @Scripts.Render("~/bundles/dhhelpdesk")
+@Scripts.Render(BundleConfig.ScriptNames.ConfirmationDialog)
 <script>
     $(document).ready(function () {
         FAQInitForm();
@@ -15,15 +14,30 @@
 
 
 @{
-    this.ViewBag.Title = @Translation.GetCoreTextTranslation("Edit FAQ");
+    ViewBag.Title = Translation.GetCoreTextTranslation("Edit FAQ");
 }
 
 <script type="text/javascript">
-    $(function() {
-        $('#delete_button').click(function() {
-            $.post('@Url.Action("DeleteFaq")', { id: '@Model.Id' }, function() {
-                window.location.href = '@Url.Action("Index")';
-            });
+    $(function () {
+        $('#delete_button').click(function (e) {
+            e.stopImmediatePropagation();
+            var dlg = new ConfirmationDialog();
+            var opts = {
+                dlgText: '@Html.Raw(Translation.GetForJS("Är du säker på att du vill ta bort aktuell FAQ"))',
+                btnYesText: '@Translation.GetForJS("Ja")',
+                btnNoText: '@Translation.GetForJS("Nej")',
+                onClick: function (button) {
+                    if (button === ConfirmationDialog.YES) {
+                        $.post('@Url.Action("DeleteFaq")', { id: '@Model.Id' }, function () {
+                            window.location.href = '@Url.Action("Index")';
+                        });
+                    } else {
+                        dlg.hide();
+                    }
+                }
+            }
+            dlg.init(opts);
+            dlg.show();
         });
     });
 </script>
@@ -37,7 +51,6 @@
                 @if (Model.UserHasFaqAdminPermission)
                 {
                 <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), "edit", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
-                    <!--<li><input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" /></li>-->
                     <li><a id="delete_button" class="btn">@Translation.GetCoreTextTranslation("Ta bort")</a></li>
                 }
                 <li><a href="@Url.Action("Index")?showDetails=@Model.ShowDetails.ToString()" class="btn">@Translation.GetCoreTextTranslation("Avbryt")</a></li>

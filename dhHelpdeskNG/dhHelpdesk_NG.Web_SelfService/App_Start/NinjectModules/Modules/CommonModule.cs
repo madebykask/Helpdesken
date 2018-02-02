@@ -48,6 +48,8 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
     using Dal.DbQueryExecutor;
     using Services.Services;
     using Domain.ExtendedCaseEntity;
+    using BusinessData.Models.Condition;
+    using Dal.Mappers.Condition;
 
     /// <summary>
     /// The common module.
@@ -260,6 +262,15 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
 
             this.Bind<IEntityToBusinessModelMapper<ExtendedCaseValueEntity, ExtendedCaseValueModel>>()
                 .To<ExtendedCaseValueToBusinessModelMapper>()
+                .InSingletonScope();
+
+
+            this.Bind<IBusinessModelToEntityMapper<ConditionModel, ConditionEntity>>()
+                       .To<ConditionToEntityMapper>()
+                       .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ConditionEntity, ConditionModel>>()
+                .To<ConditionToBusinessModelMapper>()
                 .InSingletonScope();
         }
     }

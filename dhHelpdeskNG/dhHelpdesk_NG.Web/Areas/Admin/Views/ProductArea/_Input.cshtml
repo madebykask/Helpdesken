@@ -110,24 +110,27 @@
                                         </label>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        @Translation.GetCoreTextTranslation("Visa endast för") @Translation.GetCoreTextTranslation("Ärendetyp")
-                                    </td>
-                                    <td>
-                                        <div id="divCaseType" class="btn-group">
-                                            <div class="btn" id="divBreadcrumbs_CaseType">@Model.ParentPath_CaseType</div>
-                                            <button class="btn dropdown-toggle" data-toggle="dropdown">
-                                                <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="#">@Translation.GetCoreTextTranslation("--")</a></li>
-                                                @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
-                                            </ul>
-                                            <input type="hidden" id="CaseType_Id" name="CaseType_Id" value="@Model.CaseType_Id" />
-                                        </div>
-                                    </td>
-                                </tr>
+                                @if (!Model.ProductArea.Parent_ProductArea_Id.HasValue)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Visa endast för") @Translation.GetCoreTextTranslation("Ärendetyp")
+                                        </td>
+                                        <td>
+                                            <div id="divCaseType" class="btn-group">
+                                                <div class="btn" id="divBreadcrumbs_CaseType">@Model.ParentPath_CaseType</div>
+                                                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#">@Translation.GetCoreTextTranslation("--")</a></li>
+                                                    @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
+                                                </ul>
+                                                <input type="hidden" id="CaseType_Id" name="CaseType_Id" value="@Model.CaseType_Id"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
                                 <tr>
                                     <td class="span3">
                                         @Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)

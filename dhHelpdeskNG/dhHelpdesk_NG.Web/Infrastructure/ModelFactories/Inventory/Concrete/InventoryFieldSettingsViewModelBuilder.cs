@@ -21,23 +21,19 @@
             InventoryFieldSettingsForEditResponse response,
             List<TypeGroupModel> groupModels)
         {
-            var department =
-                MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.DepartmentFieldSetting);
+            var department = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.DepartmentFieldSetting);
             var name = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.NameFieldSetting);
             var model = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.ModelFieldSetting);
-            var manufacturer =
-                MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.ManufacturerFieldSetting);
-            var serial =
-                MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.SerialNumberFieldSetting);
-            var theftMark =
-                MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.TheftMarkFieldSetting);
+            var manufacturer = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.ManufacturerFieldSetting);
+            var serial = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.SerialNumberFieldSetting);
+            var theftMark = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.TheftMarkFieldSetting);
             var barCode = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.BarCodeFieldSetting);
-            var purchaseDate =
-                MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.PurchaseDateFieldSetting);
+            var purchaseDate = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.PurchaseDateFieldSetting);
             var place = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.PlaceFieldSetting);
-            var workstation =
-                MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.WorkstationFieldSetting);
+            var workstation = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.WorkstationFieldSetting);
             var info = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.InfoFieldSetting);
+            var createdDate = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.CreatedDateFieldSetting);
+            var changedDate = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.ChangedDateFieldSetting);
 
             var defaultFieldSettingsModel = new DefaultFieldSettingsModel(
                 department,
@@ -50,22 +46,18 @@
                 purchaseDate,
                 place,
                 workstation,
-                info);
+                info,
+                createdDate,
+                changedDate);
 
-            var inventoryDynamicFieldSettings =
-                response.InventoryDynamicFieldSettings.Select(
-                    dynamicSetting => MapInventoryDynamicFieldSetting(dynamicSetting, groupModels, inventoryType.Id))
-                    .ToList();
+            var inventoryDynamicFieldSettings = response.InventoryDynamicFieldSettings.Select(
+                    dynamicSetting => MapInventoryDynamicFieldSetting(dynamicSetting, groupModels, inventoryType.Id)).ToList();
 
             var inventoryTypeModel = new InventoryTypeModel(inventoryType.Id, inventoryType.Name);
             var newDynamicFieldSettingViewModel = CreateNewInventoryDynamicFieldSettingViewModel(groupModels);
 
-            var viewModel = new InventoryFieldSettingsEditViewModel(
-                inventoryTypeModel,
-                new InventoryFieldSettingsViewModel(
-                    newDynamicFieldSettingViewModel,
-                    defaultFieldSettingsModel,
-                    inventoryDynamicFieldSettings));
+            var viewModel = new InventoryFieldSettingsEditViewModel(inventoryTypeModel,
+                new InventoryFieldSettingsViewModel(newDynamicFieldSettingViewModel, defaultFieldSettingsModel, inventoryDynamicFieldSettings));
 
             return viewModel;
         }
@@ -83,6 +75,8 @@
             var place = InventoryFieldSettingModel.GetDefault(null, InventoryFieldNames.Place);
             var workstation = InventoryFieldSettingModel.GetDefault(null, InventoryFieldNames.Workstation);
             var info = InventoryFieldSettingModel.GetDefault(1000, InventoryFieldNames.Info);
+            var createdDate = InventoryFieldSettingModel.GetDefault(12, InventoryFieldNames.CreatedDate);
+            var changedDate = InventoryFieldSettingModel.GetDefault(12, InventoryFieldNames.ChangedDate);
 
             var defaultFieldSettingsModel = new DefaultFieldSettingsModel(
                 department,
@@ -95,7 +89,9 @@
                 purchaseDate,
                 place,
                 workstation,
-                info);
+                info,
+                createdDate,
+                changedDate);
 
             var inventoryTypeModel = InventoryTypeModel.CreateDefault();
             var newDynamicFieldSettingViewModel = CreateNewInventoryDynamicFieldSettingViewModel(groupModels);

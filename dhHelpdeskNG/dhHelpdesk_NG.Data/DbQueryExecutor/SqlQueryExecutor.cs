@@ -43,6 +43,15 @@ namespace DH.Helpdesk.Dal.DbQueryExecutor
             }
         }
 
+        public TEntity QuerySingleOrDefault<TEntity>(string query, object parameters = null, CommandType commandType = CommandType.Text, int timeout = 60)
+        {
+            using (IDbConnection conn = CreateConnection())
+            {
+                var result = conn.QuerySingleOrDefault<TEntity>(query, parameters, commandTimeout: timeout, commandType: commandType);
+                return result;
+            }
+        }
+
         public IList<TEntity> QueryList<TEntity>(string query, object parameters = null, CommandType commandType = CommandType.Text, int timeout = 60)
         {
             using (IDbConnection conn = CreateConnection())

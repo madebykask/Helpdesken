@@ -4,13 +4,13 @@
         || Model.CommunicationFieldsModel.IPAddress.Show
         || Model.CommunicationFieldsModel.MacAddress.Show)
 {
-    <h4>@Translation.Get("Kommunikation")</h4>
+    <h4>@Translation.GetCoreTextTranslation("Kommunikation")</h4>
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @Html.EditorFor(m => m.CommunicationFieldsModel.NetworkAdapterId, "NotReadonlyFields/List", new { Source = Model.NetworkAdapters })
-                @Html.EditorFor(m => m.CommunicationFieldsModel.IPAddress, "NotReadonlyFields/Text")
-                @Html.EditorFor(m => m.CommunicationFieldsModel.MacAddress, "NotReadonlyFields/Text")
+                @Html.EditorFor(m => m.CommunicationFieldsModel.NetworkAdapterId, "Fields/List", new { Source = Model.NetworkAdapters })
+                @Html.EditorFor(m => m.CommunicationFieldsModel.IPAddress, "Fields/Text")
+                @Html.EditorFor(m => m.CommunicationFieldsModel.MacAddress, "Fields/Text")
             </table>
         </div>
     </div>

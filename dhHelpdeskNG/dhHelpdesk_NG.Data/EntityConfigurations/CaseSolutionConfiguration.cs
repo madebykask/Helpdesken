@@ -174,6 +174,7 @@
             this.Property(x => x.CaseSolutionDescription).IsOptional();
             this.Property(x => x.ValidateOnChange).IsOptional().HasMaxLength(100);
             this.Property(x => x.NextStepState).IsOptional();
+            this.Property(x => x.CaseRelationType).IsRequired();
 
             this.ToTable("tblcasesolution");
         }

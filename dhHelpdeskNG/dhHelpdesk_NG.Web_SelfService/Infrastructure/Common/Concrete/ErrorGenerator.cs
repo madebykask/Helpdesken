@@ -6,7 +6,7 @@
     {
         public static ErrorModel MakeError(string message, int? code = null)
         {
-            var err = new ErrorModel((code!=null? code.Value:0), message);
+            var err = new ErrorModel(code ?? 0, message);
             SessionFacade.LastError = err;
             return err;            
         }
@@ -14,6 +14,11 @@
         public static void MakeError(ErrorModel errModel)
         {            
             SessionFacade.LastError = errModel;            
+        }
+
+        public static bool HasError()
+        {
+            return SessionFacade.LastError != null;
         }
     }
 }

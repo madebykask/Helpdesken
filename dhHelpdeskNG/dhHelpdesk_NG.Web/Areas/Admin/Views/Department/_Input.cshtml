@@ -58,7 +58,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Avdelningschef e-post", Enums.TranslationSource.TextTranslation) 
+                                        @Translation.Get("Avdelningschef e-post", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => model.Department.HeadOfDepartmentEMail, new { maxlength = "50", @class = "txt50" })
@@ -138,9 +138,10 @@
                                     <td>
                                         @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="department.IsActive" @(Model.Department.IsActive == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="department.IsActive" value="0" />
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="department.IsActive" @(Model.Department.IsActive == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="department.IsActive" value="0" />
                                         </label>
                                     </td>
                                     <td></td>
@@ -149,10 +150,11 @@
                                     <td>
                                         @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="department.IsEMailDefault" @(Model.Department.IsEMailDefault == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="department.IsEMailDefault" value="0" />
-                                        &nbsp;@Translation.Get("Sätt avdelningen som standard på ärenden som registreras via e-mail", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="department.IsEMailDefault" @(Model.Department.IsEMailDefault == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="department.IsEMailDefault" value="0" />
+                                            &nbsp;@Translation.Get("Sätt avdelningen som standard på ärenden som registreras via e-mail", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
@@ -160,75 +162,128 @@
                         </div>
                     </div>
                 </div>
-                </div>
-                <div class="tab-pane tab-pane-border" id="fragment2">
-                    <div class="container">
-                        <h4>@Translation.Get("Fakturering", Enums.TranslationSource.TextTranslation)</h4>
-                        <div class="row">
-                            <div class="span12">
-                                <table class="tableform">
-                                    
-                                    <tr>
-                                        <td class="span3">@Translation.Get("Debitering", Enums.TranslationSource.TextTranslation)</td>
-                                        <td class="span9">
-                                            <label class="checkbox">
-                                            <input type="checkbox" name="department.Charge" @(Model.Department.Charge == 1 ? "checked=checked" : "") value="1"/>
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment2">
+                <div class="container">
+                    <h4>@Translation.GetCoreTextTranslation("Fakturering")</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.GetCoreTextTranslation("Debitering")
+                                    </td>
+                                    <td class="span9">
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="department.Charge" @(Model.Department.Charge == 1 ? "checked=checked" : "") value="1" />
                                             <input type="hidden" name="department.Charge" value="0" />
-                                            &nbsp;@Translation.Get("Avdelningen kan debiteras för genomförda åtgärder", Enums.TranslationSource.TextTranslation)
-                                            </label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td><label class="checkbox">
-                                            <input type="checkbox" name="department.ChargeMandatory" @(Model.Department.ChargeMandatory == 1 ? "checked=checked" : "") value="1"/>
+                                            &nbsp;@Translation.GetCoreTextTranslation("Avdelningen kan debiteras för genomförda åtgärder")
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="department.ChargeMandatory" @(Model.Department.ChargeMandatory == 1 ? "checked=checked" : "") value="1" />
                                             <input type="hidden" name="department.ChargeMandatory" value="0" />
-                                            &nbsp;@Translation.Get("Debitering är obligatorisk", Enums.TranslationSource.TextTranslation)
-                                            </label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            
-                                        </td>
-                                        <td><label class="checkbox">
-                                            <input type="checkbox" name="department.ShowInvoice" @(Model.Department.ShowInvoice == 1 ? "checked=checked" : "") value="1"/>
+                                            &nbsp;@Translation.GetCoreTextTranslation("Debitering är obligatorisk")
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="department.ShowInvoice" @(Model.Department.ShowInvoice == 1 ? "checked=checked" : "") value="1" />
                                             <input type="hidden" name="department.ShowInvoice" value="0" />
-                                            &nbsp;@Translation.Get("Visa fakturor", Enums.TranslationSource.TextTranslation)
-                                            </label>
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td>&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Bokföringsbelopp", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.TextBoxFor(model => model.Department.AccountancyAmount, new { maxlength = "8" })&nbsp;SEK
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Övertidsbelopp", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.TextBoxFor(model => model.Department.OverTimeAmount, new { maxlength = "8" })&nbsp;SEK
-                                        </td>
-                                    </tr>
-                                </table>
-                                @Html.HiddenFor(model => model.Department.Customer_Id)
-                                @Html.HiddenFor(model => model.Department.Id)
-                                @Html.HiddenFor(model => model.Department.Code)
-                                @Html.HiddenFor(model => model.Department.DepartmentGUID)
-                            </div>
+                                            &nbsp;@Translation.GetCoreTextTranslation("Visa fakturor")
+                                        </label>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.Department.ShowInvoiceTime)
+                                        &nbsp; @Translation.GetCoreTextTranslation("Visa tid")
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.Department.ShowInvoiceOvertime)
+                                        &nbsp; @Translation.GetCoreTextTranslation("Visa övertid")
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.Department.ShowInvoiceMaterial)
+                                        &nbsp; @Translation.GetCoreTextTranslation("Visa Material")
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => Model.Department.ShowInvoicePrice)
+                                        &nbsp; @Translation.GetCoreTextTranslation("Visa Pris")
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Bokföringsbelopp")
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Department.AccountancyAmount, new { maxlength = "8" })&nbsp;SEK
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Övertidsbelopp")
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Department.OverTimeAmount, new { maxlength = "8" })&nbsp;SEK
+                                    </td>
+                                </tr>
+                            </table>
+                            @Html.HiddenFor(model => model.Department.Customer_Id)
+                            @Html.HiddenFor(model => model.Department.Id)
+                            @Html.HiddenFor(model => model.Department.Code)
+                            @Html.HiddenFor(model => model.Department.DepartmentGUID)
                         </div>
                     </div>
+
+                    @Html.Partial("_Invoicing", Model)                                       
                 </div>
-            
+            </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    var $vailableOUs = $("#InvoiceAvailableOUs");
+    var $selectedOUs = $("#InvoiceSelectedOUs");
+
+    $("#addOU").click(function () {
+        $("#InvoiceAvailableOUs option:selected").remove().appendTo($selectedOUs.selector);
+        $vailableOUs.get(0).selectedIndex = -1;
+        $selectedOUs.get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeOU").click(function () {
+        $("#InvoiceSelectedOUs option:selected").remove().appendTo($vailableOUs.selector);
+        $vailableOUs.get(0).selectedIndex = -1;
+        $selectedOUs.get(0).selectedIndex = -1;
+        return false;
+    });
+</script>

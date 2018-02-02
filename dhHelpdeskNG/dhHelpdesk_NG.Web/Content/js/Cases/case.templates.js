@@ -975,6 +975,7 @@ function LoadTemplate(id) {
             if (template.SplitToCaseSolution_Id != null) {
                 $("#SplitToCaseSolution_Id").val(template.SplitToCaseSolution_Id);
             }
+
             if (template.Text_External != "") {
                 $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', true);
             }

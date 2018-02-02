@@ -334,7 +334,7 @@ namespace DH.Helpdesk.Services.Services
                     if (!calendarWGRestriction)
                         query = query.RestrictByWorkingGroups(this.workContext);
                     else
-                        query = query.RestrictByWorkingGroupsOnyRead(this.workContext);
+                        query = query.RestrictByWorkingGroupsOnlyRead(this.workContext);
                 }
                 
                 return query.GetForStartPage(customers, count, forStartPage)

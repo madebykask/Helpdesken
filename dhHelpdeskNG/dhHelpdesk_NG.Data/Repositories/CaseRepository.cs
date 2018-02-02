@@ -14,12 +14,14 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
     using DH.Helpdesk.Domain;
     using Mappers;
-    //using System.Data;
+    using System.Linq.Expressions;
+    using System.Data.Linq.SqlClient;
 
     public interface ICaseRepository : IRepository<Case>
     {
         Case GetCaseById(int id, bool markCaseAsRead = false);
         Case GetCaseByGUID(Guid GUID);
+        int GetCaseIdByEmailGUID(Guid GUID);
         Case GetCaseByEmailGUID(Guid GUID);
         Case GetDetachedCaseById(int id);
         Case GetDetachedCaseIncludesById(int id);
@@ -57,8 +59,9 @@ namespace DH.Helpdesk.Dal.Repositories
         MyCase[] GetMyCases(int userId, int? count = null);
         IList<Case> GetProblemCases(int problemId);
         IList<int> GetCasesIdsByType(int caseTypeId);
-
+        StateSecondary GetCaseSubStatus(int caseId);
         List<Case> GetTop100CasesToTest();
+        Case GetCaseQuickOpen(UserOverview user, Expression<Func<Case, bool>> casePermissionFilter, string searchFor);
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -116,6 +119,14 @@ namespace DH.Helpdesk.Dal.Repositories
             return cases;
         }
 
+        public StateSecondary GetCaseSubStatus(int caseId)
+        {
+            var stateSecondary = 
+                DataContext.Cases.Where(x => x.Id == caseId).Select(x => x.StateSecondary).FirstOrDefault();
+
+            return stateSecondary;
+        }
+
         public DynamicCase GetDynamicCase(int id)
         {
             var query = from f in this.DataContext.Forms
@@ -144,6 +155,14 @@ namespace DH.Helpdesk.Dal.Repositories
                                               .FirstOrDefault();
 
             return caseEntity;
+        }
+
+        public int GetCaseIdByEmailGUID(Guid GUID)
+        {
+            var caseId = DataContext.EmailLogs.Where(e => e.EmailLogGUID == GUID && e.CaseHistory_Id > 0)
+                                              .Select(e => e.CaseHistory.Case_Id)
+                                              .FirstOrDefault();
+            return caseId;
         }
 
         public Case GetCaseByEmailGUID(Guid GUID)
@@ -473,6 +492,28 @@ namespace DH.Helpdesk.Dal.Repositories
         public List<Case> GetTop100CasesToTest()
         {
             return DataContext.Cases.Take(100).ToList();            
+        }
+
+        public Case GetCaseQuickOpen(UserOverview currentUser, Expression<Func<Case, bool>> casePermissionFilter, string searchFor)
+        {
+
+            IQueryable<Case> query;
+
+            query = from _case in DataContext.Set<Case>()
+                    from user in _case.Customer.Users
+                    where (_case.CaseNumber.ToString() == searchFor.Replace("#", "")) && user.Id == currentUser.Id
+                    orderby _case.RegTime descending
+                    select _case;
+
+            if (casePermissionFilter != null)
+            {
+                query = query.Where(casePermissionFilter);
+            }
+
+            if (query.Any())
+                return query.FirstOrDefault();
+
+            return null;
         }
     }
 }

@@ -101,6 +101,7 @@
     <Compile Include="CaseSolutionConditionPropertyEntity.cs" />
     <Compile Include="CaseSolutionSchedule.cs" />
     <Compile Include="CaseSolutionSearch.cs" />
+    <Compile Include="CaseSolution\CaseSolution_SplitToCaseSolutionEntity.cs" />
     <Compile Include="Cases\CaseExtraFollower.cs" />
     <Compile Include="Cases\CaseFollowUp.cs" />
     <Compile Include="Cases\CaseSection.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="Computers\ComputerType.cs" />
     <Compile Include="CaseSource.cs" />
     <Compile Include="CaseIsAbout.cs" />
+    <Compile Include="Condition\ConditionEntity.cs" />
     <Compile Include="Computers\ComputerUserCategory.cs" />
     <Compile Include="EmailLogAttempt.cs" />
     <Compile Include="EmailSendStatus.cs" />

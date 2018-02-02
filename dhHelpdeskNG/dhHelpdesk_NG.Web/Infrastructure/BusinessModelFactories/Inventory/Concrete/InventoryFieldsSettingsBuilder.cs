@@ -50,6 +50,8 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var place = MapInventoryFieldSettingModel(defaultFieldSettingsModel.PlaceFieldSettingModel);
             var workstation = MapInventoryFieldSettingModel(defaultFieldSettingsModel.WorkstationFieldSettingModel);
             var info = MapInventoryFieldSettingModel(defaultFieldSettingsModel.InfoFieldSettingModel);
+            var createdDate = MapInventoryFieldSettingModel(defaultFieldSettingsModel.CreatedDateFieldSettingModel);
+            var changedDate = MapInventoryFieldSettingModel(defaultFieldSettingsModel.ChangedDateFieldSettingModel);
 
             var defaultFieldSettings = new DefaultFieldSettings(
                 department,
@@ -62,7 +64,9 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 purchaseDate,
                 place,
                 workstation,
-                info);
+                info,
+                createdDate,
+                changedDate);
             return defaultFieldSettings;
         }
 

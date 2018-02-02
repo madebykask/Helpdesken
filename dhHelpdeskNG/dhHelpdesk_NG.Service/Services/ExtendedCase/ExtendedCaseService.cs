@@ -91,16 +91,24 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
             return expandedPath;
         }
 
-        public ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, string userID)
+        public ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, string userID, int? extendedCaseFormId = null)
         {
-            return _extendedCaseDataRepository.CopyExtendedCaseToCase(extendedCaseDataID, caseID, userID);
+            return _extendedCaseDataRepository.CopyExtendedCaseToCase(extendedCaseDataID, caseID, userID, extendedCaseFormId);
         }
 
         public ExtendedCaseDataModel GetExtendedCaseFromCase(int caseID)
         {
             return _extendedCaseDataRepository.GetExtendedCaseDataByCaseId(caseID);
         }
+
+        public ExtendedCaseDataEntity GetExtendedCaseData(Guid uniqueId)
+        {
+            return _extendedCaseDataRepository.GetExtendedCaseData(uniqueId);
+        }
+
+        public int GetCaseIdByExtendedCaseGuid(Guid uniqueId)
+        {
+            return _extendedCaseDataRepository.GetCaseIdByExtendedCaseGuid(uniqueId);
+        }
     }
-
-
 }

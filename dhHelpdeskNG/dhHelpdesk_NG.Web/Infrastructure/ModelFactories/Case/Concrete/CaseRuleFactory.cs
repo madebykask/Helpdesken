@@ -10,6 +10,7 @@ using DH.Helpdesk.Web.Models;
 using DH.Helpdesk.Common.Enums.Settings;
 using DH.Helpdesk.Services.Services;
 using System;
+using DH.Helpdesk.BusinessData.Enums.Users;
 
 namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
 {
@@ -225,7 +226,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
             };
 
             var regions = _regionService.GetRegions(customerId);
-            var defaultRegion = regions.Where(r => r.IsDefault != 0 && r.IsActive != 0).FirstOrDefault();
+            var defaultRegion = regions.FirstOrDefault(r => r.IsDefault != 0 && r.IsActive != 0);
             caseBasicInfo.Regions = new BasicMultiItemField()
             {
                 Selected = new FieldItem(currentData.Region_Id?.ToString(), string.Empty),
@@ -382,7 +383,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
             };
 
             var caseTypes = _caseTypeService.GetAllCaseTypes(customerId);
-            var defaultCaseType = caseTypes.Where(c => c.IsDefault != 0 && c.IsActive != 0).FirstOrDefault();
+            var defaultCaseType = caseTypes.FirstOrDefault(c => c.IsDefault != 0 && c.IsActive != 0);
             caseBasicInfo.CaseTypes = new BasicMultiItemField()
             {
                 Selected = new FieldItem(currentData.CaseType_Id?.ToString(), string.Empty),
@@ -541,7 +542,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
             #region Other Info           
 
             var workinGroups = _workingGroupService.GetWorkingGroups(customerId, false);
-            var defaultWG = workinGroups.Where(w => w.IsDefault != 0 && w.IsActive != 0).FirstOrDefault();
+            var defaultWG = workinGroups.FirstOrDefault(w => w.IsDefault != 0 && w.IsActive != 0);
             caseBasicInfo.WorkingGroups = new BasicMultiItemField()
             {
                 Selected = new FieldItem(currentData.WorkingGroup_Id?.ToString(), string.Empty),
@@ -567,7 +568,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                                                                 string.Format("{0} {1}", a.FirstName, a.SurName) : string.Format("{0} {1}", a.SurName, a.FirstName)),
                                                          a.IsActive != 0)
                               {
-                                  ForeignKeyValue1 = string.Join(",", a.UserWorkingGroups.Where(w => w.UserRole == 2)
+                                  ForeignKeyValue1 = string.Join(",", a.UserWorkingGroups.Where(w => w.UserRole == WorkingGroupUserPermission.ADMINSTRATOR && w.IsMemberOfGroup)
                                                                                         .Select(w => w.WorkingGroup_Id)
                                                                                         .ToArray())
                               })
@@ -577,7 +578,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
 
 
             var priorities = _priorityService.GetPriorities(customerId);
-            var defaultPrio = priorities.Where(p => p.IsDefault != 0 && p.IsActive != 0).FirstOrDefault();
+            var defaultPrio = priorities.FirstOrDefault(p => p.IsDefault != 0 && p.IsActive != 0);
             caseBasicInfo.Priorities = new BasicMultiItemField()
             {
                 Selected = new FieldItem(currentData.Priority_Id?.ToString(), string.Empty),
@@ -593,7 +594,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
             };
 
             var statuses = _statusService.GetStatuses(customerId);
-            var defaultStatus = statuses.Where(s => s.IsDefault != 0 && s.IsActive != 0).FirstOrDefault();
+            var defaultStatus = statuses.FirstOrDefault(s => s.IsDefault != 0 && s.IsActive != 0);
             caseBasicInfo.Status = new BasicMultiItemField()
             {
                 Selected = new FieldItem(currentData.Status_Id?.ToString(), string.Empty),
@@ -609,7 +610,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
             };
 
             var subStatuses = _stateSecondaryService.GetStateSecondaries(customerId);
-            var defaultSubStatus = statuses.Where(s => s.IsDefault != 0 && s.IsActive != 0).FirstOrDefault();
+            var defaultSubStatus = statuses.FirstOrDefault(s => s.IsDefault != 0 && s.IsActive != 0);
             caseBasicInfo.SubStatus = new BasicMultiItemField()
             {
                 Selected = new FieldItem(currentData.StateSecondary_Id?.ToString(), string.Empty),
@@ -793,7 +794,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
 
             if (ruleMode == CaseRuleMode.TemplateUserChangeMode)
             {                
-                var setting = templateFieldSettings.Where(s => s.CaseSolutionField == templateField).SingleOrDefault();
+                var setting = templateFieldSettings.SingleOrDefault(s => s.CaseSolutionField == templateField);
                 if (setting != null)
                     mode = setting.CaseSolutionMode;
 
@@ -816,7 +817,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 // Check template behavior if exists
                 if (templateFieldSettings != null && templateFieldSettings.Any())
                 {
-                    var templateSetting = templateFieldSettings.Where(s => s.CaseSolutionField == templateField).SingleOrDefault();
+                    var templateSetting = templateFieldSettings.SingleOrDefault(s => s.CaseSolutionField == templateField);
                     if (templateSetting != null)
                     {
                         checkedTemplateSetting = true;

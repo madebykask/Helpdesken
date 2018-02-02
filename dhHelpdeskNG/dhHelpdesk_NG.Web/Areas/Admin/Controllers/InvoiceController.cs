@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DH.Helpdesk.BusinessData.Models.Grid;
+using DH.Helpdesk.BusinessData.Models.Shared;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
@@ -29,14 +30,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         private readonly ICaseInvoiceSettingsService caseInvoiceSettingsService;
 
+        private readonly IDepartmentService departmentService;
+
+
 
         public InvoiceController(
-                IMasterDataService masterDataService, 
-                ICustomerService customerService, 
-                ICaseInvoiceFactory caseInvoiceFactory, 
-                IProductAreaService productAreaService, 
-                IInvoiceArticleService invoiceArticleService, 
-                ICaseInvoiceSettingsService caseInvoiceSettingsService)
+                IMasterDataService masterDataService,
+                ICustomerService customerService,
+                ICaseInvoiceFactory caseInvoiceFactory,
+                IProductAreaService productAreaService,
+                IInvoiceArticleService invoiceArticleService,
+                ICaseInvoiceSettingsService caseInvoiceSettingsService,
+                IDepartmentService departmentService)
             : base(masterDataService)
         {
             this.customerService = customerService;
@@ -44,6 +49,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this.productAreaService = productAreaService;
             this.invoiceArticleService = invoiceArticleService;
             this.caseInvoiceSettingsService = caseInvoiceSettingsService;
+            this.departmentService = departmentService;
         }
 
         [HttpGet]
@@ -55,7 +61,28 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             {
                 settings = new CaseInvoiceSettings(customerId);
             }
-            
+
+            var departments = departmentService.GetDepartments(customerId, Common.Enums.ActivationStatus.All);
+            var selectedDepartmentsModel = new CustomSelectList();
+            var disabledDepartmentsModel = new CustomSelectList();
+            List<ListItem> selectedDepartments;
+
+            var disabledDepartments = departments.Where(x => x.DisabledForOrder).Select(x => new ListItem(x.Id.ToString(), x.DepartmentName, Convert.ToBoolean(x.IsActive))).ToList();
+            if (!disabledDepartments.Any())
+            {
+                disabledDepartments = departments.Where(x => !x.DisabledForOrder).Select(x => new ListItem(x.Id.ToString(), x.DepartmentName, Convert.ToBoolean(x.IsActive))).ToList();
+                selectedDepartments = departments.Where(x => x.DisabledForOrder).Select(x => new ListItem(x.Id.ToString(), x.DepartmentName, Convert.ToBoolean(x.IsActive))).ToList();
+            }
+            else
+            {
+                selectedDepartments = departments.Where(x => !x.DisabledForOrder).Select(x => new ListItem(x.Id.ToString(), x.DepartmentName, Convert.ToBoolean(x.IsActive))).ToList();
+            }
+            selectedDepartmentsModel.Items.AddItems(selectedDepartments);
+            disabledDepartmentsModel.Items.AddItems(disabledDepartments);
+
+            settings.AvailableDepartments = selectedDepartmentsModel;
+            settings.DisabledDepartments = disabledDepartmentsModel;
+
             var model = this.caseInvoiceFactory.GetSettingsModel(customer, settings);
             return this.View(model);
         }
@@ -227,10 +254,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return this.RedirectToAction("Index", new { customerId = model.Settings.CustomerId });
         }
 
-        public ActionResult GetArticleProductAreaList(InvoiceArticleProductAreaSelectedFilter filter)
+        public ActionResult GetArticleProductAreaList(InvoiceArticleProductAreaSelectedFilterJS jsfilter)
         {
             var ResolveName = true;
-
+            var filter = jsfilter.ToModel();
             var res = new List<InvoiceArticleProductAreaIndexRowModel>();
 
             var articles = invoiceArticleService.GetActiveArticles(filter.CustomerId);
@@ -269,14 +296,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             {
                 if (dir == SortingDirection.Asc)
                 {
-                    res = res.OrderBy(x => x.InvoiceArticleNumber)
+                    res = res.OrderBy(x => x.InvoiceArticleNumber  == null ? 
+                                        0 : (x.InvoiceArticleNumber.Replace(".", "") == "" ?
+                                        0 : int.Parse(x.InvoiceArticleNumber.Replace(".", ""))))
                             .ThenBy(x => x.InvoiceArticleName)
                             .ThenBy(x => x.InvoiceArticleNameEng)
                             .ToList();
                 }
                 else
                 {
-                    res = res.OrderByDescending(x => x.InvoiceArticleNumber)
+                    res = res.OrderByDescending(x => x.InvoiceArticleNumber == null ?
+                                        0 : (x.InvoiceArticleNumber.Replace(".", "") == "" ?
+                                        0 : int.Parse(x.InvoiceArticleNumber.Replace(".", ""))))
                             .ThenByDescending(x => x.InvoiceArticleName)
                             .ThenByDescending(x => x.InvoiceArticleNameEng)
                             .ToList();

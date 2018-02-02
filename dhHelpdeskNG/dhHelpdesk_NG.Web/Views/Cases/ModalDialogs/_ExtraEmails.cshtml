@@ -1,0 +1,68 @@
+﻿
+@using DH.Helpdesk.Web
+@model DH.Helpdesk.Web.Models.Shared.SendToDialogModel
+
+@Scripts.Render(BundleConfig.ScriptNames.UserSearchCommon)
+
+<script type="text/javascript">
+    $(function() {
+        document.parameters = {
+            emailNotValid: '@Translation.GetForJS("E-postadress är inte giltig.")',
+            emailAlreadyAdded: '@Translation.GetForJS("E-postadress redan tillagd.")',
+            adminLabel: '@Translation.GetForJS("Handläggare")',
+            emailLabel: '@Translation.GetForJS("E-postgrupp")',
+            initLabel: '@Translation.GetForJS("Anmälare")',
+            wgLabel: '@Translation.GetForJS("Driftgrupp")'
+        }
+        var admins = @Html.SerializeObjectToJson(Model.Administrators.Items);
+        var emailGroups = @Html.SerializeObjectToJson(Model.EmailGroups.Items);
+        var workingGroups = @Html.SerializeObjectToJson(Model.WorkingGroups.Items);
+        InitExtraEmailsSearch(admins, emailGroups, workingGroups);
+    });
+</script>
+
+<div id="extra_emails_popup" role="dialog" class="modal fade" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h5>@Translation.GetCoreTextTranslation("Välj E-post")</h5>
+            </div>
+            <div class="modal-body overflow-visible">
+                <div id="extraEmailsModalInput" contenteditable="true" class="case-send-emails-div case-popup-div"></div>
+            </div>
+            <div class="modal-body overflow-visible case-dropdown-area">
+                <div id="extraEmails_emailGroupsDiv" class="case-dropdown-div">
+                    @Translation.GetCoreTextTranslation("E-postgrupp")<br/>
+                    <select id="extraEmailsEmailGroupsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
+                        @foreach (var emailGroup in Model.EmailGroups)
+                        {
+                            <option value="@emailGroup.Value">@emailGroup.Text</option>
+                        }
+                    </select>
+                </div>
+                <div id="extraEmails_workingGroupsDiv" class="case-dropdown-div">
+                    @Translation.GetCoreTextTranslation("Driftgrupp")<br/>
+                    <select id="extraEmailsWorkingGroupsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
+                        @foreach (var workingGroup in Model.WorkingGroups)
+                        {
+                            <option value="@workingGroup.Value">@workingGroup.Text</option>
+                        }
+                    </select>
+                </div>
+                <div id="extraEmails_adminsDiv" class="case-dropdown-div">
+                    @Translation.GetCoreTextTranslation("Handläggare")<br/>
+                    <select id="extraEmailsAdministratorsDropdown" class="case-usersearch-multiselect multiselect-search" multiple="multiple">
+                        @foreach (var administrator in Model.Administrators)
+                        {
+                            <option value="@administrator.Value">@administrator.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="case-followers-button-done">
+                    <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.GetCoreTextTranslation("OK")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

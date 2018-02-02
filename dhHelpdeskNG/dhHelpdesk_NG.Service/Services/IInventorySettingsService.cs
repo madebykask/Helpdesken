@@ -21,7 +21,7 @@ namespace DH.Helpdesk.Services.Services
 
         ComputerFieldsSettings GetWorkstationFieldSettingsForEdit(int customerId, int languageId);
 
-        ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId);
+        ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false);
 
         ComputerFieldsSettingsOverview GetWorkstationFieldSettingsOverview(int customerId, int languageId);
 
@@ -33,7 +33,7 @@ namespace DH.Helpdesk.Services.Services
 
         ServerFieldsSettings GetServerFieldSettingsForEdit(int customerId, int languageId);
 
-        ServerFieldsSettingsForModelEdit GetServerFieldSettingsForModelEdit(int customerId, int languageId);
+        ServerFieldsSettingsForModelEdit GetServerFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false);
 
         ServerFieldsSettingsOverview GetServerFieldSettingsOverview(int customerId, int languageId);
 
@@ -41,7 +41,7 @@ namespace DH.Helpdesk.Services.Services
 
         PrinterFieldsSettings GetPrinterFieldSettingsForEdit(int customerId, int languageId);
 
-        PrinterFieldsSettingsForModelEdit GetPrinterFieldSettingsForModelEdit(int customerId, int languageId);
+        PrinterFieldsSettingsForModelEdit GetPrinterFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false);
 
         PrinterFieldsSettingsOverview GetPrinterFieldSettingsOverview(int customerId, int languageId);
 
@@ -59,7 +59,7 @@ namespace DH.Helpdesk.Services.Services
 
         InventoryFieldSettingsForEditResponse GetInventoryFieldSettingsForEdit(int inventoryTypeId);
 
-        InventoryFieldSettingsForModelEditResponse GetInventoryFieldSettingsForModelEdit(int inventoryTypeId);
+        InventoryFieldSettingsForModelEditResponse GetInventoryFieldSettingsForModelEdit(int inventoryTypeId, bool isReadonly = false);
 
         InventoryFieldSettingsOverviewResponse GetInventoryFieldSettingsOverview(int inventoryTypeId);
 

@@ -6,15 +6,15 @@
         || Model.OperatingSystemFieldsModel.RegistrationCode.Show
         || Model.OperatingSystemFieldsModel.ProductKey.Show)
 {
-    <h4>@Translation.Get("Operativsystem")</h4>
+    <h4>@Translation.GetCoreTextTranslation("Operativsystem")</h4>
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @Html.EditorFor(m => m.OperatingSystemFieldsModel.OperatingSystemId, "NotReadonlyFields/List", new { Source = Model.OperatingSystems })
-                @Html.EditorFor(m => m.OperatingSystemFieldsModel.Version, "NotReadonlyFields/Text")
-                @Html.EditorFor(m => m.OperatingSystemFieldsModel.ServicePack, "NotReadonlyFields/Text")
-                @Html.EditorFor(m => m.OperatingSystemFieldsModel.RegistrationCode, "NotReadonlyFields/Text")
-                @Html.EditorFor(m => m.OperatingSystemFieldsModel.ProductKey, "NotReadonlyFields/Text")
+                @Html.EditorFor(m => m.OperatingSystemFieldsModel.OperatingSystemId, "Fields/List", new { Source = Model.OperatingSystems })
+                @Html.EditorFor(m => m.OperatingSystemFieldsModel.Version, "Fields/Text")
+                @Html.EditorFor(m => m.OperatingSystemFieldsModel.ServicePack, "Fields/Text")
+                @Html.EditorFor(m => m.OperatingSystemFieldsModel.RegistrationCode, "Fields/Text")
+                @Html.EditorFor(m => m.OperatingSystemFieldsModel.ProductKey, "Fields/Text")
             </table>
         </div>
     </div>

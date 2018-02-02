@@ -1,12 +1,16 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
+﻿
+namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
 {
     internal sealed class Configuration : IConfiguration
     {
-        public Configuration(IApplicationConfiguration application)
+        public Configuration(IApplicationConfiguration application, IAdfsConfiguration adfsConfiguration)
         {
-            this.Application = application;
+            Application = application;
+            Adfs = adfsConfiguration;
         }
 
         public IApplicationConfiguration Application { get; private set; }
+
+        public IAdfsConfiguration Adfs { get; private set; }
     }
 }

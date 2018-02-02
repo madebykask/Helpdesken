@@ -218,6 +218,12 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
             return models;
         }
 
+        public int GetIdByName(string serverName, int customerId)
+        {
+            var server = DbSet.FirstOrDefault(x => x.Customer_Id == customerId && x.ServerName.Equals(serverName));
+            return server?.Id ?? 0;
+        }
+
         private static void Map(Helpdesk.Domain.Servers.Server entity, Server businessModel)
         {
             entity.ServerName = businessModel.GeneralFields.Name ?? string.Empty;

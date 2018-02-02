@@ -409,7 +409,8 @@
                 mailTemplate,
                 participants,
                 operationContext.CustomerId,
-                extraEmails);
+                extraEmails,
+                operationContext.LanguageId);
 
             this.SendMails(mails, operationContext.DateAndTime, operationContext.CustomerId);
         }
@@ -429,7 +430,8 @@
                 mailTemplate,
                 participants,
                 operationContext.CustomerId,
-                extraEmails);
+                extraEmails,
+                operationContext.LanguageId);
 
             this.SendMails(mails, operationContext.DateAndTime, operationContext.CustomerId);
         }
@@ -439,6 +441,7 @@
             var id = 0;
             var caseId = 0;
             var caption = "";
+            decimal caseNumber = 0;
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
@@ -447,18 +450,19 @@
                 var circular =
                     circularPartRepository.GetAll()
                         .GetByGuid(guid)
-                        .Select(x => new { id = x.QuestionnaireCircular.Questionnaire_Id, caseId = x.Case_Id, caption = x.Case.Caption })
+                        .Select(x => new { id = x.QuestionnaireCircular.Questionnaire_Id, caseId = x.Case_Id, caption = x.Case.Caption, caseNumber = x.Case.CaseNumber })
                         .SingleOrDefault();
                 if (circular != null)
                 {
                     id = circular.id;
                     caseId = circular.caseId;
                     caption = circular.caption;
+                    caseNumber = circular.caseNumber;
                 }
             }
 
             QuestionnaireOverview overview = GetQuestionnaireEntity(id, languageId);
-            return new QuestionnaireDetailedOverview { Questionnaire = overview, CaseId = caseId, Caption = caption };
+            return new QuestionnaireDetailedOverview { Questionnaire = overview, CaseId = caseId, Caption = caption, CaseNumber = caseNumber};
         }
 
         public QuestionnaireOverview GetQuestionnaire(int id, OperationContext operationContext)
@@ -688,9 +692,11 @@
             Guid guid,
             string caseNumber,
             string caseCaption,
-            string caseDescription)
+            string caseDescription,
+            int customerId,
+            int languageId)
         {
-            string path = string.Format("{0}{1}", actionAbsolutePath, guid);
+            string path = string.Format("{0}{1}&customerId={2}&languageId={3}", actionAbsolutePath, guid, customerId, languageId);
             path = string.Format("<a href=\"{0}\">{0}</a>", path);
 
             var markValues = new EmailMarkValues();
@@ -809,7 +815,8 @@
             MailTemplate mailTemplate,
             List<BusinessLogic.MapperData.Participant> participants,
             int customerId,
-            List<string> emails)
+            List<string> emails,
+            int languageId)
         {
             var mails = new List<QuestionnaireMailItem>();
 
@@ -827,7 +834,9 @@
                             connectedCase.Guid,
                             connectedCase.CaseNumber.ToString(),
                             connectedCase.Caption,
-                            connectedCase.CaseDescription)
+                            connectedCase.CaseDescription,
+                            customerId,
+                            languageId)
                     let mail = this.mailTemplateFormatter.Format(mailTemplate, markValues)
                     select new QuestionnaireMailItem(connectedCase.Guid, mailFrom, connectedCase.Email, mail));
 
@@ -841,7 +850,9 @@
                             Guid.Empty,
                             string.Empty,
                             string.Empty,
-                            string.Empty)
+                            string.Empty,
+                            customerId,
+                            languageId)
                     let mail = this.mailTemplateFormatter.Format(mailTemplate, markValues)
                     select new QuestionnaireMailItem(Guid.Empty, mailFrom, email, mail));
                 }

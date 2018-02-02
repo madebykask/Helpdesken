@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using System;
+using DH.Helpdesk.Domain.ExtendedCaseEntity;
+
+namespace DH.Helpdesk.Services.Services
 {
     using BusinessData.Models.Case;
     using BusinessData.Models.ExtendedCase;
@@ -7,8 +10,10 @@
     {
         ExtendedCaseDataModel GenerateExtendedFormModel(InitExtendedForm initData, out string lastError);
 
-		ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, string userID);
+		ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, string userID, int? extendedCaseFormId = null);
+        
+        ExtendedCaseDataModel GetExtendedCaseFromCase(int id);
 
-		ExtendedCaseDataModel GetExtendedCaseFromCase(int id);
-	}
+        int GetCaseIdByExtendedCaseGuid(Guid uniqueId);
+    }
 }

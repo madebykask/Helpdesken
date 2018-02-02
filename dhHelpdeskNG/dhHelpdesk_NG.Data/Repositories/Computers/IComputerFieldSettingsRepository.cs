@@ -12,7 +12,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
 
         ComputerFieldsSettings GetFieldSettingsForEdit(int customerId, int languageId);
 
-        ComputerFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId);
+        ComputerFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false);
 
         ComputerFieldsSettingsOverview GetFieldSettingsOverview(int customerId, int languageId);
 

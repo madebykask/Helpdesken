@@ -1,4 +1,5 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿
+namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using System.Web.Mvc;
     using DHDomain=DH.Helpdesk.Domain;
@@ -11,6 +12,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Attributes;
     using System.Collections.Generic;
     using System.Web.Configuration;
     
@@ -21,6 +23,7 @@
          private readonly ICustomerService _customerService;
          private readonly ISettingService _settingService;
          private readonly ILanguageService _languageService;
+        private readonly ICaseSolutionService _caseSolutionService;
 
         /// <summary>
         /// The work context.
@@ -31,13 +34,15 @@
             ICustomerService customerService,
             ISettingService settingService,
             ILanguageService languageService,
-            IMasterDataService masterDataService, IWorkContext workContext)
+            IMasterDataService masterDataService, IWorkContext workContext,
+            ICaseSolutionService caseSolutionService)
             : base(masterDataService)
         {
             this._customerService = customerService;
             this._settingService = settingService;
             this._languageService = languageService;
             this.workContext = workContext;
+            this._caseSolutionService = caseSolutionService;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -262,7 +267,7 @@
                     reportList[index].ActiveOnPage = report.ActiveOnPage;
             }
 
-             #endregion
+            #endregion
 
             #region Model
 
@@ -274,7 +279,12 @@
                 MinimumPasswordLength = sl,
                 PasswordHistory = sli,
                 Setting = this._settingService.GetCustomerSetting(customer.Id) ?? new DHDomain.Setting(),
-                
+                CaseSolutionList = this._caseSolutionService.GetCaseSolutions(customer.Id).Where(x => x.Status == 1).Select(x => new SelectListItem
+                {
+                    Text = Translation.Get(x.Name),
+                    Value = x.Id.ToString(),
+                }).ToList(),
+
             };
 
             model.Setting.LDAPPassword = WebConfigurationManager.AppSettings["dh_maskedpassword"].ToString();

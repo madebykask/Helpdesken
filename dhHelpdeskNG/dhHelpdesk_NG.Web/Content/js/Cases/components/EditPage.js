@@ -300,6 +300,8 @@ EditPage.prototype.loadExtendedCase = function () {
     var formParameters = $_ex_Container.contentWindow.getFormParameters();
     formParameters.languageId = self.Current_EC_LanguageId;
     formParameters.extendedCaseGuid = self.Current_EC_Guid;
+    formParameters.caseId = self.p.currentCaseId;
+    formParameters.applicationType = self.p.applicationType;
 
     var isLockedValue = window.parameters.isCaseLocked || '';
     formParameters.isCaseLocked = isLockedValue.toLowerCase() === 'true'; //important to pass boolean type value
@@ -437,7 +439,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
         return;
     }
 
-    var fieldData = $_ex_Container.contentWindow.getCaseValues()
+    var fieldData = $_ex_Container.contentWindow.getCaseValues();
     if (fieldData == undefined) {
         return;
     }
@@ -616,6 +618,12 @@ EditPage.prototype.refreshCasePage = function (updatedInfo) {
     $('#' + _caseFields.PersonsCellphone).val(updatedInfo.PersonsCellphone);
     $('#' + _caseFields.Place).val(updatedInfo.Place);
     $('#' + _caseFields.CostCentre).val(updatedInfo.CostCentre);
+    
+    //state (status)
+    $('#' + _caseFields.SubStatusId).val(updatedInfo.StateSecondary_Id);
+    var subStateName$ = $('#' + _caseFields.SubStatusName);
+    if (subStateName$.length && updatedInfo.SubStateName)
+        subStateName$.val(updatedInfo.SubStateName);
 
     $('#' + _caseFields.PlanDate).datepicker({
         format: updatedInfo.DateFormat.toLowerCase(),
@@ -1342,7 +1350,7 @@ EditPage.prototype.init = function (p) {
     EditPage.prototype.Current_EC_Guid = p.extendedCaseGuid;
     EditPage.prototype.Current_EC_LanguageId = p.extendedCaseLanguageId;
     EditPage.prototype.Current_EC_Path = p.extendedCasePath;
-
+    
 
     EditPage.prototype.extendedSections = p.extendedSections;
 

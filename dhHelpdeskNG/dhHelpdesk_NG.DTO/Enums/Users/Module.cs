@@ -69,6 +69,7 @@ namespace DH.Helpdesk.BusinessData.Enums.Users
         /// </summary>
         ChangeManagement = 11,
 
-        Cases = 12
+        Cases = 12,
+        CaseQuickOpen = 13
     }
 }

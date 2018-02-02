@@ -18,6 +18,7 @@ using DH.Helpdesk.Services.Services.Orders;
 using DH.Helpdesk.Dal.Infrastructure.Context;
 using DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders;
 using DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders.Concrete;
+using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.SelfService.Infrastructure.Extensions;
 using DH.Helpdesk.SelfService.Infrastructure.Tools;
 using DH.Helpdesk.SelfService.Models.Orders;
@@ -50,6 +51,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly IDocumentService _documentService;
 
         public OrdersController(IMasterDataService masterDataService,
+            ISelfServiceConfigurationService configurationService,
             ICaseSolutionService caseSolutionService,
             IOrdersService ordersService,
             IOrdersModelFactory ordersModelFactory,
@@ -66,7 +68,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             TemporaryIdProvider temporaryIdProvider,
             IOrderTypeService orderTypeService,
             IDocumentService documentService)
-            : base(masterDataService, caseSolutionService)
+            : base(configurationService, masterDataService, caseSolutionService)
         {
             _ordersService = ordersService;
             _ordersModelFactory = ordersModelFactory;

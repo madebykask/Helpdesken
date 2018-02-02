@@ -2,6 +2,7 @@
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Web.Enums
 @model DH.Helpdesk.Web.Areas.Reports.Models.ReportService.ReportServiceOverviewModel
 <script type="text/javascript">
     window.Params = {
@@ -35,7 +36,7 @@
                                     {
                                         var reportId = int.Parse(r.Id);                
                                         <option value="@r.Id" data-id="@r.Id" @reportId.IdIsSelected(selectedItems) data-identity="@r.Value">
-                                            @r.Value
+                                            @Translation.GetMasterDataTranslation(r.Value)
                                         </option>
                                     }
                                     @foreach (var f in Model.ReportFavorites)
@@ -165,19 +166,33 @@
                                     @Translation.GetCoreTextTranslation("Gruppera")
                                 </td>
                                 <td>
-                                    <select id="lstfilterReportCategory" name="lstfilterCategory" data-field="reportcategories" style="width: 300px;" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" @(Model.ReportFilter.ReportCategory == null ? " visible: none" : "") >
+                                    <select id="lstfilterReportCategory" name="lstfilterCategory" data-field="reportcategories" style="width: 300px;" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" @(Model.ReportFilter.ReportCategory == null ? " visible: none" : "")>
                                         @if (Model.ReportFilter.ReportCategory != null)
                                         {
                                             foreach (var r in Model.ReportFilter.ReportCategory.Items)
                                             {
                                                 int curId = 0;
                                                 int.TryParse(r.Id, out curId);
-                                                <option value="@r.Id" @(r.IsActive ? "" : "class='DisabledChosen'") >
-                                                    @r.Value
+                                                <option value="@r.Id" @(r.IsActive ? "" : "class='DisabledChosen'")>
+                                                        @GetReportFormTranslation(r.Value)
                                                 </option>
-                                             }
+                                            }
                                         }
                                     </select>
+                                    <select id="lstfilterReportCategoryRt" name="lstfilterCategoryRt" data-field="reportcategoriesrt" style="width: 300px;" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" @(Model.ReportFilter.ReportCategoryRt == null ? " visible: none" : "")>
+                                        @if (Model.ReportFilter.ReportCategoryRt != null)
+                                        {
+                                            foreach (var r in Model.ReportFilter.ReportCategoryRt.Items)
+                                            {
+                                                int curId = 0;
+                                                int.TryParse(r.Id, out curId);
+                                                <option value="@r.Id" @(r.IsActive ? "" : "class='DisabledChosen'")>
+                                                        @GetReportFormTranslation(r.Value)
+                                                </option>
+                                            }
+                                        }
+                                    </select>
+
                                     <select id="lstfilterReportCategory_repl" style="width: 300px;" @(Model.ReportFilter.ReportCategory == null ? "" : "visible: none") disabled>
                                     </select>
 
@@ -343,6 +358,46 @@
 
 }
 
+@functions {
+    private static string GetReportFormTranslation(string value)
+    {
+        if (value.Equals(ReportItemNames.RegistrationDate))
+            return Translation.GetMasterDataTranslation(ReportItemNames.RegistrationDate);
+        if (value.Equals(ReportItemNames.RegistrationYear))
+            return Translation.GetMasterDataTranslation(ReportItemNames.RegistrationYear);
+        if (value.Equals(ReportItemNames.RegistrationMonth))
+            return Translation.GetMasterDataTranslation(ReportItemNames.RegistrationMonth);
+        if (value.Equals(ReportItemNames.RegistrationWeekday))
+            return Translation.GetMasterDataTranslation(ReportItemNames.RegistrationWeekday);
+        if (value.Equals(ReportItemNames.RegistrationHour))
+            return Translation.GetMasterDataTranslation(ReportItemNames.RegistrationHour);
+        if (value.Equals(ReportItemNames.LogNoteDate))
+            return Translation.GetMasterDataTranslation(ReportItemNames.LogNoteDate);
 
+        var defaultValue = string.Empty;
+        if (value.Equals(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()))
+            defaultValue = "Case Type";
+        if (value.Equals(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()))
+            defaultValue = "Working Group";
+        if (value.Equals(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()))
+            defaultValue = "SubStatus";
+        if (value.Equals(GlobalEnums.TranslationCaseFields.Department_Id.ToString()))
+            defaultValue = "Department";
+        if (value.Equals(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()))
+            defaultValue = "Priority";
+        if (value.Equals(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()))
+            defaultValue = "Product Area";
+        if (value.Equals(GlobalEnums.TranslationCaseFields.FinishingDate.ToString()))
+            defaultValue = "Closing Date";
+        if (value.Equals(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()))
+            defaultValue = "Source";
+        if (value.Equals(GlobalEnums.TranslationCaseFields.CaseNumber.ToString()))
+            defaultValue = "Case Number";
+        if (value.Equals(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()))
+            defaultValue = "Administrator";
+        var translation = Translation.GetForCase(value, SessionFacade.CurrentCustomer.Id);
+        return !string.IsNullOrEmpty(translation) ? translation : defaultValue;
+    }
+}
 
 

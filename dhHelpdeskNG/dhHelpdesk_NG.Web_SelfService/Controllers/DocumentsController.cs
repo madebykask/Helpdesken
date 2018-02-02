@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.SelfService.Models.Documents;
 
 namespace DH.Helpdesk.SelfService.Controllers
@@ -20,10 +21,11 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly IDocumentService _documentsService;        
     
         public DocumentsController(IMasterDataService masterDataService,
-                                   ICustomerService customerService,
+                                   ICustomerService customerService, 
+                                   ISelfServiceConfigurationService configurationService,
                                    ICaseSolutionService caseSolutionService,
                                    IDocumentService documentsService)
-                : base(masterDataService, caseSolutionService)
+                : base(configurationService, masterDataService, caseSolutionService)
         {         
             this._customerService = customerService;
             this._documentsService = documentsService;

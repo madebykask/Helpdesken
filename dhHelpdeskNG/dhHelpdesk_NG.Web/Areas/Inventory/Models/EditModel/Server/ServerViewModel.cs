@@ -83,5 +83,7 @@
 
         [NotNull]
         public PlaceFieldsViewModel PlaceFieldsViewModel { get;  set; }
+
+        public bool IsForDialog { get; set; }
     }
 }

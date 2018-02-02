@@ -1,4 +1,5 @@
-﻿@model DH.Helpdesk.BusinessData.Models.Invoice.CaseInvoiceSettings
+﻿@using DH.Helpdesk.BusinessData.OldComponents
+@model DH.Helpdesk.BusinessData.Models.Invoice.CaseInvoiceSettings
 
 @using (Html.BeginForm("SaveSettings", "Invoice", FormMethod.Post, new { id = "invoice_settings_form" }))
 {
@@ -6,63 +7,66 @@
     @Html.HiddenFor(m => m.CustomerId)
     <div class="container">
         <div class="row">
-            <div class="span12">
+            <div class="span100">
                 <h4>@Translation.GetCoreTextTranslation("Export fil")</h4>
-                <table class="tableform">
-                    <tr>
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Export sökväg")
-                        </td>
-                        <td class="span9">
-                            @Html.TextBoxFor(m => m.ExportPath, new {maxlength = "200", style = "line-height: 0"})
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Valuta")
-                        </td>
-                        <td class="span9">
-                            @Html.TextBoxFor(m => m.Currency, new {maxlength = "50"})
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Utfärdare")
-                        </td>
-                        <td class="span9">
-                            @Html.TextBoxFor(m => m.Issuer, new {maxlength = "50"})
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Vår referens")
-                        </td>
-                        <td class="span9">
-                            @Html.TextBoxFor(m => m.OurReference, new {maxlength = "50"})
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Ordernummer/prefix")
-                        </td>
-                        <td class="span9">
-                            @Html.TextBoxFor(m => m.OrderNoPrefix, new {maxlength = "50"})
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Dokumentmall")
-                        </td>
-                        <td class="span9">
-                            @Html.TextBoxFor(m => m.DocTemplate, new {maxlength = "50"})
-                        </td>
-                    </tr>
-                </table>
+                <div class="span12">
+                    <table class="tableform">
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Export sökväg")
+                            </td>
+                            <td class="span9">
+                                @Html.TextBoxFor(m => m.ExportPath, new { maxlength = "200", style = "line-height: 0" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Valuta")
+                            </td>
+                            <td class="span9">
+                                @Html.TextBoxFor(m => m.Currency, new { maxlength = "50" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Utfärdare")
+                            </td>
+                            <td class="span9">
+                                @Html.TextBoxFor(m => m.Issuer, new { maxlength = "50" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Vår referens")
+                            </td>
+                            <td class="span9">
+                                @Html.TextBoxFor(m => m.OurReference, new { maxlength = "50" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Ordernummer/prefix")
+                            </td>
+                            <td class="span9">
+                                @Html.TextBoxFor(m => m.OrderNoPrefix, new { maxlength = "50" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Dokumentmall")
+                            </td>
+                            <td class="span9">
+                                @Html.TextBoxFor(m => m.DocTemplate, new { maxlength = "50" })
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
-            <div class="row">
+        <div class="row">
+            <div class="span100">
+                <h4>@Translation.GetCoreTextTranslation("Import fil")</h4>
                 <div class="span12">
-                    <h4>@Translation.GetCoreTextTranslation("Import fil")</h4>
                     <table class="tableform">
                         <tr>
                             <td class="span3">
@@ -75,13 +79,111 @@
                     </table>
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="span100">
+                <h4>@Translation.GetCoreTextTranslation("Säkerhet")</h4>
+                <div class="span12">
+                    <table class="tableform">
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Model.CustomerId)
+                            </td>
+                            <td>
+                                <input type="checkbox" name="chkDisabledDep" id="chkDisabledDep" onchange="showDisablingDep()" @(Model.AvailableDepartments.Items.Count > 0 ? "checked=checked" : "") value="1" /> @Translation.GetCoreTextTranslation("Begränsa rättighet att skicka order till")
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="row" id="divDisabledDeps" @(Model.AvailableDepartments.Items.Count > 0 ? "display:block" : "" )>
+                    <div class="span100">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3"></td>
+                                    <td class="span15">
+                                        @Translation.GetCoreTextTranslation("Tillgängliga")
+                                    </td>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Valda")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <select id="Settings_DisabledDepartmentIds" multiple="multiple" name="Settings.DisabledDepartmentIds" style="width: 314px; height: 350px">
+                                                        @foreach (var us in Model.DisabledDepartments.Items)
+                                                        {
+                                                            var classType = us.IsActive ? "" : "style=color:lightgray;";
+                                                            <option @classType value="@us.Id"> @us.Value </option>
+                                                        }
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="button" value="&gt;" class="btn" id="toEnabledDep" /><br />
+                                                    <input type="button" value="&lt;" class="btn" id="toDisabledDep" />
+                                                </td>
+                                                <td>
+                                                    <select id="Settings_AvailableDepartments" multiple="multiple" name="Settings.AvailableDepartments" style="width: 314px; height: 350px">
+                                                        @foreach (var us in Model.AvailableDepartments.Items)
+                                                        {
+                                                            var classType = us.IsActive ? "" : "style=color:lightgray;";
+                                                            <option @classType value="@us.Id"> @us.Value </option>
+                                                        }
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 }
 <script type="text/javascript">
     $(function() {
-        $("#save_invoice_settings").click(function() {
+        $("#save_invoice_settings").click(function () {
+            if ($("#chkDisabledDep").prop("checked")) {
+                $('#Settings_DisabledDepartmentIds option').prop('selected', true);
+                $('#Settings_AvailableDepartments option').prop('selected', false);
+            } else {
+                $('#Settings_DisabledDepartmentIds option').prop('selected', false);
+                $('#Settings_AvailableDepartments option').prop('selected', false);
+            }
             $("#invoice_settings_form").submit();
             return true;
         });
+
+        $("#toEnabledDep").click(function () {
+            $("#Settings_DisabledDepartmentIds").find('option:selected').detach().appendTo($("#Settings_AvailableDepartments"));
+        });
+
+        $("#toDisabledDep").click(function () {
+            $("#Settings_AvailableDepartments").find('option:selected').detach().appendTo($("#Settings_DisabledDepartmentIds"));
+        });
+
+        if ($("#chkDisabledDep").prop("checked")) {
+            $("#divDisabledDeps").show();
+        }
+        else {
+            $("#divDisabledDeps").hide();
+        }
     });
+
+    function showDisablingDep() {
+        if ($("#chkDisabledDep").prop("checked")) {
+            $("#divDisabledDeps").show();
+        }
+        else {
+            $("#divDisabledDeps").hide();
+            $("#chkDisabledDep").checked = false;
+        }
+    }
 </script>

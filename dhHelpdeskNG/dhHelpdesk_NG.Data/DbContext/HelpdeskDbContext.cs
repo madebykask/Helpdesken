@@ -601,7 +601,10 @@
         public DbSet<CaseDocumentTextIdentifierEntity> CaseDocumentTextIdentifiers { get; set; }
         public DbSet<CaseDocumentTextConditionIdentifierEntity> CaseDocumentTextConditionIdentifiers { get; set; }
 
+       public DbSet<CaseSolution_SplitToCaseSolutionEntity> CaseSolution_SplitToCaseSolutions { get; set; }
 		public DbSet<ComputerUserCategory> ComputerUserCategories { get; set; }
+
+        public DbSet<ConditionEntity> Conditions { get; set; }
 
 		#endregion
 
@@ -907,6 +910,8 @@
             modelBuilder.Configurations.Add(new CaseDocumentTemplateConfiguration());
 			modelBuilder.Configurations.Add(new CaseDocumentTextIdentifierConfiguration());
             modelBuilder.Configurations.Add(new CaseDocumentTextConditionIdentifierConfiguration());
+            modelBuilder.Configurations.Add(new CaseSolution_SplitToCaseSolutionConfiguration());
+            modelBuilder.Configurations.Add(new ConditionConfiguration());
 
 			modelBuilder.Configurations.Add(new ComputerUserCategoryConfiguration());
 			modelBuilder.Configurations.Add(new CaseSolution_CaseSection_ExtendedCaseFormConfiguration());

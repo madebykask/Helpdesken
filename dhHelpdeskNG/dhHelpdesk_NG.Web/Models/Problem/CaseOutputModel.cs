@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Models.Problem
+﻿using DH.Helpdesk.BusinessData.OldComponents;
+
+namespace DH.Helpdesk.Web.Models.Problem
 {
     using System;
 
@@ -17,5 +19,7 @@
         public string CaseType { get; set; }
 
         public DateTime? WatchDate { get; set; }
+
+        public GlobalEnums.CaseIcon CaseIcon { get; set; }
     }
 }

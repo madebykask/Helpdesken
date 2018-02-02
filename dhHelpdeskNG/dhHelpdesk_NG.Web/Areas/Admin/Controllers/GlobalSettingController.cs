@@ -1,4 +1,5 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿
+namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -11,7 +12,9 @@
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
+
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Attributes;
     using DH.Helpdesk.Common.Enums;
 
     public class GlobalSettingController : BaseController
@@ -1416,6 +1419,29 @@
 
             return View("newwatchdate", model);
 
+        }
+
+        [HttpPost]
+        public JsonResult UpdateMultiCustomersSearch(bool val)
+        {
+            var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
+            globalSettings.MultiCustomersSearch = val ? 1 : 0;
+
+            IDictionary<string,string> errors = new Dictionary<string,string>();
+            _globalSettingService.SaveGlobalSetting(globalSettings, out errors);
+            
+            if (errors.Any())
+            {
+                var errRes = new
+                {
+                    Success = false,
+                    ErrorMessage = string.Join(",", errors.Select(kv => kv.Value))
+                };
+                return Json(errRes);
+            }
+
+            var res = new { Success = true };
+            return Json(res);
         }
     }
 }

@@ -89,12 +89,13 @@
     popupIntLogInput.typeahead(getCasesIntLogEmailSearchOptions());
 
     popupIntLogInput.keydown(function (e) {
-        if (e.keyCode === 13 || e.keyCode === 186) {
+        if (e.keyCode === 13 || e.keyCode === 186 ||
+            e.keyCode === 32) {
             if (dialogType === 1) {
-                onEnterKeyUp(e, popupIntLogInput, mainIntLogInputTo);
+                processEmails(e, popupIntLogInput, mainIntLogInputTo);
             }
             if (dialogType === 2) {
-                onEnterKeyUp(e, popupIntLogInput, mainIntLogInputCc);
+                processEmails(e, popupIntLogInput, mainIntLogInputCc);
             }
         }
     });
@@ -110,11 +111,17 @@
         }
     });
 
+    popupIntLogInput.on('blur',
+        function (e) {
+            processEmails(e, popupIntLogInput, dialogType === toType ? mainIntLogInputTo : mainIntLogInputCc);
+        });
+
     fakeInputTo.typeahead(getCasesIntLogEmailSearchOptions());
 
     fakeInputTo.keydown(function (e) {
-        if (e.keyCode === 13 || e.keyCode === 186) {
-            onEnterKeyUp(e, fakeInputTo, mainIntLogInputTo);
+        if (e.keyCode === 13 || e.keyCode === 186 ||
+            e.keyCode === 32) {
+            processEmails(e, fakeInputTo, mainIntLogInputTo);
         }
     });
 
@@ -125,11 +132,17 @@
         }
     });
 
+    fakeInputTo.on('focusout',
+        function(e) {
+            processEmails(e, fakeInputTo, mainIntLogInputTo);
+        });
+
     fakeInputCc.typeahead(getCasesIntLogEmailSearchOptions());
 
     fakeInputCc.keydown(function (e) {
-        if (e.keyCode === 13 || e.keyCode === 186) {
-            onEnterKeyUp(e, fakeInputCc, mainIntLogInputCc);
+        if (e.keyCode === 13 || e.keyCode === 186 ||
+            e.keyCode === 32) {
+            processEmails(e, fakeInputCc, mainIntLogInputCc);
         }
     });
 
@@ -140,22 +153,33 @@
         }
     });
 
-    function onEnterKeyUp(e, fakeInput, mainInput) {
+    fakeInputCc.on('focusout',
+        function (e) {
+            processEmails(e, fakeInputCc, mainIntLogInputCc);
+        });
+
+    function isNewEmail(newEmail, mainInput) {
+        var emails = mainInput.val().split(';');
+        return emails.indexOf(newEmail) < 0;
+    }
+
+    function processEmails(e, fakeInput, mainInput) {
         if (e.keyCode === 13 && searchSelected)
             return;
         e.preventDefault();
         e.stopImmediatePropagation();
-        var emails = $(e.target).html();
-        var arr = getEmailsFromHtml(emails);
-        var newEmail = "";
-        if (e.keyCode === 13 || e.keyCode === 186) {
-            newEmail = arr[arr.length - 1];
-            if (newEmail !== "" && newEmail !== "&nbsp" && newEmail.indexOf("@") >= 0) {
-                checkAndAddEmailsTo(newEmail);
-                fakeInput.html(getHtmlFromEmails(mainInput.val()));
-                changeFakeInputValueForView();
-                placeCaretAtEnd(fakeInput);
+        if (e.keyCode === 13 || e.keyCode === 186 ||
+            (e.type === 'focusout' && $(e.relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) || e.keyCode === 32) {
+            var emails = $(e.target).html();
+            var arr = getEmailsFromHtml(emails);
+            for (var i = 0; i < arr.length; i++) {
+                var newEmail = arr[i] || '';
+                if (newEmail !== '' && newEmail !== '&nbsp' && isNewEmail(newEmail, mainInput)) {
+                    checkAndAddEmailsTo(newEmail);
+                }
             }
+            fakeInput.html(getHtmlFromEmails(mainInput.val()));
+            if (e.type !== 'focusout') placeCaretAtEnd(fakeInput);
         }
     }
 
@@ -172,9 +196,7 @@
                 var searchText = $.trim(arr[arr.length - 1]);
                 if (searchText) {
                     lastIntLogEmailSearchKey = generateRandomKey();
-
                     delayFunc(function (){
-                        //console.log('getCasesIntLogEmailSearchOptions: running ajax request.');
                         $.ajax({
                             url: "/cases/CaseSearchUserEmails",
                             type: "post",

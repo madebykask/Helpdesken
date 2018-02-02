@@ -2,7 +2,7 @@
 
 function ExtendedCasePage() { };
 
-var $caseButtonsToLock = $('#btnSave');
+var $caseButtonsToLock = $('input[name="btnSave"]');
 var case_Is_In_Saving_Mode = false;
 
 /*** CONST BEGIN ***/
@@ -30,11 +30,11 @@ ExtendedCasePage.prototype.CaseStatus = 0;
 /*** Common Area ***/
 
 ExtendedCasePage.prototype.isNullOrEmpty = function (val) {
-    return val == undefined || val == null || val == "";
+    return val == undefined  || val === "";
 }
 
 ExtendedCasePage.prototype.isNullOrUndefined = function (val) {
-    return val == undefined || val == null;
+    return val == undefined;
 }
 
 ExtendedCasePage.prototype.setValueToBtnGroup = function (domContainer, domText, domValue, value) {
@@ -44,7 +44,7 @@ ExtendedCasePage.prototype.setValueToBtnGroup = function (domContainer, domText,
     var el = $(domContainer).find('a[value="' + value + '"]');
     if (el) {
         var _txt = self.getBreadcrumbs(el);
-        if (_txt == undefined || _txt == "")
+        if (_txt == undefined || _txt === "")
             _txt = "--";
         $(domText).text(_txt);
         $domValue.val(value);
@@ -103,7 +103,7 @@ ExtendedCasePage.prototype.padLeft = function (value, totalLength, padChar) {
 }
 
 ExtendedCasePage.prototype.getDate = function (val) {
-    if (val == undefined || val == null || val == "")
+    if (val == undefined || val === "")
         return null;
     else {
         var dateStr = val.split(' ');
@@ -194,6 +194,8 @@ ExtendedCasePage.prototype.loadExtendedCaseIfNeeded = function () {
 ExtendedCasePage.prototype.loadExtendedCase = function () {
     var self = this;
     var $_ex_Container = self.getExtendedCaseContainer();
+
+
     var formParameters = $_ex_Container.contentWindow.getFormParameters();
     formParameters.languageId = self.Current_EC_LanguageId;
     formParameters.extendedCaseGuid = self.Current_EC_Guid;
@@ -201,6 +203,8 @@ ExtendedCasePage.prototype.loadExtendedCase = function () {
     formParameters.userRole = self.UserRole;    
     formParameters.currentUser = self.CurrentUser;
     formParameters.userGuid = '';
+    formParameters.caseId = self.Case_Field_Init_Values.CaseId;
+    formParameters.applicationType = self.ApplicationType;
 
     $_ex_Container.contentWindow.setInitialData({ step: 0, isNextValidation: false });
 
@@ -256,9 +260,9 @@ ExtendedCasePage.prototype.isExtendedCaseValid = function (showToast, isOnNext) 
     }
 
     var $exTab = $(self.ExTab_Prefix + self.Current_EC_FormId);
-    if ($('#steps').length && $('#ButtonClick').length && $('#ButtonClick').val() == 'btn-go') {
+    if ($('input[name="steps"]').first().length && $('#ButtonClick').length && $('#ButtonClick').val() === 'btn-go') {
         //check if value is selected in steps, then isOnNext should be true;
-        var templateId = parseInt($('#steps').val()) || 0;
+        var templateId = parseInt($('input[name="steps"]').first().val()) || 0;
         //only load if templateId exist
         if (templateId > 0) {
             isOnNext = true;
@@ -288,12 +292,11 @@ ExtendedCasePage.prototype.isExtendedCaseValid = function (showToast, isOnNext) 
 
 ExtendedCasePage.prototype.setNextStep = function () {   
     var self = this;    
-    var nextStep = 0;
-    nextStep = parseInt($("#steps option:selected").attr('data-next-step')) || 0;
+    var nextStep = parseInt($('input[name="steps"]:first option:selected').attr('data-next-step')) || 0;
 
     var $_ex_Container = self.getExtendedCaseContainer();
     var isNextStepValidation = true;
-    if (nextStep == 0) {
+    if (nextStep === 0) {
         isNextStepValidation = false;
     }
     $_ex_Container.contentWindow.setNextStep(nextStep, isNextStepValidation);    
@@ -307,7 +310,7 @@ ExtendedCasePage.prototype.syncCaseFromExCaseIfExists = function () {
         return;
     }
 
-    var fieldData = $_ex_Container.contentWindow.getCaseValues()
+    var fieldData = $_ex_Container.contentWindow.getCaseValues();
     if (fieldData == undefined) {
         return;
     }
@@ -481,32 +484,44 @@ ExtendedCasePage.prototype.init = function (params) {
     self.CaseStatus = params.caseStatus;
     self.CurrentUser = params.currentUser;
     self.Current_EC_Path = params.extendedCasePath;
-
+    self.ApplicationType = params.applicationType;
     var lastError = params.lastError;
+    var lastClickTimeStamp = null;
+    var nextAllowedClickDelay = 5000;
 
     /// controls binding
     self.$Form = $('#extendedCaseForm');
-    self.$btnSave = $('#btnSave');
+    self.$btnSave = $('input[name="btnSave"]');
     self.$caseTab = $("#tabsArea li a");       
-    self.$selectListStep = $("#steps");
-    self.$btnGo = $('#btnGo');
+    self.$selectListStep = $('select[name="steps"]');
+    self.$btnGo = $('input[name="btnGo"]');
     self.$selectedWorkflow = $('#SelectedWorkflowStep');
 
     self.$btnSave.on('click', function (e) {
-        self.onSaveClick(self)
+        if (lastClickTimeStamp == null || lastClickTimeStamp + nextAllowedClickDelay < event.timeStamp) {
+            lastClickTimeStamp = e.timeStamp;
+        } else {
+            return;
+        }
+        self.onSaveClick(self);
     });
 
     self.loadExtendedCaseIfNeeded();    
    
     self.$btnGo.on("click", function (e) {
         e.preventDefault();
+        if (lastClickTimeStamp == null || lastClickTimeStamp + nextAllowedClickDelay < event.timeStamp) {
+            lastClickTimeStamp = e.timeStamp;
+        } else {
+            return;
+        }
         $('#ButtonClick').val('btn-go');
 
-        var templateId = parseInt(self.$selectListStep.val()) || 0;
+        var templateId = parseInt(self.$selectListStep.first().val()) || 0;
         //only load if templateId exist
         if (templateId > 0) {
             var isValid = false;
-            var stepId = parseInt(self.$selectListStep.val()) || 0;
+            var stepId = parseInt(self.$selectListStep.first().val()) || 0;
             if (stepId > 0) {
                 isValid = self.isExtendedCaseValid(false, true);
             }
@@ -524,6 +539,10 @@ ExtendedCasePage.prototype.init = function (params) {
     });
 
     self.$selectListStep.on('change', function () {
+        var that = this;
+        self.$selectListStep.each(function(item, index) {
+            if (that !== this) $(this).val($(that).val());
+        });
         self.setNextStep();       
     });
 
@@ -531,7 +550,7 @@ ExtendedCasePage.prototype.init = function (params) {
         window.scrollTo(0, 0);
     });
 
-    if (lastError != "")
+    if (lastError !== "")
         ShowToastMessage(lastError, "error", false);
     
 };
