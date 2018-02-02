@@ -285,11 +285,13 @@ EditPage.prototype.loadExtendedSectionsIfNeeded = function () {
 
     // Todo refactor and automate all sections
     //  if (self.extendedSections.length > 0) {
-    if (self.extendedSections.Initiator != null) {
-        self.loadExtendedSection(self.extendedSections.Initiator);
-    }
-    if (self.extendedSections.Regarding != null) {
-        self.loadExtendedSection(self.extendedSections.Regarding);
+    if (self.extendedSections) {
+        if (self.extendedSections.Initiator != null) {
+            self.loadExtendedSection(self.extendedSections.Initiator);
+        }
+        if (self.extendedSections.Regarding != null) {
+            self.loadExtendedSection(self.extendedSections.Regarding);
+        }
     }
 }
 

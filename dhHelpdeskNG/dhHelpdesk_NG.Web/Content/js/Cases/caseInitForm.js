@@ -37,19 +37,26 @@ function SetFocusToReportedByOnCase() {
 
 $(document).ready(function () {
     var initiatorID = $('#InitiatorCategory').val()
-    var initiatorCategory = window.parameters.computerUserCategories[initiatorID];
-    intiatorReadOnly = initiatorCategory == null ? false : initiatorCategory.IsReadOnly;
-    applyReadOnlyOn(readOnlyExpressions['initiator'], intiatorReadOnly);
 
-    $('#AddNotifier')[0].prevState = $('#AddNotifier').is(':visible');
-    if (intiatorReadOnly) {
-        $('#AddNotifier').hide();
+    if (initiatorID) {
+        var initiatorCategory = window.parameters.computerUserCategories[initiatorID];
+        intiatorReadOnly = initiatorCategory == null ? false : initiatorCategory.IsReadOnly;
+        applyReadOnlyOn(readOnlyExpressions['initiator'], intiatorReadOnly);
+
+        $('#AddNotifier')[0].prevState = $('#AddNotifier').is(':visible');
+
+        if (intiatorReadOnly) {
+            $('#AddNotifier').hide();
+        }
     }
 
     var regardingID = $('#IsAboutCategory').val()
-    var regardingCategory = window.parameters.computerUserCategories[regardingID];
-    regardingReadOnly = regardingCategory == null ? false : regardingCategory.IsReadOnly;
-    applyReadOnlyOn(readOnlyExpressions['regarding'], regardingReadOnly);
+
+    if (regardingID) {
+        var regardingCategory = window.parameters.computerUserCategories[regardingID];
+        regardingReadOnly = regardingCategory == null ? false : regardingCategory.IsReadOnly;
+        applyReadOnlyOn(readOnlyExpressions['regarding'], regardingReadOnly);
+    }
 });
 
 
