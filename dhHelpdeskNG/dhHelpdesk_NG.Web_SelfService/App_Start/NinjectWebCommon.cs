@@ -291,10 +291,11 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IServerLogicalDriveRepository>().To<ServerLogicalDriveRepository>();
             kernel.Bind<IServerSoftwareRepository>().To<ServerSoftwareRepository>();
             kernel.Bind<IPrinterFieldSettingsRepository>().To<PrinterFieldSettingsRepository>();
+			kernel.Bind<ICaseSectionsRepository>().To<CaseSectionsRepository>();
 
 
-            // Service             
-            kernel.Bind<IMasterDataService>().To<MasterDataService>();            
+			// Service             
+			kernel.Bind<IMasterDataService>().To<MasterDataService>();            
             kernel.Bind<ISettingService>().To<SettingService>();
             kernel.Bind<ICaseService>().To<CaseService>();
             kernel.Bind<ILogService>().To<LogService>();
