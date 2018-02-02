@@ -88,12 +88,12 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
             _reportTypeNames = new Dictionary<string, string>
             {
-                {"-1", "CasesPerCasetype"},
-                {"-2", "CasesPerDate"},
-                {"-3", "CasesPerSource"},
-                {"-4", "CasesPerWorkingGroup"},
+                //{"-1", "CasesPerCasetype"},
+                //{"-2", "CasesPerDate"},
+                //{"-3", "CasesPerSource"},
+                //{"-4", "CasesPerWorkingGroup"},
                 {"-5", "CasesPerAdministrator"},
-                {"-6", "CasesPerDepartment"},
+                //{"-6", "CasesPerDepartment"},
                 {"-7", "NumberOfCases"},
                 {"-8", "AvgResolutionTime"},
                 {"-9", "ReportedTime"}
@@ -724,12 +724,12 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
 			var oldReports = new List<KeyValuePair<string, string>>()
 			{
-				new KeyValuePair<string, string>("-1", "CasesPerCasetype"),
-				new KeyValuePair<string, string>("-2", "CasesPerDate"),
-				new KeyValuePair<string, string>("-3", "CasesPerSource"),
-				new KeyValuePair<string, string>("-4", "CasesPerWorkingGroup"),
-				new KeyValuePair<string, string>("-5", "CasesPerAdministrator"),
-				new KeyValuePair<string, string>("-6", "CasesPerDepartment")
+				//new KeyValuePair<string, string>("-1", "CasesPerCasetype"),
+				//new KeyValuePair<string, string>("-2", "CasesPerDate"),
+				//new KeyValuePair<string, string>("-3", "CasesPerSource"),
+				//new KeyValuePair<string, string>("-4", "CasesPerWorkingGroup"),
+				new KeyValuePair<string, string>("-5", "CasesPerAdministrator")
+                //,new KeyValuePair<string, string>("-6", "CasesPerDepartment")
 			};
 
 			var newReports = new List<KeyValuePair<string, string>>()

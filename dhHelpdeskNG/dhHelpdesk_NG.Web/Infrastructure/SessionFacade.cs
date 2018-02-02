@@ -127,7 +127,7 @@
 
         private const string _REPORT_SERVICE_SESSION_MODEL = "REPORT_SERVICE_SESSION_MODEL";
 
-        private const string _IS_CASE_DATA_CHANGED = "Is_CASE_DATA_CHANGED";
+        private const string _IS_CASE_DATA_CHANGED = "IS_CASE_DATA_CHANGED";
 
         #endregion
 
@@ -524,26 +524,20 @@
             }
         }
 
-        public static string CurrentLoginMode
+        public static LoginMode CurrentLoginMode
         {
             get
             {
                 if (HttpContext.Current.Session[_CURRENT_LOGIN_Mode] == null)
                 {
-                    return null;
+                    return LoginMode.None;
                 }
-                return (string) HttpContext.Current.Session[_CURRENT_LOGIN_Mode];
+
+                return (LoginMode) HttpContext.Current.Session[_CURRENT_LOGIN_Mode];
             }
             set
             {
-                if (HttpContext.Current.Session[_CURRENT_LOGIN_Mode] == null)
-                {
-                    HttpContext.Current.Session.Add(_CURRENT_LOGIN_Mode, value);
-                }
-                else
-                {
-                    HttpContext.Current.Session[_CURRENT_LOGIN_Mode] = value;
-                }
+                HttpContext.Current.Session[_CURRENT_LOGIN_Mode] = value;
             }
         }
 
@@ -1230,6 +1224,32 @@
                 }
 
                 pagesFilters.Add(pageFilters);
+            }
+        }
+
+        #endregion
+
+        #region Common Methods and Properties
+
+        public static string SessionId
+        {
+            get
+            {
+                return HttpContext.Current?.Session?.SessionID;
+            }
+        }
+
+        public static void ClearSession(bool abandon = false)
+        {
+            var session = HttpContext.Current?.Session;
+            if (session != null)
+            {
+                session.Clear();
+                if (abandon)
+                {
+                    session.RemoveAll();
+                    session.Abandon();
+                }
             }
         }
 

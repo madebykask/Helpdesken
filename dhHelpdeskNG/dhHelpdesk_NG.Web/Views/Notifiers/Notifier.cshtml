@@ -4,15 +4,24 @@
 @{
     ViewBag.Title = @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation);
 }
-
+@{ var readOnly = Model.ComputerUserCategoryModel.IsReadOnly; }
 @using (Html.BeginForm("Notifier", "Notifiers", FormMethod.Post, new { id = "target" }))
 {
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
+@if (readOnly)
+{
+                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn", disabled = "true", onclick = "return false;" })</li>
+                <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn", @disabled = "true", onclick = "return false;" })</li>
+                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", "Notifiers", new { @class = "btn" })</li>
+}
+else
+{
                 <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                 <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "Delete", new { id = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post") })</li>
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", "Notifiers", new { @class = "btn" })</li>
+}
             </ul>
         </div>
     </div>

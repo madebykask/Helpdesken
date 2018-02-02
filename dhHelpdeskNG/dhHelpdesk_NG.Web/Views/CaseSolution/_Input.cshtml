@@ -232,10 +232,11 @@
                         </div>
                     </div>
                     @{ Model.CaseSolution.DefaultTab = (string.IsNullOrEmpty(Model.CaseSolution.DefaultTab) ? "case-tab" : Model.CaseSolution.DefaultTab); }
-                    @if (Model.CaseSolution.ExtendedCaseForms.Any())
+                    @if (Model.CaseSolution.ExtendedCaseForms != null && Model.CaseSolution.ExtendedCaseForms.Any())
                     {
-                        var extendedCaseName = Model.CaseSolution.ExtendedCaseForms.Any() ? Model.CaseSolution.ExtendedCaseForms.FirstOrDefault().Name.Trim() : "";
-                        var extendedCaseId = Model.CaseSolution.ExtendedCaseForms.Any() ? Model.CaseSolution.ExtendedCaseForms.FirstOrDefault().Id : 0;
+                        var extendedCaseForm = Model.CaseSolution.ExtendedCaseForms.FirstOrDefault();
+                        var extendedCaseName = extendedCaseForm != null ? (extendedCaseForm.Name ?? "").Trim() : "";
+                        var extendedCaseId = extendedCaseForm != null ? extendedCaseForm.Id : 0;
 
                         <div id="divExtendedCase" style="padding:0px;width:100%">
                             <h4>@Translation.GetMasterDataTranslation("Utökat ärende")</h4>

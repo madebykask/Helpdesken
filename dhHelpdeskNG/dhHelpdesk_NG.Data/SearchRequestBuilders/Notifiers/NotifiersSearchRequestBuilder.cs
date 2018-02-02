@@ -256,5 +256,10 @@
                     || n.Cellphone.ToLower().Contains(pharseInLowerCase)
                     || n.Email.ToLower().Contains(pharseInLowerCase) || n.UserCode.ToLower().Contains(pharseInLowerCase));
         }
-    }
+
+		internal void FilterByComputerUserCategoryID(int? value)
+		{
+			this.notifiers = this.notifiers.Where(o => o.ComputerUsersCategoryID == value);
+		}
+	}
 }

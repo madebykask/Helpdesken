@@ -7,7 +7,9 @@ using DH.Helpdesk.Dal.Repositories.Servers.Concrete;
 using DH.Helpdesk.SelfService;
 using DH.Helpdesk.SelfService.Infrastructure;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
+using DH.Helpdesk.Services.Services.Authentication;
 using DH.Helpdesk.Services.Services.Feedback;
+using DH.Helpdesk.Common.Logger;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
@@ -99,9 +101,18 @@ namespace DH.Helpdesk.SelfService
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new WorkContextModule(),  new UserModule() , new ProblemModule() ,
-                new CommonModule(), new EmailModule() , new NotifiersModule() , new ToolsModule(),
-                new OrdersModule(), new InventoryModule());
+            var kernel = new StandardKernel(
+                new LoggerModule(),
+                new WorkContextModule(),  
+                new UserModule(), 
+                new ProblemModule(),
+                new CommonModule(), 
+                new EmailModule(), 
+                new NotifiersModule(), 
+                new ToolsModule(),
+                new OrdersModule(), 
+                new InventoryModule());
+
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             
@@ -124,7 +135,11 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IEmailSendingSettingsProvider>().To<EmailSendingSettingsProvider>().InRequestScope();
 
             kernel.Bind<IFederatedAuthenticationSettings>().To<FederatedAuthenticationSettings>();
-            kernel.Bind<IFederatedAuthenticationService>().To<FederatedAuthenticationService>().InSingletonScope();
+
+            kernel.Bind<IFederatedAuthenticationService>()
+                .ToMethod(ctx => new FederatedAuthenticationService(ctx.Kernel.Get<ILoggerService>(Log4NetLoggerService.LogType.Session)))
+                .InRequestScope();
+
             kernel.Bind<ISelfServiceConfigurationService>().To<SelfServiceConfigurationService>().InSingletonScope();
 
             // Repositories

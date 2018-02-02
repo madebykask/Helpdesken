@@ -1,8 +1,17 @@
 ﻿namespace DH.Helpdesk.Common.Types
 {
-    using DH.Helpdesk.Common.ValidationAttributes;
+    public interface IUserIdentity
+    {
+        string Domain { get; }
+        string UserId { get; }
+        string EmployeeNumber { get; }
+        string FirstName { get; }
+        string LastName { get; }
+        string Email { get; }
+        string Phone { get; }
+    }
 
-    public sealed class UserIdentity
+    public sealed class UserIdentity : IUserIdentity
     {
         public UserIdentity()
         {            

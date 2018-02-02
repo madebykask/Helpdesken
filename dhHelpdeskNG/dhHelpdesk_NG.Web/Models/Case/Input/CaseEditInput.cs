@@ -72,5 +72,8 @@ namespace DH.Helpdesk.Web.Models.Case.Input
 
 		public int? SplitToCaseSolution_Id { get; set; }
 
-    }
+		public Guid? ExtendedInitiatorGUID { get; set; }
+		public Guid? ExtendedRegardingGUID { get; set; }
+
+	}
 }

@@ -1,12 +1,13 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using DH.Helpdesk.BusinessData.Enums.Users
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.WorkingGroupInputViewModel
 
 
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment1">@Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
-            <li><a href="#fragment2">@Translation.Get("Användare", Enums.TranslationSource.TextTranslation)</a></li>
+            <li class="active"><a href="#fragment1">@Translation.GetCoreTextTranslation("Driftgrupp") - @Model.Customer.Name</a></li>
+            <li><a href="#fragment2">@Translation.GetCoreTextTranslation("Användare")</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
@@ -142,13 +143,16 @@
                                 <table class="tableform">
                                     <tr>
                                         <td>
-                                            <b>@Translation.Get("Användare", Enums.TranslationSource.TextTranslation)</b>
+                                            <b>@Translation.GetCoreTextTranslation("Användare")</b>
                                         </td>
                                         <td>
-                                            <b>@Translation.Get("Handläggarrättighet", Enums.TranslationSource.TextTranslation)</b>
+                                            <b>@Translation.GetCoreTextTranslation("Handläggarrättighet")</b>
                                         </td>
                                         <td>
-                                            <b>@Translation.Get("Läsrättighet", Enums.TranslationSource.TextTranslation)</b>
+                                            <b>@Translation.GetCoreTextTranslation("Medlem i grupp")</b>
+                                        </td>
+                                        <td>
+                                            <b>@Translation.GetCoreTextTranslation("Läsrättighet")</b>
                                         </td>
                                     </tr>
                                     @foreach (var item in Model.UsersForWorkingGroup)
@@ -158,17 +162,24 @@
                                                 @Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.SurName)
                                             </td>
                                             <td>
-                                                @if (item.UserRole == 2)
+                                                @if (item.UserRole == WorkingGroupUserPermission.ADMINSTRATOR)
                                                 {
-                                                    @Translation.Get("Ja", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Ja")
                                                 }
                                             </td>
                                             <td>
-                                                @if (item.UserRole == 1)
+                                                @if (item.IsMemberOfGroup)
                                                 {
-                                                    @Translation.Get("Ja", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Ja")
                                                 }
                                             </td>
+                                            <td>
+                                                @if (item.UserRole == WorkingGroupUserPermission.READ_ONLY)
+                                                {
+                                                    @Translation.GetCoreTextTranslation("Ja")
+                                                }
+                                            </td>
+                                            
                                         </tr>
                                     }
                                 </table>

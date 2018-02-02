@@ -63,6 +63,7 @@
             this.Property(x => x.ShowInvoiceOvertime).IsRequired();
             this.Property(x => x.ShowInvoiceMaterial).IsRequired();
             this.Property(x => x.ShowInvoicePrice).IsRequired();
+            this.Property(x => x.DisabledForOrder).IsRequired();
 
             this.ToTable("tbldepartment");
         }

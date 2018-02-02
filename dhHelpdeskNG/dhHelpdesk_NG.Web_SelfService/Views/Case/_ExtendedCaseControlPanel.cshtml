@@ -1,0 +1,29 @@
+﻿@using DH.Helpdesk.Common.Constants
+@model DH.Helpdesk.SelfService.Models.Case.ExtendedCaseViewModel
+
+<div class="jumbotron greybar">
+    <div class="container-fluid">
+        <div class="col-lg-12 secnav">
+            <input name="btnSave" type="button" value='@((Model.WorkflowSteps != null && Model.WorkflowSteps.Any()) ? Translation.Get("Save") : Translation.Get("Save and Send"))' class="btn btn-default pull-left" style="margin-right:20px !important;" />
+            @if (Model.WorkflowSteps != null && Model.WorkflowSteps.Any())
+            {
+                <div class="input-group">
+                    <select name="steps" class="dropdown-group pull-left">
+                        <option value="0" class="form-control">@Translation.Get(Text.SelectStep)</option>
+                        @if (Model.WorkflowSteps != null && Model.WorkflowSteps.Any())
+                        {
+                            foreach (var step in Model.WorkflowSteps)
+                            {
+                                <option data-next-step="@step.NextStep" value="@step.CaseTemplateId">@Translation.Get(step.Name)</option>
+                            }
+                        }
+                    </select>
+                    <span class="input-group-btn pull-left">
+                        <input name="btnGo" type="button" class="btn btn-default go-button" value="@Translation.Get("Send")" />
+                    </span>
+                </div>
+
+            }
+        </div>
+    </div>
+</div>

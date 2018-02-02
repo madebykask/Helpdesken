@@ -1,4 +1,5 @@
 ﻿@using DH.Helpdesk.Common.Enums
+@using DH.Helpdesk.Web
 @model DH.Helpdesk.Web.Models.Questionnaire.Input.CircularModel
 @{
     ViewBag.Title = "Circular";
@@ -8,14 +9,14 @@
     <div class="pull-left">
         <ul class="secnav">
             <li>
-                <button value="@Translation.Get("Spara")" class="btn" id="subbut">@Translation.Get("Spara")</button>
+                <button value="@Translation.GetCoreTextTranslation("Spara")" class="btn" id="subbut">@Translation.GetCoreTextTranslation("Spara")</button>
             </li>
             <li>
-                <button value="@Translation.Get("Skapa urval")" class="btn" id="async_subbut">@Translation.Get("Skapa urval")</button>
+                <button value="@Translation.GetCoreTextTranslation("Skapa urval")" class="btn" id="async_subbut">@Translation.GetCoreTextTranslation("Skapa urval")</button>
             </li>
             <li>
                 <a href="@Url.Action("CircularOverview", new { questionnaireId = Model.QuestionnaireId, statusId = (int?)ViewBag.BackStatusId})" class="btn">
-                    @Translation.Get("Avbryt")
+                    @Translation.GetCoreTextTranslation("Avbryt")
                 </a>
             </li>
             @if (Model.Id != 0)
@@ -23,7 +24,7 @@
                 <li>
                 @if (Model.State.Value != CircularStates.Sent && Model.State.Value != CircularStates.None)
                 {
-                    @Html.ActionLink(Translation.Get("Ta bort"), "DeleteCircular", new { questionnaireId = Model.QuestionnaireId, circularId = Model.Id, backStatusId = (int?)ViewBag.BackStatusId}, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" })
+                    @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "DeleteCircular", new { questionnaireId = Model.QuestionnaireId, circularId = Model.Id, backStatusId = (int?)ViewBag.BackStatusId}, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" })
                 }
                 </li>
                 <li>
@@ -31,10 +32,10 @@
                     switch (Model.State.Value)
                     {
                         case CircularStates.ReadyToSend:
-                                @Html.ActionLink(Translation.Get("Skicka enkät"), "Send", new { circularId = Model.Id }, new { @class = "btn" })
+                                @Html.ActionLink(Translation.GetCoreTextTranslation("Skicka enkät"), "Send", new { circularId = Model.Id }, new { @class = "btn" })
                             break;
                         case CircularStates.Sent:
-                                @Html.ActionLink(Translation.Get("Skicka påminnelse"), "Remind", new { circularId = Model.Id }, new { @class = "btn" })
+                                @Html.ActionLink(Translation.GetCoreTextTranslation("Skicka påminnelse"), "Remind", new { circularId = Model.Id }, new { @class = "btn" })
                             break;
                     }
                     }
@@ -48,13 +49,13 @@
     <div class="container">
         <ul class="nav nav-tabs">
             <li class="active">
-                <a href="#fragment-1">@Translation.Get("Utskick")</a>
+                <a href="#fragment-1">@Translation.GetCoreTextTranslation("Utskick")</a>
             </li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
                 <div class="container">
-                    <h4>@Translation.Get("Urval")</h4>
+                    <h4>@Translation.GetCoreTextTranslation("Urval")</h4>
                     <div class="row">
                         <div class="span12">
                             @using (Html.BeginForm("EditCircular", "Questionnaire", FormMethod.Post, new {id = "circular_new_form"}))
@@ -62,9 +63,9 @@
                                 @Html.HiddenFor(m => m.Id)
                                 @Html.HiddenFor(m => m.QuestionnaireId)
                                 @Html.HiddenFor(m => m.State)
-                                @Html.Hidden("backStatusId", (int?)ViewBag.BackStatusId)
-                                @Html.HiddenFor(m => m.ExtraEmails)
-
+                                @Html.Hidden("backStatusId", (int?) ViewBag.BackStatusId)
+                                @Html.HiddenFor(m => m.ExtraEmails, new { @readonly = "true", id = "extraEmailsInput" })
+                                <div id="hiddenDiv" style="display: none"></div>
                                 <table class="tableform">
                                     <tr>
                                         <td class="span5">
@@ -75,10 +76,10 @@
                                             @Html.ValidationMessageFor(model => model.CircularName)
                                         </td>
                                         <td class="span5">
-                                            @Translation.GetCoreTextTranslation("Extra") @Translation.GetCoreTextTranslation("E-post").ToLower()
+                                            <a href="#add_extra_emails_btn" role="button" class="btn case-usersearch-btn" data-src="circular" data-toggle="modal">@Translation.GetCoreTextTranslation("Extra") @Translation.GetCoreTextTranslation("E-post").ToLower()</a>
                                         </td>
                                         <td class="span9">
-                                            <div id="fakeCircularExtraEmailsInput" contenteditable="true" style="height: 75px;" class="case-usersearch-textarea case-send-emails-div"></div>
+                                            <div id="fakeExtraEmailsInput" contenteditable="true" class="case-usersearch-textarea case-send-emails-div"></div>
                                         </td>
                                     </tr>
                                     <tr>
@@ -105,12 +106,12 @@
 
                                 <div>
                                     @Html.CheckBoxFor(x => x.CaseFilter.IsUniqueEmail)
-                                    @Translation.Get("Endast unika e-postadresser")
+                                    @Translation.GetCoreTextTranslation("Endast unika e-postadresser")
 
                                     <table class="tableform">
                                         <tr>
                                             <td class="span3">
-                                                @Translation.Get("Avslutsdatum")
+                                                @Translation.GetCoreTextTranslation("Avslutsdatum")
                                             </td>
                                             <td class="span9">
                                                 @Html.EditorFor(model => model.CaseFilter.FinishingDateFrom, "DatePicker", new {id = "finishing_date_from_datepicker"})
@@ -124,7 +125,7 @@
                                     <table>
                                         <tr>
                                             <td class="span3">
-                                                @Translation.Get("Avdelning")
+                                                @Translation.GetCoreTextTranslation("Avdelning")
                                             </td>
                                             <td class="span9">
                                                 @Html.ListBoxFor(model => model.CaseFilter.SelectedDepartments, Model.AvailableDepartments, new {multiple = "multiple", @class = "chosen-select"})
@@ -135,7 +136,7 @@
                                     <table>
                                         <tr>
                                             <td class="span3">
-                                                @Translation.Get("Ärendetyp")
+                                                @Translation.GetCoreTextTranslation("Ärendetyp")
                                             </td>
                                             <td class="span9">
                                                 @Html.ListBoxFor(model => model.CaseFilter.SelectedCaseTypes, Model.AvailableCaseTypes, new {multiple = "multiple", @class = "chosen-select"})
@@ -146,7 +147,7 @@
                                     <table>
                                         <tr>
                                             <td class="span3">
-                                                @Translation.Get("Produktområde")
+                                                @Translation.GetCoreTextTranslation("Produktområde")
                                             </td>
                                             <td class="span9">
                                                 @Html.ListBoxFor(model => model.CaseFilter.SelectedProductAreas, Model.AvailableProductArea, new {multiple = "multiple", @class = "chosen-select"})
@@ -157,7 +158,7 @@
                                     <table>
                                         <tr>
                                             <td class="span3">
-                                                @Translation.Get("Driftgrupp")
+                                                @Translation.GetCoreTextTranslation("Driftgrupp")
                                             </td>
                                             <td class="span9">
                                                 @Html.ListBoxFor(model => model.CaseFilter.SelectedWorkingGroups, Model.AvailableWorkingGroups, new {multiple = "multiple", @class = "chosen-select"})
@@ -168,10 +169,10 @@
                                     <table class="tableform">
                                         <tr>
                                             <td class="span2">
-                                                @Translation.Get("Urval")
+                                                @Translation.GetCoreTextTranslation("Urval")
                                             </td>
                                             <td class="span6">
-                                                @Translation.Get("Selektera ut") @Html.DropDownListFor(model => model.CaseFilter.SelectedProcent, Model.Procent, new {style = "width: 60px"}) @Translation.Get("procent av tillgängliga ärenden")
+                                                @Translation.GetCoreTextTranslation("Selektera ut") @Html.DropDownListFor(model => model.CaseFilter.SelectedProcent, Model.Procent, new {style = "width: 60px"}) @Translation.Get("procent av tillgängliga ärenden")
                                             </td>
                                         </tr>
                                     </table>
@@ -191,169 +192,24 @@
         </div>
     </div>
 </div>
+@Html.Partial("~/Views/Cases/ModalDialogs/_ExtraEmails.cshtml", Model.ExtraEmailsModel)
 
 <script type="text/javascript">
-
-    $(function () {
-
-        document.parameters = {
-            emailNotValid: '@Translation.GetForJS("E-postadress är inte giltig.")',
-            emailAlreadyAdded: '@Translation.GetForJS("E-postadress redan tillagd.")'
+    $("#subbut").click(function () {
+        if (!$("#circular_new_form").valid()) {
+            return;
         }
-
-        $("#subbut").click(function () {
-
-            if (!$("#circular_new_form").valid()) {
-                return;
-            }
-
-            $.each($('#circular_case_grid_form input').serializeArray(), function (i, obj) {
-                $('<input type="hidden">').prop(obj).appendTo($('#circular_new_form'));
-            });
-
-            $('#circular_case_filter_form input:not(:hidden), select').each(function (i, obj) {
-                $(obj).appendTo($('#circular_new_form'));
-            });
-
-            $("#circular_new_form").submit();
+        $.each($('#circular_case_grid_form input').serializeArray(), function (i, obj) {
+            $('<input type="hidden">').prop(obj).appendTo($('#circular_new_form'));
+        });
+        $.each($('#circular_case_filter_form input:not(:hidden), select').serializeArray(), function (i, obj) {
+            $('<input type="hidden">').prop(obj).appendTo($('#hiddenDiv'));
         });
 
-        $("#async_subbut").click(function () {
-            $("#circular_case_filter_form").submit();
-        });
-
-        //var mainFollowersInput = $("#circularExtraEmailsInput");
-        var mainFollowersInput = $("#ExtraEmails");
-        var mainFakeFollowersInput = $("#fakeCircularExtraEmailsInput");
-        mainFakeFollowersInput.html(getHtmlFromEmails(mainFollowersInput.val()));
-        initEditableDiv();
-
-        function initEditableDiv() {
-            var original = $.fn.val;
-            $.fn.val = function () {
-                if ($(this).is('*[contenteditable=true]')) {
-                    return $.fn.html.apply(this, arguments);
-                };
-                return original.apply(this, arguments);
-            };
-        }
-
-        mainFakeFollowersInput.keydown(function (e) {
-            if (e.keyCode === 8 || e.keyCode === 46) {
-                onRemoveKeyDown(e, mainFakeFollowersInput, mainFollowersInput);
-            }
-            if (e.keyCode === 13 || e.keyCode === 186) {
-                onEnterKeyUp(e, mainFakeFollowersInput);
-            }
-        });
-
-        function onRemoveKeyDown(e, fakeInput, mainInput) {
-            e.stopImmediatePropagation();
-            var text = mainInput.val();
-            var email = getEmailsToRemove();
-            if (email === "&nbsp;" || email.trim() === "") {
-                e.preventDefault();
-                if (e.keyCode !== 46) {
-                    var arr = text.split(";");
-                    var lastEmail = arr[arr.length - 2];
-                    if (lastEmail) {
-                        text = text.replace(lastEmail + ";", "");
-                        mainInput.val(text);
-                        fakeInput.html(getHtmlFromEmails(mainInput.val()));
-                        placeCaretAtEnd(fakeInput);
-                    }
-                }
-            } else {
-                if (email !== "" && email.indexOf(";") >= 0) {
-                    e.preventDefault();
-                    text = text.replace(email, "");
-                    mainInput.val(text);
-                    fakeInput.html(getHtmlFromEmails(mainInput.val()));
-                    placeCaretAtEnd(fakeInput);
-                }
-            }
-        }
-
-        function onEnterKeyUp(e, fakeInput) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            var emails = $(e.target).html();
-            var arr = getEmailsFromHtml(emails);
-            var newEmail = "";
-            if (e.keyCode === 13 || e.keyCode === 186) {
-                newEmail = arr[arr.length - 1];
-                if (newEmail !== "" && newEmail !== "&nbsp" && newEmail.indexOf("@@") >= 0) {
-                    checkAndAddEmailsTo(newEmail);
-                    fakeInput.html(getHtmlFromEmails(mainFollowersInput.val()));
-                    placeCaretAtEnd(fakeInput);
-                }
-            }
-        }
-
-        function checkAndAddEmailsTo(value) {
-            if (isValidEmailAddress(value)) {
-                var newToEmail = value;
-                var emails = mainFollowersInput.val().split(";");
-                if (emails.indexOf(newToEmail) < 0)
-                    mainFollowersInput.val(mainFollowersInput.val() + newToEmail + ";");
-                else {
-                    ShowToastMessage(value + " : " + document.parameters.emailAlreadyAdded, "warning");
-                    return false;
-                }
-                return true;
-            } else {
-                ShowToastMessage(value + " : " + document.parameters.emailNotValid, "error");
-                return false;
-            }
-        }
-
-        function isValidEmailAddress(emailAddress) {
-            var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
-            return pattern.test(emailAddress.trim());
-        };
-
-        function getHtmlFromEmails(emails) {
-            var arr = emails.split(";");
-            var result = [];
-            for (var i = 0; i < arr.length - 1; i++) {
-                result.push("<span class='case-email-selected'>" + arr[i] + ";</span>");
-            }
-            if (result.length > 0) result.push("<span>&nbsp</span>");
-            return result.join("");
-        }
-
-        function getEmailsFromHtml(html) {
-            var result = [];
-            var arr = html.replace(/<[^>]*>/g, "").split(";");
-            for (var i = 0; i < arr.length; i++) {
-                if (arr[i] !== "")
-                    result.push(arr[i].trim());
-            }
-            return result;
-        }
-
-        function getEmailsToRemove() {
-            var selection = window.getSelection();
-            var parentNode = $(selection.anchorNode.parentNode);
-            if (parentNode.html() === "&nbsp;") {
-                return "&nbsp;";
-            } else {
-                return $(parentNode.text().split(";")).last()[0];
-            }
-        }
-
-        function placeCaretAtEnd(node) {
-            node[0].focus();
-            var textNode = node[0].lastChild;
-            if (textNode) {
-                var range = document.createRange();
-                range.setStart(textNode, 1);
-                range.setEnd(textNode, 1);
-                var sel = window.getSelection();
-                sel.removeAllRanges();
-                sel.addRange(range);
-            }
-        }
+        $("#circular_new_form").submit();
     });
 
+    $("#async_subbut").click(function () {
+        $("#circular_case_filter_form").submit();
+    });
 </script>

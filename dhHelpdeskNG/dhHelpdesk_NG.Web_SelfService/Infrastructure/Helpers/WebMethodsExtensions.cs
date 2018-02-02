@@ -5,11 +5,20 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Helpers
 {
     public static class WebMethodsExtensions
     {
+        private const string CustomerIdQueryStringParam = "customerId";
         private const string CustomerIdCookieName = "_customerId";
 
         public static void SetCustomerIdCookie(this HttpContextBase ctx, int customerId)
         {
             SetSessionCookie(ctx, CustomerIdCookieName, customerId.ToString());
+        }
+
+        public static int GetCustomerIdFromQueryString(this HttpContextBase ctx)
+        {
+            var val = ctx.Request.QueryString[CustomerIdQueryStringParam];
+            var customerId = -1;
+            int.TryParse(val, out customerId);
+            return customerId;
         }
 
         public static int GetCustomerIdFromCookie(this HttpContextBase ctx)

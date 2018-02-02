@@ -10,17 +10,18 @@
 
     public interface INotifierModelFactory
     {
-        InputModel Create(
-            NotifierOverviewSettings settings,
-            int? selectedRegionId,
-            NotifierDetails notifier,
-            List<ItemOverview> domains,
-            List<ItemOverview> regions,
-            List<ItemOverview> departments,
-            List<ItemOverview> organizationUnits,
-            List<ItemOverview> divisions,
-            List<ItemOverview> managers,
-            List<ItemOverview> groups,
-            List<ItemOverview> languages);
+		InputModel Create(
+			NotifierOverviewSettings settings,
+			int? selectedRegionId,
+			NotifierDetails notifier,
+			List<ItemOverview> domains,
+			List<ItemOverview> regions,
+			List<ItemOverview> departments,
+			List<ItemOverview> organizationUnits,
+			List<ItemOverview> divisions,
+			List<ItemOverview> managers,
+			List<ItemOverview> groups,
+			List<ItemOverview> languages,
+			ComputerUserCategoryModel categoryModel);
     }
 }

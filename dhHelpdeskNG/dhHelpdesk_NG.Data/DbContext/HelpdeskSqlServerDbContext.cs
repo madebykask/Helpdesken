@@ -1,9 +1,20 @@
 ﻿namespace DH.Helpdesk.Dal.DbContext
 {
-    using System.Data.Entity;
+	using System.Data.Common;
+	using System.Data.Entity;
 
-    public class HelpdeskSqlServerDbContext : HelpdeskDbContext
+	public class HelpdeskSqlServerDbContext : HelpdeskDbContext
     {
+
+		public HelpdeskSqlServerDbContext() : base()
+		{
+
+		}
+
+		public HelpdeskSqlServerDbContext(DbConnection connection) : base(connection)
+		{
+
+		}
         static HelpdeskSqlServerDbContext()
         {
             //  Database initialization strategies:

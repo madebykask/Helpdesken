@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Web.Mvc;
 using System.Web.SessionState;
 using DH.Helpdesk.SelfService.Controllers.Behaviors;
@@ -50,7 +51,13 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             var searchParams = CaseSearchInputParameters.Create(inputModel);
-            
+
+            if (string.IsNullOrEmpty(searchParams.SortBy))
+            {
+                searchParams.SortBy = "Casenumber";
+                searchParams.SortAscending = false;
+            }
+
             var res = _caseControllerBehavior.ValidateSearchParameters(searchParams);
             if (!res.Valid)
             {
@@ -85,6 +92,8 @@ namespace DH.Helpdesk.SelfService.Controllers
 
         private PartialViewResult CreateErrorResult(Error err)
         {
+            ControllerContext.HttpContext.Response.TrySkipIisCustomErrors = true;
+            Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             return PartialView("~/Views/Case/_SearchError.cshtml", err);
         }
 

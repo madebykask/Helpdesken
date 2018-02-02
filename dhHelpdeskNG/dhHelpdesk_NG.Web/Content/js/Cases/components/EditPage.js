@@ -146,6 +146,11 @@ EditPage.prototype.getECTargetUrl = function () {
     return decodeURIComponent(path.replace(/&amp;/g, '&'));
 }
 
+EditPage.prototype.getExtendedCaseSectionUrl = function (path, formID) {
+    path = path.replace('[ExtendedCaseFormId]', formID);
+    return decodeURIComponent(path.replace(/&amp;/g, '&'));
+}
+
 EditPage.prototype.loadExtendedCaseIfNeeded = function () {
     "use strict";
     var self = this;
@@ -173,18 +178,34 @@ EditPage.prototype.loadExtendedCaseIfNeeded = function () {
     var $placeHolder = self.getECContainerTemplate(iframeId, targetUrl);
     $placeHolder.appendTo(extendedCaseDiv);
 
+    self.ieVer = CommonUtils.detectIE();
     var $elm = document.getElementById(iframeId);
+
     if (!self.isNullOrUndefined($elm)) {
+
+        self.exCaseFrameHeight = +$elm.style.height;
         var iframeOptions = {
             log: false,
             sizeHeight: true,
             checkOrigin: false,
             enablePublicMethods: true,
             resizedCallback: function (messageData) {
+                if (!self.ieVer.IE)
+                    return;
+                
+                var newHeight = messageData && messageData.hasOwnProperty('height') ? +messageData.height : 0;
+                var prevHeight = self.exCaseFrameHeight || 0;
+                //console.log('@resizedCallback: prevHeight: ' + prevHeight.toString() + ', newHeight: ' + newHeight.toString());
+                if (newHeight < prevHeight) {
+                    //restore max height
+                    messageData.iframe.style.height = prevHeight + 'px';
+                } else {
+                    //save last max height
+                    self.exCaseFrameHeight = newHeight;
+                }
             },
             bodyMargin: '0 0 0 0',           
-            closedCallback: function (id) {
-            },
+            closedCallback: function (id) { },
             heightCalculationMethod: 'grow'
         };
 
@@ -198,6 +219,80 @@ EditPage.prototype.loadExtendedCaseIfNeeded = function () {
         $indicator.css("display", "none");
     }
 };
+
+EditPage.prototype.loadExtendedSection = function (extendedSection) {
+    var self = this;
+
+    var frame = $(extendedSection.iframeId);
+
+    var targetUrl = self.getExtendedCaseSectionUrl(extendedSection.path, extendedSection.formId);
+
+    // var $placeHolder = self.getECContainerTemplate(iframeId, targetUrl);
+
+    frame.load(function () {
+        if (frame.attr('src').length > 0) {
+
+            var iframeOptions = {
+                log: false,
+                sizeHeight: true,
+                checkOrigin: false,
+                enablePublicMethods: true,
+                resizedCallback: function (messageData) {
+                },
+                bodyMargin: '0 0 0 0',
+                closedCallback: function (id) {
+                },
+                heightCalculationMethod: 'grow'
+            };
+
+            var formParameters = frame[0].contentWindow.getFormParameters();
+            formParameters.languageId = extendedSection.languageId;
+            formParameters.extendedCaseGuid = extendedSection.guid;
+
+            var isLockedValue = window.parameters.isCaseLocked || '';
+            formParameters.isCaseLocked = isLockedValue.toLowerCase() === 'true'; //important to pass boolean type value
+
+            var fieldValues = self.Case_Field_Init_Values;
+
+            // TODO: Evaluate if required for extended initiator
+            frame[0].contentWindow.setInitialData({ step: 0, isNextValidation: false });
+
+            if (fieldValues != null) {
+                var pr = frame[0].contentWindow.loadExtendedCase(
+                    {
+                        formParameters: formParameters,
+                        caseValues: {
+                            reportedby: { Value: $('#case__ReportedBy').val() },
+                        }
+                    });
+                pr.then(function () {
+                    //frame.iFrameResize(iframeOptions);
+                });
+            }
+
+            $(extendedSection.container).show();
+            //frame[0]
+        }
+    });
+
+    frame[0].src = targetUrl;
+
+
+}
+
+EditPage.prototype.loadExtendedSectionsIfNeeded = function () {
+    var self = this;
+
+    // Todo refactor and automate all sections
+    //  if (self.extendedSections.length > 0) {
+    if (self.extendedSections.Initiator != null) {
+        self.loadExtendedSection(self.extendedSections.Initiator);
+    }
+    if (self.extendedSections.Regarding != null) {
+        self.loadExtendedSection(self.extendedSections.Regarding);
+    }
+}
+
 
 EditPage.prototype.loadExtendedCase = function () {
     var self = this;
@@ -344,7 +439,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
         return;
     }
 
-    var fieldData = $_ex_Container.contentWindow.getCaseValues()
+    var fieldData = $_ex_Container.contentWindow.getCaseValues();
     if (fieldData == undefined) {
         return;
     }
@@ -523,6 +618,12 @@ EditPage.prototype.refreshCasePage = function (updatedInfo) {
     $('#' + _caseFields.PersonsCellphone).val(updatedInfo.PersonsCellphone);
     $('#' + _caseFields.Place).val(updatedInfo.Place);
     $('#' + _caseFields.CostCentre).val(updatedInfo.CostCentre);
+    
+    //state (status)
+    $('#' + _caseFields.SubStatusId).val(updatedInfo.StateSecondary_Id);
+    var subStateName$ = $('#' + _caseFields.SubStatusName);
+    if (subStateName$.length && updatedInfo.SubStateName)
+        subStateName$.val(updatedInfo.SubStateName);
 
     $('#' + _caseFields.PlanDate).datepicker({
         format: updatedInfo.DateFormat.toLowerCase(),
@@ -720,7 +821,6 @@ EditPage.prototype.primaryValidation = function (submitUrl) {
     } else {
         me.startSaveProcess(me, submitUrl);
     }
-    
 }
 
 EditPage.prototype.startSaveProcess = function (sender, submitUrl) {
@@ -815,6 +915,14 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
 
 EditPage.prototype.doTotalValidationAndSave = function (submitUrl) {
     var self = this;
+
+    if ($("#ExtendedInitiatorGUID").val().length > 0) {
+        $('#extendedSection-iframe-Initiator')[0].contentWindow.saveExtendedCase(false);
+    }
+
+    if ($("#ExtendedRegardingGUID").val().length > 0) {
+        $('#extendedSection-iframe-Regarding')[0].contentWindow.saveExtendedCase(false);
+    }
     
     var $_ex_Container = self.getExtendedCaseContainer();
     if (!self.isNullOrUndefined($_ex_Container)) {
@@ -829,7 +937,14 @@ EditPage.prototype.doTotalValidationAndSave = function (submitUrl) {
         }
 
         var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
-        return promise.then(self.doSaveCase(submitUrl), self.onSaveError);
+        promise.then(
+            function(res) {
+                self.doSaveCase(submitUrl);
+            }, 
+            function (err) { 
+                self.onSaveError(err);
+            });
+        return false;
     } else {
         if (!self.isFormValid()) {
             self.setCaseStatus(self.CASE_IN_IDLE);
@@ -837,7 +952,6 @@ EditPage.prototype.doTotalValidationAndSave = function (submitUrl) {
         }
         return self.doSaveCase(submitUrl);
     }
-    
 }
 
 EditPage.prototype.doSaveCase = function (submitUrl) {
@@ -938,59 +1052,86 @@ EditPage.prototype.CaseWillFinish = function ()
     }
 };
 
-EditPage.prototype.onSaveYes = function () {    
+EditPage.prototype.onSaveYes = function (e) {
+    e.preventDefault();
+
     var self = this;
     var c = self.case;
     var url = self.EDIT_CASE_URL;
     if (c.isNew() && c.isChildCase()) {
         url = self.SAVE_GOTO_PARENT_CASE_URL;
     }
-    return self.primaryValidation(url);   
+
+    self.primaryValidation(url);
+    return false;
 };
 
-EditPage.prototype.onSaveAndNewYes = function (){
+EditPage.prototype.onSaveAndNewYes = function (e) {
+    e.preventDefault();
+
     var self = this;
-    return self.primaryValidation(self.SAVE_ADD_CASE_URL);    
+    self.primaryValidation(self.SAVE_ADD_CASE_URL);
+    return false;
 };
 
-EditPage.prototype.onSaveAndCloseYes = function () {
+EditPage.prototype.onSaveAndCloseYes = function (e) {
+    e.preventDefault();
+
     var self = this;
-    return self.primaryValidation(self.NEW_CLOSE_CASE_URL);       
+    self.primaryValidation(self.NEW_CLOSE_CASE_URL);
+    return false;
 };
 
-EditPage.prototype.onSaveClick = function () {
+EditPage.prototype.onSaveClick = function (e) {
+    e.preventDefault();
+    //debugger;
+
     var self = this;
     var c = self.case;
     var url = self.EDIT_CASE_URL;
     if (c.isNew() && c.isChildCase()) {
         url = self.SAVE_GOTO_PARENT_CASE_URL;
     }
-    return self.primaryValidation(url);   
+    self.primaryValidation(url);
+    return false;
 };
 
-EditPage.prototype.onNewCloseAndSplitClick = function () {
+EditPage.prototype.onNewCloseAndSplitClick = function (e) {
+    e.preventDefault();
+
     var self = this;
-    return self.primaryValidation(self.NEW_CLOSE_SPLIT_URL);
+    self.primaryValidation(self.NEW_CLOSE_SPLIT_URL);
+    return false;
 };
 
-EditPage.prototype.onEditCloseAndSplitClick = function () {
+EditPage.prototype.onEditCloseAndSplitClick = function (e) {
+    e.preventDefault();
+
     var self = this;
-    return self.primaryValidation(self.EDIT_CLOSE_SPLIT_URL);
+    self.primaryValidation(self.EDIT_CLOSE_SPLIT_URL);
+    return false;
 };
 
-EditPage.prototype.onSaveAndCloseClick = function () {
+EditPage.prototype.onSaveAndCloseClick = function (e) {
+    e.preventDefault();
+
     var self = this;
-    return self.primaryValidation(self.NEW_CLOSE_CASE_URL);   
+    self.primaryValidation(self.NEW_CLOSE_CASE_URL);
+    return false;
 };
 
 
-EditPage.prototype.onSaveAndNewClick = function () {
+EditPage.prototype.onSaveAndNewClick = function (e) {
+    e.preventDefault();
+
     var self = this;
-    return self.primaryValidation(self.SAVE_ADD_CASE_URL);    
+    self.primaryValidation(self.SAVE_ADD_CASE_URL);
+    return false;
 };
 
 EditPage.prototype.onSaveError = function (err) {    
     ShowToastMessage("Extended Case save was not succeed!", "error", false);
+    this.setCaseStatus(this.CASE_IN_IDLE);
     return false;
 }
 
@@ -1140,7 +1281,9 @@ EditPage.prototype.recoverTokenIfNeeded = function () {
     }
 }
 
-EditPage.prototype.onCloseClick = function(ev) {
+EditPage.prototype.onCloseClick = function (e) {
+    e.preventDefault();
+
     var me = this;
     var c = me.case;
     var url;
@@ -1208,6 +1351,10 @@ EditPage.prototype.init = function (p) {
     EditPage.prototype.Current_EC_LanguageId = p.extendedCaseLanguageId;
     EditPage.prototype.Current_EC_Path = p.extendedCasePath;
     
+
+    EditPage.prototype.extendedSections = p.extendedSections;
+
+
     /*Debug mode*/    
     //EditPage.prototype.Current_EC_Path = "http://dhhelpdesk-ikea-bschr-v5.datahalland.se/ExtendedCase/?formId=[ExtendedCaseFormId]&autoLoad=1";
 
@@ -1268,7 +1415,9 @@ EditPage.prototype.init = function (p) {
 
 
     /*Load extended case*/
-    self.loadExtendedCaseIfNeeded();    
+    self.loadExtendedCaseIfNeeded();
+    self.loadExtendedSectionsIfNeeded();
+
 
     self.$watchDateChangers.on('change', function () {        
         var deptId = parseInt(self.$department.val(), 10);

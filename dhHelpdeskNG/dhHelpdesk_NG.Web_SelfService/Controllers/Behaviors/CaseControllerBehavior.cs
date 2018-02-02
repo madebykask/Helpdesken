@@ -74,7 +74,7 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
                     {
                         var useApi = SessionFacade.CurrentCustomer.FetchDataFromApiOnExternalPage;
                         var customerId = SessionFacade.CurrentCustomer.Id;
-                        var apiCredential = AppConfigHelper.GetAmApiInfo();
+                        var apiCredential = WebApiConfig.GetAmApiInfo();
                         var employee = _masterDataService.GetEmployee(customerId, userEmployeeNumber, useApi, apiCredential);
 
                         if (employee != null)

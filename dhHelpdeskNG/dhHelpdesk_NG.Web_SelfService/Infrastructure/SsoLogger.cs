@@ -1,13 +1,15 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
+using DH.Helpdesk.Common.Logger;
 using log4net;
 
 namespace DH.Helpdesk.SelfService.Infrastructure
 {
     public static class SsoLogger
     {
-        private static ILog _logger = null;
+        private static ILoggerService _logger = null;
         
-        public static void SetLoggerInstance(ILog logger)
+        public static void SetLoggerInstance(ILoggerService logger)
         {
             _logger = logger;
         }

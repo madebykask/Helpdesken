@@ -23,7 +23,7 @@ namespace DH.Helpdesk.SelfService.Models.Shared
         public bool ShowLanguage{ get; set; }
         public CaseLogModel CaseLog { get; set; }
         public bool HasError { get; set; }
-        public string LoginType { get; set; }
+        public LoginMode LoginMode { get; set; }
         public bool IsMultiCustomerSearchEnabled { get; set; }
 
     }

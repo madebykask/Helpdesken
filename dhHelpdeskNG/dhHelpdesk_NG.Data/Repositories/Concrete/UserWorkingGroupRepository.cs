@@ -32,7 +32,7 @@ namespace DH.Helpdesk.Dal.Repositories.Concrete
             
             if (!includeAdmins)
             {
-                items = items.Where(x => x.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).ToList();
+                items = items.Where(x => x.UserRole != WorkingGroupUserPermission.ADMINSTRATOR).ToList();
             }
 
             if (activeUsers)

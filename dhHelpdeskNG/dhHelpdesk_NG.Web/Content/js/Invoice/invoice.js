@@ -487,7 +487,15 @@ $(function () {
                             for (var i = 0; i < data.departments.length; i++) {
                                 var item = data.departments[i];
                                 var curRegion = (item.RegionId != null ? _region.GetById(item.RegionId) : null);
-                                _department.Items.push({ Id: item.Id, Name: item.Name, IsActive: item.IsActive, RegionId: item.RegionId, Region: curRegion });
+                                _department.Items.push(
+                                    {
+                                        Id: item.Id,
+                                        Name: item.Name,
+                                        IsActive: item.IsActive,
+                                        RegionId: item.RegionId,
+                                        DisabledForOrder: item.DisabledForOrder,
+                                        Region: curRegion
+                                    });
                             }
                         }
                 });
@@ -814,7 +822,8 @@ $(function () {
                 order.Department_Id = null;
             }
 
-            dhHelpdesk.CaseArticles.PopulateDropDownItem(elementId, departments, selectedItem);
+            dhHelpdesk.CaseArticles.PopulateDropDownItem(elementId, departments, selectedItem);            
+            this.SetSendOrderForDepartment(order.Id, order.Department_Id);
             dhHelpdesk.CaseArticles.FillOrderOU(order, selectedItem, noSelection);
         },
 
@@ -829,6 +838,28 @@ $(function () {
 
             dhHelpdesk.CaseArticles.PopulateDropDownItem(elementId, ous, selectedItem);
             dhHelpdesk.CaseArticles.UpdateAvailableOrder(order);
+        },
+
+        SetSendOrderForDepartment: function (orderId, departmentId) {
+            if (departmentId == undefined) {
+                $("#doInvoiceButton_" + orderId).removeAttr("disabled");
+                return;
+            }
+
+            var department = dhHelpdesk.CaseArticles.OrganizationData.Department.GetById(departmentId);
+            if (department != null && department.DisabledForOrder) {
+                $("#doInvoiceButton_" + orderId).attr("disabled", "disabled");
+
+                var _hint = dhHelpdesk.Common.Translate("Vald") + " " + 
+                            dhHelpdesk.Common.TranslateCaseFields("Department_Id") + " " + 
+                            dhHelpdesk.Common.Translate("kan inte faktureras");
+                            
+                $("#doInvoiceButton_" + orderId).attr("title", _hint);
+            }
+            else {
+                $("#doInvoiceButton_" + orderId).removeAttr("disabled");
+                $("#doInvoiceButton_" + orderId).attr("title", "");
+            }
         },
 
         PopulateDropDownItem: function (elementId, items, selectedItem_Id) {
@@ -3163,6 +3194,7 @@ $(function () {
                         }
                         dhHelpdesk.CaseArticles.UpdateOtherReferenceTitle(curOrd.Id);
                         dhHelpdesk.CaseArticles.UpdateAvailableOrder(th);
+                        dhHelpdesk.CaseArticles.SetSendOrderForDepartment(curOrd.Id, th.Department_Id);
                     });
 
                     var ou = this.Container.find(publicClassName + ".ou");

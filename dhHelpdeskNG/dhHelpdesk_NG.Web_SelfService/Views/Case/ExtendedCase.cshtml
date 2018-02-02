@@ -143,34 +143,10 @@
 
 @Scripts.Render("~/Content/js/Case/extendedCase")
 @Scripts.Render("~/Content/js/Case/edit")
-
-<div class="jumbotron greybar">
-    <div class="container-fluid">
-        <div class="col-lg-12 secnav">
-            <input id="btnSave" type="button" value='@((Model.WorkflowSteps != null && Model.WorkflowSteps.Any()) ? Translation.Get("Save") : Translation.Get("Save and Send"))' class="btn btn-default pull-left" style="margin-right:20px !important;" />
-            @if (Model.WorkflowSteps != null && Model.WorkflowSteps.Any())
-            {
-                <div class="input-group">
-                    <select id="steps" name="steps" class="dropdown-group pull-left">
-                        <option value="0" class="form-control">@Translation.Get(Text.SelectStep)</option>
-                        @if (Model.WorkflowSteps != null && Model.WorkflowSteps.Any())
-                        {
-                            foreach (var step in Model.WorkflowSteps)
-                            {
-                                <option data-next-step="@step.NextStep" value="@step.CaseTemplateId">@Translation.Get(step.Name)</option>
-                            }
-                        }
-                    </select>
-                    <span class="input-group-btn pull-left">
-                        <input id="btnGo" type="button" class="btn btn-default go-button" value="@Translation.Get("Send")"/>
-                    </span>
-                </div>
-
-            }
-        </div>
-    </div>
-</div>
-
+@if (Model.CaseId == 0 || (Model.WorkflowSteps != null && Model.WorkflowSteps.Any()))
+{
+    @Html.Partial("_ExtendedCaseControlPanel", Model)
+}
 @using (Html.BeginForm("ExtendedCase", "case", null, FormMethod.Post, new { id = "extendedCaseForm" }))
 {
     // Base
@@ -322,6 +298,7 @@
     /* FileUpload */
     @Html.HiddenFor(m => Model.CaseDataModel.CaseFileKey)
 
+    @Html.Hidden("ReturnUrl", (object)ViewBag.ReturnUrl)
 }
 <div class="container-fluid dh-container">
     <ul class="nav nav-tabs" id="tabsArea">
@@ -332,11 +309,11 @@
             </a>
         </li>
         @if (ViewBag.AttachmentPlacement == 1 && Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()) && (Model.CaseId == 0 || (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null)))
-            {
+        {
             <li>
                 <a href="#attachment-tab">@Translation.Get("Attachments", Enums.TranslationSource.TextTranslation) <span id="nrOfAttachedFiles">@(Model.CaseDataModel.CaseFiles != null && Model.CaseDataModel.CaseFiles.Count > 0 ? "(" + Model.CaseDataModel.CaseFiles.Count.ToString() + ")":"")</span></a>
             </li>
-            }
+        }
     </ul>
     <div class="content tab-content">
         <div id="fragment-1" class="tab-pane active">
@@ -351,31 +328,31 @@
         {
             <div id="attachment-tab" class="tab-pane" style="overflow:hidden;">
                 <div> 
-                        @*///* This copied code from NewCase.cshtml */
+                    @*///* This copied code from NewCase.cshtml */
                         ///* TODO: Make partial or shared code */*@
 
-                        <div class="col-md-12" style="margin-top:20px; margin-bottom:0px !important;">
-                            @if (Model.CaseId == 0)
-                            { 
+                    <div class="col-md-12" style="margin-top:20px; margin-bottom:0px !important;">
+                        @if (Model.CaseId == 0)
+                        { 
                             <a id="" href="#NewCase_upload_files_popup" role="button" class="btn btn-default hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add", Enums.TranslationSource.TextTranslation)</a>
                             <a href="#upload_clipboard_file_popup" role="button" class="btn btn-default hasAttribute" data-src="case" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard", Enums.TranslationSource.TextTranslation)</a>
+                        }
+                        <table id="NewCasefiles_table" class="table table-striped" style="margin-top:10px;">
+                            <tbody>
+                            @if (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null && Model.CaseDataModel.CaseFiles.Count > 0)
+                            {
+                                foreach (var item in Model.CaseDataModel.CaseFiles)
+                                {
+                                    <tr>
+                                        <td>
+                                            <i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href="@downloadCaseFileCompleteUrl.Replace("{name}", item.FileName).Replace("{id}", Model.CaseId.ToString())">@item.FileName</a>
+                                        </td>
+                                    </tr>
+                                }
                             }
-                            <table id="NewCasefiles_table" class="table table-striped" style="margin-top:10px;">
-                                <tbody>
-                                    @if (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null && Model.CaseDataModel.CaseFiles.Count > 0)
-                                    {
-                                        foreach (var item in Model.CaseDataModel.CaseFiles)
-                                        {
-                                            <tr>
-                                                <td>
-                                                    <i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href="@downloadCaseFileCompleteUrl.Replace("{name}", item.FileName).Replace("{id}", Model.CaseId.ToString())">@item.FileName</a>
-                                                </td>
-                                            </tr>
-                                        }
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         }
@@ -384,52 +361,57 @@
     </div>
 
     @*/* only on new for now.. */*@
-@if (ViewBag.AttachmentPlacement == 1 && Model.CaseId == 0 && Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
-{
-    <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h5 class="modal-title">&nbsp;</h5>
-                </div>
-                <div class="modal-body">
-                    <div id="NewCasefile_uploader"></div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="upload_clipboard_file_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3>&nbsp;</h3>
-                </div>
-                <div class="modal-body" style="max-height: 600px; text-align: center;">
-                    <form onsubmit="return false;">
-                        <div class="form-group">
-                            <label>@Translation.Get("1. Write filename (leave blank for automatic naming)", Enums.TranslationSource.TextTranslation) </label><br />
-                            <input class="" type="text" id="imgFilename" autocomplete="Off" />
-                            <span id="imageNameRequired" style="color: red"> @Translation.Get("must be specified", Enums.TranslationSource.TextTranslation) </span>
-                        </div>
-                        <div class="form-group">
-                            <label>@(Translation.Get("2. Press Ctrl+V for inserting picture", Enums.TranslationSource.TextTranslation) )</label><br />
-                            <label>@(Translation.Get("3. Click on Save for adding to case", Enums.TranslationSource.TextTranslation)) </label>
-                            <div id="previewPnl"></div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="btnSave" class="btn btn-ok btn-default" style="display: none">@Translation.Get("Save", Enums.TranslationSource.TextTranslation)</button>
-                    <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)</button>
+    @if (ViewBag.AttachmentPlacement == 1 && Model.CaseId == 0 && Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+    {
+        <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h5 class="modal-title">&nbsp;</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div id="NewCasefile_uploader"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-}
+        <div id="upload_clipboard_file_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3>&nbsp;</h3>
+                    </div>
+                    <div class="modal-body" style="max-height: 600px; text-align: center;">
+                        <form onsubmit="return false;">
+                            <div class="form-group">
+                                <label>@Translation.Get("1. Write filename (leave blank for automatic naming)", Enums.TranslationSource.TextTranslation) </label><br />
+                                <input class="" type="text" id="imgFilename" autocomplete="Off" />
+                                <span id="imageNameRequired" style="color: red"> @Translation.Get("must be specified", Enums.TranslationSource.TextTranslation) </span>
+                            </div>
+                            <div class="form-group">
+                                <label>@(Translation.Get("2. Press Ctrl+V for inserting picture", Enums.TranslationSource.TextTranslation) )</label><br />
+                                <label>@(Translation.Get("3. Click on Save for adding to case", Enums.TranslationSource.TextTranslation)) </label>
+                                <div id="previewPnl"></div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnSave" class="btn btn-ok btn-default" style="display: none">@Translation.Get("Save", Enums.TranslationSource.TextTranslation)</button>
+                        <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 
 </div>
+
+@if (Model.CaseId == 0 || (Model.WorkflowSteps != null && Model.WorkflowSteps.Any()))
+{
+    @Html.Partial("_ExtendedCaseControlPanel", Model)
+}

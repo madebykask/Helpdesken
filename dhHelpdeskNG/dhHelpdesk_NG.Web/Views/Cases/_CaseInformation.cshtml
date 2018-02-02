@@ -2,13 +2,13 @@
 @using DH.Helpdesk.Common.Extensions.String
 
 
-@if (!string.IsNullOrEmpty(ViewData["Headline"].ToString()) || Model.StatusBar.Count > 0)
+@if (!string.IsNullOrEmpty(ViewData["Headline"].ToString()) && Model.StatusBar.Count > 0)
 {
     <h4 style="font-weight:normal !important; font-size:11px !important;">
         
         @if (Model.StatusBar.Count > 0 && !string.IsNullOrEmpty(ViewData["Headline"].ToString())){
         <strong>@ViewData["Headline"].ToString()</strong>
-            if (Model.StatusBar.Count() > 0)
+            if (Model.StatusBar.Any())
             {
                 <text> | </text>
             }

@@ -45,6 +45,7 @@ function LogInitForm() {
     });
     
     $('#case__StateSecondary_Id').change(function (d, source) {
+
         $('#CaseLog_SendMailAboutCaseToNotifier').removeAttr('disabled');
         var curVal = $('#case__StateSecondary_Id').val();
         $('#case__StateSecondary_Id option[value=' + curVal + ']').attr('selected', 'selected');

@@ -13,25 +13,25 @@
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
-            <th>@Translation.Get("Grupp")</th>
-            <th>@Translation.Get("Egenskap")</th>
-            <th>@Translation.Get("Pos")</th>
-            <th>@Translation.Get("Typ")</th>
-            <th>@Translation.Get("Storlek")</th>
-            <th>@Translation.Get("Visa")</th>
-            <th>@Translation.Get("Lista")</th>
-            <th>@Translation.Get("Ta bort")</th>
+            <th>@Translation.GetCoreTextTranslation("Grupp")</th>
+            <th>@Translation.GetCoreTextTranslation("Egenskap")</th>
+            <th>@Translation.GetCoreTextTranslation("Pos")</th>
+            <th>@Translation.GetCoreTextTranslation("Typ")</th>
+            <th>@Translation.GetCoreTextTranslation("Storlek")</th>
+            <th>@Translation.GetCoreTextTranslation("Visa")</th>
+            <th>@Translation.GetCoreTextTranslation("Lista")</th>
+            <th>@Translation.GetCoreTextTranslation("Ta bort")</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td colspan="8" class="header">@Translation.Get("Ny")</td>
+            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Ny")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.NewDynamicFieldViewModel, "Settings/NewInventoryFieldSettingModel")
         </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.Get("Allmänt")</td>
+            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Allmänt")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.DefaultSettings.DepartmentFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
@@ -52,7 +52,7 @@
             @Html.EditorFor(m => m.DefaultSettings.TheftMarkFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
         </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.Get("Inventering")</td>
+            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Inventering")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.DefaultSettings.BarCodeFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
@@ -61,25 +61,36 @@
             @Html.EditorFor(m => m.DefaultSettings.PurchaseDateFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
         </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.Get("Placering")</td>
+            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Placering")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.DefaultSettings.PlaceFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
         </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.Get("Övrigt")</td>
+            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Övrigt")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.DefaultSettings.InfoFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
         </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.Get("Tillbehör")</td>
+            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Tillbehör")</td>
         </tr>
+    <tr>
+        @Html.EditorFor(m => m.DefaultSettings.WorkstationFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
+    </tr>
+
         <tr>
-            @Html.EditorFor(m => m.DefaultSettings.WorkstationFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
+            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Status")</td>
         </tr>
+    <tr>
+        @Html.EditorFor(m => m.DefaultSettings.CreatedDateFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
+    </tr>
         <tr>
-            <td colspan="8" class="header">@Translation.Get("Tillägg")</td>
+            @Html.EditorFor(m => m.DefaultSettings.ChangedDateFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
+        </tr>
+
+    <tr>
+            <td colspan="8" class="header">@Translation.GetCoreTextTranslation("Tillägg")</td>
         </tr>
         @{
             var inventoryDynamicFieldViewModelSettings = Model.InventoryDynamicFieldViewModelSettings.OrderBy(x => x.InventoryDynamicFieldSettingModel.Position).ThenBy(x => x.InventoryDynamicFieldSettingModel.Caption).ToList();

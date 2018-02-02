@@ -150,7 +150,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Specifications
             return query;
         }
 
-        public static IQueryable<T> RestrictByWorkingGroupsOnyRead<T>(this IQueryable<T> query, IWorkContext workContext)
+        public static IQueryable<T> RestrictByWorkingGroupsOnlyRead<T>(this IQueryable<T> query, IWorkContext workContext)
             where T : class, IWorkingGroupEntity
         {
             //var userGroups = workContext.User.UserWorkingGroups.Select(u => u.WorkingGroup_Id);

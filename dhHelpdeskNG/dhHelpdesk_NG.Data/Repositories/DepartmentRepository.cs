@@ -29,6 +29,8 @@ namespace DH.Helpdesk.Dal.Repositories
         IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId = null);
 
         int GetDepartmentLanguage(int departmentId);
+
+        void UpdateDeparmentDisabledForOrder(int[] toEnables, int[] toDisable);
     }
 
     public sealed class DepartmentRepository : RepositoryBase<Department>, IDepartmentRepository
@@ -141,6 +143,23 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             return query.OrderBy(d => d.DepartmentName);
+        }
+
+        public void UpdateDeparmentDisabledForOrder(int[] toEnables, int[] toDisable)
+        {
+            /*Enabling*/
+            foreach (var obj in GetMany(d => toEnables.Contains(d.Id)))
+            {
+                obj.DisabledForOrder = false;
+                Update(obj);
+            }
+
+            /*Disabling*/
+            foreach (var obj in GetMany(d => toDisable.Contains(d.Id)))
+            {
+                obj.DisabledForOrder = true;
+                Update(obj);
+            }
         }
     }
 

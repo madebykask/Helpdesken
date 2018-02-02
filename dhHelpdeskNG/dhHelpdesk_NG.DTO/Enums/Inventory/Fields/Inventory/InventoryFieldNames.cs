@@ -23,5 +23,9 @@
         public static readonly string Workstation = "Arbetsstation";
 
         public static readonly string Info = "Info";
+
+        public static readonly string CreatedDate = "Skapad datum";
+
+        public static readonly string ChangedDate = "Ändrad datum";
     }
 }

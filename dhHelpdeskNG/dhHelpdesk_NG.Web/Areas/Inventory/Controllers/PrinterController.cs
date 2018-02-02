@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
+﻿using DH.Helpdesk.Common.Constants;
+
+namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -93,10 +95,8 @@
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult PrintersGrid(PrinterSearchFilter filter)
         {
-            SessionFacade.SavePageFilters(
-                this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Printer.ToString()),
-                filter);
-
+            SessionFacade.SavePageFilters(this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Printer.ToString()),filter);
+            filter.RecordsCount = SearchFilter.RecordsOnPage;
             InventoryGridModel viewModel = this.CreateInventoryGridModel(filter);
 
             return this.PartialView("InventoryGrid", viewModel);

@@ -689,4 +689,3 @@ If not exists (select * from tblTextTranslation where text_id = 1881 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1881, 1, 'Bilagor')
 GO
 
-

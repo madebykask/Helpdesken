@@ -57,23 +57,6 @@
             public static readonly string DeletedLogs = "DeletedLogs";
         }        
 
-        public static class FederationServiceKeys
-        {
-            public static readonly string ClaimDomain = "ClaimDomain";
-
-            public static readonly string ClaimUserId = "ClaimUserId";
-
-            public static readonly string ClaimEmployeeNumber = "ClaimEmployeeNumber";
-
-            public static readonly string ClaimFirstName = "ClaimFirstName";
-
-            public static readonly string ClaimLastName = "ClaimLastName";
-
-            public static readonly string ClaimEmail = "ClaimEmail";
-
-            public static readonly string ClaimPhone = "ClaimPhone";
-        }
-
         public static class CaseFieldGroups
         {
             public static readonly string UserInformation = "UserInformation";

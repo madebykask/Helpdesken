@@ -144,6 +144,7 @@
             this.Property(x => x.AttachmentPlacement).IsRequired();
             this.Property(x => x.M2TNewCaseMailTo).IsRequired();
             this.Property(x => x.DefaultCaseTemplateId).IsRequired();
+            this.Property(x => x.QuickLinkWGRestriction).IsRequired();
 
             this.ToTable("tblsettings");
         }

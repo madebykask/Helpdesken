@@ -47,7 +47,14 @@ namespace DH.Helpdesk.Web.Controllers
         public JsonResult GetDepartments(int customerId)
         {
             var departments = _departmentService.GetDepartments(customerId, ActivationStatus.All)
-                                            .Select(d => new { Id = d.Id, Name = d.DepartmentName, IsActive = d.IsActive.ToBool(), RegionId = d.Region_Id });
+                                            .Select(d => new
+                                            {
+                                                Id = d.Id,
+                                                Name = d.DepartmentName,
+                                                IsActive = d.IsActive.ToBool(),
+                                                RegionId = d.Region_Id,
+                                                DisabledForOrder = d.DisabledForOrder
+                                            });
 
             return Json(new { departments }, JsonRequestBehavior.AllowGet);
         }

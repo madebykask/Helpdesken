@@ -121,7 +121,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             entity.BarCode,
                             entity.PurchaseDate,
                             entity.Info,
-                            Worstations = computerName
+                            Worstations = computerName,
+                            entity.CreatedDate,
+                            entity.ChangedDate
                         }).GroupBy(x => x.InventoryTypeId).ToList();
 
             foreach (var item in anonymus)
@@ -142,7 +144,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             a.BarCode,
                             a.PurchaseDate,
                             a.Worstations,
-                            a.Info)).ToList();
+                            a.Info,
+                            a.CreatedDate,
+                            a.ChangedDate)).ToList();
 
                 var overviewWithType = new InventoryOverviewWithType(item.Key, overviews);
                 overviewsWithType.Add(overviewWithType);
@@ -175,7 +179,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
             /*-1: take all records*/
             if (pageSize != -1)
-                query = query.Take(pageSize);            
+                query = query.OrderBy(x => x.InventoryName).Take(pageSize);            
 
             const string Delimeter = "; ";
 
@@ -198,7 +202,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                                         i.BarCode,
                                         i.PurchaseDate,
                                         i.Info,
-                                        WorkstationName = k.Computer.ComputerName
+                                        WorkstationName = k.Computer.ComputerName,
+                                        i.CreatedDate,
+                                        i.ChangedDate
                                     }).ToList()
                 .GroupBy(
                     x =>
@@ -217,6 +223,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             x.BarCode,
                             x.PurchaseDate,
                             x.Info,
+                            x.CreatedDate,
+                            x.ChangedDate
                         });
 
             var overviews =
@@ -235,7 +243,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         a.Key.BarCode,
                         a.Key.PurchaseDate,
                         string.Join(Delimeter, a.Select(x => x.WorkstationName)), // todo change to array
-                        a.Key.Info)).ToList();
+                        a.Key.Info,
+                        a.Key.CreatedDate,
+                        a.Key.ChangedDate)).ToList();
 
             return overviews;
         }

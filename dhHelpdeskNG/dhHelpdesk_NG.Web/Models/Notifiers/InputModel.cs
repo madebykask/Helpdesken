@@ -46,7 +46,8 @@
             StringFieldModel createdDate,
             StringFieldModel changedDate,
             StringFieldModel synchronizationDate,
-            DropDownFieldModel language)
+            DropDownFieldModel language,
+			ComputerUserCategoryModel categoryModel)
             : this(
                 userId,
                 domain,
@@ -75,14 +76,17 @@
                 other,
                 ordered,
                 isActive,
-                language)
+                language,
+				categoryModel)
         {
             this.Id = id;
             this.IsNew = false;
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
             this.SynchronizationDate = synchronizationDate;
-        }
+			this.ComputerUserCategoryModel = categoryModel;
+
+		}
 
         public InputModel(
             StringFieldModel userId,
@@ -112,7 +116,8 @@
             StringFieldModel other,
             BooleanFieldModel ordered,
             bool isActive,
-            DropDownFieldModel language)
+            DropDownFieldModel language,
+			ComputerUserCategoryModel categoryModel)
         {
             this.IsNew = true;
             this.UserId = userId;
@@ -143,7 +148,9 @@
             this.Ordered = ordered;
             this.IsActive = isActive;
             this.Language = language;
-        }
+			this.ComputerUserCategoryModel = categoryModel;
+
+		}
 
         #endregion
 
@@ -238,7 +245,9 @@
         //public virtual Language Language { get; set; }
 
         public DropDownFieldModel Language { get; set; }
-        #endregion
 
-    }
+		public ComputerUserCategoryModel ComputerUserCategoryModel { get; set; }
+		#endregion
+
+	}
 }

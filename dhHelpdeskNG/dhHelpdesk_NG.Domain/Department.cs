@@ -48,6 +48,8 @@
         public bool ShowInvoiceMaterial { get; set; }
         public bool ShowInvoicePrice { get; set; }
 
+        public bool DisabledForOrder { get; set; }
+
         public virtual Language Language { get; set; }
     }
 }

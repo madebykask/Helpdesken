@@ -6349,6 +6349,19 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1874 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1874, 2, '(Number of records for inventory is limited to {0})')
 GO
+If not exists (select * from tbltext where id = 1875)
+	insert into tbltext (id, TextString) VALUES (1875, 'Säljare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1875 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1875, 2, 'Vendor')
+GO
+If not exists (select * from tbltext where id = 1876)
+	insert into tbltext (id, TextString) VALUES (1876, 'Anställd')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1876 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1876, 2, 'Employee')
+GO
+
 
 If not exists (select * from tbltext where id = 1875)
 	insert into tbltext (id, TextString) VALUES (1875, 'Denna kategori kan inte aktiveras, eftersom huvudnivån är inaktiv')
@@ -6628,6 +6641,175 @@ If not exists (select * from tblTextTranslation where text_id = 1905 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1905, 2, 'Favorite search filter')
 GO
 
+If not exists (select * from tbltext where id = 1906)
+	insert into tbltext (id, TextString) VALUES (1906, 'sparades')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1906 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1906, 2, 'saved successfully')
+GO
+
+If not exists (select * from tbltext where id = 1907)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1907, 'ReportedTime', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1909)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1909, 'CasesPerDepartment', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1910)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1910, 'CasesPerDate', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1911)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1911, 'CasesPerSource', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1912)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1912, 'CasesPerWorkingGroup', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1913)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1913, 'AvgResolutionTime', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1914)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1914, 'NumberOfCases', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1915)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1915, 'CasesPerAdministrator', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1916)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1916, 'Registration Date', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1917)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1917, 'Registration Year', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1918)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1918, 'Registration Month', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1919)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1919, 'Registration Weekday', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1920)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1920, 'Registration Hour', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1921)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (1921, 'Log Note Date', 1)
+end
+
+GO
+
+If not exists (select * from tbltext where id = 1922)
+	insert into tbltext (id, TextString) VALUES (1922, 'Ange')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1922 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1922, 2, 'Enter')
+GO
+
+If not exists (select * from tbltext where id = 1923)
+	insert into tbltext (id, TextString) VALUES (1923, 'nummer du vill öppna')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1923 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1923, 2, 'number you want to open')
+GO
+
+
+If not exists (select * from tbltext where id = 1926)
+	insert into tbltext (id, TextString) VALUES (1926, 'kan inte faktureras')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1926 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1926, 2, 'can not be invoiced')
+GO
+
+If not exists (select * from tbltext where id = 1927)
+	insert into tbltext (id, TextString) VALUES (1927, 'Begränsningar')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1927 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1927, 2, 'Restrictions')
+GO
+
+If not exists (select * from tbltext where id = 1928)
+	insert into tbltext (id, TextString) VALUES (1928, 'Inaktivera')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1928 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1928, 2, 'Disable')
+GO
+
+If not exists (select * from tbltext where id = 1929)
+	insert into tbltext (id, TextString) VALUES (1929, N'Utökat ärende')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1929 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1929, 2, N'Extended case')
+GO
+
+If not exists (select * from tbltext where id = 1930)
+	insert into tbltext (id, TextString) VALUES (1930, N'Informationsfält')
+GO
+
+If not exists (select * from tblTextTranslation where text_id = 1930 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1930, 2, N'Information bar')
+GO
+
+If not exists (select * from tbltext where id = 1931)
+	insert into tbltext (id, TextString) VALUES (1931, 'Begränsa rättighet att skicka order till')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1931 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1931, 2, 'Limit permission to send orders for')
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
-

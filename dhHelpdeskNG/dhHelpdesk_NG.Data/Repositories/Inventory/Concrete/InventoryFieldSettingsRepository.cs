@@ -50,6 +50,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Place, businessModel.DefaultSettings.PlaceFieldSetting, businessModel.CreatedDate, this.DbSet);
             AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Workstation, businessModel.DefaultSettings.WorkstationFieldSetting, businessModel.CreatedDate, this.DbSet);
             AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Info, businessModel.DefaultSettings.InfoFieldSetting, businessModel.CreatedDate, this.DbSet);
+            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.CreatedDate, businessModel.DefaultSettings.CreatedDateFieldSetting, businessModel.CreatedDate, this.DbSet);
+            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.ChangedDate, businessModel.DefaultSettings.ChangedDateFieldSetting, businessModel.CreatedDate, this.DbSet);
         }
 
         public void Update(InventoryFieldSettings businessModel)
@@ -68,20 +70,17 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             MapFieldSetting(businessModel.DefaultSettings.PlaceFieldSetting, fieldSettingCollection.FindByName(InventoryFields.Place.ToString(CultureInfo.InvariantCulture)), businessModel.ChangedDate);
             MapFieldSetting(businessModel.DefaultSettings.WorkstationFieldSetting, fieldSettingCollection.FindByName(InventoryFields.Workstation.ToString(CultureInfo.InvariantCulture)), businessModel.ChangedDate);
             MapFieldSetting(businessModel.DefaultSettings.InfoFieldSetting, fieldSettingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)), businessModel.ChangedDate);
+            MapFieldSetting(businessModel.DefaultSettings.CreatedDateFieldSetting, fieldSettingCollection.FindByName(InventoryFields.CreatedDate.ToString(CultureInfo.InvariantCulture)), businessModel.ChangedDate);
+            MapFieldSetting(businessModel.DefaultSettings.ChangedDateFieldSetting, fieldSettingCollection.FindByName(InventoryFields.ChangedDate.ToString(CultureInfo.InvariantCulture)), businessModel.ChangedDate);
         }
 
         public InventoryFieldSettings GetFieldSettingsForEdit(int inventoryTypeId)
         {
             var settings = this.GetSettings(inventoryTypeId);
 
-            var anonymus =
-                settings.Select(
-                    s => new { s.PropertyValue, s.PropertyType, s.Show, s.ShowInList, s.PropertySize, s.PropertyPos })
-                    .ToList();
+            var anonymus = settings.Select(s => new { s.PropertyValue, s.PropertyType, s.Show, s.ShowInList, s.PropertySize, s.PropertyPos }).ToList();
 
-            var mapperData =
-                anonymus.Select(
-                    s =>
+            var mapperData = anonymus.Select(s =>
                     new InventoryFieldSettingMapperData
                         {
                             Caption = s.PropertyValue,
@@ -105,9 +104,10 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             var place = CreateFieldSettingWithDefaultPropertySize(settingCollection.FindByName(InventoryFields.Place.ToString(CultureInfo.InvariantCulture)));
             var workstation = CreateFieldSettingWithDefaultPropertySize(settingCollection.FindByName(InventoryFields.Workstation.ToString(CultureInfo.InvariantCulture)));
             var info = CreateFieldSetting(settingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)));
+            var createdDate = CreateFieldSetting(settingCollection.FindByName(InventoryFields.CreatedDate.ToString(CultureInfo.InvariantCulture)));
+            var changedDate = CreateFieldSetting(settingCollection.FindByName(InventoryFields.ChangedDate.ToString(CultureInfo.InvariantCulture)));
 
-            var settingAgregate =
-                InventoryFieldSettings.CreateForEdit(
+            var settingAgregate = InventoryFieldSettings.CreateForEdit(
                     new BusinessData.Models.Inventory.Edit.Settings.InventorySettings.DefaultFieldSettings(
                         department,
                         name,
@@ -119,7 +119,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         purchaseDate,
                         place,
                         workstation,
-                        info));
+                        info,
+                        createdDate,
+                        changedDate));
 
             return settingAgregate;
         }
@@ -333,39 +335,19 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
         private static InventoryFieldSettingsOverview GetInventoryFieldSettingsOverview(List<FieldOverviewSettingMapperData> mapperData)
         {
             var settingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
-            var department =
-                CreateFieldSettingOverview(
-                    settingCollection.FindByName(InventoryFields.Department.ToString(CultureInfo.InvariantCulture)));
-            var name =
-                CreateFieldSettingOverview(
-                    settingCollection.FindByName(InventoryFields.Name.ToString(CultureInfo.InvariantCulture)));
-            var model =
-                CreateFieldSettingOverview(
-                    settingCollection.FindByName(InventoryFields.Model.ToString(CultureInfo.InvariantCulture)));
-            var manufacturer =
-                CreateFieldSettingOverview(
-                    settingCollection.FindByName(InventoryFields.Manufacturer.ToString(CultureInfo.InvariantCulture)));
-            var serialNumber =
-                CreateFieldSettingOverview(
-                    settingCollection.FindByName(InventoryFields.SerialNumber.ToString(CultureInfo.InvariantCulture)));
-            var theftMark =
-                CreateFieldSettingOverview(
-                    settingCollection.FindByName(InventoryFields.TheftMark.ToString(CultureInfo.InvariantCulture)));
-            var barCode =
-                CreateFieldSettingOverview(
-                    settingCollection.FindByName(InventoryFields.BarCode.ToString(CultureInfo.InvariantCulture)));
-            var purchaseDate =
-                CreateFieldSettingOverview(
-                    settingCollection.FindByName(InventoryFields.PurchaseDate.ToString(CultureInfo.InvariantCulture)));
-            var place =
-                CreateFieldSettingOverview(
-                    settingCollection.FindByName(InventoryFields.Place.ToString(CultureInfo.InvariantCulture)));
-            var workstation =
-                CreateFieldSettingOverview(
-                    settingCollection.FindByName(InventoryFields.Workstation.ToString(CultureInfo.InvariantCulture)));
-            var info =
-                CreateFieldSettingOverview(
-                    settingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)));
+            var department = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.Department.ToString(CultureInfo.InvariantCulture)));
+            var name = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.Name.ToString(CultureInfo.InvariantCulture)));
+            var model = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.Model.ToString(CultureInfo.InvariantCulture)));
+            var manufacturer = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.Manufacturer.ToString(CultureInfo.InvariantCulture)));
+            var serialNumber = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.SerialNumber.ToString(CultureInfo.InvariantCulture)));
+            var theftMark = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.TheftMark.ToString(CultureInfo.InvariantCulture)));
+            var barCode = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.BarCode.ToString(CultureInfo.InvariantCulture)));
+            var purchaseDate = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.PurchaseDate.ToString(CultureInfo.InvariantCulture)));
+            var place = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.Place.ToString(CultureInfo.InvariantCulture)));
+            var workstation = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.Workstation.ToString(CultureInfo.InvariantCulture)));
+            var info = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)));
+            var createdDate = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.CreatedDate.ToString(CultureInfo.InvariantCulture)));
+            var changedDate = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.ChangedDate.ToString(CultureInfo.InvariantCulture)));
 
             var settingAgregate =
                     new BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings.DefaultFieldSettings(
@@ -379,7 +361,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         purchaseDate,
                         place,
                         workstation,
-                        info);
+                        info,
+                        createdDate,
+                        changedDate);
 
             return new InventoryFieldSettingsOverview(settingAgregate);
         }

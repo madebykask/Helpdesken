@@ -1,14 +1,27 @@
 ﻿namespace DH.Helpdesk.Dal.Infrastructure
 {
-    using DH.Helpdesk.Dal.DbContext;
+	using DH.Helpdesk.Dal.DbContext;
+	using System.Data.SqlClient;
 
-    public class DatabaseFactory : Disposable, IDatabaseFactory
+	public class DatabaseFactory : Disposable, IDatabaseFactory
     {
-        private HelpdeskDbContext dataContext;
+		private string connectionString = null;
+		private HelpdeskDbContext dataContext;
+
+		public DatabaseFactory()
+		{
+
+		}
+
+		public DatabaseFactory(string connectionString)
+		{
+			this.connectionString = connectionString;
+		}
 
         public HelpdeskDbContext Get()
         {
-            this.dataContext = this.dataContext ?? new HelpdeskSqlServerDbContext();
+            this.dataContext = this.dataContext ?? (connectionString == null ? new HelpdeskSqlServerDbContext() : 
+				new HelpdeskSqlServerDbContext(new SqlConnection(connectionString)));
 
             return this.dataContext;
         }

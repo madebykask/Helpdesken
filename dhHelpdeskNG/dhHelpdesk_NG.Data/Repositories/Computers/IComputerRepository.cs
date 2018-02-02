@@ -45,7 +45,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
             string searchFor,
             bool isShowScrapped,
             int recordsOnPage,
-            SortField sortOptions);
+            SortField sortOptions,
+            int? recordsCount);
 
         ComputerShortOverview FindShortOverview(int id);
 

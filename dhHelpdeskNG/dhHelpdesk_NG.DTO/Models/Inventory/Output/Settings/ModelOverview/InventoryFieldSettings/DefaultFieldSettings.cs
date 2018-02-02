@@ -15,7 +15,9 @@
             FieldSettingOverview purchaseDateFieldSetting,
             FieldSettingOverview placeFieldSetting,
             FieldSettingOverview workstationFieldSetting,
-            FieldSettingOverview infoFieldSetting)
+            FieldSettingOverview infoFieldSetting,
+            FieldSettingOverview createdDateFieldSetting,
+            FieldSettingOverview changedDateFieldSetting)
         {
             this.DepartmentFieldSetting = departmentFieldSetting;
             this.NameFieldSetting = nameFieldSetting;
@@ -28,6 +30,8 @@
             this.PlaceFieldSetting = placeFieldSetting;
             this.WorkstationFieldSetting = workstationFieldSetting;
             this.InfoFieldSetting = infoFieldSetting;
+            this.CreatedDateFieldSetting = createdDateFieldSetting;
+            this.ChangedDateFieldSetting = changedDateFieldSetting;
         }
 
         [NotNull]
@@ -62,5 +66,11 @@
 
         [NotNull]
         public FieldSettingOverview InfoFieldSetting { get; private set; }
+
+        [NotNull]
+        public FieldSettingOverview CreatedDateFieldSetting { get; private set; }
+
+        [NotNull]
+        public FieldSettingOverview ChangedDateFieldSetting { get; private set; }
     }
 }

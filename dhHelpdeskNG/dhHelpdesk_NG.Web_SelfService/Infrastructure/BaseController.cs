@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
+using DH.Helpdesk.Common.Configuration;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
+using log4net;
 
 namespace DH.Helpdesk.SelfService.Infrastructure
 {
@@ -29,6 +31,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
     public class BaseController : Controller
     {
         const string DEFAULT_ANONYMOUS_USER_ID = "AnonymousUser";
+        private readonly ILog _log = LogManager.GetLogger(typeof(BaseController));
 
         private readonly ISelfServiceConfigurationService _configurationService;
         private readonly IMasterDataService _masterDataService;
@@ -66,10 +69,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             var lastError = new ErrorModel(string.Empty);
             userOrCustomerChanged = false;
 
-            var appType = AppConfigHelper.GetAppSetting(AppSettingsKey.CurrentApplicationType);
-            var loginMode = AppConfigHelper.GetAppSetting(AppSettingsKey.LoginMode);
-            var isSsoMode = loginMode.Equals(LoginMode.SSO, StringComparison.OrdinalIgnoreCase);
-            var federatedAuthenticationSettings = new FederatedAuthenticationSettings();
+            var appSettings = ConfigurationService.AppSettings;
+            var loginMode = appSettings.LoginMode;
 
             var res = SetCustomer(filterContext, out lastError);
             
@@ -156,7 +157,9 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 //load user info from tblUsers if such user exist
                 LoadLocalUserInfo();
             }
-            
+
+            //LogWithContext("OnActionExecuting: user and customer has been loaded.");
+
             if (SessionFacade.CurrentCustomer.RestrictUserToGroupOnExternalPage)
             {
                 SetUserRestriction(customerId, out lastError);
@@ -322,6 +325,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
         private void LoadLocalUserInfo()
         {
+            //_log.Debug("LoadLocalUserInfo: check if local user information can be loaded.");
+
             if (SessionFacade.CurrentCustomer != null &&
                 SessionFacade.CurrentUserIdentity != null)
             {
@@ -360,13 +365,13 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 string claimData = "";
                 bool isFirst = true;
                 
-                var claimDomain = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimDomain);
-                var claimUserId = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimUserId);
-                var claimEmployeeNumber = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimEmployeeNumber);
-                var claimFirstName = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimFirstName);
-                var claimLastName = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimLastName);
-                var claimEmail = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimEmail);
-                var claimPhone = AppConfigHelper.GetAppSetting(Enums.FederationServiceKeys.ClaimPhone);
+                var claimDomain = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimDomain);
+                var claimUserId = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimUserId);
+                var claimEmployeeNumber = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimEmployeeNumber);
+                var claimFirstName = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimFirstName);
+                var claimLastName = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimLastName);
+                var claimEmail = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimEmail);
+                var claimPhone = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimPhone);
 
                 foreach (Claim claim in principal.Claims)
                 {
@@ -526,7 +531,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 }
                
                 var useApi = SessionFacade.CurrentCustomer.FetchDataFromApiOnExternalPage;
-                var apiCredential = AppConfigHelper.GetAmApiInfo();
+                var apiCredential = WebApiConfig.GetAmApiInfo();
                 var employee = _masterDataService.GetEmployee(customerId, employeeNumber, useApi, apiCredential);
                 
                 if (employee != null && employee.IsManager)
@@ -784,6 +789,24 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             
         }
 
-    }
 
+        //keep for diagnostics purposes
+        private void LogWithContext(string msg)
+        {
+            var customerId = SessionFacade.CurrentCustomerID;
+            var userIdentityEmail = SessionFacade.CurrentUserIdentity?.Email;
+            var userIdentityEmployeeNumber = SessionFacade.CurrentUserIdentity?.EmployeeNumber;
+            var userIdentityUserId = SessionFacade.CurrentUserIdentity?.UserId;
+            var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
+            var localUserId = SessionFacade.CurrentLocalUser?.UserId;
+
+            _log.Debug($@"{msg}. Context: 
+                        -customerId: {customerId}, 
+                        -userIdentityEmail = {userIdentityEmail},
+                        -userIdentityEmployeeNumber = {userIdentityEmployeeNumber},
+                        -userIdentityUserId = {userIdentityUserId},
+                        -localUserPkId = {localUserPkId},
+                        -localUserId = {localUserId}");
+        }
+    }
 }

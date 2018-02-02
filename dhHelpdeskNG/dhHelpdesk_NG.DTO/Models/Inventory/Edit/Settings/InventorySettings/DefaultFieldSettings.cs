@@ -15,7 +15,9 @@
             InventoryFieldSetting purchaseDateFieldSetting,
             InventoryFieldSetting placeFieldSetting,
             InventoryFieldSetting workstationFieldSetting,
-            InventoryFieldSetting infoFieldSetting)
+            InventoryFieldSetting infoFieldSetting,
+            InventoryFieldSetting createdDateFieldSetting,
+            InventoryFieldSetting changedDateFieldSetting)
         {
             this.DepartmentFieldSetting = departmentFieldSetting;
             this.NameFieldSetting = nameFieldSetting;
@@ -28,6 +30,8 @@
             this.PlaceFieldSetting = placeFieldSetting;
             this.WorkstationFieldSetting = workstationFieldSetting;
             this.InfoFieldSetting = infoFieldSetting;
+            this.CreatedDateFieldSetting = createdDateFieldSetting;
+            this.ChangedDateFieldSetting = changedDateFieldSetting;
         }
 
         [NotNull]
@@ -62,5 +66,11 @@
 
         [NotNull]
         public InventoryFieldSetting InfoFieldSetting { get; private set; }
+
+        [NotNull]
+        public InventoryFieldSetting CreatedDateFieldSetting { get; private set; }
+
+        [NotNull]
+        public InventoryFieldSetting ChangedDateFieldSetting { get; private set; }
     }
 }

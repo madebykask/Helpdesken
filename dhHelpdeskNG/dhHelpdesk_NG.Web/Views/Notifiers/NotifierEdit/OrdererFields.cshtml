@@ -1,12 +1,13 @@
 ﻿
 @model DH.Helpdesk.Web.Models.Notifiers.InputModel
+@{ var attributes = Model.ComputerUserCategoryModel.IsReadOnly ? (object)new { htmlAttributes = new { @readonly = "readonly" } } : new { };}
            
 <div class="container">
     <h4>@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</h4>
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @Html.EditorFor(m => m.Ordered, "CheckBox")
+                @Html.EditorFor(m => m.Ordered, "CheckBox", attributes)
             </table>
         </div>
     </div>

@@ -52,6 +52,7 @@ namespace DH.Helpdesk.Web.Controllers
                 detailed.Questionnaire.Name,
                 detailed.Questionnaire.Description,
                 detailed.CaseId,
+                detailed.CaseNumber,
                 detailed.Caption,
                 questionnarieQuestionsModel);
 

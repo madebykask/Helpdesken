@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
+﻿using System;
+using DH.Helpdesk.Common.Configuration;
+using DH.Helpdesk.Common.Enums;
+
+namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
 {
     using System.Configuration;
     using System.Globalization;
@@ -56,6 +60,19 @@
                 }
 
                 return this.applicationId;
+            }
+        }
+
+        public LoginMode LoginMode
+        {
+            get
+            {
+                var val = AppConfigHelper.GetAppSetting(AppSettingsKey.LoginMode);
+                if (string.IsNullOrEmpty(val))
+                    return LoginMode.None;
+
+                var loginMode = (LoginMode)Enum.Parse(typeof(LoginMode), val, true);
+                return loginMode;
             }
         }
     }

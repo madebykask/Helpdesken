@@ -1,6 +1,10 @@
-﻿using DH.Helpdesk.Services.Services.Cases;
+﻿using System.Web.Mvc;
+using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Services.Services.Feedback;
 using DH.Helpdesk.Services.Services.Invoice;
+using DH.Helpdesk.Web.Infrastructure.Authentication;
+using Ninject.Web.Common;
+using Ninject.Web.Mvc.FilterBindingSyntax;
 
 namespace DH.Helpdesk.Web.NinjectModules.Common
 {
@@ -43,8 +47,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IChangePriorityService>().To<ChangePriorityService>();
             this.Bind<IChangeStatusService>().To<ChangeStatusService>();
             this.Bind<IQestionnaireService>().To<QuestionnaireService>();
-			this.Bind<IFeedbackService>().To<FeedbackService>();
-			this.Bind<IQestionnaireQuestionService>().To<QuestionnaireQuestionService>();
+            this.Bind<IFeedbackService>().To<FeedbackService>();
+            this.Bind<IQestionnaireQuestionService>().To<QuestionnaireQuestionService>();
             this.Bind<IQestionnaireQuestionOptionService>().To<QuestionnaireQuestionOptionService>();
             this.Bind<ICircularService>().To<CircularService>();
             this.Bind<IInventoryService>().To<InventoryService>();
@@ -120,8 +124,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IWorkingGroupService>().To<WorkingGroupService>();
             this.Bind<ICausingPartService>().To<CausingPartService>();
             this.Bind<IEmailService>().To<EmailService>();
-	        this.Bind<IFeedbackTemplateService>().To<FeedbackTemplateService>();
-			this.Bind<IComputerModulesService>().To<ComputerModulesService>();
+            this.Bind<IFeedbackTemplateService>().To<FeedbackTemplateService>();
+            this.Bind<IComputerModulesService>().To<ComputerModulesService>();
             this.Bind<IInventorySettingsService>().To<InventorySettingsService>();
             this.Bind<IPlaceService>().To<PlaceService>();
             this.Bind<IOrganizationService>().To<OrganizationService>();
@@ -171,19 +175,16 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
 
             this.Bind<IBusinessRuleService>().To<BusinessRuleService>();
 
-			//Invoice
-			Bind<IExternalInvoiceService>().To<ExternalInvoiceService>();
-			Bind<IInvoiceService>().To<InvoiceService>();
+            //Invoice
+            Bind<IExternalInvoiceService>().To<ExternalInvoiceService>();
+            Bind<IInvoiceService>().To<InvoiceService>();
 
-			Bind<ICaseExtraFollowersService>().To<CaseExtraFollowersService>();
+            Bind<ICaseExtraFollowersService>().To<CaseExtraFollowersService>();
             Bind<IUniversalCaseService>().To<UniversalCaseService>();
             Bind<IExtendedCaseService>().To<ExtendedCaseService>();
             Bind<IMetaDataService>().To<MetaDataService>();
             Bind<IEmployeeService>().To<EmployeeService>();
             Bind<IWebApiService>().To<WebApiService>();
-
-
-
         }
 
         #endregion

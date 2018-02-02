@@ -36,10 +36,10 @@ namespace DH.Helpdesk.Web.Areas.Admin
 
 		private void ConfigMvcRoutes(AreaRegistrationContext context)
 		{
-			context.MapRoute(
-				"Admin_default",
-				AreaName + "/{controller}/{action}/{id}",
-				new { area = AreaName, action = "Index", id = UrlParameter.Optional });
-		}
+            context.MapRoute(
+                "Admin_default",
+                AreaName + "/{controller}/{action}/{id}",
+                new { area = AreaName, action = "Index", id = UrlParameter.Optional });
+        }
 	}
 }

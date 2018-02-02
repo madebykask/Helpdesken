@@ -15,8 +15,22 @@
                 {
                     @Html.DisplayFor(m => m.UserId, "Label")
                 }*@
+                @{ var attributes = Model.ComputerUserCategoryModel.IsReadOnly ? (object)new { htmlAttributes = new { @readonly = "readonly" } } : new { };}
                         
-                @Html.EditorFor(m => m.UserId, "TextBox") 
+                @Html.EditorFor(m => m.UserId, "TextBox", attributes) 
+
+                @if (Model.ComputerUserCategoryModel.ComputerUserCategoryDropDownContent.Items.Count > 1)
+                {
+                    <tr>
+                        <td>
+                            @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                            @Html.DropDown("category_dropdown", "ID", false, Model.ComputerUserCategoryModel.ComputerUserCategoryDropDownContent, false, Model.ComputerUserCategoryModel.IsReadOnly)
+                        </td>
+
+                    </tr>
+                }
                            
                 @if (Model.Domain.Show)
                 {
@@ -25,23 +39,20 @@
                             @(Translation.Get(Model.Domain.Caption, Enums.TranslationSource.TextTranslation) + (Model.Domain.Required ? "*" : string.Empty))
                         </td>
                         <td>
-                            @Html.DropDown("domain_dropdown", "DomainId", !Model.Domain.Required, Model.Domain.Value)
+                            @Html.DropDown("domain_dropdown", "DomainId", !Model.Domain.Required, Model.Domain.Value, false, Model.ComputerUserCategoryModel.IsReadOnly)
                         </td>
                     </tr>
                 }
-
-                @Html.EditorFor(m => m.LoginName, "TextBox")
-                @Html.EditorFor(m => m.FirstName, "TextBox")
-                @Html.EditorFor(m => m.Initials, "TextBox")
-                @Html.EditorFor(m => m.LastName, "TextBox")
-                @Html.EditorFor(m => m.DisplayName, "TextBox")
-                @Html.EditorFor(m => m.Place, "TextBox")
-                @Html.EditorFor(m => m.Phone, "TextBox")
-                @Html.EditorFor(m => m.CellPhone, "TextBox")
-                @Html.EditorFor(m => m.Email, "TextBox")
-                @Html.EditorFor(m => m.Code, "TextBox")
-                
-
+                @Html.EditorFor(m => m.LoginName, "TextBox", attributes)
+                @Html.EditorFor(m => m.FirstName, "TextBox", attributes)
+                @Html.EditorFor(m => m.Initials, "TextBox", attributes)
+                @Html.EditorFor(m => m.LastName, "TextBox", attributes)
+                @Html.EditorFor(m => m.DisplayName, "TextBox", attributes)
+                @Html.EditorFor(m => m.Place, "TextBox", attributes)
+                @Html.EditorFor(m => m.Phone, "TextBox", attributes)
+                @Html.EditorFor(m => m.CellPhone, "TextBox", attributes)
+                @Html.EditorFor(m => m.Email, "TextBox", attributes)
+                @Html.EditorFor(m => m.Code, "TextBox", attributes)
                 @if (Model.Language.Show)
                 {
                     <tr>
@@ -49,7 +60,7 @@
                             @(Translation.Get(Model.Language.Caption, Enums.TranslationSource.TextTranslation) + (Model.Language.Required ? "*" : string.Empty))
                         </td>
                         <td>
-                            @Html.DropDown("language_dropdown", "LanguageId", Model.Language.Required, Model.Language.Value)
+                            @Html.DropDown("language_dropdown", "LanguageId", Model.Language.Required, Model.Language.Value, false, Model.ComputerUserCategoryModel.IsReadOnly)
                         </td>
                     </tr>
                 }

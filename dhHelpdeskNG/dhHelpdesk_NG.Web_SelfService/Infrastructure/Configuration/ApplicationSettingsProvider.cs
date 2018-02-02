@@ -1,3 +1,5 @@
+using System;
+using DH.Helpdesk.Common.Configuration;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.SelfService.Infrastructure.Helpers;
 
@@ -7,6 +9,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Configuration
     {
         string ApplicationType { get; }
         string HelpdeskPath { get; }
+        LoginMode LoginMode { get; }
+        bool ShowConfirmAfterCaseRegistration { get; }
     }
 
     public class ApplicationSettingsProvider : IApplicationSettings
@@ -24,6 +28,25 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Configuration
             get
             {
                 return AppConfigHelper.GetAppSetting(AppSettingsKey.HelpdeskPath);
+            }
+        }
+
+        public LoginMode LoginMode
+        {
+            get
+            {
+                var val = AppConfigHelper.GetAppSetting(AppSettingsKey.LoginMode);
+                var loginType = (LoginMode)Enum.Parse(typeof(LoginMode), val, true);
+                return loginType;
+            }
+        }
+
+        public bool ShowConfirmAfterCaseRegistration
+        {
+            get
+            {
+                var val = AppConfigHelper.GetBoolean(AppSettingsKey.ConfirmMsgAfterCaseRegistration);
+                return val ?? false;
             }
         }
     }

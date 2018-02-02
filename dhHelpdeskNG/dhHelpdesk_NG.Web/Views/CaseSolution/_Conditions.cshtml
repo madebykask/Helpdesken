@@ -39,7 +39,7 @@
                         
 
 
-                            <select tag="lst" class="chosen-select" id=lst_@cs.PropertyName multiple="multiple" name=lst_@cs.PropertyName style="display: none;">
+                            <select tag="lst" class="chosen-select" id=lst_@cs.PropertyName multiple="multiple" name=lst_@cs.PropertyName>
                                 @foreach (var op in cs.SelectList)
                                 {
                                     if (!op.Disabled)

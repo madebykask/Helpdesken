@@ -19,7 +19,9 @@
             InventoryFieldSettingModel purchaseDateFieldSettingModel,
             InventoryFieldSettingModel placeFieldSettingModel,
             InventoryFieldSettingModel workstationFieldSettingModel,
-            InventoryFieldSettingModel infoFieldSettingModel)
+            InventoryFieldSettingModel infoFieldSettingModel,
+            InventoryFieldSettingModel createdDateFieldSettingModel,
+            InventoryFieldSettingModel changedDateFieldSettingModel)
         {
             this.DepartmentFieldSettingModel = departmentFieldSettingModel;
             this.NameFieldSettingModel = nameFieldSettingModel;
@@ -32,6 +34,8 @@
             this.PlaceFieldSettingModel = placeFieldSettingModel;
             this.WorkstationFieldSettingModel = workstationFieldSettingModel;
             this.InfoFieldSettingModel = infoFieldSettingModel;
+            this.CreatedDateFieldSettingModel = createdDateFieldSettingModel;
+            this.ChangedDateFieldSettingModel = changedDateFieldSettingModel;
         }
 
         [NotNull]
@@ -66,5 +70,11 @@
 
         [NotNull]
         public InventoryFieldSettingModel InfoFieldSettingModel { get; set; }
+
+        [NotNull]
+        public InventoryFieldSettingModel CreatedDateFieldSettingModel { get; set; }
+
+        [NotNull]
+        public InventoryFieldSettingModel ChangedDateFieldSettingModel { get; set; }
     }
 }

@@ -297,7 +297,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             string searchFor,
             bool isShowScrapped,
             int recordsOnPage,
-            SortField sortOptions)
+            SortField sortOptions,
+            int? recordsCount)
         {
             var query = this.DbSet.Where(x => x.Customer_Id == customerId);
 
@@ -473,7 +474,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                     }
                 }
             }
-
+            if (recordsCount.HasValue)
+                query = query.OrderBy(x => x.ComputerName).Take(recordsCount.Value);
             var overviews = MapToComputerOverview(query);
             return overviews;
         }

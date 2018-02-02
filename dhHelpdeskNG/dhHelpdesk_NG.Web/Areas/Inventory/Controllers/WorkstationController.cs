@@ -1,3 +1,4 @@
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Web.Models.Shared;
 
@@ -116,12 +117,10 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult WorkstationsGrid(WorkstationsSearchFilter filter)
         {
-            SessionFacade.SavePageFilters(
-                this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Workstation.ToString()),
-                filter);
+            SessionFacade.SavePageFilters(CreateFilterId(TabName.Inventories, InventoryFilterMode.Workstation.ToString()), filter);
+            filter.RecordsCount = SearchFilter.RecordsOnPage;
 
             InventoryGridModel viewModel = this.CreateInventoryGridModel(filter);
-
             return this.PartialView("InventoryGrid", viewModel);
         }
 
@@ -375,8 +374,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 this.inventorySettingsService.GetWorkstationFieldSettingsOverview(
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId);
-            List<ComputerOverview> models =
-                this.inventoryService.GetWorkstations(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
+            List<ComputerOverview> models = this.inventoryService.GetWorkstations(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
 
             InventoryGridModel viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
             return viewModel;

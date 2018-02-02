@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DH.Helpdesk.Common.Configuration;
 using DH.Helpdesk.Domain;
+using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 
 namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
 {
@@ -21,13 +23,15 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
         private readonly ILogService _logService;
         private readonly IOrderTypeService _orderTypeService;
         private readonly ISettingService _settingService;
+        private readonly ISelfServiceConfigurationService _configurationService;
 
         public CommonFunctions(ICaseSolutionService caseSolutionService,
                                IGlobalSettingService globalSettingService,
                                ILogService logService,
                                IActionSettingService actionSettingService,
                                IOrderTypeService orderTypeService,
-                               ISettingService settingService)
+                               ISettingService settingService,
+                               ISelfServiceConfigurationService configurationService)
         {
             _caseSolutionService = caseSolutionService;
             _globalSettingService = globalSettingService;
@@ -35,6 +39,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
             _logService = logService;
             _orderTypeService = orderTypeService;
             _settingService = settingService;
+            _configurationService = configurationService;
         }
 
         public List<CaseSolution> GetCaseTemplates(int customerId)
@@ -165,7 +170,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
             model.UserHasOrderTypes = (SessionFacade.CurrentLocalUser != null)? 
                                         IsUserHasOrderTypes(SessionFacade.CurrentLocalUser.Id, pCustomerId) : false;
             model.HideMenu = !SessionFacade.UserHasAccess;
-            model.LoginType = AppConfigHelper.GetAppSetting(AppSettingsKey.LoginMode);             
+            model.LoginMode = _configurationService.AppSettings.LoginMode;
 
             model.ShowLanguage = tmpDataLanguge != null && tmpDataLanguge.ToString().ToLower() == "true";
             model.CaseLog = (currentCase_Id.HasValue)? GetCaseLogs(currentCase_Id.Value) : null;

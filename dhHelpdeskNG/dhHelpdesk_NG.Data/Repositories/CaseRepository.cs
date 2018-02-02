@@ -59,7 +59,7 @@ namespace DH.Helpdesk.Dal.Repositories
         MyCase[] GetMyCases(int userId, int? count = null);
         IList<Case> GetProblemCases(int problemId);
         IList<int> GetCasesIdsByType(int caseTypeId);
-
+        StateSecondary GetCaseSubStatus(int caseId);
         List<Case> GetTop100CasesToTest();
         Case GetCaseQuickOpen(UserOverview user, Expression<Func<Case, bool>> casePermissionFilter, string searchFor);
     }
@@ -117,6 +117,14 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var cases = this.DataContext.Cases.Where(c => c.Customer_Id == customerId && c.Problem_Id == problemId).ToList();
             return cases;
+        }
+
+        public StateSecondary GetCaseSubStatus(int caseId)
+        {
+            var stateSecondary = 
+                DataContext.Cases.Where(x => x.Id == caseId).Select(x => x.StateSecondary).FirstOrDefault();
+
+            return stateSecondary;
         }
 
         public DynamicCase GetDynamicCase(int id)

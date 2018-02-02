@@ -1,4 +1,11 @@
-﻿using System.Web.Http;
+﻿using System.IdentityModel.Services;
+using System.Linq;
+using System.Security.Claims;
+using System.Web.Http;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Services.Services.Authentication;
+using DH.Helpdesk.Web.Infrastructure.Authentication;
+using DH.Helpdesk.Web.Infrastructure.Configuration.Concrete;
 
 namespace DH.Helpdesk.Web
 {
@@ -32,15 +39,17 @@ namespace DH.Helpdesk.Web
         private readonly IConfiguration configuration = ManualDependencyResolver.Get<IConfiguration>();
         
         protected void Application_Start()
-        {           
+        {
+            //Debugger.Launch();
+
             AreaRegistration.RegisterAllAreas();
             //MARK: Remove old Api
             //GlobalConfiguration.Configure(WebApiConfig.Register);
 
             ViewEngineInit();
 
-			RegisterLocalizedAttributes();
-			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            RegisterLocalizedAttributes();
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             //MARK: Remove old Api
             //FilterConfig.RegisterWebApiGlobalFilters(GlobalConfiguration.Configuration.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
@@ -48,8 +57,8 @@ namespace DH.Helpdesk.Web
             ProcessStartupTasks();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-			JsonFormatConfig.ConfigWebApi();
-			JsonFormatConfig.ConfigMVC();
+            JsonFormatConfig.ConfigWebApi();
+            JsonFormatConfig.ConfigMVC();
 
             ECT.FormLib.FormLibSetup.Setup();
             ECT.FormLib.FormLibSetup.SetupRoutes(RouteTable.Routes);
@@ -63,6 +72,14 @@ namespace DH.Helpdesk.Web
             #else
                 BundleTable.EnableOptimizations = true;
             #endif
+
+            //fix for adfs(sso) claims-based identity
+            System.Web.Helpers.AntiForgeryConfig.UniqueClaimTypeIdentifier = System.Security.Claims.ClaimTypes.Name;
+
+            if (IsSsoMode())
+            {
+                FederatedAuthenticationConfiguration.Configure();
+            }
         }
 
         private void ViewEngineInit()
@@ -80,7 +97,7 @@ namespace DH.Helpdesk.Web
         }
 
         protected void Application_PostAuthorizeRequest()
-		{
+        {
             //MARK: Remove old Api
             //if (IsWebApiRequest())
             //{
@@ -95,12 +112,111 @@ namespace DH.Helpdesk.Web
         //}        
 
         protected void Application_BeginRequest(object sender, EventArgs e)
-		{
-			Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
-		}
+        {
+            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
+            LogSession("Application.BeginRequest", Context);
+        }
+
+        #region ADFS Module Events 
+
+        protected void Session_Start(object sender, EventArgs e)
+        {
+            var sessionId = Session.SessionID;
+            LogSession("Session.Start: " + sessionId, Context);
+        }
+
+        protected void WSFederationAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs e)
+        {
+            LogSession($"WSFederationAuthenticationModule.SessionSecurityTokenCreated: token created.", Context);
+        }
+        
+        protected void WSFederationAuthenticationModule_SecurityTokenValidated(object sender, SecurityTokenValidatedEventArgs e)
+        {
+            LogSession($"WSFederationAuthenticationModule.SecurityTokenValidated: token has been validated. {e.ClaimsPrincipal}", Context);
+        }
+
+        protected void WSFederationAuthenticationModule_SignedIn(object sender, EventArgs e)
+        {
+            LogIdentityClaims(Context);
+            LogSession($"WSFederationAuthenticationModule.SignedIn: user signed In.", Context);
+        }
+
+        protected void WSFederationAuthenticationModule_RedirectingToIdentityProvider(object sender, RedirectingToIdentityProviderEventArgs e)
+        {
+            var redirectUrl = e.SignInRequestMessage.WriteQueryString();
+            LogSession($"WSFederationAuthenticationModule.RedirectingToIdentityProvider. Redirect to sts - {redirectUrl}", Context);
+        }
+
+        protected void WSFederationAuthenticationModule_SignInError(object sender, ErrorEventArgs e)
+        {
+            LogSession($"WSFederationAuthenticationModule.SignInError: sign in error. {e.Exception?.Message ?? "Unknown"}", Context);
+        }
+
+        protected void WSFederationAuthenticationModule_AuthorizationFailed(object sender, AuthorizationFailedEventArgs e)
+        {
+            LogSession($"WSFederationAuthenticationModule.AuthorizationFailed. Authorisation failed.", Context);
+        }
+        
+        #region SessionAuthenticationModule events
+
+        protected void SessionAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs args)
+        {
+            var sessionToken = args.SessionToken;
+            LogSession($"SessionAuthenticationModule.SessionSecurityTokenCreated. Token valid: {sessionToken.ValidFrom} - {sessionToken.ValidTo}.", Context);
+        }
+
+        protected void SessionAuthenticationModule_SessionSecurityTokenReceived(object sender, SessionSecurityTokenReceivedEventArgs args)
+        {
+            var token = args.SessionToken;
+            LogSession($"SessionAuthenticationModule.SessionSecurityTokenReceived. Token valid: {token.ValidFrom} - {token.ValidTo}.", Context);
+            
+            var configuration = ManualDependencyResolver.Get<IAdfsConfiguration>();
+            var federationAuthenticationService = ManualDependencyResolver.Get<IFederatedAuthenticationService>();
+
+            //check if token has expired:
+            if (token.ValidTo < DateTime.UtcNow)
+            {
+                LogSession($"Security token lifetime has been expired: ValidTo: {token.ValidTo}, UtcNow: {DateTime.UtcNow}. Signing out.", Context);
+                SessionFacade.ClearSession();
+                federationAuthenticationService.SignOut(null);
+                return;
+            }
+
+            if (configuration.EnableSlidingExpiration)
+            {
+                LogSession("Try to refresh adfs Token lifetime.", Context);
+
+                var sam = (SessionAuthenticationModule)sender;
+                var refreshedToken =
+                    federationAuthenticationService.RefreshSecurityTokenLifeTime(sam, args.SessionToken, configuration.SecurityTokenMaxDuration);
+
+                if (refreshedToken != null)
+                {
+                    args.SessionToken = refreshedToken;
+                    args.ReissueCookie = true;
+                    LogSession($"Adfs Token lifetime has been refreshed to: {refreshedToken.ValidTo},", Context);
+                }
+            }
+        }
+
+        #endregion
+
+        private void LogSession(string msg, HttpContext ctx)
+        {
+            var request = ctx.Request;
+            var identity = ctx.User?.Identity;
+            var isAuthenticated = identity?.IsAuthenticated ?? false;
+            var contextInfo = $"Authenticated: {isAuthenticated}, User: {identity?.Name}, Request: {request.Url}";
+
+            var logger = LogManager.Session;
+            logger.Debug($"{msg} {contextInfo}");
+        }
+
+        #endregion
 
         protected void Application_AcquireRequestState(object sender, EventArgs e)
         {
+            LogSession("Application.AcquireRequestState called.", Context);
             try
             {
                 var session = HttpContext.Current.Session;
@@ -324,6 +440,25 @@ namespace DH.Helpdesk.Web
                 catch (Exception ex)
                 {
                     errorLoggerService.Error(ex);
+                }
+            }
+        }
+
+        private static bool IsSsoMode()
+        {
+            var appSettingsProvider = new ApplicationConfiguration();
+            return appSettingsProvider.LoginMode == LoginMode.SSO;
+        }
+        private static void LogIdentityClaims(HttpContext ctx)
+        {
+            var log = LogManager.Session;
+            var claimsIdentity = ctx.User.Identity as ClaimsIdentity;
+            if (claimsIdentity != null && claimsIdentity.Claims.Any())
+            {
+                log.Debug(">>> Claims found:");
+                foreach (var claim in claimsIdentity.Claims)
+                {
+                    log.Debug($"Claim: {claim.Type}, value: {claim.Value}, Issuer: {claim.Issuer}");
                 }
             }
         }

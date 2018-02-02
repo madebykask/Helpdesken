@@ -89,6 +89,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly IInventoryService _inventoryService;
         private readonly ICustomerUserService _customerUserService;
         private readonly IGlobalSettingService _globalSettingService;
+        private readonly IStatusService _statusService;
 
 
         private const string ParentPathDefaultValue = "--";
@@ -140,7 +141,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             ICustomerUserService customerUserService,
             IGlobalSettingService globalSettingService,
             IWatchDateCalendarService watchDateCalendarService,
-            ISelfServiceConfigurationService configurationService)
+            ISelfServiceConfigurationService configurationService,
+            IStatusService statusService)
             : base(configurationService, masterDataService, caseSolutionService)
         {
             _caseControllerBehavior = new CaseControllerBehavior(masterDataService, caseService, caseSearchService,
@@ -188,6 +190,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             _inventoryService = inventoryService;
             _customerUserService = customerUserService;
             _globalSettingService = globalSettingService;
+            _statusService = statusService;
         }
 
         [HttpGet]
@@ -242,6 +245,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
             
             var currentCase = _caseService.GetCaseById(caseId);                
+                currentCase = _caseService.GetCaseById(_intCaseId);
 
             if (currentCase == null)
             {
@@ -249,7 +253,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
-            if (!UserHasAccessToCase(currentCase))
+            var isAnonymousMode = ConfigurationService.AppSettings.LoginMode == LoginMode.Anonymous;
+            if (!isAnonymousMode && !UserHasAccessToCase(currentCase))
             {
                 ErrorGenerator.MakeError("Case not found among your cases!");
                 return RedirectToAction("Index", "Error");
@@ -453,7 +458,6 @@ namespace DH.Helpdesk.SelfService.Controllers
                 model.NewCase.FinishingDescription = caseTemplate.FinishingDescription;
 
                 //Hidden fields
-                model.NewCase.Performer_User_Id = caseTemplate.PerformerUser_Id;
                 model.NewCase.CausingPartId = caseTemplate.CausingPartId;
                 model.NewCase.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
                 model.NewCase.Project_Id = caseTemplate.Project_Id;
@@ -461,7 +465,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                 model.NewCase.PlanDate = caseTemplate.PlanDate;
                 model.NewCase.WatchDate = caseTemplate.WatchDate;
 
-                if(model.NewCase.IsAbout == null)
+                var defaultAdmin = cs.DefaultAdministratorExternal.HasValue ? cs.DefaultAdministratorExternal : caseTemplate.PerformerUser_Id;
+                model.NewCase.Performer_User_Id = caseTemplate.PerformerUser_Id.HasValue ? caseTemplate.PerformerUser_Id : defaultAdmin;
+
+                if (model.NewCase.IsAbout == null)
                     model.NewCase.IsAbout = new CaseIsAboutEntity();
 
                 model.NewCase.IsAbout.Id = 0;
@@ -590,19 +597,20 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
-        public ActionResult ExtendedCasePublic(string id)
+        public ActionResult ExtendedCasePublic(Guid id)
         {
             _logger.Warn($"ExtendedCasePublic: {id}");
-            var uniqueId = Guid.Empty;
-
+            //var uniqueId = Guid.Empty;
+            /*
             if (!Guid.TryParse(id, out uniqueId))
             {
                 _logger.Warn($"ExtendedCasePublic: failed to parse - {id}");
                 ErrorGenerator.MakeError("UniqueId value must be specified!", 210);
                 return RedirectToAction("Index", "Error");
             }
+            */
 
-            var caseId = _extendedCaseService.GetCaseIdByExtendedCaseGuid(uniqueId);
+            var caseId = _extendedCaseService.GetCaseIdByExtendedCaseGuid(id);
             if (caseId <= 0)
             {
                 ErrorGenerator.MakeError("Extended case data not found!", 210);
@@ -613,6 +621,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (ErrorGenerator.HasError())
                 return RedirectToAction("Index", "Error");
 
+            //return url after save
+            ViewBag.ReturnUrl = Url.Action("ExtendedCasePublic", new { id });
 
             return View("ExtendedCase", model);
         }
@@ -620,11 +630,11 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpGet]
         public ActionResult ExtendedCase(int? caseTemplateId = null, int? caseId = null)
         {
+
             var model = GetExtendedCaseViewModel(caseTemplateId, caseId);
             if (ErrorGenerator.HasError())
                 return RedirectToAction("Index", "Error");
-
-
+            
             return View("ExtendedCase", model);
         }
 
@@ -659,7 +669,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                 return null;
             }
 
-            if (caseId.HasValue && !UserHasAccessToCase(caseModel))
+            var isAnonymousMode = ConfigurationService.AppSettings.LoginMode == LoginMode.Anonymous;
+
+            if (!isAnonymousMode && caseId.HasValue && !UserHasAccessToCase(caseModel))
             {
                 ErrorGenerator.MakeError("Case not found among your cases!");
                 return null;
@@ -679,17 +691,17 @@ namespace DH.Helpdesk.SelfService.Controllers
                 ErrorGenerator.MakeError("Customer is not valid!");
                 return null;
             }
-
+        
             var languageId = SessionFacade.CurrentLanguageId;
             var customerId = SessionFacade.CurrentCustomer.Id;
-
-
+            var globalSettings = _globalSettingService.GetGlobalSettings().First();
             var cs = _settingService.GetCustomerSetting(customerId);
+
             ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
 
             caseModel.FieldSettings = _caseFieldSettingService.ListToShowOnCasePage(customerId, languageId)
-                                                   .Where(c => c.ShowExternal == 1)
-                                                   .ToList();
+                .Where(c => c.ShowExternal == 1)
+                .ToList();
 
             if (caseId.IsNew())
             {
@@ -701,9 +713,11 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
             }
 
-            if (caseId.HasValue && caseModel.Customer_Id != customerId)
+            // check only if multi customer is not enabled. Allow user to see own cases for different customers.
+            if (globalSettings.MultiCustomersSearch == 0 &&
+                caseId.IsNew() == false && caseModel.Customer_Id != customerId)
             {
-                ErrorGenerator.MakeError("Selected Case is not belong to current customer!");
+                ErrorGenerator.MakeError("Selected Case doesn't belong to current customer!");
                 return null;
             }
 
@@ -770,8 +784,24 @@ namespace DH.Helpdesk.SelfService.Controllers
             return model;
         }
 
+        private void SaveCaseFiles(string caseFileKey, int customerId, int caseId, int userId)
+        {
+            //Get from baseCase path
+            var basePath = _masterDataService.GetFilePath(customerId);
+
+            if (!string.IsNullOrWhiteSpace(caseFileKey))
+            {
+                var temporaryFiles = _userTemporaryFilesStorage.GetFiles(caseFileKey, ModuleName.Cases);
+                var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseId, userId)).ToList();
+                _caseFileService.AddFiles(newCaseFiles);
+
+                // delete temp folders                
+                _userTemporaryFilesStorage.DeleteFiles(caseFileKey);
+            }
+        }
+
         [HttpPost]
-        public ActionResult ExtendedCase(ExtendedCaseViewModel model)
+        public ActionResult ExtendedCase(ExtendedCaseViewModel model, string returnUrl = null)
         {
             var isNewCase = model.CaseDataModel.Id == 0;
 
@@ -783,6 +813,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                                             CreatedByApplications.ExtendedCase,
                                             TimeZoneInfo.Local);
 
+            //LogWithContext($"ExtendedCase.Post: Saving extended case data. LocalUserId: {auxModel.CurrentUserId}, url: {auxModel.AbsolutreUrl}.");
+
             if (model.SelectedWorkflowStep.HasValue && model.SelectedWorkflowStep.Value > 0)            
                 model.CaseDataModel = ApplyNextWorkflowStepOnCase(model.CaseDataModel, model.SelectedWorkflowStep.Value);
             
@@ -792,49 +824,30 @@ namespace DH.Helpdesk.SelfService.Controllers
             //TODO: Refactor
             model.CaseDataModel.ExtendedCaseData_Id = model.ExtendedCaseDataModel.Id;
             model.CaseDataModel.ExtendedCaseForm_Id = model.ExtendedCaseDataModel.ExtendedCaseFormId;
-
+            
             var res = _universalCaseService.SaveCaseCheckSplit(model.CaseDataModel, auxModel, out caseId, out caseNum);
-            if (res.IsSucceed && caseId != -1)
+            if (res.IsSucceed && caseId > 0)
             {
-                #region casefile
-                //TODO: do we need to check "isNewCase"? /Tan
-
                 var case_ = _universalCaseService.GetCase(caseId);
 
-                //var basePath = _masterDataService.GetFilePath(model.CustomerId);
-                //Get from baseCase path
-                var basePath = _masterDataService.GetFilePath(case_.Customer_Id);
+                SaveCaseFiles(model.CaseDataModel.CaseFileKey, case_.Customer_Id, caseId, localUserId);
 
-                // save case files
-                var temporaryFiles = _userTemporaryFilesStorage.GetFiles(model.CaseDataModel.CaseFileKey, ModuleName.Cases);
-                var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseId)).ToList();
-                _caseFileService.AddFiles(newCaseFiles);
-
-                // delete temp folders                
-                _userTemporaryFilesStorage.DeleteFiles(model.CaseDataModel.CaseFileKey);
-                #endregion
-
-                //var showConfirmMessage = AppConfigHelper.GetAppSetting(AppSettingsKey.ConfirmMsgAfterCaseRegistration);
-
-                //if (!string.IsNullOrEmpty(showConfirmMessage) && showConfirmMessage == "true")
-                //{
-                //    SessionFacade.LastMessageDialog = new MessageDialogModel(
-                //        MessageTypes.success,
-                //        "Your case has been successfully registered.",
-                //        $"You can follow up your case status via this number: {caseNum}");
-
-                //    return RedirectToAction("Index", "Message");
-                //}
-                //else
-                //{                    
-                //    return RedirectToAction("UserCases", new { customerId = model.CustomerId });
-                //}
-                return RedirectToAction("ExtendedCase", new {caseId = caseId});
+                if (ConfigurationService.AppSettings.ShowConfirmAfterCaseRegistration)
+                {
+                    return RedirectToCaseConfirmation("Your case has been successfully registered.", string.Empty);
+                }
+                else
+                {
+                    //return RedirectToAction("UserCases", new { customerId = model.CustomerId });
+                    if (string.IsNullOrEmpty(returnUrl))
+                        return RedirectToAction("ExtendedCase", new { caseId = caseId });
+                    else
+                        return Redirect(returnUrl);
+                }
             }
 
             if (model.CaseDataModel.OU_Id.HasValue)            
-                model.CaseOU = _ouService.GetOU(model.CaseDataModel.OU_Id.Value);                
-            
+                model.CaseOU = _ouService.GetOU(model.CaseDataModel.OU_Id.Value);
 
             model.Result = res;
             model.StatusBar = isNewCase ? new Dictionary<string, string>() : GetStatusBar(model);
@@ -1223,26 +1236,25 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
+        public ActionResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
         {
             decimal caseNum;
             int caseId = Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog, out caseNum);
 
-            var showConfirmMessage = AppConfigHelper.GetAppSetting(AppSettingsKey.ConfirmMsgAfterCaseRegistration);
-
-            if (!string.IsNullOrEmpty(showConfirmMessage) && showConfirmMessage == "true")
+            if (ConfigurationService.AppSettings.ShowConfirmAfterCaseRegistration)
             {
-                SessionFacade.LastMessageDialog = new MessageDialogModel(
-                    MessageTypes.success,
-                    "Your case has been successfully registered.",
-                    $"You can follow up your case status via this number: {caseNum}");
-
-                return RedirectToAction("Index", "Message");
+                return RedirectToCaseConfirmation("Your case has been successfully registered.", $"You can follow up your case status via this number: {caseNum}");
             }
             else
             {
                 return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
             }
+        }
+
+        private ActionResult RedirectToCaseConfirmation(string title, string details)
+        {
+            SessionFacade.LastMessageDialog = MessageDialogModel.Success(title, details);
+            return RedirectToAction("Index", "Message");
         }
 
         [HttpPost]
@@ -1554,21 +1566,23 @@ namespace DH.Helpdesk.SelfService.Controllers
                 {
                     //not used in selfservice
                 }
-                else if (setting == GlobalEnums.TranslationCaseFields.Status_Id.ToString())
+                else if (setting == GlobalEnums.TranslationCaseFields.Status_Id.ToString() && model.CaseDataModel.Status_Id.HasValue)
                 {
-                    //not used in selfservice
+                    var status = _statusService.GetStatus(model.CaseDataModel.Status_Id.Value);
+                    value = status?.Name ?? defaultValue;
                 }
-                else if (setting == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())
+                else if (setting == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString() && model.CaseDataModel.StateSecondary_Id.HasValue)
                 {
-                    //not used in selfservice
+                    var subStatus = _stateSecondaryService.GetStateSecondary(model.CaseDataModel.StateSecondary_Id.Value);
+                    value = subStatus?.Name ?? defaultValue;
                 }
                 else if (setting == GlobalEnums.TranslationCaseFields.PlanDate.ToString())
                 {
-                    value = model.CaseDataModel.PlanDate.HasValue ? model.CaseDataModel.PlanDate.Value.ToString(dateFormat) : defaultValue;
+                    value = model.CaseDataModel.PlanDate?.ToString(dateFormat) ?? defaultValue;
                 }
                 else if (setting == GlobalEnums.TranslationCaseFields.WatchDate.ToString())
                 {
-                    value = model.CaseDataModel.WatchDate.HasValue ? model.CaseDataModel.WatchDate.Value.ToString(dateFormat) : defaultValue;
+                    value = model.CaseDataModel.WatchDate?.ToString(dateFormat) ?? defaultValue;
                 }
                 else if (setting == GlobalEnums.TranslationCaseFields.Verified.ToString())
                 {
@@ -1580,7 +1594,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
                 else if (setting == GlobalEnums.TranslationCaseFields.FinishingDate.ToString())
                 {
-                    value = model.CaseDataModel.FinishingDate.HasValue ? model.CaseDataModel.FinishingDate.Value.ToString(dateFormat) : defaultValue;
+                    value = model.CaseDataModel.FinishingDate?.ToString(dateFormat) ?? defaultValue;
                 }
                 else if (setting == GlobalEnums.TranslationCaseFields.ClosingReason.ToString())
                 {
@@ -1599,8 +1613,11 @@ namespace DH.Helpdesk.SelfService.Controllers
             var userEmployeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
 
             //Hide this to next release #57742
-            if (currentCase.CaseType.ShowOnExtPageCases == 0 || currentCase.ProductArea?.ShowOnExtPageCases == 0)            
+            if (currentCase.CaseType.ShowOnExtPageCases == 0 || currentCase.ProductArea?.ShowOnExtPageCases == 0)
+            {
+                _logger.Warn("UserHasAccessToCase: ShowOnExtPageCases == 0");
                 return false;
+            }
 
             var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();
 
@@ -1608,7 +1625,13 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (criteria.MyCasesRegistrator && !string.IsNullOrEmpty(criteria.UserId) && !string.IsNullOrEmpty(currentCase.RegUserId))
             {
                 if (currentCase.RegUserId.Equals(criteria.UserId, StringComparison.CurrentCultureIgnoreCase))
+                {
                     return true;
+                }
+                else
+                {
+                    _logger.Warn($"UserHasAccessToCase: currentCase.RegUserId ('{currentCase.RegUserId}') != CurrentUserIdenity.UserId ('{criteria.UserId}')");
+                }
             }
 
             /*User initiator*/
@@ -1765,7 +1788,6 @@ namespace DH.Helpdesk.SelfService.Controllers
                         newCase.WorkingGroup_Id = productArea.WorkingGroup_Id;
                     }
                 }
-                
             }
 
             if (newCase.Department_Id.HasValue && newCase.Priority_Id.HasValue)
@@ -1788,15 +1810,18 @@ namespace DH.Helpdesk.SelfService.Controllers
             // save log
             caseLog.CaseId = newCase.Id;
             caseLog.CaseHistoryId = caseHistoryId;
+
+            if (caseLog.UserId <= 0 && localUserId > 0)
+                caseLog.UserId = localUserId;
+
+            if (string.IsNullOrWhiteSpace(caseLog.RegUser))
+                caseLog.RegUser = SessionFacade.CurrentUserIdentity?.UserId ?? string.Empty;
+
             caseLog.Id = this._logService.SaveLog(caseLog, 0, out errors);
 
             // save case files
-            var temporaryFiles = _userTemporaryFilesStorage.GetFiles(caseFileKey, ModuleName.Cases);
-            var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, newCase.Id)).ToList();
-            _caseFileService.AddFiles(newCaseFiles);
+            SaveCaseFiles(caseFileKey, newCase.Customer_Id, newCase.Id, localUserId);
 
-            // delete temp folders                
-            _userTemporaryFilesStorage.DeleteFiles(caseFileKey);
             var oldCase = new Case();            
             // send emails
             var userTimeZone = TimeZoneInfo.Local;
@@ -1809,6 +1834,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             _caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase);
+
             caseNumber = newCase.CaseNumber;
             return newCase.Id;
         }
@@ -2424,7 +2450,23 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         
+        // keep for diagnostic purposes
+        private void LogWithContext(string msg)
+        {
+            var customerId = SessionFacade.CurrentCustomerID;
+            var userIdentityEmail = SessionFacade.CurrentUserIdentity?.Email;
+            var userIdentityEmployeeNumber = SessionFacade.CurrentUserIdentity?.EmployeeNumber;
+            var userIdentityUserId = SessionFacade.CurrentUserIdentity?.UserId;
+            var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
+            var localUserId = SessionFacade.CurrentLocalUser?.UserId;
 
         #endregion
+                        -customerId: {customerId}, 
+                        -userIdentityEmail = {userIdentityEmail},
+                        -userIdentityEmployeeNumber = {userIdentityEmployeeNumber},
+                        -userIdentityUserId = {userIdentityUserId},
+                        -localUserPkId = {localUserPkId},
+                        -localUserId = {localUserId}");
+        }
     }
 }

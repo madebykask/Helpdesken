@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
+﻿using DH.Helpdesk.Common.Constants;
+
+namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -89,6 +91,7 @@
             SessionFacade.SavePageFilters(
                 this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Server.ToString()),
                 filter);
+            filter.RecordsCount = SearchFilter.RecordsOnPage;
 
             var viewModel = this.CreateInventoryGridModel(filter);
 

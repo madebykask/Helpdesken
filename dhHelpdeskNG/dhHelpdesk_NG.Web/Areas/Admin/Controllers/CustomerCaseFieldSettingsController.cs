@@ -7,7 +7,9 @@ using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain.Cases;
 using DH.Helpdesk.Services.Services.Cases;
+using DH.Helpdesk.Web.Infrastructure.Attributes;
 using DH.Helpdesk.Web.Infrastructure.Cache;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
 using Microsoft.Ajax.Utilities;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
@@ -26,7 +28,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
     public class CustomerCaseFieldSettingsController : BaseAdminController
     {
         private readonly ICaseFieldSettingService _caseFieldSettingService;
-        private readonly ICaseSettingsService _caseSettingsService;
         private readonly ICustomerService _customerService;
         private readonly ILanguageService _languageService;
         private readonly IHelpdeskCache _cache;
@@ -35,7 +36,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         public CustomerCaseFieldSettingsController(
             ICaseFieldSettingService caseFieldSettingService,
-            ICaseSettingsService caseSettingsService,
             ICustomerService customerService,
             ILanguageService languageService,
             IMasterDataService masterDataService,
@@ -45,7 +45,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
-            this._caseSettingsService = caseSettingsService;
             this._customerService = customerService;
             this._languageService = languageService;
             _cache = cache;
@@ -217,113 +216,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             model.ShowExternalStatusBarIds = model.CaseFieldSettings.Where(m => m.ShowExternalStatusBar)
                 .Select(m => m.Id).ToList();
             #endregion
-
-            var fieldstoExclude = new []
-            {
-                GlobalEnums.TranslationCaseFields.AddUserBtn.ToString(),
-                GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString(),
-                GlobalEnums.TranslationCaseFields.Filename.ToString(),
-                GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(),
-                GlobalEnums.TranslationCaseFields.tblLog_Charge.ToString(),
-                GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(),
-                GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(),
-                GlobalEnums.TranslationCaseFields.Description.ToString(),
-                GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(),
-                GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(),
-                GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString(),
-                GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(),
-                GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(),
-                GlobalEnums.TranslationCaseFields.SMS.ToString(),
-                GlobalEnums.TranslationCaseFields.Project.ToString(),
-                GlobalEnums.TranslationCaseFields.Problem.ToString(),
-            };
-            var externalFieldsToExclude = new[]
-            {
-                GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(),
-                GlobalEnums.TranslationCaseFields.RegTime.ToString(),
-                GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
-                GlobalEnums.TranslationCaseFields.User_Id.ToString(),
-                GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(),
-                GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(),
-                GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(),
-                GlobalEnums.TranslationCaseFields.Priority_Id.ToString(),
-                GlobalEnums.TranslationCaseFields.Status_Id.ToString(),
-                GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(),
-                GlobalEnums.TranslationCaseFields.CausingPart.ToString(),
-                GlobalEnums.TranslationCaseFields.ClosingReason.ToString(),
-                GlobalEnums.TranslationCaseFields.FinishingDate.ToString()
-            };
-
-            var allFields = model.CaseFieldSettings
-                .Where(c => FieldSettingsUiNames.Names.ContainsKey(c.Name) && !fieldstoExclude.Any(f => f == c.Name));
-
-            ViewBag.AllFields = allFields.Select(c => new CustomKeyValue<int, string>
-                {
-                    Key = c.Id,
-                    Value = FieldSettingsUiNames.Names.ContainsKey(c.Name) ? Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[c.Name]) : ""
-                })
-                .ToList();
-            ;
-            ViewBag.ShowExternalStatusBarFields = allFields.Where(c => !externalFieldsToExclude.Any(f => f == c.Name))
-                .Select(c => new CustomKeyValue<int, string>
-                {
-                    Key = c.Id,
-                    Value = FieldSettingsUiNames.Names.ContainsKey(c.Name) ? Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[c.Name]) : ""
-                })
-                .ToList();
-
-
-            return model;
-        }
-
-        private CustomerCaseSummaryViewModel CustomerCaseSummaryViewModel(CaseSettings caseSetting)
-        {
-            List<SelectListItem> li = new List<SelectListItem>();
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Info", Enums.TranslationSource.TextTranslation),
-                Value = "1",
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Utökad info", Enums.TranslationSource.TextTranslation),
-                Value = "2",
-                Selected = false
-            });
-
-            var model = new CustomerCaseSummaryViewModel
-            {
-                CaseSettings = this._caseSettingsService.GetCaseSettings(SessionFacade.CurrentCustomer.Id),
-                CSetting = caseSetting,
-                CaseFieldSettingLanguages = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId),
-                LineList = li,
-            };
-
-            return model;
-        }
-
-        private CustomerInputViewModel CreateInputViewModel(Customer customer, int languageId)
-        {
-            var model = new CustomerInputViewModel
-            {
-                CustomerCaseSummaryViewModel = new CustomerCaseSummaryViewModel(),
-                CaseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customer.Id),
-                Customer = customer,
-                ListCaseForLabel = this._caseFieldSettingService.ListToShowOnCasePage(customer.Id, languageId),
-                Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
-                Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString(),
-                }).ToList()
-
-            };
-
+            
             return model;
         }
 

@@ -18,8 +18,7 @@ namespace DH.Helpdesk.Web
             public const string AttributesValidation = "~/bundles/jqueryattrval";
             public const string InventoryUserSearch = ("~/bundles/inventory/inventorysearch");
             public const string CaseIntLogEmailSearch = ("~/bundles/case/caseintlogemailsearch");
-            public const string CaseAddFollowersSearch = ("~/bundles/case/caseaddfollowerssearch");
-            public const string CaseUserSearchCommon = ("~/bundles/case/caseusersearchcommon");
+            public const string UserSearchCommon = ("~/bundles/common/usersearchcommon");
             public const string CaseCharge = ("~/bundles/case/CaseCharge");
             public const string Select2 = "~/bundles/select2";
             public const string CaseConnectToParent = "~/bundles/case/caseconnecttoparent";
@@ -62,10 +61,14 @@ namespace DH.Helpdesk.Web
                             "~/Content/js/DynamicCase/iframeResizer.js",
                             "~/Content/js/DynamicCase/container.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/common").Include(
+			bundles.Add(new ScriptBundle("~/Content/js/iframeResizer").Include(
+							"~/Content/js/DynamicCase/iframeResizer.js"));
+
+			bundles.Add(new ScriptBundle("~/bundles/common").Include(
                             "~/Content/js/Shared/commonUtils.js",
                             "~/Content/js/Shared/errors.js",
                             "~/Content/js/Shared/jquery.customAjax.js",
+
 #if DEBUG
                             "~/Scripts/jquery-1.8.3.js",
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",
@@ -453,12 +456,9 @@ namespace DH.Helpdesk.Web
                 "~/Content/js/Inventory/inventory.search.js"));
             bundles.Add(new ScriptBundle(ScriptNames.CaseIntLogEmailSearch).Include(
                 "~/Content/js/Cases/Dialogs/_caseIntLogSearch.js",
-                "~/Content/js/Cases/Dialogs/_caseUserSearchCommon.js"));
-            bundles.Add(new ScriptBundle(ScriptNames.CaseAddFollowersSearch).Include(
-                "~/Content/js/Cases/Dialogs/_caseAddFollowersSearch.js",
-                "~/Content/js/Cases/Dialogs/_caseUserSearchCommon.js"));
-            bundles.Add(new ScriptBundle(ScriptNames.CaseUserSearchCommon).Include(
-                "~/Content/js/Cases/Dialogs/_caseUserSearchCommon.js"));
+                "~/Content/js/Common/userSearchCommon.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.UserSearchCommon).Include(
+                "~/Content/js/Common/userSearchCommon.js"));
             bundles.Add(new ScriptBundle(ScriptNames.CaseConnectToParent).Include(
                 "~/Content/js/Cases/Dialogs/_caseConnectToParent.js",
                 "~/Content/js/Cases/components/FilterForm.js",

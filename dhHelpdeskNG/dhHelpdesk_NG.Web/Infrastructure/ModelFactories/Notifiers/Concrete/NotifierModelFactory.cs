@@ -30,7 +30,8 @@
             List<ItemOverview> divisions,
             List<ItemOverview> managers,
             List<ItemOverview> groups,
-            List<ItemOverview> languages)
+            List<ItemOverview> languages,
+			ComputerUserCategoryModel categoryModel)
         {
             var userId = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.UserId, notifier.UserId);
 
@@ -299,7 +300,8 @@
                 createdDate,
                 changedDate,
                 synchronizationDate,
-                language);
+                language,
+				categoryModel);
         }
     }
 }

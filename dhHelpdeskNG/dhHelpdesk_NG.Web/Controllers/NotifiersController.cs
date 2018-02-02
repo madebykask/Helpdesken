@@ -71,11 +71,13 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly ICustomerService customerService;
 
-        #endregion
+		private readonly IComputerService computerService;
 
-        #region Public Methods and Operators
+		#endregion
 
-        public NotifiersController(
+		#region Public Methods and Operators
+
+		public NotifiersController(
             IMasterDataService masterDataService,
             IDepartmentRepository departmentRepository,
             IDivisionRepository divisionRepository,
@@ -97,7 +99,8 @@ namespace DH.Helpdesk.Web.Controllers
             IUpdatedNotifierFactory updatedNotifierFactory,
             INewNotifierFactory newNotifierFactory,
             IOrganizationService organizationService,
-            ICustomerService customerService)
+            ICustomerService customerService,
+			IComputerService computerService)
             : base(masterDataService)
         {
             this.departmentRepository = departmentRepository;
@@ -123,7 +126,8 @@ namespace DH.Helpdesk.Web.Controllers
             this.newNotifierFactory = newNotifierFactory;
             this.organizationService = organizationService;
             this.customerService = customerService;
-        }
+			this.computerService = computerService;
+		}
 
         [HttpGet]
         public PartialViewResult Settings(int? languageId)
@@ -210,7 +214,8 @@ namespace DH.Helpdesk.Web.Controllers
                 List<ItemOverview> searchRegions = null;
                 List<ItemOverview> searchDepartments = null;
                 List<ItemOverview> searchOrganizationUnit = null;
-                List<ItemOverview> searchDivisions = null;
+				List<ItemOverview> searchComputerUserCategories = null;
+				List<ItemOverview> searchDivisions = null;
 
                 if (settings.Domain.ShowInNotifiers)
                 {
@@ -245,7 +250,20 @@ namespace DH.Helpdesk.Web.Controllers
                     searchDivisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
                 }
 
-                var sortField = !string.IsNullOrEmpty(filters.SortByField)
+				var computerUserCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId);
+				if (computerUserCategories.Any())
+				{
+					searchComputerUserCategories = computerUserCategories.Select(o => new ItemOverview(o.Name, o.ID.ToString())).ToList();
+					searchComputerUserCategories.Insert(0, new ItemOverview(Translation.Get("Employee", Enums.TranslationSource.TextTranslation), "0"));
+				}
+
+				if (filters.ComputerUserCategoryID.HasValue && filters.ComputerUserCategoryID.Value == 0)
+				{
+					filters.ComputerUserCategoryID = (int?)null;
+				}
+
+
+				var sortField = !string.IsNullOrEmpty(filters.SortByField)
                     ? new SortField(filters.SortByField, filters.SortBy)
                     : null;
 
@@ -257,7 +275,8 @@ namespace DH.Helpdesk.Web.Controllers
                     filters.OrganizationUnitId,
                     filters.DivisionId,
                     filters.Pharse,
-                    filters.Status,
+					filters.ComputerUserCategoryID,
+					filters.Status,
                     filters.RecordsOnPage,
                     sortField);
 
@@ -270,7 +289,8 @@ namespace DH.Helpdesk.Web.Controllers
                      searchDepartments,
                      searchOrganizationUnit,
                      searchDivisions,
-                     filters,
+					 searchComputerUserCategories,
+					 filters,
                      searchResult);
             }
 
@@ -310,7 +330,13 @@ namespace DH.Helpdesk.Web.Controllers
                 model.DisplayName = new StringFieldModel(false, "DisplayName", string.Format("{0} {1}", firstName, lastName));
             }
 
-            var newNotifier = this.newNotifierFactory.Create(model, SessionFacade.CurrentCustomer.Id, DateTime.Now);
+			var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+			var nonReadOnlyCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
+				.Where(o => !o.IsReadOnly).ToList();
+			model.ComputerUserCategoryModel = new ComputerUserCategoryModel(nonReadOnlyCategories);
+
+			var newNotifier = this.newNotifierFactory.Create(model, currentCustomerId, DateTime.Now);
+
             this.notifierService.AddNotifier(newNotifier);
             return this.RedirectToAction("Index");
         }
@@ -462,7 +488,11 @@ namespace DH.Helpdesk.Web.Controllers
             if (!string.IsNullOrEmpty(costcentre))
                 inputParams.Add("CostCentre", costcentre);
 
-            var model = this.newNotifierModelFactory.Create(
+			var nonReadOnlyCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
+				.Where(o => !o.IsReadOnly).ToList();
+			var categoryModel = new ComputerUserCategoryModel(nonReadOnlyCategories);
+
+			var model = this.newNotifierModelFactory.Create(
                 settings,
                 domains,
                 regions,
@@ -472,7 +502,8 @@ namespace DH.Helpdesk.Web.Controllers
                 managers,
                 groups,
                 inputParams,
-                languages);
+                languages,
+				categoryModel);
 
             return this.View(model);
         }
@@ -570,7 +601,11 @@ namespace DH.Helpdesk.Web.Controllers
                 groups = this.notifierGroupRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
-            var model = this.newNotifierModelFactory.Create(
+			var nonReadOnlyCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
+				.Where(o => !o.IsReadOnly).ToList();
+			var categoryModel = new ComputerUserCategoryModel(nonReadOnlyCategories);
+
+			var model = this.newNotifierModelFactory.Create(
                 settings,
                 domains,
                 regions,
@@ -580,7 +615,8 @@ namespace DH.Helpdesk.Web.Controllers
                 managers,
                 groups,
                 inputParams,
-                languages);
+                languages,
+				categoryModel);
 
             return this.View(model);
         }
@@ -688,7 +724,16 @@ namespace DH.Helpdesk.Web.Controllers
                 groups = this.notifierGroupRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
-            var model = this.notifierModelFactory.Create(
+			var nonReadOnlyCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
+				.Where(o => !o.IsReadOnly).ToList();
+			var computerUser = computerService.GetComputerUser(notifier.Id);
+			var categoryModel = computerUser.ComputerUserCategory == null ?
+				new ComputerUserCategoryModel(nonReadOnlyCategories) :
+				new ComputerUserCategoryModel(computerUser.ComputerUserCategory, nonReadOnlyCategories);
+
+
+
+			var model = this.notifierModelFactory.Create(
                 displaySettings,
                 departmentRegionId,
                 notifier,
@@ -699,7 +744,8 @@ namespace DH.Helpdesk.Web.Controllers
                 divisions,
                 managers,
                 groups,
-                languages);
+                languages,
+				categoryModel);
 
             return this.View(model);
         }
@@ -736,8 +782,9 @@ namespace DH.Helpdesk.Web.Controllers
             List<ItemOverview> searchDepartments = null;
             List<ItemOverview> searchOrganizationUnit = null;
             List<ItemOverview> searchDivisions = null;
+			List<ItemOverview> searchComputerUserCategories = null;
 
-            if (displaySettings.Domain.ShowInNotifiers)
+			if (displaySettings.Domain.ShowInNotifiers)
             {
                 searchDomains = this.domainRepository.FindByCustomerId(currentCustomerId);
             }
@@ -778,11 +825,17 @@ namespace DH.Helpdesk.Web.Controllers
                 filters.OrganizationUnitId,
                 filters.DivisionId,
                 filters.Pharse,
-                filters.Status,
+				filters.ComputerUserCategoryID,
+				filters.Status,
                 filters.RecordsOnPage,
                 null);
 
-            var searchResult = this.notifierRepository.Search(parameters);
+			searchComputerUserCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
+				.Select(o => new ItemOverview(o.Name, o.ID.ToString()))
+				.ToList();
+
+
+			var searchResult = this.notifierRepository.Search(parameters);
 
             var model = this.notifiersModelFactory.Create(
                 displaySettings,
@@ -791,7 +844,8 @@ namespace DH.Helpdesk.Web.Controllers
                 searchDepartments,
                 searchOrganizationUnit,
                 searchDivisions,
-                filters,
+				searchComputerUserCategories,
+				filters,
                 searchResult);
 
             return this.PartialView(model);
@@ -802,7 +856,12 @@ namespace DH.Helpdesk.Web.Controllers
         [BadRequestOnNotValid]
         public PartialViewResult Search(SearchInputModel inputModel)
         {
-            var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+			if (inputModel.ComputerUserCategoryID.HasValue && inputModel.ComputerUserCategoryID.Value == 0)
+			{
+				inputModel.ComputerUserCategoryID = (int?)null;
+			}
+
+			var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
             var filters = inputModel.ExtractFilters();
             SessionFacade.SavePageFilters(PageName.Notifiers, filters);
@@ -819,7 +878,8 @@ namespace DH.Helpdesk.Web.Controllers
                 filters.OrganizationUnitId,
                 filters.DivisionId,
                 filters.Pharse,
-                filters.Status,
+				filters.ComputerUserCategoryID,
+				filters.Status,
                 filters.RecordsOnPage,
                 sortField);
 

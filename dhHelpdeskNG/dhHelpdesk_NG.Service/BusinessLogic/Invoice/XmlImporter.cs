@@ -149,9 +149,10 @@ namespace DH.Helpdesk.Services.BusinessLogic.Invoice
             foreach (var article in data.Articles)
             {
                 article.CustomerId = customerId;
-                var savedArticle = articles.FirstOrDefault(a => a.Number == article.Number &&
-                                                    a.Name.EqualWith(article.Name) &&
-                                                    a.NameEng.EqualWith(article.NameEng));
+                var savedArticle = articles.FirstOrDefault(a => a.Number == article.Number //&&
+                                                   // a.Name.EqualWith(article.Name) &&
+                                                   // a.NameEng.EqualWith(article.NameEng)
+                                                   );
                 if (savedArticle != null)
                 {
                     article.Id = savedArticle.Id;

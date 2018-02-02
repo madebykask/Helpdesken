@@ -158,9 +158,12 @@
     <Compile Include="CaseSource.cs" />
     <Compile Include="CaseIsAbout.cs" />
     <Compile Include="Condition\ConditionEntity.cs" />
+    <Compile Include="Computers\ComputerUserCategory.cs" />
     <Compile Include="EmailLogAttempt.cs" />
     <Compile Include="EmailSendStatus.cs" />
     <Compile Include="EntityBase.cs" />
+    <Compile Include="ExtendedCaseEntity\CaseSolution_CaseSection_ExtendedCaseForm.cs" />
+    <Compile Include="ExtendedCaseEntity\Case_CaseSection_ExtendedCase.cs" />
     <Compile Include="ExtendedCaseEntity\Case_ExtendedCaseEntity.cs" />
     <Compile Include="ExtendedCaseEntity\ExtendedCaseValue.cs" />
     <Compile Include="ExtendedCaseEntity\ExtendedCaseData.cs" />

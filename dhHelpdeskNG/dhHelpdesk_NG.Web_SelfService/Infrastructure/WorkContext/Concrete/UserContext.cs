@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DH.Helpdesk.BusinessData.Models.User.Input;
 using DH.Helpdesk.BusinessData.Models.Users.Output;
 using DH.Helpdesk.Dal.Infrastructure.Context;
 using DH.Helpdesk.Domain;
@@ -78,6 +79,11 @@ namespace DH.Helpdesk.SelfService.Infrastructure.WorkContext.Concrete
             {
                 return _userService.GetUserModules(UserId);
             }
+        }
+
+        public void SetCurrentUser(UserOverview user)
+        {
+            SessionFacade.CurrentUser = user;
         }
 
         public void Refresh()

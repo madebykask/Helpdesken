@@ -261,16 +261,16 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <select id="AvailableCaseTypes" multiple="multiple" name="AvailableCaseTypes" style="width: 350px; height: 120px">
+                                                    <select id="AvailableCaseTypes" multiple="multiple" name="AvailableCaseTypes" style="width: 400px; height: 120px">
                                                         @foreach (var op in Model.AvailableCaseTypes)
                                                         {
                                                             if (!op.Disabled)
                                                             {
-                                                                <option value="@op.Value">@op.Text</option>
+                                                                <option value="@op.Value" title="@op.Text">@op.Text</option>
                                                             }
                                                             else
                                                             {
-                                                                <option value="@op.Value" class="DisabledChosen">@op.Text</option>
+                                                                <option value="@op.Value" class="DisabledChosen" title="@op.Text">@op.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -280,16 +280,16 @@
                                                     <input type="button" value="&gt;" class="btn" id="addCaseType" />
                                                 </td>
                                                 <td>
-                                                    <select id="SelectedCaseTypes" multiple="multiple" name="SelectedCaseTypes" style="width: 350px; height: 120px">
+                                                    <select id="SelectedCaseTypes" multiple="multiple" name="SelectedCaseTypes" style="width: 400px; height: 120px">
                                                         @foreach (var op in Model.SelectedCaseTypes)
                                                         {
                                                             if (!op.Disabled)
                                                             {
-                                                                <option value="@op.Value">@op.Text</option>
+                                                                <option value="@op.Value" title="@op.Text">@op.Text</option>
                                                             }
                                                             else
                                                             {
-                                                                <option value="@op.Value" class="DisabledChosen">@op.Text</option>
+                                                                <option value="@op.Value" class="DisabledChosen" title="@op.Text">@op.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -311,16 +311,16 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <select id="AvailableProductAreas" multiple="multiple" name="AvailableProductAreas" style="width: 350px; height: 120px">
+                                                    <select id="AvailableProductAreas" multiple="multiple" name="AvailableProductAreas" style="width: 400px; height: 120px">
                                                         @foreach (var op in Model.AvailableProductAreas)
                                                         {
                                                             if (!op.Disabled)
                                                             {
-                                                                <option value="@op.Value">@op.Text</option>
+                                                                <option value="@op.Value" title="@op.Text">@op.Text</option>
                                                             }
                                                             else
                                                             {
-                                                                <option value="@op.Value" class="DisabledChosen">@op.Text</option>
+                                                                <option value="@op.Value" class="DisabledChosen" title="@op.Text">@op.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -330,16 +330,16 @@
                                                     <input type="button" value="&gt;" class="btn" id="addProductArea" />
                                                 </td>
                                                 <td>
-                                                    <select id="SelectedProductAreas" multiple="multiple" name="SelectedProductAreas" style="width: 350px; height: 120px">
+                                                    <select id="SelectedProductAreas" multiple="multiple" name="SelectedProductAreas" style="width: 400px; height: 120px">
                                                         @foreach (var op in Model.SelectedProductAreas)
                                                         {
                                                             if (!op.Disabled)
                                                             {
-                                                                <option value="@op.Value">@op.Text</option>
+                                                                <option value="@op.Value" title="@op.Text">@op.Text</option>
                                                             }
                                                             else
                                                             {
-                                                                <option value="@op.Value" class="DisabledChosen">@op.Text</option>
+                                                                <option value="@op.Value" class="DisabledChosen" title="@op.Text">@op.Text</option>
                                                             }
                                                         }
                                                     </select>

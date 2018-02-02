@@ -58,6 +58,9 @@
 
 //});
 
+var articleList = "#lstInvoiceArticles";
+var productareaList = "#lstProductAreas";
+
 function InvoiceArticles(options) {
     "use strict";
 
@@ -73,7 +76,7 @@ InvoiceArticles.prototype = {
 
         self._initGrid();
 
-        $("#ShowSearchResult").on("click", function() {
+        $("#ShowSearchResult").on("click", function () {
             self.table.ajax.reload();
         });
     },
@@ -99,12 +102,27 @@ InvoiceArticles.prototype = {
                 ajax: {
                     url: self.options.getListUrl,
                     type: "GET",
-                    data: function (data) {
-                        var params = self._getArticlesGridParams();
-                        params.CustomerId = self.options.customerId;
-                        params.Order = data.order.length === 1 ? data.order[0].column : "";
-                        params.Dir = data.order.length === 1 ? data.order[0].dir : "";
-                        return params;
+                    data: function (data) {                                              
+
+                        var article = "";
+                        var productarea = "";
+                        $(articleList + " option:selected").each(function () {
+                            article += $(this).val() + ",";
+                        });
+
+                        $(productareaList + " option:selected").each(function () {
+                            productarea += $(this).val() + ",";
+                        });
+
+                        var filters = {
+                            'jsfilter.CustomerId': self.options.customerId,
+                            'jsfilter.Order': data.order.length === 1 ? data.order[0].column : "",
+                            'jsfilter.Dir': data.order.length === 1 ? data.order[0].dir : "",
+                            'jsfilter.SelectedInvoiceArticles': article,
+                            'jsfilter.SelectedProductAreas': productarea
+                        };                       
+
+                        return filters;
                     },
                     dataSrc: ""
                 },

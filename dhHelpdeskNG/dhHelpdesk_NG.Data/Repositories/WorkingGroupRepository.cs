@@ -1,5 +1,6 @@
 namespace DH.Helpdesk.Dal.Repositories
 {
+    using System.Data.Entity;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
@@ -108,7 +109,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId)
         {
-            var query = from uw in this.DataContext.UserWorkingGroups
+            var query = from uw in this.DataContext.UserWorkingGroups.Include(x => x.User)
                         where uw.WorkingGroup_Id == workingGroupId
                         select uw;
             return query.ToList();

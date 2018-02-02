@@ -73,7 +73,8 @@ $(function () {
 
     var page = new EditPage();
     page.init(window.parameters);
-    
+    window.page = page;
+
     doNotSendEl.on('change', function() {
         if ($(doNotSendEl).is(':checked')) {
             langEl.show();
