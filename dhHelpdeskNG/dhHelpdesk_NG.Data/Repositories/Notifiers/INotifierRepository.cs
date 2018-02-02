@@ -26,9 +26,9 @@
 
         List<ItemOverview> FindOverviewsByCustomerId(int customerId);
 
-        IList<UserSearchResults> Search(int customerId, string searchFor);
+		IList<UserSearchResults> Search(int customerId, string searchFor, int? categoryID = null);
 
-        SearchResult Search(SearchParameters parameters);
+		SearchResult Search(SearchParameters parameters);
 
         void UpdateCaseNotifier(CaseNotifier caseNotifier);
 

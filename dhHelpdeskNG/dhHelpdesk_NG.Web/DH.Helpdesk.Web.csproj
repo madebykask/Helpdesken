@@ -346,6 +346,7 @@
     <Compile Include="Models\JsonModels\Base\BaseJsonModel.cs" />
     <Compile Include="Models\JsonModels\Case\CaseJsonModel.cs" />
     <Compile Include="Models\Questionnaire\Input\QuestionnaireAnswerParams.cs" />
+    <Compile Include="Models\Notifiers\ComputerUserCategoryModel.cs" />
     <Compile Include="Models\WebApi\TokenModel.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Areas\Invoices\Models\BaseIndexModel.cs" />
@@ -4001,7 +4002,7 @@
       <Name>DH.Helpdesk.BusinessData</Name>
     </ProjectReference>
     <ProjectReference Include="..\dhHelpdesk_NG.Service\DH.Helpdesk.Services.csproj">
-      <Project>{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}</Project>
+      <Project>{3a5bfa9b-c033-4c1c-81af-7b4e1bedcfa3}</Project>
       <Name>DH.Helpdesk.Services</Name>
     </ProjectReference>
   </ItemGroup>

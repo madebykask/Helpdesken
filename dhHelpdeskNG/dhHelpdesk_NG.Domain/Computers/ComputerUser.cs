@@ -106,6 +106,11 @@
 
         public int LanguageId { get; set; }
 
-        #endregion
-    }
+		public int? ComputerUsersCategoryID { get; set; }
+
+		public ComputerUserCategory ComputerUserCategory { get; set; }
+
+
+		#endregion
+	}
 }

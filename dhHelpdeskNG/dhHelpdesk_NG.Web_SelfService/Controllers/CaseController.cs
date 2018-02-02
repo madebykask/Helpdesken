@@ -245,6 +245,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
             
             var currentCase = _caseService.GetCaseById(caseId);                
+                currentCase = _caseService.GetCaseById(_intCaseId);
 
             if (currentCase == null)
             {
@@ -811,6 +812,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                                             RequestExtension.GetAbsoluteUrl(),
                                             CreatedByApplications.ExtendedCase,
                                             TimeZoneInfo.Local);
+
+            //LogWithContext($"ExtendedCase.Post: Saving extended case data. LocalUserId: {auxModel.CurrentUserId}, url: {auxModel.AbsolutreUrl}.");
 
             if (model.SelectedWorkflowStep.HasValue && model.SelectedWorkflowStep.Value > 0)            
                 model.CaseDataModel = ApplyNextWorkflowStepOnCase(model.CaseDataModel, model.SelectedWorkflowStep.Value);
@@ -1785,7 +1788,6 @@ namespace DH.Helpdesk.SelfService.Controllers
                         newCase.WorkingGroup_Id = productArea.WorkingGroup_Id;
                     }
                 }
-                
             }
 
             if (newCase.Department_Id.HasValue && newCase.Priority_Id.HasValue)
@@ -1808,6 +1810,13 @@ namespace DH.Helpdesk.SelfService.Controllers
             // save log
             caseLog.CaseId = newCase.Id;
             caseLog.CaseHistoryId = caseHistoryId;
+
+            if (caseLog.UserId <= 0 && localUserId > 0)
+                caseLog.UserId = localUserId;
+
+            if (string.IsNullOrWhiteSpace(caseLog.RegUser))
+                caseLog.RegUser = SessionFacade.CurrentUserIdentity?.UserId ?? string.Empty;
+
             caseLog.Id = this._logService.SaveLog(caseLog, 0, out errors);
 
             // save case files
@@ -2441,7 +2450,23 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         
+        // keep for diagnostic purposes
+        private void LogWithContext(string msg)
+        {
+            var customerId = SessionFacade.CurrentCustomerID;
+            var userIdentityEmail = SessionFacade.CurrentUserIdentity?.Email;
+            var userIdentityEmployeeNumber = SessionFacade.CurrentUserIdentity?.EmployeeNumber;
+            var userIdentityUserId = SessionFacade.CurrentUserIdentity?.UserId;
+            var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
+            var localUserId = SessionFacade.CurrentLocalUser?.UserId;
 
         #endregion
+                        -customerId: {customerId}, 
+                        -userIdentityEmail = {userIdentityEmail},
+                        -userIdentityEmployeeNumber = {userIdentityEmployeeNumber},
+                        -userIdentityUserId = {userIdentityUserId},
+                        -localUserPkId = {localUserPkId},
+                        -localUserId = {localUserId}");
+        }
     }
 }

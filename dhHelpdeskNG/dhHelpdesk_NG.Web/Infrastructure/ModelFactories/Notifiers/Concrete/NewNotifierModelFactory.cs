@@ -30,7 +30,8 @@
             List<ItemOverview> managers,
             List<ItemOverview> groups,
             Dictionary<string, string> inputParams,
-            List<ItemOverview> languages)
+            List<ItemOverview> languages,
+			ComputerUserCategoryModel model)
         {
             var userId = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.UserId, (inputParams.ContainsKey("UserId") ? inputParams["UserId"] : null));
 
@@ -207,7 +208,8 @@
                 other,
                 ordered,
                 true,
-                language);
+                language,
+				model);
         }
 
         #endregion

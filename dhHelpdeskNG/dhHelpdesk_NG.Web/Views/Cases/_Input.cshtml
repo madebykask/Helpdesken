@@ -9,12 +9,21 @@
 @using DH.Helpdesk.Web
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@using DH.Helpdesk.Common.Extensions.Object
+        extendedSections: @Html.Raw(Model.ExtendedSectionsToJS()),
+        computerUserCategories: @Html.Raw(Json.Encode(Model.ComputerUserCategories.Select(o => new { o.Name, o.IsReadOnly, o.ID }).ToDictionary(o => o.ID.ToString(), o => o))),
+            ExtendedInitiatiorGUID: "ExtendedInitiatorGUID",
 
 @Html.Partial("~/Views/Cases/_CaseValidation.cshtml", Model)
 @Scripts.Render("~/bundles/cases/_input")
 @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseSolutionFields.AddFollowersBtn) && Model.caseFieldSettings.IsFieldVisible(GlobalEnums.TranslationCaseFields.AddFollowersBtn))
 {
     @Scripts.Render(BundleConfig.ScriptNames.UserSearchCommon)
+}
+
+@if (Model.HasExtendedComputerUsers)
+{
+    @Scripts.Render("~/Content/js/iframeResizer")
 }
 
 <script type="text/javascript">
@@ -259,6 +268,15 @@
                                                     <th class="span5"></th>
                                                 </tr>
                                             </thead>
+                                            @if (Model.ComputerUserCategories.Any())
+                                            {
+                                                <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">
+                                                    <td>Search category</td>
+                                                    <td>
+                                                        @Html.DropDownList("InitiatorCategory", Model.ComputerUserCategories.Select(o => new SelectListItem() { Text = o.Name, Value = o.ID.ToString(), Selected = Model.InitiatorComputerUserCategory == null ? false : o.ID == Model.InitiatorComputerUserCategory.ID }).ToList().Use(o => { o.Insert(0, new SelectListItem() { Text = Translation.Get("Employee", Enums.TranslationSource.TextTranslation), Value = "null" }); return o; }))
+                                                    </td>
+                                                </tr>
+                                            }
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">
                                                 <td>
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ReportedBy, "Användar ID")
@@ -418,13 +436,13 @@
                                                     else
                                                     {
                                                         <select id="case__Region_Id" name="case_.Region_Id" data-field="region">
-                                                            <option value="">&nbsp;</option>
+                                                            <option value="" @(Model.InitiatorReadOnly ? "disabled=\"disabled\"" : "")>&nbsp;</option>
                                                             @if (Model.regions != null)
                                                             {
                                                                 foreach (var e in Model.regions.Where(e => e.IsActive == 1 || Model.case_.Region_Id == e.Id))
                                                                 {
                                                                     <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Region_Id.ToString())>@e.Name</option>
-                                                                }
+}
                                                             }
                                                         </select>
                                                     }
@@ -445,7 +463,7 @@
                                                     else
                                                     {
                                                         <select id="case__Department_Id" class="departments-list" name="case_.Department_Id" data-field="department">
-                                                            <option value="">&nbsp;</option>
+                                                            <option value="" @(Model.InitiatorReadOnly ? "disabled=\"disabled\"" : "")>&nbsp;</option>
                                                             @if (Model.departments != null)
                                                             {
                                                                 foreach (var e in Model.departments.Where(e => e.IsActive == 1 || Model.case_.Department_Id == e.Id).Where(e => Model.case_.Region_Id == e.Region_Id || !Model.case_.Region_Id.IntHasValue()))
@@ -542,7 +560,22 @@
                                                     {
                                                         @Html.CheckBoxFor(m => Model.UpdateNotifierInformation, new { @class = "switchcheckbox" })
                                                     }
+                                              
 
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <div id="extendedSection-Initiator" style="display:none">
+                                                        <!--<h4>
+                    <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
+                    <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                    Vendor details <!-- TODO: Bind on category name and translation
+                </h4>-->
+
+                                                        <input type="hidden" id="ExtendedInitiatorGUID" name="ExtendedInitiatorGUID" value="@(Model.ExtendedCaseSections.ContainsKey(CaseSectionType.Initiator) ? Model.ExtendedCaseSections[CaseSectionType.Initiator].ExtendedCaseGuid.ToString() : "")" />
+                                                        <iframe id="extendedSection-iframe-Initiator" src="" frameborder="0" scrolling="no" style="width:500px; height:180px; margin-top: 10px"></iframe>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </table>
@@ -572,6 +605,15 @@
                                                 <th class="span5"></th>
                                             </tr>
                                         </thead>
+                                        @if (Model.ComputerUserCategories.Any())
+                                        {
+                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy, CaseSolutionFields.IsAbout_ReportedBy)">
+                                                <td>Search category</td>
+                                                <td>
+                                                    @Html.DropDownList("IsAboutCategory", Model.ComputerUserCategories.Select(o => new SelectListItem() { Text = o.Name, Value = o.ID.ToString(), Selected = Model.RegardingComputerUserCategory == null ? false : o.ID == Model.RegardingComputerUserCategory.ID }).ToList().Use(o => { o.Insert(0, new SelectListItem() { Text = Translation.Get("Employee", Enums.TranslationSource.TextTranslation), Value = "null" }); return o; }))
+                                                </td>
+                                            </tr>
+                                        }
                                         <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy, CaseSolutionFields.IsAbout_ReportedBy)">
                                             <td>
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy, "Användar ID")
@@ -815,6 +857,20 @@
                                                 {
                                                     @Html.TextBoxFor(model => model.case_.IsAbout.UserCode, new { maxlength = "50", @readonly = "readonly" })
                                                 }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <div id="extendedSection-Regarding" style="display:none">
+                                                    <!--<h4>
+                    <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
+                    <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                    Vendor details <!-- TODO: Bind on category name and translation
+                </h4>-->
+
+                                                    <input type="hidden" id="ExtendedRegardingGUID" name="ExtendedRegardingGUID" value="@(Model.ExtendedCaseSections.ContainsKey(CaseSectionType.Regarding) ? Model.ExtendedCaseSections[CaseSectionType.Regarding].ExtendedCaseGuid.ToString() : "")" />
+                                                    <iframe id="extendedSection-iframe-Regarding" src="" style="width:500px; height:180px; margin-top:10px" frameborder="0" scrolling="no"></iframe>
+                                                </div>
                                             </td>
                                         </tr>
                                     </table>

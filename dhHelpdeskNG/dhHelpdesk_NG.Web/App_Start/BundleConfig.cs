@@ -61,10 +61,14 @@ namespace DH.Helpdesk.Web
                             "~/Content/js/DynamicCase/iframeResizer.js",
                             "~/Content/js/DynamicCase/container.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/common").Include(
+			bundles.Add(new ScriptBundle("~/Content/js/iframeResizer").Include(
+							"~/Content/js/DynamicCase/iframeResizer.js"));
+
+			bundles.Add(new ScriptBundle("~/bundles/common").Include(
                             "~/Content/js/Shared/commonUtils.js",
                             "~/Content/js/Shared/errors.js",
                             "~/Content/js/Shared/jquery.customAjax.js",
+
 #if DEBUG
                             "~/Scripts/jquery-1.8.3.js",
                             "~/Content/js/jquery.unobtrusive-ajax.min.js",

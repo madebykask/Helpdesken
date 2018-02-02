@@ -88,8 +88,12 @@
                 .HasForeignKey(u => u.LanguageId)
                 .WillCascadeOnDelete(false);
 
+			this.Property(o => o.ComputerUsersCategoryID).IsOptional();
 
-            this.ToTable("tblComputerUsers");
+			this.HasOptional(o => o.ComputerUserCategory).WithMany().HasForeignKey(o => o.ComputerUsersCategoryID).WillCascadeOnDelete(false);
+
+
+			this.ToTable("tblComputerUsers");
         }
     }
 }

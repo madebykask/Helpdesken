@@ -7,8 +7,10 @@ namespace DH.Helpdesk.Domain
     using global::System;
     using global::System.Web.Mvc;
     using Common.Enums.CaseSolution;
+	using ExtendedCaseEntity;
 
-    public class CaseSolution : Entity
+
+	public class CaseSolution : Entity
     {
 
         public CaseSolution()
@@ -129,10 +131,12 @@ namespace DH.Helpdesk.Domain
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
         //public virtual Problem Problem { get; set; }
         public int SortOrder { get; set; }
-        public virtual List<ExtendedCaseEntity.ExtendedCaseFormEntity> ExtendedCaseForms { get; set; }
 
+		public virtual List<ExtendedCaseFormEntity> ExtendedCaseForms { get; set; }
 
-	    public virtual CaseSolution SplitToCaseSolution { get; set; }
+		public virtual List<CaseSolution_CaseSection_ExtendedCaseForm> CaseSectionsExtendedCaseForm { get; set; }
+
+		public virtual CaseSolution SplitToCaseSolution { get; set; }
         public string CaseSolutionDescription { get; set; }
 
         public virtual ICollection<CaseSolution_SplitToCaseSolutionEntity> SplitToCaseSolutionAnsestors { get; set; }

@@ -602,14 +602,15 @@
         public DbSet<CaseDocumentTextConditionIdentifierEntity> CaseDocumentTextConditionIdentifiers { get; set; }
 
        public DbSet<CaseSolution_SplitToCaseSolutionEntity> CaseSolution_SplitToCaseSolutions { get; set; }
+		public DbSet<ComputerUserCategory> ComputerUserCategories { get; set; }
 
         public DbSet<ConditionEntity> Conditions { get; set; }
 
-        #endregion
+		#endregion
 
-        #region Public Methods and Operators
+		#region Public Methods and Operators
 
-        public virtual void Commit()
+		public virtual void Commit()
         {
             try
             {
@@ -894,7 +895,8 @@
             modelBuilder.Configurations.Add(new CaseSolutionConditionConfiguration());
             modelBuilder.Configurations.Add(new ExtendedCaseFormConfiguration());
             modelBuilder.Configurations.Add(new CaseSolutionConditionPropertyConfiguration());
-            modelBuilder.Configurations.Add(new ExtendedCaseDataConfiguration());
+			modelBuilder.Configurations.Add(new Case_CaseSection_ExtendedCaseConfiguration());
+			modelBuilder.Configurations.Add(new ExtendedCaseDataConfiguration());
             modelBuilder.Configurations.Add(new ExtendedCaseValueConfiguration());
             modelBuilder.Configurations.Add(new Case_ExtendedCaseDataConfiguration());
             modelBuilder.Configurations.Add(new CaseDocumentConfiguration());
@@ -906,14 +908,17 @@
             modelBuilder.Configurations.Add(new CaseDocumentParagraphConditionConfiguration());
             modelBuilder.Configurations.Add(new CaseDocumentTextConditionConfiguration());
             modelBuilder.Configurations.Add(new CaseDocumentTemplateConfiguration());
-            modelBuilder.Configurations.Add(new CaseDocumentTextIdentifierConfiguration());
+			modelBuilder.Configurations.Add(new CaseDocumentTextIdentifierConfiguration());
             modelBuilder.Configurations.Add(new CaseDocumentTextConditionIdentifierConfiguration());
             modelBuilder.Configurations.Add(new CaseSolution_SplitToCaseSolutionConfiguration());
             modelBuilder.Configurations.Add(new ConditionConfiguration());
 
-            #endregion
+			modelBuilder.Configurations.Add(new ComputerUserCategoryConfiguration());
+			modelBuilder.Configurations.Add(new CaseSolution_CaseSection_ExtendedCaseFormConfiguration());
 
-            base.OnModelCreating(modelBuilder);
+			#endregion
+
+			base.OnModelCreating(modelBuilder);
         }
 
         #endregion

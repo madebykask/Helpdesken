@@ -6349,6 +6349,19 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1874 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1874, 2, '(Number of records for inventory is limited to {0})')
 GO
+If not exists (select * from tbltext where id = 1875)
+	insert into tbltext (id, TextString) VALUES (1875, 'Säljare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1875 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1875, 2, 'Vendor')
+GO
+If not exists (select * from tbltext where id = 1876)
+	insert into tbltext (id, TextString) VALUES (1876, 'Anställd')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1876 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1876, 2, 'Employee')
+GO
+
 
 If not exists (select * from tbltext where id = 1875)
 	insert into tbltext (id, TextString) VALUES (1875, 'Denna kategori kan inte aktiveras, eftersom huvudnivån är inaktiv')

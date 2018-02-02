@@ -297,7 +297,8 @@
             this.Bind<IMetaDataRepository>().To<MetaDataRepository>();
             this.Bind<IEntityInfoRepository>().To<EntityInfoRepository>();
             this.Bind<IConditionRepository>().To<ConditionRepository>();
-        }
+			this.Bind<IComputerUserCategoryRepository>().To<ComputerUserCategoryRepository>();
+		}
 
         #endregion
     }

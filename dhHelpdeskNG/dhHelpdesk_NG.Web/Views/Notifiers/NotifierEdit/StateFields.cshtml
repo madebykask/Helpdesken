@@ -11,7 +11,7 @@
                        @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td class="span9">
-                        @Html.CheckBoxFor(m => m.IsActive, new { @class = "switchcheckbox" })
+                        @Html.CheckBoxFor(m => m.IsActive, Model.ComputerUserCategoryModel.IsReadOnly ? (object)new { @class = "switchcheckbox", @readonly = "readonly" } : new { @class = "switchcheckbox" })
                     </td>
                 </tr>
                 @if (!Model.IsNew)
