@@ -283,7 +283,7 @@ function refreshIsAboutDepartment(regionId, departmentFilterFormat, selectedDepa
 function IsInitiatorCategoryReadOnly() {
     var categoryID, category;
     categoryID = $('#InitiatorCategory').val();
-    if (categoryID != 'null') {
+    if (categoryID) {
         category = window.parameters.computerUserCategories[categoryID];
     }
     if (category != null && category.IsReadOnly)
