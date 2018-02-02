@@ -618,6 +618,12 @@ EditPage.prototype.refreshCasePage = function (updatedInfo) {
     $('#' + _caseFields.PersonsCellphone).val(updatedInfo.PersonsCellphone);
     $('#' + _caseFields.Place).val(updatedInfo.Place);
     $('#' + _caseFields.CostCentre).val(updatedInfo.CostCentre);
+    
+    //state (status)
+    $('#' + _caseFields.SubStatusId).val(updatedInfo.StateSecondary_Id);
+    var subStateName$ = $('#' + _caseFields.SubStatusName);
+    if (subStateName$.length && updatedInfo.SubStateName)
+        subStateName$.val(updatedInfo.SubStateName);
 
     $('#' + _caseFields.PlanDate).datepicker({
         format: updatedInfo.DateFormat.toLowerCase(),

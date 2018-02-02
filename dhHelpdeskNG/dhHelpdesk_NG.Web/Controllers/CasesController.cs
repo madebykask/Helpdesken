@@ -17,6 +17,7 @@ using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Web.Areas.Inventory.Models;
 using DH.Helpdesk.Web.Models.Invoice;
 using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Web.Infrastructure.Logger;
 
 
 namespace DH.Helpdesk.Web.Controllers
@@ -1736,12 +1737,20 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 return this.RedirectToAction("edit", "cases", new { id = caseLog.CaseId });
             }
-            
+        }
+
+        [HttpPost]
+        public JsonResult SetCaseDataChanged(int id)
+        {
+            SessionFacade.IsCaseDataChanged = true;
+            return Json(new { success = true });
         }
 
         [HttpGet]
         public JsonResult GetCaseInfo(int caseId)
         {
+            LogManager.Session.Debug($"GetCaseInfo called. CaseId: {caseId}, IsCaseDataChanged: {SessionFacade.IsCaseDataChanged}");
+
             if (!SessionFacade.IsCaseDataChanged)
                 return Json(new { needUpdate = false, shouldReload = false, newData = "" }, JsonRequestBehavior.AllowGet);
 
@@ -1786,6 +1795,8 @@ namespace DH.Helpdesk.Web.Controllers
                 WorkingGroup_Id = _case.WorkingGroup_Id,
                 WorkingGroupName = _case.Workinggroup?.WorkingGroupName
             };
+
+            LogManager.Session.Debug($"GetCaseInfo: case should be updated.");
 
             SessionFacade.IsCaseDataChanged = false;
             return Json(new { needUpdate = true, shouldReload = false, newData = caseInfo }, JsonRequestBehavior.AllowGet);

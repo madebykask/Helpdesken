@@ -127,7 +127,7 @@
 
         private const string _REPORT_SERVICE_SESSION_MODEL = "REPORT_SERVICE_SESSION_MODEL";
 
-        private const string _IS_CASE_DATA_CHANGED = "Is_CASE_DATA_CHANGED";
+        private const string _IS_CASE_DATA_CHANGED = "IS_CASE_DATA_CHANGED";
 
         #endregion
 
