@@ -25,7 +25,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
 
         public void OnAuthentication(AuthenticationContext filterContext)
         {
-            _logger.Debug("AuthenticationFilter called.");
+            //_logger.Debug("AuthenticationFilter called.");
 
             var ctx = filterContext.HttpContext;
             var identity = ctx.User.Identity;

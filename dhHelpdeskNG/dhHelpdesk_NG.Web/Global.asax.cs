@@ -1,6 +1,8 @@
-﻿using System.IdentityModel.Services;
+﻿using System.Configuration;
+using System.IdentityModel.Services;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Web.Http;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Services.Services.Authentication;
@@ -114,7 +116,7 @@ namespace DH.Helpdesk.Web
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
-            LogSession("Application.BeginRequest", Context);
+            //LogSession("Application.BeginRequest.", Context);
         }
 
         #region ADFS Module Events 
@@ -212,11 +214,43 @@ namespace DH.Helpdesk.Web
             logger.Debug($"{msg} {contextInfo}");
         }
 
+        private void DumpSessionState(HttpContext ctx)
+        {
+            try
+            {
+                var session = ctx.Session;
+                if (!string.IsNullOrEmpty(session?.SessionID))
+                {
+                    Trace.WriteLine($">>> [{DateTime.Now}] Helpdesk.Session. Id: {session.SessionID}.Request: {ctx.Request.Url}");
+
+                    var logSessionKeys = ConfigurationManager.AppSettings["helpdesk.logsessionkeys"];
+                    if (!string.IsNullOrEmpty(logSessionKeys))
+                    {
+                        var strBld = new StringBuilder();
+                        foreach (string key in session.Keys)
+                        {
+                            if (logSessionKeys == "*" || logSessionKeys.Equals(key, StringComparison.OrdinalIgnoreCase))
+                            {
+                                strBld.AppendFormat("\t- {0}: {1}{2}", key, session[key], Environment.NewLine);
+                            }
+                        }
+
+                        Trace.WriteLine(strBld.ToString());
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Trace.TraceError($"DumpSessionState: Unknown error. Error: {ex.Message}" );
+            }
+        }
+
         #endregion
 
         protected void Application_AcquireRequestState(object sender, EventArgs e)
         {
-            LogSession("Application.AcquireRequestState called.", Context);
+            DumpSessionState(Context);
+
             try
             {
                 var session = HttpContext.Current.Session;
@@ -225,6 +259,8 @@ namespace DH.Helpdesk.Web
                 if (session != null)
                 {
                     var sessionStatus = session["SessionStatus"] as SessionStatus;
+
+                    //LogSession($"Application.AcquireRequestState called. IsCaseDataChanged: {SessionFacade.IsCaseDataChanged}", Context);
 
                     var currentUser = SessionFacade.CurrentUser;
                     var userID = currentUser != null ? currentUser.Id : (int?)null;
