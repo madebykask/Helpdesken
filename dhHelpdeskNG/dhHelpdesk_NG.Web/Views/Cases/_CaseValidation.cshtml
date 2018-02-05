@@ -55,6 +55,8 @@
         extendedCaseGuid: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().ExtendedCaseGuid.ToString() : "" )',
         extendedCaseLanguageId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().LanguageId.ToString() : "" )',
         extendedCasePath: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Path.ToString() : "" )',
+        extendedSections: @Html.Raw(Model.ExtendedSectionsToJS()),
+        computerUserCategories: @Html.Raw(Json.Encode(Model.ComputerUserCategories.Select(o => new { o.Name, o.IsReadOnly, o.ID }).ToDictionary(o => o.ID.ToString(), o => o))),
         fileExistError: '@Translation.GetForJS("Bifogad fil är borttagen från ärendet")',
         applicationType: '@ApplicationTypes.Helpdesk',
         caseFieldIds: {
@@ -96,6 +98,7 @@
             WatchDate: "case__WatchDate",
             log_InternalText: "CaseLog_TextInternal",
             CaseRelationType: "CaseRelationType",
+            ExtendedInitiatiorGUID: "ExtendedInitiatorGUID",
             CostCentre: "case__CostCentre"
         },
 
