@@ -6810,6 +6810,33 @@ If not exists (select * from tblTextTranslation where text_id = 1931 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1931, 2, 'Limit permission to send orders for')
 GO
 
+If not exists (select * from tbltext where id = 1932)
+	insert into tbltext (id, TextString) VALUES (1932, 'Visa tid')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1932 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1932, 2, 'Show time')
+GO
+
+If not exists (select * from tbltext where id = 1933)
+	insert into tbltext (id, TextString) VALUES (1933, 'Visa övertid')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1933 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1933, 2, 'Show overtime')
+GO
+
+If not exists (select * from tbltext where id = 1934)
+	insert into tbltext (id, TextString) VALUES (1934, 'Visa Material')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1934 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1934, 2, 'Show Material')
+GO
+
+If not exists (select * from tbltext where id = 1935)
+	insert into tbltext (id, TextString) VALUES (1935, 'Visa Pris')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1935 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1935, 2, 'Show Price')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
