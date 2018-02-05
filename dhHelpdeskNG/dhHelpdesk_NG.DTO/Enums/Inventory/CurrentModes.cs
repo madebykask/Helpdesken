@@ -16,5 +16,10 @@
         /// The printers.
         /// </summary>
         Printers = -1,
+
+        /// <summary>
+        /// The custom.
+        /// </summary>
+        Custom
     }
 }

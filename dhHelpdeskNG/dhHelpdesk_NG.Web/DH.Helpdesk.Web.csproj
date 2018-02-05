@@ -319,6 +319,15 @@
     <Compile Include="App_Start\NinjectModules\Modules\EFormModule.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Admin\Controllers\ExtendedCaseController.cs" />
+    <Compile Include="Areas\Inventory\Controllers\InventoryController.cs" />
+    <Compile Include="Areas\Inventory\Models\BaseEditCustomInventoryModel.cs" />
+    <Compile Include="Areas\Inventory\Models\BaseEditPrinterModel.cs" />
+    <Compile Include="Areas\Inventory\Models\EditModel\Printer\PrinterEditViewModel.cs" />
+    <Compile Include="Areas\Inventory\Models\RelatedCasesModels\CustomInventoryRelatedCasesModel.cs" />
+    <Compile Include="Areas\Inventory\Models\RelatedCasesModels\PrinterRelatedCasesModel.cs" />
+    <Compile Include="Areas\Inventory\Models\RelatedCasesModels\WorkstationRelatedCasesModel.cs" />
+    <Compile Include="Areas\Inventory\Models\RelatedCasesModel.cs" />
+    <Compile Include="Areas\Inventory\Models\RelatedCasesModels\ServerRelatedCasesModel.cs" />
     <Compile Include="Areas\WebApi\Controllers\CaseApiController.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />
     <Compile Include="Controllers\QuestionnaireAnswerController.cs" />
@@ -372,9 +381,10 @@
     <Compile Include="Areas\Invoices\InvoicesAreaRegistration.cs" />
     <Compile Include="Areas\Invoices\Models\InvoiceListItemViewModel.cs" />
     <Compile Include="Areas\Invoices\Models\LogInvoiceItemViewModel.cs" />
+    <Content Include="Areas\Inventory\Content\js\relatedCases.js" />
     <Content Include="Areas\Admin\Content\js\OrderType\index.logic.js" />
     <Content Include="Areas\Admin\Content\js\QuickLinks\index.logic.js" />
-    <Content Include="Areas\Inventory\Scripts\inventoryOverview.js" />
+    <Content Include="Areas\Inventory\Content\js\inventoryOverview.js" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\Partials\OrderFieldWebTypes.cshtml" />
     <Content Include="Areas\Invoices\Scripts\Pages\invoiceFiles.js" />
     <Content Include="Areas\Invoices\Views\Overview\Files.cshtml" />
@@ -3324,6 +3334,13 @@
     <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\Fields\ListInt.cshtml" />
     <Content Include="Areas\Admin\Views\ExtendedCase\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ExtendedCase\_Input.cshtml" />
+    <Content Include="Areas\Inventory\Views\Shared\RelatedCasesFull.cshtml" />
+    <Content Include="Areas\Inventory\Views\Workstation\WorkstationRelatedCases.cshtml" />
+    <Content Include="Areas\Inventory\Views\Server\ServerRelatedCases.cshtml" />
+    <Content Include="Areas\Inventory\Views\Printer\_EditPrinterLayout.cshtml" />
+    <Content Include="Areas\Inventory\Views\Printer\PrinterRelatedCases.cshtml" />
+    <Content Include="Areas\Inventory\Views\CustomInventory\_EditCustomInventoryLayout.cshtml" />
+    <Content Include="Areas\Inventory\Views\CustomInventory\CustomInventoryRelatedCases.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />
@@ -4695,6 +4712,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Inventory\Infrastucture\" />
+    <Folder Include="Areas\Inventory\Scripts\" />
     <Folder Include="FormLibContent\Xmls\Norway\Data\AdditionalPaymentsDeductions\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
     <Folder Include="rss\" />

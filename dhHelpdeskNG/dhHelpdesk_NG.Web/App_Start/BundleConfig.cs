@@ -29,6 +29,7 @@ namespace DH.Helpdesk.Web
             public const string CaseAttachExistingFiles = "~/bundles/case/attachexfile";
             public const string ConfirmationDialog = "~/bundles/confirmdialog";
             public const string InventoryOverview = "~/bundles/inventory/overview";
+            public const string InventoryRelatedCases = "~/bundles/inventory/relatedcases";
 
         }
 
@@ -479,7 +480,9 @@ namespace DH.Helpdesk.Web
                 "~/Content/js/Cases/components/Utils.js"));
 
             bundles.Add(new ScriptBundle(ScriptNames.InventoryOverview).Include(
-                    "~/Areas/Inventory/Scripts/inventoryOverview.js"));
+                    "~/Areas/Inventory/Content/js/inventoryOverview.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.InventoryRelatedCases).Include(
+                    "~/Areas/Inventory/Content/js/relatedCases.js"));
 
             RegisterOrdersAreaBundles(bundles);
             RegisterInvoicesAreaBundles(bundles);

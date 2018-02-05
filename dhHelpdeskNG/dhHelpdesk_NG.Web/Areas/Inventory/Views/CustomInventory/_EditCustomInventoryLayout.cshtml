@@ -1,0 +1,42 @@
+﻿@using DH.Helpdesk.BusinessData.Enums.Inventory
+@using DH.Helpdesk.Web.Areas.Inventory.Models
+@using DH.Helpdesk.Web.Infrastructure
+@model BaseEditCustomInventoryModel
+
+@{
+    Layout = Model.IsForDialog ? "~/Views/Shared/_PopupLayout.cshtml" : "~/Views/Shared/_Layout.cshtml";
+}
+
+@RenderSection("Scripts", false)
+
+<div class="secnavs fixed" style="@(Model.IsForDialog ? "top: 0" : "")">
+    <div class="pull-left">
+        @RenderSection("Actions", false)
+    </div>
+</div>
+<div class="content" style="@(Model.IsForDialog ? "margin-top: 50px" : "")">
+    <div class="container">
+        <ul class="nav nav-tabs nav-tabs-actions">
+            <li class="@GetIsActive(CustomInventoryTabs.CustomInventory)">
+                @Html.ActionLink(Translation.Get(Model.InventoryName), "Edit", "CustomInventory", new { id = Model.Id, inventoryTypeId = Model.InventoryTypeId, dialog = Model.IsForDialog }, new { })
+            </li>
+            @if (!Model.IsForDialog)
+            {
+                <li class="@GetIsActive(CustomInventoryTabs.Cases)">
+                    @Html.ActionLink(Translation.GetCoreTextTranslation("Ärenden"), "RelatedCases", "Inventory", new { inventoryId = Model.Id, inventoryType = CurrentModes.Custom }, new { })
+                </li>
+            }
+        </ul>
+        <div class="tab-content overflow-visible">
+            <div class="tab-pane tab-pane-border active">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+@functions    {
+    private MvcHtmlString GetIsActive(CustomInventoryTabs tab)
+    {
+        return MvcHtmlString.Create(Model.Tab == tab ? "active" : null);
+    }
+}

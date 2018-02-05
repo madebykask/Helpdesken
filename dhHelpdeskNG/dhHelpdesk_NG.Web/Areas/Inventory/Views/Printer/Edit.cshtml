@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Printer.PrinterViewModel
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Printer.PrinterEditViewModel
 @{
-    Layout = "~/Areas/Inventory/Views/Shared/_EditPopupLayout.cshtml";
+    Layout = "~/Areas/Inventory/Views/Printer/_EditPrinterLayout.cshtml";
 }
 
 @section Actions
@@ -27,59 +27,52 @@
     </ul>
 }
 
-@section Title
-{
-    @Translation.GetCoreTextTranslation("Skrivare")
-}
-
-@section Content
-{
     @using (Html.BeginForm("Edit", "Printer", FormMethod.Post, new { id = "printer_edit_form" }))
     {
-        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.PrinterViewModel.Id)
         @Html.HiddenFor(m => m.IsForDialog)
-        @Html.EditorFor(m => m.GeneralFieldsModel)
-        @Html.EditorFor(m => m.InventoryFieldsModel)
-        @Html.EditorFor(m => m.CommunicationFieldsModel)
-        @Html.EditorFor(m => m.OtherFieldsModel)
-        @Html.EditorFor(m => m.OrganizationFieldsViewModel)
-        @Html.EditorFor(m => m.PlaceFieldsViewModel)
-        if (Model.CreatedDate.Show || Model.ChangedDate.Show)
+        @Html.EditorFor(m => m.PrinterViewModel.GeneralFieldsModel)
+        @Html.EditorFor(m => m.PrinterViewModel.InventoryFieldsModel)
+        @Html.EditorFor(m => m.PrinterViewModel.CommunicationFieldsModel)
+        @Html.EditorFor(m => m.PrinterViewModel.OtherFieldsModel)
+        @Html.EditorFor(m => m.PrinterViewModel.OrganizationFieldsViewModel)
+        @Html.EditorFor(m => m.PrinterViewModel.PlaceFieldsViewModel)
+        if (Model.PrinterViewModel.CreatedDate.Show || Model.PrinterViewModel.ChangedDate.Show)
         {
         <h4>@Translation.GetCoreTextTranslation("Status")</h4>
         }
         <div class="row">
             <div class="span12">
                 <table class="tableform">
-                    @if (Model.CreatedDate.Show)
+                    @if (Model.PrinterViewModel.CreatedDate.Show)
                     {
                         <tr>
                             <td class="span3">
-                                <label>@Translation.Get(Model.CreatedDate.Caption)</label>
+                                <label>@Translation.Get(Model.PrinterViewModel.CreatedDate.Caption)</label>
                             </td>
                             <td class="span9">
-                                @Html.DisplayFor(m => m.CreatedDate.Value, "Date")
+                                @Html.DisplayFor(m => m.PrinterViewModel.CreatedDate.Value, "Date")
                             </td>
                         </tr>
                     }
-                    @if (Model.ChangedDate.Show)
+                    @if (Model.PrinterViewModel.ChangedDate.Show)
                     {
                         <tr>
                             <td class="span3">
-                                <label>@Translation.Get(Model.ChangedDate.Caption)</label>
+                                <label>@Translation.Get(Model.PrinterViewModel.ChangedDate.Caption)</label>
                             </td>
                             <td class="span9">
-                                @Html.DisplayFor(m => m.ChangedDate.Value, "Date")
+                                @Html.DisplayFor(m => m.PrinterViewModel.ChangedDate.Value, "Date")
                             </td>
                         </tr>
-                        if (Model.StateFieldsModel.ChangedByUserName != null)
+                        if (Model.PrinterViewModel.StateFieldsModel.ChangedByUserName != null)
                         {
                         <tr>
                             <td class="span3">
                                 <label>@Translation.GetCoreTextTranslation("Changed by")</label>
                             </td>
                             <td class="span9">
-                                @Html.DisplayFor(m => m.StateFieldsModel.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.StateFieldsModel.ChangedByUserName.LastName)
+                                @Html.DisplayFor(m => m.PrinterViewModel.StateFieldsModel.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.PrinterViewModel.StateFieldsModel.ChangedByUserName.LastName)
                             </td>
                         </tr>
                         }
@@ -88,5 +81,3 @@
             </div>
         </div>
     }
-
-}

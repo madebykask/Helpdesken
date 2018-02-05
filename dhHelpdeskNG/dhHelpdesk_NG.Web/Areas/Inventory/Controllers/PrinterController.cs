@@ -116,10 +116,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                     SessionFacade.CurrentLanguageId, readOnly);
 
             PrinterViewModel printerEditModel = this.printerViewModelBuilder.BuildViewModel(model, options, settings);
-            printerEditModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
             printerEditModel.IsForDialog = dialog;
 
-            return this.View("Edit", printerEditModel);
+            var viewModel = new PrinterEditViewModel(id, printerEditModel)
+            {
+                UserHasInventoryAdminPermission = userHasInventoryAdminPermission,
+                IsForDialog = dialog
+            };
+
+            return this.View("Edit", viewModel);
         }
 
         [HttpPost]

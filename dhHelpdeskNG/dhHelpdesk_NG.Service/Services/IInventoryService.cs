@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.User.Input;
+﻿using DH.Helpdesk.BusinessData.Enums.Inventory;
+using DH.Helpdesk.BusinessData.Models.User.Input;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -132,6 +133,7 @@ namespace DH.Helpdesk.Services.Services
         #endregion
 
         List<ComputerOverview> GetRelatedInventory(int customerId, string userId);
-        
+
+        List<int> GetRelatedCaseIds(CurrentModes inventoryType, int inventoryId, int customerId);
     }
 }

@@ -4,6 +4,7 @@ using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Infrastructure.Helpers;
+using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -53,6 +54,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ISettingService _settingService;
         private readonly IEmailGroupService _emailGroupService;
         private readonly IEmailService _emailService;
+        private readonly ISendToDialogModelFactory _sendToDialogModelFactory;
 
         #endregion
 
@@ -74,6 +76,7 @@ namespace DH.Helpdesk.Web.Controllers
             IUserService userService,
             IEmailGroupService emailGroupService,
             IEmailService emailService,
+            ISendToDialogModelFactory sendToDialogModelFactory,
             ISettingService settingService)
             : base(masterDataService)
         {
@@ -92,6 +95,7 @@ namespace DH.Helpdesk.Web.Controllers
             _settingService = settingService;
             _emailGroupService = emailGroupService;
             _emailService = emailService;
+            _sendToDialogModelFactory = sendToDialogModelFactory;
         }
 
         #endregion
@@ -752,7 +756,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var responsibleUsersList = _userService.GetAvailablePerformersOrUserId(SessionFacade.CurrentCustomer.Id);
             var customerSettings = _settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
-            var extraEmailsModel = CommonHelper.CreateNewSendToDialogModel(SessionFacade.CurrentCustomer.Id, responsibleUsersList.ToList(), customerSettings,
+            var extraEmailsModel = _sendToDialogModelFactory.CreateNewSendToDialogModel(SessionFacade.CurrentCustomer.Id, responsibleUsersList.ToList(), customerSettings,
                 _emailGroupService, _workingGroupService, _emailService);
 
             var model = new CircularModel(

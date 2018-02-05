@@ -683,6 +683,11 @@ namespace DH.Helpdesk.Services.Services.Concrete
             return this.computerRepository.GetRelatedOverviews(customerId, userId);
         }
 
+        public List<int> GetRelatedCaseIds(CurrentModes inventoryType, int inventoryId, int customerId)
+        {
+            return inventoryRepository.GetRelatedCaseIds(inventoryType, inventoryId, customerId);
+        }
+
         public ComputerShortOverview GetWorkstationShortInfo(int computerId)
         {
             return this.computerRepository.FindShortOverview(computerId);

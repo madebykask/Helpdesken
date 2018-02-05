@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Inventory.InventoryEditViewModel
 @{
-    Layout = "~/Areas/Inventory/Views/Shared/_EditPopupLayout.cshtml";
+    Layout = "~/Areas/Inventory/Views/CustomInventory/_EditCustomInventoryLayout.cshtml";
 }
 
 @section Actions
@@ -27,13 +27,6 @@
     </ul>
 }
 
-@section Title
-{
-    @Translation.Get(Model.InventoryViewModel.Name)
-}
-
-@section Content
-{
     @using (Html.BeginForm("Edit", "CustomInventory", FormMethod.Post, new { id = "inventory_edit_form" }))
     {
         @Html.EditorFor(m => m)
@@ -84,4 +77,3 @@
         @Html.HiddenFor(m => m.InventoryViewModel.InventoryTypeId)
         @Html.HiddenFor(m => m.InventoryViewModel.IsForDialog)
     }
-}

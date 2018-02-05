@@ -5,16 +5,12 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class InventoryEditViewModel
+    public class InventoryEditViewModel : BaseEditCustomInventoryModel
     {
-        public InventoryEditViewModel()
-        {
-        }
-
-        public InventoryEditViewModel(
+        public InventoryEditViewModel(int id,
             InventoryViewModel inventoryViewModel,
             List<DynamicFieldModel> dynamicFieldModels,
-            List<TypeGroupModel> typeGroupModels)
+            List<TypeGroupModel> typeGroupModels) : base(id)
         {
             this.InventoryViewModel = inventoryViewModel;
             this.DynamicFieldModels = dynamicFieldModels;
@@ -30,8 +26,10 @@
         [NotNull]
         public List<TypeGroupModel> TypeGroupModels { get; set; }
 
-        public bool UserHasInventoryAdminPermission { get; set; }
+//        public bool UserHasInventoryAdminPermission { get; set; }
+//
+//        public bool IsForDialog { get; set; }
 
-        public bool IsForDialog { get; set; }
+        public override CustomInventoryTabs Tab { get { return CustomInventoryTabs.CustomInventory; } }
     }
 }

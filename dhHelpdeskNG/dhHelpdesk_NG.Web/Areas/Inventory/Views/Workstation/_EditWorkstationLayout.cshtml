@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.Web.Areas.Inventory.Models
+﻿@using DH.Helpdesk.BusinessData.Enums.Inventory
+@using DH.Helpdesk.Web.Areas.Inventory.Models
 @using DH.Helpdesk.Web.Infrastructure
 @model BaseEditWorkstationModel
 @{
@@ -16,23 +17,29 @@
     <div class="container">
         <ul class="nav nav-tabs nav-tabs-actions">
             <li class="@GetIsActive(WorkstationEditTabs.Workstation)">
-                @Html.ActionLink(Translation.Get("Arbetsstation"), "Edit", "Workstation", new {id = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId}, new {})
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Arbetsstation"), "Edit", "Workstation", new {id = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId}, new {})
             </li>
             <li class="@GetIsActive(WorkstationEditTabs.Storage)">
-                @Html.ActionLink(Translation.Get("Lagring"), "Storage", "Workstation", new {computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new {})
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Lagring"), "Storage", "Workstation", new {computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new {})
             </li>
             <li class="@GetIsActive(WorkstationEditTabs.Programs)">
-                @Html.ActionLink(Translation.Get("Program"), "Software", "Workstation", new {computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new {})
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Program"), "Software", "Workstation", new {computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new {})
             </li>
             <li class="@GetIsActive(WorkstationEditTabs.Hotfix)">
-                @Html.ActionLink(Translation.Get("Hotfix"), "HotFixes", "Workstation", new {computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new {})
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Hotfix"), "HotFixes", "Workstation", new {computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new {})
             </li>
             <li class="@GetIsActive(WorkstationEditTabs.Log)">
-                @Html.ActionLink(Translation.Get("Logg"), "ComputerLogs", "Workstation", new {computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new {})
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Logg"), "ComputerLogs", "Workstation", new {computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new {})
             </li>
             <li class="@GetIsActive(WorkstationEditTabs.Accessories)">
-                @Html.ActionLink(Translation.Get("Tillbehör"), "Accessories", "Workstation", new {computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new {})
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Tillbehör"), "Accessories", "Workstation", new {computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId}, new {})
             </li>
+            @if (!Model.IsForDialog)
+            {
+                <li class="@GetIsActive(WorkstationEditTabs.Cases)">
+                    @Html.ActionLink(Translation.GetCoreTextTranslation("Ärenden"), "RelatedCases", "Inventory", new {inventoryId = Model.Id, inventoryType = CurrentModes.Workstations}, new {})
+                </li>
+            }
         </ul>
         <div class="tab-content overflow-visible">
             <div class="tab-pane tab-pane-border active">

@@ -1,3 +1,5 @@
+using DH.Helpdesk.BusinessData.Enums.Inventory;
+
 namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 {
     using System.Collections.Generic;
@@ -380,6 +382,35 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             result.AddRange(customInventories);
 
             return result;
+        }
+
+        public List<int> GetRelatedCaseIds(CurrentModes inventoryType, int inventoryId, int customerId)
+        {
+            var caseIds = new List<int>();
+            string inventoryName;
+            switch (inventoryType)
+            {
+                case CurrentModes.Workstations:
+                    inventoryName = DbContext.Computers.Single(x => x.Id == inventoryId).ComputerName;
+                    break;
+                case CurrentModes.Servers:
+                    inventoryName = DbContext.Servers.Single(x => x.Id == inventoryId).ServerName;
+                    break;
+                case CurrentModes.Printers:
+                    inventoryName = DbContext.Printers.Single(x => x.Id == inventoryId).PrinterName;
+                    break;
+
+                default:
+                    inventoryName = DbContext.Inventories.Single(x => x.Id == inventoryId).InventoryName;
+                    break;
+            }
+            if (!string.IsNullOrEmpty(inventoryName))
+            {
+                caseIds = DbContext.Cases.Where(x => x.Customer_Id == customerId && x.InventoryNumber.Equals(inventoryName))
+                            .Select(x => x.Id)
+                            .ToList();
+            }
+            return caseIds;
         }
 
         private void Map(Inventory businessModel, Domain.Inventory.Inventory entity)

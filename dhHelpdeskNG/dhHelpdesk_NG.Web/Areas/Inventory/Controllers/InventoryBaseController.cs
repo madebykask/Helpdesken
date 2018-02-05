@@ -1,4 +1,13 @@
-﻿namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
+﻿using System;
+using System.Linq;
+using DH.Helpdesk.BusinessData.Enums.Case;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Web.Infrastructure.CaseOverview;
+using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
+using DH.Helpdesk.Web.Models.Case;
+
+namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 {
     using System.Collections.Generic;
     using System.Web.Mvc;

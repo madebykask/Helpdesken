@@ -18,6 +18,7 @@ using DH.Helpdesk.Web.Areas.Inventory.Models;
 using DH.Helpdesk.Web.Models.Invoice;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Web.Infrastructure.Logger;
+using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
 
 
 namespace DH.Helpdesk.Web.Controllers
@@ -202,9 +203,8 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseSectionService _caseSectionService;
 
         private readonly ICaseDocumentService _caseDocumentService;
-
-
         private readonly IExtendedCaseService _extendedCaseService;
+        private readonly ISendToDialogModelFactory _sendToDialogModelFactory;
 
 
         #endregion
@@ -281,7 +281,8 @@ namespace DH.Helpdesk.Web.Controllers
             IOrderAccountService orderAccountService,
             ICaseDocumentService caseDocumentService,
                     ICaseSectionService caseSectionService,
-            IExtendedCaseService extendedCaseService
+            IExtendedCaseService extendedCaseService,
+            ISendToDialogModelFactory sendToDialogModelFactory
             )
             : base(masterDataService)
         {
@@ -358,6 +359,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._caseDocumentService = caseDocumentService;
                     _caseSectionService = caseSectionService;
             this._extendedCaseService = extendedCaseService;
+            this._sendToDialogModelFactory = sendToDialogModelFactory;
         }
 
         #endregion
@@ -902,7 +904,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             m.cases = searchResult.Items;
 
-            m.cases = TreeTranslate(m.cases, f.CustomerId);
+            m.cases = CommonHelper.TreeTranslate(m.cases, f.CustomerId, _productAreaService);
             sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
 
             var ouIds = f.OrganizationUnit.Split(',');
@@ -1655,7 +1657,7 @@ namespace DH.Helpdesk.Web.Controllers
                     var responsibleUsersAvailable = this._userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
                     m.OutFormatter = new OutputFormatter(cs.IsUserFirstLastNameRepresentation == 1, userTimeZone);
                     m.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(cs, isAddEmpty);
-                    m.SendToDialogModel = CommonHelper.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList(), cs, _emailGroupService, _workingGroupService, _emailService);
+                    m.SendToDialogModel = _sendToDialogModelFactory.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList(), cs, _emailGroupService, _workingGroupService, _emailService);
                     m.MinWorkingTime = cs.MinRegWorkingTime;
                     m.CaseMailSetting = new CaseMailSetting(
                         customer.NewCaseEmailList,
@@ -4985,34 +4987,6 @@ namespace DH.Helpdesk.Web.Controllers
             }
         }
 
-        private IList<CaseSearchResult> TreeTranslate(IList<CaseSearchResult> cases, int customerId)
-        {
-            var ret = cases;
-            var productareaCache = this._productAreaService.GetProductAreasForCustomer(customerId).ToDictionary(it => it.Id, it => true);
-            foreach (CaseSearchResult r in ret)
-            {
-                foreach (var c in r.Columns)
-                {
-                    if (c.TreeTranslation)
-                    {
-                        switch (c.Key.ToLower())
-                        {
-                            case "productarea_id":
-                                if (productareaCache.ContainsKey(c.Id))
-                                {
-                                    var names = this._productAreaService.GetParentPath(c.Id, customerId).Select(name => Translation.GetMasterDataTranslation(name));
-                                    c.StringValue = string.Join(" - ", names);
-                                }
-
-                                break;
-                        }
-                    }
-                }
-            }
-
-            return ret;
-        }
-
         private string GetDefaultFileName(string fileName)
         {
             var defaultFileName = fileName;
@@ -5452,7 +5426,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
             m.Languages = this._languageService.GetActiveLanguages();
-            m.FollowersModel = m.SendToDialogModel = CommonHelper.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting, _emailGroupService, _workingGroupService, _emailService);
+			m.FollowersModel = m.SendToDialogModel =_sendToDialogModelFactory.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting, _emailGroupService, _workingGroupService, _emailService);
             m.CaseLog = this._logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
             m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString(global::System.Globalization.CultureInfo.InvariantCulture);
             m.LogKey = m.CaseLog.LogGuid.ToString();
@@ -6491,7 +6465,7 @@ namespace DH.Helpdesk.Web.Controllers
                 relatedCasesUserId,
                 caseIds).Items;
 
-            searchResult.cases = this.TreeTranslate(searchResult.cases, SessionFacade.CurrentCustomer.Id);
+            searchResult.cases = CommonHelper.TreeTranslate(searchResult.cases, SessionFacade.CurrentCustomer.Id, _productAreaService);
             search.Search.IdsForLastSearch = this.GetIdsFromSearchResult(searchResult.cases);
             searchResult.BackUrl = Url.Action("RelatedCasesFull", "Cases", new { area = string.Empty, caseId = relatedCasesCaseId, userId = relatedCasesUserId });
 
@@ -7691,7 +7665,7 @@ namespace DH.Helpdesk.Web.Controllers
                 ).Items.Take(maxRecords).ToList();
             }
 
-            m.cases = this.TreeTranslate(m.cases, currentCustomerId);
+            m.cases = CommonHelper.TreeTranslate(m.cases, currentCustomerId, _productAreaService);
             sm.Search.IdsForLastSearch = this.GetIdsFromSearchResult(m.cases);
 
             if (!string.IsNullOrWhiteSpace(sm.caseSearchFilter.FreeTextSearch))

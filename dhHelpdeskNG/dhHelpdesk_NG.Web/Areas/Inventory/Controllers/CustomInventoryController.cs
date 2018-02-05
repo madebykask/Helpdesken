@@ -126,9 +126,9 @@
 
             List<DynamicFieldModel> dynamicFieldsModel =
                 this.dynamicsFieldsModelBuilder.BuildViewModel(settings.InventoryDynamicFieldSettingForModelEditData);
-            inventoryViewModel.Name = inventoryType.Name;
 
-            var viewModel = new InventoryEditViewModel(inventoryViewModel, dynamicFieldsModel, typeGroupModels);
+            var viewModel = new InventoryEditViewModel(0, inventoryViewModel, dynamicFieldsModel, typeGroupModels);
+            viewModel.InventoryName = inventoryType.Name;
 
             return this.View(viewModel);
         }
@@ -188,13 +188,14 @@
 
             InventoryViewModel inventoryViewModel = this.inventoryViewModelBuilder.BuildViewModel(model.Inventory, options, settings.InventoryFieldSettingsForModelEdit);
             List<DynamicFieldModel> dynamicFieldsModel = this.dynamicsFieldsModelBuilder.BuildViewModel(model.DynamicData, settings.InventoryDynamicFieldSettingForModelEditData, id);
-            inventoryViewModel.Name = model.Inventory.InventoryTypeName;
             inventoryViewModel.IsForDialog = dialog;
 
-            var viewModel = new InventoryEditViewModel(inventoryViewModel, dynamicFieldsModel, typeGroupModels)
+            var viewModel = new InventoryEditViewModel(id, inventoryViewModel, dynamicFieldsModel, typeGroupModels)
             {
                 UserHasInventoryAdminPermission = userHasInventoryAdminPermission,
-                IsForDialog = dialog
+                IsForDialog = dialog,
+                InventoryName = model.Inventory.InventoryTypeName,
+                InventoryTypeId = inventoryTypeId
             };
 
             return this.View(viewModel);

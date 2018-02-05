@@ -1,3 +1,5 @@
+using DH.Helpdesk.BusinessData.Enums.Inventory;
+
 namespace DH.Helpdesk.Dal.Repositories.Inventory
 {
     using System.Collections.Generic;
@@ -30,5 +32,6 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
 
         int GetIdByName(string inventoryName, int inventoryTypeId);
         List<InventorySearchResult> SearchPcNumber(int customerId, string query);
+        List<int> GetRelatedCaseIds(CurrentModes inventoryType, int inventoryId, int customerId);
     }
 }
