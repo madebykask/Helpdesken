@@ -10,9 +10,6 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @using DH.Helpdesk.Common.Extensions.Object
-        extendedSections: @Html.Raw(Model.ExtendedSectionsToJS()),
-        computerUserCategories: @Html.Raw(Json.Encode(Model.ComputerUserCategories.Select(o => new { o.Name, o.IsReadOnly, o.ID }).ToDictionary(o => o.ID.ToString(), o => o))),
-            ExtendedInitiatiorGUID: "ExtendedInitiatorGUID",
 
 @Html.Partial("~/Views/Cases/_CaseValidation.cshtml", Model)
 @Scripts.Render("~/bundles/cases/_input")
