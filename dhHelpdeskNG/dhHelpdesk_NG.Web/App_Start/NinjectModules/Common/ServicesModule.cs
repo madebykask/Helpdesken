@@ -3,6 +3,7 @@ using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Services.Services.Feedback;
 using DH.Helpdesk.Services.Services.Invoice;
 using DH.Helpdesk.Web.Infrastructure.Authentication;
+using DH.Helpdesk.Web.Infrastructure.Utilities;
 using Ninject.Web.Common;
 using Ninject.Web.Mvc.FilterBindingSyntax;
 
@@ -185,6 +186,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             Bind<IMetaDataService>().To<MetaDataService>();
             Bind<IEmployeeService>().To<EmployeeService>();
             Bind<IWebApiService>().To<WebApiService>();
+
+            Bind<ICaseDiagnosticService>().To<CaseDiagnosticService>().InRequestScope();
         }
 
         #endregion

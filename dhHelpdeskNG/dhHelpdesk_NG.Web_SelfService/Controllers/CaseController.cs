@@ -245,7 +245,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
             
             var currentCase = _caseService.GetCaseById(caseId);                
-                currentCase = _caseService.GetCaseById(_intCaseId);
 
             if (currentCase == null)
             {
@@ -2460,7 +2459,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
             var localUserId = SessionFacade.CurrentLocalUser?.UserId;
 
-        #endregion
+            _logger.Debug($@"{msg}. Context: 
                         -customerId: {customerId}, 
                         -userIdentityEmail = {userIdentityEmail},
                         -userIdentityEmployeeNumber = {userIdentityEmployeeNumber},
@@ -2468,5 +2467,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                         -localUserPkId = {localUserPkId},
                         -localUserId = {localUserId}");
         }
+
+        #endregion
     }
 }
