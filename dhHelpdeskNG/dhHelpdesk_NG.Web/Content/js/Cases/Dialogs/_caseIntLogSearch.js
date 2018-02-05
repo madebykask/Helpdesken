@@ -113,7 +113,10 @@
 
     popupIntLogInput.on('blur',
         function (e) {
-            processEmails(e, popupIntLogInput, dialogType === toType ? mainIntLogInputTo : mainIntLogInputCc);
+            var relatedTarget = e.relatedTarget || document.activeElement;
+            if ($(relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) {
+                processEmails(e, popupIntLogInput, dialogType === toType ? mainIntLogInputTo : mainIntLogInputCc);
+            }
         });
 
     fakeInputTo.typeahead(getCasesIntLogEmailSearchOptions());
@@ -132,9 +135,12 @@
         }
     });
 
-    fakeInputTo.on('focusout',
-        function(e) {
-            processEmails(e, fakeInputTo, mainIntLogInputTo);
+    fakeInputTo.on('blur',
+        function (e) {
+            var relatedTarget = e.relatedTarget || document.activeElement;
+            if ($(relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) {
+                processEmails(e, fakeInputTo, mainIntLogInputTo);
+            }
         });
 
     fakeInputCc.typeahead(getCasesIntLogEmailSearchOptions());
@@ -153,9 +159,12 @@
         }
     });
 
-    fakeInputCc.on('focusout',
+    fakeInputCc.on('blur',
         function (e) {
-            processEmails(e, fakeInputCc, mainIntLogInputCc);
+            var relatedTarget = e.relatedTarget || document.activeElement;
+            if ($(relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) {
+                processEmails(e, fakeInputCc, mainIntLogInputCc);
+            }
         });
 
     function isNewEmail(newEmail, mainInput) {
@@ -169,7 +178,7 @@
         e.preventDefault();
         e.stopImmediatePropagation();
         if (e.keyCode === 13 || e.keyCode === 186 ||
-            (e.type === 'focusout' && $(e.relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) || e.keyCode === 32) {
+            e.type === 'blur' || e.keyCode === 32) {
             var emails = $(e.target).html();
             var arr = getEmailsFromHtml(emails);
             for (var i = 0; i < arr.length; i++) {
@@ -179,7 +188,7 @@
                 }
             }
             fakeInput.html(getHtmlFromEmails(mainInput.val()));
-            if (e.type !== 'focusout') placeCaretAtEnd(fakeInput);
+            if (e.type !== 'blur') placeCaretAtEnd(fakeInput);
         }
     }
 

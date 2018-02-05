@@ -618,13 +618,13 @@ function GetComputerUserSearchOptionsForIsAbout() {
 
                 var categoryID = null;
                 var isAboutCategory = $('#IsAboutCategory');
-                if (isAboutCategory.length > 0)
-                    categoryID = isAboutCategory.val()
+                    if (isAboutCategory.length > 0)
+                        categoryID = isAboutCategory.val();
 
                 $.ajax({
                     url: '/cases/search_user',
                     type: 'post',
-                    data: { query: query, customerId: $('#case__Customer_Id').val(), searchKey: lastIsAboutSearchKey, categoryID },
+                    data: { query: query, customerId: $('#case__Customer_Id').val(), searchKey: lastIsAboutSearchKey, categoryID: categoryID },
                     dataType: 'json',
                     success: function (result) {
                         if (result.searchKey != lastIsAboutSearchKey)
