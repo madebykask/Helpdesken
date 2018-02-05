@@ -7,6 +7,14 @@ begin
 	ALTER TABLE [tblCaseSolution] ADD [SplitToCaseSolutionType] int NOT NULL DEFAULT(0)
 
 end
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'ReadOnly' and sysobjects.name = N'tblInventoryTypeProperty')
+begin
+
+	ALTER TABLE [tblInventoryTypeProperty] ADD [ReadOnly] INT NOT NULL DEFAULT(0)
+
+end
    
 
 
@@ -1799,7 +1807,7 @@ begin
 
 		insert into [tblConditionType] (Id, [Guid], Name, [Status], [SortOrder]) VALUES (@ConditionTypeId,@ConditionTypeGuid, 'Multicase - Split', 1, 0)
 
-		SET IDENTITY_INSERT [tblCaseSolutionType] OFF
+		SET IDENTITY_INSERT [tblConditionType] OFF
 
 	end
 	else
@@ -1914,7 +1922,8 @@ IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id =
                where syscolumns.name = N'IsMemberOfGroup' and sysobjects.name = N'tblUserWorkingGroup')
 begin
 	ALTER TABLE [dbo].[tblUserWorkingGroup] ADD IsMemberOfGroup bit NOT NULL Default(0)	
-	UPDATE [dbo].[tblUserWorkingGroup] SET [IsMemberOfGroup] = 1 WHERE [UserRole] = 2
+
+	EXEC sp_executesql N'UPDATE [dbo].[tblUserWorkingGroup] SET [IsMemberOfGroup] = 1 WHERE [UserRole] = 2'
 end
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'Name' and sysobjects.name = N'tblCaseSolutionCondition')
@@ -2278,3 +2287,4 @@ GO
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.35'
 
 --ROLLBACK --TMP
+
