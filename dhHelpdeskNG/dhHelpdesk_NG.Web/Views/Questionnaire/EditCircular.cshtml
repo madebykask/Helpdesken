@@ -57,126 +57,104 @@
                 <div class="container">
                     <h4>@Translation.GetCoreTextTranslation("Urval")</h4>
                     <div class="row">
-                        <div class="span12">
-                            @using (Html.BeginForm("EditCircular", "Questionnaire", FormMethod.Post, new {id = "circular_new_form"}))
+                        <div class="span15">
+                            @using (Html.BeginForm("EditCircular", "Questionnaire", FormMethod.Post, new { id = "circular_new_form" }))
                             {
                                 @Html.HiddenFor(m => m.Id)
                                 @Html.HiddenFor(m => m.QuestionnaireId)
                                 @Html.HiddenFor(m => m.State)
-                                @Html.Hidden("backStatusId", (int?) ViewBag.BackStatusId)
+                                @Html.Hidden("backStatusId", (int?)ViewBag.BackStatusId)
                                 @Html.HiddenFor(m => m.ExtraEmails, new { @readonly = "true", id = "extraEmailsInput" })
                                 <div id="hiddenDiv" style="display: none"></div>
                                 <table class="tableform">
                                     <tr>
-                                        <td class="span5">
+                                        <td class="span3">
                                             @Translation.GetCoreTextTranslation("Namn")
                                         </td>
-                                        <td class="span9">
+                                        <td class="span5">
                                             @Html.TextBoxFor(model => model.CircularName)
                                             @Html.ValidationMessageFor(model => model.CircularName)
                                         </td>
-                                        <td class="span5">
+                                        <td class="span7">
                                             <a href="#add_extra_emails_btn" role="button" class="btn case-usersearch-btn" data-src="circular" data-toggle="modal">@Translation.GetCoreTextTranslation("Extra") @Translation.GetCoreTextTranslation("E-post").ToLower()</a>
-                                        </td>
-                                        <td class="span9">
                                             <div id="fakeExtraEmailsInput" contenteditable="true" class="case-usersearch-textarea case-send-emails-div"></div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="span5">
+                                        <td class="span3">
                                             @Translation.GetCoreTextTranslation("Status")
                                         </td>
-                                        <td class="span9">
+                                        <td class="span5">
                                             @Model.State.GetDisplayValue()
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="span9">
+                                        <td class="span3">
                                             @Translation.GetCoreTextTranslation("Ändring") @Translation.GetCoreTextTranslation("E-post mall")
                                         </td>
-                                        <td class="span9">
+                                        <td class="span5">
                                             @Html.DropDownListFor(m => m.MailTemplateId, Model.MailTemplates)
                                         </td>
                                     </tr>
                                 </table>
                             }
-                            @using (Ajax.BeginForm("CaseRowGrid", null, new AjaxOptions {UpdateTargetId = "case_grid_container"}, new {id = "circular_case_filter_form"}))
+                            @using (Ajax.BeginForm("CaseRowGrid", null, new AjaxOptions { UpdateTargetId = "case_grid_container" }, new { id = "circular_case_filter_form" }))
                             {
                                 @Html.HiddenFor(m => m.QuestionnaireId)
-
-                                <div>
-                                    @Html.CheckBoxFor(x => x.CaseFilter.IsUniqueEmail)
-                                    @Translation.GetCoreTextTranslation("Endast unika e-postadresser")
-
-                                    <table class="tableform">
-                                        <tr>
-                                            <td class="span3">
-                                                @Translation.GetCoreTextTranslation("Avslutsdatum")
-                                            </td>
-                                            <td class="span9">
-                                                @Html.EditorFor(model => model.CaseFilter.FinishingDateFrom, "DatePicker", new {id = "finishing_date_from_datepicker"})
-                                                &nbsp; - &nbsp;
-                                                @Html.EditorFor(model => model.CaseFilter.FinishingDateTo, "DatePicker", new {id = "finishing_date_to_datepicker"})
-                                            </td>
-                                        </tr>
-
-                                    </table>
-
-                                    <table>
-                                        <tr>
-                                            <td class="span3">
-                                                @Translation.GetCoreTextTranslation("Avdelning")
-                                            </td>
-                                            <td class="span9">
-                                                @Html.ListBoxFor(model => model.CaseFilter.SelectedDepartments, Model.AvailableDepartments, new {multiple = "multiple", @class = "chosen-select"})
-                                            </td>
-                                        </tr>
-                                    </table>
-
-                                    <table>
-                                        <tr>
-                                            <td class="span3">
-                                                @Translation.GetCoreTextTranslation("Ärendetyp")
-                                            </td>
-                                            <td class="span9">
-                                                @Html.ListBoxFor(model => model.CaseFilter.SelectedCaseTypes, Model.AvailableCaseTypes, new {multiple = "multiple", @class = "chosen-select"})
-                                            </td>
-                                        </tr>
-                                    </table>
-
-                                    <table>
-                                        <tr>
-                                            <td class="span3">
-                                                @Translation.GetCoreTextTranslation("Produktområde")
-                                            </td>
-                                            <td class="span9">
-                                                @Html.ListBoxFor(model => model.CaseFilter.SelectedProductAreas, Model.AvailableProductArea, new {multiple = "multiple", @class = "chosen-select"})
-                                            </td>
-                                        </tr>
-                                    </table>
-
-                                    <table>
-                                        <tr>
-                                            <td class="span3">
-                                                @Translation.GetCoreTextTranslation("Driftgrupp")
-                                            </td>
-                                            <td class="span9">
-                                                @Html.ListBoxFor(model => model.CaseFilter.SelectedWorkingGroups, Model.AvailableWorkingGroups, new {multiple = "multiple", @class = "chosen-select"})
-                                            </td>
-                                        </tr>
-                                    </table>
-
-                                    <table class="tableform">
-                                        <tr>
-                                            <td class="span2">
-                                                @Translation.GetCoreTextTranslation("Urval")
-                                            </td>
-                                            <td class="span6">
-                                                @Translation.GetCoreTextTranslation("Selektera ut") @Html.DropDownListFor(model => model.CaseFilter.SelectedProcent, Model.Procent, new {style = "width: 60px"}) @Translation.Get("procent av tillgängliga ärenden")
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
+                                @Html.CheckBoxFor(x => x.CaseFilter.IsUniqueEmail) @Translation.GetCoreTextTranslation("Endast unika e-postadresser")
+                                <table class="tableform">
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Avslutsdatum")
+                                        </td>
+                                        <td class="span5">
+                                            @Html.EditorFor(model => model.CaseFilter.FinishingDateFrom, "DatePicker", new { id = "finishing_date_from_datepicker" })
+                                            &nbsp; - &nbsp;
+                                            @Html.EditorFor(model => model.CaseFilter.FinishingDateTo, "DatePicker", new { id = "finishing_date_to_datepicker" })
+                                        </td>
+                                        <td class="span7"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Avdelning")
+                                        </td>
+                                        <td class="span5">
+                                            @Html.ListBoxFor(model => model.CaseFilter.SelectedDepartments, Model.AvailableDepartments, new { multiple = "multiple", @class = "chosen-select" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Ärendetyp")
+                                        </td>
+                                        <td class="span5">
+                                            @Html.ListBoxFor(model => model.CaseFilter.SelectedCaseTypes, Model.AvailableCaseTypes, new { multiple = "multiple", @class = "chosen-select" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Produktområde")
+                                        </td>
+                                        <td class="span5">
+                                            @Html.ListBoxFor(model => model.CaseFilter.SelectedProductAreas, Model.AvailableProductArea, new { multiple = "multiple", @class = "chosen-select" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Driftgrupp")
+                                        </td>
+                                        <td class="span5">
+                                            @Html.ListBoxFor(model => model.CaseFilter.SelectedWorkingGroups, Model.AvailableWorkingGroups, new { multiple = "multiple", @class = "chosen-select" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Urval")
+                                        </td>
+                                        <td class="span5">
+                                            @Translation.GetCoreTextTranslation("Selektera ut") @Html.DropDownListFor(model => model.CaseFilter.SelectedProcent, Model.Procent, new { style = "width: 60px" }) @Translation.Get("procent av tillgängliga ärenden")
+                                        </td>
+                                    </tr>
+                                </table>
                             }
 
                         </div>

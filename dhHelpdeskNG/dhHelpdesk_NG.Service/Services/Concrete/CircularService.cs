@@ -826,35 +826,22 @@
 
                 string mailFrom = customerRepository.GetAll().GetById(customerId).Select(x => x.HelpdeskEmail).Single();
 
-                mails.AddRange(
-                    from connectedCase in participants
-                    let markValues =
-                        CreateMarkValues(
+                foreach (var connectedCase in participants)
+                {
+                    var markValues = CreateMarkValues(
                             actionAbsolutePath,
                             connectedCase.Guid,
                             connectedCase.CaseNumber.ToString(),
                             connectedCase.Caption,
                             connectedCase.CaseDescription,
                             customerId,
-                            languageId)
-                    let mail = this.mailTemplateFormatter.Format(mailTemplate, markValues)
-                    select new QuestionnaireMailItem(connectedCase.Guid, mailFrom, connectedCase.Email, mail));
-
-                if (emails != null && emails.Any())
-                {
-                    mails.AddRange(
-                    from email in emails
-                    let markValues =
-                        CreateMarkValues(
-                            actionAbsolutePath,
-                            Guid.Empty,
-                            string.Empty,
-                            string.Empty,
-                            string.Empty,
-                            customerId,
-                            languageId)
-                    let mail = this.mailTemplateFormatter.Format(mailTemplate, markValues)
-                    select new QuestionnaireMailItem(Guid.Empty, mailFrom, email, mail));
+                            languageId);
+                    var mail = this.mailTemplateFormatter.Format(mailTemplate, markValues);
+                    mails.Add(new QuestionnaireMailItem(connectedCase.Guid, mailFrom, connectedCase.Email, mail));
+                    if (emails != null && emails.Any())
+                    {
+                        mails.AddRange(emails.Select(email => new QuestionnaireMailItem(connectedCase.Guid, mailFrom, email, mail)));
+                    }
                 }
             }
 

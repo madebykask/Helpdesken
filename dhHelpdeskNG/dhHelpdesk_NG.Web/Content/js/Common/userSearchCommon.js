@@ -3,7 +3,6 @@
     var mainInput = $("#extraEmailsInput");
     var mainFakeInput = $("#fakeExtraEmailsInput");
     var popupInput = $("#extraEmailsModalInput");
-    var searchSelected = false;
 
     initEditableDiv();
 
@@ -142,6 +141,8 @@
 
 
 }
+
+var searchSelected = false;
 
 function onRemoveKeyDown(e, fakeInput, mainInput) {
     e.stopImmediatePropagation();
