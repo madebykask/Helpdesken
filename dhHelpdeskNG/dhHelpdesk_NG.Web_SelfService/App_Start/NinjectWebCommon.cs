@@ -292,6 +292,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IServerSoftwareRepository>().To<ServerSoftwareRepository>();
             kernel.Bind<IPrinterFieldSettingsRepository>().To<PrinterFieldSettingsRepository>();
 			kernel.Bind<ICaseSectionsRepository>().To<CaseSectionsRepository>();
+			kernel.Bind<IComputerUserCategoryRepository>().To<ComputerUserCategoryRepository>();
 
 
 			// Service             
