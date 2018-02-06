@@ -44,10 +44,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
             {
                 return new AdfsAuthenticationBehavior(_appConfiguration, _adfsConfiguration, _federatedAuthenticationService, _adfsRepository);
             }
-            //else if (mode == LoginMode.Windows)
-            //{
-            //  return new WindowsAuthenticationBehavior();
-            //}
+            else if (mode == LoginMode.Windows)
+            {
+              return new WindowsAuthenticationBehavior();
+            }
 
             throw new NotSupportedException($"Login mode '{mode}' is not supported");
         }
