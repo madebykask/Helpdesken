@@ -166,7 +166,10 @@
          data-usermodules="item"
          data-usermodules-moduleid="@(GetModuleId(Module.CaseQuickOpen))"
          data-usermodules-position="@(GetModulePosition(Module.CaseQuickOpen))">
-        @{ Html.RenderPartial("CaseQuickOpen");}
+        @if (GetModuleVisibility(Module.CaseQuickOpen))
+        {
+            Html.RenderPartial("CaseQuickOpen");
+        }
     </div>                                      
 </div>
 @functions
@@ -178,16 +181,23 @@
         if (userModule == null)
             return 0;
         return userModule.Module_Id;
-    }         
-    
+    }
+
     private int GetModulePosition(Module module)
     {
         var userModule = Model.UserModules.FirstOrDefault(m => m.Module_Id == (int) module);
         if (userModule == null)
             return 101;
         return userModule.Position;
-    }         
+    }
 
+    private bool GetModuleVisibility(Module module)
+    {
+        var userModule = Model.UserModules.FirstOrDefault(m => m.Module_Id == (int)module);
+        if (userModule == null)
+            return false;
+        return userModule.isVisible;
+    }
 }
 
 <script type="text/javascript">
