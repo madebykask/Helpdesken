@@ -2278,10 +2278,12 @@ BEGIN
 END
 GO
 
-
-
-
-
+-- set NOCHECK constraint for Foreign Key FK_tblQuestionnaireCircularParticipant_tblCase
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblQuestionnaireCircularParticipant_tblCase') AND type = 'F')
+BEGIN    
+    ALTER TABLE [dbo].[tblQuestionnaireCircularPart] NOCHECK CONSTRAINT [FK_tblQuestionnaireCircularParticipant_tblCase]
+END
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.35'
