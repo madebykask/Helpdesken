@@ -202,6 +202,8 @@ namespace DH.Helpdesk.Web.Controllers
                 this._operationLogService.SendOperationLogSMS(operationlog, SMSRecipients, txtSMS, customer);
             }
 
+            SaveRssFeed(operationlog.Customer_Id);
+
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "operationlog");
 
