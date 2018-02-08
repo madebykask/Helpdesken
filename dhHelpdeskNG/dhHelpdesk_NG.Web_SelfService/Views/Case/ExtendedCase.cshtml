@@ -411,7 +411,3 @@
 
 </div>
 
-@if (Model.CaseId == 0 || (Model.WorkflowSteps != null && Model.WorkflowSteps.Any()))
-{
-    @Html.Partial("_ExtendedCaseControlPanel", Model)
-}
