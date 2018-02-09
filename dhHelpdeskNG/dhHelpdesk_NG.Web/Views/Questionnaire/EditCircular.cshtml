@@ -76,8 +76,8 @@
                                             @Html.ValidationMessageFor(model => model.CircularName)
                                         </td>
                                         <td class="span7">
-                                            <a href="#add_extra_emails_btn" role="button" class="btn case-usersearch-btn" data-src="circular" data-toggle="modal">@Translation.GetCoreTextTranslation("Extra") @Translation.GetCoreTextTranslation("E-post").ToLower()</a>
-                                            <div id="fakeExtraEmailsInput" contenteditable="true" class="case-usersearch-textarea case-send-emails-div"></div>
+                                            @*<a href="#add_extra_emails_btn" role="button" class="btn case-usersearch-btn" data-src="circular" data-toggle="modal">@Translation.GetCoreTextTranslation("Extra") @Translation.GetCoreTextTranslation("E-post").ToLower()</a>*@
+                                            @*<div id="fakeExtraEmailsInput" contenteditable="true" class="case-usersearch-textarea case-send-emails-div"></div>*@
                                         </td>
                                     </tr>
                                     <tr>
@@ -90,7 +90,7 @@
                                     </tr>
                                     <tr>
                                         <td class="span3">
-                                            @Translation.GetCoreTextTranslation("Ändring") @Translation.GetCoreTextTranslation("E-post mall")
+                                            @*@Translation.GetCoreTextTranslation("Ändring")*@ @Translation.GetCoreTextTranslation("E-post mall")
                                         </td>
                                         <td class="span5">
                                             @Html.DropDownListFor(m => m.MailTemplateId, Model.MailTemplates)
