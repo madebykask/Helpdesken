@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+
 namespace DH.Helpdesk.BusinessData.Models.ProductArea.Output
 {
     using System.Collections.Generic;
@@ -18,8 +20,11 @@ namespace DH.Helpdesk.BusinessData.Models.ProductArea.Output
     /// </summary>
     public sealed class ProductAreaOverview : IHierarchyItem
     {
-        private readonly List<ProductAreaOverview> children = new List<ProductAreaOverview>(); 
-
+        public ProductAreaOverview()
+        {
+            WorkingGroups = new List<WorkingGroupOverview>();
+            Children = new List<ProductAreaOverview>();
+        }
         /// <summary>
         /// Gets or sets the id.
         /// </summary>
@@ -42,12 +47,10 @@ namespace DH.Helpdesk.BusinessData.Models.ProductArea.Output
 
         public int CustomerId { get; set; }
 
-        public List<ProductAreaOverview> Children
-        {
-            get
-            {
-                return this.children;
-            }
-        }
+        public int IsActive { get; set; }
+
+        public List<WorkingGroupOverview> WorkingGroups { get; set; }
+
+        public List<ProductAreaOverview> Children { get; set; }
     }
 }

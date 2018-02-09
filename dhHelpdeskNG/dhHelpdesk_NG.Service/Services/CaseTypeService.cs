@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.Case.Output;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -30,6 +32,8 @@
         IEnumerable<ItemOverview> GetOverviews(int customerId);
 
         IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds);
+
+        IList<CaseTypeOverview> GetCaseTypesOverviewWithChildren(int customerId, bool activeOnly = false);
 
         IList<CaseType> GetChildrenInRow(IList<CaseType> caseTypes, bool isTakeOnlyActive = false);
 
@@ -80,8 +84,7 @@
 
         public IList<CaseType> GetAllCaseTypes(int customerId, bool isTakeOnlyActive = false)
         {
-            var query = this.caseTypeRepository.GetMany(
-                x => x.Customer_Id == customerId);
+            var query = this.caseTypeRepository.GetMany(x => x.Customer_Id == customerId);
             if (isTakeOnlyActive)
             {
                 query = query.Where(it => it.IsActive == 1 && it.Selectable == 1);
@@ -184,6 +187,47 @@
         public IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds)
         {
             return this.caseTypeRepository.GetOverviews(customerId, caseTypesIds);
+        }
+        
+        public IList<CaseTypeOverview> GetCaseTypesOverviewWithChildren(int customerId, bool activeOnly = false)
+        {
+            var allItems = 
+                this.caseTypeRepository.GetMany(
+                    x => x.Customer_Id == customerId && 
+                         (!activeOnly || (x.IsActive == 1 && x.Selectable == 1)))
+                         .Select(x => new CaseTypeOverview
+                    {
+                      Id = x.Id,
+                      ParentId = x.Parent_CaseType_Id,
+                      Name = x.Name,
+                      ShowOnExternalPage  = x.ShowOnExternalPage,
+                      ShowOnExtPageCases = x.ShowOnExtPageCases,
+                      IsActive = x.IsActive,
+                      Selectable = x.Selectable
+                    }).ToList();
+
+            var parentItems = allItems.Where(o => o.ParentId == null).OrderBy(o => o.Name).ToList();
+            
+            foreach (var parentItem in parentItems)
+            {
+                BuildCaseTypesOverviewTree(parentItem, allItems);
+            }
+
+            return parentItems;
+        }
+
+        private void BuildCaseTypesOverviewTree(CaseTypeOverview parentCaseType, List<CaseTypeOverview> items)
+        {
+            var children = items.Where(o => o.ParentId == parentCaseType.Id).OrderBy(o => o.Name).ToList();
+
+            if (children.Any())
+            {
+                parentCaseType.SubCaseTypes.AddRange(children);
+                foreach (var child in children)
+                {
+                    BuildCaseTypesOverviewTree(child, items);
+                }
+            }
         }
 
         public IList<CaseType> GetChildrenInRow(IList<CaseType> caseTypes, bool isTakeOnlyActive = false)

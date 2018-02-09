@@ -1,4 +1,6 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
+using DH.Helpdesk.BusinessData.Models.Case.Output;
+using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Domain.Cases;
 
@@ -1131,7 +1133,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     {
                         if (model.case_.ProductArea_Id.HasValue)
                         {
-                            var curPa = GetProductArea(model.productAreas, model.case_.ProductArea_Id.Value);
+                            var curPa = GetProductAreaOverview(model.productAreas, model.case_.ProductArea_Id.Value);
                             if (curPa != null)
                             {
                                 result.Add(curPa.Name);
@@ -1340,6 +1342,29 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return result;
         }
 
+        private static ProductAreaOverview GetProductAreaOverview(IList<ProductAreaOverview> productAreas, int productAreaId)
+        {
+            ProductAreaOverview pa = null;
+            foreach (var productArea in productAreas)
+            {
+                if (productArea.Children != null && productArea.Children.Any())
+                {
+                    var childs = productArea.Children;
+                    pa = childs.SingleOrDefault(x => x.Id == productAreaId);
+                    if (pa != null)
+                        return pa;
+                    if (childs.Count > 0)
+                    {
+                        var sortedChildren = childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
+                        pa = GetProductAreaOverview(sortedChildren, productAreaId);
+                    }
+                }
+            }
+
+            return pa;
+        }
+
+        [Obsolete("Use GetProductAreaOverview")]
         private static ProductArea GetProductArea(IList<ProductArea> productAreas, int productAreaId)
         {
             ProductArea pa = null;
@@ -1351,6 +1376,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     pa = childs.SingleOrDefault(x => x.Id == productAreaId);
                     if (pa != null)
                         return pa;
+
                     if (childs.Count > 0)
                     {
                         pa = GetProductArea(childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), productAreaId);
@@ -1360,9 +1386,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return pa;
         }
 
-        private static CaseType GetCaseType(IList<CaseType> list, int id)
+        private static CaseTypeOverview GetCaseType(IList<CaseTypeOverview> list, int id)
         {
-            CaseType item = null;
+            CaseTypeOverview item = null;
             foreach (var it in list)
             {
                 if (it.SubCaseTypes != null && it.SubCaseTypes.Any())
@@ -1371,6 +1397,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     item = childs.SingleOrDefault(x => x.Id == id);
                     if (item != null)
                         return item;
+
                     if (childs.Count > 0)
                     {
                         item = GetCaseType(childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), id);

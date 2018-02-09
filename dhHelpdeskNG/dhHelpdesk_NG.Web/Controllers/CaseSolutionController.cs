@@ -2966,13 +2966,13 @@ namespace DH.Helpdesk.Web.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                CaseTypes = this._caseTypeService.GetCaseTypes(curCustomerId, TakeOnlyActive),
+                CaseTypes = this._caseTypeService.GetCaseTypesOverviewWithChildren(curCustomerId, TakeOnlyActive),
 
                 CaseWorkingGroups = workingGroupList,
 
                 Categories = this._categoryService.GetActiveParentCategories(curCustomerId),
 
-                FinishingCauses = this._finishingCauseService.GetFinishingCauses(curCustomerId),
+                FinishingCauses = this._finishingCauseService.GetFinishingCausesWithChilds(curCustomerId),
 
                 PerformerUsers = performersList,
 
@@ -2982,7 +2982,7 @@ namespace DH.Helpdesk.Web.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                ProductAreas = this._productAreaService.GetTopProductAreasForUser(curCustomerId, SessionFacade.CurrentUser),
+                ProductAreas = this._productAreaService.GetProductAreasOverviewWithChildren(curCustomerId),
 
                 WorkingGroups = this._workingGroupService.GetWorkingGroups(curCustomerId).Select(x => new SelectListItem
                 {

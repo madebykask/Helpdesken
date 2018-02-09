@@ -1,4 +1,9 @@
-﻿using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+﻿
+
+
+using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+using DH.Helpdesk.BusinessData.Models.FinishingCause;
+using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
 using DH.Helpdesk.Common.Constants;
 
 namespace DH.Helpdesk.Web.Infrastructure.Extensions
@@ -177,7 +182,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
         #region TreeString
 
-        public static MvcHtmlString CaseTypeDropdownButtonString(this HtmlHelper helper, IList<CaseType> caseTypes, bool isTakeOnlyActive = true)
+        public static MvcHtmlString CaseTypeDropdownButtonString(this HtmlHelper helper, IList<CaseTypeOverview> caseTypes, bool isTakeOnlyActive = true)
         {
             if (caseTypes != null)
             {
@@ -187,7 +192,18 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 return new MvcHtmlString(string.Empty);
         }
 
-        public static MvcHtmlString ProductAreaDropdownButtonString(this HtmlHelper helper, IList<ProductArea> pal, bool isTakeOnlyActive = true, int? productAreaIdToInclude = null)
+        [Obsolete("Uses CaseTypeDropdownButtonString instead")]
+        public static MvcHtmlString CaseTypeDropdownButtonStringOld(this HtmlHelper helper, IList<CaseType> caseTypes, bool isTakeOnlyActive = true)
+        {
+            if (caseTypes != null)
+            {
+                return BuildCaseTypeDropdownButtonOld(caseTypes, isTakeOnlyActive);
+            }
+            else
+                return new MvcHtmlString(string.Empty);
+        }
+        
+        public static MvcHtmlString ProductAreaDropdownButtonString(this HtmlHelper helper, IList<ProductAreaOverview> pal, bool isTakeOnlyActive = true, int? productAreaIdToInclude = null)
         {
             if (pal != null)
             {
@@ -197,9 +213,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 return new MvcHtmlString(string.Empty);
         }
 
+        //todo: refactor to use ProductAreaOverview instead of ef entity
         public static string ProductAreaDropdownString(IList<ProductArea> pal, bool isTakeOnlyActive = true, int? productAreaIdToInclude = null)
         {
-            return pal != null ? BuildProcuctAreaDropdownButtonString(pal, isTakeOnlyActive, null, productAreaIdToInclude) : string.Empty;
+            return pal != null ? BuildProcuctAreaDropdownButtonStringOld(pal, isTakeOnlyActive, null, productAreaIdToInclude) : string.Empty;
         }
 
         public static MvcHtmlString CategoryDropdownButtonString(this HtmlHelper helper, IList<Category> cats, bool isTakeOnlyActive = true)
@@ -222,7 +239,18 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return caseTypes == null ? MvcHtmlString.Empty : BuildCaseTypesList(caseTypes);
         }
 
-        public static MvcHtmlString FinishingCauseDropdownButtonString(this HtmlHelper helper, IList<FinishingCause> causes, bool isTakeOnlyActive = true)
+        [Obsolete("Do not use it due to lazy loading of sub causes in BuildFinishingCauseDropdownButtonOld")]
+        public static MvcHtmlString FinishingCauseDropdownButtonStringOld(this HtmlHelper helper, IList<FinishingCause> causes, bool isTakeOnlyActive = true)
+        {
+            if (causes != null)
+            {
+                return BuildFinishingCauseDropdownButtonOld(causes, isTakeOnlyActive);
+            }
+            else
+                return new MvcHtmlString(string.Empty);
+        }
+
+        public static MvcHtmlString FinishingCauseDropdownButtonString(this HtmlHelper helper, IList<FinishingCauseOverview> causes, bool isTakeOnlyActive = true)
         {
             if (causes != null)
             {
@@ -231,7 +259,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             else
                 return new MvcHtmlString(string.Empty);
         }
-         
+
         public static MvcHtmlString CaseTypeTreeString(this HtmlHelper helper, IList<CaseType> caseTypes)
         {
             if (caseTypes != null)
@@ -1100,7 +1128,41 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return new MvcHtmlString(htmlOutput);
         }
 
-        private static MvcHtmlString BuildCaseTypeDropdownButton(IList<CaseType> caseTypes, bool isTakeOnlyActive = true)
+        private static MvcHtmlString BuildCaseTypeDropdownButton(IList<CaseTypeOverview> caseTypes, bool isTakeOnlyActive = true)
+        {
+            var res = new StringBuilder();
+            
+            foreach (var caseType in caseTypes.OrderBy(c => Translation.GetMasterDataTranslation(c.Name)))
+            {
+                var childs = caseType.SubCaseTypes.Where(p => !isTakeOnlyActive || (p.IsActive != 0 && p.Selectable != 0)).ToList();
+                
+                var cls = caseType.IsActive == 1 ? string.Empty : "inactive";
+
+                if (caseType.SubCaseTypes.Count > 0)
+                {
+                    res.Append("<li class='dropdown-submenu " + cls + "'>");
+                }
+                else
+                {
+                    res.Append("<li class='" + cls + "'>");
+                }
+
+                res.AppendFormat("<a href='#' value='{0}'>{1}</a>", caseType.Id, Translation.GetMasterDataTranslation(caseType.Name));
+                if (childs.Count > 0)
+                {
+                    res.Append("<ul class='dropdown-menu'>");
+                    res.Append(BuildCaseTypeDropdownButton(childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive));
+                    res.Append("</ul>");
+                }
+
+                res.Append("</li>");
+            }
+
+            return new MvcHtmlString(res.ToString());
+        }
+
+        [Obsolete("Use BuildCaseTypeDropdownButton")]
+        private static MvcHtmlString BuildCaseTypeDropdownButtonOld(IList<CaseType> caseTypes, bool isTakeOnlyActive = true)
         {
             var res = new StringBuilder();
 
@@ -1129,7 +1191,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 if (childs.Count > 0)
                 {
                     res.Append("<ul class='dropdown-menu'>");
-                    res.Append(BuildCaseTypeDropdownButton(childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive));
+                    res.Append(BuildCaseTypeDropdownButtonOld(childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive));
                     res.Append("</ul>");
                 }
 
@@ -1139,33 +1201,62 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return new MvcHtmlString(res.ToString());
         }
 
-        private static MvcHtmlString BuildFinishingCauseDropdownButton(IList<FinishingCause> causes, bool isTakeOnlyActive = true)
+        private static MvcHtmlString BuildFinishingCauseDropdownButton(IList<FinishingCauseOverview> causes, bool isTakeOnlyActive = true)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            foreach (FinishingCause f in causes)
+            foreach (var cause in causes.OrderBy(c => Translation.GetMasterDataTranslation(c.Name)))
             {
-                if (!isTakeOnlyActive || (isTakeOnlyActive && f.IsActive != 0))
+                if (!isTakeOnlyActive || cause.IsActive != 0)
                 {
-                    bool hasChild = false;
-                    if (f.SubFinishingCauses != null)
-                        if (f.SubFinishingCauses.Count > 0 && 
-                            (!isTakeOnlyActive || (isTakeOnlyActive && 
-                                                   f.SubFinishingCauses.Any(sc=> sc.IsActive != 0))))
-                            hasChild = true;
+                    var hasChild = cause.ChildFinishingCauses?.Count > 0 &&
+                                   (!isTakeOnlyActive || cause.ChildFinishingCauses.Any(sc => sc.IsActive != 0));
 
-                    var cls = f.IsActive == 1 ? string.Empty : "inactive";
+                    var cls = cause.IsActive == 1 ? string.Empty : "inactive";
 
                     if (hasChild)
                         sb.Append("<li class='dropdown-submenu " + cls + "'>");
                     else
                         sb.Append("<li class='" + cls + "'>");
 
-                    sb.Append("<a href='#' value=" + f.Id.ToString() + ">" + Translation.GetMasterDataTranslation(f.Name) + "</a>");
+                    sb.Append("<a href='#' value=" + cause.Id.ToString() + ">" + Translation.GetMasterDataTranslation(cause.Name) + "</a>");
                     if (hasChild)
                     {
                         sb.Append("<ul class='dropdown-menu'>");
-                        sb.Append(BuildFinishingCauseDropdownButton(f.SubFinishingCauses.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive));
+                        sb.Append(BuildFinishingCauseDropdownButton(cause.ChildFinishingCauses.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive));
+                        sb.Append("</ul>");
+                    }
+                    sb.Append("</li>");
+                }
+            }
+
+            return new MvcHtmlString(sb.ToString());
+        }
+
+        [Obsolete("Slow in performance due to lazy loading of Child causes - cause.SubFinishingCauses")]
+        private static MvcHtmlString BuildFinishingCauseDropdownButtonOld(IList<FinishingCause> causes, bool isTakeOnlyActive = true)
+        {
+            var sb = new StringBuilder();
+
+            foreach (var cause in causes)
+            {
+                if (!isTakeOnlyActive || cause.IsActive != 0)
+                {
+                    var hasChild = cause.SubFinishingCauses?.Count > 0 && 
+                                   (!isTakeOnlyActive || cause.SubFinishingCauses.Any(sc=> sc.IsActive != 0));
+
+                    var cls = cause.IsActive == 1 ? string.Empty : "inactive";
+
+                    if (hasChild)
+                        sb.Append("<li class='dropdown-submenu " + cls + "'>");
+                    else
+                        sb.Append("<li class='" + cls + "'>");
+
+                    sb.Append("<a href='#' value=" + cause.Id.ToString() + ">" + Translation.GetMasterDataTranslation(cause.Name) + "</a>");
+                    if (hasChild)
+                    {
+                        sb.Append("<ul class='dropdown-menu'>");
+                        sb.Append(BuildFinishingCauseDropdownButtonOld(cause.SubFinishingCauses.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive));
                         sb.Append("</ul>");
                     }
                     sb.Append("</li>");
@@ -1221,24 +1312,34 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
             return MvcHtmlString.Create(result.ToString());
         }
-        
+
         private static MvcHtmlString BuildProcuctAreaDropdownButton(
+            IList<ProductAreaOverview> pal,
+            bool isTakeOnlyActive = true,
+            Dictionary<int, bool> userGroupDictionary = null,
+            int? productAreaIdToInclude = null)
+        {
+            var pas = BuildProductAreaDropdownButtonString(pal, isTakeOnlyActive, userGroupDictionary, productAreaIdToInclude);
+            return new MvcHtmlString(pas);
+        }
+
+        private static MvcHtmlString BuildProcuctAreaDropdownButtonOld(
             IList<ProductArea> pal,            
             bool isTakeOnlyActive = true,
             Dictionary<int, bool> userGroupDictionary = null,
             int? productAreaIdToInclude = null)
         {
-            var pas = BuildProcuctAreaDropdownButtonString(pal, isTakeOnlyActive, userGroupDictionary, productAreaIdToInclude);
+            var pas = BuildProcuctAreaDropdownButtonStringOld(pal, isTakeOnlyActive, userGroupDictionary, productAreaIdToInclude);
             return new MvcHtmlString(pas);
         }
 
-        private static string BuildProcuctAreaDropdownButtonString(
-            IList<ProductArea> pal,
+        private static string BuildProductAreaDropdownButtonString(
+            IList<ProductAreaOverview> pal,
             bool isTakeOnlyActive = true,
             Dictionary<int, bool> userGroupDictionary = null,
             int? productAreaIdToInclude = null)
         {
-            string htmlOutput = string.Empty;
+            var strBld = new StringBuilder();
             var user = SessionFacade.CurrentUser;
 
             if (userGroupDictionary == null)
@@ -1246,9 +1347,68 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 userGroupDictionary = user.UserWorkingGroups.Where(it => it.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).ToDictionary(it => it.WorkingGroup_Id, it => true);
             }
 
-            foreach (ProductArea pa in pal)
+            foreach (var pa in pal.Where(x => !isTakeOnlyActive || x.IsActive > 0))
             {
-                List<ProductArea> childList = null;
+                var childs = new List<ProductAreaOverview>();
+                if (pa.Children != null)
+                {
+                    childs = pa.Children.Where(p => !isTakeOnlyActive || p.IsActive >= 0).ToList();
+
+                    if (user.UserGroupId < (int)UserGroup.CustomerAdministrator)
+                    {
+                        childs =
+                            childs.Where(
+                                it =>
+                                    it.WorkingGroups.Count == 0
+                                    || it.WorkingGroups.Any(wg => userGroupDictionary.ContainsKey(wg.Id))
+                                    || (productAreaIdToInclude.HasValue && it.Id == productAreaIdToInclude.Value)).ToList();
+                    }
+                }
+
+                var cls = pa.IsActive == 1 ? string.Empty : "inactive";
+                if (childs.Any())
+                {
+                    strBld.AppendFormat("<li class=\"dropdown-submenu {0} {1}\" id=\"{2}\">", cls, "DynamicDropDown_Up", pa.Id);
+                }
+                else
+                {
+                    strBld.AppendFormat("<li class=\"{0} \" >", cls);
+                }
+
+                strBld.AppendFormat("<a href='#' value=\"{0}\">{1}</a>", pa.Id, Translation.GetMasterDataTranslation(pa.Name));
+
+                if (childs.Any())
+                {
+                    var sortedChilds = childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
+                    strBld.AppendFormat("<ul class='dropdown-menu subddMenu' id=\"subDropDownMenu_{0}\" >", pa.Id);
+                    strBld.Append(BuildProductAreaDropdownButtonString(sortedChilds, isTakeOnlyActive, userGroupDictionary));
+                    strBld.Append("</ul>");
+                }
+
+                strBld.Append("</li>");
+            }
+
+            var htmlOutput = strBld.ToString();
+            return htmlOutput;
+        }
+
+        private static string BuildProcuctAreaDropdownButtonStringOld(
+            IList<ProductArea> pal,
+            bool isTakeOnlyActive = true,
+            Dictionary<int, bool> userGroupDictionary = null,
+            int? productAreaIdToInclude = null)
+        {
+            var strBld = new StringBuilder();
+            var user = SessionFacade.CurrentUser;
+
+            if (userGroupDictionary == null)
+            {
+                userGroupDictionary = user.UserWorkingGroups.Where(it => it.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).ToDictionary(it => it.WorkingGroup_Id, it => true);
+            }
+
+            foreach (var pa in pal)
+            {
+                var childList = new List<ProductArea>();
                 if (pa.SubProductAreas != null)
                 {
                     var childs = isTakeOnlyActive
@@ -1261,9 +1421,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                             childs.Where(
                                 it =>
                                 it.WorkingGroups.Count == 0
-                                || it.WorkingGroups.Any(
-                                    productAreaWorkingGroup =>
-                                    userGroupDictionary.ContainsKey(productAreaWorkingGroup.Id))
+                                || it.WorkingGroups.Any(wg => userGroupDictionary.ContainsKey(wg.Id))
                                 || (productAreaIdToInclude.HasValue && it.Id == productAreaIdToInclude.Value));
                     }
 
@@ -1271,30 +1429,29 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 }
 
                 var cls = pa.IsActive == 1 ? string.Empty : "inactive";
-                if (childList != null && childList.Count > 0)
+                if (childList.Any())
                 {
-                    htmlOutput += string.Format("<li class=\"dropdown-submenu {0} {1}\" id=\"{2}\">", cls, "DynamicDropDown_Up", pa.Id);
+                    strBld.AppendFormat("<li class=\"dropdown-submenu {0} {1}\" id=\"{2}\">", cls, "DynamicDropDown_Up", pa.Id);
                 }
                 else
                 {
-                    htmlOutput += string.Format("<li class=\"{0} \" >", cls);
+                    strBld.AppendFormat("<li class=\"{0} \" >", cls);
                 }
 
-                htmlOutput +=
-                    string.Format(
-                        "<a href='#' value=\"{0}\">{1}</a>",
-                        pa.Id,
-                        Translation.GetMasterDataTranslation(pa.Name));
+                strBld.AppendFormat("<a href='#' value=\"{0}\">{1}</a>", pa.Id, Translation.GetMasterDataTranslation(pa.Name));
 
-                if (childList != null && childList.Count > 0)
+                if (childList.Any())
                 {
-                    htmlOutput += string.Format("<ul class='dropdown-menu subddMenu' id=\"subDropDownMenu_{0}\" >", pa.Id);
-                    htmlOutput += BuildProcuctAreaDropdownButtonString(childList.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive, userGroupDictionary);
-                    htmlOutput += "</ul>";
+                    var sortedChilds = childList.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
+                    strBld.AppendFormat("<ul class='dropdown-menu subddMenu' id=\"subDropDownMenu_{0}\" >", pa.Id);
+                    strBld.Append(BuildProcuctAreaDropdownButtonStringOld(sortedChilds, isTakeOnlyActive, userGroupDictionary));
+                    strBld.Append("</ul>");
                 }
 
-                htmlOutput += "</li>";
+                strBld.Append("</li>");
             }
+
+            var htmlOutput = strBld.ToString();
             return htmlOutput;
         }
 
@@ -1508,15 +1665,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
                 if (productArea.SubProductAreas != null)
                 {
-                    if (productArea.SubProductAreas.Count > 0 && (
-                        (isShowOnlyActive && !isInactive) 
-                        || !isShowOnlyActive))
+                    if (productArea.SubProductAreas.Count > 0 && ((isShowOnlyActive && !isInactive) || !isShowOnlyActive))
                     {
-                        htmlOutput += BuildProductAreaTreeRow(
-                            productArea.SubProductAreas.OrderBy(x => x.Name).ToList(),
-                            iteration + 20,
-                            isShowOnlyActive,
-                            isInactive);
+                        var subProducts = productArea.SubProductAreas.OrderBy(x => x.Name).ToList();
+                        htmlOutput += BuildProductAreaTreeRow(subProducts, iteration + 20, isShowOnlyActive, isInactive);
                     }
                 }
             }

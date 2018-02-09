@@ -1,3 +1,5 @@
+using DH.Helpdesk.Dal.Infrastructure.Helpers;
+
 namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
@@ -34,21 +36,47 @@ namespace DH.Helpdesk.Dal.Repositories
             return query.OrderBy(f => f.Name);
         }
 
+        #region CreateFinishingCauseOverviewTree
+
         public List<FinishingCauseOverview> GetFinishingCauseOverviews(int customerId)
         {
-            var causeEntities = this.DataContext.FinishingCauses.Where(c => c.Customer_Id == customerId && c.IsActive == 1).ToList();
-            var parentCauses = causeEntities.Where(c => c.Parent_FinishingCause_Id == null).ToList();
-            var categories = new List<FinishingCauseOverview>(parentCauses.Count);
+            var causeEntities = 
+                this.DataContext.FinishingCauses
+                    .Where(c => c.Customer_Id == customerId && c.IsActive == 1)
+                    .OrderBy(c => c.Name)
+                    .Select(c => new FinishingCauseOverview
+                    {
+                        Id = c.Id,
+                        ParentId = c.Parent_FinishingCause_Id,
+                        Name = c.Name,
+                        IsActive = c.IsActive
+                    }).ToList();
+
+            var parentCauses = causeEntities.Where(c => c.ParentId == null).ToList();
 
             foreach (var parentCategory in parentCauses)
             {
-                var category = this.CreateBrunchForParent(parentCategory, causeEntities);
-                categories.Add(category);
+                CreateFinishingCauseOverviewTree(parentCategory, causeEntities);
             }
 
-            return categories;
+            return parentCauses;
         }
 
+        private void CreateFinishingCauseOverviewTree(FinishingCauseOverview parentCategory, IList<FinishingCauseOverview> allCategories)
+        {
+            var children = allCategories.Where(c => c.ParentId == parentCategory.Id).OrderBy(c => c.Name).ToList();
+            if (children.Any())
+            {
+                parentCategory.ChildFinishingCauses.AddRange(children);
+                foreach (var child in children)
+                {
+                    this.CreateFinishingCauseOverviewTree(child, allCategories);
+                }
+            }
+        }
+
+        #endregion
+        
         public IEnumerable<FinishingCauseInfo> GetFinishingCauseInfos(int customerId)
         {
             var entities =
@@ -56,29 +84,14 @@ namespace DH.Helpdesk.Dal.Repositories
                     .Select(c => new { c.Id, ParentId = c.Parent_FinishingCause_Id, c.Name })
                     .OrderBy(c => c.Name)
                     .ToList();
+
             return entities
-                    .Select(c => new FinishingCauseInfo
-                    {
-                        Id = c.Id,
-                        ParentId = c.ParentId,
-                        Name = c.Name
-                    });
-        }
-
-        private FinishingCauseOverview CreateBrunchForParent(FinishingCause parentCategory, IList<FinishingCause> allCategories)
-        {
-            var cause = new FinishingCauseOverview { Id = parentCategory.Id, Name = parentCategory.Name };
-
-            var subCauseEntities = allCategories.Where(c => c.Parent_FinishingCause_Id == parentCategory.Id).OrderBy(c => c.Name).ToList();
-            if (subCauseEntities.Any())
-            {
-                var subCauses =
-                    subCauseEntities.Select(c => this.CreateBrunchForParent(c, allCategories)).ToList();
-
-                cause.ChildFinishingCauses.AddRange(subCauses);
-            }
-
-            return cause;
+                .Select(c => new FinishingCauseInfo
+                {
+                    Id = c.Id,
+                    ParentId = c.ParentId,
+                    Name = c.Name
+                });
         }
     }
 

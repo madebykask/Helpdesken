@@ -1,5 +1,8 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
+using DH.Helpdesk.BusinessData.Models.FinishingCause;
+using DH.Helpdesk.BusinessData.Models.Case.Output;
+using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
 
 namespace DH.Helpdesk.Web.Models.Case
 {
@@ -101,17 +104,17 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public IEnumerable<CaseSectionModel> CaseSectionModels { get; set; }
 
-        public IList<CaseType> caseTypes { get; set; }
+        public IList<CaseTypeOverview> caseTypes { get; set; }
         public IList<StandardText> standardTexts { get; set; }
         public IList<Category> categories { get; set; }
         public IList<ChangeEntity> changes { get; set; }
         public IList<Country> countries { get; set; }
         public IList<Currency> currencies { get; set; }
         public IList<Department> departments { get; set; }
-        public IList<FinishingCause> finishingCauses { get; set; }
+        public IList<FinishingCauseOverview> finishingCauses { get; set; }
         public IList<Impact> impacts { get; set; }
         public IList<ProblemOverview> problems { get; set; }
-        public IList<ProductArea> productAreas { get; set; }
+        public IList<ProductAreaOverview> productAreas { get; set; }
         public IList<Priority> priorities { get; set; }
         public IList<ProjectOverview> projects { get; set; }
         public IList<OU> ous { get; set; }  //unit

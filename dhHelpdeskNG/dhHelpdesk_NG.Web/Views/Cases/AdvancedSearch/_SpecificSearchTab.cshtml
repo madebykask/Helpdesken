@@ -135,7 +135,7 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
-                                    @Html.CaseTypeDropdownButtonString(Model.CaseTypeList, false)
+                                    @Html.CaseTypeDropdownButtonStringOld(Model.CaseTypeList, false)
                                 </ul>
                                 <input type="hidden" class="hidden" value="@Model.FilteredCaseType" id="hid_CaseTypeDropDown" name="hid_CaseTypeDropDown" />
                             </div>
@@ -174,7 +174,7 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
-                                    @Html.ProductAreaDropdownButtonString(Model.ProductAreaList, false)
+                                    @Html.ProductAreaDropdownButtonStringOld(Model.ProductAreaList, false)
                                 </ul>
                                 <input type="hidden" class="hidden" value="@Model.FilteredProductArea" id="hid_ProductAreaDropDown" name="hid_ProductAreaDropDown" />
                             </div>
@@ -197,7 +197,7 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
-                                    @Html.FinishingCauseDropdownButtonString(Model.ClosingReasonList, false)
+                                    @Html.FinishingCauseDropdownButtonStringOld(Model.ClosingReasonList, false)
                                 </ul>
                                 <input type="hidden" class="hidden" value="@Model.FilteredClosingReason" id="hid_ClosingReasonDropDown" name="hid_ClosingReasonDropDown" />
                             </div>

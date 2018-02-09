@@ -1,3 +1,5 @@
+using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+
 namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections;
@@ -70,6 +72,8 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The <see cref="IEnumerable"/>.
         /// </returns>
         IEnumerable<ProductAreaOverview> GetProductAreaOverviews(int customerId);
+
+        IList<ProductAreaOverview> GetProductAreasWithWorkingGroups(int customerId, bool isActiveOnly);
 
         int SaveProductArea(ProductAreaOverview productArea);
 
@@ -223,6 +227,33 @@ namespace DH.Helpdesk.Dal.Repositories
                 .ToList();
 
             return entities.Select(this.productAreaEntityToBusinessModelMapper.Map);
+        }
+
+        public IList<ProductAreaOverview> GetProductAreasWithWorkingGroups(int customerId, bool isActiveOnly)
+        {
+            //note please do not use mapper since more fields will be read from database ... for correct sql projection with required fields 
+            var productAreas = 
+                from pa in DataContext.ProductAreas
+                where pa.Customer_Id == customerId && 
+                      (!isActiveOnly || pa.IsActive > 0)
+                select new ProductAreaOverview
+                {
+                    Id = pa.Id,
+                    ParentId = pa.Parent_ProductArea_Id,
+                    Name = pa.Name,
+                    IsActive = pa.IsActive,
+                    Description = pa.Description,
+                    WorkingGroups =
+                        pa.WorkingGroups.Select(wg => new WorkingGroupOverview
+                        {
+                            Id = wg.Id,
+                            Code = wg.Code,
+                            WorkingGroupName = wg.WorkingGroupName
+                        }).ToList()
+                };
+
+            return productAreas.ToList();
+
         }
 
         /// <summary>

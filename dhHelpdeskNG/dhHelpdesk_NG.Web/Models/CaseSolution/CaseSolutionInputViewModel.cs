@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Models.CaseSolution
+﻿using DH.Helpdesk.BusinessData.Models.Case.Output;
+using DH.Helpdesk.BusinessData.Models.FinishingCause;
+using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+
+namespace DH.Helpdesk.Web.Models.CaseSolution
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
@@ -40,12 +44,12 @@
         public IList<CaseSolutionSettingModel> CaseSolutionSettingModels { get; set; }
         public IList<CaseFieldSetting> CaseFieldSettings { get; set; }
         public IList<SelectListItem> CsCategories { get; set; }
-        public IList<CaseType> CaseTypes { get; set; }
+        public IList<CaseTypeOverview> CaseTypes { get; set; }
         public IList<SelectListItem> CaseWorkingGroups { get; set; }
 //        public IList<SelectListItem> Categories { get; set; }
         public IList<Category> Categories { get; set; }
         public IList<SelectListItem> Departments { get; set; }
-        public IList<FinishingCause> FinishingCauses { get; set; }
+        public IList<FinishingCauseOverview> FinishingCauses { get; set; }
 
         /// <summary>
         /// List of available case administrators
@@ -53,7 +57,7 @@
         public SelectList PerformerUsers { get; set; }
 
         public IList<SelectListItem> Priorities { get; set; }
-        public IList<ProductArea> ProductAreas { get; set; }
+        public IList<ProductAreaOverview> ProductAreas { get; set; }
         public IList<SelectListItem> projects { get; set; }
         //public IList<ProjectOverview> Projects { get; set; }
         public IList<SelectListItem> WorkingGroups { get; set; }

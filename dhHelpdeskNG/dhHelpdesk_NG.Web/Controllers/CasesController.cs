@@ -95,7 +95,7 @@ namespace DH.Helpdesk.Web.Controllers
 	using Common.Enums.Cases;
 
 
-	public class CasesController : BaseController
+    public class CasesController : BaseController
     {
         #region ***Constant/Variables***
 
@@ -363,7 +363,6 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         #endregion
-
 
 
 
@@ -1643,7 +1642,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
                     m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
                     m.CaseSectionModels = _caseSectionService.GetCaseSections(customerId, SessionFacade.CurrentLanguageId);
-                    m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);
+                    m.finishingCauses = this._finishingCauseService.GetFinishingCausesWithChilds(customerId);
                     m.case_ = this._caseService.GetCaseById(m.CaseLog.CaseId);
                     m.IsCaseReopened = isCaseReopened;
                     bool UseVD = false;
@@ -1809,9 +1808,9 @@ namespace DH.Helpdesk.Web.Controllers
         #region --Auto Complete Fields--
         [ValidateInput(false)]
         [HttpPost]
-		public ActionResult Search_User(string query, int customerId, string searchKey, int? categoryID = null)
-		{
-			var result = this._computerService.SearchComputerUsers(customerId, query, categoryID);
+        public ActionResult Search_User(string query, int customerId, string searchKey, int? categoryID = null)
+        {
+            var result = this._computerService.SearchComputerUsers(customerId, query, categoryID);
 
             var ComputerUserSearchRestriction = _settingService.GetCustomerSetting(customerId).ComputerUserSearchRestriction;
             if (ComputerUserSearchRestriction == 1)
@@ -1829,78 +1828,78 @@ namespace DH.Helpdesk.Web.Controllers
             return Json(new { searchKey = searchKey, result = result });
         }
 
-		[HttpPost]
-		public JsonResult GetExtendedCaseUrlForCategoryAndSection(int categoryID, int caseSectionType)
-		{
-			var category = _computerService.GetComputerUserCategoryByID(categoryID);
-			var customerID = SessionFacade.CurrentCustomer.Id;
+        [HttpPost]
+        public JsonResult GetExtendedCaseUrlForCategoryAndSection(int categoryID, int caseSectionType)
+        {
+            var category = _computerService.GetComputerUserCategoryByID(categoryID);
+            var customerID = SessionFacade.CurrentCustomer.Id;
 
-			var currentUserID = SessionFacade.CurrentUser.Id;
-			var currentUserGroupID = SessionFacade.CurrentUser.UserGroupId;
+            var currentUserID = SessionFacade.CurrentUser.Id;
+            var currentUserGroupID = SessionFacade.CurrentUser.UserGroupId;
 
-			var userRole = GetUserRole(currentUserID, currentUserGroupID, customerID);
+            var userRole = GetUserRole(currentUserID, currentUserGroupID, customerID);
 
-			if (customerID != category.CustomerID)
-				throw new HttpException(403, "Not a valid category for customer");
+            if (customerID != category.CustomerID)
+                throw new HttpException(403, "Not a valid category for customer");
 
-			var extendedCaseForms = category.CaseSolution?.ExtendedCaseForms;
+            var extendedCaseForms = category.CaseSolution?.ExtendedCaseForms;
 
-			string url;
-			Guid guid;
-			//if (extendedCaseForms != null && extendedCaseForms.Any())
-			{
-				var extendedCasePath = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
-				var extendedCaseForm = _caseService.GetExtendedCaseSectionForm(category.CaseSolutionID.Value, customerID, 0, caseSectionType, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.UserGUID.ToString(), 0, 0, extendedCasePath, userRole);
+            string url;
+            Guid guid;
+            //if (extendedCaseForms != null && extendedCaseForms.Any())
+            {
+                var extendedCasePath = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
+                var extendedCaseForm = _caseService.GetExtendedCaseSectionForm(category.CaseSolutionID.Value, customerID, 0, caseSectionType, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.UserGUID.ToString(), 0, 0, extendedCasePath, userRole);
 
-				if (extendedCaseForm != null)
-				{
-					url = extendedCaseForm.Path;
-					guid = extendedCaseForm.ExtendedCaseGuid;
-				}
-				else
-				{
-					url = null;
-					guid = Guid.Empty;
-				}
-			}
-			/*else
-			{
-				url = null;
-				guid = Guid.Empty;
-			}*/
+                if (extendedCaseForm != null)
+                {
+                    url = extendedCaseForm.Path;
+                    guid = extendedCaseForm.ExtendedCaseGuid;
+                }
+                else
+                {
+                    url = null;
+                    guid = Guid.Empty;
+                }
+            }
+            /*else
+            {
+                url = null;
+                guid = Guid.Empty;
+            }*/
 
-			return Json(new { guid, url });
-		}
+            return Json(new { guid, url });
+        }
 
-		private int GetUserRole(int currentUserID, int currentUserGroupID, int customerID)
-		{
-			int userRole;
-			if (currentUserGroupID >= 3)
-			{
-				userRole = 99;
+        private int GetUserRole(int currentUserID, int currentUserGroupID, int customerID)
+        {
+            int userRole;
+            if (currentUserGroupID >= 3)
+            {
+                userRole = 99;
 
-			}
-			else
-			{
-				//Take the highest workinggroupId with "Admin" access (UserRole)
-				var userWorkingGroup = this._workingGroupService.GetWorkingGroupsAdmin(customerID, currentUserID)
-					.OrderByDescending(x => x.WorkingGroupId)
-					.FirstOrDefault();
+            }
+            else
+            {
+                //Take the highest workinggroupId with "Admin" access (UserRole)
+                var userWorkingGroup = this._workingGroupService.GetWorkingGroupsAdmin(customerID, currentUserID)
+                    .OrderByDescending(x => x.WorkingGroupId)
+                    .FirstOrDefault();
 
-				int userWorkingGroupId = 0;
+                int userWorkingGroupId = 0;
 
-				if (userWorkingGroup != null)
-				{
-					userWorkingGroupId = userWorkingGroup.WorkingGroupId;
-				}
-				userRole = userWorkingGroupId;
-			}
+                if (userWorkingGroup != null)
+                {
+                    userWorkingGroupId = userWorkingGroup.WorkingGroupId;
+                }
+                userRole = userWorkingGroupId;
+            }
 
-			return userRole;
-		}
+            return userRole;
+        }
 
 
-		[ValidateInput(false)]
+        [ValidateInput(false)]
         [HttpPost]
         public ActionResult CaseSearchUserEmails(string query, string searchKey, bool isInternalLog = false)
         {
@@ -2218,7 +2217,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult GetProductAreaByCaseType(int? caseTypeId, int customerId, int? productAreaIdToInclude)
         {
-            var pa = _productAreaService.GetTopProductAreasForUserOnCase(customerId, productAreaIdToInclude, SessionFacade.CurrentUser).ToList();
+            var pa = _productAreaService.GetTopProductAreasForUserOnCaseOld(customerId, productAreaIdToInclude, SessionFacade.CurrentUser).ToList();
 
             /*TODO: This part does not cover all states and needs to be fixed*/
             if (caseTypeId.HasValue)
@@ -3748,44 +3747,44 @@ namespace DH.Helpdesk.Web.Controllers
                     var exData = _caseService.GetExtendedCaseData(m.ExtendedCaseGuid);
                     _caseService.CreateExtendedCaseRelationship(case_.Id, exData.Id);
                 }
-				if (m.case_.ReportedBy != null && m.ExtendedInitiatorGUID.HasValue)
-				{
-					var exData = _caseService.GetExtendedCaseData(m.ExtendedInitiatorGUID.Value);
-					_caseService.CreateExtendedCaseSectionRelationship(case_.Id, exData.Id, CaseSectionType.Initiator, curCustomer.Id);
-				}
-				if (m.case_.IsAbout.ReportedBy != null && m.ExtendedRegardingGUID.HasValue)
-				{
-					var exData = _caseService.GetExtendedCaseData(m.ExtendedRegardingGUID.Value);
-					_caseService.CreateExtendedCaseSectionRelationship(case_.Id, exData.Id, CaseSectionType.Regarding, curCustomer.Id);
-				}
-			}
-			else // If edit existing case
-			{
-				if (m.ExtendedInitiatorGUID.HasValue)
-				{
-					var exData = _caseService.GetExtendedCaseData(m.ExtendedInitiatorGUID.Value);
-					_caseService.CheckAndUpdateExtendedCaseSectionData(exData.Id, m.case_.Id, m.case_.Customer_Id, CaseSectionType.Initiator);
-				}
-				else
-				{
-					_caseService.RemoveAllExtendedCaseSectionData(case_.Id, m.case_.Customer_Id, CaseSectionType.Initiator);
+                if (m.case_.ReportedBy != null && m.ExtendedInitiatorGUID.HasValue)
+                {
+                    var exData = _caseService.GetExtendedCaseData(m.ExtendedInitiatorGUID.Value);
+                    _caseService.CreateExtendedCaseSectionRelationship(case_.Id, exData.Id, CaseSectionType.Initiator, curCustomer.Id);
+                }
+                if (m.case_.IsAbout.ReportedBy != null && m.ExtendedRegardingGUID.HasValue)
+                {
+                    var exData = _caseService.GetExtendedCaseData(m.ExtendedRegardingGUID.Value);
+                    _caseService.CreateExtendedCaseSectionRelationship(case_.Id, exData.Id, CaseSectionType.Regarding, curCustomer.Id);
+                }
+            }
+            else // If edit existing case
+            {
+                if (m.ExtendedInitiatorGUID.HasValue)
+                {
+                    var exData = _caseService.GetExtendedCaseData(m.ExtendedInitiatorGUID.Value);
+                    _caseService.CheckAndUpdateExtendedCaseSectionData(exData.Id, m.case_.Id, m.case_.Customer_Id, CaseSectionType.Initiator);
+                }
+                else
+                {
+                    _caseService.RemoveAllExtendedCaseSectionData(case_.Id, m.case_.Customer_Id, CaseSectionType.Initiator);
 
-				}
+                }
 
-				if (m.ExtendedRegardingGUID.HasValue)
-				{
-					var exData = _caseService.GetExtendedCaseData(m.ExtendedRegardingGUID.Value);
-					_caseService.CheckAndUpdateExtendedCaseSectionData(exData.Id, m.case_.Id, m.case_.Customer_Id, CaseSectionType.Regarding);
-				}
-				else
-				{
-					_caseService.RemoveAllExtendedCaseSectionData(case_.Id, m.case_.Customer_Id, CaseSectionType.Regarding);
+                if (m.ExtendedRegardingGUID.HasValue)
+                {
+                    var exData = _caseService.GetExtendedCaseData(m.ExtendedRegardingGUID.Value);
+                    _caseService.CheckAndUpdateExtendedCaseSectionData(exData.Id, m.case_.Id, m.case_.Customer_Id, CaseSectionType.Regarding);
+                }
+                else
+                {
+                    _caseService.RemoveAllExtendedCaseSectionData(case_.Id, m.case_.Customer_Id, CaseSectionType.Regarding);
 
-				}
-			}
+                }
+            }
 
-			/* #58573 Check that user have access to write to InternalLogNote */
-			bool caseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
+            /* #58573 Check that user have access to write to InternalLogNote */
+            bool caseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
 
             if (!caseInternalLogAccess)
             {
@@ -4552,7 +4551,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCaseTypeFilter))
             {
                 const bool IsTakeOnlyActive = true;
-                fd.filterCaseType = this._caseTypeService.GetCaseTypes(cusId, IsTakeOnlyActive).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
+                fd.filterCaseType = this._caseTypeService.GetCaseTypesOverviewWithChildren(cusId, IsTakeOnlyActive);
             }
 
             //working group
@@ -4592,11 +4591,7 @@ namespace DH.Helpdesk.Web.Controllers
             //produktonmråde
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseProductAreaFilter))
             {
-                const bool isTakeOnlyActive = true;
-                fd.filterProductArea = this._productAreaService.GetTopProductAreasForUser(
-                    cusId,
-                    SessionFacade.CurrentUser,
-                    isTakeOnlyActive).OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
+                fd.filterProductArea = this._productAreaService.GetProductAreasOverviewWithChildren(cusId, isActiveOnly:true);
             }
 
             //kategori                        
@@ -4628,7 +4623,7 @@ namespace DH.Helpdesk.Web.Controllers
             fd.CaseClosingDateEndFilter = fd.customerUserSetting.CaseClosingDateEndFilter;
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseClosingReasonFilter))
             {
-                fd.ClosingReasons = this._finishingCauseService.GetFinishingCauses(cusId);
+                fd.ClosingReasons = this._finishingCauseService.GetFinishingCausesWithChilds(cusId);
             }
 
             fd.caseSearchFilter = sm.caseSearchFilter;
@@ -5193,13 +5188,17 @@ namespace DH.Helpdesk.Web.Controllers
 
                 m.CaseFilesModel = new CaseFilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.GetCaseFiles(caseId, canDelete).OrderBy(x => x.CreatedDate).ToArray(), m.SavedFiles, UseVD);
 
-                m.CaseAttachedExFiles =_caseFileService.GetCaseFiles(caseId, canDelete).OrderBy(x => x.CreatedDate).Select(x => new CaseAttachedExFileModel
-                {
-                    Id = x.Id,
-                    FileName = x.FileName,
-                    IsCaseFile = true,
-                    CaseId = caseId
-                }).ToList();
+                m.CaseAttachedExFiles =
+                    _caseFileService.GetCaseFiles(caseId, canDelete)
+                        .OrderBy(x => x.CreatedDate)
+                        .Select(x => new CaseAttachedExFileModel
+                                    {
+                                        Id = x.Id,
+                                        FileName = x.FileName,
+                                        IsCaseFile = true,
+                                        CaseId = caseId
+                                    }).ToList();
+
                 var exLogFiles = _logFileService.GetLogFilesByCaseId(caseId).Select(x => new CaseAttachedExFileModel
                 {
                     Id = x.Id,
@@ -5213,33 +5212,33 @@ namespace DH.Helpdesk.Web.Controllers
                     m.RegByUser = this._userService.GetUser(m.case_.User_Id.Value);
                 }
 
-				if (m.case_.ReportedBy != null)
-				{
-					var reportedByUser = this._computerService.GetComputerUserByUserID(m.case_.ReportedBy);
-					if (reportedByUser != null && reportedByUser.ComputerUsersCategoryID.HasValue)
-					{
-						m.InitiatorComputerUserCategory = _computerService.GetComputerUserCategoryByID(reportedByUser.ComputerUsersCategoryID.Value);
-						if (m.InitiatorComputerUserCategory != null)
-						{
-							m.InitiatorReadOnly = m.InitiatorComputerUserCategory.IsReadOnly;
-						}
-					}
-				}
-				if (m.case_.IsAbout != null && m.case_.IsAbout.ReportedBy != null)
-				{
-					var reportedByUser = this._computerService.GetComputerUserByUserID(m.case_.IsAbout.ReportedBy);
-					if (reportedByUser != null && reportedByUser.ComputerUsersCategoryID.HasValue)
-					{
-						m.RegardingComputerUserCategory = _computerService.GetComputerUserCategoryByID(reportedByUser.ComputerUsersCategoryID.Value);
-						if (m.RegardingComputerUserCategory != null)
-						{
-							m.RegardingReadOnly = m.RegardingComputerUserCategory.IsReadOnly;
-						}
-					}
-				}
+                if (m.case_.ReportedBy != null)
+                {
+                    var reportedByUser = this._computerService.GetComputerUserByUserID(m.case_.ReportedBy);
+                    if (reportedByUser != null && reportedByUser.ComputerUsersCategoryID.HasValue)
+                    {
+                        m.InitiatorComputerUserCategory = _computerService.GetComputerUserCategoryByID(reportedByUser.ComputerUsersCategoryID.Value);
+                        if (m.InitiatorComputerUserCategory != null)
+                        {
+                            m.InitiatorReadOnly = m.InitiatorComputerUserCategory.IsReadOnly;
+                        }
+                    }
+                }
+                if (m.case_.IsAbout != null && m.case_.IsAbout.ReportedBy != null)
+                {
+                    var reportedByUser = this._computerService.GetComputerUserByUserID(m.case_.IsAbout.ReportedBy);
+                    if (reportedByUser != null && reportedByUser.ComputerUsersCategoryID.HasValue)
+                    {
+                        m.RegardingComputerUserCategory = _computerService.GetComputerUserCategoryByID(reportedByUser.ComputerUsersCategoryID.Value);
+                        if (m.RegardingComputerUserCategory != null)
+                        {
+                            m.RegardingReadOnly = m.RegardingComputerUserCategory.IsReadOnly;
+                        }
+                    }
+                }
 
 
-				if (m.Logs != null)
+                if (m.Logs != null)
                 {
                     var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
                     var lastLog = m.Logs.FirstOrDefault();
@@ -5289,8 +5288,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1)
             {
-                const bool TAKE_ONLY_ACTIVE = true;
-                m.caseTypes = this._caseTypeService.GetCaseTypes(customerId, TAKE_ONLY_ACTIVE).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
+                const bool takeOnlyActive = true;
+                m.caseTypes = this._caseTypeService.GetCaseTypesOverviewWithChildren(customerId, takeOnlyActive).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
             }
 
             if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Category_Id.ToString()).ShowOnStartPage == 1)
@@ -5310,10 +5309,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1)
             {
-                m.productAreas = this._productAreaService.GetTopProductAreasForUserOnCase(
-                    customerId,
-                    m.case_.ProductArea_Id,
-                    SessionFacade.CurrentUser).OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
+                m.productAreas = 
+                    this._productAreaService.GetTopProductAreasForUserOnCase(customerId, m.case_.ProductArea_Id, SessionFacade.CurrentUser)
+                        .OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
             }
 
             if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1)
@@ -5414,7 +5412,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.changes = this._changeService.GetChanges(customerId);
             }
 
-            m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);
+            m.finishingCauses = this._finishingCauseService.GetFinishingCausesWithChilds(customerId);
             m.problems = this._problemService.GetCustomerProblems(customerId, false);
             m.currencies = this._currencyService.GetCurrencies();
             var responsibleUsersList = this._userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
@@ -5426,7 +5424,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
             m.Languages = this._languageService.GetActiveLanguages();
-			m.FollowersModel = m.SendToDialogModel =_sendToDialogModelFactory.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting, _emailGroupService, _workingGroupService, _emailService);
+            m.FollowersModel = m.SendToDialogModel =_sendToDialogModelFactory.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting, _emailGroupService, _workingGroupService, _emailService);
             m.CaseLog = this._logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
             m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString(global::System.Globalization.CultureInfo.InvariantCulture);
             m.LogKey = m.CaseLog.LogGuid.ToString();
@@ -5936,16 +5934,16 @@ namespace DH.Helpdesk.Web.Controllers
 
             int caseSolutionId = (m.case_.CaseSolution_Id != null) ? m.case_.CaseSolution_Id.Value : (templateId.HasValue ? templateId.Value : 0);
 
-			// Computer user categories
-			var categories = _computerService.GetComputerUserCategoriesByCustomerID(customerId);
+            // Computer user categories
+            var categories = _computerService.GetComputerUserCategoriesByCustomerID(customerId);
 
-			m.ComputerUserCategories = categories;
-			m.HasExtendedComputerUsers = categories.SelectMany(o => o.CaseSolution.CaseSectionsExtendedCaseForm).Any();
+            m.ComputerUserCategories = categories;
+            m.HasExtendedComputerUsers = categories.SelectMany(o => o.CaseSolution.CaseSectionsExtendedCaseForm).Any();
 
-			#region Extended Case
+            #region Extended Case
 
-			try
-			{
+            try
+            {
                 string extendedCasePath = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
            
                 if (!string.IsNullOrEmpty(extendedCasePath))
@@ -5996,121 +5994,121 @@ namespace DH.Helpdesk.Web.Controllers
 
 
 
-			#endregion Extended Case
+            #endregion Extended Case
 
-			#region Extended sections
+            #region Extended sections
 
-			/*try
-			{*/
-			{
-				string extendedCasePath = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
+            /*try
+            {*/
+            {
+                string extendedCasePath = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
 
-				if (!string.IsNullOrEmpty(extendedCasePath))
-				{
-					int userRole = 0;
+                if (!string.IsNullOrEmpty(extendedCasePath))
+                {
+                    int userRole = 0;
 
-					//#58691
-					//If user is Admin - send in another Number 
-					//3 = Kundadministratör
-					//4 = Administratör
-					if (SessionFacade.CurrentUser.UserGroupId >= 3)
-					{
-						userRole = 99;
+                    //#58691
+                    //If user is Admin - send in another Number 
+                    //3 = Kundadministratör
+                    //4 = Administratör
+                    if (SessionFacade.CurrentUser.UserGroupId >= 3)
+                    {
+                        userRole = 99;
 
-					}
-					else
-					{
-						//Take the highest workinggroupId with "Admin" access (UserRole)
-						var userWorkingGroup = this._workingGroupService.GetWorkingGroupsAdmin(customerId, SessionFacade.CurrentUser.Id).OrderByDescending(x => x.WorkingGroupId).FirstOrDefault();
+                    }
+                    else
+                    {
+                        //Take the highest workinggroupId with "Admin" access (UserRole)
+                        var userWorkingGroup = this._workingGroupService.GetWorkingGroupsAdmin(customerId, SessionFacade.CurrentUser.Id).OrderByDescending(x => x.WorkingGroupId).FirstOrDefault();
 
-						int userWorkingGroupId = 0;
+                        int userWorkingGroupId = 0;
 
-						if (userWorkingGroup != null)
-						{
-							userWorkingGroupId = userWorkingGroup.WorkingGroupId;
-						}
-						userRole = userWorkingGroupId;
-					}
+                        if (userWorkingGroup != null)
+                        {
+                            userWorkingGroupId = userWorkingGroup.WorkingGroupId;
+                        }
+                        userRole = userWorkingGroupId;
+                    }
 
-					// Load if existing
-					if (m.case_.Id != 0)
-					{
-						m.ExtendedCaseSections = Enum.GetValues(typeof(CaseSectionType))
-							.Cast<CaseSectionType>()
-							.Select(o => new {
-								CaseSectionType = o,
-								Form = _caseService.GetExtendedCaseSectionForm(caseId,
-									customerId,
-									o,
-									SessionFacade.CurrentLanguageId,
-									SessionFacade.CurrentUser.UserGUID.ToString(),
-									(m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0),
-									(m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0),
-									userRole,
-									extendedCasePath
-								)
-							})
-							.Where(o => o.Form != null)
-							.ToDictionary(o => o.CaseSectionType, p => p.Form);
-						//var extendedCaseSections = _caseService.GetExtendedCaseForm  GetExistingCaseSections(caseId, customerId, CaseSectionType.Initiator, SessionFacade.CurrentLanguageId, extendedCasePath);
-					}
-					else
-					{
-						m.ExtendedCaseSections = new Dictionary<CaseSectionType, ExtendedCaseFormModel>();
-					}
+                    // Load if existing
+                    if (m.case_.Id != 0)
+                    {
+                        m.ExtendedCaseSections = Enum.GetValues(typeof(CaseSectionType))
+                            .Cast<CaseSectionType>()
+                            .Select(o => new {
+                                CaseSectionType = o,
+                                Form = _caseService.GetExtendedCaseSectionForm(caseId,
+                                    customerId,
+                                    o,
+                                    SessionFacade.CurrentLanguageId,
+                                    SessionFacade.CurrentUser.UserGUID.ToString(),
+                                    (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0),
+                                    (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0),
+                                    userRole,
+                                    extendedCasePath
+                                )
+                            })
+                            .Where(o => o.Form != null)
+                            .ToDictionary(o => o.CaseSectionType, p => p.Form);
+                        //var extendedCaseSections = _caseService.GetExtendedCaseForm  GetExistingCaseSections(caseId, customerId, CaseSectionType.Initiator, SessionFacade.CurrentLanguageId, extendedCasePath);
+                    }
+                    else
+                    {
+                        m.ExtendedCaseSections = new Dictionary<CaseSectionType, ExtendedCaseFormModel>();
+                    }
 
-					//var sections = (Dictionary <CaseSectionType, ExtendedCaseFormModel>)_caseService.GetExtendedCaseSectionModels(customerId, caseId);
-					//m.ExtendedCaseSections = Enum
-					//	.GetValues(typeof(CaseSectionType))
-					//	.Cast<CaseSectionType>()
-					//	.Select(o => new
-					//	{
-					//		CaseSection = o,
-					//		Form = _caseService.GetExtendedCaseSectionForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.UserGUID.ToString(), (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0), (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0), extendedCasePath, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserId, ApplicationType.Helpdesk, userRole)
-					//	})
-					//(Dictionary<CaseSectionType, ExtendedCaseSection>)_caseService.GetExtendedCaseSectionForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.UserGUID.ToString(), (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0), (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0), extendedCasePath, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserId, ApplicationType.Helpdesk, userRole);
-
-
-					m.ContainsExtendedCase = m.ExtendedCases != null && m.ExtendedCases.Any();
-
-					//for hidden
-					if (m.ContainsExtendedCase)
-					{
-						m.ExtendedCaseGuid = m.ExtendedCases.FirstOrDefault().ExtendedCaseGuid;
-					}
-
-					//m.ExtendedCaseSections = m.CurrentCaseSolution.CaseSectionsExtendedCaseForm
-					//	.ToDictionary(o => (CaseSectionType)o.CaseSection.SectionType,
-					//		o => new ExtendedCaseSection
-					//		{
-					//			ExtendedCaseFormID = o.ExtendedCaseFormID,
-					//			CaseSolutionID = o.CaseSolutionID
-					//		});
-
-				}
-				else
-				{
-					m.ExtendedCaseSections = new Dictionary<CaseSectionType, ExtendedCaseFormModel>();
-				}
-			}
-			/*}
-			catch (Exception)
-			{
-				//TODO:
-				throw;
-			}*/
+                    //var sections = (Dictionary <CaseSectionType, ExtendedCaseFormModel>)_caseService.GetExtendedCaseSectionModels(customerId, caseId);
+                    //m.ExtendedCaseSections = Enum
+                    //	.GetValues(typeof(CaseSectionType))
+                    //	.Cast<CaseSectionType>()
+                    //	.Select(o => new
+                    //	{
+                    //		CaseSection = o,
+                    //		Form = _caseService.GetExtendedCaseSectionForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.UserGUID.ToString(), (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0), (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0), extendedCasePath, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserId, ApplicationType.Helpdesk, userRole)
+                    //	})
+                    //(Dictionary<CaseSectionType, ExtendedCaseSection>)_caseService.GetExtendedCaseSectionForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.UserGUID.ToString(), (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0), (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0), extendedCasePath, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserId, ApplicationType.Helpdesk, userRole);
 
 
-			#endregion Extended sections
+                    m.ContainsExtendedCase = m.ExtendedCases != null && m.ExtendedCases.Any();
+
+                    //for hidden
+                    if (m.ContainsExtendedCase)
+                    {
+                        m.ExtendedCaseGuid = m.ExtendedCases.FirstOrDefault().ExtendedCaseGuid;
+                    }
+
+                    //m.ExtendedCaseSections = m.CurrentCaseSolution.CaseSectionsExtendedCaseForm
+                    //	.ToDictionary(o => (CaseSectionType)o.CaseSection.SectionType,
+                    //		o => new ExtendedCaseSection
+                    //		{
+                    //			ExtendedCaseFormID = o.ExtendedCaseFormID,
+                    //			CaseSolutionID = o.CaseSolutionID
+                    //		});
+
+                }
+                else
+                {
+                    m.ExtendedCaseSections = new Dictionary<CaseSectionType, ExtendedCaseFormModel>();
+                }
+            }
+            /*}
+            catch (Exception)
+            {
+                //TODO:
+                throw;
+            }*/
+
+
+            #endregion Extended sections
 
 
 
-			#region CaseDocuments
+            #region CaseDocuments
 
-			//OM case har extendedcase, hämta värden 
+            //OM case har extendedcase, hämta värden 
 
 
-			m.CaseDocuments = _caseDocumentService.GetCaseDocuments(customerId, m.case_, SessionFacade.CurrentUser, ApplicationType.Helpdesk);
+            m.CaseDocuments = _caseDocumentService.GetCaseDocuments(customerId, m.case_, SessionFacade.CurrentUser, ApplicationType.Helpdesk);
 
             #endregion
 
@@ -6130,11 +6128,11 @@ namespace DH.Helpdesk.Web.Controllers
         }
         
         // TODO: Refactor to better position
-		public class ExtendedCaseSection
-		{
-			public int CaseSolutionID { get; set; }
-			public int ExtendedCaseFormID { get; set; }
-		}
+        public class ExtendedCaseSection
+        {
+            public int CaseSolutionID { get; set; }
+            public int ExtendedCaseFormID { get; set; }
+        }
 
 
         private Dictionary<string, string> GetStatusBar(CaseInputViewModel model)
@@ -6307,12 +6305,17 @@ namespace DH.Helpdesk.Web.Controllers
                         for (var i = 0; i < maxDepth; i++)
                         {
                             prodArea = productAreas
-                                .Where(m => m.SubProductAreas != null && m.SubProductAreas.Any())
-                                .SelectMany(m => m.SubProductAreas)
+                                .Where(m => m.Children != null && m.Children.Any())
+                                .SelectMany(m => m.Children)
                                 .FirstOrDefault(m => m.Id == model.case_.ProductArea_Id); ;
-                            if(prodArea != null) break;
-                            productAreas = productAreas.Where(m => m.SubProductAreas != null && m.SubProductAreas.Any())
-                                .SelectMany(m => m.SubProductAreas).ToList();
+
+                            if (prodArea != null)
+                                break;
+
+                            productAreas =
+                                productAreas.Where(m => m.Children != null && m.Children.Any())
+                                    .SelectMany(m => m.Children)
+                                    .ToList();
                         }
                     }
                     value = prodArea != null ? prodArea.Name : defaultValue;
@@ -6420,7 +6423,7 @@ namespace DH.Helpdesk.Web.Controllers
             return values;
         }
 
-		private CaseSearchResultModel GetUnfilteredCases(
+        private CaseSearchResultModel GetUnfilteredCases(
                    string sortBy,
                    string sortByAsc,
                    int? relatedCasesCaseId = null,
@@ -6926,7 +6929,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             ret.CaseTypeCheck = userCaseSettings.CaseType != string.Empty;
-            ret.CaseTypes = this._caseTypeService.GetCaseTypes(customerId, IsTakeOnlyActive).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
+            ret.CaseTypes = this._caseTypeService.GetCaseTypesOverviewWithChildren(customerId, IsTakeOnlyActive).ToList();
             ret.CaseTypePath = "--";
             int caseType;
             int.TryParse(userCaseSettings.CaseType, out caseType);
@@ -6940,10 +6943,8 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
-            ret.ProductAreas = this._productAreaService.GetTopProductAreasForUser(
-                    customerId,
-                    SessionFacade.CurrentUser,
-                    true).OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
+            ret.ProductAreas = this._productAreaService.GetProductAreasOverviewWithChildren(customerId);
+
             ret.ProductAreaPath = "--";
 
             int pa;
@@ -7046,7 +7047,6 @@ namespace DH.Helpdesk.Web.Controllers
             /// "Inititator" field
             ret.CaseInitiatorFilterShow = userCaseSettings.CaseInitiatorFilterShow;
 
-            ret.ClosingReasons = this._finishingCauseService.GetFinishingCauses(customerId);
             ret.ClosingReasonPath = "--";
             int closingReason;
             int.TryParse(userCaseSettings.CaseClosingReasonFilter, out closingReason);
@@ -7062,9 +7062,8 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             ret.ClosingReasonCheck = userCaseSettings.CaseClosingReasonFilter != string.Empty;
+            ret.ClosingReasons = this._finishingCauseService.GetFinishingCausesWithChilds(customerId);
 
-            ret.ClosingReasonCheck = userCaseSettings.CaseClosingReasonFilter != string.Empty;
-            ret.ClosingReasons = this._finishingCauseService.GetFinishingCauses(customerId);
             ret.ColumnSettingModel =
                 this.caseOverviewSettingsService.GetSettings(
                     customerId,
