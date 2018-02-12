@@ -45,7 +45,7 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
                            ParentId = entity.ParentId,
                            CustomerId = entity.CustomerId,
                            Parent = this.Map(entity.Parent),
-                           Children = entity.Children.Select(this.Map),
+                           Children = entity.Children.Select(this.Map).ToList(),
                            CreatedDate = entity.CreatedDate,
                            ChangedDate = entity.ChangedDate
                        };

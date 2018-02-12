@@ -52,7 +52,7 @@ namespace DH.Helpdesk.Services.Services
         CausingPartOverview GetCausingPart(int causingPartId);
 
 
-        IEnumerable<CausingPartOverview> GetActiveParentCausingParts(int customerId, int? alternativeId);
+        IList<CausingPartOverview> GetActiveParentCausingParts(int customerId, int? alternativeId);
 
         /// <summary>
         /// The save causing part.

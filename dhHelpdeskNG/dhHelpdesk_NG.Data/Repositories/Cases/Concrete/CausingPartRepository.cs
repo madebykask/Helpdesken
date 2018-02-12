@@ -15,6 +15,8 @@ using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Cases;
 using System;
+using DH.Helpdesk.Common.Extensions.Integer;
+
 namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 {
    
@@ -117,16 +119,66 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         }
 
 
-        public IEnumerable<CausingPartOverview> GetActiveParentCausingParts(int customerId, int? alternativeId)
-        {            
-            var entities = (alternativeId.HasValue)? 
-                            this.Table.Where(c =>  c.CustomerId == customerId && ((c.Parent == null && c.Status > 0) || (c.Id == alternativeId.Value)))
-                            .ToList() : 
-                            this.Table.Where(c =>  c.CustomerId == customerId && c.Parent == null && c.Status > 0)
-                            .ToList();
+        public IList<CausingPartOverview> GetActiveParentCausingPartsOld(int customerId, int? alternativeId)
+        {
+            var entities = (alternativeId.HasValue) ?
+                this.Table.Where(c => c.CustomerId == customerId && ((c.Parent == null && c.Status > 0) || (c.Id == alternativeId.Value)))
+                    .ToList() :
+                this.Table.Where(c => c.CustomerId == customerId && c.Parent == null && c.Status > 0)
+                    .ToList();
 
-            return entities
-                .Select(this.causingPartToBusinessModelMapper.Map);
+            return entities.Select(this.causingPartToBusinessModelMapper.Map).ToList();
+        }
+        
+        //note: this is db optimised version of method without lazy calls for children. Keep as is.
+        public IList<CausingPartOverview> GetActiveParentCausingParts(int customerId, int? alternativeId)
+        {
+            var allCausingParts = 
+                Table.Where(c => c.CustomerId == customerId)
+                     .Select(entity => new CausingPartOverview
+                     {
+                         Id = entity.Id,
+                         Description = entity.Description,
+                         IsActive = entity.Status > 0,
+                         Name = entity.Name,
+                         ParentId = entity.ParentId,
+                         CustomerId = entity.CustomerId,
+                         CreatedDate = entity.CreatedDate,
+                         ChangedDate = entity.ChangedDate
+                     }).ToList();
+
+            var parentCausingParts =
+                alternativeId.HasValue ?
+                    allCausingParts.Where(c => (c.ParentId == null && c.IsActive) || (c.Id == alternativeId.Value)).ToList() :
+                    allCausingParts.Where(c => c.ParentId == null && c.IsActive).ToList();
+
+
+            //build parent-children relation
+            foreach (var part in parentCausingParts)
+            {
+                if (alternativeId.HasValue && part.Id == alternativeId.Value)
+                {
+                    part.Parent = allCausingParts.FirstOrDefault(p => p.Id == part.ParentId);
+                }
+
+                BuildChildrenParts(part, allCausingParts);
+            }
+
+            return parentCausingParts;
+        }
+
+        private void BuildChildrenParts(CausingPartOverview parent, List<CausingPartOverview> parts)
+        {
+            var children = parts.Where(p => p.ParentId == parent.Id).ToList();
+            if (children.Any())
+            {
+                parent.Children = new List<CausingPartOverview>(children);
+                foreach (var cs in children)
+                {
+                    cs.Parent = parent;
+                    BuildChildrenParts(cs, parts);        
+                }
+            }
         }
 
         /// <summary>
