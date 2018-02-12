@@ -2271,6 +2271,22 @@ GO
 
 
 
+IF NOT EXISTS (
+    SELECT *
+    FROM sys.indexes AS si
+    JOIN sys.objects AS so on si.object_id=so.object_id
+    JOIN sys.schemas AS sc on so.schema_id=sc.schema_id
+    WHERE 
+        sc.name='dbo' /* Schema */
+        AND so.name ='tblEMailLog' /* Table */
+        AND si.name='FK_tblCaseHistory' /* Index */)
+BEGIN
+	CREATE NONCLUSTERED INDEX [FK_tblCaseHistory] ON [dbo].[tblEMailLog]
+	(
+		[CaseHistory_Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+END
+GO
 
 
 
