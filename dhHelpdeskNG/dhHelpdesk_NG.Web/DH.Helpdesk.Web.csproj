@@ -329,7 +329,7 @@
     <Compile Include="Infrastructure\Authentication\Behaviors\AuthenticationServiceBehaviorFactory.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\WindowsAuthenticationBehavior.cs" />
     <Compile Include="Infrastructure\Authentication\ClaimsExtensions.cs" />
-    <Compile Include="Infrastructure\Authentication\Behaviors\FormsAuthenticationBehavior.cs" />
+    <Compile Include="Infrastructure\Authentication\Behaviors\ApplicationAuthenticationBehavior.cs" />
     <Compile Include="Infrastructure\Authentication\FederatedAuthenticationConfiguration.cs" />
     <Compile Include="Infrastructure\Authentication\HelpdeskAuthenticationFilter.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\SessionContext.cs" />

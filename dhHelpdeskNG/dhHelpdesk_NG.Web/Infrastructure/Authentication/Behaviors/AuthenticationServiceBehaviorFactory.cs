@@ -38,7 +38,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
         {
             if (mode == LoginMode.Application)
             {
-                return new FormsAuthenticationBehavior();
+                return new ApplicationAuthenticationBehavior();
             }
             else if (mode == LoginMode.SSO)
             {

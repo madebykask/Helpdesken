@@ -7,7 +7,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
 {
     public class WindowsAuthenticationBehavior : IAuthenticationBehavior
     {
-        public UserIdentity CreateUserIdentity(HttpContextBase ctx)
+        public UserIdentity SignIn(HttpContextBase ctx)
         {
             UserIdentity userIdentity = null;
             var windowsPrincipal = ctx.User as WindowsPrincipal;
@@ -21,9 +21,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
                 
                 //var initiator = _notifierRepository.GetInitiatorByUserId(userId, customerId, true);
 
-                userIdentity = new UserIdentity
+                userIdentity = new UserIdentity(userId)
                 {
-                    UserId = userId,
                     Domain = userDomain,
                     //FirstName = initiator?.FirstName,
                     //LastName = initiator?.LastName,

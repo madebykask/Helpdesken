@@ -2,8 +2,11 @@
 using System.IdentityModel.Services;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web.Http;
+using System.Web.Security;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Services.Services.Authentication;
 using DH.Helpdesk.Web.Infrastructure.Authentication;
@@ -118,6 +121,33 @@ namespace DH.Helpdesk.Web
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
             //LogSession("Application.BeginRequest.", Context);
         }
+
+        protected void Application_EndRequest(object sender, EventArgs e)
+        {
+            LogSession($"Application.EndRequest. Status: {Response.Status}, StatusCode: {Response.StatusCode}, RedirectLocation: {Response.RedirectLocation}", Context);
+        }
+
+        #region Authentication Events 
+
+        protected void WindowsAuthentication_OnAuthenticate(object sender, WindowsAuthenticationEventArgs args)
+        {
+            var identity = args.Identity;
+            LogSession($">>>WindowsAuthentication.OnAuthentication event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, IsAnonymous: {identity?.IsAnonymous ?? false}", Context);
+        }
+
+        protected void FormsAuthentication_OnAuthenticate(object sender, FormsAuthenticationEventArgs args)
+        {
+            var identity = args.User?.Identity;
+            LogSession($">>>FormsAuthentication.OnAuthenticate event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
+        }
+
+        protected void Application_PostAuthenticateRequest(object sender, EventArgs args)
+        {
+            var identity = Context.User?.Identity;
+            LogSession($">>>Application.PostAuthenticateRequest event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
+        }
+
+        #endregion
 
         #region ADFS Module Events 
 

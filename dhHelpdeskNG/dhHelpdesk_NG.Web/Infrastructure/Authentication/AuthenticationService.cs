@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Web;
+using System.Web.Configuration;
+using System.Web.Security;
 using DH.Helpdesk.BusinessData.Models.LogProgram;
 using DH.Helpdesk.BusinessData.Models.User.Input;
 using DH.Helpdesk.Common.Logger;
@@ -20,6 +22,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
     {
         bool SignIn(HttpContextBase ctx);
         void SignOut(HttpContextBase ctx);
+
+        string GetLoginUrl();
     }
 
     public class AuthenticationService : IAuthenticationService
@@ -65,12 +69,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
 
         public bool SignIn(HttpContextBase ctx)
         {
-            var loginMode = _appConfiguration.LoginMode;
-            _sessionContext.SetLoginMode(loginMode);
+            _logger.Debug($"AuthenticationService: authenticating user. LoginMode: {_sessionContext.LoginMode}");
 
-            _logger.Debug($"AuthenticationService: authenticating user. LoginMode: {loginMode}");
-
-            var userIdentity = _authenticationBehavior.CreateUserIdentity(ctx);
+            var userIdentity = _authenticationBehavior.SignIn(ctx);
 
             if (!string.IsNullOrWhiteSpace(userIdentity?.UserId))
             {

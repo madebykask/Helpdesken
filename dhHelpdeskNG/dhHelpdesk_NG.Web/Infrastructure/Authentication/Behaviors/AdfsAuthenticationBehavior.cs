@@ -15,9 +15,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
 {
     public interface IAuthenticationBehavior
     {
-        UserIdentity CreateUserIdentity(HttpContextBase ctx);
-        void SignOut(HttpContextBase ctx);
         string GetLoginUrl();
+
+        UserIdentity SignIn(HttpContextBase ctx);
+        void SignOut(HttpContextBase ctx);
     }
 
     public class AdfsAuthenticationBehavior : IAuthenticationBehavior
@@ -45,7 +46,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
             return _federatedAuthenticationService.GetSignInUrl();
         }
 
-        public UserIdentity CreateUserIdentity(HttpContextBase ctx)
+        public UserIdentity SignIn(HttpContextBase ctx)
         {
             UserIdentity userIdentity = null;
             var principal = ctx.User as ClaimsPrincipal;

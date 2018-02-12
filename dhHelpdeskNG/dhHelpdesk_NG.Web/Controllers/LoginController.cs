@@ -1,4 +1,6 @@
-﻿using DH.Helpdesk.Services.Services.Authentication;
+﻿using DH.Helpdesk.BusinessData.Models.User.Input;
+using DH.Helpdesk.Common.Types;
+using DH.Helpdesk.Services.Services.Authentication;
 using DH.Helpdesk.Web.Infrastructure.Configuration;
 
 namespace DH.Helpdesk.Web.Controllers
@@ -85,6 +87,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)]
+        [AllowAnonymous]
         public ActionResult Login()
         {
             if (_applicationConfiguration.LoginMode == LoginMode.SSO)
@@ -98,6 +101,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult Login(FormCollection coll, string returnUrl)
         {
            
@@ -126,6 +130,7 @@ namespace DH.Helpdesk.Web.Controllers
                     }
 
                     this.Session.Clear();
+
                     int timeZoneOffsetInJan1, timeZoneOffsetInJul1;
                     if (int.TryParse(coll["timeZoneOffsetInJan1"], out timeZoneOffsetInJan1)
                         && int.TryParse(coll["timeZoneOffsetInJul1"], out timeZoneOffsetInJul1))
@@ -172,10 +177,11 @@ namespace DH.Helpdesk.Web.Controllers
                        user.TimeZoneId = TimeZoneInfo.Local.Id;
                        SessionFacade.TimeZoneDetectionResult = TimeZoneAutodetectResult.Failure;
                     }
-
+                    
                     SessionFacade.CurrentUser = user;
                     SessionFacade.CurrentLanguageId = user.LanguageId;
                     SessionFacade.CurrentLoginMode = LoginMode.Application;
+                    SessionFacade.CurrentUserIdentity = CreateUserIdentity(user);
 
                     var language = this.languageService.GetLanguage(user.LanguageId);
 
@@ -241,7 +247,6 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View("Login");
         }
 
-        
         private int GetLiveUserCount()
         {
             if (ApplicationFacade.LoggedInUsers != null)
@@ -251,6 +256,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult GetUserCount(string userId, string pass)
         {
             var model = new UserStatisticsModel(string.Empty);
@@ -316,6 +322,16 @@ namespace DH.Helpdesk.Web.Controllers
             tempData.Add(Access_Token_Key, access_token);
             tempData.Add(Refresh_Token_Key, refresh_token);
             return tempData;
+        }
+
+        private UserIdentity CreateUserIdentity(UserOverview user)
+        {
+            return new UserIdentity(user.UserId)
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.SurName
+            };
         }
     }
 }
