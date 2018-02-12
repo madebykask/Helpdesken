@@ -16,6 +16,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
 {
     public class HelpdeskAuthenticationFilter : IAuthenticationFilter
     {
+        public const string AllowFormsAuthKey = "__allowFormsAuth";
+
         private readonly IAuthenticationService _authenticationService;
         private readonly ISessionContext _sessionContext;
         private readonly IApplicationConfiguration _applicationConfiguration;
@@ -112,6 +114,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 if (!string.IsNullOrEmpty(loginUrl))
                 {
                     _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Unauthorised. Redirecting to login page: {loginUrl}.");
+                    context.HttpContext.Items[AllowFormsAuthKey] = true;
                     context.Result = new RedirectResult(loginUrl);
                 }
             }

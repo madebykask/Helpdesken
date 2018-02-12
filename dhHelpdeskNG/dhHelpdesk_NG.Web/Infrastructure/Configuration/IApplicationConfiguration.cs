@@ -9,5 +9,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Configuration
         CultureInfo DefaultCulture { get; }
         string ApplicationId { get; }
         LoginMode LoginMode { get; }
+        bool MixedAuthMode { get; }
     }
 }
