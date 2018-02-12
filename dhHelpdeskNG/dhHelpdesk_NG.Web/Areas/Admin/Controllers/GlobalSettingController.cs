@@ -1497,9 +1497,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetCustomerCaseFields(int customerId)
+        public ActionResult GetCustomerCaseFields(int? customerId)
         {
-            if (customerId > 0)
+            if (customerId.HasValue && customerId > 0)
             {
                 string[] exceptionList =
                 {
@@ -1527,7 +1527,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                         Name = CaseSolutionFields.Change.ToString()
                     }
                 };
-                var fields = _caseFieldSettingService.GetAllCaseFieldSettings(customerId, SessionFacade.CurrentLanguageId).Where(f => !exceptionList.Contains(f.Name)).ToList();
+                var fields = _caseFieldSettingService.GetAllCaseFieldSettings(customerId.Value, SessionFacade.CurrentLanguageId).Where(f => !exceptionList.Contains(f.Name)).ToList();
                 fields.AddRange(additionalFields);
                 var data = fields.Select(x => new SelectListItem
                     {
