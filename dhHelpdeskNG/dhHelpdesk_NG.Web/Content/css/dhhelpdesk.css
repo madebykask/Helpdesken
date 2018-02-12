@@ -3991,3 +3991,9 @@ th.sorting_disabled
     overflow-y: auto;
     direction: rtl;
 }
+
+div.chosen-container.chosen-container-multi.error {
+    border: 1px solid #ff0000;
+    border-radius: 4px;
+    background-color: #ffeeee;
+}

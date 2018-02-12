@@ -1,4 +1,10 @@
 ﻿
+using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+using DH.Helpdesk.BusinessData.Models.Grid;
+using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Enums.Settings;
+using DH.Helpdesk.Common.Tools;
+
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using System;
@@ -24,6 +30,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ILanguageService _languageService;
         private readonly ITextTranslationService _textTranslationService;
         private readonly IWatchDateCalendarService _watchDateCalendarService;
+        private readonly ICustomerUserService _customerUserService;
+        private readonly ICaseFieldSettingService _caseFieldSettingService;
+        private readonly ICaseService _caseService;
 
         public GlobalSettingController(
             IGlobalSettingService globalSettingService,
@@ -31,6 +40,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             ILanguageService languageService,
             ITextTranslationService textTranslationService,
             IWatchDateCalendarService watchDateCalendarService,
+            ICustomerUserService customerUserService,
+            ICaseFieldSettingService caseFieldSettingService,
+            ICaseService caseService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -39,6 +51,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this._languageService = languageService;
             this._textTranslationService = textTranslationService;
             this._watchDateCalendarService = watchDateCalendarService;
+            this._customerUserService = customerUserService;
+            this._caseFieldSettingService = caseFieldSettingService;
+            this._caseService = caseService;
         }
 
         public ActionResult Index(int texttypeid, string textSearch, int compareMethod)
@@ -446,6 +461,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 }
             }
 
+            var dataPrivacyModel = GetDataPrivacyModel();
 
             var model = new GlobalSettingIndexViewModel
             {
@@ -478,6 +494,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
+                DataPrivacy = dataPrivacyModel
             };
 
             model.SearchConditions = new List<SelectListItem>();
@@ -1442,6 +1459,84 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             var res = new { Success = true };
             return Json(res);
+        }
+
+        [HttpPost]
+        public ActionResult DataPrivacy(DataPrivacyModel model)
+        {
+            SessionFacade.ActiveTab = "#fragment-6";
+            if (model.SelectedCustomerId > 0)
+            {
+                if (model.ReplaceDataWith == null)
+                {
+                    model.ReplaceDataWith = string.Empty;
+                }
+                var success = _caseService.RemoveDataPrivacyFromCase(model.SelectedCustomerId, model.FieldsNames,
+                    model.ReplaceDatesWith, model.ReplaceDataWith, model.RegisterDateFrom,
+                    model.RegisterDateTo.GetEndOfDay(), model.ClosedOnly, model.RemoveCaseAttachments,
+                    model.RemoveLogAttachments,
+                    model.RemoveCaseHistory);
+
+                return Json(new {success});
+            }
+            return Json(new {success = true});
+        }
+
+        private DataPrivacyModel GetDataPrivacyModel()
+        {
+            var customers = _customerUserService.GetCustomerUsersForUser(SessionFacade.CurrentUser.Id);
+            var availableCustomers = customers.OrderBy(x => x.Customer.Name).Select(x => new SelectListItem
+            {
+                Value = x.Customer.Id.ToString(),
+                Text = x.Customer.Name
+            }).ToList();
+            return new DataPrivacyModel
+            {
+                Customers = availableCustomers
+            };
+        }
+
+        [HttpPost]
+        public ActionResult GetCustomerCaseFields(int customerId)
+        {
+            if (customerId > 0)
+            {
+                string[] exceptionList =
+                {
+                    GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString(),
+                    GlobalEnums.TranslationCaseFields.AddUserBtn.ToString(),
+                    GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString(),
+                    GlobalEnums.TranslationCaseFields.Filename.ToString(),
+                    GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(),
+                    GlobalEnums.TranslationCaseFields.tblLog_Charge.ToString(),
+                    GlobalEnums.TranslationCaseFields.FinishingDate.ToString(),
+                    GlobalEnums.TranslationCaseFields.Verified.ToString(),
+                    GlobalEnums.TranslationCaseFields.SMS.ToString(),
+                    GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(),
+                    //GlobalEnums.TranslationCaseFields.User_Id.ToString(), //because included in registeredBy
+                    GlobalEnums.TranslationCaseFields.RegTime.ToString(),
+                    GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
+                    GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), //mandatory
+                    GlobalEnums.TranslationCaseFields.CaseNumber.ToString()
+                };
+                var additionalFields = new List<CaseFieldSettingsWithLanguage>
+                {
+                    new CaseFieldSettingsWithLanguage
+                    {
+                        Label = Translation.GetCoreTextTranslation("Ändring"),
+                        Name = CaseSolutionFields.Change.ToString()
+                    }
+                };
+                var fields = _caseFieldSettingService.GetAllCaseFieldSettings(customerId, SessionFacade.CurrentLanguageId).Where(f => !exceptionList.Contains(f.Name)).ToList();
+                fields.AddRange(additionalFields);
+                var data = fields.Select(x => new SelectListItem
+                    {
+                        Value = x.Name,
+                        Text = !string.IsNullOrEmpty(x.Label) ? x.Label : x.Name
+                    }).OrderBy(x => x.Text).ToList();
+                return Json(new {success = true, data = data});
+            }
+            return Json(new {success = false});
         }
     }
 }

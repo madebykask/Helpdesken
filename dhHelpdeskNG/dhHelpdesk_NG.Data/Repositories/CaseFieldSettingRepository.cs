@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories
+﻿using System.Data.Entity;
+
+namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -19,6 +21,7 @@
         IEnumerable<CaseFieldSettingsForTranslation> GetCustomerCaseFieldSettingsForTranslation(int customerId);
         IEnumerable<CaseFieldSettingsForTranslation> GetCaseFieldSettingsForTranslation();
         IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int languageId);
+        IEnumerable<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettings(int customerId, int languageId);
     }
 
     public class CaseFieldSettingLanguageRepository : RepositoryBase<CaseFieldSettingLanguage>, ICaseFieldSettingLanguageRepository
@@ -62,6 +65,28 @@
                         };
 
             return query.OrderBy(x => x.Id);
+        }
+
+        public IEnumerable<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettings(int customerId, int languageId)
+        {
+            return DataContext.CaseFieldSettings.Include(x => x.CaseFieldSettingLanguages)
+                .Where(x => x.Customer_Id == customerId)
+                .Select( x => new
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    FsLanguage = x.CaseFieldSettingLanguages.FirstOrDefault(r => r.Language_Id == languageId),
+                    EMailIdentifier = x.EMailIdentifier
+                })
+                .Select(x => new CaseFieldSettingsWithLanguage
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Label = x.FsLanguage != null ? x.FsLanguage.Label : x.Name,
+                    Language_Id = languageId,
+                    EMailIdentifier = x.EMailIdentifier,
+                    FieldHelp = x.FsLanguage != null ? x.FsLanguage.FieldHelp : string.Empty
+                });
         }
 
         public IEnumerable<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettingsWithLanguages(int? customerId, int? languageId)

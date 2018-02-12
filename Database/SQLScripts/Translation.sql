@@ -6810,6 +6810,68 @@ If not exists (select * from tblTextTranslation where text_id = 1931 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1931, 2, 'Limit permission to send orders for')
 GO
 
+If not exists (select * from tbltext where id = 1932)
+	insert into tbltext (id, TextString) VALUES (1932, 'Dataintegritet')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1932 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1932, 2, 'Data privacy')
+GO
+
+If not exists (select * from tbltext where id = 1933)
+	insert into tbltext (id, TextString) VALUES (1933, 'Ersätt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1933 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1933, 2, 'Replace')
+GO
+
+If not exists (select * from tbltext where id = 1934)
+	insert into tbltext (id, TextString) VALUES (1934, 'Ersätt data med')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1934 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1934, 2, 'Replace data with')
+GO
+
+If not exists (select * from tbltext where id = 1935)
+	insert into tbltext (id, TextString) VALUES (1935, 'Ersätt datum med')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1935 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1935, 2, 'Replace date wtih')
+GO
+
+If not exists (select * from tbltext where id = 1936)
+	insert into tbltext (id, TextString) VALUES (1936, 'Är du säker på att du vill ersätta informationen i utvalda ärenden?')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1936 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1936, 2, 'Are you sure you want to replace data in selected cases?')
+GO
+
+If not exists (select * from tbltext where id = 1937)
+	insert into tbltext (id, TextString) VALUES (1937, 'Endast avslutade ärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1937 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1937, 2, 'Closed cases only')
+GO
+
+If not exists (select * from tbltext where id = 1938)
+	insert into tbltext (id, TextString) VALUES (1938, 'Ärendehistorik')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1938 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1938, 2, 'Case history')
+GO
+
+If not exists (select * from tbltext where id = 1939)
+	insert into tbltext (id, TextString) VALUES (1939, 'Ta bort bifogade filer i ärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1939 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1939, 2, 'Remove attachments belonging to case')
+GO
+
+If not exists (select * from tbltext where id = 1940)
+	insert into tbltext (id, TextString) VALUES (1940, 'Ta bort bifogade filer i ärendeloggen')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1940 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1940, 2, 'Remove attachments belonging to log posts')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
