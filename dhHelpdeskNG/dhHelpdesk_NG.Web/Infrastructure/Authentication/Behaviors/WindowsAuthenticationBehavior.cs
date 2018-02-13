@@ -7,7 +7,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
 {
     public class WindowsAuthenticationBehavior : IAuthenticationBehavior
     {
-        public UserIdentity SignIn(HttpContextBase ctx)
+        public UserIdentity CreateUserIdentity(HttpContextBase ctx)
         {
             UserIdentity userIdentity = null;
             var windowsPrincipal = ctx.User as WindowsPrincipal;

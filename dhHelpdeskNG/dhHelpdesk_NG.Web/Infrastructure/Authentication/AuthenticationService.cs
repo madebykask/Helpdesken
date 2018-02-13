@@ -21,7 +21,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
     public interface IAuthenticationService
     {
         bool SignIn(HttpContextBase ctx);
-        void SignOut(HttpContextBase ctx);
+        void ClearLoginSession(HttpContextBase ctx);
 
         string GetLoginUrl();
     }
@@ -71,7 +71,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         {
             _logger.Debug($"AuthenticationService: authenticating user. LoginMode: {_sessionContext.LoginMode}");
 
-            var userIdentity = _authenticationBehavior.SignIn(ctx);
+            var userIdentity = _authenticationBehavior.CreateUserIdentity(ctx);
 
             if (!string.IsNullOrWhiteSpace(userIdentity?.UserId))
             {
@@ -99,34 +99,37 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 }
                 else
                 {
-                    _logger.Warn($"Customer user doesn't exist for login '{userIdentity.UserId}'.");
+                    _logger.Warn($"AuthenticationService: Customer user doesn't exist for login '{userIdentity.UserId}'.");
                     return false;
                 }
             }
             else
             {
-                _logger.Warn($"User identity is null or empty.");
+                _logger.Warn($"AuthenticationService: User identity is null or empty.");
                 return false;
             }
             
 
             return true;
         }
-        
-        public void SignOut(HttpContextBase ctx)
+
+        public void ClearLoginSession(HttpContextBase ctx)
         {
-            _logger.Debug("AuthenticationService. Siging out.");
+            _logger.Debug("AuthenticationService. Clearing logging session.");
 
-            // end user login session
-            ClearLoginSession(ctx);
-
-            //do login mode specific sign out
-            _authenticationBehavior.SignOut(ctx);
+            var sessionId = _sessionContext.SessionId;
+            if (!string.IsNullOrWhiteSpace(sessionId))
+            {
+                _applicationContext.RemoveLoggedInUser(ctx.Session.SessionID);
+                _sessionContext.ClearSession();
+            }
         }
 
         public string GetLoginUrl()
         {
-            return _authenticationBehavior.GetLoginUrl();
+            // use helpdesk login page which is specified in the forms authentication section - do not delete forms auth section for other types!
+            //return _authenticationBehavior.GetLoginUrl();
+            return FormsAuthentication.LoginUrl ?? "/Login/Login";
         }
 
         #region Helper Methods
@@ -184,16 +187,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 // well, if we have AJAX request and user has no TimeZoneId selected in profile,
                 // set than local time zone (Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna)... siliently
                 customerUser.TimeZoneId = TimeZoneInfo.Local.Id;
-            }
-        }
-
-        private void ClearLoginSession(HttpContextBase ctx)
-        {
-            var sessionId = _sessionContext.SessionId;
-            if (!string.IsNullOrWhiteSpace(sessionId))
-            {
-                _applicationContext.RemoveLoggedInUser(ctx.Session.SessionID);
-                _sessionContext.ClearSession();
             }
         }
 

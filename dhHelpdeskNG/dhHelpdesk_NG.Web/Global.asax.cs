@@ -119,46 +119,12 @@ namespace DH.Helpdesk.Web
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
-            //LogSession("Application.BeginRequest.", Context);
+            LogSession("Application.BeginRequest.", Context);
         }
 
         protected void Application_EndRequest(object sender, EventArgs e)
         {
-            var configuration = DependencyResolver.Current.GetService<IApplicationConfiguration>();
-            var loginUrl = (FormsAuthentication.LoginUrl ?? "/Login/Login").Trim('~');
-
-            LogSession($"Application.EndRequest. MixedAuthMode: {configuration.MixedAuthMode}, Status: {Response.Status}, StatusCode: {Response.StatusCode}, RedirectLocation: {Response.RedirectLocation}", Context);
-
-            // if we are running in a mixed mode (win + forms) - we need to handle Forms auth unauthorised redirect request (Status:302).
-            if (this.Response.StatusCode == 302 &&
-                configuration.LoginMode == LoginMode.Application && 
-                configuration.MixedAuthMode &&
-                this.Response.RedirectLocation.IndexOf(loginUrl, StringComparison.CurrentCultureIgnoreCase) != -1)
-            {
-                //allow forms auth redirect if it was triggered by HelpdeskAuthenticationFilter 
-                if (AllowFormsAuthenticationRedirect(Context))
-                {
-                    LogSession("Application.EndRequest: allow authorisation redirect by forms auth filter.", Context);
-                    return;
-                }
-                    
-                LogSession("Application.EndRequest: Cancelling unauthorised redirect issued by forms authentication.", Context);
-                //if (Request.Browser.Win32)
-                {
-                    // Add script to response to redirect to forms login page in case windows authentication fails
-                    this.Response.ClearContent();
-                    this.Response.Write("<script language=\"javascript\">self.location='" + loginUrl + "?ReturnUrl=" + HttpUtility.UrlEncode(Request.Url.PathAndQuery) + "';</script>");
-
-                    // Required to allow javascript redirection through to browser
-                    this.Response.TrySkipIisCustomErrors = true;
-                    this.Response.Status = "401 Unauthorized";
-                    this.Response.StatusCode = 401;
-
-                    // note that the following line is .NET 4.5 or later only
-                    // otherwise you have to suppress the return URL etc manually!
-                    this.Response.SuppressFormsAuthenticationRedirect = true;
-                }
-            }
+            LogSession($"Application.EndRequest. Status: {Response.Status}, StatusCode: {Response.StatusCode}, RedirectLocation: {Response.RedirectLocation}", Context);
         }
 
         #region Authentication Events 
@@ -549,6 +515,7 @@ namespace DH.Helpdesk.Web
             var appSettingsProvider = new ApplicationConfiguration();
             return appSettingsProvider.LoginMode == LoginMode.SSO;
         }
+
         private static void LogIdentityClaims(HttpContext ctx)
         {
             var log = LogManager.Session;
@@ -561,18 +528,6 @@ namespace DH.Helpdesk.Web
                     log.Debug($"Claim: {claim.Type}, value: {claim.Value}, Issuer: {claim.Issuer}");
                 }
             }
-        }
-
-        private bool AllowFormsAuthenticationRedirect(HttpContext ctx)
-        {
-            var key = HelpdeskAuthenticationFilter.AllowFormsAuthKey;
-            if (ctx.Items.Contains(key))
-            {
-                var val = Convert.ToBoolean(ctx.Items[key] ?? false);
-                return val;
-            }
-
-            return false;
         }
     }
 }

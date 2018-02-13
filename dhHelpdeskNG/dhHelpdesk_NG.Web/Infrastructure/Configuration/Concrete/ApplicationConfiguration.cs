@@ -75,14 +75,5 @@ namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
                 return loginMode;
             }
         }
-
-        public bool MixedAuthMode
-        {
-            get
-            {
-                var val = AppConfigHelper.GetBoolean("MixedAuthMode") ?? false;
-                return val;
-            }
-        }
     }
 }

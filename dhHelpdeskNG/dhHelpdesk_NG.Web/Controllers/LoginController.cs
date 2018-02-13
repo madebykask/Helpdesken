@@ -79,7 +79,8 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ActionResult Logout()
         {
-            _authenticationService.SignOut(ControllerContext.HttpContext);
+            _authenticationService.ClearLoginSession(ControllerContext.HttpContext);
+            FormsAuthentication.SignOut();
 
             TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
 
@@ -180,7 +181,6 @@ namespace DH.Helpdesk.Web.Controllers
                     
                     SessionFacade.CurrentUser = user;
                     SessionFacade.CurrentLanguageId = user.LanguageId;
-                    SessionFacade.CurrentLoginMode = LoginMode.Application;
                     SessionFacade.CurrentUserIdentity = CreateUserIdentity(user);
 
                     var language = this.languageService.GetLanguage(user.LanguageId);
