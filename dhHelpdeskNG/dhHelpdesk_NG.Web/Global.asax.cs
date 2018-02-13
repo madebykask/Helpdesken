@@ -85,6 +85,8 @@ namespace DH.Helpdesk.Web
             {
                 FederatedAuthenticationConfiguration.Configure();
             }
+
+            //DumpModules();
         }
 
         private void ViewEngineInit()
@@ -528,6 +530,23 @@ namespace DH.Helpdesk.Web
                     log.Debug($"Claim: {claim.Type}, value: {claim.Value}, Issuer: {claim.Issuer}");
                 }
             }
+        }
+
+        //keep for diagnostic purposes
+        private void DumpModules()
+        {
+            var logger = LogManager.Session;
+
+            //Get List of modules in module collections
+            var httpModuleCollections = Modules;
+            logger.Debug("----------------------------------------------------");
+            logger.Debug("Total Number Active HttpModule : " + httpModuleCollections.Count.ToString() + "</br>");
+            logger.Debug("<b>List of Active Modules</b>" + "</br>");
+            foreach (string activeModule in httpModuleCollections.AllKeys)
+            {
+                logger.Debug(activeModule + "</br>");
+            }
+            logger.Debug("----------------------------------------------------");
         }
     }
 }

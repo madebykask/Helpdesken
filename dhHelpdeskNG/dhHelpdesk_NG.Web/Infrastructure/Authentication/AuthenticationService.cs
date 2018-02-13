@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Security;
@@ -82,7 +83,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                             $"User: {userIdentity.UserId}, Domain: {userIdentity.Domain}, FullName: {userIdentity.FirstName + " " + userIdentity.LastName} ");
 
                 //get customer user
-                var customerUser = _userService.GetUserByLogin(userIdentity.UserId, null);
+                var customerUser = GetLocalUser(userIdentity);
 
                 //set only if its non-empty
                 if (customerUser != null)
@@ -111,6 +112,37 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             
 
             return true;
+        }
+
+        // try to load users by different formats
+        private UserOverview GetLocalUser(UserIdentity userIdentity)
+        {
+            UserOverview res = null;
+
+            var userId = userIdentity.UserId;
+            var userNames = new List<string>
+            {
+                userId
+            };
+
+            var userIdWithoutDomain = GetUserNameWithoutDomain(userId);
+            var domain = userIdentity.Domain;
+            if (!string.IsNullOrWhiteSpace(domain))
+            {
+                var userIdWithDomain = $@"{domain}\{userIdWithoutDomain}";
+                userNames.Add(userIdWithDomain);
+            }
+
+            userNames.Add(userIdWithoutDomain);
+
+            foreach (var userName in userNames)
+            {
+                res = _userService.GetUserByLogin(userName, null);
+                if (res != null)
+                    break;
+            }
+
+            return res;
         }
 
         public void ClearLoginSession(HttpContextBase ctx)
@@ -188,6 +220,18 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 // set than local time zone (Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna)... siliently
                 customerUser.TimeZoneId = TimeZoneInfo.Local.Id;
             }
+        }
+
+        private string GetUserNameWithoutDomain(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+                return userId;
+
+            var index = userId.LastIndexOf(@"\");
+            if (index != -1)
+                return userId.Substring(index + 1);
+
+            return userId;
         }
 
         #endregion

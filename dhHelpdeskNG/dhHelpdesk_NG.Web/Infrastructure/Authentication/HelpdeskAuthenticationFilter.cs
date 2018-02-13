@@ -1,8 +1,7 @@
+using System;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
 using System.Web.Mvc.Filters;
-using System.Web.Security;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Logger;
 using DH.Helpdesk.Dal.Infrastructure.Context;
@@ -19,7 +18,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         private readonly IApplicationConfiguration _applicationConfiguration;
         private readonly IUserContext _userContext;
         private readonly ILoggerService _logger = LogManager.Session;
-        private bool _allowRequest;
+        private const string IssueLoginRedirectKey = "__issueLoginRedirectKey";
 
         #region ctor()
 
@@ -51,7 +50,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             // allow anonymous for login controller actions
             if (this.IgnoreRequest(filterContext))
             {
-                _allowRequest = true;
                 _logger.Debug($"AuthenticationFilter. Skip check for anonymous action. Identity: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}, Url: {ctx.Request.Url}");
                 return;
             }
@@ -65,26 +63,24 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 {
                     _logger.Warn($"AuthenticationFilter. Failed to sign in. Signing out. Identity: {identity?.Name}");
                     _authenticationService.ClearLoginSession(ctx);
+                    filterContext.HttpContext.Items[IssueLoginRedirectKey] = true;
                     filterContext.Result = new HttpUnauthorizedResult();
                 }
             }
         }
-
+        
+        //OnAuthenticationChallenge is called at the end after other Authorisation filters to be able to process final result
         public void OnAuthenticationChallenge(AuthenticationChallengeContext context)
         {
             var isAuthenticated = context.HttpContext.User?.Identity?.IsAuthenticated ?? false;
-            if (isAuthenticated && context.Result != null)
+            var issueLoginRedirect = Convert.ToBoolean(context.HttpContext.Items[IssueLoginRedirectKey] ?? false);
+            if (isAuthenticated && issueLoginRedirect)
             {
-                if (context.Result is HttpUnauthorizedResult || 
-                    (context.Result is HttpStatusCodeResult && ((HttpStatusCodeResult)context.Result).StatusCode == 401))
+                //if (context.Result is HttpUnauthorizedResult || (context.Result is HttpStatusCodeResult && ((HttpStatusCodeResult)context.Result).StatusCode == 401))
                 {
-                    _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Redirecting to login page.");
-                    context.Result = new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary(new { action = "Login", controller = "Login" }));
-                }
-                else if (_applicationConfiguration.LoginMode == LoginMode.SSO)
-                {
-                    _logger.Warn($"AuthenticationFilter.OnAuthenticationChallenge. Redirecting to login page.");
-                    context.Result = null;
+                    var loginUrl = _authenticationService.GetLoginUrl();
+                    _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Redirecting to login page: {loginUrl}");
+                    context.Result = new RedirectResult(loginUrl);
                 }
             }
         }
