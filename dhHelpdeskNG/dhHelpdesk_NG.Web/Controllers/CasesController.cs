@@ -4598,8 +4598,10 @@ namespace DH.Helpdesk.Web.Controllers
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCategoryFilter))
             {
                 //const bool isTakeOnlyActive = true;
-                fd.filterCategory = this._categoryService.GetActiveParentCategories(
-                    cusId).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
+                fd.filterCategory =
+                    this._categoryService.GetParentCategoriesWithChildren(cusId, true)
+                        .OrderBy(c => Translation.GetMasterDataTranslation(c.Name))
+                        .ToList();
             }
 
 
@@ -5294,7 +5296,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Category_Id.ToString()).ShowOnStartPage == 1)
             {
-                m.categories = this._categoryService.GetActiveParentCategories(customerId);
+                m.categories = this._categoryService.GetParentCategoriesWithChildren(customerId, true);
             }
 
             if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()).ShowOnStartPage == 1)
@@ -6998,8 +7000,9 @@ namespace DH.Helpdesk.Web.Controllers
             ret.Priorities = priorities;
             ret.SelectedPriority = userCaseSettings.Priority;
 
-            ret.Categories = this._categoryService.GetActiveParentCategories(
-                    customerId).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
+            ret.Categories = 
+                this._categoryService.GetParentCategoriesWithChildren(customerId, true).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
+
             ret.CategoryPath= "--";
 
             int ca;

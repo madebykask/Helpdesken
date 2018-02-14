@@ -106,7 +106,7 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public IList<CaseTypeOverview> caseTypes { get; set; }
         public IList<StandardText> standardTexts { get; set; }
-        public IList<Category> categories { get; set; }
+        public IList<CategoryOverview> categories { get; set; }
         public IList<ChangeEntity> changes { get; set; }
         public IList<Country> countries { get; set; }
         public IList<Currency> currencies { get; set; }

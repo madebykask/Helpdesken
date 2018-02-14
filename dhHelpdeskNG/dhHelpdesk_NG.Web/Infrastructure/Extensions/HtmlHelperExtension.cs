@@ -219,7 +219,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return pal != null ? BuildProcuctAreaDropdownButtonStringOld(pal, isTakeOnlyActive, null, productAreaIdToInclude) : string.Empty;
         }
 
-        public static MvcHtmlString CategoryDropdownButtonString(this HtmlHelper helper, IList<Category> cats, bool isTakeOnlyActive = true)
+        public static MvcHtmlString CategoryDropdownButtonString(this HtmlHelper helper, IList<CategoryOverview> cats, bool isTakeOnlyActive = true)
         {
             if (cats != null)
             {
@@ -1455,18 +1455,16 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return htmlOutput;
         }
 
-        private static MvcHtmlString BuildCategoryDropdownButton(
-            IList<Category> cats,
-            bool isTakeOnlyActive = true)
+        private static MvcHtmlString BuildCategoryDropdownButton(IList<CategoryOverview> cats, bool activeOnly = true)
         {
-            string htmlOutput = string.Empty;
+            var htmlOutput = new StringBuilder();
 
-            foreach (Category ca in cats)
+            foreach (var ca in cats)
             {
-                List<Category> childList = null;
+                var childList = new List<CategoryOverview>();
                 if (ca.SubCategories != null)
                 {
-                    var childs = isTakeOnlyActive
+                    var childs = activeOnly
                                  ? ca.SubCategories.Where(p => p.IsActive != 0)
                                  : ca.SubCategories;
 
@@ -1474,32 +1472,32 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 }
 
                 var cls = ca.IsActive == 1 ? string.Empty : "inactive";
-                if (childList != null && childList.Count > 0)
+                if (childList.Any())
                 {
-                    htmlOutput += string.Format("<li class=\"dropdown-submenu {0} {1}\" id=\"{2}\">", cls, "DynamicDropDown_Up", ca.Id);
+                    htmlOutput.AppendFormat("<li class=\"dropdown-submenu {0} {1}\" id=\"{2}\">", cls, "DynamicDropDown_Up", ca.Id);
                 }
                 else
                 {
-                    htmlOutput += string.Format("<li class=\"{0} \" >", cls);
+                    htmlOutput.AppendFormat("<li class=\"{0} \" >", cls);
                 }
 
-                htmlOutput +=
-                    string.Format(
-                        "<a href='#' value=\"{0}\">{1}</a>",
-                        ca.Id,
-                        Translation.GetMasterDataTranslation(ca.Name));
+                htmlOutput.AppendFormat("<a href='#' value=\"{0}\">{1}</a>", ca.Id, Translation.GetMasterDataTranslation(ca.Name));
 
-                if (childList != null && childList.Count > 0)
+                if (childList.Any())
                 {
-                    htmlOutput += string.Format("<ul class='dropdown-menu' id=\"subDropDownMenu_{0}\" >", ca.Id);
-                    htmlOutput += BuildCategoryDropdownButton(childList.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive);
-                    htmlOutput += "</ul>";
+                    htmlOutput.AppendFormat("<ul class='dropdown-menu' id=\"subDropDownMenu_{0}\" >", ca.Id);
+
+                    var sortedChilds = childList.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
+                    var output = BuildCategoryDropdownButton(sortedChilds, activeOnly);
+                    htmlOutput.Append(output);
+
+                    htmlOutput.AppendFormat("</ul>");
                 }
 
-                htmlOutput += "</li>";
+                htmlOutput.AppendFormat("</li>");
             }
 
-            return new MvcHtmlString(htmlOutput);
+            return new MvcHtmlString(htmlOutput.ToString());
         }
 
         private static MvcHtmlString BuildFinishingCauseTreeRow(IList<FinishingCause> finishingCauses, int iteration, 

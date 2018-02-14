@@ -26,7 +26,7 @@ namespace DH.Helpdesk.Web.Models.Case.Output
 
         public IList<CaseTypeOverview> filterCaseType { get; set; }
         public IList<ProductAreaOverview> filterProductArea { get; set; }
-        public IList<Category> filterCategory { get; set; }
+        public IList<CategoryOverview> filterCategory { get; set; }
         public IList<WorkingGroupEntity> filterWorkingGroup { get; set; }
         public IList<Priority> filterPriority { get; set; }
         public IList<Status> filterStatus { get; set; }

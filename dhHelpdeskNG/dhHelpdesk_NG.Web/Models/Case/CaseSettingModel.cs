@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Case.Output;
+﻿using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.FinishingCause;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
 
@@ -180,7 +181,7 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public string CategoryPath { get; set; }
         public int CategoryId { get; set; }
-        public IList<Category> Categories { get; set; }
+        public IList<CategoryOverview> Categories { get; set; }
         //public string SelectedCategory { get; set; }
         public bool WorkingGroupCheck { get; set; }
         public IList<WorkingGroupEntity> WorkingGroups { get; set; }
