@@ -2289,6 +2289,14 @@ BEGIN
 END
 GO
 
+RAISERROR('Foreign key tblProject_tblUsers_ProjectManager', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblProject_tblUsers') AND type = 'F')
+BEGIN
+	ALTER TABLE [dbo].[tblProject] WITH NOCHECK 
+	ADD CONSTRAINT [FK_tblProject_tblUsers] FOREIGN KEY ([ProjectManager]) REFERENCES [dbo].[tblUsers] ([Id]);
+END
+GO
+
 
 
 -- Last Line to update database version

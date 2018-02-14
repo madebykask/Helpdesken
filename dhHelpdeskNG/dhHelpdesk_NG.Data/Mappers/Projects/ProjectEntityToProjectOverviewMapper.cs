@@ -7,10 +7,6 @@
     {
         public ProjectOverview Map(Project entity)
         {
-            var projectManagerName = entity.Manager == null
-                                         ? string.Empty
-                                         : string.Format("{0} {1}", entity.Manager.FirstName, entity.Manager.SurName);
-
             return new ProjectOverview
             {
                 Id = entity.Id,

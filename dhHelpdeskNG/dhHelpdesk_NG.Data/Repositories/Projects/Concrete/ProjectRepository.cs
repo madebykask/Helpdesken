@@ -1,3 +1,5 @@
+using System.Data.Entity;
+
 namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
 {
     using System.Collections.Generic;
@@ -16,11 +18,11 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
 
     public class ProjectRepository : Repository, IProjectRepository
     {
-        private readonly INewBusinessModelToEntityMapper<NewProject, Project> newModelMapper;
+        private readonly INewBusinessModelToEntityMapper<NewProject, Project> _newModelMapper;
 
-        private readonly IBusinessModelToEntityMapper<UpdatedProject, Project> updatedModelMapper;
+        private readonly IBusinessModelToEntityMapper<UpdatedProject, Project> _updatedModelMapper;
 
-        private readonly IEntityToBusinessModelMapper<Project, ProjectOverview> overviewMapper;
+        private readonly IEntityToBusinessModelMapper<Project, ProjectOverview> _overviewMapper;
 
         public ProjectRepository(
             IDatabaseFactory databaseFactory,
@@ -29,14 +31,14 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
             IEntityToBusinessModelMapper<Project, ProjectOverview> overviewMapper)
             : base(databaseFactory)
         {
-            this.newModelMapper = newModelMapper;
-            this.updatedModelMapper = updatedModelMapper;
-            this.overviewMapper = overviewMapper;
+            this._newModelMapper = newModelMapper;
+            this._updatedModelMapper = updatedModelMapper;
+            this._overviewMapper = overviewMapper;
         }
 
         public virtual void Add(NewProject businessModel)
         {
-            var entity = this.newModelMapper.Map(businessModel);
+            var entity = this._newModelMapper.Map(businessModel);
             this.DbContext.Projects.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);
         }
@@ -50,21 +52,22 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
         public void Update(UpdatedProject businessModel)
         {
             var entity = this.DbContext.Projects.Find(businessModel.Id);
-            this.updatedModelMapper.Map(businessModel, entity);
+            this._updatedModelMapper.Map(businessModel, entity);
         }
 
         public ProjectOverview FindById(int projectId)
         {
             var project = this.DbContext.Projects.Find(projectId);
-            var projectDto = this.overviewMapper.Map(project);
+            var projectDto = this._overviewMapper.Map(project);
             return projectDto;
         }
 
         public List<ProjectOverview> Find(int customerId)
         {
             var projects =
-                this.DbContext.Projects.Where(x => x.Customer_Id == customerId)
-                    .Select(this.overviewMapper.Map)
+                this.DbContext.Projects.Include(x => x.Manager)
+                    .Where(x => x.Customer_Id == customerId).AsEnumerable()
+                    .Select(this._overviewMapper.Map)
                     .OrderBy(x => x.Name)
                     .ToList();
             return projects;
@@ -79,10 +82,11 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
             bool isFirstName
             )
         {
-            string toLowerProjectNameLike = projectNameLike == null ? string.Empty : projectNameLike.ToLower();
+            var toLowerProjectNameLike = projectNameLike?.ToLower() ?? string.Empty;
             IQueryable<Project> projects =
-                this.DbContext.Projects.Where(
-                    x => x.Customer_Id == customerId && x.Name.ToLower().Contains(toLowerProjectNameLike)).OrderBy(x => x.Id);
+                this.DbContext.Projects.Include(x => x.Manager)
+                    .Where(x => x.Customer_Id == customerId && x.Name.ToLower().Contains(toLowerProjectNameLike))
+                    .OrderBy(x => x.Id);
 
             if (projectManagerId.HasValue)
             {
@@ -170,7 +174,7 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
                 }
             }
 
-            return projects.Select(this.overviewMapper.Map).ToList();
+            return projects.AsEnumerable().Select(this._overviewMapper.Map).ToList();
         }
     }
 }
