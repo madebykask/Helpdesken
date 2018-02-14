@@ -2281,6 +2281,7 @@ IF NOT EXISTS (
         AND so.name ='tblEMailLog' /* Table */
         AND si.name='FK_tblCaseHistory' /* Index */)
 BEGIN
+	RAISERROR('Create index tblEMailLog.CaseHistory_Id', 10, 1) WITH NOWAIT
 	CREATE NONCLUSTERED INDEX [FK_tblCaseHistory] ON [dbo].[tblEMailLog]
 	(
 		[CaseHistory_Id] ASC

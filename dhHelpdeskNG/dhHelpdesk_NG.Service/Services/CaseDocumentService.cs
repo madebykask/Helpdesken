@@ -141,16 +141,15 @@ namespace DH.Helpdesk.Services.Services
 
                 if (!propertyName.Contains("."))
                 {
-                    //Get value from Case Model by casting to dictionary and look for property name
-                    value = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[propertyName].ToString();
+                    value = _case.GetType().GetProperty(propertyName)?.GetValue(_case, null).ToString();
                 }
                 else
                 {
                     var parentClassName = string.Concat(propertyName.TakeWhile((c) => c != '.'));
                     var parentPropertyName = propertyName.Substring(propertyName.LastIndexOf('.') + 1);
 
-                    var parentClass = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[parentClassName];
-                    value = parentClass.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(parentClass, null))[parentPropertyName].ToString();
+                    var parentClass = _case.GetType().GetProperty(parentClassName)?.GetValue(_case, null);
+                    value = parentClass?.GetType().GetProperty(parentPropertyName)?.GetValue(parentClass, null).ToString();
                 }
 
             }
@@ -418,7 +417,7 @@ namespace DH.Helpdesk.Services.Services
                     {
                         conditionKey = conditionKey.Replace("user_", "");
                         //Get value from Model by casting to dictionary and look for property name
-                        value = user.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(user, null))[conditionKey].ToString();
+                        value = user.GetType().GetProperty(conditionKey)?.GetValue(user, null).ToString();
                     }
                     //Get the specific property of Case in "Property_Name"
                     else if (_case != null && _case.Id != 0 && conditionKey.ToLower().StartsWith("case_"))
@@ -428,20 +427,20 @@ namespace DH.Helpdesk.Services.Services
                         if (!conditionKey.Contains("."))
                         {
                             //Get value from Case Model by casting to dictionary and look for property name
-                            value = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[conditionKey].ToString();
+                            value = _case.GetType().GetProperty(conditionKey)?.GetValue(_case, null).ToString();
                         }
                         else
                         {
                             var parentClassName = string.Concat(conditionKey.TakeWhile((c) => c != '.'));
                             var propertyName = conditionKey.Substring(conditionKey.LastIndexOf('.') + 1);
 
-                            var parentClass = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[parentClassName];
-                            value = parentClass.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(parentClass, null))[propertyName].ToString();
+                            var parentClass = _case.GetType().GetProperty(parentClassName)?.GetValue(_case, null);
+                            value = parentClass?.GetType().GetProperty(propertyName)?.GetValue(parentClass, null).ToString();
                         }
                     }
                     
                     // Check conditions
-                    if (value.Length > 0 && conditionValue.IndexOf(value.ToLower()) > -1)
+                    if (!string.IsNullOrEmpty(value) && conditionValue.IndexOf(value.ToLower()) > -1)
                     {
                         showDocument = true;
                         continue;
@@ -543,15 +542,15 @@ namespace DH.Helpdesk.Services.Services
 						if (!conditionProperty.Contains("."))
 						{
 							//Get value from Case Model by casting to dictionary and look for property name
-							value = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[conditionProperty].ToString();
+							value = _case.GetType().GetProperty(conditionProperty)?.GetValue(_case, null).ToString();
 						}
 						else
 						{
 							var parentClassName = string.Concat(conditionProperty.TakeWhile((c) => c != '.'));
 							var propertyName = conditionProperty.Substring(conditionProperty.LastIndexOf('.') + 1);
 
-							var parentClass = _case.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(_case, null))[parentClassName];
-							value = parentClass.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(prop => prop.Name, prop => prop.GetValue(parentClass, null))[propertyName].ToString();
+							var parentClass = _case.GetType().GetProperty(parentClassName)?.GetValue(_case, null);
+							value = parentClass?.GetType().GetProperty(propertyName)?.GetValue(parentClass, null).ToString();
 						}
 					}
 
