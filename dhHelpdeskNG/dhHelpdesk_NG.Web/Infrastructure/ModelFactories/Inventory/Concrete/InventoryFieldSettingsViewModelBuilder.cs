@@ -126,7 +126,9 @@
                 setting.Caption,
                 setting.PropertySize,
                 setting.ShowInDetails,
-                setting.ShowInList);
+                setting.ShowInList,
+                setting.XMLTag,
+                setting.ReadOnly);
 
             return settingModel;
         }
@@ -147,7 +149,9 @@
                 setting.FieldType,
                 setting.PropertySize,
                 setting.ShowInDetails,
-                setting.ShowInList);
+                setting.ShowInList,
+                setting.XMLTag,
+                setting.ReadOnly);
 
             var fieldTypesSelectList =
                 CreateFieldTypesSelectList(((int)setting.FieldType).ToString(CultureInfo.InvariantCulture));

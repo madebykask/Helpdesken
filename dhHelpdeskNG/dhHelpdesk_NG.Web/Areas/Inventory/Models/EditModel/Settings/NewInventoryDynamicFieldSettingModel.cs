@@ -19,7 +19,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings
             FieldTypes? fieldType,
             int? propertySize,
             bool showInDetails,
-            bool showInList)
+            bool showInList,
+            string xmlTag,
+            bool readOnly)
         {
             this.Id = id;
             this.InventoryTypeGroupId = inventoryTypeGroupId;
@@ -29,6 +31,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings
             this.PropertySize = propertySize;
             this.ShowInDetails = showInDetails;
             this.ShowInList = showInList;
+            this.XMLTag = xmlTag;
+            this.ReadOnly = readOnly;
         }
 
         [IsId]
@@ -46,6 +50,10 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings
 
         [Min(0)]
         public int? PropertySize { get; set; }
+
+        public string XMLTag { get; set; }
+
+        public bool ReadOnly { get; set; }
 
         public bool ShowInDetails { get; set; }
 

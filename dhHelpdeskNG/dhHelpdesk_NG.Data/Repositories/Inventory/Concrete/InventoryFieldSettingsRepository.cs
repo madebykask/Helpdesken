@@ -78,7 +78,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
         {
             var settings = this.GetSettings(inventoryTypeId);
 
-            var anonymus = settings.Select(s => new { s.PropertyValue, s.PropertyType, s.Show, s.ShowInList, s.PropertySize, s.PropertyPos }).ToList();
+            var anonymus = settings.Select(s => new { s.PropertyValue, s.PropertyType, s.Show, s.ShowInList, s.PropertySize, s.PropertyPos, s.XMLTag, s.ReadOnly }).ToList();
 
             var mapperData = anonymus.Select(s =>
                     new InventoryFieldSettingMapperData
@@ -89,7 +89,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             ShowInDetails = s.Show,
                             ShowInList = s.ShowInList,
                             PropertySize = s.PropertySize,
-                            Position = s.PropertyPos
+                            Position = s.PropertyPos,
+                            XMLTag = s.XMLTag,
+                            ReadOnly = s.ReadOnly
                         }).ToList();
 
             var settingCollection = new NamedObjectCollection<InventoryFieldSettingMapperData>(mapperData);
@@ -136,7 +138,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         Caption = s.PropertyValue,
                         FieldName = s.PropertyType,
                         s.Show,
-                        s.PropertySize
+                        s.PropertySize,
+                        s.ReadOnly
                     }).ToList();
 
             var mapperData = anonymus.Select(s =>
@@ -145,7 +148,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         Caption = s.Caption,
                         FieldName = s.FieldName.ToString(CultureInfo.InvariantCulture),
                         Show = s.Show,
-                        ReadOnly = isReadonly ? 1 : 0,
+                        ReadOnly = isReadonly ? 1 : s.ReadOnly,
                         PropertySize = s.PropertySize
                     }).ToList();
 
@@ -390,7 +393,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                 fieldSetting.Caption,
                 fieldSetting.PropertySize,
                 fieldSetting.ShowInDetails.ToBool(),
-                fieldSetting.ShowInList.ToBool());
+                fieldSetting.ShowInList.ToBool(),
+                fieldSetting.XMLTag,
+                fieldSetting.ReadOnly.ToBool());
         }
 
         private static InventoryFieldSetting CreateFieldSettingWithDefaultPropertySize(InventoryFieldSettingMapperData fieldSetting)
@@ -399,7 +404,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                 fieldSetting.Caption,
                 null,
                 fieldSetting.ShowInDetails.ToBool(),
-                fieldSetting.ShowInList.ToBool());
+                fieldSetting.ShowInList.ToBool(),
+                fieldSetting.XMLTag,
+                fieldSetting.ReadOnly.ToBool());
         }
 
         private static void MapFieldSetting(
@@ -411,6 +418,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             fieldSetting.Show = updatedSetting.ShowInDetails.ToInt();
             fieldSetting.ShowInList = updatedSetting.ShowInList.ToInt();
             fieldSetting.PropertyValue = updatedSetting.Caption;
+            fieldSetting.XMLTag = updatedSetting.XMLTag;
+            fieldSetting.ReadOnly = updatedSetting.ReadOnly.ToInt();
         }
 
         private static void AddFieldSetting(
@@ -431,7 +440,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                            PropertySize = newSetting.PropertySize ?? DefaultPropertySize,
                            PropertyPos = DefaultPosition,
                            PropertyType = propertyType,
-                           PropertyDefault = PropertyDefaultValue
+                           PropertyDefault = PropertyDefaultValue,
+                           XMLTag = newSetting.XMLTag,
+                           ReadOnly = newSetting.ReadOnly.ToInt()
                        };
 
             settings.Add(setting);

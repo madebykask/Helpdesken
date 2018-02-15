@@ -37,10 +37,8 @@
         {
             var businessModel = new InventoryFieldSettings(ModelStates.Updated, defaultSettings)
                                     {
-                                        InventoryTypeId =
-                                            inventoryTypeId,
-                                        ChangedDate =
-                                            changedDate
+                                        InventoryTypeId = inventoryTypeId,
+                                        ChangedDate = changedDate
                                     };
 
             return businessModel;
@@ -53,10 +51,8 @@
         {
             var businessModel = new InventoryFieldSettings(ModelStates.Created, defaultSettings)
                                     {
-                                        InventoryTypeId =
-                                            inventoryTypeId,
-                                        CreatedDate =
-                                            createdDate
+                                        InventoryTypeId = inventoryTypeId,
+                                        CreatedDate = createdDate
                                     };
 
             return businessModel;

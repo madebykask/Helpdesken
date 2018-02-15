@@ -76,7 +76,9 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 setting.Caption,
                 setting.PropertySize,
                 setting.ShowInDetails,
-                setting.ShowInList);
+                setting.ShowInList,
+                setting.XMLTag,
+                setting.ReadOnly);
 
             return settingModel;
         }

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
+
+namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -315,7 +317,9 @@
                         x.InventoryDynamicFieldSettingModel.PropertySize,
                         x.InventoryDynamicFieldSettingModel.ShowInDetails,
                         x.InventoryDynamicFieldSettingModel.ShowInList,
-                        DateTime.Now)).ToList();
+                        DateTime.Now,
+                        x.InventoryDynamicFieldSettingModel.XMLTag,
+                        x.InventoryDynamicFieldSettingModel.ReadOnly)).ToList();
 
             this.inventorySettingsService.UpdateDynamicFieldsSettings(dynamicFieldsSettings);
         }
@@ -339,7 +343,9 @@
                 newSetting.PropertySize,
                 newSetting.ShowInDetails,
                 newSetting.ShowInList,
-                DateTime.Now);
+                DateTime.Now,
+                newSetting.XMLTag,
+                newSetting.ReadOnly);
 
             this.inventorySettingsService.AddDynamicFieldSetting(dynamicFieldSetting);
         }

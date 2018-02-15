@@ -15,7 +15,9 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
             FieldTypes fieldType,
             int? propertySize,
             bool showInDetails,
-            bool showInList)
+            bool showInList,
+            string xml,
+            bool readOnly)
             : base(businessModelStates)
         {
             this.InventoryTypeGroupId = inventoryTypeGroupId;
@@ -25,6 +27,8 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
             this.PropertySize = propertySize;
             this.ShowInDetails = showInDetails;
             this.ShowInList = showInList;
+            this.XMLTag = xml;
+            this.ReadOnly = readOnly;
         }
 
         [IsId]
@@ -47,6 +51,10 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
 
         public bool ShowInList { get; private set; }
 
+        public string XMLTag { get; set; }
+
+        public bool ReadOnly { get; set; }
+
         [AllowRead(ModelStates.Updated)]
         public DateTime ChangedDate { get; private set; }
 
@@ -62,7 +70,9 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
             int? propertySize,
             bool showInDetails,
             bool showInList,
-            DateTime createdDate)
+            DateTime createdDate,
+            string xml,
+            bool readOnly)
         {
             var businessModel = new InventoryDynamicFieldSetting(
                 ModelStates.Created,
@@ -72,7 +82,9 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
                 fieldType,
                 propertySize,
                 showInDetails,
-                showInList) { InventoryTypeId = inventoryTypeId, CreatedDate = createdDate };
+                showInList,
+                xml,
+                readOnly) { InventoryTypeId = inventoryTypeId, CreatedDate = createdDate };
 
             return businessModel;
         }
@@ -86,7 +98,9 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
             int? propertySize,
             bool showInDetails,
             bool showInList,
-            DateTime changedDate)
+            DateTime changedDate,
+            string xml,
+            bool readOnly)
         {
             var businessModel = new InventoryDynamicFieldSetting(
                 ModelStates.Updated,
@@ -96,7 +110,9 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
                 fieldType,
                 propertySize,
                 showInDetails,
-                showInList) { Id = id, ChangedDate = changedDate };
+                showInList,
+                xml,
+                readOnly) { Id = id, ChangedDate = changedDate };
 
             return businessModel;
         }
@@ -109,7 +125,9 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
             FieldTypes fieldType,
             int? propertySize,
             bool showInDetails,
-            bool showInList)
+            bool showInList,
+            string xml,
+            bool readOnly)
         {
             var businessModel = new InventoryDynamicFieldSetting(
                 ModelStates.ForEdit,
@@ -119,7 +137,9 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
                 fieldType,
                 propertySize,
                 showInDetails,
-                showInList) { Id = id };
+                showInList,
+                xml,
+                readOnly) { Id = id };
 
             return businessModel;
         }

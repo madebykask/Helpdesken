@@ -1,11 +1,13 @@
 ﻿@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.NewInventoryDynamicFieldSettingViewModel
-<td>@Html.DropDownListFor(m => m.InventoryDynamicFieldSettingModel.InventoryTypeGroupId, Model.InventoryTypeGroups)
+<td>@Html.DropDownListFor(m => m.InventoryDynamicFieldSettingModel.InventoryTypeGroupId, Model.InventoryTypeGroups, new { @class = "inputw300" })
 </td>
 <td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.Caption)</td>
 <td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.Position, new { style = "width:50px;" })</td>
-<td>@Html.DropDownListFor(x => x.InventoryDynamicFieldSettingModel.FieldType, Model.FieldTypes, string.Empty, new { @class = "new_inventory_field_type_class" })
+<td>@Html.DropDownListFor(x => x.InventoryDynamicFieldSettingModel.FieldType, Model.FieldTypes, string.Empty, new { @class = "new_inventory_field_type_class inputw300" })
 </td>
-<td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.PropertySize, new { @class = "new_inventory_property_size_class" })</td>
+<td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.PropertySize, new { @class = "new_inventory_property_size_class inputw50" })</td>
 <td>@Html.CheckBoxFor(m => m.InventoryDynamicFieldSettingModel.ShowInDetails, new { @class = "switchcheckbox" })</td>
 <td>@Html.CheckBoxFor(m => m.InventoryDynamicFieldSettingModel.ShowInList, new { @class = "switchcheckbox" })</td>
+<td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.XMLTag)</td>
+<td>@Html.CheckBoxFor(m => m.InventoryDynamicFieldSettingModel.ReadOnly, new { @class = "switchcheckbox" })</td>
 <td></td>
