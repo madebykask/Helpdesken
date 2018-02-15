@@ -898,11 +898,11 @@
                                             <td>
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.InventoryNumber, CaseSolutionFields.InventoryNumber))
                                                 {
-                                                    @Html.TextBoxFor(model => model.case_.InventoryNumber, new { maxlength = "20", autocomplete = "Off" })
+                                                    @Html.TextBoxFor(model => model.case_.InventoryNumber, new { maxlength = "60", autocomplete = "Off" })
                                                 }
                                                 else
                                                 {
-                                                    @Html.TextBoxFor(model => model.case_.InventoryNumber, new { maxlength = "20", @readonly = "readonly" })
+                                                    @Html.TextBoxFor(model => model.case_.InventoryNumber, new { maxlength = "60", @readonly = "readonly" })
                                                 }
                                             </td>
                                             <td>

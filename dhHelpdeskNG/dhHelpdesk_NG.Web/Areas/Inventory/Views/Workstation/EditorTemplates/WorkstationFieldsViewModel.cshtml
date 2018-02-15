@@ -6,7 +6,7 @@
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @Html.EditorFor(m => m.WorkstationFieldsModel.Name, "Fields/Text")
+                @Html.EditorFor(m => m.WorkstationFieldsModel.Name, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "60" } } } )
                 @Html.EditorFor(m => m.WorkstationFieldsModel.Manufacturer, "Fields/Text")
                 @Html.EditorFor(m => m.WorkstationFieldsModel.ComputerModelId, "Fields/List", new { Source = Model.ComputerModels })
                 @Html.EditorFor(m => m.WorkstationFieldsModel.SerialNumber, "Fields/Text")

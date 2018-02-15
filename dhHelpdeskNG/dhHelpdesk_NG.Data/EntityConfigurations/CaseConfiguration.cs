@@ -104,7 +104,7 @@
             this.Property(x => x.FinishingDescription).IsOptional().HasMaxLength(200);
             this.Property(x => x.FollowUpDate).IsOptional();
             this.Property(x => x.InventoryLocation).IsRequired().HasMaxLength(100);
-            this.Property(x => x.InventoryNumber).IsRequired().HasMaxLength(20);
+            this.Property(x => x.InventoryNumber).IsRequired().HasMaxLength(60);
             this.Property(x => x.InventoryType).IsRequired().HasMaxLength(50);
             this.Property(x => x.InvoiceNumber).IsRequired().HasMaxLength(50);
             this.Property(x => x.IpAddress).IsOptional().HasMaxLength(15);

@@ -37,7 +37,7 @@
         <div class="span12">
             <table class="tableform">
                 @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.DepartmentId, "CustomTypesFields/List", new { Source = Model.InventoryViewModel.DefaultFieldsViewModel.Departments })
-                @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Name, "CustomTypesFields/Text")
+                @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Name, "CustomTypesFields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "60" } } })
                 @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Model, "CustomTypesFields/Text")
                 @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Manufacturer, "CustomTypesFields/Text")
                 @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.SerialNumber, "CustomTypesFields/Text")

@@ -2297,6 +2297,14 @@ BEGIN
 END
 GO
 
+RAISERROR ('Update column InventoryNumber on table tblCase', 10, 1) WITH NOWAIT
+IF EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'InventoryNumber' and sysobjects.name = N'tblCase')
+BEGIN
+    ALTER TABLE [dbo].[tblCase]
+	ALTER COLUMN [InventoryNumber] nvarchar(60)
+END
+GO
 
 
 -- Last Line to update database version
