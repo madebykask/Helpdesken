@@ -54,10 +54,10 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                     return null;
                 }               
 
-                var extendedCaseForm = _extendedCaseFormRepository.GetExtendedCaseFormForCaseSolution(initData.CaseSolutionId.Value);
+                var extendedCaseForm = _extendedCaseFormRepository.GetExtendedCaseFormForSolution(initData.CustomerId, initData.CaseSolutionId.Value);
                 if (extendedCaseForm != null)
                 {
-                    extendedCaseData = _extendedCaseDataRepository.CreateTemporaryExtendedCaseData(extendedCaseForm.Id, initData.UserName);                    
+                    extendedCaseData = _extendedCaseDataRepository.CreateTemporaryExtendedCaseData(extendedCaseForm.ExtendedCaseFormId, initData.UserName);                    
                 }
             }
             else

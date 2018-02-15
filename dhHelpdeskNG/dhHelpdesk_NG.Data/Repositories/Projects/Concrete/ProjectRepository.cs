@@ -64,14 +64,34 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
 
         public List<ProjectOverview> Find(int customerId)
         {
+            // this is performance optimised implemetnation. pls do not use mapper
+            //doesn't need include when using select with fields on Iquerable
             var projects =
-                this.DbContext.Projects.Include(x => x.Manager)
-                    .Where(x => x.Customer_Id == customerId).AsEnumerable()
-                    .Select(this._overviewMapper.Map)
+                this.DbContext.Projects
+                    .Where(p => p.Customer_Id == customerId)
+                    .Select(p => new ProjectOverview
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Description = p.Description,
+                        CustomerId = p.Customer_Id,
+
+                        // todo 
+                        StartDate = p.CreatedDate,
+
+                        EndDate = p.EndDate,
+                        IsActive = p.IsActive,
+                        ProjectManagerId = p.ProjectManager,
+                        ProjectManagerName = p.Manager == null ? "" : p.Manager.FirstName, // keep "" for Linq correct translation
+                        ProjectManagerSurName = p.Manager == null ? "" : p.Manager.SurName // keep "" for Linq correct translation
+                    })
                     .OrderBy(x => x.Name)
                     .ToList();
+
             return projects;
         }
+
+
 
         public List<ProjectOverview> Find(
             int customerId,
@@ -83,23 +103,23 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
             )
         {
             var toLowerProjectNameLike = projectNameLike?.ToLower() ?? string.Empty;
-            IQueryable<Project> projects =
+            IQueryable<Project> query =
                 this.DbContext.Projects.Include(x => x.Manager)
                     .Where(x => x.Customer_Id == customerId && x.Name.ToLower().Contains(toLowerProjectNameLike))
                     .OrderBy(x => x.Id);
 
             if (projectManagerId.HasValue)
             {
-                projects = projects.Where(x => x.ProjectManager.Value == projectManagerId.Value);
+                query = query.Where(x => x.ProjectManager.Value == projectManagerId.Value);
             }
 
             switch (entityStatus)
             {
                 case EntityStatus.Active:
-                    projects = projects.Where(x => x.IsActive == 1);
+                    query = query.Where(x => x.IsActive == 1);
                     break;
                 case EntityStatus.Inactive:
-                    projects = projects.Where(x => x.IsActive == 0);
+                    query = query.Where(x => x.IsActive == 0);
                     break;
             }
 
@@ -110,71 +130,92 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
                     case SortBy.Ascending:
                         if (sortField.Name == ProjectFields.Number)
                         {
-                            projects = projects.OrderBy(x => x.Id);
+                            query = query.OrderBy(x => x.Id);
                         }
                         else if (sortField.Name == ProjectFields.Name)
                         {
-                            projects = projects.OrderBy(x => x.Name);
+                            query = query.OrderBy(x => x.Name);
                         }
                         else if (sortField.Name == ProjectFields.Manager)
                         {
                             if (isFirstName)
-                                projects = projects.OrderBy(x => x.Manager.FirstName).ThenBy(x => x.Manager.SurName);
+                                query = query.OrderBy(x => x.Manager.FirstName).ThenBy(x => x.Manager.SurName);
                             else
-                                projects = projects.OrderBy(x => x.Manager.SurName).ThenBy(x => x.Manager.FirstName);
+                                query = query.OrderBy(x => x.Manager.SurName).ThenBy(x => x.Manager.FirstName);
                         }
                         else if (sortField.Name == ProjectFields.Date)
                         {
-                            projects = projects.OrderBy(x => x.CreatedDate);
+                            query = query.OrderBy(x => x.CreatedDate);
                         }
                         else if (sortField.Name == ProjectFields.ClosingDate)
                         {
-                            projects = projects.OrderBy(x => x.EndDate);
+                            query = query.OrderBy(x => x.EndDate);
                         }
                         else if (sortField.Name == ProjectFields.Description)
                         {
-                            projects = projects.OrderBy(x => x.Description);
+                            query = query.OrderBy(x => x.Description);
                         }
 
                         break;
                     case SortBy.Descending:
                         if (sortField.Name == ProjectFields.Number)
                         {
-                            projects = projects.OrderByDescending(x => x.Id);
+                            query = query.OrderByDescending(x => x.Id);
                         }
                         else if (sortField.Name == ProjectFields.Name)
                         {
-                            projects = projects.OrderByDescending(x => x.Name);
+                            query = query.OrderByDescending(x => x.Name);
                         }
                         else if (sortField.Name == ProjectFields.Manager)
                         {
                             if (isFirstName)
-                                projects =
-                                    projects.OrderByDescending(x => x.Manager.FirstName)
+                                query =
+                                    query.OrderByDescending(x => x.Manager.FirstName)
                                         .ThenBy(x => x.Manager.SurName);
                             else
-                                projects =
-                                projects.OrderByDescending(x => x.Manager.SurName)
+                                query =
+                                query.OrderByDescending(x => x.Manager.SurName)
                                     .ThenBy(x => x.Manager.FirstName);                            
                         }
                         else if (sortField.Name == ProjectFields.Date)
                         {
-                            projects = projects.OrderByDescending(x => x.CreatedDate);
+                            query = query.OrderByDescending(x => x.CreatedDate);
                         }
                         else if (sortField.Name == ProjectFields.ClosingDate)
                         {
-                            projects = projects.OrderByDescending(x => x.EndDate);
+                            query = query.OrderByDescending(x => x.EndDate);
                         }
                         else if (sortField.Name == ProjectFields.Description)
                         {
-                            projects = projects.OrderByDescending(x => x.Description);
+                            query = query.OrderByDescending(x => x.Description);
                         }
 
                         break;
                 }
             }
 
-            return projects.AsEnumerable().Select(this._overviewMapper.Map).ToList();
+            //this performance optimised version
+            //please do use mappers
+            var projects =
+                query.Select(p => new ProjectOverview
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Description = p.Description,
+                        CustomerId = p.Customer_Id,
+
+                        // todo 
+                        StartDate = p.CreatedDate,
+
+                        EndDate = p.EndDate,
+                        IsActive = p.IsActive,
+                        ProjectManagerId = p.ProjectManager,
+                        ProjectManagerName = p.Manager == null ? "" : p.Manager.FirstName, // keep "" for Linq correct translation
+                        ProjectManagerSurName = p.Manager == null ? "" : p.Manager.SurName // keep "" for Linq correct translation
+                    })
+                .ToList();
+
+            return projects;
         }
     }
 }

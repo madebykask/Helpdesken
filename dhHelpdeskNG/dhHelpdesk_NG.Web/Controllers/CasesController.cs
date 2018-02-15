@@ -17,6 +17,7 @@ using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Web.Areas.Inventory.Models;
 using DH.Helpdesk.Web.Models.Invoice;
 using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Services.BusinessLogic.Mappers.Grid;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
 
@@ -207,6 +208,20 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ISendToDialogModelFactory _sendToDialogModelFactory;
 
 
+        #region ExtededCaseUrlParams
+
+        private class ExtededCaseUrlParams
+        {
+            public int formId { get; set; }
+            public int caseStatus { get; set; }
+            public int userRole { get; set; }
+            public string userGuid { get; set; }
+            public int customerId { get; set; }
+            public bool autoLoad { get; set; }
+        }
+
+        #endregion
+
         #endregion
 
         #region ***Constructor***
@@ -363,8 +378,6 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         #endregion
-
-
 
         #region ***Public Methods***
 
@@ -1832,41 +1845,40 @@ namespace DH.Helpdesk.Web.Controllers
         public JsonResult GetExtendedCaseUrlForCategoryAndSection(int categoryID, int caseSectionType)
         {
             var category = _computerService.GetComputerUserCategoryByID(categoryID);
-            var customerID = SessionFacade.CurrentCustomer.Id;
+            var customerId = SessionFacade.CurrentCustomer.Id;
 
             var currentUserID = SessionFacade.CurrentUser.Id;
             var currentUserGroupID = SessionFacade.CurrentUser.UserGroupId;
 
-            var userRole = GetUserRole(currentUserID, currentUserGroupID, customerID);
+            var userRole = GetUserRole(currentUserID, currentUserGroupID, customerId);
 
-            if (customerID != category.CustomerID)
+            if (customerId != category.CustomerID)
                 throw new HttpException(403, "Not a valid category for customer");
 
-            var extendedCaseForms = category.CaseSolution?.ExtendedCaseForms;
+            string url = null;
+            Guid guid = Guid.Empty;
+            var userGuid = SessionFacade.CurrentUser.UserGUID.ToString();
 
-            string url;
-            Guid guid;
-            //if (extendedCaseForms != null && extendedCaseForms.Any())
+            var extendedCasePathMask = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
+            if (!string.IsNullOrEmpty(extendedCasePathMask))
             {
-                var extendedCasePath = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
-                var extendedCaseForm = _caseService.GetExtendedCaseSectionForm(category.CaseSolutionID.Value, customerID, 0, caseSectionType, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.UserGUID.ToString(), 0, 0, extendedCasePath, userRole);
+                var extendedCaseData =
+                    _caseService.GetCaseSectionExtendedCaseForm(category.CaseSolutionID.Value, customerId, 0, caseSectionType, userGuid, 0);
 
-                if (extendedCaseForm != null)
+                if (extendedCaseData != null)
                 {
-                    url = extendedCaseForm.Path;
-                    guid = extendedCaseForm.ExtendedCaseGuid;
-                }
-                else
-                {
-                    url = null;
-                    guid = Guid.Empty;
+                    guid = extendedCaseData.ExtendedCaseGuid;
+                    url = BuildExtendedCaseUrl(extendedCasePathMask, new ExtededCaseUrlParams
+                    {
+                        formId = extendedCaseData.ExtendedCaseFormId,
+                        caseStatus = extendedCaseData.StateSecondaryId,
+                        userRole = userRole,
+                        userGuid = userGuid,
+                        customerId = customerId,
+                        autoLoad = true
+                    });
                 }
             }
-            /*else
-            {
-                url = null;
-                guid = Guid.Empty;
-            }*/
 
             return Json(new { guid, url });
         }
@@ -5946,9 +5958,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             try
             {
-                string extendedCasePath = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
+                string extendedCasePathMask = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
            
-                if (!string.IsNullOrEmpty(extendedCasePath))
+                if (!string.IsNullOrEmpty(extendedCasePathMask))
                 {
                     int userRole = 0;
 
@@ -5959,15 +5971,12 @@ namespace DH.Helpdesk.Web.Controllers
                     if (SessionFacade.CurrentUser.UserGroupId >= 3)
                     {
                         userRole = 99;
-
                     }
                     else
                     {
                         //Take the highest workinggroupId with "Admin" access (UserRole)
-                        var userWorkingGroup = this._workingGroupService.GetWorkingGroupsAdmin(customerId, SessionFacade.CurrentUser.Id).OrderByDescending(x => x.WorkingGroupId).FirstOrDefault();
-
                         int userWorkingGroupId = 0;
-
+                        var userWorkingGroup = this._workingGroupService.GetWorkingGroupsAdmin(customerId, SessionFacade.CurrentUser.Id).OrderByDescending(x => x.WorkingGroupId).FirstOrDefault();
                         if (userWorkingGroup != null)
                         {
                             userWorkingGroupId = userWorkingGroup.WorkingGroupId;
@@ -5977,7 +5986,12 @@ namespace DH.Helpdesk.Web.Controllers
 
                     //CHECK HOW TO HANDLE WHEN FROM EMAIL
                     //At the moment we are only fetching 1 extended case since it is only programmed that way in editPage.js
-                    m.ExtendedCases = _caseService.GetExtendedCaseForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUser.UserGUID.ToString(), (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0), (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0), extendedCasePath, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserId, ApplicationType.Helpdesk, userRole);
+                    var stateSecondaryId = m?.case_?.StateSecondary_Id ?? 0;
+                    
+                    m.ExtendedCases = 
+                        GetExtendedCaseFormModel(customerId, caseId, caseSolutionId, stateSecondaryId, extendedCasePathMask, 
+                            SessionFacade.CurrentLanguageId, userRole, SessionFacade.CurrentUser.UserGUID.ToString());
+
                     m.ContainsExtendedCase = m.ExtendedCases != null && m.ExtendedCases.Any();
 
                     //for hidden
@@ -5985,7 +5999,6 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         m.ExtendedCaseGuid = m.ExtendedCases.FirstOrDefault().ExtendedCaseGuid;
                     }
-
                 }
             }
             catch (Exception)
@@ -5994,9 +6007,7 @@ namespace DH.Helpdesk.Web.Controllers
                 //throw;
             }
 
-
-
-            #endregion Extended Case
+            #endregion //Extended Case
 
             #region Extended sections
 
@@ -6035,24 +6046,7 @@ namespace DH.Helpdesk.Web.Controllers
                     // Load if existing
                     if (m.case_.Id != 0)
                     {
-                        m.ExtendedCaseSections = Enum.GetValues(typeof(CaseSectionType))
-                            .Cast<CaseSectionType>()
-                            .Select(o => new {
-                                CaseSectionType = o,
-                                Form = _caseService.GetExtendedCaseSectionForm(caseId,
-                                    customerId,
-                                    o,
-                                    SessionFacade.CurrentLanguageId,
-                                    SessionFacade.CurrentUser.UserGUID.ToString(),
-                                    (m.case_ != null && m.case_.StateSecondary != null ? m.case_.StateSecondary.StateSecondaryId : 0),
-                                    (m.case_ != null && m.case_.Workinggroup != null ? m.case_.Workinggroup.WorkingGroupId : 0),
-                                    userRole,
-                                    extendedCasePath
-                                )
-                            })
-                            .Where(o => o.Form != null)
-                            .ToDictionary(o => o.CaseSectionType, p => p.Form);
-                        //var extendedCaseSections = _caseService.GetExtendedCaseForm  GetExistingCaseSections(caseId, customerId, CaseSectionType.Initiator, SessionFacade.CurrentLanguageId, extendedCasePath);
+                        m.ExtendedCaseSections = GetExtendedCaseSectionsModel(m.case_, customerId, extendedCasePath, SessionFacade.CurrentUser.UserGUID.ToString(), SessionFacade.CurrentLanguageId, userRole);
                     }
                     else
                     {
@@ -6103,8 +6097,6 @@ namespace DH.Helpdesk.Web.Controllers
 
             #endregion Extended sections
 
-
-
             #region CaseDocuments
 
             //OM case har extendedcase, hämta värden 
@@ -6128,7 +6120,90 @@ namespace DH.Helpdesk.Web.Controllers
 
             return m;
         }
-        
+
+        private IList<ExtendedCaseFormModel> GetExtendedCaseFormModel(int customerId, int caseId, int caseSolutionId, int stateSecondaryId,
+            string extendedCasePathMask, int languageId, int userRole, string userGuid)
+        {
+            var res = new List<ExtendedCaseFormModel>();
+
+            var extendedCaseFormData = 
+                _caseService.GetCaseExtendedCaseForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentUser.UserGUID.ToString(), stateSecondaryId);
+
+            if (extendedCaseFormData == null)
+                return res;
+
+            var extendedCasePath = BuildExtendedCaseUrl(extendedCasePathMask, new ExtededCaseUrlParams
+            {
+                caseStatus = extendedCaseFormData.StateSecondaryId,
+                userRole = userRole,
+                userGuid = userGuid,
+                customerId = customerId,
+            });
+            
+            var model = new ExtendedCaseFormModel
+            {
+                CaseId = caseId,
+                Id = extendedCaseFormData.ExtendedCaseFormId,
+                ExtendedCaseGuid = extendedCaseFormData.ExtendedCaseGuid,
+                Name = extendedCaseFormData.ExtendedCaseFormName,
+                Path = extendedCasePath,
+                LanguageId = languageId,
+                //CaseStatus = caseStateSecondaryId, //majid: Set by querystring at the moment
+                //UserRole = caseWorkingGroupId      //majid: Set by querystring at the moment
+            };
+
+            return new List<ExtendedCaseFormModel>() { model };
+        }
+
+        private Dictionary<CaseSectionType, ExtendedCaseFormModel> GetExtendedCaseSectionsModel(Case case_,int customerId, string extendedCasePathMask,
+            string userGuid, int languageId, int userWorkingGroupId)
+        {
+            var caseId = case_.Id;
+            var caseStateSecondaryId = case_?.StateSecondary?.StateSecondaryId ?? 0;
+            var caseWorkingGroupId = case_?.Workinggroup?.WorkingGroupId ?? 0;
+
+            var extendedCaseFormModels = new List<ExtendedCaseFormModel>();
+            var exCaseFormsList = _caseService.GetExtendedCaseSectionForms(caseId, customerId);
+            foreach (var ecCaseForm in exCaseFormsList)
+            {
+                var extendedCasePath = BuildExtendedCaseUrl(extendedCasePathMask, new ExtededCaseUrlParams
+                {
+                    formId = ecCaseForm.ExtendedCaseFormId,
+                    caseStatus = ecCaseForm.StateSecondaryId,
+                    userRole = userWorkingGroupId, //majid: NOTE, this is from now on userWorkingGroupId. 
+                    userGuid = userGuid,
+                    customerId = customerId,
+                    autoLoad = true
+                });
+
+                var exendedForm = new ExtendedCaseFormModel
+                {
+                    CaseId = caseId,
+                    SectionType = (CaseSectionType)ecCaseForm.SectionType,
+                    Id = ecCaseForm.ExtendedCaseFormId,
+                    ExtendedCaseGuid = ecCaseForm.ExtendedCaseGuid,
+                    Path = extendedCasePath, 
+                    LanguageId = languageId,
+                    //CaseStatus = caseStateSecondaryId,/Sent by querystring at the moment 
+                    //UserRole = caseWorkingGroupId,/Sent by querystring at the moment
+                    Name = ecCaseForm.ExtendedCaseFormName ?? string.Empty,
+                    //UserGuid   //todo: check
+                };
+
+                extendedCaseFormModels.Add(exendedForm);
+            }
+
+            var res = new Dictionary<CaseSectionType, ExtendedCaseFormModel>();
+            foreach (var sectionType in Enum.GetValues(typeof(CaseSectionType)).Cast<CaseSectionType>())
+            {
+                var extendedCaseSectionForm = extendedCaseFormModels.SingleOrDefault(x => x.SectionType == sectionType);
+                if (extendedCaseSectionForm != null)
+                    res.Add(sectionType, extendedCaseSectionForm);
+            }
+
+            return res;
+        }
+
         // TODO: Refactor to better position
         public class ExtendedCaseSection
         {
@@ -6136,6 +6211,30 @@ namespace DH.Helpdesk.Web.Controllers
             public int ExtendedCaseFormID { get; set; }
         }
 
+        private string BuildExtendedCaseUrl(string urlMask, ExtededCaseUrlParams @params)
+        {
+            var urlBld =
+                UrlBuilder.Create(urlMask)
+                    .RemoveParam(Constants.ExtendedCaseUrlKeys.LanguageId)       //majid: sent in by js function
+                    .RemoveParam(Constants.ExtendedCaseUrlKeys.ExtendedCaseGuid) //majid: sent in by js function
+                    .SetParam(Constants.ExtendedCaseUrlKeys.CaseStatus, @params.caseStatus.ToString())
+                    .SetParam(Constants.ExtendedCaseUrlKeys.UserRole, @params.userRole.ToString()) //majid: NOTE, this is from now on userWorkingGroupId. 
+                    .SetParam(Constants.ExtendedCaseUrlKeys.UserGuid, @params.userGuid)
+                    .SetParam(Constants.ExtendedCaseUrlKeys.CustomerId, @params.customerId.ToString());
+
+            if (@params.formId > 0)
+            {
+                urlBld.SetParam(Constants.ExtendedCaseUrlKeys.FormId, @params.formId.ToString());
+            }
+
+            if (@params.autoLoad)
+            {
+                urlBld.SetParam(Constants.ExtendedCaseUrlKeys.AutoLoad, "true");
+            }
+
+            var extendedCasePath = urlBld.BuildUrl();
+            return extendedCasePath;
+        }
 
         private Dictionary<string, string> GetStatusBar(CaseInputViewModel model)
         {

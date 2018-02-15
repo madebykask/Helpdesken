@@ -1,3 +1,6 @@
+using System.Linq;
+using DH.Helpdesk.BusinessData.Models.Case;
+
 namespace DH.Helpdesk.Dal.Repositories
 {
     using DH.Helpdesk.Dal.Infrastructure;
@@ -7,6 +10,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface ICaseSolutionRepository : IRepository<CaseSolution>
     {
+        CaseSolutionInfo GetGetSolutionInfo(int id, int customerId);
     }
 
     public class CaseSolutionRepository : RepositoryBase<CaseSolution>, ICaseSolutionRepository
@@ -14,6 +18,21 @@ namespace DH.Helpdesk.Dal.Repositories
         public CaseSolutionRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+        public CaseSolutionInfo GetGetSolutionInfo(int id, int customerId)
+        {
+            var caseSolutionInfo = 
+                Table.Where(c => c.Customer_Id == customerId && c.Id == id)
+                .Select(cs => new CaseSolutionInfo
+                {
+                    CaseSolutionId = cs.Id,
+                    StateSecondaryId = cs.StateSecondary_Id ?? 0,
+                    Name = cs.Name
+                })
+                .FirstOrDefault();
+
+            return caseSolutionInfo;
         }
     }
 
