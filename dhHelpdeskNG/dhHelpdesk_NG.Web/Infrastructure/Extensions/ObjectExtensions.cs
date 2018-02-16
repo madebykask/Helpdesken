@@ -1348,9 +1348,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             ProductAreaOverview pa = null;
             foreach (var productArea in productAreas)
             {
-                if (productArea.Children != null && productArea.Children.Any())
+                if (productArea.SubProductAreas != null && productArea.SubProductAreas.Any())
                 {
-                    var childs = productArea.Children;
+                    var childs = productArea.SubProductAreas;
                     pa = childs.SingleOrDefault(x => x.Id == productAreaId);
                     if (pa != null)
                         return pa;

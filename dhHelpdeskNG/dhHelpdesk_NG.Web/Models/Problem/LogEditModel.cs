@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DH.Helpdesk.BusinessData.Models.FinishingCause;
 using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Web.Models.Problem
@@ -30,7 +31,7 @@ namespace DH.Helpdesk.Web.Models.Problem
 
         public int ProblemId { get; set; }
 
-        public IList<FinishingCause> FinishingCauses { get; set; }
+        public IList<FinishingCauseOverview> FinishingCauses { get; set; }
 
         public string FinishingCause { get; set; }
     }

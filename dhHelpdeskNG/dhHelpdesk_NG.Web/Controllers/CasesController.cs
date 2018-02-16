@@ -95,6 +95,7 @@ namespace DH.Helpdesk.Web.Controllers
 	using Domain.Computers;
 	using Common.Enums.Cases;
 
+    using BusinessData.Models.ProductArea.Output;
 
     public class CasesController : BaseController
     {
@@ -2229,37 +2230,25 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult GetProductAreaByCaseType(int? caseTypeId, int customerId, int? productAreaIdToInclude)
         {
-            var pa = _productAreaService.GetTopProductAreasForUserOnCaseOld(customerId, productAreaIdToInclude, SessionFacade.CurrentUser).ToList();
+            var productAreas = 
+                _productAreaService.GetTopProductAreasForUserOnCase(customerId, productAreaIdToInclude, caseTypeId, SessionFacade.CurrentUser).ToList();
 
-            /*TODO: This part does not cover all states and needs to be fixed*/
-            if (caseTypeId.HasValue)
+            //sort
+            productAreas = productAreas.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
+
+            //build tree with Ids
+            var praIds = productAreas.Select(x => x.Id).ToList();
+            foreach (var ctProductArea in productAreas)
             {
-                var ctProductAreas = _caseTypeService.GetCaseType(caseTypeId.Value).CaseTypeProductAreas.Select(x => x.ProductArea.GetParent()).ToList();
-                var paNoCaseType = pa.Where(x => x.CaseTypeProductAreas == null || !x.CaseTypeProductAreas.Any()).ToList();
-                ctProductAreas.AddRange(paNoCaseType.Where(p=> !ctProductAreas.Select(c=> c.Id).Contains(p.Id)));                
-                ctProductAreas = ctProductAreas.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
-                if (ctProductAreas.Any())
-                {
-                    var paIds = ctProductAreas.Select(x => x.Id).ToList();
-                    foreach (var ctProductArea in ctProductAreas)
-                    {
-                        paIds.AddRange(GetSubProductAreasIds(ctProductArea));
-                    }
-                    var drString = Infrastructure.Extensions.HtmlHelperExtension.ProductAreaDropdownString(ctProductAreas, true, productAreaIdToInclude);
-                    return Json(new { success = true, data = drString, paIds });
-                }
+                var subAreaIds = GetSubProductAreasIds(ctProductArea);
+                praIds.AddRange(subAreaIds);
             }
-            pa = pa.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
-            var praIds = pa.Select(x => x.Id).ToList();
-            foreach (var ctProductArea in pa)
-            {
-                praIds.AddRange(GetSubProductAreasIds(ctProductArea));
-            }
-            var dropString = Infrastructure.Extensions.HtmlHelperExtension.ProductAreaDropdownString(pa, true, productAreaIdToInclude);
+
+            var dropString = Infrastructure.Extensions.HtmlHelperExtension.ProductAreaDropdownString(productAreas, true, productAreaIdToInclude);
             return Json(new { success = true, data = dropString, praIds });
         }
 
-        private IEnumerable<int> GetSubProductAreasIds(ProductArea ctProductArea)
+        private IEnumerable<int> GetSubProductAreasIds(ProductAreaOverview ctProductArea)
         {
             var result = new List<int>();
             if (ctProductArea.SubProductAreas != null && ctProductArea.SubProductAreas.Any())
@@ -2271,7 +2260,8 @@ namespace DH.Helpdesk.Web.Controllers
                         result.Add(subProductArea.Id);
                         if (subProductArea.SubProductAreas != null && subProductArea.SubProductAreas.Any())
                         {
-                            result.AddRange(GetSubProductAreasIds(subProductArea));
+                            var subAreaIds = GetSubProductAreasIds(subProductArea);
+                            result.AddRange(subAreaIds);
                         }
                     }
                 }
@@ -4799,14 +4789,14 @@ namespace DH.Helpdesk.Web.Controllers
             if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.ClosingReason.ToString() &&
                                                   fs.ShowOnStartPage != 0).Any())
             {
-                specificFilter.ClosingReasonList = this._finishingCauseService.GetFinishingCauses(customerId);
+                specificFilter.ClosingReasonList = this._finishingCauseService.GetFinishingCausesWithChilds(customerId);
             }
 
             if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.CaseType_Id.ToString() &&
                                                   fs.ShowOnStartPage != 0).Any())
             {
 
-                specificFilter.CaseTypeList = this._caseTypeService.GetCaseTypes(customerId);
+                specificFilter.CaseTypeList = this._caseTypeService.GetCaseTypesOverviewWithChildren(customerId);
             }
 
             if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString() &&
@@ -6406,16 +6396,16 @@ namespace DH.Helpdesk.Web.Controllers
                         for (var i = 0; i < maxDepth; i++)
                         {
                             prodArea = productAreas
-                                .Where(m => m.Children != null && m.Children.Any())
-                                .SelectMany(m => m.Children)
+                                .Where(m => m.SubProductAreas != null && m.SubProductAreas.Any())
+                                .SelectMany(m => m.SubProductAreas)
                                 .FirstOrDefault(m => m.Id == model.case_.ProductArea_Id); ;
 
                             if (prodArea != null)
                                 break;
 
                             productAreas =
-                                productAreas.Where(m => m.Children != null && m.Children.Any())
-                                    .SelectMany(m => m.Children)
+                                productAreas.Where(m => m.SubProductAreas != null && m.SubProductAreas.Any())
+                                    .SelectMany(m => m.SubProductAreas)
                                     .ToList();
                         }
                     }

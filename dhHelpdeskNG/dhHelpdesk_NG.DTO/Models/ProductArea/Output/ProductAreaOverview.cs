@@ -23,7 +23,7 @@ namespace DH.Helpdesk.BusinessData.Models.ProductArea.Output
         public ProductAreaOverview()
         {
             WorkingGroups = new List<WorkingGroupOverview>();
-            Children = new List<ProductAreaOverview>();
+            SubProductAreas = new List<ProductAreaOverview>();
         }
         /// <summary>
         /// Gets or sets the id.
@@ -51,6 +51,6 @@ namespace DH.Helpdesk.BusinessData.Models.ProductArea.Output
 
         public List<WorkingGroupOverview> WorkingGroups { get; set; }
 
-        public List<ProductAreaOverview> Children { get; set; }
+        public List<ProductAreaOverview> SubProductAreas { get; set; }
     }
 }

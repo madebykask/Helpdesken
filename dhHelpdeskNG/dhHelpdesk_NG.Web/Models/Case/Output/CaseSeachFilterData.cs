@@ -117,7 +117,7 @@ namespace DH.Helpdesk.Web.Models.Case.Output
 
         public string FilteredDepartment { get; set; }
 
-        public IList<CaseType> CaseTypeList { get; set; }
+        public IList<CaseTypeOverview> CaseTypeList { get; set; }
 
         public int FilteredCaseType { get; set; }
 
@@ -139,7 +139,7 @@ namespace DH.Helpdesk.Web.Models.Case.Output
 
         public string FilteredStateSecondary { get; set; }
 
-        public IList<FinishingCause> ClosingReasonList { get; set; }
+        public IList<FinishingCauseOverview> ClosingReasonList { get; set; }
 
         public string FilteredClosingReason { get; set; }
 

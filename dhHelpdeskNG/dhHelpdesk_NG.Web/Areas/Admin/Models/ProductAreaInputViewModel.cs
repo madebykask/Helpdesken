@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Models
+﻿using DH.Helpdesk.BusinessData.Models.Case.Output;
+
+namespace DH.Helpdesk.Web.Areas.Admin.Models
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
@@ -15,7 +17,7 @@
         public IList<SelectListItem> Priorities { get; set; }
         public IList<SelectListItem> WgAvailable { get; set; }
         public IList<SelectListItem> WgSelected { get; set; }
-        public IList<CaseType> CaseTypes { get; set; }
+        public IList<CaseTypeOverview> CaseTypes { get; set; }
         public int CaseType_Id { get; set; }
         public string ParentPath_CaseType { get; set; }
 

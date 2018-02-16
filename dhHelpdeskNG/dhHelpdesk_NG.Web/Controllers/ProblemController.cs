@@ -266,13 +266,11 @@ namespace DH.Helpdesk.Web.Controllers
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            var problemDto = new NewProblemDto(problem.Name, problem.Description, problem.ResponsibleUserId, problem.InventoryNumber, problem.ShowOnStartPage, SessionFacade.CurrentCustomer.Id, null)
-                                 {
-                                     Id
-                                         =
-                                         problem
-                                         .Id
-                                 };
+            var problemDto = 
+                new NewProblemDto(problem.Name, problem.Description, problem.ResponsibleUserId, problem.InventoryNumber, problem.ShowOnStartPage, SessionFacade.CurrentCustomer.Id, null)
+                {
+                    Id = problem.Id
+                };
 
             this.problemService.UpdateProblem(problemDto);
 
@@ -287,13 +285,13 @@ namespace DH.Helpdesk.Web.Controllers
 
         public PartialViewResult LogForNewProblem()
         {
-            var causes = finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id);
+            var causes = finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id);
             return this.PartialView("_InputLog", new LogEditModel { FinishingCauses = causes });
         }
 
         public PartialViewResult Log(int id)
         {
-            var causes = finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id);
+            var causes = finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id);
             var finishingCauses = finishingCauseService.GetFinishingCauseInfos(SessionFacade.CurrentCustomer.Id);
             var log = MapLogs(this.problemLogService.GetProblemLog(id));
             log.FinishingCauses = causes;
@@ -304,7 +302,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         public PartialViewResult NewLog(int problemId)
         {
-            var causes = finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id);
+            var causes = finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id);
             return this.PartialView("NewLog", new LogEditModel { FinishingCauses = causes });
         }
 

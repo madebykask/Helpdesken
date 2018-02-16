@@ -74,6 +74,8 @@ namespace DH.Helpdesk.Dal.Repositories
         IEnumerable<ProductAreaOverview> GetProductAreaOverviews(int customerId);
 
         IList<ProductAreaOverview> GetProductAreasWithWorkingGroups(int customerId, bool isActiveOnly);
+        IList<ProductAreaOverview> GetCaseTypeProductAreas(int caseTypeId);
+        IList<int> GetProductAreasWithoutCaseTypes(IList<int> paIds);
 
         int SaveProductArea(ProductAreaOverview productArea);
 
@@ -249,11 +251,41 @@ namespace DH.Helpdesk.Dal.Repositories
                             Id = wg.Id,
                             Code = wg.Code,
                             WorkingGroupName = wg.WorkingGroupName
-                        }).ToList()
+                        }
+                        ).ToList()
                 };
 
             return productAreas.ToList();
+        }
 
+        public IList<int> GetProductAreasWithoutCaseTypes(IList<int> paIds)
+        {
+            var items = (from pa in Table
+                         where paIds.Contains(pa.Id) &&
+                         pa.CaseTypeProductAreas.Any() == false
+                         select pa.Id).ToList();
+
+            return items;
+        }
+
+        public IList<ProductAreaOverview> GetCaseTypeProductAreas(int caseTypeId)
+        {
+            var query =
+                from ct in DataContext.CaseTypes
+                from ctpa in ct.CaseTypeProductAreas
+                where ct.Id == caseTypeId
+                let pa = ctpa.ProductArea
+                select new ProductAreaOverview()
+                {
+                    Id = pa.Id,
+                    ParentId = pa.Parent_ProductArea_Id,
+                    Name = pa.Name,
+                    IsActive = pa.IsActive,
+                    Description = pa.Description,
+                };
+
+            var items = query.ToList();
+            return items;
         }
 
         /// <summary>
@@ -275,6 +307,8 @@ namespace DH.Helpdesk.Dal.Repositories
             return entities
                 .Select(this.productAreaEntityToBusinessModelMapper.Map);
         }
+
+
 
         public int SaveProductArea(ProductAreaOverview productArea)
         {
