@@ -14,7 +14,7 @@
                 .HasForeignKey(x => x.InventoryType_Id)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.ChangedByUser)
+            this.HasOptional(x => x.ChangedByUser)
                 .WithMany()
                 .HasForeignKey(x => x.ChangedByUser_Id)
                 .WillCascadeOnDelete(false);

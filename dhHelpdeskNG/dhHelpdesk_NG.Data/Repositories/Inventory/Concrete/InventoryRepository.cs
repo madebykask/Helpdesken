@@ -172,9 +172,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                query =
-                    query.Where(
-                        x =>
+                query = query.Where( x =>
                         x.InventoryName == searchString || x.InventoryModel == searchString
                         || x.Manufacturer == searchString || x.SerialNumber == searchString);
             }
@@ -186,68 +184,63 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             const string Delimeter = "; ";
 
             var anonymus = (from i in query
-                            join ci in DbContext.ComputerInventories on i.Id equals ci.Inventory_Id into res
-                            from k in res.DefaultIfEmpty()
-                            select
-                                new
-                                    {
-                                        i.Id,
-                                        i.Department.DepartmentName,
-                                        RoomName = i.Room.Name,
-                                        UserFirstName = i.ChangedByUser.FirstName,
-                                        UserLastName = i.ChangedByUser.SurName,
-                                        i.InventoryName,
-                                        i.InventoryModel,
-                                        i.Manufacturer,
-                                        i.SerialNumber,
-                                        i.TheftMark,
-                                        i.BarCode,
-                                        i.PurchaseDate,
-                                        i.Info,
-                                        WorkstationName = k.Computer.ComputerName,
-                                        i.CreatedDate,
-                                        i.ChangedDate
-                                    }).ToList()
-                .GroupBy(
-                    x =>
-                    new
-                        {
-                            x.Id,
-                            x.DepartmentName,
-                            x.RoomName,
-                            x.UserFirstName,
-                            x.UserLastName,
-                            x.InventoryName,
-                            x.InventoryModel,
-                            x.Manufacturer,
-                            x.SerialNumber,
-                            x.TheftMark,
-                            x.BarCode,
-                            x.PurchaseDate,
-                            x.Info,
-                            x.CreatedDate,
-                            x.ChangedDate
-                        });
+                join ci in DbContext.ComputerInventories on i.Id equals ci.Inventory_Id into res
+                from k in res.DefaultIfEmpty()
+                select new
+                {
+                    i.Id,
+                    DepartmentName = i.Department != null ? i.Department.DepartmentName : string.Empty,
+                    RoomName = i.Room != null ? i.Room.Name : string.Empty,
+                    UserFirstName = i.ChangedByUser != null ? i.ChangedByUser.FirstName : string.Empty,
+                    UserLastName = i.ChangedByUser != null ? i.ChangedByUser.SurName : string.Empty,
+                    i.InventoryName,
+                    i.InventoryModel,
+                    i.Manufacturer,
+                    i.SerialNumber,
+                    i.TheftMark,
+                    i.BarCode,
+                    i.PurchaseDate,
+                    i.Info,
+                    WorkstationName = k.Computer != null ? k.Computer.ComputerName : string.Empty,
+                    i.CreatedDate,
+                    i.ChangedDate
+                }).ToList()
+                .GroupBy(x => new
+                {
+                    x.Id,
+                    x.DepartmentName,
+                    x.RoomName,
+                    x.UserFirstName,
+                    x.UserLastName,
+                    x.InventoryName,
+                    x.InventoryModel,
+                    x.Manufacturer,
+                    x.SerialNumber,
+                    x.TheftMark,
+                    x.BarCode,
+                    x.PurchaseDate,
+                    x.Info,
+                    x.CreatedDate,
+                    x.ChangedDate
+                });
 
-            var overviews =
-                anonymus.Select(
-                    a =>
-                    new InventoryOverview(
-                        a.Key.Id,
-                        a.Key.DepartmentName,
-                        a.Key.RoomName,
-                        new UserName(a.Key.UserFirstName, a.Key.UserLastName),
-                        a.Key.InventoryName,
-                        a.Key.InventoryModel,
-                        a.Key.Manufacturer,
-                        a.Key.SerialNumber,
-                        a.Key.TheftMark,
-                        a.Key.BarCode,
-                        a.Key.PurchaseDate,
-                        string.Join(Delimeter, a.Select(x => x.WorkstationName)), // todo change to array
-                        a.Key.Info,
-                        a.Key.CreatedDate,
-                        a.Key.ChangedDate)).ToList();
+            var overviews = anonymus.Select(a =>
+                new InventoryOverview(
+                    a.Key.Id,
+                    a.Key.DepartmentName,
+                    a.Key.RoomName,
+                    new UserName(a.Key.UserFirstName, a.Key.UserLastName),
+                    a.Key.InventoryName,
+                    a.Key.InventoryModel,
+                    a.Key.Manufacturer,
+                    a.Key.SerialNumber,
+                    a.Key.TheftMark,
+                    a.Key.BarCode,
+                    a.Key.PurchaseDate,
+                    string.Join(Delimeter, a.Select(x => x.WorkstationName)), // todo change to array
+                    a.Key.Info,
+                    a.Key.CreatedDate,
+                    a.Key.ChangedDate)).ToList();
 
             return overviews;
         }
