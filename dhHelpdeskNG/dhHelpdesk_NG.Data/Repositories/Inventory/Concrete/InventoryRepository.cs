@@ -335,13 +335,13 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                 from c in this.DbContext.Computers
                 join ct in this.DbContext.ComputerTypes on c.ComputerType_Id equals ct.Id into res
                 from k in res.DefaultIfEmpty()
-                where c.Customer_Id == customerId && (c.ComputerName.ToLower().Contains(s) || c.Location.ToLower().Contains(s) || k.ComputerTypeDescription.ToLower().Contains(s))
+                where c.Customer_Id == customerId && (c.ComputerName.ToLower().Contains(s) || c.Location.ToLower().Contains(s) || k.Name.ToLower().Contains(s))
                 select new InventorySearchResult
                 {
                     Id = c.Id,
                     Name = c.ComputerName,
                     Location = c.Location,
-                    TypeDescription = k.ComputerTypeDescription,
+                    TypeDescription = k.Name, //Computer Type
                     TypeName = "Arbetsstation",
                     NeedTranslate = true
                 };
