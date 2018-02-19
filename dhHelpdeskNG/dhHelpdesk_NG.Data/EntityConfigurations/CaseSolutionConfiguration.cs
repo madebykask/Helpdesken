@@ -71,7 +71,6 @@
                 .HasForeignKey(x => x.WorkingGroup_Id)
                 .WillCascadeOnDelete(false);
 
-
 			this.HasOptional(x => x.SplitToCaseSolution)
 				.WithMany()
 				.HasForeignKey(x => x.SplitToCaseSolution_Id)
@@ -83,6 +82,10 @@
                  m.MapRightKey("ExtendedCaseForms_Id");
                  m.ToTable("tblCaseSolution_ExtendedCaseForms");
              });
+
+            this.HasMany(x => x.Conditions)
+                .WithOptional(x => x.CaseSolution)
+                .HasForeignKey(x => x.CaseSolution_Id);
 
             this.Property(x => x.Caption).IsRequired().HasMaxLength(60);
             this.Property(x => x.CaseSolutionCategory_Id).IsOptional();

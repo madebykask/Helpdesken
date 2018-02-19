@@ -17,6 +17,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     using DH.Helpdesk.Domain;
     using System.Web.Mvc;
 
+    //TODO: refactor native sql commands to use Dapper instead of raw ado net commands: SqlDbQueryExecutorFactory : IDbQueryExecutorFactory
     public sealed class CaseSolutionConditionRepository : RepositoryBase<CaseSolutionConditionEntity>, ICaseSolutionConditionRepository
     {
         private readonly IEntityToBusinessModelMapper<CaseSolutionConditionEntity, CaseSolutionConditionModel> _CaseSolutionConditionToBusinessModelMapper;
@@ -369,16 +370,18 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             }
             else
             {
-                string sql = string.Empty;
-
-                sql = "SELECT dbo.tblCaseSolutionConditionProperties.Id, dbo.tblCaseSolutionConditionProperties.CaseSolutionConditionProperty, ";
-                sql += "dbo.tblCaseSolutionConditionProperties.Text ";
-                sql += "FROM            dbo.tblCaseSolutionConditionProperties ";
-                sql += "WHERE dbo.tblCaseSolutionConditionProperties.Id NOT IN(SELECT        dbo.tblCaseSolutionConditionProperties.Id ";
-                sql += "FROM            dbo.tblCaseSolutionCondition INNER JOIN ";
-                sql += "dbo.tblCaseSolutionConditionProperties ON ";
-                sql += "dbo.tblCaseSolutionCondition.Property_Name = dbo.tblCaseSolutionConditionProperties.CaseSolutionConditionProperty ";
-                sql += "WHERE(dbo.tblCaseSolutionCondition.CaseSolution_Id = " + casesolutionid + ")) ";
+                var sql = $@"
+                    SELECT dbo.tblCaseSolutionConditionProperties.Id,
+                           dbo.tblCaseSolutionConditionProperties.CaseSolutionConditionProperty,
+                           dbo.tblCaseSolutionConditionProperties.Text
+                    FROM dbo.tblCaseSolutionConditionProperties
+                    WHERE dbo.tblCaseSolutionConditionProperties.Id NOT IN
+                    (
+                        SELECT dbo.tblCaseSolutionConditionProperties.Id
+                        FROM dbo.tblCaseSolutionCondition
+                                INNER JOIN dbo.tblCaseSolutionConditionProperties ON dbo.tblCaseSolutionCondition.Property_Name = dbo.tblCaseSolutionConditionProperties.CaseSolutionConditionProperty
+                        WHERE(dbo.tblCaseSolutionCondition.CaseSolution_Id = {casesolutionid})
+                    );";
 
                 string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
                 DataTable dt = null;
@@ -526,27 +529,47 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
                 }
             }
-
-
         }
 
+        public IList<CaseSolutionConditionModel> GetCaseSolutionsConditions(List<int> casesolutionIds)
+        {
+            var conditions =
+                this.Table
+                    .Where(c => casesolutionIds.Contains(c.CaseSolution_Id) && c.Status != 0)
+                    .Select(c => new CaseSolutionConditionModel
+                    {
+                        Id = c.Id,
+                        Property_Name = c.Property_Name,
+                        CaseSolutionConditionGUID = c.CaseSolutionConditionGUID,
+                        CaseSolution_Id = c.CaseSolution_Id,
+                        Status = c.Status,
+                        Values = c.Values
+                    })
+                    .Distinct()
+                    .ToList();
 
-
-       
+            return conditions;
+        }
 
         public IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid)
         {
-            var entities = this.Table
+            var conditions = 
+                this.Table
                    .Where(c => c.CaseSolution_Id == casesolutionid && c.Status != 0)
-
+                   .Select(c => new CaseSolutionConditionModel
+                    {
+                        Id = c.Id,
+                        Property_Name = c.Property_Name,
+                        CaseSolutionConditionGUID = c.CaseSolutionConditionGUID,
+                        CaseSolution_Id = c.CaseSolution_Id,
+                        Status = c.Status,
+                        Values = c.Values
+                   })
                    .Distinct()
                    .ToList();
 
-            return entities
-                .Select(this._CaseSolutionConditionToBusinessModelMapper.Map);
+            return conditions;
         }
-
-
 
         //public IList<CaseSolutionCondition> GetCaseSolutionConditionModel(int casesolutionid, int customerid, string constString)
         //{

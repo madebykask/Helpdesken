@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IdentityModel.Tokens;
 using System.Linq;
 using DH.Helpdesk.BusinessData.Enums.Users;
 using DH.Helpdesk.BusinessData.Models.Feedback;
@@ -156,7 +157,7 @@ namespace DH.Helpdesk.Services.Services
 
         bool IsRelated(int caseId);
 
-        ChildCaseOverview[] GetChildCasesFor(int caseId);
+        List<ChildCaseOverview> GetChildCasesFor(int caseId);
 
         ParentCaseInfo GetParentInfo(int caseId);
 
@@ -821,209 +822,16 @@ namespace DH.Helpdesk.Services.Services
 
             return false;
         }
-
-        //TODO: Extremely needs to be refactored
-        public ChildCaseOverview[] GetChildCasesFor(int caseId)
+        
+        public List<ChildCaseOverview> GetChildCasesFor(int caseId)
         {
-            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
-            {
-                var childCaseRelations = uow.GetRepository<ParentChildRelation>().GetAll();
-                var allCases = uow.GetRepository<Case>().GetAll();
-                var allSecStates = uow.GetRepository<StateSecondary>().GetAll();
-                var allPerformers = uow.GetRepository<User>().GetAll();
-                var caseTypes = uow.GetRepository<CaseType>().GetAll();
-                var res =
-                    childCaseRelations.Where(it => it.AncestorId == caseId)
-                        .Select(it => new { id = it.DescendantId, parentId = it.AncestorId, independent = it.Independent })
-                        .GroupJoin(
-                            allCases,
-                            it => it.id,
-                            case_ => case_.Id,
-                            (parentChild, case_) => new { parentChild, case_ })
-                        .SelectMany(
-                            t => t.case_.DefaultIfEmpty(),
-                            (t, case_) =>
-                            new
-                            {
-                                id = t.parentChild.id,
-                                parentId = t.parentChild.parentId,
-                                independent = t.parentChild.independent,
-                                caseNumber = case_.CaseNumber,
-                                subject = case_.Caption,
-                                performerId = case_.Performer_User_Id,
-                                substateId = case_.StateSecondary_Id,
-                                caseTypeId = case_.CaseType_Id,
-                                registrationDate = case_.RegTime,
-                                closingDate = case_.FinishingDate,
-                                approvedDate = case_.ApprovedDate,
-                                priority = case_.Priority.Name
-                            })
-                        .GroupJoin(
-                            allPerformers,
-                            tempParentChildStruct => tempParentChildStruct.performerId,
-                            performer => performer.Id,
-                            (tmpParentChild, performer) => new { tmpParentChild, performer })
-                        .SelectMany(
-                            t => t.performer.DefaultIfEmpty(),
-                            (t, performer) =>
-                            new
-                            {
-                                id = t.tmpParentChild.id,
-                                parentId = t.tmpParentChild.parentId,
-                                independent = t.tmpParentChild.independent,
-                                caseNumber = t.tmpParentChild.caseNumber,
-                                subject = t.tmpParentChild.subject,
-                                performerFirstName = performer == null ? string.Empty : performer.FirstName,
-                                performerLastName = performer == null ? string.Empty : performer.SurName,
-                                substateId = t.tmpParentChild.substateId,
-                                caseTypeId = t.tmpParentChild.caseTypeId,
-                                registrationDate = t.tmpParentChild.registrationDate,
-                                closingDate = t.tmpParentChild.closingDate,
-                                approvedDate = t.tmpParentChild.approvedDate,
-                                priority = t.tmpParentChild.priority
-                            })
-                        .GroupJoin(
-                            allSecStates,
-                            tempParentCildStruct => tempParentCildStruct.substateId,
-                            subState => subState.Id,
-                            (tmpParentChild, subState) => new { tmpParentChild, subState })
-                        .SelectMany(
-                            t => t.subState.DefaultIfEmpty(),
-                            (t, subState) =>
-                            new
-                            {
-                                id = t.tmpParentChild.id,
-                                parentId = t.tmpParentChild.parentId,
-                                independent = t.tmpParentChild.independent,
-                                subject = t.tmpParentChild.subject,
-                                caseNumber = t.tmpParentChild.caseNumber,
-                                performerFirstName = t.tmpParentChild.performerFirstName,
-                                performerLastName = t.tmpParentChild.performerLastName,
-                                subState = subState == null ? string.Empty : subState.Name,
-                                priority = t.tmpParentChild.priority,
-                                caseTypeId = t.tmpParentChild.caseTypeId,
-                                registrationDate = t.tmpParentChild.registrationDate,
-                                closingDate = t.tmpParentChild.closingDate,
-                                approvedDate = t.tmpParentChild.approvedDate
-                            })
-                        .GroupJoin(
-                            caseTypes,
-                            tempParentCildStruct => tempParentCildStruct.caseTypeId,
-                            subState => subState.Id,
-                            (tmpParentChild, casetType) => new { tmpParentChild, casetType })
-                        .SelectMany(
-                            t => t.casetType.DefaultIfEmpty(),
-                            (t, caseType) =>
-                            new
-                            {
-                                id = t.tmpParentChild.id,
-                                parentId = t.tmpParentChild.parentId,
-                                independent = t.tmpParentChild.independent,
-                                caseNumber = t.tmpParentChild.caseNumber,
-                                subject = t.tmpParentChild.subject,
-                                performerFirstName = t.tmpParentChild.performerFirstName,
-                                performerLastName = t.tmpParentChild.performerLastName,
-                                subState = t.tmpParentChild.subState,
-                                priority = t.tmpParentChild.priority,
-                                caseType = caseType == null ? string.Empty : caseType.Name,
-                                IsApprovingRequired = caseType != null && caseType.RequireApproving == 1,
-                                registrationDate = t.tmpParentChild.registrationDate,
-                                closingDate = t.tmpParentChild.closingDate,                                
-                                t.tmpParentChild.approvedDate
-                            })
-                        .AsQueryable();
-                return res.Select(it => new ChildCaseOverview()
-                {
-                    Id = it.id,
-                    CaseNo = (int)it.caseNumber,
-                    Subject = it.subject,
-                    CasePerformer = new UserNamesStruct()
-                    {
-                        FirstName = it.performerFirstName,
-                        LastName = it.performerLastName
-                    },
-                    CaseType = it.caseType,
-                    SubStatus = it.subState,
-                    Priority = it.priority,
-                    RegistrationDate = it.registrationDate,
-                    ClosingDate = it.closingDate,
-                    ApprovedDate = it.approvedDate,
-                    IsRequriedToApprive = it.IsApprovingRequired,
-                    ParentId = it.parentId,
-                    Indepandent = it.independent
-                }).ToArray();
-            }
+            return _caseRepository.GetChildCasesFor(caseId);
         }
-
-        //TODO: Extremely needs to be refactored
+        
         public ParentCaseInfo GetParentInfo(int caseId)
         {
-            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
-            {
-                var allCases = uow.GetRepository<Case>().GetAll();
-                var allRelations = uow.GetRepository<ParentChildRelation>().GetAll();
-                var allPerformers = uow.GetRepository<User>().GetAll();
-                var relationInfo = allRelations
-                    .Where(it => it.DescendantId == caseId)
-                    .Select(it => new { id = it.DescendantId, parentId = it.AncestorId, independent = it.Independent })
-                    .GroupJoin(
-                            allCases,
-                            it => it.parentId,
-                            case_ => case_.Id,
-                            (parentChild, case_) => new { parentChild, case_ })
-                        .SelectMany(
-                            t => t.case_.DefaultIfEmpty(),
-                            (t, case_) =>
-                            new
-                            {
-                                id = t.parentChild.id,
-                                parentId = t.parentChild.parentId,
-                                independent = t.parentChild.independent,
-                                caseNumber = case_.CaseNumber,
-                                subject = case_.Caption,
-                                performerId = case_.Performer_User_Id,
-                                substateId = case_.StateSecondary_Id,
-                                caseTypeId = case_.CaseType_Id,
-                                registrationDate = case_.RegTime,
-                                finishingDate = case_.FinishingDate
-                            })
-                        .GroupJoin(
-                            allPerformers,
-                            tempParentChildStruct => tempParentChildStruct.performerId,
-                            performer => performer.Id,
-                            (tmpParentChild, performer) => new { tmpParentChild, performer })
-                        .SelectMany(
-                            t => t.performer.DefaultIfEmpty(),
-                            (t, performer) =>
-                            new
-                            {
-                                parentId = t.tmpParentChild.parentId,
-                                caseNumber = t.tmpParentChild.caseNumber,
-                                finishingDate = t.tmpParentChild.finishingDate,
-                                performerFirstName = performer == null ? string.Empty : performer.FirstName,
-                                performerLastName = performer == null ? string.Empty : performer.SurName,
-                                isChildIndependent = t.tmpParentChild.independent
-                            })
-                        .FirstOrDefault();
-                if (relationInfo != null)
-                {
-                    return new ParentCaseInfo()
-                    {
-                        ParentId = relationInfo.parentId,
-                        CaseNumber = relationInfo.caseNumber,
-                        IsChildIndependent = relationInfo.isChildIndependent,
-                        CaseAdministrator =
-                                       new UserNamesStruct()
-                                       {
-                                           FirstName = relationInfo.performerFirstName,
-                                           LastName = relationInfo.performerLastName
-                                       },
-                        FinishingDate = relationInfo.finishingDate
-                    };
-                }
-            }
-
-            return null;
+            var parentCaseInfo = _caseRepository.GetParentInfo(caseId);
+            return parentCaseInfo;
         }
 
         public int? SaveInternalLogMessage(int id, string textInternal, out IDictionary<string, string> errors)

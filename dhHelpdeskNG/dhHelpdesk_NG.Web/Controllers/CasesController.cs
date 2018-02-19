@@ -5241,7 +5241,6 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }
 
-
                 if (m.Logs != null)
                 {
                     var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
@@ -5267,20 +5266,24 @@ namespace DH.Helpdesk.Web.Controllers
 
                 #endregion
             }
+            
+            var caseTemplateButtons = 
+                _caseSolutionService.GetCustomerCaseSolutionsOverview(
+                    customerId, 
+                    c => c.Status != 0 && c.ShowInsideCase != 0 && c.ConnectedButton.HasValue && c.ConnectedButton > 0)
+                    .Select(c => new CaseTemplateButton()
+                    {
+                        CaseTemplateId = c.CaseSolutionId,
+                        CaseTemplateName = c.Name,
+                        ButtonNumber = c.ConnectedButton.Value
+                    })
+                    .OrderBy(c => c.ButtonNumber)
+                    .ToList();
 
-
-            var caseTemplateButtons = _caseSolutionService.GetCaseSolutions(customerId)
-                                                          .Where(c => c.Status != 0 && c.ShowInsideCase != 0 && c.ConnectedButton.HasValue && c.ConnectedButton > 0)
-                                                          .Select(c => new CaseTemplateButton()
-                                                          {
-                                                              CaseTemplateId = c.Id,
-                                                              CaseTemplateName = c.Name,
-                                                              ButtonNumber = c.ConnectedButton.Value
-                                                          })
-                                                          .OrderBy(c => c.ButtonNumber)
-                                                          .ToList();
             m.CaseTemplateButtons = caseTemplateButtons;
-            m.WorkflowSteps = _caseSolutionService.GetGetWorkflowSteps(customerId, m.case_, SessionFacade.CurrentUser, ApplicationType.Helpdesk, templateId);
+
+            //todo: check if case solutions can be reused?
+            m.WorkflowSteps = _caseSolutionService.GetWorkflowSteps(customerId, m.case_, SessionFacade.CurrentUser, ApplicationType.Helpdesk, templateId);
 
             m.CaseMailSetting = new CaseMailSetting(
                 customer.NewCaseEmailList,

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 
 namespace DH.Helpdesk.Services.Services
@@ -25,6 +26,8 @@ namespace DH.Helpdesk.Services.Services
     public interface ICaseSolutionService
     {
         IList<CaseSolution> GetCaseSolutions(int customerId);
+        IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, bool? includeConditions = false);
+        IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, Expression<Func<CaseSolution, bool>> filter, bool? includeConditions = false);
         IList<Application> GetAllApplications(int customerId);
         IList<CaseSolutionCategory> GetCaseSolutionCategories(int customerId);
         IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch SearchCaseSolutions, bool isFirstNamePresentation);
@@ -43,7 +46,7 @@ namespace DH.Helpdesk.Services.Services
         void SaveCaseSolutionCategory(CaseSolutionCategory caseSolutionCategory, out IDictionary<string, string> errors);
         void SaveEmptyForm(Guid formGuid, int caseId);
         void Commit();
-        IList<WorkflowStepModel> GetGetWorkflowSteps(int customerId, Case _case, UserOverview user, ApplicationType applicationType, int? templateId);
+        IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case _case, UserOverview user, ApplicationType applicationType, int? templateId);
 
         IList<CaseSolution> GetCaseSolutions();
 
@@ -88,8 +91,7 @@ namespace DH.Helpdesk.Services.Services
             IStateSecondaryService stateSecondaryService,
             IApplicationRepository applicationRepository,
             ICaseService caseService,
-            IUnitOfWorkFactory unitOfWorkFactory
-            )
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
             this._caseSolutionRepository = caseSolutionRepository;
             this._caseSolutionCategoryRepository = caseSolutionCategoryRepository;
@@ -227,6 +229,16 @@ namespace DH.Helpdesk.Services.Services
             return this._caseSolutionRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
+        public IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, bool? includeConditions = false)
+        {
+            return GetCustomerCaseSolutionsOverview(customerId, null, includeConditions);
+        }
+
+        public IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, Expression<Func<CaseSolution, bool>> filter, bool? includeConditions = false)
+        {
+            return this._caseSolutionRepository.GetCustomerCaseSolutionsOverview(customerId, filter, includeConditions);
+        }
+
         public IList<CaseSolution> GetCaseSolutions()
         {
             return this._caseSolutionRepository.GetMany(x => x.Status >= 0).OrderBy(x => x.Customer.Name).ThenBy(x => x.Name).ToList();
@@ -293,40 +305,50 @@ namespace DH.Helpdesk.Services.Services
             //return this._applicationRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
-        public IList<WorkflowStepModel> GetGetWorkflowSteps(int customerId, Case _case, UserOverview user, ApplicationType applicationType, int? templateId)
+        public IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case _case, UserOverview user, ApplicationType applicationType, int? templateId)
         {
-            var templates = GetCaseSolutions(customerId).Where(c => c.Status != 0 && c.ConnectedButton == 0).Select(c => new WorkflowStepModel()
+            var caseSolutions =
+                    GetCustomerCaseSolutionsOverview(customerId, c => c.Status != 0 && c.ConnectedButton == 0, true);
+
+            var isRelatedCase = _case != null && _case.Id > 0 && _caseService.IsRelated(_case.Id);
+
+            var modelList = new List<WorkflowStepModel>();
+            foreach (var cs in caseSolutions)
             {
-                CaseTemplateId = c.Id,
-                Name = c.Name,
-                SortOrder = c.SortOrder,
-                //If value exist in NextStepState - use it. Otherwise check if caseSolution.StateSecondary_id have value, otherwise return 0;
-                NextStep = (c.NextStepState != null ? c.NextStepState.Value : (c.StateSecondary_Id != null ? _stateSecondaryService.GetStateSecondary(c.StateSecondary_Id.Value).StateSecondaryId : 0))
+                var res = ShowWorkflowStep(customerId, _case, cs, user, applicationType, templateId, isRelatedCase);
+                if (res)
+                {
+                    var workFlowStepModel = new WorkflowStepModel
+                    {
+                        CaseTemplateId = cs.CaseSolutionId,
+                        Name = cs.Name,
+                        SortOrder = cs.SortOrder,
 
-            }).OrderBy(c => c.SortOrder).ToList();
+                        //If value exist in NextStepState - use it. Otherwise check if caseSolution.StateSecondary_id have value, otherwise return 0;
+                        NextStep = cs.NextStepState ?? (cs.StateSecondary != null ? cs.StateSecondaryId ?? 0 : 0)
 
+                    };
+                    modelList.Add(workFlowStepModel);
+                }
+            }
 
-            return templates.Where(c => ShowWorkflowStep(customerId, _case, c.CaseTemplateId, user, applicationType, templateId) == true).ToList();
+            return modelList.OrderBy(c => c.SortOrder).ToList();
         }
 
-        private bool ShowWorkflowStep(int customerId, Case _case, int caseSolution_Id, UserOverview user, ApplicationType applicationType, int? templateId)
+        //todo: poor spaghetti-code implementation! Need to refactor to create separate extendable and maintainable class(es) aligned with SOLID and OOP principles
+        private bool ShowWorkflowStep(int customerId, Case _case, CaseSolutionOverview caseSolution, UserOverview user, ApplicationType applicationType, int? templateId, bool isRelatedCase)
         {
-
             //ALL conditions must be met
-            bool showWorkflowStep = false;
+            var showWorkflowStep = false;
 
             //If no conditions are set in (CaseSolutionCondition) for the template, do not show step in list
-            var caseSolutionConditions = this.GetCaseSolutionConditions(caseSolution_Id);
-
-            if (caseSolutionConditions == null || caseSolutionConditions.Count() == 0)
+            if (caseSolution.Conditions == null || caseSolution.Conditions.Count() == 0)
                 return false;
 
-            bool isRelatedCase = _case != null && this._caseService.IsRelated(_case.Id);
-
-            foreach (var condition in caseSolutionConditions)
+            foreach (var condition in caseSolution.Conditions)
             {
-                var conditionValue = condition.Value.Tidy().ToLower();
-                var conditionKey = condition.Key.Tidy();
+                var conditionValue = condition.Values.Tidy().ToLower();
+                var conditionKey = condition.Property.Tidy();
 
                 if (conditionValue == "null")
                 {
@@ -349,6 +371,7 @@ namespace DH.Helpdesk.Services.Services
                             value = "0";
                         }
                     }
+
                     //GET FROM APPLICATION
                     else if (conditionKey.ToLower() == "application_type")
                     {
@@ -458,7 +481,7 @@ namespace DH.Helpdesk.Services.Services
                 catch (Exception ex)
                 {
                     //Remove caching of conditions for this specific template that is used in Case
-                    string cacheKey = string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionConditionWithId, caseSolution_Id);
+                    string cacheKey = string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionConditionWithId, caseSolution.CaseSolutionId);
                     this._cache.Invalidate(cacheKey);
 
                     //throw;
@@ -471,33 +494,33 @@ namespace DH.Helpdesk.Services.Services
             return showWorkflowStep;
         }
 
-        public IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch SearchCaseSolutions, bool isFirstNamePresentation)
+        public IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch searchCaseSolutions, bool isFirstNamePresentation)
         {
             var query = (from cs in this._caseSolutionRepository.GetAll().Where(x => x.Customer_Id == customerId)
                          select cs);
 
             #region Search
 
-            if (!string.IsNullOrEmpty(SearchCaseSolutions.SearchCss))
+            if (!string.IsNullOrEmpty(searchCaseSolutions.SearchCss))
             {
-                SearchCaseSolutions.SearchCss = SearchCaseSolutions.SearchCss.ToLower();
+                searchCaseSolutions.SearchCss = searchCaseSolutions.SearchCss.ToLower();
 
-                query = query.Where(x => (!string.IsNullOrEmpty(x.Caption) && x.Caption.ToLower().Contains(SearchCaseSolutions.SearchCss))
-                                      || (!string.IsNullOrEmpty(x.Description) && x.Description.ToLower().Contains(SearchCaseSolutions.SearchCss))
-                                      || (!string.IsNullOrEmpty(x.Miscellaneous) && x.Miscellaneous.ToLower().Contains(SearchCaseSolutions.SearchCss))
-                                      || (!string.IsNullOrEmpty(x.Name) && x.Name.ToLower().Contains(SearchCaseSolutions.SearchCss))
-                                      || (!string.IsNullOrEmpty(x.Text_External) && x.Text_External.ToLower().Contains(SearchCaseSolutions.SearchCss))
-                                      || (!string.IsNullOrEmpty(x.Text_Internal) && x.Text_Internal.ToLower().Contains(SearchCaseSolutions.SearchCss))
+                query = query.Where(x => (!string.IsNullOrEmpty(x.Caption) && x.Caption.ToLower().Contains(searchCaseSolutions.SearchCss))
+                                      || (!string.IsNullOrEmpty(x.Description) && x.Description.ToLower().Contains(searchCaseSolutions.SearchCss))
+                                      || (!string.IsNullOrEmpty(x.Miscellaneous) && x.Miscellaneous.ToLower().Contains(searchCaseSolutions.SearchCss))
+                                      || (!string.IsNullOrEmpty(x.Name) && x.Name.ToLower().Contains(searchCaseSolutions.SearchCss))
+                                      || (!string.IsNullOrEmpty(x.Text_External) && x.Text_External.ToLower().Contains(searchCaseSolutions.SearchCss))
+                                      || (!string.IsNullOrEmpty(x.Text_Internal) && x.Text_Internal.ToLower().Contains(searchCaseSolutions.SearchCss))
                                    );
             }
 
-            if (SearchCaseSolutions.CategoryIds != null && SearchCaseSolutions.CategoryIds.Any())
+            if (searchCaseSolutions.CategoryIds != null && searchCaseSolutions.CategoryIds.Any())
             {
-                query = query.Where(x => x.CaseSolutionCategory_Id.HasValue && SearchCaseSolutions.CategoryIds.Contains(x.CaseSolutionCategory_Id.Value));
+                query = query.Where(x => x.CaseSolutionCategory_Id.HasValue && searchCaseSolutions.CategoryIds.Contains(x.CaseSolutionCategory_Id.Value));
             }
 
 
-            if (SearchCaseSolutions.OnlyActive == true)
+            if (searchCaseSolutions.OnlyActive == true)
             {
                 query = query.Where(x => x.Status == 1);
 
@@ -650,12 +673,12 @@ namespace DH.Helpdesk.Services.Services
 
             }
 
-            List<CaseSolution> cresList = new List<CaseSolution>();
-            List<CaseSolutionConditionModel> cmoList = new List<CaseSolutionConditionModel>();
+            var cresList = new List<CaseSolution>();
+            var cmoList = new List<CaseSolutionConditionModel>();
 
-            if (SearchCaseSolutions.ApplicationIds != null | SearchCaseSolutions.PriorityIds != null | SearchCaseSolutions.ProductAreaIds != null | SearchCaseSolutions.StatusIds != null | SearchCaseSolutions.SubStatusIds != null | SearchCaseSolutions.TemplateProductAreaIds != null | SearchCaseSolutions.UserWGroupIds != null | SearchCaseSolutions.WgroupIds != null)
+            if (searchCaseSolutions.ApplicationIds != null | searchCaseSolutions.PriorityIds != null | searchCaseSolutions.ProductAreaIds != null | searchCaseSolutions.StatusIds != null | searchCaseSolutions.SubStatusIds != null | searchCaseSolutions.TemplateProductAreaIds != null | searchCaseSolutions.UserWGroupIds != null | searchCaseSolutions.WgroupIds != null)
             {
-                if (SearchCaseSolutions.ApplicationIds.Count > 0 | SearchCaseSolutions.PriorityIds.Count > 0 | SearchCaseSolutions.ProductAreaIds.Count > 0 | SearchCaseSolutions.StatusIds.Count > 0 | SearchCaseSolutions.SubStatusIds.Count > 0 | SearchCaseSolutions.TemplateProductAreaIds.Count > 0 | SearchCaseSolutions.UserWGroupIds.Count > 0 | SearchCaseSolutions.WgroupIds.Count > 0)
+                if (searchCaseSolutions.ApplicationIds.Count > 0 | searchCaseSolutions.PriorityIds.Count > 0 | searchCaseSolutions.ProductAreaIds.Count > 0 | searchCaseSolutions.StatusIds.Count > 0 | searchCaseSolutions.SubStatusIds.Count > 0 | searchCaseSolutions.TemplateProductAreaIds.Count > 0 | searchCaseSolutions.UserWGroupIds.Count > 0 | searchCaseSolutions.WgroupIds.Count > 0)
                 {
                     var results = from table1 in table.AsEnumerable()
                                   join table2 in tableCond.AsEnumerable() on (int)table1["Id"] equals (int)table2["CaseSolution_Id"]
@@ -679,7 +702,7 @@ namespace DH.Helpdesk.Services.Services
 
 
 
-                    if (SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.SubStatusIds.Any())
+                    if (searchCaseSolutions.SubStatusIds != null && searchCaseSolutions.SubStatusIds.Any())
                     {
                         foreach (CaseSolution ca in cresList)
                         {
@@ -694,7 +717,7 @@ namespace DH.Helpdesk.Services.Services
                         if (cmoList != null && cmoList.Count() > 0)
                         {
                             var results1 = from d in cmoList
-                                           where SearchCaseSolutions.SubStatusIds.Contains(d.Values)
+                                           where searchCaseSolutions.SubStatusIds.Contains(d.Values)
                                            select d;
 
                             if (results1 != null)
@@ -721,7 +744,7 @@ namespace DH.Helpdesk.Services.Services
                         else
                         {
                             var results1 = from c in results
-                                           where SearchCaseSolutions.SubStatusIds.Contains(c.Values)
+                                           where searchCaseSolutions.SubStatusIds.Contains(c.Values)
                                            select c;
 
                             if (results1 != null)
@@ -750,7 +773,7 @@ namespace DH.Helpdesk.Services.Services
                     }
 
                     //Working group
-                    if (SearchCaseSolutions.WgroupIds != null && SearchCaseSolutions.WgroupIds.Any())
+                    if (searchCaseSolutions.WgroupIds != null && searchCaseSolutions.WgroupIds.Any())
                     {
                         foreach (CaseSolution ca in cresList)
                         {
@@ -765,7 +788,7 @@ namespace DH.Helpdesk.Services.Services
                         if (cmoList != null && cmoList.Count() > 0)
                         {
                             var results1 = from d in cmoList
-                                           where SearchCaseSolutions.WgroupIds.Contains(d.Values)
+                                           where searchCaseSolutions.WgroupIds.Contains(d.Values)
                                            select d;
 
                             if (results1 != null)
@@ -792,7 +815,7 @@ namespace DH.Helpdesk.Services.Services
                         else
                         {
                             var results1 = from c in results
-                                           where SearchCaseSolutions.WgroupIds.Contains(c.Values)
+                                           where searchCaseSolutions.WgroupIds.Contains(c.Values)
                                            select c;
 
                             if (results1 != null)
@@ -819,7 +842,7 @@ namespace DH.Helpdesk.Services.Services
                     }
 
                     //Priority
-                    if (SearchCaseSolutions.PriorityIds != null && SearchCaseSolutions.PriorityIds.Any())
+                    if (searchCaseSolutions.PriorityIds != null && searchCaseSolutions.PriorityIds.Any())
                     {
                         foreach (CaseSolution ca in cresList)
                         {
@@ -834,7 +857,7 @@ namespace DH.Helpdesk.Services.Services
                         if (cmoList != null && cmoList.Count() > 0)
                         {
                             var results1 = from d in cmoList
-                                           where SearchCaseSolutions.PriorityIds.Contains(d.Values)
+                                           where searchCaseSolutions.PriorityIds.Contains(d.Values)
                                            select d;
 
                             if (results1 != null)
@@ -861,7 +884,7 @@ namespace DH.Helpdesk.Services.Services
                         else
                         {
                             var results1 = from c in results
-                                           where SearchCaseSolutions.PriorityIds.Contains(c.Values)
+                                           where searchCaseSolutions.PriorityIds.Contains(c.Values)
                                            select c;
 
                             if (results1 != null)
@@ -888,14 +911,12 @@ namespace DH.Helpdesk.Services.Services
                     }
 
                     //Status
-                    if (SearchCaseSolutions.StatusIds != null && SearchCaseSolutions.StatusIds.Any())
+                    if (searchCaseSolutions.StatusIds != null && searchCaseSolutions.StatusIds.Any())
                     {
-
-                        foreach (CaseSolution ca in cresList)
+                        foreach (var cs in cresList)
                         {
-                            IEnumerable<CaseSolutionConditionModel> cco = _caseSolutionConditionRepository.GetCaseSolutionConditions(ca.Id);
-
-                            foreach (CaseSolutionConditionModel cm in cco)
+                            var caseSolutionConditions = _caseSolutionConditionRepository.GetCaseSolutionConditions(cs.Id);
+                            foreach (CaseSolutionConditionModel cm in caseSolutionConditions)
                             {
                                 cmoList.Add(cm);
                             }
@@ -904,7 +925,7 @@ namespace DH.Helpdesk.Services.Services
                         if (cmoList != null && cmoList.Count() > 0)
                         {
                             var results1 = from d in cmoList
-                                           where SearchCaseSolutions.StatusIds.Contains(d.Values)
+                                           where searchCaseSolutions.StatusIds.Contains(d.Values)
                                            select d;
 
                             if (results1 != null)
@@ -914,7 +935,7 @@ namespace DH.Helpdesk.Services.Services
                                     cresList = new List<CaseSolution>();
                                     foreach (var r in results1)
                                     {
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                        var cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
                                         cresList.Add(cres);
                                     }
                                 }
@@ -931,7 +952,7 @@ namespace DH.Helpdesk.Services.Services
                         else
                         {
                             var results1 = from c in results
-                                           where SearchCaseSolutions.StatusIds.Contains(c.Values)
+                                           where searchCaseSolutions.StatusIds.Contains(c.Values)
                                            select c;
 
                             if (results1 != null)
@@ -958,7 +979,7 @@ namespace DH.Helpdesk.Services.Services
                     }
 
                     //ProductArea
-                    if (SearchCaseSolutions.ProductAreaIds != null && SearchCaseSolutions.ProductAreaIds.Any())
+                    if (searchCaseSolutions.ProductAreaIds != null && searchCaseSolutions.ProductAreaIds.Any())
                     {
                         foreach (CaseSolution ca in cresList)
                         {
@@ -973,7 +994,7 @@ namespace DH.Helpdesk.Services.Services
                         if (cmoList != null && cmoList.Count() > 0)
                         {
                             var results1 = from d in cmoList
-                                           where SearchCaseSolutions.ProductAreaIds.Contains(d.Values)
+                                           where searchCaseSolutions.ProductAreaIds.Contains(d.Values)
                                            select d;
 
                             if (results1 != null)
@@ -1000,7 +1021,7 @@ namespace DH.Helpdesk.Services.Services
                         else
                         {
                             var results1 = from c in results
-                                           where SearchCaseSolutions.ProductAreaIds.Contains(c.Values)
+                                           where searchCaseSolutions.ProductAreaIds.Contains(c.Values)
                                            select c;
 
                             if (results1 != null)
@@ -1027,7 +1048,7 @@ namespace DH.Helpdesk.Services.Services
                     }
 
                     //UserWGroup, ????????????
-                    if (SearchCaseSolutions.UserWGroupIds != null && SearchCaseSolutions.UserWGroupIds.Any())
+                    if (searchCaseSolutions.UserWGroupIds != null && searchCaseSolutions.UserWGroupIds.Any())
                     {
                         foreach (CaseSolution ca in cresList)
                         {
@@ -1042,7 +1063,7 @@ namespace DH.Helpdesk.Services.Services
                         if (cmoList != null && cmoList.Count() > 0)
                         {
                             var results1 = from d in cmoList
-                                           where SearchCaseSolutions.UserWGroupIds.Contains(d.Values)
+                                           where searchCaseSolutions.UserWGroupIds.Contains(d.Values)
                                            select d;
 
                             if (results1 != null)
@@ -1069,7 +1090,7 @@ namespace DH.Helpdesk.Services.Services
                         else
                         {
                             var results1 = from c in results
-                                           where SearchCaseSolutions.UserWGroupIds.Contains(c.Values)
+                                           where searchCaseSolutions.UserWGroupIds.Contains(c.Values)
                                            select c;
 
                             if (results1 != null)
@@ -1096,7 +1117,7 @@ namespace DH.Helpdesk.Services.Services
                     }
 
                     //TemplateProduct, ????????????
-                    if (SearchCaseSolutions.TemplateProductAreaIds != null && SearchCaseSolutions.TemplateProductAreaIds.Any())
+                    if (searchCaseSolutions.TemplateProductAreaIds != null && searchCaseSolutions.TemplateProductAreaIds.Any())
                     {
                         foreach (CaseSolution ca in cresList)
                         {
@@ -1111,7 +1132,7 @@ namespace DH.Helpdesk.Services.Services
                         if (cmoList != null && cmoList.Count() > 0)
                         {
                             var results1 = from d in cmoList
-                                           where SearchCaseSolutions.TemplateProductAreaIds.Contains(d.Values)
+                                           where searchCaseSolutions.TemplateProductAreaIds.Contains(d.Values)
                                            select d;
 
                             if (results1 != null)
@@ -1138,7 +1159,7 @@ namespace DH.Helpdesk.Services.Services
                         else
                         {
                             var results1 = from c in results
-                                           where SearchCaseSolutions.TemplateProductAreaIds.Contains(c.Values)
+                                           where searchCaseSolutions.TemplateProductAreaIds.Contains(c.Values)
                                            select c;
 
                             if (results1 != null)
@@ -1165,7 +1186,7 @@ namespace DH.Helpdesk.Services.Services
                     }
 
                     //Application, ????????????
-                    if (SearchCaseSolutions.ApplicationIds != null && SearchCaseSolutions.ApplicationIds.Any())
+                    if (searchCaseSolutions.ApplicationIds != null && searchCaseSolutions.ApplicationIds.Any())
                     {
                         foreach (CaseSolution ca in cresList)
                         {
@@ -1180,7 +1201,7 @@ namespace DH.Helpdesk.Services.Services
                         if (cmoList != null && cmoList.Count() > 0)
                         {
                             var results1 = from d in cmoList
-                                           where SearchCaseSolutions.ApplicationIds.Contains(d.Values)
+                                           where searchCaseSolutions.ApplicationIds.Contains(d.Values)
                                            select d;
 
                             if (results1 != null)
@@ -1207,7 +1228,7 @@ namespace DH.Helpdesk.Services.Services
                         else
                         {
                             var results1 = from c in results
-                                           where SearchCaseSolutions.ApplicationIds.Contains(c.Values)
+                                           where searchCaseSolutions.ApplicationIds.Contains(c.Values)
                                            select c;
 
                             if (results1 != null)
@@ -1233,7 +1254,7 @@ namespace DH.Helpdesk.Services.Services
                         }
                     }
 
-                    if (SearchCaseSolutions.ApplicationIds == null && SearchCaseSolutions.PriorityIds == null && SearchCaseSolutions.ProductAreaIds == null && SearchCaseSolutions.StatusIds == null && SearchCaseSolutions.SubStatusIds == null && SearchCaseSolutions.TemplateProductAreaIds == null && SearchCaseSolutions.UserWGroupIds == null && SearchCaseSolutions.WgroupIds == null)
+                    if (searchCaseSolutions.ApplicationIds == null && searchCaseSolutions.PriorityIds == null && searchCaseSolutions.ProductAreaIds == null && searchCaseSolutions.StatusIds == null && searchCaseSolutions.SubStatusIds == null && searchCaseSolutions.TemplateProductAreaIds == null && searchCaseSolutions.UserWGroupIds == null && searchCaseSolutions.WgroupIds == null)
                     {
                         if (cresList.Count == 0 | cresList == null)
                         {
@@ -1250,9 +1271,9 @@ namespace DH.Helpdesk.Services.Services
                         }
                     }
 
-                    if (SearchCaseSolutions.ApplicationIds != null && SearchCaseSolutions.PriorityIds != null && SearchCaseSolutions.ProductAreaIds != null && SearchCaseSolutions.StatusIds != null && SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.TemplateProductAreaIds != null && SearchCaseSolutions.UserWGroupIds != null && SearchCaseSolutions.WgroupIds != null)
+                    if (searchCaseSolutions.ApplicationIds != null && searchCaseSolutions.PriorityIds != null && searchCaseSolutions.ProductAreaIds != null && searchCaseSolutions.StatusIds != null && searchCaseSolutions.SubStatusIds != null && searchCaseSolutions.TemplateProductAreaIds != null && searchCaseSolutions.UserWGroupIds != null && searchCaseSolutions.WgroupIds != null)
                     {
-                        if (SearchCaseSolutions.ApplicationIds.Count == 0 && SearchCaseSolutions.PriorityIds.Count == 0 && SearchCaseSolutions.ProductAreaIds.Count == 0 && SearchCaseSolutions.StatusIds.Count == 0 && SearchCaseSolutions.SubStatusIds.Count == 0 && SearchCaseSolutions.TemplateProductAreaIds.Count == 0 && SearchCaseSolutions.UserWGroupIds.Count == 0 && SearchCaseSolutions.WgroupIds.Count == 0)
+                        if (searchCaseSolutions.ApplicationIds.Count == 0 && searchCaseSolutions.PriorityIds.Count == 0 && searchCaseSolutions.ProductAreaIds.Count == 0 && searchCaseSolutions.StatusIds.Count == 0 && searchCaseSolutions.SubStatusIds.Count == 0 && searchCaseSolutions.TemplateProductAreaIds.Count == 0 && searchCaseSolutions.UserWGroupIds.Count == 0 && searchCaseSolutions.WgroupIds.Count == 0)
                         {
 
                             if (cresList.Count == 0 | cresList == null)
@@ -1296,7 +1317,7 @@ namespace DH.Helpdesk.Services.Services
 
 
 
-                    if (SearchCaseSolutions.ApplicationIds == null && SearchCaseSolutions.PriorityIds == null && SearchCaseSolutions.ProductAreaIds == null && SearchCaseSolutions.StatusIds == null && SearchCaseSolutions.SubStatusIds == null && SearchCaseSolutions.TemplateProductAreaIds == null && SearchCaseSolutions.UserWGroupIds == null && SearchCaseSolutions.WgroupIds == null)
+                    if (searchCaseSolutions.ApplicationIds == null && searchCaseSolutions.PriorityIds == null && searchCaseSolutions.ProductAreaIds == null && searchCaseSolutions.StatusIds == null && searchCaseSolutions.SubStatusIds == null && searchCaseSolutions.TemplateProductAreaIds == null && searchCaseSolutions.UserWGroupIds == null && searchCaseSolutions.WgroupIds == null)
                     {
                         if (cresList.Count == 0 | cresList == null)
                         {
@@ -1313,9 +1334,9 @@ namespace DH.Helpdesk.Services.Services
                         }
                     }
 
-                    if (SearchCaseSolutions.ApplicationIds != null && SearchCaseSolutions.PriorityIds != null && SearchCaseSolutions.ProductAreaIds != null && SearchCaseSolutions.StatusIds != null && SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.TemplateProductAreaIds != null && SearchCaseSolutions.UserWGroupIds != null && SearchCaseSolutions.WgroupIds != null)
+                    if (searchCaseSolutions.ApplicationIds != null && searchCaseSolutions.PriorityIds != null && searchCaseSolutions.ProductAreaIds != null && searchCaseSolutions.StatusIds != null && searchCaseSolutions.SubStatusIds != null && searchCaseSolutions.TemplateProductAreaIds != null && searchCaseSolutions.UserWGroupIds != null && searchCaseSolutions.WgroupIds != null)
                     {
-                        if (SearchCaseSolutions.ApplicationIds.Count == 0 && SearchCaseSolutions.PriorityIds.Count == 0 && SearchCaseSolutions.ProductAreaIds.Count == 0 && SearchCaseSolutions.StatusIds.Count == 0 && SearchCaseSolutions.SubStatusIds.Count == 0 && SearchCaseSolutions.TemplateProductAreaIds.Count == 0 && SearchCaseSolutions.UserWGroupIds.Count == 0 && SearchCaseSolutions.WgroupIds.Count == 0)
+                        if (searchCaseSolutions.ApplicationIds.Count == 0 && searchCaseSolutions.PriorityIds.Count == 0 && searchCaseSolutions.ProductAreaIds.Count == 0 && searchCaseSolutions.StatusIds.Count == 0 && searchCaseSolutions.SubStatusIds.Count == 0 && searchCaseSolutions.TemplateProductAreaIds.Count == 0 && searchCaseSolutions.UserWGroupIds.Count == 0 && searchCaseSolutions.WgroupIds.Count == 0)
                         {
 
                             if (cresList.Count == 0 | cresList == null)
@@ -1360,7 +1381,7 @@ namespace DH.Helpdesk.Services.Services
 
 
 
-                if (SearchCaseSolutions.ApplicationIds == null && SearchCaseSolutions.PriorityIds == null && SearchCaseSolutions.ProductAreaIds == null && SearchCaseSolutions.StatusIds == null && SearchCaseSolutions.SubStatusIds == null && SearchCaseSolutions.TemplateProductAreaIds == null && SearchCaseSolutions.UserWGroupIds == null && SearchCaseSolutions.WgroupIds == null)
+                if (searchCaseSolutions.ApplicationIds == null && searchCaseSolutions.PriorityIds == null && searchCaseSolutions.ProductAreaIds == null && searchCaseSolutions.StatusIds == null && searchCaseSolutions.SubStatusIds == null && searchCaseSolutions.TemplateProductAreaIds == null && searchCaseSolutions.UserWGroupIds == null && searchCaseSolutions.WgroupIds == null)
                 {
                     if (cresList.Count == 0 | cresList == null)
                     {
@@ -1377,9 +1398,9 @@ namespace DH.Helpdesk.Services.Services
                     }
                 }
 
-                if (SearchCaseSolutions.ApplicationIds != null && SearchCaseSolutions.PriorityIds != null && SearchCaseSolutions.ProductAreaIds != null && SearchCaseSolutions.StatusIds != null && SearchCaseSolutions.SubStatusIds != null && SearchCaseSolutions.TemplateProductAreaIds != null && SearchCaseSolutions.UserWGroupIds != null && SearchCaseSolutions.WgroupIds != null)
+                if (searchCaseSolutions.ApplicationIds != null && searchCaseSolutions.PriorityIds != null && searchCaseSolutions.ProductAreaIds != null && searchCaseSolutions.StatusIds != null && searchCaseSolutions.SubStatusIds != null && searchCaseSolutions.TemplateProductAreaIds != null && searchCaseSolutions.UserWGroupIds != null && searchCaseSolutions.WgroupIds != null)
                 {
-                    if (SearchCaseSolutions.ApplicationIds.Count == 0 && SearchCaseSolutions.PriorityIds.Count == 0 && SearchCaseSolutions.ProductAreaIds.Count == 0 && SearchCaseSolutions.StatusIds.Count == 0 && SearchCaseSolutions.SubStatusIds.Count == 0 && SearchCaseSolutions.TemplateProductAreaIds.Count == 0 && SearchCaseSolutions.UserWGroupIds.Count == 0 && SearchCaseSolutions.WgroupIds.Count == 0)
+                    if (searchCaseSolutions.ApplicationIds.Count == 0 && searchCaseSolutions.PriorityIds.Count == 0 && searchCaseSolutions.ProductAreaIds.Count == 0 && searchCaseSolutions.StatusIds.Count == 0 && searchCaseSolutions.SubStatusIds.Count == 0 && searchCaseSolutions.TemplateProductAreaIds.Count == 0 && searchCaseSolutions.UserWGroupIds.Count == 0 && searchCaseSolutions.WgroupIds.Count == 0)
                     {
 
                         if (cresList.Count == 0 | cresList == null)
@@ -1414,15 +1435,15 @@ namespace DH.Helpdesk.Services.Services
                .Select(grp => grp.First())
                .ToList();
 
-            if (!string.IsNullOrEmpty(SearchCaseSolutions.SortBy) && (SearchCaseSolutions.SortBy != "undefined"))
+            if (!string.IsNullOrEmpty(searchCaseSolutions.SortBy) && (searchCaseSolutions.SortBy != "undefined"))
             {
-                switch (SearchCaseSolutions.SortBy)
+                switch (searchCaseSolutions.SortBy)
                 {
 
                     case CaseSolutionIndexColumns.Name:
 
 
-                        var query1 = (SearchCaseSolutions.Ascending) ?
+                        var query1 = (searchCaseSolutions.Ascending) ?
                                 cresList.OrderBy(l => (l.Name != null ? l.Name : string.Empty)) :
                                 cresList.OrderByDescending(l => (l.Name != null ? l.Name : string.Empty));
 
@@ -1431,7 +1452,7 @@ namespace DH.Helpdesk.Services.Services
                         break;
 
                     case CaseSolutionIndexColumns.Category:
-                        query1 = (SearchCaseSolutions.Ascending) ?
+                        query1 = (searchCaseSolutions.Ascending) ?
                                 cresList.OrderBy(l => (l.CaseSolutionCategory != null ? l.CaseSolutionCategory.Name : string.Empty)) :
                                 cresList.OrderByDescending(l => (l.CaseSolutionCategory != null ? l.CaseSolutionCategory.Name : string.Empty));
 
@@ -1439,7 +1460,7 @@ namespace DH.Helpdesk.Services.Services
                         break;
 
                     case CaseSolutionIndexColumns.Caption:
-                        query1 = (SearchCaseSolutions.Ascending) ?
+                        query1 = (searchCaseSolutions.Ascending) ?
                                 cresList.OrderBy(l => (l.Caption != null ? l.Caption : string.Empty)) :
                                 cresList.OrderByDescending(l => (l.Caption != null ? l.Caption : string.Empty));
 
@@ -1447,7 +1468,7 @@ namespace DH.Helpdesk.Services.Services
                         break;
 
                     case CaseSolutionIndexColumns.Administrator:
-                        if (SearchCaseSolutions.Ascending)
+                        if (searchCaseSolutions.Ascending)
                             query1 = isFirstNamePresentation ?
                                         cresList.OrderBy(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty))
                                             .ThenBy(l => (l.PerformerUser != null ? l.PerformerUser.SurName : string.Empty)) :
@@ -1466,7 +1487,7 @@ namespace DH.Helpdesk.Services.Services
                         break;
 
                     case CaseSolutionIndexColumns.Priority:
-                        query1 = (SearchCaseSolutions.Ascending) ?
+                        query1 = (searchCaseSolutions.Ascending) ?
                                     cresList.OrderBy(l => (l.Priority != null ? l.Priority.Name : string.Empty)) :
                                     cresList.OrderByDescending(l => (l.Priority != null ? l.Priority.Name : string.Empty));
 
@@ -1475,7 +1496,7 @@ namespace DH.Helpdesk.Services.Services
 
 
                     case CaseSolutionIndexColumns.Status:
-                        query1 = (SearchCaseSolutions.Ascending) ?
+                        query1 = (searchCaseSolutions.Ascending) ?
                                 cresList.OrderBy(l => l.Status) :
                                 cresList.OrderByDescending(l => l.Status);
 
@@ -1483,21 +1504,21 @@ namespace DH.Helpdesk.Services.Services
                         break;
 
                     case CaseSolutionIndexColumns.ConnectedToButton:
-                        query1 = (SearchCaseSolutions.Ascending) ?
+                        query1 = (searchCaseSolutions.Ascending) ?
                                 cresList.OrderBy(l => l.ConnectedButton) :
                                 cresList.OrderByDescending(l => l.ConnectedButton);
 
                         return query1.ToList();
                         break;
                     case CaseSolutionIndexColumns.SortOrder:
-                        query1 = (SearchCaseSolutions.Ascending) ?
+                        query1 = (searchCaseSolutions.Ascending) ?
                                 cresList.OrderBy(l => l.SortOrder) :
                                 cresList.OrderByDescending(l => l.SortOrder);
 
                         return query1.ToList();
                         break;
                     default:
-                        query1 = (SearchCaseSolutions.Ascending) ?
+                        query1 = (searchCaseSolutions.Ascending) ?
                                 cresList.OrderBy(l => (l.Name != null ? l.Name : string.Empty)) :
                                 cresList.OrderByDescending(l => (l.Name != null ? l.Name : string.Empty));
 
@@ -1843,24 +1864,26 @@ namespace DH.Helpdesk.Services.Services
 
         public void Commit()
         {
-
-      
-
-
             this._unitOfWork.Commit();
         }
 
-        public Dictionary<string, string> GetCaseSolutionConditions(int caseSolution_Id)
+        public Dictionary<string, string> GetCaseSolutionConditions(int caseSolutionId)
         {
-            //FYI, this item is cleared when the specific CaseSolution is saved (CaseSolutionController - Edit)
-            Dictionary<string, string> caseSolutionConditions = this._cache.Get(string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition, caseSolution_Id)) as Dictionary<string, string>;
-
+            // FYI, this item is cleared when the specific CaseSolution is saved (CaseSolutionController - Edit)
+            var cacheKey = string.Format(Common.Constants.CacheKey.CaseSolutionConditionWithId, caseSolutionId);
+            var caseSolutionConditions = this._cache.Get(cacheKey) as Dictionary<string, string>;
             if (caseSolutionConditions == null)
             {
-                caseSolutionConditions = _caseSolutionConditionRepository.GetCaseSolutionConditions(caseSolution_Id).Select(x => new { x.Property_Name, x.Values }).ToDictionary(x => x.Property_Name, x => x.Values);
+                caseSolutionConditions = 
+                    _caseSolutionConditionRepository.GetCaseSolutionConditions(caseSolutionId)
+                        .Select(x => new
+                        {
+                            x.Property_Name,
+                            x.Values
+                        }).ToDictionary(x => x.Property_Name, x => x.Values);
 
                 if (caseSolutionConditions.Any())
-                    this._cache.Set(string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionConditionWithId, caseSolution_Id), caseSolutionConditions, DH.Helpdesk.Common.Constants.Cache.Duration);
+                    this._cache.Set(cacheKey, caseSolutionConditions, Common.Constants.Cache.Duration);
             }
 
             return caseSolutionConditions;

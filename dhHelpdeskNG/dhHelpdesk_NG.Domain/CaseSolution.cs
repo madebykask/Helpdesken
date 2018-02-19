@@ -143,5 +143,7 @@ namespace DH.Helpdesk.Domain
 
         public virtual ICollection<CaseSolution_SplitToCaseSolutionEntity> SplitToCaseSolutionDescendants { get; set; }
 
+        public virtual ICollection<CaseSolutionConditionEntity> Conditions { get; set; }
+
     }
 }

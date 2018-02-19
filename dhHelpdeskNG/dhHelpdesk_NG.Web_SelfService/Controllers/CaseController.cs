@@ -2407,7 +2407,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             if (caseEntity != null)
-                return _caseSolutionService.GetGetWorkflowSteps(
+                return _caseSolutionService.GetWorkflowSteps(
                                         customerId, caseEntity, null, 
                                         ApplicationType.LineManager, templateId);            
             return null;

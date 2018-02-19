@@ -254,7 +254,7 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public bool IsItParentCase()
         {
-            return this.ChildCaseViewModel != null && this.ChildCaseViewModel.ChildCaseList != null && this.ChildCaseViewModel.ChildCaseList.Length > 0;
+            return this.ChildCaseViewModel != null && this.ChildCaseViewModel.ChildCaseList != null && this.ChildCaseViewModel.ChildCaseList.Count > 0;
         }
 
         public string CaseRelationType()
@@ -281,7 +281,7 @@ namespace DH.Helpdesk.Web.Models.Case
             }
 
             var childList = this.ChildCaseViewModel.ChildCaseList;
-            if (childList == null || childList.Length == 0)
+            if (childList == null || childList.Count == 0)
             {
                 return false;
             }

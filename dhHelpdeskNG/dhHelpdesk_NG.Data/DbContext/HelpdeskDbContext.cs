@@ -606,6 +606,8 @@
 
         public DbSet<ConditionEntity> Conditions { get; set; }
 
+        public DbSet<ParentChildRelation> ParentChildRelations { get; set; }
+
 		#endregion
 
 		#region Public Methods and Operators

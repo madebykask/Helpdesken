@@ -171,8 +171,7 @@
 
 		public virtual ICollection<Case_CaseSection_ExtendedCase> CaseSectionExtendedCaseDatas { get; set; }
 
-
-		public bool IsClosed()
+        public bool IsClosed()
         {
             return this.FinishingDate != null;
         }
