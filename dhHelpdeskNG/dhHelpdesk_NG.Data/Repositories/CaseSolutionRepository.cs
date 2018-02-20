@@ -65,84 +65,63 @@ namespace DH.Helpdesk.Dal.Repositories
             // these are performance optimised queries. please do not use mappers!
             if (includeConditions.HasValue && includeConditions.Value)
             {
-                var items =
-                   (from cs in query
-                    from ss in DataContext.StateSecondaries.Where(x => x.Id == cs.StateSecondary_Id).DefaultIfEmpty()
-                    from csc in cs.Conditions
-                    select new //use anonymous type to avoid type conversion in query
-                    {
-                        // add only required columns for small sql query
-                        cs.Id,
-                        cs.Name,
-                        cs.StateSecondary_Id,
-                        cs.NextStepState,
-                        cs.Status,
-                        cs.SortOrder,
-                        cs.ConnectedButton,
-
-                        //state secondary
-                        StateSecondary_Name = ss.Name,
-                        StateSecondary_StateSecondaryId = ss.StateSecondaryId,
-
-                        //conditions
-                        Condition_Id = csc.Id,
-                        Condition_Property = csc.Property_Name,
-                        Condition_Values = csc.Values
-                    })
+                res =
+                    (from cs in query
+                        from csc in cs.Conditions
+                        let ss = cs.StateSecondary
+                        select new CaseSolutionOverview
+                        {
+                            CaseSolutionId = cs.Id,
+                            Name = cs.Name,
+                            StateSecondaryId = cs.StateSecondary_Id,
+                            NextStepState = cs.NextStepState,
+                            Status = cs.Status,
+                            SortOrder = cs.SortOrder,
+                            ConnectedButton = cs.ConnectedButton,
+                            StateSecondary = ss != null
+                                ? new StateSecondaryOverview
+                                {
+                                    Id = ss.Id,
+                                    Name = ss.Name,
+                                    StateSecondaryId = ss.StateSecondaryId,
+                                }
+                                : null,
+                            Conditions = cs.Conditions.Select(x => new CaseSolutionConditionOverview()
+                                {
+                                    Id = x.Id,
+                                    Property = x.Property_Name,
+                                    Values = x.Values
+                                })
+                                .ToList()
+                        })
+                    .OrderBy(x => x.SortOrder)
                     .AsNoTracking()
                     .ToList();
-
-                    //group and project to entity result
-                    res = (from gr in items.GroupBy(x => x.Id)
-                            let cs = gr.First()
-                            select new CaseSolutionOverview
-                            {
-                                CaseSolutionId = cs.Id,
-                                Name = cs.Name,
-                                StateSecondaryId = cs.StateSecondary_Id,
-                                NextStepState = cs.NextStepState,
-                                Status = cs.Status,
-                                SortOrder = cs.SortOrder,
-                                ConnectedButton = cs.ConnectedButton,
-                                StateSecondary = new StateSecondaryOverview
-                                {
-                                    Id = cs.StateSecondary_Id ?? 0,
-                                    Name = cs.StateSecondary_Name,
-                                    StateSecondaryId = cs.StateSecondary_StateSecondaryId,
-                                },
-
-                                Conditions = gr.Select(x => new CaseSolutionConditionOverview()
-                                {
-                                    Id = x.Condition_Id,
-                                    Property = x.Condition_Property,
-                                    Values = x.Condition_Values
-                                }).ToList()
-                            })
-                        .OrderBy(x => x.SortOrder)
-                        .ToList();
             }
             else
             {
                 res =
                     (from cs in query
-                     from ss in DataContext.StateSecondaries.Where(x => x.Id == cs.StateSecondary_Id).DefaultIfEmpty()
-                     orderby cs.SortOrder
-                     select new CaseSolutionOverview
-                     {
-                         CaseSolutionId = cs.Id,
-                         Name = cs.Name,
-                         StateSecondaryId = cs.StateSecondary_Id,
-                         NextStepState = cs.NextStepState,
-                         Status = cs.Status,
-                         SortOrder = cs.SortOrder,
-                         ConnectedButton = cs.ConnectedButton,
-                         StateSecondary = new StateSecondaryOverview
-                         {
-                             Id = ss.Id,
-                             Name = ss.Name,
-                             StateSecondaryId = ss.StateSecondaryId,
-                         }
-                     })
+                        let ss = cs.StateSecondary
+                        orderby cs.SortOrder
+                        select new CaseSolutionOverview
+                        {
+                            CaseSolutionId = cs.Id,
+                            Name = cs.Name,
+                            StateSecondaryId = cs.StateSecondary_Id,
+                            NextStepState = cs.NextStepState,
+                            Status = cs.Status,
+                            SortOrder = cs.SortOrder,
+                            ConnectedButton = cs.ConnectedButton,
+                            StateSecondary = ss != null
+                                ? new StateSecondaryOverview
+                                {
+                                    Id = ss.Id,
+                                    Name = ss.Name,
+                                    StateSecondaryId = ss.StateSecondaryId,
+                                }
+                                : null
+                        })
                     .AsNoTracking()
                     .ToList();
             }

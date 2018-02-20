@@ -129,6 +129,7 @@ namespace DH.Helpdesk.Domain
         public virtual User PerformerUser { get; set; }
         public virtual WorkingGroupEntity CaseWorkingGroup { get; set; }
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
+        public virtual StateSecondary StateSecondary { get; set; }
         //public virtual Problem Problem { get; set; }
         public int SortOrder { get; set; }
 

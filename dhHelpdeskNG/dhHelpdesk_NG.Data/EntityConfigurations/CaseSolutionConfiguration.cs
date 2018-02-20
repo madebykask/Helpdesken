@@ -61,6 +61,11 @@
                 .HasForeignKey(x => x.ProductArea_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.StateSecondary)
+                .WithMany()
+                .HasForeignKey(x => x.StateSecondary_Id)
+                .WillCascadeOnDelete(false);
+
             this.HasOptional(x => x.Project)
                 .WithMany()
                 .HasForeignKey(x => x.Project_Id)
