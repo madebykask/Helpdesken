@@ -235,7 +235,7 @@ namespace DH.Helpdesk.Services.Services.Invoice
 				var accountInfo = _accountRepository.GetAccount(fileCase.Key);
 
 				var externalInvoices = String.Join(",", fileCase.Value.Item2.Select(x => x.InvoiceNumber));
-				var referenceNumber = accountInfo?.ReferenceNumber ?? orderInfo?.ReferenceNumber;
+				var referenceNumber = accountInfo?.ReferenceNumber ?? orderInfo?.OrdererReferenceNumber;
 				var amount = fileCase.Value.Item1
 					             .Where(x => x.Charge.ToBool())
 					             .Sum(x => ((decimal)x.WorkingTime / 60) * caseInfo.Department.AccountancyAmount +
