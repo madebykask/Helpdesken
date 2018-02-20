@@ -123,7 +123,7 @@
             PersonsEmail: @Html.Raw(Json.Encode(Model.case_.PersonsEmail)),
             PersonsCellphone: @Html.Raw(Json.Encode(Model.case_.PersonsCellphone)),
             Place: @Html.Raw(Json.Encode(Model.case_.Place)),
-            CostCentre: '@Model.case_.CostCentre'
+            CostCentre: '@Html.Raw(Json.Encode(Model.case_.CostCentre))'
         },
 
         casesScopeInitParameters: {
