@@ -15,8 +15,7 @@ namespace DH.Helpdesk.BusinessData.Models.CaseDocument
         public string Description { get; set; }
         public int ParagraphType { get; set; } //TODO: make enum of this 1, =
 
-         public  ICollection<DH.Helpdesk.Domain.CaseDocumentTextEntity> CaseDocumentTexts { get; set; }
-        // public ICollection<CaseDocumentParagraphModel> CaseDocumentParagraphs { get; set; }
+        public IList<CaseDocumentTextModel> CaseDocumentTexts { get; set; }
 
         ////TODO: place below in base class model so we dont need to add this on all places
         //public int Status { get; set; }

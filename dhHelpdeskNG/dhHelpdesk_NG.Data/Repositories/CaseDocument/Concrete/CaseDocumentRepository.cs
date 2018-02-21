@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Data;
 
 namespace DH.Helpdesk.Dal.Repositories.CaseDocument.Concrete
 {
@@ -25,29 +25,79 @@ namespace DH.Helpdesk.Dal.Repositories.CaseDocument.Concrete
             _CaseDocumentToEntityMapper = CaseDocumentToEntityMapper;
         }
 
-        public IEnumerable<CaseDocumentModel> GetCaseDocumentsByCustomer(int customerId)
-        {
-
-            var entities = this.Table
-                  .Where(c => c.Customer_Id == customerId && c.Status > 0)
-                   .Distinct()
-                   .ToList();
-
-            return entities.Select(this._CaseDocumentToBusinessModelMapper.Map);
-        }
-
-        public CaseDocumentModel GetCaseDocument(Guid caseDocumentGUID)
+        public IList<CaseDocumentOverview> GetCustomerCaseDocumentsWithConditions(int caseId, int customerId)
         {
             var entities = this.Table
-                    .Where(c => c.CaseDocumentGUID == caseDocumentGUID && c.Status > 0)
+                .Where(c => c.Customer_Id == customerId && c.Status > 0)
+                .Select(c => new CaseDocumentOverview
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    FileType = c.FileType,
+                    SortOrder = c.SortOrder,
+                    CaseId = caseId,
+                    CaseDocumentGUID = c.CaseDocumentGUID,
+                    CaseDocumentTemplate_Id = c.CaseDocumentTemplate_Id,
+                    Conditions = c.Conditions.Select(cc => new DocumentConditionOverview()
+                    {
+                        Properpty = cc.Property_Name,
+                        Values = cc.Values
+                    }).ToList()
+                })
+                .ToList();
 
-                   .Distinct()
-                   .ToList();
-
-            return entities.Select(this._CaseDocumentToBusinessModelMapper.Map).FirstOrDefault();
+            return entities;
         }
 
-      
+        public CaseDocumentModel GetCaseDocumentFull(Guid caseDocumentGUID)
+        {
+            var query =
+                from caseDoc in this.DataContext.CaseDocuments
+                where caseDoc.CaseDocumentGUID == caseDocumentGUID && caseDoc.Status > 0
+                select new CaseDocumentModel
+                {
+                    Id = caseDoc.Id,
+                    Name = caseDoc.Name,
+                    CaseDocumentTemplate_Id = caseDoc.CaseDocumentTemplate_Id,
+                    CaseDocumentGUID = caseDoc.CaseDocumentGUID,
+                    Customer_Id = caseDoc.Customer_Id,
+                    Description = caseDoc.Description,
+                    FileType = caseDoc.FileType,
+                    SortOrder = caseDoc.SortOrder,
+                    Status = caseDoc.Status,
+                    CaseDocumentParagraphs =
+                        caseDoc.CaseDocumentParagraphs.Select(x => new CaseDocumentParagraphModel()
+                            {
+                                Id = x.Id,
+                                Name = x.Name,
+                                Description = x.Description,
+                                ParagraphType = x.ParagraphType,
+                                CaseDocumentTexts = x.CaseDocumentTexts.Select(t => new CaseDocumentTextModel()
+                                    {
+                                        Id = t.Id,
+                                        Name = t.Name,
+                                        Text = t.Text,
+                                        Description = t.Description,
+                                        Conditions =
+                                            t.Conditions.Where(tc => tc.Status != 0)
+                                                .Select(tc => new CaseDocumentTextConditionModel()
+                                                {
+                                                    Id = tc.Id,
+                                                    Property_Name = tc.Property_Name,
+                                                    Values = tc.Values,
+                                                    CaseDocumentTextConditionGUID = tc.CaseDocumentTextConditionGUID,
+                                                    CaseDocumentText_Id = tc.CaseDocumentText_Id,
+                                                    Operator = tc.Operator
+                                                })
+                                                .ToList()
+                                    })
+                                    .ToList()
+                            })
+                            .ToList()
+                };
 
+            var res = query.FirstOrDefault();
+            return res;
+        }
     }
 }

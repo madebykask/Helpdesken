@@ -27,7 +27,6 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
         public ExtendedCaseValueEntity GetExtendedCaseValue(int extendedCaseDataId, string fieldId)
         {
-
             return this.Table
                   .Where(c => c.ExtendedCaseDataId == extendedCaseDataId && c.FieldId.ToLower() == fieldId.ToLower()) 
                   .Distinct()

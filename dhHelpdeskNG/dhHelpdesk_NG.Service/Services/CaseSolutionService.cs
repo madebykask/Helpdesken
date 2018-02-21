@@ -307,6 +307,7 @@ namespace DH.Helpdesk.Services.Services
         }
 
         //todo: poor spaghetti-code implementation! Need to refactor to create separate extendable and maintainable class(es) aligned with SOLID and OOP principles
+        // CaseDocumentService.ShowCaseDocument and CaseDocumentService.CheckCaseDocumentTextConditions similar method where same approach can be shared! 
         private bool ShowWorkflowStep(WorkflowConditionsContext ctx)
         {
             var _case = ctx.Case;

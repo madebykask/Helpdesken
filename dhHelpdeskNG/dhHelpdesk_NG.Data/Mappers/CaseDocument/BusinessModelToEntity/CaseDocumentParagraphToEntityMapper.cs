@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Dal.Mappers.CaseDocument
+﻿
+using System.Collections.Generic;
+using System.Linq;
+
+namespace DH.Helpdesk.Dal.Mappers.CaseDocument
 {
     using BusinessData.Models.CaseDocument;
     using DH.Helpdesk.Domain;
@@ -11,12 +15,24 @@
             {
                 return;
             }
-
+            
             entity.Id = businessModel.Id;
             entity.Name = businessModel.Name;
             entity.Description = businessModel.Description;
             entity.ParagraphType = businessModel.ParagraphType;
-            entity.CaseDocumentTexts = businessModel.CaseDocumentTexts;
+
+            if (businessModel.CaseDocumentTexts != null && businessModel.CaseDocumentTexts.Any())
+            {
+                var mapper = new CaseDocumentTextToEntityMapper();
+                entity.CaseDocumentTexts = new List<CaseDocumentTextEntity>();
+
+                foreach (var textModel in businessModel.CaseDocumentTexts)
+                {
+                    var textEntity = new CaseDocumentTextEntity();
+                    mapper.Map(textModel, textEntity);
+                    entity.CaseDocumentTexts.Add(textEntity);
+                }
+            }
         }
     }
 }

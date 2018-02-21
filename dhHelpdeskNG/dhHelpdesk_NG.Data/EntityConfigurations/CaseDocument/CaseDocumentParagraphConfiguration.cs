@@ -14,6 +14,7 @@
             Property(e => e.Name).IsOptional().HasMaxLength(50);
             Property(e => e.Description).IsOptional().HasMaxLength(50);
             Property(e => e.ParagraphType).IsRequired();
+
             ToTable("tblCaseDocumentParagraph");
         }
 

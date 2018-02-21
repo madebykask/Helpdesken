@@ -1,5 +1,5 @@
 ﻿namespace DH.Helpdesk.Dal.EntityConfigurations.CaseDocument
-{    
+{
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.ModelConfiguration;
     using DH.Helpdesk.Domain;
@@ -22,6 +22,10 @@
              .WithMany(t => t.CaseDocumentTexts)
              .HasForeignKey(d => d.CaseDocumentParagraph_Id).WillCascadeOnDelete(false);
 
+            HasMany(x => x.Conditions)
+                .WithOptional()
+                .HasForeignKey(x => x.CaseDocumentText_Id)
+                .WillCascadeOnDelete(false);
 
             ToTable("tblCaseDocumentText");
         }

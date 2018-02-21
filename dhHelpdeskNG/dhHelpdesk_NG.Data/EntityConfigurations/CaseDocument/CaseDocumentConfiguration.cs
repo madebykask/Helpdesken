@@ -25,13 +25,24 @@
             Property(e => e.ChangedDate).IsRequired();
             Property(e => e.CaseDocumentTemplate_Id).IsRequired();
 
-
-
             this.HasRequired(c => c.CaseDocumentTemplate)
-           .WithMany(c => c.CaseDocuments)
-           .HasForeignKey(c => c.CaseDocumentTemplate_Id)
-           .WillCascadeOnDelete(false);
+                .WithMany(c => c.CaseDocuments)
+                .HasForeignKey(c => c.CaseDocumentTemplate_Id)
+                .WillCascadeOnDelete(false);
 
+            this.HasMany(c => c.Conditions)
+                .WithOptional()
+                .HasForeignKey(c => c.CaseDocument_Id)
+                .WillCascadeOnDelete(false);
+
+            this.HasMany(c => c.CaseDocumentParagraphs)
+                .WithMany()
+                .Map(cdp =>
+                {
+                    cdp.MapLeftKey("CaseDocument_Id");
+                    cdp.MapRightKey("CaseDocumentParagraph_Id");
+                    cdp.ToTable("tblCaseDocument_CaseDocumentParagraph");
+                });
 
             ToTable("tblCaseDocument");
         }

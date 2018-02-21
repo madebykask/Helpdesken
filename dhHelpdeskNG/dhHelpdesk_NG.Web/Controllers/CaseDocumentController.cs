@@ -275,10 +275,10 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult CaseDocumentGet(Guid caseDocumentGUID, int id)
         {
             string footerText = "";
-            CaseDocumentModel m = _caseDocumentService.GetCaseDocument(caseDocumentGUID, id);
+            var caseDoc = _caseDocumentService.GetCaseDocument(caseDocumentGUID, id);
             try
             {
-                footerText = m.CaseDocumentParagraphs.Where(x => x.CaseDocumentParagraph.ParagraphType == 5).FirstOrDefault().CaseDocumentParagraph.CaseDocumentTexts.FirstOrDefault().Text;
+                footerText = caseDoc.CaseDocumentParagraphs.Where(x => x.ParagraphType == 5).FirstOrDefault().CaseDocumentTexts.FirstOrDefault().Text;
             }
             catch (Exception)
             {
@@ -287,7 +287,7 @@ namespace DH.Helpdesk.Web.Controllers
             string draftText = "";
             try
             {
-                draftText = m.CaseDocumentParagraphs.Where(x => x.CaseDocumentParagraph.ParagraphType == 6).FirstOrDefault().CaseDocumentParagraph.CaseDocumentTexts.FirstOrDefault().Text;
+                draftText = caseDoc.CaseDocumentParagraphs.Where(x => x.ParagraphType == 6).FirstOrDefault().CaseDocumentTexts.FirstOrDefault().Text;
             }
             catch (Exception)
             {
@@ -296,7 +296,7 @@ namespace DH.Helpdesk.Web.Controllers
             string headerText = "";
             try
             {
-                headerText = m.CaseDocumentParagraphs.Where(x => x.CaseDocumentParagraph.ParagraphType == 7).FirstOrDefault().CaseDocumentParagraph.CaseDocumentTexts.FirstOrDefault().Text;
+                headerText = caseDoc.CaseDocumentParagraphs.Where(x => x.ParagraphType == 7).FirstOrDefault().CaseDocumentTexts.FirstOrDefault().Text;
             }
             catch (Exception)
             {
@@ -305,7 +305,7 @@ namespace DH.Helpdesk.Web.Controllers
             string headerAlternativeText = "";
             try
             {
-                headerAlternativeText = m.CaseDocumentParagraphs.Where(x => x.CaseDocumentParagraph.ParagraphType == 8).FirstOrDefault().CaseDocumentParagraph.CaseDocumentTexts.FirstOrDefault().Text;
+                headerAlternativeText = caseDoc.CaseDocumentParagraphs.Where(x => x.ParagraphType == 8).FirstOrDefault().CaseDocumentTexts.FirstOrDefault().Text;
             }
             catch (Exception)
             {
@@ -314,7 +314,7 @@ namespace DH.Helpdesk.Web.Controllers
             string footerAlternativeText = "";
             try
             {
-                footerAlternativeText = m.CaseDocumentParagraphs.Where(x => x.CaseDocumentParagraph.ParagraphType == 9).FirstOrDefault().CaseDocumentParagraph.CaseDocumentTexts.FirstOrDefault().Text;
+                footerAlternativeText = caseDoc.CaseDocumentParagraphs.Where(x => x.ParagraphType == 9).FirstOrDefault().CaseDocumentTexts.FirstOrDefault().Text;
             }
             catch (Exception)
             {
@@ -322,7 +322,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             //// Get the base URL
             string baseUrl = this.ControllerContext.HttpContext.Request.Url.AbsoluteUri;
-            byte[] outPdfBuffer = GeneratePdf(m, baseUrl, footerText, draftText, headerText, headerAlternativeText, footerAlternativeText).ToArray();
+            byte[] outPdfBuffer = GeneratePdf(caseDoc, baseUrl, footerText, draftText, headerText, headerAlternativeText, footerAlternativeText).ToArray();
             return this.Pdf(outPdfBuffer);
         }
 

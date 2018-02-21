@@ -223,7 +223,7 @@ namespace DH.Helpdesk.Web.Models.Case
 
 		public IList<ExtendedCaseFormModel> ComputerUserCategoryExtendedCases { get; set; }
 
-		public IEnumerable<CaseDocumentModel> CaseDocuments { get; set; }
+		public IList<CaseDocumentModel> CaseDocuments { get; set; }
 
         #region Date field from case_. Converted to user time zone
 

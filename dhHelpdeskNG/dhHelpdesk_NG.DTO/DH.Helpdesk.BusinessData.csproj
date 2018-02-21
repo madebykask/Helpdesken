@@ -172,8 +172,10 @@
     <Compile Include="Models\BusinessRules-Depricated\Rule.cs" />
     <Compile Include="Models\BusinessRules\BusinessRuleModel.cs" />
     <Compile Include="Models\BusinessRules\BusinessRuleReadModel.cs" />
+    <Compile Include="Models\CaseDocument\CaseDocumentOverview.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentTemplateModel.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentTextConditionIdentifierModel.cs" />
+    <Compile Include="Models\CaseDocument\DocumentConditionOverview.cs" />
     <Compile Include="Models\Case\CaseSolutionConditionOverview.cs" />
     <Compile Include="Models\Case\CaseSolutionInfo.cs" />
     <Compile Include="Models\Case\CaseSolutionOverview.cs" />

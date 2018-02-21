@@ -23,7 +23,7 @@ namespace DH.Helpdesk.Services.Services
 	public interface ICaseDocumentService
     {
         CaseDocumentModel GetCaseDocument(Guid caseDocumentGUID, int caseId);
-        IEnumerable<CaseDocumentModel> GetCaseDocuments(int customerId, Case _case, UserOverview user, ApplicationType applicationType);
+        IList<CaseDocumentModel> GetCaseDocuments(int customerId, Case _case, UserOverview user, ApplicationType applicationType);
     }
 
     public class CaseDocumentService : ICaseDocumentService
@@ -287,30 +287,31 @@ namespace DH.Helpdesk.Services.Services
            var _case = _caseService.GetCaseById(caseId);
 
 
-            var caseDocument = this._caseDocumentRepository.GetCaseDocument(caseDocumentGUID);
+            var caseDocument = this._caseDocumentRepository.GetCaseDocumentFull(caseDocumentGUID);
 
 			var errorMessageBuilder = new StringBuilder();
 
             if (caseDocument.CaseDocumentParagraphs != null)
             {
-                foreach (var item in caseDocument.CaseDocumentParagraphs)
+                foreach (var paragraph in caseDocument.CaseDocumentParagraphs)
                 {
-                    if (item.CaseDocumentParagraph.CaseDocumentTexts != null)
+                    if (paragraph.CaseDocumentTexts != null)
                     {
-                        foreach (var paragraphText in item.CaseDocumentParagraph.CaseDocumentTexts)
+                        foreach (var paragraphText in paragraph.CaseDocumentTexts)
                         {
 							//TODO: Refactor. For performance, at the moment we are fetching values that dont need to be fetched.
-							var conditionResult = CheckCaseDocumentTextConditions(_case, paragraphText.Id);
+							var conditionResult = CheckCaseDocumentTextConditions(_case, paragraphText.Conditions);
 
 							if (conditionResult.Show)
                             {
 								var results = ReplaceWithValue(caseDocument.Id, caseId, paragraphText.Text);
 
-								var errors = results.FailedMappings.Count == 0 ? new List<string>() :
-									results.FailedMappings
-										.Where(o => paragraphText.Text.Contains(o.Key))
-										.Select(o => $"{o.Key}: {o.Value}")
-										.ToList();
+                                var errors =
+                                    results.FailedMappings.Count == 0
+                                        ? new List<string>()
+                                        : results.FailedMappings.Where(o => paragraphText.Text.Contains(o.Key))
+                                            .Select(o => $"{o.Key}: {o.Value}")
+                                            .ToList();
 
 								if (errors.Count > 0)
 								{
@@ -343,36 +344,58 @@ namespace DH.Helpdesk.Services.Services
             return caseDocument;
         }
       
-        public IEnumerable<CaseDocumentModel> GetCaseDocuments(int customerId, Case _case, UserOverview user, ApplicationType applicationType)
+        public IList<CaseDocumentModel> GetCaseDocuments(int customerId, Case _case, UserOverview user, ApplicationType applicationType)
         {
             //TODO, do not need to fetch all from customer, filter this out better
-            var caseDocuments = this._caseDocumentRepository.GetCaseDocumentsByCustomer(customerId).Select(c => new CaseDocumentModel()
+            var caseDocuments = 
+                _caseDocumentRepository.GetCustomerCaseDocumentsWithConditions(_case.Id, customerId).OrderBy(c => c.SortOrder).ToList();
+
+            var modelList = new List<CaseDocumentModel>();
+
+            var context = new CaseDocumentConditionsContext
             {
-                Id = c.Id,
-                Name = c.Name,
-                FileType = c.FileType,
-                SortOrder = c.SortOrder,
-                CaseId = _case.Id,
-                CaseDocumentGUID = c.CaseDocumentGUID
+                CustomerId = customerId,
+                Case = _case,
+                //CaseDocument = 
+                User = user,
+                ApplicationType = applicationType
+            };
 
-            }).OrderBy(c => c.SortOrder).ToList();
+            foreach (var cd in caseDocuments)
+            {
+                context.CaseDocument = cd;
 
-            return caseDocuments.Where(c =>
-			{
-				var result = ShowCaseDocument(customerId, _case, c.Id, user, applicationType);
-				return result.Show;
-			}).ToList();
+                var res = ShowCaseDocument(context);
+
+                if (res.Show)
+                {
+                    modelList.Add(new CaseDocumentModel
+                    {
+                        Id = cd.Id,
+                        Name = cd.Name,
+                        FileType = cd.FileType,
+                        SortOrder = cd.SortOrder,
+                        CaseId = _case.Id,
+                        CaseDocumentGUID = cd.CaseDocumentGUID
+                    });
+                }
+            }
+
+            return modelList;
         }
 
-
-		//TODO: REFACTOR, this could be used the "same" way as workflowstep... 
-		private CaseDocumentConditionResult ShowCaseDocument(int customerId, Case _case, int caseDocumentId, UserOverview user, ApplicationType applicationType)
+        //TODO: REFACTOR, this could be used the "same" way as CaseSolutionService.ShowWorkflowStep... 
+        private CaseDocumentConditionResult ShowCaseDocument(CaseDocumentConditionsContext ctx)
 		{
-			//ALL conditions must be met
-			bool showDocument = false;
+            //int customerId, Case _case, CaseDocumentOverview caseDocument, UserOverview user, ApplicationType applicationType
 
-			//If no conditions are set in (CaseSolutionCondition) for the template, do not show step in list
-			var conditions = this.GetCaseDocumentConditions(caseDocumentId);
+            //ALL conditions must be met
+            var showDocument = false;
+
+		    var caseDocument = ctx.CaseDocument;
+		    
+            //If no conditions are set in (CaseSolutionCondition) for the template, do not show step in list
+		    var conditions = caseDocument.Conditions;
 
 			if (conditions == null || conditions.Count() == 0)
 			{
@@ -382,10 +405,13 @@ namespace DH.Helpdesk.Services.Services
 				};
 			}
 
+		    var _case = ctx.Case;
+		    var user = ctx.User;
+            
             foreach (var condition in conditions)
             {
-                var conditionValue = condition.Value.Tidy().ToLower();
-                var conditionKey = condition.Key.Tidy();
+                var conditionValue = condition.Values.Tidy().ToLower();
+                var conditionKey = condition.Properpty.Tidy();
 
 				try
 				{
@@ -394,7 +420,7 @@ namespace DH.Helpdesk.Services.Services
                     //GET FROM APPLICATION
                     if (conditionKey.ToLower() == "application_type")
                     {
-                        int appType = (int)((ApplicationType)Enum.Parse(typeof(ApplicationType), applicationType.ToString()));
+                        int appType = (int)((ApplicationType)Enum.Parse(typeof(ApplicationType), ctx.ApplicationType.ToString())); // is it required?
                         value = appType.ToString();
                     }
                     //GET FROM EXTENDEDCASE
@@ -440,7 +466,7 @@ namespace DH.Helpdesk.Services.Services
                     }
                     
                     // Check conditions
-                    if (!string.IsNullOrEmpty(value) && conditionValue.IndexOf(value.ToLower()) > -1)
+                    if (!string.IsNullOrEmpty(value) && conditionValue.IndexOf(value, StringComparison.CurrentCultureIgnoreCase) > -1)
                     {
                         showDocument = true;
                         continue;
@@ -477,15 +503,16 @@ namespace DH.Helpdesk.Services.Services
 				Show = showDocument
 			}; 
         }
-        //TODO: REFACTOR
-        private CaseDocumentConditionResult CheckCaseDocumentTextConditions(Case _case, int caseDocumentText_Id)
+
+        //TODO: REFACTOR, same approach as in CaseSolutionConditions and CaseDocumentConditions
+        private CaseDocumentConditionResult CheckCaseDocumentTextConditions(Case _case, IList<CaseDocumentTextConditionModel> conditions)
         {
             //If there are more than one conditions, all conditions must be fulfilled
 
             //IF there are no conditions set, it should be visible         
-            var conditions = this.GetCaseDocumentTextConditions(caseDocumentText_Id).ToList();
+            //var conditions = this.GetCaseDocumentTextConditions(caseDocumentText_Id).ToList();
 
-			bool results = false;
+			var results = false;
             //IF there are no conditions set, it should be visible
             if (conditions == null || conditions.Count() == 0)
 			{
@@ -494,9 +521,8 @@ namespace DH.Helpdesk.Services.Services
 					Show = true
 				};
 			}
-
-
-            int extendedCaseFormId = 0;
+            
+            var extendedCaseFormId = 0;
             if (_case.CaseExtendedCaseDatas != null && _case.CaseExtendedCaseDatas.Count > 0)
             {
                 extendedCaseFormId = _case.CaseExtendedCaseDatas.First().ExtendedCaseData.ExtendedCaseFormId;
@@ -504,10 +530,8 @@ namespace DH.Helpdesk.Services.Services
 
 			foreach (var condition in conditions)
 			{
-
 				var conditionValue = condition.Values.Tidy().ToLower();
 				var conditionKey = condition.Property_Name.Tidy();
-
 
 				try
 				{
@@ -587,15 +611,15 @@ namespace DH.Helpdesk.Services.Services
 			};
         }
 
-
         public Dictionary<string, string> GetCaseDocumentConditions(int caseDocument_Id)
         {
-            Dictionary<string, string> caseDocumentConditions = _caseDocumentConditionRepository.GetCaseDocumentConditions(caseDocument_Id).Select(x => new { x.Property_Name, x.Values }).ToDictionary(x => x.Property_Name, x => x.Values);
+            var caseDocumentConditions =
+                _caseDocumentConditionRepository.GetCaseDocumentConditions(caseDocument_Id)
+                    .Select(x => new { x.Property_Name, x.Values })
+                    .ToDictionary(x => x.Property_Name, x => x.Values);
+
             return caseDocumentConditions;
         }
-
-
-
 
 		//public Tuple<string, string,string> GetCaseDocumentTextConditions(int caseDocumentText_Id)
 		//{
@@ -606,7 +630,6 @@ namespace DH.Helpdesk.Services.Services
 		//    return caseDocumentTextConditions;
 		//}
 
-
 		public IEnumerable<CaseDocumentTextConditionModel> GetCaseDocumentTextConditions(int caseDocumentText_Id)
         {
             var caseDocumentTextConditions = _caseDocumentTextConditionRepository.GetCaseDocumentTextConditions(caseDocumentText_Id);
@@ -614,5 +637,13 @@ namespace DH.Helpdesk.Services.Services
             return caseDocumentTextConditions;
         }
 
+        private class CaseDocumentConditionsContext
+        {
+            public int CustomerId { get; set; }
+            public Case Case { get; set; }
+            public CaseDocumentOverview CaseDocument { get; set; }
+            public UserOverview User { get; set; }
+            public ApplicationType ApplicationType { get; set; }
+        }
     }
 }

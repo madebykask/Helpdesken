@@ -5937,6 +5937,8 @@ namespace DH.Helpdesk.Web.Controllers
             if (m.DynamicCase != null)
             {
                 var l = m.Languages.Where(x => x.Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
+                
+                //todo: use UrlBuilder!
                 m.DynamicCase.FormPath = m.DynamicCase.FormPath
                     .Replace("[CaseId]", m.case_.Id.ToString())
                     .Replace("[UserId]", SessionFacade.CurrentUser.UserId.ToString())
@@ -5950,6 +5952,7 @@ namespace DH.Helpdesk.Web.Controllers
             // Computer user categories
             var categories = _computerService.GetComputerUserCategoriesByCustomerID(customerId);
 
+            //todo: Performance. Check if HasExtendedComputerUsers can be retrieved with one query?
             m.ComputerUserCategories = categories;
             m.HasExtendedComputerUsers = categories.SelectMany(o => o.CaseSolution.CaseSectionsExtendedCaseForm).Any();
 

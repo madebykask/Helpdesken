@@ -591,7 +591,7 @@
         public DbSet<CaseDocumentConditionEntity> CaseDocumentConditions { get; set; }
         public DbSet<CaseDocumentParagraphEntity> CaseDocumentParagraphs { get; set; }
 
-        public DbSet<CaseDocument_CaseDocumentParagraphEntity> CaseDocument_CaseDocumentParagraphs { get; set; }
+        //public DbSet<CaseDocument_CaseDocumentParagraphEntity> CaseDocument_CaseDocumentParagraphs { get; set; }
         public DbSet<CaseDocumentTextEntity> CaseDocumentTexts { get; set; }
 
         public DbSet<CaseDocumentParagraphConditionEntity> CaseDocumentParagraphConditions { get; set; }
@@ -904,7 +904,7 @@
             modelBuilder.Configurations.Add(new CaseDocumentConfiguration());
             modelBuilder.Configurations.Add(new CaseDocumentConditionConfiguration());
             modelBuilder.Configurations.Add(new CaseDocumentParagraphConfiguration());
-            modelBuilder.Configurations.Add(new CaseDocument_CaseDocumentParagraphConfiguration());
+            //modelBuilder.Configurations.Add(new CaseDocument_CaseDocumentParagraphConfiguration());
             modelBuilder.Configurations.Add(new CaseDocumentTextConfiguration());
 
             modelBuilder.Configurations.Add(new CaseDocumentParagraphConditionConfiguration());
