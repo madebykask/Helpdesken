@@ -2413,7 +2413,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (caseEntity != null)
                 res = _caseSolutionService.GetWorkflowSteps(customerId, caseEntity, customerCaseSolutions, isRealtedCase, null, ApplicationType.LineManager, templateId);            
 
-            return res;
+            return res.ToList();
         }
 
         #region Helper Methods

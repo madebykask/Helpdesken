@@ -1,3 +1,4 @@
+using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 
 namespace DH.Helpdesk.Dal.Repositories

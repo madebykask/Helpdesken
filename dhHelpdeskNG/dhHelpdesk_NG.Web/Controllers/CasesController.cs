@@ -5975,7 +5975,11 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         //Take the highest workinggroupId with "Admin" access (UserRole)
                         int userWorkingGroupId = 0;
-                        var userWorkingGroup = this._workingGroupService.GetWorkingGroupsAdmin(customerId, SessionFacade.CurrentUser.Id).OrderByDescending(x => x.WorkingGroupId).FirstOrDefault();
+                        var userWorkingGroup =
+                            this._workingGroupService.GetWorkingGroupsAdmin(customerId, SessionFacade.CurrentUser.Id)
+                                .OrderByDescending(x => x.WorkingGroupId)
+                                .FirstOrDefault();
+
                         if (userWorkingGroup != null)
                         {
                             userWorkingGroupId = userWorkingGroup.WorkingGroupId;
@@ -6031,7 +6035,10 @@ namespace DH.Helpdesk.Web.Controllers
                     else
                     {
                         //Take the highest workinggroupId with "Admin" access (UserRole)
-                        var userWorkingGroup = this._workingGroupService.GetWorkingGroupsAdmin(customerId, SessionFacade.CurrentUser.Id).OrderByDescending(x => x.WorkingGroupId).FirstOrDefault();
+                        var userWorkingGroup =
+                            this._workingGroupService.GetWorkingGroupsAdmin(customerId, SessionFacade.CurrentUser.Id)
+                                .OrderByDescending(x => x.WorkingGroupId)
+                                .FirstOrDefault();
 
                         int userWorkingGroupId = 0;
 

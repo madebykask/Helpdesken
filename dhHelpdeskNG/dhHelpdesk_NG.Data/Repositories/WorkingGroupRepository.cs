@@ -20,6 +20,7 @@ namespace DH.Helpdesk.Dal.Repositories
         List<IdAndNameOverview> FindActiveIdAndNameOverviews(int customerId); 
             
         IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId);
+        IList<int> ListWorkingGroupsForUser(int userId);
 
         int? GetDefaultWorkingGroupId(int customerId, int userId);
 
@@ -105,6 +106,16 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             return null;
+        }
+
+        public IList<int> ListWorkingGroupsForUser(int userId)
+        {
+            var userWorkingGroups =
+                this.DataContext.UserWorkingGroups.Where(uw => uw.User_Id == userId)
+                    .Select(uw => uw.WorkingGroup_Id)
+                    .ToList();
+
+            return userWorkingGroups;
         }
 
         public IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId)

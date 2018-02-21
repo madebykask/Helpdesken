@@ -44,7 +44,7 @@ namespace DH.Helpdesk.Services.Services
         void SaveCaseSolutionCategory(CaseSolutionCategory caseSolutionCategory, out IDictionary<string, string> errors);
         void SaveEmptyForm(Guid formGuid, int caseId);
         void Commit();
-        IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case _case, IList<CaseSolutionOverview> caseSolutions, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId);
+        IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case case_, IList<CaseSolutionOverview> caseSolutions, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId);
 
         IList<CaseSolution> GetCaseSolutions();
 
@@ -72,6 +72,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly IStateSecondaryService _stateSecondaryService;
         private readonly ICaseService _caseService;
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
+
+        private readonly Dictionary<string, IList<WorkingGroupEntity>> _adminGroups =
+            new Dictionary<string, IList<WorkingGroupEntity>>(StringComparer.OrdinalIgnoreCase);
 
         public CaseSolutionService(
             ICaseSolutionRepository caseSolutionRepository,
@@ -117,15 +120,12 @@ namespace DH.Helpdesk.Services.Services
 
             if (userId.HasValue && userId.Value > 0)
             {
-                // filter case solutions by working groups
+                // restrict case solutions by user working groups
                 var userWorkingGroups =
-                    _workingGroupService.GetUsersForWorkingGroup(userId.Value).Select(x => x.WorkingGroup_Id).ToList();
-
-                if (userWorkingGroups.Any())
-                {
-                    customerCaseSolutions =
-                        customerCaseSolutions.Where(cs => cs.WorkingGroupId == null || userWorkingGroups.Contains(cs.WorkingGroupId.Value)).ToList();
-                }
+                    _workingGroupService.ListWorkingGroupsForUser(userId.Value);
+                
+                customerCaseSolutions =
+                    customerCaseSolutions.Where(cs => cs.WorkingGroupId == null || userWorkingGroups.Contains(cs.WorkingGroupId.Value)).ToList();
             }
 
             return customerCaseSolutions;
@@ -265,7 +265,7 @@ namespace DH.Helpdesk.Services.Services
             //return this._applicationRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
-        public IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case _case, IList<CaseSolutionOverview> caseSolutions, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId)
+        public IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case case_, IList<CaseSolutionOverview> caseSolutions, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId)
         {
             var solutionsIds = caseSolutions.Where(x => x.ConnectedButton == 0).Select(x => x.CaseSolutionId).ToList();
 
@@ -273,9 +273,20 @@ namespace DH.Helpdesk.Services.Services
                 _caseSolutionRepository.GetCaseSolutionsConditions(solutionsIds);
 
             var modelList = new List<WorkflowStepModel>();
+            var workflowStepsContext = new WorkflowConditionsContext
+            {
+                CustomerId = customerId,
+                Case = case_,
+                User = user,
+                ApplicationType = applicationType,
+                TemplateId = templateId,
+                IsRelatedCase = isRelatedCase
+            };
+
             foreach (var cs in caseSolutionsConditions)
             {
-                var res = ShowWorkflowStep(customerId, _case, cs, user, applicationType, templateId, isRelatedCase);
+                workflowStepsContext.CaseSolution = cs;
+                var res = ShowWorkflowStep(workflowStepsContext);
                 if (res)
                 {
                     var workFlowStepModel = new WorkflowStepModel
@@ -296,8 +307,12 @@ namespace DH.Helpdesk.Services.Services
         }
 
         //todo: poor spaghetti-code implementation! Need to refactor to create separate extendable and maintainable class(es) aligned with SOLID and OOP principles
-        private bool ShowWorkflowStep(int customerId, Case _case, CaseSolutionOverview caseSolution, UserOverview user, ApplicationType applicationType, int? templateId, bool isRelatedCase)
+        private bool ShowWorkflowStep(WorkflowConditionsContext ctx)
         {
+            var _case = ctx.Case;
+            var caseSolution = ctx.CaseSolution;
+            var user = ctx.User; 
+
             //ALL conditions must be met
             var showWorkflowStep = false;
 
@@ -322,7 +337,7 @@ namespace DH.Helpdesk.Services.Services
                     //Check if case is related (either child or parent);
                     if (conditionKey.ToLower() == "case_relation")
                     {
-                        if (isRelatedCase)
+                        if (ctx.IsRelatedCase)
                         {
                             value = "1";
                         }
@@ -335,24 +350,27 @@ namespace DH.Helpdesk.Services.Services
                     //GET FROM APPLICATION
                     else if (conditionKey.ToLower() == "application_type")
                     {
-                        int appType = (int)((ApplicationType)Enum.Parse(typeof(ApplicationType), applicationType.ToString()));
+                        int appType = (int)((ApplicationType)Enum.Parse(typeof(ApplicationType), ctx.ApplicationType.ToString()));
                         value = appType.ToString();
                     }
                     //GET FROM USER
                     else if (conditionKey.ToLower().StartsWith("user_WorkingGroup.WorkingGroupGUID".ToLower()))
                     {
                         //Get working groups connected to "UserRole.Admin"
-                        var workingGroups = this._workingGroupService.GetWorkingGroupsAdmin(customerId, user.Id);
 
-                        bool wgShowWorkflowStep = false;
+                        if (ctx.WorkingGroups == null)
+                        {
+                            //store int context for next methods calls
+                            ctx.WorkingGroups = _workingGroupService.GetWorkingGroupsAdmin(ctx.CustomerId, user.Id);
+                        }
 
-                        string[] conditionValues = conditionValue.Split(',').Select(sValue => sValue.Trim()).ToArray();
+                        var wgShowWorkflowStep = false;
+                        var conditionValues = conditionValue.Split(',').Select(sValue => sValue.Trim()).ToArray();
 
                         for (int i = 0; i < conditionValues.Length; i++)
                         {
                             var val = conditionValues[i];
-
-                            if (workingGroups.Where(x => x.WorkingGroupGUID.ToString().ToLower() == conditionValues[i]).Count() > 0)
+                            if (ctx.WorkingGroups.Where(x => x.WorkingGroupGuid.ToString().ToLower() == val).Count() > 0)
                             {
                                 wgShowWorkflowStep = true;
                                 //it is enough with one hit
@@ -405,11 +423,16 @@ namespace DH.Helpdesk.Services.Services
                     {
                         conditionKey = conditionKey.Replace("casesolution_", "");
 
-                        int tempId = (templateId.HasValue) ? templateId.Value : 0;
-
-                        if (tempId > 0)
+                        var templateId = ctx.TemplateId ?? 0;
+                        if (templateId > 0)
                         {
-                            var caseTemplate = GetCaseSolution(tempId);
+                            if (ctx.Template == null)
+                            {
+                                //store int context for next methods calls
+                                ctx.Template = GetCaseSolution(templateId);
+                            }
+
+                            var caseTemplate = ctx.Template;
 
                             if (!conditionKey.Contains("."))
                             {
@@ -1860,6 +1883,20 @@ namespace DH.Helpdesk.Services.Services
             }
 
             return caseSolutions;
+        }
+
+        private class WorkflowConditionsContext
+        {
+            public int CustomerId { get; set; }
+            public Case Case { get; set; }
+            public CaseSolutionOverview CaseSolution { get; set; }
+            public UserOverview User { get; set; } 
+            public ApplicationType ApplicationType { get; set; }
+            public int? TemplateId { get; set; }
+            public bool IsRelatedCase { get; set; }
+
+            public IList<WorkingGroupInfo> WorkingGroups { get; set; }
+            public CaseSolution Template { get; set; }
         }
     }
 }
