@@ -4,16 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-
 namespace DH.Helpdesk.Services.Services
 {
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Common.Enums.CaseSolution;
-    using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Domain;
-    using System.Reflection;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.BusinessData.Models.User.Input;
@@ -22,12 +19,13 @@ namespace DH.Helpdesk.Services.Services
     using System.Data.SqlClient;
     using BusinessData.Models.Case;
     using Dal.NewInfrastructure;
+    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
     public interface ICaseSolutionService
     {
         IList<CaseSolution> GetCaseSolutions(int customerId);
-        IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, bool? includeConditions = false);
-        IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, Expression<Func<CaseSolution, bool>> filter, bool? includeConditions = false);
+        IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, int? userId = null);
+
         IList<Application> GetAllApplications(int customerId);
         IList<CaseSolutionCategory> GetCaseSolutionCategories(int customerId);
         IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch SearchCaseSolutions, bool isFirstNamePresentation);
@@ -46,7 +44,7 @@ namespace DH.Helpdesk.Services.Services
         void SaveCaseSolutionCategory(CaseSolutionCategory caseSolutionCategory, out IDictionary<string, string> errors);
         void SaveEmptyForm(Guid formGuid, int caseId);
         void Commit();
-        IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case _case, UserOverview user, ApplicationType applicationType, int? templateId);
+        IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case _case, IList<CaseSolutionOverview> caseSolutions, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId);
 
         IList<CaseSolution> GetCaseSolutions();
 
@@ -65,7 +63,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IFormRepository _formRepository;
         private readonly ILinkService _linkService;
         private readonly ILinkRepository _linkRepository;
-        private readonly Dal.Infrastructure.IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ICacheProvider _cache;
 
         private readonly ICaseSolutionConditionRepository _caseSolutionConditionRepository;
@@ -83,7 +81,7 @@ namespace DH.Helpdesk.Services.Services
             IFormRepository formRepository,
             ILinkRepository linkRepository,
             ILinkService linkService,
-            Dal.Infrastructure.IUnitOfWork unitOfWork,
+            IUnitOfWork unitOfWork,
             ICaseSolutionConditionRepository caseSolutionConditionRepository,
             ICacheProvider cache,
             IWorkingGroupService workingGroupService,
@@ -112,138 +110,103 @@ namespace DH.Helpdesk.Services.Services
             this.caseSolutionConditionRepository = caseSolutionConditionRepository;
             this.unitOfWorkFactory = unitOfWorkFactory;
         }
-
-        //public int GetAntal(int customerId, int userid)
-        //{
-        //    return _caseSolutionRepository.GetAntal(customerId, userid);
-        //}
-
-        public List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId, CaseSolutionLocationShow location)
+        
+        public IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, int? userId = null)
         {
-            List<CaseTemplateCategoryNode> ret1 = new List<CaseTemplateCategoryNode>();
+            var customerCaseSolutions = GetCustomerCaseSolutionsCached(customerId);
 
-            List<CaseTemplateCategoryNode> ret2 = new List<CaseTemplateCategoryNode>();
-
-            var noneCatCaseSolutions = _caseSolutionRepository.GetMany(s => s.Customer_Id == customerId && s.CaseSolutionCategory_Id == null &&
-                                                                            s.Status != 0 && s.ConnectedButton != 0 &&
-                                                                        (s.WorkingGroup.UserWorkingGroups.Select(
-                                                                         x => x.User_Id).Contains(userId) ||
-                                                                         s.WorkingGroup_Id == null)).OrderBy(cs => cs.Name);
-
-            var canShow = false;
-            foreach (var casetemplate in noneCatCaseSolutions)
+            if (userId.HasValue && userId.Value > 0)
             {
+                // filter case solutions by working groups
+                var userWorkingGroups =
+                    _workingGroupService.GetUsersForWorkingGroup(userId.Value).Select(x => x.WorkingGroup_Id).ToList();
 
-                canShow = (location == CaseSolutionLocationShow.BothCaseOverviewAndInsideCase) ||
-                          (location == CaseSolutionLocationShow.OnCaseOverview && casetemplate.ShowOnCaseOverview != 0) ||
-                          (location == CaseSolutionLocationShow.InsideTheCase && casetemplate.ShowInsideCase != 0);
-
-                if (canShow)
+                if (userWorkingGroups.Any())
                 {
-                    CaseTemplateCategoryNode noneCategory = new CaseTemplateCategoryNode();
-                    noneCategory.CategoryId = casetemplate.Id;
-                    noneCategory.CategoryName = casetemplate.Name;
-                    noneCategory.IsRootTemplate = true;
-                    ret1.Add(noneCategory);
+                    customerCaseSolutions =
+                        customerCaseSolutions.Where(cs => cs.WorkingGroupId == null || userWorkingGroups.Contains(cs.WorkingGroupId.Value)).ToList();
                 }
             }
 
-
-
-
-            var allCategory =
-                _caseSolutionCategoryRepository.GetMany(c => c.Customer_Id == customerId).OrderBy(c => c.Name);
-
-            foreach (var category in allCategory)
-            {
-                CaseTemplateCategoryNode curCategory = new CaseTemplateCategoryNode();
-
-                curCategory.CategoryId = category.Id;
-                curCategory.CategoryName = category.Name;
-                curCategory.IsRootTemplate = false;
-
-                var caseSolutions = _caseSolutionRepository.GetMany(s => s.Customer_Id == customerId && s.CaseSolutionCategory_Id == category.Id &&
-                                                                         s.Status != 0 && s.ConnectedButton != 0 &&
-                                                                         (s.WorkingGroup.UserWorkingGroups.Select(
-                                                                             x => x.User_Id).Contains(userId) || s.WorkingGroup_Id == null)).OrderBy(cs => cs.Name);
-                if (caseSolutions != null)
-                {
-                    curCategory.CaseTemplates = new List<CaseTemplateNode>();
-                    foreach (var casetemplate in caseSolutions)
-                    {
-                        canShow = (location == CaseSolutionLocationShow.BothCaseOverviewAndInsideCase) ||
-                          (location == CaseSolutionLocationShow.OnCaseOverview && casetemplate.ShowOnCaseOverview != 0) ||
-                          (location == CaseSolutionLocationShow.InsideTheCase && casetemplate.ShowInsideCase != 0);
-
-                        if (canShow)
-                        {
-                            CaseTemplateNode curCaseTemplate = new CaseTemplateNode();
-                            curCaseTemplate.CaseTemplateId = casetemplate.Id;
-                            curCaseTemplate.CaseTemplateName = casetemplate.Name;
-                            curCaseTemplate.WorkingGroup = casetemplate.WorkingGroup == null
-                                ? ""
-                                : casetemplate.WorkingGroup.WorkingGroupName;
-
-                            curCategory.CaseTemplates.Add(curCaseTemplate);
-                        }
-                    }
-                }
-
-                ret2.Add(curCategory);
-            }
-
-            int maxLen = 0;
-            int curLen;
-            foreach (var node in ret1)
-            {
-                curLen = node.CategoryName.Length;
-                if (curLen > maxLen)
-                    maxLen = curLen;
-            }
-
-            foreach (var node in ret2)
-            {
-                curLen = node.CategoryName.Length;
-                if (curLen > maxLen)
-                    maxLen = curLen;
-            }
-
-            string line = "";
-            if (ret1.Count > 0 && ret2.Count > 0)
-            {
-                CaseTemplateCategoryNode separateLine = new CaseTemplateCategoryNode();
-                separateLine.CategoryId = 0;
-                separateLine.CategoryName = line.PadLeft(maxLen + 5, '_');
-                separateLine.IsRootTemplate = false;
-                ret1.Add(separateLine);
-            }
-
-            foreach (var ret in ret2)
-                ret1.Add(ret);
-
-            return ret1;
+            return customerCaseSolutions;
         }
 
+        //todo : check if case solutions can be passed as an arguement
+        public List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId, CaseSolutionLocationShow location)
+        {
+            var customerCaseSolutions = 
+                GetCustomerCaseSolutionsOverview(customerId, userId) //uses cached version
+                    .Where(cs => cs.ConnectedButton > 0 &&
+                                 (
+                                     location == CaseSolutionLocationShow.BothCaseOverviewAndInsideCase ||
+                                     (location == CaseSolutionLocationShow.OnCaseOverview && cs.ShowOnCaseOverview != 0) ||
+                                     (location == CaseSolutionLocationShow.InsideTheCase && cs.ShowInsideCase != 0)
+                                 )).ToList();
+
+            #region Solutions Without Category
+
+            var solutionsWithoutCategory =
+                customerCaseSolutions.Where(cs => cs.CategoryId == null)
+                    .Select(cs => CaseTemplateCategoryNode.CreateRoot(cs.CaseSolutionId, cs.Name))
+                    .ToList();
+
+            #endregion
+
+            #region Solutions With Category
+
+            var solutionsWithCategory = new List<CaseTemplateCategoryNode>();
+
+            var allCategories = 
+                _caseSolutionCategoryRepository.GetMany(c => c.Customer_Id == customerId).OrderBy(c => c.Name);
+
+            foreach (var category in allCategories)
+            {
+                var categoryCaseSolutions =
+                    customerCaseSolutions.Where(s => s.CategoryId == category.Id)
+                        .OrderBy(cs => cs.Name)
+                        .Select(cs => new CaseTemplateNode
+                        {
+                            CaseTemplateId = cs.CaseSolutionId,
+                            CaseTemplateName = cs.Name ?? string.Empty,
+                            WorkingGroup = cs.WorkingGroupName ?? string.Empty
+                        }).ToList();
+
+                var curCategory = new CaseTemplateCategoryNode
+                {
+                    CategoryId = category.Id,
+                    CategoryName = category.Name,
+                    CaseTemplates = categoryCaseSolutions
+                };
+
+                solutionsWithCategory.Add(curCategory);
+            }
+
+            #endregion
+
+            var maxLen = solutionsWithoutCategory.Concat(solutionsWithCategory).Max(x => x.CategoryName?.Length ?? 0);
+            
+            if (solutionsWithoutCategory.Any() && solutionsWithCategory.Any())
+            {
+                var separateLine = new CaseTemplateCategoryNode { CategoryName = new string('_', maxLen + 5) };
+                solutionsWithoutCategory.Add(separateLine);
+            }
+            
+            return solutionsWithoutCategory.Concat(solutionsWithCategory).ToList();
+        }
+
+        //TODO: review. not performance optimised
         public IList<CaseSolution> GetCaseSolutions(int customerId)
         {
             return this._caseSolutionRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
-        public IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, bool? includeConditions = false)
-        {
-            return GetCustomerCaseSolutionsOverview(customerId, null, includeConditions);
-        }
-
-        public IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, Expression<Func<CaseSolution, bool>> filter, bool? includeConditions = false)
-        {
-            return this._caseSolutionRepository.GetCustomerCaseSolutionsOverview(customerId, filter, includeConditions);
-        }
-
+        //todo: review. not performance optimised
         public IList<CaseSolution> GetCaseSolutions()
         {
             return this._caseSolutionRepository.GetMany(x => x.Status >= 0).OrderBy(x => x.Customer.Name).ThenBy(x => x.Name).ToList();
         }
 
+       //todo: review not performance optimised
         public IList<CaseSolution_SplitToCaseSolutionEntity> GetSplitToCaseSolutionDescendants(CaseSolution self, int[] descendantIds)
         {
             return this._caseSolutionRepository.GetMany(x => descendantIds.Contains(x.Id)).Select(cs => new CaseSolution_SplitToCaseSolutionEntity
@@ -255,9 +218,6 @@ namespace DH.Helpdesk.Services.Services
 
             }).ToList();
         }
-
-
-
 
         public IList<Application> GetAllApplications(int customerId)
         {
@@ -305,15 +265,15 @@ namespace DH.Helpdesk.Services.Services
             //return this._applicationRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
-        public IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case _case, UserOverview user, ApplicationType applicationType, int? templateId)
+        public IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case _case, IList<CaseSolutionOverview> caseSolutions, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId)
         {
-            var caseSolutions =
-                    GetCustomerCaseSolutionsOverview(customerId, c => c.Status != 0 && c.ConnectedButton == 0, true);
+            var solutionsIds = caseSolutions.Where(x => x.ConnectedButton == 0).Select(x => x.CaseSolutionId).ToList();
 
-            var isRelatedCase = _case != null && _case.Id > 0 && _caseService.IsRelated(_case.Id);
+            var caseSolutionsConditions = 
+                _caseSolutionRepository.GetCaseSolutionsConditions(solutionsIds);
 
             var modelList = new List<WorkflowStepModel>();
-            foreach (var cs in caseSolutions)
+            foreach (var cs in caseSolutionsConditions)
             {
                 var res = ShowWorkflowStep(customerId, _case, cs, user, applicationType, templateId, isRelatedCase);
                 if (res)
@@ -325,7 +285,7 @@ namespace DH.Helpdesk.Services.Services
                         SortOrder = cs.SortOrder,
 
                         //If value exist in NextStepState - use it. Otherwise check if caseSolution.StateSecondary_id have value, otherwise return 0;
-                        NextStep = cs.NextStepState ?? (cs.StateSecondary != null ? cs.StateSecondaryId ?? 0 : 0)
+                        NextStep = cs.NextStepState ?? (cs.StateSecondary?.StateSecondaryId ?? 0) 
 
                     };
                     modelList.Add(workFlowStepModel);
@@ -480,10 +440,6 @@ namespace DH.Helpdesk.Services.Services
                 }
                 catch (Exception ex)
                 {
-                    //Remove caching of conditions for this specific template that is used in Case
-                    string cacheKey = string.Format(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionConditionWithId, caseSolution.CaseSolutionId);
-                    this._cache.Invalidate(cacheKey);
-
                     //throw;
                     //TODO?
                     return false;
@@ -1889,6 +1845,21 @@ namespace DH.Helpdesk.Services.Services
             return caseSolutionConditions;
         }
 
+        private IList<CaseSolutionOverview> GetCustomerCaseSolutionsCached(int customerId)
+        {
+            // FYI, this item is cleared when the specific CaseSolution is saved (CaseSolutionController - Edit)
+            var cacheKey = string.Format(Common.Constants.CacheKey.CaseSolutionConditionWithId, customerId);
 
+            var caseSolutions = this._cache.Get(cacheKey) as IList<CaseSolutionOverview>;
+            if (caseSolutions == null)
+            {
+                caseSolutions = _caseSolutionRepository.GetCustomerCaseSolutions(customerId);
+
+                if (caseSolutions.Any())
+                    this._cache.Set(cacheKey, caseSolutions, Common.Constants.Cache.Duration);
+            }
+
+            return caseSolutions;
+        }
     }
 }

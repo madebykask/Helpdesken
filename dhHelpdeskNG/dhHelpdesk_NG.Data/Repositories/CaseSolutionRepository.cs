@@ -5,19 +5,19 @@ using System.Linq;
 using System.Linq.Expressions;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain;
-
     #region CASESOLUTION
 
     public interface ICaseSolutionRepository : IRepository<CaseSolution>
     {
         CaseSolutionInfo GetGetSolutionInfo(int id, int customerId);
-        IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, bool? includeConditions = false);
-        IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, Expression<Func<CaseSolution, bool>> filter, bool? includeConditions = false);
+
+        IList<CaseSolutionOverview> GetCustomerCaseSolutions(int customerId);
+        IList<CaseSolutionOverview> GetCaseSolutionsConditions(IList<int> Ids);
     }
 
     public class CaseSolutionRepository : RepositoryBase<CaseSolution>, ICaseSolutionRepository
@@ -43,89 +43,65 @@ namespace DH.Helpdesk.Dal.Repositories
             return caseSolutionInfo;
         }
 
-        public IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, bool? includeConditions = false)
+        public IList<CaseSolutionOverview> GetCustomerCaseSolutions(int customerId)
         {
-            return GetCustomerCaseSolutionsOverview(customerId, null, includeConditions);
-        }
-
-        public IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, Expression<Func<CaseSolution, bool>> filter, bool? includeConditions = false)
-        {
-            IList<CaseSolutionOverview> res = null;
-
             var query =
                 from cs in DataContext.CaseSolutions
-                where cs.Customer_Id == customerId
-                select cs;
+                let ss = cs.StateSecondary
+                where cs.Customer_Id == customerId &&
+                      cs.Status != 0
+                select new CaseSolutionOverview
+                {
+                    CaseSolutionId = cs.Id,
+                    Name = cs.Name,
+                    CategoryId = cs.CaseSolutionCategory_Id,
+                    StateSecondaryId = cs.StateSecondary_Id,
+                    NextStepState = cs.NextStepState,
+                    Status = cs.Status,
+                    WorkingGroupId = cs.WorkingGroup_Id,
+                    WorkingGroupName = cs.WorkingGroup.WorkingGroupName,
+                    SortOrder = cs.SortOrder,
+                    ConnectedButton = cs.ConnectedButton,
+                    ShowInsideCase = cs.ShowInsideCase,
+                    ShowOnCaseOverview = cs.ShowOnCaseOverview,
+                    StateSecondary = cs.StateSecondary != null ? new StateSecondaryOverview
+                    {
+                        Id = ss.Id,
+                        Name = ss.Name,
+                        StateSecondaryId = ss.StateSecondaryId,
+                    } : null
+                };
 
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
+            var res = query.OrderBy(x => x.SortOrder).AsNoTracking().ToList();
+            return res;
+        }
 
-            // these are performance optimised queries. please do not use mappers!
-            if (includeConditions.HasValue && includeConditions.Value)
-            {
-                res =
-                    (from cs in query
-                        from csc in cs.Conditions
-                        let ss = cs.StateSecondary
-                        select new CaseSolutionOverview
-                        {
-                            CaseSolutionId = cs.Id,
-                            Name = cs.Name,
-                            StateSecondaryId = cs.StateSecondary_Id,
-                            NextStepState = cs.NextStepState,
-                            Status = cs.Status,
-                            SortOrder = cs.SortOrder,
-                            ConnectedButton = cs.ConnectedButton,
-                            StateSecondary = ss != null
-                                ? new StateSecondaryOverview
-                                {
-                                    Id = ss.Id,
-                                    Name = ss.Name,
-                                    StateSecondaryId = ss.StateSecondaryId,
-                                }
-                                : null,
-                            Conditions = cs.Conditions.Select(x => new CaseSolutionConditionOverview()
-                                {
-                                    Id = x.Id,
-                                    Property = x.Property_Name,
-                                    Values = x.Values
-                                })
-                                .ToList()
-                        })
-                    .OrderBy(x => x.SortOrder)
-                    .AsNoTracking()
-                    .ToList();
-            }
-            else
-            {
-                res =
-                    (from cs in query
-                        let ss = cs.StateSecondary
-                        orderby cs.SortOrder
-                        select new CaseSolutionOverview
-                        {
-                            CaseSolutionId = cs.Id,
-                            Name = cs.Name,
-                            StateSecondaryId = cs.StateSecondary_Id,
-                            NextStepState = cs.NextStepState,
-                            Status = cs.Status,
-                            SortOrder = cs.SortOrder,
-                            ConnectedButton = cs.ConnectedButton,
-                            StateSecondary = ss != null
-                                ? new StateSecondaryOverview
-                                {
-                                    Id = ss.Id,
-                                    Name = ss.Name,
-                                    StateSecondaryId = ss.StateSecondaryId,
-                                }
-                                : null
-                        })
-                    .AsNoTracking()
-                    .ToList();
-            }
+        public IList<CaseSolutionOverview> GetCaseSolutionsConditions(IList<int> Ids)
+        {
+            var conditions =
+                (from cs in DataContext.CaseSolutions
+                 from csc in cs.Conditions
+                 where Ids.Contains(cs.Id)
+                 select new 
+                 {
+                     CaseSolutionId = cs.Id,
+                     csc.Id,
+                     csc.Property_Name,
+                     csc.Values
+                 }).AsNoTracking().ToList();
 
+            var res =
+                conditions.GroupBy(x => x.CaseSolutionId, x => new CaseSolutionConditionOverview()
+                    {
+                        Id = x.Id,
+                        Property = x.Property_Name,
+                        Values = x.Values
+                    })
+                    .Select(x => new CaseSolutionOverview
+                    {
+                        CaseSolutionId = x.Key,
+                        Conditions = x.ToList()
+                    }).ToList();
             return res;
         }
     }

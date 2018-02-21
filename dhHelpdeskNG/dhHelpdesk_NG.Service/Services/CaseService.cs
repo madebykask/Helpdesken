@@ -806,6 +806,9 @@ namespace DH.Helpdesk.Services.Services
         
         public bool IsRelated(int caseId)
         {
+            if (caseId <= 0)
+                return false;
+
             var isParentCase = GetChildCasesFor(caseId);
 
             if (isParentCase != null && isParentCase.Count() > 0)

@@ -16,6 +16,7 @@
         public const string CaseSolutionConditionWithId = CaseSolutionCondition + "{0}";
         public const string CaseSolutionCondition = "CaseSolutionCondition";
         public const string DepartmentsByUserPermissions = "DepartmentsByUserPermissions{0}";
+        public const string CaseSolutionConditionForCustomer = CaseSolutionCondition + "_Customer_{0}";
     }
 
       public static class CaseTabs

@@ -3360,11 +3360,14 @@ namespace DH.Helpdesk.Web.Controllers
 
         private CaseTemplateTreeModel GetCaseTemplateTreeModel(int customerId, int userId, CaseSolutionLocationShow location)
         {
-            var model = new CaseTemplateTreeModel();
-            model.CustomerId = customerId;
-            model.CaseTemplateCategoryTree = _caseSolutionService.GetCaseSolutionCategoryTree(customerId, userId, location)
-                                            .Where(c=> c.CaseTemplates == null || (c.CaseTemplates != null && c.CaseTemplates.Any()))
-                                            .ToList();
+            var model = new CaseTemplateTreeModel
+            {
+                CustomerId = customerId,
+                CaseTemplateCategoryTree =
+                    _caseSolutionService.GetCaseSolutionCategoryTree(customerId, userId, location)
+                        .Where(c => c.CaseTemplates == null || (c.CaseTemplates != null && c.CaseTemplates.Any())).ToList()
+            };
+            
             return model;
         }
 
@@ -5266,11 +5269,15 @@ namespace DH.Helpdesk.Web.Controllers
 
                 #endregion
             }
-            
-            var caseTemplateButtons = 
-                _caseSolutionService.GetCustomerCaseSolutionsOverview(
-                    customerId, 
-                    c => c.Status != 0 && c.ShowInsideCase != 0 && c.ConnectedButton.HasValue && c.ConnectedButton > 0)
+
+            var isRelatedCase = caseId > 0 && _caseService.IsRelated(caseId);
+
+            var customerCaseSolutions =
+                _caseSolutionService.GetCustomerCaseSolutionsOverview(customerId, userId);
+
+            //TODO: reuse case solutions!
+            m.CaseTemplateButtons =
+                customerCaseSolutions.Where(c => c.ShowInsideCase != 0 && c.ConnectedButton.HasValue && c.ConnectedButton > 0)
                     .Select(c => new CaseTemplateButton()
                     {
                         CaseTemplateId = c.CaseSolutionId,
@@ -5280,10 +5287,9 @@ namespace DH.Helpdesk.Web.Controllers
                     .OrderBy(c => c.ButtonNumber)
                     .ToList();
 
-            m.CaseTemplateButtons = caseTemplateButtons;
-
-            //todo: check if case solutions can be reused?
-            m.WorkflowSteps = _caseSolutionService.GetWorkflowSteps(customerId, m.case_, SessionFacade.CurrentUser, ApplicationType.Helpdesk, templateId);
+            m.WorkflowSteps =
+                _caseSolutionService.GetWorkflowSteps(customerId, m.case_, customerCaseSolutions, isRelatedCase,
+                    SessionFacade.CurrentUser, ApplicationType.Helpdesk, templateId);
 
             m.CaseMailSetting = new CaseMailSetting(
                 customer.NewCaseEmailList,
@@ -5835,7 +5841,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var c = this._categoryService.GetCategory(m.case_.Category_Id.GetValueOrDefault(), customerId);
                 if (c != null)
                 {
-                    if (caseTemplateButtons != null)
+                    if (m.CaseTemplateButtons != null)
                     {
                         var names =
                             this._categoryService.GetParentPath(c.Id, customerId).Select(name => Translation.GetMasterDataTranslation(name));
@@ -6088,7 +6094,7 @@ namespace DH.Helpdesk.Web.Controllers
             }*/
 
 
-            #endregion Extended sections
+            #endregion //Extended sections
 
             #region CaseDocuments
 

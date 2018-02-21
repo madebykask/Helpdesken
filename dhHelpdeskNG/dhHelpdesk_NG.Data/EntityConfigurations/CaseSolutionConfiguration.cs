@@ -76,7 +76,12 @@
                 .HasForeignKey(x => x.WorkingGroup_Id)
                 .WillCascadeOnDelete(false);
 
-			this.HasOptional(x => x.SplitToCaseSolution)
+            this.HasOptional(x => x.StateSecondary)
+                .WithMany()
+                .HasForeignKey(x => x.StateSecondary_Id)
+                .WillCascadeOnDelete(false);
+
+            this.HasOptional(x => x.SplitToCaseSolution)
 				.WithMany()
 				.HasForeignKey(x => x.SplitToCaseSolution_Id)
 				.WillCascadeOnDelete(false);

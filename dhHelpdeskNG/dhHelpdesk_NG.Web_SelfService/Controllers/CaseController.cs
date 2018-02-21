@@ -750,6 +750,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                 ErrorGenerator.MakeError(lastError);
                 return null;
             }
+            var isRelatedCase = caseId > 0 && _caseService.IsRelated(caseId ?? 0);
+            var customerCaseSolutions =
+                _caseSolutionService.GetCustomerCaseSolutionsOverview(customerId, userId: null);
 
             var model = new ExtendedCaseViewModel
             {
@@ -762,7 +765,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 UserRole = initData.UserRole,
                 StateSecondaryId = caseStateSecondaryId,
                 CaseOU = caseModel.OU_Id.HasValue ? _ouService.GetOU(caseModel.OU_Id.Value) : null,
-                WorkflowSteps = GetWorkflowStepModel(customerId, caseId ?? 0, caseTemplateId ?? 0).ToList(),
+                WorkflowSteps = GetWorkflowStepModel(customerId, caseId ?? 0, caseTemplateId ?? 0, customerCaseSolutions, isRelatedCase),
                 CaseDataModel = caseModel
             };
 
@@ -2381,8 +2384,9 @@ namespace DH.Helpdesk.SelfService.Controllers
             return model;
         }
 
-        private IList<WorkflowStepModel> GetWorkflowStepModel(int customerId, int caseId, int templateId)
-        {            
+        private List<WorkflowStepModel> GetWorkflowStepModel(int customerId, int caseId, int templateId, IList<CaseSolutionOverview> customerCaseSolutions, bool isRealtedCase)
+        {
+            IList<WorkflowStepModel> res = new List<WorkflowStepModel>();
             Case caseEntity = null;
             if (caseId == 0)
             {
@@ -2407,14 +2411,10 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             if (caseEntity != null)
-                return _caseSolutionService.GetWorkflowSteps(
-                                        customerId, caseEntity, null, 
-                                        ApplicationType.LineManager, templateId);            
-            return null;
+                res = _caseSolutionService.GetWorkflowSteps(customerId, caseEntity, customerCaseSolutions, isRealtedCase, null, ApplicationType.LineManager, templateId);            
 
-        }                  
-
-       
+            return res;
+        }
 
         #region Helper Methods
 
