@@ -253,7 +253,7 @@ namespace DH.Helpdesk.Web.Controllers
 				var computerUserCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId);
 				if (computerUserCategories.Any())
 				{
-					searchComputerUserCategories = computerUserCategories.Select(o => new ItemOverview(o.Name, o.ID.ToString())).ToList();
+					searchComputerUserCategories = computerUserCategories.Select(o => new ItemOverview(o.Name, o.Id.ToString())).ToList();
 					searchComputerUserCategories.Insert(0, new ItemOverview(Translation.Get("Employee", Enums.TranslationSource.TextTranslation), "0"));
 				}
 
@@ -724,14 +724,13 @@ namespace DH.Helpdesk.Web.Controllers
                 groups = this.notifierGroupRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
-			var nonReadOnlyCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
-				.Where(o => !o.IsReadOnly).ToList();
+			var nonReadOnlyCategories = 
+                computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId).Where(o => !o.IsReadOnly).ToList();
+
 			var computerUser = computerService.GetComputerUser(notifier.Id);
 			var categoryModel = computerUser.ComputerUserCategory == null ?
 				new ComputerUserCategoryModel(nonReadOnlyCategories) :
 				new ComputerUserCategoryModel(computerUser.ComputerUserCategory, nonReadOnlyCategories);
-
-
 
 			var model = this.notifierModelFactory.Create(
                 displaySettings,
@@ -831,7 +830,7 @@ namespace DH.Helpdesk.Web.Controllers
                 null);
 
 			searchComputerUserCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
-				.Select(o => new ItemOverview(o.Name, o.ID.ToString()))
+				.Select(o => new ItemOverview(o.Name, o.Id.ToString()))
 				.ToList();
 
 

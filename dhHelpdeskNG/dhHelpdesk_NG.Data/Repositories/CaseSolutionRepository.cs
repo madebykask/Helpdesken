@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Linq;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Cryptography.X509Certificates;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.Dal.Infrastructure;

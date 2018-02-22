@@ -49,6 +49,7 @@ namespace DH.Helpdesk.Services.Services
         IList<CaseSolution> GetCaseSolutions();
 
         IList<CaseSolution_SplitToCaseSolutionEntity> GetSplitToCaseSolutionDescendants(CaseSolution self, int[] descendantIds);
+        bool CheckIfExtendedFormExistForSolutionsInCategories(int customerId, List<int> list);
     }
 
     public class CaseSolutionService : ICaseSolutionService
@@ -76,6 +77,8 @@ namespace DH.Helpdesk.Services.Services
         private readonly Dictionary<string, IList<WorkingGroupEntity>> _adminGroups =
             new Dictionary<string, IList<WorkingGroupEntity>>(StringComparer.OrdinalIgnoreCase);
 
+        private IComputerUserCategoryRepository _computerUserCategoryRepository;
+
         public CaseSolutionService(
             ICaseSolutionRepository caseSolutionRepository,
             ICaseSolutionCategoryRepository caseSolutionCategoryRepository,
@@ -91,9 +94,10 @@ namespace DH.Helpdesk.Services.Services
             ICaseSolutionConditionService caseSolutionCondtionService,
             IStateSecondaryService stateSecondaryService,
             IApplicationRepository applicationRepository,
-            ICaseService caseService,
+            IComputerUserCategoryRepository computerUserCategoryRepository,
             IUnitOfWorkFactory unitOfWorkFactory)
         {
+            _computerUserCategoryRepository = computerUserCategoryRepository;
             this._caseSolutionRepository = caseSolutionRepository;
             this._caseSolutionCategoryRepository = caseSolutionCategoryRepository;
             this._caseSolutionScheduleRepository = caseSolutionScheduleRepository;
@@ -109,7 +113,6 @@ namespace DH.Helpdesk.Services.Services
             this._caseSolutionConditionRepository = caseSolutionConditionRepository;
             this._stateSecondaryService = stateSecondaryService;
             this._applicationRepository = applicationRepository;
-            this._caseService = caseService;
             this.caseSolutionConditionRepository = caseSolutionConditionRepository;
             this.unitOfWorkFactory = unitOfWorkFactory;
         }
@@ -1884,6 +1887,12 @@ namespace DH.Helpdesk.Services.Services
             }
 
             return caseSolutions;
+        }
+
+        public bool CheckIfExtendedFormExistForSolutionsInCategories(int customerId, List<int> ids)
+        {
+            var res = _computerUserCategoryRepository.CheckIfExtendedFormsExistForCategories(customerId, ids);
+            return res;
         }
 
         private class WorkflowConditionsContext

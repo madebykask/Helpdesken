@@ -181,6 +181,7 @@
     <Compile Include="Models\Case\CaseSolutionOverview.cs" />
     <Compile Include="Models\Case\ExtendedCaseDataOverview.cs" />
     <Compile Include="Models\Case\WorkingGroupInfo.cs" />
+    <Compile Include="Models\ComputerUserCategoryOverview.cs" />
     <Compile Include="Models\Condition\ConditionModel.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentTextIdentifierModel.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentTextConditionModel.cs" />

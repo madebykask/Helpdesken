@@ -5947,14 +5947,15 @@ namespace DH.Helpdesk.Web.Controllers
                 m.DynamicCase.FormPath = m.DynamicCase.FormPath.Replace(@"\", @"\\"); //this is because users with backslash in name will have issues with container.js
             }
 
-            int caseSolutionId = (m.case_.CaseSolution_Id != null) ? m.case_.CaseSolution_Id.Value : (templateId.HasValue ? templateId.Value : 0);
+            int caseSolutionId = (m.case_.CaseSolution_Id != null)
+                ? m.case_.CaseSolution_Id.Value
+                : (templateId.HasValue ? templateId.Value : 0);
 
             // Computer user categories
-            var categories = _computerService.GetComputerUserCategoriesByCustomerID(customerId);
-
-            //todo: Performance. Check if HasExtendedComputerUsers can be retrieved with one query?
-            m.ComputerUserCategories = categories;
-            m.HasExtendedComputerUsers = categories.SelectMany(o => o.CaseSolution.CaseSectionsExtendedCaseForm).Any();
+            m.ComputerUserCategories = _computerService.GetComputerUserCategoriesByCustomerID(customerId);
+            
+            m.HasExtendedComputerUsers =
+                _caseSolutionService.CheckIfExtendedFormExistForSolutionsInCategories(customerId, m.ComputerUserCategories.Select(c => c.Id).ToList());
 
             #region Extended Case
 

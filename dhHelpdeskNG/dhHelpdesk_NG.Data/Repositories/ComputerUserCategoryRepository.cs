@@ -1,11 +1,9 @@
 ﻿using DH.Helpdesk.Dal.Dal;
 using DH.Helpdesk.Domain.Computers;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.Entity;
+using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.Dal.Infrastructure;
 
 namespace DH.Helpdesk.Dal.Repositories
@@ -16,18 +14,42 @@ namespace DH.Helpdesk.Dal.Repositories
 		{
 		}
 
-		public IList<ComputerUserCategory> GetAllByCustomerID(int customerID)
+		public IList<ComputerUserCategoryOverview> GetAllByCustomerID(int customerID)
 		{
-			var all = this.DbSet.Where(o => o.CustomerID == customerID).Include(o => o.CaseSolution.ExtendedCaseForms).ToList();
+			var all = 
+                this.DbSet.Where(o => o.CustomerID == customerID)
+                .Select(x => new ComputerUserCategoryOverview()
+                    {
+                        Id = x.ID,
+                        Name = x.Name,
+                        CustomerId =  customerID,
+                        ComputerUsersCategoryGuid = x.ComputerUsersCategoryGuid,
+                        IsReadOnly = x.IsReadOnly
+                    })
+                .ToList();
+
 			return all;
 		}
 
-
 		public ComputerUserCategory GetByID(int computerUserCategoryID)
 		{
-			var computerUserCategory = this.DbSet.Include(o => o.CaseSolution.ExtendedCaseForms)
-				.Single(o => o.ID == computerUserCategoryID);
+		    var computerUserCategory = 
+                this.DbSet.Include(o => o.CaseSolution.ExtendedCaseForms)
+                .Single(o => o.ID == computerUserCategoryID);
+
 			return computerUserCategory;
 		}
-	}
+	    
+	    public bool CheckIfExtendedFormsExistForCategories(int customerId, List<int> ids)
+	    {
+	        var query =
+	            from cat in this.DbSet
+                where ids.Contains(cat.ID) &&
+	                  cat.CaseSolution.ExtendedCaseForms.Any()
+	            select cat.ID;
+
+	        var items = query.ToList();
+	        return items.Count > 0;
+	    }
+    }
 }
