@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.Customer;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -594,6 +596,11 @@
         public ItemOverview GetOverview(int customerId)
         {
             return this._customerRepository.GetOverview(customerId);
+        }
+
+        public CaseDefaultsInfo GetCustomerDefaults(int customerId)
+        {
+            return _customerRepository.GetCustomerDefaults(customerId);
         }
 
         public void SaveNewCustomerToGetId(Customer customer, out IDictionary<string, string> errors)

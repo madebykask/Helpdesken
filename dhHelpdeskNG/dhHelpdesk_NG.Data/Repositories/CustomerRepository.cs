@@ -36,7 +36,8 @@ using System;
         int? GetCustomerIdByEMailGUID(Guid GUID);
 
         int GetCustomerLanguage(int customerid);
-     
+
+        CaseDefaultsInfo GetCustomerDefaults(int customerId);
     }
 
     public sealed class CustomerRepository : RepositoryBase<Customer>, ICustomerRepository
@@ -121,6 +122,24 @@ using System;
             return entities
                     .Select(c => new ItemOverview(c.Name, c.Value.ToString(CultureInfo.InvariantCulture)))
                     .FirstOrDefault();                        
+        }
+
+        public CaseDefaultsInfo GetCustomerDefaults(int customerId)
+        {
+            var query =
+                from customer in this.Table
+                where customer.Id == customerId
+                select new CaseDefaultsInfo
+                {
+                    RegionId = this.DataContext.Regions.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
+                    CaseTypeId = this.DataContext.CaseTypes.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
+                    SupplierId = this.DataContext.Suppliers.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
+                    PriorityId = this.DataContext.Priorities.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
+                    StatusId = this.DataContext.Statuses.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
+                };
+
+            var res = query.FirstOrDefault();
+            return res;
         }
     }
 

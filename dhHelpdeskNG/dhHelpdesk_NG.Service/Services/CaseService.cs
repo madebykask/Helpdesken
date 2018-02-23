@@ -236,7 +236,8 @@ namespace DH.Helpdesk.Services.Services
         private readonly IExtendedCaseDataRepository _extendedCaseDataRepository;
         private readonly ICaseFollowUpService _caseFollowUpService;
         private readonly ICaseSolutionRepository _caseSolutionRepository;
-        private IStateSecondaryRepository _stateSecondaryRepository;
+        private readonly IStateSecondaryRepository _stateSecondaryRepository;
+        private ICustomerRepository _customerRepository;
 
 
         public CaseService(
@@ -282,8 +283,8 @@ namespace DH.Helpdesk.Services.Services
             ICaseFollowUpService caseFollowUpService,
             ICaseSectionsRepository caseSectionsRepository,
             ICaseSolutionRepository caseSolutionRepository,
-            IStateSecondaryRepository stateSecondaryRepository)
-
+            IStateSecondaryRepository stateSecondaryRepository,
+            ICustomerRepository customerRepository)
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -329,6 +330,7 @@ namespace DH.Helpdesk.Services.Services
             this._caseSectionsRepository = caseSectionsRepository;
             this._caseSolutionRepository = caseSolutionRepository;
             this._stateSecondaryRepository = stateSecondaryRepository;
+            this._customerRepository = customerRepository;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -898,6 +900,7 @@ namespace DH.Helpdesk.Services.Services
 
         public Case InitCase(int customerId, int userId, int languageId, string ipAddress, CaseRegistrationSource source, Setting customerSetting, string adUser)
         {
+            var customerDefaults = _customerRepository.GetCustomerDefaults(customerId);
             var c = new Case
             {
                 Customer_Id = customerId,
@@ -908,11 +911,11 @@ namespace DH.Helpdesk.Services.Services
                 RegLanguage_Id = languageId,
                 RegistrationSource = (int)source,
                 Deleted = 0,
-                Region_Id = this._regionService.GetDefaultId(customerId),
-                CaseType_Id = this._caseTypeService.GetDefaultId(customerId),
-                Supplier_Id = this._supplierServicee.GetDefaultId(customerId),
-                Priority_Id = this._priorityService.GetDefaultId(customerId),
-                Status_Id = this._statusService.GetDefaultId(customerId),
+                Region_Id = customerDefaults.RegionId,
+                CaseType_Id = customerDefaults.CaseTypeId,
+                Supplier_Id = customerDefaults.SupplierId,
+                Priority_Id = customerDefaults.PriorityId,
+                Status_Id = customerDefaults.StatusId,
                 WorkingGroup_Id = this._userRepository.GetUserDefaultWorkingGroupId(userId, customerId),
                 RegUserId = adUser.GetUserFromAdPath(),
                 RegUserDomain = adUser.GetDomainFromAdPath()

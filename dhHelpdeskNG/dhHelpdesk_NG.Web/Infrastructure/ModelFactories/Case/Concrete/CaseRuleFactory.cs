@@ -556,7 +556,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
 
             caseBasicInfo.WorkingGroups.Items.Insert(0, new FieldItem("-1", string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_WORKINGGROUP_CAPTION))));
 
-            var admins = _userService.GetAvailablePerformersOrUserId(customerId);
+            var admins = _userService.GetAvailablePerformersOrUserId(customerId, null, true);
             caseBasicInfo.Administrators = new BasicMultiItemField()
             {
                 Selected = new FieldItem(currentData.PerformerUser_Id?.ToString(), string.Empty),
@@ -568,8 +568,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                                                                 string.Format("{0} {1}", a.FirstName, a.SurName) : string.Format("{0} {1}", a.SurName, a.FirstName)),
                                                          a.IsActive != 0)
                               {
-                                  ForeignKeyValue1 = string.Join(",", a.UserWorkingGroups.Where(w => w.UserRole == WorkingGroupUserPermission.ADMINSTRATOR && w.IsMemberOfGroup)
-                                                                                        .Select(w => w.WorkingGroup_Id)
+                                  ForeignKeyValue1 = string.Join(",", a.WorkingGroups.Where(w => w.UserRole == WorkingGroupUserPermission.ADMINSTRATOR && w.IsMemberOfGroup)
+                                                                                        .Select(w => w.WorkingGroupId)
                                                                                         .ToArray())
                               })
                               .OrderBy(i => i.ItemText).ToList()

@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Domain;
+﻿using DH.Helpdesk.BusinessData.Models.User;
+using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
 
 namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Common
@@ -16,7 +17,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Common
             List<GroupWithEmails> workingGroups,
             List<ItemOverview> administrators);
 
-        SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<User> users, Setting customerSetting,
+        SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<CustomerUserInfo> users, Setting customerSetting,
             IEmailGroupService emailGroupService, IWorkingGroupService workingGroupService, IEmailService emailService,
             bool includeAdmins = true);
     }

@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Case.Output;
+﻿using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.FinishingCause;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
 
@@ -47,7 +48,7 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
         public IList<CaseTypeOverview> CaseTypes { get; set; }
         public IList<SelectListItem> CaseWorkingGroups { get; set; }
 //        public IList<SelectListItem> Categories { get; set; }
-        public IList<Category> Categories { get; set; }
+        public IList<CategoryOverview> Categories { get; set; }
         public IList<SelectListItem> Departments { get; set; }
         public IList<FinishingCauseOverview> FinishingCauses { get; set; }
 

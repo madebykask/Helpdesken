@@ -18,7 +18,10 @@
         IList<Category> GetAllCategories(int customerId);
         IList<CategoryOverview> GetParentCategoriesWithChildren(int customerId, bool activeOnly);
         IList<Category> GetActiveCategories(int customerId);
+
+        IList<CategoryOverview> GetActiveParentCategoriesOverviews(int customerId);
         IList<Category> GetActiveParentCategories(int customerId);
+
         Category GetCategory(int id, int customerId);
         Category GetCategoryById(int id);
         DeleteMessage DeleteCategory(int id);
@@ -125,7 +128,13 @@
                 }
             }
         }
+        
+        public IList<CategoryOverview> GetActiveParentCategoriesOverviews(int customerId)
+        {
+            return this._categoryRepository.GetCategoriesOverview(customerId, true).OrderBy(x => x.Name).ToList();
+        }
 
+        //todo: use overview method instead
         public IList<Category> GetActiveParentCategories(int customerId)
         {
             return this._categoryRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_Category_Id == null && x.IsActive == 1).OrderBy(x => x.Name).ToList();

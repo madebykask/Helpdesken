@@ -17,6 +17,7 @@ using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Web.Areas.Inventory.Models;
 using DH.Helpdesk.Web.Models.Invoice;
 using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Domain.Interfaces;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Grid;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
@@ -296,7 +297,7 @@ namespace DH.Helpdesk.Web.Controllers
             IOrderService orderService,
             IOrderAccountService orderAccountService,
             ICaseDocumentService caseDocumentService,
-                    ICaseSectionService caseSectionService,
+            ICaseSectionService caseSectionService,
             IExtendedCaseService extendedCaseService,
             ISendToDialogModelFactory sendToDialogModelFactory
             )
@@ -1667,9 +1668,11 @@ namespace DH.Helpdesk.Web.Controllers
                                 var logFiles = _logFileService.GetLogFileNamesByLogId(id);
                                 m.LogFilesModel = new FilesModel(id.ToString(), logFiles, UseVD);
                     const bool isAddEmpty = true;
+
                     var responsibleUsersAvailable = this._userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
                     m.OutFormatter = new OutputFormatter(cs.IsUserFirstLastNameRepresentation == 1, userTimeZone);
                     m.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(cs, isAddEmpty);
+
                     m.SendToDialogModel = _sendToDialogModelFactory.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList(), cs, _emailGroupService, _workingGroupService, _emailService);
                     m.MinWorkingTime = cs.MinRegWorkingTime;
                     m.CaseMailSetting = new CaseMailSetting(
@@ -1973,7 +1976,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult ChangeWorkingGroupFilterUser(int? id, int customerId)
         {
-            IList<User> performersList;
+            IList<BusinessData.Models.User.CustomerUserInfo> performersList;
             var customerSettings = this._settingService.GetCustomerSetting(customerId);
             if (customerSettings.DontConnectUserToWorkingGroup == 0 && id > 0)
             {
@@ -4648,7 +4651,9 @@ namespace DH.Helpdesk.Web.Controllers
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseUserFilter))
             {
                 const bool IsTakeOnlyActive = true;
-                fd.RegisteredByUserList = this._userService.GetUserOnCases(cusId, IsTakeOnlyActive).MapToSelectList(fd.customerSetting);
+                fd.RegisteredByUserList = 
+                    this._userService.GetUserOnCases(cusId, IsTakeOnlyActive).MapToSelectList(fd.customerSetting);
+
                 if (!string.IsNullOrEmpty(fd.caseSearchFilter.User))
                 {
                     fd.lstfilterUser = fd.caseSearchFilter.User.Split(',').Select(int.Parse).ToArray();
@@ -4658,7 +4663,9 @@ namespace DH.Helpdesk.Web.Controllers
             //ansvarig
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseResponsibleFilter))
             {
-                fd.ResponsibleUserList = this._userService.GetAvailablePerformersOrUserId(cusId).MapToSelectList(fd.customerSetting);
+                fd.ResponsibleUserList = 
+                    this._userService.GetAvailablePerformersOrUserId(cusId).Cast<IUserCommon>().MapToSelectList(fd.customerSetting);
+
                 if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserResponsible))
                 {
                     fd.lstfilterResponsible = fd.caseSearchFilter.UserResponsible.Split(',').Select(int.Parse).ToArray();
@@ -4666,6 +4673,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var performers = this._userService.GetAvailablePerformersOrUserId(cusId);
+
             //performers
             performers.Insert(0, ObjectExtensions.notAssignedPerformer());
             fd.AvailablePerformersList = performers.MapToCustomSelectList(fd.caseSearchFilter.UserPerformer, fd.customerSetting);
@@ -4694,7 +4702,9 @@ namespace DH.Helpdesk.Web.Controllers
             fd.filterCustomerId = cusId;
             // Case #53981
             var userSearch = new UserSearch() { CustomerId = cusId, StatusId = 3 };
-            fd.AvailablePerformersList = this._userService.SearchSortAndGenerateUsers(userSearch).MapToCustomSelectList(fd.caseSearchFilter.UserPerformer, fd.customerSetting);
+            fd.AvailablePerformersList = 
+                this._userService.SearchSortAndGenerateUsers(userSearch).MapToCustomSelectList(fd.caseSearchFilter.UserPerformer, fd.customerSetting);
+
             if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserPerformer))
             {
                 fd.lstfilterPerformer = fd.caseSearchFilter.UserPerformer.Split(',').Select(int.Parse).ToArray();
@@ -5108,6 +5118,8 @@ namespace DH.Helpdesk.Web.Controllers
             //todo: first
             m.caseFieldSettings = customerFieldSettings;
             m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetAllCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
+            
+            //todo: performance - query
             m.CaseSectionModels = _caseSectionService.GetCaseSections(customerId, SessionFacade.CurrentLanguageId);
 
             m.DepartmentFilterFormat = customerSetting.DepartmentFilterFormat;
@@ -5126,8 +5138,8 @@ namespace DH.Helpdesk.Web.Controllers
             if (isCreateNewCase)
             {
                 #region New case model initialization actions
-                var identity = global::System.Security.Principal.WindowsIdentity.GetCurrent();
-                var windowsUser = identity != null ? identity.Name : null;
+                
+                var userName = SessionFacade.CurrentUserIdentity?.GetUserIdWithDomain();
                 if (copyFromCaseId.HasValue)
                 {
                     m.case_ = this._caseService.Copy(
@@ -5136,7 +5148,8 @@ namespace DH.Helpdesk.Web.Controllers
                         SessionFacade.CurrentLanguageId,
                         this.Request.GetIpAddress(),
                         CaseRegistrationSource.Administrator,
-                        windowsUser);
+                        userName);
+
                     m.MapToFollowerUsers(m.case_.CaseFollowers);
                 }
                 else if (parentCaseId.HasValue)
@@ -5147,8 +5160,9 @@ namespace DH.Helpdesk.Web.Controllers
                        userId,
                        this.Request.GetIpAddress(),
                        CaseRegistrationSource.Administrator,
-                       windowsUser,
+                       userName,
                        out parentCaseInfo);
+
                     m.ParentCaseInfo = parentCaseInfo.MapBusinessToWebModel(outputFormatter);
                 }
                 else
@@ -5160,7 +5174,7 @@ namespace DH.Helpdesk.Web.Controllers
                         this.Request.GetIpAddress(),
                         CaseRegistrationSource.Administrator,
                         customerSetting,
-                        windowsUser);
+                        userName);
 
                     //m.case_ = this._caseService.InitCase(
                     //        customerId,
@@ -5766,10 +5780,10 @@ namespace DH.Helpdesk.Web.Controllers
                 #endregion
             }
 
-            DHDomain.User admUser = null;
+            BusinessData.Models.User.CustomerUserInfo admUser = null;
             if (m.case_.Performer_User_Id.HasValue)
             {
-                admUser = this._userService.GetUser(m.case_.Performer_User_Id.Value);
+                admUser = this._userService.GetUserInfo(m.case_.Performer_User_Id.Value);
             }
 
             var performersList = responsibleUsersList;
@@ -5778,7 +5792,7 @@ namespace DH.Helpdesk.Web.Controllers
                 performersList = this._userService.GetAvailablePerformersForWorkingGroup(customerId, m.case_.WorkingGroup_Id);
             }
 
-            if (!performersList.Contains(admUser) && admUser != null)
+            if (admUser != null && !performersList.Any(u => u.Id == admUser.Id) )
             {
                 performersList.Insert(0, admUser);
             }
@@ -5930,8 +5944,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             // "Administrator" (Performer)
             m.Performer_Id = m.case_.Performer_User_Id ?? 0;
-            m.Performers = performersList.Where(it => it.IsActive == 1 && (it.Performer == 1 || it.Id == m.Performer_Id))
-                .MapToSelectList(m.Setting, isAddEmpty);
+            m.Performers = 
+                performersList.Where(it => it.IsActive == 1 && (it.Performer == 1 || it.Id == m.Performer_Id)).MapToSelectList(m.Setting, isAddEmpty);
 
             m.DynamicCase = this._caseService.GetDynamicCase(m.case_.Id);
             if (m.DynamicCase != null)
@@ -7165,7 +7179,6 @@ namespace DH.Helpdesk.Web.Controllers
             ret.ClosingReasonId = closingReason;
             if (closingReason > 0)
             {
-
                 var fc = this._finishingCauseService.GetFinishingCause(ret.ClosingReasonId);
                 if (fc != null)
                 {

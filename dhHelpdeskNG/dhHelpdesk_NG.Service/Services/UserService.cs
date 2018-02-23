@@ -1,4 +1,6 @@
 ﻿using System.Linq.Expressions;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
 
@@ -56,6 +58,8 @@ namespace DH.Helpdesk.Services.Services
         IList<User> GetUsersByUserGroup(int customerId);
         IList<User> GetAdminstratorsForSMS(int customerId, int active = 1);
 
+        IList<CustomerUserInfo> GetCustomerUsers(int customerId);
+
         /// <summary>
         /// Fetches active users with performer flag.
         /// If userId is supplied appends to list user with this id without checking first condition
@@ -63,23 +67,25 @@ namespace DH.Helpdesk.Services.Services
         /// <param name="customerId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        IList<User> GetAvailablePerformersOrUserId(int customerId, int? userId = null);
+        IList<CustomerUserInfo> GetAvailablePerformersOrUserId(int customerId, int? userId = null, bool includeWorkingGroups = false);
+
         IList<User> GetPerformersOrUserId(int customerId, int? userId = null);
         IList<User> GetAllPerformers(int customerId);
-
-        IList<User> GetAvailablePerformersForWorkingGroup(int customerId, int? workingGroup = null);
+        IList<CustomerUserInfo> GetAvailablePerformersForWorkingGroup(int customerId, int? workingGroup = null);
 
         IList<User> SearchSortAndGenerateUsers(UserSearch SearchUsers);
         IList<User> SearchSortAndGenerateUsersByUserGroup(UserSearch SearchUsers);
         IList<UserGroup> GetUserGroups();
         IList<UserRole> GetUserRoles();
         IList<UserWorkingGroup> GetUserWorkingGroups();
-        IList<User> GetUsersForWorkingGroup(int customerId, int workingGroupId);
-        IList<User> GetUsersForWorkingGroup(int workingGroupId);
+
+        //IList<User> GetUsersForWorkingGroup(int customerId, int workingGroupId, bool includeWorkingGroups = false);
+        IList<CustomerUserInfo> GetUsersForWorkingGroup(int workingGroupId);
+
         bool UserHasActiveCase(int customerId, int userId, List<int> workingGroups);
 
-        
-        User GetUser(int id);
+        CustomerUserInfo GetUserInfo(int id);
+        User GetUser(int id); //not perf effecient - user info method
         string GetUserTimeZoneId(int userId);
         UserRole GetUserRoleById(int id);
         UserWorkingGroup GetUserWorkingGroupById(int userId, int workingGroupId);
@@ -322,15 +328,59 @@ namespace DH.Helpdesk.Services.Services
             return this._userRepository.GetMany(x => x.IsActive == 1).Where(x => x.CustomerUsers.Any(i => i.Customer_Id == customerId)).OrderBy(x => x.SurName).ToList(); //TODO: den här raden skall kanske fungera senare, men gör det inte just nu
         }
 
-        public IList<User> GetUsersForWorkingGroup(int customerId, int workingGroupId)
+        #region GetUsersForWorkingGroupOverview
+
+        public IList<CustomerUserInfo> GetUsersForWorkingGroup(int customerId, int workingGroupId)
         {
-            return this._userRepository.GetUsersForWorkingGroup(customerId, workingGroupId).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();    
+            var query = _userRepository.GetUsersForWorkingGroupQuery(workingGroupId, customerId, true);
+            var users = MapToCustomerUserInfo(query).ToList();
+            return users;
         }
 
-        public IList<User> GetUsersForWorkingGroup(int workingGroupId)
+        public IList<CustomerUserInfo> GetUsersForWorkingGroup(int workingGroupId)
         {
-            return this._userRepository.GetUsersForWorkingGroup(workingGroupId).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
+            var query = _userRepository.GetUsersForWorkingGroupQuery(workingGroupId);
+            var users = MapToCustomerUserInfo(query).ToList();
+            return users;
         }
+
+        //its important to keep IQuerable
+        private IQueryable<CustomerUserInfo> MapToCustomerUserInfo(IQueryable<User> query, bool includeWorkingGroups = false)
+        {
+            if (includeWorkingGroups)
+            {
+                return query.Select(x => new CustomerUserInfo()
+                {
+                    Id = x.Id,
+                    IsActive = x.IsActive,
+                    Performer = x.Performer,
+                    Email = x.Email,
+                    FirstName = x.FirstName,
+                    SurName = x.SurName,
+                    WorkingGroups =
+                        x.UserWorkingGroups.Select(w => new UserWorkingGroupOverview()
+                        {
+                            WorkingGroupId = w.WorkingGroup_Id,
+                            IsDefault = w.IsDefault,
+                            IsMemberOfGroup = w.IsMemberOfGroup,
+                            UserRole = w.UserRole
+                        }).ToList()
+                });
+            }
+
+            //by default without groups
+            return query.Select(x => new CustomerUserInfo()
+            {
+                Id = x.Id,
+                IsActive = x.IsActive,
+                Performer = x.Performer,
+                Email = x.Email,
+                FirstName = x.FirstName,
+                SurName = x.SurName
+            });
+        }
+
+        #endregion
 
         public IList<UserLists> GetUserOnCases(int customerId, bool isTakeOnlyActive = false)
         {
@@ -344,20 +394,46 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<User> GetUsers(int customerId)
         {
-            return this._userRepository.GetUsers(customerId).Where(x => x.IsActive == 1).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
+            return this._userRepository.GetUsers(customerId)
+                .Where(x => x.IsActive == 1)
+                .OrderBy(x => x.SurName)
+                .ThenBy(x => x.FirstName).ToList();
+        }
+
+        // perf optimised for dropdowns - returns only basic info
+        public IList<CustomerUserInfo> GetCustomerUsers(int customerId)
+        {
+            var query = 
+                this._userRepository.GetUsers(customerId)
+                            .Where(x => x.IsActive == 1)
+                            .OrderBy(x => x.SurName)
+                            .ThenBy(x => x.FirstName)
+                            .Select(x => new CustomerUserInfo
+                            {
+                               Id = x.Id,
+                               FirstName =  x.FirstName,
+                               SurName = x.SurName,
+                               Email =  x.Email,
+                               IsActive = x.IsActive
+                            });
+
+            return query.ToList();
         }
 
         public IList<User> GetUsersByUserGroup(int customerId)
         {
             return this._userRepository.GetUsersByUserGroup(customerId).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
         }
-
-        public IList<User> GetAvailablePerformersOrUserId(int customerId, int? userId = null)
+        
+        public IList<CustomerUserInfo> GetAvailablePerformersOrUserId(int customerId, int? userId = null, bool includeWorkingGroups = false)
         {
-            return
-                this._userRepository.GetUsers(customerId)
-                    .Where(e => e.IsActive == 1 && (e.Performer == 1 || (userId.HasValue && e.Id == userId))).OrderBy(e => e.SurName)
-                    .ToList();
+            var query =
+                _userRepository.GetUsers(customerId)
+                    .Where(e => e.IsActive == 1 && (e.Performer == 1 || (userId.HasValue && e.Id == userId)))
+                    .OrderBy(e => e.SurName).ThenBy(e => e.FirstName);
+
+            var items = MapToCustomerUserInfo(query, includeWorkingGroups).ToList();
+            return items;
         }
 
         public IList<User> GetPerformersOrUserId(int customerId, int? userId = null)
@@ -376,16 +452,16 @@ namespace DH.Helpdesk.Services.Services
                     .ToList();
         }
 
-        public IList<User> GetAvailablePerformersForWorkingGroup(int customerId, int? workingGroup = null)
+        public IList<CustomerUserInfo> GetAvailablePerformersForWorkingGroup(int customerId, int? workingGroup = null)
         {
             if (workingGroup.HasValue)
             {
-                return
-                    this.GetUsersForWorkingGroup(customerId, workingGroup.Value)
-                        .Where(it => it.IsActive == 1 && it.Performer == 1)
-                        .ToList();
-            }
+                var query = 
+                    this._userRepository.GetUsersForWorkingGroupQuery(workingGroup.Value, customerId, true) 
+                        .Where(it => it.IsActive == 1 && it.Performer == 1); 
 
+                return MapToCustomerUserInfo(query).ToList(); //todo: check working group flag
+            }
             return this.GetAvailablePerformersOrUserId(customerId);
         }
 
@@ -412,6 +488,11 @@ namespace DH.Helpdesk.Services.Services
         public IList<UserWorkingGroup> GetUserWorkingGroups()
         {
             return this._userWorkingGroupRepository.GetAll().ToList();
+        }
+        
+        public CustomerUserInfo GetUserInfo(int id)
+        {
+            return this._userRepository.GetUserInfo(id);
         }
 
         public User GetUser(int id)

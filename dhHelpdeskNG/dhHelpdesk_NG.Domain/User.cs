@@ -6,7 +6,7 @@
     using global::System;
     using global::System.Collections.Generic;
 
-    public class User : Entity, ICustomerEntity, IActiveEntity
+    public class User : Entity, ICustomerEntity, IActiveEntity, IUserCommon
     {
         public int AccountType { get; set; }
         public int ActivateCasePermission { get; set; }

@@ -1,4 +1,6 @@
 ﻿using DH.Helpdesk.BusinessData.Enums.Users;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.BusinessData.Models.Users.Input;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Users;
@@ -38,9 +40,9 @@ namespace DH.Helpdesk.Dal.Repositories
         List<ItemWithEmail> FindUsersEmails(List<int> userIds, bool isActive = false);
 
         IQueryable<User> GetUsers(int customerId);
-        IEnumerable<User> GetUsersByUserGroup(int customerId);
-        IEnumerable<User> GetUsersForWorkingGroup(int customerId, int workingGroupId);
-        IEnumerable<User> GetUsersForWorkingGroup(int workingGroupId);
+        IQueryable<User> GetUsersByUserGroup(int customerId);
+        IQueryable<User> GetUsersForWorkingGroupQuery(int workingGroupId, int? customerId = null, bool requireMemberOfGroup = false);
+
         IList<CustomerWorkingGroupForUser> ListForWorkingGroupsInUser(int userId);
         IList<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId);
         IList<LoggedOnUsersOnIndexPage> LoggedOnUsers();
@@ -49,7 +51,9 @@ namespace DH.Helpdesk.Dal.Repositories
         IList<User> GetUsersForUserSettingListByUserGroup(UserSearch searchUser);
         UserOverview Login(string uId, string pwd);
         Task<UserOverview> GetByUserIdAsync(string userId, string passw);
-        UserOverview GetUser(int userid);
+
+        CustomerUserInfo GetUserInfo(int userId); //basic information - good perf
+        UserOverview GetUser(int userid); // full information
 
         IList<UserLists> GetUserOnCases(int customerId, bool isTakeOnlyActive = false);
 
@@ -231,22 +235,40 @@ namespace DH.Helpdesk.Dal.Repositories
            return usersEmails.Select(u => new ItemWithEmail(u.Id, u.Email)).ToList();
         }
 
-        public IEnumerable<User> GetUsersForWorkingGroup(int customerId, int workingGroupId)
+        public CustomerUserInfo GetUserInfo(int userId)
         {
-            var query = from u in this.DataContext.Users
-                        join uw in this.DataContext.UserWorkingGroups on u.Id equals uw.User_Id
-                        where u.CustomerUsers.Any(c => c.Customer_Id == customerId) && uw.WorkingGroup_Id == workingGroupId && uw.UserRole != WorkingGroupUserPermission.READ_ONLY && uw.IsMemberOfGroup //u.Customer_Id == customerId
-                        select u;
-            return query;
+            var userInfo = 
+                Table.Where(u => u.Id == userId)
+                .Select(x => new CustomerUserInfo()
+                {
+                    Id = x.Id,
+                    IsActive = x.IsActive,
+                    Performer = x.Performer,
+                    Email = x.Email,
+                    FirstName = x.FirstName,
+                    SurName = x.SurName
+                })
+                .FirstOrDefault();
+
+            return userInfo;
         }
 
-        public IEnumerable<User> GetUsersForWorkingGroup(int workingGroupId)
+        public IQueryable<User> GetUsersForWorkingGroupQuery(int workingGroupId, int? customerId, bool requireMemberOfGroup = false)
         {
-            var query = from u in this.DataContext.Users
-                        join uw in this.DataContext.UserWorkingGroups on u.Id equals uw.User_Id
-                        where uw.WorkingGroup_Id == workingGroupId
-                        select u;
-            return query;
+            bool checkGroup = requireMemberOfGroup;
+            var query = 
+                from u in this.DataContext.Users
+                join uw in this.DataContext.UserWorkingGroups on u.Id equals uw.User_Id
+                where uw.WorkingGroup_Id == workingGroupId  &&
+                      (!checkGroup || (uw.UserRole != WorkingGroupUserPermission.READ_ONLY && uw.IsMemberOfGroup))
+                select u;
+
+            if (customerId > 0)
+            {
+                query = query.Where(u => u.CustomerUsers.Any(c => c.Customer_Id == customerId.Value));
+            }
+
+            return query.OrderBy(u => u.SurName).ThenBy(u => u.SurName);
         }
 
         public IQueryable<User> GetUsers(int customerId)
@@ -258,7 +280,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return query;
         }
 
-        public IEnumerable<User> GetUsersByUserGroup(int customerId)
+        public IQueryable<User> GetUsersByUserGroup(int customerId)
         {
             var query = from u in this.DataContext.Users
                         where u.CustomerUsers.Any(c => c.Customer_Id == customerId && c.User.UserGroup_Id != 4) // u.Customer_Id == customerId &&
@@ -511,6 +533,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return ret;
         }
 
+        //performance ineffecient approach - mapping is done after query is executed and wrong parameters can be assigned by mistake in ctor
         private UserOverview GetUser(Expression<Func<User, bool>> expression)
         {
             var u = this.DataContext.Users

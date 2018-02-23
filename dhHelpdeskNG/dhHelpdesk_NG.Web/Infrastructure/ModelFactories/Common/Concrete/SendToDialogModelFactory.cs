@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Domain;
+﻿using DH.Helpdesk.BusinessData.Models.User;
+using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
 
 namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete
@@ -47,7 +48,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete
                 administratorList);
         }
 
-        public SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<User> users, Setting customerSetting,
+        public SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<CustomerUserInfo> users, Setting customerSetting,
             IEmailGroupService emailGroupService, IWorkingGroupService workingGroupService, IEmailService emailService, bool includeAdmins = true)
         {
             var emailGroups = emailGroupService.GetEmailGroupsWithEmails(customerId);

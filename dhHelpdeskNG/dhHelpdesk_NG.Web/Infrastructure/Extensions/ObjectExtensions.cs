@@ -2,6 +2,7 @@
 using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Domain.Cases;
 
@@ -45,9 +46,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return new WorkingGroupEntity { Id = int.MinValue, WorkingGroupName = "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --", IsActive = 1 };
         }
 
-        public static User notAssignedPerformer()
+        public static CustomerUserInfo notAssignedPerformer()
         {
-            return new User { Id = int.MinValue, FirstName = "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --", SurName="", IsActive = 1 , Performer = 1};
+            return new CustomerUserInfo { Id = int.MinValue, FirstName = "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --", SurName="", IsActive = 1 , Performer = 1};
         }
 
         public static IList<Field> GetFilterForCases(int followUpPermission, int customerId)

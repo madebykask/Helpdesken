@@ -27,9 +27,10 @@ namespace DH.Helpdesk.Services.Services.Cases
                 SectionType = section.SectionType,
                 IsEditCollapsed = section.IsEditCollapsed,
                 IsNewCollapsed = section.IsNewCollapsed,
-                SectionHeader = section.CaseSectionLanguages.SingleOrDefault(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId) != null
-                    ? section.CaseSectionLanguages.Single(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId).Label
-                    : string.Empty,
+                SectionHeader = 
+                        section.CaseSectionLanguages.SingleOrDefault(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId) != null
+                            ? section.CaseSectionLanguages.Single(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId).Label
+                            : string.Empty,
                 CustomerId = section.Customer_Id,
                 CaseSectionFields = section.CaseSectionFields.Select(x => x.CaseFieldSetting_Id).ToList()
             }).ToList();

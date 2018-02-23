@@ -75,11 +75,11 @@ namespace DH.Helpdesk.Dal.Repositories
                        };
         }
 
-        public IList<BusinessData.Models.Case.CategoryOverview> GetCategoriesOverview(int customerId, bool activeOnly)
+        public IList<CategoryOverview> GetCategoriesOverview(int customerId, bool activeOnly)
         {
             var items = 
                 Table.Where(x => x.Customer_Id == customerId && x.Parent_Category_Id == null && (!activeOnly || x.IsActive > 0))
-                .Select(x => new BusinessData.Models.Case.CategoryOverview
+                .Select(x => new CategoryOverview
                 {
                     Id = x.Id,
                     ParentId = x.Parent_Category_Id,

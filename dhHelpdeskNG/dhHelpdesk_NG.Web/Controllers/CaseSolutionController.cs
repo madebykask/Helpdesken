@@ -1,4 +1,6 @@
 ﻿
+using DH.Helpdesk.BusinessData.Models.User;
+
 namespace DH.Helpdesk.Web.Controllers
 {
     using System.Collections.Generic;
@@ -2418,7 +2420,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult ChangeWorkingGroupFilterUser(int? id, int customerId)
         {
-            IList<User> performersList;
+            IList<CustomerUserInfo> performersList;
             var customerSettings = this._settingService.GetCustomerSetting(customerId);
             if (customerSettings.DontConnectUserToWorkingGroup == 0 && id > 0)
             {
@@ -2429,7 +2431,7 @@ namespace DH.Helpdesk.Web.Controllers
                 performersList = this._userService.GetAvailablePerformersOrUserId(customerId);
             }
 
-            var currentUser = new User() { Id = -1, FirstName = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION)) };
+            var currentUser = new CustomerUserInfo() { Id = -1, FirstName = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION)) };
             performersList.Insert(0, currentUser);
             if (customerSettings.IsUserFirstLastNameRepresentation == 1)
             {
@@ -2873,14 +2875,12 @@ namespace DH.Helpdesk.Web.Controllers
             if (caseSolution.SetCurrentUsersWorkingGroup == 1)
                 caseSolution.CaseWorkingGroup_Id = -1;
 
-            var performersList = isCreatingNew ?
-                                     this._userService.GetAvailablePerformersOrUserId(curCustomerId)
-                                         .MapToSelectList(cs, true, true)
-                                     : this._userService.GetAvailablePerformersForWorkingGroup(
-                                         curCustomerId,
-                                         caseSolution.CaseWorkingGroup_Id).MapToSelectList(cs, true, true);
-            const bool TakeOnlyActive = true;
+            var performersList = 
+                    isCreatingNew 
+                        ? this._userService.GetAvailablePerformersOrUserId(curCustomerId).MapToSelectList(cs, true, true)
+                        : this._userService.GetAvailablePerformersForWorkingGroup(curCustomerId, caseSolution.CaseWorkingGroup_Id).MapToSelectList(cs, true, true);
 
+            const bool TakeOnlyActive = true;
 
             var workingGroupList = this._workingGroupService.GetAllWorkingGroupsForCustomer(curCustomerId).Select(x => new SelectListItem
             {
@@ -2970,7 +2970,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 CaseWorkingGroups = workingGroupList,
 
-                Categories = this._categoryService.GetActiveParentCategories(curCustomerId),
+                Categories = this._categoryService.GetActiveParentCategoriesOverviews(curCustomerId),
 
                 FinishingCauses = this._finishingCauseService.GetFinishingCausesWithChilds(curCustomerId),
 
