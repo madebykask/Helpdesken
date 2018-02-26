@@ -25,7 +25,7 @@ using System;
     {
         string GetCustomerName(int customerId);
 
-        IList<Customer> CustomersForUser(int userId);
+        IQueryable<Customer> CustomersForUser(int userId);
 
         CustomerOverview FindById(int id);
 
@@ -73,16 +73,16 @@ using System;
 
             return ret;
         }
-
-
-        public IList<Customer> CustomersForUser(int userId)
+        
+        public IQueryable<Customer> CustomersForUser(int userId)
         {
-            var query = from customer in this.DataContext.Set<Customer>()
-                         join customerUser in this.DataContext.Set<CustomerUser>().Where(o => o.User_Id == userId) on customer.Id equals customerUser.Customer_Id
-                         orderby customer.Name
-                         select customer;
+            var query = 
+                from cus in this.Table
+                where cus.Users.Any(u => u.Id == userId)
+                orderby cus.Name
+                select cus;
 
-            return query.ToList();
+            return query;
         }
 
         public CustomerOverview FindById(int id)

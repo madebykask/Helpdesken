@@ -465,7 +465,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             _localTranslations = _textTranslationService.GetTranslationsFor(_UNIT_TEXTS.ToList(), _currentLanguageId);
             _caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(caseModel.Customer_Id, _currentLanguageId).ToList();
             if (auxModel.CurrentUserId > 0)
-                _customerUser = _customerUserService.GetCustomerSettings(caseModel.Customer_Id, auxModel.CurrentUserId);
+                _customerUser = _customerUserService.GetCustomerUserSettings(caseModel.Customer_Id, auxModel.CurrentUserId);
             var oldCase = new CaseModel();
 
             /*Apply rules*/

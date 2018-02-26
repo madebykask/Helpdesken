@@ -34,6 +34,9 @@ namespace DH.Helpdesk.Web.Infrastructure
 
         private readonly IMasterDataService _masterDataService;
 
+        // store settings for customer for all controller to use 
+        private Domain.Setting CurrentCustomerSettings { get; set; }
+
         #endregion
 
         #region Constructors and Destructors
@@ -114,8 +117,7 @@ namespace DH.Helpdesk.Web.Infrastructure
             if (SessionFacade.CurrentCustomer != null)
             {
                 masterViewModel.SelectedCustomerId = SessionFacade.CurrentCustomer.Id;
-                masterViewModel.CustomerSetting =
-                    this._masterDataService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+                masterViewModel.CustomerSetting = GetCustomerSettings(SessionFacade.CurrentCustomer.Id);
             }
             this.ViewData[Constants.ViewData.MasterViewData] = masterViewModel;
         }
@@ -136,6 +138,12 @@ namespace DH.Helpdesk.Web.Infrastructure
                 //_cache.GetTextTranslations();
                 //_cache.GetCaseTranslations();
             }
+        }
+
+        protected Domain.Setting GetCustomerSettings(int customerId)
+        {
+            var settings = _masterDataService.GetCustomerSettings(customerId);
+            return settings;
         }
 
         #region Protected Methods

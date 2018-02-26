@@ -27,7 +27,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
 
         SearchResult Search(SearchParameters parameters);
 
-        IList<ChangeEntity> GetChanges(int customer);
+        IList<ChangeOverview> GetChanges(int customer);
 
         void DeleteById(int changeId);
 

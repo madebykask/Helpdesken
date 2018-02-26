@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Models
+﻿using DH.Helpdesk.BusinessData.Models.Customer.Input;
+
+namespace DH.Helpdesk.Web.Models
 {
     using System.Collections.Generic;
 
@@ -16,7 +18,7 @@
 
         public Setting CustomerSetting { get; set; }
 
-        public IList<Customer> Customers { get; set; }
+        public IList<CustomerOverview> Customers { get; set; }
         
         public IList<Language> Languages { get; set; }
 

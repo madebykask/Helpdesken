@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.SelfService.Models
+﻿using DH.Helpdesk.BusinessData.Models.Customer.Input;
+
+namespace DH.Helpdesk.SelfService.Models
 {
     using System.Collections.Generic;
 
@@ -10,7 +12,7 @@
         public int SelectedLanguageId { get; set; }
 
         public Setting CustomerSetting { get; set; }
-        public IList<Customer> Customers { get; set; }
+        public IList<CustomerOverview> Customers { get; set; }
         public IList<Language> Languages { get; set; }
     }
 }

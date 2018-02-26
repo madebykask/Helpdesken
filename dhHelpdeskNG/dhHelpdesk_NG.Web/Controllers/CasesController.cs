@@ -668,7 +668,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var m = new JsonCaseIndexViewModel();
 
-            var customerUser = this._customerUserService.GetCustomerSettings(customerId, userId);
+            var customerUser = this._customerUserService.GetCustomerUserSettings(customerId, userId);
             m.CaseSearchFilterData = this.CreateCaseSearchFilterData(customerId, SessionFacade.CurrentUser, customerUser, SessionFacade.CurrentCaseSearch);
             m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.OnCaseOverview);
             this._caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
@@ -938,7 +938,7 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CurrentCaseSearch = sm;
             #endregion
 
-            var customerSettings = _settingService.GetCustomerSetting(f.CustomerId);
+            var customerSettings = GetCustomerSettings(f.CustomerId);
 
             var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1, userTimeZone);
 
@@ -1414,8 +1414,7 @@ namespace DH.Helpdesk.Web.Controllers
             //Check if customer has a default casetemplate
             if (!templateId.HasValue && customerId.HasValue)
             {
-                var setting = this._settingService.GetCustomerSetting(customerId.Value);
-
+                var setting = GetCustomerSettings(customerId.Value);
                 if (setting.DefaultCaseTemplateId != 0)
                 {
                     templateId = setting.DefaultCaseTemplateId;
@@ -1464,7 +1463,7 @@ namespace DH.Helpdesk.Web.Controllers
                     if (m.CaseMailSetting.DontSendMailToNotifier == false) m.CaseMailSetting.DontSendMailToNotifier = true;
                     else m.CaseMailSetting.DontSendMailToNotifier = false;
 
-                    var moduleCaseInvoice = this._settingService.GetCustomerSetting(customerId.Value).ModuleCaseInvoice;
+                    var moduleCaseInvoice = GetCustomerSettings(customerId.Value).ModuleCaseInvoice;
                     if (moduleCaseInvoice == 1)
                     {
                         var caseInvoices = this.invoiceArticleService.GetCaseInvoicesWithTimeZone(m.case_.Id, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
@@ -1573,7 +1572,8 @@ namespace DH.Helpdesk.Web.Controllers
                     m.ParantPath_OU = ParentPathDefaultValue;
                 }
 
-                var moduleCaseInvoice = this._settingService.GetCustomerSetting(m.case_.Customer_Id).ModuleCaseInvoice;
+                var caseCustomerSettings = GetCustomerSettings(m.case_.Customer_Id);
+                var moduleCaseInvoice = caseCustomerSettings.ModuleCaseInvoice;
                 if (moduleCaseInvoice == 1)
                 {
                     var caseInvoices = this.invoiceArticleService.GetCaseInvoicesWithTimeZone(id, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
@@ -1581,16 +1581,15 @@ namespace DH.Helpdesk.Web.Controllers
                     m.InvoiceModel = new CaseInvoiceModel(m.case_.Customer_Id, m.case_.Id, invoiceArticles, "", m.CaseKey, m.LogKey);
                 }
 
-                m.CustomerSettings = this.workContext.Customer.Settings;
-
-                m.CustomerSettings.ModuleCaseInvoice = Convert.ToBoolean(this._settingService.GetCustomerSetting(m.case_.Customer_Id).ModuleCaseInvoice); // TODO FIX
+                m.CustomerSettings = this.workContext.Customer.Settings; //current customer settings
+                m.CustomerSettings.ModuleCaseInvoice = Convert.ToBoolean(caseCustomerSettings.ModuleCaseInvoice); // TODO FIX
 
                 #region ConnectToParentModel
 
                 m.ConnectToParentModel = new JsonCaseIndexViewModel();
                 if (!m.IsItChildCase())
                 {
-                    var customerUser = this._customerUserService.GetCustomerSettings(currentCustomerId, userId);
+                    var customerUser = this._customerUserService.GetCustomerUserSettings(currentCustomerId, userId);
                     m.ConnectToParentModel.CaseSearchFilterData = this.CreateCaseSearchFilterData(currentCustomerId, SessionFacade.CurrentUser, customerUser, this.InitCaseSearchModel(customerId, userId));
 
                     //todo:
@@ -1643,8 +1642,8 @@ namespace DH.Helpdesk.Web.Controllers
             if (SessionFacade.CurrentUser != null)
             {
                 var userId = SessionFacade.CurrentUser.Id;
-                var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
-                var cs = this._settingService.GetCustomerSetting(customerId);
+                var cu = this._customerUserService.GetCustomerUserSettings(customerId, userId);
+                var cs = GetCustomerSettings(customerId);
                 var customer = this._customerService.GetCustomer(customerId);
                 var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
 
@@ -1829,7 +1828,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var result = this._computerService.SearchComputerUsers(customerId, query, categoryID);
 
-            var ComputerUserSearchRestriction = _settingService.GetCustomerSetting(customerId).ComputerUserSearchRestriction;
+            var ComputerUserSearchRestriction = GetCustomerSettings(customerId).ComputerUserSearchRestriction;
             if (ComputerUserSearchRestriction == 1)
             {
                 var departmentIds = this._departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, customerId).Select(x => x.Id).ToList();
@@ -1977,7 +1976,7 @@ namespace DH.Helpdesk.Web.Controllers
         public JsonResult ChangeWorkingGroupFilterUser(int? id, int customerId)
         {
             IList<BusinessData.Models.User.CustomerUserInfo> performersList;
-            var customerSettings = this._settingService.GetCustomerSetting(customerId);
+            var customerSettings = GetCustomerSettings(customerId);
             if (customerSettings.DontConnectUserToWorkingGroup == 0 && id > 0)
             {
                 performersList = this._userService.GetAvailablePerformersForWorkingGroup(customerId, id);
@@ -3460,7 +3459,7 @@ namespace DH.Helpdesk.Web.Controllers
                 throw new ArgumentException("Case customer has an invalid value");
             }
 
-            var customerSetting = _settingService.GetCustomerSetting(curCustomer.Id);
+            var customerSetting = GetCustomerSettings(curCustomer.Id);
 
             // offset in Minute
             var customerTimeOffset = customerSetting.TimeZone_offset;
@@ -3481,7 +3480,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 #region Editing existing case
                 oldCase = this._caseService.GetDetachedCaseById(case_.Id);
-                var cu = this._customerUserService.GetCustomerSettings(case_.Customer_Id, SessionFacade.CurrentUser.Id);
+                var cu = this._customerUserService.GetCustomerUserSettings(case_.Customer_Id, SessionFacade.CurrentUser.Id);
                 if (cu != null)
                 {
                     if (cu.UserInfoPermission == 0)
@@ -4000,7 +3999,7 @@ namespace DH.Helpdesk.Web.Controllers
             var oldCase = this._caseService.GetCaseById(caseLog.CaseId);
 
             var customer = this._customerService.GetCustomer(oldCase.Customer_Id);
-            var customerSetting = this._settingService.GetCustomerSetting(oldCase.Customer_Id);
+            var customerSetting = GetCustomerSettings(oldCase.Customer_Id);
             var basePath = _masterDataService.GetFilePath(oldCase.Customer_Id);
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
             var currentLoggedInUser = this._userService.GetUser(SessionFacade.CurrentUser.Id);
@@ -4524,7 +4523,7 @@ namespace DH.Helpdesk.Web.Controllers
             var fd = new CaseSearchFilterData
             {
                 customerUserSetting = cu,
-                customerSetting = this._settingService.GetCustomerSetting(cusId),
+                customerSetting = GetCustomerSettings(cusId),
                 filterCustomerId = cusId
             };
 
@@ -4697,7 +4696,7 @@ namespace DH.Helpdesk.Web.Controllers
             fd.caseSearchFilter = sm.caseSearchFilter;
             fd.CaseInitiatorFilter = sm.caseSearchFilter.Initiator;
             fd.InitiatorSearchScope = sm.caseSearchFilter.InitiatorSearchScope;
-            fd.customerSetting = this._settingService.GetCustomerSetting(cusId);
+            fd.customerSetting = GetCustomerSettings(cusId);
             fd.filterCustomers = customers;
             fd.filterCustomerId = cusId;
             // Case #53981
@@ -4752,12 +4751,12 @@ namespace DH.Helpdesk.Web.Controllers
                     customerId = csm.caseSearchFilter.CustomerId;
             }
 
-            var customerSetting = this._settingService.GetCustomerSetting(customerId);
+            var customerSetting = GetCustomerSettings(customerId);
 
             var specificFilter = new AdvancedSearchSpecificFilterData();
 
             specificFilter.CustomerId = customerId;
-            specificFilter.CustomerSetting = this._settingService.GetCustomerSetting(customerId);
+            specificFilter.CustomerSetting = customerSetting;
 
             specificFilter.FilteredCaseTypeText = ParentPathDefaultValue;
             specificFilter.FilteredProductAreaText = ParentPathDefaultValue;
@@ -5044,7 +5043,8 @@ namespace DH.Helpdesk.Web.Controllers
             var isCreateNewCase = caseId == 0;
             m.CaseLock = caseLocked;
 
-            m.CaseUnlockAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseUnlockPermission);
+            m.CaseUnlockAccess = 
+                _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseUnlockPermission);
 
             m.MailTemplates = this._mailTemplateService.GetCustomMailTemplatesList(customerId).ToList();
 
@@ -5102,7 +5102,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
 
-            var customerUserSetting = this._customerUserService.GetCustomerSettings(customerId, userId);
+            var customerUserSetting = this._customerUserService.GetCustomerUserSettings(customerId, userId);
             if (customerUserSetting == null)
             {
                 throw new ArgumentException(string.Format("No customer settings for this customer '{0}' and user '{1}'", customerId, userId));
@@ -5110,7 +5110,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var case_ = m.case_;
             var customer = this._customerService.GetCustomer(customerId);
-            var customerSetting = this._settingService.GetCustomerSetting(customerId);
+            var customerSetting = GetCustomerSettings(customerId);
             var outputFormatter = new OutputFormatter(customerSetting.IsUserFirstLastNameRepresentation == 1, userTimeZone);
             m.OutFormatter = outputFormatter;
             m.customerUserSetting = customerUserSetting;
@@ -6617,7 +6617,7 @@ namespace DH.Helpdesk.Web.Controllers
             DHDomain.ISearch s = new DHDomain.Search();
             var f = new CaseSearchFilter();
             var m = new CaseSearchModel();
-            var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
+            var cu = this._customerUserService.GetCustomerUserSettings(customerId, userId);
             if (cu == null)
             {
                 throw new Exception(string.Format("Customers settings is empty or not valid for customer id {0}", customerId));
@@ -6659,7 +6659,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             DHDomain.ISearch s = new DHDomain.Search();
             var f = new CaseSearchFilter();
-            var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
+            var cu = this._customerUserService.GetCustomerUserSettings(customerId, userId);
             if (cu == null)
             {
                 throw new Exception("It looks that something has happened with your session. Refresh page to fix it.");
@@ -7019,7 +7019,7 @@ namespace DH.Helpdesk.Web.Controllers
             ret.Regions = regions;
             ret.SelectedRegion = userCaseSettings.Region;
 
-            var customerSettings = this._settingService.GetCustomerSetting(customerId);
+            var customerSettings = GetCustomerSettings(customerId);
 
             var departments = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId, IsTakeOnlyActive);
             if (!departments.Any())
@@ -7846,7 +7846,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var data = new List<Dictionary<string, object>>();
-            var customerSettings = this._settingService.GetCustomerSetting(f.CustomerId);
+            var customerSettings = GetCustomerSettings(f.CustomerId);
             var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1, userTimeZone);
             foreach (var searchRow in m.cases)
             {

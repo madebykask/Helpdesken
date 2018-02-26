@@ -2,46 +2,47 @@
 using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
 using DH.Helpdesk.BusinessData.Models.FinishingCause;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
+using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
 
 namespace DH.Helpdesk.Web.Models.Case
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Web.Mvc;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
 
-	using DH.Helpdesk.BusinessData.Models;
-	using DH.Helpdesk.BusinessData.Models.Case;
-	using DH.Helpdesk.BusinessData.Models.CaseSolution;
-	using DH.Helpdesk.BusinessData.Models.Customer;
-	using DH.Helpdesk.BusinessData.Models.Language.Output;
-	using DH.Helpdesk.BusinessData.Models.Logs.Output;
-	using DH.Helpdesk.BusinessData.Models.Problem.Output;
-	using DH.Helpdesk.BusinessData.Models.Projects.Output;
-	using DH.Helpdesk.BusinessData.Models.Shared;
-	using DH.Helpdesk.BusinessData.Models.CaseDocument;
-	using DH.Helpdesk.Domain;
-	using DH.Helpdesk.Domain.Changes;
-	using DH.Helpdesk.Web.Infrastructure.CaseOverview;
-	using DH.Helpdesk.Web.Infrastructure.Grid.Output;
-	using DH.Helpdesk.Web.Models.Case.ChildCase;
-	using DH.Helpdesk.Web.Models.Case.Output;
-	using DH.Helpdesk.Web.Models.CaseLock;
-	using DH.Helpdesk.Web.Models.Invoice;
-	using DH.Helpdesk.Web.Models.Shared;
-	using DH.Helpdesk.BusinessData.Models.MailTemplates;
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.CaseSolution;
+    using DH.Helpdesk.BusinessData.Models.Customer;
+    using DH.Helpdesk.BusinessData.Models.Language.Output;
+    using DH.Helpdesk.BusinessData.Models.Logs.Output;
+    using DH.Helpdesk.BusinessData.Models.Problem.Output;
+    using DH.Helpdesk.BusinessData.Models.Projects.Output;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.CaseDocument;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Changes;
+    using DH.Helpdesk.Web.Infrastructure.CaseOverview;
+    using DH.Helpdesk.Web.Infrastructure.Grid.Output;
+    using DH.Helpdesk.Web.Models.Case.ChildCase;
+    using DH.Helpdesk.Web.Models.Case.Output;
+    using DH.Helpdesk.Web.Models.CaseLock;
+    using DH.Helpdesk.Web.Models.Invoice;
+    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.MailTemplates;
 
-	using ParentCaseInfo = DH.Helpdesk.Web.Models.Case.ChildCase.ParentCaseInfo;
-	using DH.Helpdesk.Domain.Cases;
-	using DH.Helpdesk.BusinessData.Models.Case.Output;
-	using Microsoft.Reporting.WebForms;
-	using Controllers;
-	using Helpdesk.Common.Enums.Cases;
-	using Domain.Computers;
-	using System.Text;
+    using ParentCaseInfo = DH.Helpdesk.Web.Models.Case.ChildCase.ParentCaseInfo;
+    using DH.Helpdesk.Domain.Cases;
+    using DH.Helpdesk.BusinessData.Models.Case.Output;
+    using Microsoft.Reporting.WebForms;
+    using Controllers;
+    using Helpdesk.Common.Enums.Cases;
+    using Domain.Computers;
+    using System.Text;
 
-	public class CaseInputViewModel
+    public class CaseInputViewModel
     {
         public CaseInputViewModel()
         {
@@ -54,9 +55,9 @@ namespace DH.Helpdesk.Web.Models.Case
                                                                Value = string.Empty
                                                            }
                                                    };
-			ExternalInvoices = new List<ExternalInvoiceModel>();
-            		this.SelectedWorkflowStep = 0;
-			CaseAttachedExFiles = new List<CaseAttachedExFileModel>();
+            ExternalInvoices = new List<ExternalInvoiceModel>();
+                    this.SelectedWorkflowStep = 0;
+            CaseAttachedExFiles = new List<CaseAttachedExFileModel>();
             CaseLock = new CaseLockModel();
         }
 
@@ -71,7 +72,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public int ShowInvoiceFields { get; set; }
         public int ShowExternalInvoiceFields { get; set; }
         public bool TimeRequired { get; set; }
-	public CaseLockModel CaseLock { get; set; }
+    public CaseLockModel CaseLock { get; set; }
         public int MinWorkingTime { get; set; }        
         public Infrastructure.Enums.AccessMode EditMode { get; set; } //(-1,0,1)
         public bool Disable_SendMailAboutCaseToNotifier { get; set; }
@@ -107,7 +108,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public IList<CaseTypeOverview> caseTypes { get; set; }
         public IList<StandardText> standardTexts { get; set; }
         public IList<CategoryOverview> categories { get; set; }
-        public IList<ChangeEntity> changes { get; set; }
+        public IList<ChangeOverview> changes { get; set; }
         public IList<Country> countries { get; set; }
         public IList<Currency> currencies { get; set; }
         public IList<Department> departments { get; set; }
@@ -213,17 +214,17 @@ namespace DH.Helpdesk.Web.Models.Case
         public int? templateistrue { get; set; }
 
         public string CaseTemplateName { get; set; }
-		public int? CaseTemplateSplitToCaseSolutionID { get; set; }
+        public int? CaseTemplateSplitToCaseSolutionID { get; set; }
 
-		public string BackUrl { get; set; }
+        public string BackUrl { get; set; }
 
         public bool CanGetRelatedCases { get; set; }
 
         public IList<ExtendedCaseFormModel> ExtendedCases { get; set; }
 
-		public IList<ExtendedCaseFormModel> ComputerUserCategoryExtendedCases { get; set; }
+        public IList<ExtendedCaseFormModel> ComputerUserCategoryExtendedCases { get; set; }
 
-		public IList<CaseDocumentModel> CaseDocuments { get; set; }
+        public IList<CaseDocumentModel> CaseDocuments { get; set; }
 
         #region Date field from case_. Converted to user time zone
 
@@ -289,48 +290,48 @@ namespace DH.Helpdesk.Web.Models.Case
             return childList.Any(it => it.ClosingDate == null && (containsIndependents? !it.Indepandent : true));
         }
 
-		public string ExtendedSectionsToJS()
-		{
-			var sections = this.ExtendedCaseSections;
-			if (sections == null)
-				return "null";
-			var sb = new StringBuilder();
+        public string ExtendedSectionsToJS()
+        {
+            var sections = this.ExtendedCaseSections;
+            if (sections == null)
+                return "null";
+            var sb = new StringBuilder();
 
-			sb.Append("{" + Environment.NewLine);
+            sb.Append("{" + Environment.NewLine);
 
-			foreach (var section in sections)
-			{
-				var caseSectionType = section.Key;
-				var model = section.Value;
-				var readOnly = section.Key == CaseSectionType.Initiator && this.InitiatorComputerUserCategory != null ?
-					this.InitiatorComputerUserCategory.IsReadOnly :
-					section.Key == CaseSectionType.Regarding && this.RegardingComputerUserCategory != null ?
-					this.RegardingComputerUserCategory.IsReadOnly :
-					false;
+            foreach (var section in sections)
+            {
+                var caseSectionType = section.Key;
+                var model = section.Value;
+                var readOnly = section.Key == CaseSectionType.Initiator && this.InitiatorComputerUserCategory != null ?
+                    this.InitiatorComputerUserCategory.IsReadOnly :
+                    section.Key == CaseSectionType.Regarding && this.RegardingComputerUserCategory != null ?
+                    this.RegardingComputerUserCategory.IsReadOnly :
+                    false;
 
 
-				var str = $@"
-	{caseSectionType}: {{ 
-		formId: {model.Id}, 
-		guid: '{model.ExtendedCaseGuid}', 
-		languageId: '{model.LanguageId}', 
-		path: '{model.Path}', 
-		iframeId: '#extendedSection-iframe-{caseSectionType}',
-		container:  '#extendedSection-{caseSectionType}',
-		readOnly: {readOnly.ToString().ToLower()}
-	}},";
-				sb.Append(str);
-			}
+                var str = $@"
+    {caseSectionType}: {{ 
+        formId: {model.Id}, 
+        guid: '{model.ExtendedCaseGuid}', 
+        languageId: '{model.LanguageId}', 
+        path: '{model.Path}', 
+        iframeId: '#extendedSection-iframe-{caseSectionType}',
+        container:  '#extendedSection-{caseSectionType}',
+        readOnly: {readOnly.ToString().ToLower()}
+    }},";
+                sb.Append(str);
+            }
 
-			sb.Remove(sb.Length - 1, 1); // Remove last ","
+            sb.Remove(sb.Length - 1, 1); // Remove last ","
 
-			sb.Append(Environment.NewLine + "}");
+            sb.Append(Environment.NewLine + "}");
 
-			var result = sb.ToString();
-			return result;
-		}
+            var result = sb.ToString();
+            return result;
+        }
 
-		public OutputFormatter OutFormatter { get; set; }
+        public OutputFormatter OutFormatter { get; set; }
 
         public List<CaseTemplateButton> CaseTemplateButtons { get; set; }
 
@@ -339,7 +340,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public bool CaseUnlockAccess { get; set; }
         public bool CaseInternalLogAccess { get; set; }
 
-		public List<ExternalInvoiceModel> ExternalInvoices { get; set; }
+        public List<ExternalInvoiceModel> ExternalInvoices { get; set; }
 
         public string FollowerUsers { get; set; }
 
@@ -352,18 +353,18 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public bool ContainsExtendedCase { get; set; }
         public Guid ExtendedCaseGuid { get; set; }
-		public bool IndependentChild { get; internal set; }
-		public CaseSolution CurrentCaseSolution { get; internal set; }
+        public bool IndependentChild { get; internal set; }
+        public CaseSolution CurrentCaseSolution { get; internal set; }
 
         public int CurrentUserRole { get; set; }
         public Dictionary<string, string> StatusBar { get; internal set; }
-		public bool HasExtendedComputerUsers { get; internal set; }
-		public IList<ComputerUserCategoryOverview> ComputerUserCategories { get; internal set; }
-		public ComputerUserCategory InitiatorComputerUserCategory { get; internal set; }
-		public bool InitiatorReadOnly { get; set; }
-		public IDictionary<CaseSectionType, ExtendedCaseFormModel> ExtendedCaseSections { get; internal set; }
-		public ComputerUserCategory RegardingComputerUserCategory { get; internal set; }
-		public bool RegardingReadOnly { get; internal set; }
+        public bool HasExtendedComputerUsers { get; internal set; }
+        public IList<ComputerUserCategoryOverview> ComputerUserCategories { get; internal set; }
+        public ComputerUserCategory InitiatorComputerUserCategory { get; internal set; }
+        public bool InitiatorReadOnly { get; set; }
+        public IDictionary<CaseSectionType, ExtendedCaseFormModel> ExtendedCaseSections { get; internal set; }
+        public ComputerUserCategory RegardingComputerUserCategory { get; internal set; }
+        public bool RegardingReadOnly { get; internal set; }
     }
 
     public class CaseIndexViewModel

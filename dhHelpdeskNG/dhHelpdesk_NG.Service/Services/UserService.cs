@@ -310,7 +310,7 @@ namespace DH.Helpdesk.Services.Services
         /// <returns></returns>
         public IList<Customer> GetCustomersConnectedToUser(int userId)
         {
-            return this._customerRepository.CustomersForUser(userId);
+            return this._customerRepository.CustomersForUser(userId).ToList();
         }
 
         public IList<User> GetAdministrators(int customerId, int active = 1)
