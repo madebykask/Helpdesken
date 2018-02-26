@@ -1,31 +1,49 @@
 using System;
 using System.Web;
 using System.Web.Mvc;
+using DH.Helpdesk.Common.Logger;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Infrastructure.Logger;
 
 namespace DH.Helpdesk.Web.Infrastructure.Attributes
 {
     public class CustomAuthorize : AuthorizeAttribute
     {
-        private string userPermission;
+        private readonly ILoggerService _logger = LogManager.Session;
+        private string _userPermission;
+
+        #region ctor()
+
+        public CustomAuthorize()
+        {
+        }
+
+        public CustomAuthorize(string userPermissions)
+        {
+            UserPermsissions = userPermissions;
+        }
+
+        #endregion
 
         public string UserPermsissions
         {
             get
             {
-                return this.userPermission ?? string.Empty;
+                return this._userPermission ?? string.Empty;
             }
 
             set
             {
-                this.userPermission = value;
+                this._userPermission = value;
             }
         }
         
         #region Methods
 
-        protected override void HandleUnauthorizedRequest(System.Web.Mvc.AuthorizationContext filterContext)
+        protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
+            _logger.Debug("AuthorizeCore: request is unauthorised.");
+
             if (filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
                 filterContext.Result = new RedirectResult("~/Error/Unathorized");
@@ -39,6 +57,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Attributes
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
+            _logger.Debug("AuthorizeCore: checking request.");
+
             if (httpContext == null)
             {
                 throw new ArgumentNullException(nameof(httpContext));
@@ -46,11 +66,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Attributes
 
             if (httpContext.Session == null)
             {
-                httpContext.Response.Redirect("~/login/login");
                 return false;
             }
-
-            if (!httpContext.User.Identity.IsAuthenticated)
+            
+            var isAuthenticated = httpContext.User?.Identity?.IsAuthenticated ?? false;
+            if (!isAuthenticated)
             {
                 return false;
             }

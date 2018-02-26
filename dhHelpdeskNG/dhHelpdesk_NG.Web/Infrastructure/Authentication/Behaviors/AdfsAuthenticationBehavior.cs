@@ -1,5 +1,4 @@
 using System;
-using System.IdentityModel.Services;
 using System.Security.Claims;
 using System.Text;
 using System.Web;
@@ -15,9 +14,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
 {
     public interface IAuthenticationBehavior
     {
-        UserIdentity CreateUserIdentity(HttpContextBase ctx);
-        void SignOut(HttpContextBase ctx);
         string GetLoginUrl();
+        UserIdentity CreateUserIdentity(HttpContextBase ctx);
     }
 
     public class AdfsAuthenticationBehavior : IAuthenticationBehavior

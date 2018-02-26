@@ -2448,25 +2448,17 @@ namespace DH.Helpdesk.SelfService.Controllers
             };
         }
 
-        
-        // keep for diagnostic purposes
-        private void LogWithContext(string msg)
-        {
-            var customerId = SessionFacade.CurrentCustomerID;
-            var userIdentityEmail = SessionFacade.CurrentUserIdentity?.Email;
-            var userIdentityEmployeeNumber = SessionFacade.CurrentUserIdentity?.EmployeeNumber;
-            var userIdentityUserId = SessionFacade.CurrentUserIdentity?.UserId;
-            var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
-            var localUserId = SessionFacade.CurrentLocalUser?.UserId;
 
-            _logger.Debug($@"{msg}. Context: 
-                        -customerId: {customerId}, 
-                        -userIdentityEmail = {userIdentityEmail},
-                        -userIdentityEmployeeNumber = {userIdentityEmployeeNumber},
-                        -userIdentityUserId = {userIdentityUserId},
-                        -localUserPkId = {localUserPkId},
-                        -localUserId = {localUserId}");
-        }
+		// keep for diagnostic purposes
+		private void LogWithContext(string msg)
+		{
+			var customerId = SessionFacade.CurrentCustomerID;
+			var userIdentityEmail = SessionFacade.CurrentUserIdentity?.Email;
+			var userIdentityEmployeeNumber = SessionFacade.CurrentUserIdentity?.EmployeeNumber;
+			var userIdentityUserId = SessionFacade.CurrentUserIdentity?.UserId;
+			var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
+			var localUserId = SessionFacade.CurrentLocalUser?.UserId;
+		}        
 
         #endregion
     }

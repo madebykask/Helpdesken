@@ -12,7 +12,8 @@
             adminLabel: '@Translation.GetForJS("Handläggare")',
             emailLabel: '@Translation.GetForJS("E-postgrupp")',
             initLabel: '@Translation.GetForJS("Anmälare")',
-            wgLabel: '@Translation.GetForJS("Driftgrupp")'
+            wgLabel: '@Translation.GetForJS("Driftgrupp")',
+            noResultLabel: '@Translation.GetForJS("Inga resultat matchar")'
         }
         var admins = @Html.SerializeObjectToJson(Model.Administrators.Items);
         var emailGroups = @Html.SerializeObjectToJson(Model.EmailGroups.Items);

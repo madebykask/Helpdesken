@@ -7,6 +7,14 @@ begin
 	ALTER TABLE [tblCaseSolution] ADD [SplitToCaseSolutionType] int NOT NULL DEFAULT(0)
 
 end
+
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'ReadOnly' and sysobjects.name = N'tblInventoryTypeProperty')
+begin
+
+	ALTER TABLE [tblInventoryTypeProperty] ADD [ReadOnly] INT NOT NULL DEFAULT(0)
+
+end
    
 
 
@@ -1799,7 +1807,7 @@ begin
 
 		insert into [tblConditionType] (Id, [Guid], Name, [Status], [SortOrder]) VALUES (@ConditionTypeId,@ConditionTypeGuid, 'Multicase - Split', 1, 0)
 
-		SET IDENTITY_INSERT [tblCaseSolutionType] OFF
+		SET IDENTITY_INSERT [tblConditionType] OFF
 
 	end
 	else
@@ -1914,7 +1922,8 @@ IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id =
                where syscolumns.name = N'IsMemberOfGroup' and sysobjects.name = N'tblUserWorkingGroup')
 begin
 	ALTER TABLE [dbo].[tblUserWorkingGroup] ADD IsMemberOfGroup bit NOT NULL Default(0)	
-	UPDATE [dbo].[tblUserWorkingGroup] SET [IsMemberOfGroup] = 1 WHERE [UserRole] = 2
+
+	EXEC sp_executesql N'UPDATE [dbo].[tblUserWorkingGroup] SET [IsMemberOfGroup] = 1 WHERE [UserRole] = 2'
 end
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'Name' and sysobjects.name = N'tblCaseSolutionCondition')
@@ -2269,7 +2278,14 @@ BEGIN
 END
 GO
 
-
+-- set NOCHECK constraint for Foreign Key FK_tblQuestionnaireCircularParticipant_tblCase
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblQuestionnaireCircularParticipant_tblCase') AND type = 'F')
+BEGIN    
+    ALTER TABLE [dbo].[tblQuestionnaireCircularPart] NOCHECK CONSTRAINT [FK_tblQuestionnaireCircularParticipant_tblCase]
+END
+GO
+ 
+-- DROP Foreign key FK_tblCaseFile_tblUser
 
 IF NOT EXISTS (
     SELECT *
@@ -2304,6 +2320,38 @@ BEGIN
     ALTER TABLE [dbo].[tblCase]
 	ALTER COLUMN [InventoryNumber] nvarchar(60)
 END
+
+-- set NOCHECK constraint for Foreign Key FK_tblQuestionnaireCircularParticipant_tblCase
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblQuestionnaireCircularParticipant_tblCase') AND type = 'F')
+BEGIN    
+    ALTER TABLE [dbo].[tblQuestionnaireCircularPart] NOCHECK CONSTRAINT [FK_tblQuestionnaireCircularParticipant_tblCase]
+END
+GO
+ 
+-- DROP Foreign key FK_tblCaseFile_tblUser
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblCaseFile_tblUser') AND type = 'F')
+BEGIN    
+    ALTER TABLE [dbo].[tblCaseFile] DROP CONSTRAINT [FK_tblCaseFile_tblUser]
+END
+GO  
+
+
+
+RAISERROR('Foreign key tblProject_tblUsers_ProjectManager', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblProject_tblUsers') AND type = 'F')
+BEGIN
+	ALTER TABLE [dbo].[tblProject] WITH NOCHECK 
+	ADD CONSTRAINT [FK_tblProject_tblUsers] FOREIGN KEY ([ProjectManager]) REFERENCES [dbo].[tblUsers] ([Id]);
+END
+GO
+
+RAISERROR ('Update column InventoryNumber on table tblCase', 10, 1) WITH NOWAIT
+IF EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'InventoryNumber' and sysobjects.name = N'tblCase')
+BEGIN
+    ALTER TABLE [dbo].[tblCase]
+	ALTER COLUMN [InventoryNumber] nvarchar(60)
+END
 GO
 
 
@@ -2311,3 +2359,4 @@ GO
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.35'
 
 --ROLLBACK --TMP
+

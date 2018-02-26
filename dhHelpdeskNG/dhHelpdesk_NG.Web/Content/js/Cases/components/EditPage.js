@@ -648,7 +648,7 @@ EditPage.prototype.refreshCasePage = function (updatedInfo) {
         $("#CaseTemplate_OU_Id").val(updatedInfo.OU_Id);
     }
 
-    $('#' + _caseFields.Region_Id).val(updatedInfo.Region_Id).change();
+    $('#' + _caseFields.RegionId).val(updatedInfo.Region_Id).change();
     $('#' + _caseFields.RegionName).val(updatedInfo.RegionName);
     $('#' + _caseFields.DepartmentName).val(updatedInfo.DepartmentName);
     $('#' + _caseFields.OUName).val(updatedInfo.OUName);

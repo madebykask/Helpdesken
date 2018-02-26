@@ -6811,31 +6811,31 @@ If not exists (select * from tblTextTranslation where text_id = 1931 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1932)
-	insert into tbltext (id, TextString) VALUES (1932, 'Dataintegritet')
+	insert into tbltext (id, TextString) VALUES (1932, 'Visa tid')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1932 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1932, 2, 'Data privacy')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1932, 2, 'Show time')
 GO
 
 If not exists (select * from tbltext where id = 1933)
-	insert into tbltext (id, TextString) VALUES (1933, 'Ersätt')
+	insert into tbltext (id, TextString) VALUES (1933, 'Visa övertid')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1933 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1933, 2, 'Replace')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1933, 2, 'Show overtime')
 GO
 
 If not exists (select * from tbltext where id = 1934)
-	insert into tbltext (id, TextString) VALUES (1934, 'Ersätt data med')
+	insert into tbltext (id, TextString) VALUES (1934, 'Visa Material')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1934 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1934, 2, 'Replace data with')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1934, 2, 'Show Material')
 GO
 
 If not exists (select * from tbltext where id = 1935)
-	insert into tbltext (id, TextString) VALUES (1935, 'Ersätt datum med')
+	insert into tbltext (id, TextString) VALUES (1935, 'Visa Pris')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1935 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1935, 2, 'Replace date wtih')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1935, 2, 'Show Price')
 GO
 
 If not exists (select * from tbltext where id = 1936)
@@ -6872,6 +6872,35 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1940 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1940, 2, 'Remove attachments belonging to log posts')
 GO
+
+If not exists (select * from tbltext where id = 1941)
+	insert into tbltext (id, TextString) VALUES (1941, 'Dataintegritet')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1941 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1941, 2, 'Data privacy')
+GO
+
+If not exists (select * from tbltext where id = 1942)
+	insert into tbltext (id, TextString) VALUES (1942, 'Ersätt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1942 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1942, 2, 'Replace')
+GO
+
+If not exists (select * from tbltext where id = 1943)
+	insert into tbltext (id, TextString) VALUES (1943, 'Ersätt data med')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1943 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1943, 2, 'Replace data with')
+GO
+
+If not exists (select * from tbltext where id = 1944)
+	insert into tbltext (id, TextString) VALUES (1944, 'Ersätt datum med')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1944 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1944, 2, 'Replace date wtih')
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

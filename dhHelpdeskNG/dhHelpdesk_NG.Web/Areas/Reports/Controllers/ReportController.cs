@@ -600,7 +600,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             foreach (ItemOverview f in reportOptions.Fields)
                 translatedFields.Add(new ItemOverview
                                             (
-                                                Translation.GetCoreTextTranslation(f.Name),
+                                                Translation.Get(f.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id),
                                                 f.Value
                                             ));
 

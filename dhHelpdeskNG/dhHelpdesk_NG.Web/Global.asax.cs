@@ -1,7 +1,12 @@
-﻿using System.IdentityModel.Services;
+﻿using System.Configuration;
+using System.IdentityModel.Services;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Web.Http;
+using System.Web.Security;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Services.Services.Authentication;
 using DH.Helpdesk.Web.Infrastructure.Authentication;
@@ -81,6 +86,8 @@ namespace DH.Helpdesk.Web
             {
                 FederatedAuthenticationConfiguration.Configure();
             }
+
+            //DumpModules();
         }
 
         private void ViewEngineInit()
@@ -115,8 +122,35 @@ namespace DH.Helpdesk.Web
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
-            LogSession("Application.BeginRequest", Context);
+            LogSession("Application.BeginRequest.", Context);
         }
+
+        protected void Application_EndRequest(object sender, EventArgs e)
+        {
+            LogSession($"Application.EndRequest. Status: {Response.Status}, StatusCode: {Response.StatusCode}, RedirectLocation: {Response.RedirectLocation}", Context);
+        }
+
+        #region Authentication Events 
+
+        protected void WindowsAuthentication_OnAuthenticate(object sender, WindowsAuthenticationEventArgs args)
+        {
+            var identity = args.Identity;
+            LogSession($">>>WindowsAuthentication.OnAuthentication event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, IsAnonymous: {identity?.IsAnonymous ?? false}", Context);
+        }
+
+        protected void FormsAuthentication_OnAuthenticate(object sender, FormsAuthenticationEventArgs args)
+        {
+            var identity = args.User?.Identity;
+            LogSession($">>>FormsAuthentication.OnAuthenticate event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
+        }
+
+        protected void Application_PostAuthenticateRequest(object sender, EventArgs args)
+        {
+            var identity = Context.User?.Identity;
+            LogSession($">>>Application.PostAuthenticateRequest event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
+        }
+
+        #endregion
 
         #region ADFS Module Events 
 
@@ -202,6 +236,37 @@ namespace DH.Helpdesk.Web
 
         #endregion
 
+        private void DumpSessionState(HttpContext ctx)
+        {
+            try
+            {
+                var session = ctx.Session;
+                if (!string.IsNullOrEmpty(session?.SessionID))
+                {
+                    Trace.WriteLine($">>> [{DateTime.Now}] Helpdesk.Session. Id: {session.SessionID}.Request: {ctx.Request.Url}");
+
+                    var logSessionKeys = ConfigurationManager.AppSettings["helpdesk.logsessionkeys"];
+                    if (!string.IsNullOrEmpty(logSessionKeys))
+                    {
+                        var strBld = new StringBuilder();
+                        foreach (string key in session.Keys)
+                        {
+                            if (logSessionKeys == "*" || logSessionKeys.Equals(key, StringComparison.OrdinalIgnoreCase))
+                            {
+                                strBld.AppendFormat("\t- {0}: {1}{2}", key, session[key], Environment.NewLine);
+                            }
+                        }
+
+                        Trace.WriteLine(strBld.ToString());
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Trace.TraceError($"DumpSessionState: Unknown error. Error: {ex.Message}" );
+            }
+        }
+
         #endregion
 
         protected void Application_AcquireRequestState(object sender, EventArgs e)
@@ -209,6 +274,8 @@ namespace DH.Helpdesk.Web
             //LogSession("Application.AcquireRequestState called.", Context);
             var contextBase = new HttpContextWrapper(Context);
             DependencyResolver.Current.GetService<ICaseDiagnosticService>().MakeTestSnapShot(contextBase);
+                    //LogSession($"Application.AcquireRequestState called. IsCaseDataChanged: {SessionFacade.IsCaseDataChanged}", Context);
+
         }
 
 #if !DEBUG
@@ -362,6 +429,23 @@ namespace DH.Helpdesk.Web
             //}
 
             #endif
+        }
+
+        //keep for diagnostic purposes
+        private void DumpModules()
+        {
+            var logger = LogManager.Session;
+
+            //Get List of modules in module collections
+            var httpModuleCollections = Modules;
+            logger.Debug("----------------------------------------------------");
+            logger.Debug("Total Number Active HttpModule : " + httpModuleCollections.Count.ToString() + "</br>");
+            logger.Debug("<b>List of Active Modules</b>" + "</br>");
+            foreach (string activeModule in httpModuleCollections.AllKeys)
+            {
+                logger.Debug(activeModule + "</br>");
+            }
+            logger.Debug("----------------------------------------------------");
         }
 
         #endregion

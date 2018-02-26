@@ -38,16 +38,16 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
         {
             if (mode == LoginMode.Application)
             {
-                return new FormsAuthenticationBehavior();
+                return new ApplicationAuthenticationBehavior();
             }
             else if (mode == LoginMode.SSO)
             {
                 return new AdfsAuthenticationBehavior(_appConfiguration, _adfsConfiguration, _federatedAuthenticationService, _adfsRepository);
             }
-            //else if (mode == LoginMode.Windows)
-            //{
-            //  return new WindowsAuthenticationBehavior();
-            //}
+            else if (mode == LoginMode.Windows)
+            {
+              return new WindowsAuthenticationBehavior();
+            }
 
             throw new NotSupportedException($"Login mode '{mode}' is not supported");
         }

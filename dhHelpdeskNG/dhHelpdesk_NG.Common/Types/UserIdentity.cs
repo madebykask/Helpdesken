@@ -18,12 +18,17 @@ namespace DH.Helpdesk.Common.Types
     public sealed class UserIdentity : IUserIdentity
     {
         public UserIdentity()
-        {            
+        {
         }
-        
-        public string Domain { get; set; }
+
+        public UserIdentity(string userId)
+        {
+            UserId = userId;
+        }
 
         public string UserId { get; set; }
+
+        public string Domain { get; set; }
 
         public string EmployeeNumber { get; set; }
 
@@ -34,7 +39,6 @@ namespace DH.Helpdesk.Common.Types
         public string Email { get; set; }
 
         public string Phone { get; set; }
-
         public string GetUserIdWithDomain()
         {
             if (!string.IsNullOrEmpty(UserId))

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web;
+using System.Web.Configuration;
+using System.Web.Security;
 using DH.Helpdesk.BusinessData.Models.LogProgram;
 using DH.Helpdesk.BusinessData.Models.User.Input;
 using DH.Helpdesk.Common.Logger;
@@ -19,7 +22,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
     public interface IAuthenticationService
     {
         bool SignIn(HttpContextBase ctx);
-        void SignOut(HttpContextBase ctx);
+        void ClearLoginSession(HttpContextBase ctx);
+
+        string GetLoginUrl();
     }
 
     public class AuthenticationService : IAuthenticationService
@@ -65,10 +70,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
 
         public bool SignIn(HttpContextBase ctx)
         {
-            var loginMode = _appConfiguration.LoginMode;
-            _sessionContext.SetLoginMode(loginMode);
-
-            _logger.Debug($"AuthenticationService: authenticating user. LoginMode: {loginMode}");
+            _logger.Debug($"AuthenticationService: authenticating user. LoginMode: {_sessionContext.LoginMode}");
 
             var userIdentity = _authenticationBehavior.CreateUserIdentity(ctx);
 
@@ -81,7 +83,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                             $"User: {userIdentity.UserId}, Domain: {userIdentity.Domain}, FullName: {userIdentity.FirstName + " " + userIdentity.LastName} ");
 
                 //get customer user
-                var customerUser = _userService.GetUserByLogin(userIdentity.UserId, null);
+                var customerUser = GetLocalUser(userIdentity);
 
                 //set only if its non-empty
                 if (customerUser != null)
@@ -98,34 +100,68 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 }
                 else
                 {
-                    _logger.Warn($"Customer user doesn't exist for login '{userIdentity.UserId}'.");
+                    _logger.Warn($"AuthenticationService: Customer user doesn't exist for login '{userIdentity.UserId}'.");
                     return false;
                 }
             }
             else
             {
-                _logger.Warn($"User identity is null or empty.");
+                _logger.Warn($"AuthenticationService: User identity is null or empty.");
                 return false;
             }
             
 
             return true;
         }
-        
-        public void SignOut(HttpContextBase ctx)
+
+        // try to load users by different formats
+        private UserOverview GetLocalUser(UserIdentity userIdentity)
         {
-            _logger.Debug("AuthenticationService. Siging out.");
+            UserOverview res = null;
 
-            // end user login session
-            ClearLoginSession(ctx);
+            var userId = userIdentity.UserId;
+            var userNames = new List<string>
+            {
+                userId
+            };
 
-            //do login mode specific sign out
-            _authenticationBehavior.SignOut(ctx);
+            var userIdWithoutDomain = GetUserNameWithoutDomain(userId);
+            var domain = userIdentity.Domain;
+            if (!string.IsNullOrWhiteSpace(domain))
+            {
+                var userIdWithDomain = $@"{domain}\{userIdWithoutDomain}";
+                userNames.Add(userIdWithDomain);
+            }
+
+            userNames.Add(userIdWithoutDomain);
+
+            foreach (var userName in userNames)
+            {
+                res = _userService.GetUserByLogin(userName, null);
+                if (res != null)
+                    break;
+            }
+
+            return res;
+        }
+
+        public void ClearLoginSession(HttpContextBase ctx)
+        {
+            _logger.Debug("AuthenticationService. Clearing logging session.");
+
+            var sessionId = _sessionContext.SessionId;
+            if (!string.IsNullOrWhiteSpace(sessionId))
+            {
+                _applicationContext.RemoveLoggedInUser(ctx.Session.SessionID);
+                _sessionContext.ClearSession();
+            }
         }
 
         public string GetLoginUrl()
         {
-            return _authenticationBehavior.GetLoginUrl();
+            // use helpdesk login page which is specified in the forms authentication section - do not delete forms auth section for other types!
+            //return _authenticationBehavior.GetLoginUrl();
+            return FormsAuthentication.LoginUrl ?? "/Login/Login";
         }
 
         #region Helper Methods
@@ -186,14 +222,16 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             }
         }
 
-        private void ClearLoginSession(HttpContextBase ctx)
+        private string GetUserNameWithoutDomain(string userId)
         {
-            var sessionId = _sessionContext.SessionId;
-            if (!string.IsNullOrWhiteSpace(sessionId))
-            {
-                _applicationContext.RemoveLoggedInUser(ctx.Session.SessionID);
-                _sessionContext.ClearSession();
-            }
+            if (string.IsNullOrEmpty(userId))
+                return userId;
+
+            var index = userId.LastIndexOf(@"\");
+            if (index != -1)
+                return userId.Substring(index + 1);
+
+            return userId;
         }
 
         #endregion

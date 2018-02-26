@@ -76,24 +76,8 @@ namespace DH.Helpdesk.Web.Infrastructure
             base.OnActionExecuted(filterContext);
         }
 
-        private void SetCurrentLoginMode()
-        {
-            if (SessionFacade.CurrentLoginMode == LoginMode.None)
-            {
-                var loginMode = LoginMode.Application; //default
-                var val = ConfigurationManager.AppSettings[AppSettingsKey.LoginMode];
-                if (!string.IsNullOrWhiteSpace(val))
-                {
-                    loginMode = (LoginMode)Enum.Parse(typeof(LoginMode), val, true);
-                }
-                SessionFacade.CurrentLoginMode = loginMode;
-            }
-        }
-
         private void SessionCheck(ActionExecutingContext filterContext)
         {
-            SetCurrentLoginMode();
-
             if (SessionFacade.CurrentUser != null)
             {
                 SessionFacade.CurrentCustomer =
