@@ -2354,6 +2354,15 @@ BEGIN
 END
 GO
 
+RAISERROR ('Update column InventoryNumber on table tblCaseHistory', 10, 1) WITH NOWAIT
+IF EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'InventoryNumber' and sysobjects.name = N'tblCaseHistory')
+BEGIN
+    ALTER TABLE [dbo].[tblCaseHistory]
+	ALTER COLUMN [InventoryNumber] nvarchar(60)
+END
+GO
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.35'
