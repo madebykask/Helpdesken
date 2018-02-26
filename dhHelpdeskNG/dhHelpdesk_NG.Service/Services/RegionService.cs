@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.Common.Extensions.Integer;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -13,6 +16,7 @@
     {
         IList<Region> GetAllRegions();
         IList<Region> GetRegions(int customerId);
+        IList<RegionOverview> GetRegionsOverview(int customerId);
         IList<Region> GetActiveRegions(int customerId);
         IList<Region> GetRegionsWithDepartments(int customerId);
         int? GetDefaultId(int customerId); 
@@ -42,6 +46,18 @@
         public IList<Region> GetAllRegions()
         {
             return this._regionRepository.GetAll().Where(x => x.IsActive == 1).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<RegionOverview> GetRegionsOverview(int customerId)
+        {
+            return this._regionRepository.GetMany(x => x.Customer_Id == customerId)
+                .Select(r => new RegionOverview
+                    {
+                        Id = r.Id,
+                        Name = r.Name,
+                        IsActive = r.IsActive.ToBool()
+                })
+                .OrderBy(x => x.Name).ToList();
         }
 
         public IList<Region> GetRegions(int customerId)

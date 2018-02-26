@@ -70,8 +70,12 @@ namespace DH.Helpdesk.Web.Infrastructure
         //called after a controller action is executed, that is after ~/UserController/index 
         protected override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            this.SetMasterPageModel(filterContext);
-            this.AutoDetectTimeZoneMessageCheck();
+            if (!ControllerContext.HttpContext.Request.IsAjaxRequest())
+            {
+                    //do not use for ajax requests
+                this.SetMasterPageModel(filterContext);
+                this.AutoDetectTimeZoneMessageCheck();
+            }
 
             base.OnActionExecuted(filterContext);
         }
