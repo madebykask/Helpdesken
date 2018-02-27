@@ -118,18 +118,6 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 .FirstOrDefault();
         }
 
-
-        public IList<CausingPartOverview> GetActiveParentCausingPartsOld(int customerId, int? alternativeId)
-        {
-            var entities = (alternativeId.HasValue) ?
-                this.Table.Where(c => c.CustomerId == customerId && ((c.Parent == null && c.Status > 0) || (c.Id == alternativeId.Value)))
-                    .ToList() :
-                this.Table.Where(c => c.CustomerId == customerId && c.Parent == null && c.Status > 0)
-                    .ToList();
-
-            return entities.Select(this.causingPartToBusinessModelMapper.Map).ToList();
-        }
-        
         //note: this is db optimised version of method without lazy calls for children. Keep as is.
         public IList<CausingPartOverview> GetActiveParentCausingParts(int customerId, int? alternativeId)
         {
