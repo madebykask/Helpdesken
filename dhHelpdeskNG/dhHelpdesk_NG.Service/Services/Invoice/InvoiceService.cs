@@ -234,21 +234,19 @@ namespace DH.Helpdesk.Services.Services.Invoice
 				var orderInfo = _orderRepository.GetOrder(fileCase.Key);
 				var accountInfo = _accountRepository.GetAccount(fileCase.Key);
 
-				var externalInvoices = String.Join(",", fileCase.Value.Item2.Select(x => x.InvoiceNumber));
+				var externalInvoices = string.Join(",", fileCase.Value.Item2.Select(x => x.InvoiceNumber));
 				var referenceNumber = accountInfo?.ReferenceNumber ?? orderInfo?.OrdererReferenceNumber;
-				var amount = fileCase.Value.Item1
+			    var caseDate = caseInfo.FinishingDate?.ToString("yyyy-MM-dd") ?? DateTime.Now.ToString("yyyy-MM-dd");
+                var amount = fileCase.Value.Item1
 					             .Where(x => x.Charge.ToBool())
 					             .Sum(x => ((decimal)x.WorkingTime / 60) * caseInfo.Department.AccountancyAmount +
 							             ((decimal)x.OverTime / 60) * caseInfo.Department.OverTimeAmount + 
-										 x.Price + 
-                                         x.EquipmentPrice) +
-				             fileCase.Value.Item2
-					             .Where(x => x.Charge.ToBool()).Sum(x => x.InvoicePrice);
+										 x.Price + x.EquipmentPrice) + fileCase.Value.Item2.Where(x => x.Charge.ToBool()).Sum(x => x.InvoicePrice);
 
                 sb.AppendLine($"{caseInfo.CaseNumber}-{invoiceHeader_Id}\t{translations[0]}\t{caseInfo.Department.DepartmentName}" +
                               $"\t{caseInfo.Workinggroup?.Code}\t{translations[1]}:{caseInfo.CaseNumber}, {caseInfo.Caption}" +
-				              $"{(String.IsNullOrWhiteSpace(externalInvoices) ? "" : $", {translations[2]}: " + externalInvoices)}" +
-				              $"{(referenceNumber == null ? "" : $", {translations[3]}: " + referenceNumber)}\t{translations[4]}\t{caseInfo.FinishingDate?.ToString("yyyy-MM-dd")}\t\t{amount.ToString("F2")}");
+				              $"{(string.IsNullOrWhiteSpace(externalInvoices) ? "" : $", {translations[2]}: " + externalInvoices)}" +
+				              $"{(referenceNumber == null ? "" : $", {translations[3]}: " + referenceNumber)}\t{translations[4]}\t{caseDate}\t\t{amount.ToString("F2")}");
 
 				using (var file = new StreamWriter(path))
 				{
