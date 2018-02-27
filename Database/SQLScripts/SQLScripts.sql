@@ -2363,6 +2363,33 @@ BEGIN
 END
 GO
 
+RAISERROR ('Update column ComputerName on table tblComputer', 10, 1) WITH NOWAIT
+IF EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'ComputerName' and sysobjects.name = N'tblComputer')
+BEGIN
+    ALTER TABLE [dbo].[tblComputer]
+	ALTER COLUMN [ComputerName] nvarchar(60) NOT NULL
+END
+GO
+
+RAISERROR ('Update column PrinterName on table tblPrinter', 10, 1) WITH NOWAIT
+IF EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'PrinterName' and sysobjects.name = N'tblPrinter')
+BEGIN
+    ALTER TABLE [dbo].[tblPrinter]
+	ALTER COLUMN [PrinterName] nvarchar(60) NOT NULL
+END
+GO
+
+RAISERROR ('Update column ServerName on table tblServer', 10, 1) WITH NOWAIT
+IF EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'ServerName' and sysobjects.name = N'tblServer')
+BEGIN
+    ALTER TABLE [dbo].[tblServer]
+	ALTER COLUMN [ServerName] nvarchar(60) NOT NULL
+END
+GO
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.35'
