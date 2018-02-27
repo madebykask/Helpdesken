@@ -55,7 +55,7 @@ namespace DH.Helpdesk.Services.Services
                     {
                         Id = r.Id,
                         Name = r.Name,
-                        IsActive = r.IsActive.ToBool()
+                        IsActive = r.IsActive > 0
                 })
                 .OrderBy(x => x.Name).ToList();
         }
