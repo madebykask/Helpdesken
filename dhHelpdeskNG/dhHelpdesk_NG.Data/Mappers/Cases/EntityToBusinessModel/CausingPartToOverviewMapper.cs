@@ -76,8 +76,9 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
                         CreatedDate = entity.CreatedDate,
                         ChangedDate = entity.ChangedDate
                     };
-
+                    
                     item.Children = MapChildren(item, entity.Children);
+                    res.Add(item);
                 }
             }
             
