@@ -610,12 +610,18 @@ EditPage.prototype.refreshCasePage = function (updatedInfo) {
     $('#' + _caseFields.PersonsName).val(updatedInfo.PersonsName);
     $('#' + _caseFields.PersonsPhone).val(updatedInfo.PersonsPhone);
 
+
     $('#' + _caseFields.CaseTypeId).val(updatedInfo.CaseType_Id).change();
     $('#' + _caseFields.ProductAreaId).val(updatedInfo.ProductArea_Id).change();
-    $('#' + _caseFields.WorkingGroupId).val(updatedInfo.WorkingGroup_Id).change();
+
+    //trigger change only if value has been changed
+    var workingGroupId$ = $('#' + _caseFields.WorkingGroupId);
+    if (workingGroupId$.val() != updatedInfo.WorkingGroup_Id) {
+        workingGroupId$.val(updatedInfo.WorkingGroup_Id).change();
+    } 
+
     $('#' + _caseFields.WorkingGroupName).val(updatedInfo.WorkingGroupName);
     $('#' + _caseFields.PriorityId).val(updatedInfo.Priority_Id).change();
-
     $('#' + _caseFields.PersonsEmail).val(updatedInfo.PersonsEmail);
     $('#' + _caseFields.PersonsCellphone).val(updatedInfo.PersonsCellphone);
     $('#' + _caseFields.Place).val(updatedInfo.Place);
