@@ -144,7 +144,7 @@ namespace DH.Helpdesk.Services.Services
                                      location == CaseSolutionLocationShow.BothCaseOverviewAndInsideCase ||
                                      (location == CaseSolutionLocationShow.OnCaseOverview && cs.ShowOnCaseOverview != 0) ||
                                      (location == CaseSolutionLocationShow.InsideTheCase && cs.ShowInsideCase != 0)
-                                 )).ToList();
+                                 )).OrderBy(cs => cs.Name).ToList();
 
             #region Solutions Without Category
 
@@ -1880,7 +1880,7 @@ namespace DH.Helpdesk.Services.Services
             var caseSolutions = this._cache.Get(cacheKey) as IList<CaseSolutionOverview>;
             if (caseSolutions == null)
             {
-                caseSolutions = _caseSolutionRepository.GetCustomerCaseSolutions(customerId);
+                caseSolutions = _caseSolutionRepository.GetCustomerCaseSolutions(customerId).ToList();
 
                 if (caseSolutions.Any())
                     this._cache.Set(cacheKey, caseSolutions, Common.Constants.Cache.Duration);
