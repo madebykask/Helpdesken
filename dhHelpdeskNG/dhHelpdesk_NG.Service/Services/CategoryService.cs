@@ -105,33 +105,33 @@
         {
             var categories = _categoryRepository.GetCategoriesOverview(customerId, activeOnly);
 
-            var parentCategories = categories.Where(x => x.ParentId == null).ToList();
+            var parentCategories = categories.Where(x => x.ParentId == null).OrderBy(x => x.Name).ToList();
 
             foreach (var parent in parentCategories)
             {
                 BuildCategoryChildTree(parent, categories);
             }
 
-            
+
             return parentCategories;
         }
 
         private void BuildCategoryChildTree(CategoryOverview parent, IList<CategoryOverview> categories)
         {
-            var childs = categories.Where(x => x.ParentId == parent.Id).ToList();
+            var childs = categories.Where(x => x.ParentId == parent.Id).OrderBy(x => x.Name).ToList();
             if (childs.Any())
             {
                 parent.SubCategories.AddRange(childs);
                 foreach (var child in childs)
                 {
-                    BuildCategoryChildTree(child, categories);        
+                    BuildCategoryChildTree(child, categories);
                 }
             }
         }
-        
+
         public IList<CategoryOverview> GetActiveParentCategoriesOverviews(int customerId)
         {
-            return this._categoryRepository.GetCategoriesOverview(customerId, true).OrderBy(x => x.Name).ToList();
+            return this.GetParentCategoriesWithChildren(customerId, true).ToList();
         }
 
         //todo: use overview method instead

@@ -78,7 +78,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public IList<CategoryOverview> GetCategoriesOverview(int customerId, bool activeOnly)
         {
             var items = 
-                Table.Where(x => x.Customer_Id == customerId && x.Parent_Category_Id == null && (!activeOnly || x.IsActive > 0))
+                Table.Where(x => x.Customer_Id == customerId && (!activeOnly || x.IsActive > 0))
                 .Select(x => new CategoryOverview
                 {
                     Id = x.Id,
