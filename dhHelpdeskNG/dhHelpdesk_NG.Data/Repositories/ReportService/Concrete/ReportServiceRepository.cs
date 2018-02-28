@@ -172,7 +172,7 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                     
                 case "ReportedTime":
                     ret.Add(new Tuple<string, string, int>("VariabelAxel",
-                            "SELECT 1 AS Quantity, dbo.tblcustomer.NAME AS Customer, " +
+                        "SELECT (dbo.tblLog.WorkingTime + dbo.tblLog.OverTime)/60 AS Quantity, " +
                             "dbo.tblcase.casenumber, CONVERT(VARCHAR, dbo.tblcase.casenumber) + ' ' + dbo.tblcase.caption AS[Case], " +
                             "CONVERT(nvarchar(10), dbo.tblLog.LogDate, 121) AS [LogDate], " +
                             "CONVERT(NVARCHAR(10), dbo.tblcase.regtime, 121) AS [Registration Date], " +
