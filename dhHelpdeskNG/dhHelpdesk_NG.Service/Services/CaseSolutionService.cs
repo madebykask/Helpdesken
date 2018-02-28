@@ -139,7 +139,7 @@ namespace DH.Helpdesk.Services.Services
         {
             var customerCaseSolutions = 
                 GetCustomerCaseSolutionsOverview(customerId, userId) //uses cached version
-                    .Where(cs => cs.ConnectedButton != 0 && cs.ConnectedButton == null &&
+                    .Where(cs => cs.ConnectedButton != 0 &&
                                  (
                                      location == CaseSolutionLocationShow.BothCaseOverviewAndInsideCase ||
                                      (location == CaseSolutionLocationShow.OnCaseOverview && cs.ShowOnCaseOverview != 0) ||
