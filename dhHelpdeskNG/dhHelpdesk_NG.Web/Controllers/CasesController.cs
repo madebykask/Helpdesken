@@ -93,8 +93,8 @@ namespace DH.Helpdesk.Web.Controllers
     using System.Configuration;
     using Infrastructure.Helpers;
     using Infrastructure.Cryptography;
-	using Domain.Computers;
-	using Common.Enums.Cases;
+    using Domain.Computers;
+    using Common.Enums.Cases;
 
     using BusinessData.Models.ProductArea.Output;
 
@@ -5459,7 +5459,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (m.case_.Supplier_Id > 0 && m.suppliers != null)
             {
                 var sup = m.suppliers.FirstOrDefault(x => x.Id == m.case_.Supplier_Id.GetValueOrDefault());
-                m.CountryId = sup.Country_Id.GetValueOrDefault();
+                m.CountryId = sup?.Country_Id.GetValueOrDefault();
             }
 
             if (isCreateNewCase)

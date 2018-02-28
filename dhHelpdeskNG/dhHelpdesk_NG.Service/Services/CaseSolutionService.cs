@@ -185,16 +185,17 @@ namespace DH.Helpdesk.Services.Services
             }
 
             #endregion
-
-            var maxLen = solutionsWithoutCategory.Concat(solutionsWithCategory).Max(x => x.CategoryName?.Length ?? 0);
             
             if (solutionsWithoutCategory.Any() && solutionsWithCategory.Any())
             {
+                var maxLen = solutionsWithoutCategory.Concat(solutionsWithCategory).Max(x => x.CategoryName?.Length ?? 0);
                 var separateLine = new CaseTemplateCategoryNode { CategoryName = new string('_', maxLen + 5) };
                 solutionsWithoutCategory.Add(separateLine);
             }
-            
-            return solutionsWithoutCategory.Concat(solutionsWithCategory).ToList();
+
+            return solutionsWithCategory.Any()
+                ? solutionsWithoutCategory.Concat(solutionsWithCategory).ToList()
+                : solutionsWithoutCategory;
         }
 
         //TODO: review. not performance optimised
