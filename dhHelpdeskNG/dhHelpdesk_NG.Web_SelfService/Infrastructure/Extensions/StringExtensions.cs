@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
+﻿using System.Web;
+
+namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
 {
     using System;
     using System.Linq;
@@ -231,7 +233,7 @@
             if (lowerStr.IndexOf("[userid]") > 0 && SessionFacade.CurrentSystemUser != null)
             {
                 res = Regex.Replace(res, @"\[userid\]", SessionFacade.CurrentSystemUser, RegexOptions.IgnoreCase);
-                lowerStr = res.ToLower();
+                lowerStr = HttpUtility.UrlEncode(res.ToLower()); // encode backslash in userId with domain 
             }                
 
             if (lowerStr.IndexOf("[username]") > 0 && SessionFacade.CurrentUserIdentity != null)
