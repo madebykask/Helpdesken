@@ -1,5 +1,5 @@
-﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
-@using DH.Helpdesk.BusinessData.OldComponents
+﻿@model DH.Helpdesk.Web.Models.Case.CaseMoveModel
+
 <div class="modal-header">
 <strong>@Translation.Get("Flytta", Enums.TranslationSource.TextTranslation) @Translation.Get("ärende", Enums.TranslationSource.TextTranslation)</strong>
 </div>
@@ -10,16 +10,33 @@
     <p>
         @Translation.Get("Kund", Enums.TranslationSource.TextTranslation): 
         <select id="moveCaseToCustomerId" name="moveCaseToCustomerId" >
-        @if (Html.MasterModel().Customers != null)
+        @if (Model.Customers.Any())
         {
-            foreach (var cus in Html.MasterModel().Customers)
+            var nonUserCustomers = Model.NonUserCustomers;
+            if (nonUserCustomers.Any())
             {
-                if (cus.Id != Model.case_.Customer_Id)
-                {
-                <option value="@cus.Id">@cus.Name</option>                    
-                }
+                <optgroup label="Inner">
+                    @foreach (var cus in Model.UserCustomers)
+                    {
+                        <option value="@cus.Id">@cus.Name</option>
+                    }
+                </optgroup>
+
+                <optgroup label="External">
+                    @foreach (var cus in Model.NonUserCustomers)
+                    {
+                        <option data-external="1" value="@cus.Id">@cus.Name</option>
+                    }
+                </optgroup>
             }
-        }  
+            else
+            {
+                foreach (var cus in Model.Customers.Where(x => x.Id != Model.CurrentCustomerId))
+                {
+                    <option value="@cus.Id">@cus.Name</option>
+                }    
+            }
+        }
         </select>
     </p>
 </div>

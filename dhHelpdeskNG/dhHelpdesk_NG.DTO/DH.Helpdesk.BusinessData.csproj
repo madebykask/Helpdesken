@@ -259,6 +259,7 @@
     <Compile Include="Models\Contract\ContractsSettingRowModel.cs" />
     <Compile Include="Models\Contract\ContractInputModel.cs" />
     <Compile Include="Models\Customer\CaseDefaultsInfo.cs" />
+    <Compile Include="Models\Customer\Input\MoveCaseCustomersListItem.cs" />
     <Compile Include="Models\Customer\UserCustomerOverview.cs" />
     <Compile Include="Models\DailyReport\Input\DailyReportUpdate.cs" />
     <Compile Include="Models\Accounts\AccountSettings\Read\ModelEdit\AccountFieldsSettingsForModelEdit.cs" />

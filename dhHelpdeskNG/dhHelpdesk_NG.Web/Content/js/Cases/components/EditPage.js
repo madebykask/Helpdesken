@@ -1346,6 +1346,26 @@ EditPage.prototype.getLanguage = function () {
     }
 }
 
+EditPage.prototype.moveCaseToCustomer = function(caseId, customerId, isExternal) {
+    if (isExternal) {
+        //move case to external customer
+        var inputData = { caseId, customerId };
+        $.post('/Cases/MoveCaseToExternalCustomer', inputData, function(result) {
+            if (result.Success) {
+                //alert('Redirecting to' + Location);
+                window.location.href = result.Location;
+            } else {
+                ShowToastMessage(result.Error, "error", true);
+            }
+        }).fail(function(err) {
+            ShowToastMessage('Case move failed.', "error", true);
+        });
+    } else {
+        //do normal case move
+        dhHelpdesk.moveCase(p.currentCaseId);
+    }
+};
+
 /***** Initiator *****/
 EditPage.prototype.init = function (p) {
     var self = this;
@@ -1460,19 +1480,24 @@ EditPage.prototype.init = function (p) {
     
     self.$moveCaseButton.click(function (e) {
         e.preventDefault();
-        $.post(p.caseLockChecker,
-            {
-                caseId: p.currentCaseId,
-                caseChangedTime: p.caseChangedTime,
-                lockGuid: p.caseLockGuid
-            },
-            function (data) {
-                if (data == true) {
-                    window.moveCase(p.currentCaseId);
-                } else {
-                    ShowToastMessage(p.moveLockedCaseMessage, "error", true);
-                }
-        });
+
+        var customerId = +$('#moveCaseToCustomerId').val() || 0;
+        if (customerId > 0) {
+            $.post(p.caseLockChecker,
+                {
+                    caseId: p.currentCaseId,
+                    caseChangedTime: p.caseChangedTime,
+                    lockGuid: p.caseLockGuid
+                },
+                function (data) {
+                    if (data) {
+                        var isExternal = +$('#moveCaseToCustomerId').find(':selected').data('external') || 0;
+                        self.moveCaseToCustomer(p.currentCaseId, customerId, isExternal);
+                    } else {
+                        ShowToastMessage(p.moveLockedCaseMessage, "error", true);
+                    }
+                });
+        }
     });
     
     $('.date').each(function () {

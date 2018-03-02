@@ -3,6 +3,7 @@ using DH.Helpdesk.BusinessData.Models.Logs.Output;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.MapperData.Logs;
 using DH.Helpdesk.Dal.Mappers.Logs;
+using DH.Helpdesk.Services.BusinessLogic.Cases;
 
 namespace DH.Helpdesk.Web.NinjectModules.Modules
 {
@@ -27,6 +28,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Modules
     {
         public override void Load()
         {
+            this.Bind<ICaseProcessor>().To<CaseProcessor>().InRequestScope();
+
             this.Bind<ICaseNotifierModelFactory>().To<CaseNotifierModelFactory>().InSingletonScope();
 
             this.Bind<IBusinessModelToEntityMapper<CaseNotifier, ComputerUser>>().To<CaseNotifierToEntityMapper>().InSingletonScope();

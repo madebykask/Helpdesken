@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Customer;
+using DH.Helpdesk.BusinessData.Models.Customer.Input;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -22,7 +23,7 @@ namespace DH.Helpdesk.Services.Services
         IList<Customer> SearchAndGenerateCustomersConnectedToUser(ICustomerSearch searchCustomers, int userId);
         IList<CustomerReportList> GetCustomerReportList(int id);
         IList<Report> GetAllReports();
-
+        IList<MoveCaseCustomersListItem> GetCustomersForCaseMove(int userId);
         int GetCustomerLanguage(int customerid);
 
         Customer GetCustomer(int id);
@@ -44,6 +45,7 @@ namespace DH.Helpdesk.Services.Services
         void SaveCaseSettingsForNewCustomer(int customerId, int languageId, CaseSettings caseSettings, out IDictionary<string, string> errors);
 
         ItemOverview GetOverview(int customerId);
+        CaseDefaultsInfo GetCustomerDefaults(int customerId);
     }
 
     public class CustomerService : ICustomerService
@@ -644,6 +646,39 @@ namespace DH.Helpdesk.Services.Services
 
             if (errors.Count == 0)
                 this.Commit();
+        }
+
+        public IList<MoveCaseCustomersListItem> GetCustomersForCaseMove(int userId)
+        {
+            List<MoveCaseCustomersListItem> res = new List<MoveCaseCustomersListItem>();
+            var userCustomers =
+                _customerRepository.CustomersForUser(userId)
+                    .Select(x => new MoveCaseCustomersListItem
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        IsUserCustomer = true
+                    }).ToList();
+
+            if (userCustomers.Any())
+                res.AddRange(userCustomers);
+
+            var excludeCustomerIds = userCustomers.Select(x => x.Id).ToList();
+
+            var allowCaseMoveCustomers = 
+                _customerRepository.GetAllowCaseMoveCustomers()
+                    .Where(x => !excludeCustomerIds.Contains(x.Id))
+                    .Select(x => new MoveCaseCustomersListItem
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        IsUserCustomer = false
+                    }).ToList();
+
+            if (allowCaseMoveCustomers.Any())
+                res.AddRange(allowCaseMoveCustomers);
+
+            return res.OrderBy(x => x.Name).ToList();
         }
 
         public void Commit()

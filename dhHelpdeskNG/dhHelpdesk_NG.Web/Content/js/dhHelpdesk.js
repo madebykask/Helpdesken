@@ -417,8 +417,7 @@ function NewNotifierEvent(id) {
     }, 'json');
 }
 
-function moveCase(id) {
-    var customerId = $('#moveCaseToCustomerId').val();
+function moveCase(caseId, customerId) {
     if (customerId.length > 0) {
         var url = '/cases/edit/' + id + '?moveToCustomerId=' + customerId;
         window.location.href = url;

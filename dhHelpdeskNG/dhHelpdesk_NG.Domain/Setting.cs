@@ -147,5 +147,6 @@ namespace DH.Helpdesk.Domain
         public string QuickNewCaseLinkUrl { get; set; }
         public int DefaultCaseTemplateId { get; set; }
         public bool QuickLinkWGRestriction { get; set; }
+        public bool AllowMoveCaseToAnyCustomer { get; set; }
     }
 }
