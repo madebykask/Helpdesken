@@ -5955,10 +5955,9 @@ namespace DH.Helpdesk.Web.Controllers
                 //todo: use UrlBuilder!
                 m.DynamicCase.FormPath = m.DynamicCase.FormPath
                     .Replace("[CaseId]", m.case_.Id.ToString())
-                    .Replace("[UserId]", SessionFacade.CurrentUser.UserId.ToString())
+                    .Replace("[UserId]", HttpUtility.UrlEncode(SessionFacade.CurrentUser.UserId.ToString()))
                     .Replace("[ApplicationType]", "HD5")
                     .Replace("[Language]", l.LanguageId);
-                m.DynamicCase.FormPath = m.DynamicCase.FormPath.Replace(@"\", @"\\"); //this is because users with backslash in name will have issues with container.js
             }
 
             int caseSolutionId = (m.case_.CaseSolution_Id != null)
