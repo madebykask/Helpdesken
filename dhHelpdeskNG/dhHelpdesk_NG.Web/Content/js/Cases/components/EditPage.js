@@ -1362,7 +1362,8 @@ EditPage.prototype.moveCaseToCustomer = function(caseId, customerId, isExternal)
         });
     } else {
         //do normal case move
-        dhHelpdesk.moveCase(p.currentCaseId);
+        var url = '/cases/edit/' + caseId + '?moveToCustomerId=' + customerId;
+        window.location.href = url;
     }
 };
 
@@ -1477,7 +1478,17 @@ EditPage.prototype.init = function (p) {
 
         return false;
     });
-    
+
+    $('#moveCaseToCustomerId').change(function (e) {
+        var note$ = $('#externalCustomerNote');
+        var optionSelected = $("option:selected", this);
+        if (optionSelected && optionSelected.data('external')) {
+            note$.show();
+        } else {
+            note$.hide();
+        }
+    });
+
     self.$moveCaseButton.click(function (e) {
         e.preventDefault();
 
@@ -1492,6 +1503,9 @@ EditPage.prototype.init = function (p) {
                 function (data) {
                     if (data) {
                         var isExternal = +$('#moveCaseToCustomerId').find(':selected').data('external') || 0;
+                        if (isExternal) {
+                            //todo: show external customer note
+                        }
                         self.moveCaseToCustomer(p.currentCaseId, customerId, isExternal);
                     } else {
                         ShowToastMessage(p.moveLockedCaseMessage, "error", true);

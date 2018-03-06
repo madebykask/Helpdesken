@@ -10,35 +10,18 @@
     <p>
         @Translation.Get("Kund", Enums.TranslationSource.TextTranslation): 
         <select id="moveCaseToCustomerId" name="moveCaseToCustomerId" >
-        @if (Model.Customers.Any())
-        {
-            var nonUserCustomers = Model.NonUserCustomers;
-            if (nonUserCustomers.Any())
+            @if (Model.Customers.Any())
             {
-                <optgroup label="Inner">
-                    @foreach (var cus in Model.UserCustomers)
-                    {
-                        <option value="@cus.Id">@cus.Name</option>
-                    }
-                </optgroup>
-
-                <optgroup label="External">
-                    @foreach (var cus in Model.NonUserCustomers)
-                    {
-                        <option data-external="1" value="@cus.Id">@cus.Name</option>
-                    }
-                </optgroup>
-            }
-            else
-            {
-                foreach (var cus in Model.Customers.Where(x => x.Id != Model.CurrentCustomerId))
+                foreach (var cus in Model.Customers)
                 {
-                    <option value="@cus.Id">@cus.Name</option>
-                }    
+                    <option data-external="@(cus.IsUserCustomer ? "0" : "1")" value="@cus.Id">@cus.Name</option>
+                }
             }
-        }
         </select>
     </p>
+    <div id="externalCustomerNote" style="display:none">
+        <p class="dh-note">Note: Selected customer is not from your access list and case will not be available after it has been moved.</p>
+    </div>
 </div>
 <div class="modal-footer">
     <button id="btnMoveCase"  class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Flytta", Enums.TranslationSource.TextTranslation)</button>

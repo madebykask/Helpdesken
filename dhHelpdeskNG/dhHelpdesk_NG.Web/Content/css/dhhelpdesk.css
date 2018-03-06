@@ -4015,3 +4015,7 @@ div.chosen-container.chosen-container-multi.error {
     margin: 20px 0;
     border-radius: 4px;
 }
+.dh-note {
+    font-weight: bold;
+    color: #a94442;
+}
