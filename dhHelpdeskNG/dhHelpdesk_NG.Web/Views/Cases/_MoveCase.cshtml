@@ -5,7 +5,7 @@
 </div>
 <div class="modal-body">
     <p>
-        @Translation.Get("Eventuella ändringar måste sparas innan du flyttar ärendet. Vill du flytta ärendet nu eller avbryta", Enums.TranslationSource.TextTranslation)?                
+        @Translation.GetCoreTextTranslation("Eventuella ändringar måste sparas innan du flyttar ärendet. Vill du flytta ärendet nu eller avbryta")?
     </p>
     <p>
         @Translation.Get("Kund", Enums.TranslationSource.TextTranslation): 
@@ -20,7 +20,7 @@
         </select>
     </p>
     <div id="externalCustomerNote" style="display:none">
-        <p class="dh-note">Note: Selected customer is not from your access list and case will not be available after it has been moved.</p>
+        <p class="dh-note">@Translation.GetCoreTextTranslation("Obs! Ärendet kommer att flyttas till kund som du saknar rättighet till. Du kommer inte åt ärendet efter flytten. Vill du flytta ärendet ändå, eller avbryta?")</p>
     </div>
 </div>
 <div class="modal-footer">

@@ -5133,7 +5133,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (!isCreateNewCase)
             {
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
-                m.case_ = this._caseService.GetCaseById(caseId);
+                m.case_ = this._caseService.GetCaseById(caseId); //todo: check if case has been requested before and can be reused!
 
                 if (m.CurrentCaseSolution == null && m.case_.CurrentCaseSolution_Id.HasValue)
                 {
@@ -6026,9 +6026,9 @@ namespace DH.Helpdesk.Web.Controllers
                     .Replace("[Language]", l.LanguageId);
             }
 
-            int caseSolutionId = (m.case_.CaseSolution_Id != null)
+            var caseSolutionId = (m.case_.CaseSolution_Id != null)
                 ? m.case_.CaseSolution_Id.Value
-                : (templateId.HasValue ? templateId.Value : 0);
+                : templateId ?? 0;
 
             // Computer user categories
             m.ComputerUserCategories = _computerService.GetComputerUserCategoriesByCustomerID(customerId);

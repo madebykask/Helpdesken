@@ -6915,6 +6915,12 @@ If not exists (select * from tblTextTranslation where Text_Id = 1946 and Languag
   insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1946, 'Move case to this customer', 2)
 GO
 
+If not exists (select * from tbltext where id = 1947)
+  insert into tbltext (id, TextString) VALUES (1947, 'Obs! Ärendet kommer att flyttas till kund som du saknar rättighet till. Du kommer inte åt ärendet efter flytten. Vill du flytta ärendet ändå, eller avbryta?')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1947 and Language_Id=2)
+  insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1947, 'Note: Case will be moved to customer without access rights for you. After move, you will not have access to the case. Do you want to move anyway, or cancel?', 2)
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

@@ -88,7 +88,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                    (from _case in DataContext.Cases
                     from sec in _case.CaseExtendedCaseDatas
                     where _case.Customer_Id == customerId &&
-                       _case.Id == caseId
+                          _case.Id == caseId
                     let extendedCaseForm = sec.ExtendedCaseData.ExtendedCaseForm
                     select new ExtendedCaseDataOverview
                     {
