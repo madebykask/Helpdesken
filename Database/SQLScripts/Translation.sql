@@ -6901,6 +6901,20 @@ If not exists (select * from tblTextTranslation where text_id = 1944 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1944, 2, 'Replace date wtih')
 GO
 
+If not exists (select * from tbltext where id = 1945)
+	insert into tbltext (id, TextString) VALUES (1945, 'Tillåt åtgärder för användare utan rättighet till denna kund')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1945 and Language_Id=2)
+  insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1945, 'Allow actions for users without permissions to this customer', 2)
+GO
+
+If not exists (select * from tbltext where id = 1946)
+	insert into tbltext (id, TextString) VALUES (1946, 'Flytta ärende till denna kund')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1946 and Language_Id=2)
+  insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1946, 'Move case to this customer', 2)
+GO
+
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
