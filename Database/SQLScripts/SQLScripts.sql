@@ -35,8 +35,10 @@ RAISERROR ('Update column InventoryNumber on table tblCase', 10, 1) WITH NOWAIT
 IF EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
                where syscolumns.name = N'InventoryNumber' and sysobjects.name = N'tblCase')
 BEGIN
+	ALTER FULLTEXT INDEX ON [dbo].[tblCase] DROP ([InventoryNumber])
     ALTER TABLE [dbo].[tblCase]
 	ALTER COLUMN [InventoryNumber] nvarchar(60)
+	ALTER FULLTEXT INDEX ON [dbo].[tblCase] ADD ([InventoryNumber])
 END
 
 -- set NOCHECK constraint for Foreign Key FK_tblQuestionnaireCircularParticipant_tblCase
@@ -60,15 +62,6 @@ IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblProject
 BEGIN
 	ALTER TABLE [dbo].[tblProject] WITH NOCHECK 
 	ADD CONSTRAINT [FK_tblProject_tblUsers] FOREIGN KEY ([ProjectManager]) REFERENCES [dbo].[tblUsers] ([Id]);
-END
-GO
-
-RAISERROR ('Update column InventoryNumber on table tblCase', 10, 1) WITH NOWAIT
-IF EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'InventoryNumber' and sysobjects.name = N'tblCase')
-BEGIN
-    ALTER TABLE [dbo].[tblCase]
-	ALTER COLUMN [InventoryNumber] nvarchar(60)
 END
 GO
 
