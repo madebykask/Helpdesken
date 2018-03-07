@@ -63,6 +63,28 @@ namespace DH.Helpdesk.TaskScheduler
                 .Build();
             _sched.ScheduleJob(trackerJob, trackerSettingsTrigger);
 
+
+            //var importI_job = JobBuilder.Create<ImportInitiatorJob>()
+            //    .WithIdentity(Constants.ImportInitiator_JobName)
+            //    .Build();
+            //var importI_trigger = _diContainer.Get<IImportInitiatorService>().GetTrigger();
+
+            //_sched.ScheduleJob(importI_job, importI_trigger);
+
+            //var importI_trackerJob = JobBuilder.Create<ImportInitiatorServiceSettingsTrackerJob>()
+            //    .WithIdentity("ImportInitiatorSettingsTrackerJob")
+            //    .Build();
+
+            //var importI_trackerSettingsTrigger = TriggerBuilder.Create()
+            //    .WithIdentity("ImportInitiatorSettingsTrackerJobTrigger")
+            //    .StartNow()
+            //    .ForJob("ImportInitiatorSettingsTrackerJob")
+            //    .WithSimpleSchedule(x => x
+            //        .WithIntervalInSeconds(60)
+            //        .RepeatForever())
+            //    .Build();
+            //_sched.ScheduleJob(importI_trackerJob, importI_trackerSettingsTrigger);
+
             if (_sched.GetJobGroupNames().Count > 0)
                 _sched.Start();
         }

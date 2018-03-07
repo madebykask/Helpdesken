@@ -11,5 +11,9 @@ namespace DH.Helpdesk.TaskScheduler
         public const string DailyReportGroupName = "DailyReport";
         public const string DailyReportJobName = "DailyReportJob";
         public const string DailyReportJobTriggerName = "DailyReportJobTrigger";
+
+        public const string ImportInitiator_GroupName = "ImportInitiator";
+        public const string ImportInitiator_JobName = "ImportInitiator_Job";
+        public const string ImportInitiator_JobTriggerName = "ImportInitiator_JobTrigger";
     }
 }

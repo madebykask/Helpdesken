@@ -91,13 +91,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\FileDownloader.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DI\NinjectJobFactory.cs" />
     <Compile Include="DI\NinjectSchedulerFactory.cs" />
     <Compile Include="DI\QuartzNinjectModule.cs" />
     <Compile Include="DI\ServiceModule.cs" />
+    <Compile Include="Dto\ImportInitiator_JobSettings.cs" />
     <Compile Include="Dto\JobSettings.cs" />
+    <Compile Include="Jobs\ImportInitiatorJob.cs" />
     <Compile Include="Jobs\DailyReportJob.cs" />
+    <Compile Include="Jobs\ImportInitiatorSettingsTrackerJob.cs" />
     <Compile Include="Jobs\SettingsTrackerJob.cs" />
     <Compile Include="Managers\ServiceConfigurationManager.cs" />
     <Compile Include="ProjectInstaller.cs">
@@ -106,6 +110,7 @@
     <Compile Include="ProjectInstaller.Designer.cs">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\ImportInitiatorService.cs" />
     <Compile Include="Services\DailyReportService.cs" />
     <Compile Include="TaskScheduler.cs">
       <SubType>Component</SubType>

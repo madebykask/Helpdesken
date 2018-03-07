@@ -23,7 +23,9 @@ namespace DH.Helpdesk.TaskScheduler.DI
             Bind<IDbQueryExecutor>().To<SqlDbQueryExecutor>();
             Bind<IDbQueryExecutorFactory>().To<SqlDbQueryExecutorFactory>();
             Bind<IDailyReportService>().To<DailyReportService>();
+            Bind<IImportInitiatorService>().To<ImportInitiatorService>();
 
+            Bind<IJob>().To<ImportInitiatorJob>();
             Bind<IJob>().To<DailyReportJob>();//TODO: scan assambly for jobs
         }
     }
