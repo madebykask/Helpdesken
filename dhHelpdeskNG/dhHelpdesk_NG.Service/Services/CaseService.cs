@@ -9,6 +9,7 @@ using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.BusinessData.Models.Customer;
 using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Feedback;
+using LinqLib.Operators;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -1953,7 +1954,6 @@ namespace DH.Helpdesk.Services.Services
             using (var uow = unitOfWorkFactory.Create())
             {
                 var rep = uow.GetRepository<Case>();
-                var computerUsers = uow.GetRepository<ComputerUser>();
                 var caseFiles = uow.GetRepository<CaseFile>();
                 var logFiles = uow.GetRepository<LogFile>();
                 var caseHistories = uow.GetRepository<CaseHistory>();
@@ -2210,7 +2210,13 @@ namespace DH.Helpdesk.Services.Services
                             break;
                             #endregion
                     }
+
+                    if (cfn == AdditionalDataPrivacyFields.SelfService_RegUser.ToString())
+                    {
+                        c.Logs.ForEach(l => l.RegUser = replaceDataWith);
+                    }
                 }
+
                 if (removeCaseAttachments)
                 {
                     foreach (var caseFile in c.CaseFiles.ToList())

@@ -476,17 +476,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 GridModel = gridModel,
                 TextTypes = this._textTranslationService.GetTextTypes().Select(x => new SelectListItem
                 {
-                    Text = Translation.Get(x.Name),
+                    Text = Translation.GetCoreTextTranslation(x.Name),
                     Value = x.Id.ToString()
                 }).ToList(),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
-                    Text = Translation.Get(x.Name),
+                    Text = Translation.GetCoreTextTranslation(x.Name),
                     Value = x.Id.ToString()
                 }).ToList(),
                 HolidayHeaders = this._holidayService.GetHolidayHeaders().Select(x => new SelectListItem
                 {
-                    Text = x.Id == DEFAULT_HOLIDAYS_CALENDAR_ID ? string.Format("{0} ({1})", Translation.Get(x.Name), Translation.Get("standardkalender")) : Translation.Get(x.Name),
+                    Text = x.Id == DEFAULT_HOLIDAYS_CALENDAR_ID ? string.Format("{0} ({1})", Translation.GetCoreTextTranslation(x.Name), Translation.GetCoreTextTranslation("standardkalender")) : Translation.GetCoreTextTranslation(x.Name),
                     Value = x.Id.ToString()
                 }).ToList(),
                 WatchDateCalendars = this._watchDateCalendarService.GetAllWatchDateCalendars().Select(x => new SelectListItem
@@ -498,8 +498,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             };
 
             model.SearchConditions = new List<SelectListItem>();
-            model.SearchConditions.Add(new SelectListItem { Text = Translation.Get("Börjar med"), Value = "1"});
-            model.SearchConditions.Add(new SelectListItem { Text = Translation.Get("Innehåller"), Value = "2"});
+            model.SearchConditions.Add(new SelectListItem { Text = Translation.GetCoreTextTranslation("Börjar med"), Value = "1"});
+            model.SearchConditions.Add(new SelectListItem { Text = Translation.GetCoreTextTranslation("Innehåller"), Value = "2"});
 
             ViewBag.SelectedSearchCondition = searchOption.CompareMethod.ToString();
 
@@ -517,7 +517,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 GlobalSetting = globalSetting,
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
-                    Text = Translation.Get(x.Name),
+                    Text = Translation.GetCoreTextTranslation(x.Name),
                     Value = x.Id.ToString()
                 }).ToList()
             };
@@ -1042,24 +1042,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return model;
         }
 
-        private Holiday returnWorkingHoursForNewSave(GlobalSettingHolidayViewModel viewModel)
-        {
-            var holiday = viewModel.Holiday;
-
-            if (viewModel.TimeFrom == 0)
-            {
-                holiday.TimeFrom = 0;
-                holiday.TimeUntil = 0;
-            }
-            else
-            {
-                holiday.TimeFrom = viewModel.TimeFrom;
-                holiday.TimeUntil = viewModel.TimeTil;
-            }
-
-            return holiday;
-        }
-
         public string ChangeHolidayHeader(int id)
         {
             var headerNameToChange = this._holidayService.GetHolidayHeader(id);
@@ -1070,13 +1052,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return headerNameToChange.Name;
         }
 
-        //public string ChangeHolidayList(int id)
-        //{
-        //    var list = this._holidayService.GetAll().Where(x => x.HolidayHeader_Id == id);
-        //    var str = this.RenderRazorViewToString("_HolidayList", list.ToList());
-
-        //    return str;
-        //}
 
         public string ChangeWatchDate(int id)
         {
@@ -1525,6 +1500,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     {
                         Label = Translation.GetCoreTextTranslation("Ändring"),
                         Name = CaseSolutionFields.Change.ToString()
+                    },
+                    new CaseFieldSettingsWithLanguage()
+                    {
+                        Label = "SelfService - RegUser",
+                        Name = AdditionalDataPrivacyFields.SelfService_RegUser.ToString()
                     }
                 };
                 var fields = _caseFieldSettingService.GetAllCaseFieldSettings(customerId.Value, SessionFacade.CurrentLanguageId).Where(f => !exceptionList.Contains(f.Name)).ToList();

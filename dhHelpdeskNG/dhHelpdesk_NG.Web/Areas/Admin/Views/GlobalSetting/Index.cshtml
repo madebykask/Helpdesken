@@ -10,16 +10,16 @@
     <div class="pull-left">
         <ul class="secnav" id="myButton">
             <li id="menu1" style="display: block">
-                @Html.ActionLink(Translation.Get("Ändra", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("inställningar", Enums.TranslationSource.TextTranslation), "change", null, new { @class = "btn" })
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Ändra") + " " + Translation.GetCoreTextTranslation("inställningar"), "change", null, new { @class = "btn" })
             </li>
             <li id="menu2" style="display: none">
-                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Kalender helgdagar", Enums.TranslationSource.TextTranslation), "newholiday", new { newholiday = 1 }, new { @class = "btn" })
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Lägg till") + " " + Translation.GetCoreTextTranslation("Kalender helgdagar"), "newholiday", new { newholiday = 1 }, new { @class = "btn" })
             </li>
             <li id="menu3" style="display: none">
-                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Kalender bevakningsdatum", Enums.TranslationSource.TextTranslation), "newwatchdate", new { newwdc = 1 }, new { @class = "btn" })
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Lägg till") + " " + Translation.GetCoreTextTranslation("Kalender bevakningsdatum"), "newwatchdate", new { newwdc = 1 }, new { @class = "btn" })
             </li>
             <li id="menu4" style="display: none">
-                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation), "newtranslation", new { newtext = 1, texttypeid = Model.TextType.Id }, new { @class = "btn" })
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Lägg till") + " " + Translation.GetCoreTextTranslation("Översättningar"), "newtranslation", new { newtext = 1, texttypeid = Model.TextType.Id }, new { @class = "btn" })
             </li>
             <li id="menu5" style="display: none"></li>
             <li id="menu6" style="display: none">
@@ -33,12 +33,12 @@
     <div class="container">
 
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active" id="tab1" onclick="toggleMenuItems(1)"><a href="#fragment-1">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</a></li>
-            <li id="tab2" onclick="toggleMenuItems(2)"><a href="#fragment-2">@Translation.Get("Kalender helgdagar", Enums.TranslationSource.TextTranslation)</a></li>
-            <li id="tab3" onclick="toggleMenuItems(3)"><a href="#fragment-3">@Translation.Get("Kalender bevakningsdatum", Enums.TranslationSource.TextTranslation)</a></li>
-            <li id="tab4" onclick="toggleMenuItems(4)"><a href="#fragment-4">@Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation)</a></li>
-            <li id="tab5" onclick="toggleMenuItems(5)"><a href="#fragment-5">@Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)</a></li>
-            @*<li id="tab6" onclick="toggleMenuItems(6)"><a href="#fragment-6">@Translation.GetCoreTextTranslation("Dataintegritet")</a></li>*@
+            <li class="active" id="tab1" onclick="toggleMenuItems(1)"><a href="#fragment-1">@Translation.GetCoreTextTranslation("Allmänt")</a></li>
+            <li id="tab2" onclick="toggleMenuItems(2)"><a href="#fragment-2">@Translation.GetCoreTextTranslation("Kalender helgdagar")</a></li>
+            <li id="tab3" onclick="toggleMenuItems(3)"><a href="#fragment-3">@Translation.GetCoreTextTranslation("Kalender bevakningsdatum")</a></li>
+            <li id="tab4" onclick="toggleMenuItems(4)"><a href="#fragment-4">@Translation.GetCoreTextTranslation("Översättningar")</a></li>
+            <li id="tab5" onclick="toggleMenuItems(5)"><a href="#fragment-5">@Translation.GetCoreTextTranslation("Självservice")</a></li>
+            <li id="tab6" onclick="toggleMenuItems(6)"><a href="#fragment-6">@Translation.GetCoreTextTranslation("Dataintegritet")</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
@@ -46,16 +46,16 @@
                     <thead>
                         <tr>
                             <th>
-                                @Translation.Get("Applikationsnamn", Enums.TranslationSource.TextTranslation)
+                                @Translation.GetCoreTextTranslation("Applikationsnamn")
                             </th>
                             <th>
-                                @Translation.Get("Standard", Enums.TranslationSource.TextTranslation) @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
+                                @Translation.GetCoreTextTranslation("Standard") @Translation.GetCoreTextTranslation("Språk")
                             </th>
                             <th>
-                                @Translation.Get("Version", Enums.TranslationSource.TextTranslation)
+                                @Translation.GetCoreTextTranslation("Version")
                             </th>
                             <th>
-                                @Translation.Get("Tid", Enums.TranslationSource.TextTranslation)
+                                @Translation.GetCoreTextTranslation("Tid")
                             </th>
                         </tr>
                     </thead>
@@ -85,7 +85,7 @@
                     <thead>
                         <tr>
                             <th>
-                                @Translation.Get("Kalender", Enums.TranslationSource.TextTranslation)
+                                @Translation.GetCoreTextTranslation("Kalender")
                             </th>
                         </tr>
                     </thead>
@@ -106,7 +106,7 @@
                             <table class="tableform" id="tblHoliday">
                                 <tr>
                                     <td>
-                                        @Translation.Get("Kalender", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Kalender", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(model => model.HolidayHeader.Id, Model.HolidayHeaders, new { style = "width: auto;", id = "HolidayHeaderId", onchange = "changeHoliday(this.options[this.selectedIndex].value);" })
@@ -128,7 +128,7 @@
                     <thead>
                         <tr>
                             <th>
-                                @Translation.Get("Kalender bevakningsdatum", Enums.TranslationSource.TextTranslation)
+                                @Translation.GetCoreTextTranslation("Kalender bevakningsdatum")
                             </th>
                         </tr>
                     </thead>
@@ -153,7 +153,7 @@
                                 <table class="tableform" id="tblText">
                                     <tr>
                                         <td style="width:50px">
-                                            &nbsp;&nbsp;@Translation.Get("Typ", Enums.TranslationSource.TextTranslation)
+                                            &nbsp;&nbsp;@Translation.GetCoreTextTranslation("Typ")
                                         </td>
                                         <td style="width:200px">
                                             @Html.DropDownListFor(model => model.TextType.Id, Model.TextTypes, new { style = "width: auto;", id = "TextTypeId", onchange = "changeTextType(this.options[this.selectedIndex].value);" })                                            
@@ -161,7 +161,7 @@
                                         <td>
                                             @Html.TextBoxFor(model => model.SearchTextTr, new { maxlength = "50"})
                                             @Html.DropDownListFor(model => model.SearchConditions, Model.SearchConditions, new { style = "width: auto;", id = "SearchId", onchange = "" })
-                                            <input type="button" id="searchQueryBtn" onclick ="DoSearch();" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" onclick="submit();" />
+                                            <input type="button" id="searchQueryBtn" onclick ="DoSearch();" value="@Translation.GetCoreTextTranslation("Sök")" class="btn" onclick="submit();" />
                                         </td>
                                     </tr>
                                 </table>
@@ -178,7 +178,7 @@
                 <table class="tableform">
                     <tbody>
                     <tr>
-                        <td class="span4">@Translation.Get("Visa alla kunder på Ärendeöversikten")</td>
+                        <td class="span4">@Translation.GetCoreTextTranslation("Visa alla kunder på Ärendeöversikten")</td>
                         <td>@Html.CheckBox("multiCustomersSearch", Model.GlobalSettings.FirstOrDefault().MultiCustomersSearch == 1, new {@class = "switchcheckbox"})</td>
                     </tr>
                     </tbody>
@@ -291,10 +291,10 @@
 
 @section Scripts {
     <script type="text/javascript">
-        $(function () {
+        $(function() {
             var caseFieldsDropDown = "lstFilterFields";
 
-            var getFilters = function () {
+            var getFilters = function() {
                 var filters = {
                     selectedCustomerId: null,
                     registerDateFrom: null,
@@ -308,9 +308,9 @@
                     removeCaseHistory: null
                 };
 
-                $("#" + caseFieldsDropDown + " option:selected").each(function () {
-                        filters.fields.push($(this).val());
-                    });
+                $("#" + caseFieldsDropDown + " option:selected").each(function() {
+                    filters.fields.push($(this).val());
+                });
 
                 filters.selectedCustomerId = $("#customerSelect").val();
                 filters.registerDateFrom = $("#DataPrivacy_RegisterDateFrom").val();
@@ -326,36 +326,51 @@
             };
 
             var dataPrivacyConfirmation = {
-                confirmDialog: function (text, onOk, onCancel) {
+                confirmDialog: function(text, onOk, onCancel) {
                     var d = $('<div class="modal fade">' +
                         '<div class="modal-dialog">' +
                         '<form method="post" id="deleteDialogForm" class="modal-content">' +
                         '<div class="modal-body">' +
                         '<button type="button" class="close" data-dismiss="modal">&times;</button>' +
-                        '<p class="alert alert-info infop">' + text + '</p>' + '</div>' +
+                        '<p class="alert alert-info infop">' +
+                        text +
+                        '</p>' +
+                        '</div>' +
                         '<div class="modal-footer">' +
-                        '<button type="button" class="btn btn-ok">' + '@Translation.GetCoreTextTranslation("Ja")' + '</button>' +
-                        '<button type="button" class="btn btn-cancel">' + '@Translation.GetCoreTextTranslation("Nej")' + '</button>' +
-                        '</div>' + '</form>' + '</div>' + '</div>');
+                        '<button type="button" class="btn btn-ok">' +
+                        '@Translation.GetCoreTextTranslation("Ja")' +
+                        '</button>' +
+                        '<button type="button" class="btn btn-cancel">' +
+                        '@Translation.GetCoreTextTranslation("Nej")' +
+                        '</button>' +
+                        '</div>' +
+                        '</form>' +
+                        '</div>' +
+                        '</div>');
 
-                    d.on("show", function () {
-                            d.find(".btn-cancel").on("click", function (e) {
-                                        onCancel();
-                                        d.modal('hide');
-                                    });
+                    d.on("show",
+                        function() {
+                            d.find(".btn-cancel").on("click",
+                                function(e) {
+                                    onCancel();
+                                    d.modal('hide');
+                                });
 
-                            d.find(".btn-ok").on("click", function (e) {
-                                        onOk();
-                                        d.modal('hide');
-                                    });
+                            d.find(".btn-ok").on("click",
+                                function(e) {
+                                    onOk();
+                                    d.modal('hide');
+                                });
                         });
 
-                    d.on("hide", function () {
+                    d.on("hide",
+                        function() {
                             d.find(".btn-ok").off("click");
                             d.find(".btn-cancel").off("click");
                         });
 
-                    d.on("hidden", function () {
+                    d.on("hidden",
+                        function() {
                             d.remove();
                         });
 
@@ -367,12 +382,14 @@
                 }
             }
 
-            $("#privacyRunBtn").on("click", function (e) {
-                e.stopImmediatePropagation();
-                e.preventDefault();
-                if ($("#privacyForm").valid()) {
-                    dataPrivacyConfirmation.confirmDialog('@Translation.GetForJS("Är du säker på att du vill ersätta informationen i utvalda ärenden?")',
-                            function () {
+            $("#privacyRunBtn").on("click",
+                function(e) {
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                    if ($("#privacyForm").valid()) {
+                        dataPrivacyConfirmation.confirmDialog(
+                            '@Translation.GetForJS("Är du säker på att du vill ersätta informationen i utvalda ärenden?")',
+                            function() {
                                 $("#inProcessLoader").show();
                                 $("#privacyRunBtn").addClass("disabled");
                                 var filters = getFilters();
@@ -390,137 +407,142 @@
                                 });
 
                                 $.ajax({
-                                    url: '@Url.Action("DataPrivacy")',
-                                    type: "POST",
-                                    data: getParams,
-                                    dataType: "json",
-                                    success: function (result) {
+                                        url: '@Url.Action("DataPrivacy")',
+                                        type: "POST",
+                                        data: getParams,
+                                        dataType: "json"
+                                    })
+                                    .done(function(result) {
                                         if (result.success) {
                                             ShowToastMessage('@Translation.GetForJS("Klar")', "success");
                                         }
-                                    },
-                                    complete: function () {
+                                    })
+                                    .always(function() {
                                         $("#inProcessLoader").hide();
                                         $("#privacyRunBtn").removeClass("disabled");
-                                    }
-                                });
-                            }, function () { }, true);
-                }
-            });
+                                    });
+                            },
+                            function() {},
+                            true);
+                    }
+                });
 
-            $(".chosen-select").chosen().change(function () {
+            $(".chosen-select").chosen().change(function() {
                 $(this).valid();
             });
 
-            $('#customerSelect').on('change', function () {
-                $("#fieldsLoader").show();
-                var multiSelect = $("#lstFilterFields");
-                multiSelect.prop('disabled', true).trigger("chosen:updated");
-                $.ajax({
-                    url: '@Url.Action("GetCustomerCaseFields")',
-                    type: "POST",
-                    data: { customerId: $(this).val() },
-                    dataType: "json",
-                    success: function (result) {
-                        if (result.success) {
-                            multiSelect.empty();
-                            $.each(result.data,
-                                function (idx, obj) {
-                                    multiSelect.append('<option value="' + obj.Value + '">' + obj.Text + '</option>');
-                                });
-                            multiSelect.trigger("chosen:updated");
-                        }
-                    },
-                    complete: function () {
-                        $("#fieldsLoader").hide();
-                        multiSelect.prop('disabled', false).trigger("chosen:updated");
-                    }
+            $('#customerSelect').on('change',
+                function() {
+                    $("#fieldsLoader").show();
+                    var multiSelect = $("#lstFilterFields");
+                    multiSelect.prop('disabled', true).trigger("chosen:updated");
+                    $.ajax({
+                            url: '@Url.Action("GetCustomerCaseFields")',
+                            type: "POST",
+                            data: { customerId: $(this).val() },
+                            dataType: "json"
+                        })
+                        .done(function(result) {
+                            if (result.success) {
+                                multiSelect.empty();
+                                $.each(result.data,
+                                    function(idx, obj) {
+                                        multiSelect.append(
+                                            '<option value="' + obj.Value + '">' + obj.Text + '</option>');
+                                    });
+                                multiSelect.trigger("chosen:updated");
+                            }
+                        })
+                        .done(function() {
+                            $("#fieldsLoader").hide();
+                            multiSelect.prop('disabled', false).trigger("chosen:updated");
+                        });
                 });
-            });
+        
 
-            function getRules() {
-                var rules = {
-                    "DataPrivacy.SelectedCustomerId": {
-                        required: true
-                    },
-                    "DataPrivacy.FieldsNames": {
-                        required: true
-                    },
-                    "DataPrivacy.RegisterDateFrom": {
-                        required: true
-                    },
-                    "DataPrivacy.RegisterDateTo": {
-                        required: true
+        function getRules() {
+            var rules = {
+                "DataPrivacy.SelectedCustomerId": {
+                    required: true
+                },
+                "DataPrivacy.FieldsNames": {
+                    required: true
+                },
+                "DataPrivacy.RegisterDateFrom": {
+                    required: true
+                },
+                "DataPrivacy.RegisterDateTo": {
+                    required: true
+                }
+            }
+            return rules;
+        }
+
+        $("#privacyForm").validate({
+            ignore: "",
+            rules: getRules(),
+            errorPlacement: function(error, element) {
+                if (element.is("#DataPrivacy_RegisterDateFrom") || element.is("#DataPrivacy_RegisterDateTo")) {
+                    $("#datesErrorLabel").html(error);
+                } else {
+                    if (element.is("select.chosen-select")) {
+                        error.insertAfter($("#fieldsLoader"));
+                        error.css("width", "315px");
+                        $("#" + element.attr("id") + "_chosen").addClass("error");
+                    } else {
+                        error.insertAfter(element);
                     }
                 }
-                return rules;
-            }
-
-            $("#privacyForm").validate({
-                ignore: "",
-                rules: getRules(),
-                errorPlacement: function (error, element) {
-                    if (element.is("#DataPrivacy_RegisterDateFrom") || element.is("#DataPrivacy_RegisterDateTo")) {
-                        $("#datesErrorLabel").html(error);
-                    } else {
-                        if (element.is("select.chosen-select")) {
-                            error.insertAfter($("#fieldsLoader"));
-                            error.css("width", "315px");
-                            $("#" + element.attr("id") + "_chosen").addClass("error");
-                        } else {
-                            error.insertAfter(element);
-                        }
-                    }
-                },
-                highlight: function (element) {
-                    if (element.id === caseFieldsDropDown) {
-                        $("#" + element.id + "_chosen").removeClass('error success').addClass('error');
-                    } else {
-                        $(element).removeClass('error success').addClass('error');
-                    }
-                },
-                success: function (label) {
-                    if (label.attr("for") === caseFieldsDropDown) {
-                        $("#" + label.attr("for") + "_chosen").removeClass("error");
-                    }
-                },
-                messages: {
-                    "DataPrivacy.SelectedCustomerId": {
-                        required: "@Translation.GetForJS("Kund") @Translation.GetForJS("måste anges")"
+            },
+            highlight: function(element) {
+                if (element.id === caseFieldsDropDown) {
+                    $("#" + element.id + "_chosen").removeClass('error success').addClass('error');
+                } else {
+                    $(element).removeClass('error success').addClass('error');
+                }
+            },
+            success: function(label) {
+                if (label.attr("for") === caseFieldsDropDown) {
+                    $("#" + label.attr("for") + "_chosen").removeClass("error");
+                }
+            },
+            messages: {
+                "DataPrivacy.SelectedCustomerId": {
+                    required: "@Translation.GetForJS("Kund") @Translation.GetForJS("måste anges")"
                 },
                 "DataPrivacy.FieldsNames": {
                     required: "@Translation.GetForJS("Fält") @Translation.GetForJS("måste anges")"
-            },
-                    "DataPrivacy.RegisterDateFrom": {
-                required: "@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("måste anges")"
-                    },
-                    "DataPrivacy.RegisterDateTo": {
-                required: "@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("måste anges")"
-                    }
-        }
+                },
+                "DataPrivacy.RegisterDateFrom": {
+                    required: "@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("måste anges")"
+                },
+                "DataPrivacy.RegisterDateTo": {
+                    required: "@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("måste anges")"
+                }
+            }
         });
 
-            $('#SearchId').val(@ViewBag.SelectedSearchCondition);
+        $('#SearchId').val(@ViewBag.SelectedSearchCondition);
 
-            $("#multiCustomersSearch").on('switchChange.bootstrapSwitch',
-                    function () {
+        $("#multiCustomersSearch").on('switchChange.bootstrapSwitch',
+            function() {
 
-                        $("#selfServiceError").text('').hide();
+                $("#selfServiceError").text('').hide();
 
-                        var res = $(this).is(':checked');
-                        var data = {
-                            val: res ? 'true' : 'false'
-                        };
+                var res = $(this).is(':checked');
+                var data = {
+                    val: res ? 'true' : 'false'
+                };
 
-                        $.post('@Url.Action("UpdateMultiCustomersSearch", "GlobalSetting", new {Area = "Admin"})',
-                            data,
-                            function (response) {
-                                if (!response.Success && response.ErrorMessage) {
-                                    $("#selfServiceError").text(response.ErrorMessage).show();
-                                }
-                            });
+                $.post('@Url.Action("UpdateMultiCustomersSearch", "GlobalSetting", new {Area = "Admin"})',
+                    data,
+                    function(response) {
+                        if (!response.Success && response.ErrorMessage) {
+                            $("#selfServiceError").text(response.ErrorMessage).show();
+                        }
                     });
-        });
+            });
+    });
 
         var texttypeId = $("#TextTypeId").val();
 
