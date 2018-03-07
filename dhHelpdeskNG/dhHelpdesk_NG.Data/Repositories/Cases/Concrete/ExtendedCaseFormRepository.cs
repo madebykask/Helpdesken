@@ -97,7 +97,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         ExtendedCaseFormName = extendedCaseForm.Name,
                         ExtendedCaseGuid = sec.ExtendedCaseData.ExtendedCaseGuid
                     })
-                .Single();
+                .SingleOrDefault();
 
             return extendedFormData;
         }
