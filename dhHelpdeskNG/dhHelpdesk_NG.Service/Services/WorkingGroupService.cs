@@ -214,7 +214,7 @@ namespace DH.Helpdesk.Services.Services
             var workingGroups = this.workingGroupRepository.GetMany(w => w.Customer_Id == customerId).OrderBy(w => w.WorkingGroupName).ToList();
             var workingGroupIds = workingGroups.Select(g => g.Id).ToList();
 
-            var workingGroupsUserIds = this.userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds, includeAdmins, true);
+            var workingGroupsUserIds = this.userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds, includeAdmins, true, true);
             
             var userIds = workingGroupsUserIds.SelectMany(g => g.UserIds).Distinct().ToList();
 

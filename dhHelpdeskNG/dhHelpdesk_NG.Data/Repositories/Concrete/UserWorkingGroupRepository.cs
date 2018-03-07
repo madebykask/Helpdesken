@@ -1,4 +1,6 @@
+using System;
 using DH.Helpdesk.BusinessData.Enums.Users;
+using System.Data.Entity;
 
 namespace DH.Helpdesk.Dal.Repositories.Concrete
 {
@@ -16,33 +18,41 @@ namespace DH.Helpdesk.Dal.Repositories.Concrete
         {
         }
 
-        public List<WorkingGroupUsers> FindWorkingGroupsUserIds(List<int> workingGroupIds, bool includeAdmins = true, bool activeUsers = false)
+        public List<WorkingGroupUsers> FindWorkingGroupsUserIds(List<int> workingGroupIds, bool includeAdmins = true, bool? isMemberOfGroup = null, bool activeUsers = false)
         {
-            var items = (from wg in DataContext.WorkingGroups
-                         from wgUser in wg.UserWorkingGroups.DefaultIfEmpty()
-                         where workingGroupIds.Contains(wg.Id)
-                         select new
-                         {
-                             Id = wg.Id,
-                             UserId = (int?)wgUser.User_Id,
-                             UserRole = (int?)wgUser.UserRole,
-                             IsActiveUser = (int?)wgUser.User.IsActive,
-                         }).ToList();
+            if(workingGroupIds == null) throw new ArgumentNullException(nameof(workingGroupIds));
 
-            
+            var items = (from wg in DataContext.WorkingGroups
+                from wgUser in wg.UserWorkingGroups.DefaultIfEmpty()
+                where workingGroupIds.Contains(wg.Id) && wgUser.User_Id != 0
+                select new
+                {
+                    Id = wg.Id,
+                    UserId = wgUser.User_Id,
+                    UserRole = wgUser.UserRole,
+                    IsActiveUser = wgUser.User.IsActive,
+                    IsMemberOfGroup = wgUser.IsMemberOfGroup
+                });
+
             if (!includeAdmins)
             {
-                items = items.Where(x => x.UserRole != WorkingGroupUserPermission.ADMINSTRATOR).ToList();
+                items = items.Where(x => x.UserRole != WorkingGroupUserPermission.ADMINSTRATOR);
+            }
+
+            if (isMemberOfGroup.HasValue)
+            {
+                items = items.Where(x => x.IsMemberOfGroup == isMemberOfGroup.Value);
             }
 
             if (activeUsers)
             {
-                items = items.Where(x => x.IsActiveUser == 1).ToList();
+                items = items.Where(x => x.IsActiveUser == 1);
             }
 
             var result =
                  items.GroupBy(o => o.Id)
-                      .Select(o => new WorkingGroupUsers(o.Key, o.Where(u => u.UserId.HasValue).Select(u => u.UserId.Value).ToList()))
+                      .ToList()
+                      .Select(o => new WorkingGroupUsers(o.Key, o.Select(u => u.UserId).ToList()))
                       .ToList();
          
             return result;
