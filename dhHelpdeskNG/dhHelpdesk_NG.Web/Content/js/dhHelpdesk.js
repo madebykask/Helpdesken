@@ -417,14 +417,6 @@ function NewNotifierEvent(id) {
     }, 'json');
 }
 
-function moveCase(id) {
-    var customerId = $('#moveCaseToCustomerId').val();
-    if (customerId.length > 0) {
-        var url = '/cases/edit/' + id + '?moveToCustomerId=' + customerId;
-        window.location.href = url;
-    }
-}
-
 function copyCase(id, customerId) {
 
     var url = '/cases/copy/' + id + '?customerId=' + customerId;

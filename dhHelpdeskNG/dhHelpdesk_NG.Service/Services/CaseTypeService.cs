@@ -18,6 +18,7 @@ namespace DH.Helpdesk.Services.Services
 
         IList<CaseType> GetCaseTypesForSetting(int customerId, bool isTakeOnlyActive = false);
         IList<CaseType> GetAllCaseTypes(int customerId, bool isTakeOnlyActive = false);
+        IList<int> GetCaseTypeIds(int customerId);
 
         CaseType GetCaseType(int id);
 
@@ -188,7 +189,13 @@ namespace DH.Helpdesk.Services.Services
         {
             return this.caseTypeRepository.GetOverviews(customerId, caseTypesIds);
         }
-        
+
+        public IList<int> GetCaseTypeIds(int customerId)
+        {
+            var caseTypeIds = this.caseTypeRepository.GetCaseTypeOverviews(customerId).Select(x => x.Id).ToList();
+            return caseTypeIds;
+        }
+
         public IList<CaseTypeOverview> GetCaseTypesOverviewWithChildren(int customerId, bool activeOnly = false)
         {
             var allItems = 

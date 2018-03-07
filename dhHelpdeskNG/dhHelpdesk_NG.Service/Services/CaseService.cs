@@ -6,6 +6,7 @@ using System.Linq;
 using DH.Helpdesk.BusinessData.Enums.Users;
 using DH.Helpdesk.BusinessData.Models.Feedback;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+using DH.Helpdesk.BusinessData.Models.Customer;
 using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Feedback;
 
@@ -183,6 +184,7 @@ namespace DH.Helpdesk.Services.Services
         int GetCaseQuickOpen(UserOverview user, string searchFor);
         void SendProblemLogEmail(Case cs, CaseMailSetting caseMailSetting, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, bool isClosedCaseSending);
         bool RemoveDataPrivacyFromCase(int customerId, List<string> fieldsNames, DateTime? replaceDatesWith, string replaceDataWith, DateTime? registerDateFrom, DateTime? registerDateTo, bool closedOnly, bool removeCaseAttachments, bool removeLogAttachments, bool removeCaseHistory);
+        int GetCaseCustomerId(int caseId);
     }
 
     public class CaseService : ICaseService
@@ -237,8 +239,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseFollowUpService _caseFollowUpService;
         private readonly ICaseSolutionRepository _caseSolutionRepository;
         private readonly IStateSecondaryRepository _stateSecondaryRepository;
-        private ICustomerRepository _customerRepository;
-
+        private readonly ICustomerRepository _customerRepository;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -336,6 +337,12 @@ namespace DH.Helpdesk.Services.Services
         public Case GetCaseById(int id, bool markCaseAsRead = false)
         {
             return this._caseRepository.GetCaseById(id, markCaseAsRead);
+        }
+
+        public int GetCaseCustomerId(int caseId)
+        {
+            var customerId = this._caseRepository.GetCaseCustomerId(caseId);
+            return customerId;
         }
 
         public Case GetDetachedCaseById(int id)
@@ -1153,8 +1160,7 @@ namespace DH.Helpdesk.Services.Services
 
                 this._caseRepository.Update(c);
             }
-
-
+            
             this._caseRepository.Commit();
             this._caseStatService.UpdateCaseStatistic(c);
 

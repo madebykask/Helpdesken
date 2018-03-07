@@ -143,6 +143,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return fields.getCaseSettingsValue(field.ToString()).Locked == 1;
         }
 
+        public static bool ShowOnPage(this IList<CaseFieldSetting> cfs, GlobalEnums.TranslationCaseFields field)
+        {
+            var fieldSettings = cfs.getCaseSettingsValue(field.ToString());
+            return (fieldSettings?.ShowOnStartPage ?? 0) == 1;
+        }
+
         public static CaseFieldSetting getCaseSettingsValue(this IList<CaseFieldSetting> cfs, string valueToFind)
         {
             var ret = new CaseFieldSetting();  

@@ -1,27 +1,27 @@
-﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
-@using DH.Helpdesk.BusinessData.OldComponents
+﻿@model DH.Helpdesk.Web.Models.Case.CaseMoveModel
+
 <div class="modal-header">
 <strong>@Translation.Get("Flytta", Enums.TranslationSource.TextTranslation) @Translation.Get("ärende", Enums.TranslationSource.TextTranslation)</strong>
 </div>
 <div class="modal-body">
     <p>
-        @Translation.Get("Eventuella ändringar måste sparas innan du flyttar ärendet. Vill du flytta ärendet nu eller avbryta", Enums.TranslationSource.TextTranslation)?                
+        @Translation.GetCoreTextTranslation("Eventuella ändringar måste sparas innan du flyttar ärendet. Vill du flytta ärendet nu eller avbryta")?
     </p>
     <p>
         @Translation.Get("Kund", Enums.TranslationSource.TextTranslation): 
         <select id="moveCaseToCustomerId" name="moveCaseToCustomerId" >
-        @if (Html.MasterModel().Customers != null)
-        {
-            foreach (var cus in Html.MasterModel().Customers)
+            @if (Model.Customers.Any())
             {
-                if (cus.Id != Model.case_.Customer_Id)
+                foreach (var cus in Model.Customers)
                 {
-                <option value="@cus.Id">@cus.Name</option>                    
+                    <option data-external="@(cus.IsUserCustomer ? "0" : "1")" value="@cus.Id">@cus.Name</option>
                 }
             }
-        }  
         </select>
     </p>
+    <div id="externalCustomerNote" style="display:none">
+        <p class="dh-note">@Translation.GetCoreTextTranslation("Obs! Ärendet kommer att flyttas till kund som du saknar rättighet till. Du kommer inte åt ärendet efter flytten. Vill du flytta ärendet ändå, eller avbryta?")</p>
+    </div>
 </div>
 <div class="modal-footer">
     <button id="btnMoveCase"  class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Flytta", Enums.TranslationSource.TextTranslation)</button>

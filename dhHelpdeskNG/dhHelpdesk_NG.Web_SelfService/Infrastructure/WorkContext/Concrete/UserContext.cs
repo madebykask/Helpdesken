@@ -27,10 +27,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.WorkContext.Concrete
 
         public string Login
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return SessionFacade.CurrentUserIdentity?.UserId; }
         }
 
         public string FirstName

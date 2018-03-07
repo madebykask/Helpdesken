@@ -434,38 +434,57 @@
                 </div>
 
                 <h4>@Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation)</h4>
-                <div class="container">
-                    <div class="row">
-                        <div class="span15">
-                            <table>
-                                <tr>
-                                    <td style="width:150px">
-                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                        <input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 0 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource1" value="0" />
-                                        @Translation.Get("visa endast värde om användarens standarddriftgrupp (fält för andra driftgrupper visas som tomma)", Enums.TranslationSource.TextTranslation)
-                                        <br />
-                                        <input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 1 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource2" value="1" />
-                                        @Translation.Get("visa alltid värde", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="width:150px">
-                                        @Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation) -<br />
-                                        @Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" name="setting.ShowOUsOnDepartmentFilter" @(Model.Setting.ShowOUsOnDepartmentFilter == 1 ? "checked=checked" : "") value="1" />
-                                        <input type="hidden" name="setting.ShowOUsOnDepartmentFilter" value="0" />
-                                        @Translation.Get("Visa Organisationsenhet i Avdelning filter", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
+            <div class="container">
+                <div class="row">
+                    <div class="span15">
+                        <table>
+                            <tr>
+                                <td style="width:150px">
+                                    @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                                </td>
+                                <td>
+                                    <input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 0 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource1" value="0" />
+                                    @Translation.Get("visa endast värde om användarens standarddriftgrupp (fält för andra driftgrupper visas som tomma)", Enums.TranslationSource.TextTranslation)
+                                    <br />
+                                    <input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 1 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource2" value="1" />
+                                    @Translation.Get("visa alltid värde", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:150px">
+                                    @Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation) -<br />
+                                    @Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation)
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="setting.ShowOUsOnDepartmentFilter" @(Model.Setting.ShowOUsOnDepartmentFilter == 1 ? "checked=checked" : "") value="1" />
+                                    <input type="hidden" name="setting.ShowOUsOnDepartmentFilter" value="0" />
+                                    @Translation.Get("Visa Organisationsenhet i Avdelning filter", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
-                <h4>@Translation.Get("Avancerad sökning", Enums.TranslationSource.TextTranslation)</h4>
+            </div>
+                
+            <h4>@Translation.GetCoreTextTranslation("Tillåt åtgärder för användare utan rättighet till denna  kund.")</h4>
+            <div class="container">
+                <div class="row">
+                    <div class="span15">
+                        <table>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="setting.AllowMoveCaseToAnyCustomer" @(Model.Setting.AllowMoveCaseToAnyCustomer ? "checked=checked" : "") value="1" />
+                                    <input type="hidden" name="setting.AllowMoveCaseToAnyCustomer" value="0" />
+                                    @Translation.GetCoreTextTranslation("Flytta ärende till denna kund")
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <h4>@Translation.Get("Avancerad sökning", Enums.TranslationSource.TextTranslation)</h4>
                 <div class="container">
                     <div class="row">
                         <div class="span15">

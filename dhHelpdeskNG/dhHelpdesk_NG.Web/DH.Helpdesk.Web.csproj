@@ -353,6 +353,8 @@
     <Compile Include="Infrastructure\Helpers\CommonHelper.cs" />
     <Compile Include="Infrastructure\WebApi\WebApiService.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\ApplicationContext.cs" />
+    <Compile Include="Models\Case\CaseMoveModel.cs" />
+    <Compile Include="Models\Case\CaseOperationResult.cs" />
     <Compile Include="Models\Case\InvoiceTimeModel.cs" />
     <Compile Include="Models\JsonModels\Base\BaseJsonModel.cs" />
     <Compile Include="Models\JsonModels\Case\CaseJsonModel.cs" />
@@ -3997,6 +3999,7 @@
     <Content Include="Views\QuestionnaireAnswer\QuestionnaireCompleted.cshtml" />
     <Content Include="Views\QuestionnaireAnswer\Quiestionnaire.cshtml" />
     <Content Include="Views\Cases\ModalDialogs\_ExtraEmails.cshtml" />
+    <Content Include="Views\Cases\CaseOperationResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

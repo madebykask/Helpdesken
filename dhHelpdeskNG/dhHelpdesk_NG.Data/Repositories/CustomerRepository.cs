@@ -26,6 +26,7 @@ using System;
         string GetCustomerName(int customerId);
 
         IQueryable<Customer> CustomersForUser(int userId);
+        IQueryable<Customer> GetAllowCaseMoveCustomers();
 
         CustomerOverview FindById(int id);
 
@@ -79,6 +80,18 @@ using System;
             var query = 
                 from cus in this.Table
                 where cus.Users.Any(u => u.Id == userId)
+                orderby cus.Name
+                select cus;
+
+            return query;
+        }
+
+        public IQueryable<Customer> GetAllowCaseMoveCustomers()
+        {
+            var query =
+                from cus in this.Table
+                from cusSettings in DataContext.Settings.Where(x => x.Customer_Id == cus.Id).DefaultIfEmpty()
+                where cusSettings.AllowMoveCaseToAnyCustomer
                 orderby cus.Name
                 select cus;
 

@@ -51,8 +51,7 @@
 
         public IEnumerable<ItemOverview> GetOverviews(int customerId)
         {
-            var entities = this.Table
-                    .Where(g => g.Customer_Id == customerId && g.IsActive == 1)
+            var entities = GetCustomerCaseTypes(customerId, true)
                     .Select(g => new { Value = g.Id, g.Name })
                     .OrderBy(g => g.Name)
                     .ToList();
@@ -63,10 +62,10 @@
         public IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds)
         {
             var all = caseTypesIds == null || !caseTypesIds.Any();
-            var entities = this.Table
-                    .Where(g => g.Customer_Id == customerId && 
-                            g.IsActive == 1 &&
-                            (all || caseTypesIds.Contains(g.Id)))
+
+            var entities = 
+                GetCustomerCaseTypes(customerId, true)
+                    .Where(g => all || caseTypesIds.Contains(g.Id))
                     .Select(g => new { Value = g.Id, g.Name })
                     .OrderBy(g => g.Name)
                     .ToList();
@@ -90,10 +89,11 @@
             //        .ToList();
             //For next release #57742
             var entities =
-                this.DataContext.CaseTypes.Where(c => c.Customer_Id == customerId && c.IsActive != 0)
+                GetCustomerCaseTypes(customerId, true)
                     .Select(c => new { c.Id, ParentId = c.Parent_CaseType_Id, c.Name, c.ShowOnExternalPage, c.ShowOnExtPageCases })
                     .OrderBy(c => c.Name)
                     .ToList();
+
             return entities
                     .Select(c => new CaseTypeOverview
                                      {
@@ -103,6 +103,11 @@
                                          ShowOnExternalPage = c.ShowOnExternalPage,
                                          ShowOnExtPageCases = c.ShowOnExtPageCases
                                      });
+        }
+
+        private IQueryable<CaseType> GetCustomerCaseTypes(int customerId, bool activeOnly)
+        {
+            return Table.Where(g => g.Customer_Id == customerId && (!activeOnly || g.IsActive == 1));
         }
 
         private void GetChildrenProcess(int caseTypeId, List<int> children)

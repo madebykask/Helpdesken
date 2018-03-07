@@ -65,6 +65,7 @@ namespace DH.Helpdesk.Dal.Repositories
         ParentCaseInfo GetParentInfo(int childCaseId);
         List<Case> GetTop100CasesToTest();
         Case GetCaseQuickOpen(UserOverview user, Expression<Func<Case, bool>> casePermissionFilter, string searchFor);
+        int GetCaseCustomerId(int caseId);
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -575,6 +576,11 @@ namespace DH.Helpdesk.Dal.Repositories
                 return query.FirstOrDefault();
 
             return null;
+        }
+
+        public int GetCaseCustomerId(int caseId)
+        {
+            return Table.Where(x => x.Id == caseId).Select(x => x.Customer_Id).First();
         }
     }
 }
