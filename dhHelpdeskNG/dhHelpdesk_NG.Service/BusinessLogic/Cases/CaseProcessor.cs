@@ -30,6 +30,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
             _caseTypeService = caseTypeService;
         }
 
+        #region Move Case To External Customer
+
         public void MoveCaseToExternalCustomer(int caseId, int userId, int newCustomerId)
         {
             var @case = _caseService.GetCaseById(caseId);
@@ -63,16 +65,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
                 var msg = BuildErrorsMessage(errors);
                 throw new Exception(msg);
             }
-
-            //TODO: new customer may not have CaseSolutions of the case?
-            //m.CaseTemplateButtons = _caseSolutionService.GetCustomerCaseSolutionsOverview(customerId, userId);
-
-            //TODO: check extended case data!
-
-            //todo: check child/Parent
-            //m.ParentCaseInfo = this._caseService.GetParentInfo(caseId).MapBusinessToWebModel(outputFormatter);
-            // var childCases = this._caseService.GetChildCasesFor(caseId);
-            //m.ChildCaseViewModel = new ChildCaseViewModel
         }
 
         private int GetCaseTypeForCustomer(int caseTypeId, int newCustomerId, int defaultCaseCaseTypeId)
@@ -206,6 +198,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
             }
             return strBld.ToString();
         }
+
+        #endregion
     }
 }
 

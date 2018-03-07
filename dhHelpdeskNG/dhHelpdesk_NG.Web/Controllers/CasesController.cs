@@ -5062,20 +5062,23 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [ChildActionOnly]
-        public PartialViewResult MoveCaseModal()
+        public PartialViewResult MoveCaseModal(int caseId, int customerId)
         {
-            var currentCustomerId = this.workContext.Customer.CustomerId;
             var userId = this.workContext.User.UserId;
 
             var customers =
                 _customerService.GetCustomersForCaseMove(userId)
-                    .Where(x => x.Id != currentCustomerId)
+                    .Where(x => x.Id != customerId)
                     .ToList();
 
+            var hasExtendedCase =
+                _caseService.HasExtendedCase(caseId, customerId);
+            
             var model = new CaseMoveModel()
             {
-                CurrentCustomerId = currentCustomerId,
-                Customers = customers
+                CaseCustomerId = customerId,
+                Customers = customers,
+                HasExtendedCase = hasExtendedCase
             };
 
             return PartialView("_MoveCase", model);

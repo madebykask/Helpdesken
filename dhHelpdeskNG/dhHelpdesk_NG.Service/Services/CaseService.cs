@@ -85,7 +85,8 @@ namespace DH.Helpdesk.Services.Services
         ExtendedCaseDataOverview GetCaseExtendedCaseForm(int caseSolutionId, int customerId, int caseId, string userGuid, int caseStateSecondaryId);
         ExtendedCaseDataOverview GetCaseSectionExtendedCaseForm(int caseSolutionId, int customerId, int caseId, int caseSectionType, string userGuid, int caseStateSecondaryId);
         List<ExtendedCaseDataOverview> GetExtendedCaseSectionForms(int caseId, int customerId);
-        
+        bool HasExtendedCase(int caseId, int customerId);
+
         //todo:review
         ExtendedCaseDataEntity GetExtendedCaseData(Guid extendedCaseGuid);
 
@@ -422,6 +423,12 @@ namespace DH.Helpdesk.Services.Services
             }
 
             return extendedCaseFormData;
+        }
+
+        public bool HasExtendedCase(int caseId, int customerId)
+        {
+            var data = _extendedCaseFormRepository.GetExtendedCaseFormForCase(caseId, customerId);
+            return data != null && data.ExtendedCaseFormId > 0;
         }
 
         // retrieve extended case forms for case sections

@@ -87,6 +87,17 @@ namespace DH.Helpdesk.Web.Models.Case
         [Obsolete("Put all fields that you required into this CaseInputViewModel model")]
         public Case case_  { get; set; }
 
+        public int CaseId
+        {
+            get { return case_?.Id ?? 0; }
+        }
+
+
+        public int CustomerId
+        {
+            get { return case_?.Customer_Id ?? 0; }
+        }
+
         public IList<CaseHistoryOverview> CaseHistories { get; set; }
         public CaseLog CaseLog { get; set; }
         public SendToDialogModel SendToDialogModel { get; set; }

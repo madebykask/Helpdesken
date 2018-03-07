@@ -462,7 +462,7 @@
             </div>
         }
         <div id="divMoveCase" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
-            @Html.Action("MoveCaseModal")
+            @Html.Action("MoveCaseModal", new { caseId = Model.CaseId, customerId = Model.CustomerId })
         </div>
         <div id="divCopyCase" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
             @Html.Partial("_CopyCase", Model)

@@ -6,8 +6,9 @@ namespace DH.Helpdesk.Web.Models.Case
 {
     public class CaseMoveModel
     {
-        public int CurrentCustomerId { get; set; }
+        public int CaseCustomerId { get; set; }
         public IList<MoveCaseCustomersListItem> Customers { get; set; }
+        public bool HasExtendedCase { get; set; }
 
         public IList<MoveCaseCustomersListItem> NonUserCustomers
         {
