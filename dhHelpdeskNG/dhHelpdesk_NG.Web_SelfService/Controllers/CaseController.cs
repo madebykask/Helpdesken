@@ -203,9 +203,11 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             var caseId = 0;
+            var allowAnonymousAccess = false;
 
             if (id.Is<Guid>())
             {
+                allowAnonymousAccess = true;
                 var guid = new Guid(id);
                 caseId = _caseService.GetCaseIdByEmailGUID(guid);
                 if (caseId == 0)
@@ -235,28 +237,29 @@ namespace DH.Helpdesk.SelfService.Controllers
                     }
                 }
             }
-            else
+            else if (!int.TryParse(id, out caseId))
             {
-                if (!int.TryParse(id, out caseId))
-                {
-                    ErrorGenerator.MakeError("Case Id is not valid!");
-                    return RedirectToAction("Index", "Error");
-                }
+                ErrorGenerator.MakeError("Case Id is not valid!");
+                return RedirectToAction("Index", "Error");
             }
             
-            var currentCase = _caseService.GetCaseById(caseId);                
-
+            var currentCase = _caseService.GetCaseById(caseId);
             if (currentCase == null)
             {
                 ErrorGenerator.MakeError("Case not found!");
                 return RedirectToAction("Index", "Error");
             }
 
+            //check if case is among customer cases only if its not anonymous access and not opened via link in email
             var isAnonymousMode = ConfigurationService.AppSettings.LoginMode == LoginMode.Anonymous;
-            if (!isAnonymousMode && !UserHasAccessToCase(currentCase))
+            if (!isAnonymousMode && !allowAnonymousAccess)
             {
-                ErrorGenerator.MakeError("Case not found among your cases!");
-                return RedirectToAction("Index", "Error");
+                var hasAccess = UserHasAccessToCase(currentCase);
+                if (!hasAccess)
+                {
+                    ErrorGenerator.MakeError("Case not found among your cases!");
+                    return RedirectToAction("Index", "Error");
+                }
             }
 
             if (currentCase.CaseExtendedCaseDatas.Any())
@@ -281,7 +284,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             currentCase.Customer = currentCustomer;
-
 
             var languageId = SessionFacade.CurrentLanguageId;
             var caseReceipt = GetCaseReceiptModel(currentCase, languageId);
