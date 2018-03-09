@@ -5352,6 +5352,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             var isRelatedCase = caseId > 0 && _caseService.IsRelated(caseId);
 
+            m.IsRelatedCase = isRelatedCase;
+
             var customerCaseSolutions =
                 _caseSolutionService.GetCustomerCaseSolutionsOverview(customerId, userId);
 

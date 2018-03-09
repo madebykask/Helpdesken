@@ -359,6 +359,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public bool newLog { get; set; }
         public bool editLog { get; set; }
         public IList<WorkflowStepModel> WorkflowSteps { get; set; }
+        public bool IsRelatedCase { get; set; }
 
         public int LanguageId { get; set; }
 

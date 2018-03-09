@@ -17,14 +17,14 @@
             }
         </select>
     </p>
-    @if (Model.HasExtendedCase)
-    {
-        <div>
-            <p class="dh-note">@Translation.GetCoreTextTranslation("Ärendet har ett kopplat Utökat ärende. Endast Ärendet kommer att flyttas.")</p>
-        </div>
-    }
+    <div id="extendedCaseNote"  style="display:none">
+        <p class="dh-note">@Translation.GetCoreTextTranslation("Ärendet har ett kopplat Utökat ärende. Endast Ärendet kommer att flyttas.")</p>
+    </div>
     <div id="externalCustomerNote" style="display:none">
         <p class="dh-note">@Translation.GetCoreTextTranslation("Obs! Ärendet kommer att flyttas till kund som du saknar rättighet till. Du kommer inte åt ärendet efter flytten. Vill du flytta ärendet ändå, eller avbryta?")</p>
+    </div>
+    <div id="childParentNote" style="display:none">
+        <p class="dh-note">@Translation.GetCoreTextTranslation("Ärendet har en relation, huvudärende/underärende. Ärendet kan inte flyttas till kund där behörighet saknas.")</p>
     </div>
 </div>
 <div class="modal-footer">

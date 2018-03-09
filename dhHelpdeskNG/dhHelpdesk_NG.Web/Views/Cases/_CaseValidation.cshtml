@@ -47,7 +47,7 @@
         closeBtn: '@Html.Raw(Translation.GetForJS("Stäng"))',
         selectedLabel: '@Translation.GetForJS("vald")',
         noResultLabel: '@Translation.GetForJS("Inga resultat matchar")',
-
+        isRelated: '@Model.IsRelatedCase.ToJavaScriptBool()',
         fileNameError: '@Translation.GetForJS("Filnamn är inte giltigt. Special tecken (!@#=$&?*) är inte tillåtna")',
         containsExtendedCase: '@Model.ContainsExtendedCase',
         containsEForm: '@(Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)',

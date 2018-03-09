@@ -1380,7 +1380,6 @@ EditPage.prototype.init = function (p) {
     EditPage.prototype.Current_EC_LanguageId = p.extendedCaseLanguageId;
     EditPage.prototype.Current_EC_Path = p.extendedCasePath;
     
-
     EditPage.prototype.extendedSections = p.extendedSections;
 
 
@@ -1424,7 +1423,7 @@ EditPage.prototype.init = function (p) {
 
     self.$selectListStep = $("#steps");
     self.$btnGo = $('#btnGo');
-
+    self.isRelated = self.p.isRelated;
     self.isCaseFileMandatory = self.p.isCaseFileMandatory;
 
     var invoiceElm = $('#CustomerSettings_ModuleCaseInvoice').val();
@@ -1479,19 +1478,39 @@ EditPage.prototype.init = function (p) {
         return false;
     });
 
-    $('#moveCaseToCustomerId').change(function (e) {
-        var note$ = $('#externalCustomerNote');
-        var optionSelected = $("option:selected", this);
-        if (optionSelected && optionSelected.data('external')) {
-            note$.show();
-        } else {
-            note$.hide();
+    $("#divMoveCase").on('shown', function () {
+        $('#moveCaseToCustomerId').change();
+    });
+
+    $('#moveCaseToCustomerId').change(function(e) {
+        var $selectedOption = $("option:selected", this);
+        if ($selectedOption && !self.isNullOrEmpty($selectedOption.val())) {
+
+            var isExternal = (+($selectedOption.data('external') || 0)) > 0;
+            var hasExtendedCase =
+                !self.isNullOrEmpty(self.Current_EC_FormId || '') || !self.isNullOrEmpty(self.extendedSections || '');
+            var isRelated = self.p.isRelated == 'true';
+
+            // disable move and show warning if has Child-Parent
+            if (isExternal && isRelated) {
+                $('#extendedCaseNote').hide();
+                $('#externalCustomerNote').hide();
+                $('#childParentNote').show();
+                self.$moveCaseButton.prop("disabled", true);
+                return;
+            }
+
+            //allow move but show warnings
+            $('#childParentNote').hide();
+            $('#externalCustomerNote').toggle(isExternal);
+            $('#extendedCaseNote').toggle(hasExtendedCase);
+            self.$moveCaseButton.prop("disabled", false);
         }
     });
 
     self.$moveCaseButton.click(function (e) {
         e.preventDefault();
-
+        
         var customerId = +$('#moveCaseToCustomerId').val() || 0;
         if (customerId > 0) {
             $.post(p.caseLockChecker,
@@ -1502,11 +1521,8 @@ EditPage.prototype.init = function (p) {
                 },
                 function (data) {
                     if (data) {
-                        var isExternal = +$('#moveCaseToCustomerId').find(':selected').data('external') || 0;
-                        if (isExternal) {
-                            //todo: show external customer note
-                        }
-                        self.moveCaseToCustomer(p.currentCaseId, customerId, isExternal);
+                        var isExternal = +($('#moveCaseToCustomerId').find(':selected').data('external') || 0);
+                        self.moveCaseToCustomer(p.currentCaseId, customerId, isExternal > 0);
                     } else {
                         ShowToastMessage(p.moveLockedCaseMessage, "error", true);
                     }
