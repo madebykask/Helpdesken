@@ -38,7 +38,10 @@
             <li id="tab3" onclick="toggleMenuItems(3)"><a href="#fragment-3">@Translation.GetCoreTextTranslation("Kalender bevakningsdatum")</a></li>
             <li id="tab4" onclick="toggleMenuItems(4)"><a href="#fragment-4">@Translation.GetCoreTextTranslation("Översättningar")</a></li>
             <li id="tab5" onclick="toggleMenuItems(5)"><a href="#fragment-5">@Translation.GetCoreTextTranslation("Självservice")</a></li>
-            <li id="tab6" onclick="toggleMenuItems(6)"><a href="#fragment-6">@Translation.GetCoreTextTranslation("Dataintegritet")</a></li>
+            @if (Model.DataPrivacy.IsAvailable)
+            {
+                <li id="tab6" onclick="toggleMenuItems(6)"><a href="#fragment-6">@Translation.GetCoreTextTranslation("Dataintegritet")</a></li>
+            }
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
@@ -184,47 +187,49 @@
                     </tbody>
                 </table>
             </div>
-
-            <div class="tab-pane tab-pane-border" id="fragment-6">
+            
+            @if (Model.DataPrivacy.IsAvailable)
+            {
+                <div class="tab-pane tab-pane-border" id="fragment-6">
                     <div class="tab-content">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="span12">
-                                        @using (Html.BeginForm(null, null, null, FormMethod.Post, new {id = "privacyForm", @action = "", texttypeid = 0, compareMethod = 1 }))
-                                        {
-                                            <table class="tableform" id="privacyForm">
-                                                <tr>
-                                                    <td class="span3">
-                                                        @Translation.GetCoreTextTranslation("Kund")<span class="mandatorystar"> * </span>
-                                                    </td>
-                                                    <td class="span9">
-                                                        @Html.DropDownListFor(m => m.DataPrivacy.SelectedCustomerId, Model.DataPrivacy.Customers, string.Empty, new {id = "customerSelect"})
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="span3">
-                                                        @Translation.GetCoreTextTranslation("Registreringsdatum")<span class="mandatorystar"> * </span>
-                                                    </td>
-                                                    <td class="span9">
-                                                        @Html.EditorFor(m => m.DataPrivacy.RegisterDateFrom, "DatePicker", new { id = "regCaseFrom" }) 
-                                                        @Html.EditorFor(m => m.DataPrivacy.RegisterDateTo, "DatePicker", new { id = "regCaseTo" })
-                                                        <div id="datesErrorLabel"></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="span3">
-                                                        @Translation.GetCoreTextTranslation("Status")
-                                                    </td>
-                                                    <td class="span9">
-                                                        @Html.CheckBoxFor(m => m.DataPrivacy.ClosedOnly) @Translation.GetCoreTextTranslation("Endast avslutade ärenden")
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="span3">
-                                                        @Translation.GetCoreTextTranslation("Fält")<span class="mandatorystar"> * </span>
-                                                    </td>
-                                                    <td class="span9">
-                                                        @Html.DropDownListFor(m => m.DataPrivacy.FieldsNames, Model.DataPrivacy.Fields,
+                        <div class="container">
+                            <div class="row">
+                                <div class="span12">
+                                    @using (Html.BeginForm(null, null, null, FormMethod.Post, new {id = "privacyForm", @action = "", texttypeid = 0, compareMethod = 1 }))
+                                    {
+                                        <table class="tableform" id="privacyForm">
+                                            <tr>
+                                                <td class="span3">
+                                                    @Translation.GetCoreTextTranslation("Kund")<span class="mandatorystar"> * </span>
+                                                </td>
+                                                <td class="span9">
+                                                    @Html.DropDownListFor(m => m.DataPrivacy.SelectedCustomerId, Model.DataPrivacy.Customers, string.Empty, new {id = "customerSelect"})
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="span3">
+                                                    @Translation.GetCoreTextTranslation("Registreringsdatum")<span class="mandatorystar"> * </span>
+                                                </td>
+                                                <td class="span9">
+                                                    @Html.EditorFor(m => m.DataPrivacy.RegisterDateFrom, "DatePicker", new { id = "regCaseFrom" }) 
+                                                    @Html.EditorFor(m => m.DataPrivacy.RegisterDateTo, "DatePicker", new { id = "regCaseTo" })
+                                                    <div id="datesErrorLabel"></div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="span3">
+                                                    @Translation.GetCoreTextTranslation("Status")
+                                                </td>
+                                                <td class="span9">
+                                                    @Html.CheckBoxFor(m => m.DataPrivacy.ClosedOnly) @Translation.GetCoreTextTranslation("Endast avslutade ärenden")
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="span3">
+                                                    @Translation.GetCoreTextTranslation("Fält")<span class="mandatorystar"> * </span>
+                                                </td>
+                                                <td class="span9">
+                                                    @Html.DropDownListFor(m => m.DataPrivacy.FieldsNames, Model.DataPrivacy.Fields,
                                                         new
                                                         {
                                                             id = "lstFilterFields",
@@ -233,55 +238,56 @@
                                                             placeholder = Translation.GetCoreTextTranslation("Välj en eller flera"),
                                                             style="width: 300px"
                                                         })
-                                                        <img id="fieldsLoader" style="height: 25px; display: none" src="~/Content/img/ajax-loader.GIF" />
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="span3">
-                                                        @Translation.GetCoreTextTranslation("Ersätt data med")
-                                                    </td>
-                                                    <td class="span9">
-                                                        @Html.EditorFor(m => m.DataPrivacy.ReplaceDataWith)
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="span3">
-                                                        @Translation.GetCoreTextTranslation("Ersätt datum med")
-                                                    </td>
-                                                    <td class="span9">
-                                                        @Html.EditorFor(m => m.DataPrivacy.ReplaceDatesWith, "DatePicker", new {id = "replacedDate"})
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="span3">
-                                                        @Translation.GetCoreTextTranslation("Bifogade filer")
-                                                    </td>
-                                                    <td class="span9">
-                                                        @Html.CheckBoxFor(m => m.DataPrivacy.RemoveCaseAttachments) @Translation.GetCoreTextTranslation("Ta bort bifogade filer i ärenden")
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="span3">
-                                                    </td>
-                                                    <td class="span9">
-                                                        @Html.CheckBoxFor(m => m.DataPrivacy.RemoveLogAttachments) @Translation.GetCoreTextTranslation("Ta bort bifogade filer i ärendeloggen")
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="span3">
-                                                        @Translation.GetCoreTextTranslation("Ärendehistorik")
-                                                    </td>
-                                                    <td class="span9">
-                                                        @Html.CheckBoxFor(m => m.DataPrivacy.RemoveCaseHistory) @Translation.GetCoreTextTranslation("Ta bort") @Translation.GetCoreTextTranslation("Ärendehistorik")
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        }
-                                    </div>
+                                                    <img id="fieldsLoader" style="height: 25px; display: none" src="~/Content/img/ajax-loader.GIF" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="span3">
+                                                    @Translation.GetCoreTextTranslation("Ersätt data med")
+                                                </td>
+                                                <td class="span9">
+                                                    @Html.EditorFor(m => m.DataPrivacy.ReplaceDataWith)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="span3">
+                                                    @Translation.GetCoreTextTranslation("Ersätt datum med")
+                                                </td>
+                                                <td class="span9">
+                                                    @Html.EditorFor(m => m.DataPrivacy.ReplaceDatesWith, "DatePicker", new {id = "replacedDate"})
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="span3">
+                                                    @Translation.GetCoreTextTranslation("Bifogade filer")
+                                                </td>
+                                                <td class="span9">
+                                                    @Html.CheckBoxFor(m => m.DataPrivacy.RemoveCaseAttachments) @Translation.GetCoreTextTranslation("Ta bort bifogade filer i ärenden")
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="span3">
+                                                </td>
+                                                <td class="span9">
+                                                    @Html.CheckBoxFor(m => m.DataPrivacy.RemoveLogAttachments) @Translation.GetCoreTextTranslation("Ta bort bifogade filer i ärendeloggen")
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="span3">
+                                                    @Translation.GetCoreTextTranslation("Ärendehistorik")
+                                                </td>
+                                                <td class="span9">
+                                                    @Html.CheckBoxFor(m => m.DataPrivacy.RemoveCaseHistory) @Translation.GetCoreTextTranslation("Ta bort") @Translation.GetCoreTextTranslation("Ärendehistorik")
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    }
                                 </div>
                             </div>
+                        </div>
                     </div>
-            </div>
+                </div> 
+            }
 
             <input type="hidden" name="activeTab" id="activeTab" value="@SessionFacade.ActiveTab" />
         </div>

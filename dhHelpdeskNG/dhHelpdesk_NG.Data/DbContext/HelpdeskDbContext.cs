@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Dal.DbContext
+﻿using DH.Helpdesk.Dal.EntityConfigurations.GDPR;
+using DH.Helpdesk.Domain.GDPR;
+
+namespace DH.Helpdesk.Dal.DbContext
 {
     using System.Data.Common;
     using System.Data.Entity;
@@ -601,18 +604,20 @@
         public DbSet<CaseDocumentTextIdentifierEntity> CaseDocumentTextIdentifiers { get; set; }
         public DbSet<CaseDocumentTextConditionIdentifierEntity> CaseDocumentTextConditionIdentifiers { get; set; }
 
-       public DbSet<CaseSolution_SplitToCaseSolutionEntity> CaseSolution_SplitToCaseSolutions { get; set; }
+        public DbSet<CaseSolution_SplitToCaseSolutionEntity> CaseSolution_SplitToCaseSolutions { get; set; }
 		public DbSet<ComputerUserCategory> ComputerUserCategories { get; set; }
 
         public DbSet<ConditionEntity> Conditions { get; set; }
 
         public DbSet<ParentChildRelation> ParentChildRelations { get; set; }
 
-		#endregion
+        public DbSet<GDPRDataPrivacyAccess> GDPRDataPrivacyAccesses { get; set; }
 
-		#region Public Methods and Operators
+        #endregion
 
-		public virtual void Commit()
+        #region Public Methods and Operators
+
+        public virtual void Commit()
         {
             try
             {
@@ -918,9 +923,11 @@
 			modelBuilder.Configurations.Add(new ComputerUserCategoryConfiguration());
 			modelBuilder.Configurations.Add(new CaseSolution_CaseSection_ExtendedCaseFormConfiguration());
 
-			#endregion
+            modelBuilder.Configurations.Add(new GDPRDataPrivacyAccessConfiguration());
+            
+            #endregion
 
-			base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);
         }
 
         #endregion

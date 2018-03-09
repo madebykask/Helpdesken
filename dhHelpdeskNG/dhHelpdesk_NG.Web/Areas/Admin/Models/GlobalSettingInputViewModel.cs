@@ -61,6 +61,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
             ClosedOnly = true;
             Fields = new List<SelectListItem>();
         }
+        public bool IsAvailable { get; set; }
         public List<SelectListItem> Customers { get; set; }
         public int SelectedCustomerId { get; set; }
         public DateTime? RegisterDateFrom { get; set; }

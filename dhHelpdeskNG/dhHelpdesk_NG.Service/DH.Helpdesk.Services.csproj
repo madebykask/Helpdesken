@@ -333,6 +333,7 @@
     <Compile Include="Services\EmployeeService\IEmployeeService.cs" />
     <Compile Include="Services\ExtendedCase\ExtendedCaseService.cs" />
     <Compile Include="Services\Cases\CaseSectionService.cs" />
+    <Compile Include="Services\GDPRDataPrivacyAccessService.cs" />
     <Compile Include="Services\IExtendedCaseService.cs" />
     <Compile Include="Services\IMetaDataService.cs" />
     <Compile Include="Services\UniversalCase\IUniversalCaseService.cs" />

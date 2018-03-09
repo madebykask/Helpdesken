@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Common
+﻿using DH.Helpdesk.Dal.Repositories.GDPR;
+
+namespace DH.Helpdesk.Web.NinjectModules.Common
 {
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.ADFS;
@@ -298,7 +300,8 @@
             this.Bind<IEntityInfoRepository>().To<EntityInfoRepository>();
             this.Bind<IConditionRepository>().To<ConditionRepository>();
 			this.Bind<IComputerUserCategoryRepository>().To<ComputerUserCategoryRepository>();
-		}
+            this.Bind<IGDPRDataPrivacyAccessRepository>().To<GDPRDataPrivacyAccessRepository>();
+        }
 
         #endregion
     }

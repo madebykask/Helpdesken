@@ -138,6 +138,7 @@
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseValuesConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseDataConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseFormConfiguration.cs" />
+    <Compile Include="EntityConfigurations\GDPR\GDPRDataPrivacyAccessConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleProductAreaConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceRowConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceHeaderConfiguration.cs" />
@@ -494,6 +495,7 @@
     <Compile Include="Repositories\Cases\ICaseFilterFavoriteRepository.cs" />
     <Compile Include="Repositories\Condition\IConditionRepository.cs" />
     <Compile Include="Repositories\ComputerUserCategoryRepository.cs" />
+    <Compile Include="Repositories\GDPR\GDPRDataPrivacyAccessRepository.cs" />
     <Compile Include="Repositories\IComputerUserCategoryRepository.cs" />
     <Compile Include="Repositories\IExtendedCaseValueRepository.cs" />
     <Compile Include="Repositories\IExtendedCaseDataRepository.cs" />

@@ -33,6 +33,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ICustomerUserService _customerUserService;
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ICaseService _caseService;
+        private IGDPRDataPrivacyAccessService _gdprDataPrivacyAccessService;
 
         public GlobalSettingController(
             IGlobalSettingService globalSettingService,
@@ -43,6 +44,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             ICustomerUserService customerUserService,
             ICaseFieldSettingService caseFieldSettingService,
             ICaseService caseService,
+            IGDPRDataPrivacyAccessService gdprDataPrivacyAccessService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -54,6 +56,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this._customerUserService = customerUserService;
             this._caseFieldSettingService = caseFieldSettingService;
             this._caseService = caseService;
+            this._gdprDataPrivacyAccessService = gdprDataPrivacyAccessService;
         }
 
         public ActionResult Index(int texttypeid, string textSearch, int compareMethod)
@@ -424,7 +427,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             SessionFacade.ActiveTab = coll["activeTab"];
             return this.RedirectToAction("index", "globalsetting", new { texttypeid = texttypeid, compareMethod = 1 });
         }
-
         
         private GlobalSettingIndexViewModel GetGSIndexViewModel( int holidayheaderid, int languageId, SearchOption searchOption)
         {
@@ -1459,14 +1461,22 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         private DataPrivacyModel GetDataPrivacyModel()
         {
+            var userAccess = _gdprDataPrivacyAccessService.GetByUserId(SessionFacade.CurrentUser.Id);
+            if (userAccess == null)
+            {
+                return new DataPrivacyModel() { IsAvailable = false };
+            }
+            
             var customers = _customerUserService.GetCustomerUsersForUser(SessionFacade.CurrentUser.Id);
             var availableCustomers = customers.OrderBy(x => x.Customer.Name).Select(x => new SelectListItem
             {
                 Value = x.Customer.Id.ToString(),
                 Text = x.Customer.Name
             }).ToList();
+
             return new DataPrivacyModel
             {
+                IsAvailable = true,
                 Customers = availableCustomers
             };
         }
