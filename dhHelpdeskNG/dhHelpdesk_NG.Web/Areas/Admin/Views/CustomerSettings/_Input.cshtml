@@ -466,42 +466,31 @@
                 </div>
             </div>
                 
-            <h4>@Translation.GetCoreTextTranslation("Tillåt åtgärder för användare utan rättighet till denna  kund.")</h4>
-            <div class="container">
-                <div class="row">
-                    <div class="span15">
-                        <table>
-                            <tr>
-                                <td>
-                                    <input type="checkbox" name="setting.AllowMoveCaseToAnyCustomer" @(Model.Setting.AllowMoveCaseToAnyCustomer ? "checked=checked" : "") value="1" />
-                                    <input type="hidden" name="setting.AllowMoveCaseToAnyCustomer" value="0" />
-                                    @Translation.GetCoreTextTranslation("Flytta ärende till denna kund")
-                                </td>
-                            </tr>
-
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <h4>@Translation.Get("Avancerad sökning", Enums.TranslationSource.TextTranslation)</h4>
+                <h4>@Translation.GetCoreTextTranslation("Tillåt åtgärder för användare utan rättighet till denna kund")</h4>
                 <div class="container">
                     <div class="row">
                         <div class="span15">
                             <table>
                                 <tr>
                                     <td>
-                                        <input type="checkbox" name="setting.CustomerInExtendedSearch" @(Model.Setting.CustomerInExtendedSearch == 1 ? "checked=checked" : "") value="1" />
-                                        <input type="hidden" name="setting.CustomerInExtendedSearch" value="0" />
-                                        @Translation.GetCoreTextTranslation("Inkludera kund i Utökad sökning")
+                                        <input type="checkbox" name="setting.AllowMoveCaseToAnyCustomer" @(Model.Setting.AllowMoveCaseToAnyCustomer ? "checked=checked" : "") value="true" />
+                                        <input type="hidden" name="setting.AllowMoveCaseToAnyCustomer" value="false" />
+                                        @Translation.GetCoreTextTranslation("Flytta ärende till denna kund")
                                     </td>
                                 </tr>
-
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="setting.CustomerInExtendedSearch" @(Model.Setting.CustomerInExtendedSearch == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="setting.CustomerInExtendedSearch" value="0" />
+                                        @Translation.GetCoreTextTranslation("Utökad sökning")
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>
                 </div>
 
+                <!-- CASE -->
                 <h4>@Translation.GetCoreTextTranslation("Ärende")</h4>
 
                 @*Hide temporary this release - Stina*@
