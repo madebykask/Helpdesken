@@ -109,7 +109,28 @@ BEGIN
     ALTER TABLE [dbo].[tblSettings] ADD AllowMoveCaseToAnyCustomer bit NOT NULL DEFAULT(0)
 END
 
+-- GDPR Privacy Access table
+RAISERROR('Create table tblGDPRDataPrivacyAccess', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblGDPRDataPrivacyAccess' AND type='U')
+BEGIN
 
+    CREATE TABLE dbo.tblGDPRDataPrivacyAccess(
+	    [Id] int IDENTITY(1,1) NOT NULL,
+	    [User_Id] int NULL,
+	    [CreatedDate] datetime NOT NULL,
+	CONSTRAINT PK_tblGDPRDataPrivacyAccess PRIMARY KEY CLUSTERED (Id ASC) ON [PRIMARY]
+    ) ON [PRIMARY]
+
+    -- CreatedDate default value
+    ALTER TABLE dbo.tblGDPRDataPrivacyAccess 
+    ADD CONSTRAINT DF_tblGDPRDataPrivacyAccess_CreatedDate DEFAULT (getdate()) FOR CreatedDate
+
+    -- FK: Users
+    ALTER TABLE dbo.tblGDPRDataPrivacyAccess WITH NOCHECK 
+    ADD CONSTRAINT FK_tblGDPRDataPrivacyAccess_tblUsers FOREIGN KEY(User_Id) REFERENCES dbo.tblUsers (Id)
+
+END
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.36'
