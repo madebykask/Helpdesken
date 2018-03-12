@@ -304,10 +304,10 @@ namespace DH.Helpdesk.Web.Models.Case
         public string ExtendedSectionsToJS()
         {
             var sections = this.ExtendedCaseSections;
-            if (sections == null)
+            if (sections == null || !sections.Any())
                 return "null";
-            var sb = new StringBuilder();
 
+            var sb = new StringBuilder();
             sb.Append("{" + Environment.NewLine);
 
             foreach (var section in sections)

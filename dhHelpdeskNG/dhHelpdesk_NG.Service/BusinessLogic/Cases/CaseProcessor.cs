@@ -48,7 +48,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
             @case.CaseType_Id = GetCaseTypeForCustomer(@case.CaseType_Id, newCustomerId, newCustomerDefaults.CaseTypeId); 
 
             //2. set case default user as an administrator of the case
-            @case.Performer_User_Id = newCustomerSettings.DefaultAdministrator.GetValueOrDefault(0);
+            @case.Performer_User_Id = newCustomerSettings.DefaultAdministrator;
 
             //3. Reset all dropdown fields //what selections?
             ResetCaseFields(@case);
