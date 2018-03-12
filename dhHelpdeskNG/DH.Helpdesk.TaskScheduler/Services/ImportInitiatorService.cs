@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Common.Logging;
-using CsvHelper;
 using DH.Helpdesk.Dal.DbQueryExecutor;
 using DH.Helpdesk.TaskScheduler.Dto;
-using DH.Helpdesk.TaskScheduler.Components;
-using Newtonsoft.Json;
 using Quartz;
+using DH.Helpdesk.Dal.Repositories.Notifiers;
+using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Notifiers;
+using System.Configuration;
 
 namespace DH.Helpdesk.TaskScheduler.Services
 {
@@ -21,16 +18,31 @@ namespace DH.Helpdesk.TaskScheduler.Services
     {
         private readonly IDbQueryExecutorFactory _execFactory;
         private readonly ILog _logger;
+        private readonly INotifierFieldSettingRepository _notifielrFieldSettingfactory;
+        private readonly INotifierRepository _notifielrRepository;
+
 
         //private readonly IFtpFileDownloader _downloader;
 
-        public ImportInitiatorService(IDbQueryExecutorFactory execFactory
+        public ImportInitiatorService(IDbQueryExecutorFactory execFactory,
+                                       INotifierFieldSettingRepository notifielrFieldSettingfactory,
+                                       INotifierRepository notifierRepository
                                       //,IFtpFileDownloader downloader
                                       )
         {
             _execFactory = execFactory;
             _logger = LogManager.GetLogger<ImportInitiatorService>();
+            _notifielrFieldSettingfactory = notifielrFieldSettingfactory;
+            _notifielrRepository = notifierRepository;
             //_downloader = downloader;
+        }
+
+        public IList<CompuerUsersFieldSetting> GetInitiatorSettings(int customerId)
+        {
+            var dbQueryExecutor = _execFactory.Create();           
+            var ret = dbQueryExecutor.QueryList<CompuerUsersFieldSetting>
+               ("Select * from tblComputerUserFieldSettings where Customer_id = @Customer_Id", new { Customer_Id = customerId} );            
+            return ret;
         }
 
         public ImportInitiator_JobSettings GetJobSettings()
@@ -41,9 +53,10 @@ namespace DH.Helpdesk.TaskScheduler.Services
             var settings = new ImportInitiator_JobSettings()
             {
                 Id = 0,
-                Url = @"C:\Users\sg\Downloads",
+                //Url = @"C:\Users\sg\Downloads\",
+                Url = @"C:\",
                 AppendTime = true,
-                CronExpression = "0 * 8-17 * * ?",
+                CronExpression = "0 * 8-22 * * ?",
                 ImportFormat = "CSV",
                 InputFilename = "ExampleFromCustomer.csv",
                 LastRun = "",
@@ -77,7 +90,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
             if (!string.IsNullOrWhiteSpace(settings.CronExpression))
             {
                 cronExpression = settings.CronExpression;
-            } else if (!string.IsNullOrWhiteSpace(settings.StartTime))
+            }
+            else if (!string.IsNullOrWhiteSpace(settings.StartTime))
             {
                 var r = new Regex(@"(\d{1,2}):(\d{1,2})");
                 var match = r.Match(settings.StartTime);
@@ -86,7 +100,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                     cronExpression = $"0 {match.Groups[2].Value} {match.Groups[1].Value} ? * *";
                 }
             }
-            if(string.IsNullOrWhiteSpace(cronExpression)) throw new Exception("No StartTime or CronExpression defined.");
+            if (string.IsNullOrWhiteSpace(cronExpression)) throw new Exception("No StartTime or CronExpression defined.");
 
             TimeZoneInfo timeZoneInfo;
             if (!string.IsNullOrWhiteSpace(settings.TimeZone))
@@ -99,7 +113,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
                 {
                     timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("UTC");
                 }
-            } else
+            }
+            else
                 timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("UTC");
 
             _logger.DebugFormat("Creating trigger - CronExp:{0}, TimeZone:{1}", cronExpression, timeZoneInfo.Id);
@@ -108,160 +123,110 @@ namespace DH.Helpdesk.TaskScheduler.Services
                 .Build();
         }
 
-        public DataTable GetJobData(string query)
+        public CsvInputData ReadCsv(ImportInitiator_JobSettings settings)
         {
-            if (string.IsNullOrEmpty(query)) throw new ArgumentNullException(nameof(query));
-
-            var dbQueryExecutor = _execFactory.Create();
-            return dbQueryExecutor.ExecuteTable(query);
-        }
-
-
-        //protected List<Tuple<string, string>> GetUrlsToImport(ImportInitiator_JobSettings settings)
-        //{
-        //    var res = new List<Tuple<string, string>>();
-        //    try
-        //    {
-        //        var ftpList = _downloader.GetFileList(settings.Url, settings.UserName, settings.Password);
-        //        var files = ftpList.Select(Path.GetFileName).ToList();
-        //        foreach (var file in files)
-        //        {
-        //            _logger.Debug("Validating file for import: " + file);
-
-        //            if (file.Length > 18)
-        //            {
-        //                var ftpDateString = file.Substring(9, 8);
-        //                DateTime ftpDate;
-        //                if (DateTime.TryParseExact(ftpDateString, "yyyyMMdd", CultureInfo.InvariantCulture,
-        //                    DateTimeStyles.None, out ftpDate))
-        //                {
-        //                    if (ftpDate.Date == DateTime.Now.Date)
-        //                    {
-        //                        res.Add(new Tuple<string, string>(file, $"{settings.Url}/{file}"));
-        //                        //var downloaded = _emdDataAccess.CheckIfDownloaded(file);
-        //                        //if (!downloaded)
-        //                        //{
-        //                        //    res.Add(new Tuple<string, string>(file, $"{settings.Url}/{file}"));
-        //                        //}
-        //                        //else
-        //                        //{
-        //                        //    _logger.Warn($"File ({file}) has already been downloaded.");
-        //                        //}
-        //                    }
-        //                    else
-        //                    {
-        //                        _logger.Warn($"File ({file}) is older than today and will not be imported.");
-        //                    }
-        //                }                       
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("Error getting file list from ftp and creating import list", ex);
-        //    }
-
-        //    return res;
-        //}
-
-
-
-        public List<string> ReadCsv(ImportInitiator_JobSettings settings)
-        {
-            var dateTimeExtension = settings.AppendTime ? $"{DateTime.Now.ToString("_d_M_yyyy_H_m_s")}" : "";
-            const string defaultFileName = "ExampleFromCustomer";
-
+            var ret = new CsvInputData();
 
             var filePath = settings.Url;
-            var fileName = $"{settings.InputFilename ?? defaultFileName}{dateTimeExtension}.csv";
-          
-            List<string> result = new List<string>();
-            string value;
-            using (TextReader fileReader = File.OpenText(filePath + fileName))
+            var fileName = $"{settings.InputFilename}";
+            const char delimiter = ';';
+
+            using (var reader = new StreamReader(filePath + fileName, Encoding.UTF7, true))
             {
-                var csv = new CsvReader(fileReader);
-                csv.Configuration.HasHeaderRecord = false;
-                while (csv.Read())
+                // First line contains column names.
+                var columnNames = reader.ReadLine().Split(delimiter);
+                ret.InputHeaders = columnNames.ToList();
+
+                var line = reader.ReadLine();
+                while (!string.IsNullOrEmpty(line))
                 {
-                    for (int i = 0; csv.TryGetField<string>(i, out value); i++)
+                    var curRecord = line.Split(delimiter).ToList();
+                    if (curRecord.Any())
                     {
-                        result.Add(value);
+                        var identity = curRecord[0];
+                        var rowFields = new Dictionary<string, string>();
+                        for (int i = 0; i < curRecord.Count; i++)
+                        {
+                            rowFields.Add(columnNames[i], curRecord[i]);
+                        }
+                        ret.InputColumns.Add(new Tuple<string, Dictionary<string, string>>(identity, rowFields));
                     }
+
+                    line = reader.ReadLine();
                 }
+
+                return ret;
             }
-            return result;
-
-            //const string defaultFileName = "Not set";
-            //var dateTimeExtension = settings.AppendTime ? $"{DateTime.Now.ToString("_d_M_yyyy_H_m_s")}" : "";
-
-            //var filePath = settings.Url;
-            //var fileName = $"{settings.InputFilename ?? defaultFileName}{dateTimeExtension}.csv";
-            //if (!Directory.Exists(settings.Url)) throw new DirectoryNotFoundException($"Directory {settings.Url} not found.");
-
-            //var files = GetUrlsToImport(settings);
-            //foreach (var file in files)
-            //{
-            //    var filePath = string.Empty;
-
-            //    try
-            //    {
-            //        _downloader.Download(file.Item2, settings.UserName, settings.Password, settings.SaveFolder, out filePath);
-            //        if (string.IsNullOrEmpty(filePath))
-            //        {
-            //            throw new Exception("filPath is empty after download");
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        throw new Exception($"Error downloading file: {file}", ex);
-            //    }
-
-            //    try
-            //    {
-            //        //var code = fileName.Substring(0, 2);
-            //        //var countryId = _emdDataAccess.GetCountryId(code);
-
-            //        //if (countryId != 0)
-            //        //{
-            //        //    var excelFormatter = _excelFormatterFactory.Get(filePath, "0");
-            //        //    var employeeLoader = _employeeLoaderFactory.Get(excelFormatter);
-            //        //    var result = employeeLoader.Load(settings.AmUserId, countryId);
-
-            //        //    _emdDataAccess.SaveImportLog(result, settings.LogMode, file.Item1, countryId);
-            //        //    _log.Debug($"File has been imported: {file.Item2}");
-            //        //}
-            //        //else
-            //        //{
-            //        //    _log.Warn($"Ignore file ({fileName}) import. Failed to find a country by code: " + code);
-            //        //}
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        throw new Exception($"Error parsing file: {file}", ex);
-            //    }
-            //    _downloader.Upload(settings.SaveFolder, settings.UserName, settings.Password, file.Item1, filePath);
-            //     }
-            //var reader = new CsvReader(file);
-
-            //CSVReader will now read the whole file into an enumerable
-            // IEnumerable<DataRecord> records = reader.GetRecords<DataRecord>();
-
-            //using (var csv = new CsvWriter(textWriter))
-            //{
-            //    csv.Configuration.Delimiter = ";";
-            //    _logger.DebugFormat($"Saving file {fileName} to path {filePath}");
-            //    csv.WriteRecords(data);
-            //}
-
         }
-        
-        public void UpdateLastRun(int id)
+
+        public int CheckIfExisting(string UserId , int customerId)
+        {                   
+          var existingId = 0;
+            var notifier = _notifielrRepository.GetInitiatorByUserId(UserId,customerId,false);
+            if (notifier != null)
+            {
+                existingId = notifier.Id;
+            }
+            return existingId;
+        }
+        public void ImportInitiator(CsvInputData inputData , IList<CompuerUsersFieldSetting> fieldSettings)
         {
-            var dbQueryExecutor = _execFactory.Create();
-            dbQueryExecutor.ExecQuery("Update [tblReportScheduler] set [LastRun]=@Datetime where [Id] = @Id", new { DateTime = DateTime.UtcNow, Id = id });
+            //Template
+            //Insert into tblComputerUsers (Customer_Id,LogonName,...) Values (1,)
+            //Update tblComputerUsers set {update query} where id = existingId
+
+            var insertQuery = "";
+            var updateQuery = "";
+
+            const string departmentId = "department_id";
+            foreach (var row in inputData.InputColumns)
+            {
+                insertQuery = "";
+                updateQuery = "";
+
+                var existingId = 0;
+                //TODO 1
+                var customerId = int.Parse(ConfigurationManager.AppSettings["Customers"]);
+                CheckIfExisting(row.Item1, customerId);
+
+                var fieldNames = "(";
+                var values = "(";
+                foreach (var field in row.Item2)
+                {
+                    // Key: LDAPAttr - Value: ComputerUserField
+                    var dbFieldName = fieldSettings.FirstOrDefault(fs => fs.LDAPAttribute.Equals(field.Key, StringComparison.CurrentCultureIgnoreCase));
+                    if (dbFieldName != null && !string.IsNullOrEmpty(dbFieldName.ComputerUserField))
+                    {
+                        var _value = field.Value;
+                        if (field.Key.ToLower() == departmentId)
+                        {
+                            //_value = ...
+                        }
+                        var delimiter = "";
+
+                        //Update                
+                        delimiter = string.IsNullOrEmpty(updateQuery) ? "" : ",";
+                        updateQuery += $"{delimiter}{dbFieldName.ComputerUserField} = '{_value}'";
+
+
+                        //Insert
+                        delimiter = fieldNames == "(" ? "" : ",";
+                        //var fieldNames = $"({string.Join(delimiter, inputData.InputHeaders)})";
+                        fieldNames += $"{delimiter}{field.Key}";
+                        values += $"{delimiter}{field.Value}";
+
+                        insertQuery += $"{delimiter}{dbFieldName.ComputerUserField} = '{_value}'";
+                    }
+
+
+                }
+
+
+                updateQuery = $"Update {updateQuery} where id={existingId}";
+            }
         }
-}
- 
+    }
+
 
     internal interface IImportInitiatorService
     {
@@ -269,10 +234,13 @@ namespace DH.Helpdesk.TaskScheduler.Services
 
         ITrigger GetTrigger();
 
-        DataTable GetJobData(string query);
+        CsvInputData ReadCsv(ImportInitiator_JobSettings settings);
 
-        List<string> ReadCsv(ImportInitiator_JobSettings settings);
+        IList<CompuerUsersFieldSetting> GetInitiatorSettings(int customerId);
 
-        void UpdateLastRun(int id);
+        void ImportInitiator(CsvInputData inputColumns , IList<CompuerUsersFieldSetting> fieldSettings);
+
+        int CheckIfExisting(string UserId , int customerId);
+
     }
 }

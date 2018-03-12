@@ -30,23 +30,10 @@ namespace DH.Helpdesk.TaskScheduler.Jobs
 
             var settings = _importInitiatorService.GetJobSettings();
             if(settings == null) throw new ArgumentNullException(nameof(settings));
-
-            var data = _importInitiatorService.GetJobData(settings.SqlQuery);
-
-            var enumData = data.AsEnumerable().Select(r =>
-            {
-                IDictionary<string, object> rowObj = new ExpandoObject();
-                foreach (var col in data.Columns.Cast<DataColumn>())
-                {
-                    rowObj.Add(col.ColumnName, r[col.ColumnName] ?? "");
-                }
-                return (object)rowObj;
-
-            }).ToList();
-
-            _importInitiatorService.ReadCsv(settings);
-
-            _importInitiatorService.UpdateLastRun(settings.Id);
+           
+            var inputData = _importInitiatorService.ReadCsv(settings);
+            var fieldSettings = _importInitiatorService.GetInitiatorSettings(46);
+            _importInitiatorService.ImportInitiator(inputData , fieldSettings);         
 
         }
     }

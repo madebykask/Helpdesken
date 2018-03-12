@@ -17,10 +17,12 @@ namespace DH.Helpdesk.TaskScheduler.Managers
         }
 
         public string EnvName => Config.AppSettings.Settings["EnvName"]?.Value;
+        public string Customers => Config.AppSettings.Settings["Customers"]?.Value;
     }
 
     public interface IServiceConfigurationManager
     {
         string EnvName { get; }
+        string Customers { get; }
     }
 }

@@ -11,6 +11,15 @@ using DH.Helpdesk.TaskScheduler.Managers;
 using DH.Helpdesk.TaskScheduler.Services;
 using Ninject.Extensions.Conventions.Extensions;
 using Quartz;
+using DH.Helpdesk.Dal.Repositories.Notifiers;
+using DH.Helpdesk.Dal.Repositories.Notifiers.Concrete;
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Notifiers.Concrete;
+using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Notifiers;
+using DH.Helpdesk.Dal.Mappers;
+using DH.Helpdesk.BusinessData.Models.Case.Input;
+using DH.Helpdesk.Domain.Computers;
+using DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity;
 
 namespace DH.Helpdesk.TaskScheduler.DI
 {
@@ -27,6 +36,14 @@ namespace DH.Helpdesk.TaskScheduler.DI
 
             Bind<IJob>().To<ImportInitiatorJob>();
             Bind<IJob>().To<DailyReportJob>();//TODO: scan assambly for jobs
+
+            Bind<IDatabaseFactory>().To<DatabaseFactory>();
+            Bind<INotifierFieldSettingsFactory>().To<NotifierFieldSettingsFactory>();            
+            Bind<INotifierFieldSettingRepository>().To<NotifierFieldSettingRepository>();
+            Bind<INotifierRepository>().To<NotifierRepository>();
+            Bind<IBusinessModelToEntityMapper<CaseNotifier, ComputerUser>>().To<CaseNotifierToEntityMapper>().InSingletonScope();
+
+
         }
     }
 }
