@@ -13,6 +13,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
 
         public int? ParentId { get; set; }
 
+        public string ParentName { get; set; }
+
         public string Name { get; set; }
 
         public int ShowOnExternalPage { get; set; }

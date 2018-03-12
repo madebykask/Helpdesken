@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
 
@@ -36,16 +38,21 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
         {
             var @case = _caseService.GetCaseById(caseId);
 
+            var caseCustomerId = @case.Customer_Id;
             var newCustomerSettings = _settingsService.GetCustomerSetting(newCustomerId);
-            //var newCustomerFieldsSettings = _caseFieldSettingService.GetCaseFieldSettings(newCustomerId);
-            
             var newCustomerDefaults = _customerService.GetCustomerDefaults(newCustomerId);
 
             // override customerId 
             @case.Customer_Id = newCustomerId;
 
             //1. set case typeId
-            @case.CaseType_Id = GetCaseTypeForCustomer(@case.CaseType_Id, newCustomerId, newCustomerDefaults.CaseTypeId); 
+            var newCaseTypeId = 0;
+            var caseTypeId = @case.CaseType?.Id ?? 0;
+            if (caseTypeId > 0)
+            {
+                newCaseTypeId = TryMatchCaseTypeForCustomer(caseTypeId, caseCustomerId, newCustomerId);
+            }
+            @case.CaseType_Id = newCaseTypeId > 0 ? newCaseTypeId : newCustomerDefaults?.CaseTypeId ?? 0;
 
             //2. set case default user as an administrator of the case
             @case.Performer_User_Id = newCustomerSettings.DefaultAdministrator;
@@ -67,31 +74,25 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
             }
         }
 
-        private int GetCaseTypeForCustomer(int caseTypeId, int newCustomerId, int defaultCaseCaseTypeId)
+        private int TryMatchCaseTypeForCustomer(int caseTypeId, int caseCustomerId, int newCustomerId)
         {
-            if (caseTypeId > 0)
+            var newCustomerCaseTypes = _caseTypeService.GetCaseTypesOverviewWithChildren(newCustomerId, true);
+            if (newCustomerCaseTypes != null && newCustomerCaseTypes.Any())
             {
-                var customerCaseTypeIds = _caseTypeService.GetCaseTypeIds(newCustomerId);
-                if (customerCaseTypeIds.Contains(caseTypeId))
+                var customerTypes = _caseTypeService.GetCaseTypesOverviewWithChildren(caseCustomerId, true);
+                var srcCaseTypePath = BuildCaseTypePath(caseTypeId, customerTypes, null);
+                if (!string.IsNullOrEmpty(srcCaseTypePath))
                 {
-                    return caseTypeId;
+                    //find case type to match full path
+                    var res = FindCaseType(newCustomerCaseTypes, srcCaseTypePath, null);
+                    if (res != null)
+                        return res.Id;
                 }
             }
 
-            //try set default value from case field settings
-            //int defaultCaseTypeId = 0;
-            //var defaultValue = fieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())?.DefaultValue;
-            //
-            //if (string.IsNullOrEmpty(defaultValue) && Int32.TryParse(defaultValue, out defaultCaseTypeId))
-            //{
-            //    var caseType = _caseTypeService.GetCaseType(defaultCaseTypeId);
-            //    if (caseType != null)
-            //        return caseType.Id;
-            //}
-
-            return defaultCaseCaseTypeId > 0 ? defaultCaseCaseTypeId : 0;
+            return -1;
         }
- 
+
         private void ResetCaseFields(Case curCase)
         {
             /*** 1. Initiator: ***/
@@ -189,6 +190,49 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
             //field: curCase.FinishingDate
         }
 
+
+        private string BuildCaseTypePath(int caseTypeId, IList<CaseTypeOverview> caseTypes, string parentPath)
+        {
+            foreach (var caseType in caseTypes)
+            {
+                var caseTypePath = string.IsNullOrEmpty(parentPath) ? caseType.Name : $"{parentPath}\\{caseType.Name}";
+                if (caseType.Id == caseTypeId)
+                {
+                    return caseTypePath;
+                }
+
+                if (caseType.SubCaseTypes != null && caseType.SubCaseTypes.Any())
+                {
+                    var res = BuildCaseTypePath(caseTypeId, caseType.SubCaseTypes, caseTypePath);
+                    if (res != null)
+                        return res;
+                }
+            }
+
+            return null;
+        }
+
+        private CaseTypeOverview FindCaseType(IList<CaseTypeOverview> caseTypes, string srcCaseTypePath, string parentPath)
+        {
+            foreach (var caseType in caseTypes)
+            {
+                var caseTypePath = string.IsNullOrEmpty(parentPath) ? caseType.Name : $"{parentPath}\\{caseType.Name}";
+                if (srcCaseTypePath.Equals(caseTypePath, StringComparison.OrdinalIgnoreCase))
+                {
+                    return caseType;
+                }
+
+                if (caseType.SubCaseTypes != null && caseType.SubCaseTypes.Any())
+                {
+                    var res = FindCaseType(caseType.SubCaseTypes, srcCaseTypePath, caseTypePath);
+                    if (res != null)
+                        return res;
+                }
+            }
+
+            return null;
+        }
+        
         private string BuildErrorsMessage(IDictionary<string, string> errors)
         {
             var strBld = new StringBuilder();
@@ -197,6 +241,22 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
                 strBld.AppendFormat("{0}:{1}", errorKv.Key, errorKv.Value).AppendLine();
             }
             return strBld.ToString();
+        }
+
+        private int? GetDefaultCaseTypeId()
+        {
+            //try set default value from case field settings
+            //int defaultCaseTypeId = 0;
+            //var fieldSettings = _caseFieldSettingService.GetCaseFieldSettings(newCustomerId);
+            //var defaultValue = fieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())?.DefaultValue;
+            //
+            //if (string.IsNullOrEmpty(defaultValue) && Int32.TryParse(defaultValue, out defaultCaseTypeId))
+            //{
+            //    var caseType = _caseTypeService.GetCaseType(defaultCaseTypeId);
+            //    if (caseType != null)
+            //        return caseType.Id;
+            //}
+            return null;
         }
 
         #endregion

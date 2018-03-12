@@ -1346,18 +1346,20 @@ EditPage.prototype.getLanguage = function () {
     }
 }
 
-EditPage.prototype.moveCaseToCustomer = function(caseId, customerId, isExternal) {
+EditPage.prototype.moveCaseToCustomer = function (caseId, customerId, isExternal) {
+    var self = this;
     if (isExternal) {
         //move case to external customer
         var inputData = { caseId, customerId };
         $.post('/Cases/MoveCaseToExternalCustomer', inputData, function(result) {
             if (result.Success) {
-                //alert('Redirecting to' + Location);
                 window.location.href = result.Location;
             } else {
+                self.enableMoveCaseControls(true);
                 ShowToastMessage(result.Error, "error", true);
             }
         }).fail(function(err) {
+            self.enableMoveCaseControls(true);
             ShowToastMessage('Case move failed.', "error", true);
         });
     } else {
@@ -1365,6 +1367,11 @@ EditPage.prototype.moveCaseToCustomer = function(caseId, customerId, isExternal)
         var url = '/cases/edit/' + caseId + '?moveToCustomerId=' + customerId;
         window.location.href = url;
     }
+};
+
+EditPage.prototype.enableMoveCaseControls = function(state) {
+    this.$moveCaseCustomerSelect.prop('disabled', !state);
+    this.$moveCaseButton.prop('disabled', !state);
 };
 
 /***** Initiator *****/
@@ -1401,7 +1408,8 @@ EditPage.prototype.init = function (p) {
     self.$productAreaObj = $('#divProductArea');
     self.$productAreaChildObj = $('#ProductAreaHasChild');
     self.productAreaErrorMessage = self.p.productAreaErrorMessage;
-    self.$moveCaseButton = $("#btnMoveCase");    
+    self.$moveCaseButton = $("#btnMoveCase");
+    self.$moveCaseCustomerSelect = $('#moveCaseToCustomerId');
     self.$btnSave = $('.btn.save');
     self.$btnSaveClose = $('.btn.save-close');
     self.$btnSaveNew = $('.btn.save-new');
@@ -1479,10 +1487,10 @@ EditPage.prototype.init = function (p) {
     });
 
     $("#divMoveCase").on('shown', function () {
-        $('#moveCaseToCustomerId').change();
+        self.$moveCaseCustomerSelect.change();
     });
 
-    $('#moveCaseToCustomerId').change(function(e) {
+    self.$moveCaseCustomerSelect.change(function (e) {
         var $selectedOption = $("option:selected", this);
         if ($selectedOption && !self.isNullOrEmpty($selectedOption.val())) {
 
@@ -1510,9 +1518,10 @@ EditPage.prototype.init = function (p) {
 
     self.$moveCaseButton.click(function (e) {
         e.preventDefault();
-        
+
         var customerId = +$('#moveCaseToCustomerId').val() || 0;
         if (customerId > 0) {
+            self.enableMoveCaseControls(false);
             $.post(p.caseLockChecker,
                 {
                     caseId: p.currentCaseId,
@@ -1525,11 +1534,12 @@ EditPage.prototype.init = function (p) {
                         self.moveCaseToCustomer(p.currentCaseId, customerId, isExternal > 0);
                     } else {
                         ShowToastMessage(p.moveLockedCaseMessage, "error", true);
+                        self.enableMoveCaseControls(true);
                     }
                 });
         }
     });
-    
+
     $('.date').each(function () {
         var $this = $(this);
         var errorLabel = $this.find('label.error:visible');

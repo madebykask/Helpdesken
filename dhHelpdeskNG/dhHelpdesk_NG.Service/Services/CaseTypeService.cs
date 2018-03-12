@@ -18,7 +18,6 @@ namespace DH.Helpdesk.Services.Services
 
         IList<CaseType> GetCaseTypesForSetting(int customerId, bool isTakeOnlyActive = false);
         IList<CaseType> GetAllCaseTypes(int customerId, bool isTakeOnlyActive = false);
-        IList<int> GetCaseTypeIds(int customerId);
 
         CaseType GetCaseType(int id);
 
@@ -190,28 +189,23 @@ namespace DH.Helpdesk.Services.Services
             return this.caseTypeRepository.GetOverviews(customerId, caseTypesIds);
         }
 
-        public IList<int> GetCaseTypeIds(int customerId)
-        {
-            var caseTypeIds = this.caseTypeRepository.GetCaseTypeOverviews(customerId).Select(x => x.Id).ToList();
-            return caseTypeIds;
-        }
-
         public IList<CaseTypeOverview> GetCaseTypesOverviewWithChildren(int customerId, bool activeOnly = false)
         {
-            var allItems = 
+            var allItems =
                 this.caseTypeRepository.GetMany(
-                    x => x.Customer_Id == customerId && 
-                         (!activeOnly || (x.IsActive == 1 && x.Selectable == 1)))
-                         .Select(x => new CaseTypeOverview
+                        x => x.Customer_Id == customerId && (!activeOnly || (x.IsActive == 1 && x.Selectable == 1)))
+                    .Select(x => new CaseTypeOverview
                     {
-                      Id = x.Id,
-                      ParentId = x.Parent_CaseType_Id,
-                      Name = x.Name,
-                      ShowOnExternalPage  = x.ShowOnExternalPage,
-                      ShowOnExtPageCases = x.ShowOnExtPageCases,
-                      IsActive = x.IsActive,
-                      Selectable = x.Selectable
-                    }).ToList();
+                        Id = x.Id,
+                        ParentId = x.Parent_CaseType_Id,
+                        Name = x.Name,
+                        ParentName = x.ParentCaseType != null ? x.ParentCaseType.Name : null,
+                        ShowOnExternalPage = x.ShowOnExternalPage,
+                        ShowOnExtPageCases = x.ShowOnExtPageCases,
+                        IsActive = x.IsActive,
+                        Selectable = x.Selectable
+                    })
+                    .ToList();
 
             var parentItems = allItems.Where(o => o.ParentId == null).OrderBy(o => o.Name).ToList();
             
