@@ -218,13 +218,10 @@ namespace DH.Helpdesk.TaskScheduler.Services
                         else
                         {
                             //Insert
-                            delimiter = fieldNames == "(" ? "" : ",";
-                            var closeDelimiter = fieldNames == ")" ? "" : "";
+                            delimiter = fieldNames == "(" ? "" : ",";                           
                             //var fieldNames = $"({string.Join(delimiter, inputData.InputHeaders)})";
-                            fieldNames += $"{delimiter}{field.Key}";
-                            values += $"{delimiter}{field.Value}";
-
-                            insertQuery += $"{delimiter}{dbFieldName.ComputerUserField}{closeDelimiter} Values {delimiter}{values}{closeDelimiter}";
+                            fieldNames += $"{delimiter}{dbFieldName.ComputerUserField}";                            
+                            values += $"{delimiter}'{_value}'";                            
 
                         }                        
                     }
@@ -238,7 +235,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
                 }
                 else
                 {
-                    insertQuery = $"Insert into tblComputerUsers {insertQuery} where Customer_Id = {customerId}";
+                    insertQuery += $"{fieldNames}, Customer_Id) Values {values}, {customerId})"; 
+                    insertQuery = $"Insert into tblComputerUsers {insertQuery}";
                     var dbQueryExecutor = _execFactory.Create();
                     var ret = dbQueryExecutor.ExecQuery(insertQuery);
                 }
