@@ -6936,5 +6936,12 @@ If not exists (select * from tblTextTranslation where Text_Id = 1949 and Languag
   insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1949, 'Case can not be moved. No matching or default case type can be found.', 2)
 GO
 
+If not exists (select * from tbltext where id = 1950)
+  insert into tbltext (id, TextString) VALUES (1950, 'Ärendet har en relation, huvudärende/underärende. Ärendet kan inte flyttas till kund där behörighet saknas.')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1950 and Language_Id=2)
+  insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1950, 'Case has parent/child relation. Case can not be moved to customer without user rights.', 2)
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
