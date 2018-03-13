@@ -139,20 +139,28 @@ using System;
 
         public CaseDefaultsInfo GetCustomerDefaults(int customerId)
         {
-            var query =
-                from customer in this.Table
+            var res =
+                (from customer in this.Table
                 where customer.Id == customerId
-                select new CaseDefaultsInfo
+                select new 
                 {
                     RegionId = this.DataContext.Regions.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
                     CaseTypeId = this.DataContext.CaseTypes.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
                     SupplierId = this.DataContext.Suppliers.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
                     PriorityId = this.DataContext.Priorities.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
                     StatusId = this.DataContext.Statuses.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
-                };
+                }).FirstOrDefault();
 
-            var res = query.FirstOrDefault();
-            return res;
+            //its important to return null for nullable values
+            return res != null
+                ? new CaseDefaultsInfo
+                {
+                    RegionId = res.RegionId == 0 ? null : (int?) res.RegionId,
+                    CaseTypeId = res.CaseTypeId,
+                    SupplierId = res.SupplierId == 0 ? null : (int?) res.SupplierId,
+                    PriorityId = res.PriorityId == 0 ? null : (int?) res.PriorityId,
+                    StatusId = res.StatusId == 0 ? null : (int?) res.StatusId
+                } : new CaseDefaultsInfo();
         }
     }
 
