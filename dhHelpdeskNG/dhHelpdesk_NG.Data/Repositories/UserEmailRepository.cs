@@ -93,12 +93,8 @@ namespace DH.Helpdesk.Dal.Repositories
                 var usWkgs = DbContext.UserWorkingGroups
                     .Include(x => x.User)
                     .Where(x => x.User.IsActive == 1)
+                    .Where(x => x.IsMemberOfGroup)
                     .AsQueryable();
-
-                if (isInternalLog)
-                {
-                    usWkgs = usWkgs.Where(x => x.UserRole == WorkingGroupUserPermission.ADMINSTRATOR);
-                }
 
                 var workGs = wgs.GroupJoin(usWkgs, wg => wg.Id, uwg => uwg.WorkingGroup_Id, (wg, uwgs) => new
                 {
