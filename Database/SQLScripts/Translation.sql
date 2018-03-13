@@ -6930,7 +6930,7 @@ If not exists (select * from tblTextTranslation where Text_Id = 1948 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1949)
-  insert into tbltext (id, TextString) VALUES (1949, 'Arendet kan inte flyttas. Matchande arendetyp eller standard arendetyp kan inte hittas.')
+  insert into tbltext (id, TextString) VALUES (1949, 'Ärendet kan inte flyttas. Matchande ärendetyp eller standard ärendetyp kan inte hittas.')
 GO
 If not exists (select * from tblTextTranslation where Text_Id = 1949 and Language_Id=2)
   insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1949, 'Case can not be moved. No matching or default case type can be found.', 2)
