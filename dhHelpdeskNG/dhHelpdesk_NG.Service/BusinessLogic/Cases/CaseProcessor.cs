@@ -57,7 +57,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
             @case.CaseType_Id = newCaseTypeId > 0 ? newCaseTypeId : newCustomerDefaults?.CaseTypeId ?? 0;
             if (@case.CaseType_Id <= 0)
             {
-                throw new HelpdeskException("Case can not be moved. No matching or default case type can be found.");
+                throw new HelpdeskException("Arendet kan inte flyttas. Matchande arendetyp eller standard arendetyp kan inte hittas.");
             }
 
             //2. set case default user as an administrator of the case
