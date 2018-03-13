@@ -1351,14 +1351,14 @@ EditPage.prototype.moveCaseToCustomer = function (caseId, customerId, isExternal
     if (isExternal) {
         //move case to external customer
         var inputData = { caseId, customerId };
-        $.post('/Cases/MoveCaseToExternalCustomer', inputData, function(result) {
+        $.post('/Cases/MoveCaseToExternalCustomer', inputData, function (result) {
             if (result.Success) {
-                window.location.href = result.Location;
+                window.location.href = result.Location || '/Cases/';
             } else {
                 self.enableMoveCaseControls(true);
                 ShowToastMessage(result.Error, "error", true);
             }
-        }).fail(function(err) {
+        }).fail(function (err) {
             self.enableMoveCaseControls(true);
             ShowToastMessage('Case move failed.', "error", true);
         });

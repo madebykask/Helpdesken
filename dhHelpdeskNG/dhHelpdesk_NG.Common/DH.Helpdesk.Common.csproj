@@ -111,6 +111,7 @@
     <Compile Include="Enums\SortBy.cs" />
     <Compile Include="Enums\SurveyVoteResult.cs" />
     <Compile Include="Enums\ValueCompare.cs" />
+    <Compile Include="Exceptions\HelpdeskException.cs" />
     <Compile Include="Exceptions\PropertyNotFoundException.cs" />
     <Compile Include="Extensions\Boolean\BoolExtensions.cs" />
     <Compile Include="Extensions\Boolean\ToIntExtension.cs" />

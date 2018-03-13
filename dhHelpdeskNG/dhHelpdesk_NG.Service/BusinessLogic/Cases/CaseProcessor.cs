@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
+using DH.Helpdesk.Common.Exceptions;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
 
@@ -52,7 +53,12 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
             {
                 newCaseTypeId = TryMatchCaseTypeForCustomer(caseTypeId, caseCustomerId, newCustomerId);
             }
+
             @case.CaseType_Id = newCaseTypeId > 0 ? newCaseTypeId : newCustomerDefaults?.CaseTypeId ?? 0;
+            if (@case.CaseType_Id <= 0)
+            {
+                throw new HelpdeskException("Case can not be moved. No matching or default case type can be found.");
+            }
 
             //2. set case default user as an administrator of the case
             @case.Performer_User_Id = newCustomerSettings.DefaultAdministrator;

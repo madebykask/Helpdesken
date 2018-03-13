@@ -98,6 +98,7 @@ namespace DH.Helpdesk.Web.Controllers
     using Common.Enums.Cases;
     using DH.Helpdesk.Services;
     using BusinessData.Models.ProductArea.Output;
+    using Common.Exceptions;
 
     public class CasesController : BaseController
     {
@@ -5023,21 +5024,17 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 _caseProcessor.MoveCaseToExternalCustomer(caseId, userId, customerId);
             }
+            catch (HelpdeskException e)
+            {
+                var err = Translation.GetCoreTextTranslation(e.Message);
+                return Json(new { Success = false, Error = err });
+            }
             catch (Exception e)
             {
-                return Json(new
-                {
-                    Success = false,
-                    Error = $"Unknown error. {e.Message}".ToHtmlString()
-                });
+                return Json(new { Success = false, Error = $"Unknown error. {e.Message}".ToHtmlString() });
             }
-            
-            //todo: implement
-            return Json(new
-            {
-                Success = true,
-                Location = "/Cases/CaseMoveResult/" + caseId
-            });
+ 
+            return Json(new { Success = true, Location = "/Cases/" });
         }
 
         [HttpGet]
