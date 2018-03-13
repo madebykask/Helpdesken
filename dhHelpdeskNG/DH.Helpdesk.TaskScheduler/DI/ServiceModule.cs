@@ -20,6 +20,7 @@ using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.BusinessData.Models.Case.Input;
 using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity;
+using DH.Helpdesk.Dal.Repositories;
 
 namespace DH.Helpdesk.TaskScheduler.DI
 {
@@ -41,9 +42,8 @@ namespace DH.Helpdesk.TaskScheduler.DI
             Bind<INotifierFieldSettingsFactory>().To<NotifierFieldSettingsFactory>();            
             Bind<INotifierFieldSettingRepository>().To<NotifierFieldSettingRepository>();
             Bind<INotifierRepository>().To<NotifierRepository>();
+            Bind<IDepartmentRepository>().To<DepartmentRepository>();
             Bind<IBusinessModelToEntityMapper<CaseNotifier, ComputerUser>>().To<CaseNotifierToEntityMapper>().InSingletonScope();
-
-
         }
     }
 }

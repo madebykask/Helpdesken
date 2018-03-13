@@ -31,6 +31,8 @@ namespace DH.Helpdesk.Dal.Repositories
         int GetDepartmentLanguage(int departmentId);
 
         void UpdateDeparmentDisabledForOrder(int[] toEnables, int[] toDisable);
+
+        int GetDepartmentId(string departmentName, int customerId);
     }
 
     public sealed class DepartmentRepository : RepositoryBase<Department>, IDepartmentRepository
@@ -160,6 +162,11 @@ namespace DH.Helpdesk.Dal.Repositories
                 obj.DisabledForOrder = true;
                 Update(obj);
             }
+        }
+
+        public int GetDepartmentId(string departmentName, int customerId)
+        {           
+            return this.DataContext.Departments.Where(d => d.DepartmentName == departmentName & d.Customer_Id == customerId).Select(d => d.Id).FirstOrDefault();           
         }
     }
 

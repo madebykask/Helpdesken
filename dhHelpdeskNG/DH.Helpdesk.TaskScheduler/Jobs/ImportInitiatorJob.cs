@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Common.Logging;
 using DH.Helpdesk.TaskScheduler.Services;
 using Quartz;
+using System.Configuration;
 
 namespace DH.Helpdesk.TaskScheduler.Jobs
 {
@@ -32,7 +33,8 @@ namespace DH.Helpdesk.TaskScheduler.Jobs
             if(settings == null) throw new ArgumentNullException(nameof(settings));
            
             var inputData = _importInitiatorService.ReadCsv(settings);
-            var fieldSettings = _importInitiatorService.GetInitiatorSettings(46);
+            var customerId = int.Parse(ConfigurationManager.AppSettings["Customers"]);
+            var fieldSettings = _importInitiatorService.GetInitiatorSettings(customerId);
             _importInitiatorService.ImportInitiator(inputData , fieldSettings);         
 
         }

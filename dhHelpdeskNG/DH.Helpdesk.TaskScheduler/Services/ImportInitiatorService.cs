@@ -11,6 +11,7 @@ using Quartz;
 using DH.Helpdesk.Dal.Repositories.Notifiers;
 using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Notifiers;
 using System.Configuration;
+using DH.Helpdesk.Dal.Repositories;
 
 namespace DH.Helpdesk.TaskScheduler.Services
 {
@@ -20,13 +21,15 @@ namespace DH.Helpdesk.TaskScheduler.Services
         private readonly ILog _logger;
         private readonly INotifierFieldSettingRepository _notifielrFieldSettingfactory;
         private readonly INotifierRepository _notifielrRepository;
+        private readonly IDepartmentRepository _departmentRepository;
 
 
         //private readonly IFtpFileDownloader _downloader;
 
         public ImportInitiatorService(IDbQueryExecutorFactory execFactory,
                                        INotifierFieldSettingRepository notifielrFieldSettingfactory,
-                                       INotifierRepository notifierRepository
+                                       INotifierRepository notifierRepository,
+                                       IDepartmentRepository deparmentRepository
                                       //,IFtpFileDownloader downloader
                                       )
         {
@@ -34,6 +37,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
             _logger = LogManager.GetLogger<ImportInitiatorService>();
             _notifielrFieldSettingfactory = notifielrFieldSettingfactory;
             _notifielrRepository = notifierRepository;
+            _departmentRepository = deparmentRepository;
             //_downloader = downloader;
         }
 
@@ -187,7 +191,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                 var existingId = 0;
                 //TODO 1
                 var customerId = int.Parse(ConfigurationManager.AppSettings["Customers"]);
-                CheckIfExisting(row.Item1, customerId);
+                existingId = CheckIfExisting(row.Item1, customerId);
 
                 var fieldNames = "(";
                 var values = "(";
@@ -198,31 +202,47 @@ namespace DH.Helpdesk.TaskScheduler.Services
                     if (dbFieldName != null && !string.IsNullOrEmpty(dbFieldName.ComputerUserField))
                     {
                         var _value = field.Value;
-                        if (field.Key.ToLower() == departmentId)
+                        if (dbFieldName.ComputerUserField.ToLower() == departmentId)
                         {
-                            //_value = ...
+                            _value = _departmentRepository.GetDepartmentId(_value, customerId).ToString();
+
                         }
                         var delimiter = "";
 
-                        //Update                
-                        delimiter = string.IsNullOrEmpty(updateQuery) ? "" : ",";
-                        updateQuery += $"{delimiter}{dbFieldName.ComputerUserField} = '{_value}'";
+                        if (existingId != 0)
+                        {
+                            //Update                
+                            delimiter = string.IsNullOrEmpty(updateQuery) ? "" : ",";
+                            updateQuery += $"{delimiter}{dbFieldName.ComputerUserField} = '{_value}'";
+                        }
+                        else
+                        {
+                            //Insert
+                            delimiter = fieldNames == "(" ? "" : ",";
+                            var closeDelimiter = fieldNames == ")" ? "" : "";
+                            //var fieldNames = $"({string.Join(delimiter, inputData.InputHeaders)})";
+                            fieldNames += $"{delimiter}{field.Key}";
+                            values += $"{delimiter}{field.Value}";
 
+                            insertQuery += $"{delimiter}{dbFieldName.ComputerUserField}{closeDelimiter} Values {delimiter}{values}{closeDelimiter}";
 
-                        //Insert
-                        delimiter = fieldNames == "(" ? "" : ",";
-                        //var fieldNames = $"({string.Join(delimiter, inputData.InputHeaders)})";
-                        fieldNames += $"{delimiter}{field.Key}";
-                        values += $"{delimiter}{field.Value}";
-
-                        insertQuery += $"{delimiter}{dbFieldName.ComputerUserField} = '{_value}'";
+                        }                        
                     }
-
-
                 }
 
-
-                updateQuery = $"Update {updateQuery} where id={existingId}";
+                if (existingId != 0)
+                {                    
+                    updateQuery = $"Update tblComputerUsers {updateQuery} where id={existingId} and Customer_Id = {customerId}";
+                    var dbQueryExecutor = _execFactory.Create();
+                    var ret = dbQueryExecutor.ExecQuery(updateQuery);
+                }
+                else
+                {
+                    insertQuery = $"Insert into tblComputerUsers {insertQuery} where Customer_Id = {customerId}";
+                    var dbQueryExecutor = _execFactory.Create();
+                    var ret = dbQueryExecutor.ExecQuery(insertQuery);
+                }
+                
             }
         }
     }
