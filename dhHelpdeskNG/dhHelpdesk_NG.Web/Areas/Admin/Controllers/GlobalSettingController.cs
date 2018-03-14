@@ -2,8 +2,10 @@
 using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 using DH.Helpdesk.BusinessData.Models.Grid;
 using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums.Settings;
 using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
@@ -1486,7 +1488,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             if (customerId.HasValue && customerId > 0)
             {
-                string[] exceptionList =
+                var exceptionList = new List<string>
                 {
                     GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString(),
                     GlobalEnums.TranslationCaseFields.AddUserBtn.ToString(),
@@ -1502,8 +1504,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     GlobalEnums.TranslationCaseFields.RegTime.ToString(),
                     GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
                     GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), //mandatory
-                    GlobalEnums.TranslationCaseFields.CaseNumber.ToString()
+                    GlobalEnums.TranslationCaseFields.CaseNumber.ToString(),
+                    GlobalEnums.TranslationCaseFields.Customer_Id.ToString()
                 };
+
                 var additionalFields = new List<CaseFieldSettingsWithLanguage>
                 {
                     new CaseFieldSettingsWithLanguage
@@ -1517,16 +1521,56 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                         Name = AdditionalDataPrivacyFields.SelfService_RegUser.ToString()
                     }
                 };
-                var fields = _caseFieldSettingService.GetAllCaseFieldSettings(customerId.Value, SessionFacade.CurrentLanguageId).Where(f => !exceptionList.Contains(f.Name)).ToList();
+
+                var fields =
+                    _caseFieldSettingService.GetCaseFieldSettings(customerId.Value)
+                        .Where(f => FieldSettingsUiNames.Names.ContainsKey(f.Name) &&
+                                    !exceptionList.Any(o => o.Equals(f.Name, StringComparison.OrdinalIgnoreCase)))
+                        .Select(f => new CaseFieldSettingsWithLanguage
+                        {
+                            Name = f.Name,
+                            Label = f.Name
+                        }).ToList(); 
+
+                // add additional fields
                 fields.AddRange(additionalFields);
-                var data = fields.Select(x => new SelectListItem
+                
+                var fieldSettingWithLangauges =
+                    _caseFieldSettingService.GetAllCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
+
+                var data =
+                    fields.Select(f => new
                     {
-                        Value = x.Name,
-                        Text = !string.IsNullOrEmpty(x.Label) ? x.Label : x.Name
-                    }).OrderBy(x => x.Text).ToList();
-                return Json(new {success = true, data = data});
+                        f.Name,
+                        Label = fieldSettingWithLangauges.getLabel(f.Name)
+                    })
+                    .Select(f => new SelectListItem
+                    {
+                        Value = f.Name,
+                        Text = FormatFieldLabel(f)
+                    })
+                    .OrderBy(f => f.Text)
+                    .ToList();
+                
+                return Json(new { success = true, data });
             }
-            return Json(new {success = false});
+
+            return Json(new { success = false });
+        }
+
+        private string FormatFieldLabel(dynamic field)
+        {
+            var label = field.Label;
+            
+            // prefix IsAbout section fields ony if they were translated
+            var isAboutSection = Translation.GetCoreTextTranslation(CaseSections.RegardingHeader);
+            if (field.Name.IndexOf("IsAbout_", StringComparison.OrdinalIgnoreCase) != -1 &&
+                !string.IsNullOrEmpty(label))
+            {
+                label = $"{isAboutSection} - {label}";
+            }
+
+            return string.IsNullOrEmpty(label) ? field.Name : label;
         }
     }
 }
