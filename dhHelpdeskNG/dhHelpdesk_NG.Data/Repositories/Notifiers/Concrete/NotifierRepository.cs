@@ -561,6 +561,13 @@
             return initiator == null;
         }
 
+        public int GetExistingNotifierIdByUserId(string userId, int customerId)
+        {
+            return DataContext.ComputerUsers
+                                      .Where(cu => cu.Customer_Id == customerId &&
+                                                   cu.UserId.ToLower() == userId.ToLower())
+                                                    .Select(i => i.Id).FirstOrDefault();
+        }
         #endregion
 
         #region Methods

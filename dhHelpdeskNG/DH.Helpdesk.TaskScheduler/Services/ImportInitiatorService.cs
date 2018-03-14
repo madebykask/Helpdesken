@@ -164,14 +164,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
         }
 
         public int CheckIfExisting(string UserId , int customerId)
-        {                   
-          var existingId = 0;
-            var notifier = _notifielrRepository.GetInitiatorByUserId(UserId,customerId,false);
-            if (notifier != null)
-            {
-                existingId = notifier.Id;
-            }
-            return existingId;
+        {                             
+            return _notifielrRepository.GetExistingNotifierIdByUserId(UserId,customerId);                         
         }
         public void ImportInitiator(CsvInputData inputData , IList<CompuerUsersFieldSetting> fieldSettings)
         {
@@ -204,7 +198,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
                         var _value = field.Value;
                         if (dbFieldName.ComputerUserField.ToLower() == departmentId)
                         {
-                            _value = _departmentRepository.GetDepartmentId(_value, customerId).ToString();
+                           int depId = _departmentRepository.GetDepartmentId(_value, customerId);
+                            _value = depId == 0 ? "null" : depId.ToString();                                                     
 
                         }
                         var delimiter = "";
@@ -218,18 +213,23 @@ namespace DH.Helpdesk.TaskScheduler.Services
                         else
                         {
                             //Insert
-                            delimiter = fieldNames == "(" ? "" : ",";                           
-                            //var fieldNames = $"({string.Join(delimiter, inputData.InputHeaders)})";
-                            fieldNames += $"{delimiter}{dbFieldName.ComputerUserField}";                            
-                            values += $"{delimiter}'{_value}'";                            
-
+                            delimiter = fieldNames == "(" ? "" : ",";                                                      
+                            fieldNames += $"{delimiter}{dbFieldName.ComputerUserField}";
+                            if (_value == "null")
+                            {
+                                values += $"{delimiter}{_value}";
+                            }
+                            else
+                            {
+                                values += $"{delimiter}'{_value}'";
+                            }                                                        
                         }                        
                     }
                 }
 
                 if (existingId != 0)
                 {                    
-                    updateQuery = $"Update tblComputerUsers {updateQuery} where id={existingId} and Customer_Id = {customerId}";
+                    updateQuery = $"Update tblComputerUsers SET {updateQuery} where id= {existingId} and Customer_Id = {customerId}";
                     var dbQueryExecutor = _execFactory.Create();
                     var ret = dbQueryExecutor.ExecQuery(updateQuery);
                 }

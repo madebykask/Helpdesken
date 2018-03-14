@@ -35,5 +35,7 @@
         Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly);
 
         bool IsInitiatorUserIdUnique(string userId, int initiatorId, int customerId, bool activeOnly);
+
+        int GetExistingNotifierIdByUserId(string userId, int customerId);
     }
 }
