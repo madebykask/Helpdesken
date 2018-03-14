@@ -1528,23 +1528,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                                     !exceptionList.Any(o => o.Equals(f.Name, StringComparison.OrdinalIgnoreCase)))
                         .Select(f => new CaseFieldSettingsWithLanguage
                         {
-                            Name = f.Name,
-                            Label = f.Name
+                            Name = f.Name
                         }).ToList(); 
 
                 // add additional fields
                 fields.AddRange(additionalFields);
-                
-                var fieldSettingWithLangauges =
-                    _caseFieldSettingService.GetAllCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
 
                 var data =
-                    fields.Select(f => new
-                    {
-                        f.Name,
-                        Label = fieldSettingWithLangauges.getLabel(f.Name)
-                    })
-                    .Select(f => new SelectListItem
+                    fields.Select(f => new SelectListItem
                     {
                         Value = f.Name,
                         Text = FormatFieldLabel(f)
@@ -1558,16 +1549,20 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return Json(new { success = false });
         }
 
-        private string FormatFieldLabel(dynamic field)
+        private string FormatFieldLabel(CaseFieldSettingsWithLanguage field)
         {
             var label = field.Label;
-            
+            if (string.IsNullOrEmpty(label) && FieldSettingsUiNames.Names.ContainsKey(field.Name))
+            {
+                label = Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[field.Name]);
+            }
+
             // prefix IsAbout section fields ony if they were translated
-            var isAboutSection = Translation.GetCoreTextTranslation(CaseSections.RegardingHeader);
             if (field.Name.IndexOf("IsAbout_", StringComparison.OrdinalIgnoreCase) != -1 &&
                 !string.IsNullOrEmpty(label))
             {
-                label = $"{isAboutSection} - {label}";
+                var regardingHeader = Translation.GetCoreTextTranslation(CaseSections.RegardingHeader);
+                label = $"{regardingHeader} - {label}";
             }
 
             return string.IsNullOrEmpty(label) ? field.Name : label;

@@ -9,7 +9,7 @@ namespace DH.Helpdesk.BusinessData.Enums.Case.Fields
 {
     public static class FieldSettingsUiNames
     {
-        public static Dictionary<string, string> Names = new Dictionary<string, string>
+        public static Dictionary<string, string> Names = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             { GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), "Användar ID"},
             { GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), "Anmälare"},
