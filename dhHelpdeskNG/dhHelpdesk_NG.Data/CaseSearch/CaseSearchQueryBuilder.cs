@@ -854,7 +854,7 @@ namespace DH.Helpdesk.Dal.Repositories
             if (searchCriteria.CaseIds != null && searchCriteria.CaseIds.Any())
             {
                 sb.AppendFormat(" AND ([tblCase].[Id] IN ({0})) ", string.Join(",", searchCriteria.CaseIds));
-                return sb.ToString();
+                //return sb.ToString();
             }
 
             // Related cases list http://redmine.fastdev.se/issues/11257
