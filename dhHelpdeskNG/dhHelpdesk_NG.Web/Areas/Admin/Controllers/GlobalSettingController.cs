@@ -5,6 +5,8 @@ using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums.Settings;
 using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Dal.Infrastructure.Context;
+using DH.Helpdesk.Services.BusinessLogic.Gdpr;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
@@ -35,7 +37,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ICustomerUserService _customerUserService;
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ICaseService _caseService;
-        private IGDPRDataPrivacyAccessService _gdprDataPrivacyAccessService;
+        private readonly IGDPRDataPrivacyAccessService _gdprDataPrivacyAccessService;
+        private readonly IGDPROperationsService _gdprOperationsService;
+        private IUserContext _userContext;
 
         public GlobalSettingController(
             IGlobalSettingService globalSettingService,
@@ -46,8 +50,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             ICustomerUserService customerUserService,
             ICaseFieldSettingService caseFieldSettingService,
             ICaseService caseService,
+            IGDPROperationsService gdprOperationsService,
             IGDPRDataPrivacyAccessService gdprDataPrivacyAccessService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            IUserContext userContext)
             : base(masterDataService)
         {
             this._globalSettingService = globalSettingService;
@@ -59,6 +65,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this._caseFieldSettingService = caseFieldSettingService;
             this._caseService = caseService;
             this._gdprDataPrivacyAccessService = gdprDataPrivacyAccessService;
+            this._userContext = userContext;
+            this._gdprOperationsService = gdprOperationsService;
         }
 
         public ActionResult Index(int texttypeid, string textSearch, int compareMethod)
@@ -1440,24 +1448,19 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return Json(res);
         }
 
+        
+
         [HttpPost]
-        public ActionResult DataPrivacy(DataPrivacyModel model)
+        public ActionResult DataPrivacy(DataPrivacyParameters model)
         {
             SessionFacade.ActiveTab = "#fragment-6";
             if (model.SelectedCustomerId > 0)
             {
-                if (model.ReplaceDataWith == null)
-                {
-                    model.ReplaceDataWith = string.Empty;
-                }
-                var success = _caseService.RemoveDataPrivacyFromCase(model.SelectedCustomerId, model.FieldsNames,
-                    model.ReplaceDatesWith, model.ReplaceDataWith, model.RegisterDateFrom,
-                    model.RegisterDateTo.GetEndOfDay(), model.ClosedOnly, model.RemoveCaseAttachments,
-                    model.RemoveLogAttachments,
-                    model.RemoveCaseHistory);
-
-                return Json(new {success});
+                var url = ControllerContext.RequestContext.HttpContext.Request.Url?.ToString();
+                var success = _gdprOperationsService.RemoveDataPrivacyFromCase(model, _userContext.UserId, url);
+                return Json(new { success });
             }
+
             return Json(new {success = true});
         }
 

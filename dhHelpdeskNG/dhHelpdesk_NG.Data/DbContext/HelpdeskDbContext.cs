@@ -611,7 +611,8 @@ namespace DH.Helpdesk.Dal.DbContext
 
         public DbSet<ParentChildRelation> ParentChildRelations { get; set; }
 
-        public DbSet<GDPRDataPrivacyAccess> GDPRDataPrivacyAccesses { get; set; }
+        public DbSet<GDPRDataPrivacyAccess> GDPRDataPrivacyAccess { get; set; }
+        public DbSet<GDPROperationsAudit> GDPROperationsAudit { get; set; }
 
         #endregion
 
@@ -924,7 +925,8 @@ namespace DH.Helpdesk.Dal.DbContext
 			modelBuilder.Configurations.Add(new CaseSolution_CaseSection_ExtendedCaseFormConfiguration());
 
             modelBuilder.Configurations.Add(new GDPRDataPrivacyAccessConfiguration());
-            
+            modelBuilder.Configurations.Add(new GDPROperationsAuditConfiguration());
+
             #endregion
 
             base.OnModelCreating(modelBuilder);

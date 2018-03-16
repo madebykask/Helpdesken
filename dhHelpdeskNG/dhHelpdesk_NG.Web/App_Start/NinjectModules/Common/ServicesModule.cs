@@ -163,8 +163,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<ICaseDocumentService>().To<CaseDocumentService>();
 
             this.Bind<IConditionService>().To<ConditionService>();
-            this.Bind<IGDPRDataPrivacyAccessService>().To<GDPRDataPrivacyAccessService>();
-
+            this.Bind<IGDPROperationsService, IGDPRDataPrivacyAccessService>().To<GDPRService>();
+            
             // Survey service
             this.Bind<ISurveyService>().To<SurveyService>();
 

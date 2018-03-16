@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using DH.Helpdesk.Dal.Infrastructure;
-using DH.Helpdesk.Dal.Infrastructure.Context;
-using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.GDPR;
 
 namespace DH.Helpdesk.Dal.Repositories.GDPR
@@ -25,7 +22,7 @@ namespace DH.Helpdesk.Dal.Repositories.GDPR
 
         public GDPRDataPrivacyAccess GetByUserId(int userId)
         {
-            var items = this.DataContext.GDPRDataPrivacyAccesses.FirstOrDefault(x => x.User_Id == userId);
+            var items = this.DataContext.GDPRDataPrivacyAccess.FirstOrDefault(x => x.User_Id == userId);
             return items;
         }
     }
