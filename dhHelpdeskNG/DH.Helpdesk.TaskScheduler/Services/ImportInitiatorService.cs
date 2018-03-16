@@ -12,16 +12,37 @@ using DH.Helpdesk.Dal.Repositories.Notifiers;
 using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Notifiers;
 using System.Configuration;
 using DH.Helpdesk.Dal.Repositories;
+using DH.Helpdesk.TaskScheduler.Enums;
+using System.ComponentModel.DataAnnotations;
+using DH.Helpdesk.TaskScheduler.Helper;
 
 namespace DH.Helpdesk.TaskScheduler.Services
 {
     internal class ImportInitiatorService : IImportInitiatorService
     {
+
+        const string departmentId = "department_id";
+        const string LanguageId = "languageid";
+        const string DivisionId = "division_id";
+        const string DomainId = "domain_id";
+        const string ComputerUserGroupId = "computerusergroup_id";
+        const string ManagerComputerUserId = "managercomputeruser_id";
+        const string OUId = "ou_id";
+
+        private string[] relatedFields = new string[] {
+                            departmentId, OUId,
+                            LanguageId, DomainId, DivisionId,
+                            ComputerUserGroupId,
+                            ManagerComputerUserId };
+
         private readonly IDbQueryExecutorFactory _execFactory;
         private readonly ILog _logger;
         private readonly INotifierFieldSettingRepository _notifielrFieldSettingfactory;
         private readonly INotifierRepository _notifielrRepository;
         private readonly IDepartmentRepository _departmentRepository;
+        private readonly ILanguageRepository _languageRepository;
+        private readonly IDivisionRepository _divisionRepository;
+        private readonly IDomainRepository _domainRepository;
 
 
         //private readonly IFtpFileDownloader _downloader;
@@ -29,7 +50,11 @@ namespace DH.Helpdesk.TaskScheduler.Services
         public ImportInitiatorService(IDbQueryExecutorFactory execFactory,
                                        INotifierFieldSettingRepository notifielrFieldSettingfactory,
                                        INotifierRepository notifierRepository,
-                                       IDepartmentRepository deparmentRepository
+                                       IDepartmentRepository deparmentRepository,
+                                       ILanguageRepository languageRepository,
+                                       IDivisionRepository divisionRepository,
+                                       IDomainRepository domainRepository
+
                                       //,IFtpFileDownloader downloader
                                       )
         {
@@ -38,6 +63,9 @@ namespace DH.Helpdesk.TaskScheduler.Services
             _notifielrFieldSettingfactory = notifielrFieldSettingfactory;
             _notifielrRepository = notifierRepository;
             _departmentRepository = deparmentRepository;
+            _languageRepository = languageRepository;
+            _divisionRepository = divisionRepository;
+            _domainRepository = domainRepository;
             //_downloader = downloader;
         }
 
@@ -56,8 +84,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
             //_logger.DebugFormat("Settings: {0}", settings != null ? JsonConvert.SerializeObject(settings) : "null");
             var settings = new ImportInitiator_JobSettings()
             {
-                Id = 0,
-                //Url = @"C:\Users\sg\Downloads\",
+                Id = 0,                
                 Url = @"C:\",
                 AppendTime = true,
                 CronExpression = "0 * 8-22 * * ?",
@@ -167,81 +194,125 @@ namespace DH.Helpdesk.TaskScheduler.Services
         {                             
             return _notifielrRepository.GetExistingNotifierIdByUserId(UserId,customerId);                         
         }
-        public void ImportInitiator(CsvInputData inputData , IList<CompuerUsersFieldSetting> fieldSettings)
-        {
-            //Template
-            //Insert into tblComputerUsers (Customer_Id,LogonName,...) Values (1,)
-            //Update tblComputerUsers set {update query} where id = existingId
+        public void ImportInitiator(CsvInputData inputData, IList<CompuerUsersFieldSetting> fieldSettings)
+        {                        
+            var multipleFields = fieldSettings.Where(fs => fs.LDAPAttribute.Contains(',')).ToList();
+            var ldapFields = fieldSettings.Where(fs => !string.IsNullOrEmpty(fs.LDAPAttribute)).ToList();
+            var fieldLenght = new FieldLenght();
 
-            var insertQuery = "";
-            var updateQuery = "";
-
-            const string departmentId = "department_id";
             foreach (var row in inputData.InputColumns)
             {
-                insertQuery = "";
-                updateQuery = "";
-
+                var updateQuery = "";
                 var existingId = 0;
-                //TODO 1
                 var customerId = int.Parse(ConfigurationManager.AppSettings["Customers"]);
                 existingId = CheckIfExisting(row.Item1, customerId);
 
-                var fieldNames = "(";
-                var values = "(";
-                foreach (var field in row.Item2)
+                var fieldNames = "";
+                var fieldValues = "";
+
+                var delimiter = "";
+                var isNew = existingId <= 0;
+
+                foreach (var fs in ldapFields)
                 {
-                    // Key: LDAPAttr - Value: ComputerUserField
-                    var dbFieldName = fieldSettings.FirstOrDefault(fs => fs.LDAPAttribute.Equals(field.Key, StringComparison.CurrentCultureIgnoreCase));
-                    if (dbFieldName != null && !string.IsNullOrEmpty(dbFieldName.ComputerUserField))
+                    var _dbFieldName = fs.ComputerUserField.ToLower();
+                    var _csvFieldValue = "";
+                    var maxLen = 0;
+                    var maxLengthAttr = fieldLenght.GetAttributeFrom<MaxLengthAttribute>(_dbFieldName);
+                    if (maxLengthAttr != null)
+                       maxLen = maxLengthAttr.Length;
+
+                    if (fs.LDAPAttribute.Contains(","))
                     {
-                        var _value = field.Value;
-                        if (dbFieldName.ComputerUserField.ToLower() == departmentId)
+                        var _fsFields = fs.LDAPAttribute.Split(',').ToList();
+                        foreach(var _fsField in _fsFields)
                         {
-                           int depId = _departmentRepository.GetDepartmentId(_value, customerId);
-                            _value = depId == 0 ? "null" : depId.ToString();                                                     
-
+                            var _sectionValue = row.Item2[_fsField];
+                            _csvFieldValue += string.IsNullOrEmpty(_sectionValue)? "" : $" {_sectionValue}";
+                            //NOTE: ForignKeys can not be combined                            
                         }
-                        var delimiter = "";
-
-                        if (existingId != 0)
-                        {
-                            //Update                
-                            delimiter = string.IsNullOrEmpty(updateQuery) ? "" : ",";
-                            updateQuery += $"{delimiter}{dbFieldName.ComputerUserField} = '{_value}'";
-                        }
-                        else
-                        {
-                            //Insert
-                            delimiter = fieldNames == "(" ? "" : ",";                                                      
-                            fieldNames += $"{delimiter}{dbFieldName.ComputerUserField}";
-                            if (_value == "null")
-                            {
-                                values += $"{delimiter}{_value}";
-                            }
-                            else
-                            {
-                                values += $"{delimiter}'{_value}'";
-                            }                                                        
-                        }                        
                     }
-                }
+                    else
+                    {
+                        _csvFieldValue = row.Item2[fs.LDAPAttribute];
+                        if (relatedFields.Contains(_dbFieldName))
+                            _csvFieldValue = GetRelatedValue(_dbFieldName, _csvFieldValue, customerId);                        
+                    }
 
-                if (existingId != 0)
-                {                    
-                    updateQuery = $"Update tblComputerUsers SET {updateQuery} where id= {existingId} and Customer_Id = {customerId}";
-                    var dbQueryExecutor = _execFactory.Create();
-                    var ret = dbQueryExecutor.ExecQuery(updateQuery);
-                }
-                else
-                {
-                    insertQuery += $"{fieldNames}, Customer_Id) Values {values}, {customerId})"; 
-                    insertQuery = $"Insert into tblComputerUsers {insertQuery}";
-                    var dbQueryExecutor = _execFactory.Create();
-                    var ret = dbQueryExecutor.ExecQuery(insertQuery);
-                }
-                
+                    if (maxLen > 0 && _csvFieldValue.Length > maxLen)
+                        _csvFieldValue = _csvFieldValue.Substring(0, maxLen - 1);
+
+                    // Create Script
+                    if (isNew)
+                    {
+                        //Insert
+                        delimiter = fieldNames == "" ? "" : ",";
+                        fieldNames += $"{delimiter}{_dbFieldName}";
+                        fieldValues += (_csvFieldValue == "null") ?
+                                        $"{delimiter}{_csvFieldValue}" :
+                                        $"{delimiter}'{_csvFieldValue}'";                        
+                    }
+                    else
+                    {
+                        //Update
+                        delimiter = string.IsNullOrEmpty(updateQuery) ? "" : ",";
+                        var _leftSide = $"{delimiter}{_dbFieldName} = ";
+                        var rightSide = (_csvFieldValue == "null") ? 
+                                        $"{_csvFieldValue}" : 
+                                        $"'{_csvFieldValue}'";
+                        updateQuery += (_leftSide + rightSide);                        
+                    }
+                } //for each LDAP Attr
+
+                var queryToRun = (isNew) ?
+
+                        $"Insert into tblComputerUsers " +
+                                      $"({fieldNames}, Customer_Id) " +
+                                      $"Values ({fieldValues}, {customerId})"
+                        :
+                        $"Update tblComputerUsers SET {updateQuery} " +
+                                      $",ChangeTime = '{DateTime.UtcNow}' " +
+                                      $"where id = {existingId}";
+                                
+                var dbQueryExecutor = _execFactory.Create();
+                var ret = dbQueryExecutor.ExecQuery(queryToRun);
             }
+        }
+
+        private string GetRelatedValue(string fieldName, string forignKey, int customerId)
+        {            
+            switch (fieldName)
+            {
+                case departmentId:
+                    var depId = _departmentRepository.GetDepartmentId(forignKey, customerId);
+                    return depId == 0 ? "null" : depId.ToString();
+                    
+                case LanguageId:                   
+                    var langId = _languageRepository.GetLanguageIdByText(forignKey);
+                    return langId == 0 ? "null" : langId.ToString();                    
+
+                case DivisionId:
+                    var divId = _divisionRepository.GetDivisionIdByName(forignKey, customerId);
+                    return divId == 0 ? "null" : divId.ToString();                  
+
+                case DomainId:
+                    var domainId = _domainRepository.GetDomainId(forignKey, customerId);
+                    return domainId == 0 ? "null" : domainId.ToString();
+
+                case ComputerUserGroupId:
+                    //To do Write function to get
+                    break;
+
+                case ManagerComputerUserId:
+                    //To do Write function to get
+                    break;
+
+                case OUId:
+                    //To do Write function to get
+                    break;
+            }
+
+            return string.Empty;
         }
     }
 

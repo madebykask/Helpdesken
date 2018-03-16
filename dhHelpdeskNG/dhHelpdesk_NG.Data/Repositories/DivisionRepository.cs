@@ -12,6 +12,7 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IDivisionRepository : IRepository<Division>
     {
         List<ItemOverview> FindByCustomerId(int customerId);
+        int GetDivisionIdByName(string division, int customerId);
     }
 
     public class DivisionRepository : RepositoryBase<Division>, IDivisionRepository
@@ -31,6 +32,12 @@ namespace DH.Helpdesk.Dal.Repositories
             return
                 divisionOverviews.Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture)))
                     .OrderBy(x => x.Name).ToList();
+        }
+
+        public int GetDivisionIdByName(string division , int customerId)
+        {
+            return this.DataContext.Divisions.Where(d => d.Name == division & d.Customer_Id == customerId)
+                    .Select(d => d.Id).FirstOrDefault();
         }
     }
 }

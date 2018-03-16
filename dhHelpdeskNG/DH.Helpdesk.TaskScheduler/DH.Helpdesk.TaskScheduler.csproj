@@ -110,6 +110,8 @@
     <Compile Include="Dto\CsvInputData.cs" />
     <Compile Include="Dto\ImportInitiator_JobSettings.cs" />
     <Compile Include="Dto\JobSettings.cs" />
+    <Compile Include="Enums\FieldLenght.cs" />
+    <Compile Include="Helper\PropertyHelper.cs" />
     <Compile Include="Jobs\ImportInitiatorJob.cs" />
     <Compile Include="Jobs\DailyReportJob.cs" />
     <Compile Include="Jobs\ImportInitiatorSettingsTrackerJob.cs" />
