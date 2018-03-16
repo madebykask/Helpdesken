@@ -34,8 +34,8 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
         private readonly IExternalInvoiceService _externalInvoiceService;
         private readonly ILogService _logService;
 
-        protected readonly IExportFileNameFormatter _exportFileNameFormatter;
-        protected readonly IExcelFileComposer _excelFileComposer;
+        private readonly IExportFileNameFormatter _exportFileNameFormatter;
+        private readonly IExcelFileComposer _excelFileComposer;
 
         public OverviewController(
 		    IMasterDataService masterDataService,

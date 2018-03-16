@@ -175,7 +175,7 @@ namespace DH.Helpdesk.Services.Services.Invoice
 			}
             
 			var setting = _settingService.GetCustomerSetting(customerId);
-            if (setting.InvoiceType == 2)
+            if (setting.InvoiceType == 2 && fileCases.Any())
             {
                 var fileName = now.ToString("yyyyMMddHHmmss.eko");
 				dbInvoiceHeader.InvoiceFilename = fileName;
@@ -183,7 +183,7 @@ namespace DH.Helpdesk.Services.Services.Invoice
 
             _invoiceHeaderRepository.Commit();            
 
-			if (setting.InvoiceType == 2)
+			if (setting.InvoiceType == 2 && fileCases.Any())
 			{
 				var globalSetting = _globalSettingService.GetGlobalSettings().First();
 				CreateInvoiceFile(dbInvoiceHeader.Id, 
@@ -246,7 +246,7 @@ namespace DH.Helpdesk.Services.Services.Invoice
                 sb.AppendLine($"{caseInfo.CaseNumber}-{invoiceHeader_Id}\t{translations[0]}\t{caseInfo.Department.DepartmentName}" +
                               $"\t{caseInfo.Workinggroup?.Code}\t{translations[1]}:{caseInfo.CaseNumber}, {caseInfo.Caption}" +
 				              $"{(string.IsNullOrWhiteSpace(externalInvoices) ? "" : $", {translations[2]}: " + externalInvoices)}" +
-				              $"{(referenceNumber == null ? "" : $", {translations[3]}: " + referenceNumber)}\t{translations[4]}\t{caseDate}\t\t{amount.ToString("F2")}");
+				              $"{(referenceNumber == null ? "" : $", {translations[3]}: " + referenceNumber)}\t{translations[4]}\t{caseDate}\t\t{amount:F2}");
 
 				using (var file = new StreamWriter(path))
 				{
