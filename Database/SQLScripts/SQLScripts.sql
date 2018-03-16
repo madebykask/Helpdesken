@@ -132,6 +132,34 @@ BEGIN
 END
 GO
 
+RAISERROR('Create table tblGDPROperationsAudit', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblGDPROperationsAudit' AND type='U')
+BEGIN
+
+    CREATE TABLE [dbo].[tblGDPROperationsAudit](
+	    [Id] [int] IDENTITY(1,1) NOT NULL,
+	    [User_Id] [int] NOT NULL,
+	    [Operation] [nvarchar](50) NOT NULL,
+	    [Parameters] [nvarchar](max) NULL,
+	    [Result] [nvarchar](max) NULL,
+	    [Url] [nvarchar](256) NOT NULL,
+	    [Application] [nvarchar](50) NOT NULL,
+	    [Success] [bit] NOT NULL,
+	    [Error] [nvarchar](max) NULL,
+	    [CreatedDate] [datetime] NOT NULL CONSTRAINT [DF_tblGDPROperationsAudit_CreatedDate]  DEFAULT (getdate()),
+	CONSTRAINT [PK_tblGDPROperationsAudit] PRIMARY KEY CLUSTERED ([Id] ASC) ON [PRIMARY]
+    ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+    ALTER TABLE [dbo].[tblGDPROperationsAudit]  WITH CHECK 
+    ADD CONSTRAINT [FK_tblGDPROperationsAudit_tblUsers] FOREIGN KEY([User_Id]) REFERENCES [dbo].[tblUsers] ([Id])	 
+
+    ALTER TABLE [dbo].[tblGDPROperationsAudit] CHECK CONSTRAINT [FK_tblGDPROperationsAudit_tblUsers]
+
+END
+GO
+
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.36'
 
