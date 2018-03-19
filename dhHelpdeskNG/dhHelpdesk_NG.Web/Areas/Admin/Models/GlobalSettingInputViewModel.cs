@@ -58,15 +58,21 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
     {
         public DataPrivacyModel()
         {
+            IsAvailable = false;
             ClosedOnly = true;
             Fields = new List<SelectListItem>();
         }
+
         public bool IsAvailable { get; set; }
-        public List<SelectListItem> Customers { get; set; }
         public int SelectedCustomerId { get; set; }
+        public List<SelectListItem> Customers { get; set; }
+        public int SelectedFavoriteId { get; set; }
+        public List<SelectListItem> Favorites { get; set; }
+        public int? RetentionPeriod { get; set; }
         public DateTime? RegisterDateFrom { get; set; }
         public DateTime? RegisterDateTo { get; set; }
         public bool ClosedOnly { get; set; }
+        public bool CalculateRegistrationDate { get; set; }
         public List<SelectListItem> Fields { get; set; }
         public List<string> FieldsNames { get; set; }
         public string ReplaceDataWith { get; set; }

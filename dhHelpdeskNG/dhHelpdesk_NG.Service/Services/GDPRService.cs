@@ -27,20 +27,28 @@ namespace DH.Helpdesk.Services.Services
         GDPRDataPrivacyAccess GetByUserId(int userId);
     }
 
-    public class GDPRService : IGDPROperationsService, IGDPRDataPrivacyAccessService
+    public interface IGDPRFavoritesService
+    {
+        IDictionary<int, string> ListFavorites();
+    }
+
+    public class GDPRService : IGDPROperationsService, IGDPRDataPrivacyAccessService, IGDPRFavoritesService
     {
         private readonly IGDPRDataPrivacyAccessRepository _privacyAccessRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IGDPROperationsAuditRespository _gdprOperationsAuditRespository;
         private readonly IJsonSerializeService _jsonSerializeService;
+        private readonly IGDPRDataPrivacyFavortieRepository _gdprDataPrivacyFavortieRepository;
 
         #region ctor()
 
         public GDPRService(IGDPRDataPrivacyAccessRepository privacyAccessRepository,
                            IUnitOfWorkFactory unitOfWorkFactory,
                            IGDPROperationsAuditRespository operationsAuditRespository,
+                           IGDPRDataPrivacyFavortieRepository dataPrivacyFavortieRepository,
                            IJsonSerializeService jsonSerializeService)
         {
+            _gdprDataPrivacyFavortieRepository = dataPrivacyFavortieRepository;
             _jsonSerializeService = jsonSerializeService;
             _unitOfWorkFactory = unitOfWorkFactory;
             _privacyAccessRepository = privacyAccessRepository;
@@ -57,6 +65,12 @@ namespace DH.Helpdesk.Services.Services
         }
 
         #endregion
+
+        public IDictionary<int, string> ListFavorites()
+        {
+            var favorites = _gdprDataPrivacyFavortieRepository.ListFavorites();
+            return favorites;
+        }
 
         public bool RemoveDataPrivacyFromCase(DataPrivacyParameters p, int userId, string url)
         {

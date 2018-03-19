@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services;
+
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
 
@@ -36,10 +36,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IWatchDateCalendarService _watchDateCalendarService;
         private readonly ICustomerUserService _customerUserService;
         private readonly ICaseFieldSettingService _caseFieldSettingService;
-        private readonly ICaseService _caseService;
         private readonly IGDPRDataPrivacyAccessService _gdprDataPrivacyAccessService;
         private readonly IGDPROperationsService _gdprOperationsService;
-        private IUserContext _userContext;
+        private readonly IGDPRFavoritesService _gdprFavoritesService;
+        private readonly IUserContext _userContext;
 
         public GlobalSettingController(
             IGlobalSettingService globalSettingService,
@@ -53,9 +53,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             IGDPROperationsService gdprOperationsService,
             IGDPRDataPrivacyAccessService gdprDataPrivacyAccessService,
             IMasterDataService masterDataService,
+            IGDPRFavoritesService gdprFavoritesService,
             IUserContext userContext)
             : base(masterDataService)
         {
+            _gdprFavoritesService = gdprFavoritesService;
             this._globalSettingService = globalSettingService;
             this._holidayService = holidayService;
             this._languageService = languageService;
@@ -63,7 +65,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this._watchDateCalendarService = watchDateCalendarService;
             this._customerUserService = customerUserService;
             this._caseFieldSettingService = caseFieldSettingService;
-            this._caseService = caseService;
             this._gdprDataPrivacyAccessService = gdprDataPrivacyAccessService;
             this._userContext = userContext;
             this._gdprOperationsService = gdprOperationsService;
@@ -158,11 +159,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 SessionFacade.ActiveTab = coll["activeTab"];
 
                return this.View(model);
-            
               
             }
-
-          
         }
 
         public ActionResult EditHoliday(int id, DateTime? holidayDate = null)
@@ -1468,10 +1466,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             var userAccess = _gdprDataPrivacyAccessService.GetByUserId(SessionFacade.CurrentUser.Id);
             if (userAccess == null)
-            {
-                return new DataPrivacyModel() { IsAvailable = false };
-            }
-            
+                return new DataPrivacyModel();
+
             var customers = _customerUserService.GetCustomerUsersForUser(SessionFacade.CurrentUser.Id);
             var availableCustomers = customers.OrderBy(x => x.Customer.Name).Select(x => new SelectListItem
             {
@@ -1479,11 +1475,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Text = x.Customer.Name
             }).ToList();
 
-            return new DataPrivacyModel
+            
+            var favorites = _gdprFavoritesService.ListFavorites();
+
+            var model = new DataPrivacyModel
             {
                 IsAvailable = true,
-                Customers = availableCustomers
+                Customers = availableCustomers,
+                Favorites = favorites.ToSelectList(new SelectListItem() { Value = "0", Text = Translation.GetCoreTextTranslation("Create New") } )
             };
+            return model;
         }
 
         [HttpPost]

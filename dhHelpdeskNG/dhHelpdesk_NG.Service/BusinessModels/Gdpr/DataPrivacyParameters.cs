@@ -6,6 +6,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
     public class DataPrivacyParameters
     {
         public int SelectedCustomerId { get; set; }
+        public int RetentionPeriod { get; set; }
         public DateTime? RegisterDateFrom { get; set; }
         public DateTime? RegisterDateTo { get; set; }
         public bool ClosedOnly { get; set; }
