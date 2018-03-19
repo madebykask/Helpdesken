@@ -158,10 +158,52 @@ BEGIN
 END
 GO
 
+RAISERROR('Create table tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblGDPRDataPrivacyFavorite' AND type='U')
+BEGIN
+    CREATE TABLE [dbo].[tblGDPRDataPrivacyFavorite](
+	    [Id] [int] IDENTITY(1,1) NOT NULL,
+	    [Name] [nvarchar](256) NOT NULL,
+	CONSTRAINT [PK_tblGDPRDataPrivacyFavortie] PRIMARY KEY CLUSTERED 
+    (
+	    [Id] ASC
+    ) ON [PRIMARY]
+    ) ON [PRIMARY]
+END
+GO
 
+RAISERROR('Create table tblGDPRDataPrivacyFavoriteItem', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblGDPRDataPrivacyFavoriteItem' AND type='U')
+BEGIN
+    CREATE TABLE [dbo].[tblGDPRDataPrivacyFavoriteItem](
+	    [Id] [int] IDENTITY(1,1) NOT NULL,
+	    [GDPRDataPrivacyFavorite_Id] [int] NOT NULL,
+	    [CustomerId] [int] NOT NULL,
+	    [RetentionPeriod] [int] NOT NULL,
+	    [CalculateRegistrationDate] [bit] NOT NULL,
+	    [RegisterDateFrom] [datetime] NOT NULL,
+	    [RegisterDateTo] [datetime] NOT NULL,
+	    [ClosedOnly] [bit] NOT NULL,
+	    [FieldsNames] [nvarchar](512) NOT NULL,
+	    [ReplaceDataWith] [nvarchar](256) NOT NULL,
+	    [ReplaceDatesWith] [datetime] NULL,
+	    [RemoveCaseAttachments] [bit] NOT NULL,
+	    [RemoveLogAttachments] [bit] NOT NULL,
+	CONSTRAINT [PK_tblGDPRFavoriteItem] PRIMARY KEY CLUSTERED 
+    (
+	    [Id] ASC
+    ) ON [PRIMARY]
+    ) ON [PRIMARY]
+
+    ALTER TABLE [dbo].[tblGDPRDataPrivacyFavoriteItem]  WITH CHECK ADD  CONSTRAINT [FK_tblGDPRDataPrivacyFavoriteItem_tblGDPRDataPrivacyFavorite] FOREIGN KEY([GDPRDataPrivacyFavorite_Id])
+    REFERENCES [dbo].[tblGDPRDataPrivacyFavorite] ([Id])
+
+    ALTER TABLE [dbo].[tblGDPRDataPrivacyFavoriteItem] CHECK CONSTRAINT [FK_tblGDPRDataPrivacyFavoriteItem_tblGDPRDataPrivacyFavorite]
+END
+GO 
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.36'
 
 --ROLLBACK --TMP
-
+select * from tblUsers where UserId = 'admin'
