@@ -1350,7 +1350,7 @@ EditPage.prototype.moveCaseToCustomer = function (caseId, customerId, isExternal
     var self = this;
     if (isExternal) {
         //move case to external customer
-        var inputData = { caseId: caseId, customerId: caseId };
+        var inputData = { caseId: caseId, customerId: customerId };
         $.post('/Cases/MoveCaseToExternalCustomer', inputData, function (result) {
             if (result.Success) {
                 window.location.href = result.Location || '/Cases/';
