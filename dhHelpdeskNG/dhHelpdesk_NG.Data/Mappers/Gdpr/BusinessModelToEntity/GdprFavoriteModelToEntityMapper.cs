@@ -22,7 +22,7 @@ namespace DH.Helpdesk.Dal.Mappers.Gdpr.BusinessModelToEntity
             entity.FieldsNames =
                 model.FieldsNames != null && model.FieldsNames.Any() ? string.Join(",", model.FieldsNames) : "";
 
-            entity.ReplaceDataWith = model.ReplaceDataWith;
+            entity.ReplaceDataWith = model.ReplaceDataWith ?? string.Empty;
             entity.ReplaceDatesWith = model.ReplaceDatesWith;
             entity.RemoveCaseAttachments = model.RemoveCaseAttachments;
             entity.RemoveLogAttachments = model.RemoveLogAttachments;

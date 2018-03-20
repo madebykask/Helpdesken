@@ -32,6 +32,7 @@ namespace DH.Helpdesk.Services.Services
     public interface IGDPRFavoritesService
     {
         IDictionary<int, string> ListFavorites();
+        GdprFavoriteModel GetFavorite(int id);
         int SaveFavorite(GdprFavoriteModel model);
     }
 
@@ -41,20 +42,23 @@ namespace DH.Helpdesk.Services.Services
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IGDPROperationsAuditRespository _gdprOperationsAuditRespository;
         private readonly IJsonSerializeService _jsonSerializeService;
-        private readonly IGDPRDataPrivacyFavoriteRepository _igdprDataPrivacyFavoriteRepository;
+        private readonly IGDPRDataPrivacyFavoriteRepository _gdprFavoritesRepository;
         private readonly IBusinessModelToEntityMapper<GdprFavoriteModel, GDPRDataPrivacyFavorite> _gdprFavoritesEntityMapper;
+        private readonly IEntityToBusinessModelMapper<GDPRDataPrivacyFavorite, GdprFavoriteModel> _gdprFavoritesModelMapper;
 
         #region ctor()
 
         public GDPRService(IGDPRDataPrivacyAccessRepository privacyAccessRepository,
                            IUnitOfWorkFactory unitOfWorkFactory,
                            IGDPROperationsAuditRespository operationsAuditRespository,
-                           IGDPRDataPrivacyFavoriteRepository dataPrivacyFavoriteRepository,
+                           IGDPRDataPrivacyFavoriteRepository favoritesRepository,
                            IBusinessModelToEntityMapper<GdprFavoriteModel, GDPRDataPrivacyFavorite> gdprFavoritesEntityMapper,
+                           IEntityToBusinessModelMapper<GDPRDataPrivacyFavorite, GdprFavoriteModel> gdprFavoritesModelMapper,
                            IJsonSerializeService jsonSerializeService)
         {
             _gdprFavoritesEntityMapper = gdprFavoritesEntityMapper;
-            _igdprDataPrivacyFavoriteRepository = dataPrivacyFavoriteRepository;
+            _gdprFavoritesModelMapper = gdprFavoritesModelMapper;
+            _gdprFavoritesRepository = favoritesRepository;
             _jsonSerializeService = jsonSerializeService;
             _unitOfWorkFactory = unitOfWorkFactory;
             _privacyAccessRepository = privacyAccessRepository;
@@ -74,8 +78,15 @@ namespace DH.Helpdesk.Services.Services
 
         public IDictionary<int, string> ListFavorites()
         {
-            var favorites = _igdprDataPrivacyFavoriteRepository.ListFavorites();
+            var favorites = _gdprFavoritesRepository.ListFavorites();
             return favorites;
+        }
+
+        public GdprFavoriteModel GetFavorite(int id)
+        {
+            var entity = _gdprFavoritesRepository.GetById(id);
+            var model = _gdprFavoritesModelMapper.Map(entity);
+            return model;
         }
 
         public int SaveFavorite(GdprFavoriteModel model)

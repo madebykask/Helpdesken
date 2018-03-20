@@ -1447,6 +1447,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return Json(res);
         }
 
+        public JsonResult LoadFavoriteData(int id)
+        {
+            var data = _gdprFavoritesService.GetFavorite(id);
+            return Json(new { data }, JsonRequestBehavior.AllowGet);
+        }
+        
         [HttpPost]
         public JsonResult SaveFavorites(GdprFavoriteModel model)
         {
