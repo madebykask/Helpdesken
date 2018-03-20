@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DH.Helpdesk.BusinessData.Models.Gdpr;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Serializers;
+using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.NewInfrastructure;
 using DH.Helpdesk.Dal.Repositories.GDPR;
 using DH.Helpdesk.Domain;
@@ -30,6 +32,7 @@ namespace DH.Helpdesk.Services.Services
     public interface IGDPRFavoritesService
     {
         IDictionary<int, string> ListFavorites();
+        int SaveFavorite(GdprFavoriteModel model);
     }
 
     public class GDPRService : IGDPROperationsService, IGDPRDataPrivacyAccessService, IGDPRFavoritesService
@@ -38,17 +41,20 @@ namespace DH.Helpdesk.Services.Services
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IGDPROperationsAuditRespository _gdprOperationsAuditRespository;
         private readonly IJsonSerializeService _jsonSerializeService;
-        private readonly IGDPRDataPrivacyFavortieRepository _gdprDataPrivacyFavortieRepository;
+        private readonly IGDPRDataPrivacyFavoriteRepository _igdprDataPrivacyFavoriteRepository;
+        private readonly IBusinessModelToEntityMapper<GdprFavoriteModel, GDPRDataPrivacyFavorite> _gdprFavoritesEntityMapper;
 
         #region ctor()
 
         public GDPRService(IGDPRDataPrivacyAccessRepository privacyAccessRepository,
                            IUnitOfWorkFactory unitOfWorkFactory,
                            IGDPROperationsAuditRespository operationsAuditRespository,
-                           IGDPRDataPrivacyFavortieRepository dataPrivacyFavortieRepository,
+                           IGDPRDataPrivacyFavoriteRepository dataPrivacyFavoriteRepository,
+                           IBusinessModelToEntityMapper<GdprFavoriteModel, GDPRDataPrivacyFavorite> gdprFavoritesEntityMapper,
                            IJsonSerializeService jsonSerializeService)
         {
-            _gdprDataPrivacyFavortieRepository = dataPrivacyFavortieRepository;
+            _gdprFavoritesEntityMapper = gdprFavoritesEntityMapper;
+            _igdprDataPrivacyFavoriteRepository = dataPrivacyFavoriteRepository;
             _jsonSerializeService = jsonSerializeService;
             _unitOfWorkFactory = unitOfWorkFactory;
             _privacyAccessRepository = privacyAccessRepository;
@@ -68,8 +74,30 @@ namespace DH.Helpdesk.Services.Services
 
         public IDictionary<int, string> ListFavorites()
         {
-            var favorites = _gdprDataPrivacyFavortieRepository.ListFavorites();
+            var favorites = _igdprDataPrivacyFavoriteRepository.ListFavorites();
             return favorites;
+        }
+
+        public int SaveFavorite(GdprFavoriteModel model)
+        {
+            int res;
+            using (var uow = _unitOfWorkFactory.Create())
+            {
+                var repo = uow.GetRepository<GDPRDataPrivacyFavorite>();
+                var entity = repo.GetById(model.Id);
+                if (entity == null)
+                {
+                    entity = new GDPRDataPrivacyFavorite();
+                    repo.Add(entity);
+                }
+
+                _gdprFavoritesEntityMapper.Map(model, entity);
+                uow.Save();
+
+                res = entity.Id;
+            }
+
+            return res;
         }
 
         public bool RemoveDataPrivacyFromCase(DataPrivacyParameters p, int userId, string url)

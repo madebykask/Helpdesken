@@ -927,7 +927,7 @@ namespace DH.Helpdesk.Dal.DbContext
 
             modelBuilder.Configurations.Add(new GDPRDataPrivacyAccessConfiguration());
             modelBuilder.Configurations.Add(new GDPROperationsAuditConfiguration());
-            modelBuilder.Configurations.Add(new GDPRDataPrivacyFavortieConfiguration());
+            modelBuilder.Configurations.Add(new GDPRDataPrivacyFavoriteConfiguration());
 
             #endregion
 

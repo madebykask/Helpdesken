@@ -9,10 +9,13 @@
 
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
+using DH.Helpdesk.BusinessData.Models.Gdpr;
 using DH.Helpdesk.Common.Serializers;
 using DH.Helpdesk.Dal.DbQueryExecutor;
 using DH.Helpdesk.Dal.Mappers.ExternalInvoice.BusinessModelToEntity;
 using DH.Helpdesk.Dal.Mappers.ExternalInvoice.EntityToBusinessModel;
+using DH.Helpdesk.Dal.Mappers.Gdpr.BusinessModelToEntity;
+using DH.Helpdesk.Domain.GDPR;
 using DH.Helpdesk.Web.Infrastructure.Cache;
 
 namespace DH.Helpdesk.Web.NinjectModules.Common
@@ -223,6 +226,10 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
 
             this.Bind<IEntityToBusinessModelMapper<ConditionEntity, ConditionModel>>()
                 .To<ConditionToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<GdprFavoriteModel, GDPRDataPrivacyFavorite>>()
+                .To<GdprFavoriteModelToEntityMapper>()
                 .InSingletonScope();
         }
     }

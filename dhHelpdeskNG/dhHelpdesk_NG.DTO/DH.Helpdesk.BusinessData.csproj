@@ -303,6 +303,7 @@
     <Compile Include="Models\Feedback\FeedbackQuestionOption.cs" />
     <Compile Include="Models\Feedback\FeedbackQuestionOverview.cs" />
     <Compile Include="Models\FinishingCause\FinishingCauseItem.cs" />
+    <Compile Include="Models\Gdpr\GdprFavoriteModel.cs" />
     <Compile Include="Models\Grid\CaseOverviewColumnDefinition.cs" />
     <Compile Include="Models\Grid\GridColumnDefinition.cs" />
     <Compile Include="Models\Grid\GridSettingsModel.cs" />

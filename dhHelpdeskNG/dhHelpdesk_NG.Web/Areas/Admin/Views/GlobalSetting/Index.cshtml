@@ -24,7 +24,7 @@
             <li id="menu5" style="display: none"></li>
             <li id="menu6" style="display: none">
                 @Html.ActionLink(Translation.GetCoreTextTranslation("Kör"), null, null, new {id = "privacyRunBtn", @class = "btn"})
-                <img id="inProcessLoader" style="height: 25px; display: none" src="~/Content/img/ajax-loader.GIF"/>
+                <i id="inProcessLoader" class="gif-loader" style="display:none">&nbsp;</i>
             </li>
         </ul>
     </div>
@@ -203,6 +203,7 @@
                                                 </td>
                                                 <td class="span9">
                                                     @Html.DropDownListFor(m => m.DataPrivacy.SelectedFavoriteId, Model.DataPrivacy.Favorites, new { id = "favoritesSelect" })
+                                                    <i id="favoritesLoader" class="gif-loader" style="display:none">&nbsp;</i>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -218,7 +219,7 @@
                                                     @Translation.GetCoreTextTranslation("Retention period")
                                                 </td>
                                                 <td class="span9">
-                                                    @Html.TextBoxFor(m => m.DataPrivacy.RetentionPeriod, new { id = "retentionPeriod" })
+                                                    @Html.TextBoxFor(m => m.DataPrivacy.RetentionPeriod, new { id = "retentionPeriod", width = "100px" })
                                                     @Translation.GetCoreTextTranslation("days")
                                                 </td>
                                             </tr>
@@ -261,7 +262,7 @@
                                                             placeholder = Translation.GetCoreTextTranslation("Välj en eller flera"),
                                                             style = "width: 300px"
                                                         })
-                                                    <img id="fieldsLoader" style="height: 25px; display: none" src="~/Content/img/ajax-loader.GIF"/>
+                                                    <i id="fieldsLoader" class="gif-loader" style="display:none">&nbsp;</i>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -313,6 +314,7 @@
                                                     <button class="btn btn-small" id="btnFavorite" type="button">
                                                         <i class="icon-star"></i> @Translation.GetCoreTextTranslation("Favorite")
                                                     </button>
+                                                    <i id="saveFavoritesLoader" class="gif-loader" style="display:none">&nbsp;</i>
                                                 </td>
                                             </tr>
                                         </table>
@@ -330,364 +332,588 @@
     </div>
 </div>
 
+<div id="favoritesSaveModal" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <strong><span id="fm_header">Save </span></strong>
+    </div>
+    <div class="modal-body">
+        <p id="fm_body"></p>
+        <div>
+            <input type="text" id="fm_name" />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button id="btnSaveFav" class="btn" data-dismiss="modal" aria-hidden="true">@Translation.GetCoreTextTranslation("Save")</button>
+        <button id="btnDeleteFav" class="btn" data-dismiss="modal" aria-hidden="true">@Translation.GetCoreTextTranslation("Delete")</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.GetCoreTextTranslation("Avbryt")</button>
+    </div>
+</div>
+
 @section Scripts {
-    <script type="text/javascript">
+<script type="text/javascript">
 
-        var confirmationDialog = {
-            showConfirmation: function(text, onOk, onCancel) {
-                var d = $('<div class="modal fade">' +
-                    '<div class="modal-dialog">' +
-                    '<form method="post" id="deleteDialogForm" class="modal-content">' +
-                    '<div class="modal-body">' +
-                    '<button type="button" class="close" data-dismiss="modal">&times;</button>' +
-                    '<p class="alert alert-info infop">' +
-                    text +
-                    '</p>' +
-                    '</div>' +
-                    '<div class="modal-footer">' +
-                    '<button type="button" class="btn btn-ok">' +
-                    '@Translation.GetCoreTextTranslation("Ja")' +
-                    '</button>' +
-                    '<button type="button" class="btn btn-cancel">' +
-                    '@Translation.GetCoreTextTranslation("Nej")' +
-                    '</button>' +
-                    '</div>' +
-                    '</form>' +
-                    '</div>' +
-                    '</div>');
+    var confirmationDialog = {
+        showConfirmation: function(text, onOk, onCancel) {
+            var d = $('<div class="modal fade">' +
+                '<div class="modal-dialog">' +
+                '<form method="post" id="deleteDialogForm" class="modal-content">' +
+                '<div class="modal-body">' +
+                '<button type="button" class="close" data-dismiss="modal">&times;</button>' +
+                '<p class="alert alert-info infop">' +
+                text +
+                '</p>' +
+                '</div>' +
+                '<div class="modal-footer">' +
+                '<button type="button" class="btn btn-ok">' +
+                '@Translation.GetCoreTextTranslation("Ja")' +
+                '</button>' +
+                '<button type="button" class="btn btn-cancel">' +
+                '@Translation.GetCoreTextTranslation("Nej")' +
+                '</button>' +
+                '</div>' +
+                '</form>' +
+                '</div>' +
+                '</div>');
 
-                d.on("show",
-                    function() {
-                        d.find(".btn-cancel").on("click",
-                            function(e) {
-                                onCancel();
-                                d.modal('hide');
-                            });
+            d.on("show",
+                function() {
+                    d.find(".btn-cancel").on("click",
+                        function(e) {
+                            onCancel();
+                            d.modal('hide');
+                        });
 
-                        d.find(".btn-ok").on("click",
-                            function(e) {
-                                onOk();
-                                d.modal('hide');
-                            });
-                    });
-
-                d.on("hide",
-                    function() {
-                        d.find(".btn-ok").off("click");
-                        d.find(".btn-cancel").off("click");
-                    });
-
-                d.on("hidden",
-                    function() {
-                        d.remove();
-                    });
-
-                d.modal({
-                    "backdrop": "static",
-                    "keyboard": true,
-                    "show": true
+                    d.find(".btn-ok").on("click",
+                        function(e) {
+                            onOk();
+                            d.modal('hide');
+                        });
                 });
+
+            d.on("hide",
+                function() {
+                    d.find(".btn-ok").off("click");
+                    d.find(".btn-cancel").off("click");
+                });
+
+            d.on("hidden",
+                function() {
+                    d.remove();
+                });
+
+            d.modal({
+                "backdrop": "static",
+                "keyboard": true,
+                "show": true
+            });
+        }
+    };
+
+    $(function() {
+
+        var dataPrivacyForm =
+        (function() {
+            var _self = this;
+
+            // constants and Ids
+            this.loaders = {
+                fieldsLoader: $('#fieldsLoader'),
+                favoritesLoader: $('#favoritesLoader'),
+                inProcessLoader: $('#inProcessLoader'),
+                saveFavoritesLoader: $('#saveFavoritesLoader')
+            };
+
+            this.emptyFavSelectText = "Create New"; //todo: translate
+
+            //form and fields
+            this.form$ = $("#privacyForm");
+            this.validator$ = {}
+            this.customerSelect$ = $("#customerSelect");
+            this.favoritesSelect$ = $("#favoritesSelect");
+            this.registerDateFrom$ = $("#DataPrivacy_RegisterDateFrom");
+            this.registerDateTo$ = $("#DataPrivacy_RegisterDateTo");
+            this.filterFields$ = $("#lstFilterFields");
+            this.inProcessLoader$ = $("#inProcessLoader");
+
+            //buttons
+            this.btnFavorite$ = $("#btnFavorite");
+            this.privacyRunBtn$ = $("#privacyRunBtn");
+
+            //private functions:
+
+            this.formFieldsState = {
+                btnFavorite: true,
+                privacyRunBtn: true,
+                favoritesSelect: true,
+                customerSelect: true,
+                lstFilterFields: true
+            };
+            
+            this.blockUI = function (block, loaderEl) {
+                var self = this;
+
+                if (loaderEl) {
+                    self.showControl(loaderEl, block);
+                }
+
+                this.setFormFieldsState(!block);
+
+                if (!block) {
+                    //hide all loaders
+                    for(var loader in this.loaders) {
+                        if (this.loaders.hasOwnProperty(loader))
+                            this.loaders[loader].hide();
+                     }
+                }
+            };
+
+            this.saveControlsState = function () {
+                for (var controlId in this.formFieldsState) {
+                    if (this.formFieldsState.hasOwnProperty(controlId)) {
+                        var ctrl$ = $('#' + controlId);
+                        if (ctrl$.length) {
+                            this.formFieldsState[controlId] = this.isEnabled(ctrl$);
+                        }
+                    }
+                }
             }
-        };
 
-        $(function() {
+            this.restoreControlsState = function () {
+                for (var controlId in this.formFieldsState) {
+                    if (this.formFieldsState.hasOwnProperty(controlId)) {
+                        var ctrl$ = $('#' + controlId);
+                        if (ctrl$.length) {
+                            var prevState = this.formFieldsState[controlId];
+                            this.enableControl(ctrl$, prevState);
+                        }
+                    }
+                }
+            }
 
-            var dataPrivacyForm =
-            (function() {
-                var _self = this;
+            this.setFormFieldsState = function (enable) {
+                if (enable) {
+                    this.restoreControlsState();
+                } else {
 
-                //form and controls
-                this.form$ = $("#privacyForm");
-                this.validator$ = {}
-                this.customerSelect$ = $("#customerSelect");
-                this.favoritesSelect$ = $("#favoritesSelect");
-                this.btnFavorite$ = $("#btnFavorite");
-                this.registerDateFrom$ = $("#DataPrivacy_RegisterDateFrom");
-                this.registerDateTo$ = $("#DataPrivacy_RegisterDateTo");
-                this.filterFields$ = $("#lstFilterFields");
-                this.inProcessLoader$ = $("#inProcessLoader");
-                this.privacyRunBtn$ = $("#privacyRunBtn");
+                    // save cur state
+                    this.saveControlsState();
 
-                //private functions
-
-                this.getFilterData = function() {
-                    var fields = [];
-                    this.filterFields$.find("option:selected").each(function() {
-                        fields.push($(this).val());
-                    });
-                    return {
-                        fields: fields,
-                        selectedCustomerId: this.customerSelect$.val(),
-                        registerDateFrom: this.registerDateFrom$.val(),
-                        registerDateTo: this.registerDateTo$.val(),
-                        closedOnly: $("#DataPrivacy_ClosedOnly").prop("checked"),
-                        replaceDataWith: $("#DataPrivacy_ReplaceDataWith").val(),
-                        replaceDatesWith: $("#DataPrivacy_ReplaceDatesWith").val(),
-                        removeCaseAttachments: $("#DataPrivacy_RemoveCaseAttachments").prop("checked"),
-                        removeLogAttachments: $("#DataPrivacy_RemoveLogAttachments").prop("checked"),
-                        removeCaseHistory: $("#DataPrivacy_RemoveCaseHistory").prop("checked")
-                    };
-                };
-
-                this.setupValidation = function() {
-                    var self = this;
-                    var caseFieldsDropDown = "lstFilterFields";
-
-                    this.validator$ = this.form$.validate({
-                        ignore: '*:not([name])',
-                        debug: true,
-                        rules: this.getRules(),
-                        errorPlacement: function(error, element) {
-                            if (element.is("#DataPrivacy_RegisterDateFrom") ||
-                                element.is("#DataPrivacy_RegisterDateTo")) {
-                                $("#datesErrorLabel").html(error);
-                            } else {
-                                if (element.is("select.chosen-select")) {
-                                    error.insertAfter($("#fieldsLoader"));
-                                    error.css("width", "315px");
-                                    $("#" + element.attr("id") + "_chosen").addClass("error");
-                                } else {
-                                    error.insertAfter(element);
-                                }
-                            }
-                        },
-                        highlight: function(element) {
-                            if (element.id === caseFieldsDropDown) {
-                                $("#" + element.id + "_chosen").removeClass('error success').addClass('error');
-                            } else {
-                                $(element).removeClass('error success').addClass('error');
-                            }
-                        },
-                        success: function(label) {
-                            if (label.attr("for") === caseFieldsDropDown) {
-                                $("#" + label.attr("for") + "_chosen").removeClass("error");
-                            }
-                        },
-
-                        messages: {
-                            "DataPrivacy.SelectedCustomerId": {
-                                required: "@Translation.GetForJS("Kund") @Translation.GetForJS("måste anges")"
-                            },
-                            "DataPrivacy.FieldsNames": {
-                                required: "@Translation.GetForJS("Fält") @Translation.GetForJS("måste anges")"
-                            },
-                            "DataPrivacy.RegisterDateFrom": {
-                                required:
-                                    "@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("måste anges")"
-                            },
-                            "DataPrivacy.RegisterDateTo": {
-                                required:
-                                    "@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("måste anges")"
+                    //disable controls
+                    for (var controlId in this.formFieldsState) {
+                        if (this.formFieldsState.hasOwnProperty(controlId)) {
+                            var ctrl$ = $('#' + controlId);
+                            if (ctrl$.length) {
+                                this.enableControl(ctrl$, false);
                             }
                         }
-                    });
+                    }
+                }
+            }
 
-                    //hook form validation events
-                    //this.form$.addTriggersToJqueryValidate().triggerElementValidationsOnFormValidation();
-                    //this.form$.bind('formValidation', function (event, element, result) {
-                    //    console.log('>> validation ran for form: ' + element + ' and the result was: ' + result);
-                    //});
+            this.getFilterData = function() {
+                var fields = [];
+                this.filterFields$.find("option:selected").each(function() {
+                    fields.push($(this).val());
+                });
+                return {
+                    fields: fields,
+                    selectedCustomerId: this.customerSelect$.val(),
+                    retentionPeriod: $("#retentionPeriod").val() || "0", //todo: check
+                    registerDateFrom: this.registerDateFrom$.val(),
+                    calculateRegistrationDate: $("#DataPrivacy_CalculateRegistrationDate").prop("checked"),
+                    registerDateTo: this.registerDateTo$.val(),
+                    closedOnly: $("#DataPrivacy_ClosedOnly").prop("checked"),
+                    replaceDataWith: $("#DataPrivacy_ReplaceDataWith").val(),
+                    replaceDatesWith: $("#DataPrivacy_ReplaceDatesWith").val(),
+                    removeCaseAttachments: $("#DataPrivacy_RemoveCaseAttachments").prop("checked"),
+                    removeLogAttachments: $("#DataPrivacy_RemoveLogAttachments").prop("checked"),
+                    removeCaseHistory: $("#DataPrivacy_RemoveCaseHistory").prop("checked")
+                };
+            };
 
-                    //workaround to trigger validation for date time and choose controls
-                    [this.registerDateFrom$, this.registerDateTo$].forEach(function(e) {
-                        e.on('change', function() {
-                            $(this).valid();
-                            self.onValidationChanged();
-                        });
-                    });
-                    
-                    this.form$.find(".chosen-select").chosen().change(function() {
+            this.setupValidation = function() {
+                var self = this;
+                var caseFieldsDropDown = "lstFilterFields";
+
+                this.validator$ = this.form$.validate({
+                    ignore: '*:not([name])',
+                    //debug: true,
+                    rules: self.getRules(),
+                    errorPlacement: function(error, element) {
+                        if (element.is("#DataPrivacy_RegisterDateFrom") ||
+                            element.is("#DataPrivacy_RegisterDateTo")) {
+                            $("#datesErrorLabel").html(error);
+                        } else {
+                            if (element.is("select.chosen-select")) {
+                                error.insertAfter($("#fieldsLoader"));
+                                error.css("width", "315px");
+                                $("#" + element.attr("id") + "_chosen").addClass("error");
+                            } else {
+                                error.insertAfter(element);
+                            }
+                        }
+                    },
+                    highlight: function(element) {
+                        if (element.id === caseFieldsDropDown) {
+                            $("#" + element.id + "_chosen").removeClass('error success').addClass('error');
+                        } else {
+                            $(element).removeClass('error success').addClass('error');
+                        }
+                    },
+                    success: function(label) {
+                        if (label.attr("for") === caseFieldsDropDown) {
+                            $("#" + label.attr("for") + "_chosen").removeClass("error");
+                        }
+                    },
+
+                    messages: {
+                        "DataPrivacy.SelectedCustomerId": {
+                            required: "@Translation.GetForJS("Kund") @Translation.GetForJS("måste anges")"
+                        },
+                        "DataPrivacy.FieldsNames": {
+                            required: "@Translation.GetForJS("Fält") @Translation.GetForJS("måste anges")"
+                        },
+                        "DataPrivacy.RegisterDateFrom": {
+                            required:
+                                "@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("måste anges")"
+                        },
+                        "DataPrivacy.RegisterDateTo": {
+                            required:
+                                "@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("måste anges")"
+                        }
+                    }
+                });
+
+                //workaround to trigger validation for date time and choose controls
+                [this.registerDateFrom$, this.registerDateTo$].forEach(function(e) {
+                    e.on('change', function() {
                         $(this).valid();
                         self.onValidationChanged();
                     });
-                };
-
-                this.onValidationChanged = function() {
-                    if (this.validator$) {
-                        var numberOfInvalids = this.validator$.numberOfInvalids();
-                        console.log('>>> numberOfInvalids: ' + numberOfInvalids);
-                        //set favorites button state
-                        this.setFavoritesButtonState(numberOfInvalids === 0);
-                    }
-                }
-
-                this.getRules = function() {
-                    var rules = {
-                        "DataPrivacy.SelectedCustomerId": {
-                            required: true
-                        },
-                        "DataPrivacy.FieldsNames": {
-                            required: true
-                        },
-                        "DataPrivacy.RegisterDateFrom": {
-                            required: true
-                        },
-                        "DataPrivacy.RegisterDateTo": {
-                            required: true
-                        }
-                    }
-                    return rules;
-                };
-
-                this.loadCustomerFields = function(id) {
-                    $("#fieldsLoader").show();
-                    this.filterFields$.prop('disabled', true).trigger("chosen:updated");
-
-                    $.ajax({
-                            url: '@Url.Action("GetCustomerCaseFields")',
-                            type: "POST",
-                            data: { customerId: id },
-                            dataType: "json"
-                        })
-                        .done(function(result) {
-                            if (result.success) {
-                                _self.filterFields$.empty();
-                                $.each(result.data,
-                                    function(idx, obj) {
-                                        _self.filterFields$.append(
-                                            '<option value="' + obj.Value + '">' + obj.Text + '</option>');
-                                    });
-                                _self.filterFields$.trigger("chosen:updated");
-                            }
-                        })
-                        .done(function() {
-                            $("#fieldsLoader").hide();
-                            _self.filterFields$.prop('disabled', false).trigger("chosen:updated");
-                        });
-                }
-
-                this.runDataPrivacy = function() {
-                        var self = this;
-                        var isValid = this.form$.valid();
-                        if (isValid) {
-                            confirmationDialog.showConfirmation(
-                                '@Translation.GetForJS("Är du säker på att du vill ersätta informationen i utvalda ärenden?")',
-                                function() {
-                                    self.execDataPrivacyRequest();
-                                },
-                                function() {
-                                });
-                        }
-                    },
-                    this.execDataPrivacyRequest = function() {
-                        this.showRunLoader(true);
-                        this.privacyRunBtn$.addClass("disabled");
-
-                        var filter = this.getFilterData();
-
-                        var inputData = {
-                            SelectedCustomerId: filter.selectedCustomerId,
-                            RegisterDateFrom: filter.registerDateFrom,
-                            RegisterDateTo: filter.registerDateTo,
-                            ClosedOnly: filter.closedOnly,
-                            FieldsNames: filter.fields,
-                            ReplaceDataWith: filter.replaceDataWith,
-                            ReplaceDatesWith: filter.replaceDatesWith,
-                            RemoveCaseAttachments: filter.removeCaseAttachments,
-                            RemoveLogAttachments: filter.removeLogAttachments,
-                            RemoveCaseHistory: filter.removeCaseHistory
-                        };
-
-                        $.ajax({
-                            url: '@Url.Action("DataPrivacy")',
-                            type: "POST",
-                            data: $.param(inputData), //todo: check
-                            dataType: "json"
-                        }).done(function(result) {
-                            if (result.success) {
-                                window.ShowToastMessage('@Translation.GetForJS("Klar")', "success");
-                            }
-                        }).always(function() {
-                            _self.showRunLoader(false);
-                            _self.privacyRunBtn$.removeClass("disabled");
-                        });
-                    };
-
-                this.onFavoritesChanged = function(val) {
-                    var favoriteId = val ? parseInt(val, 10) : 0;
-                    if (!isNaN(favoriteId) && favoriteId > 0) {
-                        //this.form$.validate(); //seems not required
-                        this.form$.valid();
-                        this.onValidationChanged();
-                    } else {
-                        //todo: reset validation erorrs?
-                        this.setFavoritesButtonState(true);
-                    }
-                }
-
-                this.addUpdateFavorites = function() {
-                    //todo: 1) load saved favorite items 
-                    //todo: 2) populate controls 
-                    //todo: 3) set locks state on controls
-                };
-
-                this.setFavoritesButtonState = function(enable) {
-                    this.btnFavorite$.prop('disabled', !enable);
-                };
-
-                this.showRunLoader = function(show) {
-                    if (show)
-                        this.inProcessLoader$.show();
-                    else
-                        this.inProcessLoader$.hide();
-                }
-
-                //public methods
-                return {
-                    Init: function() {
-
-                        _self.setupValidation();
-
-                        _self.favoritesSelect$.on('change',
-                            function() {
-                                var val = $(this).val();
-                                _self.onFavoritesChanged(val);
-                            });
-
-                        _self.customerSelect$.on('change',
-                            function() {
-                                var customerId = $(this).val();
-                                _self.loadCustomerFields(customerId);
-                            });
-
-                        _self.btnFavorite$.on("click",
-                            function(e) {
-                                _self.addUpdateFavorites();
-                            });
-
-                        _self.privacyRunBtn$.on("click",
-                            function(e) {
-                                e.stopImmediatePropagation();
-                                e.preventDefault();
-
-                                _self.runDataPrivacy();
-                            });
-                    }
-                }
-            })();
-
-            dataPrivacyForm.Init();
-
-            $('#SearchId').val(@ViewBag.SelectedSearchCondition);
-
-            $("#multiCustomersSearch").on('switchChange.bootstrapSwitch',
-                function() {
-
-                    $("#selfServiceError").text('').hide();
-
-                    var res = $(this).is(':checked');
-                    var data = {
-                        val: res ? 'true' : 'false'
-                    };
-
-                    $.post('@Url.Action("UpdateMultiCustomersSearch", "GlobalSetting", new {Area = "Admin"})',
-                        data,
-                        function(response) {
-                            if (!response.Success && response.ErrorMessage) {
-                                $("#selfServiceError").text(response.ErrorMessage).show();
-                            }
-                        });
                 });
+
+                this.form$.find(".chosen-select").chosen().change(function() {
+                    $(this).valid();
+                    self.onValidationChanged();
+                });
+            };
+
+
+            this.getRules = function () {
+                return {
+                    "DataPrivacy.SelectedCustomerId": {
+                        required: true
+                    },
+                    "DataPrivacy.FieldsNames": {
+                        required: true
+                    },
+                    "DataPrivacy.RegisterDateFrom": {
+                        required: true
+                    },
+                    "DataPrivacy.RegisterDateTo": {
+                        required: true
+                    }
+                };
+            };
+
+            this.onValidationChanged = function () {
+                if (this.validator$) {
+                    var numberOfInvalids = this.validator$.numberOfInvalids();
+
+                    var selectedFavId = this.getSelectedFavoriteId();
+                    if (selectedFavId > 0) {
+                        this.enableControl(this.btnFavorite$, numberOfInvalids === 0);    
+                    }
+                }
+            }
+
+            this.loadCustomerFields = function(id) {
+                var self = this;
+                this.blockUI(true, this.loaders.fieldsLoader);
+                this.filterFields$.trigger("chosen:updated");
+
+                $.ajax({
+                        url: '@Url.Action("GetCustomerCaseFields")',
+                        type: "POST",
+                        data: { customerId: id },
+                        dataType: "json"
+                    })
+                    .done(function(result) {
+                        if (result.success) {
+                            self.filterFields$.empty();
+                            $.each(result.data,
+                                function(idx, obj) {
+                                    self.filterFields$.append(
+                                        '<option value="' + obj.Value + '">' + obj.Text + '</option>');
+                                });
+                            self.filterFields$.trigger("chosen:updated");
+                        }
+                    })
+                    .done(function () {
+                        self.blockUI(false);
+                        self.filterFields$.trigger("chosen:updated");
+                    });
+            }
+
+            this.runDataPrivacy = function() {
+                    var self = this;
+                    var isValid = this.form$.valid();
+                    if (isValid) {
+                        confirmationDialog.showConfirmation(
+                            '@Translation.GetForJS("Är du säker på att du vill ersätta informationen i utvalda ärenden?")',
+                            function() {
+                                self.execDataPrivacyRequest();
+                            },
+                            function() {
+                            });
+                    }
+            },
+
+            this.execDataPrivacyRequest = function() {
+
+                this.blockUI(true, this.loaders.inProcessLoader);
+
+                var filter = this.getFilterData();
+
+                var inputData = {
+                    SelectedCustomerId: filter.selectedCustomerId,
+                    CalculateRegistrationDate: filter.calculateRegistrationDate,
+                    RegisterDateFrom: filter.registerDateFrom,
+                    RegisterDateTo: filter.registerDateTo,
+                    ClosedOnly: filter.closedOnly,
+                    FieldsNames: filter.fields,
+                    ReplaceDataWith: filter.replaceDataWith,
+                    ReplaceDatesWith: filter.replaceDatesWith,
+                    RemoveCaseAttachments: filter.removeCaseAttachments,
+                    RemoveLogAttachments: filter.removeLogAttachments,
+                    RemoveCaseHistory: filter.removeCaseHistory
+                };
+
+                $.ajax({
+                    url: '@Url.Action("DataPrivacy")',
+                    type: "POST",
+                    data: $.param(inputData), //todo: check
+                    dataType: "json"
+                }).done(function(result) {
+                    if (result.success) {
+                        window.ShowToastMessage('@Translation.GetForJS("Klar")', "success");
+                    }//todo: handle erorr?
+                }).always(function() {
+                    self.blockUI(false);
+                });
+            };
+
+            this.onFavoritesChanged = function() {
+                var favoriteId = this.getSelectedFavoriteId();
+                if (favoriteId > 0) {
+                    this.form$.valid();
+                    this.onValidationChanged();
+                    this.loadFavoriteFields(favoriteId);
+                } else {
+                    //todo: reset validation errors if New is selected?
+                    this.enableControl(this.btnFavorite$, true);
+                }
+            }
+
+            this.loadFavoriteFields = function(favId) {
+                //block UI
+                //TODO: 1. Implement loading favorites data into form!!!
+
+
+                //TODO: 2. set locks (icons) on controls
+            };
+            
+            this.addUpdateFavorites = function(name) {
+                var self = this;
+
+                if (this.form$.valid()) {
+
+                    var favoriteId = this.getSelectedFavoriteId();
+                    var filter = this.getFilterData();
+
+                    var inputData = {
+                        Id: favoriteId,
+                        Name: name || '',
+                        CustomerId: filter.selectedCustomerId,
+                        RetentionPeriod: filter.retentionPeriod,
+                        CalculateRegistrationDate: filter.calculateRegistrationDate,
+                        RegisterDateFrom: filter.registerDateFrom,
+                        RegisterDateTo: filter.registerDateTo,
+                        ClosedOnly: filter.closedOnly,
+                        FieldsNames: filter.fields,
+                        ReplaceDataWith: filter.replaceDataWith,
+                        ReplaceDatesWith: filter.replaceDatesWith,
+                        RemoveCaseAttachments: filter.removeCaseAttachments,
+                        RemoveLogAttachments: filter.removeLogAttachments,
+                        RemoveCaseHistory: filter.removeCaseHistory
+                    };
+
+                    this.blockUI(true, this.loaders.favoritesLoader);
+
+                    var isNew = (+inputData.Id) > 0;
+                    $.ajax({
+                        url: '@Url.Action("SaveFavorites")',
+                        type: "POST",
+                        data: JSON.stringify(inputData),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json"
+                    }).done(function(res) {
+                        if (res.Success) {
+                            window.ShowToastMessage('@Translation.GetForJS("Klar")', "success"); //todo: check message
+                            self.populateFavorites(res.FavoriteId, res.Favorites, isNew);
+                        } else {
+                            var err = res.Error || 'Unknown error';
+                            window.ShowToastMessage(err, "error");
+                        }
+                    }).always(function() {
+                        self.blockUI(false);
+                    });
+                }
+            };
+
+            this.populateFavorites = function(selectedId, items, triggerChange) {
+                var self = this;
+
+                //build options
+                var options = items.map(function(item) {
+                    return '<option value="' + item.value + '">' + item.text + '</option>';
+                });
+                options = '<option value="0">' + self.emptyFavSelectText + '</option>' + options;
+
+                self.favoritesSelect$.html(options);
+                self.favoritesSelect$.val(selectedId);
+                if (triggerChange)
+                    self.favoritesSelect$.change();
+            };
+
+            this.getSelectedFavoriteId = function() {
+                var val = this.favoritesSelect$.val();
+                var favoriteId = val ? parseInt(val, 10) : 0;
+                if (!isNaN(favoriteId) && favoriteId > 0)
+                    return favoriteId;
+                else
+                    return 0;
+            }
+
+            //todo: move to other class 
+            this.showSaveFavoritesDlg = function(saveNew) {
+                var headerTitle$ = $("#fm_header");
+                var bodyDesc$ = $("#fm_body");
+                var nameField$ = $("#fm_name");
+
+                //todo: Translate and star icon in the title!
+                if (saveNew) {
+                    headerTitle$.html('New Favorite');
+                    bodyDesc$.html('Enter a name for your new favorite.');
+                    nameField$.val('');
+                    $("#btnSaveFav").prop('disabled', true);
+                } else {
+                    //todo: set required buttons and labels for update
+                    var selectedFav = _self.favoritesSelect$.find(":selected").text() || '';
+                    headerTitle$.html('Update favorite - ' + selectedFav);
+                    bodyDesc$.html('Update your favorite or change the name to save it as a new favorite.');
+                    nameField$.val(selectedFav);
+                    $("#btnSaveFav").prop('disabled', selectedFav.length == 0);
+                }
+
+                $("#favoritesSaveModal").modal('show');
+            };
+
+            this.enableControl = function (el, enable) {
+                if (enable) {
+                    el.prop('disabled', false);
+                } else {
+                    el.prop('disabled', true);
+                }
+            }
+
+            this.showControl = function (el, show) {
+                if (show) {
+                    el.show();
+                } else {
+                    el.hide();
+                }
+            }
+
+            this.isEnabled = function (el) {
+                return !el.prop('disabled');
+            };
+
+            //public methods
+            return {
+                Init: function() {
+                    
+                    _self.setupValidation();
+
+                    _self.favoritesSelect$.on('change',function() {
+                         _self.onFavoritesChanged();
+                    });
+
+                    _self.customerSelect$.on('change', function() {
+                        var customerId = $(this).val();
+                        _self.loadCustomerFields(customerId);
+                    });
+
+                    _self.btnFavorite$.on("click", function(e) {
+                        var favId = _self.getSelectedFavoriteId();
+                        var isNew = favId === 0;
+                        _self.showSaveFavoritesDlg(isNew);
+                    });
+
+                    //////////////////////////////////////////
+                    //save dlg
+                    $('#btnSaveFav').on("click",
+                        function() {
+                            var name = $("#fm_name").val();
+                            _self.addUpdateFavorites(name);
+                        });
+
+                    $('#btnDeleteFav').on("click",
+                        function() {
+                            //todo: implement. show confirm?
+                            //_self.deleteFavorites();
+                        });
+
+                    $("#fm_name").on("change paste keyup",
+                        function() {
+                            var val = $(this).val() || '';
+                            $('#btnSaveFav').prop('disabled', val == '');
+                        });
+                    //////////////////////////////////////////
+
+                    _self.privacyRunBtn$.on("click",
+                        function(e) {
+                            e.stopImmediatePropagation();
+                            e.preventDefault();
+
+                            _self.runDataPrivacy();
+                        });
+                }
+            }
+        })();
+
+        dataPrivacyForm.Init();
+
+        $('#SearchId').val(@ViewBag.SelectedSearchCondition);
+
+        $("#multiCustomersSearch").on('switchChange.bootstrapSwitch',
+            function() {
+
+                $("#selfServiceError").text('').hide();
+
+                var res = $(this).is(':checked');
+                var data = {
+                    val: res ? 'true' : 'false'
+                };
+
+                $.post('@Url.Action("UpdateMultiCustomersSearch", "GlobalSetting", new {Area = "Admin"})',
+                    data,
+                    function(response) {
+                        if (!response.Success && response.ErrorMessage) {
+                            $("#selfServiceError").text(response.ErrorMessage).show();
+                        }
+                    });
+            });
         }); //end of jquery load
 
         var texttypeId = $("#TextTypeId").val();

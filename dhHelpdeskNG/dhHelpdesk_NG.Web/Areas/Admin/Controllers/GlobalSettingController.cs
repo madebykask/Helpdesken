@@ -1,5 +1,6 @@
 ﻿
 using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+using DH.Helpdesk.BusinessData.Models.Gdpr;
 using DH.Helpdesk.BusinessData.Models.Grid;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Constants;
@@ -1446,7 +1447,29 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return Json(res);
         }
 
-        
+        [HttpPost]
+        public JsonResult SaveFavorites(GdprFavoriteModel model)
+        {
+            if (!ModelState.IsValid)
+                return Json(new {Success = false, Error = "Invalid parameters"});
+
+            try
+            {
+                model.Id = _gdprFavoritesService.SaveFavorite(model);
+                var favorites = _gdprFavoritesService.ListFavorites();
+                var items = favorites.ToSelectList().Select(x => new
+                {
+                    value = x.Value,
+                    text = x.Text
+                }).ToList();
+
+                return Json(new { Success = true, FavoriteId = model.Id, Favorites = items });
+            }
+            catch (Exception e)
+            {
+                return Json(new {Success = false, Error = "Unknown error"});
+            }
+        }
 
         [HttpPost]
         public ActionResult DataPrivacy(DataPrivacyParameters model)

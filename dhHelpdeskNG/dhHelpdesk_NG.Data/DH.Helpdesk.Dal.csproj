@@ -139,7 +139,7 @@
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseDataConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseFormConfiguration.cs" />
     <Compile Include="EntityConfigurations\GDPR\GDPRDataPrivacyAccessConfiguration.cs" />
-    <Compile Include="EntityConfigurations\GDPR\GDPRDataPrivacyFavortieConfiguration.cs" />
+    <Compile Include="EntityConfigurations\GDPR\GDPRDataPrivacyFavoriteConfiguration.cs" />
     <Compile Include="EntityConfigurations\GDPR\GDPROperationsAuditConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleProductAreaConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceRowConfiguration.cs" />
@@ -318,6 +318,7 @@
     <Compile Include="Mappers\Documents\EntityToBusinessModel\DocumentToBusinessModelMapper.cs" />
     <Compile Include="Mappers\ExternalInvoice\BusinessModelToEntity\ExternalInvoiceToEntityMapper.cs" />
     <Compile Include="Mappers\ExternalInvoice\EntityToBusinessModel\CaseInvoiceRowToBusinessModel.cs" />
+    <Compile Include="Mappers\Gdpr\BusinessModelToEntity\GdprFavoriteModelToEntityMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToFieldSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToShortInfoSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToComputerProcessingSettingsMapper.cs" />

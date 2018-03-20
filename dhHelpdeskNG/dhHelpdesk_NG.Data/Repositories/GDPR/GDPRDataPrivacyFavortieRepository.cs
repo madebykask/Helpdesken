@@ -6,16 +6,16 @@ using DH.Helpdesk.Domain.GDPR;
 
 namespace DH.Helpdesk.Dal.Repositories.GDPR
 {
-    public interface IGDPRDataPrivacyFavortieRepository : IRepository<GDPRDataPrivacyFavorite>
+    public interface IGDPRDataPrivacyFavoriteRepository : IRepository<GDPRDataPrivacyFavorite>
     {
         IDictionary<int, string> ListFavorites();
     }
 
-    public class GDPRDataPrivacyFavortieRepository : RepositoryBase<GDPRDataPrivacyFavorite>, IGDPRDataPrivacyFavortieRepository
+    public class GDPRDataPrivacyFavoriteRepository : RepositoryBase<GDPRDataPrivacyFavorite>, IGDPRDataPrivacyFavoriteRepository
     {
         #region ctor()
 
-        public GDPRDataPrivacyFavortieRepository(IDatabaseFactory databaseFactory, IWorkContext workContext = null) 
+        public GDPRDataPrivacyFavoriteRepository(IDatabaseFactory databaseFactory, IWorkContext workContext = null) 
             : base(databaseFactory, workContext)
         {
         }
@@ -24,7 +24,7 @@ namespace DH.Helpdesk.Dal.Repositories.GDPR
 
         public IDictionary<int, string> ListFavorites()
         {
-            return this.DataContext.GDPRDataPrivacyFavorites.ToDictionary(x => x.Id, x => x.Name);
+            return this.Table.ToDictionary(x => x.Id, x => x.Name);
         }
     }
 }
