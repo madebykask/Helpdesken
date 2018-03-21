@@ -23,8 +23,8 @@
             </li>
             <li id="menu5" style="display: none"></li>
             <li id="menu6" style="display: none">
-                @Html.ActionLink(Translation.GetCoreTextTranslation("Kör"), null, null, new {id = "privacyRunBtn", @class = "btn"})
-                <i id="inProcessLoader" class="gif-loader" style="display:none">&nbsp;</i>
+                <button class="btn" id="privacyRunBtn">@Translation.GetCoreTextTranslation("Kör")</button>
+                <i id="inProcessLoader" class="gif-loader" style="display: none">&nbsp;</i>
             </li>
         </ul>
     </div>
@@ -39,7 +39,9 @@
             <li id="tab5" onclick="toggleMenuItems(5)"><a href="#fragment-5">@Translation.GetCoreTextTranslation("Självservice")</a></li>
             @if (Model.DataPrivacy.IsAvailable)
             {
-                <li id="tab6" onclick="toggleMenuItems(6)"><a href="#fragment-6">@Translation.GetCoreTextTranslation("Dataintegritet")</a></li>
+                <li id="tab6" onclick="toggleMenuItems(6)">
+                    <a href="#fragment-6">@Translation.GetCoreTextTranslation("Dataintegritet")</a>
+                </li>
             }
         </ul>
         <div class="tab-content">
@@ -204,6 +206,8 @@
                                                 <td class="span9">
                                                     @Html.DropDownListFor(m => m.DataPrivacy.SelectedFavoriteId, Model.DataPrivacy.Favorites, new { id = "favoritesSelect" })
                                                     <i id="favoritesLoader" class="gif-loader" style="display:none">&nbsp;</i>
+                                                    <a id="btnLock" style="display:none" class="lock-icon" href="#">&nbsp;</a>
+                                                    <a id="btnUnLock" style="display:none" class="unlock-icon" href="#">&nbsp;</a>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -413,12 +417,16 @@
 
         $(function () {
 
+            //fix for datepicker not autoclosing afer setDate is called
+            $.fn.datepicker.defaults.autoclose = true;
+
             var settings = {
                 urls: {
                     DataPrivacyAction: '@Url.Action("DataPrivacy")',
-                    LoadFavoriteDataAction: '@Url.Action("LoadFavoriteData")',
-                    SaveFavoritesAction: '@Url.Action("SaveFavorites")',
-                    GetCustomerCaseFieldsAction: '@Url.Action("GetCustomerCaseFields")'
+                    LoadFavoriteDataAction: '@Url.Action("LoadDataPrivacyFavorite")',
+                    SaveFavoritesAction: '@Url.Action("SaveDataPrivacyFavorites")',
+                    GetCustomerCaseFieldsAction: '@Url.Action("GetCustomerCaseFields")',
+                    DeleteFavoriteAction: '@Url.Action("DeleteDataPrivacyFavorite")'
                 },
                 translations:
                 {

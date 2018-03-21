@@ -21,6 +21,8 @@
 
         //form and fields
         this.form$ = $("#privacyForm");
+        this.btnLock$ = form$.find("#btnLock");
+        this.btnUnLock$ = form$.find("#btnUnLock");
         this.customerSelect$ = form$.find("#customerSelect");
         this.favoritesSelect$ = form$.find("#favoritesSelect");
         this.registerDateFrom$ = form$.find("#DataPrivacy_RegisterDateFrom");
@@ -75,6 +77,28 @@
             }
         };
 
+        this.setFormFieldsState = function (enable) {
+            if (enable) {
+                this.restoreControlsState();
+            } else {
+                // save cur state
+                this.saveControlsState();
+
+                //disable controls
+                for (var controlId in this.formFieldsState) {
+                    if (this.formFieldsState.hasOwnProperty(controlId)) {
+                        var ctrl$ = $('#' + controlId);
+                        if (ctrl$.length) {
+                            this.enableControl(ctrl$, false);
+                        }
+                    }
+                }
+            }
+
+            //required to notify chosen to update its state
+            this.filterFields$.trigger("chosen:updated");
+        };
+
          this.saveControlsState = function() {
              for (var controlId in this.formFieldsState) {
                  if (this.formFieldsState.hasOwnProperty(controlId)) {
@@ -98,27 +122,24 @@
              }
          };
 
-         this.setFormFieldsState = function(enable) {
-             if (enable) {
-                 this.restoreControlsState();
-             } else {
-                 // save cur state
-                 this.saveControlsState();
+         this.lockFormFields = function (lock) {
+             var self = this;
+             self.showLocks(lock, !lock);
 
-                 //disable controls
-                 for (var controlId in this.formFieldsState) {
-                     if (this.formFieldsState.hasOwnProperty(controlId)) {
-                         var ctrl$ = $('#' + controlId);
-                         if (ctrl$.length) {
-                             this.enableControl(ctrl$, false);
-                         }
-                     }
-                 }
-             }
+             this.form$.find("input, select").each(function(index, el) {
+                 var id = el.id;
+                 if (id !== self.favoritesSelect$[0].id) {
+                     var ctl$ = $('#' + id);
+                     self.enableControl(ctl$, !lock);
+                 }  
+             });
 
-             //required to notify chosen to update its state
-             this.filterFields$.trigger("chosen:updated");
-         };
+             self.refreshFieldsControl();
+
+             //enable run button only when form is locked!
+             _self.enableControl(_self.privacyRunBtn$, lock);
+             _self.enableControl(_self.btnFavorite$, !lock);
+         }
 
          this.getFilterData = function() {
              var fields = [];
@@ -197,13 +218,13 @@
                  e.on('change',
                      function() {
                          $(this).valid();
-                         self.onValidationChanged();
+                         //self.onValidationChanged();
                      });
              });
 
              this.form$.find(".chosen-select").chosen().change(function() {
                  $(this).valid();
-                 self.onValidationChanged();
+                 //self.onValidationChanged();
              });
          };
 
@@ -228,41 +249,52 @@
          this.onValidationChanged = function() {
              if (this.validator$) {
                  var numberOfInvalids = this.validator$.numberOfInvalids();
-
-                 var selectedFavId = this.getSelectedFavoriteId();
-                 if (selectedFavId > 0) {
-                     this.enableControl(this.btnFavorite$, numberOfInvalids === 0);
-                 }
+                 this.enableControl(this.btnFavorite$, numberOfInvalids === 0);
              }
          };
 
-         this.loadCustomerFields = function(id) {
+         this.loadCustomerFields = function(customerId) {
              var self = this;
-             this.blockUI(true, this.loaders.fieldsLoader);
+             if (customerId) {
+                 this.blockUI(true, this.loaders.fieldsLoader);
+                 self.filterFields$.empty();
 
-             var jqXhr = $.ajax({
-                    url: self.urls.GetCustomerCaseFieldsAction,
-                    type: "POST",
-                    data: $.param({ customerId: id }),
-                    dataType: "json"
-                })
-                .done(function(result) {
-                    if (result.success) {
-                        self.filterFields$.empty();
-                        $.each(result.data,
-                            function(idx, obj) {
-                                self.filterFields$.append(
-                                    '<option value="' + obj.Value + '">' + obj.Text + '</option>');
-                            });
-                        self.filterFields$.trigger("chosen:updated");
-                    }
-                })
-                 .always(function () {
-                    self.blockUI(false);
-                });
-
-             return jqXhr;
+                 this.execLoadCustomerFieldsRequest(customerId)
+                     .done(function(response) {
+                         self.blockUI(false);
+                         if (response.success) {
+                             self.populateCustomerFields(response.data);
+                         }
+                     })
+                     .fail(function() {
+                         self.blockUI(false);
+                     });
+             } else {
+                 self.filterFields$.empty();
+                 self.refreshFieldsControl();
+             }
          };
+
+        this.execLoadCustomerFieldsRequest = function(customerId) {
+            var jqXhr = $.ajax({
+                url: self.urls.GetCustomerCaseFieldsAction,
+                type: "POST",
+                data: $.param({ customerId: customerId }),
+                dataType: "json"
+            });
+            return jqXhr;
+        };
+
+        this.populateCustomerFields = function(items) {
+            var self = this;
+            this.filterFields$.empty();
+            $.each(items,
+                function (idx, obj) {
+                    self.filterFields$.append(
+                        '<option value="' + obj.Value + '">' + obj.Text + '</option>');
+                });
+            self.filterFields$.trigger("chosen:updated");
+        }
 
          this.runDataPrivacy = function() {
              var self = this;
@@ -301,68 +333,70 @@
              $.ajax({
                  url: self.urls.DataPrivacyAction,
                  type: "POST",
-                 data: $.param(inputData), //todo: check
+                 data: $.param(inputData), 
                  dataType: "json"
              }).done(function(result) {
                  if (result.success) {
                      window.ShowToastMessage(self.translations.operationSuccessMessage, "success");
-                 } //todo: handle erorr?
+                 } else {
+                     window.ShowToastMessage("Operation has failed.", "error");
+                 }
+
              }).always(function() {
                  self.blockUI(false);
              });
          };
 
-        this.onFavoritesChanged = function() {
-            var favoriteId = this.getSelectedFavoriteId();
+        this.onFavoritesChanged = function(favoriteId) {
             if (favoriteId > 0) {
                 this.loadFavoriteFields(favoriteId);
             } else {
                 //reset validation errors if New is selected
+                this.lockFormFields(false);
                 this.resetFormFields();
                 this.validator$.resetForm();
-                this.enableControl(this.btnFavorite$, true);
             }
         };
 
         this.loadFavoriteFields = function (favId) {
             var self = this;
             this.blockUI(true, this.loaders.favoritesLoader);
-
-            //block UI
-            //TODO: 1. Implement loading favorites data into form!!!
+            
             $.getJSON(this.urls.LoadFavoriteDataAction, $.param({ id: favId }))
                 .done(function (res) {
+                    self.blockUI(false);
                     if (res.data) {
-
-                        //todo: empty form fields?
-
                         self.populateFormFields(res.data)
                             .done(function () {
-                                self.blockUI(false);
-
-                                //check if required
-                                self.form$.valid();
-                                self.onValidationChanged(); 
+                                if (self.form$.valid()) {
+                                    self.lockFormFields(true);
+                                } else {
+                                    self.lockFormFields(false);
+                                }
                             });
-
-                        //TODO: 2. SET locks (icons) on controls
                     }
-                }).always(function() {
+                }).fail(function() {
                     self.blockUI(false);
                 });
         };
 
-        this.setDate = function(ctrl, val) {
-            //todo: check if it complete
-            if (val) {
-                ctrl.datepicker('setDate', val);
+        this.showLocks = function(showLock, showUnlock) {
+            this.showControl(this.btnLock$, showLock);
+            this.showControl(this.btnUnLock$, showUnlock);
+        }
+
+        this.saveFavorites = function() {
+            var isValid = this.form$.valid();
+            if (isValid) {
+                var favId = _self.getSelectedFavoriteId();
+                var isNew = favId === 0;
+                this.showSaveFavoritesDlg(isNew);
             }
         };
 
         this.resetFormFields = function () {
-
+            var self = this;
             self.customerSelect$.val(null);
-
             self.filterFields$.empty();
             self.refreshFieldsControl();
 
@@ -370,11 +404,16 @@
             self.setDate(registerDateTo$, null);
             self.retentionPeriod$.val('');
             self.calculateRegistrationDate$.prop('checked', false);
-            self.closedOnly$.prop('checked', false);
             self.replaceDataWith$.val('');
             self.setDate(self.replaceDatesWith$, null);
             self.removeCaseAttachments$.prop('checked', false);
             self.removeLogAttachments$.prop('checked', false);
+            self.closedOnly$.prop('checked', false);
+
+            //reset locking/unlocking states to default
+            self.enableControl(self.privacyRunBtn$, false); 
+            self.enableControl(self.btnFavorite$, true);
+            self.showLocks(false, false);
         };
 
         this.populateFormFields = function(data) {
@@ -396,20 +435,51 @@
 
 
             var defer = $.Deferred();
-            
-            this.loadCustomerFields(customerId).done(function () {
-                //set case fields
-                if (data.FieldsNames.length) {
-                    self.filterFields$.val(data.FieldsNames);
-                    self.refreshFieldsControl();
-                }
+            self.filterFields$.empty();
 
-                defer.resolve();
-            });
+            this.execLoadCustomerFieldsRequest(customerId)
+                .done(function (response) {
+                    if (response.success) {
+                        self.populateCustomerFields(response.data);
+                    }
+
+                    //set case fields
+                    if (data.FieldsNames.length) {
+                        self.filterFields$.val(data.FieldsNames);
+                        self.refreshFieldsControl();
+                    }
+                })
+                .always(function () {
+                    defer.resolve(); //notify all processing is complete
+                });
 
             return defer;
         };
         
+        this.deleteFavorite = function(favId) {
+            var self = this;
+            if (favId) {
+                self.blockUI(true, self.loaders.saveFavoritesLoader);
+
+                $.ajax({
+                    url: self.urls.DeleteFavoriteAction,
+                    type: "POST",
+                    data: $.param({ id: favId}),
+                    dataType: "json"
+                }).done(function (res) {
+                    self.blockUI(false);
+                    if (res.Success) {
+                        window.ShowToastMessage(self.translations.operationSuccessMessage, "success");
+                        self.populateFavorites(0, res.Favorites, true);
+                    } else {
+                        window.ShowToastMessage('Operation has failed.', "error");
+                    }
+                }).fail(function(res) {
+                    self.blockUI(false);
+                });
+            }
+        }
+
         this.addUpdateFavorites = function(name) {
             var self = this;
 
@@ -435,7 +505,7 @@
                     RemoveCaseHistory: filter.removeCaseHistory
                 };
 
-                this.blockUI(true, this.loaders.favoritesLoader);
+                this.blockUI(true, this.loaders.saveFavoritesLoader);
 
                 var isNew = (+inputData.Id) > 0;
                 $.ajax({
@@ -444,15 +514,20 @@
                     data: JSON.stringify(inputData),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json"
-                }).done(function(res) {
+                }).done(function (res) {
+                    self.blockUI(false);
                     if (res.Success) {
-                        window.ShowToastMessage(self.translations.operationSuccessMessage, "success"); //todo: check message
-                        self.populateFavorites(res.FavoriteId, res.Favorites, isNew);
+                        window.ShowToastMessage(self.translations.operationSuccessMessage, "success"); 
+                        if (res.FavoriteId) {
+                            self.populateFavorites(res.FavoriteId, res.Favorites, isNew);
+                            // lock form if favorite is selected
+                            self.lockFormFields(true);
+                        }
                     } else {
                         var err = res.Error || 'Unknown error';
                         window.ShowToastMessage(err, "error");
                     }
-                }).always(function() {
+                }).fail(function() {
                     self.blockUI(false);
                 });
             }
@@ -469,8 +544,10 @@
 
             self.favoritesSelect$.html(options);
             self.favoritesSelect$.val(selectedId);
-            if (triggerChange)
+
+            if (triggerChange) {
                 self.favoritesSelect$.change();
+            }
         };
 
          this.getSelectedFavoriteId = function() {
@@ -494,6 +571,7 @@
                 bodyDesc$.html('Enter a name for your new favorite.');
                 nameField$.val('');
                 $("#btnSaveFav").prop('disabled', true);
+                $("#btnDeleteFav").prop('disabled', true);
             } else {
                 //todo: set required buttons and labels for update
                 var selectedFav = _self.favoritesSelect$.find(":selected").text() || '';
@@ -501,9 +579,19 @@
                 bodyDesc$.html('Update your favorite or change the name to save it as a new favorite.');
                 nameField$.val(selectedFav);
                 $("#btnSaveFav").prop('disabled', selectedFav.length === 0);
+                $("#btnDeleteFav").prop('disabled', false);
             }
 
             $("#favoritesSaveModal").modal('show');
+        };
+
+        this.setDate = function (ctrl, val) {
+            //todo: check if correct
+            if (val) {
+                ctrl.datepicker('setDate', val);
+            } else {
+                ctrl.datepicker('setDate', null);
+            }
         };
 
         this.refreshFieldsControl = function () {
@@ -539,8 +627,9 @@
 
                 _self.setupValidation();
 
-                _self.favoritesSelect$.on('change', function() {
-                    _self.onFavoritesChanged();
+                _self.favoritesSelect$.on('change', function () {
+                    var favoriteId = _self.getSelectedFavoriteId();
+                    _self.onFavoritesChanged(favoriteId);
                 });
 
                 _self.customerSelect$.on('change', function() {
@@ -548,10 +637,19 @@
                     _self.loadCustomerFields(customerId);
                 });
 
-                _self.btnFavorite$.on("click", function() {
-                    var favId = _self.getSelectedFavoriteId();
-                    var isNew = favId === 0;
-                    _self.showSaveFavoritesDlg(isNew);
+                _self.btnFavorite$.on("click", function () {
+                    _self.saveFavorites();
+                });
+
+                _self.btnLock$.on("click", function () {
+                    _self.lockFormFields(false);
+                });
+
+                _self.privacyRunBtn$.on("click", function (e) {
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+
+                    _self.runDataPrivacy();
                 });
 
                 //////////////////////////////////////////
@@ -562,22 +660,18 @@
                 });
 
                 $('#btnDeleteFav').on("click", function() {
-                    //todo: implement. show confirm?
-                    //_self.deleteFavorites();
+                    var favoriteId = _self.getSelectedFavoriteId();
+                    _self.deleteFavorite(favoriteId);
                 });
-
+                
                 $("#fm_name").on("change paste keyup", function() {
                     var val = $(this).val() || '';
                     $('#btnSaveFav').prop('disabled', val === '');
                 });
-                //////////////////////////////////////////
-
-                _self.privacyRunBtn$.on("click", function(e) {
-                    e.stopImmediatePropagation();
-                    e.preventDefault();
-
-                    _self.runDataPrivacy();
-                });
+                ////////////////////////////////////////////////////
+                
+                //select empty to set defaults 
+                _self.onFavoritesChanged(0);
             }
         };
     })(jQuery);

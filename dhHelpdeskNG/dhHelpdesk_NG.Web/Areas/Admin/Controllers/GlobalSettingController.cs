@@ -1447,14 +1447,30 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return Json(res);
         }
 
-        public JsonResult LoadFavoriteData(int id)
+        public JsonResult LoadDataPrivacyFavorite(int id)
         {
             var data = _gdprFavoritesService.GetFavorite(id);
             return Json(new { data }, JsonRequestBehavior.AllowGet);
         }
-        
+
         [HttpPost]
-        public JsonResult SaveFavorites(GdprFavoriteModel model)
+        public JsonResult DeleteDataPrivacyFavorite(int id)
+        {
+            try
+            {
+                _gdprFavoritesService.DeleteFavorite(id);
+
+                var items = GetDataPrivacyFavorites();
+                return Json(new { Success = true, Favorites = items });
+            }
+            catch (Exception e)
+            {
+                return Json(new { Success = false, Error = "Unknown error" });
+            }
+        }
+
+        [HttpPost]
+        public JsonResult SaveDataPrivacyFavorites(GdprFavoriteModel model)
         {
             if (!ModelState.IsValid)
                 return Json(new {Success = false, Error = "Invalid parameters"});
@@ -1462,19 +1478,25 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             try
             {
                 model.Id = _gdprFavoritesService.SaveFavorite(model);
-                var favorites = _gdprFavoritesService.ListFavorites();
-                var items = favorites.ToSelectList().Select(x => new
-                {
-                    value = x.Value,
-                    text = x.Text
-                }).ToList();
-
+                var items = GetDataPrivacyFavorites();
                 return Json(new { Success = true, FavoriteId = model.Id, Favorites = items });
             }
             catch (Exception e)
             {
                 return Json(new {Success = false, Error = "Unknown error"});
             }
+        }
+
+        private object GetDataPrivacyFavorites()
+        {
+            var favorites = _gdprFavoritesService.ListFavorites();
+            var items = favorites.ToSelectList().Select(x => new
+            {
+                value = x.Value,
+                text = x.Text
+            }).ToList();
+
+            return items;
         }
 
         [HttpPost]

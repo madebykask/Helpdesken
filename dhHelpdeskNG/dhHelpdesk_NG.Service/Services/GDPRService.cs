@@ -34,6 +34,7 @@ namespace DH.Helpdesk.Services.Services
         IDictionary<int, string> ListFavorites();
         GdprFavoriteModel GetFavorite(int id);
         int SaveFavorite(GdprFavoriteModel model);
+        void DeleteFavorite(int favoriteId);
     }
 
     public class GDPRService : IGDPROperationsService, IGDPRDataPrivacyAccessService, IGDPRFavoritesService
@@ -87,6 +88,12 @@ namespace DH.Helpdesk.Services.Services
             var entity = _gdprFavoritesRepository.GetById(id);
             var model = _gdprFavoritesModelMapper.Map(entity);
             return model;
+        }
+
+        public void DeleteFavorite(int favoriteId)
+        {
+            _gdprFavoritesRepository.Delete(f => f.Id == favoriteId);
+            _gdprFavoritesRepository.Commit();
         }
 
         public int SaveFavorite(GdprFavoriteModel model)

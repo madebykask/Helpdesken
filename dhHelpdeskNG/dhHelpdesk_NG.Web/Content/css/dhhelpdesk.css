@@ -4019,3 +4019,18 @@ div.chosen-container.chosen-container-multi.error {
     font-weight: bold;
     color: #a94442;
 }
+
+.lock-icon, .unlock-icon {
+    width: 20px !important;
+    height: 20px !important;
+    border: none;
+    display: inline-block;
+}
+
+.lock-icon {
+    background: url('/content/icons/lock.png');
+}
+
+.unlock-icon {
+    background: url('/content/icons/unlock.png');    
+}
