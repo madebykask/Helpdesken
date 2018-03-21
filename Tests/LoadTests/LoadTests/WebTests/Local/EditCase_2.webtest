@@ -1,0 +1,823 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebTest Name="EditCase_2" Id="bbdd11ef-aa26-4bb3-9609-24bf406654f1" Owner="" Priority="2147483647" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="0" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="" CredentialUserName="" CredentialPassword="" PreAuthenticate="True" Proxy="default" StopOnError="False" RecordedResultFile="EditCase_2.eb9df006-6a40-4ff7-869a-2e1f751960cf.rec.webtestresult" ResultsLocale="">
+  <Items>
+    <Request Method="GET" Guid="f4cc3021-471f-4c32-8556-2645f35f4f69" Version="1.1" Url="http://localhost/" ThinkTime="8" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="http://localhost/Login/Login?ReturnUrl=%2F" ReportingName="" IgnoreHttpStatusCode="False">
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam36.btnLogin" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="Name" Value="btnLogin" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+            <RuleParameter Name="Index" Value="0" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+    </Request>
+    <Request Method="POST" Guid="24d17790-5f5a-4d20-8368-2ddeaa77ddf2" Version="1.1" Url="http://localhost/Login/Login" ThinkTime="2" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="http://localhost/" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="http://localhost/Login/Login?ReturnUrl=%2F" />
+      </Headers>
+      <FormPostHttpBody>
+        <FormPostParameter Name="returnUrl" Value="{{$HIDDEN1.returnUrl}}" RecordedValue="/" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="txtUid" Value="jessica" RecordedValue="jessica" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="txtPwd" Value="js" RecordedValue="js" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="timeZoneOffsetInJan1" Value="-180" RecordedValue="-180" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="timeZoneOffsetInJul1" Value="-180" RecordedValue="-180" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="btnLogin" Value="Login" RecordedValue="Login" CorrelationBinding="{{FormPostParam36.btnLogin}}" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <Loop UniqueStringId="1c445893-baff-49a5-8d72-7b7ed0e7e9ca">
+      <ConditionalRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.CountingLoopRule, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Counting Loop" Description="Executes the requests contained in the loop a specified number of times." MaxIterations="-1" AdvanceDataCursors="False">
+        <RuleParameters>
+          <RuleParameter Name="ContextParameterName" Value="Loop Counter" />
+          <RuleParameter Name="IterationsCount" Value="10" />
+        </RuleParameters>
+      </ConditionalRule>
+      <Items>
+        <Request Method="GET" Guid="36c94037-3c9e-4b71-8caa-dd352cb2ed6f" Version="1.1" Url="http://localhost/Cases/Edit/3762" ThinkTime="1" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+          <DependentRequests>
+            <Request Method="GET" Guid="ac6f0811-9070-4968-8dd4-328578b926e0" Version="1.1" Url="http://localhost/Translation/GetAllTextTranslations" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+              </Headers>
+              <QueryStringParameters>
+                <QueryStringParameter Name="curTime" Value="1521532681689" RecordedValue="1521532681689" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+              </QueryStringParameters>
+            </Request>
+            <Request Method="GET" Guid="9bcae70b-028d-4de4-8b35-e7e961169ca2" Version="1.1" Url="http://localhost/Translation/GetCaseFieldsForTranslation" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+              </Headers>
+              <QueryStringParameters>
+                <QueryStringParameter Name="curTime" Value="1521532681693" RecordedValue="1521532681693" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+              </QueryStringParameters>
+            </Request>
+            <Request Method="GET" Guid="ae078a90-0a16-415c-b07d-27ab7f4bb514" Version="1.1" Url="http://localhost/Organization/GetRegions/" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+              </Headers>
+              <QueryStringParameters>
+                <QueryStringParameter Name="customerId" Value="1" RecordedValue="1" CorrelationBinding="{{QueryStringParam4303.customerId}}" UrlEncode="False" UseToGroupResults="False" />
+              </QueryStringParameters>
+            </Request>
+            <Request Method="GET" Guid="f15a283c-10c0-4378-8186-aaef24a837fa" Version="1.1" Url="http://localhost/Cases/GetCaseFields" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="application/json, text/javascript, */*; q=0.01" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="eb4eb9f7-ea86-48a3-a930-6a1e89207ad1" Version="1.1" Url="http://localhost/content/templates/case-invoice.tmpl.html" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="2a67a65a-c47a-4b26-8e08-4649a8392cee" Version="1.1" Url="http://localhost/content/templates/case-invoice-order.tmpl.html" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="3d8cbc32-4d40-4497-bf0d-b8a0bf9213bb" Version="1.1" Url="http://localhost/content/templates/case-invoice-article.tmpl.html" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="c4fceebe-ca83-45f7-97e1-ddf1072cc93f" Version="1.1" Url="http://localhost/content/templates/case-invoice-overview.tmpl.html" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="69e4ac7f-6cea-44cd-a27b-c4721c6bd798" Version="1.1" Url="http://localhost/content/templates/case-invoice-article-overview.tmpl.html" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="f0891c21-c8cf-4dd4-998c-eb222223696c" Version="1.1" Url="http://localhost/content/templates/case-invoice-order-actions.tmpl.html" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="ad37adb2-2667-4865-9947-c5bee08990d5" Version="1.1" Url="http://localhost/content/templates/case-invoice-case-files.tmpl.html" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="d2c6d2dc-b0fb-4468-a2bb-4c291c304c40" Version="1.1" Url="http://localhost/content/templates/case-invoice-order-files.tmpl.html" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="4088ba78-b292-454e-9b34-25be80a46df6" Version="1.1" Url="http://localhost/CaseInvoice/CaseFiles" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+              </Headers>
+              <QueryStringParameters>
+                <QueryStringParameter Name="id" Value="3762" RecordedValue="3762" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+                <QueryStringParameter Name="logKey" Value="c5339b00-de2b-424f-8371-14841e604448" RecordedValue="c5339b00-de2b-424f-8371-14841e604448" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+                <QueryStringParameter Name="mytime" Value="1521532681747" RecordedValue="1521532681747" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+              </QueryStringParameters>
+            </Request>
+            <Request Method="GET" Guid="c8fe5f5b-a947-4a88-afcc-78dc7ea8fff6" Version="1.1" Url="http://localhost/Cases/RelatedCasesCount" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="application/json, text/javascript, */*; q=0.01" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+              </Headers>
+              <QueryStringParameters>
+                <QueryStringParameter Name="caseId" Value="3762" RecordedValue="3762" CorrelationBinding="{{QueryStringParam4352.caseId}}" UrlEncode="False" UseToGroupResults="False" />
+                <QueryStringParameter Name="userId" Value="jessica" RecordedValue="jessica" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+              </QueryStringParameters>
+            </Request>
+            <Request Method="GET" Guid="82eb3a52-75ca-4daa-ac3a-19a6918be6e9" Version="1.1" Url="http://localhost/Cases/RelatedInventoryCount" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="application/json, text/javascript, */*; q=0.01" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+              </Headers>
+              <QueryStringParameters>
+                <QueryStringParameter Name="userId" Value="jessica" RecordedValue="jessica" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+              </QueryStringParameters>
+            </Request>
+            <Request Method="POST" Guid="b724bc82-aba9-49fd-9f79-bdd38ad98b28" Version="1.1" Url="http://localhost/Cases/GetProductAreaByCaseType/" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="application/json, text/javascript, */*; q=0.01" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+              </Headers>
+              <FormPostHttpBody>
+                <FormPostParameter Name="caseTypeId" Value="154" RecordedValue="154" CorrelationBinding="{{FormPostParam37.caseTypeId}}" UrlEncode="True" />
+                <FormPostParameter Name="customerId" Value="1" RecordedValue="1" CorrelationBinding="{{FormPostParam38.customerId}}" UrlEncode="True" />
+                <FormPostParameter Name="myTime" Value="1521532682002" RecordedValue="1521532682002" CorrelationBinding="" UrlEncode="True" />
+                <FormPostParameter Name="productAreaIdToInclude" Value="28" RecordedValue="28" CorrelationBinding="{{FormPostParam39.productAreaIdToInclude}}" UrlEncode="True" />
+              </FormPostHttpBody>
+            </Request>
+            <Request Method="GET" Guid="c118b09a-7175-4f22-bcc0-2c498c2c955e" Version="1.1" Url="http://localhost/Cases/GetDepartmentInvoiceParameters/" ThinkTime="1" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="application/json, text/javascript, */*; q=0.01" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+              </Headers>
+              <QueryStringParameters>
+                <QueryStringParameter Name="departmentId" Value="489" RecordedValue="489" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+                <QueryStringParameter Name="ouId" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+              </QueryStringParameters>
+            </Request>
+          </DependentRequests>
+          <ExtractionRules>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+              <RuleParameters>
+                <RuleParameter Name="Required" Value="True" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam41.lockGuid" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot; /&gt;&#xD;" />
+                <RuleParameter Name="Index" Value="64" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+          </ExtractionRules>
+          <CorrelationExtractionRules>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam16.case_.ReportedBy" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="Name" Value="case__ReportedBy" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+                <RuleParameter Name="Index" Value="0" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam17.case_.PersonsEmail" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="Name" Value="case__PersonsEmail" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+                <RuleParameter Name="Index" Value="0" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam18.CaseMailSetting.DontSendMailToNotifier" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="Name" Value="CaseMailSetting_DontSendMailToNotifier" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+                <RuleParameter Name="Index" Value="0" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam19.case_.UserCode" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="Name" Value="case__UserCode" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+                <RuleParameter Name="Index" Value="0" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam20.case_.Cost" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="Name" Value="case__Cost" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+                <RuleParameter Name="Index" Value="0" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam21.case_.OtherCost" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="Name" Value="case__OtherCost" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+                <RuleParameter Name="Index" Value="0" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam22.case_.WatchDate" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="Name" Value="case__WatchDate" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+                <RuleParameter Name="Index" Value="0" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam23.CaseLog.EquipmentPrice" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="Name" Value="CaseLog_EquipmentPrice" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+                <RuleParameter Name="Index" Value="0" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam24.CaseLog.Price" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="Name" Value="CaseLog_Price" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+                <RuleParameter Name="Index" Value="0" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam25.case_.PersonsName" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="me: &quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot;,&#xD;&#xA; " />
+                <RuleParameter Name="Index" Value="8" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam26.case_.RegLanguage_Id" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="red(&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot;); }" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam27.case_.Department_Id" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot; sel" />
+                <RuleParameter Name="Index" Value="202" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam28.CustomerRegistrationSourceId" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot;&gt;Tes" />
+                <RuleParameter Name="Index" Value="316" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam29.case_.Description" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="red(&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot;); }" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam30.case_.WorkingGroup_Id" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot;&gt;Sti" />
+                <RuleParameter Name="Index" Value="82" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam31.ResponsibleUser_Id" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot;&gt;Sko" />
+                <RuleParameter Name="Index" Value="456" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam32.Performer_Id" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="red(&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot;); }" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam33.case_.Priority_Id" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot; dat" />
+                <RuleParameter Name="Index" Value="474" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam34.case_.Status_Id" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot; sel" />
+                <RuleParameter Name="Index" Value="501" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam35.case_.StateSecondary_Id" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot;&gt;Mai" />
+                <RuleParameter Name="Index" Value="324" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam4303.customerId" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="?customerId=" />
+                <RuleParameter Name="EndsWith" Value="&quot;" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam4352.caseId" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="?caseId=" />
+                <RuleParameter Name="EndsWith" Value="&amp;" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam37.caseTypeId" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot; /&gt;&#xD;" />
+                <RuleParameter Name="Index" Value="317" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam38.customerId" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="red(&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot;); }" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam39.productAreaIdToInclude" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot; /&gt;&#xD;" />
+                <RuleParameter Name="Index" Value="54" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam4401.customerId" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="?customerId=" />
+                <RuleParameter Name="EndsWith" Value="&quot;" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam4402.customerId" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="?customerId=" />
+                <RuleParameter Name="EndsWith" Value="&quot;" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam4403.caseId" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="?caseId=" />
+                <RuleParameter Name="EndsWith" Value="&amp;" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam40.caseId" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot; /&gt; " />
+                <RuleParameter Name="Index" Value="2" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+          </CorrelationExtractionRules>
+        </Request>
+        <Request Method="GET" Guid="fd778081-980e-4f54-9d27-43d58e3b5cb9" Version="1.1" Url="http://localhost/Organization/GetDepartments/" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+          <Headers>
+            <Header Name="Accept" Value="*/*" />
+            <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+            <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+          </Headers>
+          <QueryStringParameters>
+            <QueryStringParameter Name="customerId" Value="1" RecordedValue="1" CorrelationBinding="{{QueryStringParam4401.customerId}}" UrlEncode="False" UseToGroupResults="False" />
+          </QueryStringParameters>
+        </Request>
+        <Request Method="GET" Guid="6c086afc-809f-4599-84df-8ea1bc3c6086" Version="1.1" Url="http://localhost/Organization/GetOUs/" ThinkTime="1" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+          <Headers>
+            <Header Name="Accept" Value="*/*" />
+            <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+            <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+          </Headers>
+          <QueryStringParameters>
+            <QueryStringParameter Name="customerId" Value="1" RecordedValue="1" CorrelationBinding="{{QueryStringParam4402.customerId}}" UrlEncode="False" UseToGroupResults="False" />
+          </QueryStringParameters>
+        </Request>
+        <Request Method="GET" Guid="80f140be-db97-413b-9715-94b4f5072e8e" Version="1.1" Url="http://localhost/Caseinvoice/articles/" ThinkTime="15" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+          <Headers>
+            <Header Name="Accept" Value="*/*" />
+            <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+            <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+          </Headers>
+          <QueryStringParameters>
+            <QueryStringParameter Name="caseId" Value="3762" RecordedValue="3762" CorrelationBinding="{{QueryStringParam4403.caseId}}" UrlEncode="False" UseToGroupResults="False" />
+            <QueryStringParameter Name="productAreaId" Value="28" RecordedValue="28" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+            <QueryStringParameter Name="myTime" Value="1521532683870" RecordedValue="1521532683870" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+          </QueryStringParameters>
+        </Request>
+        <Request Method="POST" Guid="d375f960-a326-4682-a667-daf1425eb138" Version="1.1" Url="http://localhost/Cases/CheckCaseForActiveData/" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+          <Headers>
+            <Header Name="Accept" Value="*/*" />
+            <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+            <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+          </Headers>
+          <StringHttpBody ContentType="application/json" InsertByteOrderMark="False">ewAiAEMAdQBzAHQAbwBtAGUAcgBJAGQAIgA6ACIAMQAiACwAIgBSAGUAZwBpAG8AbgBJAGQAIgA6ACIAIgAsACIARABlAHAAYQByAHQAbQBlAG4AdABJAGQAIgA6ACIANAA4ADkAIgAsACIATwBVAEkAZAAiADoAIgAiACwAIgBTAG8AdQByAGMAZQBJAGQAIgA6ACIAMQA1ACIALAAiAEMAYQBzAGUAVAB5AHAAZQBJAGQAIgA6ACIAMQA1ADQAIgAsACIAUAByAG8AZAB1AGMAdABBAHIAZQBhAEkAZAAiADoAIgAyADgAIgAsACIAQwBhAHQAZQBnAG8AcgB5AEkAZAAiADoAIgAiACwAIgBTAHUAcABwAGwAaQBlAHIASQBkACIAOgAiACIALAAiAFcAbwByAGsAaQBuAGcARwByAG8AdQBwAEkAZAAiADoAIgA1ADcANwAiACwAIgBSAGUAcwBwAG8AbgBzAGkAYgBsAGUASQBkACIAOgAiADIAOQAyACIALAAiAEEAZABtAGkAbgBpAHMAdAByAGEAdABvAHIASQBkACIAOgAiADEAIgAsACIAUAByAGkAbwByAGkAdAB5AEkAZAAiADoAIgAxADAANQAyACIALAAiAFMAdABhAHQAdQBzAEkAZAAiADoAIgAyADQAIgAsACIAUwB1AGIAUwB0AGEAdAB1AHMASQBkACIAOgAiADMAMwAiACwAIgBDAGEAdQBzAGkAbgBnAFAAYQByAHQASQBkACIAOgAiACIALAAiAEMAbABvAHMAaQBuAGcAUgBlAGEAcwBvAG4ASQBkACIAOgAiACIAfQA=</StringHttpBody>
+        </Request>
+        <Request Method="POST" Guid="f71ca2ea-4ac4-46fd-b6e5-8cf7f431140e" Version="1.1" Url="http://localhost/Cases/IsCaseAvailable/" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+          <Headers>
+            <Header Name="Accept" Value="*/*" />
+            <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+            <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+          </Headers>
+          <FormPostHttpBody>
+            <FormPostParameter Name="caseId" Value="3762" RecordedValue="3762" CorrelationBinding="{{FormPostParam40.caseId}}" UrlEncode="True" />
+            <FormPostParameter Name="caseChangedTime" Value="2018-03-20 07:53:22" RecordedValue="2018-03-20 07:53:22" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="lockGuid" Value="{{FormPostParam41.lockGuid}}" RecordedValue="b7e1a0a2-5f68-42e8-8790-6e518070d29b" CorrelationBinding="{{FormPostParam41.lockGuid}}" UrlEncode="True" />
+          </FormPostHttpBody>
+        </Request>
+        <Request Method="POST" Guid="39a8ff90-e90c-40fe-828b-c0fcb433e41e" Version="1.1" Url="http://localhost/Cases/NewAndClose" ThinkTime="1" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="http://localhost/Cases?customerId=1" ReportingName="" IgnoreHttpStatusCode="False">
+          <DependentRequests>
+            <Request Method="POST" Guid="d355011c-43fb-4069-b1c3-7b8b4ee0d6a8" Version="1.1" Url="http://localhost/Cases/SearchAjax" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="application/json, text/javascript, */*; q=0.01" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases?customerId=1" />
+              </Headers>
+              <FormPostHttpBody>
+                <FormPostParameter Name="hidFilterCustomerId" Value="{{$HIDDEN1.hidFilterCustomerId}}" RecordedValue="1" CorrelationBinding="" UrlEncode="True" />
+                <FormPostParameter Name="hidFilterCaseTypeId" Value="{{$HIDDEN1.hidFilterCaseTypeId}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+                <FormPostParameter Name="SearchInMyCasesOnly" Value="{{$HIDDEN1.SearchInMyCasesOnly}}" RecordedValue="false" CorrelationBinding="" UrlEncode="True" />
+                <FormPostParameter Name="lstMyFavorites" Value="0" RecordedValue="0" CorrelationBinding="{{FormPostParam42.lstMyFavorites}}" UrlEncode="True" />
+                <FormPostParameter Name="txtFreeTextSearch" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+                <FormPostParameter Name="lstfilterCaseProgress" Value="2" RecordedValue="2" CorrelationBinding="{{FormPostParam43.lstfilterCaseProgress}}" UrlEncode="True" />
+                <FormPostParameter Name="expandedGroup" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+                <FormPostParameter Name="start" Value="0" RecordedValue="0" CorrelationBinding="{{FormPostParam44.start}}" UrlEncode="True" />
+                <FormPostParameter Name="length" Value="50" RecordedValue="50" CorrelationBinding="{{FormPostParam45.length}}" UrlEncode="True" />
+                <FormPostParameter Name="order" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+                <FormPostParameter Name="dir" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+              </FormPostHttpBody>
+            </Request>
+          </DependentRequests>
+          <Headers>
+            <Header Name="Referer" Value="http://localhost/Cases/Edit/3762" />
+          </Headers>
+          <ExtractionRules>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+              <RuleParameters>
+                <RuleParameter Name="Required" Value="True" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+              </RuleParameters>
+            </ExtractionRule>
+          </ExtractionRules>
+          <CorrelationExtractionRules>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam42.lstMyFavorites" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot; /&gt;&#xD;" />
+                <RuleParameter Name="Index" Value="175" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam43.lstfilterCaseProgress" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot; sel" />
+                <RuleParameter Name="Index" Value="38" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam44.start" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot; /&gt;&#xD;" />
+                <RuleParameter Name="Index" Value="175" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam45.length" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="t&quot;:[&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot;,&quot;25" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+          </CorrelationExtractionRules>
+          <FormPostHttpBody>
+            <FormPostParameter Name="BackUrl" Value="{{$HIDDEN1.BackUrl}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Id" Value="{{$HIDDEN1.case_.Id}}" RecordedValue="3762" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Id" Value="{{$HIDDEN1.case_.Id}}" RecordedValue="3762" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.CaseGUID" Value="{{$HIDDEN1.case_.CaseGUID}}" RecordedValue="237d22b7-2600-49d6-9eee-fa7062265949" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Customer_Id" Value="{{$HIDDEN1.case_.Customer_Id}}" RecordedValue="1" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.User_Id" Value="{{$HIDDEN1.case_.User_Id}}" RecordedValue="192" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.IpAddress" Value="{{$HIDDEN1.case_.IpAddress}}" RecordedValue="192.168.137.102" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Deleted" Value="{{$HIDDEN1.case_.Deleted}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.RegistrationSource" Value="{{$HIDDEN1.case_.RegistrationSource}}" RecordedValue="1" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="DepartmentFilterFormat" Value="{{$HIDDEN1.DepartmentFilterFormat}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.RegUserDomain" Value="{{$HIDDEN1.case_.RegUserDomain}}" RecordedValue="NT AUTHORITY" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.RegUserId" Value="{{$HIDDEN1.case_.RegUserId}}" RecordedValue="SYSTEM" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.CaseNumber" Value="{{$HIDDEN1.case_.CaseNumber}}" RecordedValue="2186" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.ProductAreaSetDate" Value="{{$HIDDEN1.case_.ProductAreaSetDate}}" RecordedValue="2016-04-19 12:44:53" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.LockCaseToWorkingGroup_Id" Value="{{$HIDDEN1.case_.LockCaseToWorkingGroup_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.FinishingDate" Value="{{$HIDDEN1.case_.FinishingDate}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.ProductAreaQuestionVersion_Id" Value="{{$HIDDEN1.case_.ProductAreaQuestionVersion_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.LeadTime" Value="{{$HIDDEN1.case_.LeadTime}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.CaseCleanUp_Id" Value="{{$HIDDEN1.case_.CaseCleanUp_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.RelatedCaseNumber" Value="{{$HIDDEN1.case_.RelatedCaseNumber}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.ApprovedDate" Value="{{$HIDDEN1.case_.ApprovedDate}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.ApprovedBy_User_Id" Value="{{$HIDDEN1.case_.ApprovedBy_User_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.ApprovedBy_User_Id" Value="{{$HIDDEN1.case_.ApprovedBy_User_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.FollowUpDate" Value="{{$HIDDEN1.case_.FollowUpDate}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.ExternalTime" Value="{{$HIDDEN1.case_.ExternalTime}}" RecordedValue="269648" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.DefaultOwnerWG_Id" Value="{{$HIDDEN1.case_.DefaultOwnerWG_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.RegUserName" Value="{{$HIDDEN1.case_.RegUserName}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseKey" Value="{{$HIDDEN1.CaseKey}}" RecordedValue="3762" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseMailSetting.SendMailAboutNewCaseTo" Value="{{$HIDDEN1.CaseMailSetting.SendMailAboutNewCaseTo}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseMailSetting.HelpdeskMailFromAdress" Value="{{$HIDDEN1.CaseMailSetting.HelpdeskMailFromAdress}}" RecordedValue="cg@dhsolutions.se" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseMailSetting.AbsoluterUrl" Value="{{$HIDDEN1.CaseMailSetting.AbsoluterUrl}}" RecordedValue="http://localhost/" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseMailSetting.DontConnectUserToWorkingGroup" Value="{{$HIDDEN1.CaseMailSetting.DontConnectUserToWorkingGroup}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseFileNames" Value="{{$HIDDEN1.CaseFileNames}}" RecordedValue="Cases  Product.pdf" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="LogFileNames" Value="{{$HIDDEN1.LogFileNames}}" RecordedValue="Cases  Product.pdf" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="SavedFiles" Value="{{$HIDDEN1.SavedFiles}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Unread" Value="{{$HIDDEN1.case_.Unread}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="ProductAreaHasChild" Value="{{$HIDDEN1.ProductAreaHasChild}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CustomerSettings.ModuleCaseInvoice" Value="{{$HIDDEN1.CustomerSettings.ModuleCaseInvoice}}" RecordedValue="True" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="MovedFromCustomerId" Value="{{$HIDDEN1.MovedFromCustomerId}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="ContainsExtendedCase" Value="{{$HIDDEN1.ContainsExtendedCase}}" RecordedValue="False" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="ExtendedCaseGuid" Value="{{$HIDDEN1.ExtendedCaseGuid}}" RecordedValue="00000000-0000-0000-0000-000000000000" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="WriteTextToExternalNote" Value="{{$HIDDEN1.WriteTextToExternalNote}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="Today" Value="{{$HIDDEN1.Today}}" RecordedValue="2018-03-20" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CurLanguageId" Value="{{$HIDDEN1.CurLanguageId}}" RecordedValue="2" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="SelectedValueCarrier" Value="{{$HIDDEN1.SelectedValueCarrier}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseTemplate_WorkingGroup_Id" Value="{{$HIDDEN1.CaseTemplate_WorkingGroup_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseTemplate_Priority_Id" Value="{{$HIDDEN1.CaseTemplate_Priority_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseTemplate_StateSecondary_Id" Value="{{$HIDDEN1.CaseTemplate_StateSecondary_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseTemplate_Department_Id" Value="{{$HIDDEN1.CaseTemplate_Department_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseTemplate_OU_Id" Value="{{$HIDDEN1.CaseTemplate_OU_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseTemplate_IsAbout_Department_Id" Value="{{$HIDDEN1.CaseTemplate_IsAbout_Department_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseTemplate_IsAbout_OU_Id" Value="{{$HIDDEN1.CaseTemplate_IsAbout_OU_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseTemplate_ExternalLogNote" Value="{{$HIDDEN1.CaseTemplate_ExternalLogNote}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="LastProductAreaId" Value="{{$HIDDEN1.LastProductAreaId}}" RecordedValue="28" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="LastProjectId" Value="{{$HIDDEN1.LastProjectId}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseHasInvoiceOrder" Value="yes" RecordedValue="yes" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="IsAnyFileAdded" Value="{{$HIDDEN1.IsAnyFileAdded}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseSolution_Id" Value="{{$HIDDEN1.CaseSolution_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CurrentCaseSolution_Id" Value="{{$HIDDEN1.CurrentCaseSolution_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="SplitToCaseSolution_Id" Value="{{$HIDDEN1.SplitToCaseSolution_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="ActiveTab" Value="{{$HIDDEN1.ActiveTab}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="SelectedWorkflowStep" Value="{{$HIDDEN1.SelectedWorkflowStep}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="ButtonClick" Value="save" RecordedValue="save" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLock.LockGUID" Value="{{$HIDDEN1.CaseLock.LockGUID}}" RecordedValue="b7e1a0a2-5f68-42e8-8790-6e518070d29b" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLock.ActiveTab" Value="{{$HIDDEN1.CaseLock.ActiveTab}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseRelationType" Value="{{$HIDDEN1.CaseRelationType}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="ShowReportedBy" Value="{{$HIDDEN1.ShowReportedBy}}" RecordedValue="1" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.ReportedBy" Value="jessica" RecordedValue="jessica" CorrelationBinding="{{FormPostParam16.case_.ReportedBy}}" UrlEncode="True" />
+            <FormPostParameter Name="case_.PersonsName" Value="Jessica Skog" RecordedValue="Jessica Skog" CorrelationBinding="{{FormPostParam25.case_.PersonsName}}" UrlEncode="True" />
+            <FormPostParameter Name="FollowerUsers" Value="{{$HIDDEN1.FollowerUsers}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.PersonsEmail" Value="samsoltest@gmail.com" RecordedValue="samsoltest@gmail.com" CorrelationBinding="{{FormPostParam17.case_.PersonsEmail}}" UrlEncode="True" />
+            <FormPostParameter Name="CaseMailSetting.DontSendMailToNotifier" Value="true" RecordedValue="true" CorrelationBinding="{{FormPostParam18.CaseMailSetting.DontSendMailToNotifier}}" UrlEncode="True" />
+            <FormPostParameter Name="CaseMailSetting.DontSendMailToNotifier" Value="{{$HIDDEN1.CaseMailSetting.DontSendMailToNotifier}}" RecordedValue="false" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.RegLanguage_Id" Value="1" RecordedValue="1" CorrelationBinding="{{FormPostParam26.case_.RegLanguage_Id}}" UrlEncode="True" />
+            <FormPostParameter Name="case_.PersonsPhone" Value="1234567890" RecordedValue="1234567890" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.PersonsCellphone" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Region_Id" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Department_Id" Value="489" RecordedValue="489" CorrelationBinding="{{FormPostParam27.case_.Department_Id}}" UrlEncode="True" />
+            <FormPostParameter Name="case_.OU_Id" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.CostCentre" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Place" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.UserCode" Value="1234" RecordedValue="1234" CorrelationBinding="{{FormPostParam19.case_.UserCode}}" UrlEncode="True" />
+            <FormPostParameter Name="UpdateNotifierInformation" Value="{{$HIDDEN1.UpdateNotifierInformation}}" RecordedValue="false" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="ExtendedInitiatorGUID" Value="{{$HIDDEN1.ExtendedInitiatorGUID}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.IsAbout.ReportedBy" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.IsAbout.Person_Name" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.IsAbout.Person_Email" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.IsAbout.Person_Phone" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.IsAbout.Person_Cellphone" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.IsAbout.Region_Id" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.IsAbout.Department_Id" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.IsAbout.OU_Id" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.IsAbout.CostCentre" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.IsAbout.Place" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.IsAbout.UserCode" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="ExtendedRegardingGUID" Value="{{$HIDDEN1.ExtendedRegardingGUID}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.InventoryNumber" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.InventoryType" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.InventoryLocation" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CustomerRegistrationSourceId" Value="15" RecordedValue="15" CorrelationBinding="{{FormPostParam28.CustomerRegistrationSourceId}}" UrlEncode="True" />
+            <FormPostParameter Name="case_.CaseType_Id" Value="{{$HIDDEN1.case_.CaseType_Id}}" RecordedValue="154" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.ProductArea_Id" Value="{{$HIDDEN1.case_.ProductArea_Id}}" RecordedValue="28" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseInvoiceArticles" Value="{&quot;Id&quot;:&quot;804&quot;, &quot;CaseId&quot;:&quot;3762&quot;, &quot;Orders&quot;: [{&quot;Id&quot;:&quot;982&quot;, &quot;InvoiceId&quot;:&quot;804&quot;, &quot;Number&quot;:&quot;1&quot;, &quot;InvoiceDate&quot;:&quot;&quot;, &quot;InvoicedByUser&quot;:&quot;&quot;, &quot;InvoicedByUserId&quot;:&quot;&quot;, &quot;ReportedBy&quot;:&quot;stina@datahalland.se&quot;, &quot;Persons_Name&quot;:&quot;Stina Svensmo&quot;, &quot;Persons_Email&quot;:&quot;kristina.svensmo@datahalland.se&quot;, &quot;Persons_Phone&quot;:&quot;035-179103&quot;, &quot;Persons_CellPhone&quot;:&quot;&quot;, &quot;Region_Id&quot;:&quot;14&quot;, &quot;Department_Id&quot;:&quot;123&quot;, &quot;OU_Id&quot;:&quot;72&quot;, &quot;CostCentre&quot;:&quot;&quot;, &quot;Place&quot;:&quot;&quot;, &quot;UserCode&quot;:&quot;&quot;, &quot;CreditForOrder_Id&quot;:&quot;&quot;, &quot;Project_Id&quot;:&quot;&quot;, &quot;OrderState&quot;:&quot;1&quot;, &quot;Articles&quot;: [{&quot;Id&quot;:&quot;548&quot;, &quot;OrderId&quot;:&quot;982&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;5&quot;, &quot;Ppu&quot;:&quot;1000&quot;, &quot;Position&quot;:&quot;0&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;550&quot;, &quot;OrderId&quot;:&quot;982&quot;, &quot;ArticleId&quot;:&quot;4&quot;, &quot;Number&quot;:&quot;2102.2.2.1&quot;, &quot;Name&quot;:&quot;Accounts receivable small&quot;, &quot;Amount&quot;:&quot;1&quot;, &quot;Ppu&quot;:&quot;505&quot;, &quot;Position&quot;:&quot;1&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;562&quot;, &quot;OrderId&quot;:&quot;982&quot;, &quot;ArticleId&quot;:&quot;4&quot;, &quot;Number&quot;:&quot;2102.2.2.1&quot;, &quot;Name&quot;:&quot;Accounts receivable small&quot;, &quot;Amount&quot;:&quot;1&quot;, &quot;Ppu&quot;:&quot;505&quot;, &quot;Position&quot;:&quot;2&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;563&quot;, &quot;OrderId&quot;:&quot;982&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;1&quot;, &quot;Ppu&quot;:&quot;110&quot;, &quot;Position&quot;:&quot;3&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;565&quot;, &quot;OrderId&quot;:&quot;982&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;10&quot;, &quot;Ppu&quot;:&quot;100&quot;, &quot;Position&quot;:&quot;4&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}],&quot;Files&quot;: []}, {&quot;Id&quot;:&quot;983&quot;, &quot;InvoiceId&quot;:&quot;804&quot;, &quot;Number&quot;:&quot;1&quot;, &quot;InvoiceDate&quot;:&quot;4/19/2016 15:19:11&quot;, &quot;InvoicedByUser&quot;:&quot;stina&quot;, &quot;InvoicedByUserId&quot;:&quot;192&quot;, &quot;ReportedBy&quot;:&quot;stina@datahalland.se&quot;, &quot;Persons_Name&quot;:&quot;Stina Svensmo&quot;, &quot;Persons_Email&quot;:&quot;kristina.svensmo@datahalland.se&quot;, &quot;Persons_Phone&quot;:&quot;035-179103&quot;, &quot;Persons_CellPhone&quot;:&quot;&quot;, &quot;Region_Id&quot;:&quot;11&quot;, &quot;Department_Id&quot;:&quot;110&quot;, &quot;OU_Id&quot;:&quot;72&quot;, &quot;CostCentre&quot;:&quot;&quot;, &quot;Place&quot;:&quot;&quot;, &quot;UserCode&quot;:&quot;&quot;, &quot;CreditForOrder_Id&quot;:&quot;&quot;, &quot;Project_Id&quot;:&quot;&quot;, &quot;OrderState&quot;:&quot;2&quot;, &quot;Articles&quot;: [{&quot;Id&quot;:&quot;551&quot;, &quot;OrderId&quot;:&quot;983&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;1&quot;, &quot;Ppu&quot;:&quot;1000&quot;, &quot;Position&quot;:&quot;0&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;553&quot;, &quot;OrderId&quot;:&quot;983&quot;, &quot;ArticleId&quot;:&quot;4&quot;, &quot;Number&quot;:&quot;2102.2.2.1&quot;, &quot;Name&quot;:&quot;Accounts receivable small&quot;, &quot;Amount&quot;:&quot;1&quot;, &quot;Ppu&quot;:&quot;505&quot;, &quot;Position&quot;:&quot;1&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;554&quot;, &quot;OrderId&quot;:&quot;983&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;1&quot;, &quot;Ppu&quot;:&quot;1000&quot;, &quot;Position&quot;:&quot;2&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}],&quot;Files&quot;: []}, {&quot;Id&quot;:&quot;986&quot;, &quot;InvoiceId&quot;:&quot;804&quot;, &quot;Number&quot;:&quot;4&quot;, &quot;InvoiceDate&quot;:&quot;&quot;, &quot;InvoicedByUser&quot;:&quot;&quot;, &quot;InvoicedByUserId&quot;:&quot;&quot;, &quot;ReportedBy&quot;:&quot;stina@datahalland.se&quot;, &quot;Persons_Name&quot;:&quot;Stina Svensmo&quot;, &quot;Persons_Email&quot;:&quot;kristina.svensmo@datahalland.se&quot;, &quot;Persons_Phone&quot;:&quot;035-179103&quot;, &quot;Persons_CellPhone&quot;:&quot;&quot;, &quot;Region_Id&quot;:&quot;11&quot;, &quot;Department_Id&quot;:&quot;110&quot;, &quot;OU_Id&quot;:&quot;72&quot;, &quot;CostCentre&quot;:&quot;&quot;, &quot;Place&quot;:&quot;&quot;, &quot;UserCode&quot;:&quot;&quot;, &quot;CreditForOrder_Id&quot;:&quot;983&quot;, &quot;Project_Id&quot;:&quot;&quot;, &quot;OrderState&quot;:&quot;1&quot;, &quot;Articles&quot;: [{&quot;Id&quot;:&quot;569&quot;, &quot;OrderId&quot;:&quot;986&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;1&quot;, &quot;Ppu&quot;:&quot;500&quot;, &quot;Position&quot;:&quot;0&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;572&quot;, &quot;OrderId&quot;:&quot;986&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;1&quot;, &quot;Ppu&quot;:&quot;1000&quot;, &quot;Position&quot;:&quot;1&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}],&quot;Files&quot;: []}, {&quot;Id&quot;:&quot;984&quot;, &quot;InvoiceId&quot;:&quot;804&quot;, &quot;Number&quot;:&quot;3&quot;, &quot;InvoiceDate&quot;:&quot;4/19/2016 15:34:43&quot;, &quot;InvoicedByUser&quot;:&quot;stina&quot;, &quot;InvoicedByUserId&quot;:&quot;192&quot;, &quot;ReportedBy&quot;:&quot;stina@datahalland.se&quot;, &quot;Persons_Name&quot;:&quot;Stina Svensmo&quot;, &quot;Persons_Email&quot;:&quot;kristina.svensmo@datahalland.se&quot;, &quot;Persons_Phone&quot;:&quot;035-179103&quot;, &quot;Persons_CellPhone&quot;:&quot;&quot;, &quot;Region_Id&quot;:&quot;9&quot;, &quot;Department_Id&quot;:&quot;506&quot;, &quot;OU_Id&quot;:&quot;72&quot;, &quot;CostCentre&quot;:&quot;12587&quot;, &quot;Place&quot;:&quot;&quot;, &quot;UserCode&quot;:&quot;&quot;, &quot;CreditForOrder_Id&quot;:&quot;&quot;, &quot;Project_Id&quot;:&quot;&quot;, &quot;OrderState&quot;:&quot;2&quot;, &quot;Articles&quot;: [{&quot;Id&quot;:&quot;556&quot;, &quot;OrderId&quot;:&quot;984&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;1000&quot;, &quot;Ppu&quot;:&quot;10&quot;, &quot;Position&quot;:&quot;0&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;558&quot;, &quot;OrderId&quot;:&quot;984&quot;, &quot;ArticleId&quot;:&quot;4&quot;, &quot;Number&quot;:&quot;2102.2.2.1&quot;, &quot;Name&quot;:&quot;Accounts receivable small&quot;, &quot;Amount&quot;:&quot;2&quot;, &quot;Ppu&quot;:&quot;505&quot;, &quot;Position&quot;:&quot;1&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;559&quot;, &quot;OrderId&quot;:&quot;984&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;5&quot;, &quot;Ppu&quot;:&quot;1000&quot;, &quot;Position&quot;:&quot;2&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;561&quot;, &quot;OrderId&quot;:&quot;984&quot;, &quot;ArticleId&quot;:&quot;4&quot;, &quot;Number&quot;:&quot;2102.2.2.1&quot;, &quot;Name&quot;:&quot;Accounts receivable small&quot;, &quot;Amount&quot;:&quot;5&quot;, &quot;Ppu&quot;:&quot;505&quot;, &quot;Position&quot;:&quot;3&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}],&quot;Files&quot;: []}]}" RecordedValue="{&quot;Id&quot;:&quot;804&quot;, &quot;CaseId&quot;:&quot;3762&quot;, &quot;Orders&quot;: [{&quot;Id&quot;:&quot;982&quot;, &quot;InvoiceId&quot;:&quot;804&quot;, &quot;Number&quot;:&quot;1&quot;, &quot;InvoiceDate&quot;:&quot;&quot;, &quot;InvoicedByUser&quot;:&quot;&quot;, &quot;InvoicedByUserId&quot;:&quot;&quot;, &quot;ReportedBy&quot;:&quot;stina@datahalland.se&quot;, &quot;Persons_Name&quot;:&quot;Stina Svensmo&quot;, &quot;Persons_Email&quot;:&quot;kristina.svensmo@datahalland.se&quot;, &quot;Persons_Phone&quot;:&quot;035-179103&quot;, &quot;Persons_CellPhone&quot;:&quot;&quot;, &quot;Region_Id&quot;:&quot;14&quot;, &quot;Department_Id&quot;:&quot;123&quot;, &quot;OU_Id&quot;:&quot;72&quot;, &quot;CostCentre&quot;:&quot;&quot;, &quot;Place&quot;:&quot;&quot;, &quot;UserCode&quot;:&quot;&quot;, &quot;CreditForOrder_Id&quot;:&quot;&quot;, &quot;Project_Id&quot;:&quot;&quot;, &quot;OrderState&quot;:&quot;1&quot;, &quot;Articles&quot;: [{&quot;Id&quot;:&quot;548&quot;, &quot;OrderId&quot;:&quot;982&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;5&quot;, &quot;Ppu&quot;:&quot;1000&quot;, &quot;Position&quot;:&quot;0&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;550&quot;, &quot;OrderId&quot;:&quot;982&quot;, &quot;ArticleId&quot;:&quot;4&quot;, &quot;Number&quot;:&quot;2102.2.2.1&quot;, &quot;Name&quot;:&quot;Accounts receivable small&quot;, &quot;Amount&quot;:&quot;1&quot;, &quot;Ppu&quot;:&quot;505&quot;, &quot;Position&quot;:&quot;1&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;562&quot;, &quot;OrderId&quot;:&quot;982&quot;, &quot;ArticleId&quot;:&quot;4&quot;, &quot;Number&quot;:&quot;2102.2.2.1&quot;, &quot;Name&quot;:&quot;Accounts receivable small&quot;, &quot;Amount&quot;:&quot;1&quot;, &quot;Ppu&quot;:&quot;505&quot;, &quot;Position&quot;:&quot;2&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;563&quot;, &quot;OrderId&quot;:&quot;982&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;1&quot;, &quot;Ppu&quot;:&quot;110&quot;, &quot;Position&quot;:&quot;3&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;565&quot;, &quot;OrderId&quot;:&quot;982&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;10&quot;, &quot;Ppu&quot;:&quot;100&quot;, &quot;Position&quot;:&quot;4&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}],&quot;Files&quot;: []}, {&quot;Id&quot;:&quot;983&quot;, &quot;InvoiceId&quot;:&quot;804&quot;, &quot;Number&quot;:&quot;1&quot;, &quot;InvoiceDate&quot;:&quot;4/19/2016 15:19:11&quot;, &quot;InvoicedByUser&quot;:&quot;stina&quot;, &quot;InvoicedByUserId&quot;:&quot;192&quot;, &quot;ReportedBy&quot;:&quot;stina@datahalland.se&quot;, &quot;Persons_Name&quot;:&quot;Stina Svensmo&quot;, &quot;Persons_Email&quot;:&quot;kristina.svensmo@datahalland.se&quot;, &quot;Persons_Phone&quot;:&quot;035-179103&quot;, &quot;Persons_CellPhone&quot;:&quot;&quot;, &quot;Region_Id&quot;:&quot;11&quot;, &quot;Department_Id&quot;:&quot;110&quot;, &quot;OU_Id&quot;:&quot;72&quot;, &quot;CostCentre&quot;:&quot;&quot;, &quot;Place&quot;:&quot;&quot;, &quot;UserCode&quot;:&quot;&quot;, &quot;CreditForOrder_Id&quot;:&quot;&quot;, &quot;Project_Id&quot;:&quot;&quot;, &quot;OrderState&quot;:&quot;2&quot;, &quot;Articles&quot;: [{&quot;Id&quot;:&quot;551&quot;, &quot;OrderId&quot;:&quot;983&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;1&quot;, &quot;Ppu&quot;:&quot;1000&quot;, &quot;Position&quot;:&quot;0&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;553&quot;, &quot;OrderId&quot;:&quot;983&quot;, &quot;ArticleId&quot;:&quot;4&quot;, &quot;Number&quot;:&quot;2102.2.2.1&quot;, &quot;Name&quot;:&quot;Accounts receivable small&quot;, &quot;Amount&quot;:&quot;1&quot;, &quot;Ppu&quot;:&quot;505&quot;, &quot;Position&quot;:&quot;1&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;554&quot;, &quot;OrderId&quot;:&quot;983&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;1&quot;, &quot;Ppu&quot;:&quot;1000&quot;, &quot;Position&quot;:&quot;2&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}],&quot;Files&quot;: []}, {&quot;Id&quot;:&quot;986&quot;, &quot;InvoiceId&quot;:&quot;804&quot;, &quot;Number&quot;:&quot;4&quot;, &quot;InvoiceDate&quot;:&quot;&quot;, &quot;InvoicedByUser&quot;:&quot;&quot;, &quot;InvoicedByUserId&quot;:&quot;&quot;, &quot;ReportedBy&quot;:&quot;stina@datahalland.se&quot;, &quot;Persons_Name&quot;:&quot;Stina Svensmo&quot;, &quot;Persons_Email&quot;:&quot;kristina.svensmo@datahalland.se&quot;, &quot;Persons_Phone&quot;:&quot;035-179103&quot;, &quot;Persons_CellPhone&quot;:&quot;&quot;, &quot;Region_Id&quot;:&quot;11&quot;, &quot;Department_Id&quot;:&quot;110&quot;, &quot;OU_Id&quot;:&quot;72&quot;, &quot;CostCentre&quot;:&quot;&quot;, &quot;Place&quot;:&quot;&quot;, &quot;UserCode&quot;:&quot;&quot;, &quot;CreditForOrder_Id&quot;:&quot;983&quot;, &quot;Project_Id&quot;:&quot;&quot;, &quot;OrderState&quot;:&quot;1&quot;, &quot;Articles&quot;: [{&quot;Id&quot;:&quot;569&quot;, &quot;OrderId&quot;:&quot;986&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;1&quot;, &quot;Ppu&quot;:&quot;500&quot;, &quot;Position&quot;:&quot;0&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;572&quot;, &quot;OrderId&quot;:&quot;986&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;1&quot;, &quot;Ppu&quot;:&quot;1000&quot;, &quot;Position&quot;:&quot;1&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}],&quot;Files&quot;: []}, {&quot;Id&quot;:&quot;984&quot;, &quot;InvoiceId&quot;:&quot;804&quot;, &quot;Number&quot;:&quot;3&quot;, &quot;InvoiceDate&quot;:&quot;4/19/2016 15:34:43&quot;, &quot;InvoicedByUser&quot;:&quot;stina&quot;, &quot;InvoicedByUserId&quot;:&quot;192&quot;, &quot;ReportedBy&quot;:&quot;stina@datahalland.se&quot;, &quot;Persons_Name&quot;:&quot;Stina Svensmo&quot;, &quot;Persons_Email&quot;:&quot;kristina.svensmo@datahalland.se&quot;, &quot;Persons_Phone&quot;:&quot;035-179103&quot;, &quot;Persons_CellPhone&quot;:&quot;&quot;, &quot;Region_Id&quot;:&quot;9&quot;, &quot;Department_Id&quot;:&quot;506&quot;, &quot;OU_Id&quot;:&quot;72&quot;, &quot;CostCentre&quot;:&quot;12587&quot;, &quot;Place&quot;:&quot;&quot;, &quot;UserCode&quot;:&quot;&quot;, &quot;CreditForOrder_Id&quot;:&quot;&quot;, &quot;Project_Id&quot;:&quot;&quot;, &quot;OrderState&quot;:&quot;2&quot;, &quot;Articles&quot;: [{&quot;Id&quot;:&quot;556&quot;, &quot;OrderId&quot;:&quot;984&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;1000&quot;, &quot;Ppu&quot;:&quot;10&quot;, &quot;Position&quot;:&quot;0&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;558&quot;, &quot;OrderId&quot;:&quot;984&quot;, &quot;ArticleId&quot;:&quot;4&quot;, &quot;Number&quot;:&quot;2102.2.2.1&quot;, &quot;Name&quot;:&quot;Accounts receivable small&quot;, &quot;Amount&quot;:&quot;2&quot;, &quot;Ppu&quot;:&quot;505&quot;, &quot;Position&quot;:&quot;1&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;559&quot;, &quot;OrderId&quot;:&quot;984&quot;, &quot;ArticleId&quot;:&quot;2&quot;, &quot;Number&quot;:&quot;2102.2.1.1&quot;, &quot;Name&quot;:&quot;Accounting &amp;Treasury&quot;, &quot;Amount&quot;:&quot;5&quot;, &quot;Ppu&quot;:&quot;1000&quot;, &quot;Position&quot;:&quot;2&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}, {&quot;Id&quot;:&quot;561&quot;, &quot;OrderId&quot;:&quot;984&quot;, &quot;ArticleId&quot;:&quot;4&quot;, &quot;Number&quot;:&quot;2102.2.2.1&quot;, &quot;Name&quot;:&quot;Accounts receivable small&quot;, &quot;Amount&quot;:&quot;5&quot;, &quot;Ppu&quot;:&quot;505&quot;, &quot;Position&quot;:&quot;3&quot;, &quot;CreditedForArticle_Id&quot;:&quot;&quot;, &quot;TextForArticle_Id&quot;:&quot;&quot;}],&quot;Files&quot;: []}]}" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.System_Id" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Urgency_Id" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Impact_Id" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Category_Id" Value="{{$HIDDEN1.case_.Category_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CountryId" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Supplier_Id" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.InvoiceNumber" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.ReferenceNumber" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Caption" Value="Glöm inte!" RecordedValue="Glöm inte!" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Description" Value="1" RecordedValue="1" CorrelationBinding="{{FormPostParam29.case_.Description}}" UrlEncode="True" />
+            <FormPostParameter Name="case_.Miscellaneous" Value="Hepp" RecordedValue="Hepp" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.ContactBeforeAction" Value="{{$HIDDEN1.case_.ContactBeforeAction}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.SMS" Value="{{$HIDDEN1.case_.SMS}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.AgreedDate" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Available" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Cost" Value="0" RecordedValue="0" CorrelationBinding="{{FormPostParam20.case_.Cost}}" UrlEncode="True" />
+            <FormPostParameter Name="case_.OtherCost" Value="0" RecordedValue="0" CorrelationBinding="{{FormPostParam21.case_.OtherCost}}" UrlEncode="True" />
+            <FormPostParameter Name="case_.Currency" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.WorkingGroup_Id" Value="577" RecordedValue="577" CorrelationBinding="{{FormPostParam30.case_.WorkingGroup_Id}}" UrlEncode="True" />
+            <FormPostParameter Name="ResponsibleUser_Id" Value="292" RecordedValue="292" CorrelationBinding="{{FormPostParam31.ResponsibleUser_Id}}" UrlEncode="True" />
+            <FormPostParameter Name="Performer_Id" Value="1" RecordedValue="1" CorrelationBinding="{{FormPostParam32.Performer_Id}}" UrlEncode="True" />
+            <FormPostParameter Name="case_.Priority_Id" Value="1052" RecordedValue="1052" CorrelationBinding="{{FormPostParam33.case_.Priority_Id}}" UrlEncode="True" />
+            <FormPostParameter Name="case_.Status_Id" Value="24" RecordedValue="24" CorrelationBinding="{{FormPostParam34.case_.Status_Id}}" UrlEncode="True" />
+            <FormPostParameter Name="case_.StateSecondary_Id" Value="33" RecordedValue="33" CorrelationBinding="{{FormPostParam35.case_.StateSecondary_Id}}" UrlEncode="True" />
+            <FormPostParameter Name="case_.Project_Id" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Problem_Id" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.CausingPartId" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.Change_Id" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.PlanDate" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.WatchDate" Value="2016-03-22" RecordedValue="2016-03-22" CorrelationBinding="{{FormPostParam22.case_.WatchDate}}" UrlEncode="True" />
+            <FormPostParameter Name="case_.Verified" Value="{{$HIDDEN1.case_.Verified}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.VerifiedDescription" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.SolutionRate" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.HighPriority" Value="{{$HIDDEN1.CaseLog.HighPriority}}" RecordedValue="false" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.TextExternal" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.SendMailAboutCaseToNotifier" Value="{{$HIDDEN1.CaseLog.SendMailAboutCaseToNotifier}}" RecordedValue="false" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.RegUser" Value="{{$HIDDEN1.CaseLog.RegUser}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.LogType" Value="{{$HIDDEN1.CaseLog.LogType}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.UserId" Value="{{$HIDDEN1.CaseLog.UserId}}" RecordedValue="292" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.Id" Value="{{$HIDDEN1.CaseLog.Id}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.CaseId" Value="{{$HIDDEN1.CaseLog.CaseId}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.LogGuid" Value="{{$HIDDEN1.CaseLog.LogGuid}}" RecordedValue="c5339b00-de2b-424f-8371-14841e604448" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="LogKey" Value="{{$HIDDEN1.LogKey}}" RecordedValue="c5339b00-de2b-424f-8371-14841e604448" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.OldLog_Id" Value="{{$HIDDEN1.CaseLog.OldLog_Id}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.TextInternal" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.EmailRecepientsInternalLogTo" Value="{{$HIDDEN1.CaseLog.EmailRecepientsInternalLogTo}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.EmailRecepientsInternalLogCc" Value="{{$HIDDEN1.CaseLog.EmailRecepientsInternalLogCc}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="LogFileNames" Value="{{$HIDDEN1.LogFileNames}}" RecordedValue="Cases  Product.pdf" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="case_.FinishingDescription" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.FinishingType" Value="{{$HIDDEN1.CaseLog.FinishingType}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.FinishingDate" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.WorkingTimeHour" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.WorkingTimeMinute" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.OvertimeHour" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.OvertimeMinute" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.EquipmentPrice" Value="0" RecordedValue="0" CorrelationBinding="{{FormPostParam23.CaseLog.EquipmentPrice}}" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.Price" Value="0" RecordedValue="0" CorrelationBinding="{{FormPostParam24.CaseLog.Price}}" UrlEncode="True" />
+            <FormPostParameter Name="CaseLog.Charge" Value="{{$HIDDEN1.CaseLog.Charge}}" RecordedValue="false" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="ExternalInvoices[0].Name" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="ExternalInvoices[0].Amount" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+            <FormPostParameter Name="ExternalInvoices[0].Id" Value="{{$HIDDEN1.ExternalInvoices[0].Id}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+          </FormPostHttpBody>
+        </Request>
+      </Items>
+    </Loop>
+    <Request Method="GET" Guid="5271a7e4-76f5-4abb-84c1-89003ac02bcd" Version="1.1" Url="http://localhost/Login/Logout" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+  </Items>
+  <ValidationRules>
+    <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidateResponseUrl, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Response URL" Description="Validates that the response URL after redirects are followed is the same as the recorded response URL.  QueryString parameters are ignored." Level="Low" ExectuionOrder="BeforeDependents" />
+    <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidationRuleResponseTimeGoal, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Response Time Goal" Description="Validates that the response time for the request is less than or equal to the response time goal as specified on the request.  Response time goals of zero will be ignored." Level="Low" ExectuionOrder="AfterDependents">
+      <RuleParameters>
+        <RuleParameter Name="Tolerance" Value="0" />
+      </RuleParameters>
+    </ValidationRule>
+  </ValidationRules>
+</WebTest>

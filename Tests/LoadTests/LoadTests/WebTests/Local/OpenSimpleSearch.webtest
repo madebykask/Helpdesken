@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebTest Name="OpenSimpleSearch" Id="d9577960-abe8-4bcc-9fc2-6e15471d0c22" Owner="" Priority="2147483647" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="0" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="" CredentialUserName="" CredentialPassword="" PreAuthenticate="True" Proxy="default" StopOnError="False" RecordedResultFile="WebTest1.7ac20689-051b-4010-9f81-80a7cac776ce.rec.webtestresult" ResultsLocale="">
+  <Items>
+    <Request Method="GET" Guid="9396e80d-1bf3-4259-9ad6-43c4b0a5e095" Version="1.1" Url="http://localhost/" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="http://localhost/Login/Login?ReturnUrl=%2F" ReportingName="" IgnoreHttpStatusCode="False">
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam1.btnLogin" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="Name" Value="btnLogin" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+            <RuleParameter Name="Index" Value="0" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+    </Request>
+    <Request Method="POST" Guid="06ae3df3-6045-43b2-8f06-cf2e7ad61b18" Version="1.1" Url="http://localhost/Login/Login" ThinkTime="6" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="http://localhost/" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="http://localhost/Login/Login" />
+      </Headers>
+      <FormPostHttpBody>
+        <FormPostParameter Name="txtUid" Value="hg" RecordedValue="ks" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="txtPwd" Value="hg3" RecordedValue="ks" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="timeZoneOffsetInJan1" Value="-180" RecordedValue="-180" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="timeZoneOffsetInJul1" Value="-180" RecordedValue="-180" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="btnLogin" Value="Login" RecordedValue="Login" CorrelationBinding="{{FormPostParam1.btnLogin}}" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <Request Method="GET" Guid="0a76d256-cd93-41c8-9815-8c5d737c6ab6" Version="1.1" Url="http://localhost/Login/Logout" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+    <Loop UniqueStringId="643dc5f4-fb04-416e-8531-d0acb86356a2">
+      <ConditionalRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.CountingLoopRule, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Counting Loop" Description="Executes the requests contained in the loop a specified number of times." MaxIterations="-1" AdvanceDataCursors="False">
+        <RuleParameters>
+          <RuleParameter Name="ContextParameterName" Value="Loop Counter" />
+          <RuleParameter Name="IterationsCount" Value="10" />
+        </RuleParameters>
+      </ConditionalRule>
+      <Items>
+        <Request Method="GET" Guid="0d6e0525-75e7-48a4-b7db-370366dd5dea" Version="1.1" Url="http://localhost/cases" ThinkTime="1" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+          <DependentRequests>
+            <Request Method="POST" Guid="87321bb7-9f4b-43c2-871d-be9846eb1918" Version="1.1" Url="http://localhost/Cases/SearchAjax" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="application/json, text/javascript, */*; q=0.01" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/cases" />
+              </Headers>
+              <FormPostHttpBody>
+                <FormPostParameter Name="hidFilterCustomerId" Value="{{$HIDDEN1.hidFilterCustomerId}}" RecordedValue="28" CorrelationBinding="" UrlEncode="True" />
+                <FormPostParameter Name="hidFilterProductAreaId" Value="{{$HIDDEN1.hidFilterProductAreaId}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+                <FormPostParameter Name="SearchInMyCasesOnly" Value="{{$HIDDEN1.SearchInMyCasesOnly}}" RecordedValue="false" CorrelationBinding="" UrlEncode="True" />
+                <FormPostParameter Name="txtFreeTextSearch" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+                <FormPostParameter Name="lstfilterCaseProgress" Value="2" RecordedValue="2" CorrelationBinding="{{FormPostParam2.lstfilterCaseProgress}}" UrlEncode="True" />
+                <FormPostParameter Name="expandedGroup" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+                <FormPostParameter Name="start" Value="0" RecordedValue="0" CorrelationBinding="{{FormPostParam3.start}}" UrlEncode="True" />
+                <FormPostParameter Name="length" Value="50" RecordedValue="50" CorrelationBinding="{{FormPostParam4.length}}" UrlEncode="True" />
+                <FormPostParameter Name="order" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+                <FormPostParameter Name="dir" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+              </FormPostHttpBody>
+            </Request>
+          </DependentRequests>
+          <Headers>
+            <Header Name="Referer" Value="http://localhost/" />
+          </Headers>
+          <ExtractionRules>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+              <RuleParameters>
+                <RuleParameter Name="Required" Value="True" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+              </RuleParameters>
+            </ExtractionRule>
+          </ExtractionRules>
+          <CorrelationExtractionRules>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam2.lstfilterCaseProgress" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot; &gt;Ad" />
+                <RuleParameter Name="Index" Value="146" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam3.start" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot; /&gt;&#xD;" />
+                <RuleParameter Name="Index" Value="255" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam4.length" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="t&quot;:[&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot;,&quot;25" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+          </CorrelationExtractionRules>
+        </Request>
+      </Items>
+    </Loop>
+  </Items>
+  <ValidationRules>
+    <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidateResponseUrl, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Response URL" Description="Validates that the response URL after redirects are followed is the same as the recorded response URL.  QueryString parameters are ignored." Level="Low" ExectuionOrder="BeforeDependents" />
+    <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidationRuleResponseTimeGoal, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Response Time Goal" Description="Validates that the response time for the request is less than or equal to the response time goal as specified on the request.  Response time goals of zero will be ignored." Level="Low" ExectuionOrder="AfterDependents">
+      <RuleParameters>
+        <RuleParameter Name="Tolerance" Value="0" />
+      </RuleParameters>
+    </ValidationRule>
+  </ValidationRules>
+</WebTest>

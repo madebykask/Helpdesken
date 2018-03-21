@@ -1,0 +1,366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebTest Name="EditCase" Id="29a96353-c614-4989-b8f0-37c4f71c6dba" Owner="" Priority="2147483647" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="0" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="" CredentialUserName="" CredentialPassword="" PreAuthenticate="True" Proxy="default" StopOnError="False" RecordedResultFile="EditCase.f4eef80f-5baa-4a5a-845f-e06c6fd04ae2.rec.webtestresult" ResultsLocale="">
+  <Items>
+    <Request Method="GET" Guid="e890b16f-e6e3-4e6b-86fd-df436b31c94c" Version="1.1" Url="http://localhost/" ThinkTime="13" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="http://localhost/Login/Login?ReturnUrl=%2F" ReportingName="" IgnoreHttpStatusCode="False">
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam58.btnLogin" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="Name" Value="btnLogin" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+            <RuleParameter Name="Index" Value="0" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+    </Request>
+    <Request Method="POST" Guid="1b542e73-6f48-4e34-a6ee-c7acf81e33f5" Version="1.1" Url="http://localhost/Login/Login" ThinkTime="19" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="http://localhost/" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="http://localhost/Login/Login" />
+      </Headers>
+      <FormPostHttpBody>
+        <FormPostParameter Name="returnUrl" Value="{{$HIDDEN1.returnUrl}}" RecordedValue="/" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="txtUid" Value="jessica" RecordedValue="jessica" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="txtPwd" Value="js" RecordedValue="js" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="timeZoneOffsetInJan1" Value="-180" RecordedValue="-180" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="timeZoneOffsetInJul1" Value="-180" RecordedValue="-180" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="btnLogin" Value="Login" RecordedValue="Login" CorrelationBinding="{{FormPostParam56.btnLogin}}" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <Loop UniqueStringId="5e9cb21d-d164-4db8-81f7-81452aa1e89c">
+      <ConditionalRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.CountingLoopRule, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Counting Loop" Description="Executes the requests contained in the loop a specified number of times." MaxIterations="-1" AdvanceDataCursors="False">
+        <RuleParameters>
+          <RuleParameter Name="ContextParameterName" Value="Loop Counter" />
+          <RuleParameter Name="IterationsCount" Value="100" />
+        </RuleParameters>
+      </ConditionalRule>
+      <Items>
+        <Request Method="GET" Guid="236faa77-e08a-4f63-a988-273b510d6e48" Version="1.1" Url="http://localhost/Cases/Edit/3705" ThinkTime="1" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+          <DependentRequests>
+            <Request Method="GET" Guid="e4102965-0d4f-4ca0-8f6f-5e2d71295678" Version="1.1" Url="http://localhost/Translation/GetAllTextTranslations" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+              </Headers>
+              <QueryStringParameters>
+                <QueryStringParameter Name="curTime" Value="1521449856191" RecordedValue="1521449856191" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+              </QueryStringParameters>
+            </Request>
+            <Request Method="GET" Guid="0ad51f3d-28f6-4ed9-abfe-d4aff9c8576a" Version="1.1" Url="http://localhost/Translation/GetCaseFieldsForTranslation" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+              </Headers>
+              <QueryStringParameters>
+                <QueryStringParameter Name="curTime" Value="1521449856194" RecordedValue="1521449856194" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+              </QueryStringParameters>
+            </Request>
+            <Request Method="GET" Guid="019fdbc3-972a-407f-9b4d-33f36528648d" Version="1.1" Url="http://localhost/Organization/GetRegions/" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+              </Headers>
+              <QueryStringParameters>
+                <QueryStringParameter Name="customerId" Value="1" RecordedValue="1" CorrelationBinding="{{QueryStringParam282.customerId}}" UrlEncode="False" UseToGroupResults="False" />
+              </QueryStringParameters>
+            </Request>
+            <Request Method="GET" Guid="49e3fbbb-5366-497f-850b-64c41a450205" Version="1.1" Url="http://localhost/Cases/GetCaseFields" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="application/json, text/javascript, */*; q=0.01" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="69d266b5-4cc6-4e83-a129-fbd28385367b" Version="1.1" Url="http://localhost/content/templates/case-invoice.tmpl.html" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="d68b4380-848b-44bf-add3-7b9371e95285" Version="1.1" Url="http://localhost/content/templates/case-invoice-order.tmpl.html" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="835b8a7c-8c75-4d53-aabf-0c1e41d15d5d" Version="1.1" Url="http://localhost/content/templates/case-invoice-article.tmpl.html" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="f48b0c63-c22f-4522-ae13-da96efede599" Version="1.1" Url="http://localhost/content/templates/case-invoice-overview.tmpl.html" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="6df9847d-663e-4a40-9d1a-fb833190adf7" Version="1.1" Url="http://localhost/content/templates/case-invoice-article-overview.tmpl.html" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="874025f7-4e38-4f96-b72d-be46c076cc7c" Version="1.1" Url="http://localhost/content/templates/case-invoice-order-actions.tmpl.html" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="fc6792b0-a607-47db-9002-bf037caa4b22" Version="1.1" Url="http://localhost/content/templates/case-invoice-case-files.tmpl.html" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="70598b96-f72c-4aab-bbe5-7797785f6b1d" Version="1.1" Url="http://localhost/content/templates/case-invoice-order-files.tmpl.html" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+              </Headers>
+            </Request>
+            <Request Method="GET" Guid="9cd6144e-00d2-438f-9adf-a1552e7f18e4" Version="1.1" Url="http://localhost/CaseInvoice/CaseFiles" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="*/*" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+              </Headers>
+              <QueryStringParameters>
+                <QueryStringParameter Name="id" Value="3705" RecordedValue="3705" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+                <QueryStringParameter Name="logKey" Value="828e70d4-7ff0-441d-809c-53449f732ed9" RecordedValue="828e70d4-7ff0-441d-809c-53449f732ed9" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+                <QueryStringParameter Name="mytime" Value="1521449856254" RecordedValue="1521449856254" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+              </QueryStringParameters>
+            </Request>
+            <Request Method="GET" Guid="2c5142a7-1e70-4199-bdfa-76319c63f30c" Version="1.1" Url="http://localhost/Cases/RelatedCasesCount" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="application/json, text/javascript, */*; q=0.01" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+              </Headers>
+              <QueryStringParameters>
+                <QueryStringParameter Name="caseId" Value="3705" RecordedValue="3705" CorrelationBinding="{{QueryStringParam340.caseId}}" UrlEncode="False" UseToGroupResults="False" />
+                <QueryStringParameter Name="userId" Value="jessica" RecordedValue="jessica" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+              </QueryStringParameters>
+            </Request>
+            <Request Method="GET" Guid="1f0d122c-02e5-407d-9dbd-6b12b476fb3d" Version="1.1" Url="http://localhost/Cases/RelatedInventoryCount" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="application/json, text/javascript, */*; q=0.01" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+              </Headers>
+              <QueryStringParameters>
+                <QueryStringParameter Name="userId" Value="jessica" RecordedValue="jessica" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+              </QueryStringParameters>
+            </Request>
+            <Request Method="POST" Guid="e8d5cd8b-7b4c-4194-9b76-15cfce161042" Version="1.1" Url="http://localhost/Cases/GetProductAreaByCaseType/" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="application/json, text/javascript, */*; q=0.01" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+              </Headers>
+              <FormPostHttpBody>
+                <FormPostParameter Name="caseTypeId" Value="4" RecordedValue="4" CorrelationBinding="{{FormPostParam59.caseTypeId}}" UrlEncode="True" />
+                <FormPostParameter Name="customerId" Value="1" RecordedValue="1" CorrelationBinding="{{FormPostParam60.customerId}}" UrlEncode="True" />
+                <FormPostParameter Name="myTime" Value="1521449856498" RecordedValue="1521449856498" CorrelationBinding="" UrlEncode="True" />
+                <FormPostParameter Name="productAreaIdToInclude" Value="987" RecordedValue="987" CorrelationBinding="{{FormPostParam61.productAreaIdToInclude}}" UrlEncode="True" />
+              </FormPostHttpBody>
+            </Request>
+            <Request Method="GET" Guid="b8801e1e-0c6d-47fc-8429-18bae0644545" Version="1.1" Url="http://localhost/Cases/GetDepartmentInvoiceParameters/" ThinkTime="1" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+              <Headers>
+                <Header Name="Accept" Value="application/json, text/javascript, */*; q=0.01" />
+                <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+                <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+              </Headers>
+              <QueryStringParameters>
+                <QueryStringParameter Name="departmentId" Value="489" RecordedValue="489" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+                <QueryStringParameter Name="ouId" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+              </QueryStringParameters>
+            </Request>
+          </DependentRequests>
+          <ExtractionRules>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam62.lockGUID" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot; /&gt;&#xD;" />
+                <RuleParameter Name="Index" Value="64" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+          </ExtractionRules>
+          <CorrelationExtractionRules>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam175.customerId" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="?customerId=" />
+                <RuleParameter Name="EndsWith" Value="&quot;" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam282.customerId" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="?customerId=" />
+                <RuleParameter Name="EndsWith" Value="&quot;" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam340.caseId" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="?caseId=" />
+                <RuleParameter Name="EndsWith" Value="&amp;" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam59.caseTypeId" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot;&gt;Tes" />
+                <RuleParameter Name="Index" Value="73" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam60.customerId" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="red(&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot;); }" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam61.productAreaIdToInclude" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+                <RuleParameter Name="EndsWith" Value="&quot; /&gt;&#xD;" />
+                <RuleParameter Name="Index" Value="54" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam398.customerId" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="?customerId=" />
+                <RuleParameter Name="EndsWith" Value="&quot;" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam399.customerId" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="?customerId=" />
+                <RuleParameter Name="EndsWith" Value="&quot;" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+            <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam400.caseId" DisplayName="" Description="">
+              <RuleParameters>
+                <RuleParameter Name="StartsWith" Value="?caseId=" />
+                <RuleParameter Name="EndsWith" Value="&amp;" />
+                <RuleParameter Name="Index" Value="0" />
+                <RuleParameter Name="IgnoreCase" Value="False" />
+                <RuleParameter Name="UseRegularExpression" Value="False" />
+                <RuleParameter Name="HtmlDecode" Value="True" />
+                <RuleParameter Name="Required" Value="False" />
+              </RuleParameters>
+            </ExtractionRule>
+          </CorrelationExtractionRules>
+        </Request>
+      </Items>
+    </Loop>
+    <Request Method="GET" Guid="7fff797d-f6c0-4a75-b60a-68483c93c9b3" Version="1.1" Url="http://localhost/Organization/GetDepartments/" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Accept" Value="*/*" />
+        <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+        <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+      </Headers>
+      <QueryStringParameters>
+        <QueryStringParameter Name="customerId" Value="1" RecordedValue="1" CorrelationBinding="{{QueryStringParam398.customerId}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="52021ed0-5151-4522-bc1b-f02e670c030c" Version="1.1" Url="http://localhost/Organization/GetOUs/" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Accept" Value="*/*" />
+        <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+        <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+      </Headers>
+      <QueryStringParameters>
+        <QueryStringParameter Name="customerId" Value="1" RecordedValue="1" CorrelationBinding="{{QueryStringParam399.customerId}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="306a346d-56f2-4263-96e0-ae0689dc3ded" Version="1.1" Url="http://localhost/Caseinvoice/articles/" ThinkTime="13" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Accept" Value="*/*" />
+        <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+        <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+      </Headers>
+      <QueryStringParameters>
+        <QueryStringParameter Name="caseId" Value="3705" RecordedValue="3705" CorrelationBinding="{{QueryStringParam400.caseId}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="productAreaId" Value="987" RecordedValue="987" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="myTime" Value="1521449858362" RecordedValue="1521449858362" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="POST" Guid="29249d43-dbbf-4890-ac3a-98c2d395bfd5" Version="1.1" Url="http://localhost/Cases/UnLockCase/" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Accept" Value="*/*" />
+        <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+        <Header Name="Referer" Value="http://localhost/Cases/Edit/3705" />
+      </Headers>
+      <FormPostHttpBody>
+        <FormPostParameter Name="lockGUID" Value="{{FormPostParam62.lockGUID}}" RecordedValue="c11f32e2-ef43-4e4f-84e0-f08caf5cea29" CorrelationBinding="{{FormPostParam62.lockGUID}}" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+  </Items>
+  <ValidationRules>
+    <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidateResponseUrl, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Response URL" Description="Validates that the response URL after redirects are followed is the same as the recorded response URL.  QueryString parameters are ignored." Level="Low" ExectuionOrder="BeforeDependents" />
+    <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidationRuleResponseTimeGoal, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Response Time Goal" Description="Validates that the response time for the request is less than or equal to the response time goal as specified on the request.  Response time goals of zero will be ignored." Level="Low" ExectuionOrder="AfterDependents">
+      <RuleParameters>
+        <RuleParameter Name="Tolerance" Value="0" />
+      </RuleParameters>
+    </ValidationRule>
+  </ValidationRules>
+</WebTest>
