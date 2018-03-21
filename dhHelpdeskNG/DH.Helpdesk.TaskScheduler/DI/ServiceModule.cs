@@ -21,6 +21,9 @@ using DH.Helpdesk.BusinessData.Models.Case.Input;
 using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity;
 using DH.Helpdesk.Dal.Repositories;
+using DH.Helpdesk.Domain;
+using DH.Helpdesk.BusinessData.Models.Customer;
+using DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel;
 
 namespace DH.Helpdesk.TaskScheduler.DI
 {
@@ -43,10 +46,19 @@ namespace DH.Helpdesk.TaskScheduler.DI
             Bind<INotifierFieldSettingRepository>().To<NotifierFieldSettingRepository>();
             Bind<INotifierRepository>().To<NotifierRepository>();
             Bind<IDepartmentRepository>().To<DepartmentRepository>();
-            Bind<IBusinessModelToEntityMapper<CaseNotifier, ComputerUser>>().To<CaseNotifierToEntityMapper>().InSingletonScope();
             Bind<ILanguageRepository>().To<LanguageRepository>();
             Bind<IDivisionRepository>().To<DivisionRepository>();
-            Bind<IDomainRepository>().To<DomainRepository>();        
+            Bind<IDomainRepository>().To<DomainRepository>();
+            Bind<ICustomerRepository>().To<CustomerRepository>();
+            Bind<ISettingRepository>().To<SettingRepository>();
+
+            Bind<IBusinessModelToEntityMapper<CaseNotifier, ComputerUser>>()
+                .To<CaseNotifierToEntityMapper>().InSingletonScope();
+           
+            Bind<IEntityToBusinessModelMapper<Setting, CustomerSettings>>()
+                .To<CustomerSettingsToBusinessModelMapper>()
+                .InSingletonScope();
+
         }
     }
 }

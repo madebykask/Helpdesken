@@ -29,19 +29,22 @@ namespace DH.Helpdesk.TaskScheduler.Jobs
             const string settingsName = "ImportInitiatorSettings";
 
             var settings = _importInitiatorService.GetJobSettings();
-            var currentSettings = GetValues(settings);
-
-            var dataMap = context.JobDetail.JobDataMap;
-            if (dataMap.ContainsKey(settingsName))
-                previousSettings = dataMap.GetString(settingsName);
-            else
-                dataMap.Add(settingsName, currentSettings);
-
-            if (!previousSettings.Equals(GetValues(settings), StringComparison.InvariantCultureIgnoreCase))
+            foreach (var setting in settings)
             {
-                _logger.DebugFormat("Job start time changed - was: {0}, now: {1}", previousSettings, currentSettings);
-                UpdateQuartzJobTrigger(context);
-                dataMap[settingsName] = currentSettings;
+                var currentSettings = GetValues(setting);
+
+                var dataMap = context.JobDetail.JobDataMap;
+                if (dataMap.ContainsKey(settingsName))
+                    previousSettings = dataMap.GetString(settingsName);
+                else
+                    dataMap.Add(settingsName, currentSettings);
+
+                if (!previousSettings.Equals(GetValues(setting), StringComparison.InvariantCultureIgnoreCase))
+                {
+                    _logger.DebugFormat("Job start time changed - was: {0}, now: {1}", previousSettings, currentSettings);
+                    UpdateQuartzJobTrigger(context);
+                    dataMap[settingsName] = currentSettings;
+                }
             }
 
         }
@@ -55,9 +58,12 @@ namespace DH.Helpdesk.TaskScheduler.Jobs
 
         private void UpdateQuartzJobTrigger(IJobExecutionContext context)
         {
-            var trigger = _importInitiatorService.GetTrigger();
-            var result = context.Scheduler.RescheduleJob(trigger.Key, trigger);
-            _logger.InfoFormat("Job {0} is rescheduled", trigger.JobKey.Name);
+            var triggers = _importInitiatorService.GetTrigger();
+            foreach (var trigger in triggers)
+            {
+                var result = context.Scheduler.RescheduleJob(trigger.Key, trigger);
+                _logger.InfoFormat("Job {0} is rescheduled", trigger.JobKey.Name);
+            }
         }
     }
 }

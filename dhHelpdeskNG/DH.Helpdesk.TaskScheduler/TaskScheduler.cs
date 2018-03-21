@@ -41,8 +41,9 @@ namespace DH.Helpdesk.TaskScheduler
 
         protected override void OnStart(string[] args)
         {
-            //_logger.InfoFormat("Starting service {0}", ServiceName);
+            _logger.InfoFormat("Starting service {0}", ServiceName);
 
+            ///*Daily Report*/
             var job = JobBuilder.Create<DailyReportJob>()
                 .WithIdentity(Constants.DailyReportJobName)
                 .Build();
@@ -50,11 +51,28 @@ namespace DH.Helpdesk.TaskScheduler
 
             _sched.ScheduleJob(job, trigger);
 
-            var trackerJob = JobBuilder.Create<SettingsTrackerJob>()
-                .WithIdentity("SettingsTrackerJob")
-                .Build();
 
-           // set up a job to track db starttime change of 'DailyReportJob'
+            /*Import Initiator*/
+            //var _initiatorImportService = _diContainer.Get<IImportInitiatorService>();
+            //var initiatorTriggers = _initiatorImportService.GetTriggers().ToList();
+            //var i = 0; 
+            //foreach (var initTrigger in initiatorTriggers)
+            //{                
+            //    var initiatorJob = 
+            //        JobBuilder.Create<ImportInitiatorJob>()
+            //                  .WithIdentity($"{Constants.ImportInitiator_JobName}_{i}")
+            //                  .Build();
+
+            //    _sched.ScheduleJob(initiatorJob, initTrigger);
+            //    i++;
+            //}
+
+            /*Job Tracker*/
+            var trackerJob = JobBuilder.Create<SettingsTrackerJob>()
+               .WithIdentity("SettingsTrackerJob")
+               .Build();
+
+            // set up a job to track db starttime change of 'DailyReportJob'
             var trackerSettingsTrigger = TriggerBuilder.Create()
                 .WithIdentity("SettingsTrackerJobTrigger")
                 .StartNow()
@@ -64,28 +82,6 @@ namespace DH.Helpdesk.TaskScheduler
                     .RepeatForever())
                 .Build();
             _sched.ScheduleJob(trackerJob, trackerSettingsTrigger);
-
-
-            //var importI_job = JobBuilder.Create<ImportInitiatorJob>()
-            //    .WithIdentity(Constants.ImportInitiator_JobName)
-            //    .Build();
-            //var importI_trigger = _diContainer.Get<IImportInitiatorService>().GetTrigger();
-
-            //_sched.ScheduleJob(importI_job, importI_trigger);
-
-            //var importI_trackerJob = JobBuilder.Create<ImportInitiatorServiceSettingsTrackerJob>()
-            //    .WithIdentity("ImportInitiatorSettingsTrackerJob")
-            //    .Build();
-
-            //var importI_trackerSettingsTrigger = TriggerBuilder.Create()
-            //    .WithIdentity("ImportInitiatorSettingsTrackerJobTrigger")
-            //    .StartNow()
-            //    .ForJob("ImportInitiatorSettingsTrackerJob")
-            //    .WithSimpleSchedule(x => x
-            //        .WithIntervalInSeconds(60)
-            //        .RepeatForever())
-            //    .Build();
-            //_sched.ScheduleJob(importI_trackerJob, importI_trackerSettingsTrigger);
 
             if (_sched.GetJobGroupNames().Count > 0)
                 _sched.Start();

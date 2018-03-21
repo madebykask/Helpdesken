@@ -43,6 +43,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
         private readonly ILanguageRepository _languageRepository;
         private readonly IDivisionRepository _divisionRepository;
         private readonly IDomainRepository _domainRepository;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly ISettingRepository _settingRepository;
 
 
         //private readonly IFtpFileDownloader _downloader;
@@ -53,7 +55,9 @@ namespace DH.Helpdesk.TaskScheduler.Services
                                        IDepartmentRepository deparmentRepository,
                                        ILanguageRepository languageRepository,
                                        IDivisionRepository divisionRepository,
-                                       IDomainRepository domainRepository
+                                       IDomainRepository domainRepository,
+                                       ICustomerRepository customerRepository,
+                                       ISettingRepository settingRepository
 
                                       //,IFtpFileDownloader downloader
                                       )
@@ -66,6 +70,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
             _languageRepository = languageRepository;
             _divisionRepository = divisionRepository;
             _domainRepository = domainRepository;
+            _customerRepository = customerRepository;
+            _settingRepository = settingRepository;
             //_downloader = downloader;
         }
 
@@ -77,81 +83,102 @@ namespace DH.Helpdesk.TaskScheduler.Services
             return ret;
         }
 
-        public ImportInitiator_JobSettings GetJobSettings()
-        {
-            //var dbQueryExecutor = _execFactory.Create();
-            //var settings = dbQueryExecutor.QuerySingleOrDefault<ImportInitiator_JobSettings>("Select * from tblReportScheduler");
-            //_logger.DebugFormat("Settings: {0}", settings != null ? JsonConvert.SerializeObject(settings) : "null");
-            var settings = new ImportInitiator_JobSettings()
+        public IList<ImportInitiator_JobSettings> GetJobSettings()
+        {           
+            var customers = _customerRepository.GetMany(c => !string.IsNullOrEmpty(c.NDSPath)).ToList();
+            var customerIds = customers.Select(c=> c.Id).ToArray();
+            var customerSettings = _settingRepository.GetMany(c => customerIds.Contains(c.Customer_Id)).ToList();
+                        
+            var ret = new List<ImportInitiator_JobSettings>();
+            if (customers != null)
             {
-                Id = 0,                
-                Url = @"C:\",
-                AppendTime = true,
-                CronExpression = "0 * 8-22 * * ?",
-                ImportFormat = "CSV",
-                InputFilename = "ExampleFromCustomer.csv",
-                LastRun = "",
-                SqlQuery = "",
-                StartTime = "2018-03-06",
-                TimeZone = ""
-            };
-            return settings;
+                foreach (var customer in customers.Where(c=> c.Id  == 749))
+                {
+                    var _cs = customerSettings.FirstOrDefault(s => s.Customer_Id == customer.Id);
+                    if (_cs != null)
+                    {
+                        var jobSetting = new ImportInitiator_JobSettings()
+                        {
+                            CustomerId = customer.Id,
+                            Url = customer.NDSPath,
+                            InputFilename = "ExampleFromCustomer.csv",
+                            Filter = _cs.LDAPFilter,
+                            OverwriteFromMasterDirectory = customer.OverwriteFromMasterDirectory,
+                            Days2WaitBeforeDelete = customer.Days2WaitBeforeDelete,
+                            UserName = _cs.LDAPUserName,
+                            Password = _cs.LDAPPassword,
+                            StartTime = "2018-03-06",
+                            CronExpression = "0 * 8-22 * * ?",
+                            TimeZone = "",
+                            ImportFormat = "CSV"
+                        };
+                        ret.Add(jobSetting);
+                    }
+
+                }
+            }
+            return ret;
         }
 
-        public ITrigger GetTrigger()
+        public IList<ITrigger> GetTriggers()
         {
+            var triggers = new List<ITrigger>();
             var settings = GetJobSettings();
-            if (settings == null)
-            {
-                return TriggerBuilder.Create()
-                    .WithIdentity(Constants.ImportInitiator_JobTriggerName)
-                    .ForJob(Constants.ImportInitiator_JobName)
-                    //.StartNow()
-                    .EndAt(DateTimeOffset.UtcNow)
-                    .Build();
-            }
-            //if (settings == null) throw new ArgumentNullException(nameof(settings));
 
-            var trigger = TriggerBuilder.Create()
-                        .WithIdentity(Constants.ImportInitiator_JobTriggerName)
-                        .StartNow()
-                        .ForJob(Constants.ImportInitiator_JobName);
-
-            var cronExpression = "";
-            if (!string.IsNullOrWhiteSpace(settings.CronExpression))
+            if (settings != null || settings.Any())
             {
-                cronExpression = settings.CronExpression;
-            }
-            else if (!string.IsNullOrWhiteSpace(settings.StartTime))
-            {
-                var r = new Regex(@"(\d{1,2}):(\d{1,2})");
-                var match = r.Match(settings.StartTime);
-                if (match.Success)
+                var i = 0;
+                foreach (var setting in settings)
                 {
-                    cronExpression = $"0 {match.Groups[2].Value} {match.Groups[1].Value} ? * *";
+                    //if (setting == null) throw new ArgumentNullException(nameof(settings));
+                    var trigger = TriggerBuilder.Create()
+                                .WithIdentity($"{Constants.ImportInitiator_JobTriggerName}_{i}")
+                                .StartNow()
+                                .ForJob($"{Constants.ImportInitiator_JobName}_{i}");
+
+                    var cronExpression = "";
+                    if (!string.IsNullOrWhiteSpace(setting.CronExpression))
+                    {
+                        cronExpression = setting.CronExpression;
+                    }
+                    else if (!string.IsNullOrWhiteSpace(setting.StartTime))
+                    {
+                        var r = new Regex(@"(\d{1,2}):(\d{1,2})");
+                        var match = r.Match(setting.StartTime);
+                        if (match.Success)
+                        {
+                            cronExpression = $"0 {match.Groups[2].Value} {match.Groups[1].Value} ? * *";
+                        }
+                    }
+                    if (string.IsNullOrWhiteSpace(cronExpression)) throw new Exception("No StartTime or CronExpression defined.");
+
+                    TimeZoneInfo timeZoneInfo;
+                    if (!string.IsNullOrWhiteSpace(setting.TimeZone))
+                    {
+                        try
+                        {
+                            timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(setting.TimeZone);
+                        }
+                        catch (InvalidTimeZoneException)
+                        {
+                            timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("UTC");
+                        }
+                    }
+                    else
+                        timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("UTC");
+
+                    _logger.DebugFormat("Creating trigger - CronExp:{0}, TimeZone:{1}", cronExpression, timeZoneInfo.Id);
+                    triggers.Add(trigger.WithSchedule(CronScheduleBuilder.CronSchedule(cronExpression)
+                        .InTimeZone(timeZoneInfo))
+                        .Build());
+
+                    i++;
                 }
             }
-            if (string.IsNullOrWhiteSpace(cronExpression)) throw new Exception("No StartTime or CronExpression defined.");
-
-            TimeZoneInfo timeZoneInfo;
-            if (!string.IsNullOrWhiteSpace(settings.TimeZone))
-            {
-                try
-                {
-                    timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(settings.TimeZone);
-                }
-                catch (InvalidTimeZoneException)
-                {
-                    timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("UTC");
-                }
-            }
-            else
-                timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("UTC");
-
-            _logger.DebugFormat("Creating trigger - CronExp:{0}, TimeZone:{1}", cronExpression, timeZoneInfo.Id);
-            return trigger.WithSchedule(CronScheduleBuilder.CronSchedule(cronExpression)
-                .InTimeZone(timeZoneInfo))
-                .Build();
+                       
+            if (triggers == null) throw new ArgumentNullException(nameof(triggers));
+           
+            return triggers;
         }
 
         public CsvInputData ReadCsv(ImportInitiator_JobSettings settings)
@@ -161,33 +188,41 @@ namespace DH.Helpdesk.TaskScheduler.Services
             var filePath = settings.Url;
             var fileName = $"{settings.InputFilename}";
             const char delimiter = ';';
-
-            using (var reader = new StreamReader(filePath + fileName, Encoding.UTF7, true))
+            try
             {
-                // First line contains column names.
-                var columnNames = reader.ReadLine().Split(delimiter);
-                ret.InputHeaders = columnNames.ToList();
-
-                var line = reader.ReadLine();
-                while (!string.IsNullOrEmpty(line))
+                using (var reader = new StreamReader(filePath + fileName, Encoding.UTF7, true))
                 {
-                    var curRecord = line.Split(delimiter).ToList();
-                    if (curRecord.Any())
+                    // First line contains column names.
+                    var columnNames = reader.ReadLine().Split(delimiter);
+                    ret.InputHeaders = columnNames.ToList();
+
+                    var line = reader.ReadLine();
+                    while (!string.IsNullOrEmpty(line))
                     {
-                        var identity = curRecord[0];
-                        var rowFields = new Dictionary<string, string>();
-                        for (int i = 0; i < curRecord.Count; i++)
+                        var curRecord = line.Split(delimiter).ToList();
+                        if (curRecord.Any())
                         {
-                            rowFields.Add(columnNames[i], curRecord[i]);
+                            var identity = curRecord[0];
+                            var rowFields = new Dictionary<string, string>();
+                            for (int i = 0; i < curRecord.Count; i++)
+                            {
+                                rowFields.Add(columnNames[i], curRecord[i]);
+                            }
+                            ret.InputColumns.Add(new Tuple<string, Dictionary<string, string>>(identity, rowFields));
                         }
-                        ret.InputColumns.Add(new Tuple<string, Dictionary<string, string>>(identity, rowFields));
+
+                        line = reader.ReadLine();
                     }
 
-                    line = reader.ReadLine();
+                    return ret;
                 }
-
-                return ret;
             }
+            catch
+            {
+                //TODO: Log error
+            }
+
+            return ret;
         }
 
         public int CheckIfExisting(string UserId , int customerId)
@@ -319,9 +354,9 @@ namespace DH.Helpdesk.TaskScheduler.Services
 
     internal interface IImportInitiatorService
     {
-        ImportInitiator_JobSettings GetJobSettings();
+        IList<ImportInitiator_JobSettings> GetJobSettings();
 
-        ITrigger GetTrigger();
+        IList<ITrigger> GetTriggers();
 
         CsvInputData ReadCsv(ImportInitiator_JobSettings settings);
 

@@ -31,14 +31,10 @@ namespace DH.Helpdesk.TaskScheduler.Jobs
 
             var settings = _importInitiatorService.GetJobSettings();
             if(settings == null) throw new ArgumentNullException(nameof(settings));
-           
-            var inputData = _importInitiatorService.ReadCsv(settings);
-            var customers = ConfigurationManager.AppSettings["Customers"].ToString();
-            var customerIds = customers.Split(',');
-            foreach (var cId in customerIds)
+            foreach (var setting in settings)
             {
-                var customerId = int.Parse(cId);
-                var fieldSettings = _importInitiatorService.GetInitiatorSettings(customerId);
+                var inputData = _importInitiatorService.ReadCsv(setting);         
+                var fieldSettings = _importInitiatorService.GetInitiatorSettings(setting.CustomerId);
                 _importInitiatorService.ImportInitiator(inputData, fieldSettings);
             }
 

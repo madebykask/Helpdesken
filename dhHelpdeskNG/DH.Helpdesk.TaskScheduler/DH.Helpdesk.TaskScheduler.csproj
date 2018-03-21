@@ -114,7 +114,6 @@
     <Compile Include="Helper\PropertyHelper.cs" />
     <Compile Include="Jobs\ImportInitiatorJob.cs" />
     <Compile Include="Jobs\DailyReportJob.cs" />
-    <Compile Include="Jobs\ImportInitiatorSettingsTrackerJob.cs" />
     <Compile Include="Jobs\SettingsTrackerJob.cs" />
     <Compile Include="Managers\ServiceConfigurationManager.cs" />
     <Compile Include="ProjectInstaller.cs">
