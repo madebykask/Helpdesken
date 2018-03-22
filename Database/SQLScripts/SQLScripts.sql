@@ -170,7 +170,7 @@ BEGIN
 	    [RegisterDateFrom] [datetime] NOT NULL,
 	    [RegisterDateTo] [datetime] NOT NULL,
 	    [ClosedOnly] [bit] NOT NULL,
-	    [FieldsNames] [nvarchar](512) NOT NULL,
+	    [FieldsNames] [nvarchar](1024) NOT NULL,
 	    [ReplaceDataWith] [nvarchar](256) NOT NULL,
 	    [ReplaceDatesWith] [datetime] NULL,
 	    [RemoveCaseAttachments] [bit] NOT NULL,

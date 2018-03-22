@@ -17,7 +17,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.GDPR
             this.Property(x => x.RegisterDateTo).IsRequired();
 
             this.Property(x => x.ClosedOnly).IsRequired();
-            this.Property(x => x.FieldsNames).IsRequired().HasMaxLength(512);
+            this.Property(x => x.FieldsNames).IsRequired().HasMaxLength(1024);
             this.Property(x => x.ReplaceDataWith).IsRequired().HasMaxLength(256);
 
             this.Property(x => x.ReplaceDatesWith).IsOptional();
