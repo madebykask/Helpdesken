@@ -6943,5 +6943,77 @@ If not exists (select * from tblTextTranslation where Text_Id = 1950 and Languag
   insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1950, 'Case has parent/child relation. Case can not be moved to customer without user rights.', 2)
 GO
 
+
+If not exists (select * from tbltext where id = 1951)
+	insert into tbltext (id, TextString) VALUES (1951, 'Valj Favorit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1951 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1951, 2, 'Select Favorite')
+GO
+
+If not exists (select * from tbltext where id = 1952)
+	insert into tbltext (id, TextString) VALUES (1952, 'Bevarandeperiod')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1952 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1952, 2, 'Retention period')
+GO
+
+If not exists (select * from tbltext where id = 1953)
+	insert into tbltext (id, TextString) VALUES (1953, 'Räkna ut Registreringsdatum (Till)')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1953 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1953, 2, 'Calculate Registration date (To)')
+GO
+
+If not exists (select * from tbltext where id = 1954)
+	insert into tbltext (id, TextString) VALUES (1954, 'Ny/Redigera Favorit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1954 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1954, 2, 'New/Edit Favorite')
+GO
+
+If not exists (select * from tbltext where id = 1955)
+	insert into tbltext (id, TextString) VALUES (1955, 'Skappa Ny')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1955 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1955, 2, 'Create New')
+GO
+
+If not exists (select * from tbltext where id = 1956)
+	insert into tbltext (id, TextString) VALUES (1956, 'Ny Favorit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1956 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1956, 2, 'New favorite')
+GO
+
+If not exists (select * from tbltext where id = 1957)
+	insert into tbltext (id, TextString) VALUES (1957, 'Redigera favorit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1957 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1957, 2, 'Update favorite')
+GO
+
+If not exists (select * from tbltext where id = 1958)
+	insert into tbltext (id, TextString) VALUES (1958, 'Skriv in ett namn på din nya favorit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1958 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1958, 2, 'Enter a name for your new favorite')
+GO
+
+If not exists (select * from tbltext where id = 1959)
+	insert into tbltext (id, TextString) VALUES (1959, 'Redigera favorit eller ändra namn för att spara som en ny favorit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1959 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1959, 2, 'Update your favorite or change the name to save it as a new favorite')
+GO
+
+If not exists (select * from tbltext where id = 1960)
+	insert into tbltext (id, TextString) VALUES (1960, 'Favorit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1960 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1960, 2, 'Favorite')
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

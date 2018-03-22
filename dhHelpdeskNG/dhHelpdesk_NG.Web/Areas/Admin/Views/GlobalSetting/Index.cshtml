@@ -201,7 +201,7 @@
                                         <table class="tableform" id="privacyForm">
                                             <tr>
                                                 <td class="span3">
-                                                    @Translation.GetCoreTextTranslation("Select Favorite")
+                                                    @Translation.GetCoreTextTranslation("Valj Favorit")
                                                 </td>
                                                 <td class="span9">
                                                     @Html.DropDownListFor(m => m.DataPrivacy.SelectedFavoriteId, Model.DataPrivacy.Favorites, new { id = "favoritesSelect" })
@@ -220,7 +220,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="span3">
-                                                    @Translation.GetCoreTextTranslation("Retention period")
+                                                    @Translation.GetCoreTextTranslation("Bevarandeperiod")
                                                 </td>
                                                 <td class="span9">
                                                     @Html.TextBoxFor(m => m.DataPrivacy.RetentionPeriod, new { id = "retentionPeriod", style="width:100px" })
@@ -231,7 +231,7 @@
                                                 <td class="span3">
                                                 </td>
                                                 <td class="span9">
-                                                    @Html.CheckBoxFor(m => m.DataPrivacy.CalculateRegistrationDate) @Translation.GetCoreTextTranslation("Calculate Registration date (To)")
+                                                    @Html.CheckBoxFor(m => m.DataPrivacy.CalculateRegistrationDate) @Translation.GetCoreTextTranslation("Räkna ut Registreringsdatum (Till)")
                                                 </td>
                                             </tr>
                                             <tr>
@@ -312,11 +312,11 @@
                                             <!-- /TO BE REMOVED -->
                                             <tr>
                                                 <td class="span3">
-                                                    @Translation.GetCoreTextTranslation("New/Edit Favorite")
+                                                    @Translation.GetCoreTextTranslation("Ny/Redigera Favorit")
                                                 </td>
                                                 <td class="span9">
                                                     <button class="btn btn-small" id="btnFavorite" type="button">
-                                                        <i class="icon-star"></i> @Translation.GetCoreTextTranslation("Favorite")
+                                                        <i class="icon-star"></i> @Translation.GetCoreTextTranslation("Favorit")
                                                     </button>
                                                     <i id="saveFavoritesLoader" class="gif-loader" style="display:none">&nbsp;</i>
                                                 </td>
@@ -338,21 +338,25 @@
 
 <div id="favoritesSaveModal" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
-        <i class="icon-star"></i>&nbsp;<strong><span id="fm_header"></span></strong>
+        <i class="icon-star"></i>&nbsp;<strong>
+            <span id="fm_header_new">@Translation.GetCoreTextTranslation("Ny Favorit")</span>
+            <span id="fm_header_update">@Translation.GetCoreTextTranslation("Redigera favorit") &ndash; </span>
+            <span id="selectedFavoriteText"></span>
+        </strong>
     </div>
     <div class="modal-body">
-        <p id="fm_body"></p>
+        <p id="fm_body_new">@Translation.GetCoreTextTranslation("Skriv in ett namn på din nya favorit").</p>
+        <p id="fm_body_update">@Translation.GetCoreTextTranslation("Redigera favorit eller ändra namn för att spara som en ny favorit").</p>
         <div>
             <div class="input-prepend input-append">
-                <span class="add-on">Name</span> <!-- TRANSLATE -->
+                <span class="add-on">@Translation.GetCoreTextTranslation("Namn")</span> 
                 <input class="span2" type="text" id="fm_name" />
             </div>
-            
         </div>
     </div>
     <div class="modal-footer">
-        <button id="btnSaveFav" class="btn" data-dismiss="modal" aria-hidden="true">@Translation.GetCoreTextTranslation("Save")</button>
-        <button id="btnDeleteFav" class="btn" data-dismiss="modal" aria-hidden="true">@Translation.GetCoreTextTranslation("Delete")</button>
+        <button id="btnSaveFav" class="btn" data-dismiss="modal" aria-hidden="true">@Translation.GetCoreTextTranslation("Spara")</button>
+        <button id="btnDeleteFav" class="btn" data-dismiss="modal" aria-hidden="true">@Translation.GetCoreTextTranslation("Ta bort")</button>
         <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.GetCoreTextTranslation("Avbryt")</button>
     </div>
 </div>
@@ -435,8 +439,9 @@
                 translations:
                 {
                     dataPrivacyConfirmation: '@Translation.GetForJS("Ar du saker pa att du vill ersatta informationen i utvalda arenden?")',
-                    operationSuccessMessage:  '@Translation.GetForJS("Klar")',
-                    createNew: '@Translation.GetForJS("Create New")', //todo: translate
+                    operationSuccessMessage: '@Translation.GetForJS("Klar")',
+                    createNewFavorite: '@Translation.GetForJS("Skappa Ny")', 
+
                     //validation messages
                     SelectedCustomerIdRequired: '@Translation.GetForJS("Kund") @Translation.GetForJS("maste anges")',
                     FieldsNamesRequired: '@Translation.GetForJS("Falt") @Translation.GetForJS("maste anges")',

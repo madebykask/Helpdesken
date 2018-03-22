@@ -227,7 +227,6 @@
              });
          };
 
-
          this.getRules = function() {
              return {
                  "DataPrivacy.SelectedCustomerId": {
@@ -540,7 +539,7 @@
                 return '<option value="' + item.value + '">' + item.text + '</option>';
             });
 
-            var emptyFavSelectText = self.translations.createNew || 'Create New';
+            var emptyFavSelectText = self.translations.createNewFavorite || 'Create New';
             options = '<option value="0">' + emptyFavSelectText + '</option>' + options;
 
             self.favoritesSelect$.html(options);
@@ -562,24 +561,25 @@
     
         //todo: move to other class 
         this.showSaveFavoritesDlg = function(saveNew) {
-            var headerTitle$ = $("#fm_header");
-            var bodyDesc$ = $("#fm_body");
+            
             var nameField$ = $("#fm_name");
 
-            //todo: Translate 
+            $("#fm_header_new").toggle(saveNew);
+            $("#fm_header_update").toggle(!saveNew);
+            $("#fm_body_new").toggle(saveNew);
+            $("#fm_body_update").toggle(!saveNew);
+
+            $("#btnDeleteFav").prop('disabled', saveNew);
+
             if (saveNew) {
-                headerTitle$.html('New Favorite');
-                bodyDesc$.html('Enter a name for your new favorite.');
                 nameField$.val('');
                 $("#btnSaveFav").prop('disabled', true);
-                $("#btnDeleteFav").prop('disabled', true);
+                $("#selectedFavoriteText").html('').hide();
             } else {
                 var selectedFav = _self.favoritesSelect$.find(":selected").text() || '';
-                headerTitle$.html('Update favorite - ' + selectedFav);
-                bodyDesc$.html('Update your favorite or change the name to save it as a new favorite.');
+                $("#selectedFavoriteText").html(selectedFav).show();
                 nameField$.val(selectedFav);
                 $("#btnSaveFav").prop('disabled', selectedFav.length === 0);
-                $("#btnDeleteFav").prop('disabled', false);
             }
 
             $("#favoritesSaveModal").modal('show');
