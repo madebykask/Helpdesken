@@ -1467,10 +1467,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
                 return Json(new {Success = false, Error = "Invalid parameters"});
-            
-            model.Id = _gdprFavoritesService.SaveFavorite(model);
-            var items = GetDataPrivacyFavorites();
-            return Json(new { Success = true, FavoriteId = model.Id, Favorites = items });
+
+                model.Id = _gdprFavoritesService.SaveFavorite(model);
+                var items = GetDataPrivacyFavorites();
+                return Json(new { Success = true, FavoriteId = model.Id, Favorites = items });
         }
 
         private object GetDataPrivacyFavorites()

@@ -16,6 +16,5 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
         public DateTime? ReplaceDatesWith { get; set; }
         public bool RemoveCaseAttachments { get; set; }
         public bool RemoveLogAttachments { get; set; }
-        public bool RemoveCaseHistory { get; set; }
     }
 }

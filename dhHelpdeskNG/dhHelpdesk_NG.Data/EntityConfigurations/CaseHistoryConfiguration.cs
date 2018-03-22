@@ -122,7 +122,7 @@
             this.Property(x => x.SMS).IsRequired();
             this.Property(x => x.SolutionRate).IsOptional().HasMaxLength(10);
             this.Property(x => x.UserCode).IsOptional().HasMaxLength(50);
-            this.Property(x => x.Verified).IsRequired();
+            this.Property(x => x.Verified).IsOptional();
             this.Property(x => x.VerifiedDescription).IsOptional().HasMaxLength(200);
             this.Property(x => x.WatchDate).IsOptional();
             this.Property(x => x.CreatedDate).IsRequired();
@@ -135,6 +135,7 @@
             this.Property(x => x.LogFile).IsOptional();
             this.Property(x => x.CaseLog).IsOptional();
             this.Property(x => x.ClosingReason).IsOptional();
+            this.Property(x => x.CostCentre).IsOptional().HasMaxLength(50);
             this.Property(x => x.IsAbout_Persons_Name).IsOptional().HasMaxLength(50);
             this.Property(x => x.IsAbout_ReportedBy).IsOptional().HasMaxLength(40);
             this.Property(x => x.IsAbout_Persons_Phone).IsOptional().HasMaxLength(40);

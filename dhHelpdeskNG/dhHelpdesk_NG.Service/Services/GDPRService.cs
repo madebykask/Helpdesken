@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Gdpr;
+using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Exceptions;
 using DH.Helpdesk.Common.Serializers;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.NewInfrastructure;
@@ -129,8 +131,8 @@ namespace DH.Helpdesk.Services.Services
                 {
                     var rep = uow.GetRepository<Case>();
                     var caseFiles = uow.GetRepository<CaseFile>();
-                    var logFiles = uow.GetRepository<LogFile>();
                     var caseHistories = uow.GetRepository<CaseHistory>();
+                    var logFiles = uow.GetRepository<LogFile>();
                     var emailLogs = uow.GetRepository<EmailLog>();
 
                     var casesQueryable = rep.GetAll().Where(x => x.Customer_Id == p.SelectedCustomerId);
@@ -149,7 +151,7 @@ namespace DH.Helpdesk.Services.Services
                     {
                         casesIds = cases.Select(c => c.Id).ToList();
                         
-                        ProcessReplaceCasesData(cases, caseFiles, logFiles, caseHistories, emailLogs, p);
+                        ProcessReplaceCasesData(cases, caseFiles, logFiles, emailLogs, p);
                         uow.Save();
                     }
                 }
@@ -157,9 +159,9 @@ namespace DH.Helpdesk.Services.Services
             catch (Exception e)
             {
                 auditData.Success = false;
-                auditData.Error = $"Unknown error. " + e.Message;
+                auditData.Error = $"Unknown error. { e.Message }";
                 SaveAuditOperationResult(auditData);
-                return false;
+                throw;
             }
 
             //save affected cases Ids
@@ -176,7 +178,6 @@ namespace DH.Helpdesk.Services.Services
             IList<Case> cases,
             IRepository<CaseFile> caseFiles,
             IRepository<LogFile> logFiles,
-            IRepository<CaseHistory> caseHistories,
             IRepository<EmailLog> emailLogs,
             DataPrivacyParameters p)
         {
@@ -187,236 +188,201 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (var fieldName in p.FieldsNames)
                 {
-                    switch (fieldName)
+                    if (fieldName == GlobalEnums.TranslationCaseFields.ReportedBy.ToString() ||
+                        fieldName == GlobalEnums.TranslationCaseFields.CostCentre.ToString() ||
+                        fieldName == GlobalEnums.TranslationCaseFields.Place.ToString() ||
+                        fieldName == GlobalEnums.TranslationCaseFields.UserCode.ToString() ||
+                        fieldName == GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() ||
+                        fieldName == GlobalEnums.TranslationCaseFields.InventoryLocation.ToString() ||
+                        fieldName == GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString() ||
+                        fieldName == GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString() ||
+                        fieldName == GlobalEnums.TranslationCaseFields.Caption.ToString() ||
+                        fieldName == GlobalEnums.TranslationCaseFields.Description.ToString() ||
+                        fieldName == GlobalEnums.TranslationCaseFields.Miscellaneous.ToString() ||
+                        fieldName == GlobalEnums.TranslationCaseFields.Available.ToString() ||
+                        fieldName == GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString() ||
+                        fieldName == GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()
+                        )
                     {
-                        #region initiator
+                        var property = c.GetType().GetProperty(fieldName);
+                        if (property == null) throw new PropertyNotFoundException("Property not found", fieldName);
 
-                        case "ReportedBy":
-                            c.ReportedBy = replaceDataWith;
-                            break;
-                        case "Persons_Name":
-                            c.PersonsName = replaceDataWith; //first name last name?
-                            break;
-                        case "Persons_EMail":
-                            c.PersonsEmail = replaceDataWith;
-                            break;
-                        case "Persons_Phone":
-                            c.PersonsPhone = replaceDataWith;
-                            break;
-                        case "Persons_CellPhone":
-                            c.PersonsCellphone = replaceDataWith;
-                            break;
-                        case "Region_Id":
-                            c.Region_Id = null;
-                            break;
-                        case "Department_Id":
-                            c.Department_Id = null;
-                            break;
-                        case "OU_Id":
-                            c.OU_Id = null;
-                            break;
-                        case "CostCentre":
-                            c.CostCentre = replaceDataWith;
-                            break;
-                        case "Place":
-                            c.Place = replaceDataWith;
-                            break;
-                        case "UserCode":
-                            c.UserCode = replaceDataWith;
-                            break;
+                        property.SetValue(c, replaceDataWith);
 
-                        #endregion
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.Region_Id.ToString() ||
+                             fieldName == GlobalEnums.TranslationCaseFields.Department_Id.ToString() ||
+                             fieldName == GlobalEnums.TranslationCaseFields.OU_Id.ToString() ||
+                             fieldName == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString() ||
+                             fieldName == GlobalEnums.TranslationCaseFields.System_Id.ToString() ||
+                             fieldName == GlobalEnums.TranslationCaseFields.Urgency_Id.ToString() ||
+                             fieldName == GlobalEnums.TranslationCaseFields.Impact_Id.ToString() ||
+                             fieldName == GlobalEnums.TranslationCaseFields.Category_Id.ToString() ||
+                             fieldName == GlobalEnums.TranslationCaseFields.Supplier_Id.ToString() ||
+                             fieldName == GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString() ||
+                             fieldName == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString() ||
+                             fieldName == GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString() ||
+                             fieldName == GlobalEnums.TranslationCaseFields.Priority_Id.ToString() ||
+                             fieldName == GlobalEnums.TranslationCaseFields.Status_Id.ToString() ||
+                             fieldName == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()
 
-                        #region regarding
-                        case "IsAbout_ReportedBy":
-                            if (c.IsAbout != null)
-                                c.IsAbout.ReportedBy = replaceDataWith;
-                            break;
-                        case "IsAbout_Persons_Name":
-                            if (c.IsAbout != null)
-                                c.IsAbout.Person_Name = replaceDataWith; //first last name?
-                            break;
-                        case "IsAbout_Persons_EMail":
-                            if (c.IsAbout != null)
-                                c.IsAbout.Person_Email = replaceDataWith;
-                            break;
-                        case "IsAbout_Persons_Phone":
-                            if (c.IsAbout != null)
-                                c.IsAbout.Person_Phone = replaceDataWith;
-                            break;
-                        case "IsAbout_Persons_CellPhone":
-                            if (c.IsAbout != null)
-                                c.IsAbout.Person_Cellphone = replaceDataWith;
-                            break;
-                        case "IsAbout_Region_Id":
-                            if (c.IsAbout != null)
-                                c.IsAbout.Region_Id = null;
-                            break;
-                        case "IsAbout_Department_Id":
-                            if (c.IsAbout != null)
-                                c.IsAbout.Department_Id = null;
-                            break;
-                        case "IsAbout_OU_Id":
-                            if (c.IsAbout != null)
-                                c.IsAbout.OU_Id = null;
-                            break;
-                        case "IsAbout_CostCentre":
-                            if (c.IsAbout != null)
-                                c.IsAbout.CostCentre = replaceDataWith;
-                            break;
-                        case "IsAbout_Place":
-                            if (c.IsAbout != null)
-                                c.IsAbout.Place = replaceDataWith;
-                            break;
-                        case "IsAbout_UserCode":
-                            if (c.IsAbout != null)
-                                c.IsAbout.UserCode = replaceDataWith;
-                            break;
-                        #endregion
+                        )
+                    {
+                        var property = c.GetType().GetProperty(fieldName);
+                        if (property == null) throw new PropertyNotFoundException("Property not found", fieldName);
 
-                        #region computer info
-                        case "InventoryNumber":
-                            c.InventoryNumber = replaceDataWith;
-                            break;
-                        case "ComputerType_Id":
-                            c.InventoryType = replaceDataWith;
-                            break;
-                        case "InventoryLocation":
-                            c.InventoryLocation = replaceDataWith;
-                            break;
-                        #endregion
+                        property.SetValue(c, null);
 
-                        #region case info
-                        case "User_Id":
-                            c.User_Id = null;
-                            c.RegUserId = replaceDataWith;
-                            c.RegUserDomain = replaceDataWith;
-                            c.RegUserName = replaceDataWith;
-                            c.IpAddress = replaceDataWith;
-                            break;
-                        case "RegistrationSourceCustomer":
-                            c.RegistrationSourceCustomer_Id = null;
-                            break;
-                        case "ProductArea_Id":
-                            c.ProductArea_Id = null;
-                            break;
-                        case "System_Id":
-                            c.System_Id = null;
-                            break;
-                        case "Urgency_Id":
-                            c.Urgency_Id = null;
-                            break;
-                        case "Impact_Id":
-                            c.Impact_Id = null;
-                            break;
-                        case "Category_Id":
-                            c.Category_Id = null;
-                            break;
-                        case "Supplier_Id":
-                            c.Supplier_Id = null;
-                            break;
-                        case "InvoiceNumber":
-                            c.InvoiceNumber = replaceDataWith;
-                            break;
-                        case "ReferenceNumber":
-                            c.ReferenceNumber = replaceDataWith;
-                            break;
-                        case "Caption":
-                            c.Caption = replaceDataWith;
-                            break;
-                        case "Description":
-                            c.Description = replaceDataWith;
-                            break;
-                        case "Miscellaneous":
-                            c.Miscellaneous = replaceDataWith;
-                            break;
-                        case "AgreedDate":
-                            c.AgreedDate = replaceDatesWith;
-                            break;
-                        case "Available":
-                            c.Available = replaceDataWith;
-                            break;
-                        case "Cost":
-                            c.Cost = 0;
-                            c.OtherCost = 0;
-                            c.Currency = replaceDataWith;
-                            break;
-                        #endregion
-
-                        #region case management
-                        case "WorkingGroup_Id":
-                            c.WorkingGroup_Id = null;
-                            break;
-                        case "CaseResponsibleUser_Id":
-                            c.CaseResponsibleUser_Id = null;
-                            break;
-                        case "Performer_User_Id":
-                            c.Performer_User_Id = null;
-                            break;
-                        case "Priority_Id":
-                            c.Priority_Id = null;
-                            break;
-                        case "Status_Id":
-                            c.Status_Id = null;
-                            break;
-                        case "StateSecondary_Id":
-                            c.StateSecondary_Id = null;
-                            break;
-                        case "Project":
-                            c.Project_Id = null;
-                            break;
-                        case "Problem":
-                            c.Problem_Id = null;
-                            break;
-                        case "CausingPart":
-                            c.CausingPartId = null;
-                            break;
-                        case "Change":
-                            c.Change_Id = null;
-                            break;
-                        case "PlanDate":
-                            c.PlanDate = replaceDatesWith;
-                            break;
-                        case "WatchDate":
-                            c.WatchDate = replaceDatesWith;
-                            break;
-                        //case "Verified":
-                        //    c.Verified = replaceDataWith;
-                        //    break;
-                        case "VerifiedDescription":
-                            c.VerifiedDescription = replaceDataWith;
-                            break;
-                        case "SolutionRate":
-                            c.SolutionRate = string.Empty;
-                            break;
-                        #endregion
-
-                        #region case log
-                        case "tblLog.Text_External":
-                            foreach (var log in c.Logs.ToList())
-                            {
-                                log.Text_External = replaceDataWith;
-                            }
-                            break;
-                        case "tblLog.Text_Internal":
-                            foreach (var log in c.Logs.ToList())
-                            {
-                                log.Text_Internal = replaceDataWith;
-                            }
-                            break;
-                        case "FinishingDescription":
-                            c.FinishingDescription = replaceDataWith;
-                            break;
-                        case "ClosingReason":
-                            foreach (var log in c.Logs.ToList())
-                            {
-                                log.FinishingType = null;
-                            }
-                            break;
-                        case "FinishingDate":
-                            c.FinishingDate = replaceDatesWith;
-                            break;
-                        #endregion
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_Name.ToString())
+                    {
+                        c.PersonsName = replaceDataWith; //first name last name?
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())
+                    {
+                        c.PersonsEmail = replaceDataWith;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())
+                    {
+                        c.PersonsPhone = replaceDataWith;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())
+                    {
+                        c.PersonsCellphone = replaceDataWith;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString())
+                    {
+                        if (c.IsAbout != null)
+                            c.IsAbout.ReportedBy = replaceDataWith;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString())
+                    {
+                        if (c.IsAbout != null)
+                            c.IsAbout.Person_Name = replaceDataWith; //first last name?
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString())
+                    {
+                        if (c.IsAbout != null)
+                            c.IsAbout.Person_Email = replaceDataWith;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString())
+                    {
+                        if (c.IsAbout != null)
+                            c.IsAbout.Person_Phone = replaceDataWith;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString())
+                    {
+                        if (c.IsAbout != null)
+                            c.IsAbout.Person_Cellphone = replaceDataWith;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString())
+                    {
+                        if (c.IsAbout != null)
+                            c.IsAbout.Region_Id = null;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString())
+                    {
+                        if (c.IsAbout != null)
+                            c.IsAbout.Department_Id = null;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString())
+                    {
+                        if (c.IsAbout != null)
+                            c.IsAbout.OU_Id = null;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString())
+                    {
+                        if (c.IsAbout != null)
+                            c.IsAbout.CostCentre = replaceDataWith;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString())
+                    {
+                        if (c.IsAbout != null)
+                            c.IsAbout.Place = replaceDataWith;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString())
+                    {
+                        if (c.IsAbout != null)
+                            c.IsAbout.UserCode = replaceDataWith;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())
+                    {
+                        c.InventoryType = replaceDataWith;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.User_Id.ToString())
+                    {
+                        c.User_Id = null;
+                        c.RegUserId = replaceDataWith;
+                        c.RegUserDomain = replaceDataWith;
+                        c.RegUserName = replaceDataWith;
+                        c.IpAddress = replaceDataWith;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())
+                    {
+                        c.RegistrationSourceCustomer_Id = null;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.AgreedDate.ToString())
+                    {
+                        c.AgreedDate = replaceDatesWith;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.Cost.ToString())
+                    {
+                        c.Cost = 0;
+                        c.OtherCost = 0;
+                        c.Currency = replaceDataWith;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.Project.ToString())
+                    {
+                        c.Project_Id = null;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.Problem.ToString())
+                    {
+                        c.Problem_Id = null;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.CausingPart.ToString())
+                    {
+                        c.CausingPartId = null;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.Change.ToString())
+                    {
+                        c.Change_Id = null;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.PlanDate.ToString())
+                    {
+                        c.PlanDate = replaceDatesWith;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.WatchDate.ToString())
+                    {
+                        c.WatchDate = replaceDatesWith;
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.SolutionRate.ToString())
+                    {
+                        c.SolutionRate = string.Empty;
+                    }
+                    else if (fieldName == "tblLog.Text_External")
+                    {
+                        foreach (var log in c.Logs.ToList())
+                        {
+                            log.Text_External = replaceDataWith;
+                        }
+                    }
+                    else if (fieldName == "tblLog.Text_Internal")
+                    {
+                        foreach (var log in c.Logs.ToList())
+                        {
+                            log.Text_Internal = replaceDataWith;
+                        }
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.ClosingReason.ToString())
+                    {
+                        foreach (var log in c.Logs.ToList())
+                        {
+                            log.FinishingType = null;
+                        }
+                    }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.FinishingDate.ToString())
+                    {
+                        c.FinishingDate = replaceDatesWith;
                     }
 
                     if (fieldName == AdditionalDataPrivacyFields.SelfService_RegUser.ToString())
@@ -447,23 +413,175 @@ namespace DH.Helpdesk.Services.Services
                     }
                 }
 
-                if (p.RemoveCaseHistory && c.CaseHistories.Any())
+                ProcessReplaceCasesHistoryData(c, emailLogs, p);
+            }
+        }
+
+        private void ProcessReplaceCasesHistoryData(Case c, IRepository<EmailLog> emailLogs, DataPrivacyParameters dataPrivacyParameters)
+        {
+            if (c.CaseHistories.Any())
+            {
+                var replaceDataWith = dataPrivacyParameters.ReplaceDataWith ?? string.Empty;
+                var replaceDatesWith = dataPrivacyParameters.ReplaceDatesWith;
+
+                foreach (var ch in c.CaseHistories.ToList())
                 {
-                    foreach (var caseHistory in c.CaseHistories.ToList())
+                    //emailLogs.DeleteWhere(x => x.CaseHistory_Id == caseHistory.Id);
+
+                    foreach (var fieldName in dataPrivacyParameters.FieldsNames)
                     {
-                        emailLogs.DeleteWhere(x => x.CaseHistory_Id == caseHistory.Id);
-                        caseHistories.Delete(caseHistory);
+                        if (fieldName == GlobalEnums.TranslationCaseFields.ReportedBy.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.CostCentre.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.Place.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.UserCode.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.InventoryLocation.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.Caption.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.Description.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.Miscellaneous.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.Available.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.FinishingDescription.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.ClosingReason.ToString()
+                            )
+                        {
+                            var property = ch.GetType().GetProperty(fieldName);
+                            if (property == null) throw new PropertyNotFoundException("Property not found", fieldName);
+
+                            property.SetValue(ch, replaceDataWith);
+
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.Region_Id.ToString() ||
+                                 fieldName == GlobalEnums.TranslationCaseFields.Department_Id.ToString() ||
+                                 fieldName == GlobalEnums.TranslationCaseFields.OU_Id.ToString() ||
+                                 fieldName == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString() ||
+                                 fieldName == GlobalEnums.TranslationCaseFields.System_Id.ToString() ||
+                                 fieldName == GlobalEnums.TranslationCaseFields.Urgency_Id.ToString() ||
+                                 fieldName == GlobalEnums.TranslationCaseFields.Impact_Id.ToString() ||
+                                 fieldName == GlobalEnums.TranslationCaseFields.Category_Id.ToString() ||
+                                 fieldName == GlobalEnums.TranslationCaseFields.Supplier_Id.ToString() ||
+                                 fieldName == GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString() ||
+                                 fieldName == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString() ||
+                                 fieldName == GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString() ||
+                                 fieldName == GlobalEnums.TranslationCaseFields.Priority_Id.ToString() ||
+                                 fieldName == GlobalEnums.TranslationCaseFields.Status_Id.ToString() ||
+                                 fieldName == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString() ||
+                                 fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString()
+                            )
+                        {
+                            var property = ch.GetType().GetProperty(fieldName);
+                            if (property == null) throw new PropertyNotFoundException("Property not found", fieldName);
+
+                            property.SetValue(ch, null);
+
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_Name.ToString())
+                        {
+                            ch.PersonsName = replaceDataWith; //first name last name?
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())
+                        {
+                            ch.PersonsEmail = replaceDataWith;
+                        }
+                        if (fieldName == GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())
+                        {
+                            ch.PersonsPhone = replaceDataWith;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())
+                        {
+                            ch.PersonsCellphone = replaceDataWith;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString())
+                        {
+                            //ch.IsAbout_Persons_EMail = replaceDataWith;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString())
+                        {
+                            //ch.IsAbout_Persons_CellPhone = replaceDataWith;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString())
+                        {
+                            //ch.IsAbout_Region_Id = null;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString())
+                        {
+                            //ch.IsAbout_OU_Id = null;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString())
+                        {
+                            //ch.IsAbout_CostCentre = replaceDataWith;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString())
+                        {
+                            //ñh.IsAbout_Place = replaceDataWith;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())
+                        {
+                            ch.InventoryType = replaceDataWith;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.User_Id.ToString())
+                        {
+                            ch.User_Id = null;
+                            ch.RegUserId = replaceDataWith;
+                            ch.RegUserDomain = replaceDataWith;
+                            ch.IpAddress = replaceDataWith;
+                            //ch.CreatedByUser = replaceDataWith;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())
+                        {
+                            ch.RegistrationSourceCustomer_Id = null;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.AgreedDate.ToString())
+                        {
+                            ch.AgreedDate = replaceDatesWith;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.Cost.ToString())
+                        {
+                            ch.Cost = 0;
+                            ch.OtherCost = 0;
+                            ch.Currency = replaceDataWith;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.Project.ToString())
+                        {
+                            ch.Project_Id = null;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.Problem.ToString())
+                        {
+                            ch.Problem_Id = null;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.CausingPart.ToString())
+                        {
+                            ch.CausingPartId = null;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.Change.ToString())
+                        {
+                            ch.Change_Id = null;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.PlanDate.ToString())
+                        {
+                            ch.PlanDate = replaceDatesWith;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.WatchDate.ToString())
+                        {
+                            ch.WatchDate = replaceDatesWith;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.SolutionRate.ToString())
+                        {
+                            ch.SolutionRate = string.Empty;
+                        }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.FinishingDate.ToString())
+                        {
+                            ch.FinishingDate = replaceDatesWith;
+                        }
+
                     }
                 }
-
-                //if (replaceRegisteredBy)
-                //{
-                //    c.User_Id = null;
-                //    c.RegUserId = replaceDataWith;
-                //    c.RegUserDomain = replaceDataWith;
-                //    c.RegUserName = replaceDataWith;
-                //    c.IpAddress = replaceDataWith;
-                //}
             }
         }
 

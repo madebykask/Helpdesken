@@ -90,6 +90,7 @@
         public string CaseLog { get; set; }
         public string ClosingReason { get; set; }
         public int? RegistrationSourceCustomer_Id { get; set; }
+        public string CostCentre { get; set; }
         public string IsAbout_Persons_Name { get; set; }
         public string IsAbout_ReportedBy { get; set; }
         public string IsAbout_Persons_Phone { get; set; }
