@@ -16,7 +16,6 @@
             saveFavoritesLoader: $('#saveFavoritesLoader')
         };
 
-        this.emptyFavSelectText = "Create New"; //todo: translate
         this.validator$ = {}
 
         //form and fields
@@ -149,7 +148,7 @@
              return {
                  fields: fields,
                  selectedCustomerId: this.customerSelect$.val(),
-                 retentionPeriod: $("#retentionPeriod").val() || "0", //todo: check
+                 retentionPeriod: $("#retentionPeriod").val() || "0", 
                  registerDateFrom: this.registerDateFrom$.val(),
                  calculateRegistrationDate: $("#DataPrivacy_CalculateRegistrationDate").prop("checked"),
                  registerDateTo: this.registerDateTo$.val(),
@@ -400,12 +399,12 @@
             self.filterFields$.empty();
             self.refreshFieldsControl();
 
-            self.setDate(registerDateFrom$, null);
-            self.setDate(registerDateTo$, null);
+            self.setJsonDate(registerDateFrom$, null);
+            self.setJsonDate(registerDateTo$, null);
             self.retentionPeriod$.val('');
             self.calculateRegistrationDate$.prop('checked', false);
             self.replaceDataWith$.val('');
-            self.setDate(self.replaceDatesWith$, null);
+            self.setJsonDate(self.replaceDatesWith$, null);
             self.removeCaseAttachments$.prop('checked', false);
             self.removeLogAttachments$.prop('checked', false);
             self.closedOnly$.prop('checked', false);
@@ -421,15 +420,15 @@
             var customerId = data.CustomerId;
 
             self.customerSelect$.val(customerId);
-            self.setDate(registerDateFrom$, data.RegisterDateFrom);
-            self.setDate(registerDateTo$, data.RegisterDateTo);
+            self.setJsonDate(registerDateFrom$, data.RegisterDateFrom);
+            self.setJsonDate(registerDateTo$, data.RegisterDateTo);
 
             self.retentionPeriod$.val(data.RetentionPeriod == "0" ? '' : data.RetentionPeriod);
             self.calculateRegistrationDate$.prop('checked', data.CalculateRegistrationDate);
             self.closedOnly$.prop('checked', data.ClosedOnly);
             self.replaceDataWith$.val(data.ReplaceDataWith || '');
 
-            self.setDate(self.replaceDatesWith$, data.ReplaceDatesWith);
+            self.setJsonDate(self.replaceDatesWith$, data.ReplaceDatesWith);
             self.removeCaseAttachments$.prop('checked', data.RemoveCaseAttachments);
             self.removeLogAttachments$.prop('checked', data.RemoveLogAttachments);
 
@@ -540,7 +539,9 @@
             var options = items.map(function(item) {
                 return '<option value="' + item.value + '">' + item.text + '</option>';
             });
-            options = '<option value="0">' + self.emptyFavSelectText + '</option>' + options;
+
+            var emptyFavSelectText = self.translations.createNew || 'Create New';
+            options = '<option value="0">' + emptyFavSelectText + '</option>' + options;
 
             self.favoritesSelect$.html(options);
             self.favoritesSelect$.val(selectedId);
@@ -565,7 +566,7 @@
             var bodyDesc$ = $("#fm_body");
             var nameField$ = $("#fm_name");
 
-            //todo: Translate and star icon in the title!
+            //todo: Translate 
             if (saveNew) {
                 headerTitle$.html('New Favorite');
                 bodyDesc$.html('Enter a name for your new favorite.');
@@ -573,7 +574,6 @@
                 $("#btnSaveFav").prop('disabled', true);
                 $("#btnDeleteFav").prop('disabled', true);
             } else {
-                //todo: set required buttons and labels for update
                 var selectedFav = _self.favoritesSelect$.find(":selected").text() || '';
                 headerTitle$.html('Update favorite - ' + selectedFav);
                 bodyDesc$.html('Update your favorite or change the name to save it as a new favorite.');
@@ -585,10 +585,11 @@
             $("#favoritesSaveModal").modal('show');
         };
 
-        this.setDate = function (ctrl, val) {
-            //todo: check if correct
+        this.setJsonDate = function (ctrl, val) {
             if (val) {
-                ctrl.datepicker('setDate', val);
+                //ex: "/Date(1520110800000)/", parseInt will ignore last chars and extract only numbers;
+                var date = new Date(parseInt(val.toString().substr(6)));
+                ctrl.datepicker('setDate', date);
             } else {
                 ctrl.datepicker('setDate', null);
             }

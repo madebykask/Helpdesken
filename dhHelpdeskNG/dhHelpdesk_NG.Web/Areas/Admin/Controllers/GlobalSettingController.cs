@@ -1456,17 +1456,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [HttpPost]
         public JsonResult DeleteDataPrivacyFavorite(int id)
         {
-            try
-            {
-                _gdprFavoritesService.DeleteFavorite(id);
+            _gdprFavoritesService.DeleteFavorite(id);
 
-                var items = GetDataPrivacyFavorites();
-                return Json(new { Success = true, Favorites = items });
-            }
-            catch (Exception e)
-            {
-                return Json(new { Success = false, Error = "Unknown error" });
-            }
+            var items = GetDataPrivacyFavorites();
+            return Json(new { Success = true, Favorites = items });
         }
 
         [HttpPost]
@@ -1474,17 +1467,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
                 return Json(new {Success = false, Error = "Invalid parameters"});
-
-            try
-            {
-                model.Id = _gdprFavoritesService.SaveFavorite(model);
-                var items = GetDataPrivacyFavorites();
-                return Json(new { Success = true, FavoriteId = model.Id, Favorites = items });
-            }
-            catch (Exception e)
-            {
-                return Json(new {Success = false, Error = "Unknown error"});
-            }
+            
+            model.Id = _gdprFavoritesService.SaveFavorite(model);
+            var items = GetDataPrivacyFavorites();
+            return Json(new { Success = true, FavoriteId = model.Id, Favorites = items });
         }
 
         private object GetDataPrivacyFavorites()

@@ -338,12 +338,16 @@
 
 <div id="favoritesSaveModal" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
-        <strong><span id="fm_header">Save </span></strong>
+        <i class="icon-star"></i>&nbsp;<strong><span id="fm_header"></span></strong>
     </div>
     <div class="modal-body">
         <p id="fm_body"></p>
         <div>
-            <input type="text" id="fm_name" />
+            <div class="input-prepend input-append">
+                <span class="add-on">Name</span> <!-- TRANSLATE -->
+                <input class="span2" type="text" id="fm_name" />
+            </div>
+            
         </div>
     </div>
     <div class="modal-footer">
@@ -432,7 +436,7 @@
                 {
                     dataPrivacyConfirmation: '@Translation.GetForJS("Ar du saker pa att du vill ersatta informationen i utvalda arenden?")',
                     operationSuccessMessage:  '@Translation.GetForJS("Klar")',
-
+                    createNew: '@Translation.GetForJS("Create New")', //todo: translate
                     //validation messages
                     SelectedCustomerIdRequired: '@Translation.GetForJS("Kund") @Translation.GetForJS("maste anges")',
                     FieldsNamesRequired: '@Translation.GetForJS("Falt") @Translation.GetForJS("maste anges")',
