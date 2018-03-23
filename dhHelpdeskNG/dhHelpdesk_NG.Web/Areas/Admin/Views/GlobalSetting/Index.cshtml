@@ -23,8 +23,10 @@
             </li>
             <li id="menu5" style="display: none"></li>
             <li id="menu6" style="display: none">
-                <button class="btn" id="privacyRunBtn">@Translation.GetCoreTextTranslation("Kör")</button>
-                <i id="inProcessLoader" class="gif-loader" style="display: none">&nbsp;</i>
+                <span id="tooltip-button-wrapper" data-title='@Translation.GetCoreTextTranslation("Spara i favoriter för att aktivera")'>
+                    <button class="btn" id="privacyRunBtn">@Translation.GetCoreTextTranslation("Kör")</button>
+                    <i id="inProcessLoader" class="gif-loader" style="display: none">&nbsp;</i>
+                </span>
             </li>
         </ul>
     </div>
@@ -462,6 +464,7 @@
                         }
                     });
             });
+
         }); //end of jquery load
 
         var texttypeId = $("#TextTypeId").val();

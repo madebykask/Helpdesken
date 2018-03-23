@@ -1531,14 +1531,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             {
                 var exceptionList = new List<string>
                 {
-                    GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString(),
+                    //GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString(),
                     GlobalEnums.TranslationCaseFields.AddUserBtn.ToString(),
                     GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString(),
                     GlobalEnums.TranslationCaseFields.Filename.ToString(),
-                    GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(),
-                    GlobalEnums.TranslationCaseFields.tblLog_Charge.ToString(),
+                    "tblLog.Charge",
+                    "tblLog.Filename",
                     GlobalEnums.TranslationCaseFields.FinishingDate.ToString(),
-                    GlobalEnums.TranslationCaseFields.Verified.ToString(),
+                    GlobalEnums.TranslationCaseFields.Verified.ToString(), //mandatory
                     GlobalEnums.TranslationCaseFields.SMS.ToString(),
                     GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(),
                     //GlobalEnums.TranslationCaseFields.User_Id.ToString(), //because included in registeredBy

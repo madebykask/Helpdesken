@@ -10,6 +10,7 @@ using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.NewInfrastructure;
 using DH.Helpdesk.Dal.Repositories.GDPR;
 using DH.Helpdesk.Domain;
+using DH.Helpdesk.Domain.Cases;
 using DH.Helpdesk.Domain.GDPR;
 using DH.Helpdesk.Services.BusinessLogic.Gdpr;
 using LinqLib.Operators;
@@ -131,7 +132,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     var rep = uow.GetRepository<Case>();
                     var caseFiles = uow.GetRepository<CaseFile>();
-                    var caseHistories = uow.GetRepository<CaseHistory>();
+                    var followers = uow.GetRepository<CaseExtraFollower>();
                     var logFiles = uow.GetRepository<LogFile>();
                     var emailLogs = uow.GetRepository<EmailLog>();
 
@@ -151,7 +152,7 @@ namespace DH.Helpdesk.Services.Services
                     {
                         casesIds = cases.Select(c => c.Id).ToList();
                         
-                        ProcessReplaceCasesData(cases, caseFiles, logFiles, emailLogs, p);
+                        ProcessReplaceCasesData(cases, caseFiles, logFiles, emailLogs, followers, p);
                         uow.Save();
                     }
                 }
@@ -179,6 +180,7 @@ namespace DH.Helpdesk.Services.Services
             IRepository<CaseFile> caseFiles,
             IRepository<LogFile> logFiles,
             IRepository<EmailLog> emailLogs,
+            IRepository<CaseExtraFollower> followers,
             DataPrivacyParameters p)
         {
             var replaceDataWith = p.ReplaceDataWith ?? string.Empty;
@@ -384,11 +386,21 @@ namespace DH.Helpdesk.Services.Services
                     {
                         c.FinishingDate = replaceDatesWith;
                     }
-
-                    if (fieldName == AdditionalDataPrivacyFields.SelfService_RegUser.ToString())
+                    else if (fieldName == AdditionalDataPrivacyFields.SelfService_RegUser.ToString())
                     {
                         c.Logs.ForEach(l => l.RegUser = replaceDataWith);
                     }
+                    else if (fieldName == GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString())
+                    {
+                        if (c.CaseFollowers.Any())
+                        {
+                            foreach (var follower in c.CaseFollowers.ToList())
+                            {
+                                followers.Delete(follower);
+                            }
+                        }
+                    }
+                    
                 }
 
                 if (p.RemoveCaseAttachments && c.CaseFiles.Any())
@@ -423,11 +435,10 @@ namespace DH.Helpdesk.Services.Services
             {
                 var replaceDataWith = dataPrivacyParameters.ReplaceDataWith ?? string.Empty;
                 var replaceDatesWith = dataPrivacyParameters.ReplaceDatesWith;
+                var deleteEmailLogs = false;
 
-                foreach (var ch in c.CaseHistories.ToList())
+                foreach (var caseHistory in c.CaseHistories.ToList())
                 {
-                    //emailLogs.DeleteWhere(x => x.CaseHistory_Id == caseHistory.Id);
-
                     foreach (var fieldName in dataPrivacyParameters.FieldsNames)
                     {
                         if (fieldName == GlobalEnums.TranslationCaseFields.ReportedBy.ToString() ||
@@ -451,10 +462,10 @@ namespace DH.Helpdesk.Services.Services
                             fieldName == GlobalEnums.TranslationCaseFields.ClosingReason.ToString()
                             )
                         {
-                            var property = ch.GetType().GetProperty(fieldName);
+                            var property = caseHistory.GetType().GetProperty(fieldName);
                             if (property == null) throw new PropertyNotFoundException("Property not found", fieldName);
 
-                            property.SetValue(ch, replaceDataWith);
+                            property.SetValue(caseHistory, replaceDataWith);
 
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.Region_Id.ToString() ||
@@ -475,111 +486,130 @@ namespace DH.Helpdesk.Services.Services
                                  fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString()
                             )
                         {
-                            var property = ch.GetType().GetProperty(fieldName);
+                            var property = caseHistory.GetType().GetProperty(fieldName);
                             if (property == null) throw new PropertyNotFoundException("Property not found", fieldName);
 
-                            property.SetValue(ch, null);
+                            property.SetValue(caseHistory, null);
 
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_Name.ToString())
                         {
-                            ch.PersonsName = replaceDataWith; //first name last name?
+                            caseHistory.PersonsName = replaceDataWith; //first name last name?
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())
                         {
-                            ch.PersonsEmail = replaceDataWith;
+                            caseHistory.PersonsEmail = replaceDataWith;
                         }
                         if (fieldName == GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())
                         {
-                            ch.PersonsPhone = replaceDataWith;
+                            caseHistory.PersonsPhone = replaceDataWith;
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())
                         {
-                            ch.PersonsCellphone = replaceDataWith;
+                            caseHistory.PersonsCellphone = replaceDataWith;
                         }
-                        else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString())
-                        {
-                            //ch.IsAbout_Persons_EMail = replaceDataWith;
-                        }
-                        else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString())
-                        {
-                            //ch.IsAbout_Persons_CellPhone = replaceDataWith;
-                        }
-                        else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString())
-                        {
-                            //ch.IsAbout_Region_Id = null;
-                        }
-                        else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString())
-                        {
-                            //ch.IsAbout_OU_Id = null;
-                        }
-                        else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString())
-                        {
-                            //ch.IsAbout_CostCentre = replaceDataWith;
-                        }
-                        else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString())
-                        {
-                            //ñh.IsAbout_Place = replaceDataWith;
-                        }
+                        // No such fields in Case History
+                        //else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString())
+                        //{
+                        //    //ch.IsAbout_Persons_EMail = replaceDataWith;
+                        //}
+                        //else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString())
+                        //{
+                        //    //ch.IsAbout_Persons_CellPhone = replaceDataWith;
+                        //}
+                        //else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString())
+                        //{
+                        //    //ch.IsAbout_Region_Id = null;
+                        //}
+                        //else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString())
+                        //{
+                        //    //ch.IsAbout_OU_Id = null;
+                        //}
+                        //else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString())
+                        //{
+                        //    //ch.IsAbout_CostCentre = replaceDataWith;
+                        //}
+                        //else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString())
+                        //{
+                        //    //ñh.IsAbout_Place = replaceDataWith;
+                        //}
                         else if (fieldName == GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())
                         {
-                            ch.InventoryType = replaceDataWith;
+                            caseHistory.InventoryType = replaceDataWith;
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.User_Id.ToString())
                         {
-                            ch.User_Id = null;
-                            ch.RegUserId = replaceDataWith;
-                            ch.RegUserDomain = replaceDataWith;
-                            ch.IpAddress = replaceDataWith;
+                            caseHistory.User_Id = null;
+                            caseHistory.RegUserId = replaceDataWith;
+                            caseHistory.RegUserDomain = replaceDataWith;
+                            caseHistory.IpAddress = replaceDataWith;
                             //ch.CreatedByUser = replaceDataWith;
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())
                         {
-                            ch.RegistrationSourceCustomer_Id = null;
+                            caseHistory.RegistrationSourceCustomer_Id = null;
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.AgreedDate.ToString())
                         {
-                            ch.AgreedDate = replaceDatesWith;
+                            caseHistory.AgreedDate = replaceDatesWith;
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.Cost.ToString())
                         {
-                            ch.Cost = 0;
-                            ch.OtherCost = 0;
-                            ch.Currency = replaceDataWith;
+                            caseHistory.Cost = 0;
+                            caseHistory.OtherCost = 0;
+                            caseHistory.Currency = replaceDataWith;
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.Project.ToString())
                         {
-                            ch.Project_Id = null;
+                            caseHistory.Project_Id = null;
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.Problem.ToString())
                         {
-                            ch.Problem_Id = null;
+                            caseHistory.Problem_Id = null;
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.CausingPart.ToString())
                         {
-                            ch.CausingPartId = null;
+                            caseHistory.CausingPartId = null;
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.Change.ToString())
                         {
-                            ch.Change_Id = null;
+                            caseHistory.Change_Id = null;
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.PlanDate.ToString())
                         {
-                            ch.PlanDate = replaceDatesWith;
+                            caseHistory.PlanDate = replaceDatesWith;
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.WatchDate.ToString())
                         {
-                            ch.WatchDate = replaceDatesWith;
+                            caseHistory.WatchDate = replaceDatesWith;
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.SolutionRate.ToString())
                         {
-                            ch.SolutionRate = string.Empty;
+                            caseHistory.SolutionRate = string.Empty;
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.FinishingDate.ToString())
                         {
-                            ch.FinishingDate = replaceDatesWith;
+                            caseHistory.FinishingDate = replaceDatesWith;
                         }
+                        else if (fieldName == GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString())
+                        {
+                            caseHistory.CaseExtraFollowers = replaceDataWith;
+                            deleteEmailLogs = true;
+                        }
+                        else if (fieldName == "tblLog.Text_External" 
+                            || fieldName == "tblLog.Text_Internal")
+                        {
+                            deleteEmailLogs = true;
+                        }
+                    }
 
+                    if (deleteEmailLogs)
+                    {
+                        var toReplace =  emailLogs.GetAll().Where(x => x.CaseHistory_Id == caseHistory.Id).ToList();
+                        if (toReplace.Any())
+                        {
+                            toReplace.ForEach(e => e.EmailAddress = e.Bcc = e.Cc = replaceDataWith);
+                        }
                     }
                 }
             }

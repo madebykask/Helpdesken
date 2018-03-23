@@ -4034,3 +4034,7 @@ div.chosen-container.chosen-container-multi.error {
 .unlock-icon {
     background: url('/content/icons/unlock.png');    
 }
+
+#tooltip-button-wrapper .btn[disabled] {
+    pointer-events: none;
+}

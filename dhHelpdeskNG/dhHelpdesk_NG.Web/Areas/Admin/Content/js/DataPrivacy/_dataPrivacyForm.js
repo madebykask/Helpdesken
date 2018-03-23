@@ -121,6 +121,17 @@
              }
          };
 
+         this.togglePrivacyRunBtn = function (enable) {
+             var wrapper$ = $('#tooltip-button-wrapper');
+             if (enable) {
+                 wrapper$.tooltip('destroy');
+             } else {
+                 wrapper$.tooltip({container: 'body'});
+             }
+            _self.enableControl(_self.privacyRunBtn$, enable);
+
+        }
+
          this.lockFormFields = function (lock) {
              var self = this;
              self.showLocks(lock, !lock);
@@ -136,9 +147,10 @@
              self.refreshFieldsControl();
 
              //enable run button only when form is locked!
-             _self.enableControl(_self.privacyRunBtn$, lock);
+             _self.togglePrivacyRunBtn(lock);
              _self.enableControl(_self.btnFavorite$, !lock);
          }
+        
 
          this.getFilterData = function() {
              var fields = [];
@@ -409,7 +421,7 @@
             self.closedOnly$.prop('checked', false);
 
             //reset locking/unlocking states to default
-            self.enableControl(self.privacyRunBtn$, false); 
+            _self.togglePrivacyRunBtn(false);
             self.enableControl(self.btnFavorite$, true);
             self.showLocks(false, false);
         };
@@ -638,15 +650,20 @@
                     _self.loadCustomerFields(customerId);
                 });
 
-                _self.btnFavorite$.on("click", function () {
+                _self.btnFavorite$.on('click', function () {
                     _self.saveFavorites();
                 });
 
-                _self.btnLock$.on("click", function () {
+                _self.btnLock$.on('click', function () {
                     _self.lockFormFields(false);
+
                 });
 
-                _self.privacyRunBtn$.on("click", function (e) {
+                _self.btnUnLock$.on('click', function () {
+                    _self.saveFavorites();
+                });
+
+                _self.privacyRunBtn$.on('click', function (e) {
                     e.stopImmediatePropagation();
                     e.preventDefault();
 
