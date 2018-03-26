@@ -305,7 +305,8 @@ namespace DH.Helpdesk.Web
                            "~/Areas/admin/Content/js/invoice/invoicearticleproductareaInput.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/admindataprivacy").Include(
-                    "~/Areas/Admin/Content/js/DataPrivacy/_dataPrivacyForm.js"));
+                    "~/Areas/Admin/Content/js/DataPrivacy/_dataPrivacyForm.js",
+                    "~/Content/js/moment.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/common/admin").Include(
                            "~/Content/js/Shared/errors.js",
@@ -485,6 +486,8 @@ namespace DH.Helpdesk.Web
                     "~/Areas/Inventory/Content/js/inventoryOverview.js"));
             bundles.Add(new ScriptBundle(ScriptNames.InventoryRelatedCases).Include(
                     "~/Areas/Inventory/Content/js/relatedCases.js"));
+
+
 
             RegisterOrdersAreaBundles(bundles);
             RegisterInvoicesAreaBundles(bundles);

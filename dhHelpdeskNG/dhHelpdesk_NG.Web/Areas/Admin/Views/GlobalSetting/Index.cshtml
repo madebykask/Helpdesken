@@ -225,8 +225,9 @@
                                                     @Translation.GetCoreTextTranslation("Bevarandeperiod")
                                                 </td>
                                                 <td class="span9">
-                                                    @Html.TextBoxFor(m => m.DataPrivacy.RetentionPeriod, new { id = "retentionPeriod", style="width:100px" })
+                                                    @Html.TextBoxFor(m => m.DataPrivacy.RetentionPeriod, new { id = "retentionPeriod", maxlength="3", style="width:100px" })
                                                     @Translation.GetCoreTextTranslation("days")
+                                                    <div id="retentionDaysError"></div>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -241,8 +242,8 @@
                                                     @Translation.GetCoreTextTranslation("Registreringsdatum")<span class="mandatorystar"> * </span>
                                                 </td>
                                                 <td class="span9">
-                                                    @Html.EditorFor(m => m.DataPrivacy.RegisterDateFrom, "DatePicker", new {id = "regCaseFrom"})
-                                                    @Html.EditorFor(m => m.DataPrivacy.RegisterDateTo, "DatePicker", new {id = "regCaseTo"})
+                                                    @Html.EditorFor(m => m.DataPrivacy.RegisterDateFrom, "DatePicker", new {id = "regCaseFrom", type = "text" })
+                                                    @Html.EditorFor(m => m.DataPrivacy.RegisterDateTo, "DatePicker", new {id = "regCaseTo", type = "text" })
                                                     <div id="datesErrorLabel"></div>
                                                 </td>
                                             </tr>
@@ -353,13 +354,12 @@
     </div>
 </div>
 
-@Scripts.Render("~/bundles/admindataprivacy")
 
 @section Scripts {
+    @Scripts.Render("~/bundles/admindataprivacy")
     <script type="text/javascript">
-
         var confirmationDialog = {
-            showConfirmation: function(text, onOk, onCancel) {
+            showConfirmation: function (text, onOk, onCancel) {
                 var d = $('<div class="modal fade">' +
                     '<div class="modal-dialog">' +
                     '<form method="post" id="deleteDialogForm" class="modal-content">' +
@@ -382,28 +382,28 @@
                     '</div>');
 
                 d.on("show",
-                    function() {
+                    function () {
                         d.find(".btn-cancel").on("click",
-                            function(e) {
+                            function (e) {
                                 onCancel();
                                 d.modal('hide');
                             });
 
                         d.find(".btn-ok").on("click",
-                            function(e) {
+                            function (e) {
                                 onOk();
                                 d.modal('hide');
                             });
                     });
 
                 d.on("hide",
-                    function() {
+                    function () {
                         d.find(".btn-ok").off("click");
                         d.find(".btn-cancel").off("click");
                     });
 
                 d.on("hidden",
-                    function() {
+                    function () {
                         d.remove();
                     });
 
@@ -417,10 +417,8 @@
 
         $(function () {
 
-            //fix for datepicker not autoclosing afer setDate is called
-            $.fn.datepicker.defaults.autoclose = true;
-
             var settings = {
+                dateformat: '@System.Threading.Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
                 urls: {
                     DataPrivacyAction: '@Url.Action("DataPrivacy")',
                     LoadFavoriteDataAction: '@Url.Action("LoadDataPrivacyFavorite")',
@@ -432,7 +430,7 @@
                 {
                     dataPrivacyConfirmation: '@Translation.GetForJS("Ar du saker pa att du vill ersatta informationen i utvalda arenden?")',
                     operationSuccessMessage: '@Translation.GetForJS("Klar")',
-                    createNewFavorite: '@Translation.GetForJS("Skappa Ny")', 
+                    createNewFavorite: '@Translation.GetForJS("Skappa Ny")',
 
                     //validation messages
                     SelectedCustomerIdRequired: '@Translation.GetForJS("Kund") @Translation.GetForJS("maste anges")',
@@ -440,14 +438,14 @@
                     RegisterDateFromRequired: '@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("maste anges")',
                     RegisterDateToRequired: '@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("maste anges")'
                 },
-                confirmDialog : confirmationDialog
+                confirmDialog: confirmationDialog
             };
 
             window.DataPrivacyForm.Init(settings);
 
             $('#SearchId').val(@ViewBag.SelectedSearchCondition);
 
-            $("#multiCustomersSearch").on('switchChange.bootstrapSwitch', function() {
+            $("#multiCustomersSearch").on('switchChange.bootstrapSwitch', function () {
 
                 $("#selfServiceError").text('').hide();
 
@@ -458,7 +456,7 @@
 
                 $.post('@Url.Action("UpdateMultiCustomersSearch", "GlobalSetting", new {Area = "Admin"})',
                     data,
-                    function(response) {
+                    function (response) {
                         if (!response.Success && response.ErrorMessage) {
                             $("#selfServiceError").text(response.ErrorMessage).show();
                         }
@@ -479,7 +477,7 @@
             list.html('');
             if (id != '') {
                 $.get('/GlobalSetting/ChangeTextType/' + id,
-                    function(result) {
+                    function (result) {
                         list.html($(result).html());
                     });
             }
@@ -490,7 +488,7 @@
             list.html('');
             if (id != '') {
                 $.get('/GlobalSetting/ChangeHoliday/' + id,
-                    function(result) {
+                    function (result) {
                         list.html(result);
                     });
             }
@@ -506,5 +504,11 @@
             $(menuId).show();
         }
 
+        $("#retentionPeriod").on("keypress keyup blur", function (event) {
+            $(this).val($(this).val().replace(/[^\d].+/, ""));
+            if ((event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+        });
     </script>
 }
