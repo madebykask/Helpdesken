@@ -225,7 +225,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
 
                         line = reader.ReadLine();
                     }
-                   
+                    reader.Close();
                     var destinationPath = Path.Combine(newPath +@"\" +fileName);
 
                     if (Directory.Exists(newPath))
@@ -233,12 +233,14 @@ namespace DH.Helpdesk.TaskScheduler.Services
                         try
                         {
                             File.Copy(sourcePath, destinationPath, true);
-                            File.Delete(sourcePath);                         
+                            File.Delete(sourcePath);
+
                         }
                         catch (Exception ex)
                         {                           
                             logs.Add(setting.CustomerId, $"Error: {ex.Message}");
                         }
+                       
                     }
                     else
                     {
@@ -246,12 +248,13 @@ namespace DH.Helpdesk.TaskScheduler.Services
                         try
                         {
                               File.Copy(sourcePath, destinationPath, true);
-                              File.Delete(sourcePath);                           
+                              File.Delete(sourcePath);
                         }
                         catch (Exception ex)
                         {
                             logs.Add(setting.CustomerId, $"Error: {ex.Message}");
                         }
+                        
                     }
 
                     return ret;
@@ -387,12 +390,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                             updated += $"{row.Item1}, ";
                             uCount++;
                          }
-                }
-                //else
-                //{
-                //    logs.Add(setting.CustomerId, $"There is no query to run");
-                //    _logger.Error("There is no query to run");
-                //}
+                }                
             }
             inserted += string.IsNullOrEmpty(inserted) ?
             $"There was no New Initiator." : inserted;
@@ -493,7 +491,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
         {
             var _logs = new DataLogModel();
 
-            var basePath = ConfigurationManager.AppSettings["LogPath"]; ;
+            var basePath = ConfigurationManager.AppSettings["LogPath"]; 
             var fileName = $"{DateTime.Now.ToString("yyMMdd")}.txt";
             foreach (var log in _logs.RowsData)
             {
