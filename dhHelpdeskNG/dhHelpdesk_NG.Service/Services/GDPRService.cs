@@ -543,7 +543,7 @@ namespace DH.Helpdesk.Services.Services
                             caseHistory.RegUserId = replaceDataWith;
                             caseHistory.RegUserDomain = replaceDataWith;
                             caseHistory.IpAddress = replaceDataWith;
-                            //ch.CreatedByUser = replaceDataWith;
+                            caseHistory.CreatedByUser = replaceDataWith;
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())
                         {
