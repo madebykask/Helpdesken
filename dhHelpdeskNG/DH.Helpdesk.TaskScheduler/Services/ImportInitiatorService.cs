@@ -110,7 +110,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                                 Days2WaitBeforeDelete = customer.Days2WaitBeforeDelete,
                                 UserName = _cs.LDAPUserName,
                                 Password = _cs.LDAPPassword,
-                                Logging = _cs.LogLevel,
+                                Logging = _cs.LDAPLogLevel,
                                 StartTime = "2018-03-06",
                                 CronExpression = "0 * 8-22 * * ?",
                                 TimeZone = "",
@@ -290,6 +290,9 @@ namespace DH.Helpdesk.TaskScheduler.Services
             var ldapFields = fieldSettings.Where(fs => !string.IsNullOrEmpty(fs.LDAPAttribute)).ToList();
             var fieldLenght = new FieldLenght();
 
+
+            var insertLog = "";
+            var updateLog = "";
             var inserted = "";
             var iCount = 0;
             var updated = "";
@@ -381,24 +384,28 @@ namespace DH.Helpdesk.TaskScheduler.Services
                 {
                     var dbQueryExecutor = _execFactory.Create();
                     var ret = dbQueryExecutor.ExecQuery(queryToRun);
+
+                   
                     if (isNew)
                     {
                         inserted += $"{row.Item1}, ";
+                        insertLog += queryToRun + "\r\n";
                         iCount++;
                     }
                     else {
                             updated += $"{row.Item1}, ";
+                            updateLog += queryToRun + "\r\n";
                             uCount++;
                          }
                 }                
             }
             inserted += string.IsNullOrEmpty(inserted) ?
             $"There was no New Initiator." : inserted;
-            var insertText = $"{DateTime.Now} Number of inserted inisitator is {iCount}. UserIds are: {inserted} ";
+            var insertText = $"{DateTime.Now} Number of inserted inisitator is {iCount}. UserIds are: {inserted} \r\n {insertLog}";
 
             updated += string.IsNullOrEmpty(updated) ?
             $"There was no Initiator to update." : updated;
-            var updateText = $"{DateTime.Now} Number of updated inisitator is {uCount}. UserIds are: {updated} ";
+            var updateText = $"{DateTime.Now} Number of updated inisitator is {uCount}. UserIds are: {updated} \r\n {updateLog}";
      
 
             logs.Add(setting.CustomerId, $"{insertText} \r\n {updateText}");
@@ -487,12 +494,12 @@ namespace DH.Helpdesk.TaskScheduler.Services
         }
 
 
-        public void CreatLogFile()
+        public void CreatLogFile(DataLogModel _logs)
         {
-            var _logs = new DataLogModel();
+            //var _logs = new DataLogModel();
 
             var basePath = ConfigurationManager.AppSettings["LogPath"]; 
-            var fileName = $"{DateTime.Now.ToString("yyMMdd")}.txt";
+            var fileName = $"LogFile_{DateTime.Now.ToString("yyMMdd")}.txt";
             foreach (var log in _logs.RowsData)
             {
                 var filePath = $"{basePath}\\{log.Id}\\{fileName}";
@@ -503,7 +510,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                     using (var file = File.Open(filePath, FileMode.Append, FileAccess.Write))
                     using (var writer = new StreamWriter(file))
                     {
-                        writer.WriteLine("\r\n ---------------------------------------------- \r\n ");
+                        writer.WriteLine("\r\n ------------------------END---------------------- \r\n ");
                         writer.Write(fileContent);
                         writer.Flush();
                         writer.Close();
@@ -515,8 +522,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
                     Directory.CreateDirectory(Path.GetDirectoryName(filePath));
                     using (FileStream fs = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
                     {
-                        Byte[] info = new UTF8Encoding(true).GetBytes(fileContent);
-                        // Add some information to the file.
+                        Byte[] info = new UTF7Encoding(true).GetBytes(fileContent);
+                        // Add some information to the file.                                              
                         fs.Write(info, 0, info.Length);
                         fs.Close();
                     }
@@ -542,6 +549,6 @@ namespace DH.Helpdesk.TaskScheduler.Services
 
         void DeleteInitiators(int Days2waitBeforeDelete, int customerId, ref DataLogModel logs);
 
-        void CreatLogFile();
+        void CreatLogFile(DataLogModel _logs);
     }
 }

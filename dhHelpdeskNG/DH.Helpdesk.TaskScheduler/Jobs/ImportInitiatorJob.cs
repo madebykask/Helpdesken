@@ -42,7 +42,7 @@ namespace DH.Helpdesk.TaskScheduler.Jobs
                     var fieldSettings = _importInitiatorService.GetInitiatorSettings(setting.CustomerId);
                     _importInitiatorService.ImportInitiator(setting, inputData, fieldSettings, ref _logs);
                     if (setting.Logging == 1)
-                        _importInitiatorService.CreatLogFile();
+                        _importInitiatorService.CreatLogFile(_logs);
                 }
                 
 
