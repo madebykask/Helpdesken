@@ -15,7 +15,8 @@ namespace DH.Helpdesk.TaskScheduler.Dto
         public int OverwriteFromMasterDirectory { get; set; }
         public int Days2WaitBeforeDelete { get; set; }
         public string UserName { get; set; }
-        public string Password { get; set; }            
+        public string Password { get; set; }          
+        public int Logging { get; set; }  
         public string StartTime { get; set; }
         public string CronExpression { get; set; }
         public string TimeZone { get; set; }      

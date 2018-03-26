@@ -15,6 +15,7 @@ using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.TaskScheduler.Enums;
 using System.ComponentModel.DataAnnotations;
 using DH.Helpdesk.TaskScheduler.Helper;
+using System.Threading;
 
 namespace DH.Helpdesk.TaskScheduler.Services
 {
@@ -83,47 +84,55 @@ namespace DH.Helpdesk.TaskScheduler.Services
             return ret;
         }
 
-        public IList<ImportInitiator_JobSettings> GetJobSettings()
+        public IList<ImportInitiator_JobSettings> GetJobSettings(ref DataLogModel logs)
         {           
-            var customers = _customerRepository.GetMany(c => !string.IsNullOrEmpty(c.NDSPath)).ToList();
+            var customers = _customerRepository.GetMany(c => !string.IsNullOrEmpty(c.NDSPath) && c.NDSPath == "CSV").ToList();
             var customerIds = customers.Select(c=> c.Id).ToArray();
             var customerSettings = _settingRepository.GetMany(c => customerIds.Contains(c.Customer_Id)).ToList();
                         
             var ret = new List<ImportInitiator_JobSettings>();
             if (customers != null)
             {
-                foreach (var customer in customers.Where(c=> c.Id  == 749))
+                foreach (var customer in customers)
                 {
-                    var _cs = customerSettings.FirstOrDefault(s => s.Customer_Id == customer.Id);
-                    if (_cs != null)
+                    try
                     {
-                        var jobSetting = new ImportInitiator_JobSettings()
+                        var _cs = customerSettings.FirstOrDefault(s => s.Customer_Id == customer.Id);
+                        if (_cs != null)
                         {
-                            CustomerId = customer.Id,
-                            Url = customer.NDSPath,
-                            InputFilename = "ExampleFromCustomer.csv",
-                            Filter = _cs.LDAPFilter,
-                            OverwriteFromMasterDirectory = customer.OverwriteFromMasterDirectory,
-                            Days2WaitBeforeDelete = customer.Days2WaitBeforeDelete,
-                            UserName = _cs.LDAPUserName,
-                            Password = _cs.LDAPPassword,
-                            StartTime = "2018-03-06",
-                            CronExpression = "0 * 8-22 * * ?",
-                            TimeZone = "",
-                            ImportFormat = "CSV"
-                        };
-                        ret.Add(jobSetting);
+                            var jobSetting = new ImportInitiator_JobSettings()
+                            {
+                                CustomerId = customer.Id,
+                                Url = _cs.LDAPBase,
+                                InputFilename = _cs.LDAPFilter,
+                                //Filter = _cs.LDAPFilter,
+                                OverwriteFromMasterDirectory = customer.OverwriteFromMasterDirectory,
+                                Days2WaitBeforeDelete = customer.Days2WaitBeforeDelete,
+                                UserName = _cs.LDAPUserName,
+                                Password = _cs.LDAPPassword,
+                                Logging = _cs.LogLevel,
+                                StartTime = "2018-03-06",
+                                CronExpression = "0 * 8-22 * * ?",
+                                TimeZone = "",
+                                ImportFormat = "CSV"
+                            };
+                            ret.Add(jobSetting);
+                        }
                     }
-
+                    catch (Exception ex)
+                    {
+                        logs.Add(customer.Id, $"Error: {ex.Message}");
+                    }
+                    
                 }
             }
             return ret;
         }
 
-        public IList<ITrigger> GetTriggers()
+        public IList<ITrigger> GetTriggers(ref DataLogModel logs)
         {
             var triggers = new List<ITrigger>();
-            var settings = GetJobSettings();
+            var settings = GetJobSettings(ref logs);
 
             if (settings != null || settings.Any())
             {
@@ -181,16 +190,19 @@ namespace DH.Helpdesk.TaskScheduler.Services
             return triggers;
         }
 
-        public CsvInputData ReadCsv(ImportInitiator_JobSettings settings)
+        public CsvInputData ReadCsv(ImportInitiator_JobSettings setting, ref DataLogModel logs)
         {
             var ret = new CsvInputData();
 
-            var filePath = settings.Url;
-            var fileName = $"{settings.InputFilename}";
+            var filePath = setting.Url;
+            var fileName = $"{setting.InputFilename}";
             const char delimiter = ';';
+            var sourcePath = Path.Combine(filePath , fileName);
+            var newPath = Path.Combine(filePath, "archive");  
+
             try
             {
-                using (var reader = new StreamReader(filePath + fileName, Encoding.UTF7, true))
+                using (var reader = new StreamReader(sourcePath, Encoding.UTF7, true))
                 {
                     // First line contains column names.
                     var columnNames = reader.ReadLine().Split(delimiter);
@@ -213,13 +225,44 @@ namespace DH.Helpdesk.TaskScheduler.Services
 
                         line = reader.ReadLine();
                     }
+                   
+                    var destinationPath = Path.Combine(newPath +@"\" +fileName);
+
+                    if (Directory.Exists(newPath))
+                    {                        
+                        try
+                        {
+                            File.Copy(sourcePath, destinationPath, true);
+                            File.Delete(sourcePath);                         
+                        }
+                        catch (Exception ex)
+                        {                           
+                            logs.Add(setting.CustomerId, $"Error: {ex.Message}");
+                        }
+                    }
+                    else
+                    {
+                        Directory.CreateDirectory(newPath);
+                        try
+                        {
+                              File.Copy(sourcePath, destinationPath, true);
+                              File.Delete(sourcePath);                           
+                        }
+                        catch (Exception ex)
+                        {
+                            logs.Add(setting.CustomerId, $"Error: {ex.Message}");
+                        }
+                    }
 
                     return ret;
-                }
+                }                              
+
             }
-            catch
+            catch(Exception ex)
             {
                 //TODO: Log error
+                if (setting.Logging == 1)
+                logs.Add(setting.CustomerId, $"Error: {ex.Message} Failed to reading file { fileName} from path { filePath}");               
             }
 
             return ret;
@@ -229,18 +272,31 @@ namespace DH.Helpdesk.TaskScheduler.Services
         {                             
             return _notifielrRepository.GetExistingNotifierIdByUserId(UserId,customerId);                         
         }
-        public void ImportInitiator(CsvInputData inputData, IList<CompuerUsersFieldSetting> fieldSettings)
-        {                        
+        public void ImportInitiator(ImportInitiator_JobSettings setting, CsvInputData inputData, IList<CompuerUsersFieldSetting> fieldSettings, ref DataLogModel logs)
+        {
+            var isOverwrite = Convert.ToBoolean(setting.OverwriteFromMasterDirectory);
+            var deletingDays = setting.Days2WaitBeforeDelete;
+
+            if (deletingDays > 0)
+            {
+                //Delete
+                DeleteInitiators(deletingDays, setting.CustomerId, ref logs);
+                
+            }
             var multipleFields = fieldSettings.Where(fs => fs.LDAPAttribute.Contains(',')).ToList();
             var ldapFields = fieldSettings.Where(fs => !string.IsNullOrEmpty(fs.LDAPAttribute)).ToList();
             var fieldLenght = new FieldLenght();
+
+            var inserted = "";
+            var iCount = 0;
+            var updated = "";
+            var uCount = 0;
 
             foreach (var row in inputData.InputColumns)
             {
                 var updateQuery = "";
                 var existingId = 0;
-                var customerId = int.Parse(ConfigurationManager.AppSettings["Customers"]);
-                existingId = CheckIfExisting(row.Item1, customerId);
+                existingId = CheckIfExisting(row.Item1, setting.CustomerId);
 
                 var fieldNames = "";
                 var fieldValues = "";
@@ -260,22 +316,29 @@ namespace DH.Helpdesk.TaskScheduler.Services
                     if (fs.LDAPAttribute.Contains(","))
                     {
                         var _fsFields = fs.LDAPAttribute.Split(',').ToList();
-                        foreach(var _fsField in _fsFields)
+                   
+                        foreach (var _fsField in _fsFields)
                         {
                             var _sectionValue = row.Item2[_fsField];
-                            _csvFieldValue += string.IsNullOrEmpty(_sectionValue)? "" : $" {_sectionValue}";
-                            //NOTE: ForignKeys can not be combined                            
+
+                            var c = " ";
+                            if (string.IsNullOrEmpty(_csvFieldValue))
+                                c = "";
+                            _csvFieldValue += string.IsNullOrEmpty(_sectionValue) ? "" : $"{c}{_sectionValue},";
+                            //NOTE: ForignKeys can not be combined                                                                                                             
                         }
+                        if (_csvFieldValue.EndsWith(","))
+                            _csvFieldValue = _csvFieldValue.Substring(0, _csvFieldValue.Length - 1);
                     }
                     else
                     {
                         _csvFieldValue = row.Item2[fs.LDAPAttribute];
                         if (relatedFields.Contains(_dbFieldName))
-                            _csvFieldValue = GetRelatedValue(_dbFieldName, _csvFieldValue, customerId);                        
+                            _csvFieldValue = GetRelatedValue(_dbFieldName, _csvFieldValue, setting.CustomerId);                        
                     }
 
                     if (maxLen > 0 && _csvFieldValue.Length > maxLen)
-                        _csvFieldValue = _csvFieldValue.Substring(0, maxLen - 1);
+                        _csvFieldValue = _csvFieldValue.Substring(0, maxLen - 1);                    
 
                     // Create Script
                     if (isNew)
@@ -285,7 +348,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                         fieldNames += $"{delimiter}{_dbFieldName}";
                         fieldValues += (_csvFieldValue == "null") ?
                                         $"{delimiter}{_csvFieldValue}" :
-                                        $"{delimiter}'{_csvFieldValue}'";                        
+                                        $"{delimiter}'{_csvFieldValue}'";               
                     }
                     else
                     {
@@ -295,23 +358,53 @@ namespace DH.Helpdesk.TaskScheduler.Services
                         var rightSide = (_csvFieldValue == "null") ? 
                                         $"{_csvFieldValue}" : 
                                         $"'{_csvFieldValue}'";
-                        updateQuery += (_leftSide + rightSide);                        
+                        updateQuery += (_leftSide + rightSide);                    
                     }
                 } //for each LDAP Attr
 
                 var queryToRun = (isNew) ?
 
                         $"Insert into tblComputerUsers " +
-                                      $"({fieldNames}, Customer_Id) " +
-                                      $"Values ({fieldValues}, {customerId})"
+                                      $"({fieldNames}, Customer_Id, SyncChangedDate) " +
+                                      $"Values ({fieldValues}, {setting.CustomerId}, '{DateTime.UtcNow}')"
                         :
+                        ((isOverwrite) ?
                         $"Update tblComputerUsers SET {updateQuery} " +
                                       $",ChangeTime = '{DateTime.UtcNow}' " +
-                                      $"where id = {existingId}";
-                                
-                var dbQueryExecutor = _execFactory.Create();
-                var ret = dbQueryExecutor.ExecQuery(queryToRun);
+                                      $",SyncChangedDate = '{DateTime.UtcNow}' " +
+                                      $"where id = {existingId}": string.Empty);
+
+                if (!string.IsNullOrEmpty(queryToRun))
+                {
+                    var dbQueryExecutor = _execFactory.Create();
+                    var ret = dbQueryExecutor.ExecQuery(queryToRun);
+                    if (isNew)
+                    {
+                        inserted += $"{row.Item1}, ";
+                        iCount++;
+                    }
+                    else {
+                            updated += $"{row.Item1}, ";
+                            uCount++;
+                         }
+                }
+                //else
+                //{
+                //    logs.Add(setting.CustomerId, $"There is no query to run");
+                //    _logger.Error("There is no query to run");
+                //}
             }
+            inserted += string.IsNullOrEmpty(inserted) ?
+            $"There was no New Initiator." : inserted;
+            var insertText = $"{DateTime.Now} Number of inserted inisitator is {iCount}. UserIds are: {inserted} ";
+
+            updated += string.IsNullOrEmpty(updated) ?
+            $"There was no Initiator to update." : updated;
+            var updateText = $"{DateTime.Now} Number of updated inisitator is {uCount}. UserIds are: {updated} ";
+     
+
+            logs.Add(setting.CustomerId, $"{insertText} \r\n {updateText}");
+
         }
 
         private string GetRelatedValue(string fieldName, string forignKey, int customerId)
@@ -349,22 +442,108 @@ namespace DH.Helpdesk.TaskScheduler.Services
 
             return string.Empty;
         }
+
+        public void DeleteInitiators(int Days2waitBeforeDelete, int customerId, ref DataLogModel logs)
+        {          
+            var Initiators = _notifielrRepository.GetMany(n=> n.Customer_Id == customerId).ToList();
+            var InitiatorsToDelete = Initiators.
+                                        Where(i => i.SyncChangedDate.Value.AddDays(Days2waitBeforeDelete) <= 
+                                        DateTime.UtcNow).ToList();
+            // Has Domain Id
+            var hasDomainId = InitiatorsToDelete.Where(i => i.Domain_Id != null).Select(i => i.Id).ToList();            
+            // Has ManagerComputerUserId
+            var hasMCId = InitiatorsToDelete.Where(i => i.ManagerComputerUser_Id != null).Select(i => i.Id).ToList();
+            var InitiatorIds = InitiatorsToDelete.Select(i => i.Id).ToList();
+
+            var dbQueryExecutor = _execFactory.Create();
+            var ret = 0;
+
+            if (hasDomainId.Any())
+            {
+                var InitHasDomainId = String.Join(",", hasDomainId);
+                var query = $"UPDATE tblComputer SET User_Id = Null " + 
+                            $"WHERE User_Id IN ({InitHasDomainId})";               
+                 ret = dbQueryExecutor.ExecQuery(query);
+            }
+
+            if (hasMCId.Any())
+            {
+                var InitHasMCUId = String.Join(",", hasMCId);
+                var query = $"UPDATE tblComputerUsers SET ManagerComputerUser_Id=Null " +
+                            $"WHERE ManagerComputerUser_Id IN ({InitHasMCUId})";
+                ret = dbQueryExecutor.ExecQuery(query);
+            }
+
+            foreach (var InitiatorId in InitiatorIds)
+            {
+                // ta bort historik
+                var deletequery = $"DELETE FROM tblComputerUserLog WHERE ComputerUser_Id = {InitiatorId};" +
+                            $"DELETE FROM tblComputerUser_tblCUGroup WHERE ComputerUser_Id = {InitiatorId};" +
+                            $"DELETE FROM tblComputerUsers WHERE Id = {InitiatorId};";
+                ret = dbQueryExecutor.ExecQuery(deletequery);                                
+            }
+            if (ret == 1)
+            {
+                    logs.Add(customerId, $"Number of Initiators Deleted : {InitiatorIds.Count()}");
+            }
+        }
+
+
+        public void CreatLogFile()
+        {
+            var _logs = new DataLogModel();
+
+            var basePath = ConfigurationManager.AppSettings["LogPath"]; ;
+            var fileName = $"{DateTime.Now.ToString("yyMMdd")}.txt";
+            foreach (var log in _logs.RowsData)
+            {
+                var filePath = $"{basePath}\\{log.Id}\\{fileName}";
+                var fileContent = string.Join("\n", log.Data);
+                if (File.Exists(filePath))
+                {
+                    //Open File - Append content
+                    using (var file = File.Open(filePath, FileMode.Append, FileAccess.Write))
+                    using (var writer = new StreamWriter(file))
+                    {
+                        writer.WriteLine("\r\n ---------------------------------------------- \r\n ");
+                        writer.Write(fileContent);
+                        writer.Flush();
+                        writer.Close();
+                    }
+                }
+                else
+                {
+                    //Create File
+                    Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+                    using (FileStream fs = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                    {
+                        Byte[] info = new UTF8Encoding(true).GetBytes(fileContent);
+                        // Add some information to the file.
+                        fs.Write(info, 0, info.Length);
+                        fs.Close();
+                    }
+                }
+            }
+        }
     }
 
 
     internal interface IImportInitiatorService
     {
-        IList<ImportInitiator_JobSettings> GetJobSettings();
+        IList<ImportInitiator_JobSettings> GetJobSettings(ref DataLogModel logs);
 
-        IList<ITrigger> GetTriggers();
+        IList<ITrigger> GetTriggers(ref DataLogModel logs);
 
-        CsvInputData ReadCsv(ImportInitiator_JobSettings settings);
+        CsvInputData ReadCsv(ImportInitiator_JobSettings settings, ref DataLogModel logs);
 
         IList<CompuerUsersFieldSetting> GetInitiatorSettings(int customerId);
 
-        void ImportInitiator(CsvInputData inputColumns , IList<CompuerUsersFieldSetting> fieldSettings);
+        void ImportInitiator(ImportInitiator_JobSettings setting, CsvInputData inputColumns , IList<CompuerUsersFieldSetting> fieldSettings, ref DataLogModel logs);
 
         int CheckIfExisting(string UserId , int customerId);
 
+        void DeleteInitiators(int Days2waitBeforeDelete, int customerId, ref DataLogModel logs);
+
+        void CreatLogFile();
     }
 }

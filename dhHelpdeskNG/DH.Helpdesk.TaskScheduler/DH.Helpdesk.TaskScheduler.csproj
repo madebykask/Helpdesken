@@ -108,6 +108,7 @@
     <Compile Include="DI\ServiceModule.cs" />
     <Compile Include="Dto\CompuerUsersFieldSetting.cs" />
     <Compile Include="Dto\CsvInputData.cs" />
+    <Compile Include="Dto\DataLogModel.cs" />
     <Compile Include="Dto\ImportInitiator_JobSettings.cs" />
     <Compile Include="Dto\JobSettings.cs" />
     <Compile Include="Enums\FieldLenght.cs" />

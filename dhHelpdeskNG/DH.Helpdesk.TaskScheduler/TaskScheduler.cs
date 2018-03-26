@@ -16,6 +16,7 @@ using DH.Helpdesk.TaskScheduler.Services;
 using log4net.Config;
 using Ninject;
 using Quartz;
+using DH.Helpdesk.TaskScheduler.Dto;
 
 namespace DH.Helpdesk.TaskScheduler
 {
@@ -44,28 +45,31 @@ namespace DH.Helpdesk.TaskScheduler
             _logger.InfoFormat("Starting service {0}", ServiceName);
 
             ///*Daily Report*/
-            var job = JobBuilder.Create<DailyReportJob>()
-                .WithIdentity(Constants.DailyReportJobName)
-                .Build();
-            var trigger = _diContainer.Get<IDailyReportService>().GetTrigger();
+            //var job = JobBuilder.Create<DailyReportJob>()
+            //    .WithIdentity(Constants.DailyReportJobName)
+            //    .Build();
+            //var trigger = _diContainer.Get<IDailyReportService>().GetTrigger();
 
-            _sched.ScheduleJob(job, trigger);
+            //_sched.ScheduleJob(job, trigger);
 
+            var _logs = new DataLogModel();
 
             /*Import Initiator*/
-            //var _initiatorImportService = _diContainer.Get<IImportInitiatorService>();
-            //var initiatorTriggers = _initiatorImportService.GetTriggers().ToList();
-            //var i = 0; 
-            //foreach (var initTrigger in initiatorTriggers)
-            //{                
-            //    var initiatorJob = 
-            //        JobBuilder.Create<ImportInitiatorJob>()
-            //                  .WithIdentity($"{Constants.ImportInitiator_JobName}_{i}")
-            //                  .Build();
+            var _initiatorImportService = _diContainer.Get<IImportInitiatorService>();
+            var initiatorTriggers = _initiatorImportService.GetTriggers(ref _logs).ToList();
+           
 
-            //    _sched.ScheduleJob(initiatorJob, initTrigger);
-            //    i++;
-            //}
+            var i = 0;
+            foreach (var initTrigger in initiatorTriggers)
+            {
+                var initiatorJob =
+                    JobBuilder.Create<ImportInitiatorJob>()
+                              .WithIdentity($"{Constants.ImportInitiator_JobName}_{i}")
+                              .Build();
+
+                _sched.ScheduleJob(initiatorJob, initTrigger);
+                i++;
+            }
 
             /*Job Tracker*/
             var trackerJob = JobBuilder.Create<SettingsTrackerJob>()
