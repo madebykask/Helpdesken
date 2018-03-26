@@ -6945,7 +6945,7 @@ GO
 
 
 If not exists (select * from tbltext where id = 1951)
-	insert into tbltext (id, TextString) VALUES (1951, 'Valj Favorit')
+	insert into tbltext (id, TextString) VALUES (1951, 'Välj Favorit')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1951 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1951, 2, 'Select Favorite')
@@ -6973,7 +6973,7 @@ If not exists (select * from tblTextTranslation where text_id = 1954 and Languag
 GO
 
 If not exists (select * from tbltext where id = 1955)
-	insert into tbltext (id, TextString) VALUES (1955, 'Skappa Ny')
+	insert into tbltext (id, TextString) VALUES (1955, 'Skapa Ny')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1955 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1955, 2, 'Create New')
