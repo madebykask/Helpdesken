@@ -416,6 +416,9 @@
         };
 
         $(function () {
+            $.fn.datepicker.defaults.enableOnReadonly = false;
+            //disable datepicker on locked controls
+            $("#regCaseFrom, #regCaseTo, #replacedDate").datepicker("option", "enableOnReadonly", false);
 
             var settings = {
                 dateformat: '@System.Threading.Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
@@ -436,7 +439,8 @@
                     SelectedCustomerIdRequired: '@Translation.GetForJS("Kund") @Translation.GetForJS("måste anges")',
                     FieldsNamesRequired: '@Translation.GetForJS("Fält") @Translation.GetForJS("måste anges")',
                     RegisterDateFromRequired: '@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("måste anges")',
-                    RegisterDateToRequired: '@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("måste anges")'
+                    RegisterDateToRequired: '@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("måste anges")',
+                    InvalidDateRange: '@Translation.GetForJS("Valt datumintervall är ogiltigt")'
                 },
                 confirmDialog: confirmationDialog
             };
@@ -510,5 +514,7 @@
                 event.preventDefault();
             }
         });
+
+        
     </script>
 }

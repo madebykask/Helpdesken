@@ -1,4 +1,6 @@
-﻿ window.DataPrivacyForm =
+﻿/// <reference path="../../../../../Content/js/moment.js" />
+
+window.DataPrivacyForm =
     (function($){
 
         var _self = this;
@@ -135,175 +137,161 @@
 
         }
 
-         this.lockFormFields = function (lock) {
-             var self = this;
-             self.showLocks(lock, !lock);
+        this.lockFormFields = function (lock) {
+            var self = this;
+            self.showLocks(lock, !lock);
 
-             this.form$.find("input, select").each(function(index, el) {
-                 var id = el.id;
-                 if (id !== self.favoritesSelect$[0].id) {
-                     var ctl$ = $('#' + id);
-                     self.enableControl(ctl$, !lock);
-                 }  
-             });
+            this.form$.find("input, select").each(function(index, el) {
+                var id = el.id;
+                if (id !== self.favoritesSelect$[0].id) {
+                    var ctl$ = $('#' + id);
+                    self.enableControl(ctl$, !lock);
+                }  
+            });
 
-             self.refreshFieldsControl();
+            self.refreshFieldsControl();
 
-             //override unlock state if calc is checked
-             if (!lock && self.calculateRegistrationDate$.prop('checked')) {
-                 self.enableControl(self.registerDateTo$);
-             }
+            //override unlock state if calc is checked
+            if (!lock && self.calculateRegistrationDate$.prop('checked')) {
+                self.enableControl(self.registerDateTo$);
+            }
 
-             //enable run button only when form is locked!
-             _self.togglePrivacyRunBtn(lock);
-             _self.enableControl(_self.btnFavorite$, !lock);
-         }
-        
+            //enable run button only when form is locked!
+            _self.togglePrivacyRunBtn(lock);
+            _self.enableControl(_self.btnFavorite$, !lock);
+        }
 
-         this.getFilterData = function() {
-             var fields = [];
-             this.filterFields$.find("option:selected").each(function() {
-                 fields.push($(this).val());
-             });
-             return {
-                 fields: fields,
-                 selectedCustomerId: this.customerSelect$.val(),
-                 retentionPeriod: this.retentionPeriod$.val() || "0",
-                 calculateRegistrationDate: this.calculateRegistrationDate$.prop("checked"),
-                 registerDateFrom: this.registerDateFrom$.val(),
-                 registerDateTo: this.registerDateTo$.val(),
-                 closedOnly: $("#DataPrivacy_ClosedOnly").prop("checked"),
-                 replaceDataWith: $("#DataPrivacy_ReplaceDataWith").val(),
-                 replaceDatesWith: $("#DataPrivacy_ReplaceDatesWith").val(),
-                 removeCaseAttachments: $("#DataPrivacy_RemoveCaseAttachments").prop("checked"),
-                 removeLogAttachments: $("#DataPrivacy_RemoveLogAttachments").prop("checked"),
-                 removeCaseHistory: $("#DataPrivacy_RemoveCaseHistory").prop("checked") // todo: remove after case history is implemented
-             };
-         };
+        this.getFilterData = function() {
+            var fields = [];
+            this.filterFields$.find("option:selected").each(function() {
+                fields.push($(this).val());
+            });
+            return {
+                fields: fields,
+                selectedCustomerId: this.customerSelect$.val(),
+                retentionPeriod: this.retentionPeriod$.val() || "0",
+                calculateRegistrationDate: this.calculateRegistrationDate$.prop("checked"),
+                registerDateFrom: this.registerDateFrom$.val(),
+                registerDateTo: this.registerDateTo$.val(),
+                closedOnly: $("#DataPrivacy_ClosedOnly").prop("checked"),
+                replaceDataWith: $("#DataPrivacy_ReplaceDataWith").val(),
+                replaceDatesWith: $("#DataPrivacy_ReplaceDatesWith").val(),
+                removeCaseAttachments: $("#DataPrivacy_RemoveCaseAttachments").prop("checked"),
+                removeLogAttachments: $("#DataPrivacy_RemoveLogAttachments").prop("checked"),
+                removeCaseHistory: $("#DataPrivacy_RemoveCaseHistory").prop("checked") // todo: remove after case history is implemented
+            };
+        };
 
-         this.setupValidation = function() {
-             var self = this;
-             var caseFieldsDropDown = "lstFilterFields";
+        this.setupValidation = function() {
+            var self = this;
+            var caseFieldsDropDown = "lstFilterFields";
 
-             this.validator$ = this.form$.validate({
-                 ignore: '*:not([name])',
-                 //debug: true,
-                 rules: self.getRules(),
-                 errorPlacement: function(error, element) {
-                     if (element.is("#DataPrivacy_RegisterDateFrom") ||
-                         element.is("#DataPrivacy_RegisterDateTo")) {
-                         $("#datesErrorLabel").html(error);
-                     } else if (element.is('#retentionPeriod')) {
-                         $("#retentionDaysError").html(error);
-                     }
-                     else {
-                         if (element.is("select.chosen-select")) {
-                             error.insertAfter($("#fieldsLoader"));
-                             error.css("width", "315px");
-                             $("#" + element.attr("id") + "_chosen").addClass("error");
-                         } else {
-                             error.insertAfter(element);
-                         }
-                     }
-                 },
-                 highlight: function(element) {
-                     if (element.id === caseFieldsDropDown) {
-                         $("#" + element.id + "_chosen").removeClass('error success').addClass('error');
-                     } else {
-                         $(element).removeClass('error success').addClass('error');
-                     }
-                 },
-                 success: function(label) {
-                     if (label.attr("for") === caseFieldsDropDown) {
-                         $("#" + label.attr("for") + "_chosen").removeClass("error");
-                     }
-                 },
+            this.validator$ = this.form$.validate({
+                ignore: '*:not([name])',
+                //debug: true,
+                rules: self.getRules(),
+                errorPlacement: function(error, element) {
+                    if (element.is("#DataPrivacy_RegisterDateFrom") ||
+                        element.is("#DataPrivacy_RegisterDateTo")) {
+                        $("#datesErrorLabel").html(error);
+                    } else if (element.is('#retentionPeriod')) {
+                        $("#retentionDaysError").html(error);
+                    }
+                    else {
+                        if (element.is("select.chosen-select")) {
+                            error.insertAfter($("#fieldsLoader"));
+                            error.css("width", "315px");
+                            $("#" + element.attr("id") + "_chosen").addClass("error");
+                        } else {
+                            error.insertAfter(element);
+                        }
+                    }
+                },
+                highlight: function(element) {
+                    if (element.id === caseFieldsDropDown) {
+                        $("#" + element.id + "_chosen").removeClass('error success').addClass('error');
+                    } else {
+                        $(element).removeClass('error success').addClass('error');
+                    }
+                },
+                success: function(label) {
+                    if (label.attr("for") === caseFieldsDropDown) {
+                        $("#" + label.attr("for") + "_chosen").removeClass("error");
+                    }
+                },
 
-                 messages: {
-                     "DataPrivacy.SelectedCustomerId": {
-                         required: self.translations.SelectedCustomerIdRequired
-                     },
-                     "DataPrivacy.FieldsNames": {
-                         required: self.translations.FieldsNamesRequired
-                     },
-                     "DataPrivacy.RegisterDateFrom": {
-                         required: self.translations.RegisterDateFromRequired
-                     },
-                     "DataPrivacy.RegisterDateTo": {
-                         required: self.translations.RegisterDateToRequired
-                     }
-                 }
-             });
+                messages: {
+                    "DataPrivacy.SelectedCustomerId": {
+                        required: self.translations.SelectedCustomerIdRequired
+                    },
+                    "DataPrivacy.FieldsNames": {
+                        required: self.translations.FieldsNamesRequired
+                    },
+                    "DataPrivacy.RegisterDateFrom": {
+                        required: self.translations.RegisterDateFromRequired
+                    },
+                    "DataPrivacy.RegisterDateTo": {
+                        required: self.translations.RegisterDateToRequired
+                    }
+                }
+            });
 
-             jQuery.validator.addMethod("checkDateRange", function (value, element, param) {
-                 var isValid = _self.validateDateRange(value, element);
-                 return isValid;
-             }, function (param, element) {
-                 return 'Date range is invalid'; //todo: translate
-             });
+            jQuery.validator.addMethod("checkDateRange", function (value, element, param) {
+                var isValid = self.validateDateRange(value, element);
+                return isValid;
+            }, function (param, element) {
+                return _self.translations.InvalidDateRange;
+            });
 
-             jQuery.validator.addMethod("checkRetentionDate", function (value, element, param) {
-                 var isValid = _self.validateRetentionPeriodDate(value, element);
-                 return isValid;
+            jQuery.validator.addMethod("checkRetentionDate", function (value, element, param) {
+                var isValid = self.validateRetentionPeriodDate(value, element);
+                return isValid;
 
-             }, function (param, element) {
-                 var dateTo = _self.registerDateTo$.parent().datepicker('getDate');
-                 var validDateTo = _self.calculateValidRetentionPeriodEndDate(dateTo);
-                 return 'End date shall be less or equal than ' + moment(validDateTo).format("YYYY-MM-DD"); //todo: translate
-             });
+            }, function (param, element) {
+                var dateTo = self.getSelectedDate(self.registerDateTo$);
+                var validDateTo = self.calculateValidRetentionPeriodEndDate(dateTo);
+                //return 'End date shall be less or equal than ' + moment(validDateTo).format("YYYY-MM-DD"); 
+                return _self.translations.InvalidDateRange;
+            });
 
-             this.validateDateRange = function (value, element, param) {
-                 var dateFrom = _self.registerDateFrom$.parent().datepicker('getDate');
-                 var dateTo = _self.registerDateTo$.parent().datepicker('getDate');
+            //workaround to trigger validation for date time range 
+            this.registerDateFrom$.on('change', function () { self.validateDateRangeControls(); });
+            this.registerDateTo$.on('change', function () { self.validateDateRangeControls(); });
 
-                 //check if valid date range is specified: < today, > dateFrom
-                 if (moment(dateFrom).isAfter(dateTo) || moment(dateTo).isAfter(moment(), 'day')) {
-                     return false;
-                 }
-                 return true;
-             };
+            this.validateDateRangeControls = function() {
+                _self.registerDateFrom$.valid();
+                _self.registerDateTo$.valid();
+            };
 
-             this.validateRetentionPeriodDate = function (value, element, param) {
-                 var dateTo = _self.registerDateTo$.parent().datepicker('getDate');
-                 
-                 //check if dateTo falls into retention period if its specified
-                 var retentionDaysVal = _self.retentionPeriod$.val();
-                 if (retentionDaysVal) {
-                     var validEndDate = this.calculateValidRetentionPeriodEndDate(dateTo);
-                     if (moment(dateTo).isAfter(validEndDate)) {
-                         return false;
-                     }
-                 }
-                 return true;
-             };
+            this.form$.find(".chosen-select").chosen().change(function() {
+                $(this).valid();
+            });
+        };
 
-             this.calculateValidRetentionPeriodEndDate = function () {
-                 var dateTo = moment(); //today
-                 
-                 var retentionDaysVal = _self.retentionPeriod$.val();
-                 if (retentionDaysVal) {
-                     var retentionDays = parseInt(retentionDaysVal.toString(), 10);
-                     if (!isNaN(retentionDays) && retentionDays > 0) {
-                         dateTo = dateTo.subtract(retentionDays, 'days');
-                     }
-                 }
-                 return dateTo.toDate();
-             };
+        this.validateDateRange = function (value, element, param) {
+            var dateFrom = _self.getSelectedDate(_self.registerDateFrom$);
+            var dateTo = _self.getSelectedDate(_self.registerDateTo$);
 
-             //workaround to trigger validation for date time range 
-             this.registerDateFrom$.on('change', function () { _self.validateDateRangeControls(); });
-             this.registerDateTo$.on('change', function () { _self.validateDateRangeControls(); });
+            //check if valid date range is specified: < today, > dateFrom
+            if (moment(dateFrom).isAfter(dateTo, 'day') || moment(dateTo).isAfter(moment(), 'day')) {
+                return false;
+            }
+            return true;
+        };
 
-             this.validateDateRangeControls = function() {
-                 _self.registerDateFrom$.valid();
-                 _self.registerDateTo$.valid();
-             };
+        this.validateRetentionPeriodDate = function (value, element, param) {
+            var dateTo = _self.getSelectedDate(_self.registerDateTo$);
 
-             this.form$.find(".chosen-select").chosen().change(function() {
-                 $(this).valid();
-                 //self.onValidationChanged();
-             });
-         };
+            //check if dateTo falls into retention period if its specified
+            var retentionDaysVal = _self.retentionPeriod$.val();
+            if (retentionDaysVal) {
+                var validEndDate = this.calculateValidRetentionPeriodEndDate(dateTo);
+                if (moment(dateTo).isAfter(validEndDate, 'day')) {
+                    return false;
+                }
+            }
+            return true;
+        };
 
          this.getRules = function () {
              var self = this;
@@ -337,46 +325,53 @@
          };
         
          this.onRetentionPeriodChanged = function () {
-             var isCalcChecked = this.calculateRegistrationDate$.is(':checked');
-            var text = this.retentionPeriod$.val();
-             if (text && text.length) {
-                 this.enableControl(this.calculateRegistrationDate$, true);
-                 if (isCalcChecked) {
-                     this.updateRetentionPeriodDate();
-                 }
-             } else {
-                 // if retention days are not specified: uncheck, disable, set date to empty
-                 this.calculateRegistrationDate$.prop('checked', false);
-                 this.enableControl(this.calculateRegistrationDate$, false);
-                 this.enableControl(this.registerDateTo$, true);
-                 this.registerDateTo$.parent().datepicker('setDate', null);
-             }
 
+             var text = this.retentionPeriod$.val() || '';
+            if (!text.length) {
+                this.emptyDatePicker(this.registerDateTo$);
+             } 
+
+             this.setRetentionPeriodChangedState();
+             this.updateDateRange();
              this.validateDateRangeControls();
         };
 
         this.onCalculateRetentionPeriodChanged = function(checked) {
-            if (checked) {
-                this.enableControl(this.registerDateTo$, false);
-                this.updateRetentionPeriodDate();
-            } else {
-                this.enableControl(this.registerDateTo$, true);
-                //empty existing to let user enter new date.
-                this.registerDateTo$.parent().datepicker('setDate', null); 
+            if (!checked) {
+                //empty dateTo to require user to enter a new date.
+                this.emptyDatePicker(this.registerDateTo$);
             }
 
+            this.setRetentionPeriodChangedState();
+            this.updateDateRange();
             this.validateDateRangeControls();
         };
 
-        this.updateRetentionPeriodDate = function () {
-            var text = this.retentionPeriod$.val();
-            var num = parseInt(text, 10);
-            var date = new Date();
-            if (!isNaN(num) && num > 0) {
-                date = this.calculateValidRetentionPeriodEndDate();
+        this.setRetentionPeriodChangedState = function () {
+            var isCalcChecked = this.calculateRegistrationDate$.is(':checked');
+            var text = this.retentionPeriod$.val() || '';
+            if (text && text.length) {
+                this.enableControl(this.calculateRegistrationDate$, true);
+                this.enableControl(this.registerDateTo$, !isCalcChecked);
+            } else {
+                this.calculateRegistrationDate$.prop('checked', false);
+                this.enableControl(this.calculateRegistrationDate$, false);
+                this.enableControl(this.registerDateTo$, true);
             }
-            this.registerDateTo$.parent().datepicker('setDate', date);
         }
+
+        this.calculateValidRetentionPeriodEndDate = function () {
+            var dateTo = moment(); //today
+
+            var retentionDaysVal = _self.retentionPeriod$.val();
+            if (retentionDaysVal) {
+                var retentionDays = parseInt(retentionDaysVal.toString(), 10);
+                if (!isNaN(retentionDays) && retentionDays > 0) {
+                    dateTo = dateTo.subtract(retentionDays, 'days');
+                }
+            }
+            return dateTo.toDate();
+        };
 
         this.onValidationChanged = function() {
              if (this.validator$) {
@@ -513,12 +508,7 @@
                     self.blockUI(false);
                 });
         };
-
-        this.showLocks = function(showLock, showUnlock) {
-            this.showControl(this.btnLock$, showLock);
-            this.showControl(this.btnUnLock$, showUnlock);
-        }
-
+        
         this.saveFavorites = function() {
             var isValid = this.form$.valid();
             if (isValid) {
@@ -537,15 +527,21 @@
             self.enableControl(this.registerDateTo$, true);
             self.enableControl(this.calculateRegistrationDate$);
 
-            self.setJsonDate(registerDateFrom$, null);
-            self.setJsonDate(registerDateTo$, null);
+            self.setDatepickerDate(registerDateFrom$, null);
+            self.setDatepickerDate(registerDateTo$, null);
+            
             self.retentionPeriod$.val('');
             self.calculateRegistrationDate$.prop('checked', false);
             self.replaceDataWith$.val('');
-            self.setJsonDate(self.replaceDatesWith$, null);
+            self.setDatepickerDate(self.replaceDatesWith$, null);
             self.removeCaseAttachments$.prop('checked', false);
             self.removeLogAttachments$.prop('checked', false);
             self.closedOnly$.prop('checked', false);
+
+
+            //set today as a max date for date range
+            self.setDatepickerEndDate(registerDateFrom$, new Date());
+            self.setDatepickerEndDate(registerDateTo$, new Date());
 
             //reset locking/unlocking states to default
             _self.togglePrivacyRunBtn(false);
@@ -553,26 +549,77 @@
             self.showLocks(false, false);
         };
 
+        this.updateDateRange = function () {
+            var self = this;
+
+            var dateTo$ = moment(this.getSelectedDate(self.registerDateTo$));
+            var dateFrom$ = moment(this.getSelectedDate(self.registerDateFrom$));
+
+            // calc dates end limits
+            var maxDates = this.calcDateRangeLimits();
+            var dateFromMax = maxDates.dateFrom;
+            var dateToMax = maxDates.dateTo;
+
+            //set max date limits
+            this.setDatepickerEndDate(self.registerDateFrom$, maxDates.dateFrom);
+            this.setDatepickerEndDate(self.registerDateTo$, maxDates.dateTo);
+
+            var isCalcChecked = self.calculateRegistrationDate$.is(':checked');
+            if (isCalcChecked) {
+                //set calced max allowed value 
+                this.setDatepickerDate(this.registerDateTo$, dateToMax);
+            } else if (dateTo$.isValid() && dateTo$.isAfter(dateToMax, 'days')) {
+                //fix dateTo if it doesn't fall into correct range
+                this.emptyDatePicker(self.registerDateTo$);
+            }
+
+            //fix dateFrom if its after max end date or dateTo date
+            if (dateFrom$.isValid() && dateFrom$.isAfter(dateFromMax, 'days')) {
+                this.emptyDatePicker(self.registerDateFrom$);
+            }
+        }
+
+        this.calcDateRangeLimits = function () {
+            var self = this;
+            var dateTo$ = moment(this.getSelectedDate(self.registerDateTo$));
+            
+            //calc max date for dateTo
+            var dateToMax = this.calculateValidRetentionPeriodEndDate();
+            
+            var isCalcChecked = self.calculateRegistrationDate$.is(':checked');
+
+            //calc max date for dateFrom: should be less then dateFrom;
+            var dateFromMax = dateTo$.isValid() && dateTo$.isSameOrBefore(dateToMax, 'days') && !isCalcChecked 
+                ? dateTo$.toDate()
+                : dateToMax;
+
+            return {
+                dateFrom: dateFromMax,
+                dateTo: dateToMax
+            };
+        };
+
         this.populateFormFields = function(data) {
             var self = this;
             var customerId = data.CustomerId;
 
             self.customerSelect$.val(customerId);
-            self.setJsonDate(registerDateFrom$, data.RegisterDateFrom);
-            self.setJsonDate(registerDateTo$, data.RegisterDateTo);
 
+            //date range
+            self.setDatepickerDate(registerDateFrom$, data.RegisterDateFrom);
+            self.setDatepickerDate(registerDateTo$, data.RegisterDateTo);
             self.retentionPeriod$.val(data.RetentionPeriod == "0" ? '' : data.RetentionPeriod);
             self.calculateRegistrationDate$.prop('checked', data.CalculateRegistrationDate);
             if (data.CalculateRegistrationDate) {
                 self.enableControl(self.registerDateTo$, false);
-                self.updateRetentionPeriodDate();
             }
+            
+            // update date range to correct values
+            self.updateDateRange();
 
             self.closedOnly$.prop('checked', data.ClosedOnly);
             self.replaceDataWith$.val(data.ReplaceDataWith || '');
-
-
-            self.setJsonDate(self.replaceDatesWith$, data.ReplaceDatesWith);
+            self.setDatepickerDate(self.replaceDatesWith$, data.ReplaceDatesWith);
             self.removeCaseAttachments$.prop('checked', data.RemoveCaseAttachments);
             self.removeLogAttachments$.prop('checked', data.RemoveLogAttachments);
 
@@ -694,16 +741,6 @@
             }
         };
 
-         this.getSelectedFavoriteId = function() {
-             var val = this.favoritesSelect$.val();
-             var favoriteId = val ? parseInt(val, 10) : 0;
-             if (!isNaN(favoriteId) && favoriteId > 0)
-                 return favoriteId;
-             else
-                 return 0;
-         };
-    
-        //todo: move to other class 
         this.showSaveFavoritesDlg = function(saveNew) {
             
             var nameField$ = $("#fm_name");
@@ -729,27 +766,58 @@
             $("#favoritesSaveModal").modal('show');
         };
 
-        this.setJsonDate = function (ctrl, val) {
-            if (val) {
-                //ex: "/Date(1520110800000)/", parseInt will ignore last chars and extract only numbers;
-                var date = new Date(parseInt(val.toString().substr(6)));
+        /// HELPER METHODS
 
-                ctrl.parent().datepicker('setDate', date);
-            } else {
-                ctrl.parent().datepicker('update', '');
-            }
+        this.showLocks = function (showLock, showUnlock) {
+            this.showControl(this.btnLock$, showLock);
+            this.showControl(this.btnUnLock$, showUnlock);
+        }
+
+        this.getSelectedFavoriteId = function () {
+            var val = this.favoritesSelect$.val();
+            var favoriteId = val ? parseInt(val, 10) : 0;
+            if (!isNaN(favoriteId) && favoriteId > 0)
+                return favoriteId;
+            else
+                return 0;
         };
 
         this.refreshFieldsControl = function () {
             // required to update chosen control after changes
-            this.filterFields$.trigger("chosen:updated"); 
+            this.filterFields$.trigger("chosen:updated");
         };
 
-        this.enableControl = function(el, enable) {
-            if (enable) {
-                el.prop('disabled', false);
+        this.getSelectedDate = function (ctrl) {
+            var date = ctrl.parent().datepicker('getDate');
+            return date;
+        }
+        
+        this.setDatepickerDate = function (ctrl, date, raiseEvent) {
+            var cmd = raiseEvent ? 'setDate' : 'update';
+            //console.log('>>>setDatepickerDate. Date: ' + date + ', Cmd: ' + cmd);
+
+            var date$ = moment(date);
+            if (date$.isValid()) {
+                ctrl.parent().datepicker(cmd, date$.format('YYYY-MM-DD'));
             } else {
-                el.prop('disabled', true);
+                ctrl.parent().datepicker(cmd, '');
+            }
+        };
+
+        this.emptyDatePicker = function (ctrl, raiseEvent) {
+            this.setDatepickerDate(ctrl, '', raiseEvent);
+        }
+
+        this.setDatepickerEndDate = function (ctrl, maxDate) {
+            ctrl.parent().datepicker('setEndDate', maxDate);
+        }
+
+        this.enableControl = function (el, enable) {
+            var attr = el.attr('type') == 'text' ? 'readonly' : 'disabled';
+            if (enable) {
+                el.prop(attr, false);
+            } else {
+                el.prop(attr, true);
             }
         };
 
@@ -761,10 +829,11 @@
         };
 
         this.isEnabled = function (el) {
-            return !el.prop('disabled');
+            return !el.prop('disabled') && !el.prop('readonly');
         };
 
-        //public methods
+        /// INIT
+
         return {
             Init: function (settings) {
                 _self.dateformat = settings.dateformat;
@@ -811,6 +880,18 @@
                 _self.calculateRegistrationDate$.on('change', function (e) {
                     _self.onCalculateRetentionPeriodChanged(this.checked);
                 });
+                
+                //dateFrom change event
+                _self.registerDateFrom$.parent().datepicker().on('changeDate', function (selected) {
+                    console.log('>>> registerDateFrom$: change event');
+                    _self.updateDateRange();
+                });
+
+                //dateTo change event
+                _self.registerDateTo$.parent().datepicker().on('changeDate', function (e) {
+                    console.log('>>> registerDateTo$: change event');
+                    _self.updateDateRange();
+                });
 
                 //////////////////////////////////////////
                 //save dlg
@@ -828,8 +909,8 @@
                     var val = $(this).val() || '';
                     $('#btnSaveFav').prop('disabled', val === '');
                 });
+
                 ////////////////////////////////////////////////////
-                
                 //select empty to set defaults 
                 _self.onFavoritesChanged(0);
             }

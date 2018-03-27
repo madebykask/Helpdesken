@@ -7035,6 +7035,12 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1962 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1962, 2, 'Are you sure you want to replace data in selected cases?')
 GO
+if not exists (select * from tbltext where id = 1962)
+	insert into tbltext (id, TextString) values (1962, 'Valt datumintervall är ogiltigt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1962 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1962, 2, 'Selected date range is invalid')
+GO
 
 
 -- *** Run this last when put translation script above this line **--

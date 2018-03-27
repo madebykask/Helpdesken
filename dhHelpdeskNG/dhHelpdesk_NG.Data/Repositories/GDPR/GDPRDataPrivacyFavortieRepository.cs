@@ -24,7 +24,7 @@ namespace DH.Helpdesk.Dal.Repositories.GDPR
 
         public IDictionary<int, string> ListFavorites()
         {
-            return this.Table.ToDictionary(x => x.Id, x => x.Name);
+            return this.Table.OrderBy(x => x.Name).ToDictionary(x => x.Id, x => x.Name);
         }
     }
 }
