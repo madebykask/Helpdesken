@@ -232,6 +232,9 @@ window.DataPrivacyForm =
                     },
                     "DataPrivacy.RegisterDateTo": {
                         required: self.translations.RegisterDateToRequired
+                     },
+                     "DataPrivacy.ReplaceDataWith": {
+                         maxlength: self.translations.MaxLength.replace('{0}', '15')
                     }
                 }
             });
@@ -320,6 +323,9 @@ window.DataPrivacyForm =
                         var hasVal = !!self.registerDateTo$.val() && !!self.retentionPeriod$.val();
                         return hasVal;
                      }
+                 },
+                 "DataPrivacy.ReplaceDataWith": {
+                     maxlength: 15
                  }
              };
          };
