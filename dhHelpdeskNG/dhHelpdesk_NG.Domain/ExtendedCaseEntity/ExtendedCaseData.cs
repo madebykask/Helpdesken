@@ -12,7 +12,12 @@ namespace DH.Helpdesk.Domain.ExtendedCaseEntity
         public string CreatedBy { get; set; }
 
         public DateTime CreatedOn { get; set; }
-     
+
+        public string UpdatedBy { get; set; }
+
+        public DateTime? UpdatedOn { get; set; }
+
+
         public virtual ExtendedCaseFormEntity ExtendedCaseForm { get; set; }
 
         public virtual ICollection<Case_ExtendedCaseEntity> CaseExtendedCaseDatas { get; set; }
