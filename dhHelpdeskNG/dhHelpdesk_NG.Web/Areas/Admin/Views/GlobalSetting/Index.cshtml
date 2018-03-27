@@ -416,9 +416,6 @@
         };
 
         $(function () {
-            $.fn.datepicker.defaults.enableOnReadonly = false;
-            //disable datepicker on locked controls
-            $("#regCaseFrom, #regCaseTo, #replacedDate").datepicker("option", "enableOnReadonly", false);
 
             var settings = {
                 dateformat: '@System.Threading.Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
@@ -516,6 +513,17 @@
             }
         });
 
+        //disable datepicker on disabled controls
+        $("#regCaseFrom, #regCaseTo, #replacedDate").datepicker().on('show', function (e) {
+            var input = $(e.target).find('input');
+            if (input && input.length) {
+                if (input.prop('readonly') || input.prop('disabled')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(this).datepicker('hide');
+                }
+            }
+        });
         
     </script>
 }
