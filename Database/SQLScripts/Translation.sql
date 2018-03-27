@@ -7041,6 +7041,8 @@ If not exists (select * from tblTextTranslation where text_id = 1963 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1963, 2, 'Selected date range is invalid')
 GO
 
+UPDATE tblText Set TextString = 'Skapa Ny ' WHERE Id=195;
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 
