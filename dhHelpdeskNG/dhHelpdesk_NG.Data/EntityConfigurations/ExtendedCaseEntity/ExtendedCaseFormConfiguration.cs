@@ -13,10 +13,6 @@
             HasKey(e => e.Id);
             Property(e => e.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(e => e.Name).IsOptional().HasMaxLength(100);
-            Property(e => e.CreatedBy).IsRequired().HasMaxLength(50);
-            Property(e => e.UpdatedBy).IsOptional().HasMaxLength(50);
-            Property(e => e.CreatedOn).IsRequired();
-            Property(e => e.UpdatedBy).IsOptional();
 
             Property(e => e.Version).IsRequired();
 

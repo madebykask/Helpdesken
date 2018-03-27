@@ -1,5 +1,4 @@
-﻿using System;
-using global::System.Collections.Generic;
+﻿using global::System.Collections.Generic;
 
 namespace DH.Helpdesk.Domain.ExtendedCaseEntity
 {
@@ -7,24 +6,15 @@ namespace DH.Helpdesk.Domain.ExtendedCaseEntity
     {
         public ExtendedCaseFormEntity()
         {
+            this.CaseSolutions = new List<CaseSolution>();
+            this.ExtendedCaseDatas = new List<ExtendedCaseDataEntity>();
         }
 
 
         public string Name { get; set; }
         public int Version { get; set; }
 
-
-        public string CreatedBy { get; set; }
-
-        public DateTime CreatedOn { get; set; }
-
-        public string UpdatedBy { get; set; }
-
-        public DateTime? UpdatedOn { get; set; }
-
         public virtual ICollection<CaseSolution> CaseSolutions { get; set; }
         public virtual ICollection<ExtendedCaseDataEntity> ExtendedCaseDatas { get; set; }
-
-        public virtual ICollection<Case_ExtendedCaseEntity> Case_ExtendedCases { get; set; }
     }
 }

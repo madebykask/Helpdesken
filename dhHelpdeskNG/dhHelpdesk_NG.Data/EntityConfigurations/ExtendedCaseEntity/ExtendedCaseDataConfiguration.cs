@@ -15,13 +15,11 @@
 
             Property(e => e.ExtendedCaseGuid).IsRequired();
             Property(e => e.ExtendedCaseFormId).IsRequired();
-            Property(e => e.CreatedBy).IsRequired().HasMaxLength(50);
+            Property(e => e.CreatedBy).IsRequired();
             Property(e => e.CreatedOn).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            Property(e => e.UpdatedBy).IsOptional().HasMaxLength(50);
-            Property(e => e.UpdatedOn).IsOptional();
 
 
-            HasRequired(t => t.ExtendedCaseForm)
+			HasRequired(t => t.ExtendedCaseForm)
 				.WithMany(t => t.ExtendedCaseDatas)
 				.HasForeignKey(d => d.ExtendedCaseFormId).WillCascadeOnDelete(false);
 

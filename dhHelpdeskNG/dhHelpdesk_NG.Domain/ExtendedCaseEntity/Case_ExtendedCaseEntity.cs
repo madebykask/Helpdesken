@@ -11,7 +11,5 @@
         public virtual Case CaseEntity { get; set; }
 
         public virtual ExtendedCaseDataEntity ExtendedCaseData { get; set; }
-
-        public virtual ExtendedCaseFormEntity ExtendedCaseForm { get; set; }
     }
 }

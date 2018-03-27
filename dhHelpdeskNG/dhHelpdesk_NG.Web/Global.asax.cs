@@ -278,6 +278,7 @@ namespace DH.Helpdesk.Web
 
         }
 
+#if !DEBUG
         protected void Application_Error(object sender, EventArgs e)
         {
             var httpContext = ((MvcApplication)sender).Context;
@@ -348,7 +349,7 @@ namespace DH.Helpdesk.Web
             controller.ViewData.Model = new DH.Helpdesk.Web.Models.Error.HandleErrorInfoGuid(ex, currentController, currentAction, guid);
             ((IController)controller).Execute(new RequestContext(new HttpContextWrapper(httpContext), routeData));
         }
-
+#endif
 
         /// <summary>
         /// The register binders.

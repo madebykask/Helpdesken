@@ -22,12 +22,6 @@
                 .HasForeignKey(d => d.ExtendedCaseData_Id)
                 .WillCascadeOnDelete(false);
 
-
-            HasOptional(t => t.ExtendedCaseForm)
-                .WithMany(t => t.Case_ExtendedCases)
-                .HasForeignKey(d => d.ExtendedCaseForm_Id)
-                .WillCascadeOnDelete(false);
-
             ToTable("tblCase_ExtendedCaseData");
         }
 
