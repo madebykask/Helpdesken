@@ -1519,7 +1519,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             {
                 IsAvailable = true,
                 Customers = availableCustomers,
-                Favorites = favorites.ToSelectList(new SelectListItem() { Value = "0", Text = Translation.GetCoreTextTranslation("Skappa Ny") } )
+                Favorites = favorites.ToSelectList(new SelectListItem() { Value = "0", Text = Translation.GetCoreTextTranslation("Skapa Ny") } )
             };
             return model;
         }

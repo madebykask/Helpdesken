@@ -7022,6 +7022,21 @@ GO
 
 UPDATE tblText Set TextString = 'Välj Favorit' WHERE Id=1951;
 GO
+
+UPDATE tblText Set TextString = 'Skapa Ny' WHERE Id=1955;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'Replace date with' WHERE Text_Id=1944 AND Language_Id=2;
+GO
+
+If not exists (select * from tbltext where id = 1962)
+	insert into tbltext (id, TextString) VALUES (1962, 'Är du säker på att du vill ersätta informationen i utvalda ärenden?')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1962 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1962, 2, 'Are you sure you want to replace data in selected cases?')
+GO
+
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 
