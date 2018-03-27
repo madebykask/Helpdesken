@@ -696,7 +696,7 @@ window.DataPrivacyForm =
 
                 this.blockUI(true, this.loaders.saveFavoritesLoader);
 
-                var isNew = (+inputData.Id) > 0;
+                var isNew = favoriteId === 0;
                 $.ajax({
                     url: this.urls.SaveFavoritesAction,
                     type: "POST",

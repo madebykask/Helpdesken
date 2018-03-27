@@ -6898,7 +6898,7 @@ If not exists (select * from tbltext where id = 1944)
 	insert into tbltext (id, TextString) VALUES (1944, 'Ersätt datum med')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1944 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1944, 2, 'Replace date wtih')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1944, 2, 'Replace date with')
 GO
 
 If not exists (select * from tbltext where id = 1945)
@@ -7020,28 +7020,26 @@ If not exists (select * from tblTextTranslation where text_id = 1961 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1961, 2, 'Save to favorites to enable')
 GO
 
+-- fixes required for dev. can be removed in the new sprint.
 UPDATE tblText Set TextString = 'Välj Favorit' WHERE Id=1951;
-GO
-
 UPDATE tblText Set TextString = 'Skapa Ny' WHERE Id=1955;
-GO
-
 UPDATE tblTextTranslation Set TextTranslation = 'Replace date with' WHERE Text_Id=1944 AND Language_Id=2;
 GO
 
+-- duplicate of 1936 ?
 If not exists (select * from tbltext where id = 1962)
 	insert into tbltext (id, TextString) VALUES (1962, 'Är du säker på att du vill ersätta informationen i utvalda ärenden?')
 GO
 If not exists (select * from tblTextTranslation where text_id = 1962 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1962, 2, 'Are you sure you want to replace data in selected cases?')
 GO
-if not exists (select * from tbltext where id = 1962)
-	insert into tbltext (id, TextString) values (1962, 'Valt datumintervall är ogiltigt')
-GO
-If not exists (select * from tblTextTranslation where text_id = 1962 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1962, 2, 'Selected date range is invalid')
-GO
 
+if not exists (select * from tbltext where id = 1963)
+	insert into tbltext (id, TextString) values (1963, 'Valt datumintervall är ogiltigt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1963 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1963, 2, 'Selected date range is invalid')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

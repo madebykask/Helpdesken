@@ -142,12 +142,19 @@ namespace DH.Helpdesk.Services.Services
                         casesQueryable = casesQueryable.Where(x => x.FinishingDate.HasValue);
 
                     if (p.RegisterDateFrom.HasValue)
-                        casesQueryable = casesQueryable.Where(x => x.RegTime >= p.RegisterDateFrom.Value);
+                    {
+                        var dateFrom = p.RegisterDateFrom.Value.Date;
+                        casesQueryable = casesQueryable.Where(x => x.RegTime >= dateFrom);
+                    }
 
                     if (p.RegisterDateTo.HasValue)
-                        casesQueryable = casesQueryable.Where(x => x.RegTime <= p.RegisterDateTo.Value);
+                    {
+                        var dateTo = p.RegisterDateTo.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+                        casesQueryable = casesQueryable.Where(x => x.RegTime <= dateTo);
+                    }
 
                     var cases = casesQueryable.ToList();
+
                     if (cases.Any())
                     {
                         casesIds = cases.Select(c => c.Id).ToList();
