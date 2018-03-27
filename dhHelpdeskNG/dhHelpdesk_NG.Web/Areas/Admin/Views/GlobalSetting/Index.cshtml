@@ -203,7 +203,7 @@
                                         <table class="tableform" id="privacyForm">
                                             <tr>
                                                 <td class="span3">
-                                                    @Translation.GetCoreTextTranslation("Valj Favorit")
+                                                    @Translation.GetCoreTextTranslation("Välj Favorit")
                                                 </td>
                                                 <td class="span9">
                                                     @Html.DropDownListFor(m => m.DataPrivacy.SelectedFavoriteId, Model.DataPrivacy.Favorites, new { id = "favoritesSelect" })
@@ -226,7 +226,7 @@
                                                 </td>
                                                 <td class="span9">
                                                     @Html.TextBoxFor(m => m.DataPrivacy.RetentionPeriod, new { id = "retentionPeriod", maxlength="3", style="width:100px" })
-                                                    @Translation.GetCoreTextTranslation("days")
+                                                    @Translation.GetCoreTextTranslation("dagar")
                                                     <div id="retentionDaysError"></div>
                                                 </td>
                                             </tr>
