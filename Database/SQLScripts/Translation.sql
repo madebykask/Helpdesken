@@ -7020,6 +7020,8 @@ If not exists (select * from tblTextTranslation where text_id = 1961 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1961, 2, 'Save to favorites to enable')
 GO
 
+UPDATE tblText Set TextString = 'Välj Favorit' WHERE Id=1951;
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 
