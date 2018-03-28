@@ -1,10 +1,8 @@
 ﻿@using System.Linq;
-@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.GlobalSettingIndexViewModel
 @{
     ViewBag.Title = "Global Settings";
- 
-}
+ }
 
 <div class="secnavs fixed">
     <div class="pull-left">
@@ -43,6 +41,10 @@
             {
                 <li id="tab6" onclick="toggleMenuItems(6)">
                     <a href="#fragment-6">@Translation.GetCoreTextTranslation("Dataintegritet")</a>
+                </li>
+
+                <li id="tab7" onclick="toggleMenuItems(7)">
+                    <a href="#fragment-7">@Translation.GetCoreTextTranslation("Dataintegritet") &ndash; @Translation.GetCoreTextTranslation("Historik")</a>
                 </li>
             }
         </ul>
@@ -321,6 +323,11 @@
                         </div>
                     </div>
                 </div> 
+
+                <!-- Data Privacy History -->
+                <div class="tab-pane tab-pane-border" id="fragment-7">
+                        @Html.Action("DataPrivacyHistory")
+                </div>
             }
 
             <input type="hidden" name="activeTab" id="activeTab" value="@SessionFacade.ActiveTab" />

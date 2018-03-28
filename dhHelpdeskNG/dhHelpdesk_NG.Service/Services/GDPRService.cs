@@ -14,7 +14,6 @@ using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.Cases;
 using DH.Helpdesk.Domain.ExtendedCaseEntity;
 using DH.Helpdesk.Domain.GDPR;
-using DH.Helpdesk.Services.BusinessLogic.Gdpr;
 using LinqLib.Operators;
 
 namespace DH.Helpdesk.Services.Services
@@ -26,9 +25,11 @@ namespace DH.Helpdesk.Services.Services
 
     public interface IGDPROperationsService
     {
+        IDictionary<int, string> GetOperationAuditCustomers();
+        IList<GdprOperationsAuditOverview> ListGdprOperationsAuditItems(int? customerId);
         bool RemoveDataPrivacyFromCase(DataPrivacyParameters p, int userId, string url);
     }
-
+    
     public interface IGDPRDataPrivacyAccessService
     {
         GDPRDataPrivacyAccess GetByUserId(int userId);
@@ -148,14 +149,15 @@ namespace DH.Helpdesk.Services.Services
 
                     if (parameters.RegisterDateFrom.HasValue)
                     {
-                        var dateFrom = parameters.RegisterDateFrom.Value.Date;
-                        casesQueryable = casesQueryable.Where(x => x.RegTime >= dateFrom);
+                        p.RegisterDateFrom = p.RegisterDateFrom.Value.Date;
+                        casesQueryable = casesQueryable.Where(x => x.RegTime >= p.RegisterDateFrom);
                     }
 
                     if (parameters.RegisterDateTo.HasValue)
                     {
-                        var dateTo = parameters.RegisterDateTo.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
-                        casesQueryable = casesQueryable.Where(x => x.RegTime <= dateTo);
+                        //fix date
+                        p.RegisterDateTo = p.RegisterDateTo.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+                        casesQueryable = casesQueryable.Where(x => x.RegTime <= p.RegisterDateTo.Value);
                     }
 
                     var cases = casesQueryable.ToList();
@@ -686,22 +688,81 @@ namespace DH.Helpdesk.Services.Services
             formFieldValueHistoryRep.DeleteWhere(x => x.Case_Id == c.Id);
         }
 
-        private string FormatOperationParameters(DataPrivacyParameters p)
+        private string SerializeOperationParameters(DataPrivacyParameters p)
         {
             return _jsonSerializeService.Serialize(p);
+        }
+
+        private DataPrivacyParameters DeserializeOperationParameters(string data)
+        {
+            if (string.IsNullOrEmpty(data))
+                return null;
+
+            var parameters = _jsonSerializeService.Deserialize<DataPrivacyParameters>(data);
+            return parameters;
         }
 
         #endregion
 
         #region Audit Methods
 
+        public IDictionary<int, string> GetOperationAuditCustomers()
+        {
+            var res = _gdprOperationsAuditRespository.GetOperationsAuditCustomers();
+            return res;
+        }
+
+        public IList<GdprOperationsAuditOverview> ListGdprOperationsAuditItems(int? customerId)
+        {
+            var res = new List<GdprOperationsAuditOverview>();
+
+            var cusId = customerId ?? 0;
+            var query = _gdprOperationsAuditRespository.GetMany(x => cusId == 0 || x.Customer_Id == cusId);
+
+            var items = query.Select(x => new
+            {
+                CustomerId = x.Customer_Id,
+                Data = x.Parameters,
+                CreatedDate = x.CreatedDate
+            }).OrderByDescending(x => x.CreatedDate).ToList();
+
+            foreach (var item in items)
+            {
+                var operationParams = DeserializeOperationParameters(item.Data);
+                if (operationParams != null)
+                {
+                    var auditData = new GdprOperationsAuditOverview
+                    {
+                        CustomerId = item.CustomerId ?? 0,
+                        RegDateFrom = operationParams.RegisterDateFrom,
+                        RegDateTo = operationParams.RegisterDateTo,
+                        ClosedOnly = operationParams.ClosedOnly,
+                        Fields = operationParams.FieldsNames,
+                        RemoveCaseAttachments = operationParams.RemoveCaseAttachments,
+                        RemoveLogAttachments = operationParams.RemoveLogAttachments,
+                        ExecutedDate = item.CreatedDate
+                    };
+
+                    res.Add(auditData);
+                }
+            }
+            return res;
+        }
+
+        public void SaveAuditOperationResult(GDPROperationsAudit auditData)
+        {
+            _gdprOperationsAuditRespository.Update(auditData);
+            _gdprOperationsAuditRespository.Commit();
+        }
+
         private GDPROperationsAudit SaveOperationAuditData(DataPrivacyParameters p, int userId, string url)
         {
             var auditData = new GDPROperationsAudit
             {
                 User_Id = userId,
+                Customer_Id = p.SelectedCustomerId,
                 Operation = GDPROperations.DataPrivacy.ToString(),
-                Parameters = FormatOperationParameters(p),
+                Parameters = SerializeOperationParameters(p),
                 Url = url,
                 Application = ApplicationType.Helpdesk.ToString(),
                 CreatedDate  = DateTime.UtcNow
@@ -712,13 +773,7 @@ namespace DH.Helpdesk.Services.Services
 
             return auditData;
         }
-
-        public void SaveAuditOperationResult(GDPROperationsAudit auditData)
-        {
-            _gdprOperationsAuditRespository.Update(auditData);
-            _gdprOperationsAuditRespository.Commit();
-        }
-
+       
         #endregion
     }
 }

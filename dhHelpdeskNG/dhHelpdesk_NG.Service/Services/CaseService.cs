@@ -8,7 +8,6 @@ using DH.Helpdesk.BusinessData.Models.Feedback;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.BusinessData.Models.Customer;
 using DH.Helpdesk.Domain.Computers;
-using DH.Helpdesk.Services.BusinessLogic.Gdpr;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Feedback;
 using LinqLib.Operators;
 
