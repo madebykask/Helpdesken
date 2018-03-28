@@ -11,6 +11,7 @@ using DH.Helpdesk.Dal.NewInfrastructure;
 using DH.Helpdesk.Dal.Repositories.GDPR;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.Cases;
+using DH.Helpdesk.Domain.ExtendedCaseEntity;
 using DH.Helpdesk.Domain.GDPR;
 using DH.Helpdesk.Services.BusinessLogic.Gdpr;
 using LinqLib.Operators;
@@ -121,9 +122,9 @@ namespace DH.Helpdesk.Services.Services
             return res;
         }
 
-        public bool RemoveDataPrivacyFromCase(DataPrivacyParameters p, int userId, string url)
+        public bool RemoveDataPrivacyFromCase(DataPrivacyParameters parameters, int userId, string url)
         {
-            var auditData = SaveOperationAuditData(p, userId, url);
+            var auditData = SaveOperationAuditData(parameters, userId, url);
             var casesIds = new List<int>();
 
             try
@@ -135,21 +136,22 @@ namespace DH.Helpdesk.Services.Services
                     var followers = uow.GetRepository<CaseExtraFollower>();
                     var logFiles = uow.GetRepository<LogFile>();
                     var emailLogs = uow.GetRepository<EmailLog>();
+                    var extendedCaseValuesRep = uow.GetRepository<ExtendedCaseValueEntity>();
 
-                    var casesQueryable = rep.GetAll().Where(x => x.Customer_Id == p.SelectedCustomerId);
+                    var casesQueryable = rep.GetAll().Where(x => x.Customer_Id == parameters.SelectedCustomerId);
 
-                    if (p.ClosedOnly)
+                    if (parameters.ClosedOnly)
                         casesQueryable = casesQueryable.Where(x => x.FinishingDate.HasValue);
 
-                    if (p.RegisterDateFrom.HasValue)
+                    if (parameters.RegisterDateFrom.HasValue)
                     {
-                        var dateFrom = p.RegisterDateFrom.Value.Date;
+                        var dateFrom = parameters.RegisterDateFrom.Value.Date;
                         casesQueryable = casesQueryable.Where(x => x.RegTime >= dateFrom);
                     }
 
-                    if (p.RegisterDateTo.HasValue)
+                    if (parameters.RegisterDateTo.HasValue)
                     {
-                        var dateTo = p.RegisterDateTo.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+                        var dateTo = parameters.RegisterDateTo.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
                         casesQueryable = casesQueryable.Where(x => x.RegTime <= dateTo);
                     }
 
@@ -158,8 +160,16 @@ namespace DH.Helpdesk.Services.Services
                     if (cases.Any())
                     {
                         casesIds = cases.Select(c => c.Id).ToList();
-                        
-                        ProcessReplaceCasesData(cases, caseFiles, logFiles, emailLogs, followers, p);
+
+                        parameters.ReplaceDataWith = parameters.ReplaceDataWith ?? string.Empty;
+
+                        foreach (var c in cases)
+                        {
+                            ProcessReplaceCasesData(c, caseFiles, logFiles, followers, parameters);
+                            ProcessReplaceCasesHistoryData(c, emailLogs, parameters);
+                            ProcessExtededCaseData(c, extendedCaseValuesRep, parameters);
+
+                        }
                         uow.Save();
                     }
                 }
@@ -183,234 +193,231 @@ namespace DH.Helpdesk.Services.Services
         #region Replace case data
 
         private void ProcessReplaceCasesData(
-            IList<Case> cases,
+            Case c,
             IRepository<CaseFile> caseFiles,
             IRepository<LogFile> logFiles,
-            IRepository<EmailLog> emailLogs,
             IRepository<CaseExtraFollower> followers,
-            DataPrivacyParameters p)
+            DataPrivacyParameters parameters)
         {
-            var replaceDataWith = p.ReplaceDataWith ?? string.Empty;
-            var replaceDatesWith = p.ReplaceDatesWith;
 
-            foreach (var c in cases)
+            var replaceDataWith = parameters.ReplaceDataWith;
+            var replaceDatesWith = parameters.ReplaceDatesWith;
+
+
+            foreach (var fieldName in parameters.FieldsNames)
             {
-                foreach (var fieldName in p.FieldsNames)
+                if (fieldName == GlobalEnums.TranslationCaseFields.ReportedBy.ToString() ||
+                    fieldName == GlobalEnums.TranslationCaseFields.CostCentre.ToString() ||
+                    fieldName == GlobalEnums.TranslationCaseFields.Place.ToString() ||
+                    fieldName == GlobalEnums.TranslationCaseFields.UserCode.ToString() ||
+                    fieldName == GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() ||
+                    fieldName == GlobalEnums.TranslationCaseFields.InventoryLocation.ToString() ||
+                    fieldName == GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString() ||
+                    fieldName == GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString() ||
+                    fieldName == GlobalEnums.TranslationCaseFields.Caption.ToString() ||
+                    fieldName == GlobalEnums.TranslationCaseFields.Description.ToString() ||
+                    fieldName == GlobalEnums.TranslationCaseFields.Miscellaneous.ToString() ||
+                    fieldName == GlobalEnums.TranslationCaseFields.Available.ToString() ||
+                    fieldName == GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString() ||
+                    fieldName == GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()
+                    )
                 {
-                    if (fieldName == GlobalEnums.TranslationCaseFields.ReportedBy.ToString() ||
-                        fieldName == GlobalEnums.TranslationCaseFields.CostCentre.ToString() ||
-                        fieldName == GlobalEnums.TranslationCaseFields.Place.ToString() ||
-                        fieldName == GlobalEnums.TranslationCaseFields.UserCode.ToString() ||
-                        fieldName == GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() ||
-                        fieldName == GlobalEnums.TranslationCaseFields.InventoryLocation.ToString() ||
-                        fieldName == GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString() ||
-                        fieldName == GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString() ||
-                        fieldName == GlobalEnums.TranslationCaseFields.Caption.ToString() ||
-                        fieldName == GlobalEnums.TranslationCaseFields.Description.ToString() ||
-                        fieldName == GlobalEnums.TranslationCaseFields.Miscellaneous.ToString() ||
-                        fieldName == GlobalEnums.TranslationCaseFields.Available.ToString() ||
-                        fieldName == GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString() ||
-                        fieldName == GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()
-                        )
-                    {
-                        var property = c.GetType().GetProperty(fieldName);
-                        if (property == null) throw new PropertyNotFoundException("Property not found", fieldName);
+                    var property = c.GetType().GetProperty(fieldName);
+                    if (property == null) throw new PropertyNotFoundException("Property not found", fieldName);
 
-                        property.SetValue(c, replaceDataWith);
+                    property.SetValue(c, replaceDataWith);
 
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.Region_Id.ToString() ||
-                             fieldName == GlobalEnums.TranslationCaseFields.Department_Id.ToString() ||
-                             fieldName == GlobalEnums.TranslationCaseFields.OU_Id.ToString() ||
-                             fieldName == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString() ||
-                             fieldName == GlobalEnums.TranslationCaseFields.System_Id.ToString() ||
-                             fieldName == GlobalEnums.TranslationCaseFields.Urgency_Id.ToString() ||
-                             fieldName == GlobalEnums.TranslationCaseFields.Impact_Id.ToString() ||
-                             fieldName == GlobalEnums.TranslationCaseFields.Category_Id.ToString() ||
-                             fieldName == GlobalEnums.TranslationCaseFields.Supplier_Id.ToString() ||
-                             fieldName == GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString() ||
-                             fieldName == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString() ||
-                             fieldName == GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString() ||
-                             fieldName == GlobalEnums.TranslationCaseFields.Priority_Id.ToString() ||
-                             fieldName == GlobalEnums.TranslationCaseFields.Status_Id.ToString() ||
-                             fieldName == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.Region_Id.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.Department_Id.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.OU_Id.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.System_Id.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.Urgency_Id.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.Impact_Id.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.Category_Id.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.Supplier_Id.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.Priority_Id.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.Status_Id.ToString() ||
+                            fieldName == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()
 
-                        )
-                    {
-                        var property = c.GetType().GetProperty(fieldName);
-                        if (property == null) throw new PropertyNotFoundException("Property not found", fieldName);
+                    )
+                {
+                    var property = c.GetType().GetProperty(fieldName);
+                    if (property == null) throw new PropertyNotFoundException("Property not found", fieldName);
 
-                        property.SetValue(c, null);
+                    property.SetValue(c, null);
 
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_Name.ToString())
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_Name.ToString())
+                {
+                    c.PersonsName = replaceDataWith; //first name last name?
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())
+                {
+                    c.PersonsEmail = replaceDataWith;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())
+                {
+                    c.PersonsPhone = replaceDataWith;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())
+                {
+                    c.PersonsCellphone = replaceDataWith;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString())
+                {
+                    if (c.IsAbout != null)
+                        c.IsAbout.ReportedBy = replaceDataWith;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString())
+                {
+                    if (c.IsAbout != null)
+                        c.IsAbout.Person_Name = replaceDataWith; //first last name?
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString())
+                {
+                    if (c.IsAbout != null)
+                        c.IsAbout.Person_Email = replaceDataWith;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString())
+                {
+                    if (c.IsAbout != null)
+                        c.IsAbout.Person_Phone = replaceDataWith;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString())
+                {
+                    if (c.IsAbout != null)
+                        c.IsAbout.Person_Cellphone = replaceDataWith;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString())
+                {
+                    if (c.IsAbout != null)
+                        c.IsAbout.Region_Id = null;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString())
+                {
+                    if (c.IsAbout != null)
+                        c.IsAbout.Department_Id = null;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString())
+                {
+                    if (c.IsAbout != null)
+                        c.IsAbout.OU_Id = null;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString())
+                {
+                    if (c.IsAbout != null)
+                        c.IsAbout.CostCentre = replaceDataWith;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString())
+                {
+                    if (c.IsAbout != null)
+                        c.IsAbout.Place = replaceDataWith;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString())
+                {
+                    if (c.IsAbout != null)
+                        c.IsAbout.UserCode = replaceDataWith;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())
+                {
+                    c.InventoryType = replaceDataWith;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.User_Id.ToString())
+                {
+                    c.User_Id = null;
+                    c.RegUserId = replaceDataWith;
+                    c.RegUserDomain = replaceDataWith;
+                    c.RegUserName = replaceDataWith;
+                    c.IpAddress = replaceDataWith;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())
+                {
+                    c.RegistrationSourceCustomer_Id = null;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.AgreedDate.ToString())
+                {
+                    c.AgreedDate = replaceDatesWith;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.Cost.ToString())
+                {
+                    c.Cost = 0;
+                    c.OtherCost = 0;
+                    c.Currency = replaceDataWith;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.Project.ToString())
+                {
+                    c.Project_Id = null;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.Problem.ToString())
+                {
+                    c.Problem_Id = null;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.CausingPart.ToString())
+                {
+                    c.CausingPartId = null;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.Change.ToString())
+                {
+                    c.Change_Id = null;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.PlanDate.ToString())
+                {
+                    c.PlanDate = replaceDatesWith;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.WatchDate.ToString())
+                {
+                    c.WatchDate = replaceDatesWith;
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.SolutionRate.ToString())
+                {
+                    c.SolutionRate = string.Empty;
+                }
+                else if (fieldName == "tblLog.Text_External")
+                {
+                    foreach (var log in c.Logs.ToList())
                     {
-                        c.PersonsName = replaceDataWith; //first name last name?
+                        log.Text_External = replaceDataWith;
                     }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())
+                }
+                else if (fieldName == "tblLog.Text_Internal")
+                {
+                    foreach (var log in c.Logs.ToList())
                     {
-                        c.PersonsEmail = replaceDataWith;
+                        log.Text_Internal = replaceDataWith;
                     }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.ClosingReason.ToString())
+                {
+                    foreach (var log in c.Logs.ToList())
                     {
-                        c.PersonsPhone = replaceDataWith;
+                        log.FinishingType = null;
                     }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.FinishingDate.ToString())
+                {
+                    c.FinishingDate = replaceDatesWith;
+                }
+                else if (fieldName == AdditionalDataPrivacyFields.SelfService_RegUser.ToString())
+                {
+                    c.Logs.ForEach(l => l.RegUser = replaceDataWith);
+                }
+                else if (fieldName == GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString())
+                {
+                    if (c.CaseFollowers.Any())
                     {
-                        c.PersonsCellphone = replaceDataWith;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString())
-                    {
-                        if (c.IsAbout != null)
-                            c.IsAbout.ReportedBy = replaceDataWith;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString())
-                    {
-                        if (c.IsAbout != null)
-                            c.IsAbout.Person_Name = replaceDataWith; //first last name?
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString())
-                    {
-                        if (c.IsAbout != null)
-                            c.IsAbout.Person_Email = replaceDataWith;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString())
-                    {
-                        if (c.IsAbout != null)
-                            c.IsAbout.Person_Phone = replaceDataWith;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString())
-                    {
-                        if (c.IsAbout != null)
-                            c.IsAbout.Person_Cellphone = replaceDataWith;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString())
-                    {
-                        if (c.IsAbout != null)
-                            c.IsAbout.Region_Id = null;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString())
-                    {
-                        if (c.IsAbout != null)
-                            c.IsAbout.Department_Id = null;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString())
-                    {
-                        if (c.IsAbout != null)
-                            c.IsAbout.OU_Id = null;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString())
-                    {
-                        if (c.IsAbout != null)
-                            c.IsAbout.CostCentre = replaceDataWith;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString())
-                    {
-                        if (c.IsAbout != null)
-                            c.IsAbout.Place = replaceDataWith;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString())
-                    {
-                        if (c.IsAbout != null)
-                            c.IsAbout.UserCode = replaceDataWith;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())
-                    {
-                        c.InventoryType = replaceDataWith;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.User_Id.ToString())
-                    {
-                        c.User_Id = null;
-                        c.RegUserId = replaceDataWith;
-                        c.RegUserDomain = replaceDataWith;
-                        c.RegUserName = replaceDataWith;
-                        c.IpAddress = replaceDataWith;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())
-                    {
-                        c.RegistrationSourceCustomer_Id = null;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.AgreedDate.ToString())
-                    {
-                        c.AgreedDate = replaceDatesWith;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.Cost.ToString())
-                    {
-                        c.Cost = 0;
-                        c.OtherCost = 0;
-                        c.Currency = replaceDataWith;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.Project.ToString())
-                    {
-                        c.Project_Id = null;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.Problem.ToString())
-                    {
-                        c.Problem_Id = null;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.CausingPart.ToString())
-                    {
-                        c.CausingPartId = null;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.Change.ToString())
-                    {
-                        c.Change_Id = null;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.PlanDate.ToString())
-                    {
-                        c.PlanDate = replaceDatesWith;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.WatchDate.ToString())
-                    {
-                        c.WatchDate = replaceDatesWith;
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.SolutionRate.ToString())
-                    {
-                        c.SolutionRate = string.Empty;
-                    }
-                    else if (fieldName == "tblLog.Text_External")
-                    {
-                        foreach (var log in c.Logs.ToList())
+                        foreach (var follower in c.CaseFollowers.ToList())
                         {
-                            log.Text_External = replaceDataWith;
+                            followers.Delete(follower);
                         }
                     }
-                    else if (fieldName == "tblLog.Text_Internal")
-                    {
-                        foreach (var log in c.Logs.ToList())
-                        {
-                            log.Text_Internal = replaceDataWith;
-                        }
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.ClosingReason.ToString())
-                    {
-                        foreach (var log in c.Logs.ToList())
-                        {
-                            log.FinishingType = null;
-                        }
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.FinishingDate.ToString())
-                    {
-                        c.FinishingDate = replaceDatesWith;
-                    }
-                    else if (fieldName == AdditionalDataPrivacyFields.SelfService_RegUser.ToString())
-                    {
-                        c.Logs.ForEach(l => l.RegUser = replaceDataWith);
-                    }
-                    else if (fieldName == GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString())
-                    {
-                        if (c.CaseFollowers.Any())
-                        {
-                            foreach (var follower in c.CaseFollowers.ToList())
-                            {
-                                followers.Delete(follower);
-                            }
-                        }
-                    }
-                    
                 }
 
-                if (p.RemoveCaseAttachments && c.CaseFiles.Any())
+                if (parameters.RemoveCaseAttachments && c.CaseFiles.Any())
                 {
                     foreach (var caseFile in c.CaseFiles.ToList())
                     {
@@ -418,7 +425,7 @@ namespace DH.Helpdesk.Services.Services
                     }
                 }
 
-                if (p.RemoveLogAttachments && c.Logs.Any())
+                if (parameters.RemoveLogAttachments && c.Logs.Any())
                 {
                     foreach (var log in c.Logs)
                     {
@@ -432,21 +439,20 @@ namespace DH.Helpdesk.Services.Services
                     }
                 }
 
-                ProcessReplaceCasesHistoryData(c, emailLogs, p);
             }
         }
 
-        private void ProcessReplaceCasesHistoryData(Case c, IRepository<EmailLog> emailLogs, DataPrivacyParameters dataPrivacyParameters)
+        private void ProcessReplaceCasesHistoryData(Case c, IRepository<EmailLog> emailLogs, DataPrivacyParameters parameters)
         {
             if (c.CaseHistories.Any())
             {
-                var replaceDataWith = dataPrivacyParameters.ReplaceDataWith ?? string.Empty;
-                var replaceDatesWith = dataPrivacyParameters.ReplaceDatesWith;
+                var replaceDataWith = parameters.ReplaceDataWith;
+                var replaceDatesWith = parameters.ReplaceDatesWith;
                 var deleteEmailLogs = false;
 
                 foreach (var caseHistory in c.CaseHistories.ToList())
                 {
-                    foreach (var fieldName in dataPrivacyParameters.FieldsNames)
+                    foreach (var fieldName in parameters.FieldsNames)
                     {
                         if (fieldName == GlobalEnums.TranslationCaseFields.ReportedBy.ToString() ||
                             fieldName == GlobalEnums.TranslationCaseFields.CostCentre.ToString() ||
@@ -619,6 +625,53 @@ namespace DH.Helpdesk.Services.Services
                         }
                     }
                 }
+            }
+        }
+
+        private void ProcessExtededCaseData(Case c, IRepository<ExtendedCaseValueEntity> extendedCaseValuesRep, DataPrivacyParameters parameters)
+        {
+            var replaceDataWith = parameters.ReplaceDataWith;
+            var replaceDatesWith = parameters.ReplaceDatesWith;
+
+            if (c.CaseExtendedCaseDatas != null && c.CaseExtendedCaseDatas.Any())
+            {
+                foreach (var caseData in c.CaseExtendedCaseDatas)
+                {
+                    CleanExtendedCaseData(extendedCaseValuesRep, caseData.ExtendedCaseData, replaceDataWith, replaceDatesWith);
+                    if (caseData.ExtendedCaseForm != null)
+                    {
+                        caseData.ExtendedCaseForm.CreatedBy = replaceDataWith;
+                        caseData.ExtendedCaseForm.CreatedOn = replaceDatesWith ?? DateTime.Now;
+                        caseData.ExtendedCaseForm.UpdatedBy = replaceDataWith;
+                        caseData.ExtendedCaseForm.UpdatedOn = replaceDatesWith;
+                    }
+                }
+            }
+
+            if (c.CaseSectionExtendedCaseDatas != null && c.CaseSectionExtendedCaseDatas.Any())
+            {
+                foreach (var caseData in c.CaseSectionExtendedCaseDatas)
+                {
+                    CleanExtendedCaseData(extendedCaseValuesRep, caseData.ExtendedCaseData, replaceDataWith, replaceDatesWith);
+                }
+            }
+
+        }
+
+        private static void CleanExtendedCaseData(IRepository<ExtendedCaseValueEntity> extendedCaseValuesRep, ExtendedCaseDataEntity caseData,
+            string replaceDataWith, DateTime? replaceDatesWith)
+        {
+            if (caseData != null)
+            {
+                if (caseData.ExtendedCaseValues != null)
+                {
+                    extendedCaseValuesRep.DeleteWhere(v =>
+                        v.ExtendedCaseDataId == caseData.Id);
+                }
+                caseData.CreatedBy = replaceDataWith;
+                caseData.CreatedOn = replaceDatesWith ?? DateTime.Now;
+                caseData.UpdatedBy = replaceDataWith;
+                caseData.UpdatedOn = replaceDatesWith;
             }
         }
 
