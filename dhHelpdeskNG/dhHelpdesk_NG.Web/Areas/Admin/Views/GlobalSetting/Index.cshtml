@@ -417,6 +417,18 @@
 
         $(function () {
 
+            //disable datepicker on disabled controls
+            $("#regCaseFrom, #regCaseTo, #replacedDate").datepicker().on('show', function (e) {
+                var input = $(e.target).find('input');
+                if (input && input.length) {
+                    if (input.prop('readonly') || input.prop('disabled')) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $(this).datepicker('hide');
+                    }
+                }
+            });
+
             var settings = {
                 dateformat: '@System.Threading.Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
                 urls: {
@@ -510,18 +522,6 @@
             $(this).val($(this).val().replace(/[^\d].+/, ""));
             if ((event.which < 48 || event.which > 57)) {
                 event.preventDefault();
-            }
-        });
-
-        //disable datepicker on disabled controls
-        $("#regCaseFrom, #regCaseTo, #replacedDate").datepicker().on('show', function (e) {
-            var input = $(e.target).find('input');
-            if (input && input.length) {
-                if (input.prop('readonly') || input.prop('disabled')) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    $(this).datepicker('hide');
-                }
             }
         });
         
