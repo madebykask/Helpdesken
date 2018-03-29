@@ -8,6 +8,7 @@ using DH.Helpdesk.Common.Exceptions;
 using DH.Helpdesk.Common.Serializers;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.NewInfrastructure;
+using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Dal.Repositories.GDPR;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.Cases;
@@ -137,6 +138,8 @@ namespace DH.Helpdesk.Services.Services
                     var logFiles = uow.GetRepository<LogFile>();
                     var emailLogs = uow.GetRepository<EmailLog>();
                     var extendedCaseValuesRep = uow.GetRepository<ExtendedCaseValueEntity>();
+                    var formFieldValueRep = uow.GetRepository<FormFieldValue>();
+                    var formFieldValueHistoryRep = uow.GetRepository<FormFieldValueHistory>();
 
                     var casesQueryable = rep.GetAll().Where(x => x.Customer_Id == parameters.SelectedCustomerId);
 
@@ -168,6 +171,7 @@ namespace DH.Helpdesk.Services.Services
                             ProcessReplaceCasesData(c, caseFiles, logFiles, followers, parameters);
                             ProcessReplaceCasesHistoryData(c, emailLogs, parameters);
                             ProcessExtededCaseData(c, extendedCaseValuesRep, parameters);
+                            ProccessFormPlusCaseData(c, formFieldValueHistoryRep, formFieldValueRep);
 
                         }
                         uow.Save();
@@ -189,6 +193,7 @@ namespace DH.Helpdesk.Services.Services
 
             return true;
         }
+
 
         #region Replace case data
 
@@ -673,6 +678,12 @@ namespace DH.Helpdesk.Services.Services
                 caseData.UpdatedBy = replaceDataWith;
                 caseData.UpdatedOn = replaceDatesWith;
             }
+        }
+
+        private void ProccessFormPlusCaseData(Case c, IRepository<FormFieldValueHistory> formFieldValueHistoryRep, IRepository<FormFieldValue> formFieldValueRep)
+        {
+            formFieldValueRep.DeleteWhere(x => x.Case_Id == c.Id);
+            formFieldValueHistoryRep.DeleteWhere(x => x.Case_Id == c.Id);
         }
 
         private string FormatOperationParameters(DataPrivacyParameters p)

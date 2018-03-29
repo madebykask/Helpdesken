@@ -303,6 +303,8 @@ namespace DH.Helpdesk.Dal.DbContext
 
         public DbSet<FormFieldValue> FormFieldValue { get; set; }
 
+        public DbSet<FormFieldValueHistory> FormFieldValueHistory { get; set; }
+
         public DbSet<Form> Forms { get; set; }
 
         public DbSet<FormUrlEntity> FormUrls { get; set; }
@@ -756,6 +758,7 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new FormConfiguration());
             modelBuilder.Configurations.Add(new FormFieldConfiguration());
             modelBuilder.Configurations.Add(new FormFieldValueConfiguration());
+            modelBuilder.Configurations.Add(new FormFieldValueHistoryConfiguration());
             modelBuilder.Configurations.Add(new FormUrlConfiguration());
             modelBuilder.Configurations.Add(new FloorConfiguration());
             modelBuilder.Configurations.Add(new GlobalSettingConfiguration());
