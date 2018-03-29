@@ -27,17 +27,17 @@ window.DataPrivacyForm =
         this.btnUnLock$ = form$.find("#btnUnLock");
         this.customerSelect$ = form$.find("#customerSelect");
         this.favoritesSelect$ = form$.find("#favoritesSelect");
-        this.registerDateFrom$ = form$.find("#DataPrivacy_RegisterDateFrom");
-        this.registerDateTo$ = form$.find("#DataPrivacy_RegisterDateTo");
+        this.registerDateFrom$ = form$.find("#RegisterDateFrom");
+        this.registerDateTo$ = form$.find("#RegisterDateTo");
         
-        this.calculateRegistrationDate$ = form$.find("#DataPrivacy_CalculateRegistrationDate");
+        this.calculateRegistrationDate$ = form$.find("#CalculateRegistrationDate");
         this.retentionPeriod$ = form$.find("#retentionPeriod");
         this.filterFields$ = form$.find("#lstFilterFields");
-        this.closedOnly$ = form$.find("#DataPrivacy_ClosedOnly");
-        this.replaceDataWith$ = form$.find("#DataPrivacy_ReplaceDataWith");
-        this.replaceDatesWith$ = form$.find("#DataPrivacy_ReplaceDatesWith");
-        this.removeCaseAttachments$ = form$.find("#DataPrivacy_RemoveCaseAttachments");
-        this.removeLogAttachments$ = form$.find("#DataPrivacy_RemoveLogAttachments");
+        this.closedOnly$ = form$.find("#ClosedOnly");
+        this.replaceDataWith$ = form$.find("#ReplaceDataWith");
+        this.replaceDatesWith$ = form$.find("#ReplaceDatesWith");
+        this.removeCaseAttachments$ = form$.find("#RemoveCaseAttachments");
+        this.removeLogAttachments$ = form$.find("#RemoveLogAttachments");
 
 
         //buttons
@@ -52,7 +52,7 @@ window.DataPrivacyForm =
              favoritesSelect: true,
              customerSelect: true,
              lstFilterFields: true,
-             DataPrivacy_CalculateRegistrationDate: false
+             CalculateRegistrationDate: false
          };
 
         this.isBlocked = false;
@@ -149,7 +149,7 @@ window.DataPrivacyForm =
                 }  
             });
 
-            self.refreshFieldsControl();
+            self.refreshChosenControls();
 
             //override unlock state if calc is checked
             if (!lock && self.calculateRegistrationDate$.prop('checked')) {
@@ -173,12 +173,12 @@ window.DataPrivacyForm =
                 calculateRegistrationDate: this.calculateRegistrationDate$.prop("checked"),
                 registerDateFrom: this.registerDateFrom$.val(),
                 registerDateTo: this.registerDateTo$.val(),
-                closedOnly: $("#DataPrivacy_ClosedOnly").prop("checked"),
-                replaceDataWith: $("#DataPrivacy_ReplaceDataWith").val(),
-                replaceDatesWith: $("#DataPrivacy_ReplaceDatesWith").val(),
-                removeCaseAttachments: $("#DataPrivacy_RemoveCaseAttachments").prop("checked"),
-                removeLogAttachments: $("#DataPrivacy_RemoveLogAttachments").prop("checked"),
-                removeCaseHistory: $("#DataPrivacy_RemoveCaseHistory").prop("checked") // todo: remove after case history is implemented
+                closedOnly: $("#ClosedOnly").prop("checked"),
+                replaceDataWith: $("#ReplaceDataWith").val(),
+                replaceDatesWith: $("#ReplaceDatesWith").val(),
+                removeCaseAttachments: $("#RemoveCaseAttachments").prop("checked"),
+                removeLogAttachments: $("#RemoveLogAttachments").prop("checked"),
+                removeCaseHistory: $("#RemoveCaseHistory").prop("checked") // todo: remove after case history is implemented
             };
         };
 
@@ -191,8 +191,8 @@ window.DataPrivacyForm =
                 //debug: true,
                 rules: self.getRules(),
                 errorPlacement: function(error, element) {
-                    if (element.is("#DataPrivacy_RegisterDateFrom") ||
-                        element.is("#DataPrivacy_RegisterDateTo")) {
+                    if (element.is("#RegisterDateFrom") ||
+                        element.is("#RegisterDateTo")) {
                         $("#datesErrorLabel").html(error);
                     } else if (element.is('#retentionPeriod')) {
                         $("#retentionDaysError").html(error);
@@ -221,19 +221,19 @@ window.DataPrivacyForm =
                 },
 
                 messages: {
-                    "DataPrivacy.SelectedCustomerId": {
+                    "SelectedCustomerId": {
                         required: self.translations.SelectedCustomerIdRequired
                     },
-                    "DataPrivacy.FieldsNames": {
+                    "FieldsNames": {
                         required: self.translations.FieldsNamesRequired
                     },
-                    "DataPrivacy.RegisterDateFrom": {
+                    "RegisterDateFrom": {
                         required: self.translations.RegisterDateFromRequired
                     },
-                    "DataPrivacy.RegisterDateTo": {
+                    "RegisterDateTo": {
                         required: self.translations.RegisterDateToRequired
                      },
-                     "DataPrivacy.ReplaceDataWith": {
+                     "ReplaceDataWith": {
                          maxlength: self.translations.MaxLength.replace('{0}', '15')
                     }
                 }
@@ -258,17 +258,16 @@ window.DataPrivacyForm =
             });
 
             //workaround to trigger validation for date time range 
-            this.registerDateFrom$.on('change', function () { self.validateDateRangeControls(); });
-            this.registerDateTo$.on('change', function () { self.validateDateRangeControls(); });
+            //this.registerDateFrom$.on('change', function () { self.validateDateRangeControls(); });
+            //this.registerDateTo$.on('change', function () { self.validateDateRangeControls(); });
+            //this.form$.find(".chosen-select, .chosen-single-select").chosen().change(function () {
+            //    $(this).valid();
+            //});
 
             this.validateDateRangeControls = function() {
                 _self.registerDateFrom$.valid();
                 _self.registerDateTo$.valid();
             };
-
-            this.form$.find(".chosen-select, .chosen-single-select").chosen().change(function () {
-                $(this).valid();
-            });
         };
 
         this.validateDateRange = function (value, element, param) {
@@ -300,20 +299,20 @@ window.DataPrivacyForm =
              var self = this;
 
              return {
-                 "DataPrivacy.SelectedCustomerId": {
+                 "SelectedCustomerId": {
                      required: true
                  },
-                 "DataPrivacy.FieldsNames": {
+                 "FieldsNames": {
                      required: true,
                  },
-                 "DataPrivacy.RegisterDateFrom": {
+                 "RegisterDateFrom": {
                      required: true,
                      checkDateRange: function () {
                          var hasVal = !!self.registerDateTo$.val();
                          return hasVal;
                      }
                  },
-                 "DataPrivacy.RegisterDateTo": {
+                 "RegisterDateTo": {
                      required: true,
                      checkDateRange: function() {
                          var hasVal = !!self.registerDateFrom$.val();
@@ -324,7 +323,7 @@ window.DataPrivacyForm =
                         return hasVal;
                      }
                  },
-                 "DataPrivacy.ReplaceDataWith": {
+                 "ReplaceDataWith": {
                      maxlength: 15
                  }
              };
@@ -339,7 +338,7 @@ window.DataPrivacyForm =
 
              this.setRetentionPeriodChangedState();
              this.updateDateRange();
-             this.validateDateRangeControls();
+             //this.validateDateRangeControls();
         };
 
         this.onCalculateRetentionPeriodChanged = function(checked) {
@@ -350,7 +349,7 @@ window.DataPrivacyForm =
 
             this.setRetentionPeriodChangedState();
             this.updateDateRange();
-            this.validateDateRangeControls();
+            //this.validateDateRangeControls();
         };
 
         this.setRetentionPeriodChangedState = function () {
@@ -404,7 +403,7 @@ window.DataPrivacyForm =
                      });
              } else {
                  self.filterFields$.empty();
-                 self.refreshFieldsControl();
+                 self.refreshChosenControls(self.filterFields$);
              }
          };
 
@@ -528,8 +527,7 @@ window.DataPrivacyForm =
             var self = this;
             self.customerSelect$.val(null);
             self.filterFields$.empty();
-            self.refreshFieldsControl();
-
+            
             self.enableControl(this.registerDateTo$, true);
             self.enableControl(this.calculateRegistrationDate$);
 
@@ -548,6 +546,8 @@ window.DataPrivacyForm =
             //set today as a max date for date range
             self.setDatepickerEndDate(registerDateFrom$, new Date());
             self.setDatepickerEndDate(registerDateTo$, new Date());
+
+            self.refreshChosenControls();
 
             //reset locking/unlocking states to default
             _self.togglePrivacyRunBtn(false);
@@ -641,7 +641,7 @@ window.DataPrivacyForm =
                     //set case fields
                     if (data.FieldsNames.length) {
                         self.filterFields$.val(data.FieldsNames);
-                        self.refreshFieldsControl();
+                        self.refreshChosenControls(self.filterFields$);
                     }
                 })
                 .always(function () {
@@ -788,9 +788,13 @@ window.DataPrivacyForm =
                 return 0;
         };
 
-        this.refreshFieldsControl = function () {
+        this.refreshChosenControls = function (chosen) {
             // required to update chosen control after changes
-            this.filterFields$.trigger("chosen:updated");
+            if (chosen && chosen.length) {
+                chosen.trigger("chosen:updated");
+            } else {
+                this.form$.find('[class^="chosen-"]').trigger("chosen:updated");
+            }
         };
 
         this.getSelectedDate = function (ctrl) {

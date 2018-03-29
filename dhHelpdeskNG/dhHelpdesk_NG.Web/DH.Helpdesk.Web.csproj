@@ -3355,6 +3355,7 @@
     <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\MultiSelectList.cshtml" />
     <Content Include="Areas\Admin\Views\GlobalSetting\_DataPrivacyHistory.cshtml" />
     <Content Include="Areas\Admin\Views\GlobalSetting\_DataPrivacyHistoryTable.cshtml" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\DataPrivacy.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />

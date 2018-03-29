@@ -472,7 +472,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 }
             }
 
-            var dataPrivacyModel = GetDataPrivacyModel();
+            var dataPrivacyAccess = _gdprDataPrivacyAccessService.GetByUserId(SessionFacade.CurrentUser.Id);
 
             var model = new GlobalSettingIndexViewModel
             {
@@ -505,7 +505,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                DataPrivacy = dataPrivacyModel
+                HasDataPrivacyAccess = dataPrivacyAccess != null
             };
 
             model.SearchConditions = new List<SelectListItem>();
@@ -1485,6 +1485,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return items;
         }
 
+        [GdprAccess]
+        [ChildActionOnly]
+        public ActionResult DataPrivacy()
+        {
+            var model = GetDataPrivacyModel();
+            return View(model);
+        }
+
         [HttpPost]
         [GdprAccess]
         public ActionResult DataPrivacy(DataPrivacyParameters model)
@@ -1500,7 +1508,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return Json(new {success = true});
         }
 
-
         private DataPrivacyModel GetDataPrivacyModel()
         {
             var userAccess = _gdprDataPrivacyAccessService.GetByUserId(SessionFacade.CurrentUser.Id);
@@ -1514,7 +1521,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Text = x.Customer.Name
             }).ToList();
 
-            
             var favorites = _gdprFavoritesService.ListFavorites();
 
             var model = new DataPrivacyModel

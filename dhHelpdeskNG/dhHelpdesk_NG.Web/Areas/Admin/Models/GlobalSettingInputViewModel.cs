@@ -36,7 +36,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         public string SearchTextTr { get; set; }
         public IList<SelectListItem> SearchConditions { get; set; }
 
-        public DataPrivacyModel DataPrivacy { get; set; }
+        public bool HasDataPrivacyAccess { get; set; }
 
     }
 
