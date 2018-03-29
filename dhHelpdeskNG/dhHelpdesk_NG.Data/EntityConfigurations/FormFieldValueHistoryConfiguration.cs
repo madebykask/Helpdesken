@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations
             Property(x => x.FormFieldValue).IsRequired().HasMaxLength(2000);
             Property(x => x.FormFieldText).IsOptional().HasMaxLength(2000);
             Property(x => x.InitialFormFieldText).IsRequired().HasMaxLength(2000);
-            Property(x => x.InitialFormFieldValue).IsRequired().HasMaxLength(2000);
+            //Property(x => x.InitialFormFieldValue).IsRequired().HasMaxLength(2000);
             ToTable("tblFormFieldValueHistory");
         }
     }

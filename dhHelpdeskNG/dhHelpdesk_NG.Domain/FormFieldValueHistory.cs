@@ -12,7 +12,7 @@ namespace DH.Helpdesk.Domain
         public int FormField_Id { get; set; }
         public int CaseHistory_Id { get; set; }
         public string FormFieldValue { get; set; }
-        public string InitialFormFieldValue { get; set; }
+        //public string InitialFormFieldValue { get; set; }
         public string FormFieldText { get; set; }
         public string InitialFormFieldText { get; set; }
     }
