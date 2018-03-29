@@ -124,9 +124,9 @@ namespace DH.Helpdesk.Services.Services
             return res;
         }
 
-        public bool RemoveDataPrivacyFromCase(DataPrivacyParameters parameters, int userId, string url)
+        public bool RemoveDataPrivacyFromCase(DataPrivacyParameters p, int userId, string url)
         {
-            var auditData = SaveOperationAuditData(parameters, userId, url);
+            var auditData = SaveOperationAuditData(p, userId, url);
             var casesIds = new List<int>();
 
             try
@@ -142,18 +142,18 @@ namespace DH.Helpdesk.Services.Services
                     var formFieldValueRep = uow.GetRepository<FormFieldValue>();
                     var formFieldValueHistoryRep = uow.GetRepository<FormFieldValueHistory>();
 
-                    var casesQueryable = rep.GetAll().Where(x => x.Customer_Id == parameters.SelectedCustomerId);
+                    var casesQueryable = rep.GetAll().Where(x => x.Customer_Id == p.SelectedCustomerId);
 
-                    if (parameters.ClosedOnly)
+                    if (p.ClosedOnly)
                         casesQueryable = casesQueryable.Where(x => x.FinishingDate.HasValue);
 
-                    if (parameters.RegisterDateFrom.HasValue)
+                    if (p.RegisterDateFrom.HasValue)
                     {
                         p.RegisterDateFrom = p.RegisterDateFrom.Value.Date;
-                        casesQueryable = casesQueryable.Where(x => x.RegTime >= p.RegisterDateFrom);
+                        casesQueryable = casesQueryable.Where(x => x.RegTime >= p.RegisterDateFrom.Value);
                     }
 
-                    if (parameters.RegisterDateTo.HasValue)
+                    if (p.RegisterDateTo.HasValue)
                     {
                         //fix date
                         p.RegisterDateTo = p.RegisterDateTo.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
@@ -166,13 +166,13 @@ namespace DH.Helpdesk.Services.Services
                     {
                         casesIds = cases.Select(c => c.Id).ToList();
 
-                        parameters.ReplaceDataWith = parameters.ReplaceDataWith ?? string.Empty;
+                        p.ReplaceDataWith = p.ReplaceDataWith ?? string.Empty;
 
                         foreach (var c in cases)
                         {
-                            ProcessReplaceCasesData(c, caseFiles, logFiles, followers, parameters);
-                            ProcessReplaceCasesHistoryData(c, emailLogs, parameters);
-                            ProcessExtededCaseData(c, extendedCaseValuesRep, parameters);
+                            ProcessReplaceCasesData(c, caseFiles, logFiles, followers, p);
+                            ProcessReplaceCasesHistoryData(c, emailLogs, p);
+                            ProcessExtededCaseData(c, extendedCaseValuesRep, p);
                             ProccessFormPlusCaseData(c, formFieldValueHistoryRep, formFieldValueRep);
 
                         }
