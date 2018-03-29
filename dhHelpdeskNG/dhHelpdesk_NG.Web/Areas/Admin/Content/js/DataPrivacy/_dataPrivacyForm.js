@@ -266,7 +266,7 @@ window.DataPrivacyForm =
                 _self.registerDateTo$.valid();
             };
 
-            this.form$.find(".chosen-select").chosen().change(function() {
+            this.form$.find(".chosen-select, .chosen-single-select").chosen().change(function () {
                 $(this).valid();
             });
         };

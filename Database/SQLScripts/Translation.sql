@@ -7056,6 +7056,20 @@ If not exists (select * from tblTextTranslation where text_id = 1965 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1965, 2, 'Executed')
 GO
 
+if exists (select * from tbltext where id = 1954)
+	update tbltext set TextString = N'Spara/uppdatera' where id = 1954
+GO
+If exists (select * from tblTextTranslation where text_id = 1954 and Language_Id = 2)
+	update tblTextTranslation set TextTranslation = N'Save/update' where Text_Id = 1954
+GO
+
+
+if not exists (select * from tbltext where id = 1966)
+	insert into tbltext (id, TextString) values (1966, 'Välj ett av alternativen')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1966 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1966, 2, 'Select one of the options')
+GO
 
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

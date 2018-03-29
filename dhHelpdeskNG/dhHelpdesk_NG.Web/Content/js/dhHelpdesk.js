@@ -643,7 +643,7 @@ $(".chosen-select").chosen({
 
 $(".chosen-single-select").chosen({
     width: "315px",
-    'placeholder_text_multiple': placeholder_text_multiple,
+    'placeholder_text_single': placeholder_text_single,
     'no_results_text': no_results_text
 });
 

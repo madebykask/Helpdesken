@@ -208,7 +208,12 @@
                                                     @Translation.GetCoreTextTranslation("Välj Favorit")
                                                 </td>
                                                 <td class="span9">
-                                                    @Html.DropDownListFor(m => m.DataPrivacy.SelectedFavoriteId, Model.DataPrivacy.Favorites, new { id = "favoritesSelect" })
+                                                    @Html.DropDownListFor(m => m.DataPrivacy.SelectedFavoriteId, Model.DataPrivacy.Favorites, new
+                                               {
+                                                   id = "favoritesSelect",
+                                                   @class = "chosen-single-select"
+
+                                               })
                                                     <i id="favoritesLoader" class="gif-loader" style="display:none">&nbsp;</i>
                                                     <a id="btnLock" style="display:none" class="lock-icon" href="#">&nbsp;</a>
                                                     <a id="btnUnLock" style="display:none" class="unlock-icon" href="#">&nbsp;</a>
@@ -219,7 +224,11 @@
                                                     @Translation.GetCoreTextTranslation("Kund")<span class="mandatorystar"> * </span>
                                                 </td>
                                                 <td class="span9">
-                                                    @Html.DropDownListFor(m => m.DataPrivacy.SelectedCustomerId, Model.DataPrivacy.Customers, string.Empty, new {id = "customerSelect"})
+                                                    @Html.DropDownListFor(m => m.DataPrivacy.SelectedCustomerId, Model.DataPrivacy.Customers, string.Empty, new
+                                               {
+                                                   id = "customerSelect",
+                                                   @class = "chosen-single-select"
+                                               })
                                                 </td>
                                             </tr>
                                             <tr>
@@ -307,7 +316,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="span3">
-                                                    @Translation.GetCoreTextTranslation("Ny/Redigera Favorit")
+                                                    @Translation.GetCoreTextTranslation("Spara/uppdatera")
                                                 </td>
                                                 <td class="span9">
                                                     <button class="btn btn-small" id="btnFavorite" type="button">
