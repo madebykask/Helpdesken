@@ -26,7 +26,7 @@ namespace DH.Helpdesk.Services.Services
     public interface IGDPROperationsService
     {
         IDictionary<int, string> GetOperationAuditCustomers();
-        IList<GdprOperationsAuditOverview> ListGdprOperationsAuditItems(int? customerId);
+        IList<GdprOperationsAuditOverview> ListGdprOperationsAuditItems(int? customerId, bool successOnly = true);
         bool RemoveDataPrivacyFromCase(DataPrivacyParameters p, int userId, string url);
     }
     
@@ -712,12 +712,17 @@ namespace DH.Helpdesk.Services.Services
             return res;
         }
 
-        public IList<GdprOperationsAuditOverview> ListGdprOperationsAuditItems(int? customerId)
+        public IList<GdprOperationsAuditOverview> ListGdprOperationsAuditItems(int? customerId, bool successOnly = true)
         {
             var res = new List<GdprOperationsAuditOverview>();
 
             var cusId = customerId ?? 0;
             var query = _gdprOperationsAuditRespository.GetMany(x => cusId == 0 || x.Customer_Id == cusId);
+
+            if (successOnly)
+            {
+                query = query.Where(x => x.Success);
+            }
 
             var items = query.Select(x => new
             {

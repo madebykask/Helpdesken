@@ -1486,6 +1486,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [GdprAccess]
         public ActionResult DataPrivacy(DataPrivacyParameters model)
         {
             SessionFacade.ActiveTab = "#fragment-6";
@@ -1524,7 +1525,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             };
             return model;
         }
-
+        
         [ChildActionOnly]
         public PartialViewResult DataPrivacyHistory()
         {
@@ -1539,6 +1540,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return PartialView("_DataPrivacyHistory", model);
         }
 
+        [GdprAccess]
         public JsonResult GetDataPrivacyHistoryTable(int? customerId)
         {
             var data = _gdprOperationsService.ListGdprOperationsAuditItems(customerId);
@@ -1546,15 +1548,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var viewPath = "~/Areas/Admin/Views/GlobalSetting/_DataPrivacyHistoryTable.cshtml";
             var content = RenderRazorViewToString(viewPath, data);
             return Json(new {Success = true, Content = content}, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetGdprOperationsAuditItems(int? customerId)
-        {
-            var items = _gdprOperationsService.ListGdprOperationsAuditItems(customerId);
-            return Json(new
-            {
-                data = items
-            }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

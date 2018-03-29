@@ -24,8 +24,8 @@
                     <th>@Translation.GetCoreTextTranslation("Registreringsdatum")</th>
                     <th>@Translation.GetCoreTextTranslation("Ärenden")</th>
                     <th>Data</th>
-                    <th>@Translation.GetCoreTextTranslation("Bilagor")</th>
-                    <th>@Translation.GetCoreTextTranslation("Utförde")</th>
+                    <th>@Translation.GetCoreTextTranslation("Bifogade filer")</th>
+                    <th>@Translation.GetCoreTextTranslation("Utförd")</th>
                 </tr>
                 </thead>
                 <tbody id="dph_Table_rows">
@@ -55,6 +55,8 @@
                         dphTable$.html(res.Content);
                     } else {
                         dphTable$.html(''); // todo: check
+                        var err = res.Error || 'Unknown error';
+                        window.ShowToastMessage(err, "error");
                     }
                 }).always(function(res) {
                     progessLoader$.hide();

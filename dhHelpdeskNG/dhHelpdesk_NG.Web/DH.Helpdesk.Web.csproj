@@ -332,6 +332,7 @@
     <Compile Include="Controllers\CaseDocumentController.cs" />
     <Compile Include="Controllers\QuestionnaireAnswerController.cs" />
     <Compile Include="Enums\ReportItemNames.cs" />
+    <Compile Include="Infrastructure\Attributes\GdprAccessAttribute.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\AdfsAuthenticationBehavior.cs" />
     <Compile Include="Infrastructure\Authentication\AdfsClaimsUserTransformer.cs" />
     <Compile Include="Infrastructure\Authentication\AuthenticationService.cs" />

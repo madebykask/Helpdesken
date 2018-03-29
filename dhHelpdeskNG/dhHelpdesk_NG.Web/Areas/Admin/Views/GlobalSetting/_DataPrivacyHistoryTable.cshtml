@@ -7,15 +7,15 @@
 {
     string FormatCaseStatus(GdprOperationsAuditOverview item)
     {
-        var closedText = Translation.GetCoreTextTranslation("Stängd");
-        var openedText = Translation.GetCoreTextTranslation("Öppnad");
+        var closedText = Translation.GetCoreTextTranslation("Avslutade");
+        var openedText = Translation.GetCoreTextTranslation("Öppna");
         return item.ClosedOnly ? closedText : string.Format("{0}, {1}", closedText, openedText);
     }
 
     string FormatAttachments(GdprOperationsAuditOverview item)
     {
         var caseText = Translation.GetCoreTextTranslation("Ärende");
-        var logPostsText = Translation.GetCoreTextTranslation("Ärendeloggen");//todo: check if correct
+        var logPostsText = Translation.GetCoreTextTranslation("Ärendelogg");
         var res = new List<string>();
         if (item.RemoveCaseAttachments)
             res.Add(caseText);

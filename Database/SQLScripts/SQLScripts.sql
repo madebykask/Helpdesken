@@ -183,6 +183,7 @@ BEGIN
 END
 GO
 
+
 --SPINT 11: 
 RAISERROR('Add Customer_Id column to tblGDPROperationsAudit', 10, 1) WITH NOWAIT
 IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Customer_Id' and sysobjects.name = N'tblGDPROperationsAudit')
