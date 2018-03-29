@@ -39,7 +39,6 @@ window.DataPrivacyForm =
         this.removeCaseAttachments$ = form$.find("#RemoveCaseAttachments");
         this.removeLogAttachments$ = form$.find("#RemoveLogAttachments");
 
-
         //buttons
         this.btnFavorite$ = $("#btnFavorite");
         this.privacyRunBtn$ = $("#privacyRunBtn");
@@ -177,8 +176,7 @@ window.DataPrivacyForm =
                 replaceDataWith: $("#ReplaceDataWith").val(),
                 replaceDatesWith: $("#ReplaceDatesWith").val(),
                 removeCaseAttachments: $("#RemoveCaseAttachments").prop("checked"),
-                removeLogAttachments: $("#RemoveLogAttachments").prop("checked"),
-                removeCaseHistory: $("#RemoveCaseHistory").prop("checked") // todo: remove after case history is implemented
+                removeLogAttachments: $("#RemoveLogAttachments").prop("checked")
             };
         };
 
@@ -459,8 +457,7 @@ window.DataPrivacyForm =
                  ReplaceDataWith: filter.replaceDataWith,
                  ReplaceDatesWith: filter.replaceDatesWith,
                  RemoveCaseAttachments: filter.removeCaseAttachments,
-                 RemoveLogAttachments: filter.removeLogAttachments,
-                 RemoveCaseHistory: filter.removeCaseHistory
+                 RemoveLogAttachments: filter.removeLogAttachments
              };
 
              $.ajax({
@@ -696,8 +693,7 @@ window.DataPrivacyForm =
                     ReplaceDataWith: filter.replaceDataWith,
                     ReplaceDatesWith: filter.replaceDatesWith,
                     RemoveCaseAttachments: filter.removeCaseAttachments,
-                    RemoveLogAttachments: filter.removeLogAttachments,
-                    RemoveCaseHistory: filter.removeCaseHistory
+                    RemoveLogAttachments: filter.removeLogAttachments
                 };
 
                 this.blockUI(true, this.loaders.saveFavoritesLoader);

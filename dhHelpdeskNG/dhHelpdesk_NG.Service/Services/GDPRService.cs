@@ -341,6 +341,12 @@ namespace DH.Helpdesk.Services.Services
                     c.RegUserDomain = replaceDataWith;
                     c.RegUserName = replaceDataWith;
                     c.IpAddress = replaceDataWith;
+
+                    //clean logs
+                    foreach (var log in c.Logs.ToList())
+                    {
+                        log.RegUser = replaceDataWith;
+                    }
                 }
                 else if (fieldName == GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())
                 {
