@@ -28,7 +28,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 	            dic.Select(kv => new SelectListItem()
 	            {
 	                Value = kv.Key.ToString(),
-	                Text = kv.Value.ToString(),
+	                Text = kv.Value?.ToString() ?? string.Empty,
 	            }));
 
 	        return listItems;

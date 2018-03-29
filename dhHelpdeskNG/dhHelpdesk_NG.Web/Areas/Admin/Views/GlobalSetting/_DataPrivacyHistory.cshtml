@@ -1,0 +1,68 @@
+﻿@model DH.Helpdesk.Web.Models.Gdpr.DataPrivacyHistoryViewModel
+@{
+    Layout = null;
+ }
+<div class="container">
+    <div class="row">
+        <div class="span6">
+            <table class="tableform">
+                <tbody>
+                <tr>
+                    <td class="span1">@Translation.GetCoreTextTranslation("Kund")</td>
+                    <td>@Html.DropDownListFor(x => x.SelectedCustomerId, Model.Customers, "", new { id = "dph_customerId" })<i id="historyLoader" class="gif-loader" style="display:none">&nbsp;</i></td>
+                </tr>
+                </tbody>
+            </table>            
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="span12">
+            <table class="table table-striped table-bordered table-hover table-cases">
+                <thead>
+                <tr>
+                    <th>@Translation.GetCoreTextTranslation("Registreringsdatum")</th>
+                    <th>@Translation.GetCoreTextTranslation("Ärenden")</th>
+                    <th>Data</th>
+                    <th>@Translation.GetCoreTextTranslation("Bifogade filer")</th>
+                    <th>@Translation.GetCoreTextTranslation("Utförd")</th>
+                </tr>
+                </thead>
+                <tbody id="dph_Table_rows">
+                @Html.Partial("_DataPrivacyHistoryTable", Model.Data)
+                </tbody>
+            </table>    
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+
+        $('#dph_customerId').change(function (e) {
+            var customerSelect$ = $('#dph_customerId');
+            var progessLoader$ = $('#historyLoader');
+            var dphTable$ = $('#dph_Table_rows');
+            var cusId = customerSelect$.val();
+
+            customerSelect$.prop('disabled', true);
+            progessLoader$.show();
+
+            $.getJSON('@Url.Action("GetDataPrivacyHistoryTable")',
+                $.param({ customerId: cusId }),
+                function (res) {
+                    if (res.Success) {
+                        dphTable$.html(res.Content);
+                    } else {
+                        dphTable$.html(''); // todo: check
+                        var err = res.Error || 'Unknown error';
+                        window.ShowToastMessage(err, "error");
+                    }
+                }).always(function(res) {
+                    progessLoader$.hide();
+                    customerSelect$.prop('disabled', false);
+            });
+        });
+
+    });
+</script>

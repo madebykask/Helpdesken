@@ -1,0 +1,40 @@
+﻿@using DH.Helpdesk.BusinessData.Models.Gdpr
+@model IList<GdprOperationsAuditOverview>
+
+@{ Layout = null; }
+
+@functions
+{
+    string FormatCaseStatus(GdprOperationsAuditOverview item)
+    {
+        var closedText = Translation.GetCoreTextTranslation("Avslutade");
+        var openedText = Translation.GetCoreTextTranslation("Öppna");
+        return item.ClosedOnly ? closedText : string.Format("{0}, {1}", closedText, openedText);
+    }
+
+    string FormatAttachments(GdprOperationsAuditOverview item)
+    {
+        var caseText = Translation.GetCoreTextTranslation("Ärende");
+        var logPostsText = Translation.GetCoreTextTranslation("Ärendelogg");
+        var res = new List<string>();
+        if (item.RemoveCaseAttachments)
+            res.Add(caseText);
+
+        if (item.RemoveLogAttachments)
+            res.Add(logPostsText);
+
+        return res.Any() ? string.Join(", ", res) : string.Empty;
+    }
+}
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@string.Format("{0} - {1}", item.RegDateFrom.Value.ToShortDateString(), item.RegDateTo.Value.ToShortDateString()) </td>
+            <td>@FormatCaseStatus(item) </td>
+            <td>@(item.Fields.Any() ? string.Join(", ", item.Fields) : string.Empty)</td>
+            <td>@FormatAttachments(item)</td>
+            <td>@item.ExecutedDate.ToString("yyyy-MM-dd hh:mm:ss")</td>
+        </tr>
+    }
+

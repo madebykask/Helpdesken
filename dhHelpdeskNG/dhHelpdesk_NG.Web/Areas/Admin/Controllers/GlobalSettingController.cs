@@ -7,8 +7,8 @@ using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums.Settings;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.Infrastructure.Context;
-using DH.Helpdesk.Services.BusinessLogic.Gdpr;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Models.Gdpr;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
@@ -1486,6 +1486,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [GdprAccess]
         public ActionResult DataPrivacy(DataPrivacyParameters model)
         {
             SessionFacade.ActiveTab = "#fragment-6";
@@ -1498,6 +1499,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             return Json(new {success = true});
         }
+
 
         private DataPrivacyModel GetDataPrivacyModel()
         {
@@ -1522,6 +1524,30 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Favorites = favorites.ToSelectList(new SelectListItem() { Value = "0", Text = Translation.GetCoreTextTranslation("Skapa Ny") } )
             };
             return model;
+        }
+        
+        [ChildActionOnly]
+        public PartialViewResult DataPrivacyHistory()
+        {
+            var customers = _gdprOperationsService.GetOperationAuditCustomers();
+            var model = new DataPrivacyHistoryViewModel
+            {
+                SelectedCustomerId = 0,
+                Customers = customers.ToSelectList(),
+                Data = _gdprOperationsService.ListGdprOperationsAuditItems(null)
+            };
+
+            return PartialView("_DataPrivacyHistory", model);
+        }
+
+        [GdprAccess]
+        public JsonResult GetDataPrivacyHistoryTable(int? customerId)
+        {
+            var data = _gdprOperationsService.ListGdprOperationsAuditItems(customerId);
+
+            var viewPath = "~/Areas/Admin/Views/GlobalSetting/_DataPrivacyHistoryTable.cshtml";
+            var content = RenderRazorViewToString(viewPath, data);
+            return Json(new {Success = true, Content = content}, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

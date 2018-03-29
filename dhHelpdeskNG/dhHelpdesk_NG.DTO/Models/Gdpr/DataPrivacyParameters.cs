@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
+namespace DH.Helpdesk.BusinessData.Models.Gdpr
 {
     public class DataPrivacyParameters
     {

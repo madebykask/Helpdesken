@@ -183,6 +183,23 @@ BEGIN
 END
 GO
 
+
+--SPINT 11: 
+RAISERROR('Add Customer_Id column to tblGDPROperationsAudit', 10, 1) WITH NOWAIT
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Customer_Id' and sysobjects.name = N'tblGDPROperationsAudit')
+BEGIN
+    ALTER TABLE tblGDPROperationsAudit
+    ADD Customer_Id int NULL 
+END
+GO
+
+RAISERROR('Add FK_tblGDPROperationsAudit_tblCustomer FK to tblGDPROperationsAudit', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblGDPROperationsAudit_tblCustomer') AND type = 'F')
+BEGIN
+    ALTER TABLE [dbo].[tblGDPROperationsAudit]  WITH CHECK 
+    ADD CONSTRAINT [FK_tblGDPROperationsAudit_tblCustomer] FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
+END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.36'
 

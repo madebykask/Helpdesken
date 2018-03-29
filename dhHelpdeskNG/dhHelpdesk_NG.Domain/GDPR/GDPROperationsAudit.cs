@@ -5,6 +5,7 @@ namespace DH.Helpdesk.Domain.GDPR
     public class GDPROperationsAudit : Entity
     {
         public int User_Id { get; set; }
+        public int? Customer_Id { get; set; }
         public string Operation { get; set; }
         public string Parameters { get; set; }
         public string Result { get; set; }
@@ -15,5 +16,6 @@ namespace DH.Helpdesk.Domain.GDPR
         public DateTime CreatedDate { get; set; }
 
         public virtual User User { get; set; }
+        public virtual Customer Customer { get; set; }
     }
 }
