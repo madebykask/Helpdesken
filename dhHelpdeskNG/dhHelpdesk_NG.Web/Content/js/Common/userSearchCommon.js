@@ -64,7 +64,7 @@
         if (e.keyCode === 8 || e.keyCode === 46) {
             onRemoveKeyDown(e, mainFakeInput, mainInput);
         }
-        if (e.keyCode === 13 || e.keyCode === 186 || e.keyCode === 32) {
+        if (e.keyCode === 13 || e.keyCode === 186) {
             processEmails(e, mainFakeInput, mainInput);
         }
     });
@@ -83,7 +83,7 @@
         if (e.keyCode === 8 || e.keyCode === 46) {
             onRemoveKeyDown(e, popupInput, mainInput);
         }
-        if (e.keyCode === 13 || e.keyCode === 186 || e.keyCode === 32) {
+        if (e.keyCode === 13 || e.keyCode === 186) {
             processEmails(e, popupInput, mainInput);
         }
     });
@@ -127,7 +127,7 @@
         e.preventDefault();
         e.stopImmediatePropagation();
         if (e.keyCode === 13 || e.keyCode === 186 ||
-            e.type === 'blur' || e.keyCode === 32) {
+            e.type === 'blur') {
             var emails = $(e.target).html();
             var arr = getEmailsFromHtml(emails);
             for (var i = 0; i < arr.length; i++) {

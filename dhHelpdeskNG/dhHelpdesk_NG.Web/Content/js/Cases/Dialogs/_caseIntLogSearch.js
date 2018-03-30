@@ -89,8 +89,7 @@
     popupIntLogInput.typeahead(getCasesIntLogEmailSearchOptions());
 
     popupIntLogInput.keydown(function (e) {
-        if (e.keyCode === 13 || e.keyCode === 186 ||
-            e.keyCode === 32) {
+        if (e.keyCode === 13 || e.keyCode === 186) {
             if (dialogType === 1) {
                 processEmails(e, popupIntLogInput, mainIntLogInputTo);
             }
@@ -122,8 +121,7 @@
     fakeInputTo.typeahead(getCasesIntLogEmailSearchOptions());
 
     fakeInputTo.keydown(function (e) {
-        if (e.keyCode === 13 || e.keyCode === 186 ||
-            e.keyCode === 32) {
+        if (e.keyCode === 13 || e.keyCode === 186) {
             processEmails(e, fakeInputTo, mainIntLogInputTo);
         }
     });
@@ -146,8 +144,7 @@
     fakeInputCc.typeahead(getCasesIntLogEmailSearchOptions());
 
     fakeInputCc.keydown(function (e) {
-        if (e.keyCode === 13 || e.keyCode === 186 ||
-            e.keyCode === 32) {
+        if (e.keyCode === 13 || e.keyCode === 186) {
             processEmails(e, fakeInputCc, mainIntLogInputCc);
         }
     });
@@ -178,7 +175,7 @@
         e.preventDefault();
         e.stopImmediatePropagation();
         if (e.keyCode === 13 || e.keyCode === 186 ||
-            e.type === 'blur' || e.keyCode === 32) {
+            e.type === 'blur') {
             var emails = $(e.target).html();
             var arr = getEmailsFromHtml(emails);
             for (var i = 0; i < arr.length; i++) {
