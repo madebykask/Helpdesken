@@ -461,7 +461,6 @@ namespace DH.Helpdesk.Services.Services
             {
                 var replaceDataWith = parameters.ReplaceDataWith;
                 var replaceDatesWith = parameters.ReplaceDatesWith;
-                var deleteEmailLogs = false;
 
                 foreach (var caseHistory in c.CaseHistories.ToList())
                 {
@@ -620,16 +619,10 @@ namespace DH.Helpdesk.Services.Services
                         else if (fieldName == GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString())
                         {
                             caseHistory.CaseExtraFollowers = replaceDataWith;
-                            deleteEmailLogs = true;
-                        }
-                        else if (fieldName == "tblLog.Text_External" 
-                            || fieldName == "tblLog.Text_Internal")
-                        {
-                            deleteEmailLogs = true;
                         }
                     }
 
-                    if (deleteEmailLogs)
+                    if (parameters.ReplaceEmails)
                     {
                         var toReplace =  emailLogs.GetAll().Where(x => x.CaseHistory_Id == caseHistory.Id).ToList();
                         if (toReplace.Any())
@@ -748,6 +741,7 @@ namespace DH.Helpdesk.Services.Services
                         RegDateFrom = operationParams.RegisterDateFrom,
                         RegDateTo = operationParams.RegisterDateTo,
                         ClosedOnly = operationParams.ClosedOnly,
+                        ReplaceEmails = operationParams.ReplaceEmails,
                         Fields = operationParams.FieldsNames,
                         RemoveCaseAttachments = operationParams.RemoveCaseAttachments,
                         RemoveLogAttachments = operationParams.RemoveLogAttachments,

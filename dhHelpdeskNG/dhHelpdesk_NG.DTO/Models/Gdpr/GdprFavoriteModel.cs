@@ -14,6 +14,7 @@ namespace DH.Helpdesk.BusinessData.Models.Gdpr
         public DateTime RegisterDateTo { get; set; }
         public bool ClosedOnly { get; set; }
         public List<string> FieldsNames { get; set; }
+        public bool ReplaceEmails { get; set; }
         public string ReplaceDataWith { get; set; }
         public DateTime? ReplaceDatesWith { get; set; }
         public bool RemoveCaseAttachments { get; set; }

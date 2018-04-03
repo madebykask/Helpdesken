@@ -200,7 +200,14 @@ BEGIN
     ADD CONSTRAINT [FK_tblGDPROperationsAudit_tblCustomer] FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
 END
 
+RAISERROR('Add ReplaceEmails column to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ReplaceEmails' and sysobjects.name = N'tblGDPRDataPrivacyFavorite')
+BEGIN
+    ALTER TABLE tblGDPRDataPrivacyFavorite
+    ADD ReplaceEmails bit NOT NULL DEFAULT(1)
+END
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.36'
-
 --ROLLBACK --TMP

@@ -15,5 +15,6 @@ namespace DH.Helpdesk.BusinessData.Models.Gdpr
         public bool RemoveLogAttachments { get; set; }
         
         public DateTime ExecutedDate { get; set; }
+        public bool ReplaceEmails { get; set; }
     }
 }

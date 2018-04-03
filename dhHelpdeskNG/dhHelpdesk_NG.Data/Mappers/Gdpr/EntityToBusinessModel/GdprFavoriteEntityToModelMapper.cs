@@ -24,7 +24,9 @@ namespace DH.Helpdesk.Dal.Mappers.Gdpr.EntityToBusinessModel
                 ReplaceDataWith = entity.ReplaceDataWith,
                 ReplaceDatesWith = entity.ReplaceDatesWith,
                 RemoveCaseAttachments = entity.RemoveCaseAttachments,
-                RemoveLogAttachments = entity.RemoveLogAttachments
+                RemoveLogAttachments = entity.RemoveLogAttachments,
+                ReplaceEmails = entity.ReplaceEmails
+                
             };
 
             return model;

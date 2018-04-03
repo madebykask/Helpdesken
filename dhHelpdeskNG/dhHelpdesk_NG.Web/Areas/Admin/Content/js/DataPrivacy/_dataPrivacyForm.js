@@ -38,6 +38,7 @@ window.DataPrivacyForm =
         this.replaceDatesWith$ = form$.find("#ReplaceDatesWith");
         this.removeCaseAttachments$ = form$.find("#RemoveCaseAttachments");
         this.removeLogAttachments$ = form$.find("#RemoveLogAttachments");
+        this.replaceEmails$ = form$.find("#ReplaceEmails");
 
         //buttons
         this.btnFavorite$ = $("#btnFavorite");
@@ -176,7 +177,8 @@ window.DataPrivacyForm =
                 replaceDataWith: $("#ReplaceDataWith").val(),
                 replaceDatesWith: $("#ReplaceDatesWith").val(),
                 removeCaseAttachments: $("#RemoveCaseAttachments").prop("checked"),
-                removeLogAttachments: $("#RemoveLogAttachments").prop("checked")
+                removeLogAttachments: $("#RemoveLogAttachments").prop("checked"),
+                replaceEmails: this.replaceEmails$.prop("checked")
             };
         };
 
@@ -457,7 +459,8 @@ window.DataPrivacyForm =
                  ReplaceDataWith: filter.replaceDataWith,
                  ReplaceDatesWith: filter.replaceDatesWith,
                  RemoveCaseAttachments: filter.removeCaseAttachments,
-                 RemoveLogAttachments: filter.removeLogAttachments
+                 RemoveLogAttachments: filter.removeLogAttachments,
+                 ReplaceEmails: filter.replaceEmails
              };
 
              $.ajax({
@@ -537,6 +540,7 @@ window.DataPrivacyForm =
             self.setDatepickerDate(self.replaceDatesWith$, null);
             self.removeCaseAttachments$.prop('checked', false);
             self.removeLogAttachments$.prop('checked', false);
+            self.replaceEmails$.prop('checked', true);
             self.closedOnly$.prop('checked', false);
 
 
@@ -625,6 +629,7 @@ window.DataPrivacyForm =
             self.setDatepickerDate(self.replaceDatesWith$, data.ReplaceDatesWith);
             self.removeCaseAttachments$.prop('checked', data.RemoveCaseAttachments);
             self.removeLogAttachments$.prop('checked', data.RemoveLogAttachments);
+            self.replaceEmails$.prop('checked', data.ReplaceEmails);
 
             var defer = $.Deferred();
             self.filterFields$.empty();
@@ -693,7 +698,8 @@ window.DataPrivacyForm =
                     ReplaceDataWith: filter.replaceDataWith,
                     ReplaceDatesWith: filter.replaceDatesWith,
                     RemoveCaseAttachments: filter.removeCaseAttachments,
-                    RemoveLogAttachments: filter.removeLogAttachments
+                    RemoveLogAttachments: filter.removeLogAttachments,
+                    ReplaceEmails: filter.replaceEmails
                 };
 
                 this.blockUI(true, this.loaders.saveFavoritesLoader);

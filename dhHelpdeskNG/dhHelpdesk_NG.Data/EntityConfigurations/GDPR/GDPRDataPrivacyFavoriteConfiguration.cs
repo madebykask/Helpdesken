@@ -23,6 +23,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.GDPR
             this.Property(x => x.ReplaceDatesWith).IsOptional();
             this.Property(x => x.RemoveCaseAttachments).IsRequired();
             this.Property(x => x.RemoveCaseAttachments).IsRequired();
+            this.Property(x => x.ReplaceEmails).IsRequired();
 
             this.ToTable("tblGDPRDataPrivacyFavorite");
         }
