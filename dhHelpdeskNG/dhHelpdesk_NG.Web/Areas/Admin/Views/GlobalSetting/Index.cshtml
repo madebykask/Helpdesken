@@ -215,6 +215,19 @@
 @section Scripts {
     <script type="text/javascript">
         $(function () {
+
+            window.dataPrivacyHistory.Init();
+            
+            //handle tabs switching 
+            $('#myTab a').on('shown.bs.tab', function (event) {
+                //var prevTab = $(event.relatedTarget);  
+                var activeTab = $(event.target).parent();
+
+                if (activeTab[0].id === 'tab7') {
+                    window.dataPrivacyHistory.RefreshHistory();
+                }
+            });
+
             $('#SearchId').val(@ViewBag.SelectedSearchCondition);
 
             $("#multiCustomersSearch").on('switchChange.bootstrapSwitch', function () {
@@ -275,5 +288,6 @@
             var menuId = '#menu' + number;
             $(menuId).show();
         }
+
     </script>
 }

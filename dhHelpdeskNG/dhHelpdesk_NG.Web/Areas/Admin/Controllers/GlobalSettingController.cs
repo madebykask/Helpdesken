@@ -1538,9 +1538,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var customers = _gdprOperationsService.GetOperationAuditCustomers();
             var model = new DataPrivacyHistoryViewModel
             {
-                SelectedCustomerId = 0,
-                Customers = customers.ToSelectList(),
-                Data = _gdprOperationsService.ListGdprOperationsAuditItems(null)
+                SelectedCustomerId = customers.Any() ? customers.First().Key : 0,
+                Customers = customers.ToSelectList()
             };
 
             return PartialView("_DataPrivacyHistory", model);

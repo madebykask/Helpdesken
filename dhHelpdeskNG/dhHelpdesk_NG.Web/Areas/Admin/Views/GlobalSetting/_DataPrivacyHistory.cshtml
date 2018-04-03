@@ -9,7 +9,15 @@
                 <tbody>
                 <tr>
                     <td class="span1">@Translation.GetCoreTextTranslation("Kund")</td>
-                    <td>@Html.DropDownListFor(x => x.SelectedCustomerId, Model.Customers, "", new { id = "dph_customerId" })<i id="historyLoader" class="gif-loader" style="display:none">&nbsp;</i></td>
+                    <td>
+                       @Html.DropDownListFor(x => x.SelectedCustomerId, Model.Customers, "",
+                           new
+                           {
+                               id = "dph_customerId",
+                               @class = "chosen-single-select"
+                           })
+                        <i id="historyLoader" class="gif-loader" style="display:none">&nbsp;</i>
+                    </td>
                 </tr>
                 </tbody>
             </table>            
@@ -29,7 +37,6 @@
                 </tr>
                 </thead>
                 <tbody id="dph_Table_rows">
-                @Html.Partial("_DataPrivacyHistoryTable", Model.Data)
                 </tbody>
             </table>    
         </div>
@@ -37,32 +44,44 @@
 </div>
 
 <script type="text/javascript">
-    $(function () {
-
-        $('#dph_customerId').change(function (e) {
-            var customerSelect$ = $('#dph_customerId');
-            var progessLoader$ = $('#historyLoader');
-            var dphTable$ = $('#dph_Table_rows');
-            var cusId = customerSelect$.val();
-
+    window.dataPrivacyHistory = (function () {
+        var _self = this;
+        var customerSelect$ = $('#dph_customerId');
+        var progessLoader$ = $('#historyLoader');
+        var dphTable$ = $('#dph_Table_rows');
+        
+        this.loadHistory = function () {
             customerSelect$.prop('disabled', true);
             progessLoader$.show();
 
             $.getJSON('@Url.Action("GetDataPrivacyHistoryTable")',
-                $.param({ customerId: cusId }),
+                $.param({ customerId: customerSelect$.val() }),
                 function (res) {
                     if (res.Success) {
                         dphTable$.html(res.Content);
                     } else {
-                        dphTable$.html(''); // todo: check
+                        dphTable$.html('');
                         var err = res.Error || 'Unknown error';
                         window.ShowToastMessage(err, "error");
                     }
-                }).always(function(res) {
-                    progessLoader$.hide();
-                    customerSelect$.prop('disabled', false);
+                }).always(function (res) {
+                progessLoader$.hide();
+                customerSelect$.prop('disabled', false);
             });
-        });
+        };
 
-    });
+        //public interface
+        return {
+            Init: function () {
+                //subscriptions
+                $('#dph_customerId').change(function(e) {
+                    _self.loadHistory();
+                });
+            },
+
+            RefreshHistory: function() {
+                _self.loadHistory();
+            }
+        };
+    })();
 </script>
