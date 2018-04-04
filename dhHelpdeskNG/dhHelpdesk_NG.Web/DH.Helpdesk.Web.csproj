@@ -358,6 +358,7 @@
     <Compile Include="Models\Case\CaseOperationResult.cs" />
     <Compile Include="Models\Case\InvoiceTimeModel.cs" />
     <Compile Include="Models\Gdpr\DataPrivacyHistoryViewModel.cs" />
+    <Compile Include="Models\Gdpr\GdprOperationsHistoryListItem.cs" />
     <Compile Include="Models\JsonModels\Base\BaseJsonModel.cs" />
     <Compile Include="Models\JsonModels\Case\CaseJsonModel.cs" />
     <Compile Include="Models\Questionnaire\Input\QuestionnaireAnswerParams.cs" />

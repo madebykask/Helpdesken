@@ -1,4 +1,5 @@
 ﻿
+using System.Text;
 using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 using DH.Helpdesk.BusinessData.Models.Gdpr;
 using DH.Helpdesk.BusinessData.Models.Grid;
@@ -1550,8 +1551,39 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             var data = _gdprOperationsService.ListGdprOperationsAuditItems(customerId);
 
+            var closedText = Translation.GetCoreTextTranslation("Avslutade");
+            var openedText = Translation.GetCoreTextTranslation("Öppna");
+            var caseText = Translation.GetCoreTextTranslation("Ärende");
+            var logPostsText = Translation.GetCoreTextTranslation("Ärendelogg");
+
+            var model = new List<GdprOperationsHistoryListItem>();
+
+            //replace field names with field labels
+            foreach (var item in data)
+            {
+                var attachedFilesFormatted = new StringBuilder();
+                if (item.RemoveCaseAttachments)
+                    attachedFilesFormatted.AppendFormat(caseText);
+
+                if (item.RemoveLogAttachments)
+                    attachedFilesFormatted.AppendFormat(", {0}", logPostsText);
+
+                var formattedFields = item.Fields.Select(x => FormatFieldLabel(x, null)).ToList();
+
+                var modelItem = new GdprOperationsHistoryListItem
+                {
+                    RegistrationDate = $"{item.RegDateFrom.Value.ToShortDateString()} - {item.RegDateTo.Value.ToShortDateString()}",
+                    Cases = item.ClosedOnly ? closedText : $"{closedText}, {openedText}",
+                    Data = formattedFields.Any() ? string.Join(", ", formattedFields) : "",
+                    AttachedFiles = attachedFilesFormatted.ToString().Trim(',').Trim(),
+                    Executed = item.ExecutedDate.ToString("yyyy-MM-dd HH:mm:ss")
+                };
+
+                model.Add(modelItem);
+            }
+
             var viewPath = "~/Areas/Admin/Views/GlobalSetting/_DataPrivacyHistoryTable.cshtml";
-            var content = RenderRazorViewToString(viewPath, data);
+            var content = RenderRazorViewToString(viewPath, model);
             return Json(new {Success = true, Content = content}, JsonRequestBehavior.AllowGet);
         }
 
@@ -1610,7 +1642,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     fields.Select(f => new SelectListItem
                     {
                         Value = f.Name,
-                        Text = FormatFieldLabel(f)
+                        Text = FormatFieldLabel(f.Name, f.Label)
                     })
                     .OrderBy(f => f.Text)
                     .ToList();
@@ -1621,23 +1653,21 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return Json(new { success = false });
         }
 
-        private string FormatFieldLabel(CaseFieldSettingsWithLanguage field)
+        private string FormatFieldLabel(string fieldName, string label)
         {
-            var label = field.Label;
-            if (string.IsNullOrEmpty(label) && FieldSettingsUiNames.Names.ContainsKey(field.Name))
+            if (string.IsNullOrEmpty(label) && FieldSettingsUiNames.Names.ContainsKey(fieldName))
             {
-                label = Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[field.Name]);
+                label = Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[fieldName]);
             }
 
             // prefix IsAbout section fields ony if they were translated
-            if (field.Name.IndexOf("IsAbout_", StringComparison.OrdinalIgnoreCase) != -1 &&
-                !string.IsNullOrEmpty(label))
+            if (fieldName.IndexOf("IsAbout_", StringComparison.OrdinalIgnoreCase) != -1 && !string.IsNullOrEmpty(label))
             {
                 var regardingHeader = Translation.GetCoreTextTranslation(CaseSections.RegardingHeader);
                 label = $"{regardingHeader} - {label}";
             }
 
-            return string.IsNullOrEmpty(label) ? field.Name : label;
+            return string.IsNullOrEmpty(label) ? fieldName : label;
         }
     }
 }
