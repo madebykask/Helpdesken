@@ -187,7 +187,7 @@ namespace DH.Helpdesk.Services.Services.Invoice
 			{
 				var globalSetting = _globalSettingService.GetGlobalSettings().First();
 				CreateInvoiceFile(dbInvoiceHeader.Id, 
-                                  Path.Combine(globalSetting.InvoiceFileFolder, dbInvoiceHeader.InvoiceHeaderGUID.ToString()), 
+                                  Path.Combine(globalSetting.InvoiceFileFolder, dbInvoiceHeader.InvoiceFilename), 
                                   fileCases, translations);
 			}			
 		}
