@@ -74,7 +74,7 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
             //TODO: After refactoring needs to be changed
             extendedCaseData.FormModel.CaseId = initData.CaseId;            
             extendedCaseData.FormModel.LanguageId = initData.LanguageId;
-            extendedCaseData.FormModel.Path = ExpandExtendedCasePath(globalSetting.ExtendedCasePath, extendedCaseData.FormModel.Id, initData);
+            extendedCaseData.FormModel.Path = ExpandExtendedCasePath(globalSetting.ExtendedCasePath, extendedCaseData.ExtendedCaseFormId, initData);
 
             return extendedCaseData;
         }
