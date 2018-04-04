@@ -46,6 +46,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
         private readonly IDomainRepository _domainRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly ISettingRepository _settingRepository;
+        private readonly IRegionRepository _regionRepository;
 
 
         //private readonly IFtpFileDownloader _downloader;
@@ -58,7 +59,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
                                        IDivisionRepository divisionRepository,
                                        IDomainRepository domainRepository,
                                        ICustomerRepository customerRepository,
-                                       ISettingRepository settingRepository
+                                       ISettingRepository settingRepository,
+                                       IRegionRepository regionRepository
 
                                       //,IFtpFileDownloader downloader
                                       )
@@ -73,6 +75,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
             _domainRepository = domainRepository;
             _customerRepository = customerRepository;
             _settingRepository = settingRepository;
+            _regionRepository = regionRepository;
             //_downloader = downloader;
         }
 
@@ -98,6 +101,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                     try
                     {
                         var _cs = customerSettings.FirstOrDefault(s => s.Customer_Id == customer.Id);
+                        var _r = _regionRepository.GetDefaultRegion(customer.Id);
                         if (_cs != null)
                         {
                             var jobSetting = new ImportInitiator_JobSettings()
@@ -111,6 +115,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
                                 UserName = _cs.LDAPUserName,
                                 Password = _cs.LDAPPassword,
                                 Logging = _cs.LDAPLogLevel,
+                                CreateOrganisation = _cs.LDAPCreateOrganization,
+                                DefaultRegion = _r,
                                 StartTime = "2018-03-06",
                                 CronExpression = "0 * 8-22 * * ?",
                                 TimeZone = "",
@@ -340,7 +346,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                     {
                         _csvFieldValue = row.Item2[fs.LDAPAttribute];
                         if (relatedFields.Contains(_dbFieldName))
-                            _csvFieldValue = GetRelatedValue(_dbFieldName, _csvFieldValue, setting.CustomerId);                        
+                            _csvFieldValue = GetRelatedValue(_dbFieldName, _csvFieldValue, setting.CustomerId, setting.DefaultRegion);                        
                     }
 
                     if (maxLen > 0 && _csvFieldValue.Length > maxLen)
@@ -412,13 +418,14 @@ namespace DH.Helpdesk.TaskScheduler.Services
 
         }
 
-        private string GetRelatedValue(string fieldName, string forignKey, int customerId)
+        private string GetRelatedValue(string fieldName, string forignKey, int customerId , int? regionId)
         {            
             switch (fieldName)
             {
                 case departmentId:
                     var depId = _departmentRepository.GetDepartmentId(forignKey, customerId);
-                    return depId == 0 ? "null" : depId.ToString();
+                    var InsertedDepId = CreateDepartment(forignKey, customerId, regionId).ToString();
+                    return depId == 0 ? InsertedDepId : depId.ToString();
                     
                 case LanguageId:                   
                     var langId = _languageRepository.GetLanguageIdByText(forignKey);
@@ -530,6 +537,36 @@ namespace DH.Helpdesk.TaskScheduler.Services
                 }
             }
         }
+
+       public int CreateDepartment(string departmentName, int customerId, int? regionId)
+        {
+            var department = new Domain.Department();
+
+            department.DepartmentName = departmentName;
+            department.Customer_Id = customerId;
+            department.Region_Id = regionId;
+            department.HeadOfDepartment = string.Empty;
+            department.HeadOfDepartmentEMail = string.Empty;
+            department.SearchKey = string.Empty;
+            department.Path = string.Empty;
+            department.AccountancyAmount = 0;
+            department.DepartmentId = string.Empty;
+            department.Charge = 0;
+            department.ChargeMandatory = 0;
+            department.ShowInvoice = 0;
+            department.IsActive = 1;
+            department.IsEMailDefault = 0;
+            department.ChangedDate = DateTime.UtcNow;
+            department.OverTimeAmount = 0;
+            department.LanguageId = 0;
+            department.DepartmentGUID = Guid.NewGuid();
+
+            _departmentRepository.Add(department);
+
+            var depId = _departmentRepository.GetDepartmentId(departmentName, customerId);
+
+            return depId;
+        }
     }
 
 
@@ -550,5 +587,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
         void DeleteInitiators(int Days2waitBeforeDelete, int customerId, ref DataLogModel logs);
 
         void CreatLogFile(DataLogModel _logs);
+
+        int CreateDepartment(string departmentName, int customerId, int? regionId);
     }
 }

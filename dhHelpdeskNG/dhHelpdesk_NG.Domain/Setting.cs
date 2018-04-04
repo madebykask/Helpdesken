@@ -44,6 +44,7 @@ namespace DH.Helpdesk.Domain
         public int LDAPAuthenticationType { get; set; }
         public int LDAPLogLevel { get; set; }
         public int LDAPSyncType { get; set; }
+        public int LDAPCreateOrganization { get; set; }
         public int LeadTimeFromProductAreaSetDate { get; set; }
         public int LogLevel { get; set; }
         public int LogNoteFormat { get; set; }

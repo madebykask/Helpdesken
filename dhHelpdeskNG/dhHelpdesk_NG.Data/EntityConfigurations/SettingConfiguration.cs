@@ -58,6 +58,7 @@
             this.Property(x => x.LDAPLogLevel).IsRequired();
             this.Property(x => x.LDAPPassword).IsRequired().HasMaxLength(20);
             this.Property(x => x.LDAPSyncType).IsRequired();
+            this.Property(x => x.LDAPCreateOrganization).IsRequired();
             this.Property(x => x.LDAPUserName).IsRequired().HasMaxLength(100);
             this.Property(x => x.LeadTimeFromProductAreaSetDate).IsRequired();
             this.Property(x => x.LogLevel).IsRequired();
