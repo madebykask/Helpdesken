@@ -6,11 +6,9 @@
 
 
   <!--COMMON DATA-->
-  <!ENTITY pre_country SYSTEM "Data/Data_Common_Country.xml">
   <!ENTITY data_common_noyes SYSTEM "Data/Data_Common_NoYes.xml">
   <!ENTITY data_common_servicerequestpriority SYSTEM "Data/Data_Common_ServiceRequestPriority.xml">
   <!ENTITY data_common_gender SYSTEM "Data/Data_Common_Gender.xml">
-  <!ENTITY data_common_nationality SYSTEM "Data/Data_Common_Nationality.xml">
   <!ENTITY data_common_noyes SYSTEM "Data/Data_Common_NoYes.xml">
   <!ENTITY data_common_yesno SYSTEM "Data/Data_Common_YesNo.xml">
 
@@ -127,8 +125,7 @@
         <mandatoryIf name="FamilyMember">Child</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="search-select" source="1" name="FamilyMemberNationality" label="Nationality" default="Norwegian" HCMData="1" SortOrder="39">
-        &data_common_nationality;
+      <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="FamilyMemberNationality" label="Nationality" default="Norwegian" HCMData="1" SortOrder="39">
       </element>
       <element type="select" name="TheOnlyChildCarer" label="The only child carer?" HCMData="1" SortOrder="40">
         &data_common_noyes;
@@ -147,8 +144,7 @@
         <mandatoryIf name="FamilyMember2">Child</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="search-select" source="1" name="FamilyMemberNationality2" label="Nationality" default="Norwegian" HCMData="1" SortOrder="46">
-        &data_common_nationality;
+      <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="FamilyMemberNationality2" label="Nationality" default="Norwegian" HCMData="1" SortOrder="46">
       </element>
       <element type="select" name="TheOnlyChildCarer2" label="The only child carer?" HCMData="1" SortOrder="47">
         &data_common_noyes;
@@ -167,8 +163,7 @@
         <mandatoryIf name="FamilyMember3">Child</mandatoryIf>
          <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="search-select" source="1" name="FamilyMemberNationality3" label="Nationality" default="Norwegian" HCMData="1" SortOrder="53">
-        &data_common_nationality;
+      <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="FamilyMemberNationality3" label="Nationality" default="Norwegian" HCMData="1" SortOrder="53">
       </element>
       <element type="select" name="TheOnlyChildCarer3" label="The only child carer?" HCMData="1" SortOrder="54">
         &data_common_noyes;
@@ -187,8 +182,7 @@
         <mandatoryIf name="FamilyMember4">Child</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="search-select" source="1" name="FamilyMemberNationality4" label="Nationality" default="Norwegian" HCMData="1" SortOrder="60">
-        &data_common_nationality;
+      <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="FamilyMemberNationality4" label="Nationality" default="Norwegian" HCMData="1" SortOrder="60">
       </element>
       <element type="select" name="TheOnlyChildCarer4" label="The only child carer?" HCMData="1" SortOrder="61">
         &data_common_noyes;
@@ -207,8 +201,7 @@
         <mandatoryIf name="FamilyMember5">Child</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="search-select" source="1" name="FamilyMemberNationality5" label="Nationality" default="Norwegian" HCMData="1" SortOrder="67">
-        &data_common_nationality;
+      <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="FamilyMemberNationality5" label="Nationality" default="Norwegian" HCMData="1" SortOrder="67">
       </element>
       <element type="select" name="TheOnlyChildCarer5" label="The only child carer?" HCMData="1" SortOrder="68">
         &data_common_noyes;
@@ -434,8 +427,7 @@
       </element>
 
       <!--Nationality / Language-->
-      <element type="search-select" source="1" name="Nationality" label="Nationality" HCMData="1" SortOrder="160">
-        &data_common_nationality;
+      <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="Nationality" label="Nationality" HCMData="1" SortOrder="160">
       </element>
       <element type="search-select" name="Language" label="Language" default="Norwegian" HCMData="1" SortOrder="161">
         &data_hiring_languageIT0002;

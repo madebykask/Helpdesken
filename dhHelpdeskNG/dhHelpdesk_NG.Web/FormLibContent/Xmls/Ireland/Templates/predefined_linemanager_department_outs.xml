@@ -18,6 +18,10 @@
     <show>Regional Change Leader</show>
   </dependent>
   <dependent>
+    <selected>Ben Rosser</selected>
+    <show>IT Manager</show>
+  </dependent>
+  <dependent>
     <selected>Brenda Massyn</selected>
     <show>IKEA Food Manager</show>
   </dependent>
@@ -42,15 +46,27 @@
     <show>Visual Merchandising/Activity Manager</show>
   </dependent>
   <dependent>
+    <selected>Charlotte Hanlon</selected>
+    <show>Local Marketing Leader</show>
+  </dependent>
+  <dependent>
     <selected>Chris Kelly</selected>
-    <show>Commercial Activity Leader</show>
+    <show>Deputy Sales Manager</show>
   </dependent>
   <dependent>
     <selected>Clare Rodgers</selected>
     <show>Deputy Retail Manager</show>
   </dependent>
   <dependent>
+    <selected>Claudia Marshall</selected>
+    <show>Market Manager</show>
+  </dependent>
+  <dependent>
     <selected>Daniel Byrne</selected>
+    <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
+    <selected>Danielle O'Hara</selected>
     <show>Shopkeeper</show>
   </dependent>
   <dependent>
@@ -66,12 +82,40 @@
     <show>Commercial SFM &amp; Bistro Manager</show>
   </dependent>
   <dependent>
+    <selected>Deborah Anderson</selected>
+    <show>Marketing Manager</show>
+  </dependent>
+  <dependent>
     <selected>Desmond Shelley</selected>
     <show>Goods Flow Team Manager</show>
   </dependent>
   <dependent>
+    <selected>Donna Marie Moore</selected>
+    <show>Customer Relations Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Dylan Wilkins</selected>
+    <show>Sales Team Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Edward O'Toole</selected>
+    <show>In-store Logistics Manager - Store</show>
+  </dependent>
+  <dependent>
     <selected>Ema McKay</selected>
     <show>Com &amp; In Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Emmanuel Olaniran</selected>
+    <show>Sales Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Fidelma Davies</selected>
+    <show>Deputy Shopkeeper</show>
+  </dependent>
+  <dependent>
+    <selected>Gareth Neville</selected>
+    <show>Deputy Facility Manager</show>
   </dependent>
   <dependent>
     <selected>Garry Ward</selected>
@@ -102,6 +146,14 @@
     <show>Site Facility Manager</show>
   </dependent>
   <dependent>
+    <selected>Aileen Curran</selected>
+    <show>Visual Merchandising/Activity Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Allan Gates</selected>
+    <show>Deputy Business Navigation Manager</show>
+  </dependent>
+  <dependent>
     <selected>Aoife Joyce</selected>
     <show>HR Generalist</show>
   </dependent>
@@ -110,8 +162,24 @@
     <show>HR Manager</show>
   </dependent>
   <dependent>
+    <selected>Brid Casey</selected>
+    <show>Graphic Communication Leader</show>
+  </dependent>
+  <dependent>
+    <selected>Hege Saebjornsen</selected>
+    <show>Sustainability Manager</show>
+  </dependent>
+  <dependent>
+    <selected>James Lindsay</selected>
+    <show>Assistant Store Manager</show>
+  </dependent>
+  <dependent>
     <selected>Jamie Foers</selected>
     <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
+    <selected>Jill Reedman</selected>
+    <show>Country Com&amp;In Manager</show>
   </dependent>
    <dependent>
     <selected>Joanna Yarrow</selected>
@@ -138,16 +206,40 @@
     <show>Home Furnishing Consultant</show>
   </dependent>
   <dependent>
+    <selected>Kresimir Jurisic</selected>
+    <show>Kitchen Production Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Kresimir Kovacevic</selected>
+    <show>Recovery Manager</show>
+  </dependent>
+  <dependent>
     <selected>Laragh King</selected>
-    <show>Customer Services Manager</show>
+    <show>IKEA Food Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Laura Addison</selected>
+    <show>Country Sales Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Laurent Tiersen</selected>
+    <show>Country Marketing Manager</show>
   </dependent>
   <dependent>
     <selected>Leandro Godoy</selected>
     <show>Shopkeeper</show>
   </dependent>
   <dependent>
+    <selected>Leigh Burgess</selected>
+    <show>Visual Merchandising/Activity Manager</show>
+  </dependent>
+  <dependent>
     <selected>Lewis Marshall</selected>
     <show>PR &amp; Communication Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Linton John Scarborough</selected>
+    <show>Deputy Business Navigation and Operation</show>
   </dependent>
   <dependent>
     <selected>Lisa O'Brien</selected>
@@ -184,6 +276,10 @@
   <dependent>
     <selected>Mia-Maria Nordlund</selected>
     <show>Q-Store Quality Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Michal Adamczyk</selected>
+    <show>Commercial SFM &amp; Bistro Manager</show>
   </dependent>
   <dependent>
     <selected>Miranda Lyons</selected>
@@ -226,12 +322,20 @@
     <show>Goods Flow Team Manager</show>
   </dependent>
   <dependent>
+    <selected>Rachel Starrs</selected>
+    <show>Shopkeeper</show>
+  </dependent>
+  <dependent>
     <selected>Robin Dixon</selected>
     <show>Shopkeeper</show>
   </dependent>
   <dependent>
     <selected>Ross Sharp</selected>
     <show>Checkout Services Manager</show>
+  </dependent>
+  <dependent>
+    <selected>Sajal Shah</selected>
+    <show>Chief Finance Officer</show>
   </dependent>
   <dependent>
     <selected>Sally Kenny</selected>
@@ -255,7 +359,11 @@
   </dependent>
   <dependent>
     <selected>Sharon White</selected>
-    <show>Customer Fulfilment Manager</show>
+    <show>Customer Fulfilment Manager IKEA Group</show>
+  </dependent>
+  <dependent>
+    <selected>Thomas Johnston</selected>
+    <show>Safety &amp; Security Manager</show>
   </dependent>
   <dependent>
     <selected>Tihomir Damjanovic</selected>
@@ -274,6 +382,10 @@
     <show>Kitchen Production Manager</show>
   </dependent>
   <dependent>
+    <selected>Scott Fairbairn</selected>
+    <show>Goods Flow Manager</show>
+  </dependent>
+  <dependent>
     <selected>Scott Jackson</selected>
     <show>In-store Logistics Manager - Store</show>
   </dependent>
@@ -287,10 +399,6 @@
   </dependent>
   <dependent>
     <selected>Nicola Mac Inerney</selected>
-    <show>Customer Services Manager</show>
-  </dependent>
-  <dependent>
-    <selected>Nicola McInerney</selected>
     <show>Customer Services Manager</show>
   </dependent>
  </predefined>

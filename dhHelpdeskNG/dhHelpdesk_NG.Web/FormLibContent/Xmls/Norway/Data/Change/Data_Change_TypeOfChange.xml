@@ -3,6 +3,7 @@
   <option value=""></option>
   <option value="Additional contract">Additional contract</option>
   <option value="Allowance Change">Allowance Change</option>
+  <option value="Averaging hours">Averaging hours</option>
   <option value="Basic Pay Change">Basic Pay Change</option>
   <option value="Benefit Change">Benefit Change</option>
   <option value="Contract Change">Contract Change</option>

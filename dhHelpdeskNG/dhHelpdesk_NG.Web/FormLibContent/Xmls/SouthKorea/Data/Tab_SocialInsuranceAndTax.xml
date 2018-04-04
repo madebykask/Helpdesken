@@ -4,12 +4,10 @@
     <element name="Personnel_NonResident" type="checkbox" label="Non-resident">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Personnel_NonTaxableOverseasIncome" type="checkbox" label="Non-taxable Overseas Income">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Personnel_TypeOfNonTaxableOverseaseIncome" type="select" label="Type of Non-taxable Overseas Income">
         <options>
@@ -22,7 +20,6 @@
     <element name="Personnel_HandicappedEmployee" type="checkbox" label="Handicapped Employee">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Personnel_HandicappedCode" type="select" label="Handicapped Code">
         <options>
@@ -35,22 +32,18 @@
     <element name="Personnel_MatriarchOrDualIncome" type="checkbox" label="Matriarch or Dual Income">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Personnel_SingleParent" type="checkbox" label="Single Parent">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Personnel_ProductionWorker" type="checkbox" label="Production Worker">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Personnel_YoungAgedHandicappedEEInSMEs" type="checkbox" label="Young/Aged/Handicapped EE in SMEs">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Personnel_ExmptStartDate" type="date" label="Exmpt. Start Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
@@ -61,7 +54,6 @@
     <element name="Personnel_Foreigner" type="checkbox" label="Foreigner">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Personnel_CalcMethod" type="select" label="Calc. Method">
         <options>
@@ -74,27 +66,22 @@
     <element name="Personnel_NonApplicable" type="checkbox" label="Non-applicable">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Personnel_ByTaxExemptrionLawFull" type="checkbox" label="By Tax Exemptrion Law (Full)">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Personnel_ByTaxExemptrionLawPartial" type="checkbox" label="By Tax Exemptrion Law (Partial)">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Personnel_ByIncomeTaxLaw" type="checkbox" label="By Income Tax Law">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Personnel_TaxTreaty" type="checkbox" label="Tax Treaty">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Personnel_Submitted" type="date" label="Submitted" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
@@ -102,7 +89,6 @@
     <element name="Personnel_Received" type="date" label="Received" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
     </element>
-
     <!-- Section: Medical insurance (IT0543) -->
     <element name="Medical_InsuranceEntitlementReason" type="select" label="Insurance entitlement reason">
         <options>
@@ -124,20 +110,15 @@
     <element name="Medical_NoPremiumInTheAcquiredMonth" type="checkbox" label="No premium in the Acquired Month">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Medical_OverseasWorker" type="checkbox" label="Overseas Worker">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Medical_EIEntitlementEEover65" type="checkbox" label="EI Entitlement( EEover 65)">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
-
-    <!-- Section: National Pension (IT0543) -->
     <element name="National_InsuranceEntitlementReason" type="select" label="Insurance entitlement reason">
         <options>
             <option value=""></option>
@@ -158,20 +139,15 @@
     <element name="National_NoPremiumInTheAcquiredMonth" type="checkbox" label="No premium in the Acquired Month">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="National_OverseasWorker" type="checkbox" label="Overseas Worker">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="National_EIEntitlementEEover65" type="checkbox" label="EI Entitlement( EEover 65)">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
-
-    <!-- Section: Employment insurance (IT0543) -->
     <element name="Employment_InsuranceEntitlementReason" type="select" label="Insurance entitlement reason">
         <options>
             <option value=""></option>
@@ -200,15 +176,11 @@
     <element name="Employment_OverseaseWorker" type="checkbox" label="Overseas Worker">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Employment_EIEntitlementEEover65" type="checkbox" label="EI Entitlement( EEover 65)">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
-
-    <!-- Section: Co-workers compensation Insurance (IT0543) -->
     <element name="CoWorkers_InsuranceEntitlementReason" type="select" label="Insurance entitlement reason">
         <options>
             <option value=""></option>
@@ -237,19 +209,14 @@
     <element name="CoWorkers_OverseasWorker" type="checkbox" label="Overseas Worker">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="CoWorkers_EIEntitlementEEover65" type="checkbox" label="EI Entitlement( EEover 65)">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
-
-    <!-- Section: Medical Insurance (IT0544) -->
     <element name="Medical_NoHIAdjustmentInPrvYear" type="checkbox" label="No HI Adjustmen in Prv. Year">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Medical_MonthlyCompensationAmount" type="text" label="monthly compensation amount">
         <regex inherit="amount3" pattern="" message=""></regex>
@@ -270,12 +237,9 @@
             <option value="3 Monthly change">3 Monthly change</option>
         </options>
     </element>
-
-    <!-- Section: National Pension (IT0544) -->
     <element name="National_NoHIAdjustmentInPrvYear" type="checkbox" label="No HI Adjustmen in Prv. Year">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="National_MonthlyCompensationAmount" type="text" label="monthly compensation amount">
         <regex inherit="amount3" pattern="" message=""></regex>
@@ -288,12 +252,9 @@
             <option value="3 Monthly change">3 Monthly change</option>
         </options>
     </element>
-
-    <!-- Section: Employment and co-workers compensation insurance (IT0544) -->
     <element name="Employment_NoHIAdjustmentInPrvYear" type="checkbox" label="No HI Adjustmen in Prv. Year">
         <on value="1"></on>
         <off value="0"></off>
-        <!--<regex inherit="booltrue" pattern="" message="This field is required."></regex>-->
     </element>
     <element name="Employment_MonthlyCompensationAmount" type="text" label="monthly compensation amount">
         <regex inherit="amount3" pattern="" message=""></regex>

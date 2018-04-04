@@ -26,7 +26,7 @@
         
       </element>
       <element name="Company" type="text" label="Company"></element>
-      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1" default="Store Dublin 038"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1" default="IKEA Dublin"></element>
       <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
       <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy">
