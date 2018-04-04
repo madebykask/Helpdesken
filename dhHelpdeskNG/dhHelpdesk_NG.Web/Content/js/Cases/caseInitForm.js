@@ -945,8 +945,6 @@ function CaseInitForm() {
                 _parameters.departmentInvoiceMandatory = data.ChargeMandatory;
                 _parameters.showInvoiceTime = data.ShowInvoiceTime;
                 _parameters.showInvoiceOvertime = data.ShowInvoiceOvertime;
-
-                console.log('>>> showInvoice.departmentInvoiceMandatory: ' + data.ChargeMandatory);
                 
                 if (data.Charge) {
                     $(invoiceSelector).show();

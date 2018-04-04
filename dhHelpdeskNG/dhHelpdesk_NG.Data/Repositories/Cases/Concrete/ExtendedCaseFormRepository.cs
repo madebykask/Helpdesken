@@ -43,7 +43,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             return newGuid;
         }
 
-        public ExtendedCaseDataOverview GetExtendedCaseFormForSolution(int customerId, int caseSolutionId)
+        public ExtendedCaseDataOverview GetExtendedCaseFormForSolution(int caseSolutionId, int customerId)
         {
             var extendedFormData =
                 (from cs in DataContext.CaseSolutions

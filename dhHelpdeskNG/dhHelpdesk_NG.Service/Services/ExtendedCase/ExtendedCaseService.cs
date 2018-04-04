@@ -54,7 +54,7 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                     return null;
                 }               
 
-                var extendedCaseForm = _extendedCaseFormRepository.GetExtendedCaseFormForSolution(initData.CustomerId, initData.CaseSolutionId.Value);
+                var extendedCaseForm = _extendedCaseFormRepository.GetExtendedCaseFormForSolution(initData.CaseSolutionId.Value, initData.CustomerId);
                 if (extendedCaseForm != null)
                 {
                     extendedCaseData = _extendedCaseDataRepository.CreateTemporaryExtendedCaseData(extendedCaseForm.ExtendedCaseFormId, initData.UserName);                    
