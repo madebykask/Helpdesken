@@ -1,55 +1,36 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@using DH.Helpdesk.BusinessData.OldComponents
-@model DH.Helpdesk.Web.Areas.Admin.Models.DepartmentInputViewModel
+﻿@model DH.Helpdesk.Web.Areas.Admin.Models.DepartmentInputViewModel
+<table style="width: 740px">
+    <tr>
+        <td>@Translation.GetCoreTextTranslation("Tillgängliga")</td>
+        <td></td>
+        <td>@Translation.GetCoreTextTranslation("Valda")</td>
+    </tr>
+    <tr>
+        <td>
+            <select id="InvoiceAvailableOUs" multiple="multiple" name="InvoiceAvailableOUs" style="width: 350px; height: 120px">
+                @foreach (var av in Model.InvoiceAvailableOUs)
+                {
+                    <option value="@av.Value" class='@(av.Disabled? "DisabledChosen":"")'>@av.Text</option>
+                }
+            </select>
+        </td>
+        <td style="vertical-align:middle">
+            <input type="button" value="&lt;" class="btn" id="removeOU" />
+            <input type="button" value="&gt;" class="btn" id="addOU" />
+        </td>
+        <td>
+            <select id="InvoiceSelectedOUs" multiple="multiple" name="InvoiceSelectedOUs" style="width: 350px; height: 120px">
+                @foreach (var s in Model.InvoiceSelectedOUs)
+                {
+                    <option value="@s.Value" class='@(s.Disabled? "DisabledChosen":"")'>@s.Text</option>
+                }
+            </select>
+        </td>
+    </tr>
+</table>
 
-@if (Model != null)
-{
-    <h4>@Translation.GetCoreTextTranslation("Restriktion")</h4>
-    <div class="row">
-        <div class="span12">
-            <table class="tableform">
-                <tr>
-                    <td class="span3">
-                        @Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.Customer.Id)
-                    </td>
-                    <td class="span9">
-                    <td>
-                        <table>
-                            <tr>
-                                <td>@Translation.GetCoreTextTranslation("Tillgängliga")</td>
-                                <td></td>
-                                <td>@Translation.GetCoreTextTranslation("Valda")</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <select id="InvoiceAvailableOUs" multiple="multiple" name="InvoiceAvailableOUs" style="width: 350px; height: 120px">
-                                        @foreach (var av in Model.InvoiceAvailableOUs)
-                                        {
-                                            <option value="@av.Value" class='@(av.Disabled? "DisabledChosen":"")'>@av.Text</option>
-                                        }
-                                    </select>
-                                </td>
-                                <td style="vertical-align:middle">
-                                    <input type="button" value="&lt;" class="btn" id="removeOU" />
-                                    <input type="button" value="&gt;" class="btn" id="addOU" />
-                                </td>
-                                <td>
-                                    <select id="InvoiceSelectedOUs" multiple="multiple" name="InvoiceSelectedOUs" style="width: 350px; height: 120px">
-                                        @foreach (var s in Model.InvoiceSelectedOUs)
-                                        {
-                                            <option value="@s.Value" class='@(s.Disabled? "DisabledChosen":"")'>@s.Text</option>
-                                        }
-                                    </select>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-
-    <script type="text/javascript">
+<script type="text/javascript">
+    $(function() {
         var $vailableOUs = $("#InvoiceAvailableOUs");
         var $selectedOUs = $("#InvoiceSelectedOUs");
 
@@ -66,5 +47,5 @@
             $selectedOUs.get(0).selectedIndex = -1;
             return false;
         });
-    </script>
-}
+    });
+</script>

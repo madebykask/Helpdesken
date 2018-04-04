@@ -18,6 +18,7 @@ using DH.Helpdesk.Web.Areas.Inventory.Models;
 using DH.Helpdesk.Web.Models.Invoice;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Domain.Interfaces;
+using DH.Helpdesk.Domain.Invoice;
 using DH.Helpdesk.Services.BusinessLogic.Cases;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Grid;
 using DH.Helpdesk.Web.Infrastructure.Logger;
@@ -8031,23 +8032,26 @@ namespace DH.Helpdesk.Web.Controllers
 
         private JsonResult GetInvoiceTime(int departmentId, int? ouId = null)
         {
-            var canShow = _departmentService.CanShowInvoice(departmentId, ouId);
-            if (canShow)
+            var d = _departmentService.GetDepartment(departmentId);
+
+            var isDebitRequired =
+                d.ChargeMandatory.ToBool() &&
+                (d.InvoiceChargeType == InvoiceChargeType.PerDepartment
+                    ? d.Charge.ToBool()
+                    : _departmentService.CheckIfOUsRequireDebit(departmentId, ouId));
+
+            return Json(new
             {
-                var d = _departmentService.GetDepartment(departmentId);
-                return Json(new
-                {
-                    ShowInvoice = d.ShowInvoice.ToBool(),
-                    ChargeMandatory = d.ChargeMandatory.ToBool(),
-                    Charge = d.Charge.ToBool(),
-                    ShowInvoiceTime = d.ShowInvoiceTime,
-                    ShowInvoiceOvertime = d.ShowInvoiceOvertime,
-                    ShowInvoiceMaterial = d.ShowInvoiceMaterial,
-                    ShowInvoicePrice = d.ShowInvoicePrice
-                }, JsonRequestBehavior.AllowGet);
-            }
-            return null;
+                ShowInvoice = d.ShowInvoice.ToBool(),
+                ChargeMandatory = isDebitRequired,
+                Charge = d.Charge,
+                ShowInvoiceTime = d.ShowInvoiceTime,
+                ShowInvoiceOvertime = d.ShowInvoiceOvertime,
+                ShowInvoiceMaterial = d.ShowInvoiceMaterial,
+                ShowInvoicePrice = d.ShowInvoicePrice
+            }, JsonRequestBehavior.AllowGet);
         }
+
         #endregion
     }
 

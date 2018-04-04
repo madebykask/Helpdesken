@@ -173,6 +173,7 @@
     <Compile Include="GDPR\GDPRDataPrivacyFavorite.cs" />
     <Compile Include="GDPR\GDPROperationsAudit.cs" />
     <Compile Include="Invoice\InvoiceArticleProductAreaEntity.cs" />
+    <Compile Include="Invoice\InvoiceChargeType.cs" />
     <Compile Include="Invoice\InvoiceStatus.cs" />
     <Compile Include="Interfaces\IUserCommon.cs" />
     <Compile Include="LogFileExisting.cs" />

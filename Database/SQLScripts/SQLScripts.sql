@@ -183,7 +183,6 @@ BEGIN
 END
 GO
 
-
 --SPINT 11: 
 RAISERROR('Add Customer_Id column to tblGDPROperationsAudit', 10, 1) WITH NOWAIT
 IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Customer_Id' and sysobjects.name = N'tblGDPROperationsAudit')
@@ -205,6 +204,14 @@ IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id =
 BEGIN
     ALTER TABLE tblGDPRDataPrivacyFavorite
     ADD ReplaceEmails bit NOT NULL DEFAULT(1)
+END
+GO
+
+RAISERROR('Add InvoiceChargeType column to tblDepartment', 10, 1) WITH NOWAIT
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'InvoiceChargeType' and sysobjects.name = N'tblDepartment')
+BEGIN
+    ALTER TABLE [dbo].[tblDepartment]
+    ADD InvoiceChargeType INT NOT NULL DEFAULT(0)
 END
 GO
 

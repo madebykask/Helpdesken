@@ -940,7 +940,14 @@ function CaseInitForm() {
         $(invoiceFields).hide();
         $.get("/Cases/GetDepartmentInvoiceParameters/", { departmentId: departmentId, ouId: _ouId }, function (data) {
             if (data) {
+
+                //update values required for EditPage.js
                 _parameters.departmentInvoiceMandatory = data.ChargeMandatory;
+                _parameters.showInvoiceTime = data.ShowInvoiceTime;
+                _parameters.showInvoiceOvertime = data.ShowInvoiceOvertime;
+
+                console.log('>>> showInvoice.departmentInvoiceMandatory: ' + data.ChargeMandatory);
+                
                 if (data.Charge) {
                     $(invoiceSelector).show();
                 }

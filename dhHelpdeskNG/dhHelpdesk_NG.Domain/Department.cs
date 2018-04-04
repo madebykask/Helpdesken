@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Domain
+﻿using DH.Helpdesk.Domain.Invoice;
+
+namespace DH.Helpdesk.Domain
 {
     using DH.Helpdesk.Domain.Interfaces;
 
@@ -32,8 +34,7 @@
         public string Code { get; set; }
         public Guid? DepartmentGUID { get; set; }
         public DateTime? SynchronizedDate { get; set; }
-
-
+        
         public virtual Country Country { get; set; }
         public virtual Region Region { get; set; }
         public virtual ICollection<Case> Cases { get; set; }
@@ -43,6 +44,7 @@
 
         public int LanguageId { get; set; }
 
+        public InvoiceChargeType InvoiceChargeType { get; set; }
         public bool ShowInvoiceTime { get; set; }
         public bool ShowInvoiceOvertime { get; set; }
         public bool ShowInvoiceMaterial { get; set; }

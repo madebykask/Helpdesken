@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using DH.Helpdesk.Domain.Invoice
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.DepartmentInputViewModel
 @if (TempData["Error"] != null)
 {
@@ -167,14 +168,13 @@
                 <div class="container">
                     <h4>@Translation.GetCoreTextTranslation("Fakturering")</h4>
                     <div class="row">
-                        <div class="span12">
-                            <table class="tableform">
-
+                        <div>
+                            <table class="tableform span12">
                                 <tr>
-                                    <td class="span3">
+                                    <td class="span2">
                                         @Translation.GetCoreTextTranslation("Debitering")
                                     </td>
-                                    <td class="span9">
+                                    <td class="span10">
                                         <label class="checkbox">
                                             <input type="checkbox" name="department.Charge" @(Model.Department.Charge == 1 ? "checked=checked" : "") value="1" />
                                             <input type="hidden" name="department.Charge" value="0" />
@@ -186,10 +186,25 @@
                                     <td></td>
                                     <td>
                                         <label class="checkbox">
-                                            <input type="checkbox" name="department.ChargeMandatory" @(Model.Department.ChargeMandatory == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="checkbox" id="chkChargeMandatory" name="department.ChargeMandatory" @(Model.Department.ChargeMandatory == 1 ? "checked=checked" : "") value="1" />
                                             <input type="hidden" name="department.ChargeMandatory" value="0" />
                                             &nbsp;@Translation.GetCoreTextTranslation("Debitering är obligatorisk")
                                         </label>
+                                        <div id="invoiceChargeTypeDiv" style='padding-left: 25px;display: @(Model.Department.ChargeMandatory == 1 ? "block" : "none")'>
+                                            <div id="invoiceChargeTypes">
+                                                <label class="radio">
+                                                    @Html.RadioButton("department.InvoiceChargeType", "PerDepartment", new {id = "perDep"})
+                                                    &nbsp; @Translation.GetCoreTextTranslation("Avdelning")
+                                                </label>
+                                                <label class="radio">
+                                                    @Html.RadioButton("department.InvoiceChargeType", "PerOU", new {id = "perOUs"})
+                                                    &nbsp; @Translation.GetCoreTextTranslation("Organisationsenhet")
+                                                </label>
+                                                <div id="selectOUs" style="display: @(Model.Department.InvoiceChargeType == InvoiceChargeType.PerOU ? "block" : "none")">
+                                                    @Html.Partial("_Invoicing", Model)
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -262,28 +277,39 @@
                             @Html.HiddenFor(model => model.Department.DepartmentGUID)
                         </div>
                     </div>
-
-                    @Html.Partial("_Invoicing", Model)                                       
                 </div>
             </div>
         </div>
     </div>
 </div>
 <script type="text/javascript">
-    var $vailableOUs = $("#InvoiceAvailableOUs");
-    var $selectedOUs = $("#InvoiceSelectedOUs");
+    $(function() {
+        var $vailableOUs = $("#InvoiceAvailableOUs");
+        var $selectedOUs = $("#InvoiceSelectedOUs");
 
-    $("#addOU").click(function () {
-        $("#InvoiceAvailableOUs option:selected").remove().appendTo($selectedOUs.selector);
-        $vailableOUs.get(0).selectedIndex = -1;
-        $selectedOUs.get(0).selectedIndex = -1;
-        return false;
-    });
+        $('#chkChargeMandatory').change(function(e) {
+            var isChecked = $(this).is(":checked");
+            $('#invoiceChargeTypeDiv').toggle(isChecked);
+        });
 
-    $("#removeOU").click(function () {
-        $("#InvoiceSelectedOUs option:selected").remove().appendTo($vailableOUs.selector);
-        $vailableOUs.get(0).selectedIndex = -1;
-        $selectedOUs.get(0).selectedIndex = -1;
-        return false;
+        $('#invoiceChargeTypes input').change(function() {
+            var self$ = $(this);
+            var selectedId = self$.prop('id');
+            $('#selectOUs').toggle(selectedId === 'perOUs');
+        });
+
+        $("#addOU").click(function () {
+            $("#InvoiceAvailableOUs option:selected").remove().appendTo($selectedOUs.selector);
+            $vailableOUs.get(0).selectedIndex = -1;
+            $selectedOUs.get(0).selectedIndex = -1;
+            return false;
+        });
+
+        $("#removeOU").click(function () {
+            $("#InvoiceSelectedOUs option:selected").remove().appendTo($vailableOUs.selector);
+            $vailableOUs.get(0).selectedIndex = -1;
+            $selectedOUs.get(0).selectedIndex = -1;
+            return false;
+        });
     });
 </script>
