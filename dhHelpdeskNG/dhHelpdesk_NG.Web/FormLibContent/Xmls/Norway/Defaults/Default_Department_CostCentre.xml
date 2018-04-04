@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?><predefined><name>Department</name><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Accounting Service Office</selected>
+<show>6231</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Accounting Service Office Team 1</selected>
 <show>6231</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Accounting Service Office Team 2</selected>
 <show>6231</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Add-on</selected>
+<show>3570</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Administration Forus</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Administration Leangen</selected>
@@ -11,12 +15,8 @@
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Administration Slependen</selected>
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>After Sales Service Åsane</selected>
-<show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>After Sales Service Forus</selected>
 <show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>After Sales Service Furuset</selected>
-<show>6121</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>After Sales Service Leangen</selected>
 <show>6130</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>After Sales Service Team 1 Åsane</selected>
@@ -25,10 +25,6 @@
 <show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>After Sales Services Slependen</selected>
 <show>6121</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>All Channel user experience</selected>
-<show>6100</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>ASAP project</selected>
-<show>8520</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>BA09 Cooking &amp; Eating Åsane</selected>
 <show>3540</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Bathroom HFB 6</selected>
@@ -45,6 +41,8 @@
 <show>3340</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Bedroom HFB 04 05 Forus</selected>
 <show>3340</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Bedroom HFB 4 &amp; 5 Slependen</selected>
+<show>3340</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Bedroom HFB 4 Team 1</selected>
 <show>3340</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Bedroom HFB 4 Team 2</selected>
@@ -57,56 +55,34 @@
 <show>3340</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Bedroom Team 2 Åsane</selected>
 <show>3340</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Bedrooms &amp; Bathroom HFB 4/5/6 Slependen</selected>
-<show>3340</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Bedrooms &amp; Bathroom HFB 4/5/6 Team 1</selected>
-<show>3340</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>BN Business Reporting &amp; Expansion Team</selected>
-<show>6232</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>BN Staff Planning &amp; Commercial Team</selected>
-<show>6232</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Business Navigation</selected>
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Business Navigation &amp; Operations</selected>
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Business Navigation &amp; Operations Slepend</selected>
-<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Business Navigation IKEA Hjemme</selected>
-<show>7000</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Business Navigation Team</selected>
+<show>6232</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Business Navigation,Operations&amp;Finance</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Business Navigator Forus</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Business Navigator Slependen</selected>
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Check Out Åsane</selected>
-<show>6190</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Check Out Forus</selected>
-<show>6190</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Check Out Furuset</selected>
 <show>6190</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Check Out Leangen</selected>
 <show>6180</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Check Out Sørlandet</selected>
-<show>6180</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Check Out Team 1</selected>
-<show>6180</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6190</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Check Out Team 1 Åsane</selected>
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Check Out Team 2</selected>
-<show>6180</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Check Out Team 2 Åsane</selected>
 <show>6190</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Check Out Team 2 Sørlandet</selected>
-<show>6180</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Check Out Team 3</selected>
-<show>6180</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Check Out Team 3 Åsane</selected>
-<show>6180</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Check Out Team 4</selected>
-<show>6180</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6190</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Checkout Service</selected>
-<show>6180</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6190</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Checkout Services Slependen</selected>
 <show>6190</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Checkout Team 1 Forus</selected>
@@ -130,7 +106,7 @@
 <selected>Children HFB 9</selected>
 <show>3370</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Children's &amp; IKEA Family HFB 9</selected>
-<show>3340</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>3370</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Childrens IKEA HFB 09 Forus</selected>
 <show>3370</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Childrens IKEA HFB 9 Slependen</selected>
@@ -140,7 +116,7 @@
 <selected>Com In Åsane</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Com In Service Office</selected>
-<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6071</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Com In Slependen</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Com&amp;In</selected>
@@ -158,29 +134,21 @@
 <selected>Com-In Sørlandet</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Commercial Activity</selected>
-<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Commercial Activity Ringsaker</selected>
-<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>3570</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Commercial Activity Slependen</selected>
 <show>3570</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Commercial Activity Team 1</selected>
 <show>3570</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Commercial Bistro and Restaurant Sørland</selected>
-<show>3920</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Commercial Functions Slependen</selected>
+<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Commercial SFM &amp; Bistro</selected>
 <show>3960</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Commercial Team</selected>
-<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Commercial&amp;Operations Furuset</selected>
-<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Common Sales Forus</selected>
 <show>3300</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Communicator Leangen</selected>
 <show>6071</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Construction Norway</selected>
 <show>6800</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Consumer &amp; Customer Engagement SO</selected>
-<show>6070</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Cooking &amp; Eating HFB 14 - 15 Sørlandet</selected>
 <show>3540</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Cooking &amp; Eating HFB14_15 Slependen</selected>
@@ -193,15 +161,13 @@
 <show>3540</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Cookshop HFB 14 15 Forus</selected>
 <show>3540</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Cross Functional Team</selected>
-<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Cross Functional Team Furuset</selected>
-<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Cross Functional Team Leangen</selected>
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>CSC Business Services IKEA Hjemme</selected>
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Area Furuset</selected>
+<show>6130</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Customer Area Slependen</selected>
 <show>6130</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Area Team 1 Furuset</selected>
 <show>6130</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
@@ -209,18 +175,10 @@
 <show>6130</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Center Operation IKEA Hjemme</selected>
 <show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Customer Centre Operations NO</selected>
-<show>7000</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Customer Experience SO</selected>
-<show>6100</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Customer Information</selected>
-<show>6100</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Customer Insight and Shopping Tool</selected>
-<show>6130</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Knowledge &amp; Insight</selected>
-<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>7000</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relation &amp; Checkout Sørlandet</selected>
-<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>3000</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations &amp; Ikea Food Ringsaker</selected>
 <show>3921</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations Åsane</selected>
@@ -233,33 +191,35 @@
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations Slependen</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Customer Relations SO</selected>
+<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations Team 1 Slependen</selected>
-<show>6190</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6180</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations Team 2 Slependen</selected>
-<show>6190</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6180</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations Team 3 Slependen</selected>
-<show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6190</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations Team 4 Slependen</selected>
-<show>6121</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6190</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations Team 5 Slependen</selected>
-<show>6121</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6190</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations Team 6 Slependen</selected>
-<show>6180</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6190</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations Team 7 Slependen</selected>
-<show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6121</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations Team 8 Slependen</selected>
-<show>6180</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6150</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Restaurant</selected>
 <show>3920</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Serv, Exchange&amp;Return Sørlandet</selected>
 <show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Customer Service Åsane</selected>
-<show>6130</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Customer Service</selected>
+<show>6100</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Customer Service Backline team</selected>
+<show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service Centre IKEA Hjemme</selected>
 <show>7000</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service Centre team 1</selected>
-<show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Customer Service Centre team 10</selected>
 <show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service Centre team 2</selected>
 <show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
@@ -269,10 +229,6 @@
 <show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service Centre team 5</selected>
 <show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Customer Service Centre team 6</selected>
-<show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Customer Service Centre team 7</selected>
-<show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service Centre team 8</selected>
 <show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service Centre team 9</selected>
@@ -280,7 +236,9 @@
 <selected>Customer Service Team 1 Åsane</selected>
 <show>6130</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Service Team 2 Åsane</selected>
-<show>6180</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6130</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Decor Outdoor Other HFB16-17-20 Slepende</selected>
+<show>3560</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Decoration Åsane</selected>
 <show>3560</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Decoration HFB 16</selected>
@@ -291,34 +249,24 @@
 <show>3560</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Decoration HFB 16 Team 2</selected>
 <show>3560</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Decoration HFB16</selected>
-<show>3560</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Decoration Team 1</selected>
 <show>3560</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Deputy Business Navigation</selected>
-<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Deputy HFB 4-5-9 Sørlandet</selected>
-<show>3340</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Delivery &amp; Service Team</selected>
+<show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Deputy Logistics Åsane</selected>
+<show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Logistics Forus</selected>
 <show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Deputy Logistics SO</selected>
-<show>4000</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Deputy Store Slependen</selected>
-<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Deputy-Lighting HFB10</selected>
-<show>3520</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Digital Marketing com. &amp; Editorial con.</selected>
-<show>6070</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Dining HFB 8</selected>
-<show>3350</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Easy Buying Forus</selected>
-<show>4050</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Digital Channels</selected>
+<show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Ecommerce 076</selected>
+<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>eCommerce Sales</selected>
-<show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Ecommerce Sales team 2</selected>
 <show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Establishment</selected>
 <show>6071</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Exchange &amp; Return</selected>
+<show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Exchange &amp; Return 1</selected>
 <show>6121</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Exchange &amp; Return 2</selected>
@@ -327,6 +275,8 @@
 <show>6123</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Exchange and Returns</selected>
 <show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>External Communications SO</selected>
+<show>6070</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>External Full Serve Furuset</selected>
 <show>4050</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>External Full Serve Team 1</selected>
@@ -339,10 +289,6 @@
 <show>6800</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Finance</selected>
 <show>6230</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Finance/Accounting SO Team 1</selected>
-<show>6231</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Finance/Accounting SO Team 2</selected>
-<show>6231</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Full Serve Forus</selected>
 <show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Full Serve Leangen</selected>
@@ -350,25 +296,27 @@
 <selected>Goods Flow Åsane</selected>
 <show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Flow Leangen</selected>
-<show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>4000</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods flow Team 1</selected>
 <show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Flow Team 1 Åsane</selected>
-<show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>4040</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Flow Team 2</selected>
 <show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Flow Team 2 Åsane</selected>
-<show>4040</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Goods Flow Team 3</selected>
 <show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Goods Flow Team 3</selected>
+<show>4050</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Flow Team 3 Åsane</selected>
-<show>4040</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>4050</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Flow Team 4</selected>
 <show>4040</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Flow Team 5</selected>
 <show>4040</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods flow warehouse Forus</selected>
 <show>4040</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Goods Flow Warehouse Slependen</selected>
+<show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Receiving</selected>
 <show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Replenishment Leangen</selected>
@@ -395,12 +343,6 @@
 <show>3530</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>HFB 6,11-13 Bathroom,Textiles&amp;Rugs Åsane</selected>
 <show>3530</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>HFB 7 Team 2</selected>
-<show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>HFB 7 Team 3</selected>
-<show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>HFB 7 Team 4</selected>
-<show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Home org &amp; Lighting HFB 10 18 19 Forus</selected>
 <show>3550</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Home org Leangen HFB 18-19</selected>
@@ -424,17 +366,17 @@
 <selected>HR Team Customer Service Centre</selected>
 <show>7000</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>HR-Apprentice</selected>
-<show>6830</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6310</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Human Rersource Åsane</selected>
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Human Resource</selected>
-<show>6830</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6600</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Human Resource Forus</selected>
 <show>6600</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Human Resource Leangen</selected>
 <show>6600</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Human Resource Service Office</selected>
-<show>6650</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Human Resource Slependen</selected>
 <show>6600</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IF Åsane</selected>
@@ -455,6 +397,8 @@
 <show>3960</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IF Bistro Team 2</selected>
 <show>3960</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>IF Bistro Team 2 Åsane</selected>
+<show>3960</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IF Bistro Team 3</selected>
 <show>3960</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IF Kitchen Åsane</selected>
@@ -472,7 +416,7 @@
 <selected>IF Kitchen Production Team 3</selected>
 <show>3923</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>If Kitchen Slependen</selected>
-<show>3923</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>3960</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IF Kitchen Team 1 Åsane</selected>
 <show>3940</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IF Kitchen Team 2 Åsane</selected>
@@ -488,7 +432,7 @@
 <selected>IF Restaurant Leangen</selected>
 <show>3920</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IF restaurant Slependen</selected>
-<show>3920</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>3923</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IF Restaurant Team 1</selected>
 <show>3920</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IF Restaurant Team 1 Åsane</selected>
@@ -499,6 +443,8 @@
 <show>3920</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IF Restaurant Team 3</selected>
 <show>3920</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>IF Swedish Food &amp; Bistro</selected>
+<show>3960</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Business</selected>
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Food</selected>
@@ -509,6 +455,8 @@
 <show>3923</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Food Leangen</selected>
 <show>3921</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>IKEA Food Restaurant Sørlandet</selected>
+<show>3920</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Food Slependen</selected>
 <show>3921</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Food Sørlandet</selected>
@@ -543,35 +491,25 @@
 <show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen HFB 7</selected>
 <show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Kitchen HFB 7 &amp; 8 Slependen</selected>
+<show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen Production</selected>
 <show>3940</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen Team 1</selected>
 <show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen Team 1 Åsane</selected>
 <show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Kitchen Team 1.1</selected>
-<show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Kitchen Team 1.2</selected>
-<show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen Team 2</selected>
 <show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen Team 2 Åsane</selected>
 <show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Kitchen Team 2.1</selected>
-<show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Kitchen Team 2.2</selected>
-<show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen Team 3</selected>
 <show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Kitchen Team 3.1</selected>
-<show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Kitchen Team 3.2</selected>
+<selected>Kitchen Team 3 Åsane</selected>
 <show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchen Team 4</selected>
 <show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Kitchen Team 4.1</selected>
-<show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Kitchen Team 4.2</selected>
+<selected>Kitchen Team 5</selected>
 <show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Kitchens HFB 07 08 Forus</selected>
 <show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
@@ -585,13 +523,11 @@
 <show>3520</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Lighting HFB 10 Forus</selected>
 <show>3520</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Lighting HFB 10 Team 2</selected>
-<show>3520</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Lighting Leangen HFB 10</selected>
 <show>3520</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Lighting Team 1</selected>
 <show>3520</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Lightning and Home Org.HFB10-18-19</selected>
+<selected>Lighting, Cooking &amp; Eating HFB 10/14/15</selected>
 <show>3520</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Lightning HFB10 Slependen</selected>
 <show>3520</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
@@ -605,38 +541,34 @@
 <show>3320</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Living Room&amp;Dining HFB 1 Team 2 Furuset</selected>
 <show>3320</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Living Room&amp;Dining HFB 1 Team 3 Furuset</selected>
-<show>3320</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Livingroom &amp; Storage HFB1-2 Slependen</selected>
-<show>3320</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Livingroom &amp; Storage HFB1-2 Team 1</selected>
 <show>3320</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Livingroom&amp;Storage HFB 1-2</selected>
 <show>3320</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Livingroom-Storage-Work Spaces HFB 1-2-3</selected>
 <show>3320</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Logistic Sørlandet</selected>
-<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6310</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Logistics Administration Furuset</selected>
 <show>4020</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Logistics Åsane</selected>
-<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Logistics Forus</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Logistics Furuset</selected>
 <show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Logistics Goods Flow Leangen</selected>
 <show>4040</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Logistics Leangen</selected>
+<selected>Logistics Goods Recieving Leangen</selected>
+<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Logistics Goodsadm Åsane</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Logistics Ringsaker</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Logistics Sales Support Leangen</selected>
-<show>4020</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>4050</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Logistics Service Office</selected>
 <show>4000</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Logistics Slependen</selected>
-<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>4101</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Logistics Team FS</selected>
 <show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Logistics Team MH</selected>
@@ -650,31 +582,35 @@
 <selected>Maintenance Forus</selected>
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Maintenance Furuset</selected>
-<show>6830</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6310</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Maintenance Leangen</selected>
-<show>6830</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6310</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Maintenance Slependen</selected>
-<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6310</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Maintenance Sørlandet</selected>
-<show>6830</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6310</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Markethall</selected>
+<show>3300</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Marketing</selected>
-<show>6073</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Marketing communications SO</selected>
+<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Marketing Relationship SO</selected>
 <show>6070</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Marketing Service Office</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Mobility</selected>
-<show>6600</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Media SO</selected>
+<show>6070</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Multichannel</selected>
 <show>8249</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Operation Leangen</selected>
+<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Operations Åsane</selected>
+<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Operations Furuset</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Oslo Project</selected>
+<show>7050</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>P3 Implementation</selected>
 <show>4000</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Pick-Up Point Logistic</selected>
-<show>6204</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Pick-Up Point Sales</selected>
-<show>6204</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Pick-up Point Team 1</selected>
 <show>6206</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Pick-up Point Team 2</selected>
@@ -689,16 +625,16 @@
 <show>3300</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Property Service Office</selected>
 <show>7050</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Quality IKEA CSC NO</selected>
-<show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Recovery</selected>
+<show>6330</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Recovery Åsane</selected>
 <show>6330</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Recovery Sørlandet</selected>
 <show>6330</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Restaurant team 1</selected>
-<show>3920</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>3923</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Restaurant team 2</selected>
-<show>3920</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>3923</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Retail 2</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Retail Project</selected>
@@ -723,30 +659,30 @@
 <show>4020</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales &amp; Supply Support Sørlandet</selected>
 <show>4020</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Sales 2 Sørlandet</selected>
-<show>3000</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales Activity Forus</selected>
 <show>3300</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales Åsane</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Sales Deputy Core Area BEDROOM &amp; BATH</selected>
-<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Sales Deputy Market hall/Flexipool</selected>
+<show>3300</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Sales Deputy Showroom</selected>
+<show>3570</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales Forus</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Sales HFB 1 2 9 92</selected>
+<selected>Sales HFB 1 2 92</selected>
 <show>3320</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales HFB 10 18</selected>
 <show>3520</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Sales HFB 11 12 13</selected>
+<show>3530</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales HFB 14 15</selected>
 <show>3540</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Sales HFB 16 17</selected>
-<show>3560</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Sales HFB 3 4 5</selected>
-<show>3340</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Sales HFB 17 CAL Xmas</selected>
+<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales HFB 4 5</selected>
 <show>3340</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Sales HFB 6 11 12 13</selected>
-<show>3530</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Sales HFB 6 16</selected>
+<show>3560</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales HFB 7 8</selected>
 <show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales Markedhall</selected>
@@ -763,18 +699,12 @@
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales Showroom</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Sales Showroom Leangen</selected>
-<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Sales Slependen</selected>
-<show>3540</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Sales SO</selected>
+<show>3300</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales Sørlandet</selected>
-<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>3000</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales Support Slependen</selected>
 <show>4020</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Sales Team 1 SO</selected>
-<show>3300</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Sales Team 2 SO</selected>
-<show>3300</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Security Responsible</selected>
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Self Serve &amp; Full Serve Sørlandet</selected>
@@ -784,11 +714,11 @@
 <selected>Self Serve and outdoor Leangen</selected>
 <show>3400</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Self Serve Forus</selected>
-<show>3400</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>3520</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Self Service</selected>
 <show>3400</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Self Service Slependen</selected>
-<show>3400</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>3560</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Self Service Team 1</selected>
 <show>3400</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Self Service Team 1 Åsane</selected>
@@ -797,27 +727,17 @@
 <show>3400</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Self Service Team 2 Åsane</selected>
 <show>3400</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Service Adm. Team 1</selected>
-<show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Service Administration Leangen</selected>
 <show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Service Business</selected>
 <show>3300</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>SFM &amp; Birstro team 1</selected>
 <show>3960</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Shopping Experience Slependen</selected>
-<show>6190</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Staff Planning</selected>
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Staff Planning IKEA Hjemme</selected>
-<show>6120</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Staff Planning Slependen</selected>
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Staff Scheduling</selected>
-<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Staffplanning IKEA Åsane</selected>
-<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Staffplanning Team 1 Åsane</selected>
 <show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Storage HFB 18</selected>
 <show>3550</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
@@ -826,11 +746,11 @@
 <selected>Store Åsane 441</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Store Forus 126</selected>
-<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Store Furuset 095</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Store Leangen 371</selected>
-<show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Store Ringsaker 390</selected>
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Store Slependen 091</selected>
@@ -841,25 +761,27 @@
 <show>7010</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Talent Team</selected>
 <show>6630</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Team 1</selected>
+<show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Team 1 Goods Flow Forus</selected>
 <show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Team 1 Markethall Slependen</selected>
 <show>4040</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Team 2</selected>
+<show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Team 2 Self Serve Slependen</selected>
 <show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Team 3</selected>
+<show>3360</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Team 3 Goods Receiving</selected>
 <show>4030</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Team 4 HLP Slependen</selected>
 <show>4050</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Team Bistro/SFM</selected>
-<show>3960</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Textiles &amp; Bathrooms HFB 11-12-13-16</selected>
 <show>3530</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Textiles &amp; Rugs HFB 11-12-13 Slependen</selected>
 <show>3530</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Textiles HFB 06 11 12 13 Forus</selected>
-<show>3530</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Textiles HFB 11-12-13</selected>
 <show>3530</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Textiles HFB 11-12-13 Team 1</selected>
 <show>3530</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
@@ -881,13 +803,11 @@
 <show>6071</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Visual Merchandising Sørlandet</selected>
 <show>6071</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Web, E.commerce and Digital 076</selected>
-<show>6210</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Work Åsane</selected>
-<show>3350</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Work IKEA &amp; Dining HFB 3-8 Slependen</selected>
 <show>3350</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Work IKEA HFB 3</selected>
 <show>3350</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Work IKEA HFB 3 Slependen</selected>
+<show>3370</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Work IKEA HFB3 Forus</selected>
 <show>3350</show></dependent></predefined>

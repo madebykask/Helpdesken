@@ -10,10 +10,6 @@
     <show>Rent Deduction,Uniform Deduction</show>
   </dependent>
   <dependent>
-    <selected>Dual Payroll (ZY)</selected>
-    <show>Rent Deduction,Uniform Deduction</show>
-  </dependent>
-  <dependent>
     <selected>Salaried Management</selected>
     <show>Rent Deduction,Uniform Deduction</show>
   </dependent>

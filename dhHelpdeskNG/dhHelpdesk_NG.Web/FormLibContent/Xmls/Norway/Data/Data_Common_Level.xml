@@ -2,13 +2,11 @@
 <options>
 <option value=""></option>
 <option value="Ansatt over 15 år sammenhengende IKEA Food">Ansatt over 15 år sammenhengende IKEA Food</option>
-<option value="Etter 15. års praksis som kokk">Etter 15. års praksis som kokk</option> <!-- Added text to dropdown #58824 -->
 <option value="Ansatte over 20 år sammenhengende IKEA Food">Ansatte over 20 år sammenhengende IKEA Food</option>
-<option value="Etter 20. års praksis som kokk">Etter 20. års praksis som kokk</option> <!-- Added text to dropdown #58824 -->
 <option value="Beg.lønn (fra fylte 18 år)">Beg.lønn (fra fylte 18 år)</option>
 <option value="Begynnerlønn for arbeidstakere over 20 år / etter 4 mnd. Praksis over 18 år">Begynnerlønn for arbeidstakere over 20 år / etter 4 mnd. Praksis over 18 år</option>
-<option value="Etter 10. års praksis i bransjen">Etter 10 års praksis i bransjen</option>
-<option value="Etter 10. års praksis som kokk">Etter 10 års praksis som kokk</option>
+<option value="Etter 10 års praksis i bransjen">Etter 10 års praksis i bransjen</option>
+<option value="Etter 10 års praksis som kokk">Etter 10 års praksis som kokk</option>
 <option value="Etter 2. års praksis i bransjen">Etter 2. års praksis i bransjen</option>
 <option value="Etter 2. års praksis som kokk">Etter 2. års praksis som kokk</option>
 <option value="Etter 4. års praksis i bransjen">Etter 4. års praksis i bransjen</option>

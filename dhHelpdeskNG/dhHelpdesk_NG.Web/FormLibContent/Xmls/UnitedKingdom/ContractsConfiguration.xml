@@ -6,25 +6,23 @@
       <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and bring it with you to your first day of induction, along with your completed starter pack. In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
     </lastParagraphText>
     <lastParagraphText2>
-      <![CDATA[I, {FirstName} {LastName} confirm that this offer of employment is acceptable to me and I have read understood and agree to the Terms and Conditions Appendix and information within Section 1 of the Co-worker Handbook.
+      <![CDATA[I, {FirstName} {LastName} confirm that this offer of employment is acceptable to me and I have read understood and agree to the Terms and Conditions in Section 1 of the Co-worker handbook and in the Terms and Conditions Appendix.
 
-I authorise IKEA Ltd to source pre-employment references and authorise them to provide references when requested on future occasions.  IKEA reserves the right to terminate employment if these references are not satisfactory.]]>
+I authorise IKEA Ltd to source pre-employment references and authorise them to provide references when requested on future occasions. IKEA reserves the right to terminate employment if these references are not satisfactory.]]>
     </lastParagraphText2>
-    <encTextLeft><![CDATA[Enc:]]></encTextLeft>
-    <encTextRight><![CDATA[Terms and Conditions Appendix]]></encTextRight>
+    <encTextLeft></encTextLeft>
+    <encTextRight></encTextRight>
   </contract>
 
   <contract process="Hiring" id="Doncaster" addressBoxUse="true" signatureUse="true" pageNumberUse="false" draftTextUse="true">
     <lastParagraphText>
-      <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and bring it with you to your first day of induction, along with your completed starter pack. In the meantime if you have any queries at all please do not hesitate to call us on 01302 836451. We look forward to seeing you on the day.]]>
+      <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and bring it with you to your first day of induction, along with your completed starter pack. In the meantime if you have any queries at all please do not hesitate to call us on 01302 836451.  We look forward to seeing you on the day.]]>
     </lastParagraphText>
-     <lastParagraphText2>
-      <![CDATA[I, {FirstName} {LastName}, confirm that this offer of employment is acceptable to me and I have read understood and agree to the Terms and Conditions Appendix and information within Section 1 of the Co-worker Handbook.
-
-I authorise IKEA Ltd to source pre-employment references and authorise them to provide references when requested on future occasions.  IKEA reserves the right to terminate employment if these references are not satisfactory.]]>
+    <lastParagraphText2>
+      <![CDATA[I, {FirstName} {LastName}, confirm that this offer of employment is acceptable to me and I have read understood and agree to the Terms and Conditions in Section 1 of the Co-worker handbook and in the Terms and Conditions Appendix. I authorise IKEA Ltd to source pre-employment references and authorise them to provide references when requested on future occasions.]]>
     </lastParagraphText2>
-    <encTextLeft><![CDATA[Enc:]]></encTextLeft>
-    <encTextRight><![CDATA[Terms and Conditions Appendix]]></encTextRight>
+    <encTextLeft></encTextLeft>
+    <encTextRight></encTextRight>
   </contract>
   
   <contract process="ChangeTermsConditions" id="Annualised" addressBoxUse="false" signatureUse="true" pageNumberUse="false" draftTextUse="true">
@@ -210,9 +208,9 @@ Stamped Addressed envelope]]>
 
 I authorise IKEA Ltd to source pre-employment and authorise them to provide references when requested on future occasions. IKEA reserves the right to terminate employment if these references are not satisfactory.]]>
     </lastParagraphText2>
-    <encTextLeft><![CDATA[Enc.: ]]></encTextLeft>
+    <encTextLeft><![CDATA[Enc.:]]></encTextLeft>
     <encTextRight>
-      <![CDATA[ Terms and Conditions Appendix]]>
+      <![CDATA[Terms and Conditions Appendix]]>
     </encTextRight>
   </contract>
 
@@ -221,13 +219,13 @@ I authorise IKEA Ltd to source pre-employment and authorise them to provide refe
       <![CDATA[I would be grateful if you could sign the enclosed copy of this letter as acceptance of the offer and terms and conditions.  Please bring this along to the Induction, along with your completed starter pack.  In the meantime if you have any queries at all please do not hesitate to call us on {TelNbr}. We look forward to seeing you on the day.]]>
     </lastParagraphText>
     <lastParagraphText2>
-      <![CDATA[I {FirstName} {LastName} confirm that this offer of employment is acceptable to me and I have read understood and agree to the Terms and Conditions Appendix and information within Section 1 of the Co-worker Handbook.
+      <![CDATA[I {FirstName} {LastName} confirm that this offer of employment is acceptable to me and I have read understood and agree to the Terms and Conditions in Section 1 of the Co-worker handbook and in the Terms and Conditions Appendix.
 
 I authorise IKEA Ltd to source pre-employment and authorise them to provide references when requested on future occasions. IKEA reserves the right to terminate employment if these references are not satisfactory.]]>
     </lastParagraphText2>
-    <encTextLeft><![CDATA[Enc.: ]]></encTextLeft>
+    <encTextLeft><![CDATA[Enc.:]]></encTextLeft>
     <encTextRight>
-      <![CDATA[ Terms and Conditions Appendix.]]>
+      <![CDATA[Terms and Conditions Appendix]]>
     </encTextRight>
   </contract>
 

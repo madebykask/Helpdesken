@@ -14,6 +14,10 @@
     <show>6830</show>
   </dependent>
   <dependent>
+    <selected>BNO_IKEA Green &amp; Recovery Gwangmyeong</selected>
+    <show>6330</show>
+  </dependent>
+  <dependent>
     <selected>BNO_Business Navigation &amp; Oper. Gwangmyeong</selected>
     <show>7010</show>
   </dependent>
@@ -472,17 +476,5 @@
   <dependent>
     <selected>BNO_Recovery Gwangmyeong 1.1</selected>
     <show>6330</show>
-  </dependent>
-  <dependent>
-    <selected>Logistics_Goods Flow 3.1 (Goods Out) Gwangmyeong</selected>
-    <show>4051</show>
-  </dependent>
-  <dependent>
-    <selected>Logistics_Goods Flow 2.2(Repl.) Gwnagmyeong</selected>
-    <show>4040</show>
-  </dependent>
-  <dependent>
-    <selected>Logistics_Goods Flow 1.3(Goods In) Gwnagmyeong</selected>
-    <show>4030</show>
   </dependent>
 </predefined>

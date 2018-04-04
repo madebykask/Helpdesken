@@ -23,36 +23,14 @@
     </pages>
   </contract>
 
-  <contract process="Hiring"  id="Store_So_merged" barcodeUse="true" barcodeShowOnMinStateSecondaryId="50" draftTextUse="true" draftShowOnMinStateSecondaryId="20" draftShowOnMaxStateSecondaryId="40">
-    <employerSignatureText><![CDATA[Handtekening werkgever<br />IKEA B.V.<br />]]></employerSignatureText>
-    <employeeSignatureText><![CDATA[Handtekening medewerker<br /><br /><br />]]></employeeSignatureText>
-    <documentTypeCode><![CDATA[w101]]></documentTypeCode>
-    <pages>
-      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Hiring/Pdfs/Store_So_merged.cshtml" MarginTop="69" MarginBottom="55"></page> <!--MarginBottom="69" -->
-      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Hiring/Pdfs/Store_So_mergedCopyPages.cshtml" MarginTop="69" MarginBottom="55"></page> <!--MarginBottom="69" -->
-      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_FormPersonalData.cshtml" MarginTop="50" MarginBottom="50"></page>
-      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_IcoCoWorker.cshtml" MarginTop="0" MarginBottom="50"></page>
-    </pages>
-  </contract>
-
   <contract process="Hiring" id="Apprentice" barcodeUse="true" barcodeShowOnMinStateSecondaryId="50" draftTextUse="true" draftShowOnMinStateSecondaryId="20" draftShowOnMaxStateSecondaryId="40">
     <employerSignatureText><![CDATA[Handtekening werkgever<br />IKEA B.V.<br />]]></employerSignatureText>
     <employeeSignatureText><![CDATA[Handtekening stagiair<br /><br /><br />]]></employeeSignatureText>
     <documentTypeCode><![CDATA[w101]]></documentTypeCode>
     <pages>
       <page viewName="~/FormLibContent/Areas/Netherlands/Views/Hiring/Pdfs/Apprentice.cshtml" MarginTop="69" MarginBottom="69"></page>
-      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_FormPersonalDataApprentice.cshtml" MarginTop="50" MarginBottom="50"></page>
-      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_IcoCoWorkerApprentice.cshtml" MarginTop="0" MarginBottom="50"></page>
-    </pages>
-  </contract>
-  <contract process="Hiring" id="Holiday" barcodeUse="true" barcodeShowOnMinStateSecondaryId="50" draftTextUse="true" draftShowOnMinStateSecondaryId="20" draftShowOnMaxStateSecondaryId="40">
-    <employerSignatureText><![CDATA[Handtekening werkgever<br />IKEA B.V. Nederland<br />]]></employerSignatureText>
-    <employeeSignatureText><![CDATA[Handtekening vakantiekracht<br /><br /><br />]]></employeeSignatureText>
-    <documentTypeCode><![CDATA[w101]]></documentTypeCode>
-    <pages>
-      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Hiring/Pdfs/Holiday.cshtml" MarginTop="69" MarginBottom="69"></page> <!--Ändrat från Apprentice till Holiday-->
-      <!--<page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_FormPersonalDataHoliday.cshtml" MarginTop="50" MarginBottom="50"></page>--> <!--Ändrat från _FormPersonalData till _FormPersonalDataHoliday-->
-      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_IcoCoWorkerHoliday.cshtml" MarginTop="0" MarginBottom="50"></page> <!--Ändrat från _IcoCoWorker till _IcoCoWorkerHoliday-->
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_FormPersonalData.cshtml" MarginTop="50" MarginBottom="50"></page>
+      <page viewName="~/FormLibContent/Areas/Netherlands/Views/Shared/Pdfs/_IcoCoWorker.cshtml" MarginTop="0" MarginBottom="50"></page>
     </pages>
   </contract>
 

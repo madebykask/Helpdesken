@@ -9,13 +9,6 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Accounting Assistant - Reconciliation</selected>
-    <show1>44</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Activity Manager</selected>
     <show1>49</show1>
     <show2></show2>
@@ -37,13 +30,6 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>After Sales Team Leader</selected>
-    <show1>48</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>ASM</selected>
     <show1>59</show1>
     <show2>Level 2</show2>
@@ -58,13 +44,6 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Bathshop Team Leader</selected>
-    <show1>46</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Business Navigation &amp; Operations Manager</selected>
     <show1>56</show1>
     <show2>Level 2</show2>
@@ -77,13 +56,6 @@
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
     <show4>Salaried</show4>
-  </dependent>
-  <dependent>
-    <selected>Carpenter</selected>
-    <show1>46</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
   </dependent>
   <dependent>
     <selected>Checkout Services Co-worker</selected>
@@ -105,13 +77,6 @@
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
     <show4>Salaried</show4>
-  </dependent>
-  <dependent>
-    <selected>Checkout Services Team Leader</selected>
-    <show1>46</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
   </dependent>
   <dependent>
     <selected>Com &amp; In Manager</selected>
@@ -154,13 +119,6 @@
     <show2></show2>
     <show3>Co-worker</show3>
     <show4>Salaried</show4>
-  </dependent>
-  <dependent>
-    <selected>Customer Relations Team Leader</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
   </dependent>
   <dependent>
     <selected>Customer Service Co-worker</selected>
@@ -212,13 +170,6 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Facility Specialist</selected>
-    <show1>48</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Food Production Specialist</selected>
     <show1>44</show1>
     <show2>Level 1</show2>
@@ -226,25 +177,11 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Food Production Specialist</selected>
-    <show1>44</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Furniture Builder</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4>Salaried</show4>
-  </dependent>
-  <dependent>
-    <selected>Furniture Builder</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4>Dual Payroll (ZY)</show4>
   </dependent>
   <dependent>
     <selected>Goods Flow Co-worker</selected>
@@ -268,25 +205,11 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Goods Flow Specialist</selected>
-    <show1>49</show1>
-    <show2>Level 1</show2>
-    <show3>Level 1</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Goods Flow Team Leader</selected>
     <show1>46</show1>
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
     <show4>Salaried</show4>
-  </dependent>
-  <dependent>
-    <selected>Goods Flow Team Leader</selected>
-    <show1>46</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
   </dependent>
   <dependent>
     <selected>Goods Flow Team Manager</selected>
@@ -303,13 +226,6 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Graphic Communication Co-worker</selected>
-    <show1>46</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Graphic Communication Leader</selected>
     <show1>49</show1>
     <show2>Level 1</show2>
@@ -322,13 +238,6 @@
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
     <show4>Salaried</show4>
-  </dependent>
-  <dependent>
-    <selected>HR Administrator</selected>
-    <show1>45</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
   </dependent>
   <dependent>
     <selected>HR Generalist</selected>
@@ -366,25 +275,11 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>IKEA Food Team Leader</selected>
-    <show1>46</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Interior Design Co-worker</selected>
     <show1>46</show1>
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
     <show4>Salaried</show4>
-  </dependent>
-  <dependent>
-    <selected>Interior Design Co-worker</selected>
-    <show1>46</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
   </dependent>
   <dependent>
     <selected>Interior Design Manager</selected>
@@ -408,25 +303,11 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>IT Support</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Kitchen Installation Specialist</selected>
     <show1>47</show1>
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
     <show4>Salaried</show4>
-  </dependent>
-  <dependent>
-    <selected>Kitchen Installation Specialist</selected>
-    <show1>47</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
   </dependent>
   <dependent>
     <selected>Kitchen Production Manager</selected>
@@ -478,25 +359,11 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Local Marketing Specialist</selected>
-    <show1>46</show1>
-    <show2></show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Local Marketing Specialist   IKEA FAMILY</selected>
     <show1>49</show1>
     <show2>Level 1</show2>
     <show3>Level 1</show3>
     <show4>Salaried</show4>
-  </dependent>
-  <dependent>
-    <selected>Local Marketing Specialist   IKEA FAMILY</selected>
-    <show1>49</show1>
-    <show2>Level 1</show2>
-    <show3>Level 1</show3>
-    <show4>Dual Payroll (ZY)</show4>
   </dependent>
   <dependent>
     <selected>Local Marketing Specialist   Local Comms</selected>
@@ -506,13 +373,6 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Local Marketing Specialist   Local Comms</selected>
-    <show1>46</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Local Marketing Specialist (Web Channel)</selected>
     <show1>47</show1>
     <show2></show2>
@@ -520,25 +380,11 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Local Marketing Specialist (Web Channel)</selected>
-    <show1>47</show1>
-    <show2></show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Local Marketing Specialist Local Comms</selected>
     <show1></show1>
     <show2></show2>
     <show3></show3>
     <show4>Salaried</show4>
-  </dependent>
-  <dependent>
-    <selected>Local Marketing Specialist Local Comms</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4>Dual Payroll (ZY)</show4>
   </dependent>
   <dependent>
     <selected>Project Manager Picking and Delivery</selected>
@@ -555,13 +401,6 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Q-Store Product Quality Technician</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Q-Store Quality Manager</selected>
     <show1></show1>
     <show2></show2>
@@ -576,25 +415,11 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Range Specialist</selected>
-    <show1></show1>
-    <show2></show2>
-    <show3></show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Range Support</selected>
     <show1>45</show1>
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
     <show4>Salaried</show4>
-  </dependent>
-  <dependent>
-    <selected>Range Support</selected>
-    <show1>45</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
   </dependent>
   <dependent>
     <selected>Recovery Co-worker</selected>
@@ -618,13 +443,6 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Recovery Team Leader</selected>
-    <show1>46</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Risk Supervisor</selected>
     <show1>46</show1>
     <show2></show2>
@@ -632,25 +450,11 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Risk Supervisor</selected>
-    <show1>46</show1>
-    <show2></show2>
-    <show3></show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Safety &amp; Security Co-worker</selected>
     <show1>43</show1>
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
     <show4>Salaried</show4>
-  </dependent>
-  <dependent>
-    <selected>Safety &amp; Security Co-worker</selected>
-    <show1>43</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
   </dependent>
   <dependent>
     <selected>Safety &amp; Security Manager</selected>
@@ -667,13 +471,6 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Safety and Security Function Support (Specialist)</selected>
-    <show1>48</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Sales &amp; Supply Support Manager</selected>
     <show1>51</show1>
     <show2>Level 1</show2>
@@ -686,13 +483,6 @@
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
     <show4>Salaried</show4>
-  </dependent>
-  <dependent>
-    <selected>Sales &amp; Supply Support Specialist</selected>
-    <show1>46</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
   </dependent>
   <dependent>
     <selected>Sales Co-worker</selected>
@@ -709,13 +499,6 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Sales External Co-worker</selected>
-    <show1>50</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Sales Manager</selected>
     <show1>55</show1>
     <show2>Level 2</show2>
@@ -730,28 +513,7 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Sales Specialist  - Training</selected>
-    <show1>45</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Sales Team Leader</selected>
-    <show1>46</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Salaried</show4>
-  </dependent>
-  <dependent>
-    <selected>Sales Team Leader</selected>
-    <show1>46</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
-    <selected>Season &amp; Activities Team leader</selected>
     <show1>46</show1>
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
@@ -762,13 +524,6 @@
     <show1>46</show1>
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
-    <selected>Self Serve Team Leader</selected>
-    <show1>47</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
     <show4>Salaried</show4>
   </dependent>
   <dependent>
@@ -776,7 +531,7 @@
     <show1>47</show1>
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
+    <show4>Salaried</show4>
   </dependent>
   <dependent>
     <selected>Shopkeeper Sales HFB 18 &amp; 19 (Home Organisation)</selected>
@@ -905,13 +660,6 @@
     <show4>Salaried</show4>
   </dependent>
   <dependent>
-    <selected>Sustainability Responsible</selected>
-    <show1>47</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
-  </dependent>
-  <dependent>
     <selected>Visual Merchandise / Activity Manager</selected>
     <show1>51</show1>
     <show2>Level 1</show2>
@@ -924,12 +672,5 @@
     <show2>Level 1</show2>
     <show3>Co-worker</show3>
     <show4>Salaried</show4>
-  </dependent>
-  <dependent>
-    <selected>Visual Merchandise/Activity Co-worker</selected>
-    <show1>46</show1>
-    <show2>Level 1</show2>
-    <show3>Co-worker</show3>
-    <show4>Dual Payroll (ZY)</show4>
   </dependent>
 </predefined>

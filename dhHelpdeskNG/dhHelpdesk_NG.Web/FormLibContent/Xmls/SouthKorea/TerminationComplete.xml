@@ -4,6 +4,7 @@
     <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
     <!ENTITY state SYSTEM "Templates/TerminationCompleteState.xml">
     <!ENTITY pre_termination_reason SYSTEM "Defaults/Predefined_TerminationReason.xml">
+    <!ENTITY pre_country SYSTEM "Templates/Data_Country.xml">
 ]>
 
 <form id="225" guid="12696FB8-ADE3-4C4A-96DE-8F33FA90156F" customerId="32">
@@ -23,7 +24,7 @@
             </element>
             <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1"></element>
             <element name="Company" type="text" label="Company"></element>
-            <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element> <!--#58799 mandatory-->
+            <element name="BusinessUnit" type="text" label="Business Unit"></element>
             <element name="ServiceArea" type="text" label="Function"></element>
             <element name="Department" type="text" label="Department"></element>
             <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" mandatory="1">
@@ -39,7 +40,9 @@
                     <option value ="Standard">Standard</option>
                 </options>
             </element>
+
             <element type="textarea" name="InternalLogNote" label="Comment"></element>
+
         </tab>
         <!--Basic Termination Details-->
         <tab name="#Basic" label="Basic">
@@ -113,6 +116,7 @@
                     <option value ="By Manual Payment">By Manual Payment</option>
                 </options>
             </element>
+
             <!--Termination Payments-->
             <element name="TerminationPayments" type="hidden" default="1"></element>
             <!--1-->
@@ -132,9 +136,13 @@
                 </options>
             </element>
             <element name="TerminationAmountUnits" type="text" label="Amount/Units">
-              <regex inherit="allowNegativeAmount" message="" pattern=""></regex> <!--#58799-->
-              <mandatoryIfNotEmpty name="TerminationPaymentType"></mandatoryIfNotEmpty>
+                <mandatoryIfNotEmpty name="TerminationPaymentType"></mandatoryIfNotEmpty>
+                <!--<regex inherit="amount3" pattern="" message=""></regex> #52776 --> 
             </element>
+            <!--<element name="OneIKEABonusDue" type="text" label="One IKEA Bonus Due">
+        <mandatoryIfNotEmpty name="TerminationPaymentType"></mandatoryIfNotEmpty>
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>-->
             <element name="NetGross" type="text"   label="Net/Gross"></element>
             <element name="TerminationPaymentDate" type="date" format="dd.MM.yyyy" label="Payment Date:">
                 <regex inherit="date" pattern="" message=""></regex>
@@ -157,8 +165,8 @@
                 </options>
             </element>
             <element name="TerminationAmountUnits2" type="text" label="Amount/Units">
-              <regex inherit="allowNegativeAmount" message="" pattern=""></regex> <!--#58799-->
-              <mandatoryIfNotEmpty name="TerminationPaymentType2"></mandatoryIfNotEmpty>
+                <mandatoryIfNotEmpty name="TerminationPaymentType2"></mandatoryIfNotEmpty>
+                <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
             </element>
             <element name="NetGross2" type="text"   label="Net/Gross"></element>
             <element name="TerminationPaymentDate2" type="date" format="dd.MM.yyyy" label="Payment Date:">
@@ -182,8 +190,8 @@
                 </options>
             </element>
             <element name="TerminationAmountUnits3" type="text" label="Amount/Units">
-              <regex inherit="allowNegativeAmount" message="" pattern=""></regex> <!--#58799-->
-              <mandatoryIfNotEmpty name="TerminationPaymentType3"></mandatoryIfNotEmpty>
+                <mandatoryIfNotEmpty name="TerminationPaymentType3"></mandatoryIfNotEmpty>
+              <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
             </element>
             <element name="NetGross3" type="text"   label="Net/Gross"></element>
             <element name="TerminationPaymentDate3" type="date" format="dd.MM.yyyy" label="Payment Date:">
@@ -207,8 +215,7 @@
                 </options>
             </element>
             <element name="TerminationAmountUnits4" type="text" label="Amount/Units">
-              <regex inherit="allowNegativeAmount" message="" pattern=""></regex> <!--#58799-->
-              <mandatoryIfNotEmpty name="TerminationPaymentType4"></mandatoryIfNotEmpty>
+                <mandatoryIfNotEmpty name="TerminationPaymentType4"></mandatoryIfNotEmpty>
               <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
             </element>
             <element name="NetGross4" type="text"   label="Net/Gross"></element>
@@ -233,8 +240,7 @@
                 </options>
             </element>
             <element name="TerminationAmountUnits5" type="text" label="Amount/Units">
-              <regex inherit="allowNegativeAmount" message="" pattern=""></regex> <!--#58799-->
-              <mandatoryIfNotEmpty name="TerminationPaymentType5"></mandatoryIfNotEmpty>
+                <mandatoryIfNotEmpty name="TerminationPaymentType5"></mandatoryIfNotEmpty>
               <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
             </element>
             <element name="NetGross5" type="text"   label="Net/Gross"></element>
@@ -256,7 +262,7 @@
             </element>
             <element name="DeductionAmountUnits" type="text" label="Amount/Units">
                 <mandatoryIfNotEmpty name="DeductionType"></mandatoryIfNotEmpty>
-                <regex inherit="allowNegativeAmount" pattern="" message=""></regex> <!--#58799-->
+              <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
             </element>
             <element name="DeductionNetGross" type="text"   label="Net/Gross"></element>
             <element name="DeductionDate" type="date" format="dd.MM.yyyy" label="Deduction date:">
@@ -275,8 +281,7 @@
                 </options>
             </element>
             <element name="DeductionAmountUnits2" type="text" label="Amount/Units">
-              <regex inherit="allowNegativeAmount" message="" pattern=""></regex> <!--#58799-->
-              <mandatoryIfNotEmpty name="DeductionType2"></mandatoryIfNotEmpty>
+                <mandatoryIfNotEmpty name="DeductionType2"></mandatoryIfNotEmpty>
               <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
             </element>
             <element name="DeductionNetGross2" type="text"   label="Net/Gross"></element>
@@ -295,8 +300,7 @@
                 </options>
             </element>
             <element name="DeductionAmountUnits3" type="text" label="Amount/Units">
-              <regex inherit="allowNegativeAmount" message="" pattern=""></regex> <!--#58799-->
-              <mandatoryIfNotEmpty name="DeductionType3"></mandatoryIfNotEmpty>
+                <mandatoryIfNotEmpty name="DeductionType3"></mandatoryIfNotEmpty>
               <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
             </element>
             <element name="DeductionNetGross3" type="text"   label="Net/Gross"></element>
@@ -315,8 +319,7 @@
                 </options>
             </element>
             <element name="DeductionAmountUnits4" type="text" label="Amount/Units">
-              <regex inherit="allowNegativeAmount" message="" pattern=""></regex> <!--#58799-->
-              <mandatoryIfNotEmpty name="DeductionType4"></mandatoryIfNotEmpty>
+                <mandatoryIfNotEmpty name="DeductionType4"></mandatoryIfNotEmpty>
               <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
             </element>
             <element name="DeductionNetGross4" type="text"   label="Net/Gross"></element>
@@ -335,8 +338,7 @@
                 </options>
             </element>
             <element name="DeductionAmountUnits5" type="text" label="Amount/Units">
-              <regex inherit="allowNegativeAmount" message="" pattern=""></regex> <!--#58799-->
-              <mandatoryIfNotEmpty name="DeductionType5"></mandatoryIfNotEmpty>
+                <mandatoryIfNotEmpty name="DeductionType5"></mandatoryIfNotEmpty>
               <!--<regex inherit="amount3" pattern="" message=""></regex> #52776-->
             </element>
             <element name="DeductionNetGross5" type="text"   label="Net/Gross"></element>
@@ -344,7 +346,16 @@
                 <regex inherit="date" pattern="" message=""></regex>
                 <mandatoryIfNotEmpty name="DeductionType5"></mandatoryIfNotEmpty>
             </element>
+
             <!--country Specific-->
+            <!--<element name="AdjustmentType" type="text" label="Adjustment type"></element>
+      <element name="AdjustmentAmountUnits" type="text" label="Amount/Units">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="AdjustmentDate" type="date" format="dd.MM.yyyy" label="Adjustment date:">
+        <regex inherit="date" pattern="" message=""></regex>
+        <mandatoryIfNotEmpty name="AdjustmentType"></mandatoryIfNotEmpty>
+      </element>-->
             <element name="LeavingReason" type="select" label="Leaving reason" mandatory="1">
                 <options>
                     <option value=""></option>

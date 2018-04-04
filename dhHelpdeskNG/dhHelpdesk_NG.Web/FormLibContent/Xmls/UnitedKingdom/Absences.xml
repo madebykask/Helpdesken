@@ -3,6 +3,7 @@
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
   <!ENTITY state SYSTEM "Templates/AbsencesState.xml">
+  <!ENTITY pre_country SYSTEM "Templates/Data_Country.xml">
 ]>
 
 <form id="111" guid="2EE3E70E-1E67-4694-BC1F-0FD0C38AE61F" customerId="30">
@@ -21,6 +22,7 @@
         <regex inherit="email" pattern="" message=""></regex>
       </element>
       <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1">
+        
       </element>
       <element name="Company" type="text" label="Company"></element>
       <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element>
@@ -40,16 +42,19 @@
           <option value ="Standard">Standard</option>
         </options>
       </element>
+      
       <element type="text" name="PermanentAddressLine1" label="Address line 1" formfieldidentifier="E1P0006.STRAS:1"></element>
       <element type="text" name="PermanentAddressLine2" label="Address line 2" formfieldidentifier="E1P0006.HSNMR:1"></element>
       <element type="text" name="PermanentAddressLine3" label="Address line 3" formfieldidentifier="E1P0006.POSTA:1"></element>
       <element type="text" name="PermanentPostalCode" label="Postal code" formfieldidentifier="E1P0006.PSTLZ:1"></element>
       <element type="text" name="PermanentCity" label="City" formfieldidentifier="E1P0006.ORT01:1"></element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="PermanentCountry" label="Country" default="United Kingdom" formfieldidentifier="E1P0006.LAND1:1">
+      <element type="search-select" name="PermanentCountry" label="Country" default="United Kingdom" formfieldidentifier="E1P0006.LAND1:1">
+        &pre_country;
       </element>
       <element type="hidden" name="JobTitle" label="Job Title" formfieldidentifier="E1P0001.STELL"></element>
       <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
     </tab>
+
     <!--Absences-->
     <tab name="#Absences" label="Absences">
       <element name="AbsencesMulti" type="hidden" default="1"></element>
@@ -90,6 +95,12 @@
         <laterThanOrEqual name="AbsenceStartFrom"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
+      <!--<element name="AbsenceHours" type="text" mandatory="1" label="Absence hours">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>
+      <element name="AbsenceDays" type="text" mandatory="1" label="Absence days">
+        <regex inherit="unsignednum" pattern="" message=""></regex>
+      </element>-->
       <element name="AdoptionPay" type="text" label="Adoption Pay">
         <mandatoryIf name="AbsenceType">Adoption leave</mandatoryIf>
         <regex inherit="unsignednum" pattern="" message=""></regex>
@@ -103,6 +114,8 @@
           <option value="1 - 2 years">1 - 2 years</option>
         </options>
       </element>
+
+
       <element name="AbsenceType2" type="select" label="Absence Type">
         <options>
           <option value=""></option>
@@ -153,6 +166,7 @@
           <option value="1 - 2 years">1 - 2 years</option>
         </options>
       </element>
+
       <element name="AbsenceType3" type="select" label="Absence Type" >
         <options>
           <option value=""></option>
@@ -203,6 +217,7 @@
           <option value="1 - 2 years">1 - 2 years</option>
         </options>
       </element>
+
       <element name="AbsenceType4" type="select" label="Absence Type" >
         <options>
           <option value=""></option>
@@ -253,6 +268,7 @@
           <option value="1 - 2 years">1 - 2 years</option>
         </options>
       </element>
+
       <element name="AbsenceType5" type="select" label="Absence Type" >
         <options>
           <option value=""></option>
@@ -303,6 +319,8 @@
           <option value="1 - 2 years">1 - 2 years</option>
         </options>
       </element>
+
+
       <!--CDS-->
       <element name="LockCDSAccount" type="select" label="Lock CDS Account?">
         <options>
@@ -311,6 +329,99 @@
           <option value="No">No</option>
         </options>
       </element>
+
+      <!-- Details on Global Commuting -->
+      <!--<element name="DetailsOnGlobalCommutings" type="hidden" default="1"></element>
+      <element  name="CommutingType" type="select" label="CommutingType">
+        <options>
+          <option value=""></option>
+          <option value="Business Trip">Business Trip</option>
+          <option value="Home Leave">Home Leave</option>
+          <option value="Vacation">Vacation</option>
+        </options>
+      </element>
+      <element name="StartFrom" type="date" format="dd.MM.yyyy"  label="Start from:">
+        <regex inherit="date" pattern="" message=""></regex>
+      
+      </element>-->
+      <!--<element name="EndsOn" type="date" format="dd.MM.yyyy"  label="Ends on:">
+        <laterThanOrEqual name="StartFrom"></laterThanOrEqual>
+        <regex inherit="date" pattern="" message=""></regex>
+        
+      </element>
+      <element  name="DestinationCountry" type="text" label="Destination Country">
+        
+      </element>
+      <element  name="TaxRelevant" type="select" label="Tax Relevant">
+        
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>
+
+      <element  name="CommutingType2" type="select" label="CommutingType">
+        <options>
+          <option value=""></option>
+          <option value="Business Trip">Business Trip</option>
+          <option value="Home Leave">Home Leave</option>
+          <option value="Vacation">Vacation</option>
+        </options>
+      </element>
+      <element name="StartFrom2" type="date" format="dd.MM.yyyy" label="Start from:">
+        <mandatoryIf name ="CommutingType2" >Business Trip,Home Leave,Vacation</mandatoryIf>
+
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="EndsOn2" type="date" format="dd.MM.yyyy"  label="Ends on:">
+
+        <mandatoryIf name ="CommutingType2" >Business Trip,Home Leave,Vacation</mandatoryIf>
+
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element  name="DestinationCountry2" type="text" label="Destination Country">
+        <mandatoryIf name ="CommutingType2" >Business Trip,Home Leave,Vacation</mandatoryIf>
+
+      </element>
+      <element  name="TaxRelevant2" type="select" label="Tax Relevant">
+        <mandatoryIf name ="CommutingType2" >Business Trip,Home Leave,Vacation</mandatoryIf>
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>
+
+      <element  name="CommutingType3" type="select" label="CommutingType">
+
+        <options>
+          <option value=""></option>
+          <option value="Business Trip">Business Trip</option>
+          <option value="Home Leave">Home Leave</option>
+          <option value="Vacation">Vacation</option>
+        </options>
+      </element>
+      <element name="StartFrom3" type="date" format="dd.MM.yyyy" label="Start from:">
+        <mandatoryIf name ="CommutingType3" >Business Trip,Home Leave,Vacation</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element name="EndsOn3" type="date" format="dd.MM.yyyy"  label="Ends on:">
+        <laterThanOrEqual name="StartFrom3"></laterThanOrEqual>
+        <mandatoryIf name ="CommutingType3" >Business Trip,Home Leave,Vacation</mandatoryIf>
+        <regex inherit="date" pattern="" message=""></regex>
+      </element>
+      <element  name="DestinationCountry3" type="text" label="Destination Country">
+        <mandatoryIf name ="CommutingType3" >Business Trip,Home Leave,Vacation</mandatoryIf>
+      </element>
+      <element  name="TaxRelevant3" type="select" label="Tax Relevant">
+        <mandatoryIf name ="CommutingType3" >Business Trip,Home Leave,Vacation</mandatoryIf>
+        <options>
+          <option value=""></option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </options>
+      </element>-->
     </tab>
     <!--SSC use only-->
     <tab name="#SscUseOnly" label="SSC use only">

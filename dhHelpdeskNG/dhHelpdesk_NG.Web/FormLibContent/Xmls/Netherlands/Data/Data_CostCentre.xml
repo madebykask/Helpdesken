@@ -20,9 +20,7 @@
     <option value="4000">4000 - Logistics Common</option>
     <option value="4020">4020 - Stock Control</option>
     <option value="4030">4030 - Goods receiving</option>
-    <option value="5824">5824 - GF Know Info Manage</option>
     <option value="6000">6000 - Support Common</option>
-    <option value="6013">6013 - Sustainability</option>
     <option value="6070">6070 - Marketing</option>
     <option value="6071">6071 - Communic &amp; Interior</option>
     <option value="6072">6072 - Family</option>
@@ -30,13 +28,11 @@
     <option value="6080">6080 - Communication 1</option>
     <option value="6100">6100 - Customer Service</option>
     <option value="6200">6200 - Operations Common</option>
-    <option value="6202">6202 - Support other(s) 1</option>
     <option value="6210">6210 - Administration</option>
     <option value="6230">6230 - Finance</option>
     <option value="6231">6231 - Accounting</option>
     <option value="6232">6232 - Controlling / BN</option>
     <option value="6240">6240 - IT</option>
-    <option value="6241">6241 - Business support 1</option>
     <option value="6299">6299 - Re-invoice InterCmp</option>
     <option value="6300">6300 - Risk management</option>
     <option value="6310">6310 - Maintenance</option>
@@ -52,9 +48,7 @@
     <option value="6636">6636 - Activity House</option>
     <option value="6637">6637 - Relocation</option>
     <option value="6800">6800 - Property Common</option>
-    <option value="6830"></option>
     <option value="7010">7010 - Management Group</option>
     <option value="7040">7040 - Staff Pool</option>
     <option value="7050">7050 - Expansion Team</option>
-    <option value="7080">7080 - Knowledge Management &amp; Insights</option>
 </options>

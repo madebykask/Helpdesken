@@ -19396,7 +19396,6 @@
                     <option value=""></option>
                     <option value="ECM Retail &amp; Property">ECM Retail &amp; Property</option>
                     <option value="ECM DS">ECM DS</option>
-                    <option value="ECM SSC">ECM SSC</option>
                     <option value="ECM Purchasing">ECM Purchasing</option>
                     <option value="ECM IICP">ECM IICP</option>
                 </options>
@@ -19416,7 +19415,6 @@
                     <option value="Level 7">Level 7</option>
                     <option value="Level 8">Level 8</option>
                     <option value="Level 9">Level 9</option>
-                    <option value="Level 10">Level 10</option>
                     <option value="Level 3A">Level 3A</option>
                     <option value="Level 3B">Level 3B</option>
                     <option value="Level dummy hourly">Level dummy hourly</option>

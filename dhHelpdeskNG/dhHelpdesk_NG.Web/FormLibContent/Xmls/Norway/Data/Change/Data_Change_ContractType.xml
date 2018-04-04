@@ -4,9 +4,7 @@
   <option value="Permanent">Permanent</option>
   <option value="Temporary">Temporary</option>
   <option value="Replacement">Replacement</option>
-  <option value="Casual" disabled="1">Casual</option>
+  <option value="Casual">Casual</option>
   <option value="Trainee">Trainee</option>
   <option value="Seasonal co-worker">Seasonal co-worker</option>
-  <option value="Inpat">Inpat</option>
-  <option value="Expat">Expat</option>
 </options>

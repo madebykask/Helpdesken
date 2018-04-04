@@ -3,27 +3,44 @@
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
   <!ENTITY state SYSTEM "Templates/HiringState.xml">
+  <!--<!ENTITY pre_allowancestype_netgross SYSTEM "Templates/Predefined_Allowances_NetGross.xml">
+  <!ENTITY pre_allowancestype_netgross2 SYSTEM "Templates/Predefined_Allowances_NetGross2.xml">
+  <!ENTITY pre_allowancestype_netgross3 SYSTEM "Templates/Predefined_Allowances_NetGross3.xml">-->
+  <!--<!ENTITY pre_payrollcategory_deductionstype SYSTEM "Templates/Predefined_PayrollCategory_DeductionsType.xml">
+    <!ENTITY pre_payrollcategory_deductionstype2 SYSTEM "Templates/Predefined_PayrollCategory_DeductionsType2.xml">
+    <!ENTITY pre_payrollcategory_deductionstype3 SYSTEM "Templates/Predefined_PayrollCategory_DeductionsType3.xml">-->
+  <!--<!ENTITY pre_country SYSTEM "Templates/Data_Country.xml">-->
   <!ENTITY dat_allowance SYSTEM "Templates/Data_AllowancesTypeHiring.xml">
+  <!ENTITY dat_jobtitle SYSTEM "Templates/Data_Jobtitle.xml">
+  <!ENTITY dat_linemanagers SYSTEM "Templates/Data_LineManagers.xml">
   <!ENTITY dat_tecapprovers SYSTEM "Templates/Data_TecApprovers.xml">
-  <!ENTITY dat_payscalearea SYSTEM "Data/Data_PayScaleArea.xml">
+  <!ENTITY dat_managerjobtitles SYSTEM "Templates/Data_ManagerJobtitle.xml">
+  <!ENTITY dat_nationality SYSTEM "Templates/Data_Nationality.xml">
+  <!ENTITY dat_language SYSTEM "Templates/Data_Language.xml">
+  <!ENTITY dat_costcentre SYSTEM "Templates/Data_CostCentre.xml">
   <!ENTITY dat_deductionstype SYSTEM "Templates/Data_DeductionsTypeHiringChange.xml">
   <!ENTITY dat_dependantdocumenttype SYSTEM "Templates/Data_GM_DependantDocumentType.xml">
   <!ENTITY dat_employeedocumenttype SYSTEM "Templates/Data_GM_EmployeeDocumentType.xml">
+  <!--  <!ENTITY pre_unit_department SYSTEM "Templates/Predefined_Unit_Department.xml">
+    <!ENTITY pre_psarea_psgroup SYSTEM "Templates/Predefined_PSArea_PSGroup.xml">-->
 ]>
+
+<!-- Dev/Prod/Test -->
 <form id="59" guid="618761F2-A857-4F28-9936-E67D2E503CE0" customerId="30">
   &languages;
   &regexs;
   &state;
+
   <fields>
+
     <!--Service Request Details-->
     <tab name="#servicerequestdetails" label="Service Request Details">
       <element type="select" name="NewToIKEA" mandatory="1" label="New to IKEA?">
         <options>
           <option value=""></option>
           <option value="New Hire">New Hire</option>
-          <option value="International Transfer (LTA, STA, Commuter)">International Transfer (LTA, STA, Commuter)</option>
-          <option value="International Relocation">International Relocation</option>
-          <option value="Re-Hire">Re-instating</option>
+          <option value="International Transfer">International Transfer</option>
+          <option value="Re-Hire">Re-Hire</option>
           <option value="Transfer Between Business Units">Transfer Between Business Units</option>
         </options>
       </element>
@@ -34,6 +51,7 @@
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
       </element>
+
       <element type="select" name="LengthOfInductionInDays" mandatory="1" label="Length of Induction in days" default="2 days">
         <options>
           <option value=""></option>
@@ -44,12 +62,15 @@
           <option value="5 days">5 days</option>
         </options>
       </element>
+      
       <element type="text" name="InductionStartTime" mandatory="1" label="Induction Start Time - Day 1">
         <regex inherit="timestamp" pattern="" message=""></regex>
       </element>
+
       <element type="text" name="InductionEndTime" mandatory="1" label="Induction End Time - Day 1">
         <regex inherit="timestamp" pattern="" message=""></regex>
       </element>
+<!--2-->
       <element type="text" name="InductionStartTime2" label="Induction Start Time - Day 2">
         <regex inherit="timestamp" pattern="" message=""></regex>
         <mandatoryIf name="LengthOfInductionInDays">2 days,3 days,4 days,5 days</mandatoryIf>
@@ -58,6 +79,7 @@
         <regex inherit="timestamp" pattern="" message=""></regex>
         <mandatoryIf name="LengthOfInductionInDays">2 days,3 days,4 days,5 days</mandatoryIf>
       </element>
+<!--3-->
       <element type="text" name="InductionStartTime3" label="Induction Start Time - Day 3">
         <regex inherit="timestamp" pattern="" message=""></regex>
         <mandatoryIf name="LengthOfInductionInDays">3 days,4 days,5 days</mandatoryIf>
@@ -66,6 +88,7 @@
         <regex inherit="timestamp" pattern="" message=""></regex>
         <mandatoryIf name="LengthOfInductionInDays">3 days,4 days,5 days</mandatoryIf>
       </element>
+<!--4-->
       <element type="text" name="InductionStartTime4" label="Induction Start Time - Day 4">
         <regex inherit="timestamp" pattern="" message=""></regex>
         <mandatoryIf name="LengthOfInductionInDays">4 days,5 days</mandatoryIf>
@@ -74,6 +97,7 @@
         <regex inherit="timestamp" pattern="" message=""></regex>
         <mandatoryIf name="LengthOfInductionInDays">4 days,5 days</mandatoryIf>
       </element>
+<!--5-->
       <element type="text" name="InductionStartTime5" label="Induction Start Time - Day 5">
         <regex inherit="timestamp" pattern="" message=""></regex>
         <mandatoryIf name="LengthOfInductionInDays">5 days</mandatoryIf>      
@@ -82,10 +106,10 @@
         <regex inherit="timestamp" pattern="" message=""></regex>
         <mandatoryIf name="LengthOfInductionInDays">5 days</mandatoryIf>
       </element>
+     
       <element type="date" name="PreviousContractStartDate" label="Previous Contract Start Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
-        <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
-        <mandatoryIf name="NewToIKEA">International Relocation</mandatoryIf>
+        <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
       </element>
       <element type="select" name="ServiceRequestPriority" mandatory="1" label="Service Request Priority" default="Standard">
         <options>
@@ -95,13 +119,11 @@
         </options>
       </element>
       <element type="text" name="Co-WorkerID" label="Co-Worker ID">
-        <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
-        <mandatoryIf name="NewToIKEA">International Relocation</mandatoryIf>
+        <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
         <mandatoryIf name="NewToIKEA">Transfer Between Business Units</mandatoryIf>
       </element>
       <element type="text" name="GlobalHRID" label="Global HR ID">
-        <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
-        <mandatoryIf name="NewToIKEA">International Relocation</mandatoryIf>
+        <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element type="select" name="Title" label="Title" mandatory="1">
@@ -120,18 +142,23 @@
         <regex inherit="date" pattern="" message=""></regex>
         <agecheck name="ContractStartDate" dropDownFieldToValidate="Company" validateFor="IKEA Prop Investments Ltd,IKEA Ltd" age="16" message="Employee under 16, you are unable to proceed with this service request"></agecheck>
         <agecheck name="ContractStartDate" dropDownFieldToValidate="Company" validateFor="IKEA Dist Services Ltd" age="18" message="Employee under 18, you are unable to proceed with this service request"></agecheck>
+
       </element>
       <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1"></element>
       <element type="text" name="PermanentAddressLine2" label="Address line 2"></element>
       <element type="text" name="PermanentAddressLine3" label="Address line 3"></element>
       <element type="text" name="PermanentPostalCode" label="Postal code" mandatory="1"></element>
       <element type="text" name="PermanentCity" label="City" mandatory="1"></element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="PermanentCountry" label="Country" mandatory="1" default="United Kingdom">
+      <element type="select" source="database" name="PermanentCountry" label="Country" mandatory="1" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
+      
       <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
     </tab>
+
     <tab name="#OrganisationalAssignment" label="Organisational Assignment">
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="OrganisationCountry" label="Country" default="United Kingdom" mandatory="1">
+      <element type="select" source="database" name="OrganisationCountry" label="Country" default="United Kingdom" mandatory="1">
+        <!--&pre_country;-->
       </element>
       <element type="select" source="database" name="Company" label="Company" mandatory="1">
         <options>
@@ -147,16 +174,19 @@
           <option value=""></option>
         </options>
       </element>
-      <element type="select" source="database" cssclass="autocomplete-costcentre selectize" name="HomeCostCentre" label="Home Cost Centre" mandatory="1">
+      <element type="search-select" name="HomeCostCentre" label="Home Cost Centre" mandatory="1">
+        &dat_costcentre;
       </element>
       <element type="text" name="CostAllocation" label="Cost Allocation &#37;" default="100">
         <regex inherit="unsignednum" pattern="" message=""></regex>
         <regex inherit="numFrom1To100" pattern="" message=""></regex>
       </element>
-      <element type="select" source="database" cssclass="autocomplete-costcentre selectize" name="CrossChargeCostCentre" label="Cross Charge Cost Centre">
+      <element type="search-select" name="CrossChargeCostCentre" label="Cross Charge Cost Centre">
         <lessThanOrEqual name="HomeCostCentre">99</lessThanOrEqual>
+        &dat_costcentre;
       </element>
-      <element type="select" source="database" cssclass="autocomplete-relation-jobtitle selectize" name="JobTitle" label="Job Title" mandatory="1">
+      <element type="search-select" name="JobTitle" label="Job Title" mandatory="1">
+        &dat_jobtitle;
       </element>
       <element type="select" name="NewPosition" label="New Position?" mandatory="1">
         <options>
@@ -166,17 +196,13 @@
           <option value="Local foreign Employee">Local foreign Employee</option>
         </options>
       </element>
-      <element type="select" name="CoworkerApprentice" label="Is this co-worker apprentice?">
-        <options>
-          <option value=""></option>
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>         
-        </options>
+      <element type="search-select" name="ReportsToLineManager" label="Reports to Line Manager" >
+        &dat_linemanagers;
       </element>
-      <element type="select" source="database" cssclass="autocomplete-linemanager selectize" name="ReportsToLineManager" label="Reports to Line Manager" >
+      <element type="search-select" name="ManagersJobTitle" label=" Manager's Job Title" mandatory="1">
+        &dat_managerjobtitles;
       </element>
-      <element type="select" source="database" cssclass="autocomplete-linemanagerjobtitle selectize" name="ManagersJobTitle" label=" Manager's Job Title" mandatory="1">
-      </element>
+      
       <element type="select" name="ChiefPosition" label="Chief Position" mandatory="1" default="No">
         <options>
           <option value=""></option>
@@ -184,12 +210,22 @@
           <option value="Yes">Yes</option>
         </options>
       </element>
+      
       <element type="select" name="EmploymentCategory" label="Employment Category" mandatory="1">
+        <!--<options>
+          <option value=""></option>
+          <option value="Permanent">Permanent</option>
+          <option value="Temporary">Temporary</option>
+          <option value="Fixed Term">Fixed Term</option>
+          <option value="Pensioners">Pensioners</option>
+          <option value="Non Active">Non Active</option>
+          <option value="Expats">Expats</option>
+        </options>-->
         <options>
           <option value=""></option>
           <option value="Full Time">Full Time</option>
           <option value="Part Time">Part Time</option>
-          <option value="Inpat">Inpat</option>
+          <option value="Expats">Expats</option>
         </options>
       </element>
       <element type="date" name="ContractEndDate" label="Contract End Date" format="dd.MM.yyyy">
@@ -221,8 +257,8 @@
           <option value="Permanent">Permanent</option>
           <option value="Temporary">Temporary</option>
           <option value="Fixed Term">Fixed Term</option>
-          <option value="Peak Trading Contract">Peak Trading Contract</option>
-          <option value="Apprentice" disabled="1">Apprentice</option>
+          <option value="Zero Hours">Zero Hours</option>
+          <option value="Apprentice">Apprentice</option>
         </options>
       </element>
       <element type="select" name="ProbationPeriod" label="Probation Period" mandatory="1" default="Yes">
@@ -236,7 +272,37 @@
         <mandatoryIf name="ProbationPeriod">Yes</mandatoryIf>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="select" source="database" cssclass="autocomplete-primarysite selectize" name="PrimarySite" label="Primary Site" mandatory="1">
+      <element name="PrimarySite" type="search-select" label="Primary Site" mandatory="1">
+        <options>
+          <option value=""></option>
+          <option value="IKEA Delivery Centre Doncaster">IKEA Delivery Centre Doncaster</option>
+          <option value="IKEA Belfast">IKEA Belfast</option>
+          <option value="IKEA Birmingham">IKEA Birmingham</option>
+          <option value="IKEA Bristol">IKEA Bristol</option>
+          <option value="IKEA Cardiff">IKEA Cardiff</option>
+          <option value="IKEA Contact Centre">IKEA Contact Centre</option>
+          <option value="IKEA Coventry">IKEA Coventry</option>
+          <option value="IKEA Croydon">IKEA Croydon</option>
+          <option value="IKEA Customer Delivery Centre">IKEA Customer Delivery Centre</option>
+          <option value="IKEA Distribution Services Uni">IKEA Distribution Services Uni</option>
+          <option value="IKEA E-Commerce">IKEA E-Commerce</option>
+          <option value="IKEA Edinburgh">IKEA Edinburgh</option>
+          <option value="IKEA Gateshead">IKEA Gateshead</option>
+          <option value="IKEA Glasgow">IKEA Glasgow</option>
+          <option value="IKEA Lakeside">IKEA Lakeside</option>
+          <option value="IKEA Leeds">IKEA Leeds</option>
+          <option value="IKEA Manchester">IKEA Manchester</option>
+          <option value="IKEA Milton Keynes">IKEA Milton Keynes</option>
+          <option value="IKEA Nottingham">IKEA Nottingham</option>
+          <option value="IKEA Reading">IKEA Reading</option>
+          <option value="IKEA Property Investments Ltd">IKEA Property Investments Ltd</option>
+          <option value="IKEA Service Office">IKEA Service Office</option>
+          <option value="IKEA Sheffield">IKEA Sheffield</option>
+          <option value="IKEA Southampton">IKEA Southampton</option>          
+          <option value="IKEA Tottenham">IKEA Tottenham</option>
+          <option value="IKEA Warrington">IKEA Warrington</option>
+          <option value="IKEA Wembley">IKEA Wembley</option>
+        </options>
       </element>
       <element name="TECApprover" type="search-select" label="TEC Approver" mandatory="1">
         &dat_tecapprovers;
@@ -248,16 +314,20 @@
           <option value="ICC3 WER DS">ICC3 WER DS</option>
         </options>
       </element>
+
       <element name="ContractReviewDate" type="date" format="dd.MM.yyyy" label="Contract Review Date (Zero Hours)">
         <regex inherit="date" pattern="" message=""></regex>
-        <mandatoryIf name="ContractType">Peak Trading Contract</mandatoryIf>
+        <mandatoryIf name="ContractType">Zero Hours</mandatoryIf>
       </element>
     </tab>
+
     <tab name="#payment" label="Payment Information">
       <element type="select" name="PayrollCategory" label="Payroll Category" mandatory="1">
+        <!--&pre_payrollcategory_deductionstype;
+        &pre_payrollcategory_deductionstype2;
+        &pre_payrollcategory_deductionstype3;-->
         <options>
           <option value=""></option>
-          <option value="Dual Payroll (ZY)">Dual Payroll (ZY)</option>
           <option value="Hourly">Hourly</option>
           <option value="Salaried">Salaried</option>
           <option value="Salaried Management">Salaried Management</option>
@@ -267,18 +337,19 @@
       <element type="select" name="PayScaleGroup" label="Pay Scale Group" mandatory="1">
         <options>
           <option value=""></option>
-          <option value="STARTER">STARTER</option>
           <option value="STARTLO">STARTLO</option>
           <option value="STARTUK">STARTUK</option>
           <option value="INTERN">INTERN</option>
+          <!--<option value="APPRENT1">APPRENT1</option>
+          <option value="APPRENT2">APPRENT2</option>-->
           <option value="ADVANCED">ADVANCED</option>
           <option value="MULTSKLL">MULTSKLL</option>
           <option value="BOOKOFF">BOOKOFF</option>
           <option value="QUALITY">QUALITY</option>
+          <!--<option value="APPRENTICE 7.69">APPRENTICE 7.69</option>
+          <option value="APPRENTICE 6.66">APPRENTICE 6.66</option>-->
           <option value="10">10</option>
           <option value="11">11</option>
-          <option value="42">42</option>
-          <option value="43">43</option>
           <option value="44">44</option>
           <option value="45">45</option>
           <option value="46">46</option>
@@ -306,16 +377,22 @@
           <option value="99">99</option>
         </options>
       </element>
-      <element type="select" name="PayScaleArea" label="Pay Scale Area" mandatory="1">
-        &dat_payscalearea;
-      </element>
       <element type="text" name="BasicPayAmount" label="Basic Pay Amount" mandatory="1">
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
+
       <element type="hidden" name="Allowances" default="1"></element>
       <element type="select" name="AllowancesType" label="Allowance Type">
         &dat_allowance;
       </element>
+      <!--<element type="select" name="AllowancesPaymentType" label="Payment Type">
+        <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
       <element type="text" name="AllowancesAmountUnits" label="Amount/Units">
         <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" message="" pattern=""></regex>
@@ -329,17 +406,35 @@
           <option value="one off">one off</option>
         </options>
       </element>
+      <!--<element type="select" name="AllowancesNetGross" label="Net/Gross">
+        <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
       <element type="date" name="AllowancesValidFrom" label="Valid from:" format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
       </element>
       <element type="date" name="AllowancesValidTo" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIf name="AllowancesPaymentType">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
+
       <element type="select" name="AllowancesType2" label="Allowance Type" >
         &dat_allowance;
       </element>
+      <!--<element type="select" name="AllowancesPaymentType2" label="Payment Type">
+        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
       <element type="text" name="AllowancesAmountUnits2" label="Amount/Units">
         <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" message="" pattern=""></regex>
@@ -353,17 +448,35 @@
           <option value="one off">one off</option>
         </options>
       </element>
+      <!--<element type="select" name="AllowancesNetGross2" label="Net/Gross">
+        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
       <element type="date" name="AllowancesValidFrom2" label="Valid from:" format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
         <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="date" name="AllowancesValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIf name="AllowancesPaymentType2">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
+
       <element type="select" name="AllowancesType3" label="Allowance Type" >
         &dat_allowance;
       </element>
+      <!--<element type="select" name="AllowancesPaymentType3" label="Payment Type">
+        <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
       <element type="text" name="AllowancesAmountUnits3" label="Amount/Units">
         <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" pattern="" message=""></regex>
@@ -377,14 +490,24 @@
           <option value="one off">one off</option>
         </options>
       </element>
+      <!--<element type="select" name="AllowancesNetGross3" label="Net/Gross">
+        <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
       <element type="date" name="AllowancesValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
         <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="date" name="AllowancesValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIf name="AllowancesPaymentType3">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
+
       <!--4-->
       <element type="select" name="AllowancesType4" label="Allowance Type" >
         &dat_allowance;
@@ -411,6 +534,7 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <!--4-->
+
       <!--5-->
       <element type="select" name="AllowancesType5" label="Allowance Type" >
         &dat_allowance;
@@ -437,10 +561,19 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <!--5-->
+
       <element type="hidden" name="Deductions" default="1"></element>
       <element type="select" name="DeductionsType" label="Deduction Type">
         &dat_deductionstype;
       </element>
+      <!--<element type="select" name="DeductionsPaymentType" label="Payment Type">
+        <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
       <element type="text" name="DeductionsAmountUnits" label="Amount/Units" >
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" message="" pattern=""></regex>
@@ -452,17 +585,35 @@
           <option value="one off">one off</option>
         </options>
       </element>
+      <!--<element type="select" name="DeductionsNetGross" label="Net/Gross">
+        <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
       <element type="date" name="DeductionsValidFrom" label="Valid from:" format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
       </element>
       <element type="date" name="DeductionsValidTo" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIf name="DeductionsPaymentType">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
+
       <element type="select" name="DeductionsType2" label="Deduction Type">
         &dat_deductionstype;
       </element>
+      <!--<element type="select" name="DeductionsPaymentType2" label="Payment Type">
+        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
       <element type="text" name="DeductionsAmountUnits2" label="Amount/Units">
         <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" message="" pattern=""></regex>
@@ -474,17 +625,35 @@
           <option value="one off">one off</option>
         </options>
       </element>
+      <!--<element type="select" name="DeductionsNetGross2" label="Net/Gross">
+        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
       <element type="date" name="DeductionsValidFrom2" label="Valid from:"  format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
       </element>
       <element type="date" name="DeductionsValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIf name="DeductionsPaymentType2">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
+
       <element type="select" name="DeductionsType3" label="Deduction Type" >
         &dat_deductionstype;
       </element>
+      <!--<element type="select" name="DeductionsPaymentType3" label="Payment Type">
+        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="One Time">One Time</option>
+          <option value="Recurring">Recurring</option>
+        </options>
+      </element>-->
       <element type="text" name="DeductionsAmountUnits3" label="Amount/Units">
         <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" pattern="" message=""></regex>
@@ -496,14 +665,24 @@
           <option value="one off">one off</option>
         </options>
       </element>
+      <!--<element type="select" name="DeductionsNetGross3" label="Net/Gross">
+        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
+        <options>
+          <option value=""></option>
+          <option value="Net">Net</option>
+          <option value="Gross">Gross</option>
+        </options>
+      </element>-->
       <element type="date" name="DeductionsValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ContractStartDate"></laterThanOrEqual>
       </element>
       <element type="date" name="DeductionsValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
+        <!--<mandatoryIf name="DeductionsPaymentType3">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
+
       <!--4-->
       <element type="select" name="DeductionsType4" label="Deduction Type">
         &dat_deductionstype;
@@ -528,6 +707,7 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <!--4-->
+
       <!--5-->
       <element type="select" name="DeductionsType5" label="Deduction Type">
         &dat_deductionstype;
@@ -552,6 +732,8 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <!--5-->
+
+
       <element type="select" name="OneIKEABonusLevel" label="One IKEA Bonus Level" default="Level 1" mandatory="1">
         <options>
           <option value=""></option>
@@ -588,27 +770,33 @@
         </options>
       </element>
     </tab>
+
     <tab name="#personal" label="Personal Information">
       <element type="text" name="TelephoneNumber" label="Telephone Number"></element>
       <element type="text" name="MobilePhoneNumber" label="Mobile Phone Number"></element>
       <element type="text" name="ContactEMailAddress" label="Contact e-mail address">
         <regex inherit="email" pattern="" message=""></regex>
       </element>
+
+
       <element type="text" name="MailingAddressLine1" label="Address line 1"></element>
       <element type="text" name="MailingAddressLine2" label="Address line 2"></element>
       <element type="text" name="MailingPostalCode" label="Postal code"></element>
       <element type="text" name="MailingCity" label="City"></element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="MailingCountry" label="Country" default="United Kingdom">
+      <element type="select" source="database" name="MailingCountry" label="Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
       <element type="text" name="EmergencyAddressLine1" label="Address line 1" mandatory="1"></element>
       <element type="text" name="EmergencyAddressLine2" label="Address line 2"></element>
       <element type="text" name="EmergencyPostalCode" label="Postal code" mandatory="1"></element>
       <element type="text" name="EmergencyCity" label="City" mandatory="1"></element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmergencyCountry" label="Country" default="United Kingdom" mandatory="1">
+      <element type="select" source="database" name="EmergencyCountry" label="Country" default="United Kingdom" mandatory="1">
+        <!--&pre_country;-->
       </element>
       <element type="text" name="EmergencyContactNumber" label="Emergency contact number"></element>
       <element type="text" name="EmergencyContactRelationship" label="Emergency contact/relationship">
       </element>
+
       <!--Family Member/Dependents-->
       <element type="hidden" name="FamilyMembers" default="1"></element>
       <element type="select" name="FamilyMember" label="Family Member">
@@ -632,6 +820,8 @@
       <element type="date" name="FamilyMemberDateOfBirth" label="Date of Birth" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
+
+
       <element type="select" name="FamilyMember2" label="Family Member">
         <options>
           <option value=""></option>
@@ -653,6 +843,7 @@
       <element type="date" name="FamilyMemberDateOfBirth2" label="Date of Birth" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
+
       <element type="select" name="FamilyMember3" label="Family Member">
         <options>
           <option value=""></option>
@@ -674,6 +865,7 @@
       <element type="date" name="FamilyMemberDateOfBirth3" label="Date of Birth" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
+
       <element type="select" name="FamilyMember4" label="Family Member">
         <options>
           <option value=""></option>
@@ -695,6 +887,7 @@
       <element type="date" name="FamilyMemberDateOfBirth4" label="Date of Birth" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
+
       <!--5-->
       <element type="select" name="FamilyMember5" label="Family Member">
         <options>
@@ -718,72 +911,90 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <!--5-->
+
+
+
       <!--Global mobility Employee Documents-->
       <element type="hidden" name="EmployeeDocuments" default="1"></element>
       <element type="select" name="EmployeeDocumentType" label="Document Type">
         &dat_employeedocumenttype;
       </element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry" label="Country" default="United Kingdom">
+      <element type="select" source="database" name="EmployeeDocumentCountry" label="Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
       <element type="text" name="EmployeeDocumentNo" label="Document No."></element>
       <element type="date" name="EmployeeDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="EmployeeDocumentIssuePlace" label="Issue Place"></element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country" default="United Kingdom">
+      <element type="select" source="database" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
       <element type="select" name="EmployeeDocumentType2" label="Document Type">
         &dat_employeedocumenttype;
       </element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry2" label="Country" default="United Kingdom">
+      <element type="select" source="database" name="EmployeeDocumentCountry2" label="Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
       <element type="text" name="EmployeeDocumentNo2" label="Document No."></element>
       <element type="date" name="EmployeeDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="EmployeeDocumentIssuePlace2" label="Issue Place"></element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place Country" default="United Kingdom">
+      <element type="select" source="database" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
+
       <element type="select" name="EmployeeDocumentType3" label="Document Type">
         &dat_employeedocumenttype;
       </element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry3" label="Country" default="United Kingdom">
+      <element type="select" source="database" name="EmployeeDocumentCountry3" label="Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
       <element type="text" name="EmployeeDocumentNo3" label="Document No."></element>
       <element type="date" name="EmployeeDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="EmployeeDocumentIssuePlace3" label="Issue Place"></element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place Country" default="United Kingdom">
+      <element type="select" source="database" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
+
       <!--4-->
       <element type="select" name="EmployeeDocumentType4" label="Document Type">
         &dat_employeedocumenttype;
       </element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry4" label="Country" default="United Kingdom">
+      <element type="select" source="database" name="EmployeeDocumentCountry4" label="Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
       <element type="text" name="EmployeeDocumentNo4" label="Document No."></element>
       <element type="date" name="EmployeeDocumentIssueDate4" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="EmployeeDocumentIssuePlace4" label="Issue Place"></element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry4" label="Issue Place Country" default="United Kingdom">
+      <element type="select" source="database" name="EmployeeDocumentIssuePlaceCountry4" label="Issue Place Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
       <!--4-->
+
       <!--5-->
       <element type="select" name="EmployeeDocumentType5" label="Document Type">
         &dat_employeedocumenttype;
       </element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry5" label="Country" default="United Kingdom">
+      <element type="select" source="database" name="EmployeeDocumentCountry5" label="Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
       <element type="text" name="EmployeeDocumentNo5" label="Document No."></element>
       <element type="date" name="EmployeeDocumentIssueDate5" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="EmployeeDocumentIssuePlace5" label="Issue Place"></element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry5" label="Issue Place Country" default="United Kingdom">
+      <element type="select" source="database" name="EmployeeDocumentIssuePlaceCountry5" label="Issue Place Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
       <!--5-->
+
+
       <!--Global mobility Dependants-->
       <element type="hidden" name="DependantFamilyMembers" default="1"></element>
       <element type="select" name="DependantFamilyMember" label="Dependant Family Member">
@@ -849,6 +1060,7 @@
       <element type="date" name="DependantsDateOfBirth3" label="Dependant's Date of birth" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
+
       <!--4-->
       <element type="select" name="DependantFamilyMember4" label="Dependant Family Member">
         <options>
@@ -872,6 +1084,7 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <!--4-->
+
       <!--5-->
       <element type="select" name="DependantFamilyMember5" label="Dependant Family Member">
         <options>
@@ -895,72 +1108,88 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <!--5-->
+
       <!--Global Mobility Dependants Documents-->
       <element type="hidden" name="DependantsDocuments" default="1"></element>
       <element type="select" name="DependantsDocumentType" label="Document Type">
         &dat_dependantdocumenttype;
       </element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry" label="Country" default="United Kingdom">
+      <element type="select" source="database" name="DependantsDocumentCountry" label="Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
       <element type="text" name="DependantsDocumentNo" label="Document No."></element>
       <element type="date" name="DependantsDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="DependantsDocumentIssuePlace" label="Issue Place" ></element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="United Kingdom">
+      <element type="select" source="database" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
+
       <element type="select" name="DependantsDocumentType2" label="Document Type">
         &dat_dependantdocumenttype;
       </element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry2" label="Country" default="United Kingdom">
+      <element type="select" source="database" name="DependantsDocumentCountry2" label="Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
       <element type="text" name="DependantsDocumentNo2" label="Document No."></element>
       <element type="date" name="DependantsDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="DependantsDocumentIssuePlace2" label="Issue Place"></element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="United Kingdom">
+      <element type="select" source="database" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
+
       <element type="select" name="DependantsDocumentType3" label="Document Type">
         &dat_dependantdocumenttype;
       </element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry3" label="Country" default="United Kingdom">
+      <element type="select" source="database" name="DependantsDocumentCountry3" label="Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
       <element type="text" name="DependantsDocumentNo3" label="Document No"></element>
       <element type="date" name="DependantsDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="DependantsDocumentIssuePlace3" label="Issue Place"></element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="United Kingdom">
+      <element type="select" source="database" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
+
       <!--4-->
       <element type="select" name="DependantsDocumentType4" label="Document Type">
         &dat_dependantdocumenttype;
       </element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry4" label="Country" default="United Kingdom">
+      <element type="select" source="database" name="DependantsDocumentCountry4" label="Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
       <element type="text" name="DependantsDocumentNo4" label="Document No"></element>
       <element type="date" name="DependantsDocumentIssueDate4" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="DependantsDocumentIssuePlace4" label="Issue Place"></element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry4" label="Issue Place Country" default="United Kingdom">
+      <element type="select" source="database" name="DependantsDocumentIssuePlaceCountry4" label="Issue Place Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
       <!--4-->
+
       <!--5-->
       <element type="select" name="DependantsDocumentType5" label="Document Type">
         &dat_dependantdocumenttype;
       </element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry5" label="Country" default="United Kingdom">
+      <element type="select" source="database" name="DependantsDocumentCountry5" label="Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
       <element type="text" name="DependantsDocumentNo5" label="Document No"></element>
       <element type="date" name="DependantsDocumentIssueDate5" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="DependantsDocumentIssuePlace5" label="Issue Place"></element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry5" label="Issue Place Country" default="United Kingdom">
+      <element type="select" source="database" name="DependantsDocumentIssuePlaceCountry5" label="Issue Place Country" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
       <!--5-->
+
       <!--Bank Account Details-->
       <element type="select" name="Institution" label="Institution" mandatory="1">
         <options>
@@ -970,7 +1199,8 @@
         </options>
       </element>
       <element type="text" name="Payee" label="Payee" mandatory="1"></element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="BankCountry" label="Bank Country" mandatory="1" default="United Kingdom">
+      <element type="select" source="database" name="BankCountry" label="Bank Country" mandatory="1" default="United Kingdom">
+        <!--&pre_country;-->
       </element>
       <element type="text" name="BankKey" label="Bank Key" mandatory="1">
         <regex inherit="bankKeyUk" pattern="" message=""></regex>
@@ -982,21 +1212,24 @@
         <regex inherit="ibanUk" pattern="" message=""></regex>
       </element>
       <element type="text" name="BuildingSocietyRollNo" label="Building Society Roll No">
+        <!--<regex inherit="buildingSocietyUk" pattern="" message=""></regex>-->
         <mandatoryIf name="Institution">Building Society</mandatoryIf>
       </element>
       <element type="text" name="PaymentCurrency" label="Payment Currency" mandatory="1" default="GBP">
         <regex inherit="currency" pattern="" message=""></regex>
       </element>
+
       <!--FISCAL DATA and SOCIAL INSURANCE -->
       <element type="select" name="TaxInformation" label="Tax Information">
         <options>
           <option value=""></option>
           <option value="P45 attached">P45 attached</option>
-          <option value="Starter declaration">Starter declaration</option>
+          <option value="P45 to follow">P45 to follow</option>
+          <option value="Statement A/B or C">Statement A/B or C</option>
         </options>
       </element>
       <element type="select" name="StatementDetails" label="Statement Details">
-        <mandatoryIf name="TaxInformation">Starter declaration</mandatoryIf>
+        <mandatoryIf name="TaxInformation">Statement A/B or C</mandatoryIf>
         <options>
           <option value=""></option>
           <option value="A">A</option>
@@ -1004,39 +1237,26 @@
           <option value="C">C</option>
         </options>
       </element>
-      <element type="select" name="DoYouHaveAStudentLoan" label="Do you have a student loan?" default="No" mandatory="1">
+      <element type="select" name="StudentLoanNotFullyRePaid" label="Student Loan not fully repaid?" default="No" mandatory="1">
         <options>
           <option value=""></option>
           <option value="No">No</option>
           <option value="Yes">Yes</option>
         </options>
       </element>
-      <!--<element type="select" name="StudentLoanNotFullyRePaid" label="Student Loan not fully repaid?" default="No" mandatory="1">  Name change #59671
-        <options>
-          <option value=""></option>
-          <option value="No">No</option>
-          <option value="Yes">Yes</option>
-        </options>
-      </element>-->
-      <element type="select" name="TypeOfStudentLoan" label="Type of Student Loan">
-        <mandatoryIf name="DoYouHaveAStudentLoan">Yes</mandatoryIf>
-        <options>
-          <option value=""></option>
-          <option value="Plan 1">Plan 1</option>
-          <option value="Plan 2">Plan 2</option>
-        </options>
-      </element>
+
+
       <element type="text" name="NationalInsuranceNumber" label="National Insurance Number">
         <regex inherit="nationalInsuranceNumber" pattern="" message=""></regex>
       </element>
       <!--Nationality / Language-->
-      <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="Nationality" label="Nationality" default="British">
-        <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
-        <mandatoryIf name="NewToIKEA">International Relocation</mandatoryIf>
+      <element type="search-select" name="Nationality" label="Nationality" default="British">
+        <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
+        &dat_nationality;
       </element>
-      <element type="select" source="database" cssclass="autocomplete-language selectize" name="Language" label="Language" default="English">
-        <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
-        <mandatoryIf name="NewToIKEA">International Relocation</mandatoryIf>
+      <element type="search-select" name="Language" label="Language" default="English">
+        <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
+        &dat_language;
       </element>
       <element type="select" name="EthnicOrigin" label="Ethnic Origin">
         <options>
@@ -1055,8 +1275,10 @@
           <option value="Bangladeshi">Bangladeshi</option>
           <option value="Mixed Race">Mixed Race</option>
           <option value="Other">Other</option>
+
         </options>
       </element>
+
       <element type="select" name="MaritalStatus" label="Marital Status">
         <options>
           <option value=""></option>
@@ -1066,6 +1288,7 @@
           <option value="Civil partnership">Civil partnership</option>
         </options>
       </element>
+
       <element type="select" name="DocumentType" label="Document Type">
         <options>
           <option value=""></option>
@@ -1074,10 +1297,12 @@
           <option value="Work Permit">Work Permit</option>
         </options>
       </element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DocumentCountryOfIssue" label="Country of issue" >
+      <element type="select" source="database" name="DocumentCountryOfIssue" label="Country of issue" >
+        <!--&pre_country;-->
       </element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" default="United Kingdom" name="DocumentCountryOfUse" label="Country of use">
+      <element type="select" source="database" default="United Kingdom" name="DocumentCountryOfUse" label="Country of use">
         <mandatoryIf name="DocumentType">Visa</mandatoryIf>
+        <!--&pre_country;-->
       </element>
       <element type="text" name="DocumentNO" label="Document No.">
         <mandatoryIf name="DocumentType">Passport</mandatoryIf>
@@ -1086,6 +1311,7 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
     </tab>
+
     <tab name="#SSCUseOnly" label="SSC use only">
       <element type="text" name="NewCo-WorkerID" label="Co-Worker ID">
         <regex inherit="employeeno" pattern="" message=""></regex>

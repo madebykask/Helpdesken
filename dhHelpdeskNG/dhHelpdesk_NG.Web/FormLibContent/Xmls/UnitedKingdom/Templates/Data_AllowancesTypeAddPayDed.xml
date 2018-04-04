@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <options>
   <option value=""></option>
-  <option value="Advanced" disabled="1">Advanced</option>
+  <option value="Advanced">Advanced</option>
   <option value="Annualised Hours Allowance">Annualised Hours Allowance</option>
   <option value="Car Allowance">Car Allowance</option>
   <option value="Cash Adjustment">Cash Adjustment</option>

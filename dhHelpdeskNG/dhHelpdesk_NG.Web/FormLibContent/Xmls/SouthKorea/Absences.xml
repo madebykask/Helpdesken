@@ -3,6 +3,7 @@
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
   <!ENTITY state SYSTEM "Templates/AbsencesState.xml">
+  <!ENTITY dat_country SYSTEM "Data/Data_Country.xml">
   <!ENTITY dat_absencetype SYSTEM "Data/Data_AbsenceType.xml">
 ]>
 
@@ -23,7 +24,7 @@
       </element>
       <element name="IKEANetworkID" type="text"  label="IKEA Network ID" mandatory="1"></element>
       <element name="Company" type="text" label="Company"></element>
-      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element> <!--#58799 mandatory-->
+      <element name="BusinessUnit" type="text" label="Business Unit"></element>
       <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
       <element name="TECoWorker" type="select" label="Is Co-Worker a TE?" mandatory="1" default="No">
@@ -42,6 +43,7 @@
       </element>
       <element type="textarea" name="InternalLogNote" label="Comment"></element>
     </tab>
+
     <!--Absences-->
     <tab name="#Absences" label="Absences">
       <element name="AbsencesMulti" type="hidden" default="1"></element>
@@ -53,8 +55,8 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="AbsenceEndsOn" type="date" format="dd.MM.yyyy" label="Absence ends on">       
+        <!--<laterThanOrEqual name="AbsenceStartFrom"></laterThanOrEqual>-->
         <regex inherit="date" pattern="" message=""></regex>
-         <laterThanOrEqual name="AbsenceStartFrom"></laterThanOrEqual>
       </element>
       <element name="AbsenceHours" type="text" label="Absence hours">
         <regex inherit="unsignednum" pattern="" message=""></regex>
@@ -70,8 +72,8 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="AbsenceEndsOn2" type="date" format="dd.MM.yyyy"  label="Absence ends on">
+        <!--<laterThanOrEqual name="AbsenceStartFrom2"></laterThanOrEqual>-->       
         <regex inherit="date" pattern="" message=""></regex>
-        <laterThanOrEqual name="AbsenceStartFrom2"></laterThanOrEqual>
       </element>
       <element name="AbsenceHours2" type="text" label="Absence hours">
         <regex inherit="unsignednum" pattern="" message=""></regex>
@@ -87,8 +89,8 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="AbsenceEndsOn3" type="date" format="dd.MM.yyyy" label="Absence ends on">
+        <!--<laterThanOrEqual name="AbsenceStartFrom3"></laterThanOrEqual>-->  
         <regex inherit="date" pattern="" message=""></regex>
-        <laterThanOrEqual name="AbsenceStartFrom3"></laterThanOrEqual>
       </element>
       <element name="AbsenceHours3" type="text" label="Absence hours">
         <regex inherit="unsignednum" pattern="" message=""></regex>
@@ -104,8 +106,8 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="AbsenceEndsOn4" type="date" format="dd.MM.yyyy" label="Absence ends on">
+        <!--<laterThanOrEqual name="AbsenceStartFrom4"></laterThanOrEqual>-->       
         <regex inherit="date" pattern="" message=""></regex>
-        <laterThanOrEqual name="AbsenceStartFrom4"></laterThanOrEqual>
       </element>
       <element name="AbsenceHours4" type="text" label="Absence hours">
         <regex inherit="unsignednum" pattern="" message=""></regex>
@@ -121,8 +123,8 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element name="AbsenceEndsOn5" type="date" format="dd.MM.yyyy" label="Absence ends on">
+        <!--<laterThanOrEqual name="AbsenceStartFrom5"></laterThanOrEqual>-->
         <regex inherit="date" pattern="" message=""></regex>
-        <laterThanOrEqual name="AbsenceStartFrom5"></laterThanOrEqual>
       </element>
       <element name="AbsenceHours5" type="text" label="Absence hours">
         <regex inherit="unsignednum" pattern="" message=""></regex>
@@ -130,6 +132,7 @@
       <element name="AbsenceDays5" type="text" label="Absence days">
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
+      
       <!-- Details on Global Commuting -->
       <element name="DetailsOnGlobalCommutings" type="hidden" default="1"></element>
       <!--1-->
@@ -157,7 +160,8 @@
         <laterThanOrEqual name="StartFrom"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>        
       </element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DestinationCountry" label="Destination Country">
+      <element  name="DestinationCountry" type="search-select" label="Destination Country">
+        &dat_country;
         <mandatoryIf name="TECoWorker">Yes</mandatoryIf>
       </element>
       <element  name="TaxRelevant" type="select" label="Tax Relevant?">
@@ -191,7 +195,8 @@
         <mandatoryIfNotEmpty name="CommutingType2"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DestinationCountry2" label="Destination Country">
+      <element  name="DestinationCountry2" type="search-select" label="Destination Country">
+        &dat_country;
         <mandatoryIfNotEmpty name="CommutingType2"></mandatoryIfNotEmpty>
       </element>
       <element  name="TaxRelevant2" type="select" label="Tax Relevant?">
@@ -226,7 +231,8 @@
         <laterThanOrEqual name="StartFrom3"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DestinationCountry3" label="Destination Country">
+      <element  name="DestinationCountry3" type="search-select" label="Destination Country">
+        &dat_country;
         <mandatoryIfNotEmpty name="CommutingType3"></mandatoryIfNotEmpty>
       </element>
       <element  name="TaxRelevant3" type="select" label="Tax Relevant?">
@@ -261,7 +267,8 @@
         <laterThanOrEqual name="StartFrom4"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DestinationCountry4" label="Destination Country">
+      <element  name="DestinationCountry4" type="search-select" label="Destination Country">
+        &dat_country;
         <mandatoryIfNotEmpty name="CommutingType4"></mandatoryIfNotEmpty>
       </element>
       <element  name="TaxRelevant3" type="select" label="Tax Relevant?">
@@ -296,7 +303,8 @@
         <laterThanOrEqual name="StartFrom5"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DestinationCountry5" label="Destination Country">
+      <element  name="DestinationCountry5" type="search-select" label="Destination Country">
+        &dat_country;
         <mandatoryIfNotEmpty name="CommutingType5"></mandatoryIfNotEmpty>
       </element>
       <element  name="TaxRelevant5" type="select" label="Tax Relevant?">

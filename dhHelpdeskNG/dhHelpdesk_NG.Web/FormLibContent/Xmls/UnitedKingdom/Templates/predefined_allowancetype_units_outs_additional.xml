@@ -30,10 +30,6 @@
     <show>0.92</show>
   </dependent>
   <dependent>
-    <selected>Fork Lift Truck Allowance Distribution</selected>
-    <show>0.17</show>
-  </dependent>
-  <dependent>
     <selected>Hourly ACE</selected>
     <show></show>
   </dependent>
@@ -43,7 +39,7 @@
   </dependent>
   <dependent>
     <selected>Hourly Day</selected>
-    <show>0.85</show>
+    <show>0.75</show>
   </dependent>
   <dependent>
     <selected>Housing Allowance</selected>
@@ -135,6 +131,6 @@
   </dependent>
   <dependent>
     <selected>Night Shift (Distribution Only)</selected>
-    <show>2.03</show>
+    <show>1.84</show>
   </dependent>
 </predefined>

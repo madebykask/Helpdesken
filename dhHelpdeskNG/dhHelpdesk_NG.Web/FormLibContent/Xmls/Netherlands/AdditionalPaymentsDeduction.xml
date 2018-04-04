@@ -3,6 +3,7 @@
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
   <!ENTITY state SYSTEM "Templates/AdditionalPaymentsDeductionState.xml">  
+  <!--<!ENTITY pre_deductionstype_deductionsnetgross SYSTEM "defaults/Predefined_Deductions_NetGross.xml">-->
 ]>
 
 <form id="62" guid="28DC1F72-16B3-4E17-9A2D-71B879AFE26C" customerId="29">
@@ -48,7 +49,6 @@
       <element type="select" name="AllowancesType" label="Allowance Type">
         <options>
           <option value=""></option>
-          <option value="Allowance day responsible">Allowance day responsible</option>
           <option value="ATMP Allowance">ATMP Allowance</option>
           <option value="Telephone Allowance">Telephone Allowance</option>
           <option value="Building Supplement">Building Supplement</option>

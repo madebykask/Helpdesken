@@ -5,6 +5,9 @@
   <!ENTITY state SYSTEM "Templates/HiringBasicState.xml">  
   
   <!--COMMON DATA-->
+  <!ENTITY data_common_country SYSTEM "Data/Data_Common_Country.xml">
+  <!ENTITY data_common_nationality SYSTEM "Data/Data_Common_Nationality.xml">
+  <!ENTITY data_common_language SYSTEM "Data/Data_Common_Languages.xml">
   <!ENTITY data_common_servicerequestpriority SYSTEM "Data/Data_Common_ServiceRequestPriority.xml">
   <!ENTITY data_common_gender SYSTEM "Data/Data_Common_Gender.xml">
   <!ENTITY data_common_yesno SYSTEM "Data/Data_Common_YesNo.xml">
@@ -37,12 +40,12 @@
       <element type="select" name="ServiceRequestPriority" mandatory="1" label="Service request priority" casefield="status_id" default="Standard" HCMData="0" SortOrder="0" ParentGVFields="0">
         &data_common_servicerequestpriority;
       </element>
-      <element type="text" name="Co-WorkerID" label="Co-worker ID" casefield="reportedby" HCMData="1" SortOrder="3" ParentGVFields="0">
+      <element type="text" name="Co-WorkerID" label="Co-worker ID" HCMData="1" SortOrder="3" ParentGVFields="0">
         <mandatoryIf name="NewToIKEA">Transfer Between Business Units</mandatoryIf>
         <regex inherit="employeeno" pattern="" message=""></regex>
       </element>
-      <element type="text" name="GlobalHRID" label="Global HR ID" formfieldidentifier="P0709.PERSONID_EXT" HCMData="0" SortOrder="0" ParentGVFields="0">
-        <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
+      <element type="text" name="GlobalHRID" label="Global HR ID" formfieldidentifier="P0709.PERSONID_EXT" casefield="reportedby" HCMData="0" SortOrder="0" ParentGVFields="0">
+        <mandatoryIf name="NewToIKEA">International Transfer (TE)</mandatoryIf>
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element type="text" name="FirstName" label="First name" mandatory="1" casefield="persons_name" HCMData="1" SortOrder="5" ParentGVFields="0"></element>
@@ -99,7 +102,8 @@
         <regex inherit="date" pattern="" message=""></regex>
         <mandatoryIf name="FamilyMember">Child</mandatoryIf>
       </element>
-      <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="FamilyMemberNationality" label="Nationality" default="Norwegian" HCMData="1" SortOrder="28" ParentGVFields="0">
+      <element type="search-select" source="1" name="FamilyMemberNationality" label="Nationality" default="Norwegian" HCMData="1" SortOrder="28" ParentGVFields="0">
+        &data_common_nationality;
       </element>
       <element type="select" name="TheOnlyChildCarer" label="The only child carer?" HCMData="1" SortOrder="29" ParentGVFields="0">
         &data_common_yesno;
@@ -118,7 +122,8 @@
         <regex inherit="date" pattern="" message=""></regex>
         <mandatoryIf name="FamilyMember2">Child</mandatoryIf>
       </element>
-      <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="FamilyMemberNationality2" label="Nationality" default="Norwegian" HCMData="1" SortOrder="35" ParentGVFields="0">
+      <element type="search-select" source="1" name="FamilyMemberNationality2" label="Nationality" default="Norwegian" HCMData="1" SortOrder="35" ParentGVFields="0">
+        &data_common_nationality;
       </element>
       <element type="select" name="TheOnlyChildCarer2" label="The only child carer?" HCMData="1" SortOrder="36" ParentGVFields="0">
         &data_common_yesno;
@@ -137,7 +142,8 @@
         <regex inherit="date" pattern="" message=""></regex>
         <mandatoryIf name="FamilyMember3">Child</mandatoryIf>
       </element>
-      <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="FamilyMemberNationality3" label="Nationality" default="Norwegian" HCMData="1" SortOrder="42" ParentGVFields="0">
+      <element type="search-select" source="1" name="FamilyMemberNationality3" label="Nationality" default="Norwegian" HCMData="1" SortOrder="42" ParentGVFields="0">
+        &data_common_nationality;
       </element>
       <element type="select" name="TheOnlyChildCarer3" label="The only child carer?" HCMData="1" SortOrder="43" ParentGVFields="0">
         &data_common_yesno;
@@ -156,7 +162,8 @@
         <regex inherit="date" pattern="" message=""></regex>
         <mandatoryIf name="FamilyMember4">Child</mandatoryIf>
       </element>
-      <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="FamilyMemberNationality4" label="Nationality" default="Norwegian" HCMData="1" SortOrder="49" ParentGVFields="0">
+      <element type="search-select" source="1" name="FamilyMemberNationality4" label="Nationality" default="Norwegian" HCMData="1" SortOrder="49" ParentGVFields="0">
+        &data_common_nationality;
       </element>
       <element type="select" name="TheOnlyChildCarer4" label="The only child carer?" HCMData="1" SortOrder="50" ParentGVFields="0">
         &data_common_yesno;
@@ -175,7 +182,8 @@
         <regex inherit="date" pattern="" message=""></regex>
         <mandatoryIf name="FamilyMember5">Child</mandatoryIf>
       </element>
-      <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="FamilyMemberNationality5" label="Nationality" default="Norwegian" HCMData="1" SortOrder="56" ParentGVFields="0">
+      <element type="search-select" source="1" name="FamilyMemberNationality5" label="Nationality" default="Norwegian" HCMData="1" SortOrder="56" ParentGVFields="0">
+        &data_common_nationality;
       </element>
       <element type="select" name="TheOnlyChildCarer5" label="The only child carer?" HCMData="1" SortOrder="57" ParentGVFields="0">
         &data_common_yesno;
@@ -384,7 +392,7 @@
       <element type="text" name="Payee" label="Payee" mandatory="1" HCMData="1" SortOrder="110" ParentGVFields="0"></element>
       <element type="hidden" name="BankKey" label="Bank Key" default="9999" HCMData="1" SortOrder="111" ParentGVFields="0"></element>
       <element type="text" name="AccountNumber" label="Account Number" HCMData="1" SortOrder="112" ParentGVFields="0">
-        <mandatoryIf name="NewToIKEA">New Hire,International Relocation</mandatoryIf>
+        <mandatoryIf name="NewToIKEA">New Hire,International Move without Mobility</mandatoryIf>
         <regex inherit="PersNO" pattern="" message=""></regex>
       </element>
       <!--FISCAL DATA and SOCIAL INSURANCE -->
@@ -395,7 +403,8 @@
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <!--Nationality / Language-->
-      <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="Nationality" label="Nationality" HCMData="1" SortOrder="20" ParentGVFields="0">
+      <element type="search-select" source="1" name="Nationality" label="Nationality" HCMData="1" SortOrder="20" ParentGVFields="0">
+        &data_common_nationality;
       </element>
       <element type="search-select" name="Language" label="Language" default="Norwegian" mandatory="1" HCMData="1" SortOrder="21" ParentGVFields="0">
         &data_hiring_languageIT0002;

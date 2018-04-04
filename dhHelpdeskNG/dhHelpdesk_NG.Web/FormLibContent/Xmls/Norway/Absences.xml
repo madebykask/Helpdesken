@@ -8,8 +8,11 @@
   <!ENTITY data_global_costcentre SYSTEM "Data/Data_Global_CostCentre.xml">
 
   <!--COMMON DATA-->
+  <!ENTITY data_country SYSTEM "Data/Data_Common_Country.xml">
+
   <!ENTITY dat_ServiceRequestPriority SYSTEM "Data/Data_Common_ServiceRequestPriority.xml">
   <!ENTITY data_common_noyes SYSTEM "Data/Data_Common_NoYes.xml">
+
   <!ENTITY dat_absenceType SYSTEM "Data/Absences/Data_Absences_AbsenceType.xml">
   <!ENTITY dat_changeType SYSTEM "Data/Absences/Data_Absences_ChangeType.xml">
 ]>

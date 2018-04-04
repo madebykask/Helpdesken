@@ -8,12 +8,6 @@
     <show3></show3>
   </dependent>
   <dependent>
-    <selected>Fork Lift Truck Allowance Distribution</selected>
-    <show1>0.17</show1>
-    <show2></show2>
-    <show3></show3>
-  </dependent>
-  <dependent>
     <selected>Kitchen Skills</selected>
     <show1>1.48</show1>
     <show2></show2>
@@ -27,7 +21,7 @@
   </dependent>
   <dependent>
     <selected>Hourly Day</selected>
-    <show1>0.85</show1>
+    <show1>0.75</show1>
     <show2></show2>
     <show3></show3>
   </dependent>
@@ -207,7 +201,7 @@
   </dependent>
   <dependent>
     <selected>Night Shift (Distribution Only)</selected>
-    <show1>2.03</show1>
+    <show1>1.84</show1>
     <show2></show2>
     <show3></show3>
   </dependent>

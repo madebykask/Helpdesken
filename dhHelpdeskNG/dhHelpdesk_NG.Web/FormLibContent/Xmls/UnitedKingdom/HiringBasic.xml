@@ -3,12 +3,19 @@
 <!ENTITY languages SYSTEM "Templates/Languages.xml">
 <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
 <!ENTITY state SYSTEM "Templates/HiringBasicState.xml">
+<!--<!ENTITY pre_company_unit SYSTEM "Templates/Predefined_Company_Unit.xml">
+<!ENTITY pre_unit_department SYSTEM "Templates/Predefined_Unit_Department.xml">
+<!ENTITY pre_psarea_psgroup SYSTEM "Templates/Predefined_PSArea_PSGroup.xml">-->
+<!--<!ENTITY pre_country SYSTEM "Templates/Data_Country.xml">-->
+  <!ENTITY dat_nationality SYSTEM "Templates/Data_Nationality.xml">
 ]>
 
+<!-- Dev/Prod/Test -->
 <form id="109" guid="8C9F42D1-E9F2-4E68-A66A-439F04918AE9" customerId="30">
     &languages;
     &regexs;
     &state;
+
     <fields>
         <!--Service Request Details-->
       <tab name="#servicerequestdetails" label="Service Request Details">
@@ -16,13 +23,13 @@
           <options>
             <option value=""></option>
             <option value="New Hire">New Hire</option>
-            <option value="International Transfer (LTA, STA, Commuter)">International Transfer (LTA, STA, Commuter)</option>
-            <option value="International Relocation">International Relocation</option>
-            <option value="Re-Hire">Re-instating</option>
+            <option value="International Transfer">International Transfer</option>
+            <option value="Re-Hire">Re-Hire</option>
             <option value="Transfer Between Business Units">Transfer Between Business Units</option>
           </options>
         </element>
         <element type="date" name="ContractStartDate" label="Contract Start Date" format="dd.MM.yyyy" mandatory="1">
+
           <regex inherit="date" pattern="" message=""></regex>
         </element>
         <element type="date" name="InductionDate" mandatory="1" label="Induction Date" format="dd.MM.yyyy">
@@ -38,9 +45,11 @@
           <option value="5 days">5 days</option>
         </options>
       </element>
+      
       <element type="text" name="InductionStartTime" mandatory="1" label="Induction Start Time - Day 1">
         <regex inherit="timestamp" pattern="" message=""></regex>
       </element>
+
       <element type="text" name="InductionEndTime" mandatory="1" label="Induction End Time - Day 1">
         <regex inherit="timestamp" pattern="" message=""></regex>
       </element>
@@ -82,8 +91,7 @@
       </element>
         <element type="date" name="PreviousContractStartDate" label="Previous Contract Start Date" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
-          <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
-          <mandatoryIf name="NewToIKEA">International Relocation</mandatoryIf>
+          <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
         </element>
         <element type="select" name="ServiceRequestPriority" mandatory="1" label="Service Request Priority" default="Standard">
           <options>
@@ -93,13 +101,11 @@
           </options>
         </element>
         <element type="text" name="Co-WorkerID" label="Co-Worker ID">
-          <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
-          <mandatoryIf name="NewToIKEA">International Relocation</mandatoryIf>
+          <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
           <mandatoryIf name="NewToIKEA">Transfer Between Business Units</mandatoryIf>
         </element>
         <element type="text" name="GlobalHRID" label="Global HR ID">
-          <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
-          <mandatoryIf name="NewToIKEA">International Relocation</mandatoryIf>
+          <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
           <regex inherit="unsignednum" pattern="" message=""></regex>
         </element>
         <element type="select" name="Title" label="Title" mandatory="1">
@@ -113,7 +119,13 @@
         </element>
         <element type="text" name="FirstName" label="First Name" mandatory="1"></element>
         <element type="text" name="LastName" label="Last Name" mandatory="1"></element>
+        <!--<element type="date" name="DateOfBirth" label="Date of birth" mandatory="1" format="dd.MM.yyyy">
+          <agecheck name="ContractStartDate" age="16" message="Employee under 16, you are unable to proceed with this service request"></agecheck>
+          <regex inherit="date" pattern="" message=""></regex>
+        </element>-->
         <element type="date" name="DateOfBirth" label="Date of birth" mandatory="1" format="dd.MM.yyyy">
+          <!--<agecheck name="ContractStartDate" dropDownFieldToValidate="Company" validateFor="IKEA Prop Investments Ltd,IKEA Ltd" age="16" message="Employee under 16, you are unable to proceed with this service request"></agecheck>
+          <agecheck name="ContractStartDate" dropDownFieldToValidate="Company" validateFor="IKEA Dist Services Ltd" age="18" message="Employee under 18, you are unable to proceed with this service request"></agecheck>-->
           <regex inherit="date" pattern="" message=""></regex>
         </element>
         <element type="text" name="PermanentAddressLine1" label="Address line 1" mandatory="1"></element>
@@ -125,18 +137,23 @@
         </element>
         <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
       </tab>
+
+
       <tab name="#personal" label="Personal Information">
         <element type="text" name="TelephoneNumber" label="Telephone Number"></element>
         <element type="text" name="MobilePhoneNumber" label="Mobile Phone Number"></element>
         <element type="text" name="ContactEMailAddress" label="Contact e-mail address">
           <regex inherit="email" pattern="" message=""></regex>
         </element>
+
+
         <element type="text" name="MailingAddressLine1" label="Address line 1"></element>
         <element type="text" name="MailingAddressLine2" label="Address line 2"></element>
         <element type="text" name="MailingPostalCode" label="Postal code"></element>
         <element type="text" name="MailingCity" label="City"></element>
         <element type="select" source="database" name="MailingCountry" label="Country" default="United Kingdom">
         </element>
+
         <element type="text" name="EmergencyAddressLine1" label="Address line 1" mandatory="1"></element>
         <element type="text" name="EmergencyAddressLine2" label="Address line 2"></element>
         <element type="text" name="EmergencyPostalCode" label="Postal code" mandatory="1"></element>
@@ -146,6 +163,7 @@
         <element type="text" name="EmergencyContactNumber" label="Emergency contact number"></element>
         <element type="text" name="EmergencyContactRelationship" label="Emergency contact/relationship">
         </element>
+
         <!--Family Member/Dependents-->
         <element type="hidden" name="FamilyMembers" default="1"></element>
         <element type="select" name="FamilyMember" label="Family Member">
@@ -169,6 +187,8 @@
         <element type="date" name="FamilyMemberDateOfBirth" label="Date of Birth" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
         </element>
+
+
         <element type="select" name="FamilyMember2" label="Family Member">
           <options>
             <option value=""></option>
@@ -190,6 +210,7 @@
         <element type="date" name="FamilyMemberDateOfBirth2" label="Date of Birth" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
         </element>
+
         <element type="select" name="FamilyMember3" label="Family Member">
           <options>
             <option value=""></option>
@@ -211,6 +232,7 @@
         <element type="date" name="FamilyMemberDateOfBirth3" label="Date of Birth" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
         </element>
+
         <element type="select" name="FamilyMember4" label="Family Member">
           <options>
             <option value=""></option>
@@ -232,6 +254,7 @@
         <element type="date" name="FamilyMemberDateOfBirth4" label="Date of Birth" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
         </element>
+        
         <!--5-->
         <element type="select" name="FamilyMember5" label="Family Member">
           <options>
@@ -255,6 +278,7 @@
           <regex inherit="date" pattern="" message=""></regex>
         </element>
         <!--5-->
+
         <!--Global mobility Employee Documents-->
         <element type="hidden" name="EmployeeDocuments" default="1"></element>
         <element type="select" name="EmployeeDocumentType" label="Document Type">
@@ -283,6 +307,7 @@
         <element type="text" name="EmployeeDocumentIssuePlace" label="Issue Place"></element>
         <element type="select" source="database" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country" default="United Kingdom">
         </element>
+
         <element type="select" name="EmployeeDocumentType2" label="Document Type">
           <options>
             <option value=""></option>
@@ -309,6 +334,7 @@
         <element type="text" name="EmployeeDocumentIssuePlace2" label="Issue Place"></element>
         <element type="select" source="database" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place Country" default="United Kingdom">
         </element>
+
         <element type="select" name="EmployeeDocumentType3" label="Document Type">
           <options>
             <option value=""></option>
@@ -335,6 +361,7 @@
         <element type="text" name="EmployeeDocumentIssuePlace3" label="Issue Place"></element>
         <element type="select" source="database" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place Country" default="United Kingdom">
         </element>
+
         <!--4-->
         <element type="select" name="EmployeeDocumentType4" label="Document Type">
           <options>
@@ -363,6 +390,7 @@
         <element type="select" source="database" name="EmployeeDocumentIssuePlaceCountry4" label="Issue Place Country" default="United Kingdom">
         </element>
         <!--4-->
+
         <!--5-->
         <element type="select" name="EmployeeDocumentType5" label="Document Type">
           <options>
@@ -391,6 +419,7 @@
         <element type="select" source="database" name="EmployeeDocumentIssuePlaceCountry5" label="Issue Place Country" default="United Kingdom">
         </element>
         <!--5-->
+        
         <!--Global mobility Dependants-->
         <element type="hidden" name="DependantFamilyMembers" default="1"></element>
         <element type="select" name="DependantFamilyMember" label="Dependant Family Member">
@@ -456,6 +485,7 @@
         <element type="date" name="DependantsDateOfBirth3" label="Dependant's Date of birth" format="dd.MM.yyyy">
           <regex inherit="date" pattern="" message=""></regex>
         </element>
+
         <!--4-->
            <element type="select" name="DependantFamilyMember4" label="Dependant Family Member">
           <options>
@@ -479,6 +509,7 @@
           <regex inherit="date" pattern="" message=""></regex>
         </element>
         <!--4-->
+        
         <!--5-->
            <element type="select" name="DependantFamilyMember5" label="Dependant Family Member">
           <options>
@@ -502,6 +533,7 @@
           <regex inherit="date" pattern="" message=""></regex>
         </element>
         <!--5-->
+        
         <!--Global Mobility Dependants Documents-->
         <element type="hidden" name="DependantsDocuments" default="1"></element>
         <element type="select" name="DependantsDocumentType" label="Document Type">
@@ -530,6 +562,7 @@
         <element type="text" name="DependantsDocumentIssuePlace" label="Issue Place" ></element>
         <element type="select" source="database" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="United Kingdom">
         </element>
+
         <element type="select" name="DependantsDocumentType2" label="Document Type">
           <options>
             <option value=""></option>
@@ -556,6 +589,7 @@
         <element type="text" name="DependantsDocumentIssuePlace2" label="Issue Place"></element>
         <element type="select" source="database" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="United Kingdom">
         </element>
+
         <element type="select" name="DependantsDocumentType3" label="Document Type">
           <options>
             <option value=""></option>
@@ -582,6 +616,7 @@
         <element type="text" name="DependantsDocumentIssuePlace3" label="Issue Place"></element>
         <element type="select" source="database" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="United Kingdom">
         </element>
+
         <!--4-->
         <element type="select" name="DependantsDocumentType4" label="Document Type">
           <options>
@@ -610,6 +645,7 @@
         <element type="select" source="database" name="DependantsDocumentIssuePlaceCountry4" label="Issue Place Country" default="United Kingdom">
         </element>
         <!--4-->
+
         <!--5-->
         <element type="select" name="DependantsDocumentType5" label="Document Type">
           <options>
@@ -638,7 +674,10 @@
         <element type="select" source="database" name="DependantsDocumentIssuePlaceCountry5" label="Issue Place Country" default="United Kingdom">
         </element>
         <!--5-->
+
         <!--Bank Account Details-->
+
+
         <element type="select" name="Institution" label="Institution" mandatory="1">
           <options>
             <option value=""></option>
@@ -659,21 +698,24 @@
           <regex inherit="ibanUk" pattern="" message=""></regex>
         </element>
         <element type="text" name="BuildingSocietyRollNo" label="Building Society Roll No">
+          <!--<regex inherit="buildingSocietyUk" pattern="" message=""></regex>-->
           <mandatoryIf name="Institution">Building Society</mandatoryIf>
         </element>
         <element type="text" name="PaymentCurrency" label="Payment Currency" mandatory="1" default="GBP">
           <regex inherit="currency" pattern="" message=""></regex>
         </element>
+
         <!--FISCAL DATA and SOCIAL INSURANCE -->
         <element type="select" name="TaxInformation" label="Tax Information">
           <options>
             <option value=""></option>
             <option value="P45 attached">P45 attached</option>
-            <option value="Starter declaration">Starter declaration</option>
+            <option value="P45 to follow">P45 to follow</option>
+            <option value="Statement A/B or C">Statement A/B or C</option>
           </options>
         </element>
         <element type="select" name="StatementDetails" label="Statement Details">
-          <mandatoryIf name="TaxInformation">Starter declaration</mandatoryIf>
+          <mandatoryIf name="TaxInformation">Statement A/B or C</mandatoryIf>
           <options>
             <option value=""></option>
             <option value="A">A</option>
@@ -681,39 +723,25 @@
             <option value="C">C</option>
           </options>
         </element>
-        <element type="select" name="DoYouHaveAStudentLoan" label="Do you have a student loan?" default="No" mandatory="1">
+        <element type="select" name="StudentLoanNotFullyRePaid" label="Student Loan not fully repaid?" default="No" mandatory="1">
           <options>
             <option value=""></option>
             <option value="No">No</option>
             <option value="Yes">Yes</option>
           </options>
         </element>
-        <!--<element type="select" name="StudentLoanNotFullyRePaid" label="Student Loan not fully repaid?" default="No" mandatory="1">  Name change #59671
-          <options>
-            <option value=""></option>
-            <option value="No">No</option>
-            <option value="Yes">Yes</option>
-          </options>
-        </element>-->
-        <element type="select" name="TypeOfStudentLoan" label="Type of Student Loan">
-          <mandatoryIf name="DoYouHaveAStudentLoan">Yes</mandatoryIf>
-          <options>
-            <option value=""></option>
-            <option value="Plan 1">Plan 1</option>
-            <option value="Plan 2">Plan 2</option>
-          </options>
-        </element>
+
+
         <element type="text" name="NationalInsuranceNumber" label="National Insurance Number">
           <regex inherit="nationalInsuranceNumber" pattern="" message=""></regex>
         </element>
         <!--Nationality / Language-->
-        <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="Nationality" label="Nationality" default="British">
-          <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
-          <mandatoryIf name="NewToIKEA">International Relocation</mandatoryIf>
+        <element type="search-select" name="Nationality" label="Nationality" default="British">
+          <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
+          &dat_nationality;
         </element>
         <element type="search-select" name="Language" label="Language" default="English">
-          <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
-          <mandatoryIf name="NewToIKEA">International Relocation</mandatoryIf>
+          <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
           <options>
             <option value=""></option>
             <option value="Afrikaans">Afrikaans</option>
@@ -777,8 +805,10 @@
             <option value="Bangladeshi">Bangladeshi</option>
             <option value="Mixed Race">Mixed Race</option>
             <option value="Other">Other</option>
+
           </options>
         </element>
+
         <element type="select" name="MaritalStatus" label="Marital Status">
           <options>
             <option value=""></option>
@@ -788,6 +818,7 @@
             <option value="Civil partnership">Civil partnership</option>
           </options>
         </element>
+
         <element type="select" name="DocumentType" label="Document Type">
           <options>
             <option value=""></option>

@@ -12,7 +12,9 @@
   &languages;
   &regexs;
   &state;
+
   <fields>
+
     <!--Tab ServiceRequestDetails-->
     <tab name="#ServiceRequestDetails" label="Service Request Details">
       <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
@@ -25,7 +27,7 @@
       </element>
       <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1"></element>
       <element name="Company" type="text" label="Company"></element>
-      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element> <!--#58799 mandatory-->
+      <element name="BusinessUnit" type="text" label="Business Unit"></element>
       <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
       <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy">
@@ -42,7 +44,15 @@
         </options>
       </element>
       <element type="textarea" name="InternalLogNote" label="Comment"></element>
+      <!--<element type="hidden" name="PermanentAddressLine1" label="Address line 1"></element>
+      <element type="hidden" name="PermanentAddressLine2" label="Address line 2"></element>
+      <element type="hidden" name="PermanentAddressLine3" label="Address line 3"></element>
+      <element type="hidden" name="PermanentPostalCode" label="Postal code"></element>
+      <element type="hidden" name="PermanentCity" label="City"></element>
+      <element type="hidden" name="PermanentCountry" label="Country"></element>-->
+
     </tab>
+
     <tab name="#Payment" label="Payment Information">
       <element type="hidden" name="Allowances" default="1"></element>
       <!--Allowances-->
@@ -55,7 +65,7 @@
         <mandatoryIfNotEmpty name="AllowancesChangeType"></mandatoryIfNotEmpty>
       </element>
       <element type="text" name="AllowancesAmountUnits" label="Amount/Units">
-        <regex inherit="allowNegativeAmount" message="" pattern=""></regex>  <!--#58799-->
+        <regex inherit="amount3" message="" pattern=""></regex>
         <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
         <mandatoryIfNotEmpty name="AllowancesChangeType"></mandatoryIfNotEmpty>
       </element>
@@ -91,7 +101,7 @@
         <mandatoryIfNotEmpty name="AllowancesChangeType2"></mandatoryIfNotEmpty>        
       </element>
       <element type="text" name="AllowancesAmountUnits2" label="Amount/Units" >
-        <regex inherit="allowNegativeAmount" message="" pattern=""></regex> <!--#58799-->
+        <regex inherit="amount3" message="" pattern=""></regex>
         <mandatoryIfNotEmpty name="AllowancesChangeType2"></mandatoryIfNotEmpty>
         <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>        
       </element>
@@ -127,7 +137,7 @@
         <mandatoryIfNotEmpty name="AllowancesChangeType3"></mandatoryIfNotEmpty>
       </element>
       <element type="text" name="AllowancesAmountUnits3" label="Amount/Units" >
-        <regex inherit="allowNegativeAmount" message="" pattern=""></regex> <!--#58799-->
+        <regex inherit="amount3" message="" pattern=""></regex>
         <mandatoryIfNotEmpty name="AllowancesChangeType3"></mandatoryIfNotEmpty>
         <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
       </element>
@@ -163,7 +173,7 @@
         <mandatoryIfNotEmpty name="AllowancesChangeType4"></mandatoryIfNotEmpty>        
       </element>
       <element type="text" name="AllowancesAmountUnits4" label="Amount/Units" >
-        <regex inherit="allowNegativeAmount" message="" pattern=""></regex> <!--#58799-->
+        <regex inherit="amount3" message="" pattern=""></regex>
         <mandatoryIfNotEmpty name="AllowancesChangeType4"></mandatoryIfNotEmpty>
         <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
       </element>
@@ -199,7 +209,7 @@
         <mandatoryIfNotEmpty name="AllowancesChangeType5"></mandatoryIfNotEmpty>
       </element>
       <element type="text" name="AllowancesAmountUnits5" label="Amount/Units" >
-        <regex inherit="allowNegativeAmount" message="" pattern=""></regex> <!--#58799-->
+        <regex inherit="amount3" message="" pattern=""></regex>
         <mandatoryIfNotEmpty name="AllowancesChangeType5"></mandatoryIfNotEmpty>
         <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
       </element>
@@ -240,7 +250,7 @@
       <element type="text" name="DeductionsAmountUnits" label="Amount/Units" >
         <mandatoryIfNotEmpty name="DeductionsChangeType"></mandatoryIfNotEmpty>
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
-        <regex inherit="allowNegativeAmount" message="" pattern=""></regex>  <!--#58799-->
+        <regex inherit="amount3" message="" pattern=""></regex>
       </element>
       <element type="select" name="DeductedPer" label="Deducted per:" default="month">
         <mandatoryIfNotEmpty name="DeductionsChangeType"></mandatoryIfNotEmpty>
@@ -274,7 +284,7 @@
       <element type="text" name="DeductionsAmountUnits2" label="Amount/Units" >
         <mandatoryIfNotEmpty name="DeductionsChangeType2"></mandatoryIfNotEmpty>
         <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
-        <regex inherit="allowNegativeAmount" message="" pattern=""></regex> <!--#58799-->
+        <regex inherit="amount3" message="" pattern=""></regex>
       </element>
       <element type="select" name="DeductedPer2" label="Deducted per:" default="month">
         <mandatoryIfNotEmpty name="DeductionsChangeType2"></mandatoryIfNotEmpty>
@@ -308,7 +318,7 @@
       <element type="text" name="DeductionsAmountUnits3" label="Amount/Units" >
         <mandatoryIfNotEmpty name="DeductionsChangeType3"></mandatoryIfNotEmpty>
         <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
-        <regex inherit="allowNegativeAmount" message="" pattern=""></regex> <!--#58799-->
+        <regex inherit="amount3" message="" pattern=""></regex>
       </element>
       <element type="select" name="DeductedPer3" label="Deducted per:" default="month">
         <mandatoryIfNotEmpty name="DeductionsChangeType3"></mandatoryIfNotEmpty>
@@ -342,7 +352,7 @@
       <element type="text" name="DeductionsAmountUnits4" label="Amount/Units" >
         <mandatoryIfNotEmpty name="DeductionsChangeType4"></mandatoryIfNotEmpty>
         <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
-        <regex inherit="allowNegativeAmount" message="" pattern=""></regex> <!--#58799-->
+        <regex inherit="amount3" message="" pattern=""></regex>
       </element>
       <element type="select" name="DeductedPer4" label="Deducted per:" default="month">
         <mandatoryIfNotEmpty name="DeductionsChangeType4"></mandatoryIfNotEmpty>
@@ -376,7 +386,7 @@
       <element type="text" name="DeductionsAmountUnits5" label="Amount/Units" >
         <mandatoryIfNotEmpty name="DeductionsChangeType5"></mandatoryIfNotEmpty>        
         <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
-        <regex inherit="allowNegativeAmount" message="" pattern=""></regex> <!--#58799-->
+        <regex inherit="amount3" message="" pattern=""></regex>
       </element>
       <element type="select" name="DeductedPer5" label="Deducted per:" default="month">
         <mandatoryIfNotEmpty name="DeductionsChangeType5"></mandatoryIfNotEmpty>

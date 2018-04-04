@@ -3,8 +3,6 @@
 <show>Accounting Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Accounting Manager</selected>
 <show>Accounting Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Accounting Specialist</selected>
-<show>Accounting Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Accounting Team Leader</selected>
 <show>Accounting Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Activity Specialist</selected>
@@ -13,8 +11,6 @@
 <show>Administration Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Administrator</selected>
 <show>Administrator</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>All Channel User Experience Leader</selected>
-<show>All Channel User Experience Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Apprentice</selected>
 <show>Apprentice</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Business Analyst</selected>
@@ -37,8 +33,6 @@
 <show>Checkout Services Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Checkout Services Team Leader</selected>
 <show>Checkout Services Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Claims Administrator</selected>
-<show>Claims Administrator</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Commercial Activity Leader</selected>
 <show>Commercial Activity Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Commercial Manager</selected>
@@ -49,8 +43,6 @@
 <show>Commercial SFM &amp; Bistro Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Communication &amp; Interior Design Manager</selected>
 <show>Com &amp; In Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Communication Responsible Furuset</selected>
-<show>Communication Responsible</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Communications Specialist - Senior</selected>
 <show>Communications Specialist - Senior</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Compensation &amp; Benefits Manager</selected>
@@ -61,8 +53,6 @@
 <show>Construction Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Construction Project Manager</selected>
 <show>Construction Project Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Consumer &amp; Customer Engagement Manager</selected>
-<show>Consumer &amp; Customer Engagement Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Contact Centre Manager</selected>
 <show>Country Customer Support Centre Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Controller</selected>
@@ -71,10 +61,10 @@
 <show>Activity Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Country Com/In Manager</selected>
 <show>Country Com&amp;In Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Country Commercial Activity Leader</selected>
-<show>Country Commercial Activity Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Country Compliance Manager</selected>
-<show>Country Compliance Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Country Customer Relations Manager</selected>
+<show>Country Customer Relations Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Country Easy Buying Leader</selected>
+<show>Country Easy Buying Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Country Graphic Communication Leader</selected>
 <show>Country Graphic Communication Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Country HR Manager</selected>
@@ -85,6 +75,8 @@
 <show>Retail Logistics Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Country Marketing Manager</selected>
 <show>Country Marketing Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Country Payments Leader</selected>
+<show>Country Payments Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Country Retail Manager</selected>
 <show>Country Retail Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Country Sales Manager</selected>
@@ -93,48 +85,32 @@
 <show>Co-worker Relations Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Creative Leader SO</selected>
 <show>Creative Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Ctry Digital Comm &amp; Editorial Cont Spec</selected>
-<show>Ctry Digital Comm &amp; Editorial Cont Spec</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Area Team Leader</selected>
 <show>Customer Area Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Customer Experience Manager SO</selected>
-<show>Customer Experience Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Customer Experience Services leader</selected>
-<show>CX Services</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Knowledge &amp; Insight Mgr Hjemme</selected>
 <show>Knowledge and Insight Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relation Manager</selected>
 <show>Customer Relations Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations Manager</selected>
 <show>Customer Relations Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Customer Relations Specialist SO</selected>
-<show>Customer Relations Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Customer Relations Team Leader</selected>
 <show>Customer Relations Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>CX Resolutions &amp; Returns</selected>
-<show>CX Resolutions &amp; Returns</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Data Steward</selected>
-<show>Data Steward</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Customer Service manager SO</selected>
+<show>Shopping Experience Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Database specialist</selected>
+<show>Database specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Department Manager Operations</selected>
 <show>Operations Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Business Navigation Manager</selected>
 <show>Deputy Business Navigation Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Checkout Services Manager</selected>
 <show>Deputy Checkout Services Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Deputy Com &amp; In Manager</selected>
-<show>Deputy Com &amp; In Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Country Com&amp;In Manager</selected>
 <show>Deputy Country Com&amp;In Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Deputy Customer Support Centre Manager</selected>
-<show>Deputy Customer Support Centre Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Goods Flow Manager</selected>
 <show>Deputy Goods Flow Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Logistics Manager</selected>
 <show>Deputy Logistics Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Deputy Project Manager SO</selected>
-<show>Deputy Project Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Deputy Retail Logistics Manager</selected>
-<show>Deputy Retail Logistics Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Retail Manager</selected>
 <show>Deputy Retail Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Sales Manager</selected>
@@ -145,38 +121,24 @@
 <show>Deputy Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Deputy Store Manager</selected>
 <show>Deputy Store Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Digital Business Process Specialist</selected>
-<show>Digital Business Process Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Digital Channel Performance Manager</selected>
-<show>Digital Channel Performance Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Digital Content Editor</selected>
-<show>Digital Content Editor</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Digital Merchandising Specialist</selected>
-<show>Digital Merchandising Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Digital Optimisation Manager</selected>
-<show>Digital Optimisation Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Digital Performance Analyst</selected>
-<show>Digital Performance Analyst</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Digital Range Specialist</selected>
-<show>Digital Range Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Easy Buying Leader</selected>
 <show>Easy Buying Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Easy Buying Manager</selected>
 <show>Easy Buying Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>eCommerce Customer Experience Specialist</selected>
-<show>eCommerce Customer Experience Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>eCommerce Manager</selected>
+<show>eCommerce Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Ecommerce Operations Specialist</selected>
+<show>Ecommerce Operations Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Exchange &amp; Returns Manager</selected>
 <show>Exchange &amp; Returns Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Exchange &amp; Returns Team Leader</selected>
 <show>Exchange &amp; Returns Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Facility Management Specialist</selected>
-<show>Local Facility Management Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>External Communication Manager</selected>
+<show>Country External Communication Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Facility Manager</selected>
 <show>Country Facility Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Finance Manager</selected>
 <show>Finance Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Financial Controller</selected>
-<show>Financial Controller</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Full Serve Manager</selected>
 <show>Full Serve Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Goods Flow Co-worker</selected>
@@ -191,6 +153,10 @@
 <show>Graphic Communication Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Graphic Communication Leader</selected>
 <show>Graphic Communication Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Graphic Designer</selected>
+<show>Graphic Designer</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>HR Business Navigator</selected>
+<show>HR Business Navigator</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>HR Generalist</selected>
 <show>HR Generalist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>HR Manager</selected>
@@ -203,11 +169,13 @@
 <show>HR System Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IF Team Leader</selected>
 <show>IF Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>IKEA Business Manager</selected>
+<show>IKEA Business Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>IKEA Business Specialist</selected>
 <show>IKEA Business Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>IKEA FOOD Co-worker</selected>
+<selected>IKEA Food Co-worker</selected>
 <show>IKEA Food Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>IKEA FOOD Manager</selected>
+<selected>IKEA Food Manager</selected>
 <show>IKEA Food Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Information &amp; Communication Specialist</selected>
 <show>Information &amp; Communication Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
@@ -215,14 +183,14 @@
 <show>Country In-Store Logistics Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>In-store Logistics Manager - Store</selected>
 <show>In-store Logistics Manager - Store</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Integration: default posi</selected>
+<show>Sales Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Interior Design Co-worker</selected>
 <show>Interior Design Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Interior Design Manager</selected>
 <show>Interior Design Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Interior Design Manager Sørlandet</selected>
-<show>Interior Design Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Interior Design Specialist</selected>
-<show>Interior Design Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Interior Designer Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Interior Designer Leader</selected>
 <show>Interior Design Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>iShop Administrator</selected>
@@ -248,29 +216,25 @@
 <selected>Logistics Manager</selected>
 <show>Logistics Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Logistics Specialist SO</selected>
-<show>Project Implementation Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Logistics Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Maintenance Co-worker</selected>
 <show>Maintenance Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Maintenance Manager</selected>
 <show>Maintenance Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Market Intelligence Manager</selected>
-<show>Market Intelligence Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Marketing Creative Specialist</selected>
 <show>Marketing Creative Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Marketing Relationship Manager</selected>
+<show>Marketing Relationship Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Marketing Web Specialist</selected>
+<show>Marketing Web Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Marketing Web Specialist SO</selected>
 <show>Marketing Web Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Media Specialist</selected>
 <show>Media Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Mobility Specialist</selected>
-<show>Mobility Specialist IKEA Grp</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Office Support Administrator</selected>
-<show>Office Support Administrator</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Office Support Administrator Hjemme</selected>
 <show>Office Support Administrator</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Operations Developer</selected>
 <show>Operations Developer</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Operations Manager</selected>
-<show>Operations Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Payroll Manager</selected>
 <show>Payroll Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Payroll Specialist</selected>
@@ -279,9 +243,9 @@
 <show>Pick-up Point Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>PR &amp; Communication Manager</selected>
 <show>PR &amp; Communication Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>PR Co-worker</selected>
+<show>PR Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Product Quality Specialist</selected>
-<show>Product Quality Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Product Quality Specialist Slependen</selected>
 <show>Product Quality Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Product Req &amp; Compliance Specialist</selected>
 <show>Product Req &amp; Compliance Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
@@ -297,6 +261,8 @@
 <show>Project Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Project Specialist</selected>
 <show>Project Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Project Specialist SO</selected>
+<show>Project Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Property Business Navigator</selected>
 <show>Property Business Navigator</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Property Manager</selected>
@@ -305,8 +271,6 @@
 <show>Purchase Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Purchaser</selected>
 <show>Purchaser</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Quality &amp; Safety Compliance Leader</selected>
-<show>Quality &amp; Safety Compliance Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Quality Support</selected>
 <show>Quality Support</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Range &amp;Purchasing Manager</selected>
@@ -337,6 +301,8 @@
 <show>Safety &amp; Security Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales &amp; Service Expeditor</selected>
 <show>Sales &amp; Service Expeditor</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Sales &amp; Supply Support</selected>
+<show>Sales &amp; Supply Support</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales &amp; Supply Support Co-worker</selected>
 <show>Sales &amp; Supply Support Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales &amp; Supply Support Manager</selected>
@@ -351,69 +317,63 @@
 <show>Sales Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales Navigator</selected>
 <show>Sales Navigator</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Sales Specialist</selected>
+<show>Sales Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales Support</selected>
 <show>Sales Support Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales Support Co-worker</selected>
 <show>Sales Support Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sales Support Specialist</selected>
 <show>Sales Support Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Sales Team Leader</selected>
-<show>Sales Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Security Responsible</selected>
 <show>Security Responsible</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>SEO Specialist</selected>
-<show>SEO Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Service Business Leader</selected>
 <show>Service Business Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Service Co-worker</selected>
 <show>Service Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Service Team Leader</selected>
 <show>Service Team Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Services Manager</selected>
+<show>Services Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Shopkeeper</selected>
 <show>Shopkeeper</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Shopping Experience Leader</selected>
 <show>Shopping Experience Leader</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Shopping Experience Manager</selected>
 <show>Shopping Experience Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Shopping Experience Manager SO</selected>
+<show>Shopping Experience Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Staff Planning Manager</selected>
 <show>Staff Planning Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Staff Planning Specialist</selected>
 <show>Staff Planning Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Staff Planning Specialist Slependen</selected>
-<show>Staff Planning Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Staff Scheduler</selected>
-<show>Staff Planning Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Store Design Manager SO</selected>
-<show>Store Design Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Staff Planning Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Store Manager</selected>
 <show>Store Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Superuser Hjemme</selected>
-<show>Superuser</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sustainability Developer SO</selected>
-<show>Sustainability Developer</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<show>Database specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Sustainability Manager</selected>
 <show>Sustainability Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Talent Manager</selected>
 <show>Talent Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Team Leader</selected>
 <show>Call Center Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Trainee</selected>
-<show>Trainee</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Translator</selected>
 <show>Translator</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>User Experience Specialist</selected>
-<show>User Experience Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>User experience Manager</selected>
+<show>User experience Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Visual Merchandise/Activity Manager</selected>
 <show>Visual Merchandising/Activity Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Visual Merchandising Activity Specialist</selected>
-<show>Visual Merchandising Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Visual Merchandising Specialist</selected>
 <show>Visual Merchandising Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Visual Merchandising/Activity Co-worker</selected>
 <show>Visual Merchandising/Activity Co-worker</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Visual Merchandising/Activity Manager</selected>
 <show>Visual Merchandising/Activity Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Web Communications Manager</selected>
+<show>Country Web &amp; Digital Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
+<selected>Web Contant Specialist</selected>
+<show>Marketing Web Specialist</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
 <selected>Web Implementation Manager</selected>
-<show>Web Implementation Manager</show></dependent><dependent><selectedCode>{selectedCode}</selectedCode>
-<selected>Web, Ecommerce &amp; Digital Manager</selected>
-<show>Web, Ecommerce &amp; Digital Manager</show></dependent></predefined>
+<show>Web Implementation Manager</show></dependent></predefined>

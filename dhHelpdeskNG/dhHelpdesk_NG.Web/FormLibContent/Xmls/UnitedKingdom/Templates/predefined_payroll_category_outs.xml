@@ -542,6 +542,16 @@
     <show7>Salaried Management</show7>
   </dependent>
   <dependent>
+    <selected>Checkout Services Co-worker</selected>
+    <show1></show1>
+    <show2></show2>
+    <show3></show3>
+    <show4></show4>
+    <show5>Co-worker</show5>
+    <show6>Level 1</show6>
+    <show7>Hourly</show7>
+  </dependent>
+  <dependent>
     <selected>Checkout Services Manager</selected>
     <show1>50</show1>
     <show2>51</show2>
@@ -4042,7 +4052,11 @@
     <show7>Salaried</show7>
   </dependent>
   <dependent>
+    <selected>Sales Specialist - Training</selected>
     <show1></show1>
+    <show2>45</show2>
+    <show3>45</show3>
+    <show4></show4>
     <show5>Co-worker</show5>
     <show6>Level 1</show6>
     <show7>Salaried</show7>
@@ -4055,6 +4069,7 @@
     <show4></show4>
     <show5></show5>
     <show6></show6>
+    <show7>Salaried</show7>
   </dependent>
   <dependent>
     <selected>Sales Support  Manager</selected>

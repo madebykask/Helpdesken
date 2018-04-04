@@ -4,5 +4,5 @@
   <option value="1">1</option>
   <option value="2">2</option>
   <option value="3">3</option>
-  <option disabled="1" value="not applicable">not applicable</option>
+  <option value="not applicable">not applicable</option>
 </options>

@@ -4,9 +4,14 @@
     <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
     <!ENTITY state SYSTEM "Templates/ChangeTermsConditionsState.xml">
     <!ENTITY pre_payscaletype_payscalelevel SYSTEM "Defaults/Predefined_PayScaleType_PayScaleLevel.xml">
+    <!ENTITY data_costcentre SYSTEM "Data/Data_CostCentre.xml">
+    <!ENTITY data_country SYSTEM "Data/Data_Country.xml">
+    <!ENTITY data_jobtitle SYSTEM "Data/Data_JobTitle.xml">
+    <!ENTITY data_localjobtitle SYSTEM "Data/Data_LocalJobTitle.xml">
+    <!ENTITY data_linemanager SYSTEM "Data/Data_LineManager.xml">
     <!ENTITY data_changeallowancetype SYSTEM "Data/Data_Change_AllowancesTypes.xml">
     <!ENTITY data_typeofbenefit SYSTEM "Data/Data_Change_TypeOfBenefit.xml">
-    <!ENTITY data_costcentre SYSTEM "Data/Data_CostCentre.xml">
+    <!ENTITY data_primarysite SYSTEM "Data/Data_PrimarySite.xml">
 ]>
 
 <form id="50" guid="9F3949A4-EA0A-4C97-B0AB-1F534BCCFEB8" customerId="29">
@@ -69,7 +74,8 @@
                 <validateIf name="PermanentCountry">Netherlands</validateIf>
             </element>
             <element type="text" name="PermanentCity" label="City" formfieldidentifier="E1P0006.ORT01:1" HcmData="1" SortOrder="123"></element>
-            <element type="select" source="database" cssclass="autocomplete-country selectize" name="PermanentCountry" label="Country" default="Netherlands" formfieldidentifier="E1P0006.LAND1:1" HcmData="1" SortOrder="124">
+            <element type="search-select" source="1" name="PermanentCountry" label="Country" default="Netherlands" formfieldidentifier="E1P0006.LAND1:1" HcmData="1" SortOrder="124">
+                &data_country;
             </element>
 
             <!--Internal Log Note-->
@@ -89,22 +95,26 @@
             <!-- mandatory -->
             <element type="select" source="database" name="NewDepartment" label="Department" formfieldidentifier="E1P0001.ORGEH" casefield="ou_id" HcmData="1" SortOrder="20"></element>
             <!-- mandatory -->
-            <element type="select" source="database" cssclass="autocomplete-costcentre selectize" name="HomeCostCentre" label="Cost Centre" formfieldidentifier="E1P0001.KOSTL">
-              &data_costcentre;
+            <element type="search-select" name="HomeCostCentre" source="1"  label="Cost Centre" formfieldidentifier="E1P0001.KOSTL">
+                <!--customid="changeModule"-->
+                &data_costcentre;
             </element>
             <element type="text" name="CostAllocation" label="Cost Allocation" default="100">                
                 <regex inherit="num100" pattern="" message=""></regex>
             </element>
-            <element type="select" source="database" cssclass="autocomplete-costcentre selectize" name="CrossChargeCostCentre" label="Cost Centre" formfieldidentifier="E1P0027.KOSTL">
-              &data_costcentre;
+            <element type="search-select" name="CrossChargeCostCentre" label="Cost Centre" formfieldidentifier="E1P0027.KOSTL">
+                &data_costcentre;
                 <mandatoryIfNotEqual name="CostAllocation">100</mandatoryIfNotEqual>
             </element>
+          
             <!--Job-->
 
             <!-- mandatory -->
-            <element type="select" source="database" cssclass="autocomplete-relation-positiontitle selectize" name="LocalJobTitle" label="Position Title (Local Job Name)" HcmData="1" SortOrder="11">
+            <element type="search-select" name="LocalJobTitle" label="Position Title (Local Job Name)" HcmData="1" SortOrder="11">
+              &data_localjobtitle;
             </element>
-            <element type="select" source="database" cssclass="autocomplete-jobtitle selectize" name="JobTitle" label="Job Title (Global Catalogue)" formfieldidentifier="E1P0001.STELL" HcmData="1" SortOrder="12">
+            <element type="search-select" name="JobTitle" label="Job Title (Global Catalogue)" formfieldidentifier="E1P0001.STELL" HcmData="1" SortOrder="12">
+                &data_jobtitle;
             </element>           
             <element type="select" name="NewPosition" label="New Position?" default="Fill Vacant Position" HcmData="1" SortOrder="13">
                 <options>
@@ -114,7 +124,8 @@
                     <option value="New Position for VAP store?">New Position for VAP store?</option>
                 </options>
             </element>
-            <element type="select" source="database" cssclass="autocomplete-relation-linemanager selectize" name="ReportsToLineManager" label="Reports to Line Manager" formfieldidentifier="E1P9000.PERNRMGR" HcmData="1" SortOrder="14">
+            <element type="search-select" name="ReportsToLineManager" label="Reports to Line Manager" formfieldidentifier="E1P9000.PERNRMGR" HcmData="1" SortOrder="14">
+                &data_linemanager;
             </element>
             <element type="select" name="AcknowledgedManagerInCLA" label="Acknowledged as managers in terms of CLA" HcmData="1" SortOrder="15">
                 <options>
@@ -138,8 +149,7 @@
                     <option value="Apprentice">Apprentice</option>
                     <option value="Holiday Co-Worker">Holiday Co-Worker</option>
                     <option value="Detached">Detached</option>
-                    <option value="Expat">Expat</option>
-                    <option value="Inpat">Inpat</option>
+                    <option value="Expat (TE)">Expat (TE)</option>
                 </options>
             </element>
             <element name="ContractEndDate" type="date" format="dd.MM.yyyy" label="Contract End Date" HcmData="1" SortOrder="27">
@@ -167,9 +177,11 @@
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
             <!--CDS-->
-            <element type="select" source="database" cssclass="autocomplete-primarysite selectize" name="PrimarySite" label="Primary Site">
+            <element name="PrimarySite" type="select" label="Primary Site">
+                &data_primarysite;
             </element>
-            <element type="select" source="database" cssclass="autocomplete-linemanager selectize" name="TECApprover" label="TEC Approver">
+            <element name="TECApprover" type="search-select" label="TEC Approver">
+                &data_linemanager;
             </element>
             <element name="HelpDesk" type="text" label="Help Desk" default="ICC3 HBG Retail"></element>
 
@@ -195,7 +207,6 @@
             <element type="select" name="PayrollCategory" label="Payroll Category" HcmData="1" SortOrder="28">
                 <options>
                     <option value=""></option>
-                    <option value="Dual Payroll (ZY)">Dual Payroll (ZY)</option>
                     <option value="Hourly">Hourly</option>
                     <option value="Monthly">Monthly</option>
                     <option value="Juvenile Hourly">Juvenile Hourly</option>
@@ -267,10 +278,7 @@
                     <option value="Individual increase">Individual increase</option> 
                     <option value="Adjustment desired (regular) level">Adjustment desired (regular) level</option>
                     <option value="Adjustment seniority (growth) level">Adjustment seniority (growth) level</option>
-                    <option value="Including CLA  and evaluation increase">Including CLA  and evaluation increase</option>
-                    <option value="Excluding CLA and evaluation increase">Excluding CLA and evaluation increase</option>
-                    <option value="Including CLA - increase and excluding evaluation increase">Including CLA - increase and excluding evaluation increase</option>
-                    <option value="Including evaluation increase and excluding CLA - increase">Including evaluation increase and excluding CLA - increase</option>
+
                 </options>
             </element>
             <element type="hidden" name="Allowances" default="1"></element>

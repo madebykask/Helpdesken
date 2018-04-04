@@ -56,11 +56,14 @@
       <element name="WorkedCompany" source="database" label="Company" type="select" formfieldidentifier="P0001.BUKRS">
         <mandatoryIf name="CrossCharge">Yes</mandatoryIf>
       </element>
-      <element name="WorkedBusinessUnit" source="database" label="Business Unit" type="search-select">        
+      <element name="WorkedBusinessUnit" source="database" label="Business Unit" type="search-select">
+        <mandatoryIf name="CrossCharge">Yes</mandatoryIf>
       </element>
-      <element name="WorkedFunction" source="database" label="Function" type="search-select">     
+      <element name="WorkedFunction" source="database" label="Function" type="search-select">
+        <mandatoryIf name="CrossCharge">Yes</mandatoryIf>
       </element>
-      <element name="WorkedDepartment" source="database" label="Department" type="search-select">     
+      <element name="WorkedDepartment" source="database" label="Department" type="search-select">
+        <mandatoryIf name="CrossCharge">Yes</mandatoryIf>
       </element>
       <element name="WorkedCostCentre" label="Cost Centre" type="search-select">
         <mandatoryIf name="CrossCharge">Yes</mandatoryIf>
