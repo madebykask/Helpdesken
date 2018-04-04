@@ -3992,10 +3992,16 @@ th.sorting_disabled
     direction: rtl;
 }
 
-div.chosen-container.chosen-container-multi.error {
+div.chosen-container.chosen-container-multi.error,
+div.chosen-container.chosen-container-single.error {
     border: 1px solid #ff0000;
     border-radius: 4px;
     background-color: #ffeeee;
+}
+
+div.chosen-container.chosen-container-single.error .chosen-single {
+    background-color: #ffeeee;
+    background: -webkit-linear-gradient(top, #ffeeee 20%, #ffeeee 50%, #ffeeee 52%, #ffeeee 100%);
 }
 
 .dh-success {

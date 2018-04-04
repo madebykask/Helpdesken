@@ -198,8 +198,12 @@ window.DataPrivacyForm =
                         $("#retentionDaysError").html(error);
                     }
                     else {
-                        if (element.is("select.chosen-select")) {
-                            error.insertAfter($("#fieldsLoader"));
+                        if (element.is("select.chosen-select") || element.is("select.chosen-single-select")) {
+                            var errorPlaceholder = element.next();
+                            if ($(errorPlaceholder).next().hasClass('gif-loader')) {
+                                errorPlaceholder = $(errorPlaceholder).next();
+                            }
+                            error.insertAfter(errorPlaceholder);
                             error.css("width", "315px");
                             $("#" + element.attr("id") + "_chosen").addClass("error");
                         } else {
@@ -208,14 +212,15 @@ window.DataPrivacyForm =
                     }
                 },
                 highlight: function(element) {
-                    if (element.id === caseFieldsDropDown) {
+                    if ($(element).is("select.chosen-select") || $(element).is("select.chosen-single-select")) {
                         $("#" + element.id + "_chosen").removeClass('error success').addClass('error');
                     } else {
                         $(element).removeClass('error success').addClass('error');
                     }
                 },
                 success: function(label) {
-                    if (label.attr("for") === caseFieldsDropDown) {
+                    var element$ = $('#' +label.attr("for"));
+                    if (element$.is("select.chosen-select") || element$.is("select.chosen-single-select")) {
                         $("#" + label.attr("for") + "_chosen").removeClass("error");
                     }
                 },
