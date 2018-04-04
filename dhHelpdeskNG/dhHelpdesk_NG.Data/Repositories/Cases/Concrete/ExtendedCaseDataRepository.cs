@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System;
+using System.Data.Entity;
+using DH.Helpdesk.Dal.NewInfrastructure;
 
 namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 {
@@ -43,6 +45,10 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
             Add(extendedCaseDataEntity);
             Commit();
+
+            //reload entity with related properties
+            var newId = extendedCaseDataEntity.Id;
+            extendedCaseDataEntity = this.Table.IncludePath(x=> x.ExtendedCaseForm).SingleOrDefault(x => x.Id == newId);
 
             return _extendedCaseDataToBusinessModelMapper.Map(extendedCaseDataEntity);
         }
