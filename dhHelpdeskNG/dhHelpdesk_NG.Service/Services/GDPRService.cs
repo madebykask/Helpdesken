@@ -630,6 +630,15 @@ namespace DH.Helpdesk.Services.Services
                         {
                             toReplace.ForEach(e => e.EmailAddress = e.Bcc = e.Cc = replaceDataWith);
                         }
+
+                        if (c.Mail2Tickets.Any())
+                        {
+                            foreach (var mail2Ticket in c.Mail2Tickets)
+                            {
+                                mail2Ticket.EMailAddress = replaceDataWith;
+                                mail2Ticket.CreatedDate = replaceDatesWith ?? DateTime.Now; ;
+                            }
+                        }
                     }
                 }
             }
