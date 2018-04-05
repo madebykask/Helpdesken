@@ -162,12 +162,14 @@ window.DataPrivacyForm =
         }
 
         this.getFilterData = function() {
+            
             var fields = [];
             this.filterFields$.find("option:selected").each(function() {
                 fields.push($(this).val());
             });
             return {
                 fields: fields,
+                selectedFavoriteId: this.getSelectedFavoriteId(),
                 selectedCustomerId: this.customerSelect$.val(),
                 retentionPeriod: this.retentionPeriod$.val() || "0",
                 calculateRegistrationDate: this.calculateRegistrationDate$.prop("checked"),
@@ -455,6 +457,7 @@ window.DataPrivacyForm =
              var filter = this.getFilterData();
 
              var inputData = {
+                 SelectedFavoriteId:filter.selectedFavoriteId, 
                  SelectedCustomerId: filter.selectedCustomerId,
                  CalculateRegistrationDate: filter.calculateRegistrationDate,
                  RegisterDateFrom: filter.registerDateFrom,
@@ -479,7 +482,6 @@ window.DataPrivacyForm =
                  } else {
                      window.ShowToastMessage("Operation has failed.", "error");
                  }
-
              }).always(function() {
                  self.blockUI(false);
              });

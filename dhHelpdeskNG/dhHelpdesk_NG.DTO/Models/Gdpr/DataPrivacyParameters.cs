@@ -5,6 +5,7 @@ namespace DH.Helpdesk.BusinessData.Models.Gdpr
 {
     public class DataPrivacyParameters
     {
+        public int? SelectedFavoriteId { get; set; }
         public int SelectedCustomerId { get; set; }
         public int RetentionPeriod { get; set; }
         public bool CalculateRegistrationDate { get; set; }
