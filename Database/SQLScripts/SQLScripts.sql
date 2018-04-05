@@ -215,6 +215,27 @@ BEGIN
 END
 GO
 
+RAISERROR('Add Changed/Created columns to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ChangedByUser_Id' and sysobjects.name = N'tblGDPRDataPrivacyFavorite')
+BEGIN
+    
+    ALTER TABLE tblGDPRDataPrivacyFavorite
+    ADD [CreatedDate] [datetime] NULL
+
+    ALTER TABLE tblGDPRDataPrivacyFavorite
+    ADD [CreatedByUser_Id] [int] NULL
+          
+    ALTER TABLE tblGDPRDataPrivacyFavorite
+    ADD [ChangedDate] [datetime] NULL	
+          
+    ALTER TABLE tblGDPRDataPrivacyFavorite
+    ADD [ChangedByUser_Id] [int] NULL    
+
+    ALTER TABLE [dbo].[tblGDPRDataPrivacyFavorite] ADD  CONSTRAINT [DF_tblGDPRDataPrivacyFavorite_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+    ALTER TABLE [dbo].[tblGDPRDataPrivacyFavorite] ADD  CONSTRAINT [DF_tblGDPRDataPrivacyFavorite_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
+END
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.36'
 --ROLLBACK --TMP

@@ -39,7 +39,7 @@ namespace DH.Helpdesk.Services.Services
     {
         IDictionary<int, string> ListFavorites();
         GdprFavoriteModel GetFavorite(int id);
-        int SaveFavorite(GdprFavoriteModel model);
+        int SaveFavorite(GdprFavoriteModel model, int? userId);
         void DeleteFavorite(int favoriteId);
     }
 
@@ -102,7 +102,7 @@ namespace DH.Helpdesk.Services.Services
             _gdprFavoritesRepository.Commit();
         }
 
-        public int SaveFavorite(GdprFavoriteModel model)
+        public int SaveFavorite(GdprFavoriteModel model, int? userId)
         {
             int res;
             using (var uow = _unitOfWorkFactory.Create())
@@ -111,11 +111,19 @@ namespace DH.Helpdesk.Services.Services
                 var entity = repo.GetById(model.Id);
                 if (entity == null)
                 {
-                    entity = new GDPRDataPrivacyFavorite();
+                    entity = new GDPRDataPrivacyFavorite
+                    {
+                        CreatedByUser_Id = userId
+                    };
+
                     repo.Add(entity);
                 }
 
                 _gdprFavoritesEntityMapper.Map(model, entity);
+
+                entity.ChangedByUser_Id = userId;
+                entity.ChangedDate = DateTime.Now;
+
                 uow.Save();
 
                 res = entity.Id;
