@@ -114,12 +114,9 @@
     <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />
     @Html.Partial("_Validate", Model)
     <script>
-
       function changeBusinessUnitCallback() {
-
-        GetXML('Predefined_BusinessUnit_PositionTitle.xml', narrowDownPositionTitle);
+          ect.getRelations('Relation_BusinessUnit_PositionTitle.xml', '', $('#NewBusinessUnit'), $('#PositionTitle'));
     }
-
 
     validate.run($('#actionState').val());
 

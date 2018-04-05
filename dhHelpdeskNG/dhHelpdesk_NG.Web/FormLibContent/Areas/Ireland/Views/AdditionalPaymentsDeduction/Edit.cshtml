@@ -1,19 +1,15 @@
 ﻿@model ECT.FormLib.Models.FormModel
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
-
 @{
     ViewBag.Title = Model.Translate("Ireland") + " - " + Model.Translate("Service Request Details");
 }
 
 @section Validation {
-
     @Html.Partial("_Validate", Model)
-
 }
 
 @section Script {
-
     <script>
 
         validate.run($('#actionState').val());

@@ -1,19 +1,15 @@
 ﻿@model ECT.FormLib.Models.FormModel
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
-
-
 @functions{
     public string GetContract()
     {
-
         if (string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")))
         {
             return "";
         }
 
         return "ContractEnglish";
-            
     }
 
     public string PrintText()
@@ -21,7 +17,6 @@
         return Model.Translate("Print");
     }
 }
-
 <div class="tab-pane" id="documents">
     <div class="span12">
         <table class="table-striped">
@@ -53,8 +48,6 @@
                             })" class="btn pull-right print"><i class="icon-file"></i>&nbsp;@PrintText()</a>
                         </td>
                     </tr>
-                
-                
                 // Korean Version of contract
                  <tr>
                         <td>@Model.Translate("Korean Contract")</td>
@@ -76,14 +69,7 @@
             {
                 <tr><td colspan="4"><div class="alert alert-info"><strong><i class="icon-info-sign"></i>&nbsp;@Model.Translate("A document can not be created based on current selections")</strong></div></td></tr>
             }
-
-           @* @Html.Partial("_StaticDocuments", Model)*@
             </tbody>
         </table>
     </div>
 </div>
-
-
-
-
-

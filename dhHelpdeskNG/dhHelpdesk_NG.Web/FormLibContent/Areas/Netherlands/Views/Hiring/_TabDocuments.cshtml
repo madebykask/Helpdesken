@@ -6,7 +6,7 @@
 @functions{
     public string GetContract()
     {
-     
+
         if (Model.GetDocumentAnswer("BusinessUnit", false).ToLower().Trim() == "")
         {
             return "";
@@ -17,13 +17,13 @@
         {
             return "";
         }
-        
-        
+
+
         //BusinessUnit = IKEA Competence B.V. = no documents yet
         if (Model.GetDocumentAnswer("Company").ToLower() == "IKEA Competence B.V.".ToLower())
         {
             return "";
-        }  
+        }
 
         else
         {
@@ -34,22 +34,23 @@
             }
             else if (Model.GetAnswer("EmploymentCategory").ToLower() == "Holiday Co-Worker".ToLower())
             {
-                return "";
+                return "Holiday";
             }
+            return "Store_So_merged";
+
+            
 
 
-           
-
-        //all except Service Office Netherlands
-            else if (Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Service Office Netherlands".ToLower())
-            {
-                return "Store_cccn";
-            }
-            else
-            {
-                //Should only be: "Service Office Netherlands"
-                return "So";
-            }
+            //all except Service Office Netherlands  -   Merged contract for Store and Service Office #60375
+            //else if (Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Service Office Netherlands".ToLower())
+            //{
+            //    return "Store_cccn";
+            //}
+            //else
+            //{
+            //    //Should only be: "Service Office Netherlands"
+            //    return "So";
+            //}
 
             //Default
 

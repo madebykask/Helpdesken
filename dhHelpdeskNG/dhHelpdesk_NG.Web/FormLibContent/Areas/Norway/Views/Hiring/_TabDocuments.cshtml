@@ -8,7 +8,7 @@
     {
 
         //Applies to all except if Contract Type = Transferred Employee
-        if (Model.GetDocumentAnswer("ContractType", false).ToLower().Trim() != "" && Model.GetDocumentAnswer("ContractType", false).ToLower() != "Transferred Employee".ToLower())
+        if (Model.GetDocumentAnswer("ContractType", false).ToLower().Trim() != "" && Model.GetDocumentAnswer("ContractType", false).ToLower() != "Inpat".ToLower())
         {
             return "Contract";
         }

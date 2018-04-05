@@ -1,15 +1,12 @@
 ﻿@model ECT.FormLib.Models.FormModel
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
-
 @{
     ViewBag.Title = Model.Translate("Netherlands") + " - " + Model.Translate("Hiring");
 }
-
 @section Validation {
 
     @Html.Partial("_Validate", Model)
-
 }
 
 @section Script {
@@ -58,13 +55,8 @@
             var val = $(this).val();
             validate.run(val);
         });
-
     </script>
 
 }
-
 @Html.Partial("_Edit", Model)
-
-<script>
-    //InitIntegration();
-</script>
+@Html.Partial("_Scripts", Model)

@@ -50,8 +50,6 @@
                         @Model.Element("CareerBreakLength")
                     </td>
                 </tr>
-
-
                 @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="absence@(i.ToString())" id="absence@(i.ToString())">
@@ -78,8 +76,6 @@
                               <div id="notice_FutureDate@(i.ToString())" style="display: none;" class="notice">
                             @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Absence start from?")
                         </div>
-
-
                         </td>
                     </tr>
                     <tr class="absence@(i.ToString())">
@@ -274,7 +270,4 @@
 
         end5.hide();
     }).data('datepicker');
-
-
-
 </script>

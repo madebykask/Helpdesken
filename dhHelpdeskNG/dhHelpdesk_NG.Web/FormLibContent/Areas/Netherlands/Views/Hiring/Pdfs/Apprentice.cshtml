@@ -18,7 +18,7 @@
 </head>
 <body>
     <div class="default-page">@Html.Partial("../Shared/Pdfs/_Debug", Model)
-        @Html.Partial("../Shared/Pdfs/_SectionAddressTop", Model)
+        @Html.Partial("../Shared/Pdfs/_SectionAddressTop", Model, new ViewDataDictionary { { "HeaderName", "Persoonlijk/Vertrouwelijk" } })
 
         <p>
             Betreft: Stageovereenkomst<br />
@@ -26,8 +26,8 @@
             Beste @Model.GetDocumentAnswer("FirstName", true),
         </p>
 
-        <p>Gefeliciteerd met je stageplaats! Met dit flatpack verwelkomen we je als nieuwe collega bij IKEA. Met het boekje Mijn IKEA willen we laten zien waar IKEA voor staat en geven we praktische informatie over werken bij IKEA. Daarnaast informeren we je in deze brief graag over je indiensttreding en de daarbij behorende documenten.</p>
-        <p>Tijdens het sollicitatiegesprek zijn er al een aantal gegevens verzameld. Aan de hand van deze persoonlijke gegevens en de eerder besproken arbeidsvoorwaarden is een contract opgesteld. Je arbeidsovereenkomst is in tweevoud meegestuurd. Graag ontvangen wij hiervan één getekend exemplaar retour. Het andere exemplaar kan je gebruiken voor je eigen administratie. De IKEA CAO, de IKEA Group Code of Conduct en de regels die zijn opgenomen in Mijn IKEA maken ook onderdeel uit van je arbeidsovereenkomst. Mocht je het met één of meerdere bepalingen uit het contract niet eens zijn, dan ontvangen wij je reactie graag schriftelijk binnen 7 dagen.</p>
+        <p>Gefeliciteerd met je stageplaats! Met dit flatpack verwelkomen we je als nieuwe collega bij IKEA. Met het boekje Mijn IKEA willen we laten zien waar IKEA voor staat en geven we praktische informatie over werken bij IKEA. Daarnaast informeren we je in deze brief graag over je stageovereenkomst en de daarbij behorende documenten.</p>
+        <p>Tijdens het sollicitatiegesprek zijn er al een aantal gegevens verzameld. Aan de hand van deze persoonlijke gegevens en de eerder besproken arbeidsvoorwaarden is een contract opgesteld. Je stageovereenkomst is in tweevoud meegestuurd. Graag ontvangen wij hiervan één getekend exemplaar retour. Het andere exemplaar kan je gebruiken voor je eigen administratie. De IKEA CAO, de IKEA Group Code of Conduct en de regels die zijn opgenomen in Mijn IKEA maken ook onderdeel uit van je stageovereenkomst. Mocht je het met één of meerdere bepalingen uit de overeenkomst niet eens zijn, dan ontvangen wij je reactie graag schriftelijk binnen 7 dagen.</p>
 
         Verder vind je nog de volgende zaken bijgesloten:
     <ul class="nomargin_ul" style="margin-top: 0px; padding-top: 0px;">
@@ -37,7 +37,6 @@
         <ul class="dash_ul">
             <li>&nbsp;HR gerelateerde informatie, waaronder de IKEA CAO</li>
             <li>&nbsp;Salarisstrook en persoonsgegevens</li>
-            <li>&nbsp;Rooster en verlofaanvragen</li>
             @*delete if  OA.CS.3.1 Function = IKEA Food or if OA3 Business Unit = CSC*@
             @if (Model.GetDocumentAnswer("ServiceArea").ToLower() != "IKEA Food".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "CSC".ToLower())
             {
@@ -49,7 +48,7 @@
         <br />
         Om je indiensttreding volledig te kunnen maken ontvangen wij graag binnen 5 dagen de volgende documenten retour:
     <ul>
-        <li>één ondertekend exemplaar van je arbeidsovereenkomst</li>
+        <li>één ondertekend exemplaar van je stageovereenkomst</li>
         <li>een ingevulde loonbelastingverklaring</li>
         <li>een ingevuld formulier persoonsgegevens </li>
     </ul>
@@ -58,19 +57,19 @@
 
         <p>We willen je er graag op wijzen dat je stageovereenkomst zonder deze documenten niet volledig is. Het ontbreken ervan heeft gevolgen voor de start van je stage en voor je eventuele stagevergoeding.</p>
 
-        <p>Ook ontvang je hierbij een leenpas van IKEA waar je elke werkdag mee kan in- en uitklokken. Gebruik deze pas meteen op je eerste werkdag. Als je dagelijks klokt dan kunnen wij voor een juiste salarisbetaling zorgen.</p>
+        <p>Ook ontvang je hierbij een leenpas van IKEA waar je elke werkdag mee kan in- en uitklokken. Gebruik deze pas meteen op je eerste werkdag.</p>
 
         <p>
-            Om alvast kennis te maken met je nieuwe vestiging nodigen we je uit om met je familie en/of vrienden een dagje te komen winkelen. Daarom ontvang je hierbij  een tegoedbon voor het IKEA restaurant om deze dag iets te eten en te drinken en een IKEA cadeaupas om een artikel naar keuze te kopen. Op IKEA.com/nl kan je alvast inspiratie opdoen.<br />
+            Om alvast kennis te maken met je nieuwe vestiging nodigen we je uit om met je familie en/of vrienden een dagje te komen winkelen. Daarom ontvang je een IKEA cadeaupas om een artikel naar keuze te kopen. Op IKEA.com/nl kan je alvast inspiratie opdoen.<br />
             Veel plezier!
         </p>
 
-        <p>We hopen je hiermee voldoende te hebben geïnformeerd. Heb je vragen over je contract of over de andere documenten dan kan je contact opnemen met je manager of de HR afdeling van je vestiging.</p>
+        <p>We hopen je hiermee voldoende te hebben geïnformeerd. Heb je vragen over je stageovereenkomst of over de andere documenten dan kan je contact opnemen met je manager of de HR afdeling van je vestiging.</p>
 
         <p>
             We wensen je veel succes!
 
-    @Html.Partial("../Shared/Pdfs/_SectionLineManagerPhone", Model)
+    @Html.Partial("../Shared/Pdfs/_SectionLineManagerPhoneApprentice", Model)
         </p>
         <table>
             <tr style="page-break-before: always;">
@@ -119,30 +118,33 @@
             list.Add(new PdfListItem { Text = text2, Number = Number.ToString() });
 
             //3
-            Number = list.Count() + 1;
+            string text3 = "De dagelijkse leertijd is voor de stagiair in overeenstemming met de arbeidstijd welke geldt voor de afdeling waar hij/zij geplaatst is, tenzij dit anders is overeengekomen en voor zover niet in strijd met de arbeidswetgeving voor jeugdigen.";
 
-            string text3 = "De dagelijkse leertijd is voor de stagiair in overeenstemming met de arbeidstijd welke geldt voor de afdeling waar hij geplaatst is, tenzij dit anders is overeengekomen en voor zover niet in strijd met de arbeidswetgeving voor jeugdigen.";
+            Number = list.Count() + 1;
             list.Add(new PdfListItem { Text = text3, Number = Number.ToString() });
 
-
             //4
-            Number = list.Count() + 1;
             string text4 = "In geval van verzuim of het voornemen daartoe is de stagiair verplicht IKEA op de hoogte te stellen of te doen stellen op een wijze zoals die bij IKEA gebruikelijk is.";
+
+            Number = list.Count() + 1;
             list.Add(new PdfListItem { Text = text4, Number = Number.ToString() });
 
             //5
-            Number = list.Count() + 1;
             string text5 = "IKEA zal aanstellen als praktijkbegeleider: " + Model.GetDocumentAnswer("MentorAtIKEA", true) + " van de afdeling: " + Model.GetDocumentAnswer("ServiceArea", true) + ".";
+
+            Number = list.Count() + 1;
             list.Add(new PdfListItem { Text = text5, Number = Number.ToString() });
 
             //6
-            Number = list.Count() + 1;
             string text6 = "De stagiair verbindt zich om zowel tijdens de duur der stage als ook na afloop daarvan aan derden geen mededelingen te doen betreffende bijzonderheden van de IKEA organisatie.";
+
+            Number = list.Count() + 1;
             list.Add(new PdfListItem { Text = text6, Number = Number.ToString() });
 
             //7
+            string text7 = "Een stage-overeenkomst kan op initiatief en met overeenstemming van IKEA of de stagiair en de vertegenwoordiger van de school, worden verbroken, verlengd of bekort.";
+
             Number = list.Count() + 1;
-            string text7 = "Een stage overeenkomst kan op initiatief en met overeenstemming van IKEA of de stagiair en de vertegenwoordiger van de school, worden verbroken, verlengd of bekort.";
             list.Add(new PdfListItem { Text = text7, Number = Number.ToString() });
 
             //8
@@ -167,7 +169,6 @@
 
             list[list.Count - 1].SubList = pdfList;
 
-            
             
         }
 
@@ -243,7 +244,8 @@
                 </td>
                 <td style="width: 50%; min-width: 50%; text-align: right;">
                        <br />
-                    @Html.Partial("../Shared/Pdfs/_BarCode", Model)
+                        @Html.Partial("../Shared/Pdfs/_BarCode", Model, new ViewDataDictionary { { "ExtraBarCode", "W117" } })
+                    
                     <table class="table-full-width">
             <tr><td></td><td style="width:70%; text-align:left;">   <br />
                     <br />@DateTime.Now.ToString("dd.MM.yyyy")<br />@CustomPdfPage.IsEmpty(Model.Department.Searchkey, "Business Unit")<br /> @*SG 2015-10-23 case:52774 used Search key for BU display name:  @Model.GetDocumentAnswer("BusinessUnit", true)<br />*@
@@ -269,25 +271,27 @@
         <p>
             Beste @Model.GetDocumentAnswer("FirstName", true),
         </p>
-        <p>Hierbij ontvang je je leenpas. Deze leenpas is eigendom van IKEA en voor persoonlijk gebruik gedurende je dienstverband.</p>
-        <p>
+        <p>Hierbij ontvang je je leenpas. Deze leenpas is eigendom van IKEA en voor persoonlijk gebruik gedurende je stageperiode.</p>
+        
             <b>Doel van deze pas</b><br />
-            Deze leenpas ontvang je om gedurende je dienstverband bij IKEA:<br />
-            In- en uit te klokken bij binnenkomst en vertrek;<br />
-            Toegang te krijgen tot het personeelsgebied binnen je vestiging;
-        </p>
+               Deze leenpas ontvang je om gedurende je stageperiode bij IKEA:
+            <ul>
+                <li>In- en uit te klokken bij binnenkomst en vertrek;</li>
+                <li>Toegang te krijgen tot het personeelsgebied binnen je vestiging;</li>
+            </ul>
+        
         <p>
             <b>Vervangende pas</b><br />
-            Wanneer je tijdens je tijdelijke dienstverband een nieuwe leenpas nodig hebt vanwege óf verlies óf beschadiging na ontvangst, kun je tegen inhouding van
-        EUR 10, - op je salaris een nieuwe leenpas aanvragen. Informeer het HR Service Centre bij verlies of diefstal van de pas zodat deze geblokkeerd kan worden.
+            Wanneer je tijdens je stage een nieuwe leenpas nodig hebt vanwege óf verlies óf beschadiging na ontvangst, kun je tegen inhouding van
+        EUR 10, - op je stagevergoeding een nieuwe leenpas aanvragen. Informeer de receptie van je vestiging/unit bij verlies of diefstal van de pas zodat deze geblokkeerd kan worden.
         </p>
         <p>
             <b>Uitdiensttreding</b><br />
-            Bij uitdiensttreding dien je de leenpas weer in te leveren. IKEA zal pas overgaan tot de eindafrekening van je salaris ná ontvangst van de leenpas.
+            Bij uitdiensttreding dien je de leenpas weer in te leveren. IKEA zal pas overgaan tot de eindafrekening van je stagevergoeding ná ontvangst van de leenpas.
         </p>
         <p>
             <b>Oneigenlijk gebruik</b><br />
-            Bij oneigenlijk gebruik van de leenpas tijdens of na je dienstverband zullen we hiervan aangifte doen bij de politie.
+            Bij oneigenlijk gebruik van de leenpas tijdens of na je stageperiode zullen we hiervan aangifte doen bij de politie.
         </p>
         <br />
         <table class="table-full-width">

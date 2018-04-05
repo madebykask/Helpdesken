@@ -5,23 +5,9 @@
 @{
     ViewBag.Title = Model.Translate("United Kingdom") + " - " + Model.Translate("Service Request Details");
     var url = Url.CurrentController() + "typeahead";
-    //var firstEventVal = TempData["FirstEventVal"];
-    //var lockedFields = TempData["LockedFields"];
-    //var publicHasEvent = TempData["HasEvent"];
-    //var appliedEventName = TempData["AppliedEventName"];
-    //var canApplyRule = TempData["CanApplyRule"];
-    //var allEvents = Model.events;    
 }
 
 @section Script {
-    <script type="text/javascript">
-        /*
-        $(document).ready(function () {
-            $('#CanApplyRule').val('true');
-            $('#HasEvent').val('false');
-        });
-        */
-    </script>
 }
 
 @using(Html.BeginForm("new", "ChangeTermsConditions", FormMethod.Post, new { area = "UnitedKingdom", novalidate = "novalidate" }))
@@ -135,8 +121,12 @@
         }
 
         function changeNewBusinessUnitCallback() {
-            var selectedText = $('#NewBusinessUnit').find('option:selected').text();
-            $('#PrimarySite').val(selectedText);
+            ect.copyValueFrom($('#NewBusinessUnit'), $('#PrimarySite'));
         }
+
+        function changeFunctionsCallback() {
+            ect.getRelations('Relation_Function_JobTitle.xml', '', $('#NewServiceArea'), $('#JobTitle'));
+        }
+
 </script>
 }

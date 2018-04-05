@@ -77,7 +77,7 @@
             list.Add(new PdfListItem { Text = text2 });
 
             //3
-            string text3 = "The " + UnitedKingdomPdfPage.GetServiceAreaText("ServiceArea", Model) + " is your primary area of work. You will on occasions be expected to work in other areas within the Store/Unit to support the business need.";
+            string text3 = "The " + UnitedKingdomPdfPage.GetServiceAreaText("ServiceArea", Model) + " is your primary area of work. You will on occasions be expected to work in other areas within the Unit to support the business need.";
             list.Add(new PdfListItem { Text = text3 });
 
             //4
@@ -129,9 +129,9 @@
             //7
             string text7 = "Your holiday entitlement for this contract period is " + Model.GetDocumentAnswer("HolidayCurrent", true) + " hours. Holiday entitlement runs from 1st September – 31st August (inclusive of 8 days annual public holidays) and calculated on a pro rata basis.";
 
-            text7 += "<br /><br />" + "You must save holiday hours for days of store closure when you would normally be scheduled to work.  The store will be closed on " + CustomPdfPage.IsEmpty(Model.Department.CloseDay, "CloseDay") + ".";
+            text7 += "<br /><br />" + "You must save holiday hours for days of store closure when you would normally be scheduled to work.  The unit will be closed on " + CustomPdfPage.IsEmpty(Model.Department.CloseDay, "CloseDay") + ".";
 
-            text7 += "<br /><br />" + "Untaken basic and compensatory holiday entitlement can only be carried forward with prior permission from " + CustomPdfPage.IsEmpty(Model.Department.StoreManager, "Store Manager") + ". See the Co-worker handbook for details of when holiday can be taken.";
+            text7 += "<br /><br />" + "See the Co-worker handbook for details of when holiday can be taken.";
 
             text7 += "<br /><br />" + "Upon termination of your employment, you will normally be entitled to annual holiday with pay, or pay in lieu thereof, proportional to your length of service. If you have taken more holiday entitlement than you have accrued during the holiday year, the balance will be deducted from any outstanding pay. Payment for holidays in these circumstances will be made on a pro rata basis to your service in the current holiday year and compensatory days, as specified, are excluded from this calculation.";
 
@@ -190,7 +190,7 @@
             list.Add(new PdfListItem { Text = text7 });
 
             //8
-            string text8 = "The notice period during your temporary contract is 1 week from yourself, or a minimum of one week’s notice from IKEA.";
+            string text8 = "The notice period during your temporary contract is one week from yourself, or a minimum of one week’s notice from IKEA.";
             list.Add(new PdfListItem { Text = text8 });
 
 

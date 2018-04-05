@@ -4,7 +4,6 @@
     <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
     <!ENTITY state SYSTEM "Templates/TerminationCompleteState.xml">
     <!ENTITY pre_termination_reason SYSTEM "Defaults/Predefined_TerminationReason.xml">
-    <!ENTITY data_country SYSTEM "Data/Data_Country.xml">
 ]>
 
 <form id="51" guid="9726B3D4-8D1C-4A65-A0BB-BC9817581D5C" customerId="29">
@@ -48,8 +47,7 @@
               <regex inherit="postcode" pattern="" message=""></regex>
             </element>
             <element type="text" name="PermanentCity" label="City" formfieldidentifier="E1P0006.ORT01:1" HcmData="1" SortOrder="18" ParentGVFields="1"></element>
-            <element name="PermanentCountry" label="Country" type="search-select" default="Netherlands" formfieldidentifier="E1P0006.LAND1:1">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="PermanentCountry" label="Country" default="Netherlands" formfieldidentifier="E1P0006.LAND1:1">
             </element>
           <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
         </tab>

@@ -1,0 +1,111 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@{
+    Layout = null;
+    int contractedHours = 0;
+
+    try
+    {
+        contractedHours = int.Parse(Model.GetDocumentAnswer("ContractedHours"));
+    }
+    catch (Exception)
+    {
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    @*<link href="@Model.Contract.BaseUrl/FormLibContent/assets/css/documents.css" rel="stylesheet" type="text/css" />*@
+    @Model.GetStyleAnswer("GetStyleLink")
+    @Html.Partial("../Shared/Pdfs/_Styles", Model)
+    @Model.GetStyleAnswer("GetStyles")
+</head>
+<body>
+    <div class="form-personal-data-page">
+        <table class="table table-bordered form-personal-data">
+            <tr>
+                <td style="border-right: 0px !important;">
+                    <img style="max-width: 250px; margin-left: 10px; margin-top: 10px;" src="@Model.Contract.BaseUrl/FormLibContent/Assets/img/IKEA_logo_BW.png" />
+                </td>
+                <td style="vertical-align: bottom !important; border-left: 0px !important;">
+                    <strong>FORMULIER PERSOONSGEGEVENS</strong>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-bold td-align-middle">Naam
+                </td>
+                <td>
+                    @Model.GetDocumentAnswer("FirstName", true)@if (!string.IsNullOrEmpty(Model.GetAnswer("Prefixes")))
+                                                               {<text>&nbsp;</text>@Model.GetAnswer("Prefixes")} @Model.GetDocumentAnswer("LastName", true)
+
+                </td>
+            </tr>
+            <tr>
+                <td class="td-bold td-align-middle">IBAN rekeningnummer
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="td-bold td-align-middle">Telefoonnummer
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="td-bold td-align-middle">Mobiel nummer
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="td-bold td-align-middle">E-mail adres
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="td-bold td-align-middle">Burgerlijke staat</td>
+                <td>
+                    <ul class="circle_ul">
+                        <li>Ongehuwd</li>
+                        <li>Gehuwd, sinds … / … / …</li>
+                        <li>Samenwonend</li>
+                        <li>Geregistreerd partnerschap, sinds … / … / …</li>
+                        <li>Samenlevingscontract, sinds … / … / …</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+
+        
+        @*ONLY FOR STORE CSC and SO CONRACTS*@
+        @if (Model.DocumentData.Id.ToLower() == "Store_cccn".ToLower() || Model.DocumentData.Id.ToLower() == "So".ToLower() || Model.GetAnswer("EmploymentCategory").ToLower() == "Apprentice".ToLower())
+        { 
+           <p style="width: 100%; padding-top: 50px;">
+             @Html.Partial("../Shared/Pdfs/_BarCode", Model, new ViewDataDictionary { { "ExtraBarCode", "W103" } })
+           </p>
+        }
+        else
+        {
+            <p style="width: 100%; padding-top: 50px;">
+             @Html.Partial("../Shared/Pdfs/_BarCode", Model)
+            </p>
+        }
+
+    </div>
+
+    @*ONLY FOR STORE CCCN CONRACTS*@
+    @if (Model.DocumentData.Id.ToLower() == "Store_cccn".ToLower())
+    {
+       @*  Sg : work order  # 57242
+       if (Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Store Amsterdam 088".ToLower() || (Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Store Breda 403".ToLower() && contractedHours < 17))
+        {
+        @Html.Partial("../Shared/Pdfs/Appendix2", Model)
+        }*@
+        @* Case 58522  Weekly 29 - 2017 remove the rule contractedHours < 17
+        if (contractedHours < 17)
+        {}*@
+         @Html.Partial("../Shared/Pdfs/Appendix2", Model)
+        
+    }
+
+</body>
+</html>

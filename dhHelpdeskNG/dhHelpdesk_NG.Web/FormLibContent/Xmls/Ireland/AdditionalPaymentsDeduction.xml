@@ -3,23 +3,13 @@
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
   <!ENTITY state SYSTEM "Templates/AdditionalPaymentsDeductionState.xml">
-  <!ENTITY dat_country SYSTEM "Templates/Data_Country.xml">
   <!ENTITY dat_allowancestype SYSTEM "Templates/Data_AllowancesType - AdditionalPayDeductions.xml">
-  <!--<!ENTITY pre_allowancestype_allowancesnetgross SYSTEM "Templates/Predefined_Allowances_NetGross.xml">
-  <!ENTITY pre_allowancestype2_allowancesnetgross2 SYSTEM "Templates/Predefined_Allowances2_NetGross2.xml">
-  <!ENTITY pre_allowancestype3_allowancesnetgross3 SYSTEM "Templates/Predefined_Allowances3_NetGross3.xml">
-  <!ENTITY pre_deductionstype_deductionsnetgross SYSTEM "Templates/Predefined_Deductions_NetGross.xml">
-  <!ENTITY pre_deductionstype2_deductionsnetgross2 SYSTEM "Templates/Predefined_Deductions2_NetGross2.xml">
-  <!ENTITY pre_deductionstype3_deductionsnetgross3 SYSTEM "Templates/Predefined_Deductions3_NetGross3.xml">-->
 ]>
-
 <form id="156" guid="DCCB8F20-024A-433E-8B55-5C89DB004F04" customerId="31">
   &languages;
   &regexs;
   &state;
-
   <fields>
-
     <!--Tab ServiceRequestDetails-->
     <tab name="#ServiceRequestDetails" label="Service Request Details">
       <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
@@ -31,7 +21,6 @@
         <regex inherit="email" message="" pattern=""></regex>
       </element>
       <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1">
-        
       </element>
       <element name="Company" type="text" label="Company"></element>
       <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element>
@@ -50,20 +39,16 @@
           <option value="Standard">Standard</option>
         </options>
       </element>
-
       <element type="text" name="PermanentAddressLine1" label="Address line 1" formfieldidentifier="E1P0006.STRAS:1"></element>
       <element type="text" name="PermanentAddressLine2" label="Address line 2" formfieldidentifier="E1P0006.HSNMR:1"></element>
       <element type="text" name="PermanentAddressLine3" label="Address line 3" formfieldidentifier="E1P0006.POSTA:1"></element>
-      <element type="text" name="PermanentPostalCode" label="Postal code" formfieldidentifier="E1P0006.PSTLZ:1"></element>
+      <element type="text" name="PermanentPostalCode" label="District" formfieldidentifier="E1P0006.PSTLZ:1"></element>
       <element type="text" name="PermanentCity" label="City" formfieldidentifier="E1P0006.ORT01:1"></element>
-      <element type="search-select" name="PermanentCountry" label="Country" default="Ireland" formfieldidentifier="E1P0006.LAND1:1">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="PermanentCountry" label="Country" default="Ireland" formfieldidentifier="E1P0006.LAND1:1">
       </element>
       <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
     </tab>
-
     <tab name="#Payment" label="Payment Information">
-
       <element type="hidden" name="Allowances" default="1"></element>
       <element type="select" name="AllowancesChangeType" label="Change Type">
         <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
@@ -75,20 +60,10 @@
         </options>
       </element>
       <element type="select" name="AllowancesType" label="Allowance Type">
-        <!--&pre_allowancestype_allowancesnetgross;-->
         &dat_allowancestype;
       </element>
-      <!--<element type="select" name="AllowancesPaymentType" label="Payment Type">
-        <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
-        <options>
-          <option value=""></option>
-          <option value="One Time">One Time</option>
-          <option value="Recurring">Recurring</option>
-        </options>
-      </element>-->
       <element type="text" name="AllowancesAmountUnits" label="Amount/Units">
         <mandatoryIf name="AllowancesChangeType">Start,Change</mandatoryIf>
-        <!--<mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>-->
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element type="select" name="AllowancesPaidPer" label="Paid per">
@@ -100,24 +75,14 @@
           <option value="one off">one off</option>
         </options>
       </element>
-      <!--<element type="select" name="AllowancesNetGross" label="Net/Gross">
-        <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
-        <options>
-          <option value=""></option>
-          <option value="Net">Net</option>
-          <option value="Gross">Gross</option>
-        </options>
-      </element>-->
       <element type="date" name="AllowancesValidFrom" label="Valid from:" format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="AllowancesValidTo" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <!--<mandatoryIf name="AllowancesPaymentType">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-
       <element type="select" name="AllowancesChangeType2" label="Change Type">
         <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
         <options>
@@ -128,20 +93,10 @@
         </options>
       </element>
       <element type="select" name="AllowancesType2" label="Allowance Type" >
-        <!--&pre_allowancestype2_allowancesnetgross2;-->
         &dat_allowancestype;
       </element>
-      <!--<element type="select" name="AllowancesPaymentType2" label="Payment Type">
-        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
-        <options>
-          <option value=""></option>
-          <option value="One Time">One Time</option>
-          <option value="Recurring">Recurring</option>
-        </options>
-      </element>-->
       <element type="text" name="AllowancesAmountUnits2" label="Amount/Units" >
         <mandatoryIf name="AllowancesChangeType2">Start,Change</mandatoryIf>
-        <!--<mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>-->
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element type="select" name="AllowancesPaidPer2" label="Paid per">
@@ -153,24 +108,14 @@
           <option value="one off">one off</option>
         </options>
       </element>
-      <!--<element type="select" name="AllowancesNetGross2" label="Net/Gross" >
-        <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
-        <options>
-          <option value=""></option>
-          <option value="Net">Net</option>
-          <option value="Gross">Gross</option>
-        </options>
-      </element>-->
       <element type="date" name="AllowancesValidFrom2" label="Valid from:" format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="AllowancesValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <!--<mandatoryIf name="AllowancesPaymentType2">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-
       <element type="select" name="AllowancesChangeType3" label="Change Type" >
         <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
         <options>
@@ -181,20 +126,10 @@
         </options>
       </element>
       <element type="select" name="AllowancesType3" label="Allowance Type" >
-        <!--&pre_allowancestype3_allowancesnetgross3;-->
         &dat_allowancestype;
       </element>
-      <!--<element type="select" name="AllowancesPaymentType3" label="Payment Type">
-        <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
-        <options>
-          <option value=""></option>
-          <option value="One Time">One Time</option>
-          <option value="Recurring">Recurring</option>
-        </options>
-      </element>-->
       <element type="text" name="AllowancesAmountUnits3" label="Amount/Units" >
         <mandatoryIf name="AllowancesChangeType3">Start,Change</mandatoryIf>
-        <!--<mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>-->
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element type="select" name="AllowancesPaidPer3" label="Paid per">
@@ -206,24 +141,14 @@
           <option value="one off">one off</option>
         </options>
       </element>
-      <!--<element type="select" name="AllowancesNetGross3" label="Net/Gross" >
-        --><!--<mandatoryIfNotEmpty name="AllowancesPaymentType3"></mandatoryIfNotEmpty>--><!--
-        <options>
-          <option value=""></option>
-          <option value="Net">Net</option>
-          <option value="Gross">Gross</option>
-        </options>
-      </element>-->
       <element type="date" name="AllowancesValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="AllowancesType3"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="AllowancesValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <!--<mandatoryIf name="AllowancesPaymentType3">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
-      </element>
-    
+      </element>  
       <!--4-->
       <element type="select" name="AllowancesChangeType4" label="Change Type" >
         <mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>
@@ -239,7 +164,6 @@
       </element>
       <element type="text" name="AllowancesAmountUnits4" label="Amount/Units" >
         <mandatoryIf name="AllowancesChangeType4">Start,Change</mandatoryIf>
-        <!--<mandatoryIfNotEmpty name="AllowancesType4"></mandatoryIfNotEmpty>-->
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element type="select" name="AllowancesPaidPer4" label="Paid per">
@@ -260,7 +184,6 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <!--4-->
-
       <!--5-->
       <element type="select" name="AllowancesChangeType5" label="Change Type" >
         <mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>
@@ -276,7 +199,6 @@
       </element>
       <element type="text" name="AllowancesAmountUnits5" label="Amount/Units" >
         <mandatoryIf name="AllowancesChangeType5">Start,Change</mandatoryIf>
-        <!--<mandatoryIfNotEmpty name="AllowancesType5"></mandatoryIfNotEmpty>-->
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element type="select" name="AllowancesPaidPer5" label="Paid per">
@@ -297,8 +219,6 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <!--5-->
-
-
       <element type="hidden" name="Deductions" default="1"></element>
       <element type="select" name="DeductionsChangeType" label="Change Type">
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
@@ -310,23 +230,13 @@
         </options>
       </element>
       <element type="select" name="DeductionsType" label="Deduction Type" >
-        <!--&pre_deductionstype_deductionsnetgross;-->
         <options>
           <option value=""></option>
           <option value="Rent Deduction">Rent Deduction</option>
           <option value="Uniform Deduction">Uniform Deduction</option>
           <option value="Parking Fee">Parking Fee</option>
-
         </options>
       </element>
-      <!--<element type="select" name="DeductionsPaymentType" label="Payment Type" >
-        <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
-        <options>
-          <option value=""></option>
-          <option value="One Time">One Time</option>
-          <option value="Recurring">Recurring</option>
-        </options>
-      </element>-->
       <element type="text" name="DeductionsAmountUnits" label="Amount/Units" >
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" message="" pattern=""></regex>
@@ -338,24 +248,14 @@
           <option value="one off">one off</option>
         </options>
       </element>
-      <!--<element type="select" name="DeductionsNetGross" label="Net/Gross" >
-        <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
-        <options>
-          <option value=""></option>
-          <option value="Net">Net</option>
-          <option value="Gross">Gross</option>
-        </options>
-      </element>-->
       <element type="date" name="DeductionsValidFrom" label="Valid from:" format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="DeductionsValidTo" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
-        <!--<mandatoryIf name="DeductionsPaymentType">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-
       <element type="select" name="DeductionsChangeType2" label="Change Type">
         <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
         <options>
@@ -366,24 +266,13 @@
         </options>
       </element>
       <element type="select" name="DeductionsType2" label="Deduction Type" >
-        <!--&pre_deductionstype2_deductionsnetgross2;-->
         <options>
           <option value=""></option>
           <option value="Rent Deduction">Rent Deduction</option>
           <option value="Uniform Deduction">Uniform Deduction</option>
           <option value="Parking Fee">Parking Fee</option>
-
-
         </options>
       </element>
-      <!--<element type="select" name="DeductionsPaymentType2" label="Payment Type" >
-        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
-        <options>
-          <option value=""></option>
-          <option value="One Time">One Time</option>
-          <option value="Recurring">Recurring</option>
-        </options>
-      </element>-->
       <element type="text" name="DeductionsAmountUnits2" label="Amount/Units" >
         <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" message="" pattern=""></regex>
@@ -395,24 +284,14 @@
           <option value="one off">one off</option>
         </options>
       </element>
-      <!--<element type="select" name="DeductionsNetGross2" label="Net/Gross" >
-        <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
-        <options>
-          <option value=""></option>
-          <option value="Net">Net</option>
-          <option value="Gross">Gross</option>
-        </options>
-      </element>-->
       <element type="date" name="DeductionsValidFrom2" label="Valid from:"  format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="DeductionsType2"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="DeductionsValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <!--<mandatoryIf name="DeductionsPaymentType2">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-
       <element type="select" name="DeductionsChangeType3" label="Change Type">
         <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
         <options>
@@ -423,24 +302,13 @@
         </options>
       </element>
       <element type="select" name="DeductionsType3" label="Deduction Type" >
-        <!--&pre_deductionstype3_deductionsnetgross3;-->
         <options>
           <option value=""></option>
           <option value="Rent Deduction">Rent Deduction</option>
           <option value="Uniform Deduction">Uniform Deduction</option>
           <option value="Parking Fee">Parking Fee</option>
-
-
         </options>
       </element>
-      <!--<element type="select" name="DeductionsPaymentType3" label="Payment Type" >
-        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
-        <options>
-          <option value=""></option>
-          <option value="One Time">One Time</option>
-          <option value="Recurring">Recurring</option>
-        </options>
-      </element>-->
       <element type="text" name="DeductionsAmountUnits3" label="Amount/Units" >
         <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
         <regex inherit="unsignednum" message="" pattern=""></regex>
@@ -452,24 +320,14 @@
           <option value="one off">one off</option>
         </options>
       </element>
-      <!--<element type="select" name="DeductionsNetGross3" label="Net/Gross" >
-        <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
-        <options>
-          <option value=""></option>
-          <option value="Net">Net</option>
-          <option value="Gross">Gross</option>
-        </options>
-      </element>-->
       <element type="date" name="DeductionsValidFrom3" label="Valid from:"  format="dd.MM.yyyy">
         <mandatoryIfNotEmpty name="DeductionsType3"></mandatoryIfNotEmpty>
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="DeductionsValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <!--<mandatoryIf name="DeductionsPaymentType3">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      
       <!--4-->
       <element type="select" name="DeductionsChangeType4" label="Change Type">
         <mandatoryIfNotEmpty name="DeductionsType4"></mandatoryIfNotEmpty>
@@ -508,7 +366,6 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>      
       <!--4-->
-
       <!--5-->
       <element type="select" name="DeductionsChangeType5" label="Change Type">
         <mandatoryIfNotEmpty name="DeductionsType5"></mandatoryIfNotEmpty>
@@ -547,9 +404,7 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <!--5-->
-      
     </tab>
-
     <tab name="#SSCUseOnly" label="SSC use only">
       <element type="select" name="PayrollCategory" label="Payroll Category">
         <options>
@@ -562,10 +417,5 @@
         </options>
       </element>
     </tab>
-
-    <!--<tab name="InternalLogNote">
-      <element type="textarea" name="InternalLogNote" label="Internal log note"></element>
-    </tab>-->
-
   </fields>
 </form>

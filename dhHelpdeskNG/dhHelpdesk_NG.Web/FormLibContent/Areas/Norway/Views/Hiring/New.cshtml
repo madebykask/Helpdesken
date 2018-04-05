@@ -27,12 +27,14 @@
                 var countryText = $('#PermanentCountry')[0].selectize.getItem(value).text();
                 var countryValue = $('#PermanentCountry')[0].selectize.getValue();
 
+                
+
                 var $select = $('#' + prefix + 'Country').selectize();
 
                 $select[0].selectize.clearOptions();
                 $select[0].selectize.addOption({
-                    Name: countryText,
-                    Id: countryValue
+                    text: countryText,
+                    value: countryValue
                 });
                 $select[0].selectize.setValue(countryValue);
 

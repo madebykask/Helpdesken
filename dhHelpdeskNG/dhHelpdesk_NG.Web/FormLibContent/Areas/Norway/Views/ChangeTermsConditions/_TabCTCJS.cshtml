@@ -46,7 +46,8 @@
                 lockMidlertidigKarakter();
 
             LockNoticePeriod();
-            setIfCasual();        
+            setIfCasual();
+            lockPersonReplacedAndProjectName($(this).val());
 
             //Locked IF OA18 (Probation period?) = No
             $('#ProbationPeriod').change(function () {
@@ -74,6 +75,7 @@
             setIfCasual();
             lockMidlertidigKarakter();
             setEndDateBehavior($(this).val());
+            lockPersonReplacedAndProjectName($(this).val());
         });
 
         // if OA15 = "Casual", Employment Percentage default value is 0 --- Notice period  Locked if OA15 Contract type = Casual 
@@ -92,9 +94,11 @@
                 if (val != "".toUpperCase()) {
                     if (val == "Seasonal co-worker".toUpperCase()) {
                         $('#PayrollCategory').val("Hourly");
+                        $('#PaidPer').val("hour");
                     }
                     else {
                         $('#PayrollCategory').val("Monthly");
+                        $('#PaidPer').val("");
                     }
                 }//End If Not null
             }//End Else
@@ -119,6 +123,20 @@
                        $('#MidlertidigKarakter').val("");
                        $('#MidlertidigKarakter').attr("disabled", true);
                 }
+            }
+        };
+
+        // Person replaced and Project Name locked for Contract type: Seasonal co-worker  / Additional in weekly #60314
+        function lockPersonReplacedAndProjectName(value) {
+            if ($('#ContractType').val() == 'Seasonal co-worker') {
+                $('#PersonReplaced').prop('disabled', true);
+                $('#PersonReplaced').val("");
+                $('#ProjectName').prop('disabled', true);
+                $('#ProjectName').val("");
+            }
+            else {
+                $('#PersonReplaced').prop('disabled', false);
+                $("#ProjectName").prop("disabled", false);
             }
         };
 
@@ -362,18 +380,18 @@
         });
 
         var lockParticipatingInJour = function () {
-            var val = $("#Overtime").val().toUpperCase();
+            //var val = $("#Overtime").val().toUpperCase();
             if (psGroup.val().toUpperCase() == 'INDIVID'.toUpperCase()) {
-                if (val != "".toUpperCase() && val == "No".toUpperCase()) {
-                    $('#ParticipatingInJour').val("");
-                    $('#ParticipatingInJour').attr("disabled", true);
-                }
-                else {
+                //if (val != "".toUpperCase() && val == "No".toUpperCase()) {
+                //    $('#ParticipatingInJour').val("");
+                //    $('#ParticipatingInJour').attr("disabled", true);
+                //}
+                //else {
                     $('#ParticipatingInJour').attr("disabled", false);
-                }
+                //}
             }
             else {
-                $('#ParticipatingInJour').attr("disabled", false);
+                $('#ParticipatingInJour').attr("disabled", true);
             }
         };
 

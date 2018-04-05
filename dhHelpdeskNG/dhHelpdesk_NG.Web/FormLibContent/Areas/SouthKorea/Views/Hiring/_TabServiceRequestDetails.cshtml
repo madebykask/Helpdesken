@@ -1,7 +1,6 @@
 ﻿@model ECT.FormLib.Models.FormModel
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
-
 <div class="tab-pane active" id="ServiceRequestDetails">
     <div class="span6">
         <table class="table">
@@ -56,6 +55,10 @@
                     <td>@Model.Element("GlobalHRID")</td>
                 </tr>
                 <tr>
+                    <td class="tdstrong">@Model.Label("PreviousContractStartDate")</td>
+                    <td>@Model.Element("PreviousContractStartDate")</td>
+                </tr>
+                <tr>
                     <td class="tdstrong">@Model.Label("Title")</td>
                     <td>@Model.Element("Title")</td>
                 </tr>
@@ -75,12 +78,10 @@
                     <td class="tdstrong">@Model.Label("LastName")</td>
                     <td>@Model.Element("LastName")</td>
                 </tr>
-
                 <tr>
                     <td class="tdstrong">@Model.Label("NickName")</td>
                     <td>@Model.Element("NickName")</td>
                 </tr>
-
                 <tr>
                     <td class="tdstrong">@Model.Label("Dateofbirth")</td>
                     <td>@Model.Element("Dateofbirth")</td>
@@ -93,27 +94,16 @@
             </tbody>
         </table>
     </div>
-
     <div class="span6">
-
-        <table class="table">
-            <tbody>
-               
-
-            </tbody>
-        </table>
-    </div>
-
-    <div class="span6">
-
         <table class="table">
             <tbody>
             </tbody>
         </table>
     </div>
-    <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
-    <input type="hidden" id="AllCoWorker" value="1" />
-    <input type="hidden" id="formGuid" value="@Model.FormGuid" />
-</div>
-
-
+    <div class="span6">
+        <table class="table">
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" /><input type="hidden" id="AllCoWorker" value="1" /><input type="hidden" id="formGuid" value="@Model.FormGuid" /></div>

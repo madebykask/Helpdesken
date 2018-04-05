@@ -240,7 +240,7 @@
 
         if (ev.date.valueOf() > end.date.valueOf()) {
             var newDate = new Date(ev.date);
-            newDate.setDate(newDate.getDate() + 1);
+            newDate.setDate(newDate.getDate());
             end.setValue(newDate);
             $('#AbsenceEndsOn').val('');
         }
@@ -250,7 +250,7 @@
 
     var end = $('#date_AbsenceEndsOn').not(".disabled").datepicker({
         onRender: function (date) {
-            return date.valueOf() <= start.date.valueOf() ? 'disabled' : '';
+            return date.valueOf() < start.date.valueOf() ? 'disabled' : '';
         }
     }).on('changeDate', function (ev) {
 
@@ -277,7 +277,7 @@
 
         if (ev.date.valueOf() > end2.date.valueOf()) {
             var newDate = new Date(ev.date);
-            newDate.setDate(newDate.getDate() + 1);
+            newDate.setDate(newDate.getDate());
             end2.setValue(newDate);
             $('#AbsenceEndsOn2').val('');
         }
@@ -287,7 +287,7 @@
 
     var end2 = $('#date_AbsenceEndsOn2').not(".disabled").datepicker({
         onRender: function (date) {
-            return date.valueOf() <= start2.date.valueOf() ? 'disabled' : '';
+            return date.valueOf() < start2.date.valueOf() ? 'disabled' : '';
         }
     }).on('changeDate', function (ev) {
 
@@ -310,7 +310,7 @@
 
         if (ev.date.valueOf() > end3.date.valueOf()) {
             var newDate = new Date(ev.date);
-            newDate.setDate(newDate.getDate() + 1);
+            newDate.setDate(newDate.getDate());
             end3.setValue(newDate);
             $('#AbsenceEndsOn3').val('');
         }
@@ -320,7 +320,7 @@
 
     var end3 = $('#date_AbsenceEndsOn3').not(".disabled").datepicker({
         onRender: function (date) {
-            return date.valueOf() <= start3.date.valueOf() ? 'disabled' : '';
+            return date.valueOf() < start3.date.valueOf() ? 'disabled' : '';
         }
     }).on('changeDate', function (ev) {
 
@@ -342,7 +342,7 @@
 
         if (ev.date.valueOf() > end4.date.valueOf()) {
             var newDate = new Date(ev.date);
-            newDate.setDate(newDate.getDate() + 1);
+            newDate.setDate(newDate.getDate());
             end4.setValue(newDate);
             $('#AbsenceEndsOn4').val('');
         }
@@ -352,7 +352,7 @@
 
     var end4 = $('#date_AbsenceEndsOn4').not(".disabled").datepicker({
         onRender: function (date) {
-            return date.valueOf() <= start4.date.valueOf() ? 'disabled' : '';
+            return date.valueOf() < start4.date.valueOf() ? 'disabled' : '';
         }
     }).on('changeDate', function (ev) {
 
@@ -376,7 +376,7 @@
 
         if (ev.date.valueOf() > end5.date.valueOf()) {
             var newDate = new Date(ev.date);
-            newDate.setDate(newDate.getDate() + 1);
+            newDate.setDate(newDate.getDate());
             end5.setValue(newDate);
             $('#AbsenceEndsOn5').val('');
         }
@@ -386,7 +386,7 @@
 
     var end5 = $('#date_AbsenceEndsOn5').not(".disabled").datepicker({
         onRender: function (date) {
-            return date.valueOf() <= start5.date.valueOf() ? 'disabled' : '';
+            return date.valueOf() < start5.date.valueOf() ? 'disabled' : '';
         }
     }).on('changeDate', function (ev) {
 

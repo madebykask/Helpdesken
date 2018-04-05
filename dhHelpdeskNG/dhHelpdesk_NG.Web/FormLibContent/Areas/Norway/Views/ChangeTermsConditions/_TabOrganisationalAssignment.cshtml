@@ -130,12 +130,15 @@
                  <tr>
                     <td class="tdstrong">@Model.Label("ContractType")</td>
                     <td>@Model.Element("ContractType")</td>
-                     <td></td>
+                    <td>
+                        <input type="hidden" class="oldValue" id="OLD_ContractType" name="OLD_ContractType" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ContractType").Select(x => x.Value).FirstOrDefault() : "")" />
+                        <em class="muted" id="emOLD_ContractType">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_ContractType").Select(x => x.Value).FirstOrDefault() : "")</em>
+                    </td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("EmploymentPercentage")</td>
+                    <td class="tdstrong" style="vertical-align:top !important;">@Model.Label("EmploymentPercentage")</td>
                     <td>@Model.Element("EmploymentPercentage")</td>
-                    <td>
+                    <td style="vertical-align:top !important;">
                         <input type="hidden" class="oldValue"  id="OLD_EmploymentPercentage" name="OLD_EmploymentPercentage" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmploymentPercentage").Select(x => x.Value).FirstOrDefault() : "")"/>
                         <em class="muted" id="emOLD_EmploymentPercentage">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmploymentPercentage").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>

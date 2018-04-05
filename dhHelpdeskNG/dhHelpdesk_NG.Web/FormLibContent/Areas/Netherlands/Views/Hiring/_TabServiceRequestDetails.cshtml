@@ -59,6 +59,15 @@
                     <td>@Model.Element("GlobalHRID")</td>
                 </tr>
                 <tr>
+                    <td class="tdstrong">@Model.Label("PreviousContractStartDate")</td>
+                    <td>@Model.Element("PreviousContractStartDate")
+
+                        <div id="notice_PreviousContractStartDate" style="display: none;" class="notice">
+                            @Model.Translate("The date you've entered is in the past. Are you sure you want to backdate Hiring date?")
+                        </div>
+                    </td>
+                </tr>
+                <tr>
                     <td class="tdstrong">@Model.Label("Title")</td>
                     <td>@Model.Element("Title")</td>
                 </tr>

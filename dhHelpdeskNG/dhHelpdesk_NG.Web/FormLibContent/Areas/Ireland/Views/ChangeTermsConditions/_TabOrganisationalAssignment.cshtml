@@ -1,18 +1,13 @@
 ﻿@model ECT.FormLib.Models.FormModel
-@using ECT.FormLib;
 @using ECT.FormLib.Models;
-
 @{
     const string CompanyName = "IKEA Distribution Services Limited";
     const string ContractType = "Permanent";
     const string PartTime = "Part time";
     const string FullTime = "Full time";
-    const string DefaultProbationPeriod = "Yes";
-
     var fillOldVal = TempData["oldValues"];
     var newfill = (List<KeyValuePair<string, string>>)fillOldVal;
 }
-
 <div class="tab-pane" id="OrganisationalAssignment">
     <div class="span8">
         <table class="table">
@@ -101,12 +96,14 @@
                     <td class="tdstrong">@Model.Label("ManagersJobTitle")</td>
                     <td>@Model.Element("ManagersJobTitle")</td>
                 </tr>
-                @*      </tbody>
-        </table>
-    </div>
-    <div class="span6">
-        <table class="table">
-            <tbody>*@
+                <tr>
+                    <td class="tdstrong">@Model.Label("ChiefPosition")</td>
+                    <td>@Model.Element("ChiefPosition")
+                        <div id="notice_ChiefPosition" style="display:inline-block; color:black;" class="notice">
+                                @Model.Translate("Mark chief position: “yes” if the co-worker is to take chief position")
+                        </div>
+                    </td>
+                </tr>
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Employment Conditions")</h4>
@@ -151,14 +148,6 @@
                         <em class="muted" id="emOLD_EmploymentCategory">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_EmploymentCategory").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
                 </tr>
-                @* <tr>
-                    <td class="tdstrong">@Model.Label("ProbationPeriod")</td>
-                    <td>@Model.Element("ProbationPeriod")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("ProbationEndDate")</td>
-                    <td>@Model.Element("ProbationEndDate")</td>
-                </tr>*@
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("CDS")</h4>
@@ -182,12 +171,8 @@
             </tbody>
         </table>
     </div>
-
 </div>
-
-
 <script>
-
     $(function () {
 
         function setEmployeeBehavior(value) {
@@ -253,42 +238,12 @@ $('#Company').change(function () {
             }
         });
 
-        $('#ReportsToLineManager').change(function () {
-            //$('#TECApprover').val($(this).val());
-        });
-
         $('#NewDepartment').change(function () {
-            //////////
-            //Change function for Department
-            //////////
-
-            //GetXML('predefined_costcentre_department_outs.xml', setCostCentre);
-
-            ////Line manager department
-            //GetXML('predefined_linemanager_department_outs.xml', setLineManager);
-
-            ////Line manager job title
-            //GetXML('predefined_department_jobtitle_IE_outs.xml', setLineManagerJobTitle);
-
-            ////Department /Tec approver
-            //GetXML('predefined_department_tecapprover_outs.xml', setTecApprover);
-
-            ////Line manager jobtitle
-            //GetXML('predefined_department_jobtitle_IE_outs.xml', setLineManagerJob);         
-
             GetXML('predefined_function_department_linemanager_outs.xml', setLineManagerAndCostCentre);
-
             setTimeout(function () { GetXML('predefined_linemanager_department_outs.xml', setLineManagerJob); }, 30);
-
-            //Department /Tec approver
-            //GetXML('predefined_department_tecapprover_outs.xml', setTecApprover);
         });
-        function setLineManagerAndCostCentre(xml) {
-            //////////
-            //setLineManager:
-            //Sets Line manager and cost centre from predefined_function_department_linemanager_outs.XML and selected department
-            //////////
 
+        function setLineManagerAndCostCentre(xml) {
             var show1 = '' //Cost Centre
             var show2 = '' //Line manager
 
@@ -355,56 +310,18 @@ $('#Company').change(function () {
         };
 
         $('#NewBusinessUnit').change(function () {
-            //////////
-            //Sets Primary site to Business Unit
-            //////////
-            //alert();
-
-            //setTecApprover();
             setPayrollCategory();
             setBasicPayAmount();
-            //setAllowanceType2();
-            //setAllowanceType();
-            //setAllowanceType3();
-            //setAllowanceType4();
-            //setAllowanceType5();
 
-            var value = $(this).val();
-            if ($('#NewBusinessUnit')[0].selectize) {
-                var selectedText = $('#NewBusinessUnit')[0].selectize.getItem(value).text();
-
-                if ($('#PrimarySite')[0].selectize) {
-                    $('#PrimarySite')[0].selectize.setValue(selectedText);
-                }
-                else {
-                    $('#PrimarySite').val(selectedText);
-                }
-            }
-            else {
-                var selectedText = $('#NewBusinessUnit').find('option:selected').text();
-                if ($('#PrimarySite')[0].selectize) {
-                    $('#PrimarySite')[0].selectize.setValue(selectedText);
-                }
-                else {
-                    var selectedText = $('#NewBusinessUnit').find('option:selected').text();
-                    $('#PrimarySite').val(selectedText);
-                }
-            }
-
-            if (this.options[this.selectedIndex].innerHTML == 'Store Dublin 038') {
-                var val1 = 'Business Navigation & Operations Manager';
-                $('#TECApprover')[0].selectize.setValue(val1);
-                //document.getElementById('TECApprover').value = 'Business Navigation &amp; Operations Manager';
+            ect.copyValueFrom($('#NewBusinessUnit'), $('#PrimarySite'));
+            
+            if (this.options[this.selectedIndex].innerHTML == 'IKEA Dublin') {
+                ect.setValue('Business Navigation & Operations Manager', $('#TECApprover'));
             }
         });
 
         $('#NewServiceArea').change(function () {
-            //Line manager job title
-            GetXML('predefined_function_jobtitleIE_outs.xml', setLineManagerDefault);
-
             setTimeout(function () { GetXML('predefined_function_department_linemanager_outs.xml', setLineManagerAndCostCentre); }, 1);
-
-            setTimeout(function () { GetXML('predefined_function_jobtitleIE_outs.xml', setLineManagerJobTitle); }, 1);
         });
 
         function GetXML(xmlFile, url) {
@@ -505,31 +422,12 @@ $('#Company').change(function () {
                 }
             });
 
-            var jobtitleoptions = $('#JobTitle')[0].selectize.options;
-            var jobtitleoptionslength = Object.keys(jobtitleoptions).length;
-            if (jobtitleoptionslength == 0) {
-                GetXML('Data_JobTitle.xml', SetAllJobtitles);
-            }
-
             $('#JobTitle').on('change', function () {
                 setDefaultPayroll();
                 addPayScaleOnPayroll();
                 setPayrollCategory();
                 setBasicPayAmount();
             });
-        };
-
-        function SetAllJobtitles(xml) {
-            var selectize_tags = $("#JobTitle")[0].selectize;
-            var jobtitles = [''];
-            $(xml).find('option').each(function () {
-                var a = $(this).text();
-                if (!(a == 'undefined' || a == '')) {
-                    jobtitles.push($(this).text());
-                }
-            });
-            var items = jobtitles.map(function (x) { return { text: x, value: x }; });
-            selectize_tags.addOption(items);
         };
 
         function setDefaultPayrollXML(xml) {
@@ -1079,7 +977,7 @@ $('#Company').change(function () {
 
                 if (grp.toString().trim() == 'STARTIE') {
 
-                    if (bus.toString().trim() == 'Store Dublin 038') {
+                    if (bus.toString().trim() == 'IKEA Dublin') {
                         if (document.getElementById('BasicPayAmount')) {
                             document.getElementById('BasicPayAmount').value = '11.50'
                         }
@@ -1120,7 +1018,7 @@ $('#Company').change(function () {
                 bus = $("#NewBusinessUnit option:selected").text();
             }
 
-            if (sal.toString().trim() == 'Salaried' | sal.toString().trim() == 'Salaried Management' | sal.toString().trim() == 'Salaried Senior Management') {
+            if (sal.toString().trim() == 'Salaried' | sal.toString().trim() == 'Salaried Management' | sal.toString().trim() == 'Salaried Senior Management' | sal.toString().trim() == 'Dual Payroll (ZY)') {
                 //TAN //Commented this out because the AllowanceAmountsUnits where cleared on save. CaseNumber:?
                 //document.getElementById('AllowancesAmountUnits').value = '';
 

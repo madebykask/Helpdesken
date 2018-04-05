@@ -1,20 +1,11 @@
 ﻿@model ECT.FormLib.Models.FormModel
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
-
 @{
     ViewBag.Title = Model.Translate("Ireland") + " - " + Model.Translate("Service Request Details");
 }
 
 @section Script {
-    <script type="text/javascript">
-
-        //$(function () {
-        //    validate.run(20);
-        //});
-
-    </script>
-
     @Html.Partial("_Validate", Model)
 }
 
@@ -63,7 +54,3 @@
     </div>
     <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />    
 }
-
-<script>
- 
-</script>

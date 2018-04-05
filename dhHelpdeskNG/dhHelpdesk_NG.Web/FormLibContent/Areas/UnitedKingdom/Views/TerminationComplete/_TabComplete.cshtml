@@ -312,8 +312,7 @@
 
         value = 'One IKEA Bonus Due';
 
-        if ($('#TerminationReason').val().toLowerCase() == 'International transfer begins'.toLowerCase() || $('#CompleteTerminationType').val().toLowerCase() == 'Retirement'.toLowerCase()
-            || $('#CompleteTerminationType').val().toLowerCase() == 'Redundancy'.toLowerCase() || $('#CompleteTerminationType').val().toLowerCase() == 'Other'.toLowerCase()) {
+        if ($('#TerminationReason').val().toLowerCase() == 'International transfer begins'.toLowerCase() || $('#CompleteTerminationType').val().toLowerCase() != 'Dismissal'.toLowerCase()) {
 
             $('#TerminationPaymentType option:contains("' + value + '")').removeAttr('disabled');
             $('#TerminationPaymentType2 option:contains("' + value + '")').removeAttr('disabled');

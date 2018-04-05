@@ -42,14 +42,14 @@
 
         @if (Model.GetDocumentAnswer("TerminationReason").ToLower() == "Termination in probation period by employer".ToLower())
         {
-            <p>Met ingang van @Model.GetDocumentAnswer("LastDayOfEmployment", true) is het dienstverband tussen jou en IKEA B.V. tijdens de proeftijd opgezegd. De reden van het ontslag is met jou besproken.</p>
+            <p>Het dienstverband tussen jou en IKEA B.V. is tijdens de proeftijd opgezegd. De reden van het ontslag is met jou besproken. De opzegging heeft tot gevolg dat @Model.GetDocumentAnswer("LastDayOfEmployment", true) de laatste dag van de arbeidsovereenkomst is.</p>
         }
 
         @if (Model.GetDocumentAnswer("TerminationReason").ToLower() == "Termination in probation period by employee".ToLower())
         {
-            <p>Met ingang van @Model.GetDocumentAnswer("LastDayOfEmployment", true) wordt op jouw verzoek het dienstverband tussen jou en IKEA B.V. tijdens proeftijd beëindigd.</p>
+            <p>Op @Model.GetDocumentAnswer("LastDayOfEmployment", true) wordt op jouw verzoek het dienstverband tussen jou en IKEA B.V. tijdens proeftijd beëindigd. Wij gaan hiermee akkoord en daarmee is @Model.GetDocumentAnswer("LastDayOfEmployment", true) de laatste dag van de arbeidsovereenkomst.</p>
             
-            <p>We gaan hiermee akkoord en beschouwen @Model.GetDocumentAnswer("LastDayOfEmployment", true) als laatste dag van de arbeidsovereenkomst.</p>
+            @*<p>We gaan hiermee akkoord en beschouwen @Model.GetDocumentAnswer("LastDayOfEmployment", true) als laatste dag van de arbeidsovereenkomst.</p>*@
         }
 
         @if (Model.GetDocumentAnswer("BasicTerminationType").ToLower() == "Retirement".ToLower())
@@ -57,19 +57,50 @@
             <p>Hierbij bevestigen we de beëindiging van rechtswege van de arbeidsovereenkomst tussen jou en IKEA, dit vanwege het bereiken van de pensioengerechtigde leeftijd.</p>
             
             <p>We beschouwen @Model.GetDocumentAnswer("LastDayOfEmployment", true) als laatste dag van je arbeidsovereenkomst.</p>
-            
-            <p>De personeelspas hoef je niet in te leveren, (vroeg)gepensioneerden behouden gedurende hun hele leven de IKEA personeelspas en daarmee het recht op personeelskorting. Dit is conform CAO artikel 9F.</p>
+
+            @* SG 2018-02-06 case:60410 delete this paragraph*@
+            @*<p>De personeelspas hoef je niet in te leveren, (vroeg)gepensioneerden behouden gedurende hun hele leven de IKEA personeelspas en daarmee het recht op personeelskorting. Dit is conform CAO.</p>*@
+            @* SG 2018-02-06 case:60410 Add this paragraph*@
+            <p>
+                Conform IKEA CAO artikel 9F behouden (vroeg)gepensioneerden gedurende hun hele leven recht op personeelskorting. Wanneer je wilt genieten van de personeelskorting dien je een IKEA ‘Pensioenpas’ aan te vragen. Deze kun je aanvragen door bijgevoegd formulier in te vullen en met een pasfoto en je oude personeelspas retour te sturen in de bijgesloten retourenvelop.
+                <br/><br /> 
+                We willen jou de de mogelijkheid bieden om ook na jouw pensionering betrokken te blijven bij IKEA door jou:<br />
+                <table border="0">                    
+                    <tr>
+                        <td style="padding-left: 20px !important;" valign="top">&bull;</td>
+                        <td style="padding-left: 15px !important;" valign="top">het personeelsblad Connect Magazine toe te sturen</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 20px !important;" valign="top">&bull;</td>
+                        <td style="padding-left: 15px !important;" valign="top">een kerstattentie aan te bieden</td>
+                    </tr>                      
+                    <tr>
+                        <td style="padding-left: 20px !important;" valign="top">&bull;</td>
+                        <td style="padding-left: 15px !important;" valign="top">uit te nodigen voor speciale gelegenheden</td>
+                    </tr>  
+                </table>
+                <br />
+                Mocht je na jouw pensionering op de hoogte willen blijven van ontwikkelingen bij IKEA, dan hebben we jouw actuele persoonsgegevens nodig. Met het retourneren van bijgevoegd formulier machtig je Stichting IKEA Pensioenfonds (STIP) om wijzigingen in jouw persoonsgegevens met IKEA B.V. te delen.
+            </p>
+
+            <p>Graag willen we je van harte bedanken voor je inzet bij IKEA!</p>
         }
+
+        <p>Als je tenminste zes maanden onafgebroken in dienst bent geweest in dit Financial Year (FY) heb je recht op een naar rato afrekening van de One IKEA Bonus.</p>
+
+        <p>De berekening gebeurt op basis van de laatst bekende schatting van het resultaat van jouw store/unit op het moment van je uitdiensttreding.</p>
+
+        <p>De bonus gaat naar rato van je gewerkte uren, salaris en je bonuslevel. Het bedrag wordt uiterlijk 2 maanden na je uitdiensttreding uitbetaald.</p>
 
         @*(Coworkerfield is not implemented)*@
         @if (Model.GetDocumentAnswer("Co-WorkerBeenEmployedFor2Months").ToLower() == "Yes".ToLower() && Model.GetDocumentAnswer("BasicTerminationType").ToLower() != "Retirement".ToLower())
         {
             <p>We willen je wijzen op de mogelijkheid van waardeoverdracht van je pensioen naar een nieuwe werkgever. Informeer bij je nieuwe pensioenuitvoerder naar de procedure. Mocht je niet besluiten tot waardeoverdracht en je pensioenuitkering is kleiner dan € 100,- per jaar op je pensioendatum, dan betaalt STIP (Stichting IKEA Pensioenfonds) dit over twee jaar je pensioenaanspraken in één keer (dit noemen we afkoop). Zodra dit van toepassing is, ontvang je hiervoor een formulier van onze pensioenuitvoerder om de gegevens te controleren. STIP informeert je later over het pensioen dat je tijdens je dienstverband bij IKEA hebt opgebouwd.</p>
         }
-
-        <p>
+        @* SG 2018-02-06 case:60410 delete this paragraph*@
+        @*<p>
             Als je gebruik maakt van Bedrijfsfitness wordt met de eindafrekening van je salaris het resterende bedrag voor je abonnement verrekend. We verzoeken je om zelf je uitdiensttreding bij Bedrijfsfitness Nederland te melden. Voor meer informatie zie <a href="http://www.bedrijfsfitnessnederland.nl">www.bedrijfsfitnessnederland.nl</a>. 
-        </p>
+        </p>*@
         @* SG 2015-10-23 case:52774 used Search key for BU display name: Model.GetDocumentAnswer("BusinessUnit", true)*@
         <p>We vragen je om op je laatste werkdag de eigendommen van IKEA in te leveren bij de vestiging @CustomPdfPage.IsEmpty(Model.Department.Searchkey, "Business Unit"). Denk hierbij aan je bedrijfskleding (schoon en gestreken), je naambadge, de sleutel van je kluisje en eventueel van het fietsenhok, je personeelspas (tenzij je met pensioen gaat), als je die hebt je NS Business card en eventuele andere eigendommen van IKEA zoals specifieke sleutels, laptop of telefoon.</p>
 
@@ -77,7 +108,7 @@
 
         <p>In de bijlage vind je een toelichting op je laatste salarisbetalingen.</p>
 
-        <p>Na @Model.GetDocumentAnswer("LastDayOfEmployment", true) vervalt je toegang tot ico-worker en ESS, de site om je salarisstroken te bekijken. Als je je salarisstroken wilt bewaren, zorg er dan voor dat je ze voor die datum hebt uitgeprint of opgeslagen. De salarisstroken die na die datum nog beschikbaar komen, ontvang je per post.</p>
+        <p>Na @Model.GetDocumentAnswer("LastDayOfEmployment", true) vervalt je toegang tot ico-worker en ESS, de site om je salarisstroken te bekijken. Als je je salarisstroken wilt bewaren, zorg er dan voor dat je ze voor die datum hebt geprint of opgeslagen. De salarisstroken die na die datum nog beschikbaar komen, ontvang je per post.</p>
 
         <p>Graag ontvangen wij één exemplaar, met daarop je handtekening, voor akkoord retour. Deze kan je in de bijgevoegde envelop terugsturen.</p>
 
@@ -104,6 +135,138 @@
                 </td>
             </tr>
         </table>
-    </div>  
+        <table>
+            <tr style="page-break-before: always;">
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+
+        <h1>
+            Toelichting op eindafrekening bij IKEA
+        </h1>
+
+        <p style="line-height:16px !important;">Bij IKEA maken we onderscheid tussen de salarisbetaling van een uurloon parttimer en een maandloon parttimer/fulltimer. Dit heeft ook gevolgen voor de eindafrekening van het salaris bij uitdiensttreding. Onderstaand volgt hiervan per categorie een uitleg.</span></p>
+
+        <p style="line-height:16px !important;"><span style="text-decoration:underline;">Uurloon parttimers</span><br />Ben je ingedeeld in de categorie uurloon parttimer, dan ontvang je maandelijks een uitbetaling van je contracturen van de huidige maand. In de daaropvolgende maand kan IKEA het aantal daadwerkelijke gewerkte uren, reiskosten per gewerkte dag en eventuele toeslagen uit de vorige maand berekenen en uitbetalen.</p>
+
+        <p style="line-height:16px !important;">Onderstaand volgt een voorbeeld van de afrekening van het salaris bij uitdiensttreding, voor uurloon parttimers.</p>
+
+        <table border="1">
+            <tr>
+                <td style="line-height:16px !important;"><i>Salarisbetaling laatste maand indienst bij IKEA</i></td>
+                <td style="line-height:16px !important;"><i>Salarisbetaling 1 maand uitdienst</i></td>
+                <td style="line-height:16px !important;"><i>Salarisbetaling 2 maanden uit dienst</i></td>
+            </tr>
+            <tr>
+                <td style="line-height:16px !important;">Contracturen huidige maand</td>
+                <td style="line-height:16px !important;">Meer/minder uren vorige maand</td>
+                <td style="line-height:16px !important;">Uitbetaling verlofuren</td>
+            </tr>
+            <tr>
+                <td style="line-height:16px !important;">Meer/minder uren vorige maand</td>
+                <td style="line-height:16px !important;">Toeslaguren vorige maand</td>
+                <td style="line-height:16px !important;"></td>
+            </tr>
+             <tr>
+                <td style="line-height:16px !important;">Toeslaguren vorige maand</td>
+                <td style="line-height:16px !important;">Reiskosten vorige maand</td>
+                <td style="line-height:16px !important;"></td>
+            </tr>
+             <tr>
+                <td style="line-height:16px !important;">Reiskosten vorige maand</td>
+                <td style="line-height:16px !important;"></td>
+                <td style="line-height:16px !important;"></td>
+            </tr>
+             <tr>
+                <td style="line-height:16px !important;">Vakantiegeld, 13<small><sup>e</sup></small> maand<small><sup>1</sup></small></td>
+                <td style="line-height:16px !important;"></td>
+                <td style="line-height:16px !important;"></td>
+            </tr>
+        </table>
+        <br />
+
+        <p style="line-height:16px !important;"><span style="text-decoration:underline;">Maandloonparttimers/ fulltimers</span><br />Ben je ingedeeld in de categorie maandloon parttimer of fulltimer, dan ontvang je maandelijks een uitbetaling van je contracturen van de huidige maand. In de daaropvolgende maand kan IKEA de reiskosten en eventuele toeslagen uit de vorige maand berekenen en uitbetalen. Ook kan IKEA op dat moment het aantal daadwerkelijke gewerkte uren berekenen en verwerken in jouw flexuren  overzicht.</p>
+
+        <p style="line-height:16px !important;">Onderstaand volgt een voorbeeld van de afrekening van het salaris bij uitdiensttreding, voor maandloon parttimers en fulltimers.</p>
+
+        <table border="1">
+            <tr>
+                <td style="line-height:16px !important;"><i>Salarisbetaling laatste maand indienst bij IKEA</i></td>
+                <td style="line-height:16px !important;"><i>Salarisbetaling 1 maand uitdienst</i></td>
+                <td style="line-height:16px !important;"><i>Salarisbetaling 2 maanden uit dienst</i></td>
+            </tr>
+            <tr>
+                <td style="line-height:16px !important;">Contracturen huidige maand</td>
+                <td style="line-height:16px !important;">Toeslaguren vorige maand</td>
+                <td style="line-height:16px !important;">Uitbetaling verlofuren</td>
+            </tr>
+            <tr>
+                <td style="line-height:16px !important;">Toeslaguren vorige maand</td>
+                <td style="line-height:16px !important;">Reiskosten vorige maand</td>
+                <td style="line-height:16px !important;">Uitbetaling flexuren</td>
+            </tr>
+             <tr>
+                <td style="line-height:16px !important;">Reiskosten vorige maand</td>
+                <td style="line-height:16px !important;"></td>
+                <td style="line-height:16px !important;"></td>
+            </tr>
+            <tr>
+                <td style="line-height:16px !important;">Vakantiegeld, 13<small><sup>e</sup></small> maand<small><sup>1</sup></small></td>
+                <td style="line-height:16px !important;"></td>
+                <td style="line-height:16px !important;"></td>
+            </tr>
+        </table>
+        <br />
+
+        <p style="line-height:16px !important;">Let op: leidinggevenden en medewerkers met een functie in schaal 10 of hoger hebben geen recht op flexuren.</p>
+        <br />
+        <p style="line-height:16px !important;">_________________________________________ <br /><small><sup>1</sup></small>Vakantiegeld en 13e maand worden naar rato uitbetaald.<br /><small><sup>2</sup></small>Flexibele uren, ook wel meer-minder uren genoemd.</p>
+        
+        @if (@Model.GetDocumentAnswer("BasicTerminationType").ToLower() == "Retirement".ToLower())
+        {
+            <table>
+                <tr style="page-break-before: always;">
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+
+            @Html.Partial("../Shared/Pdfs/_BarCode", Model, new ViewDataDictionary { { "ExtraBarCode", "W109" } })
+            <h1>Aanvraagformulier Pensioenpas</h1> 
+            <p style="line-height:16px !important;">Hierbij vraag ik, @Model.GetDocumentAnswer("FirstName", true) @Model.GetDocumentAnswer("LastName", true), een IKEA Pensioenpas aan. Bijgevoegd een recente pasfoto en mijn oude personeelspas.  </p>
+            <br/><br />
+            <table cellpadding="0" cellspacing="0" width="100%" style="border: 1px;" rules="none">
+                <tbody>
+                    <tr>
+                        <td style="width: 96px;" valign="top"><span style="text-decoration:underline;">Recente pasfoto</span></td>
+                        <td style="width: 60px;">&nbsp;</td>
+                        <td style="width: 96px;" align="center">Oude personeelspas</td>                   
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>                    
+                    </tr>
+                    <tr>
+                        <!-- HERE IS MY CHANGE -->
+                        <td style="outline: thin solid;width: 100px;height: 230px">&nbsp;</td>
+                        <td style="width: 5px;">&nbsp;</td>                      
+                        <td style="outline: thin solid;width: 280px;height: 230px">&nbsp;</td>
+                                     
+                    </tr>               
+                </tbody>
+            </table>  
+            <br /><br /><br />
+         <h1 style="text-decoration:underline;">Machtiging persoonsgegevens</h1>  
+            <p style="line-height:16px !important;">Hierbij machtig ik, @Model.GetDocumentAnswer("FirstName", true) @Model.GetDocumentAnswer("LastName", true), Stichting IKEA Pensioenfonds (STIP) om wijzigingen in mijn persoonsgegevens met  IKEA B.V. te delen. </p>
+            <br />
+            <p style="clear:both;">
+                Handtekening werknemer,
+                <br />
+                Amsterdam, @DateTime.Now.ToString("dd.MM.yyyy")      
+            </p>
+            <br /><br /><br />
+            <p style="line-height:16px !important;">------------------------------<br /></p>
+        }
+</div>  
 </body>
 </html>

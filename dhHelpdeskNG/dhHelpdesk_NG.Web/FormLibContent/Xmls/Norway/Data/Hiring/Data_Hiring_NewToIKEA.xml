@@ -3,7 +3,7 @@
   <option value=""></option>
   <option value="New Hire">New Hire</option>
   <option value="Re-Hire">Re-Hire</option>
-  <option value="International Transfer (TE)">International Transfer (TE)</option>
+  <option value="International Transfer (LTA, STA, Commuter)">International Transfer (LTA, STA, Commuter)</option>
   <option value="Transfer Between Business Units">Transfer Between Business Units</option>
-  <option value="International Move without Mobility">International Move without Mobility</option>
+  <option value="International Relocation">International Relocation</option>
 </options>

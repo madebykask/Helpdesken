@@ -1,7 +1,6 @@
 ﻿@model ECT.FormLib.Models.FormModel
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
-
 <div class="tab-pane active" id="servicerequestdetails">
     <div class="span6">
         <table class="table">
@@ -101,9 +100,7 @@
             </tbody>
         </table>
     </div>
-    
     <div class="span6">
-        
         <table class="table">
             <tbody>
                 <tr>
@@ -119,10 +116,6 @@
                     <td class="tdstrong">@Model.Label("PermanentAddressLine2")</td>
                     <td>@Model.Element("PermanentAddressLine2")</td>
                 </tr>
-                @*<tr>
-                    <td class="tdstrong">@Model.Label("PermanentAddressLine3")</td>
-                    <td>@Model.Element("PermanentAddressLine3")</td>
-                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
                     <td>@Model.Element("PermanentPostalCode")</td>
@@ -145,6 +138,8 @@
 </div>
 <script>
     var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');
+    var ect = new Ect();
+
     if ("@Model.ReadOnlyTab("#servicerequestdetails")" == 'False' && lockedbyUserGroup == 'False') {
         
         var dateHiringDate = $('#date_ContractStartDate');
@@ -158,27 +153,19 @@
                 });
         }
 
-
         function selectIndexChangeNewToIKEA() {
-            //////
-            // AC - 2014-09-22
-
             if ($('#NewToIKEA').val() == 'New Hire') {
                 document.getElementById('GlobalHRID').disabled = true;
                 document.getElementById('Co-WorkerID').disabled = true;
-
-
-
                 $('#date_PreviousContractStartDate').datepicker("destroy");
                 $('#date_PreviousContractStartDate').addClass("disabled");
                 $('#PreviousContractStartDate').prop('disabled', true);
                 $('#PreviousContractStartDate').val("");
 
             }
-            else if ($('#NewToIKEA').val() == 'International Transfer') {
+            else if ($('#NewToIKEA').val() == 'International Transfer (LTA, STA, Commuter)' || $('#NewToIKEA').val() == 'International Relocation') {
                 document.getElementById('Co-WorkerID').disabled = false;
                 document.getElementById('GlobalHRID').disabled = false;
-
                 $('#date_PreviousContractStartDate').datepicker();
                 $('#PreviousContractStartDate').prop('disabled', false);
                 $("#PreviousContractStartDate").removeClass("disabled");
@@ -206,14 +193,12 @@
             $('#InductionDate').val($('#ContractStartDate').val());
 
             var startDate = $('#ContractStartDate').val();
-
             var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
             var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
             var nowTemp = new Date();
             var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
             noticeHiringDate.hide();
             noticeHiringDateWrong.hide();
-
             if (dstartDate.valueOf() < now.valueOf())
                 noticeHiringDate.show();
         });

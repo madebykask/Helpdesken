@@ -53,22 +53,35 @@
 
         <p style="text-align: center;font-family:Verdana; font-size:20px;"><strong><u>Employment Contract</u></strong></p>
           <br />
+        <!-- Add condition to check which company is used, then different text is shown in contract #59272-->
+        @if (Model.GetDocumentAnswer("Company") == "3500 IKEA Korea Ltd")
+        {
+            <p style="text-align: justify;font-family:Verdana; font-size:9px; line-height:17">
+                IKEA Korea (“company”) and  @Model.GetDocumentAnswer("FirstName", true) @Model.GetDocumentAnswer("LastName", true) (@Model.GetDocumentAnswer("Co-workerIDSSCUSE", true)) (“co-worker”) agree to comply with the labor law and the company’s Co-worker Handbook
+                in a mutual and earnest manner during the co-worker’s term of employment, and enter into a contract as follows:
+                <br /><br />
+            </p>
+        }
 
-        <p style="text-align: justify;font-family:Verdana; font-size:9px; line-height:17">        
-            IKEA Korea (“company”) and  @Model.GetDocumentAnswer("FirstName", true) @Model.GetDocumentAnswer("LastName", true) (@Model.GetDocumentAnswer("LastnameinKR", true) @Model.GetDocumentAnswer("FirstnameinKR", true)) (@Model.GetDocumentAnswer("Co-workerIDSSCUSE", true)) (“co-worker”) agree to comply with the labor law and the company’s Co-worker Handbook
-            in a mutual and earnest manner during the co-worker’s term of employment, and enter into a contract as follows:
-             <br /><br />
-        </p>
+        @if (Model.GetDocumentAnswer("Company") == "3501 IKEA Distribution Services Korea Ltd")
+        {
+            <p style="text-align: justify;font-family:Verdana; font-size:9px; line-height:17">
+                IKEA Distribution Services Korea Ltd (“company”) and  @Model.GetDocumentAnswer("FirstName", true) @Model.GetDocumentAnswer("LastName", true) (@Model.GetDocumentAnswer("Co-workerIDSSCUSE", true)) (“co-worker”) agree to comply with the labor law and the company’s Co-worker Handbook
+                in a mutual and earnest manner during the co-worker’s term of employment, and enter into a contract as follows:
+                <br /><br />
+            </p>
+        }
+        
         @{
             var list = new List<PdfListItem>();
             var pdfList = new List<PdfListItem>();
-      
+
 
             //1
             string text1;
 
             // IF “OA13 Employment Category = Permanent” 
-            if (!string.IsNullOrEmpty(Model.GetAnswer("Employmentcategory")) && Model.GetAnswer("Employmentcategory") == "Permanent") 
+            if (!string.IsNullOrEmpty(Model.GetAnswer("Employmentcategory")) && Model.GetAnswer("Employmentcategory") == "Permanent")
             {
                 text1 = "Starting Date : " + convertedStartDate;
                 list.Add(new PdfListItem { Text = text1 });
@@ -76,258 +89,291 @@
             else
             {
                 //IF “OA13 Employment Category = Temporary” 
-                if (!string.IsNullOrEmpty(Model.GetAnswer("Employmentcategory")) && Model.GetAnswer("Employmentcategory") == "Temporary") 
+                if (!string.IsNullOrEmpty(Model.GetAnswer("Employmentcategory")) && Model.GetAnswer("Employmentcategory") == "Temporary")
                 {
                     text1 = "Working Period: " + convertedStartDate + " ~ " + convertedEndDate;
                     list.Add(new PdfListItem { Text = text1 });
                 }
             }
-            
+
             //2
             string text2 = "Department : " + Model.GetDocumentAnswer("Department", true) + "<br />";
 
             text2 += "Job title : " + Model.GetDocumentAnswer("JobTitle", true) + "<br />";
-            
-            text2 += "Duty : " + Model.GetDocumentAnswer("ShortSortjobdescription", true) + "<br />";
-                     //"17, Iljik-ro, Gwangmyeong-si, Gyunggi-do
-            text2 += "Work Location : " + Model.Company.KRSNo + "<br />";
-        
+
+            // If field OA.CS.10.1 Short job description has no value, leave it blank #59272
+            if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("ShortSortjobdescription")))
+            {
+                text2 += "Duty : " + Model.GetDocumentAnswer("ShortSortjobdescription", true) + "<br />";
+            }
+            else
+            {
+                text2 += "Duty : " + "<br />";
+            }
+
+            //Location for BU Gwangmyeong Store, Service Office, Customer Support Center, Distribution Support Unit:   17, Iljik-ro, Gwangmyeong-si, Gyunggi-do
+            if (Model.GetDocumentAnswer("BusinessUnit", true) != "Goyang Store")
+            {
+                text2 += "Work Location : " + Model.Company.KRSNo + "<br />";
+            }
+
+            //Location for BU Goyang Store: 420(Donae-dong), Gwonyul-daero, Deogyang-gu, Goyang-si, Gyeonggi-do
+            else
+            {
+                text2 += "Work Location : " + Model.Department.StrAddr + "<br />";
+            }
+
             text2 += "If deemed necessary for work, the company may change the co-worker’s title, duty, and work location.";
-            
+
             list.Add(new PdfListItem { Text = text2 });
-               
-                                                            
+
+
             //3
             string text3 = "Probation Period<br />" +
-                           "The probation period for a new co-worker lasts for three months from the starting date.  disqualifying work performance, personality, attitude, or other business decisions. " +
-                           "However, the term may be extended if it is acknowledged and determined as necessary." +
-                           " The company may terminate this contract based on the conditions specified by the Labor Standards Act if it decides at its own discretion during the probation period that it would be inappropriate to hire the co-worker due to incompetence, " +
-                           "The company may even change the co-worker’s title during the probation period after discussing it with the co-worker, by taking into account all of the relevant factors, including his work performance and business necessity.";
+                           "The probation period for a new co-worker lasts for three months from the starting date. " +
+                           "However, the term may be extended if it is acknowledged and determined as necessary. " +
+                           "The company may terminate this contract based on the conditions specified by the Labor Standards Act if it decides at its own discretion during the probation period that it would be inappropriate to hire the co-worker due to incompetence, " +
+                           "disqualifying work performance, personality, attitude, or other business decisions. " +
+                           "The company may even change the co-worker’s title during the probation period after discussing it with the co-worker, by taking into account all of the relevant factors, including his work performance and business necessity. ";
             list.Add(new PdfListItem { Text = text3 });
 
             //4
             string text4 = "Salary <br />";
             string justPermanent = "";
             string permanentTemproray = "";
-            
-            
-             switch (Model.GetAnswer("Payrollcategory"))
+
+            //New text for paragraph 4 - #59272
+            switch (Model.GetAnswer("Payrollcategory"))
+            {
+
+                //If “PM1 Payment Category = Exempt”:                     
+                case "Exempted":
+                    permanentTemproray = "The monthly salary is paid to the bank account specified by the co-worker on the 10th (or on the preceding date if the 10th is a holiday) of every month. However, if the co-worker is absent any working day at least once, the monthly rate and other compensations shall be adjusted based on the number of actual working days. " +
+                                         "Any social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws. <br />" +
+                                         "Considering the fact that administrative works are time-flexible and working hours are difficult to measure, the monthly salary covers both the fixed work hours (20 hours per month) and all non-duty (including extended hours, holidays, and night duty) work hours. <br />" +
+                                         "A fixed amount of allowance for overtime, holiday and night time work (20 hours per month) shall be included in the base salary due to difficulties of measuring working hours in order to make an efficient calculation under inclusive salary system. ";
+                    break;
+
+                //If “PM1 Payment Category = Flex Monthly”:
+                case "Flex - Monthly":
+                    permanentTemproray = "The monthly salary is paid to the bank account specified by the co-worker on the 10th (or on the preceding date if the 10th is a holiday) of every month. However, if the co-worker is absent any working day at least once, the monthly salary and other compensations shall be adjusted based on the number of actual working days. If the co-worker works off-duty shifts outside of the scheduled work hours after receiving the company’s approval, the co-worker can receive the allowance for overtime hours, night shift, and holidays, or get a time off. Social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws.";
+                    break;
+
+                //If “PM1 Payment Category = Salaried Monthly”:
+                case "Salaried - Monthly":
+                    permanentTemproray = "The monthly salary is paid to the bank account specified by the co-worker on the 10th (or on the preceding date if the 10th is a holiday) of every month. However, if the co-worker is absent any working day at least once, the monthly salary and other compensations shall be adjusted based on the number of actual working days. If the co-worker works off-duty shifts outside of the scheduled work hours after receiving the company’s approval, the co-worker can receive the allowance for overtime hours, night shift, and holidays, or get a time off. Social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws.";
+                    break;
+
+                //If “PM1 Payment Category = Flex Hourly”:               
+                case "Flex - Hourly":
+                    if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("ExtraBasicPayAmount")))
                     {
+                        justPermanent = "The actual total amount paid will be ￦ " + Model.GetDocumentAnswer("ExtraBasicPayAmount", true) + "(including weekly holiday allowance) if the allowances for weekly holidays and paid holidays are added to the above amount. The weekly holiday allowance will be paid only if the co-worker has worked all fixed work hours and there is no absence without prior notice. <br />" +
+                                    "The monthly salary is calculated by multiplying the actual work hours by the hourly rate. The monthly salary is wired to the bank account specified by the co-worker on the 10<sup style='font-size:7px;'>th</sup> (or the preceding date if the 10<sup style='font-size:7px;'>th</sup> is a holiday) of every month. <br />" +
+                                    "If the co-worker works off-duty shifts outside of the scheduled work hours after receiving the company’s approval, the co-worker can receive the allowance for overtime hours, night shift, and holidays, or get a time off. Social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws.";
+                    }
+                    else
+                    {
+                        justPermanent = "The actual total amount paid will be hourly rated (including weekly holiday allowance) if the allowances for weekly holidays and paid holidays are added to the above amount. The weekly holiday allowance will be paid only if the co-worker has worked all fixed work hours and there is no absence without prior notice. <br />" +
+                                    "The monthly salary is calculated by multiplying the actual work hours by the hourly rate. The monthly salary is wired to the bank account specified by the co-worker on the 10<sup style='font-size:7px;'>th</sup> (or the preceding date if the 10<sup style='font-size:7px;'>th</sup> is a holiday) of every month. <br />" +
+                                    "If the co-worker works off-duty shifts outside of the scheduled work hours after receiving the company’s approval, the co-worker can receive the allowance for overtime hours, night shift, and holidays, or get a time off. Social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws.";
+                    }
 
-                        //If “OA13 Employment category = Permanent, Temporary” and “PM1 Payment Category = Exempt”:                     
-                        case "Exempted":                    
-                            permanentTemproray = "The monthly salary is paid to the bank account specified by the co-worker on the 10<sup style='font-size:7px;'>th</sup> (or on the preceding date if the 10<sup style='font-size:7px;'>th</sup> is a holiday) of every month. However, if the co-worker is absent any working day at least once, the monthly rate and other compensations shall be adjusted based on the number of actual working days." +
-                                                 "Any social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws. <br />" +
-                                                 "Considering the fact that administrative works are time-flexible and working hours are difficult to measure, the monthly salary covers both the fixed work hours (20 hours per month) and all non-duty (including extended hours, holidays, and night duty) work hours. Therefore, the company does not issue any overtime allowance other than the salary. <br />" +
-                                                 "A fixed amount of allowance for overtime, holiday and night time work (20 hours per month) shall be included in the base salary due to difficulties of measuring working hours in order to make an efficient calculation under inclusive salary system.";
-                       break;
+                    break;
 
-                        //If “OA13 Employment category = Permanent, Temporary” and “PM1 Payment Category = Flex Monthly”:
-                        case "Flex - Monthly":
-                       permanentTemproray = "The monthly salary is paid to the bank account specified by the co-worker on the 10<sup style='font-size:7px;'>th</sup> (or on the preceding date if the 10<sup style='font-size:7px;'>th</sup> is a holiday) of every month. However, if the co-worker is absent any working day at least once, the monthly salary and other compensations shall be adjusted based on the number of actual working days. If the co-worker works off-duty shifts outside of the scheduled work hours after receiving the company’s approval, the co-worker can receive the allowance for overtime hours, night shift, and holidays, or get a time off. Social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws.";
-                       break;
+                //If “PM1 Payment Category = Salaried - Hourly”:
+                case "Salaried - Hourly":
+                    if (!string.IsNullOrEmpty(Model.GetDocumentAnswer("ExtraBasicPayAmount")))
+                    {
+                        justPermanent = "The actual total amount paid will be ￦ " + Model.GetDocumentAnswer("ExtraBasicPayAmount", true) + "(including weekly holiday allowance) if the allowances for weekly holidays and paid holidays are added to the above amount. The weekly holiday allowance will be paid only if the co-worker has worked all fixed work hours and there is no absence without prior notice. <br />" +
+                                    "The monthly salary is calculated by multiplying the actual work hours by the hourly rate. The monthly salary is wired to the bank account specified by the co-worker on the 10<sup style='font-size:7px;'>th</sup> (or the preceding date if the 10<sup style='font-size:7px;'>th</sup> is a holiday) of every month. <br />" +
+                                    "If the co-worker works off-duty shifts outside of the scheduled work hours after receiving the company’s approval, the co-worker can receive the allowance for overtime hours, night shift, and holidays, or get a time off. Social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws.";
+                    }
+                    else
+                    {
+                        justPermanent = "The actual total amount paid will be hourly rated (including weekly holiday allowance) if the allowances for weekly holidays and paid holidays are added to the above amount. The weekly holiday allowance will be paid only if the co-worker has worked all fixed work hours and there is no absence without prior notice. <br />" +
+                                    "The monthly salary is calculated by multiplying the actual work hours by the hourly rate. The monthly salary is wired to the bank account specified by the co-worker on the 10<sup style='font-size:7px;'>th</sup> (or the preceding date if the 10<sup style='font-size:7px;'>th</sup> is a holiday) of every month. <br />" +
+                                    "If the co-worker works off-duty shifts outside of the scheduled work hours after receiving the company’s approval, the co-worker can receive the allowance for overtime hours, night shift, and holidays, or get a time off. Social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws.";
+                    }
 
-                        //If “OA13 Employment category = Permanent, Temporary” and “PM1 Payment Category = Salaried Monthly”:
-                        case "Salaried - Monthly":
-                       permanentTemproray = "The monthly salary is paid to the bank account specified by the co-worker on the 10<sup style='font-size:7px;'>th</sup> (or on the preceding date if the 10<sup style='font-size:7px;'>th</sup> is a holiday) of every month. However, if the co-worker is absent any working day at least once, the monthly salary and other compensations shall be adjusted based on the number of actual working days. If the co-worker works off-duty shifts outside of the scheduled work hours after receiving the company’s approval, the co-worker can receive the allowance for overtime hours, night shift, and holidays, or get a time off. Social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws.";
-                       break;
+                    break;
 
-                        //If “OA13 Employment category = Permanent” and “PM1 Payment Category = Flex Hourly”:               
-                        case "Flex - Hourly":
-                            justPermanent = "The actual total amount paid will be ￦ " + Model.GetDocumentAnswer("ExtraBasicPayAmount", true) + " if the allowances for weekly holidays and paid holidays are added to the above amount. The weekly holiday allowance will be paid only if the co-worker has worked all fixed work hours and there is no absence without prior notice. <br />" +
-                                            "The monthly salary is calculated by multiplying the actual work hours by the hourly rate. The monthly salary is wired to the bank account specified by the co-worker on the 10<sup style='font-size:7px;'>th</sup> (or the preceding date if the 10<sup style='font-size:7px;'>th</sup> is a holiday) of every month. <br />" +
-                                            "If the co-worker works off-duty shifts outside of the scheduled work hours after receiving the company’s approval, the co-worker can receive the allowance for overtime hours, night shift, and holidays, or get a time off. Social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws.";
-                       break;
 
-                        //If “OA13 Employment category = Permanent” and “PM1 Payment Category = Salaried - Hourly”:
-                        case "Salaried - Hourly":
-                            justPermanent = "The actual total amount paid will be ￦ " + Model.GetDocumentAnswer("ExtraBasicPayAmount", true) + " if the allowances for weekly holidays and paid holidays are added to the above amount. The weekly holiday allowance will be paid only if the co-worker has worked all fixed work hours and there is no absence without prior notice. <br />" +
-                                            "The monthly salary is calculated by multiplying the actual work hours by the hourly rate. The monthly salary is wired to the bank account specified by the co-worker on the 10<sup style='font-size:7px;'>th</sup> (or the preceding date if the 10<sup style='font-size:7px;'>th</sup> is a holiday) of every month. <br />" +
-                                            "If the co-worker works off-duty shifts outside of the scheduled work hours after receiving the company’s approval, the co-worker can receive the allowance for overtime hours, night shift, and holidays, or get a time off. Social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws.";                    
-                       break;
-
-                        
-                    }<!-- end of switch-->
-            
-            //If “OA13 Employment category = Permanent, Temporary” and “PM1 Payment Category = Exempt, Flex – Monthly, Salaried - Monthly”:
-            if ((!string.IsNullOrEmpty(Model.GetAnswer("Employmentcategory")) && (Model.GetAnswer("Employmentcategory").ToLower() == "Permanent".ToLower() || Model.GetAnswer("Employmentcategory").ToLower() == "Temporary".ToLower()))
-                && (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && (Model.GetAnswer("Payrollcategory").ToLower() == "Exempted".ToLower() || Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Monthly".ToLower() || Model.GetAnswer("Payrollcategory").ToLower() == "Salaried - Monthly".ToLower())))
+            }<!-- end of switch-->
+            //Changed paragraph 4, not checking Employment category, only check condition for Payroll category #59272
+            //If “PM1 Payroll Category = Exempted”:
+            if ((!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory"))) && (Model.GetAnswer("Payrollcategory").ToLower() == "Exempted".ToLower()))
             {
                 text4 +=
                           "(1) Monthly salary: ￦ " + Model.GetDocumentAnswer("Basicpayamount", true) + "<br />" + permanentTemproray;
-                                       
+
                 list.Add(new PdfListItem { Text = text4 });
             }
 
-
-            //If “OA13 Employment category = Permanent, Temporary” and “PM1 Payment Category = Flex Hourly, Salaried – Hourly”:
-            if ((!string.IsNullOrEmpty(Model.GetAnswer("Employmentcategory")) && (Model.GetAnswer("Employmentcategory").ToLower() == "Temporary".ToLower()))
-               && (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && (Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Hourly".ToLower() || Model.GetAnswer("Payrollcategory").ToLower() == "Salaried - Hourly".ToLower())))
+            //If “PM1 Payroll Category = Flex – Monthly, Salaried - Monthly”:
+            if ((!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && (Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Monthly".ToLower() || Model.GetAnswer("Payrollcategory").ToLower() == "Salaried - Monthly".ToLower())))
             {
                 text4 +=
-                          "(1) Hourly rate: ￦ " + Model.GetDocumentAnswer("Basicpayamount", true) + "<br />";
+                          "(1) Monthly salary: ￦ " + Model.GetDocumentAnswer("Basicpayamount", true) + "<br />" + permanentTemproray;
 
                 list.Add(new PdfListItem { Text = text4 });
             }
 
-            //If “OA13 Employment category = Permanent” and “PM1 Payment Category = Flex Hourly, Salaried – Hourly”:
-            if ((!string.IsNullOrEmpty(Model.GetAnswer("Employmentcategory")) && (Model.GetAnswer("Employmentcategory").ToLower() == "Permanent".ToLower()))
-               && (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && (Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Hourly".ToLower() || Model.GetAnswer("Payrollcategory").ToLower() == "Salaried - Hourly".ToLower())))
+            //If “PM1 Payroll Category = Flex - Hourly, Salaried – Hourly”:
+            if ((!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && (Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Hourly".ToLower() || Model.GetAnswer("Payrollcategory").ToLower() == "Salaried - Hourly".ToLower())))
             {
                 text4 +=
                           "(1) Hourly rate: ￦ " + Model.GetDocumentAnswer("Basicpayamount", true) + "<br />" + justPermanent;
 
                 list.Add(new PdfListItem { Text = text4 });
             }
-           
-            
+
+
+
             //*********** OLD Text 4 
-                //// If PM1 Payroll Category = “Salaried – Monthly”  or “Flex-monthly”  
-                //if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && (Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Monthly".ToLower() || Model.GetAnswer("Payrollcategory").ToLower() == "Salaried - Monthly".ToLower()))
-                //{            
-                //      text4 = "Salary <br />" +
-                //                "(2) Monthly salary: ￦ " + Model.GetDocumentAnswer("Basicpayamount", true) + "<br />" +
-                //                "The monthly salary is paid to the bank account specified by the co-worker on the 10th (or on the preceding date if the 10th is a holiday) of every month. "+
-                //                "However, if the co-worker is absent any working day at least once, the monthly salary and other compensations shall be adjusted based on the number of actual working days. " +
-                //                "If the co-worker works off-duty shifts outside of the scheduled work hours after receiving the company’s approval, the co-worker can receive the allowance for overtime hours, night shift, and holidays, or get a time off. " +
-                //                "Social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws. <br />";
-                //      list.Add(new PdfListItem { Text = text4 });
-                //}
+            //// If PM1 Payroll Category = “Salaried – Monthly”  or “Flex-monthly”  
+            //if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && (Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Monthly".ToLower() || Model.GetAnswer("Payrollcategory").ToLower() == "Salaried - Monthly".ToLower()))
+            //{            
+            //      text4 = "Salary <br />" +
+            //                "(2) Monthly salary: ￦ " + Model.GetDocumentAnswer("Basicpayamount", true) + "<br />" +
+            //                "The monthly salary is paid to the bank account specified by the co-worker on the 10th (or on the preceding date if the 10th is a holiday) of every month. "+
+            //                "However, if the co-worker is absent any working day at least once, the monthly salary and other compensations shall be adjusted based on the number of actual working days. " +
+            //                "If the co-worker works off-duty shifts outside of the scheduled work hours after receiving the company’s approval, the co-worker can receive the allowance for overtime hours, night shift, and holidays, or get a time off. " +
+            //                "Social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws. <br />";
+            //      list.Add(new PdfListItem { Text = text4 });
+            //}
 
-                //// If PM1 Payroll Category = “Salaried – Hourly” or “Flex - Hourly” 
-                //if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && (Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Hourly".ToLower() || Model.GetAnswer("Payrollcategory").ToLower() == "Salaried - Hourly".ToLower()))
-                //{
-                //    text4 = "Salary <br />" +
-                //              "(1) Hourly rate: ￦ " + Model.GetDocumentAnswer("Basicpayamount", true) + "<br />" +
-                //              "The actual total amount paid will be ￦ 9,200 if the allowances for weekly holidays and paid holidays are added to the above amount. The weekly holiday allowance will be paid only if the co-worker has worked all fixed work hours and there is no absence without prior notice. <br />" +
-                //              "The monthly salary is calculated by multiplying the actual work hours by the hourly rate. The monthly salary is wired to the bank account specified by the co-worker on the 10th (or the preceding date if the 10th is a holiday) of every month. <br />" +
-                //              "If the co-worker works off-duty shifts outside of the scheduled work hours after receiving the company’s approval, the co-worker can receive the allowance for overtime hours, night shift, " +
-                //              "and holidays, or get a time off. Social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws.<br />";
-                //    list.Add(new PdfListItem { Text = text4 });
-                //}
+            //// If PM1 Payroll Category = “Salaried – Hourly” or “Flex - Hourly” 
+            //if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && (Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Hourly".ToLower() || Model.GetAnswer("Payrollcategory").ToLower() == "Salaried - Hourly".ToLower()))
+            //{
+            //    text4 = "Salary <br />" +
+            //              "(1) Hourly rate: ￦ " + Model.GetDocumentAnswer("Basicpayamount", true) + "<br />" +
+            //              "The actual total amount paid will be ￦ 9,200 if the allowances for weekly holidays and paid holidays are added to the above amount. The weekly holiday allowance will be paid only if the co-worker has worked all fixed work hours and there is no absence without prior notice. <br />" +
+            //              "The monthly salary is calculated by multiplying the actual work hours by the hourly rate. The monthly salary is wired to the bank account specified by the co-worker on the 10th (or the preceding date if the 10th is a holiday) of every month. <br />" +
+            //              "If the co-worker works off-duty shifts outside of the scheduled work hours after receiving the company’s approval, the co-worker can receive the allowance for overtime hours, night shift, " +
+            //              "and holidays, or get a time off. Social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws.<br />";
+            //    list.Add(new PdfListItem { Text = text4 });
+            //}
 
-                //// If PM1 Payroll Category = “Exempted”  
-                //if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && Model.GetAnswer("Payrollcategory").ToLower() == "Exempted".ToLower())
-                //{
-                //    text4 = "Salary <br />" +
-                //              "(1) Monthly salary: ￦ " + Model.GetDocumentAnswer("Basicpayamount", true) + "<br />" +
-                //              "The monthly salary is paid to the bank account specified by the co-worker on the 10th (or on the preceding date if the 10th is a holiday) of every month. However, if the co-worker is absent any working day at least once, the monthly rate and other compensations shall be adjusted based on the number of actual working days. " +
-                //              "Any social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws. <br />" +
-                //              "Considering the fact that administrative works are time-flexible and working hours are difficult to measure, the monthly salary covers both the fixed work hours (20 hours per month) and all non-duty (including extended hours, holidays, and night duty) work hours. Therefore, the company does not issue any overtime allowance other than the salary. <br />" +
-                //              "A fixed amount of allowance for overtime, holiday and night time work (20 hours per month) shall be included in the base salary due to difficulties of measuring working hours in order to make an efficient calculation under inclusive salary system. <br />";
-                //    list.Add(new PdfListItem { Text = text4 });
-                //}
+            //// If PM1 Payroll Category = “Exempted”  
+            //if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && Model.GetAnswer("Payrollcategory").ToLower() == "Exempted".ToLower())
+            //{
+            //    text4 = "Salary <br />" +
+            //              "(1) Monthly salary: ￦ " + Model.GetDocumentAnswer("Basicpayamount", true) + "<br />" +
+            //              "The monthly salary is paid to the bank account specified by the co-worker on the 10th (or on the preceding date if the 10th is a holiday) of every month. However, if the co-worker is absent any working day at least once, the monthly rate and other compensations shall be adjusted based on the number of actual working days. " +
+            //              "Any social insurance charges including tax, national health insurance, and national pension as well as lawful deductibles shall be deducted in compliance with the applicable laws. <br />" +
+            //              "Considering the fact that administrative works are time-flexible and working hours are difficult to measure, the monthly salary covers both the fixed work hours (20 hours per month) and all non-duty (including extended hours, holidays, and night duty) work hours. Therefore, the company does not issue any overtime allowance other than the salary. <br />" +
+            //              "A fixed amount of allowance for overtime, holiday and night time work (20 hours per month) shall be included in the base salary due to difficulties of measuring working hours in order to make an efficient calculation under inclusive salary system. <br />";
+            //    list.Add(new PdfListItem { Text = text4 });
+            //}
             //End 4
-            
+
             //5
 
-            string text5;
+            string text5;  //Rule has been changed, only condition for Payroll category, not Employment category as well #59272
 
-            if (!string.IsNullOrEmpty(Model.GetAnswer("Employmentcategory")) && (Model.GetAnswer("Employmentcategory").ToLower() == "Permanent".ToLower() || Model.GetAnswer("Employmentcategory").ToLower() == "Temporary".ToLower()))
+            //If “PM1 Payment Category = Exempted”:
+            if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && Model.GetAnswer("Payrollcategory").ToLower() == "Exempted".ToLower())
             {
-                //If “OA13 Employment category  = Permanent, Temporary” and “PM1 Payment Category = Exempt”:
-                if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && Model.GetAnswer("Payrollcategory").ToLower() == "Exempted".ToLower())
-                {
-                    text5 = "Working Days and Holidays <br />" +
-                              "The contractual working hours are " + Model.GetDocumentAnswer("Contractedhours", true) + " hours per week. However, co-workers might work more than his/her contractual working hours for a specific period on the condition that the average working hours shall not exceed the contractual working hours. The maximum length of the period is within 3 months. No obligation for an additional allowance is given for extended working hours exceeding contractual hours for a specific week or a specific day. <br />" +
-                              "The standard starting and finish time are from 09:00 – 18:00, but the working days and hours, starting time, finishing time and rest time may be modified by the company in accordance with the Labor Standards Act., business requirement and other factors. <br />" +
-                              "The company shall, between working hours, allow a recess of not less than 30 minutes to co-workers working for 4 hours or a recess of not less than 45 minutes to co-workers working for 6 hours or a recess of not less than 60 minutes to co-workers working for 8 hours.<br />" +                              
-                              "The work hours and recess may vary depending on business necessity and work practices. The company shall grant the co-worker 1 paid holiday per week and follow the Co-worker Handbook for more information on other holidays. <br />";      
-                    list.Add(new PdfListItem { Text = text5 });
-                }
-
-                //If “OA13 Employment category  = Permanent, Temporary” and “PM1 Payment Category = Flex Hourly”:
-                if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Hourly".ToLower())
-                {
-                    text5 = "Working Days and Holidays <br />" +
-                              "The contractual working hours are " + Model.GetDocumentAnswer("Contractedhours", true) + " hours per week. However, co-workers might work more than his/her contractual working hours for a specific period on the condition that the average working hours shall not exceed the contractual working hours. The maximum length of the period is within 3 months. No obligation for an additional allowance is given for extended working hours exceeding contractual hours for a specific week or a specific day. <br />" +
-                              "The standard starting and finish time are from 09:00 – 18:00, but the working days and hours, starting time, finishing time and rest time may be modified by the company in accordance with the Labor Standards Act., business requirement and other factors. <br />" +
-                              "The company shall, between working hours, allow a recess of not less than 30 minutes to co-workers working for 4 hours or a recess of not less than 45 minutes to co-workers working for 6 hours or a recess of not less than 60 minutes to co-workers working for 8 hours. <br />" +
-                              "The work hours and recess may vary depending on business necessity and work practices. The company shall grant the co-worker 1 paid holiday per week and follow the Co-worker Handbook for more information on other holidays.";
-                    list.Add(new PdfListItem { Text = text5 });
-                }
-
-                //If “OA13 Employment category = Permanent, Temporary” and “PM1 Payment Category = Flex Monthly”:
-                if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Monthly".ToLower())
-                {
-                    text5 = "Working Days and Holidays <br />" +
-                              "The contractual working hours are " + Model.GetDocumentAnswer("Contractedhours", true) + " hours per week. <br />" +
-                              "The standard starting and finish time are from 09:00 – 18:00, but the working days and hours, starting time, finishing time and rest time may be modified by the company in accordance with the Labor Standards Act., business requirement and other factors. <br />" +
-                              "The company shall, between working hours, allow a recess of not less than 30 minutes to co-workers working for 4 hours or a recess of not less than 45 minutes to co-workers working for 6 hours or a recess of not less than 60 minutes to co-workers working for 8 hours. <br />" +
-                              "The work hours and recess may vary depending on business necessity and work practices. The company shall grant the co-worker 1 paid holiday per week and follow the Co-worker Handbook for more information on other holidays.";
-                    list.Add(new PdfListItem { Text = text5 });
-                }
-
-                //If “OA13 Employment category = Permanent, Temporary” and “PM1 Payment Category = Salaried - Hourly”:
-                if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && Model.GetAnswer("Payrollcategory").ToLower() == "Salaried - Hourly".ToLower())
-                {
-                    text5 = "Working Days and Holidays <br />" +
-                              "The contractual working hours are " + Model.GetDocumentAnswer("Contractedhours", true) + " hours per week. <br />" +
-                              "The standard starting and finish time are from 09:00 – 18:00, but the working days and hours, starting time, finishing time and rest time may be modified by the company in accordance with the Labor Standards Act., business requirement and other factors. <br />" +
-                              "The company shall, between working hours, allow a recess of not less than 30 minutes to co-workers working for 4 hours or a recess of not less than 45 minutes to co-workers working for 6 hours or a recess of not less than 60 minutes to co-workers working for 8 hours. <br />" +
-                              "The work hours and recess may vary depending on business necessity and work practices. The company shall grant the co-worker 1 paid holiday per week and follow the Co-worker Handbook for more information on other holidays.";
-                    list.Add(new PdfListItem { Text = text5 });                    
-                }
-
-                //If “OA13 Employment category = Permanent, Temporary” and “PM1 Payment Category = Salaried - Monthly”:
-                if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && Model.GetAnswer("Payrollcategory").ToLower() == "Salaried - Monthly".ToLower())
-                {
-                    text5 = "Working Days and Holidays <br />" +
-                              "The contractual working hours are " + Model.GetDocumentAnswer("Contractedhours", true) + " hours per week. <br />" +
-                              "The standard starting and finish time are from 09:00 – 18:00, but the working days and hours, starting time, finishing time and rest time may be modified by the company in accordance with the Labor Standards Act., business requirement and other factors. <br />" +
-                              "The company shall, between working hours, allow a recess of not less than 30 minutes to co-workers working for 4 hours or a recess of not less than 45 minutes to co-workers working for 6 hours or a recess of not less than 60 minutes to co-workers working for 8 hours. <br />" +
-                              "The work hours and recess may vary depending on business necessity and work practices. The company shall grant the co-worker 1 paid holiday per week and follow the Co-worker Handbook for more information on other holidays.";
-                    list.Add(new PdfListItem { Text = text5 });
-                }
-                
+                text5 = "Working Days and Holidays <br />" +
+                          "The contractual working hours are " + Model.GetDocumentAnswer("Contractedhours", true) + " hours per week. However, co-workers might work more than his/her contractual working hours for a specific period on the condition that the average working hours shall not exceed the contractual working hours. The maximum length of the period is within 3 months. No obligation for an additional allowance is given for extended working hours exceeding contractual hours for a specific week or a specific day. <br />" +
+                          "The standard starting and finish time are from 09:00 – 18:00, but the working days and hours, starting time, finishing time and rest time may be modified by the company in accordance with the Labor Standards Act., business requirement and other factors. <br />" +
+                          "The company shall, between working hours, allow a recess of not less than 30 minutes to co-workers working for 4 hours or a recess of not less than 45 minutes to co-workers working for 6 hours or a recess of not less than 60 minutes to co-workers working for 8 hours. <br />" +
+                          "The work hours and recess may vary depending on business necessity and work practices. The company shall grant the co-worker 1 paid holiday per week and follow the Co-worker Handbook for more information on other holidays. <br />";
+                list.Add(new PdfListItem { Text = text5 });
             }
-            
+
+            //If “PM1 Payment Category = Flex Hourly”:
+            if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Hourly".ToLower())
+            {
+                text5 = "Working Days and Holidays <br />" +
+                          "The contractual working hours are " + Model.GetDocumentAnswer("Contractedhours", true) + " hours per week. However, co-workers might work more than his/her contractual working hours for a specific period on the condition that the average working hours shall not exceed the contractual working hours. The maximum length of the period is within 3 months. No obligation for an additional allowance is given for extended working hours exceeding contractual hours for a specific week or a specific day. <br />" +
+                          "The standard starting and finish time are from 09:00 – 18:00, but the working days and hours, starting time, finishing time and rest time may be modified by the company in accordance with the Labor Standards Act., business requirement and other factors. <br />" +
+                          "The company shall, between working hours, allow a recess of not less than 30 minutes to co-workers working for 4 hours or a recess of not less than 45 minutes to co-workers working for 6 hours or a recess of not less than 60 minutes to co-workers working for 8 hours. <br />" +
+                          "The work hours and recess may vary depending on business necessity and work practices. The company shall grant the co-worker 1 paid holiday per week and follow the Co-worker Handbook for more information on other holidays.";
+                list.Add(new PdfListItem { Text = text5 });
+            }
+
+            //If “PM1 Payment Category = Flex Monthly”:
+            if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Monthly".ToLower())
+            {
+                text5 = "Working Days and Holidays <br />" +
+                          "The contractual working hours are 40 hours per week. <br />" +
+                          "The standard starting and finish time are from 09:00 – 18:00, but the working days and hours, starting time, finishing time and rest time may be modified by the company in accordance with the Labor Standards Act., business requirement and other factors. <br />" +
+                          "The company shall, between working hours, allow a recess of not less than 30 minutes to co-workers working for 4 hours or a recess of not less than 45 minutes to co-workers working for 6 hours or a recess of not less than 60 minutes to co-workers working for 8 hours. <br />" +
+                          "The work hours and recess may vary depending on business necessity and work practices. The company shall grant the co-worker 1 paid holiday per week and follow the Co-worker Handbook for more information on other holidays.";
+                list.Add(new PdfListItem { Text = text5 });
+            }
+
+            //If “PM1 Payment Category = Salaried - Hourly”:
+            if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && Model.GetAnswer("Payrollcategory").ToLower() == "Salaried - Hourly".ToLower())
+            {
+                text5 = "Working Days and Holidays <br />" +
+                          "The contractual working hours are " + Model.GetDocumentAnswer("Contractedhours", true) + " hours per week. However, co-workers might work more than his/her contractual working hours for a specific period on the condition that the average working hours shall not exceed the contractual working hours. The maximum length of the period is within 3 months. No obligation for an additional allowance is given for extended working hours exceeding contractual hours for a specific week or a specific day. <br />" +
+                          "The standard starting and finish time are from 09:00 – 18:00, but the working days and hours, starting time, finishing time and rest time may be modified by the company in accordance with the Labor Standards Act., business requirement and other factors. <br />" +
+                          "The company shall, between working hours, allow a recess of not less than 30 minutes to co-workers working for 4 hours or a recess of not less than 45 minutes to co-workers working for 6 hours or a recess of not less than 60 minutes to co-workers working for 8 hours. <br />" +
+                          "The work hours and recess may vary depending on business necessity and work practices. The company shall grant the co-worker 1 paid holiday per week and follow the Co-worker Handbook for more information on other holidays.";
+                list.Add(new PdfListItem { Text = text5 });
+            }
+
+            //If “PM1 Payment Category = Salaried - Monthly”:
+            if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && Model.GetAnswer("Payrollcategory").ToLower() == "Salaried - Monthly".ToLower())
+            {
+                text5 = "Working Days and Holidays <br />" +
+                          "The contractual working hours are " + Model.GetDocumentAnswer("Contractedhours", true) + " hours per week. <br />" +
+                          "The standard starting and finish time are from 09:00 – 18:00, but the working days and hours, starting time, finishing time and rest time may be modified by the company in accordance with the Labor Standards Act., business requirement and other factors. <br />" +
+                          "The company shall, between working hours, allow a recess of not less than 30 minutes to co-workers working for 4 hours or a recess of not less than 45 minutes to co-workers working for 6 hours or a recess of not less than 60 minutes to co-workers working for 8 hours. <br />" +
+                          "The work hours and recess may vary depending on business necessity and work practices. The company shall grant the co-worker 1 paid holiday per week and follow the Co-worker Handbook for more information on other holidays.";
+                list.Add(new PdfListItem { Text = text5 });
+            }
+
+
             //*********** OLD Text 5 
-                //// If PM1 Payroll Category = “Salaried – Monthly”  or “Flex-monthly”  
-                //if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && (Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Monthly".ToLower() || Model.GetAnswer("Payrollcategory").ToLower() == "Salaried - Monthly".ToLower()))
-                //{
-                //    text5 = "Working Days and Holidays <br />" +
-                //              "The contractual working hours are " + Model.GetDocumentAnswer("Contractedhours", true) + " hours per week.<br />" +
-                //              "The standard starting and finish time are from 09:00 – 18:00, but the working days and hours, starting time, finishing time and rest time may be modified by the company in accordance with the Labor Standards Act., business requirement and other factors. <br />" +
-                //              "The company shall, between working hours, allow a recess of not less than 30 minutes to co-workers working for 4 hours or a recess of not less than 45 minutes to co-workers working for 6 hours or a recess of not less than 60 minutes to co-workers working for 8 hours. <br />" +
-                //              "The work hours and recess may vary depending on business necessity and work practices. The company shall grant the co-worker 1 paid holiday per week and follow the Co-worker Handbook for more information on other holidays. <br />";
-                //    list.Add(new PdfListItem { Text = text5 });
-                //}
+            //// If PM1 Payroll Category = “Salaried – Monthly”  or “Flex-monthly”  
+            //if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && (Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Monthly".ToLower() || Model.GetAnswer("Payrollcategory").ToLower() == "Salaried - Monthly".ToLower()))
+            //{
+            //    text5 = "Working Days and Holidays <br />" +
+            //              "The contractual working hours are " + Model.GetDocumentAnswer("Contractedhours", true) + " hours per week.<br />" +
+            //              "The standard starting and finish time are from 09:00 – 18:00, but the working days and hours, starting time, finishing time and rest time may be modified by the company in accordance with the Labor Standards Act., business requirement and other factors. <br />" +
+            //              "The company shall, between working hours, allow a recess of not less than 30 minutes to co-workers working for 4 hours or a recess of not less than 45 minutes to co-workers working for 6 hours or a recess of not less than 60 minutes to co-workers working for 8 hours. <br />" +
+            //              "The work hours and recess may vary depending on business necessity and work practices. The company shall grant the co-worker 1 paid holiday per week and follow the Co-worker Handbook for more information on other holidays. <br />";
+            //    list.Add(new PdfListItem { Text = text5 });
+            //}
 
-                //// If PM1 Payroll Category = “Flex - Hourly” 
-                //if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Hourly".ToLower())
-                //{
-                //    text5 = "Working Days and Holidays <br />" +
-                //              "The contractual working hours are  " + Model.GetDocumentAnswer("Basicpayamount", true) + "hours per week. " +
-                //              "However, co-workers might work more than his/her contractual working hours for a specific period on the condition that the average working hours shall not exceed the contractual working hours. " +
-                //              "The maximum length of the period is within 3 months. No obligation for an additional allowance is given for extended working hours exceeding contractual hours for a specific week or a specific day. <br />" +
-                //              "The standard starting and finish time are from 09:00 – 18:00, but the working days and hours, starting time, finishing time and rest time may be modified by the company in accordance with the Labor Standards Act., business requirement and other factors. <br />" +
-                //              "The company shall, between working hours, allow a recess of not less than 30 minutes to co-workers working for 4 hours or a recess of not less than 45 minutes to co-workers working for 6 hours or a recess of not less than 60 minutes to co-workers working for 8 hours. <br />" +
-                //              "The work hours and recess may vary depending on business necessity and work practices. The company shall grant the co-worker 1 paid holiday per week and follow the Co-worker Handbook for more information on other holidays. <br />";
-                //    list.Add(new PdfListItem { Text = text5 });
-                //}
+            //// If PM1 Payroll Category = “Flex - Hourly” 
+            //if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && Model.GetAnswer("Payrollcategory").ToLower() == "Flex - Hourly".ToLower())
+            //{
+            //    text5 = "Working Days and Holidays <br />" +
+            //              "The contractual working hours are  " + Model.GetDocumentAnswer("Basicpayamount", true) + "hours per week. " +
+            //              "However, co-workers might work more than his/her contractual working hours for a specific period on the condition that the average working hours shall not exceed the contractual working hours. " +
+            //              "The maximum length of the period is within 3 months. No obligation for an additional allowance is given for extended working hours exceeding contractual hours for a specific week or a specific day. <br />" +
+            //              "The standard starting and finish time are from 09:00 – 18:00, but the working days and hours, starting time, finishing time and rest time may be modified by the company in accordance with the Labor Standards Act., business requirement and other factors. <br />" +
+            //              "The company shall, between working hours, allow a recess of not less than 30 minutes to co-workers working for 4 hours or a recess of not less than 45 minutes to co-workers working for 6 hours or a recess of not less than 60 minutes to co-workers working for 8 hours. <br />" +
+            //              "The work hours and recess may vary depending on business necessity and work practices. The company shall grant the co-worker 1 paid holiday per week and follow the Co-worker Handbook for more information on other holidays. <br />";
+            //    list.Add(new PdfListItem { Text = text5 });
+            //}
 
-                //// If PM1 Payroll Category = “Exempted”  
-                //if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && Model.GetAnswer("Payrollcategory").ToLower() == "Exempted".ToLower())
-                //{
-                //    text5 = "Working Days and Holidays <br />" +
-                //              "The contractual working hours are  " + Model.GetDocumentAnswer("Basicpayamount", true) + "hours per week. " +
-                //              "However, co-workers might work more than his/her contractual working hours for a specific period on the condition that the average working hours shall not exceed the contractual working hours. " +
-                //              "The maximum length of the period is within 3 months. No obligation for an additional allowance is given for extended working hours exceeding contractual hours for a specific week or a specific day. <br />" +
-                //              "The standard starting and finish time are from 09:00 – 18:00, but the working days and hours, starting time, finishing time and rest time may be modified by the company in accordance with the Labor Standards Act., business requirement and other factors. <br />" +
-                //              "The company shall, between working hours, allow a recess of not less than 30 minutes to co-workers working for 4 hours or a recess of not less than 45 minutes to co-workers working for 6 hours or a recess of not less than 60 minutes to co-workers working for 8 hours. <br />" +
-                //              "The work hours and recess may vary depending on business necessity and work practices. The company shall grant the co-worker 1 paid holiday per week and follow the Co-worker Handbook for more information on other holidays. <br />";
-                //    list.Add(new PdfListItem { Text = text5 });
-                //}
+            //// If PM1 Payroll Category = “Exempted”  
+            //if (!string.IsNullOrEmpty(Model.GetAnswer("Payrollcategory")) && Model.GetAnswer("Payrollcategory").ToLower() == "Exempted".ToLower())
+            //{
+            //    text5 = "Working Days and Holidays <br />" +
+            //              "The contractual working hours are  " + Model.GetDocumentAnswer("Basicpayamount", true) + "hours per week. " +
+            //              "However, co-workers might work more than his/her contractual working hours for a specific period on the condition that the average working hours shall not exceed the contractual working hours. " +
+            //              "The maximum length of the period is within 3 months. No obligation for an additional allowance is given for extended working hours exceeding contractual hours for a specific week or a specific day. <br />" +
+            //              "The standard starting and finish time are from 09:00 – 18:00, but the working days and hours, starting time, finishing time and rest time may be modified by the company in accordance with the Labor Standards Act., business requirement and other factors. <br />" +
+            //              "The company shall, between working hours, allow a recess of not less than 30 minutes to co-workers working for 4 hours or a recess of not less than 45 minutes to co-workers working for 6 hours or a recess of not less than 60 minutes to co-workers working for 8 hours. <br />" +
+            //              "The work hours and recess may vary depending on business necessity and work practices. The company shall grant the co-worker 1 paid holiday per week and follow the Co-worker Handbook for more information on other holidays. <br />";
+            //    list.Add(new PdfListItem { Text = text5 });
+            //}
             // End 5
-            
+
             //6
             string text6 = "Paid Annual Leave and Other Leaves <br />" +
-                           "On the first day you join IKEA you are entitled to 20 days ( " + Model.GetDocumentAnswer("Annualleaveentitlement", true) + " hours) for annual leave per year. " +
+                           "On the first day you join IKEA you are entitled to 20 days ( " + Model.GetDocumentAnswer("Annualleaveentitlement", true) + " ) for annual leave per year. " +
                            "A year is considered January 1st – December 31st. The entitlement of annual paid leave for the year of joining and leaving will be prorated based on the actual worked days in the given year. " +
                            "The entitlement of annual lave for a permanent part time co-worker will be prorated in hours, based on the ratio of his/her total working hours. <br />" +
                            "After you complete first year of service for the every consecutive years of service you will get one more day of annual leave until you reach the maximum of 25 days. <br />" +
-                           "For annual leave, please agree dates of your annual leave with your manager well in advance, so together you can ensure that all job is done on time and that colleagues will back you up. The minimum of unit of annual leave is 4 hours. <br />" + 
+                           "For annual leave, please agree dates of your annual leave with your manager well in advance, so together you can ensure that all job is done on time and that colleagues will back you up. The minimum of unit of annual leave is 4 hours. <br />" +
                            "For other leaves such as maternity, menstrual, family care, and sick leaves, the company rules including those from the Co-worker Handbook shall be applied. " +
                            "If the annual leave is not used within 1 year, despite the company’s promotion of the use of annual leave in compliance with the Labor Standard Act, the unused annual leave will not be encashed. <br />";
             list.Add(new PdfListItem { Text = text6 });
@@ -335,10 +381,10 @@
             //7
             string text7 = "Retirement Benefits Scheme <br/>" +
                            "With regards to the retirement benefit paid to the Co-worker, the Co-worker Retirement Benefit Security Act and the relevant regulations of the Company shall apply.";
-          
+
             list.Add(new PdfListItem { Text = text7 });
 
-                 
+
             //8
             string text8 = "Conflict of Interest and Non disclosure of Information: <br/>" +
                            "During the period of this Agreement, the Co-worker shall not perform any services for any competitor of the Company or any subsidiary of a competitor, nor shall the Co-worker otherwise serve any conflicting interest unless the Company first consents in writing. <br />" +
@@ -357,41 +403,44 @@
                             "The Co-worker hereby expressly consents to the processing (including collection, use, and local and international transmission to databases within the Company's group or third-party contractors storing such data on the Company's behalf) of the Co-worker’s personal data.  The Co-worker may request and obtain access to the Co-worker’s own personal data (where collected), and correct or delete such data (where appropriate). " +
                             "The Co-worker binds himself/herself to follow IKEA’s Internet and Intranet Policy and IKEA Information Security Policy and Rules which can be studied at IKEA Intranet site. (www.ikea.com).";
             list.Add(new PdfListItem { Text = text10 });
- 
-            //11
-            string text11;
-            
+
+            //11    This text always show regardless of Employment category #59272
+            string text11 = "Termination <br />" +
+                            "The Company may terminate this Agreement with just cause as set forth in the Company’s rules of employment and other Company regulations by giving the Co-worker 30 days' advance notice or payment of 30 days' ordinary wage in lieu thereof; provided, however, that if the Co-worker commits substantial breaches as set forth in this Agreement and/or other Company regulations in accordance with the Labour Standards Act, the Company may terminate this Agreement without giving advance notice or payment in lieu thereof. <br />" +
+                            "When the Co-worker desires to voluntarily resign from the Company, the Co-worker shall submit a written resignation at least 30 days prior to the intended resignation date to the Company and continue to perform the Co-worker’s duties until the Company accepts the Co-worker’s resignation, and thereafter, shall diligently transfer the Co-worker’s duties to the Co-worker’s successor.";
+            list.Add(new PdfListItem { Text = text11 });
+
             //IF “OA13 Employment Category = Permanent
-            if (!string.IsNullOrEmpty(Model.GetAnswer("Employmentcategory")) && (Model.GetAnswer("Employmentcategory").ToLower() == "Permanent".ToLower()))
-            {
-                text11 = "Termination <br />" +
-                           "The Company may terminate this Agreement with just cause as set forth in the Company’s rules of employment and other Company regulations by giving the Co-worker 30 days' advance notice or payment of 30 days' ordinary wage in lieu thereof; provided, however, that if the Co-worker commits substantial breaches as set forth in this Agreement and/or other Company regulations in accordance with the Labour Standards Act, the Company may terminate this Agreement without giving advance notice or payment in lieu thereof. <br />" +
-                           "When the Co-worker desires to voluntarily resign from the Company, the Co-worker shall submit a written resignation at least 30 days prior to the intended resignation date to the Company and continue to perform the Co-worker’s duties until the Company accepts the Co-worker’s resignation, and thereafter, shall diligently transfer the Co-worker’s duties to the Co-worker’s successor.";
-                list.Add(new PdfListItem { Text = text11 });
-            }
+            //if (!string.IsNullOrEmpty(Model.GetAnswer("Employmentcategory")) && (Model.GetAnswer("Employmentcategory").ToLower() == "Permanent".ToLower()))
+            //{
+            //    text11 = "Termination <br />" +
+            //               "The Company may terminate this Agreement with just cause as set forth in the Company’s rules of employment and other Company regulations by giving the Co-worker 30 days' advance notice or payment of 30 days' ordinary wage in lieu thereof; provided, however, that if the Co-worker commits substantial breaches as set forth in this Agreement and/or other Company regulations in accordance with the Labour Standards Act, the Company may terminate this Agreement without giving advance notice or payment in lieu thereof. <br />" +
+            //               "When the Co-worker desires to voluntarily resign from the Company, the Co-worker shall submit a written resignation at least 30 days prior to the intended resignation date to the Company and continue to perform the Co-worker’s duties until the Company accepts the Co-worker’s resignation, and thereafter, shall diligently transfer the Co-worker’s duties to the Co-worker’s successor.";
+            //    list.Add(new PdfListItem { Text = text11 });
+            //}
 
             //IF “OA13 Employment Category = Temporary         
-            if (!string.IsNullOrEmpty(Model.GetAnswer("Employmentcategory")) && Model.GetAnswer("Employmentcategory").ToLower() == "Temporary".ToLower())
-            {
-                text11 = "Termination <br />" +
-                           "The Company may terminate this Agreement with just cause as set forth in the Company’s rules of employment and other Company regulations by giving the Co-worker 30 days' advance notice or payment of 30 days' ordinary wage in lieu thereof; provided, however, that if the Co-worker commits substantial breaches as set forth in this Agreement and/or other Company regulations in accordance with the Labour Standards Act, the Company may terminate this Agreement without giving advance notice or payment in lieu thereof. <br />" +
-                           "When the Co-worker desires to voluntarily resign from the Company, the Co-worker shall submit a written resignation at least 30 days prior to the intended resignation date to the Company and continue to perform the Co-worker’s duties until the Company accepts the Co-worker’s resignation, and thereafter, shall diligently transfer the Co-worker’s duties to the Co-worker’s successor. <br />" +
-                           "If you or IKEA want to terminate you contract before the end, then the notice is 30 calendar days in advance. If no termination before the end date, then this contract will be ended without any further notice according to the end date in paragraph 1.";
-                list.Add(new PdfListItem { Text = text11 });
-            }                           
-                    
+            //if (!string.IsNullOrEmpty(Model.GetAnswer("Employmentcategory")) && Model.GetAnswer("Employmentcategory").ToLower() == "Temporary".ToLower())
+            //{
+            //    text11 = "Termination <br />" +
+            //               "The Company may terminate this Agreement with just cause as set forth in the Company’s rules of employment and other Company regulations by giving the Co-worker 30 days' advance notice or payment of 30 days' ordinary wage in lieu thereof; provided, however, that if the Co-worker commits substantial breaches as set forth in this Agreement and/or other Company regulations in accordance with the Labour Standards Act, the Company may terminate this Agreement without giving advance notice or payment in lieu thereof. <br />" +
+            //               "When the Co-worker desires to voluntarily resign from the Company, the Co-worker shall submit a written resignation at least 30 days prior to the intended resignation date to the Company and continue to perform the Co-worker’s duties until the Company accepts the Co-worker’s resignation, and thereafter, shall diligently transfer the Co-worker’s duties to the Co-worker’s successor. <br />" +
+            //               "If you or IKEA want to terminate you contract before the end, then the notice is 30 calendar days in advance. If no termination before the end date, then this contract will be ended without any further notice according to the end date in paragraph 1.";
+            //    list.Add(new PdfListItem { Text = text11 });
+            //}
+
             //12
             string text12 = "Applicable Law  <br />" +
                             "This contract is governed by Korean law and interpreted on this basis.";
             list.Add(new PdfListItem { Text = text12 });
 
-           
+
             //13
             string text13 = "Others <br />" +
                             "The Co-worker acknowledges that the Co-worker has reviewed the rules of employment of the Company and agrees that all matters which are not provided for in this Agreement are governed by the rules of employment and the Labour Standards Act.  The Co-worker shall not be entitled to any benefits granted to co-workers of the Company working outside Korea unless otherwise provided for in the Company regulations or this Agreement. <br /><br />";
-           
+
             list.Add(new PdfListItem { Text = text13 });
-                        
+
         }
 
         @if (list.Count > 1)

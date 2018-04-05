@@ -3,23 +3,14 @@
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
   <!ENTITY state SYSTEM "Templates/ChangeTermsConditionsState.xml">
-  <!ENTITY dat_country SYSTEM "Templates/Data_Country.xml">
-  <!ENTITY dat_costcentre SYSTEM "Templates/Data_CostCentre.xml">
-  <!ENTITY dat_jobtitle SYSTEM "Templates/Data_JobTitle.xml">
-  <!ENTITY dat_linemanagers SYSTEM "Templates/Data_LineManagers.xml">
-  <!ENTITY dat_managerjobtitles SYSTEM "Templates/Data_ManagerJobtitles.xml">
-  <!ENTITY dat_tecapprovers SYSTEM "Templates/Data_TecApprovers.xml">
   <!ENTITY dat_allowancestype SYSTEM "Templates/Data_AllowancesType - Hiring - Change.xml">
-
 ]>
 
 <form id="114" guid="8AE53E69-4A3D-49D2-B320-741801BFEC2E" customerId="31">
   &languages;
   &regexs;
   &state;
-
   <fields>
-
     <!--Tab ServiceRequestDetails-->
     <tab name="#ServiceRequestDetails" label="Service Request Details">
       <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
@@ -35,28 +26,6 @@
       <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element>
       <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
-      <!--<element name="ChangeType" type="select" label="Change Type?" mandatory="1">
-        <options>
-          <option value=""></option>
-          <option value="ONLY Pay Change">ONLY Pay Change</option>
-          <option value="ONLY Change work hours">ONLY Change work hours</option>
-          <option value="Renewal Of Temp Contract">Renewal Of Temp Contract</option>
-          <option value="Temp Contract to Permanent">Temp Contract to Permanent</option>
-          <option value="Promotion">Promotion</option>
-          <option value="Lateral move">Lateral move</option>
-          <option value="Demotion">Demotion</option>
-          <option value="Re-organisation">Re-organisation</option>
-          <option value="Cost center change">Cost center change</option>
-          <option value="Position change">Position change</option>
-          <option value="Full time to part time">Full time to part time</option>
-          <option value="Part time to Full time">Part time to Full time</option>
-          <option value="Gone Local">Gone Local</option>
-          <option value="Move without Mobility">Move without Mobility</option>
-          <option value="End Short term assignment">End Short term assignment</option>
-          <option value="Secondment">Secondment</option>
-          <option value="Career Break End">Career Break End</option>
-        </options>
-      </element>-->
       <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
@@ -77,7 +46,6 @@
           <option value="1 - 2 years">1 - 2 years</option>
           <option value="over 2 years">over 2 years</option>
         </options>
-        <!--<mandatoryIf name="ChangeType">Secondment</mandatoryIf>-->
       </element>
       <element type="select" name="CareerBreakReturn" label="Career Break return - pay review">
         <options>
@@ -86,75 +54,36 @@
           <option value="in six months from return">in six months from return</option>
           <option value="timescales depend on time away">timescales depend on time away</option>
         </options>
-        <!--<mandatoryIf name="ChangeType">Career Break End</mandatoryIf>-->
       </element>
-
-
-      <!--Permanent Address-->
-      <!--Mandatory-->
-      <!--<element type="text" name="PermanentAddressLine1" label="Address line 1"></element>-->
-      <!--<element type="text" name="PermanentAddressLine2" label="Address line 2"></element>-->
-      <!--Mandatory-->
-      <!--<element type="text" name="PermanentCity" label="City"></element>-->
-      <!--Mandatory-->
-      <!--<element type="search-select" name="PermanentCountry" label="Country" source="1" default="Ireland">
-        <options>
-         
-        </options>
-      </element>-->
-
       <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
-
     </tab>
-
-    <!--Tab OrganisationalAssignment-->
     <tab name="#OrganisationalAssignment" label="Organisational Assignment">
-      <!--Organisation Assignment-->
-      <!--Mandatory-->
-      <element name="Country" type="search-select" label="Country" source="1" default="Ireland">
-        &dat_country;
+      <element name="Country" label="Country" type="select" source="database" cssclass="autocomplete-country selectize" default="Ireland">
       </element>
-      
-
-      <!--Mandatory-->
       <element type="select" name="NewCompany" source="database" label="Company" mandatory="1" formfieldidentifier="E1P0001.BUKRS">
         <options>
           <option value=""></option>
         </options>
       </element>
-      <!--Mandatory-->
       <element type="select" source="database" name="NewBusinessUnit" label="Business Unit" mandatory="1" formfieldidentifier="E1P0001.WERKS">
         <options>
           <option value=""></option>
         </options>
       </element>
-      <!--Mandatory-->
       <element type="select" source="database" name="NewServiceArea" label="Function" formfieldidentifier="E1P0001.BTRTL">
         <options>
           <option value=""></option>
         </options>
       </element>
-      <!--Mandatory-->
       <element type="select" source="database" name="NewDepartment" label="Department" formfieldidentifier="E1P0001.ORGEH">
         <options>
           <option value=""></option>
         </options>
       </element>
-
-
-      <element type="search-select" name="HomeCostCentre" source="1" label="Home Cost Centre" formfieldidentifier="E1P0001.KOSTL" >
-        &dat_costcentre;
+      <element type="select" source="database" cssclass="autocomplete-costcentre selectize" name="HomeCostCentre" label="Home Cost Centre" formfieldidentifier="E1P0001.KOSTL" >
       </element>
-
-      <!--Job-->
-      <!--Mandatory-->
-
-
-      <element type="search-select" source="1" name="JobTitle" label="Job Title" formfieldidentifier="E1P0001.STELL">
-        &dat_jobtitle;
+      <element type="select" source="database" cssclass="autocomplete-relation-jobtitle selectize"  name="JobTitle" label="Job Title" formfieldidentifier="E1P0001.STELL">
       </element>
-
-      <!--Mandatory-->
       <element name="NewPosition" type="select" label="New Position?">
         <options>
           <option value=""></option>
@@ -163,39 +92,32 @@
           <option value="Local foreign Employee">Local foreign Employee</option>
         </options>
       </element>
-     
-
-      <element type="search-select" source="1" name="ReportsToLineManager" label="Reports to Line Manager" formfieldidentifier="E1P9000.PERNRMGR">
-        &dat_linemanagers;
+      <element type="select" source="database" cssclass="autocomplete-linemanager selectize" name="ReportsToLineManager" label="Reports to Line Manager" formfieldidentifier="E1P9000.PERNRMGR">
       </element>
-      <!--Mandatory-->
-      <!--<element name="ManagerJobTitle" type="typeahead-simple" label="Manager Job Title" source="1">
+      <element type="select" source="database" cssclass="autocomplete-linemanagerjobtitle selectize" name="ManagersJobTitle" label=" Manager's Job Title" default="">
+      </element>
+      <element type="select" name="ChiefPosition" label="Chief Position" mandatory="1" default="No">
         <options>
-          <option value=""></option>         
+          <option value=""></option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
         </options>
-      </element>-->
-      <element type="search-select" source="1" name="ManagersJobTitle" label=" Manager's Job Title" default="">
-        &dat_managerjobtitles;
       </element>
-      <!--Employment Conditions-->
-      <!--Mandatory-->
       <element name="EmploymentCategory" type="select" label="Employment Category" formfieldidentifier="E1P0001.PERSG:1">
         <options>
           <option value=""></option>
           <option value="Full time">Full time</option>
           <option value="Part time">Part time</option>
           <option value="Expats">Expats</option>
+          <option value="Inpat">Inpat</option>
       </options>
       </element>
       <element type="date" name="ContractEndDate" label="Contract End Date" format="dd.MM.yyyy">
       </element>
-      <!--Mandatory-->
       <element type="text" name="ContractedHours" label="Contracted Hours" formfieldidentifier="E1P0007.WOSTD">
         <regex inherit="unsignednum" pattern="" message=""></regex>
         <regex inherit="numMax39" pattern="" message=""></regex>
       </element>
-      
-      <!--Mandatory-->
       <element name="DaysPerWeek" type="select" label="Days Per Week" default="5">
         <options>
           <option value=""></option>
@@ -207,7 +129,6 @@
         </options>
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
-      <!--Mandatory-->
       <element name="ContractType" type="select" label="Contract Type" formfieldidentifier="E1P0001.PERSG:2">
         <options>
           <option value=""></option>
@@ -216,35 +137,10 @@
           <option value="Fixed Term">Fixed Term</option>
         </options>
       </element>
-      <!--Mandatory-->
-      <!--<element name="ProbationPeriod" type="select" label="Probation period" default="Yes">
-        <options>
-          <option value=""></option>
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>
-        </options>
+      <element type="select" source="database" cssclass="autocomplete-primarysite selectize" name="PrimarySite" label="Primary Site" default="IKEA Dublin">
       </element>
-      <element name="ProbationEndDate" type="date" label="Probation end date" format="dd.MM.yyyy">
-        --><!--<mandatoryIf name="ProbationPeriod">Yes</mandatoryIf>--><!--
-        <regex inherit="date" pattern="" message=""></regex>
-      </element>-->
-
-      <!--CDS-->
-      <!--Mandatory-->
-      <element name="PrimarySite" type="select" label="Primary Site" default="Store Dublin 038">
-        <options>
-          <option value=""></option>
-          <option value="IKEA Dublin">IKEA Dublin</option>
-          <option value="Store Dublin 038">Store Dublin 038</option>
-          <option value="Service Office IE">Service Office IE</option>
-        </options>
+      <element type="select" source="database" cssclass="autocomplete-tecapprover selectize" name="TECApprover" label="TEC Approver">
       </element>
-     
-
-      <element name="TECApprover" type="search-select" source="1" label="TEC Approver" default="Business Navigation &amp; Operations Manager">
-        &dat_tecapprovers;
-      </element>
-      <!--Mandatory-->
       <element name="HelpDesk" type="select" label="Help Desk" default="ICC3 UK Retail">
         <options>
           <option value=""></option>
@@ -252,22 +148,18 @@
         </options>
       </element>
     </tab>
-
-    <!--Tab: Payment Information-->
-    <!--Mandatory-->
     <tab name="#Payment" label="Payment Information">
       <element type="select" name="PayrollCategory" label="Payroll Category">
         <options>
           <option value=""></option>
+          <option value="Dual Payroll (ZY)">Dual Payroll (ZY)</option>
           <option value="Hourly">Hourly</option>
-          <option value="Annualised">Annualised</option>
+          <option disabled="1" value="Annualised">Annualised</option>
           <option value="Salaried">Salaried</option>
           <option value="Salaried Management">Salaried Management</option>
           <option value="Salaried Senior Management">Salaried Senior Management</option>
         </options>
-        <!--<mandatoryIf name="ChangeType">Basic Pay Changes</mandatoryIf>-->
       </element>
-      <!--Mandatory-->
       <element type="select" name="PayScaleGroup" label="Pay Scale Group">
         <options>
           <option value=""></option>
@@ -305,25 +197,9 @@
           <option value="99">99</option>
         </options>
       </element>
-      <!--Mandatory-->
       <element type="text" name="BasicPayAmount" label="Basic Pay Amount">
         <regex inherit="unsignednum" pattern="" message=""></regex>
-        <!--<options>
-          <option value=""></option>
-          <option value="9,77">9,77</option>
-          <option value="9,40">9,40</option>
-          <option value="9,63">9,63</option>
-          <option value="9,77">9,77</option>
-          <option value="9,77">9,77</option>
-          <option value="10,15">10,15</option>
-          <option value="10,38">10,38</option>
-          <option value="10,52">10,52</option>
-          <option value="10,68">10,68</option>
-          <option value="10,88">10,88</option>
-        </options>-->
-        <!--<mandatoryIf name="ChangeType">Basic Pay Changes</mandatoryIf>-->
       </element>
-      <!--Mandatory-->
       <element type="select" name="BasicPayChangeReason" label="Basic Pay Change Reason" default="Change of Basic Pay">
         <options>
           <option value=""></option>
@@ -336,9 +212,7 @@
           <option value="Annual review">Annual review</option>
           <option value="Salary adjustment">Salary adjustment</option>
         </options>
-        <!--<mandatoryIf name="ChangeType">Basic Pay Changes</mandatoryIf>-->
       </element>
-
       <element type="hidden" name="Allowances" default="1"></element>
       <element type="select" name="AllowancesChangeType" label="Change Type">
         <options>
@@ -351,16 +225,7 @@
       <element type="select" name="AllowancesType" label="Allowance Type">
         &dat_allowancestype;
       </element>
-      <!--<element type="select" name="AllowancesPaymentType" label="Payment Type">
-        --><!--<mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>--><!--
-        <options>
-          <option value=""></option>
-          <option value="One Time">One Time</option>
-          <option value="Recurring">Recurring</option>
-        </options>
-      </element>-->
       <element type="text" name="AllowancesAmountUnits" label="Amount/Units">
-        <!--<mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>-->
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
       <element type="select" name="AllowancesPaidPer" label="Paid per">
@@ -372,22 +237,12 @@
           <option value="one off">one off</option>
         </options>
       </element>
-      <!--<element type="select" name="AllowancesNetGross" label="Net/Gross">
-        <options>
-          <option value=""></option>
-          <option value="Net">Net</option>
-          <option value="Gross">Gross</option>
-        </options>
-      </element>-->
       <element type="date" name="AllowancesValidFrom" label="Valid from:" format="dd.MM.yyyy">
-        <!--<mandatoryIfNotEmpty name="AllowancesType"></mandatoryIfNotEmpty>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="date" name="AllowancesValidTo" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <!--<mandatoryIf name="AllowancesType">Recurring</mandatoryIf>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-
       <element type="select" name="AllowancesChangeType2" label="Change Type">
         <options>
           <option value=""></option>
@@ -399,16 +254,7 @@
       <element type="select" name="AllowancesType2" label="Allowance Type">
         &dat_allowancestype;
       </element>
-      <!--<element type="select" name="AllowancesPaymentType2" label="Payment Type">
-        --><!--<mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>--><!--
-        <options>
-          <option value=""></option>
-          <option value="One Time">One Time</option>
-          <option value="Recurring">Recurring</option>
-        </options>
-      </element>-->
       <element type="text" name="AllowancesAmountUnits2" label="Amount/Units">
-        <!--<mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>-->
         <regex inherit="unsignednum" message="" pattern=""></regex>
       </element>
       <element type="select" name="AllowancesPaidPer2" label="Paid per">
@@ -420,23 +266,13 @@
           <option value="one off">one off</option>
         </options>
       </element>
-      <!--<element type="select" name="AllowancesNetGross2" label="Net/Gross">
-        <options>
-          <option value=""></option>
-          <option value="Net">Net</option>
-          <option value="Gross">Gross</option>
-        </options>
-      </element>-->
       <element type="date" name="AllowancesValidFrom2" label="Valid from:" format="dd.MM.yyyy">
-        <!--<mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>-->
         <regex inherit="date" pattern="" message=""></regex>
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
       </element>
       <element type="date" name="AllowancesValidTo2" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
-        <!--<mandatoryIfNotEmpty name="AllowancesType2"></mandatoryIfNotEmpty>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-
       <element type="select" name="AllowancesChangeType3" label="Change Type">
         <options>
           <option value=""></option>
@@ -467,7 +303,6 @@
       <element type="date" name="AllowancesValidTo3" label="Valid to:"  default="31.12.9999" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-
       <!--4-->
       <element type="select" name="AllowancesChangeType4" label="Change Type">
         <options>
@@ -500,7 +335,6 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <!--4-->
-
       <!--5-->
       <element type="select" name="AllowancesChangeType5" label="Change Type">
         <options>
@@ -533,8 +367,6 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <!--5-->
-      
-
       <element type="hidden" name="Deductions" default="1"></element>
       <element type="select" name="DeductionsChangeType" label="Change Type">
         <options>
@@ -562,23 +394,13 @@
           <option value="one off">one off</option>
         </options>
       </element>
-      <!--<element type="select" name="DeductionsNetGross" label="Net/Gross" >
-        <options>
-          <option value=""></option>
-          <option value="Net">Net</option>
-          <option value="Gross">Gross</option>
-        </options>
-      </element>-->
       <element type="date" name="DeductionsValidFrom" label="Valid from:" format="dd.MM.yyyy">
-        <!--<mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>-->
         <laterThanOrEqual name="ChangeValidFrom"></laterThanOrEqual>
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="date" name="DeductionsValidTo" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
-        <!--<mandatoryIfNotEmpty name="DeductionsType"></mandatoryIfNotEmpty>-->
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-
       <element type="select" name="DeductionsChangeType2" label="Change Type">
         <options>
           <option value=""></option>
@@ -612,7 +434,6 @@
       <element type="date" name="DeductionsValidTo2" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-
       <element type="select" name="DeductionsChangeType3" label="Change Type">
         <options>
           <option value=""></option>
@@ -646,7 +467,6 @@
       <element type="date" name="DeductionsValidTo3" label="Valid to:" default="31.12.9999" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      
       <!--4-->
       <element type="select" name="DeductionsChangeType4" label="Change Type">
         <options>
@@ -682,7 +502,6 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <!--4-->
-
       <!--5-->
       <element type="select" name="DeductionsChangeType5" label="Change Type">
         <options>
@@ -718,8 +537,6 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <!--5-->
-
-
       <element type="select" name="OneIKEABonusLevel" label="One IKEA Bonus Level">
         <options>
           <option value=""></option>
@@ -729,7 +546,6 @@
           <option value="Level 3">Level 3</option>
         </options>
       </element>
-
       <element type="date" name="DateOfNextSalaryReview" label="Date of next salary review" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
@@ -742,9 +558,7 @@
           <option value="Level 3">Level 3</option>
         </options>
       </element>
-
     </tab>
-
     <!--Tab: SSC Use Only-->
     <tab name="#SSCUseOnly" label="SSC use only">
       <element type="text" name="HolidayFull" label="Holiday full">
@@ -763,6 +577,5 @@
       </element>
       <element type="text" name="HolidayYear" label="Holiday Year"></element>
     </tab>
-
   </fields>
 </form>

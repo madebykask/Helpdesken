@@ -6,6 +6,14 @@
 @{
     Layout = null;
     Model.Language = "nl";
+    var extraBarCode = string.Empty;
+    var barCode = Model.DocumentData.TypeCode;
+    if (ViewData["ExtraBarCode"] != null)
+    {
+        extraBarCode = ViewData["ExtraBarCode"].ToString();
+        barCode = extraBarCode;
+    }
+    
 }
 
 @*  //Comment: Barcode for NL should only be shown in status 50 for hiring. In other processes in status 40.*@
@@ -16,7 +24,7 @@
     {
     <div style="width: 100%;">
         <div style="text-align: right; font-size: 10pt;">
-            <font face="IDAutomationHC39M">*@Model.Contract.EmployeeNumber@Model.DocumentData.TypeCode*</font>
+            <font face="IDAutomationHC39M">*@Model.Contract.EmployeeNumber@barCode*</font>
         </div>
     </div>
     <br />

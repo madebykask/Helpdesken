@@ -74,47 +74,18 @@
                 </td>
             </tr>
             <tr>
-                <td class="td-bold td-align-middle">Tenaamstelling</td>
-                <td>Indien gehuwd of een geregistreerd partnerschap, je keuze voor tenaamstelling:
+                <td class="td-bold td-align-middle">Eerder dienstverband IKEA</td>
+                <td>
                   <ul class="circle_ul">
-                      <li>Alleen geboortenaam</li>
-                      <li>Geboortenaam – partnernaam</li>
-                      <li>Partnernaam – geboortenaam</li>
-                      <li>Partnernaam</li>
+                      <li>Ja, van ……………… tot ……………….</li>
+                      <li>Nee</li>
                   </ul>
                 </td>
             </tr>
-            @*  OLIKA för Store_CCCN, SO och Apprentice*@
-
-            @if (Model.GetAnswer("EmploymentCategory").ToLower() != "Apprentice".ToLower())
+            
+            @*Delete whole table row if   PM.CS.16 Type of benefit= "Company Car"*@
+            @if (Model.GetAnswer("TypeOfBenefit").ToLower() != "Company Car".ToLower())
             {
-                <tr>
-                    <td class="td-bold">Naam partner</td>
-                    <td>Achternaam:</td>
-                </tr>
-
-                //Delete whole table row if   PM.CS.16 Type of benefit= "Company Car"
-                bool CompanyCar = false;
-
-                for (int i = 1; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
-                {
-
-                    string MultipleNr = i.ToString();
-                    if (i == 1)
-                    {
-                        MultipleNr = "";
-                    }
-
-                    if (Model.GetDocumentAnswer("TypeOfBenefit" + MultipleNr).ToLower() == "Company Car".ToLower())
-                    {
-                        CompanyCar = true;
-                        break;
-                    }
-                }
-
-                //  @if (Model.GetDocumentAnswer("TypeOfBenefit") != "Company Car")
-                if (CompanyCar == false)
-                {
                 <tr>
                     <td class="td-bold td-align-middle">Reiskosten</td>
                     <td>
@@ -124,43 +95,15 @@
                         </ul>
                     </td>
                 </tr>
-                }
-            }
-            else
-            {
-                <tr>
-                    <td class="td-align-middle">
-                        <strong>Partnergegevens</strong><br />
-                        (indien van toepassing)
-                    </td>
-                    <td class="td-align-middle">Achternaam:<br />
-                        Voorletters:<br />
-                        Geslacht:<br />
-                        Geboortedatum:<br />
-                        <br />
-                    </td>
-                </tr>
-
-               
             }
         </table>
 
-        <p style="width: 100%; padding-top: 50px;">
-            @Html.Partial("../Shared/Pdfs/_BarCode", Model)
-        </p>
-
-
-
     </div>
 
-    @*ONLY FOR STORE CCCN CONRACTS*@
-    @if (Model.DocumentData.Id.ToLower() == "Store_cccn".ToLower())
+    @*ONLY FOR STORE CCCN and SO CONRACTS - Add questionarie after table Formulier persoongegevens*@
+    @if (Model.DocumentData.Id.ToLower() == "Store_So_merged".ToLower() && Model.GetAnswer("EmploymentCategory").ToLower() == "Permanent".ToLower())
     {
-        if (Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Store Amsterdam 088".ToLower() || (Model.GetDocumentAnswer("BusinessUnit").ToLower() == "Store Breda 403".ToLower() && contractedHours < 17))
-        {
-        @Html.Partial("../Shared/Pdfs/Appendix2", Model)
-        }
-
+         @Html.Partial("../Shared/Pdfs/AppendixQuestionarie", Model)   
     }
 
 </body>

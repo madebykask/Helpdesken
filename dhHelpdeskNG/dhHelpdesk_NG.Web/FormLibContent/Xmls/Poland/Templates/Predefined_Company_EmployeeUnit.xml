@@ -11,7 +11,7 @@
     </dependent>
     <dependent>
         <selected>OR</selected>
-        <show>O188,O018,O205,O203,O329,O311,O307,O306,O204,O294,O429,IKEA Retail SM,O034,O010</show>
+        <show>O188,O018,O205,O203,O329,O311,O307,O306,O204,O294,O429,O526,IKEA Retail SM,O034,O010</show>
     </dependent>
     <dependent>
         <selected>OT</selected>
@@ -19,7 +19,7 @@
     </dependent>
     <dependent>
         <selected>OI</selected>
-        <show>OI02,OI01,OI07,OI05,OI09,OI03,OI04,OI08,OI06</show>
+        <show>OI02,OI01,OI07,OI05,OI09,OI03,OI04,OI08,OI06,OI10</show>
     </dependent>
     <dependent>
         <selected>OP</selected>

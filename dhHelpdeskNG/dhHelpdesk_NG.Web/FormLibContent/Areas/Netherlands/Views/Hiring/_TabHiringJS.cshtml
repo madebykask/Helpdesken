@@ -4,7 +4,8 @@
 
 @{
     const string ContractType = "Permanent";
-    const string IsTeWorker = "International Transfer";
+    const string IsTeWorker = "International Transfer (LTA, STA, Commuter)";
+    const string IsTeWorkerI = "International Relocation";
     const string DefaultCountry = "Netherlands";
 }
 
@@ -21,9 +22,16 @@
     $('#CityEducationSchool').attr("disabled", true);
     $('#LevelOfEducation').attr("disabled", true);
     $('#MentorAtIKEA').attr("disabled", true);
+    $("#PreviousContractStartDate").attr("disabled", true);
+    $('#date_PreviousContractStartDate').datepicker("destroy");
+    $('#date_PreviousContractStartDate').addClass("disabled");
+    $('#PreviousContractStartDate').prop('disabled', true);
+
+    var ect = new Ect();
 
     if (("@Model.ReadOnlyTab("#OrganisationalAssignment")" == 'False' && "@Model.ReadOnlyTab("#servicerequestdetails")" == 'False'
           && "@Model.ReadOnlyTab("#payment")" == 'False') && lockedbyUserGroup == 'False') {
+
 
         $(function () {
             if ($('#LocalJobTitle').val() != '')
@@ -34,7 +42,7 @@
             setTimeout(function () { SetDefaultCompany(); }, 10);
 
             BlockCoWorkerID();
-
+            setPreviousContractStartDate($('#NewToIKEA').val());
             function setEmployeeBehavior(value) {
                 if (value == 'Permanent') {
                     $('#date_ContractEndDate').datepicker("destroy");
@@ -63,16 +71,10 @@
             });
 
             BlockApprenticefields();
-
-            //SelectIndexChangePayScaleLevel();
-
-            //SetPayeeDefault();
-
             setProbationDate($('#ProbationPeriod').val());
         });// End Function
 
         ///// Scripts for TAb Service Requests details 
-
         $("#NewToIKEA").change(function () {
             BlockCoWorkerID();
         });
@@ -97,23 +99,13 @@
             var nowTemp = new Date();
             var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
             noticeHiringDate.hide();
-            // noticeHiringDateWrong.hide();
-            //if (!(dstartDate.getDate() === 1 || dstartDate.getDate() === 15))
-            //    noticeHiringDateWrong.show();
 
             if (dstartDate.valueOf() < now.valueOf())
                 noticeHiringDate.show();
 
-            //if (!(dstartDate.getDate() === 1 || dstartDate.getDate() === 15) && (dstartDate.valueOf() < now.valueOf())) {
-            //    //if ( $('#EmploymentCategory').val() &&!$('#EmploymentCategory').val() == 'Apprentice')
-            //    //{ noticeHiringDateWrong.show(); }
-            //    noticeHiringDate.show();
-            //}
         });
 
-
         //// Scripts for TAb Organisational Assignement
-
         var startDate = $('#ContractStartDate').val();
         var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
         var dStart = APIGlobal.DateTime.parseDate(startDate, format);
@@ -147,7 +139,6 @@
             var probationPeriod = $('#ProbationPeriod');
             var probationEndDate = $('#ProbationEndDate');
             var noticeProbationDate = $('#probationDate');
-
 
             function setProbationDate() {  }
 
@@ -228,26 +219,9 @@
         });    
 
         $('#BusinessUnit').change(function () {
-            var value = $(this).val();
-            if ($('#BusinessUnit')[0].selectize) {
-                var selectedText = $('#BusinessUnit')[0].selectize.getItem(value).text();
-
-                if ($('#PrimarySite')[0].selectize)
-                    $('#PrimarySite')[0].selectize.setValue(selectedText);
-                else
-                    $('#PrimarySite').val(selectedText);
-            } else {
-                var selectedText = $('#BusinessUnit').find('option:selected').text();
-                if ($('#PrimarySite')[0].selectize)
-                    $('#PrimarySite')[0].selectize.setValue(selectedText);
-                else
-                    var selectedText = $('#BusinessUnit').find('option:selected').text();
-                    $('#PrimarySite').val(selectedText);
-            }
-
-            GetXML('Predefined_BusinessUnit_LineManager.xml', narrowDownBusinessUnitLineManager);
-            GetXML('Predefined_BusinessUnit_LocalJobTitle.xml', narrowDownBusinessUnitLocalJobTitle);
-            //setTimeout(function () { GetXML('Predefined_BusinessUnit_LocalJobTitle.xml', narrowDownBusinessUnitLocalJobTitle); }, 1);
+            ect.copyValueFrom($('#BusinessUnit'), $('#PrimarySite'));
+            ect.getRelations('Relation_BusinessUnit_LineManager.xml', '', $('#BusinessUnit'), $('#ReportsToLineManager'));
+            ect.getRelations('Relation_BusinessUnit_PositionTitle.xml', '', $('#BusinessUnit'), $('#LocalJobTitle'));
         });
 
         $('#ReportsToLineManager').change(function () {
@@ -301,103 +275,8 @@
                 }
             });
         }       
-
-        function narrowDownBusinessUnitLineManager(xml) {
-            var show = '';
-            var baseBusinessUnit = '';
-
-            if (document.getElementById('BusinessUnit')) {
-                baseBusinessUnit = $("#BusinessUnit option:selected").text();
-            }
-
-            var report_value;
-            report_value = $('#ReportsToLineManager').val();
-
-            $('#ReportsToLineManager').val('');
-
-            var selectize_tags = $("#ReportsToLineManager")[0].selectize
-            selectize_tags.clearOptions();
-
-
-            $(xml).find('dependent').each(function () {
-                var $sel = $(this);
-                show = '';
-
-                var businessUnit = $sel.find('selected').text();
-                show = $sel.find('show').text();
-
-                if (businessUnit == baseBusinessUnit) {
-
-                    if (show != '') {
-
-                        //temp, replace spaces that occours in the beginning of comma separation.
-                        show = show.replace(/\, /g, ",");
-
-                        var optionsarray = show.split(',');
-                        optionsarray.unshift('');
-
-                        var items = optionsarray.map(function (x) { return { text: x, value: x }; });
-                        selectize_tags.addOption(items);
-                        if (report_value != '') {
-                            selectize_tags.setValue(report_value);
-
-                        }
-                        else
-                            selectize_tags.setValue('');
-                        return;
-                    }
-                }
-            });
-        }
-
-        function narrowDownBusinessUnitLocalJobTitle(xml) {
-
-            var show = '';
-            var bus = '';
-
-            if (document.getElementById('BusinessUnit')) {
-                bus = $("#BusinessUnit option:selected").text();
-            }
-
-            var jobtitle_value;
-            jobtitle_value = $('#LocalJobTitle').val();
-
-            $('#LocalJobTitle').val("");
-
-            var selectize_tags = $("#LocalJobTitle")[0].selectize
-            selectize_tags.clearOptions();
-
-            $(xml).find('dependent').each(function () {
-
-                var $sel = $(this);
-                show = '';
-
-                var businessunit = $sel.find('selected').text();
-                show = $sel.find('show').text();
-
-                if (businessunit == bus) {
-
-                    if (show != '') {
-
-                        //temp, replace spaces that occours in the beginning of comma separation.
-                        show = show.replace(/\, /g, ",");
-
-                        var optionsarray = show.split(',');
-                        optionsarray.unshift('');
-
-                        var items = optionsarray.map(function (x) { return { text: x, value: x }; });
-                        selectize_tags.addOption(items);
-
-                        if (jobtitle_value != '') {
-                            selectize_tags.setValue(jobtitle_value);
-                        } else
-                            selectize_tags.setValue('');
-                        return;
-                    }
-                }
-            });
-        }
-
+  
+  
         var setDefaultJobTitle = function (xml) {
 
             SetDefCount += 1;
@@ -413,7 +292,7 @@
                 var jobtitle = $sel.find('selected').text();
                 show = $sel.find('show').text();
 
-                if (jobtitle == positiontitle) {
+                if (jobtitle.toLowerCase() == positiontitle.toLowerCase()) {
                     if (show != '') {
                         var n = show.indexOf("#");
                         if (n == -1) {
@@ -668,33 +547,18 @@
         });
         document.getElementById('NextRevisionDate5').onkeypress = function () { return true; }
 
-        //SG 2015-10-22 Case 52774, No 29 the filed CLAIncrease removed
-        //function SelectIndexChangePayScaleLevel() {
-        //    if (document.getElementById('PayScaleLevel').value) {
-        //        if (document.getElementById('PayScaleLevel').value <= 12) {
-        //            document.getElementById('CLAIncrease').selectedIndex = 1;
-        //        }
-        //        if (document.getElementById('PayScaleLevel').value >= 13) {
-        //            document.getElementById('CLAIncrease').selectedIndex = 2;
-        //        }
-        //    }
-
-        //}
-        //document.getElementById('PayScaleLevel').onchange = SelectIndexChangePayScaleLevel;
-
-
         $(function () {
             function setPayrollCategoryBehavior(value) {
                 ////////////
                 /// Created: 18-09-2014
                 /// AC
                 if (document.getElementById('BasicPay')) {
-                    if (value == 'Hourly' || value == 'Juvenile Hourly') {
+                    if (value == 'Hourly' || value == 'Juvenile Hourly' || value == 'Dual Payroll (ZY)') {
                         document.getElementById('BasicPay').disabled = true;
                         $('#BasicPay').val('');
                         document.getElementById('BasicPayAmount').disabled = false;
                     }
-                    else if (value == 'Monthly' || value == 'Juvenile Monthly' || value == 'MT/Dep/SM') {
+                    else if (value == 'Monthly' || value == 'Juvenile Monthly' || value == 'MT/Dep/SM' || value == 'Dual Payroll (ZY)') {
                         document.getElementById('BasicPay').disabled = false;
                         document.getElementById('BasicPayAmount').disabled = true;
                         $('#BasicPayAmount').val('');
@@ -719,168 +583,31 @@
         });
 
         function SetPayeeDefault() {
-
-            //var counterBankAccounts = parseInt($('#BankAccounts').val()) || 0;
-
             var payeevalue = $("#FirstName").val() + ($('#Prefixes').length > 0 && $('#Prefixes').val() != "" ? (" " + $('#Prefixes').val() + " " ): " ") + $("#LastName").val();
-
             //set first
             $("#Payee").val(payeevalue);
             $("#Payee2").val(payeevalue);
-
-            //for (var i = 2; i <= counterBankAccounts; i++) {
-            //    var payeeid = $('#Payee' + i);
-            //    $(payeeid).val(payeevalue);
-            //}
         };
-
-        ///-------- Scripts that we are not using now any more ------------- Just keep them until go Live
-
-
-        //$('#EmploymentCategory').change(function () {
-        //    setdeductionvalidto();
-        //});
-        //$('#ContractEndDate').change(function () {
-        //    setdeductionvalidto();
-        //});
-        //$('#date_ContractEndDate').on('changeDate', function (ev) {
-        //    setdeductionvalidto();
-        //});
-
-        //function setdeductionvalidto() {
-        //    if ($('#EmploymentCategory').val() == 'Temporary') {
-        //        var enddatetoset = $('#ContractEndDate').val();
-        //        if (!(enddatetoset == '')) {
-        //            $('#DeductionsValidTo').val(enddatetoset);
-        //            $('#DeductionsValidTo2').val(enddatetoset);
-        //            $('#DeductionsValidTo3').val(enddatetoset);
-        //            $('#DeductionsValidTo4').val(enddatetoset);
-        //            $('#DeductionsValidTo5').val(enddatetoset);
-        //        }
-        //    }
-        //}
-
-        //$('#ContractedHours').change(function () {
-
-        //    var h = document.getElementById('ContractedHours').value;
-        //    var calc = 0;
-        //    switch (h) {
-        //        case "1":
-        //            calc = 4.33;
-        //        case "2":
-        //            calc = 8.67;
-        //        case "3":
-        //            calc = 13.00;
-        //        case "4":
-        //            calc = 17.33;
-        //        case "5":
-        //            calc = 21.67;
-        //        case "6":
-        //            calc = 26.00;
-        //        case "7":
-        //            calc = 30.33;
-        //        case "8":
-        //            calc = 34.67;
-        //        case "9":
-        //            calc = 39.00;
-        //        case "10":
-        //            calc = 43.33;
-        //        case "11":
-        //            calc = 47.67;
-        //        case "12":
-        //            calc = 52.00;
-        //        case "13":
-        //            calc = 56.33;
-        //        case "14":
-        //            calc = 60.67;
-        //        case "15":
-        //            calc = 65.00;
-        //        case "16":
-        //            calc = 69.33;
-        //        case "17":
-        //            calc = 73.67;
-        //        case "18":
-        //            calc = 78.00;
-        //        case "19":
-        //            calc = 82.33;
-        //        case "20":
-        //            calc = 86.67;
-        //        case "21":
-        //            calc = 91.00;
-        //        case "22":
-        //            calc = 95.33;
-        //        case "23":
-        //            calc = 99.67;
-        //        case "24":
-        //            calc = 104.00;
-        //        case "25":
-        //            calc = 108.33;
-        //        case "26":
-        //            calc = 112.67;
-        //        case "27":
-        //            calc = 117.00;
-        //        case "28":
-        //            calc = 121.33;
-        //        case "29":
-        //            calc = 125.67;
-        //        case "30":
-        //            calc = 130.00;
-        //        case "31":
-        //            calc = 134.33;
-        //        case "32":
-        //            calc = 138.67;
-        //        case "33":
-        //            calc = 143.00;
-        //        case "34":
-        //            calc = 147.33;
-        //        case "35":
-        //            calc = 151.67;
-        //        case "36":
-        //            calc = 156.00;
-        //        case "37":
-        //            calc = 160.33;
-        //        case "38":
-        //            calc = 164.67;
-        //        case "39":
-        //            calc = 169.00;
-        //        case "40":
-        //            calc = 173.33;
-        //        default:
-        //            1;
-        //            break;
-        //    }
-        //    //document.getElementById('BasicPay').value = calc * h;
-
-        //});
-
-        // Return back this Weekly update week 19 # 54999  //SG
-
+     
         $('#AllowancesType').change(function () {
-
             GetXML('Predefined_AllowanceType_Units.xml', setAllowanceUnits);
         });
 
         $('#AllowancesType2').change(function () {
-
             GetXML('Predefined_AllowanceType_Units.xml', setAllowanceUnits2);
         });
 
         $('#AllowancesType3').change(function () {
-
             GetXML('Predefined_AllowanceType_Units.xml', setAllowanceUnits3);
         });
 
         $('#AllowancesType4').change(function () {
-
             GetXML('Predefined_AllowanceType_Units.xml', setAllowanceUnits4);
         });
 
         $('#AllowancesType5').change(function () {
-
             GetXML('Predefined_AllowanceType_Units.xml', setAllowanceUnits5);
         });
-
-        
 
         function setAllowanceUnits5(xml) {
             var show = ''
@@ -1088,34 +815,30 @@
 
     } // End If READ ONLY TABs
 
-    if ($('#NewToIKEA').val() == '@IsTeWorker') {
-        $(".globalmobility-first").show();
-    }
-    else {
-        $(".globalmobility-first").hide();
-    }
-
-
     function setGlobalMobilityBehavior(value) {
-        if (!(value == '@IsTeWorker')) {
-                $("[class*=globalmobility]").hide();
-                $("[class*=globalmobility] input:not(input[type=hidden])").val("");
-                $("[class*=globalmobility] input[type=text][name*='Country']").val('@DefaultCountry');
-                $("[class*=globalmobility] select option:not([value])").prop('selected', true);
-            } else {
-                $(".globalmobility-first").show();
-            }
-
-            $("[class*=globalmobility-first] input[type=hidden]").val("1");
+        if (($('#NewToIKEA').val() == '@IsTeWorker') || ($('#NewToIKEA').val() == '@IsTeWorkerI')) {
+            $(".globalmobility-first").hide();
+            $(".globalmobility").hide();
         }
+    }
 
-@*        if (!($('#NewToIKEA').val() == '@IsTeWorker')) {
-        $(".globalmobility-first").hide();
-        $(".globalmobility").hide();
-    }*@
+    function setPreviousContractStartDate(value) {
+      
+        if (($('#NewToIKEA').val() == '@IsTeWorker') || ($('#NewToIKEA').val() == '@IsTeWorkerI')) {
+            $("#PreviousContractStartDate").attr("disabled", false);
+            $('#date_PreviousContractStartDate').datepicker();
+            $("#PreviousContractStartDate").removeClass("disabled");
+        } else {
+            $("#PreviousContractStartDate").attr("disabled", true);
+            $('#date_PreviousContractStartDate').datepicker("destroy");
+            $('#date_PreviousContractStartDate').addClass("disabled");
+            $('#PreviousContractStartDate').prop('disabled', true);
+        }
+    }
 
     $('#NewToIKEA').change(function () {
         setGlobalMobilityBehavior($(this).val());
+        setPreviousContractStartDate($(this).val());
     });
 
     function GetXML(xmlFile, url) {

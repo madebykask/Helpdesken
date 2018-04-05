@@ -10,6 +10,10 @@
     <show>Badge Charge,Company Car,Uniform Deduction,ID Card,TEC Expenses Deduction,Travel Allowance,PHI-Private Health Ins,Rent Deduction</show>
   </dependent>
   <dependent>
+    <selected>Dual Payroll (ZY)</selected>
+    <show>Badge Charge,Company Car,Uniform Deduction,ID Card,TEC Expenses Deduction,Travel Allowance,PHI-Private Health Ins,Rent Deduction</show>
+  </dependent>
+  <dependent>
     <selected>Salaried Management</selected>
     <show>Badge Charge,Company Car,Uniform Deduction,ID Card,TEC Expenses Deduction,Travel Allowance,PHI-Private Health Ins,Rent Deduction</show>
   </dependent>

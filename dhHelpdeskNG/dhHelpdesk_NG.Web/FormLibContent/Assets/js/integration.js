@@ -81,7 +81,16 @@ function changeNewCompany(clear) {
                         $('#NewBusinessUnit option').filter(function () {
                             return $(this).text() == oldValue;
                         }).prop('selected', true);
-                        $('#PrimarySite').val(oldValue);
+
+                        if ($('#PrimarySite')[0].selectize) {
+                            $('#PrimarySite')[0].selectize.setValue(oldValue);
+                        }
+                        else
+                        {
+                            $('#PrimarySite').val(oldValue);
+                        }
+
+                        
                     }
 
                     if (!clear && selectedValue != '') {
@@ -94,7 +103,12 @@ function changeNewCompany(clear) {
                         //Commented out because it gave complication on IE change t&c. Overwriting default values when saving.
                         //$("#NewBusinessUnit").change();
                         
-                        $('#PrimarySite').val($('#NewBusinessUnit').text());
+                        if ($('#PrimarySite')[0].selectize) {
+                            $('#PrimarySite')[0].selectize.setValue($('#NewBusinessUnit').text());
+                        }
+                        else {
+                            $('#PrimarySite').val($('#NewBusinessUnit').text());
+                        }
 
                     }
 

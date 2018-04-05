@@ -1,0 +1,158 @@
+﻿@model ECT.FormLib.Models.FormModel
+@using ECT.FormLib;
+@using ECT.FormLib.Models;
+@using ECT.FormLib.Pdfs;
+
+@{
+    Layout = null;
+    var txt = string.Empty;
+    var txt2 = "medewerker";
+    if (ViewData["SignatureText"] != null)
+    {
+        txt = ViewData["SignatureText"].ToString();
+    }
+    txt = (txt == string.Empty) ? txt2 : txt;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    @*<link href="@Model.Contract.BaseUrl/FormLibContent/assets/css/documents.css" rel="stylesheet" type="text/css" />*@
+    @Model.GetStyleAnswer("GetStyleLink")
+    @Html.Partial("../Shared/Pdfs/_Styles", Model)
+    @Model.GetStyleAnswer("GetStyles")
+
+    @*<style>
+        table, p {
+            font-size: 10pt !important; 
+            line-height: normal !important;
+        }
+    </style>*@
+
+</head>
+<body>
+    <table>
+        <tr style="page-break-before: always;">
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+
+    <div class="default-page">
+        
+        @Html.Partial("../Shared/Pdfs/_BarCode", Model, new ViewDataDictionary { { "ExtraBarCode", "W404" } })
+    
+        <p style="line-height: normal !important; font-size: 10pt !important; padding-top: 20px;">
+            Naam medewerker : @Model.GetDocumentAnswer("FirstName", true) @Model.GetDocumentAnswer("LastName", true) <br />
+            BSN nummer :<br /><br />
+        </p>
+        
+
+        <p style="line-height: normal !important; font-size: 10pt !important">
+            <i>Wij benadrukken je nogmaals dat de door jou verstrekte informatie strikt vertrouwelijk behandeld wordt en alleen bedoeld is voor het verkrijgen van subsidiemogelijkheden bij het UWV voor de werkgever.
+            </i>
+        </p>
+
+        <p style="line-height: normal !important; font-size: 10pt !important">1. Ontvang / Ontving je een uitkering op grond van de WIA (WGA, IVA), WAO, WAZ, Wajong of Ziektewet?<br /><br /></p>
+        
+        <p style="line-height: normal !important; font-size: 10pt !important">-----------------------------------------------------------------------------------<br /><br /></p>
+        
+        <p style="line-height: normal !important; font-size: 10pt !important">Zo ja, wat voor een uitkering ontvang/ontving je? In welke periode heb je deze ontvangen?<br /><br /></p>
+        
+        <p style="line-height: normal !important; font-size: 10pt !important">-----------------------------------------------------------------------------------<br /><br /></p>
+        
+        <p style="line-height: normal !important; font-size: 10pt !important">2. Is aan jou in het verleden een van de bovenstaande uitkeringen geweigerd?<br /><br /></p>
+        
+        <p style="line-height: normal !important; font-size: 10pt !important">-----------------------------------------------------------------------------------<br /><br /></p>
+        
+        <p style="line-height: normal !important; font-size: 10pt !important">Zo ja, heeft het UWV jou de status van “arbeidsgehandicapte” of “structureel functioneel beperkt” gegeven?<br /><br /></p>
+        
+        <p style="line-height: normal !important; font-size: 10pt !important">-----------------------------------------------------------------------------------<br /><br /></p>
+        
+        <p style="line-height: normal !important; font-size: 10pt !important">3. Heeft het UWV/CWI (voorheen CWI/arbeidsbureau) een uitspraak gedaan over de status van “arbeidsgehandicapte” of “structureel functioneel beperkt”?<br /><br /></p>
+        
+        <p style="line-height: normal !important; font-size: 10pt !important">-----------------------------------------------------------------------------------<br /><br /></p>
+        
+        <p style="line-height: normal !important; font-size: 10pt !important">4. Ontvang of ontving je een voorziening voor behoud, herstel of bevordering van de arbeidsgeschiktheid?<br /><br /></p>
+        
+        <p style="line-height: normal !important; font-size: 10pt !important">-----------------------------------------------------------------------------------<br /><br /></p>
+        
+        <p style="line-height: normal !important; font-size: 10pt !important">Premiekorting Ouderen 50+<br />
+                                                                            5. Ontvang je een andere uitkering (bijvoorbeeld: Werkloosheidswet, Bijstand of ANW) dan genoemd bij vraag 1 en ben je 50 jaar of ouder?<br />
+                                                                            Zo ja: wat voor uitkering ontvang je:<br /><br /></p>
+        
+        <p style="line-height: normal !important; font-size: 10pt !important">-----------------------------------------------------------------------------------<br /><br /></p>
+
+        <table>
+            <tr style="page-break-before: always;">
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+
+        <p style="line-height: normal !important; font-size: 10pt !important; font-weight: bold; padding-top: 30px;">Subsidie onderzoek</p>
+        <br />
+        <br />
+        <p style="line-height: normal !important; font-size: 10pt !important">Ik verzoek je hieronder aan te kruisen of je een medische- / arbeidskundige keuring hebt ondergaan bij UWV of bij Centrum Werk en Inkomen (CWI):</p>
+        <br />
+           
+        <table style="line-height: normal !important; font-size: 10pt !important" class="table-full-width">
+            <tr>
+                <td style="border:none !important;width:100%;min-width:100%;"></td>
+            </tr>
+            <tr>
+                <td style="border:none !important;width:100%;min-width:100%;"></td>
+            </tr>
+            <tr>
+                <td style="border:none !important; width:60%;">- Medische- /arbeidskundige keuring ondergaan bij UWV</td>
+                <td style="width:20%;">
+                    <ul class="circle_ul" style="margin-left:-150px;">
+                        <li>ja</li>
+                    </ul>
+                </td>
+                <td style="width:20%;">
+                    <ul class="circle_ul" style="margin-left:-100px;">
+                        <li>nee</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td style="border:none !important;width:100%;min-width:100%;"></td>
+            </tr>
+            <tr>
+                <td style="border:none !important;width:100%;min-width:100%;"></td>
+            </tr>
+            <tr>
+                <td style="border:none !important;width:100%;min-width:100%;"></td>
+            </tr>
+            <tr>
+                <td style="border:none !important; width:60%;">- Medische- /arbeidskundige keuring ondergaan bij CWI</td>
+                <td style="width:20%;">
+                    <ul class="circle_ul" style="margin-left:-150px;">
+                        <li>ja</li>
+                    </ul>
+                </td>
+                <td style="width:20%;">
+                    <ul class="circle_ul" style="margin-left:-100px;">
+                        <li>nee</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <br />   
+             
+        <p style="line-height: normal !important; font-size: 10pt !important">Datum: _________ Handtekening: _________________________</p>
+  
+        <br />
+        <br />
+        <br />
+        <br />
+        <p style="line-height: normal !important; font-size: 10pt !important">
+            <i>
+                In te vullen door HR:
+            </i>
+            <br />
+            Conclusie: Betrokkene valt wel/niet onder de subsidiemogelijkheden van UWV/Belastingdienst (indien wel van toepassing dan bewijsstuk opvragen bij medewerker).
+        </p>
+        
+ </div>
+</body>
+</html>

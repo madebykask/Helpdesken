@@ -36,8 +36,8 @@
     <div class="container containeralignright" style="margin-top:5px;">
         <small>@ECT.FormLib.FormLibI18N.Translate("Version", ECT.FormLib.FormLibSessions.User.Language)&nbsp;@ECT.FormLib.FormLibUtils.AssemblyVersion()</small>
     </div>
-    <div id="spinnerDiv" style="position:fixed;top:50%;left:50%"></div> 
-    <input type="hidden" id="core_baseUrl" name="core_baseUrl" value="@(!HttpContext.Current.Request.Url.Host.ToLower().Contains("localhost") ? "/ect" : "")" />
+    <div id="spinnerDiv" style="position:fixed;top:50%;left:50%;z-index:20000000;"></div>
+    <input type="hidden" id="core_baseUrl" name="core_baseUrl" value="" />
     <input type="hidden" id="core_area" name="core_area" value="@area" />
     <input type="hidden" id="core_controller" name="core_controller" value="@controller" />
     <input type="hidden" id="core_rooturl" name="core_rooturl" value="@Url.CurrentRoot()" />
@@ -86,7 +86,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
         <small>@ECT.FormLib.FormLibI18N.Translate("Version", ECT.FormLib.FormLibSessions.User.Language)&nbsp;@ECT.FormLib.FormLibUtils.AssemblyVersion()</small>
     </div>
 </div>
-<div id="spinnerDiv" style="position:fixed;top:50%;left:50%"></div>
+<div id="spinnerDiv" style="position:fixed;top:50%;left:50%;z-index:20000000;"></div>
 <input type="hidden" id="core_controller" name="core_controller" value="@controller" />
 <input type="hidden" id="core_baseUrl" name="core_baseUrl" value="" />
 <input type="hidden" id="core_area" name="core_area" value="@area" />

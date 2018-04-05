@@ -55,7 +55,7 @@
             list.Add(new PdfListItem { Text = text2 });
 
             //3
-            string text3 = "The " + UnitedKingdomPdfPage.GetServiceAreaText("ServiceArea", Model) + " is your primary place of work. You will on occasions be expected to work in other areas within the Store/Unit to support the business need.";
+            string text3 = "The " + UnitedKingdomPdfPage.GetServiceAreaText("ServiceArea", Model) + " is your primary area of work. You will on occasions be expected to work in other areas within the site to support the business need.";
             list.Add(new PdfListItem { Text = text3 });
 
             //4
@@ -87,18 +87,18 @@
             //7           
             string text7 = "Your basic annual holiday entitlement per calendar year is " + Model.GetDocumentAnswer("HolidayFull", true) + " hours." + " Our holiday year runs from 1<sup>st</sup> April to 31<sup>st</sup> March. Your remaining holiday entitlement for " + CustomPdfPage.GetDateInWords("HolidayYear", Model) + " is " + CustomPdfPage.GetDateInWords("HolidayCurrent", Model) + " hours."
                          + "This entitlement includes an allowance for Bank Holidays. Bank/public holidays form normal working days and the company reserves the right to require you to work on those days. You must save holiday hours for days of site closure when you would normally be scheduled to work." + brText
-                         + "Untaken basic holiday entitlement can only be carried forward with prior permission from your department Manager. See the Co-worker handbook for details of when holiday can be taken." + brText
+                         + "See the Co-worker handbook for details of when holiday can be taken." + brText
                          + "For all holidays a Holiday Form must be completed, and authorised by your manager.  Since holidays need to be authorised in advance, no holiday reservations should be made until your manager has agreed the dates.";
             list.Add(new PdfListItem { Text = text7 });
 
             //8
-            string text8 = "You will join IKEA on a six month probationary period. This probationary period will commence from " + Model.GetDocumentAnswer("ContractStartDate", true) + "."
-                         + " On the successful completion of this probationary period your continued employment will be confirmed by letter. The notice period during your probationary period is one week from either side. If it is agreed your probationary period is extended beyond your first six months’ then your notice period will remain as one week from either side. Beyond the probationary period you be entitled to and will need to give 1 week's notice in writing." + brText
+            string text8 = "You will join IKEA on a 6 month probationary period. This probationary period will commence from " + Model.GetDocumentAnswer("ContractStartDate", true) + "."
+                         + " On the successful completion of this probationary period your continued employment will be confirmed by letter. The notice period during your probationary period is one week from either side. If it is agreed your probationary period is extended beyond your first 6 months’ then your notice period will remain as one week from either side. Beyond the probationary period you be entitled to and will need to give 1 week's notice in writing." + brText
                          + "IKEA reserves the right to terminate your employment, without notice, in cases of gross misconduct. IKEA reserves the right to make a payment in lieu of notice.";
             list.Add(new PdfListItem { Text = text8 });
 
             //9
-            string text9 = "You will be asked to complete a Medical Questionnaire online when you join IKEA. Only our Occupational Health Advisor will read the content. Your employment may be subject to a medical examination which may include substance testing at any point during your first six months.";
+            string text9 = "You will be asked to complete a Medical Questionnaire online when you join IKEA. Only our Occupational Health Advisor will read the content. Your employment may be subject to a medical examination which may include substance testing at any point during your first 6 months.";
             list.Add(new PdfListItem { Text = text9 });
 
             //10

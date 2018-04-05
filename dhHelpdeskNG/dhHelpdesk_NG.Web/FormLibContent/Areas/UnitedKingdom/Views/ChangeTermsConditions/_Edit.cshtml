@@ -109,6 +109,7 @@
     <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />
     @Html.Partial("_Validate", Model)
     <script>
+
     function changeNewCompanyCallback() {
         var value = $('#NewCompany').find('option:selected').text();
 
@@ -139,111 +140,12 @@
     }
 
     function changeNewBusinessUnitCallback() {
-        var selectedText = $('#NewBusinessUnit').find('option:selected').text();
-        $('#PrimarySite').val(selectedText);
+        ect.copyValueFrom($('#NewBusinessUnit'), $('#PrimarySite'));
     }
 
     function changeFunctionsCallback() {
-        
-        //setTimeout(function () { GetXML('predefined_function_department_linemanager_outs.xml', setLineManagerAndCostCentre); }, 1);
-
-        //setTimeout(function () { GetXML('predefined_function_jobtitleUK_outs.xml', setLineManagerJobTitle); }, 1);
-
-
-        GetXML('predefined_function_jobtitleUK_outs.xml', NarrowDownJobTitle);
-
-
-        function NarrowDownJobTitle(xml) {
-            $('#JobTitle').off('change');
-            var show = ''
-
-            var dep = '';
-            var bus = '';
-
-            if (document.getElementById('NewServiceArea')) {
-                dep = $("#NewServiceArea option:selected").text();
-            }
-
-            if (document.getElementById('NewBusinessUnit')) {
-                bus = $("#NewBusinessUnit option:selected").text();
-            }
-
-
-            var jobtitle_value;
-            jobtitle_value = $('#JobTitle').val();
-
-            $('#JobTitle').val("");
-
-            var selectize_tags = $("#JobTitle")[0].selectize
-            selectize_tags.clearOptions();
-
-
-
-            $(xml).find('dependent').each(function () {
-
-
-                var $sel = $(this);
-                show = '';
-
-                var department = $sel.find('selected').text();
-
-                show = $sel.find('show').text();
-
-                if (department == dep) {
-
-                    if (show != '') {
-
-                        show = ' ,' + show;
-
-                        //temp, replace spaces that occours in the beginning of comma separation.
-                        show = show.replace(/\, /g, ",");
-
-                        var optionsarray = show.split(',');
-                        optionsarray.unshift('');
-
-                        //TEMP for Steering Group_Doncaster, Sales (problem with commas in the name) so we use  #
-                        if (show.indexOf("#") > -1) {
-                            $.each(optionsarray, function (i) {
-                                optionsarray[i] = optionsarray[i].replace(/\#/g, ",");
-                            });
-                        }
-
-                        var items = optionsarray.map(function (x) { return { text: x, value: x }; });
-                        selectize_tags.addOption(items);
-
-                        if (jobtitle_value != '')
-                            selectize_tags.setValue(jobtitle_value);
-                        else
-                            selectize_tags.setValue('');
-                        return;
-                    }
-                }
-
-            });
-
-            var jobtitleoptions = $('#JobTitle')[0].selectize.options;
-            var jobtitleoptionslength = Object.keys(jobtitleoptions).length;
-            if (jobtitleoptionslength == 0) {
-                GetXML('Data_JobTitle.xml', SetAllJobtitles);
-            }
-
-            $('#JobTitle').on('change', function () {
-                ////////
-                //JobTitle change function
-                setDefaultPayroll();
-                addDeductionTypesOnPayroll();
-                addAllowanceOnPayroll();
-                addPayScaleOnPayroll();
-                setPayrollCategory();
-                setBasicPayAmount();
-            });
-        }
-       
+        ect.getRelations('Relation_Function_JobTitle.xml', '', $('#NewServiceArea'), $('#JobTitle'));
     }
-
-
-    //InitIntegration(); 
-    //changeNewCompany();
 
     validate.run($('#actionState').val());
 

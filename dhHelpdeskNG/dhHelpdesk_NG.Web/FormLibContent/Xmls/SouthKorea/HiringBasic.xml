@@ -3,14 +3,6 @@
     <!ENTITY languages SYSTEM "Templates/Languages.xml">
     <!ENTITY state SYSTEM "Templates/HiringBasicState.xml">
     <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
-    <!ENTITY dat_country SYSTEM "Data/Data_Country.xml">
-    <!ENTITY dat_language SYSTEM "Data/Data_Language.xml">
-    <!ENTITY dat_nationality SYSTEM "Data/Data_Nationality.xml">
-    <!ENTITY dat_costcentres SYSTEM "Data/Data_CostCentres.xml">
-    <!ENTITY dat_primarysite SYSTEM "Data/Data_PrimarySite.xml">
-    <!ENTITY dat_jobtitle SYSTEM "Data/Data_JobTitle.xml">
-    <!ENTITY dat_positiontitle SYSTEM "Data/Data_PositionTitle.xml">
-    <!ENTITY dat_linemanagers SYSTEM "Data/Data_LineManager.xml">
     <!ENTITY dat_allowance SYSTEM "Data/Data_AllowanceType.xml">
     <!ENTITY dat_deduction SYSTEM "Data/Data_DeductionType.xml">
     <!ENTITY dat_familymember SYSTEM "Data/Data_FamilyMember.xml">
@@ -25,8 +17,6 @@
     <!ENTITY dat_city SYSTEM "Data/Data_City.xml">
     <!ENTITY tab_socialinsuranceandtax SYSTEM "Data/Tab_SocialInsuranceAndTax.xml">
 ]>
-
-<!-- Dev/Prod/Test -->
 <form id="228" guid="02A31B2F-D0AE-4B09-87B5-0CBB45114264" customerId="32">
     &languages;
     &regexs;
@@ -39,7 +29,7 @@
                     <option value=""></option>
                     <option value="New-Hire">New-Hire</option>
                     <option value="Re-Hire">Re-Hire</option>
-                    <option value="International Transfer">International Transfer</option>
+                    <option value="International Transfer (LTA, STA, Commuter)">International Transfer (LTA, STA, Commuter)</option>
                     <option value="Transfer Between Business Units">Transfer Between Business Units</option>
                 </options>
             </element>
@@ -67,7 +57,11 @@
             </element>
             <element name="GlobalHRID" label="Global HR ID " type="text" >
                 <regex inherit="unsignednum" pattern="" message=""></regex>
-                <mandatoryIf name="NewtoIKEA">International Transfer</mandatoryIf>
+                <mandatoryIf name="NewtoIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
+            </element>
+            <element type="date" name="PreviousContractStartDate" label="Previous Contract Start Date" format="dd.MM.yyyy">
+              <regex inherit="date" pattern="" message=""></regex>
+              <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
             </element>
             <element name="Title" label="Title" type="select" mandatory="1">
                 <options>
@@ -107,6 +101,13 @@
             <element name="Contacte-mailaddress" label="Contact e-mail address" type="text" >
                 <regex inherit="email" pattern="" message=""></regex>
             </element>
+            <element name="CoworkerID" label="Co-worker ID" type="text">
+              <regex inherit="unsignednum" pattern="" message=""></regex>
+              <regex inherit="employeeno" pattern="" message=""></regex>
+            </element>
+            <element name="RegistrationID" label="Registration ID" type="text" mandatory="1">
+              <regex inherit="numMax14" message="" pattern=""></regex>
+            </element>
             <element name="PermanentAddressline1" label="Address line in KR" type="text" mandatory="1">
             </element>
             <element name="PermanentAddressline2" label="Address line in EN" type="text" mandatory="1">
@@ -116,8 +117,8 @@
             <element name="PermanentCity" label="City" type="select" mandatory="1">
                 &dat_city;
             </element>
-            <element name="PermanentCountry" label="Country" type="search-select" mandatory="1" default="South Korea" >
-                &dat_country;
+            <element name="PermanentCountry" label="Country" type="select" source="database" cssclass="autocomplete-country selectize" mandatory="1" default="South Korea" >
+                
             </element>
             <element name="PermanentTelephone" label="Telephone" type="text"></element>
             <element name="PermanentCommunicationtypes" default="1" type="hidden"></element>
@@ -170,8 +171,8 @@
             <element name="EmergencyCity" label="City" type="select" mandatory="1">
                 &dat_city;
             </element>
-            <element name="EmergencyCountry" label="Country" type="search-select"  default="South Korea" mandatory="1">
-                &dat_country;
+            <element name="EmergencyCountry" label="Country" type="select" source="database" cssclass="autocomplete-country selectize" default="South Korea" mandatory="1">
+                
             </element>
             <element name="EmergencyTelephone" label="Telephone" type="text" >
             </element>
@@ -223,8 +224,8 @@
             <element name="HomeCity" label="City" type="select" mandatory="1">
                 &dat_city;
             </element>
-            <element name="HomeCountry" label="Country" type="search-select"  default="South Korea" mandatory="1">
-                &dat_country;
+            <element name="HomeCountry" label="Country" type="select" source="database" cssclass="autocomplete-country selectize" default="South Korea" mandatory="1">
+                
             </element>
             <element name="HomeTelephone" label="Mobile phone" type="text" mandatory="1">
             </element>
@@ -297,13 +298,12 @@
                     <option value="Female">Female</option>
                 </options>
             </element>
-            <!--<element name="FamilyMemberRegistrationNumber" label="Family Member Registration Number" type="text" >
-                <regex inherit="max13digits" pattern="" message=""></regex>
-            </element>-->
             <element name="FamilyMemberDateofbirth" label="Date of birth" type="date" format="dd.MM.yyyy">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-
+            <element name="FamiliMemberRegID" label="Family Member Registration ID" type="text">
+              <regex inherit="numMax14" message="" pattern=""></regex>
+            </element>
             <element name="DependancyStatus" type="multi" label="Dependancy Status">
                 &dat_dependancystatus;
             </element>
@@ -316,8 +316,6 @@
             <element name="adoptionfosterdate" label="adoption / foster date" type="date" format="dd.MM.yyy">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-
-
             <!--2-->
             <element name="FamilyMember2" label="Family Member" type="select" >
                 &dat_familymember;
@@ -345,11 +343,11 @@
                     <option value="Female">Female</option>
                 </options>
             </element>
-            <!--<element name="FamilyMemberRegistrationNumber2" label="Family Member Registration Number" type="text" >
-                <regex inherit="max13digits" pattern="" message=""></regex>
-            </element>-->
             <element name="FamilyMemberDateofbirth2" label="Date of birth" type="date" format="dd.MM.yyyy">
                 <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element name="FamiliMemberRegID2" label="Family Member Registration ID" type="text">
+              <regex inherit="numMax14" message="" pattern=""></regex>
             </element>
             <element name="DependancyStatus2" type="multi" label="Dependancy Status">
                 &dat_dependancystatus;
@@ -363,8 +361,6 @@
             <element name="adoptionfosterdate2" label="adoption / foster date" type="date" format="dd.MM.yyy">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-
-
             <!--3-->
             <element name="FamilyMember3" label="Family Member" type="select" >
                 &dat_familymember;
@@ -392,11 +388,11 @@
                     <option value="Female">Female</option>
                 </options>
             </element>
-            <!--<element name="FamilyMemberRegistrationNumber3" label="Family Member Registration Number" type="text" >
-                <regex inherit="max13digits" pattern="" message=""></regex>
-            </element>-->
             <element name="FamilyMemberDateofbirth3" label="Date of birth" type="date" format="dd.MM.yyyy">
                 <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element name="FamiliMemberRegID3" label="Family Member Registration ID" type="text">
+              <regex inherit="numMax14" message="" pattern=""></regex>
             </element>
             <element name="DependancyStatus3" type="multi" label="Dependancy Status">
                 &dat_dependancystatus;
@@ -410,8 +406,6 @@
             <element name="adoptionfosterdate3" label="adoption / foster date" type="date" format="dd.MM.yyy">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-
-
             <!--4-->
             <element name="FamilyMember4" label="Family Member" type="select" >
                 &dat_familymember;
@@ -421,13 +415,11 @@
                 &dat_dependantstype;
             </element>
             <element name="FamilyMemberLastName4" label="Last Name" type="text" >
-
             </element>
             <element name="FamilyMemberLastNameinEnglish4" label="Family Member Last Name in English" type="text" >
                 <regex inherit="alphaCharachter" pattern="" message=""></regex>
             </element>
             <element name="FamilyMemberFirstName4" label="First Name " type="text" >
-
             </element>
             <element name="FamilyMemberFirstNameinEnglish4" label="Family Member First Name in English " type="text" >
                 <regex inherit="alphaCharachter" pattern="" message=""></regex>
@@ -439,11 +431,11 @@
                     <option value="Female">Female</option>
                 </options>
             </element>
-            <!--<element name="FamilyMemberRegistrationNumber4" label="Family Member Registration Number" type="text" >
-                <regex inherit="max13digits" pattern="" message=""></regex>
-            </element>-->
             <element name="FamilyMemberDateofbirth4" label="Date of birth" type="date" format="dd.MM.yyyy">
                 <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element name="FamiliMemberRegID4" label="Family Member Registration ID" type="text">
+              <regex inherit="numMax14" message="" pattern=""></regex>
             </element>
             <element name="DependancyStatus4" type="multi" label="Dependancy Status">
                 &dat_dependancystatus;
@@ -457,9 +449,6 @@
             <element name="adoptionfosterdate4" label="adoption / foster date" type="date" format="dd.MM.yyy">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-
-
-
             <!--5-->
             <element name="FamilyMember5" label="Family Member" type="select" >
                 &dat_familymember;
@@ -469,13 +458,11 @@
                 &dat_dependantstype;
             </element>
             <element name="FamilyMemberLastName5" label="Last Name" type="text" >
-
             </element>
             <element name="FamilyMemberLastNameinEnglish5" label="Family Member Last Name in English" type="text" >
                 <regex inherit="alphaCharachter" pattern="" message=""></regex>
             </element>
             <element name="FamilyMemberFirstName5" label="First Name " type="text" >
-
             </element>
             <element name="FamilyMemberFirstNameinEnglish5" label="Family Member First Name in English " type="text" >
                 <regex inherit="alphaCharachter" pattern="" message=""></regex>
@@ -487,11 +474,11 @@
                     <option value="Female">Female</option>
                 </options>
             </element>
-            <!--<element name="FamilyMemberRegistrationNumber5" label="Family Member Registration Number" type="text" >
-                <regex inherit="max13digits" pattern="" message=""></regex>
-            </element>-->
             <element name="FamilyMemberDateofbirth5" label="Date of birth" type="date" format="dd.MM.yyyy">
                 <regex inherit="date" pattern="" message=""></regex>
+            </element>
+            <element name="FamiliMemberRegID5" label="Family Member Registration ID" type="text">
+              <regex inherit="numMax14" message="" pattern=""></regex>
             </element>
             <element name="DependancyStatus5" type="multi" label="Dependancy Status">
                 &dat_dependancystatus;
@@ -505,14 +492,11 @@
             <element name="adoptionfosterdate5" label="adoption / foster date" type="date" format="dd.MM.yyy">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-
-
             <element type="hidden" name="EmployeeDocuments" default="1"></element>
             <element name="EmployeeDocumentType" label="Document Type" type="select" >
                 &dat_documenttype;
             </element>
-            <element name="EmployeeCountry" label="Country" type="search-select" >
-                &dat_country;
+            <element name="EmployeeCountry" label="Country" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
             <element name="EmployeeDocumentno." label="Document no." type="text" >
             </element>
@@ -521,16 +505,12 @@
             </element>
             <element name="EmployeeIssuePlace" label="Issue Place" type="text" >
             </element>
-            <element name="EmployeeIssuePlaceCountry" label="Issue Place (Country)" type="search-select" >
-                &dat_country;
+            <element name="EmployeeIssuePlaceCountry" label="Issue Place (Country)" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
-
-
             <element name="EmployeeDocumentType2" label="Document Type" type="select" >
                 &dat_documenttype;
             </element>
-            <element name="EmployeeCountry2" label="Country" type="search-select" >
-                &dat_country;
+            <element name="EmployeeCountry2" label="Country" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
             <element name="EmployeeDocumentno.2" label="Document no." type="text" >
             </element>
@@ -539,15 +519,12 @@
             </element>
             <element name="EmployeeIssuePlace2" label="Issue Place" type="text" >
             </element>
-            <element name="EmployeeIssuePlaceCountry2" label="Issue Place (Country)" type="search-select" >
-                &dat_country;
+            <element name="EmployeeIssuePlaceCountry2" label="Issue Place (Country)" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
-
             <element name="EmployeeDocumentType3" label="Document Type" type="select" >
                 &dat_documenttype;
             </element>
-            <element name="EmployeeCountry3" label="Country" type="search-select" >
-                &dat_country;
+            <element name="EmployeeCountry3" label="Country" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
             <element name="EmployeeDocumentno.3" label="Document no." type="text" >
             </element>
@@ -556,15 +533,12 @@
             </element>
             <element name="EmployeeIssuePlace3" label="Issue Place" type="text" >
             </element>
-            <element name="EmployeeIssuePlaceCountry3" label="Issue Place (Country)" type="search-select" >
-                &dat_country;
+            <element name="EmployeeIssuePlaceCountry3" label="Issue Place (Country)" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
-
             <element name="EmployeeDocumentType4" label="Document Type" type="select" >
                 &dat_documenttype;
             </element>
-            <element name="EmployeeCountry4" label="Country" type="search-select" >
-                &dat_country;
+            <element name="EmployeeCountry4" label="Country" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
             <element name="EmployeeDocumentno.4" label="Document no." type="text" >
             </element>
@@ -573,16 +547,12 @@
             </element>
             <element name="EmployeeIssuePlace4" label="Issue Place" type="text" >
             </element>
-            <element name="EmployeeIssuePlaceCountry4" label="Issue Place (Country)" type="search-select" >
-                &dat_country;
+            <element name="EmployeeIssuePlaceCountry4" label="Issue Place (Country)" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
-
-
             <element name="EmployeeDocumentType5" label="Document Type" type="select" >
                 &dat_documenttype;
             </element>
-            <element name="EmployeeCountry5" label="Country" type="search-select" >
-                &dat_country;
+            <element name="EmployeeCountry5" label="Country" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
             <element name="EmployeeDocumentno.5" label="Document no." type="text" >
             </element>
@@ -591,13 +561,8 @@
             </element>
             <element name="EmployeeIssuePlace5" label="Issue Place" type="text" >
             </element>
-            <element name="EmployeeIssuePlaceCountry5" label="Issue Place (Country)" type="search-select" >
-                &dat_country;
+            <element name="EmployeeIssuePlaceCountry5" label="Issue Place (Country)" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
-
-
-
-
             <element type="hidden" name="DependantFamilyMembers" default="1" label="DependantFamilyMembers"></element>
             <element name="DependantFamilyMember" label="Dependant Family Member" type="select" >
                 &dat_dependantfamilymember;
@@ -617,8 +582,6 @@
             <element name="DependantsDateofbirth" label="Dependant's Date of birth" type="date" format="dd.MM.yyyy">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-
-
             <element name="DependantFamilyMember2" label="Dependant Family Member" type="select" >
                 &dat_dependantfamilymember;
             </element>
@@ -637,7 +600,6 @@
             <element name="DependantsDateofbirth2" label="Dependant's Date of birth" type="date" format="dd.MM.yyyy">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-
             <element name="DependantFamilyMember3" label="Dependant Family Member" type="select" >
                 &dat_dependantfamilymember;
             </element>
@@ -656,8 +618,6 @@
             <element name="DependantsDateofbirth3" label="Dependant's Date of birth" type="date" format="dd.MM.yyyy">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-
-
             <element name="DependantFamilyMember4" label="Dependant Family Member" type="select" >
                 &dat_dependantfamilymember;
             </element>
@@ -676,8 +636,6 @@
             <element name="DependantsDateofbirth4" label="Dependant's Date of birth" type="date" format="dd.MM.yyyy">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-
-
             <element name="DependantFamilyMember5" label="Dependant Family Member" type="select" >
                 &dat_dependantfamilymember;
             </element>
@@ -696,14 +654,11 @@
             <element name="DependantsDateofbirth5" label="Dependant's Date of birth" type="date" format="dd.MM.yyyy">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-
-
             <element name="DependantsDocuments" type="hidden" default="1" label="DependantsDocuments"></element>
             <element name="DependantsDocumentType" label="Document Type" type="select" >
                 &dat_documenttype;
             </element>
-            <element name="DependantsCountry" label="Country" type="search-select" >
-                &dat_country;
+            <element name="DependantsCountry" label="Country" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
             <element name="DependantsDocumentno." label="Dependants Document no." type="text" >
             </element>
@@ -712,16 +667,12 @@
             </element>
             <element name="DependantsIssuePlace" label="Dependants Issue Place" type="text" >
             </element>
-            <element name="DependantsIssuePlaceCountry" label="Dependants Issue Place (Country)" type="search-select" >
-                &dat_country;
+            <element name="DependantsIssuePlaceCountry" label="Dependants Issue Place (Country)" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
-
-
             <element name="DependantsDocumentType2" label="Document Type" type="select" >
                 &dat_documenttype;
             </element>
-            <element name="DependantsCountry2" label="Country" type="search-select" >
-                &dat_country;
+            <element name="DependantsCountry2" label="Country" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
             <element name="DependantsDocumentno.2" label="Dependants Document no." type="text" >
             </element>
@@ -730,15 +681,12 @@
             </element>
             <element name="DependantsIssuePlace2" label="Dependants Issue Place" type="text" >
             </element>
-            <element name="DependantsIssuePlaceCountry2" label="Dependants Issue Place (Country)" type="search-select" >
-                &dat_country;
+            <element name="DependantsIssuePlaceCountry2" label="Dependants Issue Place (Country)" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
-
             <element name="DependantsDocumentType3" label="Document Type" type="select" >
                 &dat_documenttype;
             </element>
-            <element name="DependantsCountry3" label="Country" type="search-select" >
-                &dat_country;
+            <element name="DependantsCountry3" label="Country" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
             <element name="DependantsDocumentno.3" label="Dependants Document no." type="text" >
             </element>
@@ -747,15 +695,12 @@
             </element>
             <element name="DependantsIssuePlace3" label="Dependants Issue Place" type="text" >
             </element>
-            <element name="DependantsIssuePlaceCountry3" label="Dependants Issue Place (Country)" type="search-select" >
-                &dat_country;
+            <element name="DependantsIssuePlaceCountry3" label="Dependants Issue Place (Country)" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
-
             <element name="DependantsDocumentType4" label="Document Type" type="select" >
                 &dat_documenttype;
             </element>
-            <element name="DependantsCountry4" label="Country" type="search-select" >
-                &dat_country;
+            <element name="DependantsCountry4" label="Country" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
             <element name="DependantsDocumentno.4" label="Dependants Document no." type="text" >
             </element>
@@ -764,16 +709,12 @@
             </element>
             <element name="DependantsIssuePlace4" label="Dependants Issue Place" type="text" >
             </element>
-            <element name="DependantsIssuePlaceCountry4" label="Dependants Issue Place (Country)" type="search-select" >
-                &dat_country;
+            <element name="DependantsIssuePlaceCountry4" label="Dependants Issue Place (Country)" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
-
-
             <element name="DependantsDocumentType5" label="Document Type" type="select" >
                 &dat_documenttype;
             </element>
-            <element name="DependantsCountry5" label="Country" type="search-select" >
-                &dat_country;
+            <element name="DependantsCountry5" label="Country" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
             <element name="DependantsDocumentno.5" label="Dependants Document no." type="text" >
             </element>
@@ -782,12 +723,8 @@
             </element>
             <element name="DependantsIssuePlace5" label="Dependants Issue Place" type="text" >
             </element>
-            <element name="DependantsIssuePlaceCountry5" label="Dependants Issue Place (Country)" type="search-select" >
-                &dat_country;
+            <element name="DependantsIssuePlaceCountry5" label="Dependants Issue Place (Country)" type="select" source="database" cssclass="autocomplete-country selectize" >
             </element>
-
-
-
             <element name="BankType" label="Bank Type " type="select" mandatory="1" default="Main Bank" >
                 <options>
                     <option value=""></option>
@@ -797,8 +734,7 @@
             </element>
             <element name="Payee" label="Payee " type="text" mandatory="1" >
             </element>
-            <element name="BankCountry" label="Bank Country" type="search-select" mandatory="1" default="South Korea" >
-                &dat_country;
+            <element name="BankCountry" label="Bank Country" type="select" source="database" cssclass="autocomplete-country selectize" mandatory="1" default="South Korea" >
             </element>
             <element name="BankKey" label="Bank Key" type="text" mandatory="1">
                 <regex inherit="unsignednum" pattern="" message=""></regex>
@@ -810,7 +746,7 @@
                 <regex inherit="alphaCharachter" message="" pattern=""></regex>
             </element>
             <element name="BankType2" label="Bank Type" type="select" >
-                <mandatoryIf name="NewtoIKEA">International Transfer</mandatoryIf>
+                <mandatoryIf name="NewtoIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
                 <options>
                     <option value=""></option>
                     <option value="Main Bank">Main Bank</option>
@@ -819,8 +755,7 @@
             </element>
             <element name="Payee2" label="Payee" type="text">
             </element>
-            <element name="BankCountry2" label="Bank Country" type="search-select">
-                &dat_country;
+            <element name="BankCountry2" label="Bank Country" type="select" source="database" cssclass="autocomplete-country selectize">
             </element>
             <element name="BankKey2" label="Bank Key" type="text" >
                 <regex inherit="unsignednum" pattern="" message=""></regex>
@@ -833,17 +768,12 @@
             <element name="OtherBankPercentageorAmount" label="Other Bank Percentage or Amount" type="text">
                 <mandatoryIfNotEmpty name="BankType2"></mandatoryIfNotEmpty>
             </element>
-
-            <element name="Nationality" label="Nationality" type="search-select" default="Korean" mandatory="1">
-                &dat_nationality;
+            <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="Nationality" label="Nationality" default="Korean" mandatory="1">
             </element>
-            <element name="SecondNationality" label="Second Nationality" type="search-select">
-                &dat_nationality;
+            <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="SecondNationality" label="Second Nationality">
             </element>
-            <element name="Language" label="Language" type="search-select" default="Korean" mandatory="1">
-                &dat_language;
+            <element type="select" source="database" cssclass="autocomplete-language selectize" name="Language" label="Language" default="Korean" mandatory="1">
             </element>
-
             <element name="Educations" default="1" type="hidden"></element>
             <element name="Educationalestablishment" label="Educational Establishment" type="select" >
                 <options>
@@ -878,7 +808,6 @@
             <element name="Educationenddate" type="date" label="Education end date" format="dd.MM.yyyy">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-
             <element name="Educationalestablishment2" label="Educational Establishment" type="select" >
                 <options>
                     <option value=""></option>
@@ -912,7 +841,6 @@
             <element name="Educationenddate2" type="date" label="Education end date" format="dd.MM.yyyy" >
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-
             <element name="Educationalestablishment3" label="Educational Establishment" type="select" >
                 <options>
                     <option value=""></option>
@@ -940,14 +868,12 @@
             <element name="BranchofStudyTwo3" label="Branch of Study 2" type="select">
                 &dat_branchofstudy;
             </element>
-
             <element name="Educationstartdate3" type="date" label="Education start date" format="dd.MM.yyyy" >
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
             <element name="Educationenddate3" type="date" label="Education end date" format="dd.MM.yyyy" >
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-
             <element name="Educationalestablishment4" label="Educational Establishment" type="select" >
                 <options>
                     <option value=""></option>
@@ -1014,11 +940,6 @@
             <element name="Educationenddate5" type="date" label="Education end date" format="dd.MM.yyyy" >
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-
-            <!--<element name="Registrationnumber" label="Registration number" type="text" mandatory="1">
-                <regex inherit="max13digits" pattern="" message=""></regex>
-            </element>-->
-
         </tab>
         &tab_socialinsuranceandtax;
     </fields>

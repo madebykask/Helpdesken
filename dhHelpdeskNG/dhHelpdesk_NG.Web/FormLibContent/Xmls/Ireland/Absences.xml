@@ -3,7 +3,6 @@
   <!ENTITY languages SYSTEM "Templates/Languages.xml">
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
   <!ENTITY state SYSTEM "Templates/AbsencesState.xml">
-  <!ENTITY dat_country SYSTEM "Templates/Data_Country.xml">
 ]>
 
 <form id="166" guid="71B1A263-12E5-427E-855B-B76ABE20F415" customerId="31">
@@ -49,8 +48,7 @@
       <element type="text" name="PermanentAddressLine3" label="Address line 3" formfieldidentifier="E1P0006.POSTA:1"></element>
       <element type="text" name="PermanentPostalCode" label="Postal Code" formfieldidentifier="E1P0006.PSTLZ:1"></element>
       <element type="text" name="PermanentCity" label="City" formfieldidentifier="E1P0006.ORT01:1"></element>
-      <element type="search-select" name="PermanentCountry" label="Country" default="Ireland" formfieldidentifier="E1P0006.LAND1:1">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="PermanentCountry" label="Country" default="Ireland" formfieldidentifier="E1P0006.LAND1:1">
       </element>
       <element type="hidden" name="JobTitle" label="Job Title" formfieldidentifier="E1P0001.STELL"></element>
 

@@ -1,35 +1,27 @@
 ﻿@model ECT.FormLib.Models.FormModel
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
-
-
 @{
-       
     const string ContractType = "Permanent";
-    
 }
-
 <script>
-
+    var ect = new Ect();
     var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');
 
     if ("@Model.ReadOnlyTab("#Payment")" == 'False' && lockedbyUserGroup == 'False') {
 
-
         $(function () {
-
-
             $("#NewBusinessUnit").change(function () {
+                setTimeout(function () {
+                    ect.copyValueFrom($('#NewBusinessUnit'), $('#Primarysite'));
+                }, 30);
 
-                setTimeout(function () { setDefaultPrimarySite() }, 30);
-
-                setTimeout(function () { GetXML('Predefined_BusinessUnit_PositionTitle.xml', narrowDownPositionTitle); }, 1);
-                //setTimeout(function () { GetXML('Predefined_BusinessUnit_JobTitle.xml', narrowDownJobTitle); }, 1);
+                setTimeout(function () {
+                    ect.getRelations('Relation_BusinessUnit_PositionTitle.xml', '', $('#NewBusinessUnit'), $('#PositionTitle'));
+                }, 1);
             });
 
         });
-
-    
 
         function setPaymentDatePickersBehavior() {
 
@@ -57,8 +49,6 @@
       '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3,#DeductionsValidFrom4,#DeductionsValidFrom5,#CalculationStartDate').val(startDate);
         }
 
-        // setPaymentDatePickersBehavior();
-
         $('#date_ChangeValidFrom').on('changeDate', function (ev) {
             setPaymentDatePickersBehavior();
         }).data('datepicker');
@@ -66,8 +56,6 @@
         $('#ChangeValidFrom').change(function () {
             setPaymentDatePickersBehavior();
         });
-
-
 
         $('#ChangeValidFrom').not(".disabled").change(function () {
             SetProbationEndDate($('#ProbationPeriod').val());       
@@ -103,27 +91,9 @@
             $('#date_' + $(this).attr("id")).datepicker("setValue", $(this).val());
         });
 
-        //sg : Week 1-2016 order #53881
-        $("#ReportsToLineManager").change(function () {
-            //SetDefaultTECApprover();
-        });
-
         $("#EmploymentCategory").change(function () {
-
             setEmployeeBehavior($(this).val());
         });
-
-        //var SetDefaultTECApprover = function () {
-        //    var LineManager;
-        //    LineManager = $('#ReportsToLineManager').val();
-
-        //    if ($('#TECapprover')[0].selectize) {
-        //        $('#TECapprover')[0].selectize.setValue(LineManager);
-        //    }
-        //    else {
-        //        $('#TECapprover').val(LineManager);
-        //    }
-        //}
 
         $("#ContractedHours").change(function () {
             GetXML('default_AnnualLeaveEntitlement.xml', SetDefaultAnnualLeave);
@@ -137,28 +107,7 @@
                 $('#ContractType').val('Full Time')
             }
         }
-
-        //var SetDefaultCompany = function () {
-
-        //    if ($("#Company option").length == 2) {
-        //        $("#Company option").eq(1).attr('selected', true);
-        //        $("#Company").change();
-        //    }
-        //}
-
        
-       
-        $("#NewBusinessUnit").change(function () {
-            setDefaultPrimarySite();
-        });
-
-        var setDefaultPrimarySite = function () {
-
-            var bu = $("#NewBusinessUnit").text();
-
-            $("#Primarysite").val(bu)
-        }
-
         $("#NewDepartment").change(function () {
             GetXML('default_costcentre.xml', SetDefaultCostCentre);
         });
@@ -166,150 +115,6 @@
         $("#PositionTitle").change(function () {
             GetXML('default_jobtitle.xml', SetDefaultJobTitle);
         });
-
-        function narrowDownPositionTitle(xml) {
-            //////////
-            //narrowDownJobTitle:
-            //Adds Jobtitles on selected Function
-            //////////
-
-            var show = ''
-            var bus = '';
-
-
-            if (document.getElementById('NewBusinessUnit')) {
-                bus = $("#NewBusinessUnit option:selected").text();
-            }
-
-
-            var jobtitle_value;
-            jobtitle_value = $('#PositionTitle').val();
-
-            $('#PositionTitle').val("");
-
-            var selectize_tags = $("#PositionTitle")[0].selectize
-            selectize_tags.clearOptions();
-
-
-
-            $(xml).find('dependent').each(function () {
-
-
-                var $sel = $(this);
-                show = '';
-
-                var businessunit = $sel.find('selected').text();
-
-                show = $sel.find('show').text();
-
-                if (businessunit == bus) {
-
-                    if (show != '') {
-
-                        show = ' ,' + show;
-
-                        //temp, replace spaces that occours in the beginning of comma separation.
-                        show = show.replace(/\, /g, ",");
-
-                        var optionsarray = show.split(',');
-                        optionsarray.unshift('');
-
-                        //TEMP for Steering Group_Doncaster, Sales (problem with commas in the name) so we use  #
-                        if (show.indexOf("#") > -1) {
-                            $.each(optionsarray, function (i) {
-                                optionsarray[i] = optionsarray[i].replace(/\#/g, ",");
-                            });
-                        }
-
-                        var items = optionsarray.map(function (x) { return { text: x, value: x }; });
-                  
-                        selectize_tags.addOption(items);
-
-
-                        if (jobtitle_value != '') {
-                            selectize_tags.setValue(jobtitle_value);
-
-                        }
-                        else
-                            selectize_tags.setValue('');
-                        return;
-                    }
-                }
-            });
-        }
-
-
-        function narrowDownJobTitle(xml) {
-            //////////
-            //narrowDownJobTitle:
-            //Adds Jobtitles on selected Function
-            //////////
-
-            var show = ''
-            var bus = '';
-
-
-            if (document.getElementById('NewBusinessUnit')) {
-                bus = $("#NewBusinessUnit option:selected").text();
-            }
-
-
-            var jobtitle_value;
-            jobtitle_value = $('#JobTitle').val();
-
-            $('#JobTitle').val("");
-
-            var selectize_tags = $("#JobTitle")[0].selectize
-            selectize_tags.clearOptions();
-
-
-
-            $(xml).find('dependent').each(function () {
-
-
-                var $sel = $(this);
-                show = '';
-
-                var businessunit = $sel.find('selected').text();
-
-                show = $sel.find('show').text();
-
-                if (businessunit == bus) {
-
-                    if (show != '') {
-
-                        show = ' ,' + show;
-
-                        //temp, replace spaces that occours in the beginning of comma separation.
-                        show = show.replace(/\, /g, ",");
-
-                        var optionsarray = show.split(',');
-                        optionsarray.unshift('');
-
-                        //TEMP for Steering Group_Doncaster, Sales (problem with commas in the name) so we use  #
-                        if (show.indexOf("#") > -1) {
-                            $.each(optionsarray, function (i) {
-                                optionsarray[i] = optionsarray[i].replace(/\#/g, ",");
-                            });
-                        }
-
-                        var items = optionsarray.map(function (x) { return { text: x, value: x }; });
-
-                        selectize_tags.addOption(items);
-
-
-                        if (jobtitle_value != '') {
-                            selectize_tags.setValue(jobtitle_value);
-
-                        }
-                        else
-                            selectize_tags.setValue('');
-                        return;
-                    }
-                }
-            });
-        }
-
 
         var SetDefaultCostCentre = function (xml) {
             var functiondepartment;
@@ -388,7 +193,7 @@
         var SetDefaultPaidPer = function () {
             var pay = $('#PayrollCategory').val();
 
-            if (pay == 'Salaried - Monthly' || pay == 'Flex - Monthly') {
+            if (pay == 'Salaried - Monthly' || pay == 'Flex - Monthly' || pay == 'Dual Payroll (ZY)') {
                 $('#PaidPer').val('month');
             }
             else if (pay == 'Salaried - Hourly' || pay == 'Flex - Hourly') {
@@ -409,8 +214,6 @@
                 $('#ContractEndDate').prop('disabled', false);
                 $("#ContractEndDate").removeClass("disabled");
             }
-
-
         }
 
         if ($('#ContractType').val() == '@ContractType') {
@@ -420,8 +223,6 @@
             $('#ContractEndDate').val("");
         }
 
-
-
         $('#date_ContractEndDate').not(".disabled").datepicker().on('changeDate', function (ev) {
             $('#ChangeValidTo').val($('#ContractEndDate').val());
         });
@@ -429,21 +230,14 @@
         $('#ContractEndDate').change(function () {
             $('#ChangeValidTo').val($('#ContractEndDate').val());
         });
-
-
-
-  
     }
     else {
-
         // set Annualleaveentitlement on SSC Use Only Tab via Contracted Houres
         var contracHoures = document.getElementById('ContractedHours').value;
 
         if (contracHoures) {
-
             GetAnnualXML();
         }
-
 
         function GetAnnualXML() {
 
@@ -501,7 +295,6 @@
 
     }
 
-
     function GetXML(xmlFile, url) {
         //////////
         //Gets XML File
@@ -525,6 +318,4 @@
 
         });
     }
-
-
 </script>
