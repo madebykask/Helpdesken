@@ -337,15 +337,16 @@ namespace DH.Helpdesk.Services.Services
                 else if (fieldName == GlobalEnums.TranslationCaseFields.User_Id.ToString())
                 {
                     c.User_Id = null;
-                    c.RegUserId = replaceDataWith;
-                    c.RegUserDomain = replaceDataWith;
-                    c.RegUserName = replaceDataWith;
-                    c.IpAddress = replaceDataWith;
+                    c.RegUserId = ReplaceWith(c.RegUserId, replaceDataWith);
+                    c.RegUserDomain = ReplaceWith(c.RegUserDomain, replaceDataWith);
+                    c.RegUserName = ReplaceWith(c.RegUserName, replaceDataWith);
+                    c.IpAddress = ReplaceWith(c.IpAddress, replaceDataWith);
 
                     //clean logs
                     foreach (var log in c.Logs.ToList())
                     {
                         log.RegUser = replaceDataWith;
+                        log.User_Id = null;
                     }
                 }
                 else if (fieldName == GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())
@@ -565,10 +566,10 @@ namespace DH.Helpdesk.Services.Services
                         else if (fieldName == GlobalEnums.TranslationCaseFields.User_Id.ToString())
                         {
                             caseHistory.User_Id = null;
-                            caseHistory.RegUserId = replaceDataWith;
-                            caseHistory.RegUserDomain = replaceDataWith;
-                            caseHistory.IpAddress = replaceDataWith;
-                            caseHistory.CreatedByUser = replaceDataWith;
+                            caseHistory.RegUserId = ReplaceWith(caseHistory.RegUserId, replaceDataWith);
+                            caseHistory.RegUserDomain = ReplaceWith(caseHistory.RegUserDomain, replaceDataWith);
+                            caseHistory.IpAddress = ReplaceWith(caseHistory.IpAddress, replaceDataWith);
+                            caseHistory.CreatedByUser = ReplaceWith(caseHistory.CreatedByUser, replaceDataWith);
                         }
                         else if (fieldName == GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())
                         {
@@ -632,6 +633,15 @@ namespace DH.Helpdesk.Services.Services
                     }
                 }
             }
+        }
+
+        private string ReplaceWith(string curValue, string resetValue)
+        {
+            if (string.IsNullOrEmpty(curValue))
+            {
+                return curValue;
+            }
+            return resetValue;
         }
 
         private void ProcessExtededCaseData(Case c, IRepository<ExtendedCaseValueEntity> extendedCaseValuesRep, DataPrivacyParameters parameters)
@@ -778,7 +788,7 @@ namespace DH.Helpdesk.Services.Services
 
             return auditData;
         }
-       
+            
         #endregion
     }
 }

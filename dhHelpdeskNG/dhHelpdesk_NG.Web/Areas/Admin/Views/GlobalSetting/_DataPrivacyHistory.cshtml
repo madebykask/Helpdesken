@@ -51,8 +51,8 @@
         var dphTable$ = $('#dph_Table_rows');
         
         this.loadHistory = function () {
-            customerSelect$.prop('disabled', true);
-            progessLoader$.show();
+
+            _self.blockUI(true);
 
             $.getJSON('@Url.Action("GetDataPrivacyHistoryTable")',
                 $.param({ customerId: customerSelect$.val() }),
@@ -65,10 +65,21 @@
                         window.ShowToastMessage(err, "error");
                     }
                 }).always(function (res) {
-                progessLoader$.hide();
-                customerSelect$.prop('disabled', false);
+                    _self.blockUI(false);
             });
-        };
+        },
+
+        this.blockUI = function(block) {
+            if (block) {
+                customerSelect$.prop('disabled', true);
+                customerSelect$.trigger("chosen:updated");
+                progessLoader$.show();
+            } else {
+                customerSelect$.prop('disabled', false);
+                customerSelect$.trigger("chosen:updated");
+                progessLoader$.hide();
+            }
+        }
 
         //public interface
         return {
