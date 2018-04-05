@@ -168,7 +168,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 
 			var globalSetting = _globalSettingService.GetGlobalSettings().First();
 
-			return File(Path.Combine(globalSetting.InvoiceFileFolder, file.Guid.ToString()), "text/plain", file.Name);
+			return File(Path.Combine(globalSetting.InvoiceFileFolder, file.Name), "text/plain", file.Name);
 	    }
 
         [System.Web.Mvc.HttpGet]
