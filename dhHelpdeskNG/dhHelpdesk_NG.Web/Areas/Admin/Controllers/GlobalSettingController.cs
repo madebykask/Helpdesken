@@ -1547,6 +1547,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         }
 
         [GdprAccess]
+        [NoCache]
         public JsonResult GetDataPrivacyHistoryTable(int? customerId)
         {
             var data = _gdprOperationsService.ListGdprOperationsAuditItems(customerId);

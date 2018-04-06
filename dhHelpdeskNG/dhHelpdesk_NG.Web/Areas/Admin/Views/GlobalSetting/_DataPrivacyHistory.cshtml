@@ -44,19 +44,23 @@
 </div>
 
 <script type="text/javascript">
-    window.dataPrivacyHistory = (function () {
+    window.dataPrivacyHistory = (function() {
         var _self = this;
         var customerSelect$ = $('#dph_customerId');
         var progessLoader$ = $('#historyLoader');
         var dphTable$ = $('#dph_Table_rows');
-        
-        this.loadHistory = function () {
 
-            _self.blockUI(true);
+        this.loadHistory = function() {
 
-            $.getJSON('@Url.Action("GetDataPrivacyHistoryTable")',
-                $.param({ customerId: customerSelect$.val() }),
-                function (res) {
+                _self.blockUI(true);
+
+                $.ajax({
+                    url: '@Url.Action("GetDataPrivacyHistoryTable")',
+                    cache: 'false',
+                    type: "POST",
+                    data: $.param({ customerId: customerSelect$.val() }),
+                    dataType: "json"
+                }).done(function(res) {
                     if (res.Success) {
                         dphTable$.html(res.Content);
                     } else {
@@ -66,7 +70,7 @@
                     }
                 }).always(function (res) {
                     _self.blockUI(false);
-            });
+                });
         },
 
         this.blockUI = function(block) {
