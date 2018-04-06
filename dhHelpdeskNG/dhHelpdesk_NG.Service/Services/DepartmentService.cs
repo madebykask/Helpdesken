@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.Domain.Invoice;
+using LinqLib.Sort;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -85,7 +86,12 @@ namespace DH.Helpdesk.Services.Services
         public IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool isOnlyActive = true)
         {
             var departments = _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, isOnlyActive);
-            return departments.Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0) && (isOnlyActive? d.IsActive !=0: true)).ToList();
+            var res = departments.Where(d => d.Region_Id == null ||
+                                             (d.Region != null && d.Region.IsActive != 0) &&
+                                             (!isOnlyActive || d.IsActive != 0))
+                                 .OrderBy(d => d.DepartmentName)
+                                 .ToList();
+            return res;
         }
 
         public List<ItemOverview> GetUserDepartments(int customerId, int? userId, int? regionId, int departmentFilterFormat)

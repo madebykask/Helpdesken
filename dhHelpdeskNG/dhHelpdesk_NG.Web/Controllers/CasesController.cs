@@ -4541,10 +4541,10 @@ namespace DH.Helpdesk.Web.Controllers
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseDepartmentFilter))
             {
                 const bool IsTakeOnlyActive = false;
-                fd.filterDepartment = this._departmentService.GetDepartmentsByUserPermissions(
-                    userId,
-                    cusId,
-                    IsTakeOnlyActive);
+
+                fd.filterDepartment =
+                    _departmentService.GetDepartmentsByUserPermissions(userId, cusId, IsTakeOnlyActive);
+
                 if (!fd.filterDepartment.Any())
                 {
                     fd.filterDepartment =
