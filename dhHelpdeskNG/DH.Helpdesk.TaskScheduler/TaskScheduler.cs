@@ -17,6 +17,8 @@ using log4net.Config;
 using Ninject;
 using Quartz;
 using DH.Helpdesk.TaskScheduler.Dto;
+using Quartz.Listener;
+using Quartz.Impl.Matchers;
 
 namespace DH.Helpdesk.TaskScheduler
 {
@@ -68,16 +70,41 @@ namespace DH.Helpdesk.TaskScheduler
 
 
                 var i = 0;
+                var firstJob = JobBuilder.Create<ImportInitiatorJob>().Build();
+                ITrigger firstTrigger = null;
+                JobKey lastJobKey = null;
+                JobChainingJobListener listener = new JobChainingJobListener("Pipeline Chain");
+                IList<IJobDetail> jobs = new List<IJobDetail>();
                 foreach (var initTrigger in initiatorTriggers)
-                {
+                {                   
                     var initiatorJob =
                         JobBuilder.Create<ImportInitiatorJob>()
                                   .WithIdentity($"{Constants.ImportInitiator_JobName}_{i}")
                                   .Build();
+                    
+                    if (i == 0)
+                    {
+                        firstJob = initiatorJob;
+                        firstTrigger = initTrigger;                        
+                    }
+                    else
+                    {
+                        jobs.Add(initiatorJob);
+                        listener.AddJobChainLink(lastJobKey, initiatorJob.Key);
+                    }
 
-                    _sched.ScheduleJob(initiatorJob, initTrigger);
+                    lastJobKey = initiatorJob.Key;
                     i++;
                 }
+
+                _sched.ListenerManager.AddJobListener(listener, GroupMatcher<JobKey>.GroupEquals("Pipeline"));
+
+                _sched.ScheduleJob(firstJob, firstTrigger);
+                foreach(var _job in jobs)
+                {
+                    _sched.AddJob(_job, false, true);
+                }
+                
             }
 
             /*Job Tracker*/
