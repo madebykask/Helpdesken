@@ -5,6 +5,7 @@ using DH.Helpdesk.BusinessData.Models.Gdpr;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Exceptions;
+using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Common.Serializers;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.NewInfrastructure;
@@ -149,6 +150,8 @@ namespace DH.Helpdesk.Services.Services
                     var extendedCaseValuesRep = uow.GetRepository<ExtendedCaseValueEntity>();
                     var formFieldValueRep = uow.GetRepository<FormFieldValue>();
                     var formFieldValueHistoryRep = uow.GetRepository<FormFieldValueHistory>();
+                    var caseExtendedCaseRep = uow.GetRepository<Case_ExtendedCaseEntity>();
+                    var caseSectionExtendedCaseRep = uow.GetRepository<Case_CaseSection_ExtendedCase>();
 
                     var casesQueryable = rep.GetAll().Where(x => x.Customer_Id == p.SelectedCustomerId);
 
@@ -180,7 +183,7 @@ namespace DH.Helpdesk.Services.Services
                         {
                             ProcessReplaceCasesData(c, caseFiles, logFiles, followers, p);
                             ProcessReplaceCasesHistoryData(c, emailLogs, p);
-                            ProcessExtededCaseData(c, extendedCaseValuesRep, p);
+                            ProcessExtededCaseData(c, caseExtendedCaseRep, caseSectionExtendedCaseRep, extendedCaseValuesRep, p);
                             ProccessFormPlusCaseData(c, formFieldValueHistoryRep, formFieldValueRep);
 
                         }
@@ -661,7 +664,10 @@ namespace DH.Helpdesk.Services.Services
             return resetValue;
         }
 
-        private void ProcessExtededCaseData(Case c, IRepository<ExtendedCaseValueEntity> extendedCaseValuesRep, DataPrivacyParameters parameters)
+        private void ProcessExtededCaseData(Case c, IRepository<Case_ExtendedCaseEntity> caseExtendedCaseRep,
+            IRepository<Case_CaseSection_ExtendedCase> caseSectionExtendedCaseRep,
+            IRepository<ExtendedCaseValueEntity> extendedCaseValuesRep,
+            DataPrivacyParameters parameters)
         {
             var replaceDataWith = parameters.ReplaceDataWith;
             var replaceDatesWith = parameters.ReplaceDatesWith;
@@ -679,6 +685,8 @@ namespace DH.Helpdesk.Services.Services
                         caseData.ExtendedCaseForm.UpdatedOn = replaceDatesWith;
                     }
                 }
+                c.CaseExtendedCaseDatas.Clear();
+                caseExtendedCaseRep.DeleteWhere(ce => ce.Case_Id == c.Id);
             }
 
             if (c.CaseSectionExtendedCaseDatas != null && c.CaseSectionExtendedCaseDatas.Any())
@@ -687,6 +695,8 @@ namespace DH.Helpdesk.Services.Services
                 {
                     CleanExtendedCaseData(extendedCaseValuesRep, caseData.ExtendedCaseData, replaceDataWith, replaceDatesWith);
                 }
+                c.CaseSectionExtendedCaseDatas.Clear();
+                caseSectionExtendedCaseRep.DeleteWhere(cs => cs.Case_Id == c.Id);
             }
 
         }
