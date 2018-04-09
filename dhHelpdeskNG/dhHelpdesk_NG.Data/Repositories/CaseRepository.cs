@@ -385,6 +385,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         private void SetCaseUnreadFlag(int id, int unread = 0)
         {
+            //TODO: refactor to use simple update query without fetching data.
             var cases = this.DataContext.Cases.Single(c => c.Id == id);
             cases.Unread = unread;
             this.Update(cases);

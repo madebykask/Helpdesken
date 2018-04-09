@@ -415,6 +415,8 @@ namespace DH.Helpdesk.Services.Services
                     }).ToArray();
             caseLogs.ForEach(this._logRepository.Add);
             this._logRepository.Commit();
+
+            caseRepository.MarkCaseAsUnread(parentCaseId);
         }
         public void AddParentCaseLogToChildCases(int[] caseIds, CaseLog parentCaseLog)
         {
@@ -555,6 +557,8 @@ namespace DH.Helpdesk.Services.Services
                         }).ToArray();
             caseLogs.ForEach(this._logRepository.Add);
             this._logRepository.Commit();
+
+            caseIds.ForEach(id => caseRepository.MarkCaseAsUnread(id));
         }
 
 	    public void UpdateLogInvoices(List<CaseLog> logs)
