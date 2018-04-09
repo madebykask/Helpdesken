@@ -40,7 +40,10 @@ namespace DH.Helpdesk.TaskScheduler.Jobs
                 {
                     var inputData = _importInitiatorService.ReadCsv(setting, ref _logs);
                     var fieldSettings = _importInitiatorService.GetInitiatorSettings(setting.CustomerId);
+
+                    if(inputData.InputColumns.Any())
                     _importInitiatorService.ImportInitiator(setting, inputData, fieldSettings, ref _logs);
+
                     if (setting.Logging == 1)
                         _importInitiatorService.CreatLogFile(_logs);
                 }

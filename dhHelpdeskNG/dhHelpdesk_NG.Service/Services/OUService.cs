@@ -16,6 +16,8 @@
         IList<OU> GetOUs(int customerId);
         OU GetOU(int id);
 
+        OU GetOUIdByName(string oUName);
+
         DeleteMessage DeleteOU(int id);
 
         void SaveOU(OU ou, out IDictionary<string, string> errors);
@@ -117,5 +119,11 @@
         {
             this._unitOfWork.Commit();
         }
+
+        public OU GetOUIdByName(string oUName)
+        {
+            return this._ouRepository.Get(x => x.Name.ToLower() == oUName.ToLower());
+        }
     }
+   
 }

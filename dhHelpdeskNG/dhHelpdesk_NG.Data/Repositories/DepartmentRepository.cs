@@ -166,7 +166,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public int GetDepartmentId(string departmentName, int customerId)
         {           
-            return this.DataContext.Departments.Where(d => d.DepartmentName == departmentName & d.Customer_Id == customerId).Select(d => d.Id).FirstOrDefault();           
+            return this.DataContext.Departments.Where(d => d.DepartmentName.ToLower() == departmentName.ToLower() 
+                                                      & d.Customer_Id == customerId).Select(d => d.Id).FirstOrDefault();           
         }
     }
 

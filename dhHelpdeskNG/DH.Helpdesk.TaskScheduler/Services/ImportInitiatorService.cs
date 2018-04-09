@@ -23,7 +23,9 @@ namespace DH.Helpdesk.TaskScheduler.Services
     {
 
         const string departmentId = "department_id";
-        const string LanguageId = "languageid";
+        const string region = "region_id";
+        const string extendedinfo = "extendedinfo";
+        const string LanguageId = "language_id";
         const string DivisionId = "division_id";
         const string DomainId = "domain_id";
         const string ComputerUserGroupId = "computerusergroup_id";
@@ -35,6 +37,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
                             LanguageId, DomainId, DivisionId,
                             ComputerUserGroupId,
                             ManagerComputerUserId };
+        private string[] BlockFields = new string[] {
+                           region, extendedinfo};
 
         private readonly IDbQueryExecutorFactory _execFactory;
         private readonly ILog _logger;
@@ -47,6 +51,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
         private readonly ICustomerRepository _customerRepository;
         private readonly ISettingRepository _settingRepository;
         private readonly IRegionRepository _regionRepository;
+        private readonly Helpdesk.Services.Services.IOUService _ouService;
 
 
         //private readonly IFtpFileDownloader _downloader;
@@ -60,7 +65,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
                                        IDomainRepository domainRepository,
                                        ICustomerRepository customerRepository,
                                        ISettingRepository settingRepository,
-                                       IRegionRepository regionRepository
+                                       IRegionRepository regionRepository,
+                                       Helpdesk.Services.Services.IOUService ouService
 
                                       //,IFtpFileDownloader downloader
                                       )
@@ -76,6 +82,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
             _customerRepository = customerRepository;
             _settingRepository = settingRepository;
             _regionRepository = regionRepository;
+            _ouService = ouService;
             //_downloader = downloader;
         }
 
@@ -117,7 +124,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                                 Logging = _cs.LDAPLogLevel,
                                 CreateOrganisation = _cs.LDAPCreateOrganization,
                                 DefaultRegion = _r,
-                                StartTime = "2018-03-06",
+                                StartTime = "2018-04-06",
                                 CronExpression = "0 * 8-22 * * ?",
                                 TimeZone = "",
                                 ImportFormat = "CSV"
@@ -294,7 +301,10 @@ namespace DH.Helpdesk.TaskScheduler.Services
             }
             var multipleFields = fieldSettings.Where(fs => fs.LDAPAttribute.Contains(',')).ToList();
             var ldapFields = fieldSettings.Where(fs => !string.IsNullOrEmpty(fs.LDAPAttribute)).ToList();
+            //ldapFields.RemoveAll(l => BlockFields.Contains(l.ComputerUserField.ToLower()));
+
             var fieldLenght = new FieldLenght();
+            var regionsToAdd = new List<string>();
 
 
             var insertLog = "";
@@ -346,31 +356,38 @@ namespace DH.Helpdesk.TaskScheduler.Services
                     {
                         _csvFieldValue = row.Item2[fs.LDAPAttribute];
                         if (relatedFields.Contains(_dbFieldName))
-                            _csvFieldValue = GetRelatedValue(_dbFieldName, _csvFieldValue, setting.CustomerId, setting.DefaultRegion);                        
+                            _csvFieldValue = GetRelatedValue(_dbFieldName, _csvFieldValue, setting.CustomerId, setting.DefaultRegion, setting.CreateOrganisation);
+                        if (BlockFields.Contains(_dbFieldName))
+                        {
+                            regionsToAdd.Add(_csvFieldValue);
+                            _dbFieldName = string.Empty;
+                        }
                     }
 
                     if (maxLen > 0 && _csvFieldValue.Length > maxLen)
-                        _csvFieldValue = _csvFieldValue.Substring(0, maxLen - 1);                    
-
-                    // Create Script
-                    if (isNew)
+                        _csvFieldValue = _csvFieldValue.Substring(0, maxLen - 1);
+                    if (!string.IsNullOrEmpty(_dbFieldName))
                     {
-                        //Insert
-                        delimiter = fieldNames == "" ? "" : ",";
-                        fieldNames += $"{delimiter}{_dbFieldName}";
-                        fieldValues += (_csvFieldValue == "null") ?
-                                        $"{delimiter}{_csvFieldValue}" :
-                                        $"{delimiter}'{_csvFieldValue}'";               
-                    }
-                    else
-                    {
-                        //Update
-                        delimiter = string.IsNullOrEmpty(updateQuery) ? "" : ",";
-                        var _leftSide = $"{delimiter}{_dbFieldName} = ";
-                        var rightSide = (_csvFieldValue == "null") ? 
-                                        $"{_csvFieldValue}" : 
-                                        $"'{_csvFieldValue}'";
-                        updateQuery += (_leftSide + rightSide);                    
+                        // Create Script
+                        if (isNew)
+                        {
+                            //Insert
+                            delimiter = fieldNames == "" ? "" : ",";
+                            fieldNames += $"{delimiter}{_dbFieldName}";
+                            fieldValues += (_csvFieldValue == "null") ?
+                                            $"{delimiter}{_csvFieldValue}" :
+                                            $"{delimiter}'{_csvFieldValue}'";
+                        }
+                        else
+                        {
+                            //Update
+                            delimiter = string.IsNullOrEmpty(updateQuery) ? "" : ",";
+                            var _leftSide = $"{delimiter}{_dbFieldName} = ";
+                            var rightSide = (_csvFieldValue == "null") ?
+                                            $"{_csvFieldValue}" :
+                                            $"'{_csvFieldValue}'";
+                            updateQuery += (_leftSide + rightSide);
+                        }
                     }
                 } //for each LDAP Attr
 
@@ -405,6 +422,10 @@ namespace DH.Helpdesk.TaskScheduler.Services
                          }
                 }                
             }
+
+            if (regionsToAdd.Any())
+                CreateRegions(regionsToAdd, setting.CustomerId, setting.CreateOrganisation);
+
             inserted += string.IsNullOrEmpty(inserted) ?
             $"There was no New Initiator." : inserted;
             var insertText = $"{DateTime.Now} Number of inserted inisitator is {iCount}. UserIds are: {inserted} \r\n {insertLog}";
@@ -418,14 +439,14 @@ namespace DH.Helpdesk.TaskScheduler.Services
 
         }
 
-        private string GetRelatedValue(string fieldName, string forignKey, int customerId , int? regionId)
+        private string GetRelatedValue(string fieldName, string forignKey, int customerId , int? regionId, int createOrganisation)
         {            
             switch (fieldName)
             {
-                case departmentId:
-                    var depId = _departmentRepository.GetDepartmentId(forignKey, customerId);
-                    var InsertedDepId = CreateDepartment(forignKey, customerId, regionId).ToString();
-                    return depId == 0 ? InsertedDepId : depId.ToString();
+                               
+                case departmentId:                   
+                    var depId = GetDepartmentId(forignKey, customerId, regionId, createOrganisation);
+                    return depId == 0 ? "null" : depId.ToString();
                     
                 case LanguageId:                   
                     var langId = _languageRepository.GetLanguageIdByText(forignKey);
@@ -448,8 +469,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
                     break;
 
                 case OUId:
-                    //To do Write function to get
-                    break;
+                    var ouId = GetOUId(forignKey, createOrganisation);
+                    return ouId == 0 ? "null" : ouId.ToString();
             }
 
             return string.Empty;
@@ -499,8 +520,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                     logs.Add(customerId, $"Number of Initiators Deleted : {InitiatorIds.Count()}");
             }
         }
-
-
+    
         public void CreatLogFile(DataLogModel _logs)
         {
             //var _logs = new DataLogModel();
@@ -538,11 +558,40 @@ namespace DH.Helpdesk.TaskScheduler.Services
             }
         }
 
-       public int CreateDepartment(string departmentName, int customerId, int? regionId)
+        private void CreateRegions(List<string> regionNames, int customerId, int createOrganisation)
+        {
+            if (createOrganisation != 0) { 
+            var dbQueryExecutor = _execFactory.Create();
+            var ret = 0;
+                regionNames.Distinct();
+                foreach (var regionName in regionNames)
+                {
+                    var query = $"IF NOT EXISTS(SELECT 1 FROM tblRegion WHERE " +
+                                $"Region = '{regionName}' and Customer_Id = {customerId} )" +
+                                $"BEGIN " +
+                                $"Insert into tblRegion (Region, Customer_Id)" +
+                                $"Values ('{regionName}', {customerId})" +
+                                $"END";                 
+                       
+                    ret = dbQueryExecutor.ExecQuery(query);
+                }
+           }
+
+        }
+        public int GetDepartmentId(string departmentName, int customerId, int? regionId, int createOrganisation)
+        {
+            var depId = _departmentRepository.GetDepartmentId(departmentName.Trim().ToLower(), customerId);
+            if (depId == 0 && createOrganisation != 0)
+            {
+                depId = CreateDepartment(departmentName, customerId, regionId);
+            }
+            return depId;
+        }
+        public int CreateDepartment(string departmentName, int customerId, int? regionId)
         {
             var department = new Domain.Department();
 
-            department.DepartmentName = departmentName;
+            department.DepartmentName = departmentName.Trim();
             department.Customer_Id = customerId;
             department.Region_Id = regionId;
             department.HeadOfDepartment = string.Empty;
@@ -562,11 +611,45 @@ namespace DH.Helpdesk.TaskScheduler.Services
             department.DepartmentGUID = Guid.NewGuid();
 
             _departmentRepository.Add(department);
+            _departmentRepository.Commit();
 
             var depId = _departmentRepository.GetDepartmentId(departmentName, customerId);
 
             return depId;
         }
+        private int GetOUId(string OUName, int createOrganisation)
+        {
+            var oU = _ouService.GetOUIdByName(OUName.Trim());
+            var ouId = 0;
+            if (oU != null)
+                ouId = oU.Id;
+
+            if (oU == null && createOrganisation != 0)
+            {
+                ouId = CreateOU(OUName);
+            }
+            return ouId;
+        }
+
+        private int CreateOU(string OUName)
+        {     
+            var dbQueryExecutor = _execFactory.Create();
+            var ret = 0;
+                           
+            var query = $"Insert into tblOU (OU, Department_Id)" +
+                        $"Values ('{OUName}', NULL)";
+            ret = dbQueryExecutor.ExecQuery(query);
+
+            var ou = _ouService.GetOUIdByName(OUName.Trim());
+            var ouId = 0;
+            if (ou != null)
+                ouId = ou.Id;
+
+
+            return ouId;
+        }
+
+
     }
 
 
@@ -589,5 +672,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
         void CreatLogFile(DataLogModel _logs);
 
         int CreateDepartment(string departmentName, int customerId, int? regionId);
+
+        int GetDepartmentId(string departmentName, int customerId, int? regionId, int createOrganisation);
     }
 }

@@ -52,6 +52,9 @@ namespace DH.Helpdesk.TaskScheduler.DI
             Bind<ICustomerRepository>().To<CustomerRepository>();
             Bind<ISettingRepository>().To<SettingRepository>();
             Bind<IRegionRepository>().To<RegionRepository>();
+            Bind<IOrganizationUnitRepository>().To<Dal.Repositories.Concrete.OrganizationUnitRepository>();
+            Bind<Helpdesk.Services.Services.IOUService>().To<Helpdesk.Services.Services.OUService>();
+            Bind<IUnitOfWork>().To<UnitOfWork>();
 
             Bind<IBusinessModelToEntityMapper<CaseNotifier, ComputerUser>>()
                 .To<CaseNotifierToEntityMapper>().InSingletonScope();
