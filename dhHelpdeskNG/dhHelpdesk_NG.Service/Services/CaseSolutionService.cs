@@ -272,9 +272,7 @@ namespace DH.Helpdesk.Services.Services
         public IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case case_, IList<CaseSolutionOverview> caseSolutions, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId)
         {
             var solutionsIds = caseSolutions.Where(x => x.ConnectedButton == 0).Select(x => x.CaseSolutionId).ToList();
-
-            var caseSolutionsConditions = 
-                _caseSolutionRepository.GetCaseSolutionsConditions(solutionsIds);
+            var caseSolutionsConditions = _caseSolutionRepository.GetCaseSolutionsConditions(solutionsIds);
 
             var modelList = new List<WorkflowStepModel>();
             var workflowStepsContext = new WorkflowConditionsContext
@@ -287,9 +285,14 @@ namespace DH.Helpdesk.Services.Services
                 IsRelatedCase = isRelatedCase
             };
 
-            foreach (var cs in caseSolutionsConditions)
+            foreach (var cs in caseSolutions)
             {
-                workflowStepsContext.CaseSolution = cs;
+                // load conditions for solutions from the loaded list (perf optimisation)
+                var solutionConditions = caseSolutionsConditions.FirstOrDefault(x => x.CaseSolutionId == cs.CaseSolutionId);
+
+                //set conditions to process
+                workflowStepsContext.Conditions = solutionConditions?.Conditions;
+
                 var res = ShowWorkflowStep(workflowStepsContext);
                 if (res)
                 {
@@ -301,8 +304,8 @@ namespace DH.Helpdesk.Services.Services
 
                         //If value exist in NextStepState - use it. Otherwise check if caseSolution.StateSecondary_id have value, otherwise return 0;
                         NextStep = cs.NextStepState ?? (cs.StateSecondary?.StateSecondaryId ?? 0) 
-
                     };
+
                     modelList.Add(workFlowStepModel);
                 }
             }
@@ -315,17 +318,17 @@ namespace DH.Helpdesk.Services.Services
         private bool ShowWorkflowStep(WorkflowConditionsContext ctx)
         {
             var _case = ctx.Case;
-            var caseSolution = ctx.CaseSolution;
+            var conditions = ctx.Conditions ?? new List<CaseSolutionConditionOverview>();
             var user = ctx.User; 
 
             //ALL conditions must be met
             var showWorkflowStep = false;
 
             //If no conditions are set in (CaseSolutionCondition) for the template, do not show step in list
-            if (caseSolution.Conditions == null || caseSolution.Conditions.Count() == 0)
+            if (!conditions.Any())
                 return false;
 
-            foreach (var condition in caseSolution.Conditions)
+            foreach (var condition in conditions)
             {
                 var conditionValue = condition.Values.Tidy().ToLower();
                 var conditionKey = condition.Property.Tidy();
@@ -1900,7 +1903,7 @@ namespace DH.Helpdesk.Services.Services
         {
             public int CustomerId { get; set; }
             public Case Case { get; set; }
-            public CaseSolutionOverview CaseSolution { get; set; }
+            public List<CaseSolutionConditionOverview> Conditions { get; set; }
             public UserOverview User { get; set; } 
             public ApplicationType ApplicationType { get; set; }
             public int? TemplateId { get; set; }
