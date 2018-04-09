@@ -469,7 +469,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
-            strBld.AppendLine(@"SELECT _case.Id FROM tblCase _case  WITH (NOLOCK, INDEX(IX_tblCase_Customer_Id)) ");
+            strBld.AppendLine(@"SELECT _case.Id FROM tblCase _case  WITH (NOLOCK) ");
             strBld.AppendLine(@"  INNER JOIN tblCustomer ON tblCustomer.Id = _case.Customer_Id ");
             strBld.AppendLine(@"  INNER JOIN tblCustomerUser ON tblCustomerUser.Customer_Id = tblCustomer.Id");
             strBld.AppendFormat("WHERE _case.Customer_Id = {0} ", customerId).AppendLine();
@@ -497,7 +497,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var strBld = new StringBuilder();
 
             strBld.AppendLine(@"SELECT Case_Id FROM tblCaseIsAbout caseIsAbout ");
-            strBld.AppendLine(@"  INNER JOIN tblCase ON tblCase.Id = caseIsAbout.Case_Id ");
+            strBld.AppendLine(@"  INNER JOIN tblCase WITH (nolock) ON tblCase.Id = caseIsAbout.Case_Id ");
             strBld.AppendFormat("WHERE tblCase.Customer_Id = {0} ", customerId).AppendLine();
             strBld.AppendLine(" AND (");
 
@@ -515,8 +515,8 @@ namespace DH.Helpdesk.Dal.Repositories
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
 
-            strBld.AppendLine(@"SELECT Case_Id FROM tblLog WITH (NOLOCK, INDEX(IX_tblLog_Case_Id))");
-            strBld.AppendLine(@"  INNER JOIN tblCase ON tblLog.Case_Id = tblCase.Id ");
+            strBld.AppendLine(@"SELECT Case_Id FROM tblLog WITH (NOLOCK)");
+            strBld.AppendLine(@"  INNER JOIN tblCase WITH (nolock) ON tblLog.Case_Id = tblCase.Id ");
             strBld.AppendLine(@"  INNER JOIN tblCustomer ON tblCustomer.Id = tblCase.Customer_Id ");
             strBld.AppendLine(@"  INNER JOIN tblCustomerUser ON tblCustomerUser.Customer_Id = tblCustomer.Id");
             strBld.AppendLine("WHERE ");
@@ -545,7 +545,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var strBld = new StringBuilder();
 
             strBld.AppendLine(@"SELECT caseDep.Id FROM tblDepartment dep ");
-            strBld.AppendLine("  INNER JOIN tblCase caseDep ON dep.Id = caseDep.Department_Id ");
+            strBld.AppendLine("  INNER JOIN tblCase caseDep WITH (nolock) ON dep.Id = caseDep.Department_Id ");
             strBld.AppendFormat("WHERE caseDep.Customer_Id = {0} ", customerId).AppendLine();
             strBld.AppendLine(" AND (");
             var items = BuildFreeTextConditionsFor(freeText, _freeTextDepartmentConditionFields);
@@ -562,8 +562,8 @@ namespace DH.Helpdesk.Dal.Repositories
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
 
-            strBld.AppendLine(@"select tblCase.Id from tblCase WITH (NOLOCK, INDEX(IX_tblCase_Customer_Id)) ");
-            strBld.AppendLine(@"  INNER JOIN tblFormFieldValue WITH (NOLOCK, FORCESEEK, INDEX([IX_tblFormFieldValue_Case_Id])) ON tblCase.Id = tblFormFieldValue.Case_Id ");
+            strBld.AppendLine(@"select tblCase.Id from tblCase WITH (NOLOCK) ");
+            strBld.AppendLine(@"  INNER JOIN tblFormFieldValue WITH (NOLOCK) ON tblCase.Id = tblFormFieldValue.Case_Id ");
             strBld.AppendLine(@"  INNER JOIN tblCustomer ON tblCustomer.Id = tblCase.Customer_Id ");
             strBld.AppendLine(@"  INNER JOIN tblCustomerUser ON tblCustomerUser.Customer_Id = tblCustomer.Id");
             strBld.AppendLine("WHERE ");
@@ -604,7 +604,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
             #region adding tables into FROM section
 
-            tables.Add("from tblCase WITH ( NOLOCK, INDEX(IX_tblCase_Customer_Id)) ");
+            tables.Add("from tblCase WITH (NOLOCK) ");
             tables.Add("inner join tblCustomer on tblCase.Customer_Id = tblCustomer.Id ");
             
             if (ctx.Criterias.SearchFilter.IsExtendedSearch == false)
@@ -612,8 +612,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
             if (ctx.UseFreeTextCaseSearchCTE)
             {
-                tables.Add("LEFT JOIN (SELECT DISTINCT TOP(2000000) sfr.CaseId " +
-                           "           FROM SearchFreeTextFilter sfr ORDER BY sfr.CaseId) freeTextSearchResults ON tblCase.Id = freeTextSearchResults.CaseId");
+                tables.Add("LEFT JOIN (SELECT DISTINCT sfr.CaseId " +
+                           "           FROM SearchFreeTextFilter sfr) freeTextSearchResults ON tblCase.Id = freeTextSearchResults.CaseId");
             }
 
             tables.Add("left outer join tblDepartment on tblDepartment.Id = tblCase.Department_Id ");

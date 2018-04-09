@@ -236,6 +236,90 @@ BEGIN
 END
 GO
 
+
+-- Search fix
+-- .176
+RAISERROR('Creating index IX_tblCase_Customer', 10, 1) WITH NOWAIT
+if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer')
+	DROP INDEX [IX_tblCase_Customer] ON [dbo].[tblCase]
+GO
+CREATE NONCLUSTERED INDEX [IX_tblCase_Customer] ON [dbo].[tblCase]
+(
+	[Customer_Id] ASC
+)
+INCLUDE ( 	[Id]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+
+RAISERROR('Creating index IX_tblCase_Customer_Department', 10, 1) WITH NOWAIT
+if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Department')
+	DROP INDEX [IX_tblCase_Customer_Department] ON [dbo].[tblCase]
+GO
+CREATE NONCLUSTERED INDEX [IX_tblCase_Customer_Department] ON [dbo].[tblCase]
+(
+	[Customer_Id] ASC
+)
+INCLUDE ( 	[Id],
+	[Department_Id]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+
+
+RAISERROR('Creating index IX_tblCase_Customer_Id', 10, 1) WITH NOWAIT
+if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Id')
+	DROP INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
+GO
+CREATE NONCLUSTERED INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
+(
+	[Customer_Id] ASC,
+	[FinishingDate] ASC,
+	[WorkingGroup_Id] ASC,
+	[Deleted] ASC,
+	[Department_Id] ASC,
+	[Id] ASC,
+	[RegTime] ASC
+)
+INCLUDE ( 	[Casenumber],
+	[Place],
+	[UserCode]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	
+RAISERROR('Creating index IX_tblCase_Id_DepartmentId', 10, 1) WITH NOWAIT
+if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Id_DepartmentId')
+	DROP INDEX [IX_tblCase_Id_DepartmentId] ON [dbo].[tblCase]
+GO	
+/****** Object:  Index [IX_tblCase_Id_DepartmentId]    Script Date: 2018-03-20 12:46:29 ******/
+CREATE NONCLUSTERED INDEX [IX_tblCase_Id_DepartmentId] ON [dbo].[tblCase]
+(
+	[Id] ASC,
+	[Department_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+
+RAISERROR('Creating index IX_tblCustomer_new', 10, 1) WITH NOWAIT
+if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCustomer_new')
+	DROP INDEX [IX_tblCustomer_new] ON [dbo].[tblCustomer]
+GO	
+/****** Object:  Index [IX_tblCustomer_new]    Script Date: 2018-03-20 12:42:18 ******/
+CREATE NONCLUSTERED INDEX [IX_tblCustomer_new] ON [dbo].[tblCustomer]
+(
+	[Id] ASC,
+	[Name] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 95) ON [PRIMARY]
+GO
+
+RAISERROR('Creating index IX_tblDepartment_new', 10, 1) WITH NOWAIT
+if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblDepartment_new')
+	DROP INDEX [IX_tblDepartment_new] ON [dbo].[tblDepartment]
+GO	
+/****** Object:  Index [IX_tblDepartment_new]    Script Date: 2018-03-20 13:06:57 ******/
+CREATE NONCLUSTERED INDEX [IX_tblDepartment_new] ON [dbo].[tblDepartment]
+(
+	[Id] ASC,
+	[DepartmentId] ASC,
+	[Department] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.36'
 --ROLLBACK --TMP
