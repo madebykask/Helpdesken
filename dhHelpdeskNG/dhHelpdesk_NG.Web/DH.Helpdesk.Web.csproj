@@ -1101,6 +1101,8 @@
     <Content Include="Content\js\Feedback\feedback.edit.js" />
     <Content Include="Content\js\Feedback\feedbackStatisticsCases.js" />
     <Content Include="Content\js\Inventory\inventory.search.js" />
+    <Content Include="Content\js\moment.js" />
+    <Content Include="Content\js\moment.min.js" />
     <Content Include="Content\js\Shared\commonUtils.js" />
     <Content Include="Content\js\Shared\errors.js" />
     <Content Include="Content\js\Shared\jquery.customAjax.js" />
