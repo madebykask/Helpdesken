@@ -106,7 +106,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 {
                     FirstName = x.WorkingGroup.WorkingGroupName,
                     SurName = string.Empty,
-                    Emails = x.UserWorkingGroups.Select(r => r.User.Email).ToList(),
+                    Emails = string.IsNullOrWhiteSpace(x.WorkingGroup.EMail) ? x.UserWorkingGroups.Select(r => r.User.Email).ToList() : new List<string> { x.WorkingGroup.EMail },
                     GroupType = CaseUserSearchGroup.WorkingGroup,
                     DepartmentName = string.Empty
                 })
