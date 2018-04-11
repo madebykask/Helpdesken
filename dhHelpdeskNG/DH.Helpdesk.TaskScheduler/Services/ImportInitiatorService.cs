@@ -291,14 +291,14 @@ namespace DH.Helpdesk.TaskScheduler.Services
         public void ImportInitiator(ImportInitiator_JobSettings setting, CsvInputData inputData, IList<CompuerUsersFieldSetting> fieldSettings, ref DataLogModel logs)
         {
             var isOverwrite = Convert.ToBoolean(setting.OverwriteFromMasterDirectory);
-            var deletingDays = setting.Days2WaitBeforeDelete;
+            //var deletingDays = setting.Days2WaitBeforeDelete;
 
-            if (deletingDays > 0)
-            {
-                //Delete
-                DeleteInitiators(deletingDays, setting.CustomerId, ref logs);
+            //if (deletingDays > 0)
+            //{
+            //    //Delete
+            //    DeleteInitiators(deletingDays, setting.CustomerId, ref logs);
                 
-            }
+            //}
             var multipleFields = fieldSettings.Where(fs => fs.LDAPAttribute.Contains(',')).ToList();
             var ldapFields = fieldSettings.Where(fs => !string.IsNullOrEmpty(fs.LDAPAttribute)).ToList();
             //ldapFields.RemoveAll(l => BlockFields.Contains(l.ComputerUserField.ToLower()));

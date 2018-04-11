@@ -41,7 +41,13 @@ namespace DH.Helpdesk.TaskScheduler.Jobs
                     var inputData = _importInitiatorService.ReadCsv(setting, ref _logs);
                     var fieldSettings = _importInitiatorService.GetInitiatorSettings(setting.CustomerId);
 
-                    if(inputData.InputColumns.Any())
+                    var deletingDays = setting.Days2WaitBeforeDelete;
+
+                    //Delete
+                    if (deletingDays > 0)                                            
+                        _importInitiatorService.DeleteInitiators(deletingDays, setting.CustomerId, ref _logs);                    
+
+                    if (inputData.InputColumns.Any())
                     _importInitiatorService.ImportInitiator(setting, inputData, fieldSettings, ref _logs);
 
                     if (setting.Logging == 1)
