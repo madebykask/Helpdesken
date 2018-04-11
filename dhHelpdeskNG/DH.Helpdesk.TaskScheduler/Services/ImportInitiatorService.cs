@@ -399,7 +399,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                         :
                         ((isOverwrite) ?
                         $"Update tblComputerUsers SET {updateQuery} " +
-                                      $",ChangeTime = '{DateTime.UtcNow}' " +
+                                      $",ChangeTime = '{DateTime.Now}' " +
                                       $",SyncChangedDate = '{DateTime.UtcNow}' " +
                                       $"where id = {existingId}": string.Empty);
 
