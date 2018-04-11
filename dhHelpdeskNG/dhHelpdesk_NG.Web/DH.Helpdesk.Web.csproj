@@ -643,6 +643,8 @@
     </Content>
     <Content Include="Content\icons\case_locked.png" />
     <Content Include="Content\icons\case_log_new.png" />
+    <Content Include="Content\icons\lock.png" />
+    <Content Include="Content\icons\unlock.png" />
     <Content Include="Content\img\ajax-loader.GIF" />
     <Content Include="Content\img\clickmultimenu-1.png" />
     <Content Include="Content\img\clickmultimenu-2.png" />
