@@ -3,7 +3,7 @@
     <status value="0">
         <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
-      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
+      <!--<readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>-->
         <actions>
             <action status="30" internal-val="30" text="Submit Service Request to SSC">
                 <validateTabs>#ServiceRequestDetails,#Payment</validateTabs>
@@ -19,7 +19,7 @@
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#Payment,#attachments</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
-      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
+      <!--<readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>-->
         <actions>
             <action status="20" internal-val="20" text="Submit to HR Unit">
                 <validateTabs>#ServiceRequestDetails,#Payment</validateTabs>
@@ -35,7 +35,7 @@
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#Payment,#attachments,#documents</visibleTabs>
         <readOnlyTabs></readOnlyTabs>
-      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
+      <!--<readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>-->
         <actions>
             <action status="10" internal-val="10" text="Send back to Line Manager"></action>
             <action status="30" internal-val="30" text="Submit Service Request to SSC">
@@ -52,7 +52,7 @@
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#Payment,#attachments,#documents,#SSCUseOnly</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
-      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
+      <!--<readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>-->
         <actions>
             <action status="40" internal-val="40" text="Validity check OK"></action>
             <action status="20" internal-val="20" text="Validity check not OK"></action>
@@ -67,7 +67,7 @@
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#Payment,#attachments,#documents,#SSCUseOnly</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Payment</readOnlyTabs>
-      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
+      <!--<readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>-->
         <actions>
             <action status="60" internal-val="60" text="Global View update"></action>
             <action status="99" internal-val="70" text="Cancel Service Request"></action>
@@ -80,7 +80,7 @@
         </userGroup>
         <visibleTabs>#ServiceRequestDetails,#Payment,#attachments,#documents,#SSCUseOnly</visibleTabs>
         <readOnlyTabs>#ServiceRequestDetails,#Payment,#SSCUseOnly</readOnlyTabs>
-      <readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>
+      <!--<readOnlyFields>Company,BusinessUnit,ServiceArea,Department</readOnlyFields>-->
         <actions>
         </actions>
     </status>

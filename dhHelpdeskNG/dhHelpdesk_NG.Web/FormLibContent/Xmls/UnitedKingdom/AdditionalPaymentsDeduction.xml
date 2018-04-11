@@ -32,10 +32,26 @@
       <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1">
         
       </element>
-      <element name="Company" type="text" label="Company"></element>
-      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element>
-      <element name="ServiceArea" type="text" label="Function"></element>
-      <element name="Department" type="text" label="Department"></element>
+      <element name="Company" type="select" source="database" label="Company">
+        <options>
+          <option value=""></option>
+        </options>
+      </element>
+      <element name="BusinessUnit" type="select" source="database" label="Business Unit" mandatory="1">
+        <options>
+          <option value=""></option>
+        </options>
+      </element>
+      <element name="ServiceArea" type="select" source="database" label="Function">
+        <options>
+          <option value=""></option>
+        </options>
+      </element>
+      <element name="Department" type="select" source="database" label="Department">
+        <options>
+          <option value=""></option>
+        </options>
+      </element>
       <element name="ChangeValidFrom" type="date" label="Change Valid from:" mandatory="1" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
