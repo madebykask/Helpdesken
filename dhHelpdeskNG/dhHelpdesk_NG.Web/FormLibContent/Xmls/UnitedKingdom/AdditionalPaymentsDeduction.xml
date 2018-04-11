@@ -21,15 +21,15 @@
 
     <!--Tab ServiceRequestDetails-->
     <tab name="#ServiceRequestDetails" label="Service Request Details">
-      <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
+      <element name="EmployeeNumber" type="text" label="Co-Worker Globalview ID" mandatory="1">
         <regex inherit="employeeno" message="" pattern=""></regex>
       </element>
-      <element name="FirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
-      <element name="LastName" type="text" label="Co-Worker Last Name" mandatory="1"></element>
-      <element name="IKEAEmailAddress" type="text" label="IKEA Email Address">
+      <element name="EmployeeFirstName" type="text" label="Co-Worker First Name" mandatory="1"></element>
+      <element name="EmployeeLastName" type="text" label="Co-Worker Last Name" mandatory="1"></element>
+      <element name="IKEAEmailAddress1" type="text" label="IKEA Email Address">
         <regex inherit="email" message="" pattern=""></regex>
       </element>
-      <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1">
+      <element name="IKEANetworkID1" type="text" label="IKEA Network ID" mandatory="1">
         
       </element>
       <element name="Company" type="select" source="database" label="Company">
