@@ -65,6 +65,7 @@ namespace DH.Helpdesk.Dal.Repositories.CaseDocument.Concrete
                     FileType = caseDoc.FileType,
                     SortOrder = caseDoc.SortOrder,
                     Status = caseDoc.Status,
+                    CaseDocumentTemplate = caseDoc.CaseDocumentTemplate,
                     CaseDocumentParagraphs =
                         caseDoc.CaseDocumentParagraphs.Select(x => new CaseDocumentParagraphModel()
                             {
