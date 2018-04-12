@@ -59,13 +59,15 @@
     mainFakeInput.html(getHtmlFromEmails(mainInput.val()));
 
     mainFakeInput.typeahead(getUserSearchOptions(mainInput, mainFakeInput, popupInput));
-
-    mainFakeInput.keydown(function (e) {
-        if (e.keyCode === 8 || e.keyCode === 46) {
+    mainFakeInput.keydown(function(e) {
+        if (e.which === 8 || e.which === 46) {
             onRemoveKeyDown(e, mainFakeInput, mainInput);
         }
-        if (e.keyCode === 13 || e.keyCode === 186 ||
-            e.keyCode === 59) {
+    });
+
+    mainFakeInput.keypress(function (e) {
+        if (e.which === 13 || e.which === 186 ||
+            e.which === 59) {
             processEmails(e, mainFakeInput, mainInput);
         }
     });
@@ -81,11 +83,14 @@
     popupInput.typeahead(getUserSearchOptions(mainInput, mainFakeInput, popupInput));
 
     popupInput.keydown(function (e) {
-        if (e.keyCode === 8 || e.keyCode === 46) {
+        if (e.which === 8 || e.which === 46) {
             onRemoveKeyDown(e, popupInput, mainInput);
         }
-        if (e.keyCode === 13 || e.keyCode === 186 ||
-            e.keyCode === 59) {
+    });
+
+    popupInput.keypress(function(e) {
+        if (e.which === 13 || e.which === 186 ||
+            e.which === 59) {
             processEmails(e, popupInput, mainInput);
         }
     });
@@ -124,12 +129,12 @@
     }
 
     function processEmails(e, fakeInput, mainInput) {
-        if (e.keyCode === 13 && searchSelected)
+        if (e.which === 13 && searchSelected)
             return;
         e.preventDefault();
         e.stopImmediatePropagation();
-        if (e.keyCode === 13 || e.keyCode === 186 ||
-            e.type === 'blur' || e.keyCode === 59) {
+        if (e.which === 13 || e.which === 186 ||
+            e.type === 'blur' || e.which === 59) {
             var emails = $(e.target).html();
             var arr = getEmailsFromHtml(emails);
             for (var i = 0; i < arr.length; i++) {
@@ -153,7 +158,7 @@ function onRemoveKeyDown(e, fakeInput, mainInput) {
     var text = mainInput.val();
     var email = getEmailsToRemove();
     if (email === "&nbsp;" || email.trim() === "") {
-        if (e.keyCode !== 46) {
+        if (e.which !== 46) {
             var arr = text.split(";");
             var lastEmail = arr[arr.length - 2];
             if (lastEmail) {

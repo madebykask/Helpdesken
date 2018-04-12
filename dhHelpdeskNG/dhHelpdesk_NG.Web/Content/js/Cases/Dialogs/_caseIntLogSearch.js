@@ -88,9 +88,9 @@
 
     popupIntLogInput.typeahead(getCasesIntLogEmailSearchOptions());
 
-    popupIntLogInput.keydown(function (e) {
-        if (e.keyCode === 13 || e.keyCode === 186 ||
-            e.keyCode === 59) {
+    popupIntLogInput.keypress(function (e) {
+        if (e.which === 13 || e.which === 186 ||
+            e.which === 59) {
             if (dialogType === 1) {
                 processEmails(e, popupIntLogInput, mainIntLogInputTo);
             }
@@ -101,7 +101,7 @@
     });
 
     popupIntLogInput.keydown(function (e) {
-        if (e.keyCode === 8 || e.keyCode === 46) {
+        if (e.which === 8 || e.which === 46) {
             if (dialogType === 1) {
                 onRemoveKeyDown(e, popupIntLogInput, mainIntLogInputTo);
             }
@@ -121,16 +121,16 @@
 
     fakeInputTo.typeahead(getCasesIntLogEmailSearchOptions());
 
-    fakeInputTo.keydown(function (e) {
-        if (e.keyCode === 13 || e.keyCode === 186 ||
-            e.keyCode === 59) {
+    fakeInputTo.keypress(function (e) {
+        if (e.which === 13 || e.which === 186 ||
+            e.which === 59) {
             processEmails(e, fakeInputTo, mainIntLogInputTo);
         }
     });
 
     fakeInputTo.keydown(function (e) {
         dialogType = toType;
-        if (e.keyCode === 8 || e.keyCode === 46) {
+        if (e.which === 8 || e.which === 46) {
             onRemoveKeyDown(e, fakeInputTo, mainIntLogInputTo);
         }
     });
@@ -145,16 +145,16 @@
 
     fakeInputCc.typeahead(getCasesIntLogEmailSearchOptions());
 
-    fakeInputCc.keydown(function (e) {
-        if (e.keyCode === 13 || e.keyCode === 186 ||
-            e.keyCode === 59) {
+    fakeInputCc.keypress(function (e) {
+        if (e.which === 13 || e.which === 186 ||
+            e.which === 59) {
             processEmails(e, fakeInputCc, mainIntLogInputCc);
         }
     });
 
     fakeInputCc.keydown(function (e) {
         dialogType = ccType;
-        if (e.keyCode === 8 || e.keyCode === 46) {
+        if (e.which === 8 || e.which === 46) {
             onRemoveKeyDown(e, fakeInputCc, mainIntLogInputCc);
         }
     });
@@ -173,12 +173,12 @@
     }
 
     function processEmails(e, fakeInput, mainInput) {
-        if (e.keyCode === 13 && searchSelected)
+        if (e.which === 13 && searchSelected)
             return;
         e.preventDefault();
         e.stopImmediatePropagation();
-        if (e.keyCode === 13 || e.keyCode === 186 ||
-            e.type === 'blur' || e.keyCode === 59) {
+        if (e.which === 13 || e.which === 186 ||
+            e.type === 'blur' || e.which === 59) {
             var emails = $(e.target).html();
             var arr = getEmailsFromHtml(emails);
             for (var i = 0; i < arr.length; i++) {
