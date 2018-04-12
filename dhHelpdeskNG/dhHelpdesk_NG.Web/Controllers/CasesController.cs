@@ -5271,18 +5271,18 @@ namespace DH.Helpdesk.Web.Controllers
                 var canDelete = (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1);
                 m.SavedFiles = canDelete ? string.Empty : m.CaseFileNames;
 
-                var caseFiles = _caseFileService.GetCaseFiles(caseId, canDelete).OrderBy(x => x.CreatedDate);
+                m.CaseFilesModel = new CaseFilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.GetCaseFiles(caseId, canDelete).OrderBy(x => x.CreatedDate).ToArray(), m.SavedFiles, UseVD);
 
-                m.CaseFilesModel = new CaseFilesModel(caseId.ToString(), caseFiles.ToArray(), m.SavedFiles, UseVD);
-
-                m.CaseAttachedExFiles = 
-                    caseFiles.Select(x => new CaseAttachedExFileModel
-                                            {
-                                                Id = x.Id,
-                                                FileName = x.FileName,
-                                                IsCaseFile = true,
-                                                CaseId = caseId
-                                            }).ToList();
+                m.CaseAttachedExFiles =
+                    _caseFileService.GetCaseFiles(caseId, canDelete)
+                        .OrderBy(x => x.CreatedDate)
+                        .Select(x => new CaseAttachedExFileModel
+                                    {
+                                        Id = x.Id,
+                                        FileName = x.FileName,
+                                        IsCaseFile = true,
+                                        CaseId = caseId
+                                    }).ToList();
 
                 var exLogFiles = _logFileService.GetLogFilesByCaseId(caseId).Select(x => new CaseAttachedExFileModel
                 {
