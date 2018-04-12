@@ -51,7 +51,7 @@
                            .HasForeignKey(c => c.ChangeByUser_Id)
                            .WillCascadeOnDelete(false);
 
-            this.HasRequired(c => c.Administrator)
+            this.HasOptional(c => c.Administrator)
                            .WithMany()
                            .HasForeignKey(c => c.Performer_User_Id)
                            .WillCascadeOnDelete(false);
