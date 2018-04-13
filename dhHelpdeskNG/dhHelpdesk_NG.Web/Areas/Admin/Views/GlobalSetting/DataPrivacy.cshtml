@@ -10,7 +10,7 @@
                 <table class="tableform" id="privacyForm">
                     <tr>
                         <td class="span3">
-                            @Translation.GetCoreTextTranslation("Välj Favorit")
+                            @Translation.GetCoreTextTranslation("Välj favorit")
                         </td>
                         <td class="span9">
                             @Html.DropDownListFor(m => m.SelectedFavoriteId, Model.Favorites, new { id = "favoritesSelect", @class = "chosen-single-select" })
@@ -41,7 +41,7 @@
                         <td class="span3">
                         </td>
                         <td class="span9">
-                            @Html.CheckBoxFor(m => m.CalculateRegistrationDate) @Translation.GetCoreTextTranslation("Räkna ut Registreringsdatum (Till)")
+                            @Html.CheckBoxFor(m => m.CalculateRegistrationDate) @Translation.GetCoreTextTranslation("Räkna ut registreringsdatum (till)")
                         </td>
                     </tr>
                     <tr>
@@ -114,7 +114,7 @@
                         <td class="span3">
                         </td>
                         <td class="span9">
-                            @Html.CheckBoxFor(m => m.RemoveLogAttachments) @Translation.GetCoreTextTranslation("Ta bort bifogade filer i ärendeloggen")
+                            @Html.CheckBoxFor(m => m.RemoveLogAttachments) @Translation.GetCoreTextTranslation("Ta bort bifogade filer i ärendelogg")
                         </td>
                     </tr>
                     <tr>
@@ -253,7 +253,7 @@
             {
                 dataPrivacyConfirmation: '@Translation.GetForJS("Är du säker på att du vill ersätta informationen i utvalda ärenden?")',
                 operationSuccessMessage: '@Translation.GetForJS("Klar")',
-                createNewFavorite: '@Translation.GetForJS("Skapa Ny")',
+                createNewFavorite: '@Translation.GetForJS("Skapa ny")',
 
                 //validation messages
                 SelectedCustomerIdRequired: '@Translation.GetForJS("Kund") @Translation.GetForJS("måste anges")',

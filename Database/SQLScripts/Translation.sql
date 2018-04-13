@@ -7021,8 +7021,8 @@ If not exists (select * from tblTextTranslation where text_id = 1961 and Languag
 GO
 
 -- fixes required for dev. can be removed in the new sprint.
-UPDATE tblText Set TextString = 'Välj Favorit' WHERE Id=1951;
-UPDATE tblText Set TextString = 'Skapa Ny' WHERE Id=1955;
+UPDATE tblText Set TextString = 'Välj favorit' WHERE Id=1951;
+UPDATE tblText Set TextString = 'Skapa ny' WHERE Id=1955;
 UPDATE tblTextTranslation Set TextTranslation = 'Replace date with' WHERE Text_Id=1944 AND Language_Id=2;
 GO
 
@@ -7086,6 +7086,23 @@ If not exists (select * from tblTextTranslation where text_id = 1968 and Languag
      insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1968, 2, 'Computer type description')
 GO
 
+UPDATE tblText Set TextString = 'Räkna ut registreringsdatum (till)' WHERE Id=1953;
+If exists (select * from tblTextTranslation where text_id = 1953 and Language_Id = 2)
+	update tblTextTranslation set TextTranslation = 'Calculate registration date (to)' where Text_Id = 1953
+GO
+
+UPDATE tblText Set TextString = 'Ta bort bifogade filer i ärendelogg' WHERE Id=1940;
+If exists (select * from tblTextTranslation where text_id = 1940 and Language_Id = 2)
+	update tblTextTranslation set TextTranslation = 'Remove attachments belonging to case log' where Text_Id = 1940
+GO
+
+If exists (select * from tblTextTranslation where text_id = 1951 and Language_Id = 2)
+	update tblTextTranslation set TextTranslation = 'Select favorite' where Text_Id = 1951
+GO
+
+If exists (select * from tblTextTranslation where text_id = 1955 and Language_Id = 2)
+	update tblTextTranslation set TextTranslation = 'Create new' where Text_Id = 1955
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 
