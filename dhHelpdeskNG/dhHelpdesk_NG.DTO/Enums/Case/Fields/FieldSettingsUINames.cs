@@ -37,7 +37,7 @@ namespace DH.Helpdesk.BusinessData.Enums.Case.Fields
             { GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString(), "Placering"},
             { GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString(), "Ansvarskod"},
             { GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), "PC Nummer"},
-            { GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), "Datortyp"},
+            { GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), "Datortyp beskrivning"},
             { GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), "Placering"},
             { GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), "Ärende"},
             { GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(), "Källa"},

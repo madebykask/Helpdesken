@@ -7079,6 +7079,13 @@ If not exists (select * from tblTextTranslation where text_id = 1967 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1967, 2, 'Remove e-mail addresses in case log and history')
 GO
 
+if not exists (select * from tbltext where id = 1968)
+	insert into tbltext (id, TextString) values (1968, 'Datortyp beskrivning')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1968 and Language_Id = 2)
+     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1968, 2, 'Computer type description')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services.Concrete
+﻿using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
+
+namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System.Collections.Generic;
 
@@ -118,6 +120,12 @@
         {
             var computerTypes = this.computerTypeRepository.FindOverviews(customerId);
             return computerTypes;
+        }
+
+        public ComputerTypeOverview GetComputerType(int id)
+        {
+            var computerType = this.computerTypeRepository.Get(id);
+            return computerType;
         }
 
         public List<ItemOverview> GetComputerModels()

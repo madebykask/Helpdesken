@@ -18,7 +18,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
     public abstract class ComputerModuleBaseController : UserInteractionController
     {
         protected readonly IComputerModulesService ComputerModulesService;
-        private readonly IUserPermissionsChecker _userPermissionsChecker;
+        protected readonly IUserPermissionsChecker UserPermissionsChecker;
 
         protected ComputerModuleBaseController(
                   IMasterDataService masterDataService, 
@@ -28,7 +28,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             : base(masterDataService)
         {
             this.ComputerModulesService = computerModulesService;
-            this._userPermissionsChecker = userPermissionChecker;
+            this.UserPermissionsChecker = userPermissionChecker;
         }
 
         public abstract ModuleTypes ModuleType { get; }
@@ -38,7 +38,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         {
             List<ItemOverview> items = this.Get().OrderBy(x => x.Name).ToList();
 
-            var inventoryPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            var inventoryPermission = this.UserPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
             var viewModel = new ComputerModuleGridModel(items, this.ModuleType, inventoryPermission);
 
             return this.View(viewModel);
@@ -47,8 +47,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpGet]
         public ViewResult Edit(int id, string name)
         {
-            var inventoryPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
-            var viewModel = new ComputerModuleEditModel(id, name);
+            var inventoryPermission = this.UserPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+
+            var viewModel = CreateModuleEditModel(id, name);
             viewModel.UserHasInventoryAdminPermission = inventoryPermission;
 
             return this.View(viewModel);
@@ -57,8 +58,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpPost]
         public RedirectToRouteResult Edit(ComputerModuleEditModel model)
         {
-            ComputerModule businessModel = ComputerModule.CreateUpdated(model.Id, model.Name, DateTime.Now);
-
+            var businessModel = CreateUpdatedBusinessModel(model);
             this.Update(businessModel);
 
             return this.RedirectToAction("Index");
@@ -75,8 +75,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpPost]
         public RedirectToRouteResult New(ComputerModuleEditModel model)
         {
-            ComputerModule businessModel = ComputerModule.CreateNew(model.Name, DateTime.Now);
-
+            var businessModel = CreateNewBusinessModel(model);
             this.Create(businessModel);
 
             return this.RedirectToAction("Index");
@@ -88,6 +87,24 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             this.Remove(id);
 
             return this.RedirectToAction("Index");
+        }
+
+        protected virtual ComputerModuleEditModel CreateModuleEditModel(int id, string name)
+        {
+            var viewModel = new ComputerModuleEditModel(id, name);
+            return viewModel;
+        }
+
+        protected virtual ComputerModule CreateNewBusinessModel(ComputerModuleEditModel model)
+        {
+            var businessModel = ComputerModule.CreateNew(model.Name, DateTime.Now);
+            return businessModel;
+        }
+
+        protected virtual ComputerModule CreateUpdatedBusinessModel(ComputerModuleEditModel model)
+        {
+            var businessModel = ComputerModule.CreateUpdated(model.Id, model.Name, DateTime.Now);
+            return businessModel;
         }
 
         protected abstract List<ItemOverview> Get();

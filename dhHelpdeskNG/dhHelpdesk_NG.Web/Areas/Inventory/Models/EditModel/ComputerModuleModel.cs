@@ -21,6 +21,9 @@
         [LocalizedRequired]
         public string Name { get; set; }
 
+        [LocalizedStringLengthAttribute(50)]
+        public string Description { get; set; }
+
         public bool UserHasInventoryAdminPermission { get; set; }
     }
 }

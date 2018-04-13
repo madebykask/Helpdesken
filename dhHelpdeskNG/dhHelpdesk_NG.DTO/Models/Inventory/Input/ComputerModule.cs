@@ -7,14 +7,17 @@
 
     public class ComputerModule : BusinessModel
     {
-        private ComputerModule(ModelStates modelState, string name)
+        private ComputerModule(ModelStates modelState, string name, string description = null)
         {
             this.State = modelState;
             this.Name = name;
+            this.Description = description;
         }
 
         [NotNullAndEmpty]
         public string Name { get; private set; }
+
+        public string Description { get; set; }
 
         [AllowRead(ModelStates.Created)]
         public DateTime CreatedDate { get; set; }

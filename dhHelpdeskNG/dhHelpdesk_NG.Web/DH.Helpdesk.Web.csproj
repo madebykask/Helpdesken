@@ -3361,6 +3361,7 @@
     <Content Include="Areas\Admin\Views\GlobalSetting\_DataPrivacyHistory.cshtml" />
     <Content Include="Areas\Admin\Views\GlobalSetting\_DataPrivacyHistoryTable.cshtml" />
     <Content Include="Areas\Admin\Views\GlobalSetting\DataPrivacy.cshtml" />
+    <Content Include="Areas\Inventory\Views\ComputerType\_Input.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />
