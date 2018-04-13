@@ -11,9 +11,7 @@ namespace DH.Helpdesk.Domain
         public string FileType { get; set; }
 
         public virtual ICollection<CaseDocumentConditionEntity> Conditions { get; set; }
-        public virtual ICollection<CaseDocumentParagraphEntity> CaseDocumentParagraphs { get; set; } 
+        public virtual ICollection<CaseDocument_CaseDocumentParagraphEntity> CaseDocumentParagraphsKeys { get; set; }
         public virtual CaseDocumentTemplateEntity CaseDocumentTemplate { get; set; }
-
-
     }
 }

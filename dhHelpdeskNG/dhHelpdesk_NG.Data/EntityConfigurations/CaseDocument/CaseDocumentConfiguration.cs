@@ -35,14 +35,10 @@
                 .HasForeignKey(c => c.CaseDocument_Id)
                 .WillCascadeOnDelete(false);
 
-            this.HasMany(c => c.CaseDocumentParagraphs)
-                .WithMany()
-                .Map(cdp =>
-                {
-                    cdp.MapLeftKey("CaseDocument_Id");
-                    cdp.MapRightKey("CaseDocumentParagraph_Id");
-                    cdp.ToTable("tblCaseDocument_CaseDocumentParagraph");
-                });
+            this.HasMany(x => x.CaseDocumentParagraphsKeys)
+                .WithRequired()
+                .HasForeignKey(x => x.CaseDocument_Id)
+                .WillCascadeOnDelete(false);
 
             ToTable("tblCaseDocument");
         }

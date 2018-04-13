@@ -352,6 +352,4 @@ namespace DH.Helpdesk.Web.Controllers
             context.HttpContext.Response.Cache.SetCacheability(HttpCacheability.Private);
         }
     }
-
-
 }

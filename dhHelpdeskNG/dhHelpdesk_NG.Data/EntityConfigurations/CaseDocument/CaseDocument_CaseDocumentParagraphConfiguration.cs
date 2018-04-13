@@ -9,7 +9,8 @@
         internal CaseDocument_CaseDocumentParagraphConfiguration()
         {
             HasKey(e => new { e.CaseDocument_Id, e.CaseDocumentParagraph_Id });
-
+            Property(x => x.SortOrder).IsRequired();
+            
             HasRequired(t => t.CaseDocument)
                 .WithMany()
                 .HasForeignKey(d => d.CaseDocument_Id)

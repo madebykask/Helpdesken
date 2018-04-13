@@ -13,7 +13,7 @@
     <div class="page-holder">
         @if (Model.CaseDocumentParagraphs != null)
         {
-            foreach (var par in Model.CaseDocumentParagraphs)
+            foreach (var par in Model.CaseDocumentParagraphs.OrderBy(x => x.SortOrder))
             {
                 if (par.CaseDocumentTexts != null)
                 {

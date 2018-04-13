@@ -67,18 +67,23 @@ namespace DH.Helpdesk.Dal.Repositories.CaseDocument.Concrete
                     Status = caseDoc.Status,
                     CaseDocumentTemplate = caseDoc.CaseDocumentTemplate,
                     CaseDocumentParagraphs =
-                        caseDoc.CaseDocumentParagraphs.Select(x => new CaseDocumentParagraphModel()
+                        (from parKey in caseDoc.CaseDocumentParagraphsKeys
+                         let par = parKey.CaseDocumentParagraph
+                         select new CaseDocumentParagraphModel
                             {
-                                Id = x.Id,
-                                Name = x.Name,
-                                Description = x.Description,
-                                ParagraphType = x.ParagraphType,
-                                CaseDocumentTexts = x.CaseDocumentTexts.Select(t => new CaseDocumentTextModel()
+                                Id = par.Id,
+                                Name = par.Name,
+                                Description = par.Description,
+                                ParagraphType = par.ParagraphType,
+                                SortOrder = parKey.SortOrder,
+                                CaseDocumentTexts = par.CaseDocumentTexts.Select(t => new CaseDocumentTextModel()
                                     {
                                         Id = t.Id,
+                                        Headline = t.Headline,
                                         Name = t.Name,
                                         Text = t.Text,
                                         Description = t.Description,
+                                        SortOrder = t.SortOrder,
                                         Conditions =
                                             t.Conditions.Where(tc => tc.Status != 0)
                                                 .Select(tc => new CaseDocumentTextConditionModel()
@@ -89,12 +94,9 @@ namespace DH.Helpdesk.Dal.Repositories.CaseDocument.Concrete
                                                     CaseDocumentTextConditionGUID = tc.CaseDocumentTextConditionGUID,
                                                     CaseDocumentText_Id = tc.CaseDocumentText_Id,
                                                     Operator = tc.Operator
-                                                })
-                                                .ToList()
-                                    })
-                                    .ToList()
-                            })
-                            .ToList()
+                                                }).ToList()
+                                    }).OrderBy(x => x.SortOrder).ToList()
+                            }).ToList()
                 };
 
             var res = query.FirstOrDefault();

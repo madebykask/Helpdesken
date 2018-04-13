@@ -31,13 +31,14 @@ namespace DH.Helpdesk.Dal.Mappers.CaseDocument
 
             if (businessModel.CaseDocumentParagraphs != null && businessModel.CaseDocumentParagraphs.Any())
             {
-                var mapper = new CaseDocumentParagraphToEntityMapper();
-                entity.CaseDocumentParagraphs = new List<CaseDocumentParagraphEntity>();
+                entity.CaseDocumentParagraphsKeys = new List<CaseDocument_CaseDocumentParagraphEntity>();
                 foreach (var paragModel in businessModel.CaseDocumentParagraphs)
                 {
-                    var paragraph = new CaseDocumentParagraphEntity();
-                    mapper.Map(paragModel, paragraph);
-                    entity.CaseDocumentParagraphs.Add(paragraph);
+                    entity.CaseDocumentParagraphsKeys.Add(new CaseDocument_CaseDocumentParagraphEntity()
+                    {
+                        CaseDocument_Id = businessModel.Id,
+                        CaseDocumentParagraph_Id = paragModel.Id
+                    });
                 }
             }
 

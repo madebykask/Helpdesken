@@ -30,9 +30,8 @@ namespace DH.Helpdesk.Dal.Mappers.CaseDocument
                 ChangedDate = entity.ChangedDate,
                 ChangedByUser_Id = entity.ChangedByUser_Id,
                 
-                CaseDocumentParagraphs = entity.CaseDocumentParagraphs.Select(m => paragraphMapper.Map(m)).ToList(),
+                CaseDocumentParagraphs = entity.CaseDocumentParagraphsKeys.Select(m => paragraphMapper.Map(m.CaseDocumentParagraph)).ToList(),
                 CaseDocumentTemplate = entity.CaseDocumentTemplate
-                
             };
 
             return model;
