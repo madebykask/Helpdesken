@@ -429,14 +429,18 @@ namespace DH.Helpdesk.Services.Services
                         conditionKey = conditionKey.Replace("extendedcase_", "");
 
                         var extData = _case.CaseExtendedCaseDatas.FirstOrDefault();
-
-                        var extDataID = extData.ExtendedCaseData_Id;
-
-                        var extValue = _extendedCaseValueRepository.GetExtendedCaseValue(extDataID, conditionKey);
-                        if (extValue == null)
-                            throw new CaseDocumentConditionException(conditionKey, 
-                                $"Can't get extended case values from condition key {conditionKey} in extended case data ID {extDataID}");
-                        value = extValue.Value;
+                        if (extData != null)
+                        {
+                            var extDataId = extData.ExtendedCaseData_Id;
+                            if (extDataId > 0)
+                            {
+                                var extValue = _extendedCaseValueRepository.GetExtendedCaseValue(extDataId, conditionKey);
+                                if (extValue == null)
+                                    throw new CaseDocumentConditionException(conditionKey,
+                                        $"Can't get extended case values from condition key {conditionKey} in extended case data ID {extDataId}");
+                                value = extValue.Value;
+                            }
+                        }
                     }
                     //GET FROM USER
                     else if (conditionKey.ToLower().StartsWith("user_"))
