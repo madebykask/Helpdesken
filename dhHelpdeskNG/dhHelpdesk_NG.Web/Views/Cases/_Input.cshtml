@@ -2198,8 +2198,8 @@
                                                             <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@readonlyExternalInvoices[i].Name">
                                                         </td>
                                                         <td>
-                                                            @readonlyExternalInvoices[i].Amount.ToString("#.##")
-                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@readonlyExternalInvoices[i].Amount.ToString("#.##")" placeholder="0.00">
+                                                            @readonlyExternalInvoices[i].AmountValue
+                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].AmountValue" name="ExternalInvoices[@extInvoicesCount].AmountValue" value="@readonlyExternalInvoices[i].AmountValue" placeholder="0.00">
                                                             <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="@readonlyExternalInvoices[i].Id">
                                                         </td>
                                                         <td>
@@ -2215,7 +2215,7 @@
                                                             <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@editableExternalInvoices[i].Name">
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@editableExternalInvoices[i].Amount.ToString("#.##")" placeholder="0.00">
+                                                            <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].AmountValue" name="ExternalInvoices[@extInvoicesCount].AmountValue" value="@editableExternalInvoices[i].AmountValue" placeholder="0.00">
                                                             <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="@editableExternalInvoices[i].Id">
                                                         </td>
                                                         <td>
@@ -2229,7 +2229,7 @@
                                                         <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name">
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" placeholder="0.00">
+                                                        <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].AmountValue" name="ExternalInvoices[@extInvoicesCount].AmountValue" placeholder="0.00">
                                                         <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="0">
                                                     </td>
                                                     <td>
