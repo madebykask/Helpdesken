@@ -1610,7 +1610,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
                     GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), //mandatory
                     GlobalEnums.TranslationCaseFields.CaseNumber.ToString(),
-                    GlobalEnums.TranslationCaseFields.Customer_Id.ToString()
+                    GlobalEnums.TranslationCaseFields.Customer_Id.ToString(),
+                    GlobalEnums.TranslationCaseFields.Cost.ToString()
                 };
 
                 var additionalFields = new List<CaseFieldSettingsWithLanguage>
