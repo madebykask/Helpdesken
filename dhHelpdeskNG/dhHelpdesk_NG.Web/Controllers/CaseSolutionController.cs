@@ -434,11 +434,12 @@ namespace DH.Helpdesk.Web.Controllers
             foreach (string s in selectedSplit)
             {
                 string[] cap = s.Split(':');
-                string text = cap[0].ToString();
+                var text = cap[0].StartsWith("_") ? cap[0].Substring(1, cap[0].Length - 1) : cap[0];
+
                 string values = string.Empty;
-                if (cap.Count() > 1)
+                if (cap.Length > 1)
                 {
-                    values = cap[1].ToString();
+                    values = cap[1];
                 }
                 bool exists = false;
 
@@ -1473,21 +1474,12 @@ namespace DH.Helpdesk.Web.Controllers
             foreach (string s in selectedSplit)
             {
                 string[] cap = s.Split(':');
-                string text = string.Empty;
-                if (cap[0].ToString().Substring (0,1)=="_")
-                {
-                    int len = cap[0].ToString().Length;
-                    text = cap[0].ToString().Substring(1, (len-1));
-                }
-                else
-                {
-                    text = cap[0].ToString();
-                }
-                
+                var text = cap[0].StartsWith("_") ? cap[0].Substring(1, cap[0].Length - 1) : cap[0];
+
                 string values = string.Empty;
-                if (cap.Count() > 1)
+                if (cap.Length > 1)
                 {
-                    values = cap[1].ToString();
+                    values = cap[1];
                 }
                 bool exists = false;
 
