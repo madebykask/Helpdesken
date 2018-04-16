@@ -1569,7 +1569,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 if (item.RemoveLogAttachments)
                     attachedFilesFormatted.AppendFormat(", {0}", logPostsText);
 
-                var formattedFields = item.Fields.Select(x => FormatFieldLabel(x, null)).ToList();
+                var formattedFields = item.Fields.Select(x => FormatFieldLabel(x, null, customerId ?? 0)).ToList();
 
                 var modelItem = new GdprOperationsHistoryListItem
                 {
@@ -1643,7 +1643,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     fields.Select(f => new SelectListItem
                     {
                         Value = f.Name,
-                        Text = FormatFieldLabel(f.Name, f.Label)
+                        Text = FormatFieldLabel(f.Name, f.Label, customerId.Value)
                     })
                     .OrderBy(f => f.Text)
                     .ToList();
@@ -1654,11 +1654,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return Json(new { success = false });
         }
 
-        private string FormatFieldLabel(string fieldName, string label)
+        private string FormatFieldLabel(string fieldName, string label, int customerId)
         {
             if (string.IsNullOrEmpty(label) && FieldSettingsUiNames.Names.ContainsKey(fieldName))
             {
-                label = Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[fieldName]);
+                label = Translation.GetForCase(fieldName, customerId);
             }
 
             // prefix IsAbout section fields ony if they were translated
