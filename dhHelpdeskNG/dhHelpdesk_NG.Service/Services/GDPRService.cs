@@ -368,12 +368,12 @@ namespace DH.Helpdesk.Services.Services
                 {
                     c.AgreedDate = replaceDatesWith;
                 }
-                else if (fieldName == GlobalEnums.TranslationCaseFields.Cost.ToString())
-                {
-                    c.Cost = 0;
-                    c.OtherCost = 0;
-                    c.Currency = replaceDataWith;
-                }
+                //else if (fieldName == GlobalEnums.TranslationCaseFields.Cost.ToString())
+                //{
+                //    c.Cost = 0;
+                //    c.OtherCost = 0;
+                //    c.Currency = replaceDataWith;
+                //}
                 else if (fieldName == GlobalEnums.TranslationCaseFields.Project.ToString())
                 {
                     c.Project_Id = null;
