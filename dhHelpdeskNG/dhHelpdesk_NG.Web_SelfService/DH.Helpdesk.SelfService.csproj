@@ -220,6 +220,10 @@
       <HintPath>..\packages\Thinktecture.IdentityModel.3.6.1\lib\net45\Thinktecture.IdentityModel.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Thinktecture.IdentityModel.EmbeddedSts, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Thinktecture.IdentityModel.EmbeddedSts.1.0.2\lib\net45\Thinktecture.IdentityModel.EmbeddedSts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WebActivator">
       <HintPath>..\packages\WebActivator.1.5\lib\net40\WebActivator.dll</HintPath>
     </Reference>
@@ -439,6 +443,7 @@
     <Content Include="Content\css\bootstrap-datepicker3.css" />
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\case-mobile.css" />
     <Content Include="Content\css\chosen-sprite%402x.png" />
     <Content Include="Content\css\chosen-sprite.png" />
     <Content Include="Content\css\chosen.css" />
