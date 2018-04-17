@@ -358,6 +358,7 @@ namespace DH.Helpdesk.Web
         {
             ModelBinders.Binders.Add(typeof(DateTime), new DateTimeBinder());
             ModelBinders.Binders.Add(typeof(DateTime?), new NullableDateTimeBinder());
+            ModelBinders.Binders.Add(typeof(decimal), new DecimalModelBinder());
         }
 
         private static void RegisterLocalizedAttributes()
