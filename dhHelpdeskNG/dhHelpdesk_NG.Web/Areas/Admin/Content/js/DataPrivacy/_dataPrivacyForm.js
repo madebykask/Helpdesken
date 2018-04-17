@@ -487,14 +487,14 @@ window.DataPrivacyForm =
              });
          };
 
-        this.onFavoritesChanged = function(favoriteId) {
-            if (favoriteId > 0) {
-                this.loadFavoriteFields(favoriteId);
+         this.onFavoritesChanged = function (favoriteId) {
+             if (favoriteId > 0) {
+                 this.loadFavoriteFields(favoriteId);
             } else {
                 //reset validation errors if New is selected
-                this.lockFormFields(false);
                 this.resetFormFields();
                 this.validator$.resetForm();
+                this.lockFormFields(false);
             }
         };
 
@@ -618,6 +618,10 @@ window.DataPrivacyForm =
             var customerId = data.CustomerId;
 
             self.customerSelect$.val(customerId);
+
+            //date range
+            this.setDatepickerEndDate(self.registerDateFrom$, new Date());
+            this.setDatepickerEndDate(self.registerDateTo$, new Date());
 
             //date range
             self.setDatepickerDate(registerDateFrom$, data.RegisterDateFrom);
