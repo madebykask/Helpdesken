@@ -1510,13 +1510,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [GdprAccess]
         public ActionResult DataPrivacy(DataPrivacyParameters model)
         {
-            //todo: validate parameters?
-
-            for (int i = 0; i < 10; ++i)
-            {
-                Task.WaitAll(Task.Delay(1000));
-            }
-
             SessionFacade.ActiveTab = "#fragment-6";
             if (model.SelectedCustomerId > 0)
             {
