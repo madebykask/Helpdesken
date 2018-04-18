@@ -10,6 +10,8 @@ window.DataPrivacyForm =
         this.translations = {};
         this.confirmationDialog = {};
         this.urls = {};
+        this.progressIntervalId = 0;
+        this.pollingRequest = null;
 
         // constants and Ids
         this.loaders = {
@@ -442,18 +444,24 @@ window.DataPrivacyForm =
              if (isValid) {
                  this.confirmationDialog.showConfirmation(
                      this.translations.dataPrivacyConfirmation,
-                     function() {
-                         self.execDataPrivacyRequest();
+                     function () {
+                         //todo: check error?
+                         self.createOperationAudit().done(function (res) {
+                             self.execDataPrivacyRequest(res.id);
+                         });
                      },
                      function() {
-                     });
+                 });
              }
          };
 
-         this.execDataPrivacyRequest = function() {
+         this.createOperationAudit = function () {
+             return $.getJSON(self.urls.CreateOperationAuditAction,
+                              $.param({ customerId: this.customerSelect$.val() }));
+        };
 
-             this.blockUI(true, this.loaders.inProcessLoader);
-
+         this.execDataPrivacyRequest = function(operationId) {
+             
              var filter = this.getFilterData();
 
              var inputData = {
@@ -468,8 +476,11 @@ window.DataPrivacyForm =
                  ReplaceDatesWith: filter.replaceDatesWith,
                  RemoveCaseAttachments: filter.removeCaseAttachments,
                  RemoveLogAttachments: filter.removeLogAttachments,
-                 ReplaceEmails: filter.replaceEmails
+                 ReplaceEmails: filter.replaceEmails,
+                 OperationAuditId: operationId
              };
+
+             self.startOperationProgress(operationId);
 
              $.ajax({
                  url: self.urls.DataPrivacyAction,
@@ -482,10 +493,64 @@ window.DataPrivacyForm =
                  } else {
                      window.ShowToastMessage("Operation has failed.", "error");
                  }
-             }).always(function() {
-                 self.blockUI(false);
+             }).always(function () {
+                 self.stopOperationProgress();
+                 //todo: add ajax time out error  handling
              });
          };
+
+         this.startOperationProgress = function (operationId) {
+            var self = this;
+            
+            if (self.pollingRequest) {
+                self.pollingRequest.abort();
+                self.pollingRequest = null;
+            }
+            console.log(">>> start operation polling. Id = " + operationId);
+            self.progressIntervalId =
+                setInterval(function() {
+                     self.pollOperationProgress(operationId);
+                }, 500);
+
+             self.showGlobalProgress(true);
+         };
+
+         this.stopOperationProgress = function() {
+            var self = this;
+            console.log(">>> stop operation polling.");
+            self.showGlobalProgress(false);
+            clearInterval(self.progressIntervalId);
+        };
+        
+         this.pollOperationProgress = function (operationId) {
+             var self = _self;
+             if (self.pollingRequest)
+                 return;
+
+            console.log("pollOperationProgress: " + operationId);
+            
+            this.pollingRequest = $.getJSON(self.urls.GetOperationProgressAction, $.param({ id: operationId })).done(function (res) {
+                console.log(">>> Operation poll result. Complete: " + (res.isComplete ? 'true' : 'false'));
+                if (res.isComplete) {
+                    self.stopOperationProgress();
+                }
+            }).always(function() {
+                self.pollingRequest = null;
+            });
+         };
+
+         this.showGlobalProgress = function (show) {
+             var self = this;
+             var progressDiv$ = $("#operationProgress");
+             
+             if (show) {
+                 progressDiv$.show();
+                 this.blockUI(true, this.loaders.inProcessLoader);
+             } else {
+                 progressDiv$.hide();
+                 self.blockUI(false);
+             }
+        };
 
          this.onFavoritesChanged = function (favoriteId) {
              if (favoriteId > 0) {

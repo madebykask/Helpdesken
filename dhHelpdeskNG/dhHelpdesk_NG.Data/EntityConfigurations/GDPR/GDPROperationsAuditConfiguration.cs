@@ -28,6 +28,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.GDPR
             this.Property(x => x.Url).IsRequired().HasMaxLength(256);
             this.Property(x => x.Application).IsRequired().HasMaxLength(50);
             this.Property(x => x.Success).IsRequired();
+            this.Property(x => x.Status).IsRequired();
             this.Property(x => x.Error).IsOptional();
             this.Property(x => x.CreatedDate).IsRequired();
 

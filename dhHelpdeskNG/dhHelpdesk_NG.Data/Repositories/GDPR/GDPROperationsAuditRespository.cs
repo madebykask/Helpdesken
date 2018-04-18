@@ -8,6 +8,7 @@ namespace DH.Helpdesk.Dal.Repositories.GDPR
 {
     public interface IGDPROperationsAuditRespository : IRepository<GDPROperationsAudit>
     {
+        GDPROperationsAudit Get(int id);
         IDictionary<int, string> GetOperationsAuditCustomers();
     }
 
@@ -22,6 +23,11 @@ namespace DH.Helpdesk.Dal.Repositories.GDPR
         }
 
         #endregion
+
+        public GDPROperationsAudit Get(int id)
+        {
+            return Table.Single(x => x.Id == id);
+        }
 
         public IDictionary<int, string> GetOperationsAuditCustomers()
         {

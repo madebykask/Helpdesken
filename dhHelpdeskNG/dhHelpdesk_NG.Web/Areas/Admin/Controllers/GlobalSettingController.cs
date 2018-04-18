@@ -1,6 +1,7 @@
 ﻿
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 using DH.Helpdesk.BusinessData.Models.Gdpr;
 using DH.Helpdesk.BusinessData.Models.Grid;
@@ -1495,19 +1496,35 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        [GdprAccess]
+        public JsonResult CreateDataPrivacyOperationAudit(int customerId)
+        {
+            var userId = _userContext.UserId;
+            var url = ControllerContext.RequestContext.HttpContext.Request.Url?.ToString();
+            var auditOperationId = _gdprOperationsService.CreateDataPrivacyOperationAudit(userId, customerId, url);
+            return Json(new { id = auditOperationId }, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         [GdprAccess]
         public ActionResult DataPrivacy(DataPrivacyParameters model)
         {
+            //todo: validate parameters?
+
+            for (int i = 0; i < 10; ++i)
+            {
+                Task.WaitAll(Task.Delay(1000));
+            }
+
             SessionFacade.ActiveTab = "#fragment-6";
             if (model.SelectedCustomerId > 0)
             {
-                var url = ControllerContext.RequestContext.HttpContext.Request.Url?.ToString();
-                var success = _gdprOperationsService.RemoveDataPrivacyFromCase(model, _userContext.UserId, url);
+                var success = _gdprOperationsService.RemoveDataPrivacyFromCase(model);
                 return Json(new { success });
             }
 
-            return Json(new {success = true});
+            return Json(new { success = true });
         }
 
         private DataPrivacyModel GetDataPrivacyModel()

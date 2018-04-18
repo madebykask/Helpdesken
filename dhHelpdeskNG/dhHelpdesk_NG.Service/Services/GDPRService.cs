@@ -7,6 +7,7 @@ using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Exceptions;
 using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Common.Serializers;
+using DH.Helpdesk.Dal.Infrastructure.Context;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.NewInfrastructure;
 using DH.Helpdesk.Dal.Repositories;
@@ -28,7 +29,9 @@ namespace DH.Helpdesk.Services.Services
     {
         IDictionary<int, string> GetOperationAuditCustomers();
         IList<GdprOperationsAuditOverview> ListGdprOperationsAuditItems(int? customerId, bool successOnly = true);
-        bool RemoveDataPrivacyFromCase(DataPrivacyParameters p, int userId, string url);
+        int CreateDataPrivacyOperationAudit(int userId, int customerId, string url);
+        GDPROperationsAudit GetDataPrivacyOperationAuditData(int id);
+        bool RemoveDataPrivacyFromCase(DataPrivacyParameters p);
     }
     
     public interface IGDPRDataPrivacyAccessService
@@ -133,11 +136,26 @@ namespace DH.Helpdesk.Services.Services
             return res;
         }
 
-        public bool RemoveDataPrivacyFromCase(DataPrivacyParameters p, int userId, string url)
+        public GDPROperationsAudit GetDataPrivacyOperationAuditData(int id)
         {
-            var auditData = SaveOperationAuditData(p, userId, url);
-            var casesIds = new List<int>();
+            return _gdprOperationsAuditRespository.Get(id);
+        }
 
+        public int CreateDataPrivacyOperationAudit(int userId, int customerId, string url)
+        {
+            var auditData = CreateOperationAuditData(userId, customerId, url);
+            return auditData.Id;
+        }
+
+        public bool RemoveDataPrivacyFromCase(DataPrivacyParameters p)
+        {
+            //update operation audit data
+            var auditData = _gdprOperationsAuditRespository.GetById(p.OperationAuditId);
+            auditData.Parameters = SerializeOperationParameters(p);
+            auditData.Status = GDPROperationStatus.Running;
+            UpdateAuditOperationData(auditData);
+
+            var casesIds = new List<int>();
             try
             {
                 using (var uow = _unitOfWorkFactory.Create())
@@ -222,15 +240,18 @@ namespace DH.Helpdesk.Services.Services
             catch (Exception e)
             {
                 auditData.Success = false;
+                auditData.Status = GDPROperationStatus.Complete;
                 auditData.Error = $"Unknown error. { e.Message }";
-                SaveAuditOperationResult(auditData);
+                UpdateAuditOperationData(auditData);
                 throw;
             }
 
+
             //save affected cases Ids
             auditData.Result = string.Join(",", casesIds);
+            auditData.Status = GDPROperationStatus.Complete;
             auditData.Success = true;
-            SaveAuditOperationResult(auditData);
+            UpdateAuditOperationData(auditData);
 
             return true;
         }
@@ -826,23 +847,24 @@ namespace DH.Helpdesk.Services.Services
             return res;
         }
 
-        public void SaveAuditOperationResult(GDPROperationsAudit auditData)
+        public void UpdateAuditOperationData(GDPROperationsAudit auditData)
         {
             _gdprOperationsAuditRespository.Update(auditData);
             _gdprOperationsAuditRespository.Commit();
         }
 
-        private GDPROperationsAudit SaveOperationAuditData(DataPrivacyParameters p, int userId, string url)
+        private GDPROperationsAudit CreateOperationAuditData(int userId, int customerId, string url)
         {
-            var auditData = new GDPROperationsAudit
+            var auditData = new GDPROperationsAudit()
             {
                 User_Id = userId,
-                Customer_Id = p.SelectedCustomerId,
+                Customer_Id = customerId,
                 Operation = GDPROperations.DataPrivacy.ToString(),
-                Parameters = SerializeOperationParameters(p),
+                Parameters = "",
                 Url = url,
                 Application = ApplicationType.Helpdesk.ToString(),
-                CreatedDate  = DateTime.UtcNow
+                CreatedDate = DateTime.UtcNow,
+                Status = GDPROperationStatus.None
             };
 
             _gdprOperationsAuditRespository.Add(auditData);

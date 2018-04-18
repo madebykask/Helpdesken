@@ -159,9 +159,15 @@
     </div>
 </div>
 
+<div id="operationProgress" class="loading-msg" style="display:none">
+    <div class="content-wrapper">
+        <div class="loader">@Translation.Get("Laddar...")</div>
+    </div>
+</div>
+
 @Scripts.Render("~/bundles/admindataprivacy")
 <script type="text/javascript">
-    
+
     var confirmationDialog = {
         showConfirmation: function (text, onOk, onCancel) {
             var d = $('<div class="modal fade">' +
@@ -247,7 +253,9 @@
                 LoadFavoriteDataAction: '@Url.Action("LoadDataPrivacyFavorite")',
                 SaveFavoritesAction: '@Url.Action("SaveDataPrivacyFavorites")',
                 GetCustomerCaseFieldsAction: '@Url.Action("GetCustomerCaseFields")',
-                DeleteFavoriteAction: '@Url.Action("DeleteDataPrivacyFavorite")'
+                DeleteFavoriteAction: '@Url.Action("DeleteDataPrivacyFavorite")',
+                CreateOperationAuditAction: '@Url.Action("CreateDataPrivacyOperationAudit")',
+                GetOperationProgressAction: '@Url.Action("GetOperationProgress", "GDPRProgress")'
             },
             translations:
             {

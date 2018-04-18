@@ -41,11 +41,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         {
             var ctx = filterContext.HttpContext;
             var identity = ctx.User.Identity;
-            var customerUserName = _userContext.Login;
-
-            var loginMode = InitCurrentLoginMode();
-
-            _logger.Debug($"AuthenticationFilter called. CustomerUser: {customerUserName}, Identity: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}, Url: {ctx.Request.Url}");
 
             // allow anonymous for login controller actions
             if (this.IgnoreRequest(filterContext))
@@ -53,6 +48,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 _logger.Debug($"AuthenticationFilter. Skip check for anonymous action. Identity: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}, Url: {ctx.Request.Url}");
                 return;
             }
+            
+            var customerUserName = _userContext.Login;
+            var loginMode = InitCurrentLoginMode();
+
+            _logger.Debug($"AuthenticationFilter called. CustomerUser: {customerUserName}, Identity: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}, Url: {ctx.Request.Url}");
+            
 
             //perform signin for helpdesk customer user only if request has been authenticated by native mechanisms (forms, wins, adfs,..)
             if (identity != null && identity.IsAuthenticated && string.IsNullOrEmpty(_sessionContext.UserIdentity?.UserId))

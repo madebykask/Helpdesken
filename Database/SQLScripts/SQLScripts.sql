@@ -318,8 +318,28 @@ CREATE NONCLUSTERED INDEX [IX_tblDepartment_new] ON [dbo].[tblDepartment]
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 
+--GDPR Audit table chagnes
+RAISERROR ('Add column Status on table tblGDPROperationsAudit', 10, 1) WITH NOWAIT
+IF NOT EXISTS (select 1 from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'Status' and sysobjects.name = N'tblGDPROperationsAudit')
+BEGIN 
+	 DECLARE @cmd nvarchar(1000)
+
+	 -- add status: 1 - Running, 2 - Complete
+	 ALTER TABLE [dbo].[tblGDPROperationsAudit]
+	 ADD [Status] int NULL
+
+	 SET @cmd = N'UPDATE tblGDPROperationsAudit SET [Status] = 2' 
+	 exec (@cmd)
+	 
+	 SET @cmd = N'ALTER TABLE tblGDPROperationsAudit ALTER COLUMN [Status] int NOT NULL' 	 
+	 exec (@cmd)	 
+END
+GO
 
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.36'
 --ROLLBACK --TMP
+
+
