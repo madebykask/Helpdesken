@@ -445,9 +445,11 @@ window.DataPrivacyForm =
                  this.confirmationDialog.showConfirmation(
                      this.translations.dataPrivacyConfirmation,
                      function () {
-                         //todo: check error?
                          self.createOperationAudit().done(function (res) {
-                             self.execDataPrivacyRequest(res.id);
+                             if (res.id)
+                                 self.execDataPrivacyRequest(res.id);
+                             else
+                                 window.ShowToastMessage("Operation has failed.", "error");
                          });
                      },
                      function() {
@@ -510,14 +512,16 @@ window.DataPrivacyForm =
             self.progressIntervalId =
                 setInterval(function() {
                      self.pollOperationProgress(operationId);
-                }, 500);
+                }, 1000);
 
+             self.enableControl(self.privacyRunBtn$, false);
              self.showGlobalProgress(true);
          };
 
          this.stopOperationProgress = function() {
             var self = this;
             console.log(">>> stop operation polling.");
+            self.enableControl(self.privacyRunBtn$, true);
             self.showGlobalProgress(false);
             clearInterval(self.progressIntervalId);
         };
@@ -527,10 +531,10 @@ window.DataPrivacyForm =
              if (self.pollingRequest)
                  return;
 
-            console.log("pollOperationProgress: " + operationId);
+            //console.log("pollOperationProgress: " + operationId);
             
             this.pollingRequest = $.getJSON(self.urls.GetOperationProgressAction, $.param({ id: operationId })).done(function (res) {
-                console.log(">>> Operation poll result. Complete: " + (res.isComplete ? 'true' : 'false'));
+                //console.log(">>> Operation poll result. Complete: " + (res.isComplete ? 'true' : 'false'));
                 if (res.isComplete) {
                     self.stopOperationProgress();
                 }
@@ -542,15 +546,15 @@ window.DataPrivacyForm =
          this.showGlobalProgress = function (show) {
              var self = this;
              var progressDiv$ = $("#operationProgress");
-             
+
              if (show) {
+                 self.blockUI(true, this.loaders.inProcessLoader);
                  progressDiv$.show();
-                 this.blockUI(true, this.loaders.inProcessLoader);
              } else {
                  progressDiv$.hide();
                  self.blockUI(false);
              }
-        };
+         };
 
          this.onFavoritesChanged = function (favoriteId) {
              if (favoriteId > 0) {
