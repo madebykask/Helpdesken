@@ -153,7 +153,34 @@ namespace DH.Helpdesk.Services.Services
                     var caseExtendedCaseRep = uow.GetRepository<Case_ExtendedCaseEntity>();
                     var caseSectionExtendedCaseRep = uow.GetRepository<Case_CaseSection_ExtendedCase>();
 
-                    var casesQueryable = rep.GetAll().Where(x => x.Customer_Id == p.SelectedCustomerId);
+                    var casesQueryable = rep.GetAll()
+                        .IncludePath(c => c.CaseHistories)
+                        .IncludePath(c => c.CaseExtendedCaseDatas.Select(ec => ec.ExtendedCaseData.ExtendedCaseValues))
+                        .IncludePath(c => c.CaseExtendedCaseDatas.Select(ec => ec.ExtendedCaseForm))
+                        .IncludePath(c => c.CaseSectionExtendedCaseDatas.Select(esc => esc.ExtendedCaseData.ExtendedCaseValues))
+                        .Where(x => x.Customer_Id == p.SelectedCustomerId);
+
+                    if (p.RemoveCaseAttachments)
+                    {
+                        casesQueryable = casesQueryable.IncludePath(x => x.CaseFiles);
+                    }
+
+                    if (p.RemoveLogAttachments || p.FieldsNames.Contains("tblLog.Text_External") ||
+                        p.FieldsNames.Contains("tblLog.Text_Internal") || p.FieldsNames.Contains(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()))
+                    {
+                        casesQueryable = casesQueryable.IncludePath(x => x.Logs.Select(f => f.LogFiles));
+                    }
+
+                    if (p.FieldsNames.Contains(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()))
+                    {
+                        casesQueryable = casesQueryable.IncludePath(x => x.CaseFollowers);
+                    }
+
+                    if (p.ReplaceEmails)
+                    {
+                        casesQueryable = casesQueryable.IncludePath(x => x.Mail2Tickets);
+                        casesQueryable = casesQueryable.IncludePath(x => x.CaseHistories.Select(y => y.Emaillogs));
+                    }
 
                     if (p.ClosedOnly)
                         casesQueryable = casesQueryable.Where(x => x.FinishingDate.HasValue);
@@ -184,9 +211,10 @@ namespace DH.Helpdesk.Services.Services
                             ProcessReplaceCasesData(c, caseFiles, logFiles, followers, p);
                             ProcessReplaceCasesHistoryData(c, emailLogs, p);
                             ProcessExtededCaseData(c, caseExtendedCaseRep, caseSectionExtendedCaseRep, extendedCaseValuesRep, p);
-                            ProccessFormPlusCaseData(c, formFieldValueHistoryRep, formFieldValueRep);
-
                         }
+
+                        ProccessFormPlusCaseData(cases.Select(c => c.Id).ToList(), formFieldValueHistoryRep, formFieldValueRep);
+
                         uow.Save();
                     }
                 }
@@ -636,7 +664,7 @@ namespace DH.Helpdesk.Services.Services
 
                     if (parameters.ReplaceEmails)
                     {
-                        var toReplace =  emailLogs.GetAll().Where(x => x.CaseHistory_Id == caseHistory.Id).ToList();
+                        var toReplace = c.CaseHistories.SelectMany(ch => ch.Emaillogs).ToList();//emailLogs.GetAll().Where(x => x.CaseHistory_Id == caseHistory.Id).ToList();
                         if (toReplace.Any())
                         {
                             toReplace.ForEach(e => e.EmailAddress = e.Bcc = e.Cc = replaceDataWith);
@@ -674,7 +702,7 @@ namespace DH.Helpdesk.Services.Services
 
             if (c.CaseExtendedCaseDatas != null && c.CaseExtendedCaseDatas.Any())
             {
-                foreach (var caseData in c.CaseExtendedCaseDatas)
+                foreach (var caseData in c.CaseExtendedCaseDatas.ToList())
                 {
                     CleanExtendedCaseData(extendedCaseValuesRep, caseData.ExtendedCaseData, replaceDataWith, replaceDatesWith);
                     if (caseData.ExtendedCaseForm != null)
@@ -684,19 +712,21 @@ namespace DH.Helpdesk.Services.Services
                         caseData.ExtendedCaseForm.UpdatedBy = replaceDataWith;
                         caseData.ExtendedCaseForm.UpdatedOn = replaceDatesWith;
                     }
+                    caseExtendedCaseRep.Delete(caseData);
                 }
                 c.CaseExtendedCaseDatas.Clear();
-                caseExtendedCaseRep.DeleteWhere(ce => ce.Case_Id == c.Id);
+                //caseExtendedCaseRep.DeleteWhere(ce => ce.Case_Id == c.Id);
             }
 
             if (c.CaseSectionExtendedCaseDatas != null && c.CaseSectionExtendedCaseDatas.Any())
             {
-                foreach (var caseData in c.CaseSectionExtendedCaseDatas)
+                foreach (var caseData in c.CaseSectionExtendedCaseDatas.ToList())
                 {
                     CleanExtendedCaseData(extendedCaseValuesRep, caseData.ExtendedCaseData, replaceDataWith, replaceDatesWith);
+                    caseSectionExtendedCaseRep.Delete(caseData);
                 }
                 c.CaseSectionExtendedCaseDatas.Clear();
-                caseSectionExtendedCaseRep.DeleteWhere(cs => cs.Case_Id == c.Id);
+                //caseSectionExtendedCaseRep.DeleteWhere(cs => cs.Case_Id == c.Id);
             }
 
         }
@@ -706,10 +736,13 @@ namespace DH.Helpdesk.Services.Services
         {
             if (caseData != null)
             {
-                if (caseData.ExtendedCaseValues != null)
+                if (caseData.ExtendedCaseValues != null && caseData.ExtendedCaseValues.Any())
                 {
-                    extendedCaseValuesRep.DeleteWhere(v =>
-                        v.ExtendedCaseDataId == caseData.Id);
+                    foreach (var value in caseData.ExtendedCaseValues.ToList())
+                    {
+                        extendedCaseValuesRep.Delete(value);
+                    }
+                    caseData.ExtendedCaseValues.Clear();
                 }
                 caseData.CreatedBy = replaceDataWith;
                 caseData.CreatedOn = replaceDatesWith ?? DateTime.Now;
@@ -718,10 +751,12 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        private void ProccessFormPlusCaseData(Case c, IRepository<FormFieldValueHistory> formFieldValueHistoryRep, IRepository<FormFieldValue> formFieldValueRep)
+        private void ProccessFormPlusCaseData(IList<int> casesIds, IRepository<FormFieldValueHistory> formFieldValueHistoryRep, IRepository<FormFieldValue> formFieldValueRep)
         {
-            formFieldValueRep.DeleteWhere(x => x.Case_Id == c.Id);
-            formFieldValueHistoryRep.DeleteWhere(x => x.Case_Id == c.Id);
+            if (!casesIds.Any()) return;
+
+            formFieldValueRep.DeleteWhere(x => casesIds.Contains(x.Case_Id));
+            formFieldValueHistoryRep.DeleteWhere(x => casesIds.Contains(x.Case_Id));
         }
 
         private string SerializeOperationParameters(DataPrivacyParameters p)
