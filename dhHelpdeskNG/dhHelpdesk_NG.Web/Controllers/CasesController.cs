@@ -1365,7 +1365,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
                 else
                 {
-                    err = Translation.Get("Du kan inte ta bort noteringen, eftersom du saknar behörighet att ta bort bifogade filer") + ".";
+                    err = Translation.GetCoreTextTranslation("Du kan inte ta bort noteringen, eftersom du saknar behörighet att ta bort bifogade filer") + ".";
                     TempData["PreventError"] = err;
                     return this.RedirectToAction("editlog", "cases", new { id = id, customerId = SessionFacade.CurrentCustomer.Id });
                 }
@@ -2536,8 +2536,8 @@ namespace DH.Helpdesk.Web.Controllers
             return new UnicodeFileContentResult(fileContent, fileName);
         }
 
-        [HttpGet]
-        public UnicodeFileContentResult DownloadLogFile(string id, string fileName)
+        [AcceptVerbs(new[] { "GET", "HEAD" })]
+        public ActionResult DownloadLogFile(string id, string fileName)
         {
             byte[] fileContent;
 
@@ -2554,8 +2554,16 @@ namespace DH.Helpdesk.Web.Controllers
                         basePath = _masterDataService.GetFilePath(c.Customer_Id);
                 }
 
-                fileContent = this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+                try
+                {
+                    fileContent = this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+                }
+                catch (FileNotFoundException e)
+                {
+                    return HttpNotFound("File not found");
+                }
             }
+
             var defaultFileName = GetDefaultFileName(fileName);
             Response.AddHeader("Content-Disposition", string.Format("attachment; filename=\"{0}\"", defaultFileName));
 

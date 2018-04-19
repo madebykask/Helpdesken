@@ -210,7 +210,7 @@
                                                                  }
                                                                  else
                                                                  {
-                                                                     <a href="@Url.Action("DownloadLogFile", new {id = r.Id, fileName = l.FileName})"><i class="icon-file"></i> @l.FileName</a>
+                                                                     <a target="_blank" class="isExisted" href="@Url.Action("DownloadLogFile", new {id = r.Id, fileName = l.FileName})"><i class="icon-file"></i> @l.FileName</a>
                                                                  }
                                                              }
                                                          }
@@ -306,3 +306,4 @@
     }
 
 }
+

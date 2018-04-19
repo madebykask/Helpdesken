@@ -203,6 +203,7 @@ namespace DH.Helpdesk.Dal.Repositories
         List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId);
         List<LogFile> GetLogFilesByCaseId(int caseId);
         List<LogFile> GetLogFilesByLogId(int logId);
+        List<LogFile> GetReferencedFiles(int logId);
         void DeleteByLogIdAndFileName(int logId, string basePath, string fileName);
         void MoveLogFiles(int caseId, string fromBasePath, string toBasePath);
         List<LogFileExisting> GetExistingFileNamesByCaseId(int caseId);
@@ -266,6 +267,11 @@ namespace DH.Helpdesk.Dal.Repositories
             return (from f in this.DataContext.LogFiles
                     where f.Log_Id == logId
                     select f).ToList();
+        }
+
+        public List<LogFile> GetReferencedFiles(int logId)
+        {
+            return DataContext.LogFiles.Where(l => l.ParentLog_Id == logId).ToList();
         }
 
         public void DeleteByLogIdAndFileName(int logId, string basePath, string fileName)
