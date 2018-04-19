@@ -51,6 +51,7 @@
             this.Property(x => x.EMailSubjectPattern).IsRequired().HasMaxLength(100);
             //this.Property(x => x.InventoryDays2WaitBeforeDelete).IsOptional();
             this.Property(x => x.InvoiceType).IsRequired();
+            this.Property(x => x.IntegrationType).IsRequired();
             this.Property(x => x.LDAPAllUsers).IsRequired();
             this.Property(x => x.LDAPAuthenticationType).IsRequired();
             this.Property(x => x.LDAPBase).IsRequired().HasMaxLength(200);

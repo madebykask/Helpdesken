@@ -13,37 +13,59 @@
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
-                <div class="container">
-                    <h4>@Translation.Get("LDAP", Enums.TranslationSource.TextTranslation)</h4>
+                <h4>@Translation.Get("Integration - Anmälare", Enums.TranslationSource.TextTranslation)</h4>
+                <div class="container">                    
                     <div class="row">
                         <div class="span12">
+
+                            <input type="radio" name="Setting.IntegrationType" @(Model.Setting.IntegrationType == 1 ? "checked='checked'" : "") id="Customer_Setting_IntegrationType1" onclick="ShowRelatedFields()" value="1" />
+                            @Translation.Get("LDAP", Enums.TranslationSource.TextTranslation)
+                            <input type="radio" name="Setting.IntegrationType" @(Model.Setting.IntegrationType == 0 ? "checked='checked'" : "") id="Customer_Setting_IntegrationType2" onclick="ShowRelatedFields()" value="0" />
+                            @Translation.Get("CSV", Enums.TranslationSource.TextTranslation)
+                            <br /><br />                                                      
                             <table class="tableform" id="customerSync">
-                                <tr>
-                                    <td class="span3">
-                                        @Translation.Get("Server", Enums.TranslationSource.TextTranslation)
+                                <tr class="customerSync">
+                                    <td colspan="2">
+                                        <strong>@Translation.Get("LDAP", Enums.TranslationSource.TextTranslation)</strong>
                                     </td>
-                                    <td class="span9">
+                                </tr>
+                                <tr class="CSVSync">
+                                    <td colspan="2">
+                                        <strong>@Translation.Get("CSV", Enums.TranslationSource.TextTranslation)</strong>
+                                    </td>
+                                </tr>
+                                <tr>                                    
+                                    <td class="span3 customerSync">
+                                        @Translation.Get("Server", Enums.TranslationSource.TextTranslation)
+                                    </td>                                 
+                                    <td class="span9 customerSync">
                                         @Html.TextBoxFor(model => model.Customer.NDSPath, new { maxlength = "200", style = "width: 400px;" })
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td class="customerSync">
                                         @Translation.Get("Base DN", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="CSVSync">
+                                        @Translation.Get("Sökväg", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => model.Setting.LDAPBase, new { maxlength = "200", style = "width: 400px;" })
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td class="customerSync">
                                         @Translation.Get("Filter", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="CSVSync">
+                                        @Translation.Get("Filnamn", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => model.Setting.LDAPFilter, new { maxlength = "150", style = "width: 400px;" })
-                                        &nbsp;@Translation.Get("(mail=*@datahalland.se)", Enums.TranslationSource.TextTranslation)
+                                        <span class="customerSync">&nbsp;@Translation.Get("(mail=*@datahalland.se)", Enums.TranslationSource.TextTranslation)</span>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr class="customerSync">
                                     <td>
                                         @Translation.Get("Användar Id", Enums.TranslationSource.TextTranslation)
                                     </td>
@@ -51,7 +73,7 @@
                                         @Html.TextBoxFor(model => model.Setting.LDAPUserName, new { maxlength = "100", style = "width: 400px;" })
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr class="customerSync">
                                     <td>
                                         @Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation)
                                     </td>
@@ -747,5 +769,25 @@
 
         }
     });
+ 
+    
+
+    $(".CSVSync").hide();
+
+    ShowRelatedFields();
+
+    function ShowRelatedFields()
+    {                          
+        if (document.getElementById('Customer_Setting_IntegrationType2').checked)
+        {
+            $(".CSVSync").show();
+            $(".customerSync").hide();
+        }
+        else {
+            $(".customerSync").show();
+            $(".CSVSync").hide();
+        }       
+    }        
+        
 
 </script>
