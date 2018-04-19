@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -65,6 +64,11 @@ namespace DH.Helpdesk.Dal.Repositories
                 public const string Text_External = "Text_External";
             }
 
+            public static class Region
+            {
+                public const string RegionName = "Region";
+            }
+
             public static class Department
             {
                 public const string DepartmentId = "DepartmentId";
@@ -81,7 +85,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         #region FreeText Search Condition Fields
 
-        private string[] _initiatorCaseConditionFields = new string[]
+        private readonly string[] _initiatorCaseConditionFields = new string[]
         {
             Tables.Case.ReportedBy,
             Tables.Case.Persons_Name,
@@ -92,7 +96,7 @@ namespace DH.Helpdesk.Dal.Repositories
             Tables.Case.Persons_Phone
         };
 
-        private string[] _freeTextCaseConditionFields = new string[]
+        private readonly string[] _freeTextCaseConditionFields = new string[]
         {
             Tables.Case.ReportedBy,
             Tables.Case.Persons_Name,
@@ -109,7 +113,7 @@ namespace DH.Helpdesk.Dal.Repositories
             Tables.Case.InventoryNumber
         };
 
-        private string[] _freeTextCaseIsAboutConditionFields = new string[]
+        private readonly string[] _freeTextCaseIsAboutConditionFields = new string[]
         {
             Tables.CaseIsAbout.ReportedBy,
             Tables.CaseIsAbout.Person_Name,
@@ -120,13 +124,18 @@ namespace DH.Helpdesk.Dal.Repositories
             Tables.CaseIsAbout.Person_Phone
         };
 
-        private string[] _freeTextLogConditionFields = new string[]
+        private readonly string[] _freeTextLogConditionFields = new string[]
         {
             Tables.Log.Text_Internal,
             Tables.Log.Text_External
         };
 
-        private string[] _freeTextDepartmentConditionFields = new string[]
+        private readonly string[] _freeTextRegionConditionFields = new string[]
+        {
+            Tables.Region.RegionName
+        };
+
+        private readonly string[] _freeTextDepartmentConditionFields = new string[]
         {
             Tables.Department.DepartmentId,
             Tables.Department.DepartmentName
@@ -136,7 +145,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public string BuildCaseSearchSql(SearchQueryBuildContext ctx)
         {
-            
             _useFts = ctx.UseFullTextSearch;
 
             var search = ctx.Criterias.Search;
@@ -443,9 +451,10 @@ namespace DH.Helpdesk.Dal.Repositories
                     var items = new List<string>
                     {
                         BuildCaseFreeTextSearchQueryCte(freeText, filter),
+                        BuildRegionFreeTextSearchQueryCte(freeText, filter),
+                        BuildDepartmentFreeTextSearchQueryCte(freeText, filter),
                         BuildCaseIsAboutFreeTextSearchQueryCte(freeText, filter),
                         BuildLogFreeTextSearchQueryCte(freeText, filter),
-                        BuildDepartmentFreeTextSearchQueryCte(freeText, filter),
                         BuilFormFieldValueFreeTextSearchQueryCte(freeText, filter)
                     };
 
@@ -536,6 +545,24 @@ namespace DH.Helpdesk.Dal.Repositories
 
             strBld.AppendLine(" )");
             strBld.AppendLine(@"GROUP BY tblLog.Case_Id");
+            return strBld.ToString();
+        }
+
+        private string BuildRegionFreeTextSearchQueryCte(string freeText, CaseSearchFilter filter)
+        {
+            var customerId = filter.CustomerId;
+            var strBld = new StringBuilder();
+
+            strBld.AppendLine(@"SELECT caseReg.Id FROM tblRegion reg ");
+            strBld.AppendLine("  INNER JOIN tblCase caseReg WITH (nolock) ON reg.Id = caseReg.Region_Id ");
+            strBld.AppendFormat("WHERE caseReg.Customer_Id = {0} ", customerId).AppendLine();
+            strBld.AppendLine(" AND (");
+            var items = BuildFreeTextConditionsFor(freeText, _freeTextRegionConditionFields);
+            var formattedConditions = ConcatConditionsToString(items);
+            strBld.AppendLine(formattedConditions);
+
+            strBld.AppendLine(" )");
+            strBld.AppendLine(@"GROUP BY caseReg.Id");
             return strBld.ToString();
         }
 
