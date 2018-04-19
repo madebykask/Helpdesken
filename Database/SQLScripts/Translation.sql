@@ -7103,6 +7103,14 @@ GO
 If exists (select * from tblTextTranslation where text_id = 1955 and Language_Id = 2)
 	update tblTextTranslation set TextTranslation = 'Create new' where Text_Id = 1955
 GO
+
+if not exists (select * from tbltext where id = 1969)
+	insert into tbltext (id, TextString) values (1969, 'Sökväg')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1969 and Language_Id = 2)
+     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1969, 2, 'Path')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 
