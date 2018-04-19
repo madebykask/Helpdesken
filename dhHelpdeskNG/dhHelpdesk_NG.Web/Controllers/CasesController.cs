@@ -5588,6 +5588,11 @@ namespace DH.Helpdesk.Web.Controllers
                             m.UpdateNotifierInformation = caseTemplate.UpdateNotifierInformation.Value.ToBool();
                         }
 
+                        if (caseTemplate.AddFollowersBtn.HasValue)
+                        {
+                            m.AddFollowersBtn = caseTemplate.AddFollowersBtn.Value;
+                        }
+
                         if (caseTemplate.Supplier_Id != null)
                             m.case_.Supplier_Id = caseTemplate.Supplier_Id.Value;
 

@@ -1086,6 +1086,12 @@ namespace DH.Helpdesk.Web.Controllers
                 int UpdateNotifierInformation = Convert.ToInt32(collection["CaseSolution.UpdateNotifierInformation"].ToString());
                 caseSolutionInputViewModel.CaseSolution.UpdateNotifierInformation = UpdateNotifierInformation;
             }
+
+            if (collection["CaseSolution.AddFollowersBtn"].Trim() != string.Empty)
+            {
+                caseSolutionInputViewModel.CaseSolution.AddFollowersBtn = Convert.ToBoolean(collection["CaseSolution.AddFollowersBtn"]);
+            }
+
             if (collection["CaseSolution.Urgency_Id"].ToString().Trim() != string.Empty)
             {
                 int Urgency_Id = Convert.ToInt32(collection["CaseSolution.Urgency_Id"].ToString());
@@ -1268,6 +1274,7 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.Place,
                     caseSolution.UserCode,
                     UpdateNotifierInformation = caseSolution.UpdateNotifierInformation.ToBool().ToString(),
+                    AddFollowersBtn = caseSolution.AddFollowersBtn.ToString(),
 
                     caseSolution.IsAbout_ReportedBy,
                     caseSolution.IsAbout_PersonsName,
@@ -2232,6 +2239,12 @@ namespace DH.Helpdesk.Web.Controllers
                 int UpdateNotifierInformation = Convert.ToInt32(collection["CaseSolution.UpdateNotifierInformation"].ToString());
                 caseSolutionInputViewModel.CaseSolution.UpdateNotifierInformation = UpdateNotifierInformation;
             }
+
+            if (collection["CaseSolution.AddFollowersBtn"].Trim() != string.Empty)
+            {
+                caseSolutionInputViewModel.CaseSolution.AddFollowersBtn = Convert.ToBoolean(collection["CaseSolution.AddFollowersBtn"]);
+            }
+
             if (collection["CaseSolution.Urgency_Id"].ToString().Trim() != string.Empty)
             {
                 int Urgency_Id = Convert.ToInt32(collection["CaseSolution.Urgency_Id"].ToString());
@@ -2532,6 +2545,7 @@ namespace DH.Helpdesk.Web.Controllers
             currentData.Text_External = templateModel.Text_External;
             currentData.Text_Internal = templateModel.Text_Internal;
             currentData.UpdateNotifierInformation = templateModel.UpdateNotifierInformation;
+            currentData.AddFollowersBtn = templateModel.AddFollowersBtn;
             currentData.Urgency_Id = templateModel.Urgency_Id;
             currentData.UserCode = templateModel.UserCode;
             currentData.Verified = templateModel.Verified;

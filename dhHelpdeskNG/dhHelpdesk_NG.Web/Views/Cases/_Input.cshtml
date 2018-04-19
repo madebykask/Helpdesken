@@ -317,7 +317,7 @@
                                                 </td>
                                                 @if (Model.caseFieldSettings.IsFieldVisible(GlobalEnums.TranslationCaseFields.AddFollowersBtn))
                                                 {
-                                                    <td>
+                                                    <td style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseSolutionFields.AddFollowersBtn)">
                                                         @Html.HiddenFor(model => model.FollowerUsers, new { @readonly = "true", id = "extraEmailsInput" })
                                                         @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseSolutionFields.AddFollowersBtn))
                                                         {

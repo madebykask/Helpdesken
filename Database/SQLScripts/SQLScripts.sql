@@ -343,6 +343,7 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
    ALTER TABLE tblSettings ADD IntegrationType int NOT NULL Default(1)
 GO
 
+
 -- Add tblRegion to FTS catalog
 IF EXISTS (SELECT * FROM sys.fulltext_indexes fti WHERE fti.object_id = OBJECT_ID(N'[dbo].[tblRegion]'))
 	DROP FULLTEXT INDEX ON [dbo].[tblRegion]
@@ -376,7 +377,20 @@ if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Id'
 		  [UserCode]) 
 GO
 
+
+RAISERROR ('Adding column AddFollowersBtn on table tblCaseSolution', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AddFollowersBtn' and sysobjects.name = N'tblCaseSolution')
+   ALTER TABLE tblCaseSolution ADD AddFollowersBtn bit NULL
+
+   INSERT INTO tblCaseSolutionFieldSettings (CaseSolution_Id, FieldName_Id, Mode, CreatedDate, ChangedDate)
+		SELECT cs2.CaseSolution_Id, 67, cs2.Mode, GETDATE(), GETDATE()		
+		FROM tblCaseSolutionFieldSettings as cs2
+		LEFT JOIN tblCaseSolutionFieldSettings as cs1 on cs2.CaseSolution_Id = cs1.CaseSolution_Id AND cs1.FieldName_Id = 67
+		WHERE cs2.FieldName_Id = 17 AND cs1.FieldName_Id is NULL
+GO
+
 ---------------------------------------------------------------------------------
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.36'
 --ROLLBACK --TMP

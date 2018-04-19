@@ -319,6 +319,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public BasicSingleItemField UpdateUserInfo { get; set; }
 
+        public BasicSingleItemField AddFollowersBtn { get; set; }
+
         public BasicMultiItemField Regions { get; set; }
 
         public BasicMultiItemField Departments { get; set; }

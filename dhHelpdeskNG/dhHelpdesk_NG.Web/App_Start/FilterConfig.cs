@@ -13,9 +13,7 @@ namespace DH.Helpdesk.Web
 	{
 		public static void RegisterGlobalFilters(GlobalFilterCollection filters)
 		{
-#if !DEBUG
             filters.Add(new CustomHandleErrorAttribute());
-#endif
 		}
 
 		public static void RegisterWebApiGlobalFilters(HttpFilterCollection filters)
