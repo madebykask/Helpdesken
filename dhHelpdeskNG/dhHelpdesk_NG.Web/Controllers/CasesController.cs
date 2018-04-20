@@ -2536,7 +2536,7 @@ namespace DH.Helpdesk.Web.Controllers
             return new UnicodeFileContentResult(fileContent, fileName);
         }
 
-        [AcceptVerbs(new[] { "GET", "HEAD" })]
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)] // do not replace with [HttpGet, HttpHead]
         public ActionResult DownloadLogFile(string id, string fileName)
         {
             byte[] fileContent;
