@@ -57,6 +57,40 @@ namespace DH.Helpdesk.Web.Infrastructure.Binders
             }
 
             throw new ArgumentException(string.Format("Invalid argument: {0}.", value.RawValue));
-        } 
+        }
+
+
+        public static Decimal ParseDecimal(ValueProviderResult valueResult)
+        {
+            var actualValue = 0.00M;
+            try
+            {
+                actualValue = Convert.ToDecimal(valueResult.AttemptedValue, CultureInfo.CurrentCulture);
+                return actualValue;
+            }
+            catch (FormatException e)
+            {
+            }
+
+            try
+            {
+                actualValue = Convert.ToDecimal(valueResult.AttemptedValue, CultureInfo.CurrentUICulture);
+                return actualValue;
+            }
+            catch (Exception e)
+            {
+            }
+
+            try
+            {
+                actualValue = Convert.ToDecimal(valueResult.AttemptedValue, CultureInfo.InvariantCulture);
+                return actualValue;
+            }
+            catch (Exception e)
+            {
+            }
+
+            throw new ArgumentException(string.Format("Invalid argument: {0}.", valueResult.RawValue));
+        }
     }
 }

@@ -137,6 +137,10 @@ namespace DH.Helpdesk.Services.Services
                 this._logFileRepository.Commit();
             }
 
+            //remove reference from parent in child records
+            var referencedFiles = this._logFileRepository.GetReferencedFiles(id);
+            referencedFiles?.ForEach(x => x.ParentLog_Id = null);
+
             this._mail2TicketRepository.DeleteByLogId(id);
             this._mail2TicketRepository.Commit();
 

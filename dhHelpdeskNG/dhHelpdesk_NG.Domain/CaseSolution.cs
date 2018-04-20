@@ -80,6 +80,7 @@ namespace DH.Helpdesk.Domain
         public string FinishingDescription { get; set; }
         public int SMS { get; set; }
         public int? UpdateNotifierInformation { get; set; }
+        public bool? AddFollowersBtn { get; set; }
         public DateTime? PlanDate { get; set; }
         public int? CausingPartId { get; set; }
         public int? RegistrationSource { get; set; }

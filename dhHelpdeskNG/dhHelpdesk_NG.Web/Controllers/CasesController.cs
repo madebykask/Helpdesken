@@ -1365,7 +1365,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
                 else
                 {
-                    err = Translation.Get("Du kan inte ta bort noteringen, eftersom du saknar behörighet att ta bort bifogade filer") + ".";
+                    err = Translation.GetCoreTextTranslation("Du kan inte ta bort noteringen, eftersom du saknar behörighet att ta bort bifogade filer") + ".";
                     TempData["PreventError"] = err;
                     return this.RedirectToAction("editlog", "cases", new { id = id, customerId = SessionFacade.CurrentCustomer.Id });
                 }
@@ -2536,8 +2536,8 @@ namespace DH.Helpdesk.Web.Controllers
             return new UnicodeFileContentResult(fileContent, fileName);
         }
 
-        [HttpGet]
-        public UnicodeFileContentResult DownloadLogFile(string id, string fileName)
+        [AcceptVerbs(new[] { "GET", "HEAD" })]
+        public ActionResult DownloadLogFile(string id, string fileName)
         {
             byte[] fileContent;
 
@@ -2554,8 +2554,16 @@ namespace DH.Helpdesk.Web.Controllers
                         basePath = _masterDataService.GetFilePath(c.Customer_Id);
                 }
 
-                fileContent = this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+                try
+                {
+                    fileContent = this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+                }
+                catch (FileNotFoundException e)
+                {
+                    return HttpNotFound("File not found");
+                }
             }
+
             var defaultFileName = GetDefaultFileName(fileName);
             Response.AddHeader("Content-Disposition", string.Format("attachment; filename=\"{0}\"", defaultFileName));
 
@@ -5271,18 +5279,18 @@ namespace DH.Helpdesk.Web.Controllers
                 var canDelete = (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1);
                 m.SavedFiles = canDelete ? string.Empty : m.CaseFileNames;
 
-                m.CaseFilesModel = new CaseFilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.GetCaseFiles(caseId, canDelete).OrderBy(x => x.CreatedDate).ToArray(), m.SavedFiles, UseVD);
+                var caseFiles = _caseFileService.GetCaseFiles(caseId, canDelete).OrderBy(x => x.CreatedDate);
 
-                m.CaseAttachedExFiles =
-                    _caseFileService.GetCaseFiles(caseId, canDelete)
-                        .OrderBy(x => x.CreatedDate)
-                        .Select(x => new CaseAttachedExFileModel
-                                    {
-                                        Id = x.Id,
-                                        FileName = x.FileName,
-                                        IsCaseFile = true,
-                                        CaseId = caseId
-                                    }).ToList();
+                m.CaseFilesModel = new CaseFilesModel(caseId.ToString(), caseFiles.ToArray(), m.SavedFiles, UseVD);
+
+                m.CaseAttachedExFiles = 
+                    caseFiles.Select(x => new CaseAttachedExFileModel
+                                            {
+                                                Id = x.Id,
+                                                FileName = x.FileName,
+                                                IsCaseFile = true,
+                                                CaseId = caseId
+                                            }).ToList();
 
                 var exLogFiles = _logFileService.GetLogFilesByCaseId(caseId).Select(x => new CaseAttachedExFileModel
                 {
@@ -5586,6 +5594,11 @@ namespace DH.Helpdesk.Web.Controllers
                         if (caseTemplate.UpdateNotifierInformation.HasValue)
                         {
                             m.UpdateNotifierInformation = caseTemplate.UpdateNotifierInformation.Value.ToBool();
+                        }
+
+                        if (caseTemplate.AddFollowersBtn.HasValue)
+                        {
+                            m.AddFollowersBtn = caseTemplate.AddFollowersBtn.Value;
                         }
 
                         if (caseTemplate.Supplier_Id != null)

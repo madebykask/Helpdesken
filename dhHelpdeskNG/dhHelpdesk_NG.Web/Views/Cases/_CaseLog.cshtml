@@ -210,7 +210,7 @@
                                                                  }
                                                                  else
                                                                  {
-                                                                     <a href="@Url.Action("DownloadLogFile", new {id = r.Id, fileName = l.FileName})"><i class="icon-file"></i> @l.FileName</a>
+                                                                     <a target="_blank" class="isExisted" href="@Url.Action("DownloadLogFile", new {id = r.Id, fileName = l.FileName})"><i class="icon-file"></i> @l.FileName</a>
                                                                  }
                                                              }
                                                          }
@@ -262,9 +262,9 @@
 						        <td>
 							        @Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Material"):
 						        </td>
-						        <td id="totalMaterial">
-							        @Model.Logs.Sum(x => x.Price).ToString("0.00")
-						        </td>
+					            <td id="totalMaterial">
+					                @Model.Logs.Sum(x => x.EquipmentPrice).ToString("0.00")
+					            </td>
 					        </tr>
                         }
                         if (Model.case_.Department.ShowInvoicePrice)
@@ -274,7 +274,7 @@
 							        @Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Pris"):
 						        </td>
 						        <td id="totalPrice">
-							        @Model.Logs.Sum(x => x.EquipmentPrice).ToString("0.00")
+						            @Model.Logs.Sum(x => x.Price).ToString("0.00")
 						        </td>
 					        </tr>
                         }
@@ -306,3 +306,4 @@
     }
 
 }
+

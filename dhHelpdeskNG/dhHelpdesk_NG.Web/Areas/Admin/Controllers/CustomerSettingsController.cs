@@ -110,6 +110,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             vmodel.Setting.EMailSubjectPattern = setting.EMailSubjectPattern.ToString();
             vmodel.Setting.LDAPSyncType = setting.LDAPSyncType;
             vmodel.Setting.LDAPCreateOrganization = setting.LDAPCreateOrganization;
+           // vmodel.Setting.IntegrationType = setting.IntegrationType;
             vmodel.Setting.PhysicalFilePath = setting.PhysicalFilePath;
             vmodel.Setting.VirtualFilePath = setting.VirtualFilePath;
             vmodel.Setting.CaseComplaintDays = setting.CaseComplaintDays;

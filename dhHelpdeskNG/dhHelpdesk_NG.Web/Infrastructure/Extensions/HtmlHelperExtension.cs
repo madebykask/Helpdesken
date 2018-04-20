@@ -1636,18 +1636,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
         private static MvcHtmlString BuildCaseSolutionCategoryJSDropdownButton(IList<CaseTemplateCategoryNode> categories, int customerId)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             foreach (CaseTemplateCategoryNode f in categories)
             {
-
-                bool hasChild = false;
-                if (f.CaseTemplates != null)
-                    if (f.CaseTemplates.Count > 0)
-                        hasChild = true;
+                var hasChild = f.CaseTemplates != null && f.CaseTemplates.Count > 0;
 
                 if (hasChild)
-                    sb.Append("<li class='dropdown-submenu'>");
+                    sb.AppendFormat("<li class='dropdown-submenu DynamicDropDown_Up' id='tpl_{0}'>", f.CategoryId);
                 else
                     sb.Append("<li>");
 
@@ -1660,30 +1656,24 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
                 if (hasChild)
                 {
-                    sb.Append("<ul class='dropdown-menu'>");
+                    sb.AppendFormat("<ul class='dropdown-menu subddMenu' id='subDropDownMenu_tpl_{0}'>", f.CategoryId);
                     sb.Append(BuildCaseSolutionJSDropdownButton(f.CaseTemplates.ToList(), customerId));
                     sb.Append("</ul>");
                 }
                 sb.Append("</li>");
-
             }
 
             return new MvcHtmlString(sb.ToString());
         }
         private static MvcHtmlString BuildCaseSolutionCategoryDropdownButton(IList<CaseTemplateCategoryNode> categories, int customerId)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             foreach (CaseTemplateCategoryNode f in categories)
             {
-
-                bool hasChild = false;
-                if (f.CaseTemplates != null)
-                    if (f.CaseTemplates.Count > 0)
-                        hasChild = true;
-
+                var hasChild = f.CaseTemplates != null && f.CaseTemplates.Any();
                 if (hasChild)
-                    sb.Append("<li class='dropdown-submenu'>");
+                    sb.AppendFormat("<li class='dropdown-submenu DynamicDropDown_Up' id='tpl_{0}'>", f.CategoryId);
                 else
                     sb.Append("<li>");
 
@@ -1712,7 +1702,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
                 if (hasChild)
                 {
-                    sb.Append("<ul class='dropdown-menu'>");
+                    sb.AppendFormat("<ul class='dropdown-menu subddMenu' id='subDropDownMenu_tpl_{0}'>", f.CategoryId);
                     sb.Append(BuildCaseSolutionDropdownButton(f.CaseTemplates.ToList(), customerId));
                     sb.Append("</ul>");
                 }
