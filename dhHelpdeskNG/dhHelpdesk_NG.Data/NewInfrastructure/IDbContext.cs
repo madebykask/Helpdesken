@@ -9,6 +9,10 @@
 
         DbEntityEntry<T> Entry<T>(T entity) where T : class;
 
+        DbContextConfiguration Configuration { get; }
+
+        DbChangeTracker ChangeTracker { get; }
+
         int SaveChanges();
 
         void Dispose();
