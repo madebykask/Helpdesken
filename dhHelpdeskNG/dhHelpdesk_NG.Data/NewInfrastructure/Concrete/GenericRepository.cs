@@ -61,6 +61,11 @@ namespace DH.Helpdesk.Dal.NewInfrastructure.Concrete
             this.dbset.Remove(entity);
         }
 
+        public void DeleteRange(IEnumerable<TEntity> entities)
+        {
+            ((DbSet<TEntity>) dbset).RemoveRange(entities);
+        }
+
         public void DeleteWhere(Expression<Func<TEntity, bool>> predicate)
         {
             IQueryable<TEntity> delList = this.dbset.Where(predicate);

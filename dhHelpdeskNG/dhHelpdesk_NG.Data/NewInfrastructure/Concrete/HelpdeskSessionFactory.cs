@@ -9,6 +9,11 @@
             return new HelpdeskSqlServerDbContext();
         }
 
+        public IDbContext GetSession(int timeout)
+        {
+            return new HelpdeskSqlServerDbContext(timeout);
+        }
+
         public IDbContext GetSessionWithDisabledLazyLoading()
         {
             var session = new HelpdeskSqlServerDbContext();

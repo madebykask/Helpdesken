@@ -14,6 +14,11 @@
             return new UnitOfWork(this.sessionFactory.GetSession());
         }
 
+        public IUnitOfWork Create(int timeout)
+        {
+            return new UnitOfWork(this.sessionFactory.GetSession(timeout));
+        }
+
         public IUnitOfWork CreateWithDisabledLazyLoading()
         {
             return new UnitOfWork(this.sessionFactory.GetSessionWithDisabledLazyLoading());

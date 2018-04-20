@@ -156,15 +156,17 @@ namespace DH.Helpdesk.Services.Services
             UpdateAuditOperationData(auditData);
 
             var casesIds = new List<int>();
+            var sqlTimeout = 300; //seconds
             try
             {
-                using (var uow = _unitOfWorkFactory.Create())
+                using (var uow = _unitOfWorkFactory.Create(sqlTimeout))
                 {
+                    uow.AutoDetectChangesEnabled = false;
+
                     var rep = uow.GetRepository<Case>();
                     var caseFiles = uow.GetRepository<CaseFile>();
                     var followers = uow.GetRepository<CaseExtraFollower>();
                     var logFiles = uow.GetRepository<LogFile>();
-                    var emailLogs = uow.GetRepository<EmailLog>();
                     var extendedCaseValuesRep = uow.GetRepository<ExtendedCaseValueEntity>();
                     var formFieldValueRep = uow.GetRepository<FormFieldValue>();
                     var formFieldValueHistoryRep = uow.GetRepository<FormFieldValueHistory>();
@@ -216,7 +218,7 @@ namespace DH.Helpdesk.Services.Services
                         casesQueryable = casesQueryable.Where(x => x.RegTime <= p.RegisterDateTo.Value);
                     }
 
-                    var cases = casesQueryable.ToList();
+                    var cases = casesQueryable.ToArray();
 
                     if (cases.Any())
                     {
@@ -226,13 +228,15 @@ namespace DH.Helpdesk.Services.Services
 
                         foreach (var c in cases)
                         {
+                            
                             ProcessReplaceCasesData(c, caseFiles, logFiles, followers, p);
-                            ProcessReplaceCasesHistoryData(c, emailLogs, p);
+                            ProcessReplaceCasesHistoryData(c, p);
                             ProcessExtededCaseData(c, caseExtendedCaseRep, caseSectionExtendedCaseRep, extendedCaseValuesRep, p);
                         }
 
                         ProccessFormPlusCaseData(cases.Select(c => c.Id).ToList(), formFieldValueHistoryRep, formFieldValueRep);
 
+                        uow.DetectChanges();
                         uow.Save();
                     }
                 }
@@ -484,39 +488,27 @@ namespace DH.Helpdesk.Services.Services
                 {
                     if (c.CaseFollowers.Any())
                     {
-                        foreach (var follower in c.CaseFollowers.ToList())
-                        {
-                            followers.Delete(follower);
-                        }
+                        followers.DeleteRange(c.CaseFollowers);
                     }
                 }
+            }
 
-                if (parameters.RemoveCaseAttachments && c.CaseFiles.Any())
+            if (parameters.RemoveCaseAttachments && c.CaseFiles.Any())
+            {
+                caseFiles.DeleteRange(c.CaseFiles);
+            }
+
+            if (parameters.RemoveLogAttachments && c.Logs.Any())
+            {
+                var logFilesEnitites = c.Logs.SelectMany(l => l.LogFiles).ToArray();
+                if (logFilesEnitites.Any())
                 {
-                    foreach (var caseFile in c.CaseFiles.ToList())
-                    {
-                        caseFiles.Delete(caseFile);
-                    }
+                    logFiles.DeleteRange(logFilesEnitites);
                 }
-
-                if (parameters.RemoveLogAttachments && c.Logs.Any())
-                {
-                    foreach (var log in c.Logs)
-                    {
-                        if (log.LogFiles.Any())
-                        {
-                            foreach (var lFile in log.LogFiles.ToList())
-                            {
-                                logFiles.Delete(lFile);
-                            }
-                        }
-                    }
-                }
-
             }
         }
 
-        private void ProcessReplaceCasesHistoryData(Case c, IRepository<EmailLog> emailLogs, DataPrivacyParameters parameters)
+        private void ProcessReplaceCasesHistoryData(Case c, DataPrivacyParameters parameters)
         {
             if (c.CaseHistories.Any())
             {
@@ -733,10 +725,8 @@ namespace DH.Helpdesk.Services.Services
                         caseData.ExtendedCaseForm.UpdatedBy = replaceDataWith;
                         caseData.ExtendedCaseForm.UpdatedOn = replaceDatesWith;
                     }
-                    caseExtendedCaseRep.Delete(caseData);
                 }
-                c.CaseExtendedCaseDatas.Clear();
-                //caseExtendedCaseRep.DeleteWhere(ce => ce.Case_Id == c.Id);
+                caseExtendedCaseRep.DeleteRange(c.CaseExtendedCaseDatas);
             }
 
             if (c.CaseSectionExtendedCaseDatas != null && c.CaseSectionExtendedCaseDatas.Any())
@@ -744,10 +734,8 @@ namespace DH.Helpdesk.Services.Services
                 foreach (var caseData in c.CaseSectionExtendedCaseDatas.ToList())
                 {
                     CleanExtendedCaseData(extendedCaseValuesRep, caseData.ExtendedCaseData, replaceDataWith, replaceDatesWith);
-                    caseSectionExtendedCaseRep.Delete(caseData);
                 }
-                c.CaseSectionExtendedCaseDatas.Clear();
-                //caseSectionExtendedCaseRep.DeleteWhere(cs => cs.Case_Id == c.Id);
+                caseSectionExtendedCaseRep.DeleteRange(c.CaseSectionExtendedCaseDatas);
             }
 
         }
@@ -759,11 +747,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 if (caseData.ExtendedCaseValues != null && caseData.ExtendedCaseValues.Any())
                 {
-                    foreach (var value in caseData.ExtendedCaseValues.ToList())
-                    {
-                        extendedCaseValuesRep.Delete(value);
-                    }
-                    caseData.ExtendedCaseValues.Clear();
+                    extendedCaseValuesRep.DeleteRange(caseData.ExtendedCaseValues);
                 }
                 caseData.CreatedBy = replaceDataWith;
                 caseData.CreatedOn = replaceDatesWith ?? DateTime.Now;
