@@ -19,6 +19,7 @@ using DH.Helpdesk.Web.Areas.Invoices.Models;
 using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order;
 using DH.Helpdesk.Web.Enums;
 using DH.Helpdesk.Web.Infrastructure;
+using DH.Helpdesk.Web.Infrastructure.Attributes;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Models.Invoice;
 using DH.Helpdesk.Web.Models.Shared;
@@ -171,6 +172,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 			return File(Path.Combine(globalSetting.InvoiceFileFolder, file.Name), "text/plain", file.Name);
 	    }
 
+        [NoCache]
         [System.Web.Mvc.HttpGet]
         public ActionResult GetInvoicesOverviewList(InvoiceOverviewFilterModel filter)
         {
