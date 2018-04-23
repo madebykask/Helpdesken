@@ -3998,6 +3998,7 @@ th.sorting_disabled
     overflow-x: hidden;
     overflow-y: auto;
     direction: rtl;
+    text-align: left;
 }
 
 div.chosen-container.chosen-container-multi.error,
