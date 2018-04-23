@@ -9,10 +9,13 @@
         {
         }
 
-        public StateFieldsSettingsModel(FieldSettingModel createdDateFieldSettingModel, FieldSettingModel changedDateFieldSettingModel)
+        public StateFieldsSettingsModel(FieldSettingModel createdDateFieldSettingModel, 
+                                        FieldSettingModel changedDateFieldSettingModel,
+                                        FieldSettingModel syncdDateFieldSettingModel)
         {
             this.CreatedDateFieldSettingModel = createdDateFieldSettingModel;
             this.ChangedDateFieldSettingModel = changedDateFieldSettingModel;
+            this.SyncDateFieldSettingModel = syncdDateFieldSettingModel;
         }
 
         [NotNull]
@@ -22,5 +25,9 @@
         [NotNull]
         [LocalizedDisplay("Senast ändrad datum")]
         public FieldSettingModel ChangedDateFieldSettingModel { get; set; }
+
+        [NotNull]
+        [LocalizedDisplay("Synkroniseringsdatum")]
+        public FieldSettingModel SyncDateFieldSettingModel { get; set; }
     }
 }

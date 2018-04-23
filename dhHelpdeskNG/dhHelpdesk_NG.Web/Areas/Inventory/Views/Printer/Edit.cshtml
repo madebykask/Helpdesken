@@ -77,6 +77,17 @@
                         </tr>
                         }
                     }
+                    @if (Model.PrinterViewModel.SyncDate.Show)
+                    {
+                        <tr>
+                            <td class="span3">
+                                <label>@Translation.Get(Model.PrinterViewModel.SyncDate.Caption)</label>
+                            </td>
+                            <td class="span9">
+                                @Html.DisplayFor(m => m.PrinterViewModel.SyncDate.Value, "Date")
+                            </td>
+                        </tr>
+                    }
                 </table>
             </div>
         </div>

@@ -27,5 +27,7 @@
         public static readonly string CreatedDate = "CreatedDate";
 
         public static readonly string ChangedDate = "ChangedDate";
+
+        public static readonly string SyncChangedDate = "SyncChangedDate";
     }
 }

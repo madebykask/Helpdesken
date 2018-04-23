@@ -12,6 +12,7 @@
             int? customerId,
             DateTime createdDate,
             DateTime changedDate,
+            DateTime? syncDate,
             GeneralFields generalFields,
             InventoryFields inventoryFields,
             CommunicationFields communicationFields,
@@ -23,6 +24,7 @@
             this.CustomerId = customerId;
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
+            this.SyncDate = syncDate;
             this.GeneralFields = generalFields;
             this.InventoryFields = inventoryFields;
             this.CommunicationFields = communicationFields;
@@ -38,8 +40,10 @@
         public int? CustomerId { get; private set; }
 
         public DateTime CreatedDate { get; private set; }
-
+        
         public DateTime ChangedDate { get; private set; }
+
+        public DateTime? SyncDate { get; }
 
         [NotNull]
         public GeneralFields GeneralFields { get; private set; }

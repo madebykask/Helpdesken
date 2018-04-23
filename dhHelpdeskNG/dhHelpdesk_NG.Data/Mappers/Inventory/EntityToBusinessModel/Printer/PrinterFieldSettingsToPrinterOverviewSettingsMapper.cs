@@ -116,8 +116,8 @@
         {
             var createdDate = CreateFieldSetting(entity.FindByName(StateFields.CreatedDate));
             var changedDate = CreateFieldSetting(entity.FindByName(StateFields.ChangedDate));
-
-            var settings = new StateFieldsSettings(createdDate, changedDate);
+            var syncDate = CreateFieldSetting(entity.FindByName(StateFields.SyncDate));
+            var settings = new StateFieldsSettings(createdDate, changedDate, syncDate);
 
             return settings;
         }

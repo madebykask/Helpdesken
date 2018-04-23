@@ -26,8 +26,7 @@
             int? buildingId,
             int? floorId,
             DateTime? syncChangeDate)
-            : base(departmentId, roomId, name, model, manufacturer, serialNumber, theftMark, barCode, purchaseDate, info
-                )
+            : base(departmentId, roomId, name, model, manufacturer, serialNumber, theftMark, barCode, purchaseDate, info)
         {
             this.Id = id;
             this.CreatedDate = createdDate;

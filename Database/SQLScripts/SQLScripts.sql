@@ -5,7 +5,6 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
    ALTER TABLE tblSettings ADD IntegrationType int NOT NULL Default(1)
 GO
 
-
 -- Add tblRegion to FTS catalog
 IF EXISTS (SELECT * FROM sys.fulltext_indexes fti WHERE fti.object_id = OBJECT_ID(N'[dbo].[tblRegion]'))
 	DROP FULLTEXT INDEX ON [dbo].[tblRegion]
@@ -50,6 +49,14 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 		LEFT JOIN tblCaseSolutionFieldSettings as cs1 on cs2.CaseSolution_Id = cs1.CaseSolution_Id AND cs1.FieldName_Id = 67
 		WHERE cs2.FieldName_Id = 17 AND cs1.FieldName_Id is NULL
 GO
+
+RAISERROR ('Adding column SyncChangedDate on table tblPrinter', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SyncChangedDate' and sysobjects.name = N'tblPrinter')
+   ALTER TABLE dbo.tblPrinter ADD SyncChangedDate datetime NULL
+GO
+
+--INSERT INTO [dbo].[tblPrinterFieldSettings] (Customer_Id, PrinterField, Show, Label, Label_ENG, Required, FieldHelp, ShowInList, CreatedDate, ChangedDate)
+--VALUES (1, 'SyncChangedDate', 1, 'Synkroniseringsdatum', 'Synchronize Date', 0, '',  0, GETDATE(), GETDATE())
 
 ---------------------------------------------------------------------------------
 

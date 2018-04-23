@@ -23,39 +23,36 @@
 
         public DefaultFieldSettings DefaultSettings { get; private set; }
 
+        #region Factory Methods
+
         public static InventoryFieldSettings CreateForEdit(DefaultFieldSettings defaultSettings)
         {
             var businessModel = new InventoryFieldSettings(ModelStates.ForEdit, defaultSettings);
-
             return businessModel;
         }
 
-        public static InventoryFieldSettings CreateForUpdate(
-            int inventoryTypeId,
-            DefaultFieldSettings defaultSettings,
-            DateTime changedDate)
+        public static InventoryFieldSettings CreateForUpdate(int inventoryTypeId, DefaultFieldSettings defaultSettings, DateTime changedDate)
         {
             var businessModel = new InventoryFieldSettings(ModelStates.Updated, defaultSettings)
-                                    {
-                                        InventoryTypeId = inventoryTypeId,
-                                        ChangedDate = changedDate
-                                    };
+            {
+                InventoryTypeId = inventoryTypeId,
+                ChangedDate = changedDate
+            };
 
             return businessModel;
         }
 
-        public static InventoryFieldSettings CreateNew(
-            int inventoryTypeId,
-            DefaultFieldSettings defaultSettings,
-            DateTime createdDate)
+        public static InventoryFieldSettings CreateNew(int inventoryTypeId, DefaultFieldSettings defaultSettings, DateTime createdDate)
         {
             var businessModel = new InventoryFieldSettings(ModelStates.Created, defaultSettings)
-                                    {
-                                        InventoryTypeId = inventoryTypeId,
-                                        CreatedDate = createdDate
-                                    };
+            {
+                InventoryTypeId = inventoryTypeId,
+                CreatedDate = createdDate
+            };
 
             return businessModel;
         }
+
+        #endregion
     }
 }

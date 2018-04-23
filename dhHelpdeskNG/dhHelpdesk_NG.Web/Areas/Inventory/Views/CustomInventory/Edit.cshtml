@@ -70,6 +70,14 @@
                             @Html.DisplayFor(m => m.InventoryViewModel.ChangeDate, "Date")
                         </td>
                     </tr>
+                    <tr>
+                        <td class="span3">
+                            <label>@Translation.GetCoreTextTranslation("Synkroniseringsdatum")</label>
+                        </td>
+                        <td class="span9">
+                            @Html.DisplayFor(m => m.InventoryViewModel.SyncDate, "Date")
+                        </td>
+                    </tr>
                 </table>
             </div>
         </div>

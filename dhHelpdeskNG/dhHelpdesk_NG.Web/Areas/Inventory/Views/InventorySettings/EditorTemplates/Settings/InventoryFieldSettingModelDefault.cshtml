@@ -6,6 +6,15 @@
 <td>@Html.DisplayFor(m => m.PropertySize)</td>
 <td>@Html.CheckBoxFor(m => m.ShowInDetails, new { @class = "switchcheckbox" })</td>
 <td>@Html.CheckBoxFor(m => m.ShowInList, new {@class = "switchcheckbox"})</td>
-<td>@Html.TextBoxFor(m => m.XMLTag)</td>
+<td>
+    @if (Model.HideXml ?? false)
+    {
+        @Html.HiddenFor(m => m.XMLTag)
+    }
+    else
+    {
+        @Html.TextBoxFor(m => m.XMLTag)
+    }
+</td>
 <td>@Html.CheckBoxFor(m => m.ReadOnly, new { @class = "switchcheckbox" })</td>
 <td></td>

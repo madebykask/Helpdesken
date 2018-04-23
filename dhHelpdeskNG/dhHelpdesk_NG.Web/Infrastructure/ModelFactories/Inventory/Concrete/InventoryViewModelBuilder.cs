@@ -81,9 +81,9 @@
             return new InventoryViewModel(model.InventoryTypeId, defaultFieldsViewModel)
                        {
                            Id = model.Id,
-                           CreatedDate =
-                               model.CreatedDate,
-                           ChangeDate = model.ChangeDate
+                           CreatedDate = model.CreatedDate,
+                           ChangeDate = model.ChangeDate,
+                           SyncDate = model.SyncChangeDate
                        };
         }
 

@@ -190,14 +190,12 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         public PartialViewResult PrinterSettings(int languageId)
         {
             var settings =
-                this.inventorySettingsService.GetPrinterFieldSettingsForEdit(
-                    SessionFacade.CurrentCustomer.Id,
-                    languageId);
+                this.inventorySettingsService.GetPrinterFieldSettingsForEdit(SessionFacade.CurrentCustomer.Id, languageId);
+
             var langauges = this.languageService.GetActiveOverviews();
-            var viewModel = this.printerFieldsSettingsViewModelBuilder.BuildViewModel(
-                settings,
-                langauges,
-                languageId);
+
+            var viewModel = 
+                this.printerFieldsSettingsViewModelBuilder.BuildViewModel(settings, langauges, languageId);
 
             return this.PartialView("PrinterSettings", viewModel);
         }
@@ -206,9 +204,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [BadRequestOnNotValid]
         public void PrinterSettings(PrinterFieldsSettingsViewModel model)
         {
-            var businessModel = this.printerFieldsSettingsBuilder.BuildViewModel(
-                model,
-                SessionFacade.CurrentCustomer.Id);
+            var businessModel = 
+                this.printerFieldsSettingsBuilder.BuildViewModel(model, SessionFacade.CurrentCustomer.Id);
 
             this.inventorySettingsService.UpdatePrinterFieldsSettings(businessModel);
         }
@@ -265,21 +262,17 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [BadRequestOnNotValid]
         public RedirectToRouteResult NewInventorySettings(InventoryFieldSettingsEditViewModel model)
         {
-            // todo
-            var inventoryTypeBusinessModel = InventoryType.CreateNew(
-                SessionFacade.CurrentCustomer.Id,
-                model.InventoryTypeModel.Name,
-                DateTime.Now);
+            var inventoryTypeBusinessModel = 
+                InventoryType.CreateNew(SessionFacade.CurrentCustomer.Id, model.InventoryTypeModel.Name, DateTime.Now);
+
             this.inventoryService.AddInventoryType(inventoryTypeBusinessModel);
 
-            var defaultSettingsBusinessModel = this.inventoryFieldsSettingsBuilder.BuildBusinessModelForAdd(
-                inventoryTypeBusinessModel.Id,
-                model.InventoryFieldSettingsViewModel.DefaultSettings);
+            var defaultSettingsBusinessModel = 
+                this.inventoryFieldsSettingsBuilder.BuildBusinessModelForAdd(inventoryTypeBusinessModel.Id, model.InventoryFieldSettingsViewModel.DefaultSettings);
+            
             this.inventorySettingsService.AddInventoryFieldsSettings(defaultSettingsBusinessModel);
 
-            this.AddDynamicFieldSetting(
-                inventoryTypeBusinessModel.Id,
-                model.InventoryFieldSettingsViewModel.NewDynamicFieldViewModel.InventoryDynamicFieldSettingModel);
+            this.AddDynamicFieldSetting(inventoryTypeBusinessModel.Id, model.InventoryFieldSettingsViewModel.NewDynamicFieldViewModel.InventoryDynamicFieldSettingModel);
 
             return this.RedirectToAction("EditSettings", new { inventoryTypeId = inventoryTypeBusinessModel.Id });
         }
@@ -352,9 +345,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
         private void UpdateInventoryFieldsSettings(int inventoryTypeId, DefaultFieldSettingsModel defaultFieldSettingsModel)
         {
-            var defaultSettingsBusinessModel = this.inventoryFieldsSettingsBuilder.BuildBusinessModelForUpdate(
-                inventoryTypeId,
-                defaultFieldSettingsModel);
+            var defaultSettingsBusinessModel = 
+                this.inventoryFieldsSettingsBuilder.BuildBusinessModelForUpdate(inventoryTypeId, defaultFieldSettingsModel);
+
             this.inventorySettingsService.UpdateInventoryFieldsSettings(defaultSettingsBusinessModel);
         }
 

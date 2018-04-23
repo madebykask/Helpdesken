@@ -32,8 +32,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             entity.CreatedDate = businessModel.CreatedDate;
             entity.ChangedByUser_Id = businessModel.ChangeByUserId;
 
-            entity.ChangedDate = businessModel.CreatedDate; // todo
-            entity.SyncChangedDate = null; // todo
+            entity.ChangedDate = businessModel.CreatedDate; 
+            entity.SyncChangedDate = null; // todo?
 
             this.DbSet.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);
@@ -125,7 +125,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             entity.Info,
                             Worstations = computerName,
                             entity.CreatedDate,
-                            entity.ChangedDate
+                            entity.ChangedDate,
+                            entity.SyncChangedDate
                         }).GroupBy(x => x.InventoryTypeId).ToList();
 
             foreach (var item in anonymus)
@@ -148,7 +149,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             a.Worstations,
                             a.Info,
                             a.CreatedDate,
-                            a.ChangedDate)).ToList();
+                            a.ChangedDate,
+                            a.SyncChangedDate)).ToList();
 
                 var overviewWithType = new InventoryOverviewWithType(item.Key, overviews);
                 overviewsWithType.Add(overviewWithType);
@@ -203,7 +205,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                     i.Info,
                     WorkstationName = k.Computer != null ? k.Computer.ComputerName : string.Empty,
                     i.CreatedDate,
-                    i.ChangedDate
+                    i.ChangedDate,
+                    i.SyncChangedDate
                 }).ToList()
                 .GroupBy(x => new
                 {
@@ -221,7 +224,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                     x.PurchaseDate,
                     x.Info,
                     x.CreatedDate,
-                    x.ChangedDate
+                    x.ChangedDate,
+                    x.SyncChangedDate
                 });
 
             var overviews = anonymus.Select(a =>
@@ -240,7 +244,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                     string.Join(Delimeter, a.Select(x => x.WorkstationName)), // todo change to array
                     a.Key.Info,
                     a.Key.CreatedDate,
-                    a.Key.ChangedDate)).ToList();
+                    a.Key.ChangedDate,
+                    a.Key.SyncChangedDate)).ToList();
 
             return overviews;
         }

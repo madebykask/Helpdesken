@@ -1135,7 +1135,6 @@
                 BusinessData.Enums.Inventory.Fields.Shared.PlaceFields.Location,
                 (StringDisplayValue)overview.PlaceFields.Location,
                 values);
-
             CreateValueIfNeeded(
                 settings.StateFieldsSettings.CreatedDateFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Server.StateFields.CreatedDate,
@@ -1146,7 +1145,12 @@
                 BusinessData.Enums.Inventory.Fields.Server.StateFields.ChangedDate,
                 (DateTimeDisplayValue)overview.ChangedDate,
                 values);
-
+            CreateValueIfNeeded(
+                settings.StateFieldsSettings.SyncChangedDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.StateFields.SyncChangeDate,
+                (DateTimeDisplayValue)overview.SyncDate,
+                values);
+            
             return new InventoryOverviewModel(overview.Id, values);
         }
 
@@ -1223,9 +1227,15 @@
                 settings.StateFieldsSettings.CreatedDateFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Server.StateFields.CreatedDate,
                 headers);
+
             CreateHeaderIfNeeded(
                 settings.StateFieldsSettings.ChangedDateFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Server.StateFields.ChangedDate,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.StateFieldsSettings.SyncChangedDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.StateFields.SyncChangeDate,
                 headers);
 
             return headers;
@@ -1303,6 +1313,12 @@
                 settings.DefaultSettings.ChangedDateFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.ChangedDate,
                 (DateTimeDisplayValue)overview.ChangedDate,
+                values);
+
+            CreateValueIfNeeded(
+                settings.DefaultSettings.SyncDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.SyncChangedDate,
+                (DateTimeDisplayValue)overview.SyncChangedDate,
                 values);
 
             var dynamicValues = dynamicData.Where(x => x.InventoryId == overview.Id).ToList();
@@ -1395,6 +1411,10 @@
             CreateHeaderIfNeeded(
                 settings.DefaultSettings.ChangedDateFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.ChangedDate,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.DefaultSettings.SyncDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.SyncChangedDate,
                 headers);
 
             headers.AddRange(

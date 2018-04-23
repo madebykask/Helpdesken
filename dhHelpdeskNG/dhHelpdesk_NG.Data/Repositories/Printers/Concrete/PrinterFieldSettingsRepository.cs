@@ -354,6 +354,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
         {
             MapFieldSetting(updatedSettings.CreatedDateFieldSetting, entity.FindByName(StateFields.CreatedDate), languageTextId, changedDate);
             MapFieldSetting(updatedSettings.ChangedDateFieldSetting, entity.FindByName(StateFields.ChangedDate), languageTextId, changedDate);
+            MapFieldSetting(updatedSettings.SyncDateFieldSetting, entity.FindByName(StateFields.SyncDate), languageTextId, changedDate);
         }
 
         private static void MapFieldSetting(

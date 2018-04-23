@@ -100,9 +100,7 @@
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult InventoriesGrid(InventorySearchFilter filter, int inventoryTypeId)
         {
-            SessionFacade.SavePageFilters(
-                this.CreateFilterId(TabName.Inventories, InventoryFilterMode.CustomType.ToString()),
-                filter);
+            SessionFacade.SavePageFilters(this.CreateFilterId(TabName.Inventories, InventoryFilterMode.CustomType.ToString()), filter);
 
             InventoryGridModel viewModel = this.CreateInventoryGridModel(filter, inventoryTypeId);
 
@@ -235,8 +233,7 @@
 
             /*-1: take all records */
             var _filter = filter.CreateRequest(inventoryTypeId, takeAllRecords? (int?) -1 :null);
-            InventoriesOverviewResponse models =
-                inventoryService.GetInventories(_filter);
+            InventoriesOverviewResponse models = inventoryService.GetInventories(_filter);
 
             InventoryGridModel viewModel = InventoryGridModel.BuildModel(
                 models,

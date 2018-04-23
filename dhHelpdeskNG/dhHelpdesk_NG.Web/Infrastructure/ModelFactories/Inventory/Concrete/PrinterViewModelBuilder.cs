@@ -28,7 +28,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 this.configurableFieldModelBuilder.CreateDateTimeField(
                     settings.StateFieldsSettings.ChangedDateFieldSetting,
                     model.ChangedDate);
-
+            var syncdDate =
+                this.configurableFieldModelBuilder.CreateNullableDateTimeField(
+                    settings.StateFieldsSettings.SyncDateFieldSetting,
+                    model.SyncDate);
             var name =
                 this.configurableFieldModelBuilder.CreateStringField(
                     settings.GeneralFieldsSettings.NameFieldSetting,
@@ -160,7 +163,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                        {
                            Id = model.Id,
                            CreatedDate = createdDate,
-                           ChangedDate = changedDate
+                           ChangedDate = changedDate,
+                           SyncDate = syncdDate
                        };
         }
 
