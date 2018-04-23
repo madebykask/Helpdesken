@@ -96,14 +96,12 @@ using System;
             int ret;
             var caseNo = (from c in this.DataContext.Cases
                           where c.Id == caseId
-                          select c.CaseNumber
-                        ).FirstOrDefault();
+                          select c.CaseNumber).FirstOrDefault();
 
             if (int.TryParse(caseNo.ToString(), out ret))
                 return ret;
             else
                 return caseId;
-
         }
 
         public List<CaseFileModel> GetCaseFiles(int caseId, bool canDelete)

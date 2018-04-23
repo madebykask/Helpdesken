@@ -7,6 +7,8 @@ using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Exceptions;
 using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Common.Serializers;
+using DH.Helpdesk.Dal.Enums;
+using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.Infrastructure.Context;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.NewInfrastructure;
@@ -33,7 +35,7 @@ namespace DH.Helpdesk.Services.Services
         GDPROperationsAudit GetDataPrivacyOperationAuditData(int id);
         bool RemoveDataPrivacyFromCase(DataPrivacyParameters p);
     }
-    
+
     public interface IGDPRDataPrivacyAccessService
     {
         GDPRDataPrivacyAccess GetByUserId(int userId);
@@ -54,19 +56,35 @@ namespace DH.Helpdesk.Services.Services
         private readonly IGDPROperationsAuditRespository _gdprOperationsAuditRespository;
         private readonly IJsonSerializeService _jsonSerializeService;
         private readonly IGDPRDataPrivacyFavoriteRepository _gdprFavoritesRepository;
-        private readonly IBusinessModelToEntityMapper<GdprFavoriteModel, GDPRDataPrivacyFavorite> _gdprFavoritesEntityMapper;
-        private readonly IEntityToBusinessModelMapper<GDPRDataPrivacyFavorite, GdprFavoriteModel> _gdprFavoritesModelMapper;
+
+        private readonly IBusinessModelToEntityMapper<GdprFavoriteModel, GDPRDataPrivacyFavorite>
+            _gdprFavoritesEntityMapper;
+
+        private readonly IEntityToBusinessModelMapper<GDPRDataPrivacyFavorite, GdprFavoriteModel>
+            _gdprFavoritesModelMapper;
+
+        
+        private readonly IGlobalSettingService _globalSettingService;
+        private readonly ISettingService _settingService;
+        private readonly IFilesStorage _filesStorage;
 
         #region ctor()
 
         public GDPRService(IGDPRDataPrivacyAccessRepository privacyAccessRepository,
-                           IUnitOfWorkFactory unitOfWorkFactory,
-                           IGDPROperationsAuditRespository operationsAuditRespository,
-                           IGDPRDataPrivacyFavoriteRepository favoritesRepository,
-                           IBusinessModelToEntityMapper<GdprFavoriteModel, GDPRDataPrivacyFavorite> gdprFavoritesEntityMapper,
-                           IEntityToBusinessModelMapper<GDPRDataPrivacyFavorite, GdprFavoriteModel> gdprFavoritesModelMapper,
-                           IJsonSerializeService jsonSerializeService)
+            IUnitOfWorkFactory unitOfWorkFactory,
+            IGDPROperationsAuditRespository operationsAuditRespository,
+            IGDPRDataPrivacyFavoriteRepository favoritesRepository,
+            IBusinessModelToEntityMapper<GdprFavoriteModel, GDPRDataPrivacyFavorite> gdprFavoritesEntityMapper,
+            IEntityToBusinessModelMapper<GDPRDataPrivacyFavorite, GdprFavoriteModel> gdprFavoritesModelMapper,
+            IFilesStorage filesStorage,
+            IGlobalSettingService globalSettingService,
+            ISettingService settingService,
+            IJsonSerializeService jsonSerializeService)
         {
+            _filesStorage = filesStorage;
+            _settingService = settingService;
+            _globalSettingService = globalSettingService;
+        
             _gdprFavoritesEntityMapper = gdprFavoritesEntityMapper;
             _gdprFavoritesModelMapper = gdprFavoritesModelMapper;
             _gdprFavoritesRepository = favoritesRepository;
@@ -74,6 +92,44 @@ namespace DH.Helpdesk.Services.Services
             _unitOfWorkFactory = unitOfWorkFactory;
             _privacyAccessRepository = privacyAccessRepository;
             _gdprOperationsAuditRespository = operationsAuditRespository;
+        }
+
+        #endregion
+
+        #region CaseFileEntity
+
+        private class CaseFileEntity
+        {
+            #region ctor()
+
+            public CaseFileEntity(int caseId, string caseNumber, string fileName)
+                : this(caseId, caseNumber, 0, fileName)
+            {
+            }
+
+            public CaseFileEntity(int caseId, string caseNumber, int logId, string fileName)
+            {
+                CaseId = caseId;
+                CaseNumber = caseNumber;
+                LogId = logId;
+                FileName = fileName;
+            }
+
+            #endregion
+
+            public int CaseId { get; private set; }
+            public string CaseNumber { get; private set; }
+            public int LogId { get; private set; }
+            public string FileName { get; private set; }
+
+            public int GetCaseNumberOrId()
+            {
+                int res;
+                if (int.TryParse(CaseNumber, out res))
+                    return res;
+                else
+                    return CaseId;
+            }
         }
 
         #endregion
@@ -155,8 +211,12 @@ namespace DH.Helpdesk.Services.Services
             auditData.Status = GDPROperationStatus.Running;
             UpdateAuditOperationData(auditData);
 
+
+            var filesToDelete = new List<CaseFileEntity>();
             var casesIds = new List<int>();
+            var customerId = p.SelectedCustomerId;
             var sqlTimeout = 300; //seconds
+
             try
             {
                 using (var uow = _unitOfWorkFactory.Create(sqlTimeout))
@@ -186,7 +246,8 @@ namespace DH.Helpdesk.Services.Services
                     }
 
                     if (p.RemoveLogAttachments || p.FieldsNames.Contains("tblLog.Text_External") ||
-                        p.FieldsNames.Contains("tblLog.Text_Internal") || p.FieldsNames.Contains(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()))
+                        p.FieldsNames.Contains("tblLog.Text_Internal") ||
+                        p.FieldsNames.Contains(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()))
                     {
                         casesQueryable = casesQueryable.IncludePath(x => x.Logs.Select(f => f.LogFiles));
                     }
@@ -228,8 +289,7 @@ namespace DH.Helpdesk.Services.Services
 
                         foreach (var c in cases)
                         {
-                            
-                            ProcessReplaceCasesData(c, caseFiles, logFiles, followers, p);
+                            ProcessReplaceCasesData(c, caseFiles, logFiles, followers, p, filesToDelete);
                             ProcessReplaceCasesHistoryData(c, p);
                             ProcessExtededCaseData(c, caseExtendedCaseRep, caseSectionExtendedCaseRep, extendedCaseValuesRep, p);
                         }
@@ -240,12 +300,14 @@ namespace DH.Helpdesk.Services.Services
                         uow.Save();
                     }
                 }
+                
+                DeleteCaseFiles(customerId, filesToDelete);
             }
             catch (Exception e)
             {
                 auditData.Success = false;
                 auditData.Status = GDPROperationStatus.Complete;
-                auditData.Error = $"Unknown error. { e.Message }";
+                auditData.Error = $"Unknown error. {e.Message}";
                 UpdateAuditOperationData(auditData);
                 throw;
             }
@@ -260,15 +322,56 @@ namespace DH.Helpdesk.Services.Services
             return true;
         }
 
+        private void DeleteCaseFiles(int customerId, List<CaseFileEntity> filesToDelete)
+        {
+            if (!filesToDelete.Any())
+                return;
+
+            var caseFiles = filesToDelete.Where(f => f.LogId == 0).ToList();
+            var logFiles = filesToDelete.Where(f => f.LogId > 0).ToList();
+
+            var baseDirPath = GetFilesDirPath(customerId);
+
+            //delete case files
+            foreach (var fileEntity in caseFiles)
+            {
+                int caseId = fileEntity.GetCaseNumberOrId();
+                this._filesStorage.DeleteFile(ModuleName.Cases, caseId, baseDirPath, fileEntity.FileName);
+            }
+
+            //delete log files
+            foreach (var fileEntity in logFiles)
+            {
+                this._filesStorage.DeleteFile(ModuleName.Log, fileEntity.LogId, baseDirPath, fileEntity.FileName);
+            }
+        }
+
+        private string GetFilesDirPath(int customerId)
+        {
+            var dirPath = string.Empty;
+            var customerSettings = _settingService.GetCustomerSetting(customerId);
+            if (!string.IsNullOrEmpty(customerSettings.PhysicalFilePath))
+            {
+                dirPath = customerSettings.PhysicalFilePath;
+            }
+            else
+            {
+                var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
+                dirPath = globalSettings.AttachedFileFolder;
+            }
+            
+            return dirPath ?? string.Empty;
+        }
 
         #region Replace case data
 
         private void ProcessReplaceCasesData(
-            Case c,
-            IRepository<CaseFile> caseFiles,
-            IRepository<LogFile> logFiles,
-            IRepository<CaseExtraFollower> followers,
-            DataPrivacyParameters parameters)
+            Case c, 
+            Dal.NewInfrastructure.IRepository<CaseFile> caseFiles, 
+            Dal.NewInfrastructure.IRepository<LogFile> logFiles, 
+            Dal.NewInfrastructure.IRepository<CaseExtraFollower> followers,
+            DataPrivacyParameters parameters,
+            List<CaseFileEntity> caseFilesToDelete)
         {
 
             var replaceDataWith = parameters.ReplaceDataWith;
@@ -495,7 +598,15 @@ namespace DH.Helpdesk.Services.Services
 
             if (parameters.RemoveCaseAttachments && c.CaseFiles.Any())
             {
-                caseFiles.DeleteRange(c.CaseFiles);
+                var items = c.CaseFiles.Select(f => new CaseFileEntity(f.Case_Id, c.CaseNumber.ToString(), f.FileName)).ToList();
+                if (items.Any())
+                {
+                    //store to delete from disk
+                    caseFilesToDelete.AddRange(items);
+                    
+                    //delete from db
+                    caseFiles.DeleteRange(c.CaseFiles);
+                }
             }
 
             if (parameters.RemoveLogAttachments && c.Logs.Any())
@@ -503,6 +614,11 @@ namespace DH.Helpdesk.Services.Services
                 var logFilesEnitites = c.Logs.SelectMany(l => l.LogFiles).ToArray();
                 if (logFilesEnitites.Any())
                 {
+                    //store to delete from disk
+                    var items = logFilesEnitites.Select(l => new CaseFileEntity(c.Id, c.CaseNumber.ToString(), l.Log_Id, l.FileName)).ToList();
+                    caseFilesToDelete.AddRange(items);
+                    
+                    //delete from db
                     logFiles.DeleteRange(logFilesEnitites);
                 }
             }
@@ -705,9 +821,10 @@ namespace DH.Helpdesk.Services.Services
             return resetValue;
         }
 
-        private void ProcessExtededCaseData(Case c, IRepository<Case_ExtendedCaseEntity> caseExtendedCaseRep,
-            IRepository<Case_CaseSection_ExtendedCase> caseSectionExtendedCaseRep,
-            IRepository<ExtendedCaseValueEntity> extendedCaseValuesRep,
+        private void ProcessExtededCaseData(Case c,
+            Dal.NewInfrastructure.IRepository<Case_ExtendedCaseEntity> caseExtendedCaseRep,
+            Dal.NewInfrastructure.IRepository<Case_CaseSection_ExtendedCase> caseSectionExtendedCaseRep,
+            Dal.NewInfrastructure.IRepository<ExtendedCaseValueEntity> extendedCaseValuesRep,
             DataPrivacyParameters parameters)
         {
             var replaceDataWith = parameters.ReplaceDataWith;
@@ -740,8 +857,11 @@ namespace DH.Helpdesk.Services.Services
 
         }
 
-        private static void CleanExtendedCaseData(IRepository<ExtendedCaseValueEntity> extendedCaseValuesRep, ExtendedCaseDataEntity caseData,
-            string replaceDataWith, DateTime? replaceDatesWith)
+        private static void CleanExtendedCaseData(
+            Dal.NewInfrastructure.IRepository<ExtendedCaseValueEntity> extendedCaseValuesRep,
+            ExtendedCaseDataEntity caseData,
+            string replaceDataWith, 
+            DateTime? replaceDatesWith)
         {
             if (caseData != null)
             {
@@ -756,7 +876,9 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        private void ProccessFormPlusCaseData(IList<int> casesIds, IRepository<FormFieldValueHistory> formFieldValueHistoryRep, IRepository<FormFieldValue> formFieldValueRep)
+        private void ProccessFormPlusCaseData(IList<int> casesIds,
+            Dal.NewInfrastructure.IRepository<FormFieldValueHistory> formFieldValueHistoryRep,
+            Dal.NewInfrastructure.IRepository<FormFieldValue> formFieldValueRep)
         {
             if (!casesIds.Any()) return;
 
