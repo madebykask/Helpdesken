@@ -8066,6 +8066,78 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         #endregion
+
+
+#if DEBUG
+
+        #region Test Actions 
+
+        [HttpGet]
+        public JsonResult GenerateCaseLogFiles(int caseId, int count)
+        {
+            var customerId = workContext.Customer.CustomerId;
+            var basePath = _masterDataService.GetFilePath(customerId);
+
+            var dummyContent = GenerateDummyFileContent(1);
+
+            var @case = _caseService.GetCaseById(caseId);
+            var lastLogNote = @case.Logs.OrderByDescending(l => l.Id).FirstOrDefault();
+
+            if (lastLogNote == null)
+                return Json(new { Success = false, Error = "Case doesn't have log notes." }, JsonRequestBehavior.AllowGet);
+
+            try
+            {
+                foreach (var pos in Enumerable.Range(0, count))
+                {
+                    var fileName = $"file_{Guid.NewGuid()}";
+                    var logFile = new CaseFileDto(dummyContent, basePath, fileName, DateTime.UtcNow, lastLogNote.Id, this.workContext.User?.UserId);
+                    this._logFileService.AddFile(logFile);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Success = false, Error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GenerateCaseFiles(int caseId, int count)
+        {
+            var customerId = workContext.Customer.CustomerId;
+            var basePath = _masterDataService.GetFilePath(customerId);
+
+            var dummyContent = GenerateDummyFileContent(1);
+
+            try
+            {
+                foreach (var pos in Enumerable.Range(0, count))
+                {
+                    var fileName = $"file_{Guid.NewGuid()}";
+                    var caseFile = new CaseFileDto(dummyContent, basePath, fileName, DateTime.UtcNow, caseId, this.workContext.User?.UserId);
+                    _caseFileService.AddFile(caseFile);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Success = false, Error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        private byte[] GenerateDummyFileContent(int sizeInMb)
+        {
+            byte[] data = new byte[sizeInMb * 1024 * 1024];
+            Random rng = new Random();
+            rng.NextBytes(data);
+            return data;
+        }
+
+        #endregion
+#endif
     }
 
 
