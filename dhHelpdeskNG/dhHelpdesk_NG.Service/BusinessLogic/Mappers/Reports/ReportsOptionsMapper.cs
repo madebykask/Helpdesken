@@ -247,14 +247,11 @@
             string[] exceptionList = {"IsAbout_Region_Id", "IsAbout_Department_Id", "IsAbout_OU_Id", "AddFollowersBtn" };
             if (fields != null)
             {
-                fieldsResult = fields.Select(f => new
-                                {
-                                    f.Id,                                    
-                                    FieldName = f.Name
-                                })                                
+                fieldsResult = fields
+                                .Where(f => !exceptionList.Contains(f.Name))
+                                .Select(f => new { f.Id, f.Name })
                                 .ToList()
-                                .Where(f=> !exceptionList.Contains(f.FieldName))
-                                .Select(f => new ItemOverview(f.FieldName, f.Id.ToString(CultureInfo.InvariantCulture)))                                
+                                .Select(f => new ItemOverview(f.Name, f.Id.ToString(CultureInfo.InvariantCulture)))                                
                                 .ToList();
 
                 // Add calculation fields manually to the available fields

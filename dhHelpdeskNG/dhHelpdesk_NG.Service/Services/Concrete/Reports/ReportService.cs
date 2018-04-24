@@ -321,11 +321,10 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                 var departmentRep = uow.GetRepository<Department>();
                 var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
                 var caseTypeRep = uow.GetRepository<CaseType>();
-                var fields = fieldRep.GetAll().GetByNullableCustomer(customerId)
+                var fields = fieldRep.GetAll()
+                    .GetByNullableCustomer(customerId)
                     .GetShowable()
-                    .ToList()
-                    .Where(it => GridColumnsDefinition.IsAvailavbleToViewInCaseoverview(it.Name))
-                    .AsQueryable();
+                    .Where(it => !GridColumnsDefinition.NotAvailableField.Contains(it.Name));
                 var departments = departmentRep.GetAll().GetByCustomer(customerId);
                 var workingGroups = workingGroupRep.GetAll().GetByCustomer(customerId);
                 var caseTypes = caseTypeRep.GetAll().GetByCustomer(customerId);
