@@ -55,8 +55,40 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
    ALTER TABLE dbo.tblPrinter ADD SyncChangedDate datetime NULL
 GO
 
---INSERT INTO [dbo].[tblPrinterFieldSettings] (Customer_Id, PrinterField, Show, Label, Label_ENG, Required, FieldHelp, ShowInList, CreatedDate, ChangedDate)
---VALUES (1, 'SyncChangedDate', 1, 'Synkroniseringsdatum', 'Synchronize Date', 0, '',  0, GETDATE(), GETDATE())
+---------------------------------------------------------------
+-- Adding new SyncChangedDate field settings in InventoryTypes 
+---------------------------------------------------------------
+RAISERROR ('Adding SyncChangedDate field settings for InventoryTypes', 10, 1) WITH NOWAIT
+DECLARE @CustomInventoryTypes TABLE (Id int) 
+DECLARE @inventoryTypeId int = 0,
+	   @itemsCount int = 0
+
+-- fill temp table with inventory types that don't have SyncDate field settings
+INSERT INTO @CustomInventoryTypes(Id)
+select inv.Id
+from tblInventoryType inv 
+  LEFT JOIN tblInventoryTypeProperty inv_p on inv_p.InventoryType_Id = inv.Id AND PropertyType = -15
+WHERE inv_p.Id IS NULL
+
+SET @itemsCount = ISNULL((SELECT Count(*) from @CustomInventoryTypes),0)
+
+-- add new SyncDate field settings for each inventory type
+while (@itemsCount > 0)
+BEGIN
+    SELECT TOP 1 @inventoryTypeId = Id FROM @CustomInventoryTypes
+
+    IF (NOT EXISTS(SELECT * FROM tblInventoryTypeProperty WHERE InventoryType_Id = @inventoryTypeId AND PropertyType = -15))
+    BEGIN	   
+	   --select @inventoryTypeId, NULL, 'Synkroniserad datum', 0, '', -15, 1000, 0,  0, 0, NULL, 0, GETDATE(), GETDATE()
+	   INSERT INTO dbo.tblInventoryTypeProperty (InventoryType_Id, InventoryTypeGroup_Id, PropertyValue, PropertyPos, PropertyDefault, PropertyType, PropertySize, ShowInList,  Show, [ReadOnly], XMLTag, [Unique], ChangedDate, CreatedDate)
+	   VALUES (@inventoryTypeId, NULL, 'Synkroniserad datum', 0, '', -15, 1000, 0,  0, 0, NULL, 0, GETDATE(), GETDATE())
+    END
+
+    DELETE FROM @CustomInventoryTypes WHERE Id = @inventoryTypeId
+    SET @itemsCount = ISNULL((SELECT Count(*) from @CustomInventoryTypes),0)
+END
+------------------------------------------------------------
+
 
 ---------------------------------------------------------------------------------
 
