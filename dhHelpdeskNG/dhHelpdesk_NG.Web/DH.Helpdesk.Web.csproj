@@ -3466,7 +3466,7 @@
     <Content Include="Areas\Inventory\Views\Server\OperationLogGrid.cshtml" />
     <Content Include="Areas\Inventory\Views\Server\EditorTemplates\CommunicationFieldsViewModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Server\EditorTemplates\GeneralFieldsModel.cshtml" />
-    <Content Include="Areas\Inventory\Views\Server\EditorTemplates\StateModel.cshtml" />
+    <Content Include="Areas\Inventory\Views\Server\EditorTemplates\StateFieldsModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Server\EditorTemplates\StorageFieldsModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Server\EditorTemplates\OtherFieldsModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\ChassisFieldsModel.cshtml" />
