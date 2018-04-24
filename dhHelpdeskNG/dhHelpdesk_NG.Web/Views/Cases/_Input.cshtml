@@ -1496,14 +1496,14 @@
                                                 <span class="lbl">@Translation.Get("Skicka SMS när ärendet avslutas", SessionFacade.CurrentLanguageId).</span>
                                             </td>
                                         </tr>
-                                        <tr class="displaytr" style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())">
+                                        <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.AgreedDate, CaseSolutionFields.AgreedDate)">
                                             <td>
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.AgreedDate, "Överenskommet datum")
                                             </td>
                                             <td colspan="2">
                                                 @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AgreedDate, CaseSolutionFields.AgreedDate))
                                                 {
-                                                    @Html.EditorFor(m => m.case_.AgreedDate, "DatePicker", new { id = "divCase__AgreedDate", disabled = "disabled" })
+                                                    @Html.EditorFor(m => m.case_.AgreedDate, "DateReadOnly", new { id = "divCase__AgreedDate", @class = "readonlyAgreedDate" })
                                                 }
                                                 else
                                                 {
