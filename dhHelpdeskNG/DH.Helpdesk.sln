@@ -20,6 +20,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonAssembly", "CommonAssembly", "{398E5BA2-4379-4071-B6E2-F842E141E8F8}"
 	ProjectSection(SolutionItems) = preProject
 		CommonAssembly\SharedAssemblyInfo.cs = CommonAssembly\SharedAssemblyInfo.cs
+		CommonAssembly\SharedAssemblyInfo.vb = CommonAssembly\SharedAssemblyInfo.vb
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.SelfService", "dhHelpdesk_NG.Web_SelfService\DH.Helpdesk.SelfService.csproj", "{9DBE7D20-DEE8-427C-9A68-FC338B1108FC}"

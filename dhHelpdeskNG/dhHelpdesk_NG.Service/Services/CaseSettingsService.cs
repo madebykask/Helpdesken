@@ -218,6 +218,8 @@
             IList<CaseSettings> csl = this._caseSettingRepository.GetMany(x => x.Customer_Id == customerId && x.User_Id == userId)
                 .OrderBy(x => x.ColOrder)
                 .ToList();
+
+			var hasNewSetting = false;
             if (csl.Count == 0)
             {
                 csl = this.GetCaseSettingsByUserGroup(customerId, userGroupId);
@@ -237,10 +239,14 @@
                     newCaseSetting.RegTime = DateTime.UtcNow;
                     newCaseSetting.ChangeTime = DateTime.UtcNow;
                     this.SaveCaseSetting(newCaseSetting, out errors);
+
+					hasNewSetting = true;
                 }
             }
 
-            csl = this._caseSettingRepository.GetMany(x => x.Customer_Id == customerId && x.User_Id == userId).OrderBy(x => x.ColOrder).ToList();
+			// If new settings have been added retrieve them again (performance check).
+			if (hasNewSetting)
+				csl = this._caseSettingRepository.GetMany(x => x.Customer_Id == customerId && x.User_Id == userId).OrderBy(x => x.ColOrder).ToList();
 
             //// we does not support multiline in cases overview grid
             return csl.Where(it => it.Line == 1).ToList();
