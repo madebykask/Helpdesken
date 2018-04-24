@@ -17,28 +17,35 @@
                 <div class="container">                    
                     <div class="row">
                         <div class="span12">
-
                             <input type="radio" name="Setting.IntegrationType" @(Model.Setting.IntegrationType == 1 ? "checked='checked'" : "") id="Customer_Setting_IntegrationType1" onclick="ShowRelatedFields()" value="1" />
                             @Translation.Get("LDAP", Enums.TranslationSource.TextTranslation)
                             <input type="radio" name="Setting.IntegrationType" @(Model.Setting.IntegrationType == 0 ? "checked='checked'" : "") id="Customer_Setting_IntegrationType2" onclick="ShowRelatedFields()" value="0" />
                             @Translation.Get("CSV", Enums.TranslationSource.TextTranslation)
                             <br /><br />                                                      
-                            <table class="tableform" id="customerSync">
-                                <tr class="customerSync">
-                                    <td colspan="2">
-                                        <strong>@Translation.Get("LDAP", Enums.TranslationSource.TextTranslation)</strong>
+                            <table class="tableform" id="customerSync">       
+                                <tr>
+                                    <td class="span3">
+                                        @* To be for design *@
                                     </td>
+                                    <td class="span9">
+                                        @* To be for design *@
+                                    </td>
+                                </tr>             
+                                <tr>
+                                    <td class="customerSync">
+                                        <strong>@Translation.Get("LDAP", Enums.TranslationSource.TextTranslation)</strong>
+                                    </td>                                   
                                 </tr>
                                 <tr class="CSVSync">
-                                    <td colspan="2">
+                                    <td>
                                         <strong>@Translation.Get("CSV", Enums.TranslationSource.TextTranslation)</strong>
-                                    </td>
+                                    </td>                                    
                                 </tr>
                                 <tr>                                    
-                                    <td class="span3 customerSync">
+                                    <td class="customerSync">
                                         @Translation.Get("Server", Enums.TranslationSource.TextTranslation)
                                     </td>                                 
-                                    <td class="span9 customerSync">
+                                    <td class="customerSync">
                                         @Html.TextBoxFor(model => model.Customer.NDSPath, new { maxlength = "200", style = "width: 400px;" })
                                     </td>
                                 </tr>
