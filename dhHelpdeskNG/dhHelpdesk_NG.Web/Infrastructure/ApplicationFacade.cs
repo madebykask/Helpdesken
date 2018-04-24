@@ -31,9 +31,13 @@
     public static class ApplicationFacade
     {
         private const string _USER_CASE_INFO = "USER_CASE_INFO";
-        private const string _USER_LOGGED_IN = "USER_LOGGED_IN";
+        public const string _USER_LOGGED_IN = "USER_LOGGED_IN";
 
-        static ApplicationFacade()
+		private const string _PERFORMANCE_LOG_ACTIVE = "PERFORMANCE_LOG_ACTIVE";
+		private const string _PERFORMANCE_LOG_FREQUENCY = "PERFORMANCE_LOG_FREQUENCY";
+		private const string _PERFORMANCE_LOG_SETTINGS_CACHE = "PERFORMANCE_LOG_SETTINGS_CACHE";
+
+		static ApplicationFacade()
         {
             Version = DH.Helpdesk.Version.FULL_VERSION;
         }
@@ -78,7 +82,12 @@
             }
         }
 
-        public static void RemoveUserFromCase(int userId, int caseId, string sessionId)
+		internal static void SetPerformanceLogSettingsCache(int performanceLogSettingsCache)
+		{
+			HttpContext.Current.Application[_PERFORMANCE_LOG_SETTINGS_CACHE] = DateTime.UtcNow.AddSeconds(performanceLogSettingsCache);
+		}
+
+		public static void RemoveUserFromCase(int userId, int caseId, string sessionId)
         {
             if (UserCaseInfo == null) return;
 
@@ -94,7 +103,9 @@
         {
             get
             {
-                return (ConcurrentDictionary<string, LoggedInUsers>)HttpContext.Current.Application[_USER_LOGGED_IN];
+				if (HttpContext.Current == null)
+					return null;
+				return (ConcurrentDictionary<string, LoggedInUsers>)HttpContext.Current.Application[_USER_LOGGED_IN];
             }
             private set { }
         }
@@ -173,5 +184,42 @@
                 }
             }
         }
-    }
+
+
+
+
+		public static bool IsPerformanceLogActive()
+		{
+			var active = false;
+			if (HttpContext.Current.Application[_PERFORMANCE_LOG_ACTIVE] != null)
+				active = (bool)HttpContext.Current.Application[_PERFORMANCE_LOG_ACTIVE];
+			return active;
+		}
+
+		public static void SetPerformanceLogActive(bool state)
+		{
+			HttpContext.Current.Application[_PERFORMANCE_LOG_ACTIVE] = state;
+		}
+
+		public static int GetPerformanceLogFrequency()
+		{
+			return (int)HttpContext.Current.Application[_PERFORMANCE_LOG_FREQUENCY];
+		}
+
+		public static void SetPerformanceLogFrequency(int frequency)
+		{
+			HttpContext.Current.Application[_PERFORMANCE_LOG_FREQUENCY] = frequency;
+		}
+
+		internal static bool HasPerformanceLogSettingsCacheExpired()
+		{
+			var expires = (DateTime)HttpContext.Current.Application[_PERFORMANCE_LOG_SETTINGS_CACHE];
+
+			var expired = false;
+			if ((expires <= DateTime.UtcNow))
+				expired = true;
+
+			return expired;
+		}
+	}
 }

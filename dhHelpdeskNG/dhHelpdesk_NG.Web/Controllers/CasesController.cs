@@ -994,7 +994,7 @@ namespace DH.Helpdesk.Web.Controllers
             var ids = caseSearchResults.Select(o => o.Id).ToArray();
             var globalSettings = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
-            var casesLocks = _caseLockService.GetLockedCasesToOverView(ids, globalSettings, this._defaultCaseLockBufferTime);
+            var casesLocks = _caseLockService.GetLockedCasesToOverView(ids, globalSettings, this._defaultCaseLockBufferTime).ToList();
         
             foreach (var searchRow in caseSearchResults)
             {
