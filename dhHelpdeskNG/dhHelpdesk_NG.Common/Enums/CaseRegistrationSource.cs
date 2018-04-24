@@ -7,6 +7,7 @@
         SelfService = 2,
         Email = 3,
         CaseTemplate = 4,
-        Contract = 5
+        Contract = 5,
+        Order = 6
     }
 }
