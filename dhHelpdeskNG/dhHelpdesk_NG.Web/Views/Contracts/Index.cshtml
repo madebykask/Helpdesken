@@ -166,7 +166,7 @@
                             <tr>
                                 <td style="width:100px">@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)</td>&nbsp;
                                 <td>
-                                    <select id="lstShow" name="lstShow" data-field="region" data-placeholder="@Translation.Get("Välj", Enums.TranslationSource.TextTranslation)" class="chosen-select">
+                                    <select id="lstShow" name="lstShow" data-field="region" data-placeholder="@Translation.Get("Välj", Enums.TranslationSource.TextTranslation)" class="inputw300">
                                         @foreach (var s in Model.ShowContracts)
                                         {
                                             <option selected="@s.Selected" value="@s.Value">@s.Text</option>
