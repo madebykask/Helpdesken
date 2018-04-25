@@ -101,6 +101,10 @@ BEGIN
 		[PerformanceLogSettingsCache] INT NOT NULL DEFAULT(0);
 END
 
+--tblCustomerUser
+ALTER TABLE tblCustomerUser
+    ALTER COLUMN CaseRegionFilter NVARCHAR(100)
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.37'
