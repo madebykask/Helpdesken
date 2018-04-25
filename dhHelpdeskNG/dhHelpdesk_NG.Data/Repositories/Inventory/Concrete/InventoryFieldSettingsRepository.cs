@@ -168,6 +168,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             var place = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.Place.ToString(CultureInfo.InvariantCulture)));
             var workstation = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.Workstation.ToString(CultureInfo.InvariantCulture)));
             var info = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)));
+            var createdDate = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.CreatedDate.ToString(CultureInfo.InvariantCulture)));
+            var changedDate = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.ChangedDate.ToString(CultureInfo.InvariantCulture)));
+            var syncDate = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.SyncDate.ToString(CultureInfo.InvariantCulture)));
 
             var settingAgregate = new InventoryFieldSettingsForModelEdit(
                     new BusinessData.Models.Inventory.Output.Settings.ModelEdit.InventorySettings.DefaultFieldSettings(
@@ -181,7 +184,10 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         purchaseDate,
                         place,
                         workstation,
-                        info));
+                        info,
+                        createdDate,
+                        changedDate,
+                        syncDate));
 
             return settingAgregate;
         }

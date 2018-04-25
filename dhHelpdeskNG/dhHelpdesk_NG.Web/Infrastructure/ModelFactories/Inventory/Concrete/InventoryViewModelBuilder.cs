@@ -56,6 +56,10 @@
                 options.Departments,
                 model.DepartmentId.ToString());
 
+            var createdDate = CreateNullableDateTimeField(settings.DefaultSettings.CreatedDate, model.CreatedDate);
+            var changedDate = CreateNullableDateTimeField(settings.DefaultSettings.ChangedDate, model.ChangeDate);
+            var syncDate = CreateNullableDateTimeField(settings.DefaultSettings.SyncDate, model.SyncChangeDate);
+
             var defaultFieldsModel = new DefaultFieldsModel(
                 departmentId,
                 model.BuildingId,
@@ -69,7 +73,10 @@
                 barCode,
                 purchaseDate,
                 workstation,
-                info);
+                info,
+                createdDate,
+                changedDate,
+                syncDate);
 
             var defaultFieldsViewModel = new DefaultFieldsViewModel(
                 defaultFieldsModel,
@@ -86,7 +93,7 @@
                            SyncDate = model.SyncChangeDate
                        };
         }
-
+        
         public InventoryViewModel BuildViewModel(
             InventoryEditOptions options,
             InventoryFieldSettingsForModelEdit settings,
@@ -127,7 +134,10 @@
                 barCode,
                 purchaseDate,
                 workstation,
-                info);
+                info,
+                null,
+                null,
+                null); 
 
             var defaultFieldsViewModel = new DefaultFieldsViewModel(
                 defaultFieldsModel,
