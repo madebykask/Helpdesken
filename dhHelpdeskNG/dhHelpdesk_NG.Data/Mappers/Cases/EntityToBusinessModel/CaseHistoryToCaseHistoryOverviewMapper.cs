@@ -1,15 +1,5 @@
-﻿using System.Linq;
-using DH.Helpdesk.BusinessData.Models.Accounts;
-using DH.Helpdesk.BusinessData.Models.Case;
-using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
-using DH.Helpdesk.BusinessData.Models.Case.Output;
-using DH.Helpdesk.BusinessData.Models.Changes.Output;
-using DH.Helpdesk.BusinessData.Models.Logs.Output;
-using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
-using DH.Helpdesk.Common.Tools;
+﻿using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
-using DH.Helpdesk.Domain;
-using EmailLogsOverview = DH.Helpdesk.BusinessData.Models.Case.CaseHistory.EmailLogsOverview;
 
 namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
 {
@@ -111,110 +101,33 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
                 ActionExternalTime = entity.ActionExternalTime,
                 CaseExtraFollowers = entity.CaseExtraFollowers,
 
-                Department = data.Department != null
-                    ? new DepartmentOverview
-                    {
-                        DepartmentId = data.Department.DepartmentId,
-                        DepartmentName = data.Department.DepartmentName,
-                        SearchKey = data.Department.SearchKey,
-                        CountryName = data.Department.Country != null ? data.Department.Country.Name : null
-                    }
-                    : null,
+                Department = data.Department,
 
-                RegistrationSourceCustomer =
-                    data.RegistrationSourceCustomer != null
-                        ? new RegistrationSourceCustomerOverview
-                        {
-                            Id = data.RegistrationSourceCustomer.Id,
-                            SourceName = data.RegistrationSourceCustomer.SourceName
-                        }
-                        : null,
+                RegistrationSourceCustomer = data.RegistrationSourceCustomer,
 
-                CaseType = new CaseTypeOverview
-                {
-                    Id = data.CaseType.Id,
-                    Name = data.CaseType.Name
-                },
+                CaseType = data.CaseType,
 
-                ProductArea = data.ProductArea != null
-                    ? new ProductAreaOverview
-                    {
-                        Id = data.ProductArea.Id,
-                        Name = data.ProductArea.Name
-                    }
-                    : null,
+                ProductArea = data.ProductArea,
 
-                Category = data.Category != null
-                    ? new CategoryOverview
-                    {
+                Category = data.Category,
 
-                        Id = data.Category.Id,
-                        Name = data.Category.Name,
-                    }
-                    : null,
+                Problem = data.Problem,
 
-                UserPerformer = data.UserPerformer != null
-                    ? new UserBasicOvierview
-                    {
-                        Id = data.UserPerformer.Id ?? 0,
-                        FirstName = data.UserPerformer.FirstName,
-                        SurName = data.UserPerformer.SurName
-                    }
-                    : null,
+                UserPerformer = data.UserPerformer,
 
-                UserResponsible = data.UserResponsible != null
-                    ? new UserBasicOvierview
-                    {
-                        Id = data.UserResponsible.Id ?? 0,
-                        FirstName = data.UserResponsible.FirstName,
-                        SurName = data.UserResponsible.SurName
-                    }
-                    : null,
+                UserResponsible = data.UserResponsible,
 
-                Priority = data.Priority != null
-                    ? new PriorityOverview
-                    {
-                        Id = data.Priority.Id,
-                        Name = data.Priority.Name
-                    }
-                    : null,
+                Priority = data.Priority,
 
-                WorkingGroup = data.WorkingGroup != null
-                    ? new WorkingGroupOverview
-                    {
-                        Id = data.WorkingGroup.Id,
-                        WorkingGroupName = data.WorkingGroup.WorkingGroupName
-                    }
-                    : null,
+                WorkingGroup = data.WorkingGroup,
 
-                StateSecondary = data.StateSecondary != null
-                    ? new StateSecondaryOverview
-                    {
-                        Id = data.StateSecondary.Id,
-                        Name = data.StateSecondary.Name
-                    }
-                    : null,
+                StateSecondary = data.StateSecondary,
 
-                Status = data.Status != null
-                    ? new StatusOverview
-                    {
-                        Id = data.Status.Id,
-                        Name = data.Status.Name
-                    }
-                    : null,
+                Status = data.Status,
 
-                IsAbout_Department = data.IsAbout_Department != null
-                    ? new DepartmentOverview
-                    {
-                        DepartmentId = data.IsAbout_Department.DepartmentId,
-                        DepartmentName = data.IsAbout_Department.DepartmentName,
-                        SearchKey = data.IsAbout_Department.SearchKey,
-                        CountryName = data.IsAbout_Department.Country?.Name
-                    }
-                    : null,
+                IsAbout_Department = data.IsAbout_Department,
 
-                Emaillogs = data.EmailLogs.Where(t => t.Id.HasValue)
-                                          .Select(t => new EmailLogsOverview(t.Id.Value, t.MailId.Value, t.EmailAddress)).ToList()
+                Emaillogs = data.EmailLogs
             };
         }
     }

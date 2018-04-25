@@ -1,25 +1,35 @@
 ﻿using System.Collections.Generic;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+using DH.Helpdesk.BusinessData.Models.Case.Output;
+using DH.Helpdesk.BusinessData.Models.Problem.Output;
+using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+using DH.Helpdesk.BusinessData.Models.Projects.Output;
 using DH.Helpdesk.BusinessData.Models.User.Interfaces;
 using DH.Helpdesk.Domain;
+using DH.Helpdesk.Domain.Problems;
+using DH.Helpdesk.Domain.Projects;
 
 namespace DH.Helpdesk.Dal.MapperData.CaseHistory
 {
     public class CaseHistoryMapperData
     {
         public Domain.CaseHistory CaseHistory { get; set; }
-        public Category Category { get; set; }
-        public DepartmentMapperData Department { get; set; }
-        public RegistrationSourceCustomer RegistrationSourceCustomer { get; set; }
-        public CaseType CaseType { get; set; }
-        public ProductArea ProductArea { get; set; }
-        public UserMapperData UserPerformer { get; set; }
-        public UserMapperData UserResponsible { get; set; }
-        public Priority Priority { get; set; }
-        public WorkingGroupEntity WorkingGroup { get; set; }
-        public StateSecondary StateSecondary { get; set; }
-        public Status Status { get; set; }
-        public DepartmentMapperData IsAbout_Department { get; set; }
 
-        public IEnumerable<EmailLogMapperData> EmailLogs { get; set; }
+        public CategoryOverview Category { get; set; } 
+        public DepartmentOverview Department { get; set; }
+        public CaseTypeOverview CaseType { get; set; }
+        public ProductAreaOverview ProductArea { get; set; }
+        public ProjectOverview Project { get; set; }
+        public ProblemOverview Problem { get; set; }
+        public UserBasicOvierview UserPerformer { get; set; }
+        public UserBasicOvierview UserResponsible { get; set; }
+        public PriorityOverview Priority { get; set; }
+        public StatusOverview Status { get; set; }
+        public StateSecondaryOverview StateSecondary { get; set; }
+        public RegistrationSourceCustomerOverview RegistrationSourceCustomer { get; set; }
+        public WorkingGroupOverview WorkingGroup { get; set; }
+        public DepartmentOverview IsAbout_Department { get; set; }
+        public IList<EmailLogsOverview> EmailLogs { get; set; }
     }
 }

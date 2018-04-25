@@ -44,8 +44,12 @@
 
 
             this.HasOptional(c => c.Problem)
-                              .WithMany()
-                              .HasForeignKey(c => c.Problem_Id);
+                            .WithMany()
+                            .HasForeignKey(c => c.Problem_Id);
+
+            this.HasOptional(c => c.Project)
+                            .WithMany()
+                            .HasForeignKey(c => c.Project_Id);
 
             this.HasRequired(x => x.CaseType)
                             .WithMany()

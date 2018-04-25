@@ -344,6 +344,7 @@
     <Compile Include="Infrastructure\Authentication\FederatedAuthenticationConfiguration.cs" />
     <Compile Include="Infrastructure\Authentication\HelpdeskAuthenticationFilter.cs" />
     <Compile Include="Infrastructure\Binders\DecimalModelBinder.cs" />
+    <Compile Include="Infrastructure\Extensions\CaseHistoryBuilder.cs" />
     <Compile Include="Infrastructure\UrlBuilder.cs" />
     <Compile Include="Infrastructure\Utilities\CaseDiagnosticService.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\SessionContext.cs" />
