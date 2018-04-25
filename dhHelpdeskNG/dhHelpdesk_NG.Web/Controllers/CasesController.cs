@@ -8130,7 +8130,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private byte[] GenerateDummyFileContent(int sizeInMb)
         {
-            byte[] data = new byte[sizeInMb * 1024 * 1024];
+            byte[] data = new byte[sizeInMb * 1024];
             Random rng = new Random();
             rng.NextBytes(data);
             return data;

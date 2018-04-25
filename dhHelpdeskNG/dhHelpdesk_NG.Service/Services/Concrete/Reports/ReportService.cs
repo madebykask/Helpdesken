@@ -360,7 +360,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
         {
             using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
-                var caseRep = uow.GetRepository<Case>();
+                var categoryRep = uow.GetRepository<Category>();
                 var caseTypeRep = uow.GetRepository<CaseType>();
                 var productAreaRep = uow.GetRepository<ProductArea>();
                 var ouRep = uow.GetRepository<OU>();
@@ -409,6 +409,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 
                 var caseTypes = caseTypeRep.GetAll().GetByCustomer(customerId);
                 var productAreas = productAreaRep.GetAll().GetByCustomer(customerId);
+                var categories = categoryRep.GetAll().GetByCustomer(customerId);
                 var ous = ouRep.GetAll();
                 var finishingCauses = finishingCauseRep.GetAll().GetByCustomer(customerId);
 
@@ -430,7 +431,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                                                closeFrom,
                                                closeTo);
                 
-                var overviews = caseData.MapToCaseOverviews(caseTypes, productAreas, ous, finishingCauses);
+                var overviews = caseData.MapToCaseOverviews(caseTypes, productAreas, ous, finishingCauses, categories);
 
                 var sortedOverviews = Sort(overviews, sort);
                 return new ReportGeneratorData(settings, sortedOverviews);

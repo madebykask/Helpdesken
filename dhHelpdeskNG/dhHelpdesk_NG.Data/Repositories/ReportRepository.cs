@@ -263,9 +263,6 @@ namespace DH.Helpdesk.Dal.Repositories
                         join im in this.DataContext.Impacts on c.Impact_Id equals (int?)im.Id into ims
                         from _im in ims.DefaultIfEmpty()
 
-                        join cat in this.DataContext.Categories on c.Category_Id equals (int?)cat.Id into cats
-                        from _cat in cats.DefaultIfEmpty()
-
                         join sup in this.DataContext.Suppliers on c.Supplier_Id equals (int?)sup.Id into sups
                         from _sup in sups.DefaultIfEmpty()
 
@@ -370,7 +367,7 @@ namespace DH.Helpdesk.Dal.Repositories
                             System = c.System_Id.HasValue ? _s.SystemName : "",
                             UrgentDegree = c.Urgency_Id.HasValue ? _ur.Name : "",
                             Impact = c.Impact_Id.HasValue ? _im.Name : "",
-                            Category = c.Category_Id.HasValue ? _cat.Name : "",
+                            Category = c.Category_Id.HasValue ? c.Category_Id.ToString() : "",
                             Supplier = c.Supplier_Id.HasValue ? _sup.Name : "",
                             InvoiceNumber = c.InvoiceNumber,
                             ReferenceNumber = c.ReferenceNumber,
