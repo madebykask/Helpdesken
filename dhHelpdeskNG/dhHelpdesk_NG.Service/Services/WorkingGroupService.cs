@@ -211,7 +211,7 @@ namespace DH.Helpdesk.Services.Services
 
         public List<GroupWithEmails> GetWorkingGroupsWithActiveEmails(int customerId, bool includeAdmins = true)
         {
-            var workingGroups = this.workingGroupRepository.GetMany(w => w.Customer_Id == customerId).OrderBy(w => w.WorkingGroupName).ToList();
+            var workingGroups = this.workingGroupRepository.GetMany(w => w.Customer_Id == customerId && w.IsActive == 1).OrderBy(w => w.WorkingGroupName).ToList();
             var workingGroupIds = workingGroups.Select(g => g.Id).ToList();
 
             var workingGroupsUserIds = this.userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds, includeAdmins, true, true);
