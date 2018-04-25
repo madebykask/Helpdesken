@@ -58,7 +58,9 @@
                     UserFields.IsAbout_Persons_Phone.ToLower(),
                     UserFields.IsAbout_Place.ToLower(),
                     UserFields.IsAbout_Region.ToLower(),
-                    UserFields.IsAbout_UserCode.ToLower()                   
+                    UserFields.IsAbout_UserCode.ToLower(),
+                    LogFields.InternalLogNote.ToLower(),
+                    LogFields.ExternalLogNote.ToLower()                   
                 };
 
 
