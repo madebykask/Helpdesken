@@ -14,27 +14,30 @@
         </div>
     </div>
     @Html.Partial("_Input", Model)
+
 }
+
 @section Scripts {
     <script type="text/javascript">
-
-        $(function () {
-            var validator = $("#target").validate({
+        $(function() {
+            $("#target").validate({
                 rules: {
-                    "ContractCategory.Name": {
-                        required: true
-                    }
+                    "ContractCategory.Name": "required",
+                    "ContractCategory.CaseType_Id": "required"
                 },
                 messages: {
+                    "ContractCategory.CaseType_Id": {
+                        required: '@Translation.GetForJS("Ärendetyp") @Translation.GetForJS("måste anges")'
+                    },
                     "ContractCategory.Name": {
-                        required: "@Translation.GetForJS("Du måste ange en avtalskategori", Enums.TranslationSource.TextTranslation)"
+                        required: '@Translation.GetForJS("Avtalskategori")  @Translation.GetForJS("måste anges")'
                     }
                 },
-                submitHandler: function (form) {
+                submitHandler: function(form) {
                     form.submit();
                 }
             });
         });
-
-</script>
+    </script>
 }
+
