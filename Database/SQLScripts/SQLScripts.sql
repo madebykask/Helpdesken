@@ -110,6 +110,14 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
    ALTER TABLE tblUsers ADD IntegrationType bit NOT NULL Default(0)
 GO
 
+RAISERROR ('Adding ContractPermission field settings for tblUsers', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ContractPermission' and sysobjects.name = N'tblUsers')
+   ALTER TABLE tblUsers ADD ContractPermission bit NOT NULL Default(0)
+
+   UPDATE tblUsers set ContractPermission = 1
+   where UserGroup_Id in (Select Id from tblUsergroups where UserGroup = N'Administratör')
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.37'
 --ROLLBACK --TMP

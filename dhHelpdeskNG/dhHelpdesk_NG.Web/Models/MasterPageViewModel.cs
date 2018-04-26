@@ -152,7 +152,7 @@ namespace DH.Helpdesk.Web.Models
 
         public bool IsContractVisible()
         {
-            return this.CustomerSetting.ModuleContract.ToBool() && this.IsCustomerOrSystemAdministrator();
+            return this.CustomerSetting.ModuleContract.ToBool() && this.IsAdministrator(); 
         }
 
 		public bool IsInvoicesVisible()
