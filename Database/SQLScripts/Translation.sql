@@ -7110,6 +7110,13 @@ If not exists (select * from tblTextTranslation where text_id = 1971 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1971, 2, 'Number of answers')
 GO
 
+If not exists (select * from tbltext where id = 1972)
+	insert into tbltext (id, TextString) VALUES (1972, 'Integration - Anmälare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1972 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1972, 2, 'Integration - Initiator')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 
