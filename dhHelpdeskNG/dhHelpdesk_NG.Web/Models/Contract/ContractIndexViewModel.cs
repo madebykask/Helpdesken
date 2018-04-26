@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DH.Helpdesk.Web.Infrastructure;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 
 namespace DH.Helpdesk.Web.Models.Contract
@@ -11,8 +13,6 @@ namespace DH.Helpdesk.Web.Models.Contract
 
     public class ContractIndexViewModel
     {
-       
-
         public ContractIndexViewModel(Customer customer)
         {
             Customer = customer;
@@ -21,60 +21,25 @@ namespace DH.Helpdesk.Web.Models.Contract
 
             var selectListItems = new List<SelectListItem>();
 
-
             selectListItems.AddRange(GetSelectListItem());
-
             
             ShowContracts = GetSelectListItem();
-
-
         }
 
         private static IEnumerable<SelectListItem> GetSelectListItem()
         {
-            var items = new List<SelectListItem>();
-
-            items.Add(new SelectListItem
+            var dic = new Dictionary<int, string>
             {
-                Text = string.Format("{0} {1}", "", "Pågående"),
-                Value = "1",
-                Selected = false
-            });
+                { 1, $"  {Translation.GetCoreTextTranslation("Pågående")}" },
+                { 2, $"  {Translation.GetCoreTextTranslation("För uppföljning")}" },
+                { 3, $"  {Translation.GetCoreTextTranslation("För uppsägning")}" },
+                { 4, $"  {Translation.GetCoreTextTranslation("Löpande")}" },
+                { 9, $"  {Translation.GetCoreTextTranslation("Avslutade")}" },
+                { 10, $"  {Translation.GetCoreTextTranslation("Alla")}" }
+            };
 
-            items.Add(new SelectListItem
-            {
-                Text = string.Format("{0} {1}", "", "För uppföljning"),
-                Value = "2",
-                Selected = false
-            });
-
-            items.Add(new SelectListItem
-            {
-                Text = string.Format("{0} {1}", "", "För uppsägning"),
-                Value = "3",
-                Selected = false
-            });
-
-            items.Add(new SelectListItem
-            {
-                Text = string.Format("{0} {1}", "", "Löpande"),
-                Value = "4",
-                Selected = false
-            });
-
-            items.Add(new SelectListItem
-            {
-                Text = string.Format("{0} {1}", "", "Avslutade"),
-                Value = "9",
-                Selected = false
-            });
-
-            items.Add(new SelectListItem
-            {
-                Text = string.Format("{0} {1}", "", "Alla"),
-                Value = "10",
-                Selected = true
-            });
+            var items = dic.ToSelectList();
+            items.Single(x => x.Value == "10").Selected = true;
 
             return items;
         }
@@ -105,8 +70,6 @@ namespace DH.Helpdesk.Web.Models.Contract
 
         public int RunningCases { get; set; }
     }
-
-    
 
     public sealed class ContractsIndexRowModel
     {
