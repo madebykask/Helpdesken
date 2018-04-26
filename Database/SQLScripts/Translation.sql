@@ -6362,21 +6362,6 @@ If not exists (select * from tblTextTranslation where text_id = 1876 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1876, 2, 'Employee')
 GO
 
-
-If not exists (select * from tbltext where id = 1875)
-	insert into tbltext (id, TextString) VALUES (1875, 'Denna kategori kan inte aktiveras, eftersom huvudnivån är inaktiv')
-GO
-If not exists (select * from tblTextTranslation where text_id = 1875 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1875, 2, 'This category can not be activated, because the main level is inactive')
-GO
-
-If not exists (select * from tbltext where id = 1876)
-	insert into tbltext (id, TextString) VALUES (1876, 'Antal svar')
-GO
-If not exists (select * from tblTextTranslation where text_id = 1876 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1876, 2, 'Number of answers')
-GO
-
 If not exists (select * from tbltext where id = 1877)
 	insert into tbltext (id, TextString) VALUES (1877, 'Är du säker på att du vill ta bort aktuell FAQ')
 GO
@@ -7109,6 +7094,20 @@ if not exists (select * from tbltext where id = 1969)
 GO
 If not exists (select * from tblTextTranslation where text_id = 1969 and Language_Id = 2)
      insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1969, 2, 'Path')
+GO
+
+If not exists (select * from tbltext where id = 1970)
+	insert into tbltext (id, TextString) VALUES (1970, 'Denna kategori kan inte aktiveras, eftersom huvudnivån är inaktiv')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1970 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1970, 2, 'This category can not be activated, because the main level is inactive')
+GO
+
+If not exists (select * from tbltext where id = 1971)
+	insert into tbltext (id, TextString) VALUES (1971, 'Antal svar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1971 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1971, 2, 'Number of answers')
 GO
 
 -- *** Run this last when put translation script above this line **--
