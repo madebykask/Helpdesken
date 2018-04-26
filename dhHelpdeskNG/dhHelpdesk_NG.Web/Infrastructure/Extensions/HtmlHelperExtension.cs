@@ -5,6 +5,7 @@ using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.BusinessData.Models.FinishingCause;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
 using DH.Helpdesk.Common.Constants;
+using DH.Helpdesk.Web.Infrastructure.Case;
 
 namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
