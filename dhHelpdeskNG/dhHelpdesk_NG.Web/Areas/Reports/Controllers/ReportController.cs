@@ -610,7 +610,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 var fieldName = string.IsNullOrWhiteSpace(caseSectionName) ? Translation.GetCoreTextTranslation(f.Name) : Translation.GetForCase(f.Name, SessionFacade.CurrentCustomer.Id);
                 translatedFields.Add(new ItemOverview
                 (
-                    string.IsNullOrWhiteSpace(caseSectionName) ? fieldName : $"{caseSectionName} - {fieldName}",
+                    fieldName,
                     f.Value
                 ));
             }
