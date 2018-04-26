@@ -105,6 +105,10 @@ END
 ALTER TABLE tblCustomerUser
     ALTER COLUMN CaseRegionFilter NVARCHAR(100)
 
+RAISERROR ('Adding SyncChangedDate field settings for tblUsers', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IntegrationType' and sysobjects.name = N'tblUsers')
+   ALTER TABLE tblUsers ADD IntegrationType bit NOT NULL Default(0)
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.37'

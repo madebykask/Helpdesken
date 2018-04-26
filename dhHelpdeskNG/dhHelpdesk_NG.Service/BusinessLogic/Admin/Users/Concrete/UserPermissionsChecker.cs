@@ -137,6 +137,11 @@
                 permissions.Add(UserPermission.InventoryPermission);
             }
 
+            if (user.ContractPermission)
+            {
+                permissions.Add(UserPermission.ContractPermission);
+            }
+
             if (user.InvoicePermission.ToBool())
             {
                 permissions.Add(UserPermission.InvoicePermission);

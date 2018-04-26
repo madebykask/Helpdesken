@@ -330,6 +330,16 @@
         </tr>
         <tr>
             <td>
+                @Translation.GetCoreTextTranslation("Avtal")
+            </td>
+            <td>
+                <input data-field="contractPermission" type="checkbox" name="User.ContractPermission" @(Model.User.ContractPermission ? "checked=checked" : "") value="true"/>
+                <input type="hidden" name="User.ContractPermission" value="false" />
+                &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren har administratörsbehörighet till internt kontrakt")
+            </td>
+        </tr>
+        <tr>
+            <td>
                 @Translation.Get("Fakturering artikel", Enums.TranslationSource.TextTranslation)
             </td>
             <td>

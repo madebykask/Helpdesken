@@ -7117,6 +7117,14 @@ If not exists (select * from tblTextTranslation where text_id = 1972 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1972, 2, 'Integration - Initiator')
 GO
 
+If not exists (select * from tbltext where id = 1973)
+	insert into tbltext (id, TextString) VALUES (1973, 'Användaren har administratörsbehörighet till internt kontrakt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1973 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1973, 2, 'User has admin permission to Internal Contract')
+
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 
