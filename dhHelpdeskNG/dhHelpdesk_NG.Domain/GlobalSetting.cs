@@ -30,6 +30,9 @@ namespace DH.Helpdesk.Domain
 		public string InvoiceFileFolder { get; set; }
         public string ExtendedCasePath { get; set; }
         public int MultiCustomersSearch { get; set; }
-        public virtual Language DefaultLanguage { get; set; }
+		public bool PerformanceLogActive { get; set; }
+		public int PerformanceLogFrequency { get; set; }
+		public int PerformanceLogSettingsCache { get; set; }
+		public virtual Language DefaultLanguage { get; set; }
     }
 }

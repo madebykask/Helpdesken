@@ -112,6 +112,15 @@ namespace DH.Helpdesk
     }
 }
 ' />
+    <WriteLinesToFile Overwrite="true" File="$(ProjectDir)..\dhHelpdeskNG\CommonAssembly\SharedAssemblyInfo.vb" Encoding="UTF-8" Lines='Imports System.Reflection
+
+&lt;Assembly: AssemblyCompany("DH Solutions")&gt;
+&lt;Assembly: AssemblyCopyright("&#169; 2015 DH Solutions")&gt;
+&lt;Assembly: AssemblyVersion("$(VersionString)")&gt;
+&lt;Assembly: AssemblyFileVersion("$(VersionString)")&gt;
+&lt;Assembly: AssemblyInformationalVersion("$(FullVersion)")&gt;
+
+' />
     
   </Target>
 </Project>

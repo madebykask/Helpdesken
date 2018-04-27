@@ -68,8 +68,13 @@
 
         public IList<FinishingCause> GetFinishingCauses(int customerId)
         {
-            return this._finishingCauseRepository.GetMany(x => x.Customer_Id == customerId  && x.Parent_FinishingCause_Id == null).OrderBy(x => x.Name).ToList();
-        }
+			return this._finishingCauseRepository
+				.GetManyWithSubFinishingCauses(x => x.Customer_Id == customerId)
+				.OrderBy(x => x.Name)
+				.ToList()
+				.Where(x => x.Parent_FinishingCause_Id == null)
+				.ToList();
+		}
 
         public IList<FinishingCauseOverview> GetFinishingCausesWithChilds(int customerId)
         {

@@ -337,6 +337,17 @@ BEGIN
 END
 GO
 
+-- Performance log controls 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'PerformanceLogActive' and sysobjects.name = N'tblGlobalSettings')
+BEGIN
+		ALTER TABLE [dbo].[tblGlobalSettings]
+		ADD [PerformanceLogActive] BIT NOT NULL DEFAULT(0),
+        [PerformanceLogFrequency] INT NOT NULL DEFAULT(0),
+		[PerformanceLogSettingsCache] INT NOT NULL DEFAULT(0);
+END
+
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.36'

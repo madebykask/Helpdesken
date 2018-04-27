@@ -161,14 +161,15 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<ProductAreaEntity> GetTopProductAreasForUser(int customerId, UserOverview user, bool isOnlyActive = true)
         {
-            var res =
-                this.productAreaRepository.GetMany(
-                    x =>
-                    x.Customer_Id == customerId && x.Parent_ProductArea_Id == null
-                    && ((isOnlyActive && x.IsActive != 0) || !isOnlyActive));
+			var res =
+				this.productAreaRepository.GetManyWithSubProductAreas(
+					x => x.Customer_Id == customerId && ((isOnlyActive && x.IsActive != 0) || !isOnlyActive))
+					.OrderBy(x => x.Name)
+					.ToList()
+					.Where(x => x.Parent_ProductArea_Id == null);
 
-            return res.OrderBy(x => x.Name).ToList();
-        }
+			return res.ToList();
+		}
 
         private ProductAreaOverview GetTopMostAreaForChildNew(int id, IList<ProductAreaOverview> items)
         {

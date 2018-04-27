@@ -9,16 +9,14 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("DH.Helpdesk.Mail2Ticket")>
-<Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("")>
+<Assembly: AssemblyDescription("")>
 <Assembly: AssemblyProduct("DH.Helpdesk.Mail2Ticket")>
-<Assembly: AssemblyCopyright("Copyright ©  2008")> 
-<Assembly: AssemblyTrademark("")> 
+<Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)> 
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("7921568d-583b-4929-b75f-4e8492a924d1")> 
+<Assembly: Guid("7921568d-583b-4929-b75f-4e8492a924d1")>
 
 ' Version information for an assembly consists of the following four values:
 '
@@ -30,6 +28,3 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
-
-<Assembly: AssemblyVersion("4.23.3.0")> 
-<Assembly: AssemblyFileVersion("4.23.3.0")> 

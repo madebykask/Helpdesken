@@ -15,11 +15,14 @@ namespace DH.Helpdesk.Dal.Repositories
 {
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+	using System;
+	using System.Linq;
+	using System.Linq.Expressions;
 
-    /// <summary>
-    /// The CategoryRepository interface.
-    /// </summary>
-    public interface ICategoryRepository : IRepository<Category>
+	/// <summary>
+	/// The CategoryRepository interface.
+	/// </summary>
+	public interface ICategoryRepository : IRepository<Category>
     {
         /// <summary>
         /// The get category overview.
@@ -32,7 +35,9 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         CategoryOverview GetCategoryOverview(int id);
 
-        IList<BusinessData.Models.Case.CategoryOverview> GetCategoriesOverview(int customerId, bool activeOnly);
+		IQueryable<Category> GetManyWithSubCategories(Expression<Func<Category, bool>> where);
+
+		IList<BusinessData.Models.Case.CategoryOverview> GetCategoriesOverview(int customerId, bool activeOnly);
     }
 
     /// <summary>
@@ -75,7 +80,12 @@ namespace DH.Helpdesk.Dal.Repositories
                        };
         }
 
-        public IList<CategoryOverview> GetCategoriesOverview(int customerId, bool activeOnly)
+		public IQueryable<Category> GetManyWithSubCategories(Expression<Func<Category, bool>> where)
+		{
+			return this.DataContext.Categories.Include("SubCategories").Where(where);
+		}
+
+		public IList<CategoryOverview> GetCategoriesOverview(int customerId, bool activeOnly)
         {
             var items = 
                 Table.Where(x => x.Customer_Id == customerId && (!activeOnly || x.IsActive > 0))
