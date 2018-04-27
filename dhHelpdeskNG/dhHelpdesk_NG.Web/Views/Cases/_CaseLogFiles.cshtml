@@ -41,7 +41,7 @@
                                     }
                                     else
                                     {
-                                        <a target="_blank" href="@Html.Action("LogFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", Model.Id}, {"fileName", filename.Name}})"><i class="icon-file"></i> @filename.Name</a>
+                                        <a target="_blank" class="isExisted" href="@Html.Action("LogFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", Model.Id}, {"fileName", filename.Name}})"><i class="icon-file"></i> @filename.Name</a>
                                     }
                                 }
                             }
@@ -61,7 +61,7 @@
                                     }
                                     else
                                     {
-                                        <a href="@Url.Action("DownloadLogFile", new RouteValueDictionary {{"id", Model.Id}, {"fileName", filename.Name}})"><i class="icon-file"></i> @filename.Name</a>
+                                        <a class="isExisted" href="@Url.Action("DownloadLogFile", new RouteValueDictionary {{"id", Model.Id}, {"fileName", filename.Name}})"><i class="icon-file"></i> @filename.Name</a>
                                     }
                                 }
                             }

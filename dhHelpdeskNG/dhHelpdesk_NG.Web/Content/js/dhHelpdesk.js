@@ -710,3 +710,14 @@ function dynamicDropDownBehaviorOnMouseMove(event) {
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////
+
+$.fn.checkUrlFileExists = function () {
+    "use strict";
+    var url = $(this)[0].href;
+    var http = new XMLHttpRequest();
+    http.open("HEAD", url, false);
+    http.send();
+    return http.status === 200;
+};
+
+

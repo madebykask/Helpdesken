@@ -59,12 +59,9 @@ $(function() {
                 return false;
     });
 
-    $("a.isExisted").on("click", function (e) {        
-        var url = $(this).attr("href");
-        var http = new XMLHttpRequest();
-        http.open("HEAD", url, false);
-        http.send();
-        if (http.status != 200) {
+    $("a.isExisted").on("click", function (e) {
+        var exists = $(this).checkUrlFileExists();
+        if (!exists) {
             e.preventDefault();
             ShowToastMessage(window.parameters.fileExistError, "error");
         }
