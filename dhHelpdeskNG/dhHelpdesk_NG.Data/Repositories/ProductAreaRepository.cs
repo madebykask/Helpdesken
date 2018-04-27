@@ -16,13 +16,14 @@ namespace DH.Helpdesk.Dal.Repositories
     using System.Data.SqlClient;
     using System.Data;
     using System;
+	using System.Linq.Expressions;
 
-    #region PRODUCTAREA
+	#region PRODUCTAREA
 
-    /// <summary>
-    /// The ProductAreaRepository interface.
-    /// </summary>
-    public interface IProductAreaRepository : IRepository<ProductAreaEntity>
+	/// <summary>
+	/// The ProductAreaRepository interface.
+	/// </summary>
+	public interface IProductAreaRepository : IRepository<ProductAreaEntity>
     {
         /// <summary>
         /// The get product area overview.
@@ -82,7 +83,9 @@ namespace DH.Helpdesk.Dal.Repositories
 
 
         IList<ProductAreaEntity> GetWithHierarchy(int customerId);
-    }
+
+		IQueryable<ProductAreaEntity> GetManyWithSubProductAreas(Expression<Func<ProductAreaEntity, bool>> where);
+	}
 
     /// <summary>
     /// The product area repository.
@@ -269,7 +272,12 @@ namespace DH.Helpdesk.Dal.Repositories
             return items;
         }
 
-        public IList<ProductAreaOverview> GetCaseTypeProductAreas(int caseTypeId)
+		public IQueryable<ProductAreaEntity> GetManyWithSubProductAreas(Expression<Func<ProductAreaEntity, bool>> where)
+		{
+			return this.DataContext.ProductAreas.Include("SubProductAreas").Where(where);
+		}
+
+		public IList<ProductAreaOverview> GetCaseTypeProductAreas(int caseTypeId)
         {
             var query =
                 from ct in DataContext.CaseTypes

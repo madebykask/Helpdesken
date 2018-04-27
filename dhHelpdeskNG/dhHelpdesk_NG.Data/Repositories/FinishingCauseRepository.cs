@@ -9,16 +9,21 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
 
-    #region FINISHINGCAUSE
+	using System.Linq.Expressions;
+	using System;
 
-    public interface IFinishingCauseRepository : IRepository<FinishingCause>
+	#region FINISHINGCAUSE
+
+	public interface IFinishingCauseRepository : IRepository<FinishingCause>
     {
         IEnumerable<FinishingCause> GetActiveByCustomer(int customerId);
 
         List<FinishingCauseOverview> GetFinishingCauseOverviews(int customerId);
 
         IEnumerable<FinishingCauseInfo> GetFinishingCauseInfos(int customerId);
-    }
+
+		IQueryable<FinishingCause> GetManyWithSubFinishingCauses(Expression<Func<FinishingCause, bool>> where);
+	}
 
     public class FinishingCauseRepository : RepositoryBase<FinishingCause>, IFinishingCauseRepository
     {
@@ -93,7 +98,12 @@ namespace DH.Helpdesk.Dal.Repositories
                     Name = c.Name
                 });
         }
-    }
+
+		public IQueryable<FinishingCause> GetManyWithSubFinishingCauses(Expression<Func<FinishingCause, bool>> where)
+		{
+			return this.DataContext.FinishingCauses.Include("SubFinishingCauses").Where(where);
+		}
+	}
 
     #endregion
 

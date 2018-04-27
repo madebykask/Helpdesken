@@ -8,8 +8,10 @@
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+	using System.Linq.Expressions;
+	using System;
 
-    public interface ICaseTypeRepository : IRepository<CaseType>
+	public interface ICaseTypeRepository : IRepository<CaseType>
     {
         void ResetDefault(int exclude, int customerId);
 
@@ -22,7 +24,9 @@
         IEnumerable<int> GetChildren(int caseTypeId);
 
         IEnumerable<CaseTypeOverview> GetCaseTypeOverviews(int customerId);
-    }
+
+		IQueryable<CaseType> GetManyWithSubCaseTypes(Expression<Func<CaseType, bool>> where);
+	}
 
     public class CaseTypeRepository : RepositoryBase<CaseType>, ICaseTypeRepository
     {
@@ -40,7 +44,12 @@
             }
         }
 
-        public void ResetEmailDefault(int exclude, int customerId)
+		public IQueryable<CaseType> GetManyWithSubCaseTypes(Expression<Func<CaseType, bool>> where)
+		{
+			return this.DataContext.CaseTypes.Include("SubCaseTypes").Where(where);
+		}
+
+		public void ResetEmailDefault(int exclude, int customerId)
         {
             foreach (CaseType obj in this.GetMany(s => s.IsEMailDefault == 1 && s.Id != exclude && s.Customer_Id == customerId))
             {

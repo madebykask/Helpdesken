@@ -60,9 +60,10 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CaseType> GetCaseTypes(int customerId, bool isTakeOnlyActive = false)
         {
-            var query = this.caseTypeRepository.GetMany(
-                x => x.Customer_Id == customerId && x.Parent_CaseType_Id == null);
-            if (isTakeOnlyActive)
+			var query = ((IQueryable<CaseType>)caseTypeRepository.GetManyWithSubCaseTypes(o => o.Customer_Id == customerId))
+				.ToList()
+				.Where(o => o.Parent_CaseType_Id == null);
+			if (isTakeOnlyActive)
             {
                 query = query.Where(it => it.IsActive == 1 && it.Selectable == 1);
             }

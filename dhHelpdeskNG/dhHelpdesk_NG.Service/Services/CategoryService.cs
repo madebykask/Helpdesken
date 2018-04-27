@@ -137,8 +137,13 @@
         //todo: use overview method instead
         public IList<Category> GetActiveParentCategories(int customerId)
         {
-            return this._categoryRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_Category_Id == null && x.IsActive == 1).OrderBy(x => x.Name).ToList();
-        }
+			return this._categoryRepository
+				.GetManyWithSubCategories(x => x.Customer_Id == customerId && x.IsActive == 1)
+				.OrderBy(x => x.Name)
+				.ToList()
+				.Where(x => x.Parent_Category_Id == null)
+				.ToList();
+		}
 
         public IList<Category> GetActiveCategories(int customerId)
         {
