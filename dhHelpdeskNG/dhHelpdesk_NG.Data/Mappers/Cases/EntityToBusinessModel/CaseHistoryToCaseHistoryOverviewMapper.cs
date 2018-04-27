@@ -115,6 +115,8 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
 
                 Project = data.Project,
 
+                CausingPart = data.CausingPart,
+
                 UserPerformer = data.UserPerformer,
 
                 UserResponsible = data.UserResponsible,

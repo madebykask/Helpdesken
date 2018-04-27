@@ -90,6 +90,12 @@ namespace DH.Helpdesk.Dal.Repositories
                         Name = caseHistory.ProductArea.Name
                     } : null,
 
+                    CausingPart = caseHistory.CausingPartId != null ? new CausingPartOverview()
+                    {
+                        Id = caseHistory.CausingPart.Id,
+                        Name = caseHistory.CausingPart.Name
+                    } : null,
+
                     Problem =  caseHistory.Problem_Id != null ? new ProblemOverview()
                     {
                         Id = caseHistory.Problem.Id,

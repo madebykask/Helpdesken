@@ -181,8 +181,21 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
                 if (cur.Problem_Id != prev.Problem_Id)
                 {
                     var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.Problem.ToString());
-                    var prevVal = prev.Problem != null ? prev.Problem.Name : null;
-                    var curVal = cur.Problem != null ? cur.Problem.Name : null;
+                    var prevVal = prev.Problem?.Name;
+                    var curVal = cur.Problem?.Name;
+                    var s = FormatChanges(field, prevVal, curVal);
+                    sb.Append(s);
+                }
+            }
+
+            // Causing Part
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CausingPart.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.CausingPartId != prev.CausingPartId)
+                {
+                    var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.CausingPart.ToString());
+                    var prevVal = prev.CausingPart?.Name;
+                    var curVal = cur.CausingPart?.Name;
                     var s = FormatChanges(field, prevVal, curVal);
                     sb.Append(s);
                 }

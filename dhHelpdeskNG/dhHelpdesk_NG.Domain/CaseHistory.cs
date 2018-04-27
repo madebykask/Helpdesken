@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Domain.Projects;
+﻿using DH.Helpdesk.Domain.Cases;
+using DH.Helpdesk.Domain.Projects;
 
 namespace DH.Helpdesk.Domain
 {
@@ -121,6 +122,7 @@ namespace DH.Helpdesk.Domain
         public virtual Department Department { get; set; }
         public virtual Problem Problem { get; set; }
         public virtual Project Project { get; set; }
+        public virtual CausingPart CausingPart { get; set; }
         public virtual CaseType CaseType { get; set; }
         public virtual ProductArea ProductArea { get; set; }
         public virtual ICollection<EmailLog> Emaillogs { get; set; }

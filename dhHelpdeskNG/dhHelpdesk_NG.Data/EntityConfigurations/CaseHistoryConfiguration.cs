@@ -61,6 +61,11 @@
                             .HasForeignKey(x => x.ProductArea_Id)
                             .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.CausingPart)
+                            .WithMany()
+                            .HasForeignKey(x => x.CausingPartId)
+                            .WillCascadeOnDelete(false);
+
             this.HasOptional(x => x.UserPerformer)
                             .WithMany()
                             .HasForeignKey(x => x.Performer_User_Id)

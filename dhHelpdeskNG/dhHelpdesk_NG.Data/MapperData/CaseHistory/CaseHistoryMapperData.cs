@@ -5,10 +5,6 @@ using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.Problem.Output;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
 using DH.Helpdesk.BusinessData.Models.Projects.Output;
-using DH.Helpdesk.BusinessData.Models.User.Interfaces;
-using DH.Helpdesk.Domain;
-using DH.Helpdesk.Domain.Problems;
-using DH.Helpdesk.Domain.Projects;
 
 namespace DH.Helpdesk.Dal.MapperData.CaseHistory
 {
@@ -22,6 +18,7 @@ namespace DH.Helpdesk.Dal.MapperData.CaseHistory
         public ProductAreaOverview ProductArea { get; set; }
         public ProjectOverview Project { get; set; }
         public ProblemOverview Problem { get; set; }
+        public CausingPartOverview CausingPart { get; set; }
         public UserBasicOvierview UserPerformer { get; set; }
         public UserBasicOvierview UserResponsible { get; set; }
         public PriorityOverview Priority { get; set; }
