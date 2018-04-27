@@ -102,6 +102,8 @@
   <ItemGroup>
     <Compile Include="Components\FileDownloader.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DI\DatabaseModule.cs" />
+    <Compile Include="DI\JobsModule.cs" />
     <Compile Include="DI\NinjectJobFactory.cs" />
     <Compile Include="DI\NinjectSchedulerFactory.cs" />
     <Compile Include="DI\QuartzNinjectModule.cs" />
@@ -113,10 +115,12 @@
     <Compile Include="Dto\JobSettings.cs" />
     <Compile Include="Enums\FieldLenght.cs" />
     <Compile Include="Helper\PropertyHelper.cs" />
+    <Compile Include="Jobs\Gdpr\GdprTasksManagerJob.cs" />
+    <Compile Include="Jobs\Gdpr\GDPRTasksService.cs" />
     <Compile Include="Jobs\ImportInitiatorJob.cs" />
     <Compile Include="Jobs\DailyReportJob.cs" />
     <Compile Include="Jobs\SettingsTrackerJob.cs" />
-    <Compile Include="Managers\ServiceConfigurationManager.cs" />
+    <Compile Include="Infrastructure\Configuration\ServiceConfigurationManager.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -160,6 +164,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
+      <Project>{90DEFCB6-E297-4F99-A532-DA1E0522AA49}</Project>
+      <Name>DH.Helpdesk.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dhHelpdesk_NG.Data\DH.Helpdesk.Dal.csproj">
       <Project>{a8f6b7b8-8055-4bb7-82c4-85004f52e6ef}</Project>
       <Name>DH.Helpdesk.Dal</Name>

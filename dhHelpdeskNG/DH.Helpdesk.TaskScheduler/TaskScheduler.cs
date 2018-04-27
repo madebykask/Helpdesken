@@ -1,22 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
-using System.Data;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
 using Common.Logging;
 using DH.Helpdesk.TaskScheduler.Jobs;
-using DH.Helpdesk.TaskScheduler.Managers;
 using DH.Helpdesk.TaskScheduler.Services;
-using log4net.Config;
 using Ninject;
 using Quartz;
 using DH.Helpdesk.TaskScheduler.Dto;
+using DH.Helpdesk.TaskScheduler.Infrastructure.Configuration;
 using Quartz.Listener;
 using Quartz.Impl.Matchers;
 
@@ -27,34 +20,36 @@ namespace DH.Helpdesk.TaskScheduler
         private static IKernel _diContainer;
         private static ILog _logger;
         private readonly IScheduler _sched;
+        private readonly IApplicationSettings _applicationSettings;
+
+        #region ctor()
 
         public TaskScheduler(IKernel diContainer)
         {
             _diContainer = diContainer;
-            InitializeComponent();
             _logger = LogManager.GetLogger<TaskScheduler>();
+            _applicationSettings = _diContainer.Get<IServiceConfigurationManager>().AppSettings;
 
-            var envName = _diContainer.Get<IServiceConfigurationManager>().EnvName;
+            var envName = _applicationSettings.EnvName;
             ServiceName = string.IsNullOrEmpty(envName) ? "DH.TaskScheduler" : $"DH.TaskScheduler.{envName}";
-
-            var customers = _diContainer.Get<IServiceConfigurationManager>().Customers;            
-
             _sched = _diContainer.Get<IScheduler>();
+
+            InitializeComponent();
         }
+
+        #endregion
 
         protected override void OnStart(string[] args)
         {
             _logger.InfoFormat("Starting service {0}", ServiceName);
 
-            var dailyReport = Convert.ToInt32(ConfigurationManager.AppSettings["DailyReport"]);
-            var initiatoImport = Convert.ToInt32(ConfigurationManager.AppSettings["InitiatorImport"]);
-
             /*Daily Report*/
-            if (dailyReport == 1)
+            if (_applicationSettings.IsDailyReportEnabled)
             {
                 var job = JobBuilder.Create<DailyReportJob>()
                     .WithIdentity(Constants.DailyReportJobName)
                     .Build();
+
                 var trigger = _diContainer.Get<IDailyReportService>().GetTrigger();
 
                 _sched.ScheduleJob(job, trigger);
@@ -63,7 +58,7 @@ namespace DH.Helpdesk.TaskScheduler
             var _logs = new DataLogModel();
 
             /*Import Initiator*/
-            if (initiatoImport == 1)
+            if (_applicationSettings.IsInitiatorImportEnabled)
             {
                 var _initiatorImportService = _diContainer.Get<IImportInitiatorService>();
                 var initiatorTriggers = _initiatorImportService.GetTriggers(ref _logs).ToList();
@@ -104,7 +99,11 @@ namespace DH.Helpdesk.TaskScheduler
                 {
                     _sched.AddJob(_job, false, true);
                 }
-                
+            }
+
+            if (_applicationSettings.IsGDPRTasksEnabled)
+            {
+                //TODO: run new GDPRTasksManagerJob
             }
 
             /*Job Tracker*/
@@ -121,6 +120,7 @@ namespace DH.Helpdesk.TaskScheduler
                     .WithIntervalInSeconds(60)
                     .RepeatForever())
                 .Build();
+
             _sched.ScheduleJob(trackerJob, trackerSettingsTrigger);
 
             if (_sched.GetJobGroupNames().Count > 0)
