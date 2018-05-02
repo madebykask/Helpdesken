@@ -615,6 +615,7 @@ namespace DH.Helpdesk.Dal.DbContext
         public DbSet<GDPRDataPrivacyAccess> GDPRDataPrivacyAccess { get; set; }
         public DbSet<GDPROperationsAudit> GDPROperationsAudit { get; set; }
         public DbSet<GDPRDataPrivacyFavorite> GDPRDataPrivacyFavorites { get; set; }
+        public DbSet<GDPRTask> GDPRTasks { get; set; }
 
         #endregion
 
@@ -930,6 +931,7 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new GDPRDataPrivacyAccessConfiguration());
             modelBuilder.Configurations.Add(new GDPROperationsAuditConfiguration());
             modelBuilder.Configurations.Add(new GDPRDataPrivacyFavoriteConfiguration());
+            modelBuilder.Configurations.Add(new GDPRTaskConfiguration());
 
             #endregion
 

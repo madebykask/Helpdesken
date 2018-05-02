@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DH.Helpdesk.TaskScheduler.DI.Modules;
 using Quartz;
 using Quartz.Impl;
 

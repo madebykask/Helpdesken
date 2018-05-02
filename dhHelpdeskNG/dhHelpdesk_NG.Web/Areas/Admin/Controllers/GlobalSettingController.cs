@@ -10,6 +10,7 @@ using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums.Settings;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.Infrastructure.Context;
+using DH.Helpdesk.Domain.GDPR;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Models.Gdpr;
 
@@ -44,6 +45,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IGDPROperationsService _gdprOperationsService;
         private readonly IGDPRFavoritesService _gdprFavoritesService;
         private readonly IUserContext _userContext;
+        private readonly IGDPRTasksService _gdprTasksService;
 
         public GlobalSettingController(
             IGlobalSettingService globalSettingService,
@@ -58,10 +60,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             IGDPRDataPrivacyAccessService gdprDataPrivacyAccessService,
             IMasterDataService masterDataService,
             IGDPRFavoritesService gdprFavoritesService,
+            IGDPRTasksService gdprTasksService,
             IUserContext userContext)
             : base(masterDataService)
         {
-            _gdprFavoritesService = gdprFavoritesService;
+            this._gdprTasksService = gdprTasksService;
+            this._gdprFavoritesService = gdprFavoritesService;
             this._globalSettingService = globalSettingService;
             this._holidayService = holidayService;
             this._languageService = languageService;
@@ -1495,17 +1499,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var model = GetDataPrivacyModel();
             return View(model);
         }
-
-        [HttpGet]
-        [GdprAccess]
-        public JsonResult CreateDataPrivacyOperationAudit(int customerId)
-        {
-            var userId = _userContext.UserId;
-            var url = ControllerContext.RequestContext.HttpContext.Request.Url?.ToString();
-            var auditOperationId = _gdprOperationsService.CreateDataPrivacyOperationAudit(userId, customerId, url);
-            return Json(new { id = auditOperationId }, JsonRequestBehavior.AllowGet);
-        }
-
+        
         [HttpPost]
         [GdprAccess]
         public ActionResult DataPrivacy(DataPrivacyParameters model)
@@ -1513,11 +1507,21 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             SessionFacade.ActiveTab = "#fragment-6";
             if (model.SelectedCustomerId > 0)
             {
-                var success = _gdprOperationsService.RemoveDataPrivacyFromCase(model);
-                return Json(new { success });
+                //schedule new data privacy job
+                var taskInfo = new GDPRTask
+                {
+                    CustomerId = model.SelectedCustomerId,
+                    UserId = _userContext.UserId,
+                    FavoriteId = model.SelectedFavoriteId ?? 0,
+                    AddedDate = DateTime.UtcNow,
+                    Status = GDPRTaskStatus.None
+                };
+
+                var taskId = _gdprTasksService.AddNewTask(taskInfo);
+                return Json(new { success = true, taskId = taskId });
             }
 
-            return Json(new { success = true });
+            return Json(new { success = false, taskId = 0 });
         }
 
         private DataPrivacyModel GetDataPrivacyModel()

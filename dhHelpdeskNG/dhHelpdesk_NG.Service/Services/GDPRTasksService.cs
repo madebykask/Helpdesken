@@ -1,0 +1,69 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using DH.Helpdesk.Dal.Repositories.GDPR;
+using DH.Helpdesk.Domain.GDPR;
+using log4net;
+
+namespace DH.Helpdesk.Services.Services
+{
+    public interface IGDPRTasksService
+    {
+        GDPRTask GetById(int taskId);
+        IList<GDPRTask> GetPendingTasks();
+        
+        int AddNewTask(GDPRTask task);
+        void UpdateTask(GDPRTask task);
+
+        void UpdateTaskStatus(int taskId, GDPRTaskStatus status);
+    }
+
+    public class GDPRTasksService : IGDPRTasksService
+    {
+        private readonly ILog _log = LogManager.GetLogger(typeof(GDPRTasksService));
+        private readonly IGDPRTaskRepository _taskRepository;
+
+        #region ctor()
+
+        public GDPRTasksService(IGDPRTaskRepository taskRepository)
+        {
+            _taskRepository = taskRepository;
+            //_log.DebugFormat("GDPRTasksService.ctor() called. ThreadId: {0}", Thread.CurrentThread.ManagedThreadId);
+        }
+
+        #endregion
+
+        public GDPRTask GetById(int taskId)
+        {
+            var task = _taskRepository.GetById(taskId);
+            return task;
+        }
+
+        public IList<GDPRTask> GetPendingTasks()
+        {
+            var tasks = _taskRepository.GetTasks(GDPRTaskStatus.None).OrderBy(x => x.AddedDate).ToList();
+            return tasks;
+        }
+
+        public void UpdateTaskStatus(int taskId, GDPRTaskStatus status)
+        {
+            var task = _taskRepository.GetById(taskId);
+            task.Status = status;
+            _taskRepository.Update(task);
+            _taskRepository.Commit();
+        }
+
+        public int AddNewTask(GDPRTask task)
+        {
+            _taskRepository.Add(task);
+            _taskRepository.Commit();
+
+            return task.Id;
+        }
+
+        public void UpdateTask(GDPRTask task)
+        {
+            _taskRepository.Update(task);
+            _taskRepository.Commit();
+        }
+    }
+}

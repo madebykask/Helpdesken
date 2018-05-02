@@ -7,22 +7,25 @@ using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Notifiers.Concrete;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity;
 using DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel;
+using DH.Helpdesk.Dal.NewInfrastructure;
+using DH.Helpdesk.Dal.NewInfrastructure.Concrete;
 using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Dal.Repositories.Concrete;
+using DH.Helpdesk.Dal.Repositories.GDPR;
 using DH.Helpdesk.Dal.Repositories.Notifiers;
 using DH.Helpdesk.Dal.Repositories.Notifiers.Concrete;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.Computers;
 using Ninject.Modules;
+using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
+using UnitOfWork = DH.Helpdesk.Dal.Infrastructure.UnitOfWork;
 
-namespace DH.Helpdesk.TaskScheduler.DI
+namespace DH.Helpdesk.TaskScheduler.DI.Modules
 {
     public class DatabaseModule : NinjectModule
     {
         public override void Load()
         {
-            //todo: check if all registrations have been moved correctly!
-
             //Dapper
             Bind<IDbQueryExecutor>().To<SqlDbQueryExecutor>();
             Bind<IDbQueryExecutorFactory>().To<SqlDbQueryExecutorFactory>();
@@ -31,6 +34,9 @@ namespace DH.Helpdesk.TaskScheduler.DI
             Bind<IUnitOfWork>().To<UnitOfWork>();
             Bind<IDatabaseFactory>().To<DatabaseFactory>();
             
+            Bind<ISessionFactory>().To<HelpdeskSessionFactory>();
+            Bind<IUnitOfWorkFactory>().To<UnitOfWorkFactory>();
+
             //EF: repositories
             Bind<INotifierFieldSettingsFactory>().To<NotifierFieldSettingsFactory>();
             Bind<INotifierFieldSettingRepository>().To<NotifierFieldSettingRepository>();
@@ -43,7 +49,11 @@ namespace DH.Helpdesk.TaskScheduler.DI
             Bind<ISettingRepository>().To<SettingRepository>();
             Bind<IRegionRepository>().To<RegionRepository>();
             Bind<IOrganizationUnitRepository>().To<OrganizationUnitRepository>();
-
+            Bind<IGlobalSettingRepository>().To<GlobalSettingRepository>();
+            Bind<IGDPRTaskRepository>().To<GDPRTaskRepository>();
+            Bind<IGDPROperationsAuditRespository>().To<GDPROperationsAuditRespository>();
+            Bind<IGDPRDataPrivacyFavoriteRepository>().To<GDPRDataPrivacyFavoriteRepository>();
+            
             //Mappers
             RegisterMappers();
         }

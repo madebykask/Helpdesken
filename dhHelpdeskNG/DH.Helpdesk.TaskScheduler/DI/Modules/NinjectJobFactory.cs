@@ -5,7 +5,7 @@ using Ninject;
 using Quartz;
 using Quartz.Spi;
 
-namespace DH.Helpdesk.TaskScheduler.DI
+namespace DH.Helpdesk.TaskScheduler.DI.Modules
 {
     public class NinjectJobFactory : IJobFactory
     {

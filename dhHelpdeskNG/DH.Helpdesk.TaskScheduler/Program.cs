@@ -2,6 +2,7 @@
 using System.Linq;
 using System.ServiceProcess;
 using DH.Helpdesk.TaskScheduler.DI;
+using DH.Helpdesk.TaskScheduler.DI.Modules;
 using Ninject;
 using Ninject.Modules;
 
@@ -16,6 +17,7 @@ namespace DH.Helpdesk.TaskScheduler
         {
             var modules = new List<NinjectModule>
             {
+                new InfrastructureModule(),
                 new DatabaseModule(),
                 new ServiceModule(),
                 new JobsModule(),
@@ -24,6 +26,7 @@ namespace DH.Helpdesk.TaskScheduler
 
             using (var kernel = new StandardKernel(modules.Cast<INinjectModule>().ToArray()))
             {
+                
                 var servicesToRun = new ServiceBase[]
                 {
                     new TaskScheduler(kernel)

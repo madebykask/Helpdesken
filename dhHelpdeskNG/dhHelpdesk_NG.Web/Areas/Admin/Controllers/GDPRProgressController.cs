@@ -9,13 +9,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
     [SessionState(SessionStateBehavior.Disabled)]
     public class GDPRProgressController : Controller  // keep Controller as a base class for faster performance
     {
+        private readonly IGDPRTasksService _gdprTasksService;
         private readonly IGDPROperationsService _gdprOperationsService;
 
         #region ctor()
 
-        public GDPRProgressController(IGDPROperationsService gdprOperationsService)
+        public GDPRProgressController(IGDPRTasksService  gdprTasksService)
         {
-            _gdprOperationsService = gdprOperationsService;
+            _gdprTasksService = gdprTasksService;
         }
 
         #endregion
@@ -23,12 +24,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [HttpGet]
         [OutputCache(NoStore = true, Duration = 0)]
         [AllowAnonymous]
-        public JsonResult GetOperationProgress(int id)
+        public JsonResult GetTaskProgress(int id)
         {
-            var data = _gdprOperationsService.GetDataPrivacyOperationAuditData(id);
+            var data = _gdprTasksService.GetById(id);
             return Json(new
             {
-                isComplete = data.Status == GDPROperationStatus.Complete,
+                isComplete = data.Status == GDPRTaskStatus.Complete,
                 Success = data.Success,
                 Error = data.Error
             }, JsonRequestBehavior.AllowGet);

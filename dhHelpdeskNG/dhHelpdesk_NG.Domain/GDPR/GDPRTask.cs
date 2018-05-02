@@ -2,13 +2,17 @@
 
 namespace DH.Helpdesk.Domain.GDPR
 {
-    public class GDPRTask
+    public class GDPRTask : Entity
     {
-        public int Id { get; set; }
+        public int CustomerId { get; set; }
         public int UserId {get; set; }
         public int FavoriteId { get; set; }
-        public GDPROperationStatus Status { get; set; }
+        public GDPRTaskStatus Status { get; set; }
         public DateTime AddedDate { get; set; }
         public int Progress { get; set; }
+        public DateTime? StartedAt { get; set; }
+        public DateTime? EndedAt { get; set; }
+        public bool Success { get; set; }
+        public string Error { get; set; }
     }
 }

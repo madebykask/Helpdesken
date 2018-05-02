@@ -14,8 +14,8 @@ using System.Configuration;
 using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.TaskScheduler.Enums;
 using System.ComponentModel.DataAnnotations;
-using DH.Helpdesk.TaskScheduler.Helper;
 using System.Threading;
+using DH.Helpdesk.TaskScheduler.Helpers;
 
 namespace DH.Helpdesk.TaskScheduler.Services
 {

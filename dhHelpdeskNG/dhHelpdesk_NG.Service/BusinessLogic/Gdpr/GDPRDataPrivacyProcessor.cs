@@ -8,85 +8,30 @@ using DH.Helpdesk.Common.Exceptions;
 using DH.Helpdesk.Common.Serializers;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Dal.Infrastructure;
-using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.NewInfrastructure;
+using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Dal.Repositories.GDPR;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.Cases;
 using DH.Helpdesk.Domain.ExtendedCaseEntity;
 using DH.Helpdesk.Domain.GDPR;
-using LinqLib.Operators;
+using DH.Helpdesk.Services.Services;
 
-namespace DH.Helpdesk.Services.Services
+namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 {
-    public enum GDPROperations
+    public interface IGDPRDataPrivacyProcessor
     {
-        DataPrivacy
+        void Process(int customerId, int userId, DataPrivacyParameters p);
     }
 
-    public interface IGDPROperationsService
+    public class GDPRDataPrivacyProcessor : IGDPRDataPrivacyProcessor
     {
-        IDictionary<int, string> GetOperationAuditCustomers();
-        IList<GdprOperationsAuditOverview> ListGdprOperationsAuditItems(int? customerId, bool successOnly = true);
-        GDPROperationsAudit GetDataPrivacyOperationAuditData(int id);
-        bool RemoveDataPrivacyFromCase(DataPrivacyParameters p);
-    }
-
-    public interface IGDPRDataPrivacyAccessService
-    {
-        GDPRDataPrivacyAccess GetByUserId(int userId);
-    }
-
-    public interface IGDPRFavoritesService
-    {
-        IDictionary<int, string> ListFavorites();
-        GdprFavoriteModel GetFavorite(int id);
-        int SaveFavorite(GdprFavoriteModel model, int? userId);
-        void DeleteFavorite(int favoriteId);
-    }
-
-    public class GDPRService : IGDPROperationsService, IGDPRDataPrivacyAccessService, IGDPRFavoritesService
-    {
-        private readonly IGDPRDataPrivacyAccessRepository _privacyAccessRepository;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IGDPROperationsAuditRespository _gdprOperationsAuditRespository;
-        private readonly IJsonSerializeService _jsonSerializeService;
-        private readonly IGDPRDataPrivacyFavoriteRepository _gdprFavoritesRepository;
-
-        private readonly IBusinessModelToEntityMapper<GdprFavoriteModel, GDPRDataPrivacyFavorite> _gdprFavoritesEntityMapper;
-        private readonly IEntityToBusinessModelMapper<GDPRDataPrivacyFavorite, GdprFavoriteModel> _gdprFavoritesModelMapper;
-
-        private readonly IGlobalSettingService _globalSettingService;
-        private readonly ISettingService _settingService;
         private readonly IFilesStorage _filesStorage;
-
-        #region ctor()
-
-        public GDPRService(IGDPRDataPrivacyAccessRepository privacyAccessRepository,
-            IUnitOfWorkFactory unitOfWorkFactory,
-            IGDPROperationsAuditRespository operationsAuditRespository,
-            IGDPRDataPrivacyFavoriteRepository favoritesRepository,
-            IBusinessModelToEntityMapper<GdprFavoriteModel, GDPRDataPrivacyFavorite> gdprFavoritesEntityMapper,
-            IEntityToBusinessModelMapper<GDPRDataPrivacyFavorite, GdprFavoriteModel> gdprFavoritesModelMapper,
-            IFilesStorage filesStorage,
-            IGlobalSettingService globalSettingService,
-            ISettingService settingService,
-            IJsonSerializeService jsonSerializeService)
-        {
-            _filesStorage = filesStorage;
-            _settingService = settingService;
-            _globalSettingService = globalSettingService;
-        
-            _gdprFavoritesEntityMapper = gdprFavoritesEntityMapper;
-            _gdprFavoritesModelMapper = gdprFavoritesModelMapper;
-            _gdprFavoritesRepository = favoritesRepository;
-            _jsonSerializeService = jsonSerializeService;
-            _unitOfWorkFactory = unitOfWorkFactory;
-            _privacyAccessRepository = privacyAccessRepository;
-            _gdprOperationsAuditRespository = operationsAuditRespository;
-        }
-
-        #endregion
+        private readonly IGDPROperationsAuditRespository _gdprOperationsAuditRespository;
+        private readonly ISettingRepository _settingRepository;
+        private readonly IGlobalSettingRepository _globalSettingRepository;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly IJsonSerializeService _jsonSerializeService;
 
         #region CaseFileEntity
 
@@ -126,80 +71,32 @@ namespace DH.Helpdesk.Services.Services
 
         #endregion
 
-        #region IGDPRDataPrivacyAccessService
+        #region ctor()
 
-        public GDPRDataPrivacyAccess GetByUserId(int userId)
+        public GDPRDataPrivacyProcessor(
+            IFilesStorage filesStorage,
+            IGDPROperationsAuditRespository gdprOperationsAuditRespository,
+            IGlobalSettingRepository globalSettingRepository,
+            ISettingRepository settingRepository,
+            IJsonSerializeService jsonSerializeService,
+            IUnitOfWorkFactory unitOfWorkFactory)
         {
-            return _privacyAccessRepository.GetByUserId(userId);
+            _jsonSerializeService = jsonSerializeService;
+            _filesStorage = filesStorage;
+            _gdprOperationsAuditRespository = gdprOperationsAuditRespository;
+            _settingRepository = settingRepository;
+            _globalSettingRepository = globalSettingRepository;
+            _unitOfWorkFactory = unitOfWorkFactory;
         }
 
         #endregion
-
-        public IDictionary<int, string> ListFavorites()
-        {
-            var favorites = _gdprFavoritesRepository.ListFavorites();
-            return favorites;
-        }
-
-        public GdprFavoriteModel GetFavorite(int id)
-        {
-            var entity = _gdprFavoritesRepository.GetById(id);
-            var model = _gdprFavoritesModelMapper.Map(entity);
-            return model;
-        }
-
-        public void DeleteFavorite(int favoriteId)
-        {
-            _gdprFavoritesRepository.Delete(f => f.Id == favoriteId);
-            _gdprFavoritesRepository.Commit();
-        }
-
-        public int SaveFavorite(GdprFavoriteModel model, int? userId)
-        {
-            int res;
-            using (var uow = _unitOfWorkFactory.Create())
-            {
-                var repo = uow.GetRepository<GDPRDataPrivacyFavorite>();
-                var entity = repo.GetById(model.Id);
-                if (entity == null)
-                {
-                    entity = new GDPRDataPrivacyFavorite
-                    {
-                        CreatedByUser_Id = userId
-                    };
-
-                    repo.Add(entity);
-                }
-
-                _gdprFavoritesEntityMapper.Map(model, entity);
-
-                entity.ChangedByUser_Id = userId;
-                entity.ChangedDate = DateTime.Now;
-
-                uow.Save();
-
-                res = entity.Id;
-            }
-
-            return res;
-        }
-
-        public GDPROperationsAudit GetDataPrivacyOperationAuditData(int id)
-        {
-            return _gdprOperationsAuditRespository.Get(id);
-        }
         
-        public bool RemoveDataPrivacyFromCase(DataPrivacyParameters p)
+        //TODO: Progress reporting!
+
+        public void Process(int customerId, int userId, DataPrivacyParameters p)
         {
-            //update operation audit data
-            var auditData = _gdprOperationsAuditRespository.GetById(p.OperationAuditId);
-            auditData.Parameters = SerializeOperationParameters(p);
-            //auditData.Status = GDPRAuditOperationStatus.Running;
-            UpdateAuditOperationData(auditData);
-            
             var filesToDelete = new List<CaseFileEntity>();
             var casesIds = new List<int>();
-            var customerId = p.SelectedCustomerId;
             var sqlTimeout = 300; //seconds
 
             try
@@ -222,8 +119,9 @@ namespace DH.Helpdesk.Services.Services
                         .IncludePath(c => c.CaseHistories)
                         .IncludePath(c => c.CaseExtendedCaseDatas.Select(ec => ec.ExtendedCaseData.ExtendedCaseValues))
                         .IncludePath(c => c.CaseExtendedCaseDatas.Select(ec => ec.ExtendedCaseForm))
-                        .IncludePath(c => c.CaseSectionExtendedCaseDatas.Select(esc => esc.ExtendedCaseData.ExtendedCaseValues))
-                        .Where(x => x.Customer_Id == p.SelectedCustomerId);
+                        .IncludePath(
+                            c => c.CaseSectionExtendedCaseDatas.Select(esc => esc.ExtendedCaseData.ExtendedCaseValues))
+                        .Where(x => x.Customer_Id == customerId);
 
                     if (p.RemoveCaseAttachments)
                     {
@@ -276,35 +174,28 @@ namespace DH.Helpdesk.Services.Services
                         {
                             ProcessReplaceCasesData(c, caseFiles, logFiles, followers, p, filesToDelete);
                             ProcessReplaceCasesHistoryData(c, p);
-                            ProcessExtededCaseData(c, caseExtendedCaseRep, caseSectionExtendedCaseRep, extendedCaseValuesRep, p);
+                            ProcessExtededCaseData(c, caseExtendedCaseRep, caseSectionExtendedCaseRep,
+                                extendedCaseValuesRep, p);
                         }
 
-                        ProccessFormPlusCaseData(cases.Select(c => c.Id).ToList(), formFieldValueHistoryRep, formFieldValueRep);
+                        ProccessFormPlusCaseData(cases.Select(c => c.Id).ToList(), formFieldValueHistoryRep,
+                            formFieldValueRep);
 
                         uow.DetectChanges();
                         uow.Save();
                     }
                 }
-                
+
                 DeleteCaseFiles(customerId, filesToDelete);
+            
+                SaveSuccessOperationAudit(customerId, userId, p);
             }
             catch (Exception e)
             {
-                auditData.Success = false;
-                //auditData.Status = GDPRAuditOperationStatus.Complete;
-                auditData.Error = $"Unknown error. {e.Message}";
-                UpdateAuditOperationData(auditData);
+                var errMsg = $"Unknown error. {e.Message}";
+                SaveFailedOperationAudit(customerId, userId, p, errMsg);
                 throw;
             }
-
-
-            //save affected cases Ids
-            auditData.Result = string.Join(",", casesIds);
-            //auditData.Status = GDPRAuditOperationStatus.Complete;
-            auditData.Success = true;
-            UpdateAuditOperationData(auditData);
-
-            return true;
         }
 
         private void DeleteCaseFiles(int customerId, List<CaseFileEntity> filesToDelete)
@@ -334,26 +225,26 @@ namespace DH.Helpdesk.Services.Services
         private string GetFilesDirPath(int customerId)
         {
             var dirPath = string.Empty;
-            var customerSettings = _settingService.GetCustomerSetting(customerId);
+            var customerSettings = _settingRepository.GetCustomerSetting(customerId);
             if (!string.IsNullOrEmpty(customerSettings.PhysicalFilePath))
             {
                 dirPath = customerSettings.PhysicalFilePath;
             }
             else
             {
-                var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
+                var globalSettings = _globalSettingRepository.Get();
                 dirPath = globalSettings.AttachedFileFolder;
             }
-            
+
             return dirPath ?? string.Empty;
         }
 
         #region Replace case data
 
         private void ProcessReplaceCasesData(
-            Case c, 
-            Dal.NewInfrastructure.IRepository<CaseFile> caseFiles, 
-            Dal.NewInfrastructure.IRepository<LogFile> logFiles, 
+            Case c,
+            Dal.NewInfrastructure.IRepository<CaseFile> caseFiles,
+            Dal.NewInfrastructure.IRepository<LogFile> logFiles,
             Dal.NewInfrastructure.IRepository<CaseExtraFollower> followers,
             DataPrivacyParameters parameters,
             List<CaseFileEntity> caseFilesToDelete)
@@ -379,7 +270,7 @@ namespace DH.Helpdesk.Services.Services
                     fieldName == GlobalEnums.TranslationCaseFields.Available.ToString() ||
                     fieldName == GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString() ||
                     fieldName == GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()
-                    )
+                )
                 {
                     var property = c.GetType().GetProperty(fieldName);
                     if (property == null) throw new PropertyNotFoundException("Property not found", fieldName);
@@ -388,22 +279,22 @@ namespace DH.Helpdesk.Services.Services
 
                 }
                 else if (fieldName == GlobalEnums.TranslationCaseFields.Region_Id.ToString() ||
-                            fieldName == GlobalEnums.TranslationCaseFields.Department_Id.ToString() ||
-                            fieldName == GlobalEnums.TranslationCaseFields.OU_Id.ToString() ||
-                            fieldName == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString() ||
-                            fieldName == GlobalEnums.TranslationCaseFields.System_Id.ToString() ||
-                            fieldName == GlobalEnums.TranslationCaseFields.Urgency_Id.ToString() ||
-                            fieldName == GlobalEnums.TranslationCaseFields.Impact_Id.ToString() ||
-                            fieldName == GlobalEnums.TranslationCaseFields.Category_Id.ToString() ||
-                            fieldName == GlobalEnums.TranslationCaseFields.Supplier_Id.ToString() ||
-                            fieldName == GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString() ||
-                            fieldName == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString() ||
-                            fieldName == GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString() ||
-                            fieldName == GlobalEnums.TranslationCaseFields.Priority_Id.ToString() ||
-                            fieldName == GlobalEnums.TranslationCaseFields.Status_Id.ToString() ||
-                            fieldName == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()
+                         fieldName == GlobalEnums.TranslationCaseFields.Department_Id.ToString() ||
+                         fieldName == GlobalEnums.TranslationCaseFields.OU_Id.ToString() ||
+                         fieldName == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString() ||
+                         fieldName == GlobalEnums.TranslationCaseFields.System_Id.ToString() ||
+                         fieldName == GlobalEnums.TranslationCaseFields.Urgency_Id.ToString() ||
+                         fieldName == GlobalEnums.TranslationCaseFields.Impact_Id.ToString() ||
+                         fieldName == GlobalEnums.TranslationCaseFields.Category_Id.ToString() ||
+                         fieldName == GlobalEnums.TranslationCaseFields.Supplier_Id.ToString() ||
+                         fieldName == GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString() ||
+                         fieldName == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString() ||
+                         fieldName == GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString() ||
+                         fieldName == GlobalEnums.TranslationCaseFields.Priority_Id.ToString() ||
+                         fieldName == GlobalEnums.TranslationCaseFields.Status_Id.ToString() ||
+                         fieldName == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()
 
-                    )
+                )
                 {
                     var property = c.GetType().GetProperty(fieldName);
                     if (property == null) throw new PropertyNotFoundException("Property not found", fieldName);
@@ -570,7 +461,10 @@ namespace DH.Helpdesk.Services.Services
                 }
                 else if (fieldName == AdditionalDataPrivacyFields.SelfService_RegUser.ToString())
                 {
-                    c.Logs.ForEach(l => l.RegUser = replaceDataWith);
+                    foreach (var log in c.Logs.ToList())
+                    {
+                        log.RegUser = replaceDataWith;
+                    }
                 }
                 else if (fieldName == GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString())
                 {
@@ -588,7 +482,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     //store to delete from disk
                     caseFilesToDelete.AddRange(items);
-                    
+
                     //delete from db
                     caseFiles.DeleteRange(c.CaseFiles);
                 }
@@ -602,7 +496,7 @@ namespace DH.Helpdesk.Services.Services
                     //store to delete from disk
                     var items = logFilesEnitites.Select(l => new CaseFileEntity(c.Id, c.CaseNumber.ToString(), l.Log_Id, l.FileName)).ToList();
                     caseFilesToDelete.AddRange(items);
-                    
+
                     //delete from db
                     logFiles.DeleteRange(logFilesEnitites);
                 }
@@ -639,7 +533,7 @@ namespace DH.Helpdesk.Services.Services
                             fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString() ||
                             fieldName == GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString() ||
                             fieldName == GlobalEnums.TranslationCaseFields.ClosingReason.ToString()
-                            )
+                        )
                         {
                             var property = caseHistory.GetType().GetProperty(fieldName);
                             if (property == null) throw new PropertyNotFoundException("Property not found", fieldName);
@@ -663,7 +557,7 @@ namespace DH.Helpdesk.Services.Services
                                  fieldName == GlobalEnums.TranslationCaseFields.Status_Id.ToString() ||
                                  fieldName == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString() ||
                                  fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString()
-                            )
+                        )
                         {
                             var property = caseHistory.GetType().GetProperty(fieldName);
                             if (property == null) throw new PropertyNotFoundException("Property not found", fieldName);
@@ -839,13 +733,12 @@ namespace DH.Helpdesk.Services.Services
                 }
                 caseSectionExtendedCaseRep.DeleteRange(c.CaseSectionExtendedCaseDatas);
             }
-
         }
 
         private static void CleanExtendedCaseData(
             Dal.NewInfrastructure.IRepository<ExtendedCaseValueEntity> extendedCaseValuesRep,
             ExtendedCaseDataEntity caseData,
-            string replaceDataWith, 
+            string replaceDataWith,
             DateTime? replaceDatesWith)
         {
             if (caseData != null)
@@ -871,80 +764,45 @@ namespace DH.Helpdesk.Services.Services
             formFieldValueHistoryRep.DeleteWhere(x => casesIds.Contains(x.Case_Id));
         }
 
-        private string SerializeOperationParameters(DataPrivacyParameters p)
-        {
-            return _jsonSerializeService.Serialize(p);
-        }
+        #endregion
 
-        private DataPrivacyParameters DeserializeOperationParameters(string data)
-        {
-            if (string.IsNullOrEmpty(data))
-                return null;
-
-            var parameters = _jsonSerializeService.Deserialize<DataPrivacyParameters>(data);
-            return parameters;
-        }
-        
         #region Audit Methods
 
-        public IDictionary<int, string> GetOperationAuditCustomers()
+        private void SaveSuccessOperationAudit(int customerId, int userId, DataPrivacyParameters dataPrivacyParameters)
         {
-            var res = _gdprOperationsAuditRespository.GetOperationsAuditCustomers();
-            return res;
+            var audiData = new GDPROperationsAudit()
+            {
+                User_Id = userId,
+                Customer_Id = customerId,
+                Parameters = _jsonSerializeService.Serialize(dataPrivacyParameters),
+                Operation = GDPROperations.DataPrivacy.ToString(),
+                Application = ApplicationType.Helpdesk.ToString(),
+                CreatedDate = DateTime.UtcNow,                
+                Success = true
+            };
+
+            _gdprOperationsAuditRespository.Add(audiData);
+            _gdprOperationsAuditRespository.Commit();
         }
 
-        public IList<GdprOperationsAuditOverview> ListGdprOperationsAuditItems(int? customerId, bool successOnly = true)
+        private void SaveFailedOperationAudit(int customerId, int userId, DataPrivacyParameters dataPrivacyParameters, string error)
         {
-            var res = new List<GdprOperationsAuditOverview>();
-
-            var cusId = customerId ?? 0;
-            var query = _gdprOperationsAuditRespository.GetMany(x => cusId == 0 || x.Customer_Id == cusId);
-
-            if (successOnly)
+            var audiData = new GDPROperationsAudit()
             {
-                query = query.Where(x => x.Success);
-            }
+                User_Id = userId,
+                Customer_Id = customerId,
+                Parameters = _jsonSerializeService.Serialize(dataPrivacyParameters),
+                Operation = GDPROperations.DataPrivacy.ToString(),
+                Application = ApplicationType.Helpdesk.ToString(),
+                CreatedDate = DateTime.UtcNow,
+                Success = false,
+                Error = error
+            };
 
-            var items = query.Select(x => new
-            {
-                CustomerId = x.Customer_Id,
-                Data = x.Parameters,
-                CreatedDate = x.CreatedDate
-            }).OrderByDescending(x => x.CreatedDate).ToList();
-
-            foreach (var item in items)
-            {
-                var operationParams = DeserializeOperationParameters(item.Data);
-                if (operationParams != null)
-                {
-                    var auditData = new GdprOperationsAuditOverview
-                    {
-                        CustomerId = item.CustomerId ?? 0,
-                        RegDateFrom = operationParams.RegisterDateFrom,
-                        RegDateTo = operationParams.RegisterDateTo,
-                        ClosedOnly = operationParams.ClosedOnly,
-                        ReplaceEmails = operationParams.ReplaceEmails,
-                        Fields = operationParams.FieldsNames,
-                        RemoveCaseAttachments = operationParams.RemoveCaseAttachments,
-                        RemoveLogAttachments = operationParams.RemoveLogAttachments,
-                        ExecutedDate = item.CreatedDate
-                    };
-
-                    res.Add(auditData);
-                }
-            }
-            return res;
-        }
-
-        public void UpdateAuditOperationData(GDPROperationsAudit auditData)
-        {
-            _gdprOperationsAuditRespository.Update(auditData);
+            _gdprOperationsAuditRespository.Add(audiData);
             _gdprOperationsAuditRespository.Commit();
         }
 
         #endregion
-
-       #endregion
     }
 }
-   

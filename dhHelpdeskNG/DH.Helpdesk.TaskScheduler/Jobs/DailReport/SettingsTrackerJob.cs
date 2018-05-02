@@ -4,7 +4,7 @@ using DH.Helpdesk.TaskScheduler.Dto;
 using DH.Helpdesk.TaskScheduler.Services;
 using Quartz;
 
-namespace DH.Helpdesk.TaskScheduler.Jobs
+namespace DH.Helpdesk.TaskScheduler.Jobs.DailReport
 {
     [DisallowConcurrentExecution]
     [PersistJobDataAfterExecution]
@@ -39,7 +39,6 @@ namespace DH.Helpdesk.TaskScheduler.Jobs
                 UpdateQuartzJobTrigger(context);
                 dataMap[settingsName] = currentSettings;
             }
-
         }
 
         private string GetValues(JobSettings settings)

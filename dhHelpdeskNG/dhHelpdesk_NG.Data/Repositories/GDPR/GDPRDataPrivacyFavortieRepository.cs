@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using DH.Helpdesk.Dal.Infrastructure;
-using DH.Helpdesk.Dal.Infrastructure.Context;
 using DH.Helpdesk.Domain.GDPR;
 
 namespace DH.Helpdesk.Dal.Repositories.GDPR
@@ -15,8 +14,8 @@ namespace DH.Helpdesk.Dal.Repositories.GDPR
     {
         #region ctor()
 
-        public GDPRDataPrivacyFavoriteRepository(IDatabaseFactory databaseFactory, IWorkContext workContext = null) 
-            : base(databaseFactory, workContext)
+        public GDPRDataPrivacyFavoriteRepository(IDatabaseFactory databaseFactory) 
+            : base(databaseFactory)
         {
         }
 
