@@ -16,7 +16,7 @@
 
         public override string FormatErrorMessage(string name)
         {
-            return Translation.Get("min value is: ") + this.Min;
+            return Translation.GetCoreTextTranslation("min value is: ") + this.Min;
         }
     }
 }

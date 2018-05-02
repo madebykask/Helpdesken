@@ -6,7 +6,7 @@
     {
         public override string FormatErrorMessage(string name)
         {
-            return Translation.Get("must be an integer.");
+            return Translation.GetCoreTextTranslation("måste vara ett heltal");
         }
     }
 }

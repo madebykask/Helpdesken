@@ -7125,6 +7125,30 @@ If not exists (select * from tblTextTranslation where text_id = 1973 and Languag
 
 GO
 
+If not exists (select * from tbltext where id = 1974)
+	insert into tbltext (id, TextString) VALUES (1974, 'fältet är obligatoriskt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1974 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1974, 2, 'Field is required')
+
+GO
+
+If not exists (select * from tbltext where id = 1975)
+	insert into tbltext (id, TextString) VALUES (1975, 'Du måste ange ett svar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1975 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1975, 2, 'You have to type an answer')
+
+GO
+
+If not exists (select * from tbltext where id = 1976)
+	insert into tbltext (id, TextString) VALUES (1976, 'måste vara ett heltal')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1976 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1976, 2, 'must be an integer')
+
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 

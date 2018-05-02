@@ -9,19 +9,17 @@
 
 @Scripts.Render("~/bundles/dhhelpdesk")
 <script>
-     $(document).ready(function () {
-         FAQInitForm();
-     });
-
-   
-
+    $.validator.setDefaults({ ignore: ':hidden:not(textarea)' });
+    $(document).ready(function () {
+        FAQInitForm();
+    });
 </script>
 
 @Html.Partial("_Plupload") 
 
 
 @{
-    this.ViewBag.Title = Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation);
+    this.ViewBag.Title = Translation.GetCoreTextTranslation("Ny FAQ");
 
 }
 
@@ -33,10 +31,10 @@
             <ul class="secnav">
                 @if (Model.UserHasFaqAdminPermission)
                 {
-                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "new", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
-                    <!-- <li><input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" /></li>-->                    
+                    <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), "new", null, new { onclick = "tinymce.triggerSave();$('#target').submit();return false;", @class = "btn" })</li>
+                    <!-- <li><input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn" /></li>-->                    
                 }
-                <li><a href="@Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a></li>
+                <li><a href="@Url.Action("Index")" class="btn">@Translation.GetCoreTextTranslation("Avbryt")</a></li>
             </ul>
         </div>
     </div>
