@@ -19,7 +19,7 @@
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Nytt", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("avtal", Enums.TranslationSource.TextTranslation), "new", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>
+            <li>@Html.ActionLink(Translation.Get("Nytt avtal", Enums.TranslationSource.TextTranslation), "new", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>
             @Html.HiddenFor(x => Model.Setting)
         </ul>
     </div>
