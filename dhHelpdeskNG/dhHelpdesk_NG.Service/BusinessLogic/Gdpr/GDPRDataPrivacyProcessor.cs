@@ -21,7 +21,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 {
     public interface IGDPRDataPrivacyProcessor
     {
-        void Process(int customerId, int userId, DataPrivacyParameters p);
+        bool Process(int customerId, int userId, DataPrivacyParameters p);
     }
 
     public class GDPRDataPrivacyProcessor : IGDPRDataPrivacyProcessor
@@ -32,6 +32,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
         private readonly IGlobalSettingRepository _globalSettingRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IJsonSerializeService _jsonSerializeService;
+        private readonly IDataPrivacyTaskProgress _taskProgress;
 
         #region CaseFileEntity
 
@@ -79,9 +80,11 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             IGlobalSettingRepository globalSettingRepository,
             ISettingRepository settingRepository,
             IJsonSerializeService jsonSerializeService,
+            IDataPrivacyTaskProgress taskProgress,
             IUnitOfWorkFactory unitOfWorkFactory)
         {
             _jsonSerializeService = jsonSerializeService;
+            _taskProgress = taskProgress;
             _filesStorage = filesStorage;
             _gdprOperationsAuditRespository = gdprOperationsAuditRespository;
             _settingRepository = settingRepository;
@@ -91,10 +94,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 
         #endregion
         
-        //TODO: Progress reporting!
-
-        public void Process(int customerId, int userId, DataPrivacyParameters p)
+        public bool Process(int customerId, int userId, DataPrivacyParameters p)
         {
+            bool res = true;
             var filesToDelete = new List<CaseFileEntity>();
             var casesIds = new List<int>();
             var sqlTimeout = 300; //seconds
@@ -167,19 +169,22 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                     if (cases.Any())
                     {
                         casesIds = cases.Select(c => c.Id).ToList();
-
+                        var pos = 1;
+                        var count = cases.Length;
                         p.ReplaceDataWith = p.ReplaceDataWith ?? string.Empty;
 
+                        
                         foreach (var c in cases)
                         {
                             ProcessReplaceCasesData(c, caseFiles, logFiles, followers, p, filesToDelete);
                             ProcessReplaceCasesHistoryData(c, p);
-                            ProcessExtededCaseData(c, caseExtendedCaseRep, caseSectionExtendedCaseRep,
-                                extendedCaseValuesRep, p);
+                            ProcessExtededCaseData(c, caseExtendedCaseRep, caseSectionExtendedCaseRep, extendedCaseValuesRep, p);
+
+                            pos++;
+                            UpdateProgress(p.TaskId, pos, count);
                         }
 
-                        ProccessFormPlusCaseData(cases.Select(c => c.Id).ToList(), formFieldValueHistoryRep,
-                            formFieldValueRep);
+                        ProccessFormPlusCaseData(cases.Select(c => c.Id).ToList(), formFieldValueHistoryRep, formFieldValueRep);
 
                         uow.DetectChanges();
                         uow.Save();
@@ -194,7 +199,20 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             {
                 var errMsg = $"Unknown error. {e.Message}";
                 SaveFailedOperationAudit(customerId, userId, p, errMsg);
-                throw;
+                res = false;
+            }
+
+            _taskProgress.Update(p.TaskId, 100);
+            return res;
+        }
+
+        private void UpdateProgress(int taskId, int pos, int totalCount)
+        {
+            var step = totalCount > 1000 ? 100 : 10;
+            if (pos % step == 0)
+            {
+                var progress = Math.Ceiling(((float)pos / (float)totalCount) * 100);
+                _taskProgress.Update(taskId, Convert.ToInt32(progress));
             }
         }
 
@@ -777,7 +795,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                 Parameters = _jsonSerializeService.Serialize(dataPrivacyParameters),
                 Operation = GDPROperations.DataPrivacy.ToString(),
                 Application = ApplicationType.Helpdesk.ToString(),
-                CreatedDate = DateTime.UtcNow,                
+                CreatedDate = DateTime.UtcNow,
                 Success = true
             };
 

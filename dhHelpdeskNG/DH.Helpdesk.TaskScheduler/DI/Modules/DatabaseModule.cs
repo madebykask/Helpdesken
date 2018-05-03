@@ -16,6 +16,7 @@ using DH.Helpdesk.Dal.Repositories.Notifiers;
 using DH.Helpdesk.Dal.Repositories.Notifiers.Concrete;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.Computers;
+using DH.Helpdesk.Services.BusinessLogic.Gdpr;
 using Ninject.Modules;
 using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 using UnitOfWork = DH.Helpdesk.Dal.Infrastructure.UnitOfWork;
@@ -53,6 +54,7 @@ namespace DH.Helpdesk.TaskScheduler.DI.Modules
             Bind<IGDPRTaskRepository>().To<GDPRTaskRepository>();
             Bind<IGDPROperationsAuditRespository>().To<GDPROperationsAuditRespository>();
             Bind<IGDPRDataPrivacyFavoriteRepository>().To<GDPRDataPrivacyFavoriteRepository>();
+            Bind<IDataPrivacyTaskProgress>().To<DataPrivacyTaskProgress>();
             
             //Mappers
             RegisterMappers();

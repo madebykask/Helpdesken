@@ -36,11 +36,12 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
 
                     job.JobDataMap.Put(GdprDataPrivacyJob.DataMapKey, pendingTask.Id);
 
+                    _gdprTasksService.UpdateTaskStatus(pendingTask.Id, GDPRTaskStatus.Scheduled);
+
                     //run job immediately
                     context.Scheduler.AddJob(job, true);
                     context.Scheduler.TriggerJob(job.Key);
-
-                    _gdprTasksService.UpdateTaskStatus(pendingTask.Id, GDPRTaskStatus.Scheduled);
+                    
                     _log.Debug($"Scheduled task with Id={pendingTask.Id}");
                 }
             }

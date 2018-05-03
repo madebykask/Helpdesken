@@ -55,7 +55,7 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
 
                 _log.Debug("Executing data privacy action.");
 
-                var parameters = CreateParameters(taskInfo.CustomerId, taskInfo.FavoriteId);
+                var parameters = CreateParameters(taskInfo);
 
                 //update status before running 
                 var startedAt = DateTime.UtcNow;
@@ -91,14 +91,15 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
             _log.Debug("Ending data privacy job.");
         }
 
-        private DataPrivacyParameters CreateParameters(int customerId, int favoriteId)
+        private DataPrivacyParameters CreateParameters(GDPRTask taskInfo)
         {
-            var favoriteData = _dataPrivacyFavoriteRepository.GetById(favoriteId);
+            var favoriteData = _dataPrivacyFavoriteRepository.GetById(taskInfo.FavoriteId);
 
             var dpp = new DataPrivacyParameters()
             {
-                SelectedCustomerId = customerId,
-                SelectedFavoriteId = favoriteId,
+                TaskId = taskInfo.Id,
+                SelectedCustomerId = taskInfo.CustomerId,
+                SelectedFavoriteId = taskInfo.FavoriteId,
                 RetentionPeriod = favoriteData.RetentionPeriod,
                 RegisterDateTo = favoriteData.RegisterDateTo,
                 RegisterDateFrom = favoriteData.RegisterDateFrom,

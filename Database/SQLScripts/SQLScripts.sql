@@ -103,14 +103,64 @@ END
 
 --tblCustomerUser
 ALTER TABLE tblCustomerUser
-    ALTER COLUMN CaseRegionFilter NVARCHAR(100)
+ALTER COLUMN CaseRegionFilter NVARCHAR(100)
 
 RAISERROR ('Adding ContractPermission field settings for tblUsers', 10, 1) WITH NOWAIT
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ContractPermission' and sysobjects.name = N'tblUsers')
    ALTER TABLE tblUsers ADD ContractPermission bit NOT NULL Default(0)
 
-   UPDATE tblUsers set ContractPermission = 1
-   where UserGroup_Id in (Select Id from tblUsergroups where UserGroup = N'Administratör')
+   DECLARE @cmd nvarchar(MAX)
+   SET @cmd = N'UPDATE tblUsers set ContractPermission = 1 where UserGroup_Id in (Select Id from tblUsergroups where UserGroup = N''Administratör'')'
+   exec (@cmd)   
+GO
+
+-- tblGDPRTask
+RAISERROR ('Create table tblGDPRTask', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblGDPRTask' AND type='U')
+BEGIN
+    CREATE TABLE [dbo].[tblGDPRTask](
+	    [Id] [int] IDENTITY(1,1) NOT NULL,
+	    [CustomerId] [int] NOT NULL,
+	    [UserId] [int] NOT NULL,
+	    [FavoriteId] [int] NOT NULL,
+	    [Status] [int] NOT NULL,
+	    [AddedDate] [datetime] NOT NULL CONSTRAINT [DF_tblGDPRTask_AddedDate]  DEFAULT (getdate()),
+	    [Progress] [int] NOT NULL,
+	    [StartedAt] [datetime] NULL,
+	    [EndedAt] [datetime] NULL,
+	    [Success] [bit] NOT NULL CONSTRAINT [DF_tblGDPRTask_Success]  DEFAULT ((0)),
+	    [Error] [nvarchar](512) NULL,
+	CONSTRAINT [PK_tblGDPRTask] PRIMARY KEY CLUSTERED 
+    (
+	    [Id] ASC
+    ) ON [PRIMARY]
+    ) ON [PRIMARY]
+
+    ALTER TABLE [dbo].[tblGDPRTask]  WITH NOCHECK ADD  CONSTRAINT [FK_tblGDPRTask_tblCustomer] FOREIGN KEY([CustomerId])
+    REFERENCES [dbo].[tblCustomer] ([Id])
+    
+    ALTER TABLE [dbo].[tblGDPRTask]  WITH NOCHECK ADD  CONSTRAINT [FK_tblGDPRTask_tblGDPRDataPrivacyFavorite] FOREIGN KEY([FavoriteId])
+    REFERENCES [dbo].[tblGDPRDataPrivacyFavorite] ([Id])
+
+    ALTER TABLE [dbo].[tblGDPRTask]  WITH NOCHECK ADD  CONSTRAINT [FK_tblGDPRTask_tblUsers] FOREIGN KEY([UserId])
+    REFERENCES [dbo].[tblUsers] ([Id])
+END
+GO
+
+RAISERROR('DROP Status column in [dbo].[tblGDPROperationsAudit]', 10, 1) WITH NOWAIT
+IF EXISTS (select 1 from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+           where syscolumns.name = N'Status' and sysobjects.name = N'tblGDPROperationsAudit')
+BEGIN
+     ALTER TABLE tblGDPROperationsAudit DROP COLUMN [Status]    
+END
+GO
+
+RAISERROR('DROP Url column in [dbo].[tblGDPROperationsAudit]', 10, 1) WITH NOWAIT
+IF EXISTS (select 1 from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+           where syscolumns.name = N'Url' and sysobjects.name = N'tblGDPROperationsAudit')
+BEGIN
+     ALTER TABLE tblGDPROperationsAudit DROP COLUMN [Url]    
+END
 GO
 
 -- Last Line to update database version

@@ -161,6 +161,7 @@
     <Compile Include="BusinessLogic\Condition\ConditionBaseException.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionException.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionEvaluator.cs" />
+    <Compile Include="BusinessLogic\Gdpr\DataPrivacyTaskProgress.cs" />
     <Compile Include="BusinessLogic\Gdpr\GDPRDataPrivacyProcessor.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\MailTemplateFormatterNew.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\OrderMailTemplateFormatter.cs" />

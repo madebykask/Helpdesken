@@ -192,7 +192,7 @@ namespace DH.Helpdesk.Services.Services
         public bool RemoveDataPrivacyFromCase(DataPrivacyParameters p)
         {
             //update operation audit data
-            var auditData = _gdprOperationsAuditRespository.GetById(p.OperationAuditId);
+            var auditData = _gdprOperationsAuditRespository.GetById(p.TaskId);
             auditData.Parameters = SerializeOperationParameters(p);
             //auditData.Status = GDPRAuditOperationStatus.Running;
             UpdateAuditOperationData(auditData);
