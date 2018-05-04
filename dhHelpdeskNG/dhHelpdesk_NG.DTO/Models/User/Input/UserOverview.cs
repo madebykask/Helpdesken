@@ -35,7 +35,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             int bulletinBoardPermission,
             int documentPermission,
             int inventoryPermission,
-            bool contractPermission,
+            int contractPermission,
             int setPriorityPermission,
             int invoicePermission,
             int dataSecurityPermission,
@@ -180,7 +180,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
 
         public int InventoryPermission { get; set; }
 
-        public bool ContractPermission { get; set; }
+        public int ContractPermission { get; set; }
 
         public int CaseUnlockPermission { get; set; }
 

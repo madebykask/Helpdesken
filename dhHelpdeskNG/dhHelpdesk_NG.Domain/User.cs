@@ -27,7 +27,7 @@
 
         public int InventoryPermission { get; set; }
 
-        public bool ContractPermission { get; set; }
+        public int ContractPermission { get; set; }
         /// <summary>
         /// Allows user to manage events in calendar    
         /// </summary>

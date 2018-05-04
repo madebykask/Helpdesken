@@ -333,8 +333,8 @@
                 @Translation.GetCoreTextTranslation("Avtal")
             </td>
             <td>
-                <input data-field="contractPermission" type="checkbox" name="User.ContractPermission" @(Model.User.ContractPermission ? "checked=checked" : "") value="true"/>
-                <input type="hidden" name="User.ContractPermission" value="false" />
+                <input data-field="contractPermission" type="checkbox" name="User.ContractPermission" @(Model.User.ContractPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.ContractPermission" value="0" />
                 &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren har administratörsbehörighet till internt kontrakt")
             </td>
         </tr>

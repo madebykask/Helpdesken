@@ -15,11 +15,13 @@ using DH.Helpdesk.Web.Infrastructure.Tools;
 using System.Net;
 using DH.Helpdesk.Dal.Enums;
 using System.IO;
+using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.Web.Infrastructure.Mvc;
 using DH.Helpdesk.BusinessData.Models.Shared.Input;
 using DH.Helpdesk.Web.Enums;
 using DH.Helpdesk.BusinessData.Models.Shared;
-
+using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+using DH.Helpdesk.Web.Infrastructure.Attributes;
 
 
 namespace DH.Helpdesk.Web.Controllers
@@ -32,8 +34,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IContractService _contractService;
         private readonly ISupplierService _supplierService;
         private readonly IDepartmentService _departmentService;
-        private readonly ITemporaryFilesCache userTemporaryFilesStorage;
-        private readonly ISettingService _settingService;
+        private readonly ITemporaryFilesCache _userTemporaryFilesStorage;
 
         public ContractsController(
             IUserService userService,
@@ -43,9 +44,7 @@ namespace DH.Helpdesk.Web.Controllers
             ISupplierService supplierService,
             IDepartmentService departmentService,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
-            IMasterDataService masterDataService,
-            ISettingService settingService)
-
+            IMasterDataService masterDataService)
 
             : base(masterDataService)
         {
@@ -55,15 +54,14 @@ namespace DH.Helpdesk.Web.Controllers
             this._customerService = customerService;
             this._supplierService = supplierService;
             this._departmentService = departmentService;
-            this._settingService = settingService;
-            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Contracts);
+            this._userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Contracts);
         }
 
 
         //
         // GET: /Contract/
-
         [HttpGet]
+        [UserPermissions(UserPermission.ContractPermission)]
         public ActionResult Index()
         {
             var customer = _customerService.GetCustomer(SessionFacade.CurrentCustomer.Id);
@@ -84,8 +82,8 @@ namespace DH.Helpdesk.Web.Controllers
             model.Suppliers = suppliers.OrderBy(s => s.Name).ToList();
             model.Setting = GetSettingsModel(customer.Id);
             model.TotalCases = model.Rows.Data.Count();
-            model.OnGoingCases = model.Rows.Data.Where(z => z.Finished == 0).Count();
-            model.FinishedCases = model.Rows.Data.Where(z => z.Finished == 1).Count();
+            model.OnGoingCases = model.Rows.Data.Count(z => z.Finished == 0);
+            model.FinishedCases = model.Rows.Data.Count(z => z.Finished == 1);
 
             int iContractNoticeOfRemovalCount = 0;
             foreach (ContractsIndexRowModel ci in model.Rows.Data)
@@ -108,7 +106,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
             model.ContractFollowUpCount = iContractFollowUpCount;
 
-            model.RunningCases = model.Rows.Data.Where(z => z.Running == 1).Count();
+            model.RunningCases = model.Rows.Data.Count(z => z.Running == 1);
 
 
 
@@ -117,6 +115,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
+        [UserPermissions(UserPermission.ContractPermission)]
         public ActionResult New(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
@@ -426,18 +425,19 @@ namespace DH.Helpdesk.Web.Controllers
 
             return model;
         }
-
+        
         [HttpPost]
+        [UserPermissions(UserPermission.ContractPermission)]
         public ActionResult New(ContractViewInputModel contractInput, string actiontype, string contractFileKey)
         {
             var cId = this.SaveContract(contractInput);
-            var temporaryFiles = userTemporaryFilesStorage.FindFiles(contractFileKey.ToString());
+            var temporaryFiles = _userTemporaryFilesStorage.FindFiles(contractFileKey.ToString());
             var contractFiles = temporaryFiles.Select(f => new ContractFileModel(0, cId, f.Content, null, MimeMapping.GetMimeMapping(f.Name), f.Name, DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid())).ToList();
 
             foreach (var contractFile in contractFiles)
             {
                 this._contractService.SaveContracFile(contractFile);
-                userTemporaryFilesStorage.DeleteFile(contractFile.FileName, contractInput.ContractFileKey);
+                _userTemporaryFilesStorage.DeleteFile(contractFile.FileName, contractInput.ContractFileKey);
             }
 
             if (actiontype != "Spara och stäng")
@@ -449,6 +449,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
+        [UserPermissions(UserPermission.ContractPermission)]
         public JsonResult SaveContractFieldsSetting(JSContractsSettingRowViewModel[] contractSettings)
         {
             int currentCustomerId;
@@ -760,6 +761,7 @@ namespace DH.Helpdesk.Web.Controllers
 
 
         [HttpPost]
+        [UserPermissions(UserPermission.ContractPermission)]
         public void UploadContractFile(string id, string name)
         {
             var uploadedFile = this.Request.Files[0];
@@ -768,22 +770,23 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (GuidHelper.IsGuid(id))
             {
-                if (this.userTemporaryFilesStorage.FileExists(name, id))
+                if (this._userTemporaryFilesStorage.FileExists(name, id))
                 {
-                    userTemporaryFilesStorage.DeleteFile(name, id);
+                    _userTemporaryFilesStorage.DeleteFile(name, id);
                     //throw new HttpException((int)HttpStatusCode.Conflict, null); because it take a long time.
                 }
-                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id);
+                this._userTemporaryFilesStorage.AddFile(uploadedData, name, id);
             }
         }
 
 
         [HttpGet]
+        [UserPermissions(UserPermission.ContractPermission)]
         public UnicodeFileContentResult DownloadFile(string id, string fileName, string filePlace)
         {
             byte[] fileContent;
             if (id == "0")
-                fileContent = userTemporaryFilesStorage.GetFileContent(fileName.Trim(), filePlace, "");
+                fileContent = _userTemporaryFilesStorage.GetFileContent(fileName.Trim(), filePlace, "");
             else
             {
                 fileContent = _contractService.GetContractFile(int.Parse(id)).Content;
@@ -796,12 +799,13 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
+        [UserPermissions(UserPermission.ContractPermission)]
         public JsonResult DeleteContractFile(string id, string fileName, string filePlace)
         {
             try
             {
                 if (id == "0")
-                    userTemporaryFilesStorage.DeleteFile(fileName.Trim(), filePlace);
+                    _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), filePlace);
                 else
                 {
                     this._contractService.DeleteContractFile(int.Parse(id));
@@ -816,10 +820,11 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
+        [UserPermissions(UserPermission.ContractPermission)]
         public JsonResult GetAllFiles(string id, int cId)
         {
             string[] fileNames = { };
-            var tempFiles = userTemporaryFilesStorage.FindFiles(id);
+            var tempFiles = _userTemporaryFilesStorage.FindFiles(id);
 
             if (tempFiles.Any())
             {
@@ -909,7 +914,7 @@ namespace DH.Helpdesk.Web.Controllers
                 foreach (var f in contractFiles)
                 {
                     filesToAdd.Add(new WebTemporaryFile(f.Content, f.FileName));
-                    this.userTemporaryFilesStorage.AddFile(f.Content, f.FileName, contractFilesKey);
+                    this._userTemporaryFilesStorage.AddFile(f.Content, f.FileName, contractFilesKey);
                 }
             }
             return filesToAdd;
@@ -950,7 +955,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         //
         // GET: /Contract/Edit/5
-
+        [UserPermissions(UserPermission.ContractPermission)]
         public ActionResult Edit(int id)
         {
             var contractFields = this.GetSettingsModel(SessionFacade.CurrentCustomer.Id);
@@ -995,19 +1000,20 @@ namespace DH.Helpdesk.Web.Controllers
         // POST: /Contract/Edit/5
 
         [HttpPost]
+        [UserPermissions(UserPermission.ContractPermission)]
         public ActionResult Edit(int id, ContractViewInputModel contractInput, string actiontype, string contractFileKey)
         {
             try
             {
                 var cId = SaveContract(contractInput);
-                var temporaryFiles = userTemporaryFilesStorage.FindFiles(contractFileKey);
+                var temporaryFiles = _userTemporaryFilesStorage.FindFiles(contractFileKey);
                 var contractsExistingFiles = this._contractService.GetContractFiles(id);
                 var contractFiles = temporaryFiles.Select(f => new ContractFileModel(0, cId, f.Content, null, MimeMapping.GetMimeMapping(f.Name), f.Name, DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid())).ToList();
 
                 foreach (var contractFile in contractFiles)
                 {
                     this._contractService.SaveContracFile(contractFile);
-                    userTemporaryFilesStorage.DeleteFile(contractFile.FileName, contractInput.ContractFileKey);
+                    _userTemporaryFilesStorage.DeleteFile(contractFile.FileName, contractInput.ContractFileKey);
                 }
 
                 if (actiontype != "Spara och stäng")
@@ -1036,6 +1042,7 @@ namespace DH.Helpdesk.Web.Controllers
         // POST: /Contract/Delete/5
 
         [HttpPost]
+        [UserPermissions(UserPermission.ContractPermission)]
         public ActionResult Delete(int id, FormCollection collection)
         {
             try

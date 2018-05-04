@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Customer.Input;
+﻿using DH.Helpdesk.BusinessData.Enums.Admin.Users;
+using DH.Helpdesk.BusinessData.Models.Customer.Input;
 
 namespace DH.Helpdesk.Web.Models
 {
@@ -30,7 +31,9 @@ namespace DH.Helpdesk.Web.Models
             {
                 return SessionFacade.CurrentUser.LanguageId;
             }
-        }   
+        }
+
+        public IList<UserPermission> UserPermissions { get; set; }
 
         public bool IsAdministrator()
         {
@@ -152,7 +155,7 @@ namespace DH.Helpdesk.Web.Models
 
         public bool IsContractVisible()
         {
-            return this.CustomerSetting.ModuleContract.ToBool() && this.IsAdministrator(); 
+            return this.CustomerSetting.ModuleContract.ToBool() && UserPermissions.Contains(UserPermission.ContractPermission); 
         }
 
 		public bool IsInvoicesVisible()

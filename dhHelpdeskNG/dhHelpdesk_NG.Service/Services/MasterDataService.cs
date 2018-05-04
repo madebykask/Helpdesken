@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Models.Customer.Input;
+using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -44,6 +46,7 @@ namespace DH.Helpdesk.Services.Services
         Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true);
         EmployeeModel GetEmployee(int customerId, string employeeNumber, bool useApi = false, WebApiCredentialModel credentialModel = null);
         void UpdateUserLogin(LogProgram logProgram);
+        IList<UserPermission> GetUserPermissions(int userId);
     }
 
     public class MasterDataService : IMasterDataService
@@ -61,7 +64,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICustomerUserRepository _customerUserRepository;
         private readonly IEmployeeService _employeeService;
         private readonly ILogProgramService _logProgramService;
-        
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
 
         private Dictionary<int, Setting> _customersSettingsCache = new Dictionary<int, Setting>();
 
@@ -78,7 +81,8 @@ namespace DH.Helpdesk.Services.Services
             INotifierRepository computerUserRepository,
             ICustomerUserRepository customerUserRepository,
             IEmployeeService employeeService,
-            ILogProgramService logProgramService)
+            ILogProgramService logProgramService,
+            IUserPermissionsChecker userPermissionsChecker)
         {
             this._customerRepository = customerRepository;
             this._languageRepository = languageRepository;
@@ -93,6 +97,7 @@ namespace DH.Helpdesk.Services.Services
             _customerUserRepository = customerUserRepository;
             _employeeService = employeeService;
             _logProgramService = logProgramService;
+            _userPermissionsChecker = userPermissionsChecker;
         }
 
         public IList<CustomerOverview> GetCustomers(int userId)
@@ -256,6 +261,12 @@ namespace DH.Helpdesk.Services.Services
         public void UpdateUserLogin(LogProgram logProgram)
         {
             _logProgramService.UpdateUserLogin(logProgram);
+        }
+
+        public IList<UserPermission> GetUserPermissions(int userId)
+        {
+            var user = GetUser(userId);
+            return _userPermissionsChecker.GetUserPermissions(user);
         }
     }
 }

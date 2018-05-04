@@ -95,6 +95,7 @@ namespace DH.Helpdesk.Web.Infrastructure
             var masterViewModel = new MasterPageViewModel();
             masterViewModel.Languages = this._masterDataService.GetLanguages();
             masterViewModel.SelectedLanguageId = SessionFacade.CurrentLanguageId;
+            masterViewModel.UserPermissions = _masterDataService.GetUserPermissions(SessionFacade.CurrentUser.Id);
 
             masterViewModel.GlobalSettings = this._masterDataService.GetGlobalSettings();
 
