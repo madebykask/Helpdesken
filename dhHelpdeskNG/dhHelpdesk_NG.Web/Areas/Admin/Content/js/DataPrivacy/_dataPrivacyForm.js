@@ -519,7 +519,8 @@ window.DataPrivacyForm =
 
             console.log("pollOperationProgress: " + taskId);
             
-             this.pollingRequest = $.getJSON(self.urls.GetTaskProgressAction, $.param({ id: taskId })).done(function (res) {
+            this.pollingRequest =
+                $.getJSON(self.urls.GetTaskProgressAction, $.param({ id: taskId })).done(function (res) {
                 //console.log(">>> Task poll result. Complete: " + (res.isComplete ? 'true' : 'false'));
                 if (res.isComplete) {
                     self.stopTaskProgress();
@@ -529,6 +530,9 @@ window.DataPrivacyForm =
                         var err = res.Error || '';
                         window.ShowToastMessage('Operation has failed. ' + err, "error");
                     }
+                } else {
+                    var progress = res.Progress || 0;
+                    $("#taskProgress").text(progress);
                 }
             }).always(function() {
                 self.pollingRequest = null;

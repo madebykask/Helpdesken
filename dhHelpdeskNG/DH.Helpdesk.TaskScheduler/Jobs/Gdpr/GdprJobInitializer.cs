@@ -35,7 +35,7 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
                     .StartNow()
                     .ForJob(job.Key)
                     .WithSimpleSchedule(x => x
-                        .WithIntervalInSeconds(50)
+                        .WithIntervalInSeconds(15)
                         .RepeatForever())
                     .Build();
 

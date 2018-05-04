@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using DH.Helpdesk.BusinessData.Models.Gdpr;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
@@ -21,7 +22,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 {
     public interface IGDPRDataPrivacyProcessor
     {
-        bool Process(int customerId, int userId, DataPrivacyParameters p);
+        void Process(int customerId, int userId, DataPrivacyParameters p);
     }
 
     public class GDPRDataPrivacyProcessor : IGDPRDataPrivacyProcessor
@@ -94,11 +95,11 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 
         #endregion
         
-        public bool Process(int customerId, int userId, DataPrivacyParameters p)
+        public void Process(int customerId, int userId, DataPrivacyParameters p)
         {
             bool res = true;
+            var cases = new List<Case>();
             var filesToDelete = new List<CaseFileEntity>();
-            var casesIds = new List<int>();
             var sqlTimeout = 300; //seconds
 
             try
@@ -164,24 +165,22 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                         casesQueryable = casesQueryable.Where(x => x.RegTime <= p.RegisterDateTo.Value);
                     }
 
-                    var cases = casesQueryable.ToArray();
+                    cases = casesQueryable.ToList();
 
                     if (cases.Any())
                     {
-                        casesIds = cases.Select(c => c.Id).ToList();
                         var pos = 1;
-                        var count = cases.Length;
+                        var count = cases.Count;
                         p.ReplaceDataWith = p.ReplaceDataWith ?? string.Empty;
 
-                        
                         foreach (var c in cases)
                         {
                             ProcessReplaceCasesData(c, caseFiles, logFiles, followers, p, filesToDelete);
                             ProcessReplaceCasesHistoryData(c, p);
                             ProcessExtededCaseData(c, caseExtendedCaseRep, caseSectionExtendedCaseRep, extendedCaseValuesRep, p);
 
-                            pos++;
                             UpdateProgress(p.TaskId, pos, count);
+                            pos++;
                         }
 
                         ProccessFormPlusCaseData(cases.Select(c => c.Id).ToList(), formFieldValueHistoryRep, formFieldValueRep);
@@ -191,24 +190,23 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                     }
                 }
 
-                DeleteCaseFiles(customerId, filesToDelete);
-            
-                SaveSuccessOperationAudit(customerId, userId, p);
+                if (cases.Any())
+                {
+                    DeleteCaseFiles(customerId, filesToDelete);
+                    SaveSuccessOperationAudit(customerId, userId, p, cases.Select(c => c.Id).ToList());
+                }
             }
             catch (Exception e)
             {
                 var errMsg = $"Unknown error. {e.Message}";
                 SaveFailedOperationAudit(customerId, userId, p, errMsg);
-                res = false;
+                throw;
             }
-
-            _taskProgress.Update(p.TaskId, 100);
-            return res;
         }
 
         private void UpdateProgress(int taskId, int pos, int totalCount)
         {
-            var step = totalCount > 1000 ? 100 : 10;
+            var step = totalCount > 1000 ? 100 : totalCount > 100 ? 10 : 5; 
             if (pos % step == 0)
             {
                 var progress = Math.Ceiling(((float)pos / (float)totalCount) * 100);
@@ -786,7 +784,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 
         #region Audit Methods
 
-        private void SaveSuccessOperationAudit(int customerId, int userId, DataPrivacyParameters dataPrivacyParameters)
+        private void SaveSuccessOperationAudit(int customerId, int userId, DataPrivacyParameters dataPrivacyParameters, IList<int> caseIds)
         {
             var audiData = new GDPROperationsAudit()
             {
@@ -796,6 +794,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                 Operation = GDPROperations.DataPrivacy.ToString(),
                 Application = ApplicationType.Helpdesk.ToString(),
                 CreatedDate = DateTime.UtcNow,
+                Result = caseIds.Any() ? string.Join(",", caseIds.ToArray()) : null,
                 Success = true
             };
 

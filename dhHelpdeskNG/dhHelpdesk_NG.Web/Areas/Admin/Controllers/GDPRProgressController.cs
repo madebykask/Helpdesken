@@ -30,6 +30,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return Json(new
             {
                 isComplete = data.Status == GDPRTaskStatus.Complete,
+                Progress = data.Progress,
                 Success = data.Success,
                 Error = data.Error
             }, JsonRequestBehavior.AllowGet);

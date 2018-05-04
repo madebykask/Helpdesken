@@ -65,6 +65,7 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
                 {
                     _dataPrivacyProcessor.Process(taskInfo.CustomerId, taskInfo.UserId, parameters);
                     _log.Debug($"Data privacy task (id={taskInfo.Id}) has completed successfully.");
+                    
                 }
                 catch (Exception e)
                 {
@@ -72,16 +73,17 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
                     isSuccess = false;
                     errorMsg = "Unknow error. " + e.Message;
                 }
-                finally
-                {
-                    taskInfo.StartedAt = startedAt;
-                    taskInfo.EndedAt = DateTime.UtcNow;
-                    taskInfo.Success = isSuccess;
-                    taskInfo.Error = errorMsg;
-                    taskInfo.Status = GDPRTaskStatus.Complete;
 
-                    _gdprTasksService.UpdateTask(taskInfo);
-                }
+                //update task info
+                taskInfo = _gdprTasksService.GetById(taskId);
+                taskInfo.StartedAt = startedAt;
+                taskInfo.EndedAt = DateTime.UtcNow;
+                taskInfo.Success = isSuccess;
+                taskInfo.Error = errorMsg;
+                taskInfo.Status = GDPRTaskStatus.Complete;
+                taskInfo.Progress = 100;
+                _gdprTasksService.UpdateTask(taskInfo);
+                
             }
             else
             {
