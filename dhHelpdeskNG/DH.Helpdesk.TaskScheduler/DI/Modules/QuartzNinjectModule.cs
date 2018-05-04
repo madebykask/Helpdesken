@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ninject;
 using Ninject.Modules;
 using Quartz;
-using Ninject;
 
-namespace DH.Helpdesk.TaskScheduler.DI
+namespace DH.Helpdesk.TaskScheduler.DI.Modules
 {
 	public class QuartzNinjectModule : NinjectModule
 	{

@@ -142,6 +142,7 @@
     <Compile Include="EntityConfigurations\GDPR\GDPRDataPrivacyAccessConfiguration.cs" />
     <Compile Include="EntityConfigurations\GDPR\GDPRDataPrivacyFavoriteConfiguration.cs" />
     <Compile Include="EntityConfigurations\GDPR\GDPROperationsAuditConfiguration.cs" />
+    <Compile Include="EntityConfigurations\GDPR\GDPRTaskConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleProductAreaConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceRowConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceHeaderConfiguration.cs" />
@@ -503,6 +504,7 @@
     <Compile Include="Repositories\GDPR\GDPRDataPrivacyAccessRepository.cs" />
     <Compile Include="Repositories\GDPR\GDPRDataPrivacyFavortieRepository.cs" />
     <Compile Include="Repositories\GDPR\GDPROperationsAuditRespository.cs" />
+    <Compile Include="Repositories\GDPR\GDPRTaskRepository.cs" />
     <Compile Include="Repositories\IComputerUserCategoryRepository.cs" />
     <Compile Include="Repositories\IExtendedCaseValueRepository.cs" />
     <Compile Include="Repositories\IExtendedCaseDataRepository.cs" />

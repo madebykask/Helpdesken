@@ -1,15 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Dynamic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common.Logging;
 using DH.Helpdesk.TaskScheduler.Services;
 using Quartz;
 
-namespace DH.Helpdesk.TaskScheduler.Jobs
+namespace DH.Helpdesk.TaskScheduler.Jobs.DailReport
 {
     [DisallowConcurrentExecution]
     internal class DailyReportJob: IJob

@@ -161,6 +161,8 @@
     <Compile Include="BusinessLogic\Condition\ConditionBaseException.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionException.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionEvaluator.cs" />
+    <Compile Include="BusinessLogic\Gdpr\DataPrivacyTaskProgress.cs" />
+    <Compile Include="BusinessLogic\Gdpr\GDPRDataPrivacyProcessor.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\MailTemplateFormatterNew.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\OrderMailTemplateFormatter.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\SurveyTemplate1.cs">
@@ -334,6 +336,7 @@
     <Compile Include="Services\ExtendedCase\ExtendedCaseService.cs" />
     <Compile Include="Services\Cases\CaseSectionService.cs" />
     <Compile Include="Services\GDPRService.cs" />
+    <Compile Include="Services\GDPRTasksService.cs" />
     <Compile Include="Services\IExtendedCaseService.cs" />
     <Compile Include="Services\IMetaDataService.cs" />
     <Compile Include="Services\UniversalCase\IUniversalCaseService.cs" />

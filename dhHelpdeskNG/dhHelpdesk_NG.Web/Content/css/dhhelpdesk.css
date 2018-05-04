@@ -1748,6 +1748,11 @@ table th.thpointer {
     line-height: 3;
 }
 
+#gdprTask {
+    width: 160px!important;
+    background-position: 128px center;
+}
+
 .error-msg,
 .no-data-msg {
     position: static;

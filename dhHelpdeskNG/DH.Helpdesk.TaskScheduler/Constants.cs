@@ -15,5 +15,7 @@ namespace DH.Helpdesk.TaskScheduler
         public const string ImportInitiator_GroupName = "ImportInitiator";
         public const string ImportInitiator_JobName = "ImportInitiator_Job";
         public const string ImportInitiator_JobTriggerName = "ImportInitiator_JobTrigger";
+
+        public const string GDPRDataPrivacyJobName = "GDPRDataPrivacyJob";
     }
 }

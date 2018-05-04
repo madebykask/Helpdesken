@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Dynamic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common.Logging;
+using DH.Helpdesk.TaskScheduler.Dto;
 using DH.Helpdesk.TaskScheduler.Services;
 using Quartz;
-using System.Configuration;
-using DH.Helpdesk.TaskScheduler.Dto;
-using System.IO;
 
-namespace DH.Helpdesk.TaskScheduler.Jobs
+namespace DH.Helpdesk.TaskScheduler.Jobs.Import
 {
     [DisallowConcurrentExecution]
     internal class ImportInitiatorJob: IJob

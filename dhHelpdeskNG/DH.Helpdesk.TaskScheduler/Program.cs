@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
 using DH.Helpdesk.TaskScheduler.DI;
+using DH.Helpdesk.TaskScheduler.DI.Modules;
 using Ninject;
-using Ninject.Syntax;
-using Quartz;
+using Ninject.Modules;
 
 namespace DH.Helpdesk.TaskScheduler
 {
@@ -18,17 +15,25 @@ namespace DH.Helpdesk.TaskScheduler
         /// </summary>
         static void Main()
         {
-            using (var kernel = new StandardKernel(new ServiceModule() ,new QuartzNinjectModule()))
+            var modules = new List<NinjectModule>
             {
-                ServiceBase[] ServicesToRun;
-                ServicesToRun = new ServiceBase[]
+                new InfrastructureModule(),
+                new DatabaseModule(),
+                new ServiceModule(),
+                new JobsModule(),
+                new QuartzNinjectModule()
+            };
+
+            using (var kernel = new StandardKernel(modules.Cast<INinjectModule>().ToArray()))
+            {
+                
+                var servicesToRun = new ServiceBase[]
                 {
                     new TaskScheduler(kernel)
                 };
-                ServiceBase.Run(ServicesToRun);
 
+                ServiceBase.Run(servicesToRun);
             }
         }
     }
-
 }

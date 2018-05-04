@@ -18,6 +18,6 @@ namespace DH.Helpdesk.BusinessData.Models.Gdpr
         public DateTime? ReplaceDatesWith { get; set; }
         public bool RemoveCaseAttachments { get; set; }
         public bool RemoveLogAttachments { get; set; }
-        public int OperationAuditId { get; set; }
+        public int TaskId { get; set; }
     }
 }
