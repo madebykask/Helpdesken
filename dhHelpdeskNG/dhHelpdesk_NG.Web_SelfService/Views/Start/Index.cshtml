@@ -27,13 +27,14 @@
         {
             <div class="col-md-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading phselfservice"><span class="glyphicon glyphicon-star"></span>@Translation.Get("Bulletin Board", Enums.TranslationSource.TextTranslation) </div>
+                    <div class="panel-heading phselfservice">@Translation.Get("Bulletin Board", Enums.TranslationSource.TextTranslation) </div>
                     <div class="panel-body">                    
                         @if (Model.BulletinBoard != null)
                         {
                             foreach (var b in Model.BulletinBoard)
                             {                                                                                   
-                                <p> <strong> @Html.DisplayFor(m=> b.ShowDate , "Date")  </strong> <br /> &nbsp;&nbsp; @Html.Raw(b.Text) </p>                              
+                                <p> <strong> @Html.DisplayFor(m=> b.ChangedDate , "DateAndTime")  </strong> <br /> &nbsp;&nbsp; @Html.Raw(b.Text) </p>
+                                <br />
                             }
                         }                    
                         <div class="bulletinimg">
