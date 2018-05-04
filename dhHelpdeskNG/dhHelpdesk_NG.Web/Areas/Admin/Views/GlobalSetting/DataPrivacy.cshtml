@@ -254,14 +254,15 @@
                 SaveFavoritesAction: '@Url.Action("SaveDataPrivacyFavorites")',
                 GetCustomerCaseFieldsAction: '@Url.Action("GetCustomerCaseFields")',
                 DeleteFavoriteAction: '@Url.Action("DeleteDataPrivacyFavorite")',
-                GetTaskProgressAction: '@Url.Action("GetTaskProgress", "GDPRProgress")'
+                GetTaskProgressAction: '@Url.Action("GetTaskProgress", "GDPRProgress")',
+                GetRunningDataPrivacyTasksAction: '@Url.Action("GetRunningDataPrivacyTasks")'
             },
             translations:
             {
                 dataPrivacyConfirmation: '@Translation.GetForJS("Är du säker på att du vill ersätta informationen i utvalda ärenden?")',
                 operationSuccessMessage: '@Translation.GetForJS("Klar")',
                 createNewFavorite: '@Translation.GetForJS("Skapa ny")',
-
+                favoritesUnlockWarning: '@Translation.GetForJS("The favorite can't be changed since it's scheduled to run.")',
                 //validation messages
                 SelectedCustomerIdRequired: '@Translation.GetForJS("Kund") @Translation.GetForJS("måste anges")',
                 FieldsNamesRequired: '@Translation.GetForJS("Fält") @Translation.GetForJS("måste anges")',

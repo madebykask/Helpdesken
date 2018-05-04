@@ -10,7 +10,9 @@ namespace DH.Helpdesk.Services.Services
     {
         GDPRTask GetById(int taskId);
         IList<GDPRTask> GetPendingTasks();
-        
+        IList<GDPRTask> GetPendingTasksByFavorite(int favoriteId);
+
+
         int AddNewTask(GDPRTask task);
         void UpdateTask(GDPRTask task);
 
@@ -36,6 +38,12 @@ namespace DH.Helpdesk.Services.Services
         {
             var task = _taskRepository.GetById(taskId);
             return task;
+        }
+
+        public IList<GDPRTask> GetPendingTasksByFavorite(int favoriteId)
+        {
+            var tasks = _taskRepository.GetMany(t => t.FavoriteId == favoriteId && t.Status != GDPRTaskStatus.Complete).OrderBy(x => x.AddedDate).ToList();
+            return tasks;
         }
 
         public IList<GDPRTask> GetPendingTasks()

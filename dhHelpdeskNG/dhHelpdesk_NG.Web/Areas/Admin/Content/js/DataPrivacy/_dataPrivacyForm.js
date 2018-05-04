@@ -128,16 +128,30 @@ window.DataPrivacyForm =
              }
          };
 
-         this.togglePrivacyRunBtn = function (enable) {
-             var wrapper$ = $('#tooltip-button-wrapper');
-             if (enable) {
-                 wrapper$.tooltip('destroy');
-             } else {
-                 wrapper$.tooltip({container: 'body'});
-             }
+        this.togglePrivacyRunBtn = function(enable) {
+            var wrapper$ = $('#tooltip-button-wrapper');
+            if (enable) {
+                wrapper$.tooltip('destroy');
+            } else {
+                wrapper$.tooltip({ container: 'body' });
+            }
             _self.enableControl(_self.privacyRunBtn$, enable);
 
-        }
+        };
+
+        this.unlockFormFields = function () {
+            var self = this;
+            var favoriteId = self.getSelectedFavoriteId();
+            $.getJSON(self.urls.GetRunningDataPrivacyTasksAction, $.param({ favoriteId: favoriteId }), function (res) {
+                var count = +res.count || 0;
+                if (count > 0) {
+                    window.ShowToastMessage( self.translations.favoritesUnlockWarning, 'warning');
+                    return;
+                } else {
+                    self.lockFormFields(false);
+                }
+            });
+        };
 
         this.lockFormFields = function (lock) {
             var self = this;
@@ -946,8 +960,7 @@ window.DataPrivacyForm =
                 });
 
                 _self.btnLock$.on('click', function () {
-                    _self.lockFormFields(false);
-
+                    _self.unlockFormFields();
                 });
 
                 _self.btnUnLock$.on('click', function () {

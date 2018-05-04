@@ -7125,6 +7125,14 @@ If not exists (select * from tblTextTranslation where text_id = 1973 and Languag
 
 GO
 
+-- TODO: check if id is correct after mergin to dev!
+If not exists (select * from tbltext where id = 1974)
+	insert into tbltext (id, TextString) VALUES (1974, 'The favorite can''t be changed since it''s scheduled to run.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1974 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1974, 2, 'The favorite can''t be changed since it''s scheduled to run.')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 

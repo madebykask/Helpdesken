@@ -1547,7 +1547,19 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             };
             return model;
         }
-        
+
+        [HttpGet]
+        public JsonResult GetRunningDataPrivacyTasks(int favoriteId)
+        {
+            var tasks = _gdprTasksService.GetPendingTasksByFavorite(favoriteId);
+            if (tasks.Any())
+            {
+                var taskIds = tasks.Select(t => t.Id).ToArray();
+                return Json(new { count = taskIds.Length, ids = taskIds }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { count = 0 }, JsonRequestBehavior.AllowGet);
+        }
+
         [ChildActionOnly]
         public PartialViewResult DataPrivacyHistory()
         {
