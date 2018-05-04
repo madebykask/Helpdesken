@@ -32,6 +32,11 @@ namespace DH.Helpdesk.BusinessData.Models.Document.Output
         public DateTime CreatedDate { get; set; }
 
         /// <summary>
+        /// Gets or sets the changes date.
+        /// </summary>
+        public DateTime ChangedDate { get; set; }
+
+        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         public string Name { get; set; }
