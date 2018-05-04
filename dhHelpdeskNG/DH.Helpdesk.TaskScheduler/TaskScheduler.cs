@@ -37,7 +37,7 @@ namespace DH.Helpdesk.TaskScheduler
         {
             _logger.InfoFormat("Starting service {0}", ServiceName);
 
-            Debugger.Launch();
+            //Debugger.Launch();
 
             var initializers = _diContainer.GetAll<IJobInitializer>();
             foreach (var initializer in initializers)
