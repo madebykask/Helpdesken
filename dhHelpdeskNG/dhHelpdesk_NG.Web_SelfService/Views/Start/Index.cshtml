@@ -33,7 +33,7 @@
                         {
                             foreach (var b in Model.BulletinBoard)
                             {                                                                                   
-                                <p> <strong> @Html.DisplayFor(m=> b.ChangedDate , "DateAndTime")  </strong> <br /> &nbsp;&nbsp; @Html.Raw(b.Text) </p>
+                                <p> <strong> @Html.DisplayFor(m=> b.ChangedDate , "DateAndTime")  </strong> <br /> @Html.Raw(b.Text) </p>
                                 <br />
                             }
                         }                    
