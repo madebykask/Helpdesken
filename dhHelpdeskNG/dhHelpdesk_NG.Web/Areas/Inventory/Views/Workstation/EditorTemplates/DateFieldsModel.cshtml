@@ -4,12 +4,11 @@
         || Model.SynchronizeDate.Show
         || Model.PathDirectory.Show)
 {
-    <h4>@Translation.Get("Status")</h4>
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @Html.EditorFor(m => m.ScanDate, "Fields/Date", new { id = "computer_edit_scandate_datepicker" })
                 @Html.EditorFor(m => m.SynchronizeDate, "Fields/Date", new { id = "computer_edit_syncdate_datepicker" })
+                @Html.EditorFor(m => m.ScanDate, "Fields/Date", new { id = "computer_edit_scandate_datepicker" })
                 @Html.EditorFor(m => m.PathDirectory, "Fields/Text")
             </table>
         </div>
