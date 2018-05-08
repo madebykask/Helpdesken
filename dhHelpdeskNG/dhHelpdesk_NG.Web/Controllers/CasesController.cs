@@ -1920,12 +1920,20 @@ namespace DH.Helpdesk.Web.Controllers
             return userRole;
         }
 
-
         [ValidateInput(false)]
         [HttpPost]
         public ActionResult CaseSearchUserEmails(string query, string searchKey, bool isInternalLog = false)
         {
-            var models = _caseSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, true, true, true, true, isInternalLog);
+            var searchScope = new BusinessData.Models.Email.EmailSearchScope()
+            {
+                SearchInInitiators = true,
+                SearchInAdmins = true,
+                SearchInUsers = true,
+                SearchInEmailGrs = true,
+                SearchInWorkingGrs = true
+            };
+
+            var models = _caseSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, searchScope);
             return Json(new { searchKey = searchKey, result = models });
         }
 

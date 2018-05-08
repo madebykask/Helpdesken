@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Threading;
 using System.Web.SessionState;
+using DH.Helpdesk.BusinessData.Models.Email;
 using DH.Helpdesk.BusinessData.Models.WorktimeCalculator;
 using DH.Helpdesk.SelfService.Controllers.Behaviors;
 using DH.Helpdesk.SelfService.Entites;
@@ -1297,7 +1298,11 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpPost]
         public ActionResult CaseSearchUserEmails(string query, string searchKey)
         {
-            var models = _caseSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, false, true, false, false);
+            var searchScope = new EmailSearchScope()
+            {
+                SearchInInitiators = true
+            };
+            var models = _caseSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, searchScope);
             return Json(new { searchKey = searchKey, result = models });
         }
 

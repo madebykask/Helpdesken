@@ -293,6 +293,7 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\Processing\UserFieldSettings.cs" />
     <Compile Include="Models\Department\DepartmentOverview.cs" />
     <Compile Include="Models\Email\EmailResponse.cs" />
+    <Compile Include="Models\Email\EmailSearchScope.cs" />
     <Compile Include="Models\Employee\EmployeeModel.cs" />
     <Compile Include="Models\Error\ErrorModel.cs" />
     <Compile Include="Models\ExtendedCase\InitExtendedForm.cs" />

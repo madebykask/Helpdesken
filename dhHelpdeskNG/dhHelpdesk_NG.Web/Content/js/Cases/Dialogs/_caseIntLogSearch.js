@@ -244,8 +244,7 @@
                                 process(resultList);
                             }
                         });    
-                    },
-                    300);
+                    }, 300);
                 }
                 return;
             },
@@ -300,6 +299,9 @@
                     grType = document.parameters.wgLabel + ": ";
                 if (item.groupType === 3)
                     grType = document.parameters.emailLabel + ": ";
+                if (item.groupType === 4)
+                    grType = document.parameters.usersLabel + ": ";
+
                 var userId = item.userId != null ? item.userId + ' - ' : "";
                 var query = getSimpleQuery(this.query);
                 var result = item.name + " - " + userId + item.email + " - " + item.departmentname;
