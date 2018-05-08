@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.Concrete
+﻿using DH.Helpdesk.Services.DisplayValues.Report;
+
+namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.Concrete
 {
     using System;
     using System.Globalization;
@@ -124,7 +126,11 @@
                     row++;
                     foreach (var value in c.FieldValues)
                     {
-                        ws.SetValue(row, column, value.Value.GetDisplayValue().PrepareForExcel());
+                        var tempValue = value.Value as TimeDisplayValue;
+                        ws.SetValue(row, column,
+                            tempValue != null
+                                ? tempValue.Value.ToString().PrepareForExcel()
+                                : value.Value.GetDisplayValue().PrepareForExcel());
                         column++;
                     }
                 }
