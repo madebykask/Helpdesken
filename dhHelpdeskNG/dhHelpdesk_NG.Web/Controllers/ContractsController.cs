@@ -349,11 +349,11 @@ namespace DH.Helpdesk.Web.Controllers
             //if (contractFields != null)
             //{          
             //model.NoticeTime.Insert(0, emptyChoice);
-            model.NoticeTimes.Add(new SelectListItem() { Selected = false, Text = "1 månad", Value = "1" });
+            model.NoticeTimes.Add(new SelectListItem() { Selected = false, Text = "1 " + Translation.GetCoreTextTranslation("månad"), Value = "1" });
 
             for (int i = 2; i <= 12; i++)
             {
-                model.NoticeTimes.Add(new SelectListItem() { Selected = false, Text = i.ToString() + " månader", Value = i.ToString() });
+                model.NoticeTimes.Add(new SelectListItem() { Selected = false, Text = i.ToString() + " " + Translation.GetCoreTextTranslation("månader"), Value = i.ToString() });
             }
 
             model.SettingsModel = contractFields.SettingRows.Select(conf => new ContractsSettingRowViewModel

@@ -360,7 +360,7 @@
                                             </td>
                                             <td colspan="3">
                                                 @Html.EditorFor(m => m.NoticeDate, "DatePicker", new { id = "divContract__NoticeDate" })
-                                                @Translation.Get("Skapa", Enums.TranslationSource.TextTranslation) @Translation.Get("ärende", Enums.TranslationSource.TextTranslation)
+                                                @Translation.Get("Skapa ärende", Enums.TranslationSource.TextTranslation)
                                                 @Html.DropDownListFor(t => Model.NoticeTimeId, Model.NoticeTimes, new { style = "width: auto;" }) @Translation.Get("före uppsägningsdatum", Enums.TranslationSource.TextTranslation)
                                             </td>
                                         }
