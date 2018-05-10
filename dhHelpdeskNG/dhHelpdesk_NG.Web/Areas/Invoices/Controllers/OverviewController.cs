@@ -174,7 +174,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 			return File(Path.Combine(globalSetting.InvoiceFileFolder, file.Name), "text/plain", file.Name);
 	    }
 
-        [NoCache]
+        [OutputCache(NoStore = true, Duration = 0)]
         [System.Web.Mvc.HttpGet]
         public ActionResult GetInvoicesOverviewList(InvoiceOverviewFilterModel filter)
         {
