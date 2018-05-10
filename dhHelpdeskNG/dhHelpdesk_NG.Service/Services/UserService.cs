@@ -355,6 +355,7 @@ namespace DH.Helpdesk.Services.Services
                     Id = x.Id,
                     IsActive = x.IsActive,
                     Performer = x.Performer,
+                    UserGroupId = x.UserGroup_Id,
                     Email = x.Email,
                     FirstName = x.FirstName,
                     SurName = x.SurName,
@@ -375,6 +376,7 @@ namespace DH.Helpdesk.Services.Services
                 Id = x.Id,
                 IsActive = x.IsActive,
                 Performer = x.Performer,
+                UserGroupId = x.UserGroup_Id,
                 Email = x.Email,
                 FirstName = x.FirstName,
                 SurName = x.SurName

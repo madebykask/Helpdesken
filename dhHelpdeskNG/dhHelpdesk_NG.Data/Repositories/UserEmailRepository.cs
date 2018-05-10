@@ -57,7 +57,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
             if (performersOnly)
             {
-                query = query.Where(x => x.Performer == 1);
+                var usersGroupId = (int)UserGroup.User;
+                query = query.Where(x => x.Performer == 1 && x.UserGroup_Id > usersGroupId);
             }
 
             if (usersOnly)

@@ -57,18 +57,21 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete
 
             if (users != null)
             {
-                if (customerSetting.IsUserFirstLastNameRepresentation == 1)
-                {
-                    foreach (var u in users.OrderBy(it => it.FirstName).ThenBy(it => it.SurName))
-                        if (u.IsActive == 1 && u.Performer == 1 && emailService.IsValidEmail(u.Email) && !string.IsNullOrWhiteSpace(u.Email))
-                            administrators.Add(new ItemOverview(string.Format("{0} {1}", u.FirstName, u.SurName), u.Email));
-                }
-                else
-                {
-                    foreach (var u in users.OrderBy(it => it.SurName).ThenBy(it => it.FirstName))
-                        if (u.IsActive == 1 && u.Performer == 1 && emailService.IsValidEmail(u.Email) && !string.IsNullOrWhiteSpace(u.Email))
-                            administrators.Add(new ItemOverview(string.Format("{0} {1}", u.SurName, u.FirstName), u.Email));
-                }
+                var filteredUsers =
+                    users.Where(u => u.IsActive == 1 && 
+                                     u.Performer == 1 && 
+                                     u.UserGroupId > 1 && // exclude users
+                                     emailService.IsValidEmail(u.Email) && 
+                                     !string.IsNullOrWhiteSpace(u.Email)).ToList();
+
+                administrators =
+                    customerSetting.IsUserFirstLastNameRepresentation == 1
+                        ? filteredUsers.OrderBy(it => it.FirstName)
+                            .ThenBy(it => it.SurName)
+                            .Select(u => new ItemOverview($"{u.FirstName} {u.SurName}", u.Email)).ToList()
+                        : filteredUsers.OrderBy(it => it.SurName)
+                            .ThenBy(it => it.FirstName)
+                            .Select(u => new ItemOverview($"{u.SurName} {u.FirstName}", u.Email)).ToList();
             }
 
             return Create(emailGroups, workingGroups, administrators);
