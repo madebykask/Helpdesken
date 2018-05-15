@@ -30,6 +30,8 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
         public ProcessResult Result { get; set; }
 
+        public bool ShowRegistrationMessage { get; set; }
+        public string CaseRegistrationMessage { get; set; }
     }
     
 }

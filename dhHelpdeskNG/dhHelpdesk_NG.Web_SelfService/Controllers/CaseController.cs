@@ -99,6 +99,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly OrganizationJsonService _orgJsonService;
         private readonly char[] EMAIL_SEPARATOR = new char[] { ';' };
         private readonly CaseControllerBehavior _caseControllerBehavior;
+        private const string ShowRegistrationMessageKey = "showRegistrationMessage";
 
         public CaseController(
             ICaseService caseService,
@@ -308,13 +309,9 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
             else
             {
-                var htmlFooterData = string.Empty;
-                var registrationInfoText = _infoService.GetInfoText((int)InfoTextType.SelfServiceRegistrationMessage, SessionFacade.CurrentCustomer.Id, languageId);
+                if (showRegistrationMessage)
+                    caseReceipt.CaseRegistrationMessage = GetCaseRegistrationMessage(languageId);
 
-                if (registrationInfoText != null && !string.IsNullOrEmpty(registrationInfoText.Name))
-                    htmlFooterData = registrationInfoText.Name;
-
-                caseReceipt.CaseRegistrationMessage = htmlFooterData;
                 caseReceipt.CanAddExternalNote = false;
             }
 
@@ -324,6 +321,12 @@ namespace DH.Helpdesk.SelfService.Controllers
 
 
             return View(caseReceipt);
+        }
+
+        private string GetCaseRegistrationMessage(int languageId)
+        {
+            var registrationInfoText = _infoService.GetInfoText((int)InfoTextType.SelfServiceRegistrationMessage, SessionFacade.CurrentCustomer.Id, languageId);
+            return registrationInfoText?.Name ?? string.Empty;
         }
 
         [HttpGet]
@@ -632,11 +635,20 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpGet]
         public ActionResult ExtendedCase(int? caseTemplateId = null, int? caseId = null)
         {
-
             var model = GetExtendedCaseViewModel(caseTemplateId, caseId);
             if (ErrorGenerator.HasError())
                 return RedirectToAction("Index", "Error");
-            
+
+            if (!caseId.IsNew())
+            {
+                var showRegistrationMessage = TempData.GetSafe<bool>(ShowRegistrationMessageKey);
+                if (showRegistrationMessage)
+                {
+                    model.ShowRegistrationMessage = true;
+                    model.CaseRegistrationMessage = GetCaseRegistrationMessage(SessionFacade.CurrentLanguageId);
+                }
+            }
+
             return View("ExtendedCase", model);
         }
 
@@ -782,7 +794,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             if (!caseId.IsNew() && !model.CaseDataModel.FinishingDate.HasValue)
-                ViewBag.CurrentCaseId = caseId.Value;
+            ViewBag.CurrentCaseId = caseId.Value;
 
             model.StatusBar = caseId.IsNew() ? new Dictionary<string, string>() : GetStatusBar(model);
 
@@ -843,6 +855,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
                 else
                 {
+                    TempData[ShowRegistrationMessageKey] = isNewCase;
+
                     //return RedirectToAction("UserCases", new { customerId = model.CustomerId });
                     if (string.IsNullOrEmpty(returnUrl))
                         return RedirectToAction("ExtendedCase", new { caseId = caseId });
