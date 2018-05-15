@@ -191,7 +191,7 @@
                 var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
 
                 BulletinBoard entity;
-                var now = DateTime.Now;
+                var now = DateTime.UtcNow;
                 if (bulletinBoard.IsNew())
                 {
                     entity = new BulletinBoard();
