@@ -3,6 +3,7 @@ using System.Data.Entity;
 using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Enums.Users;
+using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.BusinessData.Models.Case.CaseIntLog;
 using DH.Helpdesk.BusinessData.Models.Case.CaseOverview;

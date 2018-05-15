@@ -14,7 +14,7 @@
         var downloadContractFileUrl = window.appParameters.downloadContractFileUrl;
         var downloadContractFileParamUrl = window.appParameters.downloadContractFileParamUrl;
         var deleteContractFileUrl = window.appParameters.deleteContractFileUrl;
-        
+        var loadHistoryUrl = window.appParameters.loadHistoryUrl;
         
         var customerId;
         var alreadyExistFileIds = [];
@@ -56,6 +56,23 @@
                 } else {
                     alert('Unexpected error!');
                 }
+            });
+        };
+        
+        Application.contract.loadHistory = function(contractId) {
+            var progressLoader$ = $("#globalProgress");
+            progressLoader$.show();
+
+            $.ajax({
+                url: loadHistoryUrl,
+                cache: 'false',
+                type: 'GET',
+                data: $.param({ id: contractId }),
+                dataType: 'html'
+            }).done(function(res) {
+                $("#contractHistory").html(res);
+            }).always(function(res) {
+                progressLoader$.hide();
             });
         };
 

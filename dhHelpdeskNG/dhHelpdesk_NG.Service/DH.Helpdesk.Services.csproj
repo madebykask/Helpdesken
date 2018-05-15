@@ -161,6 +161,8 @@
     <Compile Include="BusinessLogic\Condition\ConditionBaseException.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionException.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionEvaluator.cs" />
+    <Compile Include="BusinessLogic\Contracts\ContractHistoryFieldsDiffBuilder.cs" />
+    <Compile Include="BusinessLogic\Contracts\IContractHistoryFormatter.cs" />
     <Compile Include="BusinessLogic\Gdpr\DataPrivacyTaskProgress.cs" />
     <Compile Include="BusinessLogic\Gdpr\GDPRDataPrivacyProcessor.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\MailTemplateFormatterNew.cs" />

@@ -90,6 +90,7 @@
     <Compile Include="Enums\Changes\Fields\OrdererField.cs" />
     <Compile Include="Enums\Changes\Fields\OtherField.cs" />
     <Compile Include="Enums\Changes\Fields\RegistrationField.cs" />
+    <Compile Include="Enums\Contracts\ContractFieldLabels.cs" />
     <Compile Include="Enums\Inventory\CurrentModes.cs" />
     <Compile Include="Enums\Inventory\Fields\Computer\CommunicationFields.cs" />
     <Compile Include="Enums\Inventory\Fields\Computer\ContactFields.cs" />
@@ -256,9 +257,11 @@
     <Compile Include="Models\Accounts\AccountSettings\Read\Edit\UserFieldSettings.cs" />
     <Compile Include="Models\CaseOverviewGridColumnSetting.cs" />
     <Compile Include="Models\Contract\ContractFileModel.cs" />
+    <Compile Include="Models\Contract\ContractHistoryFull.cs" />
     <Compile Include="Models\Contract\ContractSelectedFilter.cs" />
     <Compile Include="Models\Contract\ContractsSettingRowModel.cs" />
     <Compile Include="Models\Contract\ContractInputModel.cs" />
+    <Compile Include="Models\Contract\FieldDifference.cs" />
     <Compile Include="Models\Customer\CaseDefaultsInfo.cs" />
     <Compile Include="Models\Customer\Input\MoveCaseCustomersListItem.cs" />
     <Compile Include="Models\Customer\UserCustomerOverview.cs" />
@@ -541,6 +544,7 @@
     <Compile Include="Models\Shared\DateToDate.cs" />
     <Compile Include="Models\ReportService\ReportSelectedFilter.cs" />
     <Compile Include="Models\Shared\CustomKeyValue.cs" />
+    <Compile Include="Models\Shared\EntityOverview.cs" />
     <Compile Include="Models\Shared\Output\SearchResult.cs" />
     <Compile Include="Models\Shared\ItemDependentOverview.cs" />
     <Compile Include="Models\TextList.cs" />

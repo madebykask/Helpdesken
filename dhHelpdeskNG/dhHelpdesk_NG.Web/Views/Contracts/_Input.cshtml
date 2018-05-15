@@ -9,6 +9,7 @@
 <script type="text/javascript">
     window.appParameters = {
         uploadContractFileUrl: '@Url.Action("UploadContractFile", "Contracts")',
+        loadHistoryUrl: '@Url.Action("ContractHistory", "Contracts")',
         ContractFileKey: '@Model.ContractFileKey',
         contractId: '@Model.ContractId',
         ContractFilesUrl: '@Url.Action("GetAllFiles", "Contracts")',
@@ -29,7 +30,9 @@
                 <li id="log_tab">
                     <a href="#fragment-2">@Translation.Get("Logg", Enums.TranslationSource.TextTranslation)</a>
                 </li>
-            }
+                <li id="history_tab">
+                    <a href="#fragment-3">@Translation.Get("Historik", Enums.TranslationSource.TextTranslation)</a>
+                </li>}
         </ul>
 
         <div class="tab-content">
@@ -539,13 +542,46 @@
             <div class="tab-pane tab-pane-border" id="fragment-2">
                 @* @Html.Partial("_log", Model)    *@
             </div>
-            </div>
+            @if (Model.ContractId > 0)
+            {
+                <div class="tab-pane tab-pane-border" id="fragment-3">
+                    <div id="tab-3" class="tab-pane tab-pane-border">
+                        <div class="container">
+                            <div class="row">
+                                <div class="span12" id="contractHistory">
+                                    <!-- Loaded with ajax -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
         </div>
     </div>
+
+<div id="globalProgress" class="loading-msg" style="display:none">
+    <div class="content-wrapper">
+        <div class="loader">@Translation.GetCoreTextTranslation("Laddar...")</div>
+    </div>
+</div>
 
 @Scripts.Render("~/bundles/contracts/edit")
 
 <script type="text/javascript">
+
+    $(function () {
+    
+        //handle tabs switching 
+        $('#myTab a').on('shown.bs.tab', function (event) {
+            //var prevTab = $(event.relatedTarget);  
+            var activeTab = $(event.target).parent();
+
+            if (activeTab[0].id === 'history_tab') {
+                window.Application.contract.loadHistory(window.appParameters.contractId);
+            }
+        });
+    });
 
 function FieldIsRequired(value) {
     var ret = false;

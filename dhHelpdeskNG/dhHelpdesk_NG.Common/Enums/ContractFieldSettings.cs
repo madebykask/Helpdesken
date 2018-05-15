@@ -35,6 +35,5 @@
         public const string ResponsibleFollowUpField = "followupresponsibleuser_id";
  
         public const string CaseNumber = "casenumber";
-
     }
 }

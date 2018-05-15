@@ -166,6 +166,15 @@ BEGIN
 END
 GO
 
+RAISERROR('Add Files column in [dbo].[tblContractHistory]', 10, 1) WITH NOWAIT
+IF NOT EXISTS (select 1 from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'Files' and sysobjects.name = N'tblContractHistory')
+BEGIN
+     ALTER TABLE tblContractHistory
+     ADD Files nvarchar(1024) NULL
+END
+GO 
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.37'
 --ROLLBACK --TMP
