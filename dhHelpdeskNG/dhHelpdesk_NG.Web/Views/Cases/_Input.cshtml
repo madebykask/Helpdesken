@@ -2226,15 +2226,40 @@
                                                 }
                                                 <tr>
                                                     <td>
-                                                        <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name">
+                                                        @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                        {
+                                                            <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" disabled="disabled">
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name">
+                                                        }
+                                                        
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" placeholder="0.00">
+                                                        @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                        {
+                                                            <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" placeholder="0.00" disabled="disabled">
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" placeholder="0.00">
+                                                        }
+                                                        
                                                         <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="0">
                                                     </td>
                                                     <td>
-                                                        <a id="@("btnDeleteExternalInvoice" + extInvoicesCount)" class="btn bt-small" title="Delete" data-rowid="@extInvoicesCount"><i class="icon-remove"></i></a>
-                                                        <a id="btnAddExternalInvoice" class="btn bt-small" title="Add"><i class="icon-plus"></i></a>
+                                                        @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                        {
+                                                            <a id="@("btnDeleteExternalInvoice" + extInvoicesCount)" class="btn bt-small" title="Delete" data-rowid="@extInvoicesCount" disabled="disabled"><i class="icon-remove"></i></a>
+                                                            
+                                                        }
+                                                        else
+                                                        {
+                                                            <a id="@("btnDeleteExternalInvoice" + extInvoicesCount)" class="btn bt-small" title="Delete" data-rowid="@extInvoicesCount"><i class="icon-remove"></i></a>
+                                                            <a id="btnAddExternalInvoice" class="btn bt-small" title="Add"><i class="icon-plus"></i></a>
+                                                        }
+                                                        
                                                     </td>
                                                 </tr>
                                             </table>
