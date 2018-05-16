@@ -46,9 +46,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.Contracts
             {EnumContractFieldSettings.CaseNumber, ContractFieldLabels.CaseNumber},
             {EnumContractFieldSettings.Other, ContractFieldLabels.Info},
             //{EnumContractFieldSettings.Responsible, ContractFieldLabels.Responsible},
-            
-            //todo:
-            //{EnumContractFieldSettings.Filename
         };
 
         #endregion
@@ -208,7 +205,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Contracts
 
         private FieldDisplaySettings CreateNoticeTimeFieldSettings()
         {
-            // since there's no separate settings for notice date - use 'Notice date' settings
+            // since there's no separate settings for notice time - use 'Notice date' settings
             var fs = FindSettings(EnumContractFieldSettings.NoticeDate);
             fs.FieldName = "noticetime";
             fs.Label = "Skapa Ärende";
