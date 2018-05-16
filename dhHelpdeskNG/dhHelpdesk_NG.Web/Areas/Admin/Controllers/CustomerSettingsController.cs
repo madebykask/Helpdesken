@@ -131,7 +131,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             vmodel.Setting.IsSMTPSecured = setting.IsSMTPSecured;
             vmodel.Setting.BatchEmail = setting.BatchEmail;
             vmodel.Setting.InvoiceType = setting.InvoiceType;
-
+            vmodel.Setting.CaseSMS = setting.CaseSMS;
 
             if (customerToSave == null)
                 throw new Exception("No customer found...");
