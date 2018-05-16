@@ -16,8 +16,6 @@
         var deleteContractFileUrl = window.appParameters.deleteContractFileUrl;
         var loadHistoryUrl = window.appParameters.loadHistoryUrl;
         
-        PluploadTranslation($("#contract_languageId").val());
-        
         var customerId;
         var alreadyExistFileIds = [];
        
@@ -30,7 +28,7 @@
 
         var $deleteButtons = $('.deleteContractFile');
 
-        Application.contract.init = function () {           
+        Application.contract.init = function () {
             $deleteButtons.bind("click", function () {
                 Application.contract.deleteFile($(this));
             });
