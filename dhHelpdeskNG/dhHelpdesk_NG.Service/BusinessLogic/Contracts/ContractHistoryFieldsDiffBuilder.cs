@@ -36,7 +36,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Contracts
             {EnumContractFieldSettings.StartDate, ContractFieldLabels.ContractStartDate},
             {EnumContractFieldSettings.EndDate, ContractFieldLabels.ContractEndDate},
             {EnumContractFieldSettings.NoticeDate, ContractFieldLabels.Noticedate},
-            {EnumContractFieldSettings.WatchDate, ContractFieldLabels.Watchdate},
+            //{EnumContractFieldSettings.WatchDate, ContractFieldLabels.Watchdate},
             {EnumContractFieldSettings.Department, ContractFieldLabels.Department},
             {EnumContractFieldSettings.ResponsibleUser, ContractFieldLabels.Responsibleuser},
             {EnumContractFieldSettings.Finished, ContractFieldLabels.Finished},
