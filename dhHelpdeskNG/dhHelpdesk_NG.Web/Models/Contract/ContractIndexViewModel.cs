@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.BusinessData.OldComponents;
 
 
 namespace DH.Helpdesk.Web.Models.Contract
@@ -79,6 +80,7 @@ namespace DH.Helpdesk.Web.Models.Contract
             SelectedShowStatus = 10;
             IsInNoticeOfRemoval = false;
             IsInFollowUp = false;
+            ContractCase = new ContractCase();
         }
 
         public bool IsInNoticeOfRemoval { get; set; }
@@ -88,7 +90,7 @@ namespace DH.Helpdesk.Web.Models.Contract
 
         public int ContractId { get; set; }
 
-        public int CaseNumber { get; set; }
+        public ContractCase ContractCase { get; set; }
 
         public string ContractNumber { get; set; }
 
@@ -150,5 +152,12 @@ namespace DH.Helpdesk.Web.Models.Contract
 
         public bool IsAsc { get; private set; }
 
+    }
+
+    public sealed class ContractCase
+    {
+        public int CaseNumber { get; set; }
+        public GlobalEnums.CaseIcon CaseIcon { get; set; }
+        public bool HasMultiplyCases { get; set; }
     }
 }

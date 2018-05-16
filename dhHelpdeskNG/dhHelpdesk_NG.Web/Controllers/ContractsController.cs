@@ -21,9 +21,11 @@ using DH.Helpdesk.Web.Infrastructure.Mvc;
 using DH.Helpdesk.BusinessData.Models.Shared.Input;
 using DH.Helpdesk.Web.Enums;
 using DH.Helpdesk.BusinessData.Models.Shared;
+using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
 using DH.Helpdesk.Services.BusinessLogic.Contracts;
 using DH.Helpdesk.Web.Components.Contracts;
+using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
 using DH.Helpdesk.Web.Infrastructure.Attributes;
 
 
@@ -627,7 +629,7 @@ namespace DH.Helpdesk.Web.Controllers
 
 
 
-            model.Columns = settings.SettingRows.Where(s => s.ShowInList == true)
+            model.Columns = settings.SettingRows.Where(s => s.ShowInList)
                                                 .ToList();
 
             foreach (var col in model.Columns)
@@ -639,11 +641,21 @@ namespace DH.Helpdesk.Web.Controllers
 
             foreach (var con in allContracts)
             {
+                var latestLog = con.ContractLogs.Any(x => x.Case_Id.HasValue)
+                    ? con.ContractLogs.Where(x => x.Case_Id.HasValue).OrderByDescending(l => l.CreatedDate).FirstOrDefault()
+                    : null;
+                var hasMultiplyCases = con.ContractLogs.Count(x => x.Case_Id.HasValue) > 1;
+                var latestCase = latestLog?.Case;
                 model.Data.Add(new ContractsIndexRowModel
                 {
                     ContractId = con.Id,
                     ContractNumber = con.ContractNumber,
                     ContractEndDate = con.ContractEndDate,
+                    ContractCase = latestCase != null ?  new ContractCase {
+                        CaseNumber = (int)latestCase.CaseNumber,
+                        CaseIcon = CasesMapper.GetCaseIcon(latestCase.FinishingDate, latestCase.ApprovedDate, latestCase.CaseType.RequireApproving),
+                        HasMultiplyCases = hasMultiplyCases
+                    } : new ContractCase { CaseNumber = 0 },
                     ContractStartDate = con.ContractStartDate,
                     Finished = con.Finished,
                     Running = con.Running,
@@ -731,7 +743,7 @@ namespace DH.Helpdesk.Web.Controllers
                     return sort.IsAsc ? data.OrderBy(d => d.ContractNumber).ToList() : data.OrderByDescending(d => d.ContractNumber).ToList();
 
                 case EnumContractFieldSettings.CaseNumber:
-                    return sort.IsAsc ? data.OrderBy(d => d.CaseNumber).ToList() : data.OrderByDescending(d => d.CaseNumber).ToList();
+                    return sort.IsAsc ? data.OrderBy(d => d.ContractCase.CaseNumber).ToList() : data.OrderByDescending(d => d.ContractCase.CaseNumber).ToList();
 
                 case EnumContractFieldSettings.Category:
                     return sort.IsAsc ? data.OrderBy(d => d.ContractCategory.Name).ToList() : data.OrderByDescending(d => d.ContractCategory.Name).ToList();

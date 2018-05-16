@@ -132,6 +132,7 @@
     <Compile Include="EntityConfigurations\ContractHistoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractFieldSettingConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ContractLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\EmailLogAttemptConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\Case_CaseSection_ExtendedCaseConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\Case_ExtendedCaseDataConfiguration.cs" />

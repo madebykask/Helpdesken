@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Domain
 {
     using global::System;
+    using global::System.Collections.Generic;
 
     public class Contract : Entity
     {
@@ -28,5 +29,6 @@
         public virtual User FollowUpResponsibleUser { get; set; }
         public virtual User ResponsibleUser { get; set; }
         public virtual Supplier Supplier { get; set; }
+        public virtual ICollection<ContractLog> ContractLogs { get; set; }
     }
 }

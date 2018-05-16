@@ -728,6 +728,7 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new ContractCategoryConfiguration());
             modelBuilder.Configurations.Add(new ContractConfiguration());
             modelBuilder.Configurations.Add(new ContractHistoryConfiguration());
+            modelBuilder.Configurations.Add(new ContractLogConfiguration());
             modelBuilder.Configurations.Add(new ContractFieldSettingConfiguration());
             modelBuilder.Configurations.Add(new ContractFileConfiguration());
             modelBuilder.Configurations.Add(new CountryConfiguration());            

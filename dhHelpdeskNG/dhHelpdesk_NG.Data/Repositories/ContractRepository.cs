@@ -10,6 +10,7 @@ namespace DH.Helpdesk.Dal.Repositories
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
+    using System.Data;
     using System.Linq;
 
     #region CONTRACT
@@ -38,7 +39,10 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IList<Contract> GetContractsNotFinished(int customerId)
         {
-            var query = this.Table.Where(c => c.ContractCategory.Customer_Id == customerId);
+            var query = this.Table
+                .Include(x => x.ContractLogs)
+                .Include(x => x.ContractLogs.Select(l => l.Case))
+                .Where(c => c.ContractCategory.Customer_Id == customerId);
             return query.ToList();
         }
 
