@@ -7170,6 +7170,42 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 1979 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1979, 2, 'before notice date')
 GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to close cases' WHERE Text_Id=1002 AND Language_Id=2;
+GO 
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to case templates' WHERE Text_Id=818 AND Language_Id=2;
+GO 
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to FAQ' WHERE Text_Id=1004 AND Language_Id=2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to Calendar' WHERE Text_Id=1331 AND Language_Id=2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to Bulletin board' WHERE Text_Id=1017 AND Language_Id=2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to Document' WHERE Text_Id=1587 AND Language_Id=2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to Inventory' WHERE Text_Id=1598 AND Language_Id=2;
+GO
+
+update tbltext set TextString = 'Användaren har rättighet till avtal' where id = 1973
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to Contract' WHERE Text_Id=1973 AND Language_Id=2;
+GO
+
+update tbltext set TextString = 'Användaren har rättighet till aktuellt' where id = 1331
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to Calendar' WHERE Text_Id=1001 AND Language_Id=2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to Invoice article' WHERE Text_Id=1724 AND Language_Id=2;
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 
